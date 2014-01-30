@@ -1,0 +1,24 @@
+//Based on the server app for github.com/rtoal/chuzr
+
+var express = require('express'),
+    http = require('http'),
+    cors = require('cors');
+    
+console.log('Configuring GRNsight server');
+var env = process.env.NODE_ENV || 'development',
+    app = express();
+app.set('port', process.env.PORT || 3000);
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(cors());
+
+//Dont start the server if this app is run as a child process.
+if (!module.parent) {
+  http.createServer(app).listen(app.get('port'), function () {
+    console.log('GRNsight server running on port %s, environment=%s', app.get('port'), env);
+  });
+} else {
+  module.exports = app;
+}
+
