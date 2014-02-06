@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html><head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -8,6 +7,9 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,13 +26,55 @@
         <a href="https://github.com/dondi/GRNsight" class="button"><small>View project on</small>GitHub</a>
       </div>
     </header>
+    	<div class="navbar" id="navbarTest">
+          <ul class="nav navbar" id="navmenu">
+            <li>
+              <a href="index.html">Home</a>
+            </li>
+            <li>
+              <a href="about.html">About</a>
+            </li>
+            <li>
+              <a href="news.html">News</a>
+            </li>
+            <li>
+              <a href="downloads.html">Downloads</a>
+            </li>
+            <li>
+              <a href="documentation.html">Documentation</a>
+            </li>
+            <li>
+              <a href="wiki.html">Wiki</a>
+            </li>
+            <li>
+              <a href="publications.html">Publications</a>
+            </li>
+            <li>
+              <a href="people.html">People</a>
+            </li>
+            <li>
+              <a href="contact.html">Contact</a>
+            </li>
+            <li>
+              <a href="links.html">Links</a>
+            </li>
+          </ul>
+        </div>
 
     <div id="content-wrapper">
-      <div class="inner clearfix">
+      <div class="inner clearfix">    
         <section id="main-content">
+         <input type="file" id="uploadme" />
+         <input type="button" id="clickme" value="Upload" />
+         <script>
+		    	 $(function(){
+			    	 $('#clickme').click(function(){
+				       $('#uploadme').click();
+				     });
+		       });
+        </script>
           <h3>
 <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
 <p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
 <pre><code>$ cd your_repo_root/repo_name
