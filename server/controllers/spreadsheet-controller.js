@@ -12,4 +12,9 @@ module.exports = function (app) {
       '</form>'
     );
   }); 
+  
+  //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+  app.post('/upload', function (req, res) {
+  
+  });
 }
