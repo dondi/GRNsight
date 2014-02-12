@@ -9,7 +9,8 @@ var env = process.env.NODE_ENV || 'development',
     app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(cors());
 

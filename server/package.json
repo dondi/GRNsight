@@ -12,6 +12,7 @@
     "mocha": "latest",
     "supertest": "latest",
     "should": "latest",
-    "node-xlsx": "latest"
+    "node-xlsx": "latest",
+    "multiparty": "latest"
   }
 }
