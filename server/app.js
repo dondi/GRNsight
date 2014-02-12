@@ -14,6 +14,8 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(cors());
 
+//Load controllers
+require(__dirname + '/controllers' + '/spreadsheet-controller')(app);
 //Dont start the server if this app is run as a child process.
 if (!module.parent) {
   http.createServer(app).listen(app.get('port'), function () {
