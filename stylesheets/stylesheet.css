@@ -261,12 +261,6 @@ form {
   margin-bottom: 8px;
   color: #474747;
 } 
-#main-content h2:before {
-  content: "//";
-  color: #9ddcff;
-  padding-right: 0.3em;
-  margin-left: -1.5em;
-}
 
 #main-content h3 {
   font-family: 'Open Sans', sans-serif;
@@ -371,6 +365,29 @@ footer a {
 }
 footer a:hover {
   color: #444;
+}
+
+#pageHeader {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  text-align:center;
+  color: #474747;
+}
+
+#name {
+	font-weight:bold;
+	font-size:18px;	
+	margin:0 0 0 0;
+	font-family: 'Open Sans', sans-serif;
+}
+
+#personInfo {
+	font-weight:normal;
+	font-family: 'Open Sans', sans-serif;
+	margin: 0 0 0 10px;
 }
 
 /* MISC */
