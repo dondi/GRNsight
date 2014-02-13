@@ -6,6 +6,7 @@ var should = require('should'),
     xlsx = require('node-xlsx');
     
 var sheet = xlsx.parse(__dirname + '/dahlquist_wt-data_21-gene-_sample-output_20140122_est_out_1.xlsx');
+var path = __dirname + '/dahlquist_wt-data_21-gene-_sample-output_20140122_est_out_1.xlsx';
     
 var expectedSheet = {
   worksheets: 
@@ -26,10 +27,10 @@ var expectedSheet = {
 var worksheets = [];
 
 describe('Spreadsheet Controller', function () {
-    describe('parse', function () {
+    describe('#parse', function () {
      it('should properly POST the parsed spreadsheet', function (done) {
        //The parsing is done as part of a post
-       request(url).post('/').send(sheet).end(function (err, res) {
+       request(url).post('/upload').send(path).end(function (err, res) {
          should.not.exist(err);
          res.should.have.status(201);
          res.should.be.json;
