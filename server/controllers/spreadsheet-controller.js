@@ -28,6 +28,7 @@ module.exports = function (app) {
       //For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
       res.header('Access-Control-Allow-Credentials', 'true');
+      res.header('Access-Control-Allow-Origin', '*');
       res.writeHead(200, {'content-type': 'text/plain'});
       try{
         for (var i = 0; i < sheet.worksheets.length; i++) {
