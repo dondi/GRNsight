@@ -1,0 +1,120 @@
+body {
+	background-color: #F7F7F7;
+}
+
+.backBox {
+	background-color: #FFF;
+	border-radius: 10px;
+	font-family: 'Open Sans', sans-serif;
+	box-shadow: 0 0 10px #787878;
+}
+
+#header p {
+	color: #44C114;
+	margin: 0 10px 0 10px;
+}
+
+#title {
+	font-size: 60px;
+	line-height: 1.5;
+	position: relative;
+}
+
+#subtext {
+	font-size: 20px;
+	line-height: 1.2;
+	position: relative;
+	padding-bottom: 10px;
+
+}
+
+#logo {
+	width: 100px;
+	height: 100px;
+	border: 1px #DDD solid;
+	margin: 10px 15px 15px 10px;
+	float:left;
+}
+
+#lmuLogo {
+	float:right;
+	clear:right;
+}
+
+#sideBar {
+	margin-top:20px;
+	padding-top:1px	;
+	width: 160px;
+	height:300px;
+	position: absolute;
+}
+
+#nav {
+	list-style-type: none;
+	line-height: 2;
+	font-size: 15px;
+}
+
+a {
+	text-decoration: none;
+	color: #44C114;
+}
+
+a:hover {
+	color: #6CFF30;
+}
+
+a:active {
+	color: #379F11;
+}
+
+#mainContent {
+	left:0;
+	right:0;
+	margin: 20px 0 0 180px;
+	padding: 5px 5px 5px 5px;
+}
+
+#pageTitle {
+	font-size: 25px;
+	text-align: center;
+	text-decoration: underline;
+	color: #141414;
+}
+
+#pageContent {
+	color:#141414;
+	font-size: 14px;
+	padding: 0px 5px 5px 10px;
+}
+
+#name {
+	font-weight:bold;
+	font-size:18px;	
+	margin:0 0 0 0;
+	padding-left:15px;
+}
+
+#personInfo {
+	font-weight:normal;
+	font-size:15px;
+	margin: 0 0 0 30px;
+}
+
+h3 {
+	padding-left: 10px;
+	margin: 15px 0 10px 0;
+}
+
+#footerNav {
+	border-top: 1px solid #A0A0A0;
+	padding-top:20px;
+	list-style-type: none;
+	font-size: 12px;
+	text-align: center;
+}
+
+#footerNav li {
+	display:inline;
+	padding: 15px 15px;
+}

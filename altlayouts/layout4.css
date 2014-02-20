@@ -1,0 +1,129 @@
+body {
+	font-family: 'Georgia', serif;
+	margin:0;
+	background-color: #F8F8F8;
+}
+
+#header {
+	right:0;
+	left:0;
+	background-color: #14A633;
+}
+
+#logo {
+	width: 100px;
+	height: 100px;
+	border: 1px #DDD solid;
+	margin: 10px 15px 15px 10px;
+	float:left;
+}
+
+#header p {
+	color: #F8F8F8;
+	margin: 0 10px 0 10px;
+	text-shadow: 1px 1px 2px #212121;
+}
+
+#title {
+	font-size: 60px;
+	line-height: 1.5;
+	position: relative;
+}
+
+#subtext {
+	font-size: 20px;
+	line-height: 1.2;
+	position: relative;
+	padding-bottom: 10px;
+}
+
+#container {
+	left:0;
+	right:0;
+	position:absolute;
+	padding: 10px 20px 10px 20px;
+}
+
+#nav {
+	padding: 10px 0 10px 0;
+	list-style-type: none;
+	font-size: 14px;
+	text-align: center;
+	margin:0;
+}
+
+
+#nav li {
+	display:inline;
+	padding: 0 15px 0 15px;
+}
+
+a {
+	text-decoration: none;
+	color: #44C114;
+}
+
+a:hover {
+	color: #6CFF30;
+}
+
+a:active {
+	color: #379F11;
+}
+
+#navLine {
+	width:70%;
+}
+
+#mainContent {
+	width:80%;
+	margin:0 auto;
+}
+
+#pageTitle {
+	font-size: 25px;
+	text-align: center;
+	color: #141414;
+	margin:0;
+	padding-top:20px;
+}
+
+#pageContent {
+	color:#141414;
+	font-size: 14px;
+	padding: 0px 5px 5px 15px;
+}
+
+#name {
+	font-weight:bold;
+	font-size:18px;	
+	margin:0 0 0 0;
+	padding-left:20px;
+}
+
+#personInfo {
+	font-weight:normal;
+	font-size:15px;
+	margin: 0 0 0 40px;
+}
+
+h3 {
+	padding-left: 10px;
+	margin: 15px 0 10px 0;
+}
+
+#separate {
+	width:60%;
+}
+
+#footerNav {
+	padding-top:20px;
+	list-style-type: none;
+	font-size: 12px;
+	text-align: center;
+}
+
+#footerNav li {
+	display:inline;
+	padding: 15px 15px;
+}
