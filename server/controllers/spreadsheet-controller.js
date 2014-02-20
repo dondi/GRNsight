@@ -28,16 +28,23 @@ module.exports = function (app) {
       //For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
       res.writeHead(200, {'content-type': 'text/plain'});
-      for (var i = 0; i < sheet.worksheets.length; i++) {
-        currentSheet = sheet.worksheets[i];
-        res.write(currentSheet.name + '\n\n');
-        for (var j = 0; j < currentSheet.data.length; j++) {
-          for(var k = 0; k < currentSheet.data[j].length; k++) {
-            res.write(currentSheet.data[j][k].value + ' ');
+      try{
+        for (var i = 0; i < sheet.worksheets.length; i++) {
+          currentSheet = sheet.worksheets[i];
+          res.write(currentSheet.name + '\n\n');
+          for (var j = 0; j < currentSheet.data.length; j++) {
+            res.write(currentSheet.data[j] + ' ');
+          
+            for(var k = 0; k < currentSheet.data[j].length; k++) {
+              res.write(currentSheet.data[j][k].value + ' ');
+            }
+          
+            res.write('\n');
           }
           res.write('\n');
         }
-        res.write('\n');
+      } catch (err) {
+        res.write("\n\n Excel format error encountered: " + err.message);
       }
       res.end();
     });
