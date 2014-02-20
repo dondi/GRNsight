@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title GRNsight
+    link(href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css", rel="stylesheet")
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
+    
+  body
+    form(method='POST', action='localhost:3000/upload')
+      input(type='file', id='spreadsheet')
+      br
+      button(type='submit', class='btn', id='upload') Upload
+script(src="/js/upload.js")

@@ -1,9 +1,9 @@
 var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
     util = require('util');
-
+    
 module.exports = function (app) {
-  
+
   /*Send the upload file form to the web client
    *Can be implemented in a web page later
    */
@@ -27,18 +27,16 @@ module.exports = function (app) {
       var sheet = xlsx.parse(files.upload[0].path);
       //For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
+      res.header('Access-Control-Allow-Credentials', 'true');
       res.writeHead(200, {'content-type': 'text/plain'});
       try{
         for (var i = 0; i < sheet.worksheets.length; i++) {
           currentSheet = sheet.worksheets[i];
           res.write(currentSheet.name + '\n\n');
           for (var j = 0; j < currentSheet.data.length; j++) {
-            res.write(currentSheet.data[j] + ' ');
-          
             for(var k = 0; k < currentSheet.data[j].length; k++) {
               res.write(currentSheet.data[j][k].value + ' ');
             }
-          
             res.write('\n');
           }
           res.write('\n');

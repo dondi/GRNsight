@@ -22,6 +22,8 @@ if (app.get('env') === 'development') {
   app.use(express.errorHandler());
 }
 
+require('./controllers/main')(app);
+
 //Dont start the server if this app is run as a child process.
 if (!module.parent) {
   http.createServer(app).listen(app.get('port'), function () {
