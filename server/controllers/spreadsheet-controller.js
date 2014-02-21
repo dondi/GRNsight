@@ -3,19 +3,6 @@ var multiparty = require('multiparty'),
     util = require('util');
     
 module.exports = function (app) {
-
-  /*Send the upload file form to the web client
-   *Can be implemented in a web page later
-   */
-  app.get('/', function (req, res) {
-    res.writeHead(200, {'content-type': 'text/html'});
-    res.end(
-      '<form action="/upload" enctype="multipart/form-data" method="post">'+
-      '<input type="file" name="upload"><br>'+
-      '<input type="submit" value="Upload">'+
-      '</form>'
-    );
-  }); 
   
   //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
   app.post('/upload', function (req, res) {
@@ -27,7 +14,6 @@ module.exports = function (app) {
       var sheet = xlsx.parse(files.upload[0].path);
       //For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
-      res.header('Access-Control-Allow-Credentials', 'true');
       res.header('Access-Control-Allow-Origin', '*');
       res.writeHead(200, {'content-type': 'text/plain'});
       try{

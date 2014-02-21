@@ -7,8 +7,7 @@ html
     script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
     
   body
-    form(method='POST', action='localhost:3000/upload')
-      input(type='file', id='spreadsheet')
+    form(method='POST', action='http://localhost:3000/upload', enctype='multipart/form-data')
+      input(type='file', name='upload')
       br
-      button(type='submit', class='btn', id='upload') Upload
-script(src="/js/upload.js")
+      input(type='submit', value='upload')
