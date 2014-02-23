@@ -16,20 +16,24 @@ module.exports = function (app) {
       //TODO: Optimize the result for D3
       res.header('Access-Control-Allow-Origin', '*');
       res.writeHead(200, {'content-type': 'text/plain'});
-      try{
-        for (var i = 0; i < sheet.worksheets.length; i++) {
-          currentSheet = sheet.worksheets[i];
-          res.write(currentSheet.name + '\n\n');
-          for (var j = 0; j < currentSheet.data.length; j++) {
+      for (var i = 0; i < sheet.worksheets.length; i++) {
+        currentSheet = sheet.worksheets[i];
+        res.write(currentSheet.name + '\n\n');
+        for (var j = 0; j < currentSheet.data.length; j++) {
+          try {
             for(var k = 0; k < currentSheet.data[j].length; k++) {
+              try {
               res.write(currentSheet.data[j][k].value + ' ');
+              } catch (err) {
+                console.log(err);
+              }
             }
-            res.write('\n');
+          } catch (err) {
+            console.log(err);
           }
           res.write('\n');
         }
-      } catch (err) {
-        res.write("\n\n Excel format error encountered: " + err.message);
+        res.write('\n');
       }
       res.end();
     });
