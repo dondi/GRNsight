@@ -21,7 +21,7 @@ body {
 #header p {
 	color: #F8F8F8;
 	margin: 0 10px 0 10px;
-	text-shadow: 1px 1px 2px #212121;
+	text-shadow: 1px 1px 2px #080808; /* 212121 */
 }
 
 #title {
@@ -43,13 +43,14 @@ body {
 	width: 160px;
 	height:300px;
 	position: absolute;
-	border-right: 1px solid #828282;
 }
 
 #nav {
 	list-style-type: none;
 	line-height: 2;
 	font-size: 15px;
+	border-right: 1px solid #828282;
+	width:130px;
 }
 
 a {
@@ -68,7 +69,7 @@ a:active {
 #mainContent {
 	left:0;
 	right:0;
-	margin: 20px 0 0 180px;
+	margin: 20px 0px 0px 180px;
 	padding: 5px 5px 5px 5px;
 }
 
@@ -117,4 +118,60 @@ h3 {
 #footerNav li {
 	display:inline;
 	padding: 15px 15px;
+}
+
+/* Colors. Delete once Color Chosen. */
+table {
+	vertical-align: middle;
+	text-align: center;
+}
+
+td {
+	width:30px;
+}
+
+.tempColor {
+	width:20px;
+	height: 20px;
+	position: block;
+}
+
+#color1 {
+	background-color: #7CFC00;
+}
+
+#color2 {
+	background-color: #83F52C;
+}
+
+#color3 {
+	background-color: #66FF66;
+}
+
+#color4 {
+	background-color: #00EE00;
+}
+
+#color5 {
+	background-color: #0AC92B;
+}
+
+#color6 {
+	background-color: #14A633;
+}
+
+#color7 {
+	background-color: #228B22;
+}
+
+#color8 {
+	background-color: #308014;
+}
+
+#color9 {
+	background-color: #006400;
+}
+
+#color10 {
+	background-color: #004F00;
 }

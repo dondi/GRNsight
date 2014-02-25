@@ -1,90 +1,66 @@
-<!DOCTYPE html>
-<html><head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+<!doctype html>
+<html>
 
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <head>
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+        <title>GRNsight by Dondi</title>
+        <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script type='text/javascript' src='js/garand-sticky-c199302/jquery.sticky.js'></script>
+        <script>
+            $( window ).load( function() { 
+                $( "#nav" ).sticky( { topSpacing:0 } );
+            });
+        </script>
+        <meta charset='utf-8'>
 
-    <title>GRNsight by dondi</title>
-  </head>
+    </head>
 
-  <body>
-    <header>
-      <div class="inner">
-        <h1>GRNsight</h1>
-        <h2>Web app and service for modeling and visualizing gene regulatory networks.</h2>
-        <a href="https://github.com/dondi/GRNsight" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
-    	<div class="navbar" id="navbarTest">
-          <ul class="nav navbar" id="navmenu">
-            <li>
-              <a href="index.html">Home</a>
-            </li>
-            <li>
-              <a href="about.html">About</a>
-            </li>
-            <li>
-              <a href="news.html">News</a>
-            </li>
-            <li>
-              <a href="downloads.html">Downloads</a>
-            </li>
-            <li>
-              <a href="documentation.html">Documentation</a>
-            </li>
-            <li>
-              <a href="https://github.com/dondi/GRNsight/wiki">Wiki</a>
-            </li>
-            <li>
-              <a href="publications.html">Publications</a>
-            </li>
-            <li>
-              <a href="people.html">People</a>
-            </li>
-            <li>
-              <a href="contact.html">Contact</a>
-            </li>
-            <li>
-              <a href="links.html">Links</a>
-            </li>
-          </ul>
+    <body>
+
+        <div id='header'>
+            <div id='logo'></div>
+            <p id='title'>GRNsight</p>
+            <p id='subtext'>Web app and service for modeling and visualizing gene regulatory networks.</p>
         </div>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">    
-        <section id="main-content">
-          <h2 id="pageHeader">Documentation</h2>
-          <p>No documentation as of present.</p>
-        </section>
+        <div id='navBar' class='.backBox'>
+            <ul id='nav'>
+                <li><a href='index.html'>Home</a></li>
+                <li><a href='about.html'>About</a></li>
+                <li><a href='news.html'>News</a></li>
+                <li><a href='downloads.html'>Download</a></li>
+                <li><a href='documentation.html'>Documentation</a></li>
+                <li><a href='https://github.com/dondi/GRNsight/wiki'>Wiki</a></li>
+                <li><a href='publications.html'>Publications</a></li>
+                <li><a href='people.html'>People</a></li>
+                <li><a href='contact.html'>Contact</a></li>
+                <li><a href='links.html'>Links</a></li>
+            </ul>
+        </div>
 
-        <aside id="sidebar">
-          <a href="https://github.com/dondi/GRNsight/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/dondi/GRNsight/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+        <div id='mainContent'>
+            <p id='pageTitle'>Documentation</p>
+            <p id='pageContent'>
+                No documentation as of present.
+            </p>
+            <div id='footer'>
+                <hr id='separate'>
+                <ul id='footerNav'>
+                    <li><a href='index.html'>Home</a></li>
+                    <li><a href='about.html'>About</a></li>
+                    <li><a href='news.html'>News</a></li>
+                    <li><a href='downloads.html'>Download</a></li>
+                    <li><a href='documentation.html'>Documentation</a></li>
+                    <li><a href='https://github.com/dondi/GRNsight/wiki'>Wiki</a></li>
+                    <li><a href='publications.html'>Publications</a></li>
+                    <li><a href='people.html'>People</a></li>
+                    <li><a href='contact.html'>Contact</a></li>
+                    <li><a href='links.html'>Links</a></li>
+                </ul>
+            </div>
+        </div>
 
-          <p class="repo-owner"><a href="https://github.com/dondi/GRNsight"></a> is maintained by <a href="https://github.com/dondi">dondi</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
-
-  
-  </body>
+    </body>
+    
 </html>
