@@ -7,7 +7,7 @@ html
     script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
     
   body
-    form(method='POST', action='http://localhost:3000/upload', enctype='multipart/form-data')
+    form(method='POST', name='file', action='http://localhost:3000/upload', enctype='multipart/form-data')
       input(type='file', name='upload')
       br
-      input(type='submit', value='upload')
+      button(type='submit', class='btn', id='upload') Upload

@@ -4,10 +4,6 @@ var multiparty = require('multiparty'),
     
 module.exports = function (app) {
 
-  app.get('/upload', function (req, res) {
-    //Probably a better way to do this.
-    res.redirect('http://localhost:3001/graph');
-  });
   //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
   app.post('/upload', function (req, res) {
     //TODO: Add file validation
@@ -33,8 +29,7 @@ module.exports = function (app) {
           }
         }
       }
-      req.session.data = network;
-      res.redirect('http://localhost:3001/graph');
+      res.json(network);
     });
   });
 }

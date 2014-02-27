@@ -13,8 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(cors());
-app.use(express.cookieSession());
-app.use(app.router);
+//app.use(express.cookieSession());
 
 //Load controllers
 require(__dirname + '/controllers' + '/spreadsheet-controller')(app);
