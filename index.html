@@ -60,6 +60,8 @@
                         <td><p id='color10' class='tempColor'></p></td>
                     </tr>
                     <tr>
+                        <td><p id='color17' class='tempColor'></p></td>
+                        <td><p id='color16' class='tempColor'></p></td>
                         <td><p id='color15' class='tempColor'></p></td>
                         <td><p id='color11' class='tempColor'></p></td>
                         <td><p id='color12' class='tempColor'></p></td>
@@ -110,24 +112,33 @@
                     });
                     // Everything below this point is staggered by 1
                     $( "#color11" ).click( function() {
-                        $( "#colorText" ).html( "Color 12: #006633" );
+                        $( "#colorText" ).html( "Color 14: #006633" );
                         $( "#header" ).css( "background-color", "#006633" );
                     });
                     $( "#color12" ).click( function() {
-                        $( "#colorText" ).html( "Color 13: #005B2D" );
+                        $( "#colorText" ).html( "Color 15: #005B2D" );
                         $( "#header" ).css( "background-color", "#005B2D" );
                     });
                     $( "#color13" ).click( function() {
-                        $( "#colorText" ).html( "Color 14: #005128" );
+                        $( "#colorText" ).html( "Color 16: #005128" );
                         $( "#header" ).css( "background-color", "#005128" );
                     });
                     $( "#color14" ).click( function() {
-                        $( "#colorText" ).html( "Color 15: #004723" );
+                        $( "#colorText" ).html( "Color 17: #004723" );
                         $( "#header" ).css( "background-color", "#004723" );
                     });
+                    // Staggered by ~5
                     $( "#color15" ).click( function() {
-                        $( "#colorText" ).html( "Color 11: #16693F" );
+                        $( "#colorText" ).html( "Color 13: #16693F" );
                         $( "#header" ).css( "background-color", "#16693F" );
+                    });
+                    $( "#color16" ).click( function() {
+                        $( "#colorText" ).html( "Color 12: #197547" );
+                        $( "#header" ).css( "background-color", "#197547" );
+                    });
+                    $( "#color17" ).click( function() {
+                        $( "#colorText" ).html( "Color 11: #32845B" );
+                        $( "#header" ).css( "background-color", "#32845B" );
                     });
                 </script>
             </div>
