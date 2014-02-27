@@ -59,6 +59,13 @@
                         <td><p id='color9' class='tempColor'></p></td>
                         <td><p id='color10' class='tempColor'></p></td>
                     </tr>
+                    <tr>
+                        <td><p id='color15' class='tempColor'></p></td>
+                        <td><p id='color11' class='tempColor'></p></td>
+                        <td><p id='color12' class='tempColor'></p></td>
+                        <td><p id='color13' class='tempColor'></p></td>
+                        <td><p id='color14' class='tempColor'></p></td>
+                    </tr>
                 </table>
                 <script>
                     $( "#color1" ).click( function() {
@@ -100,6 +107,27 @@
                     $( "#color10" ).click( function() {
                         $( "#colorText" ).html( "Color 10: #004F00" );
                         $( "#header" ).css( "background-color", "#004F00" );
+                    });
+                    // Everything below this point is staggered by 1
+                    $( "#color11" ).click( function() {
+                        $( "#colorText" ).html( "Color 12: #006633" );
+                        $( "#header" ).css( "background-color", "#006633" );
+                    });
+                    $( "#color12" ).click( function() {
+                        $( "#colorText" ).html( "Color 13: #005B2D" );
+                        $( "#header" ).css( "background-color", "#005B2D" );
+                    });
+                    $( "#color13" ).click( function() {
+                        $( "#colorText" ).html( "Color 14: #005128" );
+                        $( "#header" ).css( "background-color", "#005128" );
+                    });
+                    $( "#color14" ).click( function() {
+                        $( "#colorText" ).html( "Color 15: #004723" );
+                        $( "#header" ).css( "background-color", "#004723" );
+                    });
+                    $( "#color15" ).click( function() {
+                        $( "#colorText" ).html( "Color 11: #16693F" );
+                        $( "#header" ).css( "background-color", "#16693F" );
                     });
                 </script>
             </div>
