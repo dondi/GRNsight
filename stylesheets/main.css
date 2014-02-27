@@ -7,7 +7,7 @@ body {
 #header {
 	right:0;
 	left:0;
-	background-color: #14A633;
+	background-color: #16693F;
 }
 
 #logo {
@@ -21,7 +21,7 @@ body {
 #header p {
 	color: #F8F8F8;
 	margin: 0 10px 0 10px;
-	text-shadow: 1px 1px 2px #080808; /* 212121 */
+	text-shadow: 1px 1px 2px #080808;
 }
 
 #title {
@@ -55,15 +55,15 @@ body {
 
 a {
 	text-decoration: none;
-	color: #44C114;
+	color: #16693F;
 }
 
 a:hover {
-	color: #6CFF30;
+	color: #69163F;
 }
 
 a:active {
-	color: #379F11;
+	color: #125432;
 }
 
 #mainContent {
@@ -76,7 +76,6 @@ a:active {
 #pageTitle {
 	font-size: 25px;
 	text-align: center;
-	text-decoration: underline;
 	color: #141414;
 }
 
@@ -119,88 +118,3 @@ h3 {
 	display:inline;
 	padding: 15px 15px;
 }
-
-/* Colors. Delete once Color Chosen. */
-table {
-	vertical-align: middle;
-	text-align: center;
-}
-
-td {
-	width:30px;
-}
-
-.tempColor {
-	width:20px;
-	height: 20px;
-	position: block;
-}
-
-#color1 {
-	background-color: #7CFC00;
-}
-
-#color2 {
-	background-color: #83F52C;
-}
-
-#color3 {
-	background-color: #66FF66;
-}
-
-#color4 {
-	background-color: #00EE00;
-}
-
-#color5 {
-	background-color: #0AC92B;
-}
-
-#color6 {
-	background-color: #14A633;
-}
-
-#color7 {
-	background-color: #228B22;
-}
-
-#color8 {
-	background-color: #308014;
-}
-
-#color9 {
-	background-color: #006400;
-}
-
-#color10 {
-	background-color: #004F00;
-}
-
-#color11 {
-	background-color: #006633;
-}
-
-#color12 {
-	background-color: #005B2D;
-}
-
-#color13 {
-	background-color: #005128;
-}
-
-#color14 {
-	background-color: #004723;
-}
-
-#color15 {
-	background-color: #16693F;
-}
-
-#color16 {
-	background-color: #197547;
-}
-
-#color17 {
-	background-color: #32845B; 
-}
-
