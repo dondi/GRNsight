@@ -37,6 +37,26 @@ body {
 	padding-bottom: 10px;
 }
 
+#lmu {
+	text-align: right;
+	position: relative;
+	float:right;
+	padding: 10px 10px 10px 0px;
+}
+
+#subtextLMU {
+	font-size: 15px;
+	line-height: 1;
+	position: relative;
+	float: right;
+	font-style: italic;
+	padding-bottom:5px;
+}
+
+#lmuLogo {
+	padding: 10px 10px 0px 0px;
+}
+
 #navBar {
 	margin-top:20px;
 	padding-top:1px	;
