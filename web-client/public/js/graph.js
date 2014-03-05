@@ -16,7 +16,7 @@ var links = [
 ];
   
 var width = 960,
-    height = 500;
+    height = 700;
   
 var color = d3.scale.category20();
 
@@ -45,12 +45,20 @@ link = link.data(links)
            .attr("class", "link");
          
 node = node.data(nodes)
-           .enter().append("rect")
+           .enter().append("g")
            .attr("class", "node")
-           .attr("width", 40)
-           .attr("height", 30)
-           .on("dblclick", dblclick)
            .call(force.drag);
+           
+node.append("rect")
+   .attr("width", 40)
+   .attr("height", 30)
+   .on("dblclick", dblclick);
+           
+node.append("text")
+  .attr("dx", 0)
+  .attr("dy", 15)
+  .style("font-size", "12px")
+  .text(function(d) {return d.name;});
            
 $('.node').css({
   'cursor': 'move',
@@ -70,8 +78,7 @@ function tick() {
       .attr("x2", function(d) { return d.target.x;})
       .attr("y2", function(d) { return d.target.y;});
 
-  node.attr("x", function(d) { return d.x;})
-      .attr("y", function(d) {return d.y;});
+  node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
 }
 
 function dblclick(d) {
