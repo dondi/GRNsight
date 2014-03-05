@@ -23,7 +23,8 @@ var color = d3.scale.category20();
 var force = d3.layout.force()
     .size([width, height])
     .on("tick", tick)
-    .linkDistance(20);
+    .linkDistance(80)
+    .charge(-200);
 
 var drag = force.drag()
     .on("dragstart", dragstart);
@@ -44,16 +45,16 @@ link = link.data(links)
            .attr("class", "link");
          
 node = node.data(nodes)
-           .enter().append("circle")
+           .enter().append("rect")
            .attr("class", "node")
-           .attr("r", 12)
+           .attr("width", 40)
+           .attr("height", 30)
            .on("dblclick", dblclick)
-           .call(drag)
-           .each(function(d) {d.fixed = true});
+           .call(force.drag);
            
 $('.node').css({
   'cursor': 'move',
-  'fill': '#ccc',
+  'fill': 'white',
   'stroke': '#000',
   'stroke-width': '1.5px'
 });
@@ -69,8 +70,8 @@ function tick() {
       .attr("x2", function(d) { return d.target.x;})
       .attr("y2", function(d) { return d.target.y;});
 
-  node.attr("cx", function(d) { return d.x;})
-      .attr("cy", function(d) {return d.y;});
+  node.attr("x", function(d) { return d.x;})
+      .attr("y", function(d) {return d.y;});
 }
 
 function dblclick(d) {
