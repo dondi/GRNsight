@@ -1,6 +1,8 @@
 /*http://bl.ocks.org/mbostock/4062045 used as reference
  *As well as http://bl.ocks.org/mbostock/3750558
-*/
+ *and http://bl.ocks.org/mbostock/950642
+ *and http://bl.ocks.org/mbostock/1153292
+ */
 var nodes = [
   {name: 'ACE2'},
   {name: 'AFT2'},
@@ -20,11 +22,14 @@ var width = 960,
   
 var color = d3.scale.category20();
 
+var diagonal = d3.svg.diagonal()
+  .projection(function(d) {return [d.y, d.x];});
+
 var force = d3.layout.force()
     .size([width, height])
     .on("tick", tick)
     .linkDistance(80)
-    .charge(-200);
+    .charge(-300);
 
 var drag = force.drag()
     .on("dragstart", dragstart);
@@ -32,6 +37,19 @@ var drag = force.drag()
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
+    
+//Adding the arrowheads
+svg.append("defs").append("marker")
+  .attr("id", "arrowhead")
+  .attr("viewbox", "0 0 6 6")
+  .attr("refX", 6)
+  .attr("refY", 3)
+  .attr("markerUnits", "strokeWidth")
+  .attr("markerWidth", 6)
+  .attr("markerHeight", 6)
+  .attr("orient", "auto")
+  .append("path")
+    .attr("d", "M0 0, L6 3, L0 6, Z"); 
   
 var link = svg.selectAll(".link"),
     node = svg.selectAll(".node");
@@ -42,7 +60,8 @@ force.nodes(nodes)
    
 link = link.data(links)
            .enter().append("line")
-           .attr("class", "link");
+           .attr("class", "link")
+           .attr("marker-end", "url(#arrowhead)");
          
 node = node.data(nodes)
            .enter().append("g")
@@ -59,6 +78,7 @@ node.append("text")
   .attr("dy", 15)
   .style("font-size", "12px")
   .text(function(d) {return d.name;});
+  
            
 $('.node').css({
   'cursor': 'move',
