@@ -4,7 +4,7 @@ module.exports = function (app) {
   });
   
   app.get('/graph', function (req, res) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.render('graph', {title: 'Graph'});
   });
 }

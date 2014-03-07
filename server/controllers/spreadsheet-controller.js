@@ -13,10 +13,14 @@ module.exports = function (app) {
                    links: []};
     form.parse(req, function (err, fields, files) {
       if (err) return res.json(400, err);
-      var sheet = xlsx.parse(files.upload[0].path);
+      try {
+        var sheet = xlsx.parse(files.file[0].path);
+      } catch (err) {
+        return res.json(400, err);
+      }
       //For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
-      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
       for (var i = 0; i < sheet.worksheets.length; i++) {
         currentSheet = sheet.worksheets[i];
         if (currentSheet.name == "network") {
