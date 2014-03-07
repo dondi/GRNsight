@@ -13,13 +13,14 @@ $(function() {
       success: function (data) {
         console.log(data);
       }
-      
-      
-      //May need to set the content type, but the multipart/form and application.json
-      //aren't working.
     }).done(function (network) {
       console.log(network.genes);
     });
     e.preventDefault();
   });
 });
+
+/*
+ * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+ * for helping to resolve this.
+ */
