@@ -56,7 +56,7 @@ svg.append("defs").append("marker")
   .attr("markerHeight", 6)
   .attr("orient", "auto")
   .append("path")
-    .attr("d", "M0 0, L6 3, L0 6, Z"); 
+    .attr("d", "M 0 0 L 6 3 L 0 6 Z"); 
   
 var link = svg.selectAll(".link"),
     node = svg.selectAll(".node");
