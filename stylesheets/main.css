@@ -8,6 +8,7 @@ body {
 	right:0;
 	left:0;
 	background-color: #16693F;
+	height:147px;
 }
 
 #logo {
@@ -121,6 +122,46 @@ a:active {
 h3 {
 	padding-left: 10px;
 	margin: 15px 0 10px 0;
+}
+
+#abstract {
+	font-size: 15px;
+	margin-left: 30px;
+}
+
+#newsDate {
+	font-weight:bold;
+	font-size:18px;	
+	line-height: 1.5;
+	margin:0 0 0 0;
+	padding-left:15px;
+	width:75%;
+	border-bottom: 1px solid #828282;
+}
+
+#newsHeader {
+	font-weight:bold;
+	font-size:15px;	
+	margin:0 0 0 0;
+	padding: 10px 0 0 30px;
+}
+
+#newsInfo {
+	font-size:15px;	
+	margin:0 0 0 0;
+	padding: 10px 0 0 30px;
+}
+
+#linkHeader {
+	font-weight:bold;
+	font-size:18px;	
+	margin:0 0 0 0;
+	padding-left:15px;
+}
+
+#linkInfo {
+	font-size:15px;	
+	padding-left: 30px;
 }
 
 #separate {
