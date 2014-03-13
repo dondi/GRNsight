@@ -71,14 +71,18 @@
                .call(force.drag);
            
     node.append("rect")
-       .attr("width", 40)
+       .attr("width", function (d) {
+           return d.name.length * 20;
+       })
        .attr("height", 30)
        .on("dblclick", dblclick);
            
     node.append("text")
-      .attr("dx", 0)
+      .attr("dx", 15)
       .attr("dy", 15)
-      .style("font-size", "12px")
+      .style("font-size", "14px")
+      .style("stroke-width", "0")
+      .style("fill", "black")
       .text(function(d) {return d.name;});
 
 
