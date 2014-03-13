@@ -15,6 +15,7 @@ $(function() {
       }
     }).done(function (network) {
       console.log(network.genes);
+      drawGraph(network.genes, network.links);
     });
     e.preventDefault();
   });
