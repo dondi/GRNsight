@@ -10,7 +10,9 @@ module.exports = function (app) {
     var form = new multiparty.Form(),
         currentSheet,
         network = {genes: [],
-                   links: []};
+                   links: []},
+        currentLink,
+        currentGene;
     form.parse(req, function (err, fields, files) {
       if (err) return res.json(400, err);
       try {
@@ -26,9 +28,20 @@ module.exports = function (app) {
         if (currentSheet.name == "network") {
           for (var j = 1; j < currentSheet.data.length; j++) {
             try {
-              network.genes.push(currentSheet.data[0][j].value);
+              currentGene = {name: currentSheet.data[0][j].value}
+              network.genes.push(currentGene);
             } catch (err) {
               console.log(err);
+            }
+            for(var k = 1; k < currentSheet.data[j].length; k++) {
+              try {
+                if (currentSheet.data[j - 1][k - 1].value == 1) {
+                  currentLink = {source: j, target: k};
+                  network.links.push(currentLink);
+                }
+              } catch (err) {
+                console.log(err);
+              }
             }
           }
         }
