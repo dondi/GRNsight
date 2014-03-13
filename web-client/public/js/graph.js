@@ -63,10 +63,7 @@
          .links(links)
          .start();
    
-    link = link.data(links)
-               .enter().append("line")
-               .attr("class", "link")
-               .attr("marker-end", "url(#arrowhead)");
+
          
     node = node.data(nodes)
                .enter().append("g")
@@ -83,7 +80,12 @@
       .attr("dy", 15)
       .style("font-size", "12px")
       .text(function(d) {return d.name;});
-  
+
+
+    link = link.data(links)
+             .enter().append("line")
+             .attr("class", "link")
+             .attr("marker-end", "url(#arrowhead)");
            
     $('.node').css({
       'cursor': 'move',
