@@ -36,7 +36,7 @@ module.exports = function (app) {
             for(var k = 1; k < currentSheet.data[j].length; k++) {
               try {
                 if (currentSheet.data[j][k].value == 1) {
-                  currentLink = {source: j - 1, target: k - 1};
+                  currentLink = {source: k - 1, target: j - 1};
                   network.links.push(currentLink);
                 }
               } catch (err) {
