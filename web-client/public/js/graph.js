@@ -62,14 +62,25 @@
     force.nodes(nodes)
          .links(links)
          .start();
-   
-
          
     node = node.data(nodes)
                .enter().append("g")
                .attr("class", "node")
                .call(force.drag);
            
+    link = link.data(links)
+               .enter().append("g")
+               .attr("class", "link");
+               
+    /*Big thanks to the following for the smart edges
+     *https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
+     */
+    link.append("path")
+        .attr("d", function(d) {
+          return moveTo(d) + lineTo(d);
+        }) 
+        .attr("marker-end", "url(#arrowhead)");      
+        
     node.append("rect")
        .attr("width", function (d) {
            return d.name.length * 20;
@@ -86,10 +97,7 @@
       .text(function(d) {return d.name;});
 
 
-    link = link.data(links)
-             .enter().append("line")
-             .attr("class", "link")
-             .attr("marker-end", "url(#arrowhead)");
+
            
     $('.node').css({
       'cursor': 'move',
@@ -118,5 +126,30 @@
 
     function dragstart(d) {
       d3.select(this).classed("fixed", d.fixed = true);
+    }
+    
+    function moveTo(d) {
+      var node = d3.select("#node" + d.source.index),
+          w = parseFloat(node.attr("width")),
+          h = parseFloat(node.attr("height"));
+          
+      d.source.newX = d.source.x + (w/2);
+      d.source.newY = d.source.y + (h/2);
+          
+      return "M" + d.source.newX + "," + d.target.newY;
+    }
+    
+    function lineTo(d) {
+      var node = d3.select("#node" + d.target.index),
+          w = parseFloat(node.attr("width")),
+          h = parseFloat(node.attr("height"));
+          
+      d.target.centerX = d.target.x + (w/2);
+      d.target.centerY = d.target.y + (h/2);
+      
+      //This function calculates the newX and newY
+      smartPathEnd(d, w, h);
+      
+      return " L" + d.target.newX + "," + d.target.newY;
     }
   }
