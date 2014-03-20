@@ -4,7 +4,7 @@ $(function() {
     formData.append('file', $('#upload')[0].files[0]);
     
     $.ajax({
-      url: 'http://localhost:3000/upload',
+      url: 'http://grnsight.cs.lmu.edu:3000/upload', // TODO Read from config
       data: formData,
       processData: false,
       contentType: false,
