@@ -5,8 +5,11 @@ var express = require('express'),
     cors = require('cors');
     
 console.log('Configuring GRNsight server');
+
 var env = process.env.NODE_ENV || 'development',
+    config = require('./config/config')[env],
     app = express();
+
 app.set('port', process.env.PORT || 3000);
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -15,7 +18,10 @@ app.use(express.methodOverride());
 app.use(cors());
 //app.use(express.cookieSession());
 
-//Load controllers
+app.set('corsOrigin', config.corsOrigin);
+console.log('CORS host: ' + app.get('corsOrigin'));
+
+// Load controllers
 require(__dirname + '/controllers' + '/spreadsheet-controller')(app);
 
 //Dont start the server if this app is run as a child process.

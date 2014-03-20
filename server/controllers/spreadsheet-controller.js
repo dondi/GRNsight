@@ -20,9 +20,10 @@ module.exports = function (app) {
       } catch (err) {
         return res.json(400, err);
       }
-      //For the time being, send the result in a form readable by people
+
+      // For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
-      res.header('Access-Control-Allow-Origin', 'http://grnsight.cs.lmu.edu');
+      res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
       for (var i = 0; i < sheet.worksheets.length; i++) {
         currentSheet = sheet.worksheets[i];
         if (currentSheet.name == "network") {
