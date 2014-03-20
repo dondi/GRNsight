@@ -22,7 +22,7 @@ module.exports = function (app) {
       }
       //For the time being, send the result in a form readable by people
       //TODO: Optimize the result for D3
-      res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+      res.header('Access-Control-Allow-Origin', 'http://grnsight.cs.lmu.edu');
       for (var i = 0; i < sheet.worksheets.length; i++) {
         currentSheet = sheet.worksheets[i];
         if (currentSheet.name == "network") {
