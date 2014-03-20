@@ -3,6 +3,7 @@ html
   head
     title GRNsight
     link(href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css", rel="stylesheet")
+    link(href="/stylesheets/grnsight.css", rel="stylesheet")
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
     script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
     script(src='http://d3js.org/d3.v3.min.js')
@@ -12,5 +13,6 @@ html
       input(type='file', name='upload', id='upload')
       br
       input(type='submit')
+    div(class='grnsight-container')
   script(src='/js/upload.js')
   script(src='/js/graph.js')

@@ -21,9 +21,11 @@
       {'source':4,'target':2}
     ];
     */
-    
-    var width = 960,
-        height = 700;
+
+    var $container = $(".grnsight-container");
+
+    var width = $container.width(),
+        height = $container.height();
   
     var color = d3.scale.category20();
 
@@ -39,7 +41,7 @@
     var drag = force.drag()
         .on("dragstart", dragstart);
   
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
         .attr("height", height);
     
