@@ -78,8 +78,11 @@
        .on("dblclick", dblclick);
            
     node.append("text")
-      .attr("dx", 15)
+      .attr("dx", function (d) {
+        return (d.name.length * 20)/2;
+      })
       .attr("dy", 15)
+      .attr("text-anchor", "middle")
       .style("font-size", "14px")
       .style("stroke-width", "0")
       .style("fill", "black")
