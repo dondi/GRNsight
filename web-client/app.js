@@ -6,11 +6,13 @@ var express = require('express'),
     stylus = require('stylus');
     
 var env = process.env.NODE_ENV || 'development',
+    config = require('./config/config')[env],
     app = express();
     
 app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -22,6 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 if (app.get('env') === 'development') {
   app.use(express.errorHandler());
 }
+
+app.set('serviceRoot', config.serviceRoot);
+console.log('Web service root: ' + app.get('serviceRoot'));
 
 require('./controllers/main')(app);
 
