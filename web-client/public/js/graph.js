@@ -34,7 +34,7 @@
         .size([width, height])
         .on("tick", tick)
         .linkDistance(80)
-        .charge(-300);
+        .charge(-500);
 
     var drag = force.drag()
         .on("dragstart", dragstart);
@@ -62,72 +62,40 @@
     force.nodes(nodes)
          .links(links)
          .start();
-         
+
+    link = link.data(links)
+               .enter().append("g")
+               .attr("class", "link"); 
+                 
     node = node.data(nodes)
                .enter().append("g")
                .attr("class", "node")
+               .attr("id", function(d) {
+                 return "node" + d.index;
+               })
+               .attr("transform", function(d) {
+                 return "translate(" + d.x + d.y + ")";
+               })
+               .attr("width", function (d) {
+                 return d.name.length * 20;
+               })
+               .attr("height", 30)
                .call(force.drag);
+               
+    link.append("path")
+        .attr("id", function(d) {
+          return "path" + d.source.index + "_" + d.target.index;
+        })
+        .attr("d", function(d) {
+          return moveTo(d) + lineTo(d);
+        }) 
+        .attr("marker-end", "url(#arrowhead)"); 
            
-    link = link.data(links)
-               .enter().append("g")
-               .attr("class", "link");
+
                
     /*Big thanks to the following for the smart edges
      *https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
      */
-    link.append("path")
-        .attr("d", function(d) {
-          return moveTo(d) + lineTo(d);
-        }) 
-        .attr("marker-end", "url(#arrowhead)");      
-        
-    node.append("rect")
-       .attr("width", function (d) {
-           return d.name.length * 20;
-       })
-       .attr("height", 30)
-       .on("dblclick", dblclick);
-           
-    node.append("text")
-      .attr("dx", 15)
-      .attr("dy", 15)
-      .style("font-size", "14px")
-      .style("stroke-width", "0")
-      .style("fill", "black")
-      .text(function(d) {return d.name;});
-
-
-
-           
-    $('.node').css({
-      'cursor': 'move',
-      'fill': 'white',
-      'stroke': '#000',
-      'stroke-width': '1.5px'
-    });
-
-    $('.link').css({
-      'stroke': '#000',
-      'stroke-width': '1.5px'
-    });
-
-    function tick() {
-      link.attr("x1", function(d) { return d.source.x;})
-          .attr("y1", function(d) { return d.source.y;})
-          .attr("x2", function(d) { return d.target.x;})
-          .attr("y2", function(d) { return d.target.y;});
-
-      node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
-    }
-
-    function dblclick(d) {
-      d3.select(this).classed("fixed", d.fixed = false);
-    }
-
-    function dragstart(d) {
-      d3.select(this).classed("fixed", d.fixed = true);
-    }
-    
     function moveTo(d) {
       var node = d3.select("#node" + d.source.index),
           w = parseFloat(node.attr("width")),
@@ -136,7 +104,7 @@
       d.source.newX = d.source.x + (w/2);
       d.source.newY = d.source.y + (h/2);
           
-      return "M" + d.source.newX + "," + d.target.newY;
+      return "M" + d.source.newX + "," + d.source.newY;
     }
     
     function lineTo(d) {
@@ -152,4 +120,170 @@
       
       return " L" + d.target.newX + "," + d.target.newY;
     }
+    
+    function smartPathEnd(d, w, h) {
+
+				// We need to work out the (tan of the) angle between the
+				// imaginary horizontal line running through the center of the
+				// target node and the imaginary line connecting the center of
+				// the target node with the top-left corner of the same
+				// node. Of course, this angle is fixed.
+				var tanRatioFixed =
+						(d.target.centerY - d.target.y)
+						/
+						(d.target.centerX - d.target.x);
+
+				// We also need to work out the (tan of the) angle between the
+				// imaginary horizontal line running through the center of the
+				// target node and the imaginary line connecting the center of
+				// the target node with the center of the source node. This
+				// angle changes as the nodes move around the screen.
+				var tanRatioMoveable =
+						Math.abs(d.target.centerY - d.source.newY)
+						/
+						Math.abs(d.target.centerX - d.source.newX); // Note,
+						// JavaScript handles division-by-zero by returning
+						// Infinity, which in this case is useful, especially
+						// since it handles the subsequent Infinity arithmetic
+						// correctly.
+
+				// Now work out the intersection point
+
+				if (tanRatioMoveable == tanRatioFixed) {
+						// Then path is intersecting at corner of textbox so draw
+						// path to that point
+
+						// By default assume path intersects a left-side corner
+						d.target.newX = d.target.x;
+
+						// But...
+						if (d.target.centerX < d.source.newX) {
+								// i.e. if target node is to left of the source node
+								// then path intersects a right-side corner
+								d.target.newX = d.target.x + w;
+						}
+
+						// By default assume path intersects a top corner
+						d.target.newY = d.target.y;
+
+						// But...
+						if (d.target.centerY < d.source.newY) {
+								// i.e. if target node is above the source node
+								// then path intersects a bottom corner
+								d.target.newY = d.target.y + h;
+						}
+				}
+
+				if (tanRatioMoveable < tanRatioFixed) {
+						// Then path is intersecting on a vertical side of the
+						// textbox, which means we know the x-coordinate of the
+						// path endpoint but we need to work out the y-coordinate
+
+						// By default assume path intersects left vertical side
+						d.target.newX = d.target.x;
+
+						// But...
+						if (d.target.centerX < d.source.newX) {
+								// i.e. if target node is to left of the source node
+								// then path intersects right vertical side
+								d.target.newX = d.target.x + w;
+						}
+
+						// Now use a bit of trigonometry to work out the y-coord.
+
+						// By default assume path intersects towards top of node								
+						d.target.newY =
+								d.target.centerY - ((d.target.centerX - d.target.x)
+																		*
+																		tanRatioMoveable);
+
+						// But...
+						if (d.target.centerY < d.source.newY) {
+								// i.e. if target node is above the source node
+								// then path intersects towards bottom of the node
+								d.target.newY = (2 * d.target.y) - d.target.newY + h;
+						}
+				}
+
+				if (tanRatioMoveable > tanRatioFixed) {
+						// Then path is intersecting on a horizontal side of the
+						// textbox, which means we know the y-coordinate of the
+						// path endpoint but we need to work out the x-coordinate
+
+						// By default assume path intersects top horizontal side
+						d.target.newY = d.target.y;
+
+						// But...
+						if (d.target.centerY < d.source.newY) {
+								// i.e. if target node is above the source node
+								// then path intersects bottom horizontal side
+								d.target.newY = d.target.y + h;
+						}
+
+						// Now use a bit of trigonometry to work out the x-coord.
+
+						// By default assume path intersects towards lefthand side
+						d.target.newX =
+								d.target.centerX - ((d.target.centerY - d.target.y)
+																		/
+																		tanRatioMoveable);
+
+						// But...
+						if (d.target.centerX < d.source.newX) {
+								// i.e. if target node is to left of the source node
+								// then path intersects towards the righthand side
+								d.target.newX = (2 * d.target.x) - d.target.newX + w;
+						}
+				}
+		}    
+        
+    node.append("rect")
+       .attr("width", function() {
+         return this.parentNode.getAttribute("width");
+       })
+       .attr("height", function() {
+         return this.parentNode.getAttribute("height");
+       })
+       .on("dblclick", dblclick);
+           
+    node.append("text")
+      .attr("dx", 15)
+      .attr("dy", 15)
+      .style("font-size", "14px")
+      .style("stroke-width", "0")
+      .style("fill", "black")
+      .text(function(d) {return d.name;});
+      
+    
+           
+    $('.node').css({
+      'cursor': 'move',
+      'fill': 'white',
+      'stroke': '#000',
+      'stroke-width': '1.5px'
+    });
+
+    $('.link').css({
+      'stroke': '#000',
+      'stroke-width': '1.5px'
+    });
+
+    function tick() {
+      link.select("path")
+          .attr("d", function(d) {
+            return moveTo(d) + lineTo(d);
+          });
+
+      node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
+    }
+
+    function dblclick(d) {
+      d3.select(this).classed("fixed", d.fixed = false);
+    }
+
+    function dragstart(d) {
+      d3.select(this).classed("fixed", d.fixed = true);
+    }
+    
+
   }
