@@ -33,7 +33,7 @@
     var force = d3.layout.force()
         .size([width, height])
         .on("tick", tick)
-        .linkDistance(80)
+        .linkDistance(200)
         .charge(-500);
 
     var drag = force.drag()
