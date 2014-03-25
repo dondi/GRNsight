@@ -1,14 +1,14 @@
 body {
 	font-family: 'Georgia', serif;
 	margin:0;
-	background-color: #F8F8F8;
+	background-color: #FFFFFF;
 }
 
 #header {
 	right:0;
 	left:0;
 	background-color: #16693F;
-	height:147px;
+	height:140px;
 }
 
 #logo {
@@ -42,7 +42,7 @@ body {
 	text-align: right;
 	position: relative;
 	float:right;
-	padding: 10px 10px 10px 0px;
+	padding: 10px 0px 10px 0px;
 }
 
 #subtextLMU {
@@ -55,7 +55,7 @@ body {
 }
 
 #lmuLogo {
-	padding: 10px 10px 0px 0px;
+	padding-top: 10px;
 }
 
 #navBar {
