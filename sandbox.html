@@ -7,13 +7,13 @@
         <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
         <script src="https://code.jquery.com/jquery.js"></script>
         <script type='text/javascript' src='js/garand-sticky-c199302/jquery.sticky.js'></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script>
             $( window ).load( function() { 
                 $( "#nav" ).sticky( { topSpacing:0 } );
             });
         </script>
         <meta charset='utf-8'>
-        <script src='http://d3js.org/d3.v3.min.js'></script>
 
     </head>
 
@@ -35,7 +35,6 @@
                 <li><a href='about.html'>About</a></li>
                 <li><a href='news.html'>News</a></li>
                 <li><a href='https://github.com/dondi/GRNsight'>Developers</a></li>
-                <li><a href='demo.html'>Demo</a></li>
                 <li><a href='documentation.html'>Documentation</a></li>
                 <li><a href='https://github.com/dondi/GRNsight/wiki'>Wiki</a></li>
                 <li><a href='publications.html'>Publications</a></li>
@@ -46,13 +45,30 @@
         </div>
 
         <div id='mainContent'>
-            <p id='pageTitle'>Demo</p>
-            <p id=""
+            <p id='pageTitle'>Sandbox</p>
             <p id='pageContent'>
-                A demo of the GRNsight visualization
-                <br /> <br />
-                <iframe src="http://grnsight.cs.lmu.edu:3001" width="100%" height="768" frameBorder="0"></iframe>
-                <a href="sandbox.html">Go to sandbox</a>
+                <div id='settings'>
+                    <form oninput="linkDistOutput.value=linkDistInput.value">
+                        Link Distance: 1<input type="range" min="1" max='500' value='80' id='linkDistInput' name='linkDistInput' onchange="updateLinkDist(this.value)">500: 
+                        <output name='linkDistOutput' for='linkDistInput'>80</output>
+                    </form>
+                    <form oninput="chargeOutput.value=chargeInput.value">
+                        Charge: -1000<input type="range" min="-1000" max="0" value="-300" id="chargeInput" name='chargeInput' onchange='updateCharge(this.value)'>0: 
+                        <output name='chargeOutput' for='chargeInput'>-300</output>
+                    </form>
+                    <form oninput="chargeGravityOutput.value=chargeGravityInput.value">
+                        Gravity: 0<input type="range" min="0" max="1" value="0.1" step='0.1' id="chargeGravityInput" name='chargeGravityInput' onchange='updateGravity(this.value)'>1: 
+                        <output name='chargeGravityOutput' for='chargeGravityOutput'>0.1</output>
+                    </form>
+                    <form oninput="chargeDistOutput.value=chargeDistInput.value">
+                        Charge Distance: 0<input type="range" min="0" max="1000" value="1000" step='1' id="chargeDistInput" name='chargeDistInput' onchange='updateChargeDist(this.value)'>1000: 
+                        <output name='chargeDistOutput' for='chargeDistInput'>1000</output>
+                    </form>
+                </div>
+                <div id='sandboxImage'>
+                    <div id='sandbox'></div>
+                    <script src='./javascripts/sandbox.js'></script>
+                </div>
             </p>
             <div id='footer'>
                 <hr id='separate'>
@@ -61,7 +77,6 @@
                     <li><a href='about.html'>About</a></li>
                     <li><a href='news.html'>News</a></li>
                     <li><a href='https://github.com/dondi/GRNsight'>Developers</a></li>
-                    <li><a href='demo.html'>Demo</a></li>
                     <li><a href='documentation.html'>Documentation</a></li>
                     <li><a href='https://github.com/dondi/GRNsight/wiki'>Wiki</a></li>
                     <li><a href='publications.html'>Publications</a></li>
