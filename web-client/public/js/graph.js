@@ -217,13 +217,13 @@
 						d.target.newY =
 								d.target.centerY - ((d.target.centerX - d.target.x)
 																		*
-																		tanRatioMoveable) - offset;
+																		tanRatioMoveable);
 
 						// But...
 						if (d.target.centerY < d.source.newY) {
 								// i.e. if target node is above the source node
 								// then path intersects towards bottom of the node
-								d.target.newY = (2 * d.target.y) - d.target.newY + h + offset;
+								d.target.newY = (2 * d.target.y) - d.target.newY + h;
 						}
 				}
 
@@ -248,13 +248,13 @@
 						d.target.newX =
 								d.target.centerX - ((d.target.centerY - d.target.y)
 																		/
-																		tanRatioMoveable) - offset;
+																		tanRatioMoveable) ;
 
 						// But...
 						if (d.target.centerX < d.source.newX) {
 								// i.e. if target node is to left of the source node
 								// then path intersects towards the righthand side
-								d.target.newX = (2 * d.target.x) - d.target.newX + w + offset;
+								d.target.newX = (2 * d.target.x) - d.target.newX + w;
 						}
 				}
 		}    
