@@ -59,16 +59,16 @@
     //Flat arrowheads for repression
     svg.append("defs").append("marker")
        .attr("id", "repressor")
-       .attr("viewbow", "0 0 6 6")
+       .attr("viewbow", "0 0 12 12")
        .attr("refX", 6)
        .attr("refY", 3)
        .attr("markerUnits", "strokeWidth")
-       .attr("markerWidth", 6)
+       .attr("markerWidth", 12)
        .attr("markerHeight", 6)
        .attr("orient", "auto")
        .append("path")
-         .attr("d", "M 0 0 L 0 6 Z")
-         .style("fill", "white");		 
+         .attr("d", "M 6 0 L 6 12 Z")
+         .attr("style", "stroke: black");
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
@@ -138,7 +138,13 @@
     }
     
     function smartPathEnd(d, w, h) {
-
+        
+        // Set an offset if the edge is a repressor to make room for the flat arrowhead
+        var offset = 0;
+        
+        if (d.value < 0) {
+          offset = 10;
+        }
 				// We need to work out the (tan of the) angle between the
 				// imaginary horizontal line running through the center of the
 				// target node and the imaginary line connecting the center of
@@ -170,23 +176,23 @@
 						// path to that point
 
 						// By default assume path intersects a left-side corner
-						d.target.newX = d.target.x;
+						d.target.newX = d.target.x - offset;
 
 						// But...
 						if (d.target.centerX < d.source.newX) {
 								// i.e. if target node is to left of the source node
 								// then path intersects a right-side corner
-								d.target.newX = d.target.x + w;
+								d.target.newX = d.target.x + w + offset;
 						}
 
 						// By default assume path intersects a top corner
-						d.target.newY = d.target.y;
+						d.target.newY = d.target.y - offset;
 
 						// But...
 						if (d.target.centerY < d.source.newY) {
 								// i.e. if target node is above the source node
 								// then path intersects a bottom corner
-								d.target.newY = d.target.y + h;
+								d.target.newY = d.target.y + h + offset;
 						}
 				}
 
@@ -196,13 +202,13 @@
 						// path endpoint but we need to work out the y-coordinate
 
 						// By default assume path intersects left vertical side
-						d.target.newX = d.target.x;
+						d.target.newX = d.target.x - offset;
 
 						// But...
 						if (d.target.centerX < d.source.newX) {
 								// i.e. if target node is to left of the source node
 								// then path intersects right vertical side
-								d.target.newX = d.target.x + w;
+								d.target.newX = d.target.x + w + offset;
 						}
 
 						// Now use a bit of trigonometry to work out the y-coord.
@@ -211,13 +217,13 @@
 						d.target.newY =
 								d.target.centerY - ((d.target.centerX - d.target.x)
 																		*
-																		tanRatioMoveable);
+																		tanRatioMoveable) - offset;
 
 						// But...
 						if (d.target.centerY < d.source.newY) {
 								// i.e. if target node is above the source node
 								// then path intersects towards bottom of the node
-								d.target.newY = (2 * d.target.y) - d.target.newY + h;
+								d.target.newY = (2 * d.target.y) - d.target.newY + h + offset;
 						}
 				}
 
@@ -227,13 +233,13 @@
 						// path endpoint but we need to work out the x-coordinate
 
 						// By default assume path intersects top horizontal side
-						d.target.newY = d.target.y;
+						d.target.newY = d.target.y - offset;
 
 						// But...
 						if (d.target.centerY < d.source.newY) {
 								// i.e. if target node is above the source node
 								// then path intersects bottom horizontal side
-								d.target.newY = d.target.y + h;
+								d.target.newY = d.target.y + h + offset;
 						}
 
 						// Now use a bit of trigonometry to work out the x-coord.
@@ -242,13 +248,13 @@
 						d.target.newX =
 								d.target.centerX - ((d.target.centerY - d.target.y)
 																		/
-																		tanRatioMoveable);
+																		tanRatioMoveable) - offset;
 
 						// But...
 						if (d.target.centerX < d.source.newX) {
 								// i.e. if target node is to left of the source node
 								// then path intersects towards the righthand side
-								d.target.newX = (2 * d.target.x) - d.target.newX + w;
+								d.target.newX = (2 * d.target.x) - d.target.newX + w + offset;
 						}
 				}
 		}    
