@@ -26,7 +26,7 @@ module.exports = function (app) {
       res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
       for (var i = 0; i < sheet.worksheets.length; i++) {
         currentSheet = sheet.worksheets[i];
-        if (currentSheet.name == "network") {
+        if (currentSheet.name == "network_optimized_weights") {
           for (var j = 1; j < currentSheet.data.length; j++) {
             try {
               currentGene = {name: currentSheet.data[0][j].value}
@@ -36,8 +36,13 @@ module.exports = function (app) {
             }
             for(var k = 1; k < currentSheet.data[j].length; k++) {
               try {
-                if (currentSheet.data[j][k].value == 1) {
-                  currentLink = {source: k - 1, target: j - 1};
+                if (currentSheet.data[j][k].value != 0) {
+                  currentLink = {source: k - 1, target: j - 1, value: currentSheet.data[j][k].value};
+                  if (currentLink.value > 0) {
+                    currentLink.type = "arrowhead";
+                  } else {
+                    currentLink.type = "repressor";
+                  }
                   network.links.push(currentLink);
                 }
               } catch (err) {
