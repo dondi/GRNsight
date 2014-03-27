@@ -3,9 +3,7 @@
  *and http://bl.ocks.org/mbostock/950642
  *and http://bl.ocks.org/mbostock/1153292
  */
- 
-
-  var drawGraph = function (nodes, links) {
+  var drawGraph = function (nodes, links, controls) {
     /*
     var nodes = [
       {name: 'ACE2'},
@@ -365,6 +363,35 @@
     function dragstart(d) {
       d3.select(this).classed("fixed", d.fixed = true);
     }
-    
 
-  }
+    function updateLinkDist(event) {
+        var toChange = $(this).val();
+        force.linkDistance( toChange );
+        force.nodes(nodes)
+            .links(links)
+            .start();
+    }
+
+    function updateCharge(event) {
+        var toChange = $(this).val();
+        force.charge( toChange );
+        force.nodes(nodes)
+            .links(links)
+            .start(); 
+    }
+
+    function updateChargeDist(event) {
+        var toChange = $(this).val();
+        force.chargeDistance( toChange );
+        force.nodes(nodes)
+            .links(links)
+            .start();
+    }
+
+    // Set up our controllers if any.
+    if (controls) {
+        $(controls.linkSlider).change(updateLinkDist);
+        $(controls.chargeSlider).change(updateCharge);
+        $(controls.chargeDistSlider).change(updateChargeDist);
+    }
+}

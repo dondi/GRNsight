@@ -4,7 +4,7 @@ $(function() {
     formData.append('file', $('#upload')[0].files[0]);
     
     $.ajax({
-      url: 'http://grnsight.cs.lmu.edu:3000/upload', // TODO Read from config
+      url: 'http://localhost:3000/upload', // TODO Read from config
       data: formData,
       processData: false,
       contentType: false,
@@ -15,7 +15,11 @@ $(function() {
       }
     }).done(function (network) {
       console.log(network.genes);
-      drawGraph(network.genes, network.links);
+      drawGraph(network.genes, network.links, {
+        linkSlider: "#linkDistInput",
+        chargeSlider: "#chargeInput",
+        chargeDistSlider: "#chargeDistInput"
+      });
     });
     e.preventDefault();
   });

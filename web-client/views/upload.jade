@@ -9,10 +9,13 @@ html
     script(src='http://d3js.org/d3.v3.min.js')
     
   body
-    form(enctype='multipart/form-data')
+    form(enctype='multipart/form-data', class='form-inline', role='form')
       input(type='file', name='upload', id='upload')
-      br
-      input(type='submit')
+      input(type='submit', class='btn')
+      input(type='range', min='1', max='500', value='80', step='1', id='linkDistInput', name='linkDistInput')
+      input(type='range', min='-1000', max='0', value='-300', step='1', id='chargeInput', name='chargeInput')
+      input(type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput')
     div(class='grnsight-container')
-  script(src='/js/upload.js')
   script(src='/js/graph.js')
+  script(src='/js/upload.js')
+  
