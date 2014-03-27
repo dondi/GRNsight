@@ -315,7 +315,8 @@
                 dry = dr,
                 xRotation = 0, // degrees
                 largeArc = 0, // 1 or 0
-                sweep = 1; // 1 or 0
+                sweep = 1, //1 or 0
+                offset = 0;
 
                 // Self edge.
                 if ( x1 === x2 && y1 === y2 ) {
@@ -342,9 +343,13 @@
                   // and ending points of the arc are the same, so kludge it.
                   x2 = x1 + 1;
                   y2 = y1;
+                  
+                  if (d.value < 0) {
+                    offset = 6;
+                  }
                 } 
 
-           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2 + "," + y2;
+           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + (x2 + offset) + "," + y2;
         } else {
            return moveTo(d) + lineTo(d);
         }
