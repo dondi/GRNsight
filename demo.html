@@ -47,12 +47,12 @@
 
         <div id='mainContent'>
             <p id='pageTitle'>Demo</p>
-            <p id=""
             <p id='pageContent'>
                 A demo of the GRNsight visualization
                 <br /> <br />
                 <iframe src="http://grnsight.cs.lmu.edu:3001" width="100%" height="768" frameBorder="0"></iframe>
-                <form oninput="linkDistOutput.value=linkDistInput.value">
+                <!-- this will be uncommented out if/when the sliders are taken out of the iFrame-->
+                <!--<form oninput="linkDistOutput.value=linkDistInput.value">
                         Link Distance: 1<input type="range" min="1" max='500' value='80' id='linkDistInput' name='linkDistInput' onchange="updateLinkDist(this.value)">500: 
                         <output name='linkDistOutput' for='linkDistInput'>80</output>
                     </form>
@@ -67,7 +67,8 @@
                     <form oninput="chargeDistOutput.value=chargeDistInput.value">
                         Charge Distance: 0<input type="range" min="0" max="1000" value="1000" step='1' id="chargeDistInput" name='chargeDistInput' onchange='updateChargeDist(this.value)'>1000: 
                         <output name='chargeDistOutput' for='chargeDistInput'>1000</output>
-                    </form>
+                    </form>-->
+                    <a href="sandbox.html">Go to Sandbox</a>
             </p>
             <div id='footer'>
                 <hr id='separate'>
