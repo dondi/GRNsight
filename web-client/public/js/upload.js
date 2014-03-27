@@ -15,7 +15,11 @@ $(function() {
       }
     }).done(function (network) {
       console.log(network.genes);
-      drawGraph(network.genes, network.links);
+      drawGraph(network.genes, network.links, {
+        linkSlider: "#linkDistInput",
+        chargeSlider: "#chargeInput",
+        chargeDistSlider: "#chargeDistInput"
+      });
     });
     e.preventDefault();
   });
