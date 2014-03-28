@@ -9,6 +9,10 @@ iframe {
 	margin:0;
 }
 
+iframe.embedded-demo {
+    min-width: 1200px;
+}
+
 #header {
 	right:0;
 	left:0;
