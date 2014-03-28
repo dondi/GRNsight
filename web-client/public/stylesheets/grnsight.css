@@ -1,7 +1,13 @@
 .grnsight-container {
   position: fixed;
   left: 0;
-  top: 64px;
+  top: 80px;
   right: 0;
   bottom: 0;
+}
+form {
+  margin-bottom: 1ex;
+}
+form label {
+  margin: 1ex;
 }

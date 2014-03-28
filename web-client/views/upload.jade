@@ -2,20 +2,36 @@ doctype html
 html
   head
     title GRNsight
-    link(href="//netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css", rel="stylesheet")
+    link(href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", rel="stylesheet")
     link(href="/stylesheets/grnsight.css", rel="stylesheet")
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
-    script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
-    script(src='http://d3js.org/d3.v3.min.js')
-    
+
   body
-    form(enctype='multipart/form-data', class='form-inline', role='form')
-      input(type='file', name='upload', id='upload')
-      input(type='submit', class='btn')
-      input(type='range', min='1', max='500', value='80', step='1', id='linkDistInput', name='linkDistInput')
-      input(type='range', min='-1000', max='0', value='-300', step='1', id='chargeInput', name='chargeInput')
-      input(type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput')
-    div(class='grnsight-container')
+    div(class='container')
+      div(class='row')
+        div(class='col-md-12')
+          form(enctype='multipart/form-data', class='form-inline', role='form')
+            div(class='form-group')
+              label(for='linkDistInput') GRNmap Spreadsheet:
+              input(type='file', class='form-control', name='upload', id='upload', data-filename-placement='inside')
+            div(class='form-group pull-right')
+              input(type='submit', class='btn btn-primary')
+      div(class='row')
+        div(class='col-md-12')
+          form(class='form-inline')
+            div(class='form-group')
+              label(for='linkDistInput') Link Distance:
+              input(class='form-control', type='range', min='1', max='500', value='80', step='1', id='linkDistInput', name='linkDistInput')
+            div(class='form-group')
+              label(for='chargeInput') Charge:
+              input(class='form-control', type='range', min='-1000', max='0', value='-300', step='1', id='chargeInput', name='chargeInput')
+            div(class='form-group')
+              label(for='chargeDistInput') Charge Distance:
+              input(class='form-control' type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput')
+      div(class='grnsight-container')
+  script(src='//code.jquery.com/jquery-2.1.0.min.js')
+  script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+  script(src='/lib/bootstrap.file-input/bootstrap.file-input.js')
+  script(src='//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js')
   script(src='/js/graph.js')
   script(src='/js/upload.js')
   

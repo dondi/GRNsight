@@ -1,4 +1,7 @@
-$(function() {
+$(function () {
+    // Style.
+    $("input[type=file]").bootstrapFileInput();
+
   $('form').submit(function(e){
     var formData = new FormData();
     formData.append('file', $('#upload')[0].files[0]);
