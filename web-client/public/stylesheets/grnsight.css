@@ -8,6 +8,7 @@
 form {
   margin-bottom: 1ex;
 }
-form label {
+form label,
+form span {
   margin: 1ex;
 }
