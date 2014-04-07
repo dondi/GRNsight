@@ -3,7 +3,7 @@
  *and http://bl.ocks.org/mbostock/950642
  *and http://bl.ocks.org/mbostock/1153292
  */
-  var drawGraph = function (nodes, links, controls) {
+  var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls) {
     /*
     var nodes = [
       {name: 'ACE2'},
@@ -29,6 +29,14 @@
 
     var diagonal = d3.svg.diagonal()
       .projection(function(d) {return [d.y, d.x];});
+      
+    var positiveScale = d3.scale.quantile()
+                  .domain(positiveWeights)
+                  .range(["1.0px", "2.0px", "3.0px", "4.0px"]);
+                  
+    var negativeScale = d3.scale.quantile()
+                          .domain(negativeWeights)
+                          .range(["1.0px", "2.0px", "3.0px", "4.0px"]);
 
     var force = d3.layout.force()
         .size([width, height])
@@ -80,7 +88,7 @@
 
     link = link.data(links)
                .enter().append("g")
-               .attr("class", "link"); 
+               .attr("class", "link");
                  
 
     node = node.data(nodes)
@@ -110,6 +118,13 @@
 		    })
 		    .style("stroke", function (d) {
 		      return d.stroke;
+		    })
+		    .style("stroke-width", function (d) {
+		      if (d.value > 0) {
+		        return positiveScale(d.value);
+		      } else {
+		        return negativeScale(d.value);
+		      }
 		    }); 
            
 

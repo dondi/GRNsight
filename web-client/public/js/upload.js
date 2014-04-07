@@ -18,7 +18,7 @@ $(function () {
       }
     }).done(function (network) {
       console.log(network.genes);
-      drawGraph(network.genes, network.links, {
+      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
         linkSlider: "#linkDistInput",
         chargeSlider: "#chargeInput",
         chargeDistSlider: "#chargeDistInput"

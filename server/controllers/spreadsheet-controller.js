@@ -11,7 +11,9 @@ module.exports = function (app) {
         currentSheet,
         network = {genes: [],
                    links: [],
-                   errors: []},
+                   errors: [],
+                   positiveWeights: [],
+                   negativeWeights: []},
         currentLink,
         currentGene;
     form.parse(req, function (err, fields, files) {
@@ -42,9 +44,11 @@ module.exports = function (app) {
                   if (currentLink.value > 0) {
                     currentLink.type = "arrowhead";
                     currentLink.stroke = "MediumVioletRed";
+                    network.positiveWeights.push(currentLink.value);
                   } else {
                     currentLink.type = "repressor";
                     currentLink.stroke = "DarkTurquoise";
+                    network.negativeWeights.push(currentLink.value);
                   }
                   network.links.push(currentLink);
                 }
