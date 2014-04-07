@@ -54,21 +54,22 @@
       .attr("markerHeight", 6)
       .attr("orient", "auto")
       .append("path")
-        .attr("d", "M 0 0 L 6 3 L 0 6 Z");
+        .attr("d", "M 0 0 L 6 3 L 0 6 Z")
+        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
 
     //Flat arrowheads for repression
     svg.append("defs").append("marker")
        .attr("id", "repressor")
        .attr("viewbow", "0 0 12 12")
        .attr("refX", 6)
-       .attr("refY", 3)
+       .attr("refY", 6)
        .attr("markerUnits", "strokeWidth")
        .attr("markerWidth", 12)
-       .attr("markerHeight", 6)
+       .attr("markerHeight", 15)
        .attr("orient", "auto")
        .append("path")
          .attr("d", "M 6 0 L 6 12 Z")
-         .attr("style", "stroke: black");
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
@@ -105,8 +106,11 @@
           return moveTo(d) + lineTo(d);
         }) 
         .attr("marker-end", function(d) {
-		  return "url(#" + d.type + ")";
-		}); 
+		      return "url(#" + d.type + ")";
+		    })
+		    .style("stroke", function (d) {
+		      return d.stroke;
+		    }); 
            
 
                

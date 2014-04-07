@@ -10,7 +10,8 @@ module.exports = function (app) {
     var form = new multiparty.Form(),
         currentSheet,
         network = {genes: [],
-                   links: []},
+                   links: [],
+                   errors: []},
         currentLink,
         currentGene;
     form.parse(req, function (err, fields, files) {
@@ -32,7 +33,7 @@ module.exports = function (app) {
               currentGene = {name: currentSheet.data[0][j].value}
               network.genes.push(currentGene);
             } catch (err) {
-              console.log(err);
+              network.errors.push(err);
             }
             for(var k = 1; k < currentSheet.data[j].length; k++) {
               try {
@@ -40,13 +41,15 @@ module.exports = function (app) {
                   currentLink = {source: k - 1, target: j - 1, value: currentSheet.data[j][k].value};
                   if (currentLink.value > 0) {
                     currentLink.type = "arrowhead";
+                    currentLink.stroke = "MediumVioletRed";
                   } else {
                     currentLink.type = "repressor";
+                    currentLink.stroke = "DarkTurquoise";
                   }
                   network.links.push(currentLink);
                 }
               } catch (err) {
-                console.log(err);
+                network.errors.push(err);
               }
             }
           }
