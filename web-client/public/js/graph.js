@@ -4,22 +4,6 @@
  *and http://bl.ocks.org/mbostock/1153292
  */
   var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls) {
-    /*
-    var nodes = [
-      {name: 'ACE2'},
-      {name: 'AFT2'},
-      {name: 'CIN5'},
-      {name: 'FHL1'},
-      {name: 'FKH2'},
-      {name: 'GLN3'},
-      {name: 'HAP5'}];
-
-    var links = [
-      {'source':1,'target':0},
-      {'source':4,'target':2}
-    ];
-    */
-
     var $container = $(".grnsight-container");
 
     var width = $container.width(),
@@ -54,29 +38,29 @@
     //Adding the arrowheads
     svg.append("defs").append("marker")
       .attr("id", "arrowhead")
-      .attr("viewbox", "0 0 6 6")
-      .attr("refX", 6)
-      .attr("refY", 3)
-      .attr("markerUnits", "strokeWidth")
-      .attr("markerWidth", 6)
-      .attr("markerHeight", 6)
+      .attr("viewbox", "0 0 10 10")
+      .attr("refX", 10)
+      .attr("refY", 5)
+      .attr("markerUnits", "userSpaceOnUse")
+      .attr("markerWidth", 10)
+      .attr("markerHeight", 10)
       .attr("orient", "auto")
       .append("path")
-        .attr("d", "M 0 0 L 6 3 L 0 6 Z")
+        .attr("d", "M 0 0 L 10 5 L 0 10 Z")
         .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
 
     //Flat arrowheads for repression
     svg.append("defs").append("marker")
        .attr("id", "repressor")
-       .attr("viewbow", "0 0 12 12")
-       .attr("refX", 6)
-       .attr("refY", 6)
-       .attr("markerUnits", "strokeWidth")
-       .attr("markerWidth", 12)
-       .attr("markerHeight", 15)
+       .attr("viewbox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 24)
+       .attr("markerHeight", 24)
        .attr("orient", "auto")
        .append("path")
-         .attr("d", "M 6 0 L 6 12 Z")
+         .attr("d", "M 12 0 L 12 24 Z")
          .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
   
     var link = svg.selectAll(".link"),
