@@ -17,11 +17,11 @@
       
     var positiveScale = d3.scale.quantile()
                   .domain(positiveWeights)
-                  .range(["1.0px", "2.0px", "3.0px", "4.0px"]);
+                  .range(["2.0px", "3.0px", "4.0px", "5.0px"]);
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
-                          .range(["1.0px", "2.0px", "3.0px", "4.0px"]);
+                          .range(["2.0px", "3.0px", "4.0px", "5.0px"]);
 
     var force = d3.layout.force()
         .size([width, height])
@@ -271,6 +271,7 @@
        .attr("height", function() {
          return this.parentNode.getAttribute("height");
        })
+       .attr("stroke-width", "2px")
        .on("dblclick", dblclick);
            
     node.append("text")
