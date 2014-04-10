@@ -7,7 +7,8 @@
     var $container = $(".grnsight-container");
 
     var width = $container.width(),
-        height = $container.height();
+        height = $container.height(),
+        nodeHeight = 30;
   
     var color = d3.scale.category20();
 
@@ -87,7 +88,7 @@
                .attr("width", function (d) {
                  return d.name.length * 20;
                })
-               .attr("height", 30)
+               .attr("height", nodeHeight)
                .call(force.drag);
                
     link.append("path")
@@ -325,7 +326,7 @@
                   //Couldn't figure out how to derive the width of the rectangle from here,
                   //so it is being calculated again. May need to set it when the node is created.
                   x1 = d.source.x + (d.source.name.length * 20);
-                  y1 = d.source.y + 15;
+                  y1 = d.source.y + (nodeHeight/2);
                   // Fiddle with this angle to get loop oriented.
                   xRotation = 45;
 
@@ -333,7 +334,7 @@
                   largeArc = 1;
 
                   // Change sweep to change orientation of loop. 
-                  sweep = 0;
+                  sweep = 1;
 
                   // Make drx and dry different to get an ellipse
                   // instead of a circle.
@@ -342,15 +343,15 @@
 
                   // For whatever reason the arc collapses to a point if the beginning
                   // and ending points of the arc are the same, so kludge it.
-                  x2 = x1 + 1;
-                  y2 = y1;
+                  x2 = d.source.x + (d.source.name.length *20)/1.2;
+                  y2 = d.source.y + nodeHeight;
                   
                   if (d.value < 0) {
-                    offset = 6;
+                    offset = 10;
                   }
                 } 
 
-           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + (x2 + offset) + "," + y2;
+           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2  + "," + (y2 + offset);
         } else {
            return moveTo(d) + lineTo(d);
         }
