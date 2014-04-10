@@ -391,6 +391,7 @@
         force.nodes(nodes)
             .links(links)
             .start();
+        $( "#linkDistVal" ).html( toChange );
     }
 
     function updateCharge(event) {
@@ -399,6 +400,7 @@
         force.nodes(nodes)
             .links(links)
             .start(); 
+        $( "#chargeVal" ).html( toChange );
     }
 
     function updateChargeDist(event) {
@@ -407,6 +409,7 @@
         force.nodes(nodes)
             .links(links)
             .start();
+        $( "#chargeDistVal" ).html( toChange );
     }
 
     // Set up our controllers if any.

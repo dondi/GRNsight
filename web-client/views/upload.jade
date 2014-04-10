@@ -15,25 +15,18 @@ html
               input(type='file', class='form-control', name='upload', id='upload', data-filename-placement='inside')
             div(class='form-group pull-right')
               input(type='submit', class='btn btn-success')
-      div(class='row')
-        div(class='col-md-12')
-          form(class='form-inline')
-            div(class='form-group')
-              label(for='linkDistInput') Link Distance:
-              span 1
-              input(class='form-control', type='range', min='1', max='500', value='80', step='1', id='linkDistInput', name='linkDistInput')
-              span 500
-            div(class='form-group')
-              label(for='chargeInput') Charge:
-              span -1000
-              input(class='form-control', type='range', min='-1000', max='0', value='-300', step='1', id='chargeInput', name='chargeInput')
-              span 0
-            div(class='form-group')
-              label(for='chargeDistInput') Charge Distance:
-              span 0
-              input(class='form-control' type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput')
-              span 1000
       div(class='grnsight-container')
+    div(class='sliders')
+        form
+          label(for='linkDistInput') Link Distance: 
+          span(id='linkDistVal') 80
+          input(class='form-control', type='range', min='1', max='500', value='80', step='1', id='linkDistInput', name='linkDistInput')
+          label(for='chargeInput') Charge:
+          span(id='chargeVal') -300
+          input(class='form-control', type='range', min='-1000', max='0', value='-300', step='1', id='chargeInput', name='chargeInput')
+          label(for='chargeDistInput') Charge Distance:
+          span(id='chargeDistVal') 100
+          input(class='form-control' type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput')
   script(src='//code.jquery.com/jquery-2.1.0.min.js')
   script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
   script(src='/lib/bootstrap.file-input/bootstrap.file-input.js')
