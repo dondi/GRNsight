@@ -133,13 +133,29 @@
           w = parseFloat(node.attr("width")),
           h = parseFloat(node.attr("height"));
           
+      var x1 = d.source.x,
+          y1 = d.source.y,
+          x2 = d.target.x,
+          y2 = d.target.y,
+          dx = x2 - x1,
+          dy = y2 - y1,
+          dr = Math.sqrt(dx * dx + dy * dy),
+
+          // Defaults for normal edge.
+          drx = dr,
+          dry = dr,
+          xRotation = 0, // degrees
+          largeArc = 0, // 1 or 0
+          sweep = 1, //1 or 0
+          offset = 0;
+          
       d.target.centerX = d.target.x + (w/2);
       d.target.centerY = d.target.y + (h/2);
       
       //This function calculates the newX and newY
       smartPathEnd(d, w, h);
       
-      return " L" + d.target.newX + "," + d.target.newY;
+      return "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + d.target.newX  + "," + d.target.newY;
     }
     
     function smartPathEnd(d, w, h) {
