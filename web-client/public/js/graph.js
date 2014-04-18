@@ -17,11 +17,11 @@
       
     var positiveScale = d3.scale.quantile()
                   .domain(positiveWeights)
-                  .range(["2.0px", "3.0px", "4.0px", "5.0px"]);
+                  .range(["2.0", "3.0", "4.0", "5.0"]);
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
-                          .range(["2.0px", "3.0px", "4.0px", "5.0px"]);
+                          .range(["2.0", "3.0", "4.0", "5.0"]);
 
     var force = d3.layout.force()
         .size([width, height])
@@ -35,23 +35,25 @@
     var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
         .attr("height", height);
+        
+    var defs = svg.append("defs");
     
     //Adding the arrowheads
-    svg.append("defs").append("marker")
+    defs.append("marker")
       .attr("id", "arrowhead")
-      .attr("viewbox", "0 0 10 10")
+      .attr("viewbox", "0 0 50 50")
       .attr("refX", 10)
       .attr("refY", 5)
       .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 10)
-      .attr("markerHeight", 10)
+      .attr("markerWidth", 50)
+      .attr("markerHeight", 50)
       .attr("orient", "auto")
       .append("path")
         .attr("d", "M 0 0 L 10 5 L 0 10 Z")
         .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
 
     //Flat arrowheads for repression, vertical
-    svg.append("defs").append("marker")
+    defs.append("marker")
        .attr("id", "repressor")
        .attr("viewbox", "0 0 24 24")
        .attr("refX", 12)
@@ -65,7 +67,7 @@
          .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
          
     //Flat arrowheads for repression, horizontal
-    svg.append("defs").append("marker")
+    defs.append("marker")
        .attr("id", "repressorHorizontal")
        .attr("viewbox", "0 0 24 24")
        .attr("refX", 12)
@@ -112,9 +114,6 @@
         .attr("d", function(d) {
           return moveTo(d) + lineTo(d);
         }) 
-        .attr("marker-end", function(d) {
-		      return "url(#" + d.type + ")";
-		    })
 		    .style("stroke", function (d) {
 		      return d.stroke;
 		    })
@@ -124,6 +123,9 @@
 		      } else {
 		        return negativeScale(d.value);
 		      }
+		    })
+		    .attr("marker-end", function(d) {
+		      return "url(#" + d.type + ")";
 		    }); 
            
 
