@@ -5,7 +5,7 @@
  */
   var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls) {
     var $container = $(".grnsight-container");
-
+    d3.selectAll("svg").remove();
     var width = $container.width(),
         height = $container.height(),
         nodeHeight = 30;
@@ -50,7 +50,7 @@
         .attr("d", "M 0 0 L 10 5 L 0 10 Z")
         .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
 
-    //Flat arrowheads for repression
+    //Flat arrowheads for repression, vertical
     svg.append("defs").append("marker")
        .attr("id", "repressor")
        .attr("viewbox", "0 0 24 24")
@@ -59,9 +59,23 @@
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 24)
        .attr("markerHeight", 24)
-       .attr("orient", "auto")
+       .attr("orient", "angle")
        .append("path")
          .attr("d", "M 12 0 L 12 24 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
+         
+    //Flat arrowheads for repression, horizontal
+    svg.append("defs").append("marker")
+       .attr("id", "repressorHorizontal")
+       .attr("viewbox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 24)
+       .attr("markerHeight", 24)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 0 12 L 24 12 Z")
          .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
   
     var link = svg.selectAll(".link"),
@@ -159,7 +173,6 @@
     }
     
     function smartPathEnd(d, w, h) {
-        
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var offset = 0;
         
@@ -171,7 +184,7 @@
 				// target node and the imaginary line connecting the center of
 				// the target node with the top-left corner of the same
 				// node. Of course, this angle is fixed.
-				var tanRatioFixed =
+				d.tanRatioFixed =
 						(d.target.centerY - d.target.y)
 						/
 						(d.target.centerX - d.target.x);
@@ -181,7 +194,7 @@
 				// target node and the imaginary line connecting the center of
 				// the target node with the center of the source node. This
 				// angle changes as the nodes move around the screen.
-				var tanRatioMoveable =
+				d.tanRatioMoveable =
 						Math.abs(d.target.centerY - d.source.newY)
 						/
 						Math.abs(d.target.centerX - d.source.newX); // Note,
@@ -192,92 +205,92 @@
 
 				// Now work out the intersection point
 
-				if (tanRatioMoveable == tanRatioFixed) {
-						// Then path is intersecting at corner of textbox so draw
-						// path to that point
+				if (d.tanRatioMoveable == d.tanRatioFixed) {
+          // Then path is intersecting at corner of textbox so draw
+          // path to that point
 
-						// By default assume path intersects a left-side corner
-						d.target.newX = d.target.x - offset;
+          // By default assume path intersects a left-side corner
+          d.target.newX = d.target.x - offset;
 
-						// But...
-						if (d.target.centerX < d.source.newX) {
-								// i.e. if target node is to left of the source node
-								// then path intersects a right-side corner
-								d.target.newX = d.target.x + w + offset;
-						}
+          // But...
+          if (d.target.centerX < d.source.newX) {
+              // i.e. if target node is to left of the source node
+              // then path intersects a right-side corner
+              d.target.newX = d.target.x + w + offset;
+          }
 
-						// By default assume path intersects a top corner
-						d.target.newY = d.target.y - offset;
+          // By default assume path intersects a top corner
+          d.target.newY = d.target.y - offset;
 
-						// But...
-						if (d.target.centerY < d.source.newY) {
-								// i.e. if target node is above the source node
-								// then path intersects a bottom corner
-								d.target.newY = d.target.y + h + offset;
-						}
+          // But...
+          if (d.target.centerY < d.source.newY) {
+              // i.e. if target node is above the source node
+              // then path intersects a bottom corner
+              d.target.newY = d.target.y + h + offset;
+          }
 				}
 
-				if (tanRatioMoveable < tanRatioFixed) {
-						// Then path is intersecting on a vertical side of the
-						// textbox, which means we know the x-coordinate of the
-						// path endpoint but we need to work out the y-coordinate
+				if (d.tanRatioMoveable < d.tanRatioFixed) {
+          // Then path is intersecting on a vertical side of the
+          // textbox, which means we know the x-coordinate of the
+          // path endpoint but we need to work out the y-coordinate
 
-						// By default assume path intersects left vertical side
-						d.target.newX = d.target.x - offset;
+          // By default assume path intersects left vertical side
+          d.target.newX = d.target.x - offset;
 
-						// But...
-						if (d.target.centerX < d.source.newX) {
-								// i.e. if target node is to left of the source node
-								// then path intersects right vertical side
-								d.target.newX = d.target.x + w + offset;
-						}
+          // But...
+          if (d.target.centerX < d.source.newX) {
+              // i.e. if target node is to left of the source node
+              // then path intersects right vertical side
+              d.target.newX = d.target.x + w + offset;
+          }
 
-						// Now use a bit of trigonometry to work out the y-coord.
+          // Now use a bit of trigonometry to work out the y-coord.
 
-						// By default assume path intersects towards top of node								
-						d.target.newY =
-								d.target.centerY - ((d.target.centerX - d.target.x)
-																		*
-																		tanRatioMoveable);
+          // By default assume path intersects towards top of node								
+          d.target.newY =
+              d.target.centerY - ((d.target.centerX - d.target.x)
+                                  *
+                                  d.tanRatioMoveable);
 
-						// But...
-						if (d.target.centerY < d.source.newY) {
-								// i.e. if target node is above the source node
-								// then path intersects towards bottom of the node
-								d.target.newY = (2 * d.target.y) - d.target.newY + h;
-						}
+          // But...
+          if (d.target.centerY < d.source.newY) {
+              // i.e. if target node is above the source node
+              // then path intersects towards bottom of the node
+              d.target.newY = (2 * d.target.y) - d.target.newY + h;
+          }
 				}
 
-				if (tanRatioMoveable > tanRatioFixed) {
-						// Then path is intersecting on a horizontal side of the
-						// textbox, which means we know the y-coordinate of the
-						// path endpoint but we need to work out the x-coordinate
+				if (d.tanRatioMoveable > d.tanRatioFixed) {
+          // Then path is intersecting on a horizontal side of the
+          // textbox, which means we know the y-coordinate of the
+          // path endpoint but we need to work out the x-coordinate
 
-						// By default assume path intersects top horizontal side
-						d.target.newY = d.target.y - offset;
+          // By default assume path intersects top horizontal side
+          d.target.newY = d.target.y - offset;
 
-						// But...
-						if (d.target.centerY < d.source.newY) {
-								// i.e. if target node is above the source node
-								// then path intersects bottom horizontal side
-								d.target.newY = d.target.y + h + offset;
-						}
+          // But...
+          if (d.target.centerY < d.source.newY) {
+              // i.e. if target node is above the source node
+              // then path intersects bottom horizontal side
+              d.target.newY = d.target.y + h + offset;
+          }
 
-						// Now use a bit of trigonometry to work out the x-coord.
+          // Now use a bit of trigonometry to work out the x-coord.
 
-						// By default assume path intersects towards lefthand side
-						d.target.newX =
-								d.target.centerX - ((d.target.centerY - d.target.y)
-																		/
-																		tanRatioMoveable) ;
+          // By default assume path intersects towards lefthand side
+          d.target.newX =
+              d.target.centerX - ((d.target.centerY - d.target.y)
+                                  /
+                                  d.tanRatioMoveable) ;
 
-						// But...
-						if (d.target.centerX < d.source.newX) {
-								// i.e. if target node is to left of the source node
-								// then path intersects towards the righthand side
-								d.target.newX = (2 * d.target.x) - d.target.newX + w;
-						}
-				}
+          // But...
+          if (d.target.centerX < d.source.newX) {
+              // i.e. if target node is to left of the source node
+              // then path intersects towards the righthand side
+              d.target.newX = (2 * d.target.x) - d.target.newX + w;
+					}
+			  }
 		}    
         
     node.append("rect")
@@ -373,7 +386,17 @@
            return moveTo(d) + lineTo(d);
         }
       });
-
+      link.select("path").attr("marker-end", function(d) {
+        if (d.type == "repressor") {
+          if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
+            return "url(#repressorHorizontal)";
+          } else {
+            return "url(#repressor)";
+          }
+        } else {
+          return "url(#arrowhead)";				
+        }
+      });
       node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
     }
 
