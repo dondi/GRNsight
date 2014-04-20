@@ -403,14 +403,14 @@
                 xRotation = 0, // degrees
                 largeArc = 0, // 1 or 0
                 sweep = 1, //1 or 0
-                offset = 0;
+                offset = parseFloat(d.strokeWidth);
 
                 // Self edge.
                 if ( x1 === x2 && y1 === y2 ) {
                   //Move the position of the loop
                   //Couldn't figure out how to derive the width of the rectangle from here,
                   //so it is being calculated again. May need to set it when the node is created.
-                  x1 = d.source.x + (d.source.name.length * 20);
+                  x1 = d.source.x + (d.source.name.length * 20) - 5;
                   y1 = d.source.y + (nodeHeight/2);
                   // Fiddle with this angle to get loop oriented.
                   xRotation = 45;
@@ -429,8 +429,8 @@
 
                   // Make drx and dry different to get an ellipse
                   // instead of a circle.
-                  drx = 15 + radiusModifier;
-                  dry = 15 + radiusModifier;
+                  drx = 25 + radiusModifier;
+                  dry = 25 + radiusModifier;
 
                   // For whatever reason the arc collapses to a point if the beginning
                   // and ending points of the arc are the same, so kludge it.
