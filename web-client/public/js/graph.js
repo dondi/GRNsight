@@ -17,11 +17,11 @@
       
     var positiveScale = d3.scale.quantile()
                   .domain(positiveWeights)
-                  .range(["2.0", "6.0", "10.0", "14.0"]);
+                  .range(["2", "6", "10", "14"]);
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
-                          .range(["2.0", "6.0", "10.0", "14.0"]);
+                          .range(["2", "6", "10", "14"]);
 
     var force = d3.layout.force()
         .size([width, height])
@@ -40,13 +40,52 @@
     
     //Adding the arrowheads
     defs.append("marker")
-      .attr("id", "arrowhead")
+      .attr("id", "arrowhead2")
       .attr("viewBox", "0 0 10 10")
       .attr("refX", 10)
       .attr("refY", 5)
       .attr("markerUnits", "userSpaceOnUse")
       .attr("markerWidth", 10)
       .attr("markerHeight", 10)
+      .attr("orient", "auto")
+      .append("path")
+        .attr("d", "M 0 0 L 10 5 L 0 10 z")
+        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
+        
+    defs.append("marker")
+      .attr("id", "arrowhead6")
+      .attr("viewBox", "0 0 10 10")
+      .attr("refX", 10)
+      .attr("refY", 5)
+      .attr("markerUnits", "userSpaceOnUse")
+      .attr("markerWidth", 15)
+      .attr("markerHeight", 15)
+      .attr("orient", "auto")
+      .append("path")
+        .attr("d", "M 0 0 L 10 5 L 0 10 z")
+        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
+        
+    defs.append("marker")
+      .attr("id", "arrowhead10")
+      .attr("viewBox", "0 0 10 10")
+      .attr("refX", 10)
+      .attr("refY", 5)
+      .attr("markerUnits", "userSpaceOnUse")
+      .attr("markerWidth", 20)
+      .attr("markerHeight", 20)
+      .attr("orient", "auto")
+      .append("path")
+        .attr("d", "M 0 0 L 10 5 L 0 10 z")
+        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
+        
+    defs.append("marker")
+      .attr("id", "arrowhead14")
+      .attr("viewBox", "0 0 10 10")
+      .attr("refX", 10)
+      .attr("refY", 5)
+      .attr("markerUnits", "userSpaceOnUse")
+      .attr("markerWidth", 25)
+      .attr("markerHeight", 25)
       .attr("orient", "auto")
       .append("path")
         .attr("d", "M 0 0 L 10 5 L 0 10 z")
@@ -89,7 +128,14 @@
 
     link = link.data(links)
                .enter().append("g")
-               .attr("class", "link");
+               .attr("class", "link")
+               .attr("strokeWidth", function (d) {
+                 if (d.value > 0) {
+                   return positiveScale(d.value);
+                 } else {
+                  return negativeScale(d.value);
+                 }
+               });
                  
 
     node = node.data(nodes)
@@ -111,21 +157,18 @@
         .attr("id", function(d) {
           return "path" + d.source.index + "_" + d.target.index;
         })
-        .attr("d", function(d) {
-          return moveTo(d) + lineTo(d);
-        }) 
 		    .style("stroke", function (d) {
 		      return d.stroke;
 		    })
 		    .style("stroke-width", function (d) {
 		      if (d.value > 0) {
-		        return positiveScale(d.value);
+		        return d.strokeWidth = positiveScale(d.value);
 		      } else {
-		        return negativeScale(d.value);
+		        return d.strokeWidth = negativeScale(d.value);
 		      }
 		    })
 		    .attr("marker-end", function(d) {
-		      return "url(#" + d.type + ")";
+		      return "url(#" + d.type + d.strokeWidth + ")";
 		    }); 
            
 
@@ -141,7 +184,7 @@
       d.source.newX = d.source.x + (w/2);
       d.source.newY = d.source.y + (h/2);
           
-      return "M" + d.source.newX + "," + d.source.newY;
+      return "M" + d.source.newX + "," + d.source.newY + " ";
     }
     
     function lineTo(d) {
@@ -153,16 +196,16 @@
           y1 = d.source.y,
           x2 = d.target.x,
           y2 = d.target.y,
-          dx = x2 - x1,
-          dy = y2 - y1,
-          dr = Math.sqrt(dx * dx + dy * dy),
+          dx,
+          dy,
+          dr,
 
           // Defaults for normal edge.
-          drx = dr,
-          dry = dr,
+          drx,
+          dry,
           xRotation = 0, // degrees
-          largeArc = 0, // 1 or 0
-          sweep = 1, //1 or 0
+          largeArc = 0 // 1 or 0
+          sweep = 0, //1 or 0
           offset = 0;
           
       d.target.centerX = d.target.x + (w/2);
@@ -170,13 +213,22 @@
       
       //This function calculates the newX and newY
       smartPathEnd(d, w, h);
+      dx = d.target.newX - x1;
+      dy = d.target.newY - y1;
+      dr = Math.sqrt(dx * dx + dy * dy);
+      drx = dr,
+      dry = dr;
       
-      return "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + d.target.newX  + "," + d.target.newY;
+      if ( ((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) || ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))){
+        sweep = 1;
+      }
+      
+      return "A" + drx + "," + dry + "," + xRotation + "," + largeArc + "," + sweep + "," + d.target.newX  + "," + d.target.newY;
     }
     
     function smartPathEnd(d, w, h) {
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
-        var offset = 0;
+        var offset = parseFloat(d.strokeWidth);
         
         if (d.value < 0) {
           offset = 10;
@@ -403,7 +455,7 @@
             return "url(#repressor)";
           }
         } else {
-          return "url(#arrowhead)";				
+          return "url(#arrowhead" + d.strokeWidth + ")";				
         }
       });
       node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
