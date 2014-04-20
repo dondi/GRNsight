@@ -17,11 +17,11 @@
       
     var positiveScale = d3.scale.quantile()
                   .domain(positiveWeights)
-                  .range(["2.0", "3.0", "4.0", "5.0"]);
+                  .range(["2.0", "6.0", "10.0", "14.0"]);
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
-                          .range(["2.0", "3.0", "4.0", "5.0"]);
+                          .range(["2.0", "6.0", "10.0", "14.0"]);
 
     var force = d3.layout.force()
         .size([width, height])
@@ -41,21 +41,21 @@
     //Adding the arrowheads
     defs.append("marker")
       .attr("id", "arrowhead")
-      .attr("viewbox", "0 0 50 50")
+      .attr("viewBox", "0 0 10 10")
       .attr("refX", 10)
       .attr("refY", 5)
       .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 50)
-      .attr("markerHeight", 50)
+      .attr("markerWidth", 10)
+      .attr("markerHeight", 10)
       .attr("orient", "auto")
       .append("path")
-        .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+        .attr("d", "M 0 0 L 10 5 L 0 10 z")
         .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
 
     //Flat arrowheads for repression, vertical
     defs.append("marker")
        .attr("id", "repressor")
-       .attr("viewbox", "0 0 24 24")
+       .attr("viewBox", "0 0 24 24")
        .attr("refX", 12)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
@@ -69,7 +69,7 @@
     //Flat arrowheads for repression, horizontal
     defs.append("marker")
        .attr("id", "repressorHorizontal")
-       .attr("viewbox", "0 0 24 24")
+       .attr("viewBox", "0 0 24 24")
        .attr("refX", 12)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
@@ -343,6 +343,7 @@
                 dx = x2 - x1,
                 dy = y2 - y1,
                 dr = Math.sqrt(dx * dx + dy * dy),
+                radiusModifier = 0,
 
                 // Defaults for normal edge.
                 drx = dr,
@@ -367,11 +368,17 @@
 
                   // Change sweep to change orientation of loop. 
                   sweep = 1;
+                  
+                  if (d.value > 0) {
+                    radiusModifier = positiveScale(d.value)/2;
+                  } else {
+                    radiusModifier = negativeScale(d.value)/2;
+                  }
 
                   // Make drx and dry different to get an ellipse
                   // instead of a circle.
-                  drx = 15;
-                  dry = 15;
+                  drx = 15 + radiusModifier;
+                  dry = 15 + radiusModifier;
 
                   // For whatever reason the arc collapses to a point if the beginning
                   // and ending points of the arc are the same, so kludge it.
