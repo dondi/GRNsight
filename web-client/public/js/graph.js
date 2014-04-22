@@ -460,6 +460,13 @@
     });
 
     function tick() {
+    
+      node.attr("x", function(d) {
+        var nodeWidth = d.name.length * 20;
+        return d.x = Math.max(0, Math.min(width - nodeWidth, d.x));
+      })
+         .attr("y", function(d) { return d.y = Math.max(0, Math.min(height - nodeHeight, d.y));})
+         .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
         /* Allows for looping edges.
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
@@ -536,7 +543,7 @@
           return "url(#arrowhead" + d.strokeWidth + ")";				
         }
       });
-      node.attr("transform", function(d) {return "translate(" + d.x + "," + d.y + ")";});
+
     }
 
     function dblclick(d) {
