@@ -93,7 +93,7 @@
 
     //Flat arrowheads for repression, vertical
     defs.append("marker")
-       .attr("id", "repressor")
+       .attr("id", "repressor2")
        .attr("viewBox", "0 0 24 24")
        .attr("refX", 12)
        .attr("refY", 12)
@@ -105,9 +105,48 @@
          .attr("d", "M 12 0 L 12 24 Z")
          .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
          
+    defs.append("marker")
+       .attr("id", "repressor6")
+       .attr("viewBox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 28)
+       .attr("markerHeight", 28)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 12 0 L 12 24 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 3.5");
+         
+    defs.append("marker")
+       .attr("id", "repressor10")
+       .attr("viewBox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 28)
+       .attr("markerHeight", 28)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 12 0 L 12 24 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 6.5");
+         
+    defs.append("marker")
+       .attr("id", "repressor14")
+       .attr("viewBox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 32)
+       .attr("markerHeight", 32)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 12 0 L 12 24 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
+         
     //Flat arrowheads for repression, horizontal
     defs.append("marker")
-       .attr("id", "repressorHorizontal")
+       .attr("id", "repressorHorizontal2")
        .attr("viewBox", "0 0 24 24")
        .attr("refX", 12)
        .attr("refY", 12)
@@ -118,6 +157,45 @@
        .append("path")
          .attr("d", "M 0 12 L 24 12 Z")
          .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
+
+    defs.append("marker")
+       .attr("id", "repressorHorizontal6")
+       .attr("viewBox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 28)
+       .attr("markerHeight", 28)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 0 12 L 24 12 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 3.5");
+         
+    defs.append("marker")
+       .attr("id", "repressorHorizontal10")
+       .attr("viewBox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 28)
+       .attr("markerHeight", 28)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 0 12 L 24 12 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 6.5");
+         
+    defs.append("marker")
+       .attr("id", "repressorHorizontal14")
+       .attr("viewBox", "0 0 24 24")
+       .attr("refX", 12)
+       .attr("refY", 12)
+       .attr("markerUnits", "userSpaceOnUse")
+       .attr("markerWidth", 32)
+       .attr("markerHeight", 32)
+       .attr("orient", "angle")
+       .append("path")
+         .attr("d", "M 0 12 L 24 12 Z")
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
@@ -231,7 +309,7 @@
         var offset = parseFloat(d.strokeWidth);
         
         if (d.value < 0) {
-          offset = 10;
+          offset = Math.max(offset, 10);
         }
 				// We need to work out the (tan of the) angle between the
 				// imaginary horizontal line running through the center of the
@@ -438,7 +516,7 @@
                   y2 = d.source.y + nodeHeight;
                   
                   if (d.value < 0) {
-                    offset = 10;
+                    offset = Math.max(10, parseFloat(d.strokeWidth));
                   }
                 } 
 
@@ -450,9 +528,9 @@
       link.select("path").attr("marker-end", function(d) {
         if (d.type == "repressor") {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
-            return "url(#repressorHorizontal)";
+            return "url(#repressorHorizontal" + d.strokeWidth + ")";
           } else {
-            return "url(#repressor)";
+            return "url(#repressor" + d.strokeWidth + ")";
           }
         } else {
           return "url(#arrowhead" + d.strokeWidth + ")";				
