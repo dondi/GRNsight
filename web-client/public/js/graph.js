@@ -9,20 +9,23 @@
     var width = $container.width(),
         height = $container.height(),
         nodeHeight = 30;
-  
-    var color = d3.scale.category20();
-
-    var diagonal = d3.svg.diagonal()
-      .projection(function(d) {return [d.y, d.x];});
       
-    var positiveScale = d3.scale.quantile()
-                  .domain(positiveWeights)
-                  .range(["2", "6", "10", "14"]);
+    var positiveScale;
+    
+    if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
+      positiveScale = d3.scale.quantile()
+                              .domain(positiveWeights)
+                              .range(["2"]);
+    } else {
+      positiveScale = d3.scale.quantile()
+                        .domain(positiveWeights)
+                        .range(["2", "6", "10", "14"]);
+    }
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
                           .range(["2", "6", "10", "14"]);
-
+    
     var force = d3.layout.force()
         .size([width, height])
         .on("tick", tick)
@@ -50,7 +53,7 @@
       .attr("orient", "auto")
       .append("path")
         .attr("d", "M 0 0 L 10 5 L 0 10 z")
-        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
+        .attr("style", "stroke: gray; fill: gray");
         
     defs.append("marker")
       .attr("id", "arrowhead6")
@@ -103,7 +106,7 @@
        .attr("orient", "angle")
        .append("path")
          .attr("d", "M 12 0 L 12 24 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
+         .attr("style", "stroke: gray; fill: gray");
          
     defs.append("marker")
        .attr("id", "repressor6")
@@ -156,7 +159,7 @@
        .attr("orient", "angle")
        .append("path")
          .attr("d", "M 0 12 L 24 12 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise");
+         .attr("style", "stroke: gray; fill: gray");
 
     defs.append("marker")
        .attr("id", "repressorHorizontal6")
@@ -235,14 +238,18 @@
         .attr("id", function(d) {
           return "path" + d.source.index + "_" + d.target.index;
         })
-		    .style("stroke", function (d) {
-		      return d.stroke;
-		    })
 		    .style("stroke-width", function (d) {
 		      if (d.value > 0) {
 		        return d.strokeWidth = positiveScale(d.value);
 		      } else {
 		        return d.strokeWidth = negativeScale(d.value);
+		      }
+		    })
+		    .style("stroke", function (d) {
+		      if (d.strokeWidth == "2") {
+		        return "gray";
+		      } else {
+		        return d.stroke;
 		      }
 		    })
 		    .attr("marker-end", function(d) {
