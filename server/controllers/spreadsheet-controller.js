@@ -1,6 +1,7 @@
 var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
-    util = require('util');
+    util = require('util'),
+    path = require('path');
     
 module.exports = function (app) {
 
@@ -17,11 +18,13 @@ module.exports = function (app) {
         currentLink,
         currentGene;
     form.parse(req, function (err, fields, files) {
-      if (err) return res.json(400, err);
+      if (err) return res.json(400, "There was a problem uploading your file. Please try again.");
+      var input = files.file[0].path;
+      if (path.extname(input) != ".xlsx") return res.json(400, "Invalid input file. Please upload an xlsx file.");
       try {
         var sheet = xlsx.parse(files.file[0].path);
       } catch (err) {
-        return res.json(400, err);
+        return res.json(400, "Unable to read input. The file may be corrupt.");
       }
 
       // For the time being, send the result in a form readable by people
@@ -46,7 +49,7 @@ module.exports = function (app) {
           currentGene = {name: currentSheet.data[0][j].value}
           network.genes.push(currentGene);
         } catch (err) {
-          network.errors.push(err);
+          network.errors.push(err.message);
         }
         for(var k = 1; k < currentSheet.data[j].length; k++) {
           try {
@@ -64,7 +67,7 @@ module.exports = function (app) {
               network.links.push(currentLink);
             }
           } catch (err) {
-            network.errors.push(err);
+            network.errors.push(err.message);
           }
         }
       }

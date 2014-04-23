@@ -218,7 +218,6 @@
                  }
                });
                  
-
     node = node.data(nodes)
                .enter().append("g")
                .attr("class", "node")
@@ -252,9 +251,13 @@
 		        return d.stroke;
 		      }
 		    })
-		    .attr("marker-end", function(d) {
+		    .attr("marker-end", function (d) {
 		      return "url(#" + d.type + d.strokeWidth + ")";
-		    }); 
+		    })
+        .append("svg:title")
+          .text(function (d) {
+            return d.value;
+          });
            
 
                
