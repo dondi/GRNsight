@@ -233,15 +233,61 @@
                .attr("id", function(d) {
                  return "node" + d.index;
                })
-               .attr("transform", function(d) {
-                 return "translate(" + d.x + d.y + ")";
-               })
                .attr("width", function (d) {
                  return d.name.length * 20;
                })
                .attr("height", nodeHeight)
-               .call(force.drag);
+               /* Attempt to initiate a grid. Doesn't work.
+               .each(function (d, i) {
+                 var startX,
+                     startY;
+                 
+                 if (i == 0) {
+                   startX = 10;
+                   startY = 10;
+                 } else {
+                   var previous = nodes[i - 1]
+                       startX = previous.x + (2 * previous.width) + 20,
+                       startY = previous.y + (2 * previous.height) + 15;
+                       
+                   if( startX < width - d.width ) {
+                     startY = previous.y;
+                   } else {
+                    startX = 10;
+                   }
+                 }
+                 d3.select(this).attr("x", function (d) {
+                   return d.x = startX;
+                 })
+                 .attr("y", function (d) {
+                   return d.y = startY;
+                 });
+               })*/
                
+               /*Neither does this approach
+               .attr("d", function (d, i) {
+                 if (i == 0) {
+                   d.x = 10;
+                   d.y = 10;
+                   return d;
+                 } else {
+                   var previous = nodes[i - 1]
+                       startX = previous.x + (2 * previous.width) + 20,
+                       startY = previous.y + (2 * previous.height) + 15;
+                       
+                   if( startX < width - d.width ) {
+                     d.x = startX;
+                     d.y = previous.y;
+                     return d;
+                   } else {
+                     d.x = 10;
+                     d.y = startY;
+                     return d;
+                   }
+                 }
+               })*/
+               .call(force.drag);
+         
     link.append("path")
         .attr("id", function(d) {
           return "path" + d.source.index + "_" + d.target.index;
