@@ -10,12 +10,15 @@
         height = $container.height(),
         nodeHeight = 30;
       
-    var positiveScale;
+    var positiveScale,
+        unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
       positiveScale = d3.scale.quantile()
                               .domain(positiveWeights)
                               .range(["2"]);
+                              
+      unweighted = true;
     } else {
       positiveScale = d3.scale.quantile()
                         .domain(positiveWeights)
@@ -53,7 +56,13 @@
       .attr("orient", "auto")
       .append("path")
         .attr("d", "M 0 0 L 10 5 L 0 10 z")
-        .attr("style", "stroke: gray; fill: gray");
+        .attr("style", function () {
+          if (unweighted) {
+            return "stroke: black; fill: black";
+          } else {
+            return "stroke: gray; fill: gray";
+          }
+        });
         
     defs.append("marker")
       .attr("id", "arrowhead6")
@@ -224,15 +233,61 @@
                .attr("id", function(d) {
                  return "node" + d.index;
                })
-               .attr("transform", function(d) {
-                 return "translate(" + d.x + d.y + ")";
-               })
                .attr("width", function (d) {
                  return d.name.length * 20;
                })
                .attr("height", nodeHeight)
-               .call(force.drag);
+               /* Attempt to initiate a grid. Doesn't work.
+               .each(function (d, i) {
+                 var startX,
+                     startY;
+                 
+                 if (i == 0) {
+                   startX = 10;
+                   startY = 10;
+                 } else {
+                   var previous = nodes[i - 1]
+                       startX = previous.x + (2 * previous.width) + 20,
+                       startY = previous.y + (2 * previous.height) + 15;
+                       
+                   if( startX < width - d.width ) {
+                     startY = previous.y;
+                   } else {
+                    startX = 10;
+                   }
+                 }
+                 d3.select(this).attr("x", function (d) {
+                   return d.x = startX;
+                 })
+                 .attr("y", function (d) {
+                   return d.y = startY;
+                 });
+               })*/
                
+               /*Neither does this approach
+               .attr("d", function (d, i) {
+                 if (i == 0) {
+                   d.x = 10;
+                   d.y = 10;
+                   return d;
+                 } else {
+                   var previous = nodes[i - 1]
+                       startX = previous.x + (2 * previous.width) + 20,
+                       startY = previous.y + (2 * previous.height) + 15;
+                       
+                   if( startX < width - d.width ) {
+                     d.x = startX;
+                     d.y = previous.y;
+                     return d;
+                   } else {
+                     d.x = 10;
+                     d.y = startY;
+                     return d;
+                   }
+                 }
+               })*/
+               .call(force.drag);
+         
     link.append("path")
         .attr("id", function(d) {
           return "path" + d.source.index + "_" + d.target.index;
@@ -245,7 +300,9 @@
 		      }
 		    })
 		    .style("stroke", function (d) {
-		      if (d.strokeWidth == "2") {
+		      if (unweighted) {
+		        return "black";
+		      } else if (d.strokeWidth == "2") {
 		        return "gray";
 		      } else {
 		        return d.stroke;
