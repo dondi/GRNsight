@@ -26,7 +26,13 @@ html
           input(class='form-control', type='range', min='-1000', max='0', value='-300', step='1', id='chargeInput', name='chargeInput' disabled)
           label(for='chargeDistInput') Charge Distance:
           span(id='chargeDistVal') 100
-          input(class='form-control' type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput' disabled)
+          input(class='form-control', type='range', min='0', max='1000', value='100', step='1', id='chargeDistInput', name='chargeDistInput' disabled)
+          label(for='gravityInput') Gravity:
+          span(id='gravityVal') 0.1
+          input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.1', id='gravityInput', name='gravityInput' disabled)
+          br
+          input(id='lockSliders' type='checkbox' value='lock' disabled) 
+          | &nbsp; Lock Sliders
   script(src='//code.jquery.com/jquery-2.1.0.min.js')
   script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
   script(src='/lib/bootstrap.file-input/bootstrap.file-input.js')

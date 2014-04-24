@@ -20,7 +20,9 @@ $(function () {
       drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
         linkSlider: "#linkDistInput",
         chargeSlider: "#chargeInput",
-        chargeDistSlider: "#chargeDistInput"
+        chargeDistSlider: "#chargeDistInput",
+        gravitySlider: "#gravityInput",
+        lockSliderCheckbox: "#lockSliders"
       });
     });
     e.preventDefault();

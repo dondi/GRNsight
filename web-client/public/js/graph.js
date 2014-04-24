@@ -589,15 +589,36 @@
         $( "#chargeDistVal" ).html( toChange );
     }
 
+    function updateGravity(event) {
+      var toChange = $(this).val();
+        force.gravity( toChange );
+        force.nodes(nodes)
+            .links(links)
+            .stop();
+        force.start();
+        $( "#gravityVal" ).html( toChange );
+    }
+
+    function updateSliders(event) {
+      var check = $( "#lockSliders" ).prop( 'checked' );
+      $( "#linkDistInput" ).prop( 'disabled', check );
+      $( "#chargeInput" ).prop( 'disabled', check );
+      $( "#gravityInput" ).prop( 'diabled', check );
+      $( "#chargeDistInput" ).prop( 'disabled', check );
+    }
+
     // Set up our controllers if any.
     if (controls) {
         $(controls.linkSlider).change(updateLinkDist);
         $(controls.chargeSlider).change(updateCharge);
         $(controls.chargeDistSlider).change(updateChargeDist);
+        $(controls.gravitySlider).change(updateGravity);
+        $(controls.lockSliderCheckbox).change(updateSliders);
     }
 
     $( "#linkDistInput" ).prop( 'disabled', false );
     $( "#chargeInput" ).prop( 'disabled', false );
     $( "#chargeDistInput" ).prop( 'disabled', false );
-    
+    $( "#gravityInput" ).prop( 'disabled', false );
+    $( "#lockSliders" ).prop( 'disabled', false );
 }
