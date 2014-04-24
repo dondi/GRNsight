@@ -603,7 +603,7 @@
       var check = $( "#lockSliders" ).prop( 'checked' );
       $( "#linkDistInput" ).prop( 'disabled', check );
       $( "#chargeInput" ).prop( 'disabled', check );
-      $( "#gravityInput" ).prop( 'diabled', check );
+      $( "#gravityInput" ).prop( 'disabled', check );
       $( "#chargeDistInput" ).prop( 'disabled', check );
     }
 
