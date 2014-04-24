@@ -258,9 +258,7 @@
           .text(function (d) {
             return d.value;
           });
-           
 
-               
     /*Big thanks to the following for the smart edges
      *https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
      */
@@ -597,4 +595,9 @@
         $(controls.chargeSlider).change(updateCharge);
         $(controls.chargeDistSlider).change(updateChargeDist);
     }
+
+    $( "#linkDistInput" ).prop( 'disabled', false );
+    $( "#chargeInput" ).prop( 'disabled', false );
+    $( "#chargeDistInput" ).prop( 'disabled', false );
+    
 }
