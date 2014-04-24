@@ -24,7 +24,10 @@ $(function () {
         gravitySlider: "#gravityInput",
         lockSliderCheckbox: "#lockSliders"
       });
-    });
+    }).error( function(xhr, status, error) {
+      var err = JSON.parse(xhr.responseText)
+      $( "#errors" ).html(err);
+    } );
     e.preventDefault();
   });
 });
