@@ -10,12 +10,15 @@
         height = $container.height(),
         nodeHeight = 30;
       
-    var positiveScale;
+    var positiveScale,
+        unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
       positiveScale = d3.scale.quantile()
                               .domain(positiveWeights)
                               .range(["2"]);
+                              
+      unweighted = true;
     } else {
       positiveScale = d3.scale.quantile()
                         .domain(positiveWeights)
@@ -53,7 +56,13 @@
       .attr("orient", "auto")
       .append("path")
         .attr("d", "M 0 0 L 10 5 L 0 10 z")
-        .attr("style", "stroke: gray; fill: gray");
+        .attr("style", function () {
+          if (unweighted) {
+            return "stroke: black; fill: black";
+          } else {
+            return "stroke: gray; fill: gray";
+          }
+        });
         
     defs.append("marker")
       .attr("id", "arrowhead6")
@@ -245,7 +254,9 @@
 		      }
 		    })
 		    .style("stroke", function (d) {
-		      if (d.strokeWidth == "2") {
+		      if (unweighted) {
+		        return "black";
+		      } else if (d.strokeWidth == "2") {
 		        return "gray";
 		      } else {
 		        return d.stroke;
