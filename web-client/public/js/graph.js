@@ -210,6 +210,34 @@
        .append("path")
          .attr("d", "M 0 12 L 24 12 Z")
          .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
+
+//Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
+// for the outline code  
+var filter = defs.append("filter")
+                 .attr("id", "outline");
+
+    filter.append("feMorphology")
+            .attr("result", "offset")
+            .attr("in", "SourceGraphic")
+            .attr("operator", "dilate")
+            .attr("radius", "2");
+
+    filter.append("feColorMatrix")
+            .attr("result", "drop")
+            .attr("in", "offset")
+            .attr("type", "matrix")
+            .attr("values", function () {
+              return "1 1 1 1 1"
+                   + "\n" + "1 1 1 1 1"
+                   + "\n" + "1 1 1 1 1"
+                   + "\n" + "0 0 0 1 0";
+            });
+    
+    filter.append("feBlend")
+          .attr("in", "SourceGraphic")
+          .attr("in2", "drop")
+          .attr("mode", "normal");
+        
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
@@ -313,6 +341,7 @@
 		    .attr("marker-end", function (d) {
 		      return "url(#" + d.type + d.strokeWidth + ")";
 		    })
+		    .attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
             return d.value;
