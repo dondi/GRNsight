@@ -38,7 +38,8 @@
         .gravity($("#gravityInput").val());
 
     var drag = force.drag()
-        .on("dragstart", dragstart);
+        .on("dragstart", dragstart)
+        .on("dragend", dragend);
   
     var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
@@ -213,16 +214,16 @@
 
 //Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
 // for the outline code  
-var filter = defs.append("filter")
-                 .attr("id", "outline");
+    var outline = defs.append("filter")
+                    .attr("id", "outline");
 
-    filter.append("feMorphology")
+    outline.append("feMorphology")
             .attr("result", "offset")
             .attr("in", "SourceGraphic")
             .attr("operator", "dilate")
             .attr("radius", "2");
 
-    filter.append("feColorMatrix")
+    outline.append("feColorMatrix")
             .attr("result", "drop")
             .attr("in", "offset")
             .attr("type", "matrix")
@@ -233,10 +234,37 @@ var filter = defs.append("filter")
                    + "\n" + "0 0 0 1 0";
             });
     
-    filter.append("feBlend")
+    outline.append("feBlend")
           .attr("in", "SourceGraphic")
           .attr("in2", "drop")
           .attr("mode", "normal");
+          
+    var highlight = defs.append("filter")
+                      .attr("id", "highlight");
+                      
+    highlight.append("feMorphology")
+            .attr("result", "offset")
+            .attr("in", "SourceGraphic")
+            .attr("operator", "dilate")
+            .attr("radius", "2");
+
+    highlight.append("feColorMatrix")
+            .attr("result", "drop")
+            .attr("in", "offset")
+            .attr("type", "matrix")
+            .attr("values", function () {
+              return "1 1 1 1 1"
+                   + "\n" + "1 1 1 1 1"
+                   + "\n" + "0 0 0 0 0"
+                   + "\n" + "0 0 0 1 0";
+            });
+    
+    highlight.append("feBlend")
+          .attr("in", "SourceGraphic")
+          .attr("in2", "drop")
+          .attr("mode", "normal");
+    
+
         
   
     var link = svg.selectAll(".link"),
@@ -647,7 +675,21 @@ var filter = defs.append("filter")
     }
 
     function dragstart(d) {
-      d3.select(this).classed("fixed", d.fixed = true);
+      var node = d3.select(this);
+      console.log(node.datum());
+      node.classed("fixed", d.fixed = true);
+      link.select("path").attr("filter", function (d) {
+        console.log(d.source.name);
+        if(d.source.name == node.datum().name) {
+          return "url(#highlight)";
+        } else {
+          return "url(#outline)";
+        }
+      });
+    }
+    
+    function dragend (d) {
+      link.select("path").attr("filter", "url(#outline)");
     }
 
     function updateLinkDist(event) {
