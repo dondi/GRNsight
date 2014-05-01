@@ -31,12 +31,22 @@ html
           span(id='gravityVal') 0.1
           input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.1', id='gravityInput', name='gravityInput' disabled)
           br
-          input(id='lockSliders' type='checkbox' value='lock' disabled) 
-          | &nbsp; Lock Sliders
+          input(id='lockSliders' type='checkbox' value='lockSliders' disabled) 
+          | &nbsp; Lock Sliders &nbsp; &nbsp;
           br
           br
           input(id='resetSliders' type='button' value='Reset Sliders')
-    div(id='errors')
+    div(id='myModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+      div(class='modal-dialog modal-sm')
+        div(class='modal-content')
+          div(class='modal-header')
+            input(type='button' class='close' data-dismiss='modal' aria-hidden='true' value='X')
+            h4(class='modal-title') Error
+          div(class='modal-body')
+            p(id='error')
+          div(class='modal-footer')
+            input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
+            //input(type='button' id='launchFileOpen' class='btn btn-primary' value='Select New File')
   script(src='//code.jquery.com/jquery-2.1.0.min.js')
   script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
   script(src='/lib/bootstrap.file-input/bootstrap.file-input.js')

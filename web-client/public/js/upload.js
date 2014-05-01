@@ -7,7 +7,7 @@ $(function () {
     formData.append('file', $('#upload')[0].files[0]);
     
     $.ajax({
-      url: 'http://grnsight.cs.lmu.edu:3000/upload', // TODO Read from config 
+      url: 'http://localhost:3000/upload', // TODO Read from config 
       data: formData,
       processData: false,
       contentType: false,
@@ -27,7 +27,8 @@ $(function () {
       });
     }).error( function(xhr, status, error) {
       var err = JSON.parse(xhr.responseText)
-      $( "#errors" ).html(err);
+      $( "#error" ).html(err);
+      $( "#myModal" ).modal('show');
     });
     e.preventDefault();
   });
