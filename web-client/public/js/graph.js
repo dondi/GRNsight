@@ -565,7 +565,7 @@
       })
       .attr("dy", 20)
       .attr("text-anchor", "middle")
-      .style("font-size", "14px")
+      .style("font-size", "18px")
       .style("stroke-width", "0")
       .style("fill", "black")
       .text(function(d) {return d.name;});
@@ -676,10 +676,8 @@
 
     function dragstart(d) {
       var node = d3.select(this);
-      console.log(node.datum());
       node.classed("fixed", d.fixed = true);
       link.select("path").attr("filter", function (d) {
-        console.log(d.source.name);
         if(d.source.name == node.datum().name) {
           return "url(#highlight)";
         } else {
