@@ -574,9 +574,9 @@
                   sweep = 1;
                   
                   if (d.value > 0) {
-                    radiusModifier = positiveScale(d.value)/2;
+                    radiusModifier = positiveScale(d.value)/1.75;
                   } else {
-                    radiusModifier = negativeScale(d.value)/2;
+                    radiusModifier = negativeScale(d.value)/1.75;
                   }
 
                   // Make drx and dry different to get an ellipse
