@@ -32,8 +32,10 @@
     var force = d3.layout.force()
         .size([width, height])
         .on("tick", tick)
-        .linkDistance(200)
-        .charge(-500);
+        .linkDistance($("#linkDistInput").val())
+        .charge($("#chargeInput").val())
+        .chargeDistance($("#chargeDistInput").val())
+        .gravity($("#gravityInput").val());
 
     var drag = force.drag()
         .on("dragstart", dragstart);
@@ -656,6 +658,7 @@
         $( "#gravityVal" ).html( toChange );
     }
 
+
     function updateSliders(event) {
       var check = $( "#lockSliders" ).prop( 'checked' );
       $( "#linkDistInput" ).prop( 'disabled', check );
@@ -673,9 +676,13 @@
         $(controls.lockSliderCheckbox).change(updateSliders);
     }
 
-    $( "#linkDistInput" ).prop( 'disabled', false );
-    $( "#chargeInput" ).prop( 'disabled', false );
-    $( "#chargeDistInput" ).prop( 'disabled', false );
-    $( "#gravityInput" ).prop( 'disabled', false );
-    $( "#lockSliders" ).prop( 'disabled', false );
+    var lockCheck = $( "#lockSliders" ).prop( 'checked' );
+
+    $( "#linkDistInput" ).prop( 'disabled', lockCheck );
+    $( "#chargeInput" ).prop( 'disabled', lockCheck );
+    $( "#chargeDistInput" ).prop( 'disabled', lockCheck );
+    $( "#gravityInput" ).prop( 'disabled', lockCheck );
+    $( "#lockSliders" ).prop( 'disabled', false ); 
+    $( "#errors" ).html("");
+
 }
