@@ -47,6 +47,10 @@
         
     var defs = svg.append("defs");
     
+    $("path").tooltip({
+      track: true
+    });
+    
     //Adding the arrowheads
     defs.append("marker")
       .attr("id", "arrowhead2")
@@ -372,7 +376,7 @@
 		    .attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
-            return d.value;
+            return d.value.toPrecision(5);
           });
 
     /*Big thanks to the following for the smart edges
