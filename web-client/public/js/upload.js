@@ -22,7 +22,8 @@ $(function () {
         chargeSlider: "#chargeInput",
         chargeDistSlider: "#chargeDistInput",
         gravitySlider: "#gravityInput",
-        lockSliderCheckbox: "#lockSliders"
+        lockSliderCheckbox: "#lockSliders",
+        resetSliderButton: "#resetSliders"
       });
     }).error( function(xhr, status, error) {
       var err = JSON.parse(xhr.responseText)

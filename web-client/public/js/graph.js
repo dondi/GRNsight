@@ -665,6 +665,26 @@
       $( "#chargeInput" ).prop( 'disabled', check );
       $( "#gravityInput" ).prop( 'disabled', check );
       $( "#chargeDistInput" ).prop( 'disabled', check );
+      $( "#resetSliders" ).prop( 'disabled', check );
+    }
+
+    function defaultSliders(event) {
+      $( "#linkDistInput" ).val(200);
+      $( "#linkDistVal" ).html("200");
+      $( "#chargeInput" ).val(-500);
+      $( "#chargeVal" ).html("-500");
+      $( "#gravityInput" ).val(0.1);
+      $( "#gravityVal" ).html("0.1");
+      $( "#chargeDistInput" ).val(1000);
+      $( "#chargeDistVal" ).html("1000");
+      force.linkDistance(200)
+           .charge(-500)
+           .chargeDistance(1000)
+           .gravity(0.1);
+      force.nodes(nodes)
+           .links(links)
+           .stop();
+      force.start();
     }
 
     // Set up our controllers if any.
@@ -674,6 +694,7 @@
         $(controls.chargeDistSlider).change(updateChargeDist);
         $(controls.gravitySlider).change(updateGravity);
         $(controls.lockSliderCheckbox).change(updateSliders);
+        $(controls.resetSliderButton).click(defaultSliders);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
@@ -682,6 +703,7 @@
     $( "#chargeInput" ).prop( 'disabled', lockCheck );
     $( "#chargeDistInput" ).prop( 'disabled', lockCheck );
     $( "#gravityInput" ).prop( 'disabled', lockCheck );
+    $( "#resetSliders" ).prop( 'disabled', lockCheck );
     $( "#lockSliders" ).prop( 'disabled', false ); 
     $( "#errors" ).html("");
 
