@@ -26,7 +26,7 @@ $(function () {
         resetSliderButton: "#resetSliders"
       });
     }).error( function(xhr, status, error) {
-      var err = JSON.parse(xhr.responseText)
+      var err = JSON.parse(xhr.responseText);
       $( "#error" ).html(err);
       $( "#myModal" ).modal('show');
     });
