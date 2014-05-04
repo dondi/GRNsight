@@ -30,12 +30,11 @@ html
           label(for='gravityInput') Gravity:
           span(id='gravityVal') 0.1
           input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.1', id='gravityInput', name='gravityInput' disabled)
-          br
-          input(id='lockSliders' type='checkbox' value='lockSliders' disabled) 
-          | &nbsp; Lock Sliders &nbsp; &nbsp;
-          br
-          br
-          input(id='resetSliders' type='button' class='btn btn-default' value='Reset Sliders') 
+        form
+          input(id='lockSliders', type='checkbox', value='lockSliders' disabled)
+          label(for='lockSliders' style='font-weight:normal') Lock Sliders
+        form
+          input(id='resetSliders' type='button' class='btn btn-default' value='Reset Sliders' disabled) 
           | &nbsp; 
           input(id='undoReset' type='button' class='btn btn-default' value='Undo Reset' disabled)
     div(id='myModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
