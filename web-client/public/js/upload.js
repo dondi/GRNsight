@@ -23,7 +23,8 @@ $(function () {
         chargeDistSlider: "#chargeDistInput",
         gravitySlider: "#gravityInput",
         lockSliderCheckbox: "#lockSliders",
-        resetSliderButton: "#resetSliders"
+        resetSliderButton: "#resetSliders",
+        undoResetButton: "#undoReset"
       });
     }).error( function(xhr, status, error) {
       var err = JSON.parse(xhr.responseText);

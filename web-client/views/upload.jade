@@ -35,7 +35,9 @@ html
           | &nbsp; Lock Sliders &nbsp; &nbsp;
           br
           br
-          input(id='resetSliders' type='button' value='Reset Sliders')
+          input(id='resetSliders' type='button' class='btn btn-default' value='Reset Sliders') 
+          | &nbsp; 
+          input(id='undoReset' type='button' class='btn btn-default' value='Undo Reset' disabled)
     div(id='myModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog modal-sm')
         div(class='modal-content')

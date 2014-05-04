@@ -742,6 +742,7 @@
     }
 
     function defaultSliders(event) {
+      allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
       $( "#linkDistInput" ).val(200);
       $( "#linkDistVal" ).html("200");
       $( "#chargeInput" ).val(-500);
@@ -758,6 +759,27 @@
            .links(links)
            .stop();
       force.start();
+      $( "#undoReset" ).prop( 'disabled', false );
+    }
+
+    function undoReset(event) {
+      $( "#linkDistInput" ).val( allDefaults[0] );
+      $( "#linkDistVal" ).html( allDefaults[0] );
+      $( "#chargeInput" ).val( allDefaults[1] );
+      $( "#chargeVal" ).html( allDefaults[1] );
+      $( "#gravityInput" ).val( allDefaults[3] );
+      $( "#gravityVal" ).html( allDefaults[3] );
+      $( "#chargeDistInput" ).val( allDefaults[2] );
+      $( "#chargeDistVal" ).html( allDefaults[2] );
+      force.linkDistance( allDefaults[0] )
+           .charge( allDefaults[1] )
+           .chargeDistance( allDefaults[2] )
+           .gravity( allDefaults[3] );
+      force.nodes(nodes)
+           .links(links)
+           .stop();
+      force.start();
+      $( "#undoReset" ).prop( 'disabled', true );
     }
 
     // Set up our controllers if any.
@@ -768,9 +790,12 @@
         $(controls.gravitySlider).change(updateGravity);
         $(controls.lockSliderCheckbox).change(updateSliders);
         $(controls.resetSliderButton).click(defaultSliders);
+        $(controls.undoResetButton).click(undoReset);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
+
+    var allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
 
     $( "#linkDistInput" ).prop( 'disabled', lockCheck );
     $( "#chargeInput" ).prop( 'disabled', lockCheck );
@@ -778,6 +803,7 @@
     $( "#gravityInput" ).prop( 'disabled', lockCheck );
     $( "#resetSliders" ).prop( 'disabled', lockCheck );
     $( "#lockSliders" ).prop( 'disabled', false ); 
+    $( "#undoReset" ).prop( 'disabled', true );
     $( "#errors" ).html("");
 
 }
