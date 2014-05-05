@@ -567,7 +567,7 @@
       .attr("dx", function (d) {
         return (d.name.length * 20)/2;
       })
-      .attr("dy", 20)
+      .attr("dy", 22)
       .attr("text-anchor", "middle")
       .style("font-size", "18px")
       .style("stroke-width", "0")
@@ -635,9 +635,9 @@
                   sweep = 1;
                   
                   if (d.value > 0) {
-                    radiusModifier = positiveScale(d.value)/1.75;
+                    radiusModifier = positiveScale(d.value)/2.00;
                   } else {
-                    radiusModifier = negativeScale(d.value)/1.75;
+                    radiusModifier = negativeScale(d.value)/2.00;
                   }
 
                   // Make drx and dry different to get an ellipse
