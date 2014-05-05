@@ -258,7 +258,7 @@
             .attr("type", "matrix")
             .attr("values", function () {
               return "1 1 1 1 1"
-                   + "\n" + "1 1 1 1 1"
+                   + "\n" + "1 1 0 0 0"
                    + "\n" + "0 0 0 0 0"
                    + "\n" + "0 0 0 1 0";
             });
@@ -682,7 +682,7 @@
       var node = d3.select(this);
       node.classed("fixed", d.fixed = true);
       link.select("path").attr("filter", function (d) {
-        if(d.source.name == node.datum().name) {
+        if(d.source.name == node.datum().name || d.target.name == node.datum().name) {
           return "url(#highlight)";
         } else {
           return "url(#outline)";
