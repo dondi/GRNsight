@@ -376,7 +376,7 @@
 		    .attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
-            return d.value.toPrecision(5);
+            return d.value.toPrecision(4);
           });
 
     /*Big thanks to the following for the smart edges
