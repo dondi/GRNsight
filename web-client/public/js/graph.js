@@ -28,10 +28,10 @@
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
                           .range(["2", "6", "10", "14"]);
-                          
-    $(document).ready(function() {
-      Tipped.create("path");
-    });
+    /*                      
+    var snapToGrid = function(val, gridSize) {
+    
+    };*/
     
     var force = d3.layout.force()
         .size([width, height])
