@@ -19,7 +19,11 @@ module.exports = function (app) {
         currentGene;
     form.parse(req, function (err, fields, files) {
       if (err) return res.json(400, "There was a problem uploading your file. Please try again.");
-      var input = files.file[0].path;
+      try {
+        var input = files.file[0].path;
+      } catch (err) {
+        return res.json(400, "No upload file selected.");
+      } 
       if (path.extname(input) != ".xlsx") return res.json(400, "Invalid input file. Please upload an xlsx file.");
       try {
         var sheet = xlsx.parse(files.file[0].path);
