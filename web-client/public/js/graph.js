@@ -28,6 +28,10 @@
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
                           .range(["2", "6", "10", "14"]);
+                          
+    $(document).ready(function() {
+      Tipped.create("path");
+    });
     
     var force = d3.layout.force()
         .size([width, height])
@@ -46,11 +50,7 @@
         .attr("height", height);
         
     var defs = svg.append("defs");
-    
-    $("path").tooltip({
-      track: true
-    });
-    
+          
     //Adding the arrowheads
     defs.append("marker")
       .attr("id", "arrowhead2")
