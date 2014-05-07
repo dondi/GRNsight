@@ -8,8 +8,9 @@
     d3.selectAll("svg").remove();
     var width = $container.width(),
         height = $container.height(),
-        nodeHeight = 30;
-      
+        nodeHeight = 30,
+        gridWidth = 300;
+    
     var positiveScale,
         unweighted = false;
     
@@ -28,10 +29,10 @@
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
                           .range(["2", "6", "10", "14"]);
-    /*                      
-    var snapToGrid = function(val, gridSize) {
-    
-    };*/
+                       
+    snapToGrid = function(val, gridSize) {
+      return gridSize * Math.round(val/gridSize);
+    };
     
     var force = d3.layout.force()
         .size([width, height])
@@ -40,9 +41,12 @@
         .charge($("#chargeInput").val())
         .chargeDistance($("#chargeDistInput").val())
         .gravity($("#gravityInput").val());
+        
+        
 
     var drag = force.drag()
         .on("dragstart", dragstart)
+        //.on("drag", dragmove)
         .on("dragend", dragend);
   
     var svg = d3.select($container[0]).append("svg")
@@ -299,56 +303,7 @@
                  return d.name.length * 20;
                })
                .attr("height", nodeHeight)
-               /* Attempt to initiate a grid. Doesn't work.
-               .each(function (d, i) {
-                 var startX,
-                     startY;
-                 
-                 if (i == 0) {
-                   startX = 10;
-                   startY = 10;
-                 } else {
-                   var previous = nodes[i - 1]
-                       startX = previous.x + (2 * previous.width) + 20,
-                       startY = previous.y + (2 * previous.height) + 15;
-                       
-                   if( startX < width - d.width ) {
-                     startY = previous.y;
-                   } else {
-                    startX = 10;
-                   }
-                 }
-                 d3.select(this).attr("x", function (d) {
-                   return d.x = startX;
-                 })
-                 .attr("y", function (d) {
-                   return d.y = startY;
-                 });
-               })*/
-               
-               /*Neither does this approach
-               .attr("d", function (d, i) {
-                 if (i == 0) {
-                   d.x = 10;
-                   d.y = 10;
-                   return d;
-                 } else {
-                   var previous = nodes[i - 1]
-                       startX = previous.x + (2 * previous.width) + 20,
-                       startY = previous.y + (2 * previous.height) + 15;
-                       
-                   if( startX < width - d.width ) {
-                     d.x = startX;
-                     d.y = previous.y;
-                     return d;
-                   } else {
-                     d.x = 10;
-                     d.y = startY;
-                     return d;
-                   }
-                 }
-               })*/
-               .call(force.drag);
+               .call(drag);
          
     link.append("path")
         .attr("id", function(d) {
@@ -573,6 +528,8 @@
       .style("stroke-width", "0")
       .style("fill", "black")
       .text(function(d) {return d.name;});
+    
+    $(node).draggable({ grid: [100, 30]});
            
     $('.node').css({
       'cursor': 'move',
@@ -592,7 +549,7 @@
       node.attr("x", function(d) {
         var nodeWidth = d.name.length * 20;
         return d.x = Math.max(0, Math.min(width - nodeWidth, d.x));
-      })
+          })
          .attr("y", function(d) { return d.y = Math.max(0, Math.min(height - nodeHeight, d.y));})
          .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
         /* Allows for looping edges.
@@ -690,7 +647,12 @@
       });
     }
     
+    //Can't get the grid to stick for some reason
     function dragend (d) {
+      d3.select(this)
+        .attr("x", d.x = snapToGrid(d.x, 20))
+        .attr("y", d.y = snapToGrid(d.y, 20))
+        .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
       link.select("path").attr("filter", "url(#outline)");
     }
 
