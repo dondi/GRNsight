@@ -1,3 +1,10 @@
+.submission {
+  margin-left:10px;
+  margin-bottom: 10px;
+}
+.file-input-name {
+  font-weight: normal;
+}
 .grnsight-container {
   position: fixed;
   left: 250px;
@@ -7,7 +14,7 @@
   border: 1px solid #9a9a9a;
 }
 .sliders {
-  width: 220px;
+  width: 230px;
   margin-left: 10px;
 }
 form {

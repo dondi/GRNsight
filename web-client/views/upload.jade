@@ -9,15 +9,25 @@ html
     script(src="http://code.jquery.com/ui/1.10.1/jquery-ui.js")
   
   body
+    div(class='submission')
+      form(enctype='multipart/form-data', class='form-inline', role='form')
+        div(class='form-group')
+          label(for='upload') GRNmap Spreadsheet: &nbsp; &nbsp;
+            input(type='file', class='form-control', name='upload', id='upload')
+        div(class='form-horizontal')
+          input(type='submit', class='btn btn-success', value='Submit')
+
     div(class='container')
-      div(class='row')
-        div(class='col-md-12')
-          form(enctype='multipart/form-data', class='form-inline', role='form')
-            div(class='form-group')
-              label(for='linkDistInput') GRNmap Spreadsheet:
-              input(type='file', class='form-control', name='upload', id='upload')
-            div(class='form-group pull-right')
-              input(type='submit', class='btn btn-success' value='Submit')
+      //
+        // Commenting out just in case we want to switch back to here
+        div(class='row')
+          div(class='col-md-12')
+            form(enctype='multipart/form-data', class='form-inline', role='form')
+              div(class='form-group')
+                label(for='upload') GRNmap Spreadsheet:
+                input(type='file', class='form-control', name='upload', id='upload')
+              div(class='form-group pull-right')
+                input(type='submit', class='btn btn-success' value='Submit')
       div(class='grnsight-container')
     div(class='sliders')
         form
@@ -35,7 +45,7 @@ html
           input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.1', id='gravityInput', name='gravityInput' disabled)
         form
           input(id='lockSliders', type='checkbox', value='lockSliders' disabled)
-          label(for='lockSliders' style='font-weight:normal') Lock Sliders
+          label(for='lockSliders' style='font-weight:normal') Lock Force Graph Parameters
         form
           input(id='resetSliders' type='button' class='btn btn-default' value='Reset Sliders' disabled) 
           | &nbsp; 
