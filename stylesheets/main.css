@@ -17,26 +17,26 @@ iframe.embedded-demo {
 	right:0;
 	left:0;
 	background-color: #16693F;
-	height:140px;
+	height:118px;
 }
 
 #logo {
 	width: 100px;
 	height: 100px;
 	border: 1px #DDD solid;
-	margin: 10px 15px 15px 10px;
+	margin: 7px 15px 15px 0px;
 	float:left;
 }
 
 #header p {
 	color: #F8F8F8;
-	margin: 0 10px 0 10px;
+	margin: 0 10px 0 0px;
 	text-shadow: 1px 1px 2px #080808;
 }
 
 #title {
 	font-size: 60px;
-	line-height: 1.5;
+	line-height: 1.4;
 	position: relative;
 }
 
@@ -44,32 +44,35 @@ iframe.embedded-demo {
 	font-size: 20px;
 	line-height: 1.2;
 	position: relative;
-	padding-bottom: 10px;
+	/*padding-bottom: 10px;*/
 }
 
 #lmu {
-	text-align: right;
+	/*text-align: right;*/
 	position: relative;
 	float:right;
-	padding: 10px 0px 10px 0px;
+	/*padding: 0px 0px 10px 0px;*/
 }
 
 #subtextLMU {
 	font-size: 15px;
 	line-height: 1;
 	position: relative;
-	float: right;
+	/*float: right;*/
 	font-style: italic;
-	padding-bottom:5px;
+	padding-right:5px;
 }
 
 #lmuLogo {
-	padding-top: 10px;
+	/*padding-top: 10px;*/
+	position:relative;
+	float:right;
+	padding-left:10px;
 }
 
 #navBar {
 	margin-top:20px;
-	padding-top:1px	;
+	padding-top:1px;
 	width: 160px;
 	height:300px;
 	position: absolute;
