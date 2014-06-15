@@ -603,8 +603,8 @@
 
                   // Make drx and dry different to get an ellipse
                   // instead of a circle.
-                  drx = 25 + radiusModifier;
-                  dry = 25 + radiusModifier;
+                  drx = 17 + radiusModifier;
+                  dry = 17 + radiusModifier;
 
                   // For whatever reason the arc collapses to a point if the beginning
                   // and ending points of the arc are the same, so kludge it.
