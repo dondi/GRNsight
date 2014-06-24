@@ -22,5 +22,16 @@ module.exports = {
       name: 'GRNsight'
     },
     serviceRoot: 'http://grnsight.cs.lmu.edu:3000'
+  },
+
+  beta: {
+    host: 'grnsight.cs.lmu.edu',
+    port: 4001,
+    url: 'http://' + this.host + '/' + this.port,
+    root: rootPath,
+    app: {
+      name: 'GRNsight'
+    },
+    serviceRoot: 'http://grnsight.cs.lmu.edu:4000'
   }
 }
