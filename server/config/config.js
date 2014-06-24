@@ -29,7 +29,7 @@ module.exports = {
     port: 4000,
     url: 'http://' + this.host + '/' + this.port,
     corsOrigin: 'http://grnsight.cs.lmu.edu:4001'
-    root: rootPath
+    root: rootPath,
     app: {
       name: 'GRNsight'
     }
