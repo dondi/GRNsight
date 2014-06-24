@@ -10,7 +10,7 @@ var env = process.env.NODE_ENV || 'development',
     config = require('./config/config')[env],
     app = express();
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 4000);
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
