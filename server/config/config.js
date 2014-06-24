@@ -22,7 +22,7 @@ module.exports = {
     app: {
       name: 'GRNsight'
     }
-  }
+  },
 
   beta: {
     host: 'grnsight.cs.lmu.edu',
