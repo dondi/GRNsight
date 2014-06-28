@@ -10,7 +10,7 @@ module.exports = {
     app: {
       name: 'GRNsight'
     },
-    serviceRoot: 'http://localhost:3000'
+    serviceRoot: 'http://localhost:4000'
   },
 
   production: {
@@ -21,7 +21,7 @@ module.exports = {
     app: {
       name: 'GRNsight'
     },
-    serviceRoot: 'http://grnsight.cs.lmu.edu:3000'
+    serviceRoot: 'http://grnsight.cs.lmu.edu:4000'
   },
 
   beta: {
