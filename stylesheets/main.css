@@ -4,10 +4,6 @@ body {
 	background-color: #FFFFFF;
 }
 
-/*iframe {
-	
-}*/
-
 iframe.embedded-demo {
 	padding:0;
 	margin:0;
@@ -45,27 +41,24 @@ iframe.embedded-demo {
 	font-size: 20px;
 	line-height: 1.2;
 	position: relative;
-	/*padding-bottom: 10px;*/
 }
 
 #lmu {
-	/*text-align: right;*/
 	position: relative;
 	float:right;
-	/*padding: 0px 0px 10px 0px;*/
+	width:400px;
 }
 
 #subtextLMU {
 	font-size: 15px;
 	line-height: 1;
 	position: relative;
-	/*float: right;*/
 	font-style: italic;
 	padding-right:5px;
+	padding-top:9px;
 }
 
 #lmuLogo {
-	/*padding-top: 10px;*/
 	position:relative;
 	float:right;
 	padding-left:10px;
