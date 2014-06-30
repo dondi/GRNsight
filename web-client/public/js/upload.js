@@ -1,6 +1,6 @@
 $(function () {
 
-  $('#upload').change(function(e){
+  $('#upload').on('change', function(e){
 
     // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
     // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
@@ -42,6 +42,11 @@ $(function () {
     });
     e.preventDefault();
   });
+
+  $('#reload').on('click', function() {
+    $('#upload').trigger('change');
+  })
+
 });
 
 /*
