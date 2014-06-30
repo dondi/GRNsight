@@ -1,6 +1,6 @@
 $(function () {
     // Style.
-    $("input[type=file]").bootstrapFileInput();
+    //$("input[type=file]").bootstrapFileInput();
 
   $('#upload').change(function(e){
     var formData = new FormData();

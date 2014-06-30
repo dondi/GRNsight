@@ -26,3 +26,9 @@ form span {
 .navbar {
   bottom: 7px;
 }
+#upload {
+  display: none;
+}
+#test333 {
+  font-weight: normal;
+}
