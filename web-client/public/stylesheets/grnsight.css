@@ -29,6 +29,10 @@ form span {
 #upload {
   display: none;
 }
-#test333 {
+#open {
   font-weight: normal;
+}
+#fileName {
+  color: #000;
+  cursor: text;
 }

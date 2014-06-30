@@ -25,7 +25,7 @@ html
                 ul(class='dropdown-menu' role='menu')
                   li
                     a(href='#') 
-                      label(for='upload' id='test333')
+                      label(for='upload' id='open')
                         span(class='glyphicon glyphicon-folder-open') 
                         | &nbsp; Open
                       input(type='file', name='upload', id='upload')
@@ -35,7 +35,7 @@ html
                       | &nbsp; Reload
                   li(class='divider')
                   li
-                    a(href='#')
+                    a(href='#' id='reload')
                       span(class='glyphicon glyphicon-export')
                       | &nbsp; Export
                   li(class='divider')
@@ -56,30 +56,13 @@ html
                       | &nbsp; Redo
                   li(class='divider')
                   li
-                    a(href-'#')
+                    a(href='#')
                       span(class='glyphicon glyphicon-wrench')
                       | &nbsp; Preferences
-    
-    //
-      div(class='submission')
-        form(enctype='multipart/form-data', class='form-inline', role='form', id='testing1')
-          div(class='form-group')
-            label(for='upload') GRNmap Spreadsheet: &nbsp; &nbsp;
-              input(type='file', class='form-control', name='upload', id='upload')
-          div(class='form-horizontal')
-            input(type='submit', class='btn btn-success', value='Submit')
+            li
+              a(href='#' id='fileName')
 
     div(class='container')
-      // 
-        // Commenting out just in case we want to switch back to here
-        div(class='row')
-          div(class='col-md-12')
-            form(enctype='multipart/form-data', class='form-inline', role='form')
-              div(class='form-group')
-                label(for='upload') GRNmap Spreadsheet:
-                input(type='file', class='form-control', name='upload', id='upload')
-              div(class='form-group pull-right')
-                input(type='submit', class='btn btn-success' value='Submit')
       div(class='grnsight-container')
     div(class='sliders')
         form

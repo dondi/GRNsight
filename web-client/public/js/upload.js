@@ -1,8 +1,17 @@
 $(function () {
-    // Style.
-    //$("input[type=file]").bootstrapFileInput();
 
   $('#upload').change(function(e){
+
+    // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
+    // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
+    var fullFilePath = $('input[type=file]').val()
+    var fakePathCheck = fullFilePath.search("\\\\") + 1;
+    while( fakePathCheck != 0 ) {
+      fullFilePath = fullFilePath.substring(fakePathCheck)
+      fakePathCheck = fullFilePath.search("\\\\") + 1;
+    }
+    $('#fileName').html( fullFilePath );
+
     var formData = new FormData();
     formData.append('file', $('#upload')[0].files[0]);
     
