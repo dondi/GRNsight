@@ -635,7 +635,6 @@
 
       //Rudimentary manual redraw. This should fix the Firefox bug where the edges don't show up.
       if(runNum === 0) {
-        //alert("Attempting redraw.");
         runNum++;
         drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls, networkType);
       }
@@ -756,10 +755,10 @@
 
     // Set up our controllers if any.
     if (controls) {
-        $(controls.linkSlider).change(updateLinkDist);
-        $(controls.chargeSlider).change(updateCharge);
-        $(controls.chargeDistSlider).change(updateChargeDist);
-        $(controls.gravitySlider).change(updateGravity);
+        $(controls.linkSlider).on('input', updateLinkDist);
+        $(controls.chargeSlider).on('input', updateCharge);
+        $(controls.chargeDistSlider).on('input', updateChargeDist);
+        $(controls.gravitySlider).on('input', updateGravity);
         $(controls.lockSliderCheckbox).change(updateSliders);
         $(controls.resetSliderButton).click(defaultSliders);
         $(controls.undoResetButton).click(undoReset);
@@ -776,6 +775,5 @@
     $( "#resetSliders" ).prop( 'disabled', lockCheck );
     $( "#lockSliders" ).prop( 'disabled', false ); 
     $( "#undoReset" ).prop( 'disabled', true );
-    $( "#errors" ).html("");
 
 }
