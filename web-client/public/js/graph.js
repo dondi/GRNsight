@@ -328,7 +328,7 @@
 		    .attr("marker-end", function (d) {
 		      return "url(#" + d.type + d.strokeWidth + ")";
 		    })
-		    .attr("filter", "url(#outline)")
+		    //.attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
             return d.value.toPrecision(4);
@@ -647,13 +647,13 @@
     function dragstart(d) {
       var node = d3.select(this);
       node.classed("fixed", d.fixed = true);
-      link.select("path").attr("filter", function (d) {
+      /*link.select("path").attr("filter", function (d) {
         if(d.source.name == node.datum().name || d.target.name == node.datum().name) {
           return "url(#highlight)";
         } else {
           return "url(#outline)";
         }
-      });
+      });*/
     }
     
     //Can't get the grid to stick for some reason
@@ -662,7 +662,7 @@
         .attr("x", d.x = snapToGrid(d.x, 20))
         .attr("y", d.y = snapToGrid(d.y, 20))
         .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
-      link.select("path").attr("filter", "url(#outline)");
+      //link.select("path").attr("filter", "url(#outline)");
     }
 
     function updateLinkDist(event) {
