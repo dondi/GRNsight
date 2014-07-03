@@ -66,16 +66,16 @@ html
       div(class='grnsight-container')
     div(class='sliders')
         form
-          label(for='linkDistInput') Link Distance: 
+          label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the lines between nodes. Range: 1-500') Link Distance: 
           span(id='linkDistVal') 200
           input(class='form-control', type='range', min='1', max='500', value='200', step='1', id='linkDistInput', name='linkDistInput' disabled)
-          label(for='chargeInput') Charge:
+          label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other. Range: -1000-0') Charge:
           span(id='chargeVal') -500
           input(class='form-control', type='range', min='-1000', max='0', value='-500', step='1', id='chargeInput', name='chargeInput' disabled)
-          label(for='chargeDistInput') Charge Distance:
+          label(for='chargeDistInput' class='info', data-toggle='tooltip', title='Increases/decreases the size of the charged area around a node. Range: 0-1000') Charge Distance:
           span(id='chargeDistVal') 1000
           input(class='form-control', type='range', min='0', max='1000', value='1000', step='1', id='chargeDistInput', name='chargeDistInput' disabled)
-          label(for='gravityInput') Gravity:
+          label(for='gravityInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force holding the nodes to the center of the graph. Range: 0-1') Gravity:
           span(id='gravityVal') 0.1
           input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.1', id='gravityInput', name='gravityInput' disabled)
         form
@@ -96,7 +96,7 @@ html
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
-  script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+  script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='/lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js')
   script(src='/js/graph.js')

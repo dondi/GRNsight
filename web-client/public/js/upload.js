@@ -1,4 +1,10 @@
 $(function () {
+  
+  // Style of the tooltips
+  $('.info').tooltip({
+    placement: 'top',
+    delay: { show: 700, hide: 100}
+  })
 
   $('#upload').on('change', function(e){
 
