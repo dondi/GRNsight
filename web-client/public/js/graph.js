@@ -118,7 +118,7 @@
     defs.append("marker")
        .attr("id", "repressor2")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 24)
@@ -131,7 +131,7 @@
     defs.append("marker")
        .attr("id", "repressor6")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 28)
@@ -144,7 +144,7 @@
     defs.append("marker")
        .attr("id", "repressor10")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 28)
@@ -157,7 +157,7 @@
     defs.append("marker")
        .attr("id", "repressor14")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 32)
@@ -171,7 +171,7 @@
     defs.append("marker")
        .attr("id", "repressorHorizontal2")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 24)
@@ -184,7 +184,7 @@
     defs.append("marker")
        .attr("id", "repressorHorizontal6")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 28)
@@ -197,7 +197,7 @@
     defs.append("marker")
        .attr("id", "repressorHorizontal10")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 28)
@@ -210,7 +210,7 @@
     defs.append("marker")
        .attr("id", "repressorHorizontal14")
        .attr("viewBox", "0 0 24 24")
-       .attr("refX", 12)
+       .attr("refX", 11)
        .attr("refY", 12)
        .attr("markerUnits", "userSpaceOnUse")
        .attr("markerWidth", 32)
@@ -222,7 +222,7 @@
 
 //Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
 // for the outline code  
-    var outline = defs.append("filter")
+    /*var outline = defs.append("filter")
                     .attr("id", "outline");
 
     outline.append("feMorphology")
@@ -270,7 +270,7 @@
     highlight.append("feBlend")
           .attr("in", "SourceGraphic")
           .attr("in2", "drop")
-          .attr("mode", "normal");
+          .attr("mode", "normal");*/
     
 
         
