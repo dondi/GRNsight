@@ -42,6 +42,6 @@ form span {
 nav.navbar.navbar-default {
   background-color: #d3d3d3;
 }
-.dropdown-toggle {
-  color: #000;
+.navbar-default .navbar-nav>li>a {
+  color: #696969;
 }
