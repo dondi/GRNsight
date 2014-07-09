@@ -288,7 +288,7 @@
         
   
     var link = svg.selectAll(".link"),
-        node = svg.selectAll(".node"),
+        node = svg.selectAll(".node");
         //linkHighlight = svg.selectAll(".link");
 
     force.nodes(nodes)
@@ -374,8 +374,8 @@
 		    .attr("marker-end", function (d) {
 		      return "url(#" + d.type + d.strokeWidth + ")";
 		    })
-        .style("position", "absolute")
-        .style("z-index", "3")
+        //.style("position", "absolute")
+        //.style("z-index", "3")
 		    //.attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
