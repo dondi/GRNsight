@@ -12,23 +12,35 @@
         gridWidth = 300;
     
     var positiveScale,
+        positiveHighlight,
         unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
       positiveScale = d3.scale.quantile()
                               .domain(positiveWeights)
                               .range(["2"]);
+      positiveHighlight = d3.scale.quantile()
+                                  .domain(positiveWeights)
+                                  .range(["4"]);
                               
       unweighted = true;
     } else {
       positiveScale = d3.scale.quantile()
                         .domain(positiveWeights)
                         .range(["2", "6", "10", "14"]);
+
+      /*positiveHighlight = d3.scale.quantile()
+                                  .domain(positiveWeights)
+                                  .range(["4", "8", "12", "16"]);*/
     }
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
                           .range(["2", "6", "10", "14"]);
+
+    /*var negativeHighlight = d3.scale.quantile()
+                                    .domain(negativeWeights)
+                                    .range(["4", "8", "12", "16"]);*/
                        
     snapToGrid = function(val, gridSize) {
       return gridSize * Math.round(val/gridSize);
@@ -276,11 +288,23 @@
         
   
     var link = svg.selectAll(".link"),
-        node = svg.selectAll(".node");
+        node = svg.selectAll(".node"),
+        //linkHighlight = svg.selectAll(".link");
 
     force.nodes(nodes)
          .links(links)
          .start();
+    
+    /*linkHighlight = linkHighlight.data(links)
+                        .enter().append("g")
+                        .attr("class", "highlight")
+                        .attr("strokeWidth", function (d) {
+                          if (d.value > 0) {
+                            return positiveHighlight(d.value);
+                          } else {
+                           return negativeHighlight(d.value);
+                          }
+                        });*/
 
     link = link.data(links)
                .enter().append("g")
@@ -304,7 +328,29 @@
                })
                .attr("height", nodeHeight)
                .call(drag);
-         
+
+    /*linkHighlight.append("path")
+                 .attr("id", function(d) {
+                   return "highlight" + d.source.index + "_" + d.target.index;
+                 })
+                 .style("stroke-width", function (d) {
+                   if (d.value > 0) {
+                     return d.strokeWidth = positiveHighlight(d.value);
+                   } else {
+                     return d.strokeWidth = negativeHighlight(d.value);
+                   }
+                 })
+                 .style("stroke", "white")
+                 .attr("marker-end", function (d) {
+                   return "url(#" + d.type + d.strokeWidth + ")";
+                 })
+                 .style("position", "absolute")
+                 .style("z-index", "5")
+                 .append("svg:title")
+                   .text(function (d) {
+                     return d.value.toPrecision(4);
+                   });*/
+
     link.append("path")
         .attr("id", function(d) {
           return "path" + d.source.index + "_" + d.target.index;
@@ -328,6 +374,8 @@
 		    .attr("marker-end", function (d) {
 		      return "url(#" + d.type + d.strokeWidth + ")";
 		    })
+        .style("position", "absolute")
+        .style("z-index", "3")
 		    //.attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
@@ -548,6 +596,12 @@
       'stroke-width': '1.5px'
     });
 
+    /*$('.highlight').css({
+      'stroke': '#000',
+      'fill': 'none',
+      'stroke-width': '1.5px'
+    })*/
+
     function tick() {
     
       node.attr("x", function(d) {
@@ -559,6 +613,82 @@
         /* Allows for looping edges.
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
+
+        /*linkHighlight.select("path").attr("d", function(d) {
+          
+          if (d.target === d.source) {
+            var x1 = d.source.x,
+                y1 = d.source.y,
+                x2 = d.target.x,
+                y2 = d.target.y,
+                dx = x2 - x1,
+                dy = y2 - y1,
+                dr = Math.sqrt(dx * dx + dy * dy),
+                radiusModifier = 0,
+
+                // Defaults for normal edge.
+                drx = dr,
+                dry = dr,
+                xRotation = 0, // degrees
+                largeArc = 0, // 1 or 0
+                sweep = 1, //1 or 0
+                offset = parseFloat(d.strokeWidth);
+
+                // Self edge.
+                if ( x1 === x2 && y1 === y2 ) {
+                  //Move the position of the loop
+                  //Couldn't figure out how to derive the width of the rectangle from here,
+                  //so it is being calculated again. May need to set it when the node is created.
+                  x1 = d.source.x + (d.source.name.length * 20) - 5;
+                  y1 = d.source.y + (nodeHeight/2);
+                  // Fiddle with this angle to get loop oriented.
+                  xRotation = 45;
+
+                  // Needs to be 1.
+                  largeArc = 1;
+
+                  // Change sweep to change orientation of loop. 
+                  sweep = 1;
+                  
+                  if (d.value > 0) {
+                    radiusModifier = positiveScale(d.value)/2.00;
+                  } else {
+                    radiusModifier = negativeScale(d.value)/2.00;
+                  }
+
+                  // Make drx and dry different to get an ellipse
+                  // instead of a circle.
+                  drx = 17 + radiusModifier;
+                  dry = 17 + radiusModifier;
+
+                  // For whatever reason the arc collapses to a point if the beginning
+                  // and ending points of the arc are the same, so kludge it.
+                  x2 = d.source.x + (d.source.name.length *20)/1.2;
+                  y2 = d.source.y + nodeHeight;
+                  
+                  if (d.value < 0) {
+                    offset = Math.max(10, parseFloat(d.strokeWidth));
+                  }
+                } 
+
+           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2  + "," + (y2 + offset);
+        } else {
+           return moveTo(d) + lineTo(d);
+        }
+      });
+
+      linkHighlight.select("path").attr("marker-end", function(d) {
+        if (d.type == "repressor") {
+          if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
+            return "url(#repressorHorizontal" + d.strokeWidth + ")";
+          } else {
+            return "url(#repressor" + d.strokeWidth + ")";
+          }
+        } else {
+          return "url(#arrowhead" + d.strokeWidth + ")";        
+        }
+      });*/
+
         link.select("path").attr("d", function(d) {
           
           if (d.target === d.source) {
@@ -621,6 +751,7 @@
            return moveTo(d) + lineTo(d);
         }
       });
+
       link.select("path").attr("marker-end", function(d) {
         if (d.type == "repressor") {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {

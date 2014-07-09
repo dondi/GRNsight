@@ -39,3 +39,9 @@ form span {
   color: #000;
   cursor: text;
 }
+nav.navbar.navbar-default {
+  background-color: #d3d3d3;
+}
+.dropdown-toggle {
+  color: #000;
+}
