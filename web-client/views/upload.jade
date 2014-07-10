@@ -99,18 +99,18 @@ html
       div(class='grnsight-container')
     div(class='sliders')
         form
-          label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the lines between nodes. Range: 1-500') Link Distance: 
-          span(id='linkDistVal') 200
-          input(class='form-control', type='range', min='1', max='500', value='200', step='1', id='linkDistInput', name='linkDistInput' disabled)
-          label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other. Range: -1000-0') Charge:
-          span(id='chargeVal') -500
-          input(class='form-control', type='range', min='-1000', max='0', value='-500', step='1', id='chargeInput', name='chargeInput' disabled)
-          label(for='chargeDistInput' class='info', data-toggle='tooltip', title='Increases/decreases the size of the charged area around a node. Range: 0-1000') Charge Distance:
-          span(id='chargeDistVal') 1000
-          input(class='form-control', type='range', min='0', max='1000', value='1000', step='1', id='chargeDistInput', name='chargeDistInput' disabled)
-          label(for='gravityInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force holding the nodes to the center of the graph. Range: 0-1') Gravity:
+          label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the lines between nodes.') Link Distance (1-10000): 
+          span(id='linkDistVal') 5000
+          input(class='form-control', type='range', min='1', max='10000', value='5000', step='1', id='linkDistInput', name='linkDistInput' disabled)
+          label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other. Range: -1000-0') Charge (-10000-0):
+          span(id='chargeVal') -5000
+          input(class='form-control', type='range', min='-10000', max='0', value='-5000', step='1', id='chargeInput', name='chargeInput' disabled)
+          label(for='chargeDistInput' class='info', data-toggle='tooltip', title='Increases/decreases the size of the charged area around a node. Range: 0-1000') Charge Distance (0-10000):
+          span(id='chargeDistVal') 5000
+          input(class='form-control', type='range', min='0', max='10000', value='5000', step='1', id='chargeDistInput', name='chargeDistInput' disabled)
+          label(for='gravityInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force holding the nodes to the center of the graph. Range: 0-1') Gravity (0-1):
           span(id='gravityVal') 0.1
-          input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.1', id='gravityInput', name='gravityInput' disabled)
+          input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.01', id='gravityInput', name='gravityInput' disabled)
         form
           input(id='lockSliders', type='checkbox', value='lockSliders' disabled)
           label(for='lockSliders' style='font-weight:normal') Lock Force Graph Parameters
