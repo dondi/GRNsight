@@ -16,11 +16,11 @@ module.exports = {
   production: {
     host: 'grnsight.cs.lmu.edu',
     port: 3001,
-    url: 'http://' + this.host + '/' + this.port,
+    url: 'http://' + this.host + '/client',
     root: rootPath,
     app: {
       name: 'GRNsight'
     },
-    serviceRoot: 'http://grnsight.cs.lmu.edu:3000'
+    serviceRoot: 'http://grnsight.cs.lmu.edu/server'
   }
 }

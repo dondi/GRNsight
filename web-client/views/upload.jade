@@ -11,6 +11,7 @@ html
   body
     div(class='submission')
       form(enctype='multipart/form-data', class='form-inline', role='form')
+        input(type='hidden', id='service-root', value='#{serviceRoot}')
         div(class='form-group')
           label(for='upload') GRNmap Spreadsheet: &nbsp; &nbsp;
             input(type='file', class='form-control', name='upload', id='upload')

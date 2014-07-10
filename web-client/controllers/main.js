@@ -1,6 +1,6 @@
 module.exports = function (app) {
   app.get('/', function (req, res) {
-    res.render('upload', {title: 'Upload'});
+      res.render('upload', {title: 'Upload', serviceRoot: app.get('serviceRoot')});
   });
   
   app.get('/graph', function (req, res) {
