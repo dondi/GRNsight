@@ -6,7 +6,7 @@ module.exports = {
     host: 'localhost',
     port: 3000,
     url: 'http://' + this.host + '/' + this.port,
-    corsOrigin: 'http://localhost:4001',
+    corsOrigin: 'http://localhost:3001',
     root: rootPath,
     app: {
       name: 'GRNsight'

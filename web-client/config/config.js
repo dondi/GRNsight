@@ -10,7 +10,7 @@ module.exports = {
     app: {
       name: 'GRNsight'
     },
-    serviceRoot: 'http://localhost:4000'
+    serviceRoot: 'http://localhost:3000'
   },
 
   production: {
