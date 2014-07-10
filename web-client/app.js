@@ -9,7 +9,7 @@ var env = process.env.NODE_ENV || 'development',
     config = require('./config/config')[env],
     app = express();
     
-app.set('port', process.env.PORT || 4001);
+app.set('port', process.env.PORT || config.port || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 

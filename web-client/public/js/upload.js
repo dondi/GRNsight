@@ -20,9 +20,8 @@ $(function () {
 
     var formData = new FormData();
     formData.append('file', $('#upload')[0].files[0]);
-    
     $.ajax({
-      url: 'http://grnsight.cs.lmu.edu:4000/upload', // TODO Read from config 
+        url: $("#service-root").val() + "/upload",
       data: formData,
       processData: false,
       contentType: false,
