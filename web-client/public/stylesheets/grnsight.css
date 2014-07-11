@@ -41,7 +41,17 @@ form span {
 }
 nav.navbar.navbar-default {
   background-color: #dfebe5;
+  border-color: #dfebe5;
 }
 .navbar-default .navbar-nav>li>a {
+  color: #000;
+}
+.navbar-default .navbar-nav>li>a:hover {
   color: #696969;
+}
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+  background-color: #16693f;
+  color: #fff;
 }
