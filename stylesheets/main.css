@@ -98,6 +98,10 @@ a:active {
 	color: #125432;
 }
 
+#modText {
+	font-size: 12px;
+}
+
 #mainContent {
 	left:0;
 	right:0;
