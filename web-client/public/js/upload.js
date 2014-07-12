@@ -16,8 +16,6 @@ $(function () {
       fullFilePath = fullFilePath.substring(fakePathCheck)
       fakePathCheck = fullFilePath.search("\\\\") + 1;
     }
-    $('#fileName').html( fullFilePath );
-
     var formData = new FormData();
     formData.append('file', $('#upload')[0].files[0]);
     $.ajax({
@@ -31,6 +29,7 @@ $(function () {
         console.log(data);
       }
     }).done(function (network) {
+      $('#fileName').html( fullFilePath );
       drawGraph(0, network.genes, network.links, network.positiveWeights, network.negativeWeights, {
         linkSlider: "#linkDistInput",
         chargeSlider: "#chargeInput",
