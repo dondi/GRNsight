@@ -24,7 +24,8 @@ module.exports = function (app) {
       } catch (err) {
         return res.json(400, "No upload file selected.");
       } 
-      if (path.extname(input) != ".xlsx") return res.json(400, "Invalid input file. Please upload an xlsx file.");
+      if (path.extname(input) != ".xlsx") return res.json(400, "Invalid input file. Please select an Excel Workbook (*.xlsx) file.\
+        <br><br>Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight.");
       try {
         var sheet = xlsx.parse(files.file[0].path);
       } catch (err) {
