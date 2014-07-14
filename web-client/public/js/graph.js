@@ -12,16 +12,16 @@
         gridWidth = 300;
     
     var positiveScale,
-        positiveHighlight,
+        //positiveHighlight,
         unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
       positiveScale = d3.scale.quantile()
                               .domain(positiveWeights)
                               .range(["2"]);
-      positiveHighlight = d3.scale.quantile()
+      /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
-                                  .range(["4"]);
+                                  .range(["4"]);*/
                               
       unweighted = true;
     } else {
