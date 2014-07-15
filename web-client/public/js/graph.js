@@ -33,6 +33,10 @@
                                   .domain(positiveWeights)
                                   .range(["4", "8", "12", "16"]);*/
     }
+
+    /*for(var i = 0; i < negativeWeights.length; i++) {
+      negativeWeights[i] = Math.abs(negativeWeights[i]);
+    }*/
                   
     var negativeScale = d3.scale.quantile()
                           .domain(negativeWeights)
@@ -830,6 +834,9 @@
             .links(links)
             .stop();
         force.start();
+        if(toChange.length === 3) {
+          toChange += "0";
+        }
         $( "#gravityVal" ).html( toChange );
     }
 
@@ -845,16 +852,16 @@
 
     function defaultSliders(event) {
       allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      $( "#linkDistInput" ).val(200);
-      $( "#linkDistVal" ).html("200");
-      $( "#chargeInput" ).val(-500);
-      $( "#chargeVal" ).html("-500");
+      $( "#linkDistInput" ).val(500);
+      $( "#linkDistVal" ).html("500");
+      $( "#chargeInput" ).val(-1000);
+      $( "#chargeVal" ).html("-1000");
       $( "#gravityInput" ).val(0.1);
-      $( "#gravityVal" ).html("0.1");
+      $( "#gravityVal" ).html("0.10");
       $( "#chargeDistInput" ).val(1000);
       $( "#chargeDistVal" ).html("1000");
-      force.linkDistance(200)
-           .charge(-500)
+      force.linkDistance(500)
+           .charge(-1000)
            .chargeDistance(1000)
            .gravity(0.1);
       force.nodes(nodes)

@@ -55,3 +55,9 @@ nav.navbar.navbar-default {
   background-color: #16693f;
   color: #fff;
 }
+.info {
+  font-size: 13px;
+}
+.forceVal {
+  font-size: 12px;
+}
