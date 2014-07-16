@@ -394,7 +394,7 @@
           // If negative, you need one bar for horizontal and one for vertical.
           if(d.value < 0) {
             defs.append("marker")
-             .attr("id", "repressor14")
+             .attr("id", "repressor" + d.strokeWidth)
              .attr("viewBox", "0 0 24 24")
              .attr("refX", 11)
              .attr("refY", 12)
@@ -842,7 +842,11 @@
             return "url(#repressor" + d.strokeWidth + ")";
           }
         } else {
-          return "url(#arrowhead" + d.strokeWidth + ")";				
+          var minimum = "";
+          if (d.value >= -0.1 && d.value <= 0.1) {
+            minimum = "gray";
+          }
+          return "url(#arrowhead" + d.strokeWidth + minimum + ")";				
         }
       });
 
