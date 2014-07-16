@@ -387,8 +387,12 @@
 		    })
 		    .attr("marker-end", function (d) {
 
-          var color,
-              minimum = "";
+          var x1 = d.source.x,
+              y1 = d.source.y,
+              x2 = d.target.x,
+              y2 = d.target.y,
+              minimum = "",
+              color;
 
           if(d.value >= -0.1 && d.value <= 0.1) {
             minimum = "gray";
@@ -449,8 +453,15 @@
             defs.append("marker")
               .attr("id",  "arrowhead" + d.strokeWidth + minimum)
               .attr("viewBox", "0 0 12 10")
+              .attr("preserveAspectRatio", "xMinYMin meet")
               .attr("refX", 7.5)
-              .attr("refY", 5)
+              .attr("refY", function () {
+                /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
+                  return 3;
+                } else {*/
+                  return 5;
+                //}
+              })
               .attr("markerUnits", "userSpaceOnUse")
               .attr("markerWidth", function() {
                 return 12 + d.strokeWidth*1.5;
@@ -459,10 +470,6 @@
                 return 8 + d.strokeWidth*1.5;
               })
               .attr("orient", function() {
-                var x1 = d.source.x,
-                    y1 = d.source.y,
-                    x2 = d.target.x,
-                    y2 = d.target.y;
                 if( x1 === x2 && y1 === y2 ) {
                   return 270;
                 } else {
@@ -824,8 +831,8 @@
                   //Move the position of the loop
                   //Couldn't figure out how to derive the width of the rectangle from here,
                   //so it is being calculated again. May need to set it when the node is created.
-                  x1 = d.source.x + (d.source.name.length * 20) - 5;
-                  y1 = d.source.y + (nodeHeight/2);
+                  x1 = d.source.x + (d.source.name.length * 20);
+                  y1 = d.source.y + (nodeHeight/2) + 6;
                   // Fiddle with this angle to get loop oriented.
                   xRotation = 45;
 
@@ -856,7 +863,7 @@
                   
                   if (d.value < 0) {
                     offset = Math.max(10, parseFloat(d.strokeWidth));
-                  }
+                  } 
                 } 
 
            return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2  + "," + (y2 + offset);
