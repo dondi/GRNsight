@@ -10,15 +10,28 @@
         height = $container.height(),
         nodeHeight = 30,
         gridWidth = 300;
+
+    var allWeights = positiveWeights.concat(negativeWeights);
+    //alert("There are " + positiveWeights.length + " positive elements, " + negativeWeights.length + " negative elements, and " + allWeights.length + " total elements.");
+    for(var i = 0; i < allWeights.length; i++ ) {
+      allWeights[i] = Math.abs(allWeights[i]);
+      //alert("Absolute value taken. Element " + i + " is " + allWeights[i] + ".");
+    }
     
+
     var positiveScale,
         //positiveHighlight,
+        totalScale,
         unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
       positiveScale = d3.scale.quantile()
                               .domain(positiveWeights)
                               .range(["2"]);
+
+      totalScale = d3.scale.quantile()
+                           .domain(d3.extent(allWeights))
+                           .range(["2"]);
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
                                   .range(["4"]);*/
@@ -29,6 +42,10 @@
                         .domain(positiveWeights)
                         .range(["2", "6", "10", "14"]);
 
+      totalScale = d3.scale.linear()
+                           .domain(allWeights)
+                           .range([2, 14])
+                           .clamp(true);
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
                                   .range(["4", "8", "12", "16"]);*/
@@ -57,8 +74,6 @@
         .charge($("#chargeInput").val())
         .chargeDistance($("#chargeDistInput").val())
         .gravity($("#gravityInput").val());
-        
-        
 
     var drag = force.drag()
         .on("dragstart", dragstart)
@@ -72,7 +87,7 @@
     var defs = svg.append("defs");
           
     //Adding the arrowheads
-    defs.append("marker")
+    /*defs.append("marker")
       .attr("id", "arrowhead2")
       //.attr("viewBox", "0 0 10 10")
       .attr("refX", 13)
@@ -234,7 +249,7 @@
        .attr("orient", "angle")
        .append("path")
          .attr("d", "M 0 12 L 24 12 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
+         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");*/
 
 //Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
 // for the outline code  
@@ -314,11 +329,10 @@
                .enter().append("g")
                .attr("class", "link")
                .attr("strokeWidth", function (d) {
-                 if (d.value > 0) {
-                   return positiveScale(d.value);
-                 } else {
-                  return negativeScale(d.value);
-                 }
+                 //alert(d.value);
+                 var d_AbsVal = Math.abs(d.value)
+                 //alert("With abs: " + d_AbsVal);
+                 return totalScale(d_AbsVal);
                });
                  
     node = node.data(nodes)
@@ -360,23 +374,84 @@
           return "path" + d.source.index + "_" + d.target.index;
         })
 		    .style("stroke-width", function (d) {
-		      if (d.value > 0) {
-		        return d.strokeWidth = positiveScale(d.value);
-		      } else {
-		        return d.strokeWidth = negativeScale(d.value);
-		      }
+          var d_absVal = Math.abs(d.value);
+		      return d.strokeWidth = totalScale(d_absVal);
 		    })
 		    .style("stroke", function (d) {
 		      if (unweighted) {
 		        return "black";
-		      } else if (d.strokeWidth == "2") {
+		      } else if (d.value >= -0.1 && d.value <= 0.1) {
 		        return "gray";
 		      } else {
 		        return d.stroke;
 		      }
 		    })
 		    .attr("marker-end", function (d) {
-		      return "url(#" + d.type + d.strokeWidth + ")";
+
+          var color,
+              minimum = "";
+
+          // If negative, you need one bar for horizontal and one for vertical.
+          if(d.value < 0) {
+            defs.append("marker")
+             .attr("id", "repressor14")
+             .attr("viewBox", "0 0 24 24")
+             .attr("refX", 11)
+             .attr("refY", 12)
+             .attr("markerUnits", "userSpaceOnUse")
+             .attr("markerWidth", 32)
+             .attr("markerHeight", 32)
+             .attr("orient", "angle")
+             .append("path")
+               .attr("d", "M 12 0 L 12 24 Z")
+               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
+
+            defs.append("marker")
+             .attr("id", "repressorHorizontal" + d.strokeWidth)
+             .attr("viewBox", "0 0 24 24")
+             .attr("refX", 11)
+             .attr("refY", 12)
+             .attr("markerUnits", "userSpaceOnUse")
+             .attr("markerWidth", 28)
+             .attr("markerHeight", 28)
+             .attr("orient", "angle")
+             .append("path")
+               .attr("d", "M 0 12 L 24 12 Z")
+               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 3.5");
+          } else {
+            // Arrowheads
+            defs.append("marker")
+              .attr("id", function() {
+                if(d.value >= -0.1 && d.value <= 0.1) {
+                  minimum = "gray";
+                }
+                return "arrowhead" + d.strokeWidth + minimum;
+              })
+              .attr("viewBox", "0 0 12 10")
+              .attr("refX", 7.5)
+              .attr("refY", 5)
+              .attr("markerUnits", "userSpaceOnUse")
+              .attr("markerWidth", function() {
+                return 12 + d.strokeWidth*1.5;
+              })
+              .attr("markerHeight", function() {
+                return 8 + d.strokeWidth*1.5;
+              })
+              .attr("orient", "auto")
+              .append("path")
+                .attr("d", "M 0 0 L 14 5 L 0 10 z")
+                .attr("style", function () {
+                  if (unweighted) {
+                    color = "black";
+                  } else if (d.value >= -0.1 && d.value <= 0.1) {
+                    color = "gray";
+                  } else {
+                    color = d.stroke;
+                  }
+                    return "stroke: " + color + "; fill: " + color;
+                });
+          }
+		      return "url(#" + d.type + d.strokeWidth + minimum + ")";
 		    })
         //.style("position", "absolute")
         //.style("z-index", "3")
@@ -729,11 +804,14 @@
                   // Change sweep to change orientation of loop. 
                   sweep = 1;
                   
-                  if (d.value > 0) {
+                  var d_AbsVal = Math.abs(d.value);
+                  radiusModifier = totalScale(d_AbsVal)/2.00;
+
+                  /*if (d.value > 0) {
                     radiusModifier = positiveScale(d.value)/2.00;
                   } else {
                     radiusModifier = negativeScale(d.value)/2.00;
-                  }
+                  }*/
 
                   // Make drx and dry different to get an ellipse
                   // instead of a circle.
