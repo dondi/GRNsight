@@ -390,10 +390,14 @@
           var color,
               minimum = "";
 
+          if(d.value >= -0.1 && d.value <= 0.1) {
+            minimum = "gray";
+          }
+
           // If negative, you need one bar for horizontal and one for vertical.
           if(d.value < 0) {
             defs.append("marker")
-             .attr("id", "repressor" + d.strokeWidth)
+             .attr("id", "repressor" + d.strokeWidth + minimum)
              .attr("viewBox", "0 0 24 24")
              .attr("refX", 11)
              .attr("refY", 12)
@@ -406,11 +410,18 @@
              })
              .attr("orient", "angle")
              .append("path")
-               .attr("d", "M 12 0 L 12 24 Z")
-               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: " + d.strokeWidth/2);
+                .attr("d", "M 12 0 L 12 24 Z")
+                .attr("style", function() {
+                  if (d.value >= -0.1 && d.value <= 0.1) {
+                    color = "gray";
+                  } else {
+                    color = d.stroke;
+                  }
+                  return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
+                });
 
             defs.append("marker")
-             .attr("id", "repressorHorizontal" + d.strokeWidth)
+             .attr("id", "repressorHorizontal" + d.strokeWidth + minimum)
              .attr("viewBox", "0 0 24 24")
              .attr("refX", 11)
              .attr("refY", 12)
@@ -423,17 +434,20 @@
              })
              .attr("orient", "angle")
              .append("path")
-               .attr("d", "M 0 12 L 24 12 Z")
-               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: " + d.strokeWidth/2);
+                .attr("d", "M 0 12 L 24 12 Z")
+                .attr("style", function() {
+                  if (d.value >= -0.1 && d.value <= 0.1) {
+                    color = "gray";
+                  } else {
+                    color = d.stroke;
+                  }
+                  return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
+                });
+
           } else {
             // Arrowheads
             defs.append("marker")
-              .attr("id", function() {
-                if(d.value >= -0.1 && d.value <= 0.1) {
-                  minimum = "gray";
-                }
-                return "arrowhead" + d.strokeWidth + minimum;
-              })
+              .attr("id",  "arrowhead" + d.strokeWidth + minimum)
               .attr("viewBox", "0 0 12 10")
               .attr("refX", 7.5)
               .attr("refY", 5)
@@ -444,7 +458,17 @@
               .attr("markerHeight", function() {
                 return 8 + d.strokeWidth*1.5;
               })
-              .attr("orient", "auto")
+              .attr("orient", function() {
+                var x1 = d.source.x,
+                    y1 = d.source.y,
+                    x2 = d.target.x,
+                    y2 = d.target.y;
+                if( x1 === x2 && y1 === y2 ) {
+                  return 270;
+                } else {
+                  return "auto";
+                }
+              })
               .append("path")
                 .attr("d", "M 0 0 L 14 5 L 0 10 z")
                 .attr("style", function () {
@@ -842,17 +866,17 @@
       });
 
       link.select("path").attr("marker-end", function(d) {
+        var minimum = "";
+        if (d.value >= -0.1 && d.value <= 0.1) {
+          minimum = "gray";
+        }
         if (d.type == "repressor") {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
-            return "url(#repressorHorizontal" + d.strokeWidth + ")";
+            return "url(#repressorHorizontal" + d.strokeWidth + minimum + ")";
           } else {
-            return "url(#repressor" + d.strokeWidth + ")";
+            return "url(#repressor" + d.strokeWidth + minimum + ")";
           }
         } else {
-          var minimum = "";
-          if (d.value >= -0.1 && d.value <= 0.1) {
-            minimum = "gray";
-          }
           return "url(#arrowhead" + d.strokeWidth + minimum + ")";				
         }
       });
