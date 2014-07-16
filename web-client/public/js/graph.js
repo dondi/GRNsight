@@ -43,9 +43,8 @@
                         .range(["2", "6", "10", "14"]);
 
       totalScale = d3.scale.linear()
-                           .domain(allWeights)
-                           .range([2, 14])
-                           .clamp(true);
+                           .domain(d3.extent(allWeights))
+                           .range([2, 14]);
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
                                   .range(["4", "8", "12", "16"]);*/
@@ -399,12 +398,16 @@
              .attr("refX", 11)
              .attr("refY", 12)
              .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", 32)
-             .attr("markerHeight", 32)
+             .attr("markerWidth", function() {
+               return 22 + d.strokeWidth;
+             })
+             .attr("markerHeight", function() {
+              return 22 + d.strokeWidth;
+             })
              .attr("orient", "angle")
              .append("path")
                .attr("d", "M 12 0 L 12 24 Z")
-               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
+               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: " + d.strokeWidth/2);
 
             defs.append("marker")
              .attr("id", "repressorHorizontal" + d.strokeWidth)
@@ -412,12 +415,16 @@
              .attr("refX", 11)
              .attr("refY", 12)
              .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", 28)
-             .attr("markerHeight", 28)
+             .attr("markerWidth", function() {
+               return 22 + d.strokeWidth;
+             })
+             .attr("markerHeight", function() {
+               return 22 + d.strokeWidth;
+             })
              .attr("orient", "angle")
              .append("path")
                .attr("d", "M 0 12 L 24 12 Z")
-               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 3.5");
+               .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: " + d.strokeWidth/2);
           } else {
             // Arrowheads
             defs.append("marker")
