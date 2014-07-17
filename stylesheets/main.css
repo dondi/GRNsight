@@ -18,12 +18,11 @@ iframe.embedded-demo {
 	height:118px;
 }
 
-#logo {
-	width: 100px;
-	height: 100px;
-	border: 1px #DDD solid;
-	margin: 7px 15px 15px 10px;
+#GRNsightLogo {
+	width: 200px;
+	height: 118px;
 	float:left;
+	padding-right:10px;
 }
 
 #header p {
@@ -35,13 +34,11 @@ iframe.embedded-demo {
 #title {
 	font-size: 60px;
 	line-height: 1.4;
-	position: relative;
 }
 
 #subtext {
 	font-size: 20px;
 	line-height: 1.2;
-	position: relative;
 }
 
 #lmu {
@@ -53,7 +50,6 @@ iframe.embedded-demo {
 #subtextLMU {
 	font-size: 15px;
 	line-height: 1;
-	position: relative;
 	font-style: italic;
 	padding-right:5px;
 	padding-top: 2px;
@@ -77,7 +73,7 @@ iframe.embedded-demo {
 	position: absolute;
 }
 
-#nav {
+.nav {
 	list-style-type: none;
 	line-height: 2;
 	font-size: 15px;
@@ -99,8 +95,10 @@ a:active {
 }
 
 #modText {
+	padding: 5px 0 0 40px;
 	line-height: 1;
 	font-size: 12px;
+	width: 130px;
 }
 
 #mainContent {
