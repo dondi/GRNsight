@@ -36,6 +36,10 @@ iframe.embedded-demo {
 	line-height: 1.4;
 }
 
+#title > a {
+    color: white;
+}
+
 #subtext {
 	font-size: 20px;
 	line-height: 1.2;
