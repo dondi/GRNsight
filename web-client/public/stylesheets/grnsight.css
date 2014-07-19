@@ -32,8 +32,16 @@ form span {
 .noGlyph {
   margin-left: 22px;
 }
+#open-item {
+  padding-left: 0;
+  padding-right: 0;
+}
 #open {
   font-weight: normal;
+  margin-bottom: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
 }
 #fileName {
   color: #000;
