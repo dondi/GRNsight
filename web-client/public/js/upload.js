@@ -7,35 +7,36 @@ $(function () {
   });
 
   var loadGrn = function (url, name, formData) {
-      // The presence of formData is taken to indicate a POST.
-      (formData ?
-        $.ajax({
-          url: $("#service-root").val() + "/upload",
-          data: formData,
-          processData: false,
-          contentType: false,
-          type: 'POST',
-          crossDomain: true
-        }) :
-        $.getJSON(url)
-      ).done(function (network) {
-        console.log(network);
-        $('#fileName').text(name);
-        drawGraph(0, network.genes, network.links, network.positiveWeights, network.negativeWeights, {
-          linkSlider: "#linkDistInput",
-          chargeSlider: "#chargeInput",
-          chargeDistSlider: "#chargeDistInput",
-          gravitySlider: "#gravityInput",
-          lockSliderCheckbox: "#lockSliders",
-          resetSliderButton: "#resetSliders",
-          undoResetButton: "#undoReset"
+        // The presence of formData is taken to indicate a POST.
+        var fullUrl = $("#service-root").val() + url;
+        (formData ?
+          $.ajax({
+            url: fullUrl,
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            crossDomain: true
+          }) :
+          $.getJSON(fullUrl)
+        ).done(function (network) {
+          console.log(network);
+          $('#fileName').text(name);
+          drawGraph(0, network.genes, network.links, network.positiveWeights, network.negativeWeights, {
+            linkSlider: "#linkDistInput",
+            chargeSlider: "#chargeInput",
+            chargeDistSlider: "#chargeDistInput",
+            gravitySlider: "#gravityInput",
+            lockSliderCheckbox: "#lockSliders",
+            resetSliderButton: "#resetSliders",
+            undoResetButton: "#undoReset"
+          });
+        }).error(function (xhr, status, error) {
+          var err = JSON.parse(xhr.responseText);
+          $("#error").html(err);
+          $("#myModal").modal('show');
         });
-      }).error(function (xhr, status, error) {
-        var err = JSON.parse(xhr.responseText);
-        $("#error").html(err);
-        $("#myModal").modal('show');
-      });
-    };
+      };
 
   $('#upload').on('change', function (e) {
 
@@ -51,19 +52,20 @@ $(function () {
 
     var formData = new FormData();
     formData.append('file', $('#upload')[0].files[0]);
-    loadGrn($("#service-root").val() + "/upload", fullFilePath, formData);
+    loadGrn("/upload", fullFilePath, formData);
     e.preventDefault();
   });
 
-  $('#reload').on('click', function() {
+  $('#reload').click(function (event) {
     $('#upload').trigger('change');
   });
 
-  $('unweighted').click(function (event) {
+  $('#unweighted').click(function (event) {
+    loadGrn("/demo/unweighted", "Demo #1: Unweighted GRN");
   });
 
-
-  $('weighted').click(function (event) {
+  $('#weighted').click(function (event) {
+    loadGrn("/demo/weighted", "Demo #2: Weighted GRN");
   });
 });
 

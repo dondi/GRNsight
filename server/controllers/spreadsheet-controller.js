@@ -2,32 +2,22 @@ var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
     util = require('util'),
     path = require('path');
-    
-module.exports = function (app) {
 
-  //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
-  app.post('/upload', function (req, res) {
-    //TODO: Add file validation
-    var form = new multiparty.Form(),
-        currentSheet,
-        network = {genes: [],
-                   links: [],
-                   errors: [],
-                   positiveWeights: [],
-                   negativeWeights: []},
-        currentLink,
-        currentGene;
-    form.parse(req, function (err, fields, files) {
-      if (err) return res.json(400, "There was a problem uploading your file. Please try again.");
+    processGRNmap = function (path, res, app) {
+      var sheet,
+          currentSheet,
+          network = {
+            genes: [],
+            links: [],
+            errors: [],
+            positiveWeights: [],
+            negativeWeights: []
+          },
+          currentLink,
+          currentGene;
+
       try {
-        var input = files.file[0].path;
-      } catch (err) {
-        return res.json(400, "No upload file selected.");
-      } 
-      if (path.extname(input) != ".xlsx") return res.json(400, "Invalid input file. Please select an Excel Workbook (*.xlsx) file.\
-        <br><br>Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight.");
-      try {
-        var sheet = xlsx.parse(files.file[0].path);
+        sheet = xlsx.parse(path);
       } catch (err) {
         return res.json(400, "Unable to read input. The file may be corrupt.");
       }
@@ -77,6 +67,37 @@ module.exports = function (app) {
         }
       }
       return res.json(network);
+    };
+
+module.exports = function (app) {
+  //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+  app.post('/upload', function (req, res) {
+    //TODO: Add file validation
+    (new multiparty.Form()).parse(req, function (err, fields, files) {
+      if (err) {
+        return res.json(400, "There was a problem uploading your file. Please try again.");
+      }
+
+      try {
+        var input = files.file[0].path;
+      } catch (err) {
+        return res.json(400, "No upload file selected.");
+      }
+
+      if (path.extname(input) !== ".xlsx") {
+        return res.json(400, "Invalid input file. Please select an Excel Workbook (*.xlsx) file." +
+          "<br><br>Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight.");
+      }
+
+      return processGRNmap(input, res, app);
     });
+  });
+
+  app.get('/demo/unweighted', function (req, res) {
+    return processGRNmap("test/dahlquist_wt-data_21-gene-sample-input_20140122.xlsx", res, app);
+  });
+
+  app.get('/demo/weighted', function (req, res) {
+    return processGRNmap("test/dahlquist_wt-data_21-gene-_sample-output_20140122_est_out_1.xlsx", res, app);
   });
 }
