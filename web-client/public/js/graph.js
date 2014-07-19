@@ -75,9 +75,9 @@
         .gravity($("#gravityInput").val());
 
     var drag = force.drag()
-        .on("dragstart", dragstart)
+        .on("dragstart", dragstart);
         //.on("drag", dragmove)
-        .on("dragend", dragend);
+        //.on("dragend", dragend);
   
     var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
