@@ -37,7 +37,7 @@ iframe.embedded-demo {
 }
 
 #title > a {
-    color: white;
+    color: #F8F8F8; /* Force to match header text regardless of state. */
 }
 
 #subtext {
