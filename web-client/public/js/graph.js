@@ -677,6 +677,15 @@
 			  }
 		}    
         
+    var dblclick = function (d) {
+      d3.select(this).classed("fixed", d.fixed = false);
+    };
+
+    var nodeTextDblclick = function (d) {
+      // Relay the double-click to our parent.
+      dblclick.call(this.parentNode, d);
+    };
+
     node.append("rect")
        .attr("width", function() {
          return this.parentNode.getAttribute("width");
@@ -696,7 +705,8 @@
       .style("font-size", "18px")
       .style("stroke-width", "0")
       .style("fill", "black")
-      .text(function(d) {return d.name;});
+      .text(function(d) {return d.name;})
+      .on("dblclick", nodeTextDblclick);
     
     $(node).draggable({ grid: [100, 30]});
            
@@ -893,10 +903,6 @@
         runNum++;
         drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls, networkType);
       }
-    }
-
-    function dblclick(d) {
-      d3.select(this).classed("fixed", d.fixed = false);
     }
 
     function dragstart(d) {
