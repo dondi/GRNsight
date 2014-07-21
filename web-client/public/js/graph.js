@@ -12,10 +12,9 @@
         gridWidth = 300;
 
     var allWeights = positiveWeights.concat(negativeWeights);
-    //alert("There are " + positiveWeights.length + " positive elements, " + negativeWeights.length + " negative elements, and " + allWeights.length + " total elements.");
+
     for(var i = 0; i < allWeights.length; i++ ) {
       allWeights[i] = Math.abs(allWeights[i]);
-      //alert("Absolute value taken. Element " + i + " is " + allWeights[i] + ".");
     }
     
 
