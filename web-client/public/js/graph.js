@@ -21,6 +21,7 @@
     var positiveScale,
         //positiveHighlight,
         totalScale,
+        normalizedScale,
         unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
@@ -31,6 +32,10 @@
       totalScale = d3.scale.quantile()
                            .domain(d3.extent(allWeights))
                            .range(["2"]);
+
+      normalizedScale = d3.scale.linear()
+                                .domain(d3.extent(allWeights))
+                                .range(["2"]);
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
                                   .range(["4"]);*/
@@ -44,6 +49,9 @@
       totalScale = d3.scale.linear()
                            .domain(d3.extent(allWeights))
                            .range([2, 14]);
+      normalizedScale = d3.scale.linear()
+                                .domain(d3.extent(allWeights))
+
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
                                   .range(["4", "8", "12", "16"]);*/
@@ -378,8 +386,8 @@
 		    .style("stroke", function (d) {
 		      if (unweighted) {
 		        return "black";
-		      } else if (d.value >= -0.1 && d.value <= 0.1) {
-		        return "gray";
+          } else if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+            return "gray";
 		      } else {
 		        return d.stroke;
 		      }
@@ -393,14 +401,14 @@
               minimum = "",
               color;
 
-          if(d.value >= -0.1 && d.value <= 0.1) {
+          if(normalizedScale(Math.abs(d.value)) <= 0.05) {
             minimum = "gray";
           }
 
           // If negative, you need one bar for horizontal and one for vertical.
           if(d.value < 0) {
             defs.append("marker")
-             .attr("id", "repressor" + d.strokeWidth + minimum)
+             .attr("id", "repressor_StrokeWidth" + d.strokeWidth + minimum)
              .attr("viewBox", "0 0 24 24")
              .attr("refX", 11)
              .attr("refY", 12)
@@ -411,11 +419,11 @@
              .attr("markerHeight", function() {
               return 22 + d.strokeWidth;
              })
-             .attr("orient", "angle")
+             .attr("orient", 180)
              .append("path")
                 .attr("d", "M 12 0 L 12 24 Z")
                 .attr("style", function() {
-                  if (d.value >= -0.1 && d.value <= 0.1) {
+                  if(normalizedScale(Math.abs(d.value)) <= 0.05) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -424,7 +432,7 @@
                 });
 
             defs.append("marker")
-             .attr("id", "repressorHorizontal" + d.strokeWidth + minimum)
+             .attr("id", "repressorHorizontal_StrokeWidth" + d.strokeWidth + minimum)
              .attr("viewBox", "0 0 24 24")
              .attr("refX", 11)
              .attr("refY", 12)
@@ -435,11 +443,11 @@
              .attr("markerHeight", function() {
                return 22 + d.strokeWidth;
              })
-             .attr("orient", "angle")
+             .attr("orient", 180)
              .append("path")
                 .attr("d", "M 0 12 L 24 12 Z")
                 .attr("style", function() {
-                  if (d.value >= -0.1 && d.value <= 0.1) {
+                  if(normalizedScale(Math.abs(d.value)) <= 0.05) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -450,7 +458,7 @@
           } else {
             // Arrowheads
             defs.append("marker")
-              .attr("id",  "arrowhead" + d.strokeWidth + minimum)
+              .attr("id",  "arrowhead_StrokeWidth" + d.strokeWidth + minimum)
               .attr("viewBox", "0 0 12 10")
               .attr("preserveAspectRatio", "xMinYMin meet")
               .attr("refX", 7.5)
@@ -480,7 +488,7 @@
                 .attr("style", function () {
                   if (unweighted) {
                     color = "black";
-                  } else if (d.value >= -0.1 && d.value <= 0.1) {
+                  } else if(normalizedScale(Math.abs(d.value)) <= 0.05) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -888,12 +896,12 @@
         }
         if (d.type == "repressor") {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
-            return "url(#repressorHorizontal" + d.strokeWidth + minimum + ")";
+            return "url(#repressorHorizontal_StrokeWidth" + d.strokeWidth + minimum + ")";
           } else {
-            return "url(#repressor" + d.strokeWidth + minimum + ")";
+            return "url(#repressor_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
         } else {
-          return "url(#arrowhead" + d.strokeWidth + minimum + ")";				
+          return "url(#arrowhead_StrokeWidth" + d.strokeWidth + minimum + ")";				
         }
       });
 
