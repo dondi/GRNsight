@@ -891,7 +891,7 @@
 
       link.select("path").attr("marker-end", function(d) {
         var minimum = "";
-        if (d.value >= -0.1 && d.value <= 0.1) {
+        if(normalizedScale(Math.abs(d.value)) <= 0.05) {
           minimum = "gray";
         }
         if (d.type == "repressor") {
