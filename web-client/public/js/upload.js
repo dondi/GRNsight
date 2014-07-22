@@ -30,7 +30,9 @@ $(function () {
             lockSliderCheckbox: "#lockSliders",
             lockSliderMenu: "#lockSlidersMenu",
             resetSliderButton: "#resetSliders",
-            undoResetButton: "#undoReset"
+            resetSliderMenu: "#resetSlidersMenu",
+            undoResetButton: "#undoReset",
+            undoResetMenu: "#undoResetMenu"
           });
         }).error(function (xhr, status, error) {
           var err = JSON.parse(xhr.responseText);

@@ -1043,7 +1043,9 @@
         $(controls.lockSliderCheckbox).unbind('click').click(updateSliders);
         $(controls.lockSliderMenu).unbind('click').click(updateSliders); 
         $(controls.resetSliderButton).unbind('click').click(defaultSliders);
+        $(controls.resetSliderMenu).unbind('click').click(defaultSliders);
         $(controls.undoResetButton).unbind('click').click(undoReset);
+        $(controls.undoResetMenu).unbind('click').click(undoReset);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
