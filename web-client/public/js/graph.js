@@ -975,6 +975,15 @@
 
 
     function updateSliders(event) {
+      if( $("#lockSlidersMenu").attr('class') === 'noGlyph' ) {
+        $("#lockSliders").prop('checked', true);
+        $("#lockSlidersMenu").removeClass('noGlyph')
+                             .html("<span class='glyphicon glyphicon-ok'></span>&nbsp; Lock Force Graph Parameters");
+      } else {
+        $("#lockSliders").prop('checked', false);
+        $("#lockSlidersMenu").addClass('noGlyph')
+                             .html("<span class='glyphicon invisible'></span>&nbsp; Lock Force Graph Parameters");
+      }
       var check = $( "#lockSliders" ).prop( 'checked' );
       $( "#linkDistInput" ).prop( 'disabled', check );
       $( "#chargeInput" ).prop( 'disabled', check );
@@ -1030,7 +1039,9 @@
         $(controls.chargeSlider).on('input', updateCharge);
         $(controls.chargeDistSlider).on('input', updateChargeDist);
         $(controls.gravitySlider).on('input', updateGravity);
-        $(controls.lockSliderCheckbox).change(updateSliders);
+        // Handler is unbound first to prevent it from firing twice.
+        $(controls.lockSliderCheckbox).unbind('click').click(updateSliders);
+        $(controls.lockSliderMenu).unbind('click').click(updateSliders); 
         $(controls.resetSliderButton).click(defaultSliders);
         $(controls.undoResetButton).click(undoReset);
     }

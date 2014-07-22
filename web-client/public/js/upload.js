@@ -28,6 +28,7 @@ $(function () {
             chargeDistSlider: "#chargeDistInput",
             gravitySlider: "#gravityInput",
             lockSliderCheckbox: "#lockSliders",
+            lockSliderMenu: "#lockSlidersMenu",
             resetSliderButton: "#resetSliders",
             undoResetButton: "#undoReset"
           });

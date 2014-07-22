@@ -48,9 +48,13 @@ html
               a(href='#' class='dropdown-toggle' data-toggle='dropdown' disabled) Edit
               ul(class='dropdown-menu' role='menu')
                 li(class='disabled')
-                  a(href='#' class='noGlyph') Undo
+                  a(href='#') 
+                    span(class='glyphicon invisible')
+                    | &nbsp; Undo
                 li(class='disabled')
-                  a(href='#' class='noGlyph') Redo
+                  a(href='#') 
+                    span(class='glyphicon invisible')
+                    | &nbsp; Redo
                 li(class='divider')
                 li(class='disabled')
                   a(href='#')
@@ -59,13 +63,19 @@ html
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Format
               ul(class='dropdown-menu' role='menu')
+                li
+                  a(href='#' class='noGlyph' id='lockSlidersMenu')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Lock Force Graph Parameters
                 li(class='disabled')
-                  a(href='#' class='noGlyph') Lock Force Graph Parameters
-                li(class='disabled')
-                  a(href='#' class='noGlyph') Lock Nodes
+                  a(href='#' class='noGlyph') 
+                    span(class='glyphicon invisible')
+                    | &nbsp; Lock Nodes
                 li(class='divider')
                 li(class='disabled')
-                  a(href='#' class='noGlyph') Reset Sliders
+                  a(href='#') 
+                    span(class='glyphicon invisible')
+                    | &nbsp; Reset Sliders
             li(class='dropdown') 
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
               ul(class='dropdown-menu' role='menu')
