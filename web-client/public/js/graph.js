@@ -1042,8 +1042,8 @@
         // Handler is unbound first to prevent it from firing twice.
         $(controls.lockSliderCheckbox).unbind('click').click(updateSliders);
         $(controls.lockSliderMenu).unbind('click').click(updateSliders); 
-        $(controls.resetSliderButton).click(defaultSliders);
-        $(controls.undoResetButton).click(undoReset);
+        $(controls.resetSliderButton).unbind('click').click(defaultSliders);
+        $(controls.undoResetButton).unbind('click').click(undoReset);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
