@@ -475,6 +475,8 @@
                 .attr("refX", function() {
                   if(unweighted || d.strokeWidth < 4 ) {
                     return 7.5 + d.strokeWidth*1.5;
+                  } else if (d.strokeWidth > 9) {
+                    return 7.5;
                   } else {
                     return 7.5 + ((d.strokeWidth < 7) ? d.strokeWidth/2 : d.strokeWidth/6);
                   }
