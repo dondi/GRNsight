@@ -432,7 +432,8 @@
                })
                .attr("orient", 180)
                .append("path")
-                  .attr("d", "M 12 0 L 12 24 Z")
+                  //.attr("d", "M 12 0 L 12 24 Z")
+                  .attr("d", "M 12 0 L 12 24 L 14 24 L 14 0 Z")
                   .attr("style", function() {
                     if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                       color = "gray";
@@ -456,7 +457,7 @@
                })
                .attr("orient", 180)
                .append("path")
-                  .attr("d", "M 0 12 L 24 12 Z")
+                  .attr("d", "M 0 12 L 24 12 L 24 14 L 0 14 Z")
                   .attr("style", function() {
                     if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                       color = "gray";
