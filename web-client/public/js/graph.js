@@ -400,104 +400,115 @@
               x2 = d.target.x,
               y2 = d.target.y,
               minimum = "",
+              selfRef = "",
               color;
 
           if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
             minimum = "gray";
           }
-
-          // If negative, you need one bar for horizontal and one for vertical.
-          if(d.value < 0) {
-            defs.append("marker")
-             .attr("id", "repressor_StrokeWidth" + d.strokeWidth + minimum)
-             .attr("viewBox", "0 0 24 24")
-             .attr("refX", 11)
-             .attr("refY", 12)
-             .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", function() {
-               return 22 + d.strokeWidth;
-             })
-             .attr("markerHeight", function() {
-              return 22 + d.strokeWidth;
-             })
-             .attr("orient", 180)
-             .append("path")
-                .attr("d", "M 12 0 L 12 24 Z")
-                .attr("style", function() {
-                  if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
-                    color = "gray";
-                  } else {
-                    color = d.stroke;
-                  }
-                  return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
-                });
-
-            defs.append("marker")
-             .attr("id", "repressorHorizontal_StrokeWidth" + d.strokeWidth + minimum)
-             .attr("viewBox", "0 0 24 24")
-             .attr("refX", 11)
-             .attr("refY", 12)
-             .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", function() {
-               return 22 + d.strokeWidth;
-             })
-             .attr("markerHeight", function() {
-               return 22 + d.strokeWidth;
-             })
-             .attr("orient", 180)
-             .append("path")
-                .attr("d", "M 0 12 L 24 12 Z")
-                .attr("style", function() {
-                  if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
-                    color = "gray";
-                  } else {
-                    color = d.stroke;
-                  }
-                  return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
-                });
-
-          } else {
-            // Arrowheads
-            defs.append("marker")
-              .attr("id",  "arrowhead_StrokeWidth" + d.strokeWidth + minimum)
-              .attr("viewBox", "0 0 12 10")
-              .attr("preserveAspectRatio", "xMinYMin meet")
-              .attr("refX", 7.5)
-              .attr("refY", function () {
-                /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
-                  return 3;
-                } else {*/
-                  return 5;
-                //}
-              })
-              .attr("markerUnits", "userSpaceOnUse")
-              .attr("markerWidth", function() {
-                return 12 + d.strokeWidth*1.5;
-              })
-              .attr("markerHeight", function() {
-                return 8 + d.strokeWidth*1.5;
-              })
-              .attr("orient", function() {
-                if( x1 === x2 && y1 === y2 ) {
-                  return 270;
-                } else {
-                  return "auto";
-                }
-              })
-              .append("path")
-                .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
-                .attr("style", function () {
-                  if (unweighted) {
-                    color = "black";
-                  } else if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
-                    color = "gray";
-                  } else {
-                    color = d.stroke;
-                  }
-                    return "stroke: " + color + "; fill: " + color;
-                });
+          if( x1 === x2 && y1 === y2 ) {
+            selfRef = "_SelfReferential";
           }
-		      return "url(#" + d.type + d.strokeWidth + minimum + ")";
+
+          // If the same ID is created twice (usually happens in the unweighted GRNS), it causes unpredictable behavior
+          // in the markers. To prevent this, first we check to make sure the ID about to be created doesn't exist.
+          if( $("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum).length != 0 ) {
+            return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";  
+          } else {
+           
+            // If negative, you need one bar for horizontal and one for vertical.
+            if(d.value < 0) {
+              defs.append("marker")
+               .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+               .attr("viewBox", "0 0 24 24")
+               .attr("refX", 11)
+               .attr("refY", 12)
+               .attr("markerUnits", "userSpaceOnUse")
+               .attr("markerWidth", function() {
+                 return 22 + d.strokeWidth;
+               })
+               .attr("markerHeight", function() {
+                return 22 + d.strokeWidth;
+               })
+               .attr("orient", 180)
+               .append("path")
+                  .attr("d", "M 12 0 L 12 24 Z")
+                  .attr("style", function() {
+                    if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+                      color = "gray";
+                    } else {
+                      color = d.stroke;
+                    }
+                    return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
+                  });
+
+              defs.append("marker")
+               .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+               .attr("viewBox", "0 0 24 24")
+               .attr("refX", 11)
+               .attr("refY", 12)
+               .attr("markerUnits", "userSpaceOnUse")
+               .attr("markerWidth", function() {
+                 return 22 + d.strokeWidth;
+               })
+               .attr("markerHeight", function() {
+                 return 22 + d.strokeWidth;
+               })
+               .attr("orient", 180)
+               .append("path")
+                  .attr("d", "M 0 12 L 24 12 Z")
+                  .attr("style", function() {
+                    if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+                      color = "gray";
+                    } else {
+                      color = d.stroke;
+                    }
+                    return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
+                  });
+
+            } else {
+              // Arrowheads
+              defs.append("marker")
+                .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                .attr("viewBox", "0 0 12 10")
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("refX", 7.5)
+                .attr("refY", function () {
+                  /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
+                    return 3;
+                  } else {*/
+                    return 5;
+                  //}
+                })
+                .attr("markerUnits", "userSpaceOnUse")
+                .attr("markerWidth", function() {
+                  return 12 + d.strokeWidth*1.5;
+                })
+                .attr("markerHeight", function() {
+                  return 8 + d.strokeWidth*1.5;
+                })
+                .attr("orient", function() {
+                  if( x1 === x2 && y1 === y2 ) {
+                    return 270;
+                  } else {
+                    return "auto";
+                  }
+                })
+                .append("path")
+                  .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
+                  .attr("style", function () {
+                    if (unweighted) {
+                      color = "black";
+                    } else if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+                      color = "gray";
+                    } else {
+                      color = d.stroke;
+                    }
+                      return "stroke: " + color + "; fill: " + color;
+                    });
+              }
+          }
+		      return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
 		    })
         //.style("position", "absolute")
         //.style("z-index", "3")
@@ -891,9 +902,17 @@
       });
 
       link.select("path").attr("marker-end", function(d) {
-        var minimum = "";
+        var x1 = d.source.x,
+            y1 = d.source.y,
+            x2 = d.target.x,
+            y2 = d.target.y,
+            minimum = "",
+            selfRef = "";
         if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
           minimum = "gray";
+        }
+        if( x1 === x2 && y1 === y2 ) {
+          selfRef = "_SelfReferential";
         }
         if (d.type == "repressor") {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
@@ -902,7 +921,7 @@
             return "url(#repressor_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
         } else {
-          return "url(#arrowhead_StrokeWidth" + d.strokeWidth + minimum + ")";				
+          return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";				
         }
       });
 
