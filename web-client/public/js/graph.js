@@ -483,10 +483,43 @@
                   return xOffsets[d.strokeWidth];
                 })
                 .attr("refY", function () {
+                  var yOffsets;
+
+                  if(x1 === x2 && y1 === y2 ) {
+                    yOffsets = {
+                      2: 6.7, 3: 6,4: 5.89,
+                      5: 5,
+                      6: 5,
+                      7: 5,
+                      8: 5,
+                      9: 5,
+                      10: 5,
+                      11: 5,
+                      12: 5,
+                      13: 5,
+                      14: 5
+                    }
+                  } else {
+                    yOffsets = {
+                      2: 5,
+                      3: 5,
+                      4: 4.8,
+                      5: 5,
+                      6: 5,
+                      7: 4.98,
+                      8: 4.9,
+                      9: 5.2,
+                      10: 4.85,
+                      11: 4.7,
+                      13: 5,
+                      12: 5.15,
+                      14: 4.7
+                    }
+                  }
                   /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
                     return 3;
                   } else {*/
-                    return 5;
+                    return yOffsets[d.strokeWidth];
                   //}
                 })
                 .attr("markerUnits", "userSpaceOnUse")
