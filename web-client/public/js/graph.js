@@ -339,7 +339,7 @@
                  //alert(d.value);
                  var d_AbsVal = Math.abs(d.value)
                  //alert("With abs: " + d_AbsVal);
-                 return totalScale(d_AbsVal);
+                 return Math.round( totalScale(d_AbsVal) );
                });
                  
     node = node.data(nodes)
@@ -382,7 +382,7 @@
         })
 		    .style("stroke-width", function (d) {
           var d_absVal = Math.abs(d.value);
-		      return d.strokeWidth = totalScale(d_absVal);
+		      return d.strokeWidth = Math.round( totalScale(d_absVal) );
 		    })
 		    .style("stroke", function (d) {
 		      if (unweighted) {
@@ -473,13 +473,13 @@
                 .attr("viewBox", "0 0 12 12")
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("refX", function() {
-                  if(unweighted || d.strokeWidth < 4 ) {
-                    return 7.5 + d.strokeWidth*1.5;
-                  } else if (d.strokeWidth > 9) {
-                    return 7.5;
-                  } else {
-                    return 7.5 + ((d.strokeWidth < 7) ? d.strokeWidth/2 : d.strokeWidth/6);
-                  }
+                  // Individual offsets for each possible stroke width
+                  var xOffsets = {
+                    2 : 11.75, 3 : 11, 4 : 9.75, 5 : 9.25,  6 : 8.5, 7 : 10,
+                    8 : 9.75, 9 : 9.5, 10 : 9, 11 : 9.5, 12 : 9.5, 13 : 9.25,
+                    14 : 9
+                  };
+                  return xOffsets[d.strokeWidth];
                 })
                 .attr("refY", function () {
                   /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
@@ -490,10 +490,10 @@
                 })
                 .attr("markerUnits", "userSpaceOnUse")
                 .attr("markerWidth", function() {
-                  return 12 + d.strokeWidth*1.5;
+                  return 12 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
                 })
                 .attr("markerHeight", function() {
-                  return 8 + d.strokeWidth*1.5;
+                  return 5 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
                 })
                 .attr("orient", function() {
                   if( x1 === x2 && y1 === y2 ) {
