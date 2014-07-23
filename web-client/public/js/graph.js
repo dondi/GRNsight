@@ -14,7 +14,7 @@
     var allWeights = positiveWeights.concat(negativeWeights);
 
     for(var i = 0; i < allWeights.length; i++ ) {
-      allWeights[i] = Math.abs(allWeights[i]);
+      allWeights[i] = Math.abs((allWeights[i]).toPrecision(4));
     }
     
 
@@ -49,8 +49,9 @@
       totalScale = d3.scale.linear()
                            .domain(d3.extent(allWeights))
                            .range([2, 14]);
+
       normalizedScale = d3.scale.linear()
-                                .domain(d3.extent(allWeights))
+                                .domain(d3.extent(allWeights));
 
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
@@ -386,7 +387,7 @@
 		    .style("stroke", function (d) {
 		      if (unweighted) {
 		        return "black";
-          } else if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+          } else if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
             return "gray";
 		      } else {
 		        return d.stroke;
@@ -401,7 +402,7 @@
               minimum = "",
               color;
 
-          if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+          if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
             minimum = "gray";
           }
 
@@ -423,7 +424,7 @@
              .append("path")
                 .attr("d", "M 12 0 L 12 24 Z")
                 .attr("style", function() {
-                  if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+                  if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -447,7 +448,7 @@
              .append("path")
                 .attr("d", "M 0 12 L 24 12 Z")
                 .attr("style", function() {
-                  if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+                  if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -484,11 +485,11 @@
                 }
               })
               .append("path")
-                .attr("d", "M 0 0 L 14 5 L 0 10 z")
+                .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
                 .attr("style", function () {
                   if (unweighted) {
                     color = "black";
-                  } else if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+                  } else if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -891,7 +892,7 @@
 
       link.select("path").attr("marker-end", function(d) {
         var minimum = "";
-        if(normalizedScale(Math.abs(d.value)) <= 0.05) {
+        if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
           minimum = "gray";
         }
         if (d.type == "repressor") {
