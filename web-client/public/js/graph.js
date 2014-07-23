@@ -470,9 +470,15 @@
               // Arrowheads
               defs.append("marker")
                 .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-                .attr("viewBox", "0 0 12 10")
+                .attr("viewBox", "0 0 12 12")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("refX", 7.5)
+                .attr("refX", function() {
+                  if(unweighted || d.strokeWidth < 4 ) {
+                    return 7.5 + d.strokeWidth*1.5;
+                  } else {
+                    return 7.5 + ((d.strokeWidth < 7) ? d.strokeWidth/2 : d.strokeWidth/6);
+                  }
+                })
                 .attr("refY", function () {
                   /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
                     return 3;
@@ -916,9 +922,9 @@
         }
         if (d.type == "repressor") {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
-            return "url(#repressorHorizontal_StrokeWidth" + d.strokeWidth + minimum + ")";
+            return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           } else {
-            return "url(#repressor_StrokeWidth" + d.strokeWidth + minimum + ")";
+            return "url(#repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
         } else {
           return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";				
