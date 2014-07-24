@@ -1167,24 +1167,27 @@
     }
 
     function defaultSliders(event) {
-      allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      $( "#linkDistInput" ).val(500);
-      $( "#linkDistVal" ).html("500");
-      $( "#chargeInput" ).val(-1000);
-      $( "#chargeVal" ).html("-1000");
-      $( "#gravityInput" ).val(0.1);
-      $( "#gravityVal" ).html("0.10");
-      $( "#chargeDistInput" ).val(1000);
-      $( "#chargeDistVal" ).html("1000");
-      force.linkDistance(500)
-           .charge(-1000)
-           .chargeDistance(1000)
-           .gravity(0.1);
-      force.nodes(nodes)
-           .links(links)
-           .stop();
-      force.start();
-      $( "#undoReset" ).prop( 'disabled', false );
+      var check = $( "#lockSliders" ).prop( 'checked' );
+      if( !check ) {
+        allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
+        $( "#linkDistInput" ).val(500);
+        $( "#linkDistVal" ).html("500");
+        $( "#chargeInput" ).val(-1000);
+        $( "#chargeVal" ).html("-1000");
+        $( "#gravityInput" ).val(0.1);
+        $( "#gravityVal" ).html("0.10");
+        $( "#chargeDistInput" ).val(1000);
+        $( "#chargeDistVal" ).html("1000");
+        force.linkDistance(500)
+             .charge(-1000)
+             .chargeDistance(1000)
+             .gravity(0.1);
+        force.nodes(nodes)
+             .links(links)
+             .stop();
+        force.start();
+        $( "#undoReset" ).prop( 'disabled', false );
+      }
     }
 
     function undoReset(event) {
