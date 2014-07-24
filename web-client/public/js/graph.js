@@ -36,6 +36,7 @@
       normalizedScale = d3.scale.linear()
                                 .domain(d3.extent(allWeights))
                                 .range(["2"]);
+
       /*positiveHighlight = d3.scale.quantile()
                                   .domain(positiveWeights)
                                   .range(["4"]);*/
@@ -387,7 +388,7 @@
 		    .style("stroke", function (d) {
 		      if (unweighted) {
 		        return "black";
-          } else if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+          } else if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05 ) {
             return "gray";
 		      } else {
 		        return d.stroke;
@@ -405,7 +406,7 @@
               xOffsets,
               color;
 
-          if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+          if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
             minimum = "gray";
           }
           if( x1 === x2 && y1 === y2 ) {
@@ -459,7 +460,7 @@
                   .attr("rx", 10)
                   .attr("ry", 10)
                   .attr("style", function() {
-                    if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+                    if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
@@ -512,7 +513,7 @@
                   .attr("rx", 10)
                   .attr("ry", 10)
                   .attr("style", function() {
-                    if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+                    if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
@@ -592,7 +593,7 @@
                   .attr("style", function () {
                     if (unweighted) {
                       color = "black";
-                    } else if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+                    } else if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
@@ -1057,7 +1058,7 @@
             y2 = d.target.y,
             minimum = "",
             selfRef = "";
-        if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+        if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
           minimum = "gray";
         }
         if( x1 === x2 && y1 === y2 ) {
