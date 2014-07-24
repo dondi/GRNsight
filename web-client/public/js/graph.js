@@ -401,6 +401,8 @@
               y2 = d.target.y,
               minimum = "",
               selfRef = "",
+              yOffsets,
+              xOffsets,
               color;
 
           if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
@@ -420,51 +422,102 @@
             if(d.value < 0) {
               defs.append("marker")
                .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-               .attr("viewBox", "0 0 24 24")
-               .attr("refX", 11)
-               .attr("refY", 12)
+               //.attr("viewBox", function() {
+               //  return "0 0 " + d.strokeWidth + " " + d.strokeWidth;
+                //})
+               .attr("refX", function() {
+                 xOffsets = {
+                   2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2, 7 : 3, 8 : 2,
+                   9 : 3, 10 : 3, 11 : 4, 12 : 3, 13 : 0, 14 : 4
+                 }
+                 return xOffsets[d.strokeWidth];
+               })
+               .attr("refY", function() {
+                 yOffsets = {
+                   2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
+                   9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 0, 14 : 16
+                 }
+                 return yOffsets[d.strokeWidth];
+               })
                .attr("markerUnits", "userSpaceOnUse")
                .attr("markerWidth", function() {
-                 return 22 + d.strokeWidth;
+                 return d.strokeWidth;
                })
                .attr("markerHeight", function() {
-                return 22 + d.strokeWidth;
+                return 25 + d.strokeWidth;
                })
                .attr("orient", 180)
-               .append("path")
+               .append("rect")
                   //.attr("d", "M 12 0 L 12 24 Z")
-                  .attr("d", "M 12 0 L 12 24 L 14 24 L 14 0 Z")
+                  //.attr("d", "M 12 0 L 12 24 L 14 24 L 14 0 Z")
+                  .attr("width", function() {
+                    return d.strokeWidth;
+                  })
+                  .attr("height", function () {
+                    return 25 + d.strokeWidth;
+                  })
+                  .attr("rx", 10)
+                  .attr("ry", 10)
                   .attr("style", function() {
                     if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
                     }
-                    return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
+                    return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
                   });
 
               defs.append("marker")
                .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-               .attr("viewBox", "0 0 24 24")
-               .attr("refX", 11)
-               .attr("refY", 12)
+               //.attr("viewBox", function() {
+                // return "0 0 " + d.strokeWidth + " " + d.strokeWidth;
+                //})
+               .attr("refX", function() {
+                  if(x1 === x2 && y1 === y2) {
+                    xOffsets = {
+                      2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 0, 7 : 0, 8 : 16.5,
+                      9 : 16.5, 10 : 17.5, 11 : 0, 12 : 0, 13 : 0, 14 : 16
+                    }
+                  } else {
+                    xOffsets = {
+                      2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
+                      9 : 16, 10 : 17, 11 : 17, 12 : 18.5, 13 : 0, 14 : 18
+                    }
+                  }
+                 return xOffsets[d.strokeWidth];
+               })
+               .attr("refY", function() {
+                 yOffsets = {
+                   2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2, 7 : 3, 8 : 2,
+                   9 : 3, 10 : 3, 11 : 4, 12 : 3, 13 : 0, 14 : 4
+                 }
+                 return yOffsets[d.strokeWidth];
+               })
                .attr("markerUnits", "userSpaceOnUse")
                .attr("markerWidth", function() {
-                 return 22 + d.strokeWidth;
+                 return 25 + d.strokeWidth;
                })
                .attr("markerHeight", function() {
-                 return 22 + d.strokeWidth;
+                 return d.strokeWidth;
                })
                .attr("orient", 180)
-               .append("path")
-                  .attr("d", "M 0 12 L 24 12 L 24 14 L 0 14 Z")
+               .append("rect")
+                  //.attr("d", "M 0 12 L 24 12 L 24 14 L 0 14 Z")
+                  .attr("width", function() {
+                    return 25 + d.strokeWidth;
+                  })
+                  .attr("height", function() {
+                    return d.strokeWidth;
+                  })
+                  .attr("rx", 10)
+                  .attr("ry", 10)
                   .attr("style", function() {
                     if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
                     }
-                    return "stroke:" + color + "; fill: " + color + "; stroke-width: " + d.strokeWidth/2;
+                    return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
                   });
 
             } else {
@@ -475,7 +528,7 @@
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("refX", function() {
                   // Individual offsets for each possible stroke width
-                  var xOffsets = {
+                  xOffsets = {
                     2 : 11.75, 3 : 11, 4 : 9.75, 5 : 9.25,  6 : 8.5, 7 : 10,
                     8 : 9.75, 9 : 9.5, 10 : 9, 11 : 9.5, 12 : 9.5, 13 : 9.25,
                     14 : 9
@@ -483,8 +536,6 @@
                   return xOffsets[d.strokeWidth];
                 })
                 .attr("refY", function () {
-                  var yOffsets;
-
                   if(x1 === x2 && y1 === y2 ) {
                     yOffsets = {
                       2: 6.7, 3: 6,4: 5.89,
@@ -620,6 +671,31 @@
     function smartPathEnd(d, w, h) {
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var offset = parseFloat(d.strokeWidth);
+
+        /*var x1 = d.source.x,
+            y1 = d.source.y,
+            x2 = d.target.x,
+            y2 = d.target.y,
+            minimum = "",
+            selfRef = "";
+
+        // For some reason, the markers are appended improperly on the 
+        var offsetsProper = {
+          2 : 0, 3 : 0, 4 : 0, 5 : 0, 6 : 0, 7 : 0, 8 : 0,
+          9 : 0, 10 : 0, 11 : 0, 12 : 0, 13 : 0, 14 : 0
+        }
+        var offsetsImproper = {
+          2 : 0, 3 : 0, 4 : 0, 5 : 0, 6 : 0, 7 : 0, 8 : 0,
+          9 : 0, 10 : 0, 11 : 0, 12 : 0, 13 : 0, 14 : 11
+        }
+
+
+        if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
+          minimum = "gray";
+        }
+        if( x1 === x2 && y1 === y2 ) {
+          selfRef = "_SelfReferential";
+        }*/
         
         if (d.value < 0) {
           offset = Math.max(offset, 10);
@@ -681,13 +757,29 @@
           // path endpoint but we need to work out the y-coordinate
 
           // By default assume path intersects left vertical side
-          d.target.newX = d.target.x - offset;
+            d.target.newX = d.target.x - offset;
+            //if(d.type != "arrowhead") {
+             // d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refX", function() {
+              //  return offsetsProper[d.strokeWidth];
+            //  });
+            //};
 
           // But...
           if (d.target.centerX < d.source.newX) {
               // i.e. if target node is to left of the source node
               // then path intersects right vertical side
+
+            //if(d.type != "arrowhead") {
+             // d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refX", function() {
+              //  return offsetsImproper[d.strokeWidth];
+            //  });
+            //};
+
+            if( d.type != "arrowhead") { 
+              d.target.newX = d.target.x + w + offset + d.strokeWidth;
+            } else {
               d.target.newX = d.target.x + w + offset;
+            }
           }
 
           // Now use a bit of trigonometry to work out the y-coord.
@@ -714,11 +806,26 @@
           // By default assume path intersects top horizontal side
           d.target.newY = d.target.y - offset;
 
+           //if(d.type != "arrowhead") {
+            //  d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refY", function() {
+             //   return offsetsProper[d.strokeWidth];
+           // });
+          //};
+
           // But...
           if (d.target.centerY < d.source.newY) {
               // i.e. if target node is above the source node
               // then path intersects bottom horizontal side
-              d.target.newY = d.target.y + h + offset;
+            //  if(d.type != "arrowhead") {
+              //  d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refY", function() {
+                //  return offsetsImproper[d.strokeWidth];
+              //  });
+              //  };
+              if( d.type != "arrowhead") { 
+                d.target.newY = d.target.y + h + offset + d.strokeWidth;
+              } else {
+                d.target.newY = d.target.y + h + offset;
+              }
           }
 
           // Now use a bit of trigonometry to work out the x-coord.
