@@ -1191,23 +1191,26 @@
     }
 
     function undoReset(event) {
-      $( "#linkDistInput" ).val( allDefaults[0] );
-      $( "#linkDistVal" ).html( allDefaults[0] );
-      $( "#chargeInput" ).val( allDefaults[1] );
-      $( "#chargeVal" ).html( allDefaults[1] );
-      $( "#gravityInput" ).val( allDefaults[3] );
-      $( "#gravityVal" ).html( allDefaults[3] );
-      $( "#chargeDistInput" ).val( allDefaults[2] );
-      $( "#chargeDistVal" ).html( allDefaults[2] );
-      force.linkDistance( allDefaults[0] )
-           .charge( allDefaults[1] )
-           .chargeDistance( allDefaults[2] )
-           .gravity( allDefaults[3] );
-      force.nodes(nodes)
-           .links(links)
-           .stop();
-      force.start();
-      $( "#undoReset" ).prop( 'disabled', true );
+      var check =  $( "#undoReset" ).prop( 'disabled' )
+      if( !check ) {
+        $( "#linkDistInput" ).val( allDefaults[0] );
+        $( "#linkDistVal" ).html( allDefaults[0] );
+        $( "#chargeInput" ).val( allDefaults[1] );
+        $( "#chargeVal" ).html( allDefaults[1] );
+        $( "#gravityInput" ).val( allDefaults[3] );
+        $( "#gravityVal" ).html( allDefaults[3] );
+        $( "#chargeDistInput" ).val( allDefaults[2] );
+        $( "#chargeDistVal" ).html( allDefaults[2] );
+        force.linkDistance( allDefaults[0] )
+             .charge( allDefaults[1] )
+             .chargeDistance( allDefaults[2] )
+             .gravity( allDefaults[3] );
+        force.nodes(nodes)
+             .links(links)
+             .stop();
+        force.start();
+        $( "#undoReset" ).prop( 'disabled', true );
+      }
     }
 
     // Set up our controllers if any.
