@@ -388,7 +388,7 @@
 		    .style("stroke", function (d) {
 		      if (unweighted) {
 		        return "black";
-          } else if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05 ) {
+          } else if(normalize(d) <= 0.05 ) {
             return "gray";
 		      } else {
 		        return d.stroke;
@@ -460,7 +460,7 @@
                   .attr("rx", 10)
                   .attr("ry", 10)
                   .attr("style", function() {
-                    if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+                    if( normalize(d) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
@@ -513,7 +513,7 @@
                   .attr("rx", 10)
                   .attr("ry", 10)
                   .attr("style", function() {
-                    if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+                    if(normalize(d) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
@@ -593,7 +593,7 @@
                   .attr("style", function () {
                     if (unweighted) {
                       color = "black";
-                    } else if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+                    } else if( normalize(d) <= 0.05) {
                       color = "gray";
                     } else {
                       color = d.stroke;
@@ -1058,7 +1058,7 @@
             y2 = d.target.y,
             minimum = "",
             selfRef = "";
-        if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+        if( normalize(d) <= 0.05) {
           minimum = "gray";
         }
         if( x1 === x2 && y1 === y2 ) {
@@ -1082,6 +1082,10 @@
       }
     }
 
+    function normalize(d) {
+      return Math.abs(d.value/(d3.max(allWeights)));
+    }
+ 
     function dragstart(d) {
       var node = d3.select(this);
       node.classed("fixed", d.fixed = true);
