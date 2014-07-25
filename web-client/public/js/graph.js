@@ -18,17 +18,11 @@
     }
     
 
-    var positiveScale,
-        //positiveHighlight,
-        totalScale,
+    var totalScale,
         normalizedScale,
         unweighted = false;
     
     if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
-      positiveScale = d3.scale.quantile()
-                              .domain(positiveWeights)
-                              .range(["2"]);
-
       totalScale = d3.scale.quantile()
                            .domain(d3.extent(allWeights))
                            .range(["2"]);
@@ -36,40 +30,16 @@
       normalizedScale = d3.scale.linear()
                                 .domain(d3.extent(allWeights))
                                 .range(["2"]);
-
-      /*positiveHighlight = d3.scale.quantile()
-                                  .domain(positiveWeights)
-                                  .range(["4"]);*/
                               
       unweighted = true;
     } else {
-      positiveScale = d3.scale.quantile()
-                        .domain(positiveWeights)
-                        .range(["2", "6", "10", "14"]);
-
       totalScale = d3.scale.linear()
                            .domain(d3.extent(allWeights))
                            .range([2, 14]);
 
       normalizedScale = d3.scale.linear()
                                 .domain(d3.extent(allWeights));
-
-      /*positiveHighlight = d3.scale.quantile()
-                                  .domain(positiveWeights)
-                                  .range(["4", "8", "12", "16"]);*/
     }
-
-    /*for(var i = 0; i < negativeWeights.length; i++) {
-      negativeWeights[i] = Math.abs(negativeWeights[i]);
-    }*/
-                  
-    var negativeScale = d3.scale.quantile()
-                          .domain(negativeWeights)
-                          .range(["2", "6", "10", "14"]);
-
-    /*var negativeHighlight = d3.scale.quantile()
-                                    .domain(negativeWeights)
-                                    .range(["4", "8", "12", "16"]);*/
                        
     snapToGrid = function(val, gridSize) {
       return gridSize * Math.round(val/gridSize);
@@ -94,171 +64,6 @@
         
     var defs = svg.append("defs");
           
-    //Adding the arrowheads
-    /*defs.append("marker")
-      .attr("id", "arrowhead2")
-      //.attr("viewBox", "0 0 10 10")
-      .attr("refX", 13)
-      .attr("refY", 5)
-      .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 14)
-      .attr("markerHeight", 10)
-      .attr("orient", "auto")
-      .append("path")
-        .attr("d", "M 0 0 L 14 5 L 0 10 z")
-        .attr("style", function () {
-          if (unweighted) {
-            return "stroke: black; fill: black";
-          } else {
-            return "stroke: gray; fill: gray";
-          }
-        });
-        
-    defs.append("marker")
-      .attr("id", "arrowhead6")
-      //.attr("viewBox", "0 0 10 10")
-      .attr("refX", 13)
-      .attr("refY", 8.5)
-      .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 20)
-      .attr("markerHeight", 16)
-      .attr("orient", "auto")
-      .append("path")
-        .attr("d", "M 0 0 L 20 7 L 0 16 z")
-        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
-        
-    defs.append("marker")
-      .attr("id", "arrowhead10")
-      //.attr("viewBox", "0 0 10 10")
-      .attr("refX", 15)
-      .attr("refY", 11)
-      .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 26)
-      .attr("markerHeight", 22)
-      .attr("orient", "auto")
-      .append("path")
-        .attr("d", "M 0 0 L 26 11 L 0 22 z")
-        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
-        
-    defs.append("marker")
-      .attr("id", "arrowhead14")
-      //.attr("viewBox", "0 0 10 10")
-      .attr("refX", 14)
-      .attr("refY", 13.5)
-      .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 32)
-      .attr("markerHeight", 28)
-      .attr("orient", "auto")
-      .append("path")
-        .attr("d", "M 0 0 L 32 14 L 0 28 z")
-        .attr("style", "stroke: MediumVioletRed; fill: MediumVioletRed");
-
-    //Flat arrowheads for repression, vertical
-    defs.append("marker")
-       .attr("id", "repressor2")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 24)
-       .attr("markerHeight", 24)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 12 0 L 12 24 Z")
-         .attr("style", "stroke: gray; fill: gray");
-         
-    defs.append("marker")
-       .attr("id", "repressor6")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 28)
-       .attr("markerHeight", 28)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 12 0 L 12 24 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 3.5");
-         
-    defs.append("marker")
-       .attr("id", "repressor10")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 28)
-       .attr("markerHeight", 28)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 12 0 L 12 24 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 6.5");
-         
-    defs.append("marker")
-       .attr("id", "repressor14")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 32)
-       .attr("markerHeight", 32)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 12 0 L 12 24 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");
-         
-    //Flat arrowheads for repression, horizontal
-    defs.append("marker")
-       .attr("id", "repressorHorizontal2")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 24)
-       .attr("markerHeight", 24)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 0 12 L 24 12 Z")
-         .attr("style", "stroke: gray; fill: gray");
-
-    defs.append("marker")
-       .attr("id", "repressorHorizontal6")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 28)
-       .attr("markerHeight", 28)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 0 12 L 24 12 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 3.5");
-         
-    defs.append("marker")
-       .attr("id", "repressorHorizontal10")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 28)
-       .attr("markerHeight", 28)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 0 12 L 24 12 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 6.5");
-         
-    defs.append("marker")
-       .attr("id", "repressorHorizontal14")
-       .attr("viewBox", "0 0 24 24")
-       .attr("refX", 11)
-       .attr("refY", 12)
-       .attr("markerUnits", "userSpaceOnUse")
-       .attr("markerWidth", 32)
-       .attr("markerHeight", 32)
-       .attr("orient", "angle")
-       .append("path")
-         .attr("d", "M 0 12 L 24 12 Z")
-         .attr("style", "stroke: DarkTurquoise; fill: DarkTurquoise; stroke-width: 9");*/
-
 //Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
 // for the outline code  
     /*var outline = defs.append("filter")
@@ -310,36 +115,20 @@
           .attr("in", "SourceGraphic")
           .attr("in2", "drop")
           .attr("mode", "normal");*/
-    
 
-        
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
-        //linkHighlight = svg.selectAll(".link");
 
     force.nodes(nodes)
          .links(links)
          .start();
-    
-    /*linkHighlight = linkHighlight.data(links)
-                        .enter().append("g")
-                        .attr("class", "highlight")
-                        .attr("strokeWidth", function (d) {
-                          if (d.value > 0) {
-                            return positiveHighlight(d.value);
-                          } else {
-                           return negativeHighlight(d.value);
-                          }
-                        });*/
-
+  
     link = link.data(links)
                .enter().append("g")
                .attr("class", "link")
                .attr("strokeWidth", function (d) {
-                 //alert(d.value);
                  var d_AbsVal = Math.abs(d.value)
-                 //alert("With abs: " + d_AbsVal);
                  return Math.round( totalScale(d_AbsVal) );
                });
                  
@@ -354,28 +143,6 @@
                })
                .attr("height", nodeHeight)
                .call(drag);
-
-    /*linkHighlight.append("path")
-                 .attr("id", function(d) {
-                   return "highlight" + d.source.index + "_" + d.target.index;
-                 })
-                 .style("stroke-width", function (d) {
-                   if (d.value > 0) {
-                     return d.strokeWidth = positiveHighlight(d.value);
-                   } else {
-                     return d.strokeWidth = negativeHighlight(d.value);
-                   }
-                 })
-                 .style("stroke", "white")
-                 .attr("marker-end", function (d) {
-                   return "url(#" + d.type + d.strokeWidth + ")";
-                 })
-                 .style("position", "absolute")
-                 .style("z-index", "5")
-                 .append("svg:title")
-                   .text(function (d) {
-                     return d.value.toPrecision(4);
-                   });*/
 
     link.append("path")
         .attr("id", function(d) {
@@ -423,9 +190,6 @@
             if(d.value < 0) {
               defs.append("marker")
                .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-               //.attr("viewBox", function() {
-               //  return "0 0 " + d.strokeWidth + " " + d.strokeWidth;
-                //})
                .attr("refX", function() {
                  xOffsets = {
                    2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2, 7 : 3, 8 : 2,
@@ -449,8 +213,6 @@
                })
                .attr("orient", 180)
                .append("rect")
-                  //.attr("d", "M 12 0 L 12 24 Z")
-                  //.attr("d", "M 12 0 L 12 24 L 14 24 L 14 0 Z")
                   .attr("width", function() {
                     return d.strokeWidth;
                   })
@@ -470,14 +232,11 @@
 
               defs.append("marker")
                .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-               //.attr("viewBox", function() {
-                // return "0 0 " + d.strokeWidth + " " + d.strokeWidth;
-                //})
                .attr("refX", function() {
                   if(x1 === x2 && y1 === y2) {
                     xOffsets = {
-                      2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 0, 8 : 16.5,
-                      9 : 16.5, 10 : 17.5, 11 : 18, 12 : 0, 13 : 0, 14 : 16
+                      2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
+                      9 : 16.5, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 16
                     }
                   } else {
                     xOffsets = {
@@ -503,7 +262,6 @@
                })
                .attr("orient", 180)
                .append("rect")
-                  //.attr("d", "M 0 12 L 24 12 L 24 14 L 0 14 Z")
                   .attr("width", function() {
                     return 25 + d.strokeWidth;
                   })
@@ -539,40 +297,20 @@
                 .attr("refY", function () {
                   if(x1 === x2 && y1 === y2 ) {
                     yOffsets = {
-                      2: 6.7, 3: 6,4: 5.89,
-                      5: 5,
-                      6: 5,
-                      7: 5,
-                      8: 5,
-                      9: 5,
-                      10: 5,
-                      11: 5,
-                      12: 5,
-                      13: 5,
+                      // Most set to 5 until something can be figured out about 
+                      // the centering of the self-referential arrowheads
+                      2: 6.7, 3: 6,4: 5.89, 5: 5, 6: 5, 7: 5,
+                      8: 5, 9: 5, 10: 5, 11: 5, 12: 5, 13: 5,
                       14: 5
                     }
                   } else {
                     yOffsets = {
-                      2: 5,
-                      3: 5,
-                      4: 4.8,
-                      5: 5,
-                      6: 5,
-                      7: 4.98,
-                      8: 4.9,
-                      9: 5.2,
-                      10: 4.85,
-                      11: 4.7,
-                      13: 5,
-                      12: 5.15,
-                      14: 4.7
+                      2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
+                      8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
+                      13: 5, 14: 4.7
                     }
                   }
-                  /*if(x1 === x2 && y1 === y2 && d.strokeWidth > 6.5) {
-                    return 3;
-                  } else {*/
-                    return yOffsets[d.strokeWidth];
-                  //}
+                  return yOffsets[d.strokeWidth];
                 })
                 .attr("markerUnits", "userSpaceOnUse")
                 .attr("markerWidth", function() {
@@ -604,8 +342,6 @@
           }
 		      return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
 		    })
-        //.style("position", "absolute")
-        //.style("z-index", "3")
 		    //.attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
@@ -672,31 +408,6 @@
     function smartPathEnd(d, w, h) {
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var offset = parseFloat(d.strokeWidth);
-
-        /*var x1 = d.source.x,
-            y1 = d.source.y,
-            x2 = d.target.x,
-            y2 = d.target.y,
-            minimum = "",
-            selfRef = "";
-
-        // For some reason, the markers are appended improperly on the 
-        var offsetsProper = {
-          2 : 0, 3 : 0, 4 : 0, 5 : 0, 6 : 0, 7 : 0, 8 : 0,
-          9 : 0, 10 : 0, 11 : 0, 12 : 0, 13 : 0, 14 : 0
-        }
-        var offsetsImproper = {
-          2 : 0, 3 : 0, 4 : 0, 5 : 0, 6 : 0, 7 : 0, 8 : 0,
-          9 : 0, 10 : 0, 11 : 0, 12 : 0, 13 : 0, 14 : 11
-        }
-
-
-        if(normalizedScale(Math.abs(d.value.toPrecision(4))) <= 0.05) {
-          minimum = "gray";
-        }
-        if( x1 === x2 && y1 === y2 ) {
-          selfRef = "_SelfReferential";
-        }*/
         
         if (d.value < 0) {
           offset = Math.max(offset, 10);
@@ -759,22 +470,11 @@
 
           // By default assume path intersects left vertical side
             d.target.newX = d.target.x - offset;
-            //if(d.type != "arrowhead") {
-             // d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refX", function() {
-              //  return offsetsProper[d.strokeWidth];
-            //  });
-            //};
 
           // But...
           if (d.target.centerX < d.source.newX) {
               // i.e. if target node is to left of the source node
               // then path intersects right vertical side
-
-            //if(d.type != "arrowhead") {
-             // d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refX", function() {
-              //  return offsetsImproper[d.strokeWidth];
-            //  });
-            //};
 
             if( d.type != "arrowhead") { 
               d.target.newX = d.target.x + w + offset + d.strokeWidth;
@@ -807,21 +507,10 @@
           // By default assume path intersects top horizontal side
           d.target.newY = d.target.y - offset;
 
-           //if(d.type != "arrowhead") {
-            //  d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refY", function() {
-             //   return offsetsProper[d.strokeWidth];
-           // });
-          //};
-
           // But...
           if (d.target.centerY < d.source.newY) {
               // i.e. if target node is above the source node
               // then path intersects bottom horizontal side
-            //  if(d.type != "arrowhead") {
-              //  d3.select("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum ).attr("refY", function() {
-                //  return offsetsImproper[d.strokeWidth];
-              //  });
-              //  };
               if( d.type != "arrowhead") { 
                 d.target.newY = d.target.y + h + offset + d.strokeWidth;
               } else {
@@ -910,81 +599,6 @@
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
 
-        /*linkHighlight.select("path").attr("d", function(d) {
-          
-          if (d.target === d.source) {
-            var x1 = d.source.x,
-                y1 = d.source.y,
-                x2 = d.target.x,
-                y2 = d.target.y,
-                dx = x2 - x1,
-                dy = y2 - y1,
-                dr = Math.sqrt(dx * dx + dy * dy),
-                radiusModifier = 0,
-
-                // Defaults for normal edge.
-                drx = dr,
-                dry = dr,
-                xRotation = 0, // degrees
-                largeArc = 0, // 1 or 0
-                sweep = 1, //1 or 0
-                offset = parseFloat(d.strokeWidth);
-
-                // Self edge.
-                if ( x1 === x2 && y1 === y2 ) {
-                  //Move the position of the loop
-                  //Couldn't figure out how to derive the width of the rectangle from here,
-                  //so it is being calculated again. May need to set it when the node is created.
-                  x1 = d.source.x + (d.source.name.length * 20) - 5;
-                  y1 = d.source.y + (nodeHeight/2);
-                  // Fiddle with this angle to get loop oriented.
-                  xRotation = 45;
-
-                  // Needs to be 1.
-                  largeArc = 1;
-
-                  // Change sweep to change orientation of loop. 
-                  sweep = 1;
-                  
-                  if (d.value > 0) {
-                    radiusModifier = positiveScale(d.value)/2.00;
-                  } else {
-                    radiusModifier = negativeScale(d.value)/2.00;
-                  }
-
-                  // Make drx and dry different to get an ellipse
-                  // instead of a circle.
-                  drx = 17 + radiusModifier;
-                  dry = 17 + radiusModifier;
-
-                  // For whatever reason the arc collapses to a point if the beginning
-                  // and ending points of the arc are the same, so kludge it.
-                  x2 = d.source.x + (d.source.name.length *20)/1.2;
-                  y2 = d.source.y + nodeHeight;
-                  
-                  if (d.value < 0) {
-                    offset = Math.max(10, parseFloat(d.strokeWidth));
-                  }
-                } 
-
-           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2  + "," + (y2 + offset);
-        } else {
-           return moveTo(d) + lineTo(d);
-        }
-      });
-
-      linkHighlight.select("path").attr("marker-end", function(d) {
-        if (d.type == "repressor") {
-          if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
-            return "url(#repressorHorizontal" + d.strokeWidth + ")";
-          } else {
-            return "url(#repressor" + d.strokeWidth + ")";
-          }
-        } else {
-          return "url(#arrowhead" + d.strokeWidth + ")";        
-        }
-      });*/
-
         link.select("path").attr("d", function(d) {
           
           if (d.target === d.source) {
@@ -1023,12 +637,6 @@
                   
                   var d_AbsVal = Math.abs(d.value);
                   radiusModifier = totalScale(d_AbsVal)/2.00;
-
-                  /*if (d.value > 0) {
-                    radiusModifier = positiveScale(d.value)/2.00;
-                  } else {
-                    radiusModifier = negativeScale(d.value)/2.00;
-                  }*/
 
                   // Make drx and dry different to get an ellipse
                   // instead of a circle.
