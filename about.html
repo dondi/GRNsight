@@ -64,17 +64,18 @@
                     <li>GRNsight code is available under the open source <a href='http://opensource.org/licenses/BSD-3-Clause' target='_blank'>BSD license</a>.</li>
                 </ul>
                 <p id='releaseNotes'>Release Notes</p>
-                GRNsight v1.1 Beta 
+                GRNsight v1.2
                 <ul>
                     <li>Branched code so that the stable v1.0 runs on the GRNsight home page, while v1.1 Beta runs on a new Beta page for live testing of new features.</li>
                     <li> Improvements were made to the user interface layout:
                         <ul>
                             <li>A menu bar was implemented to organize GRNsight functions and options.</li>
-                            <li>Instead of multiple “Open” and “Submit” buttons, the “Open” menu option opens a dialog from which to choose a GRNmap spreadsheet and then automatically loads the graph; a reload option was implemented.</li>
+                            <li>Instead of multiple “Open” and “Submit” buttons, the “Open” menu option opens a dialog from which to choose a GRNmap spreadsheet and then automatically loads the graph; a reload option was also implemented.</li>
                             <li>Information about each force graph parameter was added into a tooltip that appears upon hovering over the label.</li>
                         </ul>
                     </li>
-                    <li>Improvements were made to the appearance of the triangular arrowheads, blunt arrowheads, and circular edges.</li>
+                    <li>The thickness of the edges was changed to be assigned on a continuous linear scale instead of using the four quartiles. Edges that have a normalized weight parameter of 0.05 or less were colored gray. The thickness of the edge was changed to be based on the magnitude of the absolute value of the weight. Larger magnitudes have thicker edges and smaller magnitudes have thinner edges. The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (weights of 1). Edges with a normalized value of 0.05 or less are colored gray.</li>
+                    <li>Improvements were made to the appearance of the triangular arrowheads, blunt arrowheads, and circular edges. The triangular arrowheads and blunt arrowheads were also changed to be assigned on the same continuous linear scale as the edges.</li>
                     <li>Cosmetic issues and performance issues were fixed by temporarily removing the highlighting and outlining of edges.</li>
                     <li>grnsight.cs.lmu.edu was configured to serve 4 services via standard ports to reduce likelihood of blockage by anti-malware software.</li>
                 </ul>
