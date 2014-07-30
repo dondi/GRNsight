@@ -749,6 +749,8 @@
             .links(links)
             .stop();
         force.start();
+
+        // Makes 0.1 appear as 0.10, 0.2 appear as 0.20, etc.
         if(toChange.length === 3) {
           toChange += "0";
         }
@@ -799,14 +801,20 @@
     }
 
     function undoReset(event) {
-      var check =  $( "#undoReset" ).prop( 'disabled' )
+      var check =  $( "#undoReset" ).prop( 'disabled' );
+
+      // gravityCheck used to add on the zero to 0.1 -> 0.10, 0.2 -> 0.20, etc
+      var gravityCheck = "";
       if( !check ) {
         $( "#linkDistInput" ).val( allDefaults[0] );
         $( "#linkDistVal" ).html( allDefaults[0] );
         $( "#chargeInput" ).val( allDefaults[1] );
         $( "#chargeVal" ).html( allDefaults[1] );
         $( "#gravityInput" ).val( allDefaults[3] );
-        $( "#gravityVal" ).html( allDefaults[3] );
+        if( $("#gravityInput").val().length === 3 ) {
+          gravityCheck = "0";
+        }
+        $( "#gravityVal" ).html( allDefaults[3] + gravityCheck );
         $( "#chargeDistInput" ).val( allDefaults[2] );
         $( "#chargeDistVal" ).html( allDefaults[2] );
         force.linkDistance( allDefaults[0] )
@@ -827,6 +835,7 @@
         $(controls.chargeSlider).on('input', updateCharge);
         $(controls.chargeDistSlider).on('input', updateChargeDist);
         $(controls.gravitySlider).on('input', updateGravity);
+
         // Handler is unbound first to prevent it from firing twice.
         $(controls.lockSliderCheckbox).unbind('click').click(updateSliders);
         $(controls.lockSliderMenu).unbind('click').click(updateSliders); 
