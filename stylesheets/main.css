@@ -240,3 +240,15 @@ ul ul ul {
 html {
 	font-size: medium;
 }
+
+.panel-title {
+	font-size: 13px;
+}
+
+.panel-default>.panel-heading {
+	background-color: #dfebe5;
+}
+
+.panel-heading {
+	padding: 7px 15px;
+}
