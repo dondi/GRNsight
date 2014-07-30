@@ -55,10 +55,10 @@
                     GRNsight is a web application for visualizing models of medium-scale gene regulatory networks (GRNs).  GRNsight was created to work with the input and output spreadsheets used by GRNmap, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  The following sections describe how to use GRNsight.
                 </p>
                 <ol>
-                    <li>Input Spreadsheet
+                    <li id='section1'>Input Spreadsheet
                         <ul>
                             <li>
-                                If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program GRNmap, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to Section 2 to learn how to load your file as an input spreadsheet.
+                                If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program GRNmap, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a href='#section2'>Section 2</a> to learn how to load your file as an input spreadsheet.
                             </li>
                             <li>
                                 If you want to create manually a new file to use with GRNsight, format the file in the following manner:
@@ -81,7 +81,7 @@
                                                 <img src='images/Sample_network_worksheet.jpg' alt='network' height='290.7' width='832.7' /><br><br>
                                             </li>
                                             <li>
-                                                When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular arrowheads on the edges.  However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively.  To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”.  Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or < 0 to indicate a repression relationship.  The screenshot below gives an example of this type of adjacency matrix.  For more information on how GRNsight displays weighted edges on the graph, see Section 3 below.<br><br>
+                                                When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular arrowheads on the edges.  However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively.  To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”.  Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or < 0 to indicate a repression relationship.  The screenshot below gives an example of this type of adjacency matrix.  For more information on how GRNsight displays weighted edges on the graph, see <a href='#section3'>Section 3</a> below.<br><br>
                                                 <img src='images/Sample_network_optimized_weights_worksheet.jpg' alt='network_optimized_weights' height='289.3' width='1252.7' /><br><br>
                                             </li>
                                             <li>Note that GRNsight is designed to visualized “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.</li>
@@ -91,7 +91,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li>Loading the Input Spreadsheets
+                    <br><br>
+                    <li id='section2'>Loading the Input Spreadsheets
                         <ul>
                             <li>Once you have your appropriately formatted Excel Workbook file (*.xlsx), you can load it into GRNsight.</li>
                             <li>Go to the GRNsight home page.  Select the menu option File > Open.  A dialog box will open for you to select your file.  Clicking the Open button will load your file.  Clicking the Cancel button will return you to the GRNsight home page.</li>
@@ -100,7 +101,8 @@
                             <li>To reload the same file, select the menu option File > Reload.</li>
                         </ul>
                     </li>
-                    <li>How GRNsight Displays the Graph
+                    <br><br>
+                    <li id='section3'>How GRNsight Displays the Graph
                         <ul>
                             <li>GRNsight graphs are generated through D3.js, a JavaScript data visualization library.  We have modified the default implementation of D3 to include the following features:
                                 <ul>
@@ -142,6 +144,8 @@
                         </ul>
                     </li>
                 </ol>
+                <h3 id='gettingStarted'>Further Information</h3>
+                <p>For additional documentation, please see the <a href='https://github.com/dondi/GRNsight/wiki' target='_blank'>GRNsight Wiki</a>.</p>
             </div>
             <div id='footer'>
                 <hr id='separate'>

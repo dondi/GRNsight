@@ -215,3 +215,15 @@ h3 {
 	font-size: 12px;
 	text-align: center;
 }
+
+ol ul {
+	list-style-type: disc;
+}
+
+ol ul ul {
+	list-style-type: circle;
+}
+
+ol ul ul ul {
+	list-style-type: square;
+}
