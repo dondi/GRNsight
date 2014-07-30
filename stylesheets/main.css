@@ -3,6 +3,10 @@ body {
 	margin:0;
 	background-color: #FFFFFF;
 	min-width: 1300px;
+
+	/* Overwrite bootstrap CSS */
+	line-height: normal;
+	font-size: medium;
 }
 
 iframe.embedded-demo {
@@ -216,14 +220,23 @@ h3 {
 	text-align: center;
 }
 
-ol ul {
+ul {
 	list-style-type: disc;
 }
 
-ol ul ul {
+ul ul {
 	list-style-type: circle;
 }
 
-ol ul ul ul {
+ul ul ul {
 	list-style-type: square;
+}
+
+/* Overwrite Bootstrap styling */
+* {
+	box-sizing: content-box;
+}
+
+html {
+	font-size: medium;
 }
