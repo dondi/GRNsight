@@ -22,6 +22,7 @@ $(function () {
         ).done(function (network) {
           console.log(network);
           $('#fileName').text(name);
+          $("input[type='range'").off("input");
           drawGraph(0, network.genes, network.links, network.positiveWeights, network.negativeWeights, {
             linkSlider: "#linkDistInput",
             chargeSlider: "#chargeInput",
@@ -42,13 +43,13 @@ $(function () {
       };
 
   $('#upload').on('change', function (e) {
-
     // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
     // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
     var fullFilePath = $('input[type=file]').val(),
-        fakePathCheck = fullFilePath.search("\\\\") + 1;
+        fakePathCheck = fullFilePath.search("\\\\") + 1; // 4 \'s enables it to search for a slash character without error
 
-    while (fakePathCheck != 0) {
+    // fakePathCheck will return -1 when the character is not found, so will only be -1 when all slashes are gone
+    while (fakePathCheck != 0) { 
       fullFilePath = fullFilePath.substring(fakePathCheck)
       fakePathCheck = fullFilePath.search("\\\\") + 1;
     }
@@ -70,6 +71,20 @@ $(function () {
   $('#weighted').click(function (event) {
     loadGrn("/demo/weighted", "Demo #2: Weighted GRN");
   });
+
+  $("input[type='range'").on('input', function() {
+    alert("blarp.");
+    // Due to all of the sliders and their HTML values sharing the same naming convention: NameInput/NameVal, we can remove
+    // the Input and replace it with Val to change the correct HTML value each time.
+    var inputStringLocation = $(this).attr("id").search("Input");
+    var targetID = $(this).attr("id").substring(0, inputStringLocation) + "Val";
+    var gravityCheck = "";
+    if(targetID === "gravityVal"  && $(this).val().length === 3) {
+      gravityCheck = "0";
+    }
+    $("#" + targetID).html($(this).val() + gravityCheck);
+  })
+
 });
 
 /*
