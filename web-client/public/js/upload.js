@@ -55,6 +55,7 @@ $(function () {
       fullFilePath = fullFilePath.substring(fakePathCheck)
       fakePathCheck = fullFilePath.search("\\\\") + 1;
     }
+    reload = ["", ""];
 
     var formData = new FormData();
     formData.append('file', $('#upload')[0].files[0]);
@@ -63,15 +64,22 @@ $(function () {
   });
 
   $('#reload').click(function (event) {
-    $('#upload').trigger('change');
+    if(reload[0] === "") {
+      $('#upload').trigger('change');
+    } else {
+      loadGrn(reload[0], reload[1]);
+    }
   });
 
+  var reload = ["", ""];
   $('#unweighted').click(function (event) {
     loadGrn("/demo/unweighted", "Demo #1: Unweighted GRN");
+    reload = [ "/demo/unweighted", "Demo #1: Unweighted GRN"];
   });
 
   $('#weighted').click(function (event) {
     loadGrn("/demo/weighted", "Demo #2: Weighted GRN");
+    reload = [ "/demo/weighted", "Demo #2: Weighted GRN"];
   });
 
 
@@ -100,7 +108,7 @@ $(function () {
   $("#undoResetMenu").unbind('click').click(undoReset);
   var allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
 
-  function lockSliders() {
+  function lockSliders(event) {
     if( $("#lockSlidersMenu").attr('class') === 'noGlyph' ) {
       $("#lockSliders").prop('checked', true);
       $("#lockSlidersMenu").removeClass('noGlyph')
@@ -115,7 +123,7 @@ $(function () {
     $("#resetSliders").prop('disabled', check);
   }
 
-  function resetSliders() {
+  function resetSliders(event) {
       var check = $( "#lockSliders" ).prop( 'checked' );
       if( !check ) {
         allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
@@ -131,7 +139,7 @@ $(function () {
       }
     }
 
-    function undoReset() {
+    function undoReset(event) {
       var check =  $( "#undoReset" ).prop( 'disabled' );
       // gravityCheck used to add on the zero to 0.1 -> 0.10, 0.2 -> 0.20, etc
       var gravityCheck = "";
