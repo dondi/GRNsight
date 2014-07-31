@@ -73,7 +73,6 @@ $(function () {
   });
 
   $("input[type='range'").on('input', function() {
-    alert("blarp.");
     // Due to all of the sliders and their HTML values sharing the same naming convention: NameInput/NameVal, we can remove
     // the Input and replace it with Val to change the correct HTML value each time.
     var inputStringLocation = $(this).attr("id").search("Input");
