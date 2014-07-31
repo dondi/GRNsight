@@ -757,25 +757,6 @@
         $( "#gravityVal" ).html( toChange );
     }
 
-
-    function updateSliders(event) {
-      if( $("#lockSlidersMenu").attr('class') === 'noGlyph' ) {
-        $("#lockSliders").prop('checked', true);
-        $("#lockSlidersMenu").removeClass('noGlyph')
-                             .html("<span class='glyphicon glyphicon-ok'></span>&nbsp; Lock Force Graph Parameters");
-      } else {
-        $("#lockSliders").prop('checked', false);
-        $("#lockSlidersMenu").addClass('noGlyph')
-                             .html("<span class='glyphicon invisible'></span>&nbsp; Lock Force Graph Parameters");
-      }
-      var check = $( "#lockSliders" ).prop( 'checked' );
-      $( "#linkDistInput" ).prop( 'disabled', check );
-      $( "#chargeInput" ).prop( 'disabled', check );
-      $( "#gravityInput" ).prop( 'disabled', check );
-      $( "#chargeDistInput" ).prop( 'disabled', check );
-      $( "#resetSliders" ).prop( 'disabled', check );
-    }
-
     function defaultSliders(event) {
       var check = $( "#lockSliders" ).prop( 'checked' );
       if( !check ) {
@@ -837,8 +818,6 @@
         $(controls.gravitySlider).on('input', updateGravity);
 
         // Handler is unbound first to prevent it from firing twice.
-        $(controls.lockSliderCheckbox).unbind('click').click(updateSliders);
-        $(controls.lockSliderMenu).unbind('click').click(updateSliders); 
         $(controls.resetSliderButton).unbind('click').click(defaultSliders);
         $(controls.resetSliderMenu).unbind('click').click(defaultSliders);
         $(controls.undoResetButton).unbind('click').click(undoReset);
@@ -846,15 +825,9 @@
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
-
     var allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
 
-    $( "#linkDistInput" ).prop( 'disabled', lockCheck );
-    $( "#chargeInput" ).prop( 'disabled', lockCheck );
-    $( "#chargeDistInput" ).prop( 'disabled', lockCheck );
-    $( "#gravityInput" ).prop( 'disabled', lockCheck );
-    $( "#resetSliders" ).prop( 'disabled', lockCheck );
-    $( "#lockSliders" ).prop( 'disabled', false ); 
+    $( "input [type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
 
 }

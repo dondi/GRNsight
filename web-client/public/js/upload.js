@@ -23,13 +23,15 @@ $(function () {
           console.log(network);
           $('#fileName').text(name);
           $("input[type='range'").off("input");
+          $("#resetSliders").off("click");
+          $("#resetSlidersMenu").off("click");
+          $("#undoReset").off('click');
+          $("#undoResetMenu").off('click');
           drawGraph(0, network.genes, network.links, network.positiveWeights, network.negativeWeights, {
             linkSlider: "#linkDistInput",
             chargeSlider: "#chargeInput",
             chargeDistSlider: "#chargeDistInput",
             gravitySlider: "#gravityInput",
-            lockSliderCheckbox: "#lockSliders",
-            lockSliderMenu: "#lockSlidersMenu",
             resetSliderButton: "#resetSliders",
             resetSliderMenu: "#resetSlidersMenu",
             undoResetButton: "#undoReset",
@@ -72,7 +74,12 @@ $(function () {
     loadGrn("/demo/weighted", "Demo #2: Weighted GRN");
   });
 
-  $("input[type='range'").on('input', function() {
+
+  /*
+     Allow the sliders to be used before loading a graph
+  */
+
+  $("input[type='range']").on('input', function() {
     // Due to all of the sliders and their HTML values sharing the same naming convention: NameInput/NameVal, we can remove
     // the Input and replace it with Val to change the correct HTML value each time.
     var inputStringLocation = $(this).attr("id").search("Input");
@@ -82,7 +89,67 @@ $(function () {
       gravityCheck = "0";
     }
     $("#" + targetID).html($(this).val() + gravityCheck);
-  })
+  });
+
+  // Handler is unbound first to prevent it from firing twice.
+  $("#lockSliders").unbind('click').click(lockSliders);
+  $("#lockSlidersMenu").unbind('click').click(lockSliders);
+  $("#resetSliders").unbind('click').click(resetSliders);
+  $("#resetSlidersMenu").unbind('click').click(resetSliders);
+  $("#undoReset").unbind('click').click(undoReset);
+  $("#undoResetMenu").unbind('click').click(undoReset);
+  var allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
+
+  function lockSliders() {
+    if( $("#lockSlidersMenu").attr('class') === 'noGlyph' ) {
+      $("#lockSliders").prop('checked', true);
+      $("#lockSlidersMenu").removeClass('noGlyph')
+                             .html("<span class='glyphicon glyphicon-ok'></span>&nbsp; Lock Force Graph Parameters");
+    } else {
+      $("#lockSliders").prop('checked', false);
+      $("#lockSlidersMenu").addClass('noGlyph')
+                             .html("<span class='glyphicon invisible'></span>&nbsp; Lock Force Graph Parameters");
+    }
+    var check = $("#lockSliders").prop('checked');
+    $("input[type='range']").prop('disabled', check);
+    $("#resetSliders").prop('disabled', check);
+  }
+
+  function resetSliders() {
+      var check = $( "#lockSliders" ).prop( 'checked' );
+      if( !check ) {
+        allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
+        $( "#linkDistInput" ).val(500);
+        $( "#linkDistVal" ).html("500");
+        $( "#chargeInput" ).val(-1000);
+        $( "#chargeVal" ).html("-1000");
+        $( "#gravityInput" ).val(0.1);
+        $( "#gravityVal" ).html("0.10");
+        $( "#chargeDistInput" ).val(1000);
+        $( "#chargeDistVal" ).html("1000");
+        $( "#undoReset" ).prop( 'disabled', false );
+      }
+    }
+
+    function undoReset() {
+      var check =  $( "#undoReset" ).prop( 'disabled' );
+      // gravityCheck used to add on the zero to 0.1 -> 0.10, 0.2 -> 0.20, etc
+      var gravityCheck = "";
+      if( !check ) {
+        $( "#linkDistInput" ).val( allDefaults[0] );
+        $( "#linkDistVal" ).html( allDefaults[0] );
+        $( "#chargeInput" ).val( allDefaults[1] );
+        $( "#chargeVal" ).html( allDefaults[1] );
+        $( "#gravityInput" ).val( allDefaults[3] );
+        if( $("#gravityInput").val().length === 3 ) {
+          gravityCheck = "0";
+        }
+        $( "#gravityVal" ).html( allDefaults[3] + gravityCheck );
+        $( "#chargeDistInput" ).val( allDefaults[2] );
+        $( "#chargeDistVal" ).html( allDefaults[2] );
+        $( "#undoReset" ).prop( 'disabled', true );
+      }
+    }
 
 });
 
