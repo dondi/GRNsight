@@ -1,7 +1,15 @@
-$( window ).load( function() {
+$(function() {
 
-	// Attach sticky functionality to the navbar
-	$( "#stickyBar" ).sticky( { topSpacing:0 } );
+    $(window).scroll(function() {
+        // This prevents the side bar from staying stuck when the user has scrolled left. Also, when the user would zoom
+        // in, the sidebar would stay stuck. This prevents that.
+        if( ($(window).scrollLeft() >= 30 && $(window).scrollTop() > 140) || ($(window).scrollTop() < 140 &&  $("#stickyBar").attr('class') != 'affix-top') ) {
+            $("#stickyBar").attr('class', 'affix-top');
+        // Re-sticks the sidebar after being unstuck due to left scroll.
+        } else if($(window).scrollTop() > 140 && $("#stickyBar").attr('class') != 'affix') {
+            $("#stickyBar").attr('class', 'affix');
+        } 
+    })
 
     // Documentation page only: Makes links open their respective sections when clicked
     $("#showSection2").click(function (){

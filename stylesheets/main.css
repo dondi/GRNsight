@@ -81,6 +81,10 @@ iframe.embedded-demo {
 	position: absolute;
 }
 
+#stickyBar.affix {
+	top: 0px;
+}
+
 .nav {
 	list-style-type: none;
 	line-height: 2;
