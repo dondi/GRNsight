@@ -55,9 +55,9 @@
                                 .domain(d3.extent(allWeights));
     }
                        
-    snapToGrid = function(val, gridSize) {
-      return gridSize * Math.round(val/gridSize);
-    };
+    //snapToGrid = function(val, gridSize) {
+    //  return gridSize * Math.round(val/gridSize);
+    //};
     
     var force = d3.layout.force()
         .size([width, height])
@@ -581,7 +581,7 @@
       .text(function(d) {return d.name;})
       .on("dblclick", nodeTextDblclick);
     
-    $(node).draggable({ grid: [100, 30]});
+    //$(node).draggable({ grid: [100, 30]});
            
     $('.node').css({
       'cursor': 'move',
@@ -722,13 +722,13 @@
     }
     
     //Can't get the grid to stick for some reason
-    function dragend (d) {
-      d3.select(this)
-        .attr("x", d.x = snapToGrid(d.x, 20))
-        .attr("y", d.y = snapToGrid(d.y, 20))
-        .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
+    //function dragend (d) {
+    //  d3.select(this)
+    //    .attr("x", d.x = snapToGrid(d.x, 20))
+    //    .attr("y", d.y = snapToGrid(d.y, 20))
+    //    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
       //link.select("path").attr("filter", "url(#outline)");
-    }
+    //}
 
     function updateLinkDist(event) {
         var toChange = $(this).val();
