@@ -842,7 +842,7 @@
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
     var allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
 
-    $( "input [type='range']" ).prop( 'disabled', lockCheck );
+    $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
 
 }

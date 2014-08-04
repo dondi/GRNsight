@@ -22,7 +22,7 @@ $(function () {
         ).done(function (network) {
           console.log(network);
           $('#fileName').text(name);
-          $("input[type='range'").off("input");
+          $("input[type='range']").off("input");
           $("#resetSliders").off("click");
           $("#resetSlidersMenu").off("click");
           $("#undoReset").off('click');
