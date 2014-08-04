@@ -3,18 +3,32 @@
  *and http://bl.ocks.org/mbostock/950642
  *and http://bl.ocks.org/mbostock/1153292
  */
-  var drawGraph = function (runNum, nodes, links, positiveWeights, negativeWeights, controls, networkType) {
+  var drawGraph = function (runNum, nodes, links, positiveWeights, negativeWeights, controls) {
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
     var width = $container.width(),
         height = $container.height(),
         nodeHeight = 30,
-        gridWidth = 300;
+        gridWidth = 300,
+        colorOptimal = true;
+
+    // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
+    if($("#formatOptimal").attr('class') === 'deselectedColoring') {
+      colorOptimal = false;
+    }
 
     var allWeights = positiveWeights.concat(negativeWeights);
 
-    for(var i = 0; i < allWeights.length; i++ ) {
-      allWeights[i] = Math.abs((allWeights[i]).toPrecision(4));
+    if(!colorOptimal) {
+      for(var i = 0; i < allWeights.length; i++) {
+        if( allWeights[i] != 0 ) {
+          allWeights[i] = 1;
+        }
+      }
+    } else {
+      for(var i = 0; i < allWeights.length; i++ ) {
+        allWeights[i] = Math.abs((allWeights[i]).toPrecision(4));
+      }
     }
     
 
@@ -153,7 +167,7 @@
 		      return d.strokeWidth = Math.round( totalScale(d_absVal) );
 		    })
 		    .style("stroke", function (d) {
-		      if (unweighted) {
+		      if (unweighted || !colorOptimal) {
 		        return "black";
           } else if(normalize(d) <= 0.05 ) {
             return "gray";
@@ -186,8 +200,9 @@
             return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";  
           } else {
            
-            // If negative, you need one bar for horizontal and one for vertical.
-            if(d.value < 0) {
+            // If negative, you need one bar for horizontal and one for vertical. If the user is not coloring the weighted
+            // sheets, then we make all of the markers arrowheads.
+            if(d.value < 0 && colorOptimal) {
               defs.append("marker")
                .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
                .attr("refX", function() {
@@ -329,7 +344,7 @@
                 .append("path")
                   .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
                   .attr("style", function () {
-                    if (unweighted) {
+                    if (unweighted || !colorOptimal) {
                       color = "black";
                     } else if( normalize(d) <= 0.05) {
                       color = "gray";
@@ -409,7 +424,7 @@
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var offset = parseFloat(d.strokeWidth);
         
-        if (d.value < 0) {
+        if (d.value < 0  && colorOptimal ) {
           offset = Math.max(offset, 10);
         }
 				// We need to work out the (tan of the) angle between the
@@ -648,7 +663,7 @@
                   x2 = d.source.x + (d.source.name.length *20)/1.2;
                   y2 = d.source.y + nodeHeight;
                   
-                  if (d.value < 0) {
+                  if (d.value < 0  && colorOptimal ) {
                     offset = Math.max(10, parseFloat(d.strokeWidth));
                   } 
                 } 
@@ -672,7 +687,7 @@
         if( x1 === x2 && y1 === y2 ) {
           selfRef = "_SelfReferential";
         }
-        if (d.type == "repressor") {
+        if (d.type == "repressor"  && colorOptimal ) {
           if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
             return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           } else {
@@ -686,7 +701,7 @@
       //Rudimentary manual redraw. This should fix the Firefox bug where the edges don't show up.
       if(runNum === 0) {
         runNum++;
-        drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls, networkType);
+        drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls);
       }
     }
 

@@ -36,7 +36,7 @@ $(function () {
             resetSliderMenu: "#resetSlidersMenu",
             undoResetButton: "#undoReset",
             undoResetMenu: "#undoResetMenu"
-          });
+          }, network.networkType);
         }).error(function (xhr, status, error) {
           var err = JSON.parse(xhr.responseText);
           $("#error").html(err);
@@ -81,6 +81,21 @@ $(function () {
     loadGrn("/demo/weighted", "Demo #2: Weighted GRN");
     reload = [ "/demo/weighted", "Demo #2: Weighted GRN"];
   });
+
+  $('.deselectedColoring').click(colorPreferences);
+
+  function colorPreferences (event) {
+    var deselectedID = $('.deselectedColoring').attr('id');
+    var selectedID = $('.selectedColoring').attr('id');
+    $("#" + deselectedID + ">span").attr('class', 'glyphicon glyphicon-ok');
+    $("#" + selectedID + ">span").attr('class', 'glyphicon invisible');
+
+    // Allows the click handler to swap between the two different options
+    $("#" + deselectedID).attr('class', 'selectedColoring')
+                         .off('click');
+    $("#" + selectedID).attr('class', 'deselectedColoring')
+                       .on('click', colorPreferences);
+  }
 
 
   /*
