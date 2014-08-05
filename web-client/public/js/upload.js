@@ -6,6 +6,12 @@ $(function () {
     delay: { show: 700, hide: 100 }
   });
 
+  // Defaults the sliders so that they return to their default values when the page is refreshed
+  $( "#linkDistInput" ).val(500);
+  $( "#chargeInput" ).val(-1000);
+  $( "#chargeDistInput" ).val(1000);
+  $( "#gravityInput" ).val(0.1);
+
   var loadGrn = function (url, name, formData) {
         // The presence of formData is taken to indicate a POST.
         var fullUrl = $("#service-root").val() + url;
