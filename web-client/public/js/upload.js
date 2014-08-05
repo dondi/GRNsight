@@ -27,7 +27,7 @@ $(function () {
           $("#resetSlidersMenu").off("click");
           $("#undoReset").off('click');
           $("#undoResetMenu").off('click');
-          drawGraph(0, network.genes, network.links, network.positiveWeights, network.negativeWeights, {
+          drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
             linkSlider: "#linkDistInput",
             chargeSlider: "#chargeInput",
             chargeDistSlider: "#chargeDistInput",

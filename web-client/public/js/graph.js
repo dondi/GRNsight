@@ -3,7 +3,7 @@
  *and http://bl.ocks.org/mbostock/950642
  *and http://bl.ocks.org/mbostock/1153292
  */
-  var drawGraph = function (runNum, nodes, links, positiveWeights, negativeWeights, controls) {
+  var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls) {
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
     var width = $container.width(),
@@ -699,10 +699,10 @@
       });
 
       //Rudimentary manual redraw. This should fix the Firefox bug where the edges don't show up.
-      if(runNum === 0) {
-        runNum++;
-        drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls);
-      }
+      //if(runNum === 0) {
+      //  runNum++;
+      //  drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls);
+      //}
     }
 
     function normalize(d) {
