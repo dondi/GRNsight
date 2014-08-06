@@ -42,6 +42,10 @@ var multiparty = require('multiparty'),
       for (var j = 1; j < currentSheet.data.length; j++) {
         try {
           currentGene = {name: currentSheet.data[0][j].value}
+          if(currentSheet.data[0][j].value.length > 12 ) {
+            return res.json(400, "Gene names must be at most 12 characters in length. The gene " + currentSheet.data[0][j].value + 
+              " is greater than 12 characters. Please edit the name and resubmit your sheet.");
+          }
           network.genes.push(currentGene);
         } catch (err) {
           network.errors.push(err.message);
