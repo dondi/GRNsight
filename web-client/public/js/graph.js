@@ -733,36 +733,28 @@
     function updateLinkDist(event) {
         var toChange = $(this).val();
         force.linkDistance( toChange );
-        force.nodes(nodes)
-            .links(links)
-            .start();
+        force.start();
         $( "#linkDistVal" ).html( toChange );
     }
 
     function updateCharge(event) {
         var toChange = $(this).val();
         force.charge( toChange );
-        force.nodes(nodes)
-            .links(links)
-            .start(); 
+        force.start(); 
         $( "#chargeVal" ).html( toChange );
     }
 
     function updateChargeDist(event) {
         var toChange = $(this).val();
         force.chargeDistance( toChange );
-        force.nodes(nodes)
-            .links(links)
-            .start();
+        force.start();
         $( "#chargeDistVal" ).html( toChange );
     }
 
     function updateGravity(event) {
       var toChange = $(this).val();
         force.gravity( toChange );
-        force.nodes(nodes)
-            .links(links)
-            .stop();
+        force.stop();
         force.start();
 
         // Makes 0.1 appear as 0.10, 0.2 appear as 0.20, etc.
@@ -788,9 +780,7 @@
              .charge(-1000)
              .chargeDistance(1000)
              .gravity(0.1);
-        force.nodes(nodes)
-             .links(links)
-             .stop();
+        force.stop();
         force.start();
         $( "#undoReset" ).prop( 'disabled', false );
       }
@@ -817,13 +807,20 @@
              .charge( allDefaults[1] )
              .chargeDistance( allDefaults[2] )
              .gravity( allDefaults[3] );
-        force.nodes(nodes)
-             .links(links)
-             .stop();
+        force.stop();
         force.start();
         $( "#undoReset" ).prop( 'disabled', true );
       }
     }
+
+    /*function lockNodes(event) {
+      if( $("#lockNodes").prop('checked') ) {
+        force.stop();
+        $('.node').selectAll()
+      } else {
+        force.start();
+      }
+    }*/
 
     // Set up our controllers if any.
     if (controls) {
@@ -837,6 +834,7 @@
         $(controls.resetSliderMenu).unbind('click').click(defaultSliders);
         $(controls.undoResetButton).unbind('click').click(undoReset);
         $(controls.undoResetMenu).unbind('click').click(undoReset);
+        //$(controls.lockNodes).unbind('click').click(lockNodes);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
@@ -844,5 +842,6 @@
 
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
+    $( "#lockNodes").prop( 'disabled', false);
 
 }

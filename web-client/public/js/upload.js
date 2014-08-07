@@ -42,6 +42,7 @@ $(function () {
             resetSliderMenu: "#resetSlidersMenu",
             undoResetButton: "#undoReset",
             undoResetMenu: "#undoResetMenu"
+            //lockNodes: "#lockNodes"
           }, network.networkType);
         }).error(function (xhr, status, error) {
           var err = JSON.parse(xhr.responseText);
