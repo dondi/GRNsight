@@ -99,17 +99,19 @@
                                         <div id='v1_2Content' class='panel-collapse collapse in'>
                                             <div class='panel-body'>
                                                 <ul>
-                                                    <li>Branched code so that the stable v1.2 runs on the GRNsight home page, while v1.3 Beta runs on a new Beta page for live testing of new features.</li>
+                                                    <li>Code was brached so that the stable v1.2 runs on the GRNsight home page, while v1.3 Beta runs on a new Beta page for live testing of new features.</li>
                                                     <li> Improvements were made to the user interface layout:
                                                         <ul>
                                                             <li>A menu bar was implemented to organize GRNsight functions and options.</li>
-                                                            <li>Instead of multiple “Open” and “Submit” buttons, the “Open” menu option opens a dialog from which to choose a GRNmap spreadsheet and then automatically     loads the graph; a reload option was also implemented.</li>
+                                                            <li>Instead of separate “Open” and “Submit” buttons, the “Open” menu option opens a dialog from which to choose a GRNmap spreadsheet and then automatically loads the graph; a new "Reload" option was implemented that reloads the current graph.</li>
+                                                            <li>A Demo menu option was implemented to load sample unweighted and weighted gene regulatory networks.</li>
                                                             <li>Information about each force graph parameter was added into a tooltip that appears upon hovering over the label.</li>
                                                         </ul>
                                                     </li>
-                                                    <li>The thickness of the edges was changed to be assigned on a continuous linear scale instead of using the four quartiles. Edges that have a normalized weight parameter of 0.05 or less were colored gray. The thickness of the edge was changed to be based on the magnitude of the absolute value of the weight. Larger magnitudes have thicker edges and smaller magnitudes have thinner edges. The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (weights of 1). Edges with a normalized value of 0.05 or less are colored gray.</li>
+                                                    <li>For graphs with weighted edges, the method for determining the thickness and coloring of the edges was changed. The way that GRNsight now determines the edge thickness is as follows. GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1. GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1). Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored grey.</li>
                                                     <li>Improvements were made to the appearance of the triangular arrowheads, blunt arrowheads, and circular edges. The triangular arrowheads and blunt arrowheads were also changed to be assigned on the same continuous linear scale as the edges.</li>
                                                     <li>Cosmetic issues and performance issues were fixed by temporarily removing the highlighting and outlining of edges.</li>
+                                                    <li>The ranges and default values of the force graph parameters were adjusted to optimize the automatic layout of the Demo networks consisting of 21 nodes and 50 edges.</li>
                                                     <li>grnsight.cs.lmu.edu was configured to serve 4 services via standard ports to reduce likelihood of blockage by anti-malware software.</li>
                                                 </ul>
                                             </div>
@@ -191,8 +193,7 @@
                         <div id='fundingContent' class='panel-collapse collapse'>
                             <div class='panel-body'>
                                <p>
-                                   This work is partially supported by <a href='http://www.nsf.gov/awardsearch/showAward?AWD_ID=0921038' target='_blank'>NSF award 0921038</a> and by the Loyola Marymount University Rains Research Assistant Program (Nicole Anguiano).
-                               </p>
+                                   This work is partially supported by <a href='http://www.nsf.gov/awardsearch/showAward?AWD_ID=0921038' target='_blank'>NSF award 0921038</a> (Kam D. Dahlquist, Ben G. Fitzpatrick, and Katrina Sherbina) and by the Loyola Marymount University Rains Research Assistant Program (Nicole Anguiano).
                            </div>
                         </div>
                     </div>

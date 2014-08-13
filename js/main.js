@@ -15,10 +15,16 @@ $(function() {
     $("#showSection2").click(function (){
         $("#section1Content").collapse('hide');
         $("#section2Content").collapse('show');
+        setTimeout(function() {
+            window.location.href='#section2';
+        }, 500);
     });
     $("#showSection3").click(function() {
         $("#section1Content").collapse('hide');
         $("#section3Content").collapse('show');
+        setTimeout(function() {
+            window.location.href='#section3';
+        }, 500);
     })
 
     $( "#modified").html( document.lastModified );
