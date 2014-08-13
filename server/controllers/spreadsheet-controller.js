@@ -38,6 +38,12 @@ var multiparty = require('multiparty'),
           break;
         }
       }
+
+      if(currentSheet === undefined) {
+        return res.json(400, "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet. Please select another" + 
+          " file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
+          "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
+      }
       
       for (var j = 1; j < currentSheet.data.length; j++) {
         try {
