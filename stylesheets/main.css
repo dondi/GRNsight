@@ -106,7 +106,7 @@ a:active {
 	color: #125432;
 }
 
-#pageContent a {
+#pageContent a, #CCLicense a {
 	text-decoration: underline;
 }
 
