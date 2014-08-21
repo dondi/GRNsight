@@ -183,9 +183,9 @@ $(function () {
 
 });
 
-$("#printGraph").click(function (event) {
+/*$("#printGraph").click(function (event) {
   window.print();
-});
+});*/
 
 /*
  * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
