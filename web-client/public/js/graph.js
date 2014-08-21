@@ -371,7 +371,8 @@
      *https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
      */
     function moveTo(d) {
-      var node = d3.select("#node" + d.source.index),
+
+      var node = d3.select("#node" + d.source.index);
           w = parseFloat(node.attr("width")),
           h = parseFloat(node.attr("height"));
           
@@ -603,7 +604,8 @@
     })*/
 
     function tick() {
-    
+      
+      try {
       node.attr("x", function(d) {
         var nodeWidth = d.name.length * 20;
         return d.x = Math.max(0, Math.min(width - nodeWidth, d.x));
@@ -697,6 +699,10 @@
           return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";				
         }
       });
+
+      } catch(e) {
+        console.warn("Detected invalid node. Moving on to next node.");
+      }
 
       //Rudimentary manual redraw. This should fix the Firefox bug where the edges don't show up.
       //if(runNum === 0) {
