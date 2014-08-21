@@ -51,10 +51,11 @@ $(function () {
         });
       };
 
-  $('#upload').on('change', function (e) {
+  $('#upload').on('change', function (event) {
     // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
     // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
-    var fullFilePath = $('input[type=file]').val(),
+    var $upload = $(this),
+        fullFilePath = $upload.val(),
         fakePathCheck = fullFilePath.search("\\\\") + 1; // 4 \'s enables it to search for a slash character without error
 
     // fakePathCheck will return -1 when the character is not found, so will only be -1 when all slashes are gone
@@ -65,8 +66,9 @@ $(function () {
     reload = ["", ""];
 
     var formData = new FormData();
-    formData.append('file', $('#upload')[0].files[0]);
+    formData.append('file', $upload[0].files[0]);
     loadGrn("/upload", fullFilePath, formData);
+    $upload.val("");
     e.preventDefault();
   });
 
