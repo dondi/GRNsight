@@ -46,6 +46,7 @@ $(function () {
           }, network.networkType);
         }).error(function (xhr, status, error) {
           var err = JSON.parse(xhr.responseText);
+          $("#upload").val(""); // De-select the bad file.
           $("#error").html(err);
           $("#myModal").modal('show');
         });
@@ -68,7 +69,6 @@ $(function () {
     var formData = new FormData();
     formData.append('file', $upload[0].files[0]);
     loadGrn("/upload", fullFilePath, formData);
-    $upload.val("");
     event.preventDefault();
   });
 
