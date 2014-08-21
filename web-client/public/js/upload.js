@@ -69,7 +69,7 @@ $(function () {
     formData.append('file', $upload[0].files[0]);
     loadGrn("/upload", fullFilePath, formData);
     $upload.val("");
-    e.preventDefault();
+    event.preventDefault();
   });
 
   $('#reload').click(function (event) {
