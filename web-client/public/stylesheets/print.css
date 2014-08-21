@@ -1,0 +1,22 @@
+@page {
+  size: landscape;
+}
+nav {
+  display: none !important;
+}
+.grnsight-container {
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border: none;
+  margin: -10px 0 -100px -60px !important;
+  -ms-transform: scale(0.75, 0.75);
+  -webkit-transform: scale(0.75, 0.75);
+  transform: scale(0.75, 0.75);
+}
+.sliders {
+  margin-left: 0px;
+  width: 0px;
+  visibility: hidden;
+}

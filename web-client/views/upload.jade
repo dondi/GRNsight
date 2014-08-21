@@ -4,6 +4,7 @@ html
     title GRNsight
     link(href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", rel="stylesheet")
     link(href="stylesheets/grnsight.css", rel="stylesheet")
+    link(href="stylesheets/print.css", rel="stylesheet", media="print")
     link(href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css", rel="stylesheet")
     script(src="http://code.jquery.com/jquery-1.9.1.js")
     script(src="http://code.jquery.com/ui/1.10.1/jquery-ui.js")
@@ -40,8 +41,8 @@ html
                     span(class='glyphicon glyphicon-export')
                     | &nbsp; Export
                 li(class='divider')
-                li(class='disabled')
-                  a(href='#')
+                li
+                  a(href='#' id='printGraph')
                     span(class='glyphicon glyphicon-print')
                     | &nbsp; Print
             li(class='dropdown')
