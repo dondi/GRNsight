@@ -14,18 +14,24 @@ $(function() {
     // Documentation page only: Makes links open their respective sections when clicked
     $("#showSection2").click(function (){
         $("#section1Content").collapse('hide');
+        $("#section3Content").collapse('hide');
         $("#section2Content").collapse('show');
-        setTimeout(function() {
-            window.location.href='#section2';
-        }, 500);
     });
+
+    $('#section2Content').on('shown.bs.collapse', function() {
+        window.location.href = '#section2';
+    });
+
     $("#showSection3").click(function() {
         $("#section1Content").collapse('hide');
+        $("#section2Content").collapse('hide');
         $("#section3Content").collapse('show');
-        setTimeout(function() {
-            window.location.href='#section3';
-        }, 500);
-    })
+    });
+
+
+    $('#section3Content').on('shown.bs.collapse', function() {
+        window.location.href = '#section3';
+    });
 
     $( "#modified").html( document.lastModified );
 
