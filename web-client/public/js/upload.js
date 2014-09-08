@@ -82,14 +82,18 @@ $(function () {
 
   var reload = ["", ""];
   $('#unweighted').click(function (event) {
-    loadGrn("/demo/unweighted", "Demo #1: Unweighted GRN");
-    reload = [ "/demo/unweighted", "Demo #1: Unweighted GRN"];
+    loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN");
   });
 
   $('#weighted').click(function (event) {
-    loadGrn("/demo/weighted", "Demo #2: Weighted GRN");
-    reload = [ "/demo/weighted", "Demo #2: Weighted GRN"];
+    loadDemo("/demo/weighted", "Demo #2: Weighted GRN");
   });
+
+  var loadDemo = function(url, name) {
+    loadGrn(url, name);
+    reload = [url, name];
+    $("#upload").val("");
+  }
 
   $('.deselectedColoring').click(colorPreferences);
 
