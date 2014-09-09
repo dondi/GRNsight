@@ -33,6 +33,7 @@ $(function () {
           $("#resetSlidersMenu").off("click");
           $("#undoReset").off('click');
           $("#undoResetMenu").off('click');
+          previousFile = [url, name, formData];
           drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
             linkSlider: "#linkDistInput",
             chargeSlider: "#chargeInput",
@@ -72,9 +73,11 @@ $(function () {
     event.preventDefault();
   });
 
+  var previousFile = ["/upload", "", undefined];
+
   $('#reload').click(function (event) {
     if(reload[0] === "") {
-      $('#upload').trigger('change');
+      loadGrn(previousFile[0], previousFile[1], previousFile[2]);
     } else {
       loadGrn(reload[0], reload[1]);
     }
