@@ -51,7 +51,7 @@
         <div id='mainContent'>
             <p id='pageTitle'>Documentation</p>
             <div id='pageContent'>
-                <h3 id='gettingStarted'>Getting Started</h3>
+                <h3>Getting Started</h3>
                 <p>
                     GRNsight is a web application for visualizing models of medium-scale gene regulatory networks (GRNs).  GRNsight was created to work with the input and output spreadsheets used by GRNmap, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  The following sections describe how to use GRNsight.
                 </p>
@@ -150,7 +150,7 @@
                                             <li>If your adjacency matrix is contained in a worksheet entitled “network_optimized_weights” and contains real numbers instead of just 1’s to indicate weighted connections, it will adjust the arrowhead type, thickness, and color of the edges as follows:
                                                 <ul>
                                                     <li>For positive weights > 0, the edge will be given a regular arrowhead (pointy tip) to indicate an activation relationship between the two nodes.</li>
-                                                    <li>For negative weights < 0, the edge will be given a blunt arrowhead (a line segment perpendicular to the edge direction) to indicate a repression relationship between the two nodes.</li>
+                                                    <li>For negative weights &lt; 0, the edge will be given a blunt arrowhead (a line segment perpendicular to the edge direction) to indicate a repression relationship between the two nodes.</li>
                                                     <li>
                                                         The thickness of the edge will vary based on the magnitude of the absolute value of the weight.  Larger magnitudes will have thicker edges and smaller magnitudes will have thinner edges.  The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (weights of 1).
                                                     </li>
@@ -199,7 +199,7 @@
                         </div> <!--panel-collapse collapse-->
                     </div> <!--panel panel-default-->
                 </div> <!--panel-group-->
-                <h3 id='gettingStarted'>Further Information</h3>
+                <h3>Further Information</h3>
                 <p>For additional documentation, please see the <a href='https://github.com/dondi/GRNsight/wiki' target='_blank'>GRNsight Wiki</a>.</p>
             </div>
             <div id='footer'>

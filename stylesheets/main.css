@@ -171,12 +171,12 @@ h3 {
 	margin: 15px 0 10px 0;
 }
 
-#abstract {
+.abstract {
 	font-size: 15px;
 	margin-left: 30px;
 }
 
-#newsDate {
+.newsDate {
 	font-weight:bold;
 	font-size:18px;	
 	line-height: 1.5;
@@ -186,27 +186,27 @@ h3 {
 	border-bottom: 1px solid #828282;
 }
 
-#newsHeader {
+.newsHeader {
 	font-weight:bold;
 	font-size:15px;	
 	margin:0 0 0 0;
 	padding: 10px 0 0 30px;
 }
 
-#newsInfo {
+.newsInfo {
 	font-size:14px;	
 	margin:0 0 0 0;
 	padding: 10px 0 30px 30px;
 }
 
-#linkHeader {
+.linkHeader {
 	font-weight:bold;
 	font-size:18px;	
 	margin:0 0 0 0;
 	padding-left:15px;
 }
 
-#linkInfo {
+.linkInfo {
 	font-size:15px;	
 }
 
