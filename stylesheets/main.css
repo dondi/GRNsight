@@ -153,14 +153,14 @@ p.panel-title.aboutHeaders {
 	font-weight: bold;
 }
 
-#name {
+.name {
 	font-weight:bold;
 	font-size:18px;	
 	margin:0 0 0 0;
 	padding-left:15px;
 }
 
-#personInfo {
+.personInfo {
 	font-weight:normal;
 	font-size:15px;
 	margin: 0 0 0 30px;

@@ -12,27 +12,24 @@ $(function() {
     })
 
     // Documentation page only: Makes links open their respective sections when clicked
-    $("#showSection2").click(function (){
+    $(".showSection2").click(function (){
         $("#section1Content").collapse('hide');
         $("#section3Content").collapse('hide');
         $("#section2Content").collapse('show');
     });
-
-    $('#section2Content').on('shown.bs.collapse', function() {
-        window.location.href = '#section2';
-    });
-
-    $("#showSection3").click(function() {
+    $(".showSection3").click(function() {
         $("#section1Content").collapse('hide');
         $("#section2Content").collapse('hide');
         $("#section3Content").collapse('show');
     });
-
-
+    $('#section2Content').on('shown.bs.collapse', function() {
+        window.location.href = '#section2';
+    });
     $('#section3Content').on('shown.bs.collapse', function() {
         window.location.href = '#section3';
     });
 
+    // Change the modified time of the web page
     $( "#modified").html( document.lastModified );
 
     // Enable logo change on-hover
