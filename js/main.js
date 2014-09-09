@@ -12,16 +12,6 @@ $(function() {
     })
 
     // Documentation page only: Makes links open their respective sections when clicked
-    $(".showSection2").click(function (){
-        $("#section1Content").collapse('hide');
-        $("#section3Content").collapse('hide');
-        $("#section2Content").collapse('show');
-    });
-    $(".showSection3").click(function() {
-        $("#section1Content").collapse('hide');
-        $("#section2Content").collapse('hide');
-        $("#section3Content").collapse('show');
-    });
     $('#section2Content').on('shown.bs.collapse', function() {
         window.location.href = '#section2';
     });
