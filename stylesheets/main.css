@@ -176,6 +176,13 @@ h3 {
 	margin-left: 30px;
 }
 
+div.abstract > iframe {
+	border:1px solid #CCC; 
+	border-width:1px 1px 0; 
+	margin-bottom:5px; 
+	max-width: 100%;
+}
+
 .newsDate {
 	font-weight:bold;
 	font-size:18px;	
