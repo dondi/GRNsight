@@ -31,7 +31,7 @@ html
                       | &nbsp; Open
                     input(type='file', name='upload', id='upload', accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                     input(type='hidden', id='service-root', value='#{serviceRoot}')
-                li
+                li(class='startDisabled disabled')
                   a(href='#' id='reload')
                     span(class='glyphicon glyphicon-repeat')
                     | &nbsp; Reload
@@ -41,7 +41,7 @@ html
                     span(class='glyphicon glyphicon-export')
                     | &nbsp; Export
                 li(class='divider')
-                li
+                li(class=' startDisabled disabled')
                   a(href='#' id='printGraph')
                     span(class='glyphicon glyphicon-print')
                     | &nbsp; Print

@@ -849,5 +849,6 @@
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
     $( "#lockNodes").prop( 'disabled', false);
+    $(".startDisabled").removeClass("disabled");
 
 }
