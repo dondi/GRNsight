@@ -76,10 +76,12 @@ $(function () {
   var previousFile = ["/upload", "", undefined];
 
   $('#reload').click(function (event) {
-    if(reload[0] === "") {
-      loadGrn(previousFile[0], previousFile[1], previousFile[2]);
-    } else {
-      loadGrn(reload[0], reload[1]);
+    if(!$('.startDisabled').hasClass('disabled')) { 
+      if(reload[0] === "") {
+        loadGrn(previousFile[0], previousFile[1], previousFile[2]);
+      } else {
+        loadGrn(reload[0], reload[1]);
+      }
     }
   });
 
@@ -193,7 +195,9 @@ $(function () {
 });
 
 $("#printGraph").click(function (event) {
-  window.print();
+  if(!$('.startDisabled').hasClass('disabled')) {
+    window.print();
+  }
 });
 
 /*
