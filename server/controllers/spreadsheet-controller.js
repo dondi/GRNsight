@@ -51,7 +51,6 @@ var multiparty = require('multiparty'),
           try {
             currentGene = {name: currentSheet.data[0][j].value}
             currentGenePair = {name: currentSheet.data[j][0].value}
-            console.log("Current gene: " + currentGene.name + ".  Current Pair: " + currentGenePair.name);
           } catch (err) {
             return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
           }
