@@ -300,32 +300,32 @@
                 .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
                 .attr("viewBox", "0 0 12 12")
                 .attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("refX", function() {
+                .attr('refX', function () {
                   // Individual offsets for each possible stroke width
-                  xOffsets = {
-                    2 : 11.75, 3 : 11, 4 : 9.75, 5 : 9.25,  6 : 8.5, 7 : 10,
-                    8 : 9.75, 9 : 9.5, 10 : 9, 11 : 9.5, 12 : 9.5, 13 : 9.25,
-                    14 : 9
-                  };
-                  return xOffsets[d.strokeWidth];
-                })
-                .attr("refY", function () {
-                  if(x1 === x2 && y1 === y2 ) {
-                    yOffsets = {
-                      // Most set to 5 until something can be figured out about 
-                      // the centering of the self-referential arrowheads
-                      2: 6.7, 3: 6,4: 5.89, 5: 5, 6: 5, 7: 5,
-                      8: 5, 9: 5, 10: 5, 11: 5, 12: 5, 13: 5,
-                      14: 5
+                  return ((x1 === x2 && y1 === y2) ?
+                    {
+                      2: 11.75, 3: 11, 4: 9.75, 5: 11,  6: 8.5, 7: 10,
+                      8: 9.75, 9: 9.5, 10: 10, 11: 10, 12: 10, 13: 10,
+                      14: 10
+                    } : {
+                      2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
+                      8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
+                      14: 9
                     }
-                  } else {
-                    yOffsets = {
+                  )[d.strokeWidth];
+                })
+                .attr('refY', function () {
+                  return ((x1 === x2 && y1 === y2) ?
+                    {
+                      2: 6.7, 3: 6, 4: 6, 5: 5.5, 6: 5, 7: 5.75,
+                      8: 5.5, 9: 5.5, 10: 5.75, 11: 5.75, 12: 5.75, 13: 5.75,
+                      14: 5.75
+                    } : {
                       2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
                       8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
                       13: 5, 14: 4.7
                     }
-                  }
-                  return yOffsets[d.strokeWidth];
+                  )[d.strokeWidth];
                 })
                 .attr("markerUnits", "userSpaceOnUse")
                 .attr("markerWidth", function() {
@@ -334,12 +334,13 @@
                 .attr("markerHeight", function() {
                   return 5 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
                 })
-                .attr("orient", function() {
-                  if( x1 === x2 && y1 === y2 ) {
-                    return 270;
-                  } else {
-                    return "auto";
-                  }
+                .attr('orient', function () {
+                  return (x1 === x2 && y1 === y2) ?
+                    {
+                      2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
+                      8: 252, 9: 252, 10: 240, 11: 240, 12: 240, 13: 240,
+                      14: 240
+                    }[d.strokeWidth] : "auto";
                 })
                 .append("path")
                   .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
