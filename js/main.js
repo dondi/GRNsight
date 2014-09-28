@@ -19,9 +19,6 @@ $(function() {
         window.location.href = '#section3';
     });
 
-    // Change the modified time of the web page
-    $( "#modified").html( document.lastModified );
-
     // Enable logo change on-hover
     $( "#GRNsightLogo" ).on( "mouseenter", function() {
     	$("#GRNsightLogo").attr("src", "images/GRNsight_logo_20140710_rollover_resized.jpg")
