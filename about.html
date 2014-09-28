@@ -99,11 +99,15 @@
                                         <div id='v1_4Content' class='panel-collapse collapse'>
                                             <div class='panel-body'>
                                                 <ul>
-                                                    <li>The force graph parameter sliders, lock sliders, and reset button were set to be active before a spreadsheet is loaded. The values set before loading will automatically be used when a spreadsheet is loaded.</li>
                                                     <li>
-                                                        Options were added to the preferences menu: "Format edges based on optimized weight parameters" or "Default to black edges with regular arrowheads". When "Format edges based on optimized weight parameters" is selected, weighted spreadsheets will display with color and variable thicknesses depending on the weight of the relationship between edges. If "Default to black edges with regular arrowheads" is selected, all graphs will appear as unweighted graphs.
+                                                        The force graph parameter sliders, lock force graph parameter sliders check box and menu item, and reset force graph parameter button and menu item were all set to be active before a spreadsheet is loaded. The values set before loading will be used when a spreadsheet is loaded.
                                                     </li>
-                                                    <li>Printing was enabled in the File menu, though it adds extra blank pages to the end. Opening the file as a PDF before printing can allow removal of the extra pages.</li> 
+                                                    <li>
+                                                        Two options were added to the Edit > Preferences menu: "Format edges based on optimized weight parameters" or "Default to black edges with regular arrowheads". When "Format edges based on optimized weight parameters" is selected, spreadsheets named "network_optimized_weights" containing weighted values in the adjacency matrix will display with color and variable thicknesses depending on the weight values of the relationships between edges. If "Default to black edges with regular arrowheads" is selected, all graphs will appear as unweighted graphs.
+                                                    </li>
+                                                    <li>
+                                                        Printing was enabled in the File menu. Mac users can utilize native print to PDF function available from their operating system to print the graph to a PDF file. Windows users will need to have the full version of Adobe Acrobat (or other "print to PDF" utility) to print graphs to a PDF file. There is a known bug with the print function printing an extra blank page that is currently being investigated for a fix in a later release.
+                                                    </li> 
                                                     <li>Various bug fixes were implemented regarding the loading of the Demo GRNs and unusual behavior of the first node created from a spreadsheet.</li>
                                                 </ul>
                                             </div> <!--panel-body-->
