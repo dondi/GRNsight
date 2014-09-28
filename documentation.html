@@ -58,7 +58,7 @@
                     <div class='panel panel-default'>
                         <div class='panel-heading'>
                             <h5 class='panel-title' id='section1'>
-                                <a href='#section1Content' data-toggle='collapse' data-parent='#accordian'>
+                                <a href='#section1Content' data-toggle='collapse'>
                                     1. Input Spreadsheet
                                 </a>
                             </h5>
@@ -67,10 +67,10 @@
                             <div class='panel-body'>
                                 <ul>
                                     <li>
-                                        If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program GRNmap, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a class='showSection2' data-toggle='collapse' data-target='#section2Content' data-parent='#accordian'>Section 2</a> to learn how to load your file as an input spreadsheet.
+                                        If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program GRNmap, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a class='showSection2'>Section 2</a> to learn how to load your file as an input spreadsheet.
                                     </li>
                                     <li>
-                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses. See <a class='showSection3' data-toggle='collapse' data-target='#section3Content' data-parent='#accordian'>Section 3</a> for details on how GRNsight displays the graph.
+                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses. See <a class='showSection3'>Section 3</a> for details on how GRNsight displays the graph.
                                     </li>
                                     <li>
                                         If you want to create manually a new file to use with GRNsight, format the file in the following manner:
@@ -93,7 +93,7 @@
                                                         <img src='images/Sample_network_worksheet.jpg' alt='network' height='290' width='832' /><br><br>
                                                     </li>
                                                     <li>
-                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file "Demo #2: Weighted GRN" corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a  class='showSection3' data-toggle='collapse' data-target='#section3Content' data-parent='#accordian'>Section 3</a> below.<br><br>
+                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file "Demo #2: Weighted GRN" corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class='showSection3'>Section 3</a> below.<br><br>
                                                         <img src='images/Sample_network_optimized_weights_worksheet.jpg' alt='network_optimized_weights' height='289' width='1252' /><br><br>
                                                     </li>
                                                     <li>Note that GRNsight is designed to visualized “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.</li>
@@ -108,7 +108,7 @@
                     <div class='panel panel-default'>
                         <div class='panel-heading'>
                             <h4 class='panel-title' id='section2'>
-                                <a data-toggle='collapse' data-parent='#accordian' href='#section2Content'>
+                                <a data-toggle='collapse' href='#section2Content'>
                                     2. Loading the Input Spreadsheets
                                 </a>
                             </h4>
@@ -122,7 +122,7 @@
                                     <li>To load a different file, select the menu option File > Open again.</li>
                                     <li>To reload the same file, select the menu option File > Reload.</li>
                                     <li>
-                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses.  See <a  class='showSection3' data-toggle='collapse' data-target='#section3Content' data-parent='#accordian'>Section 3</a> for details on how GRNsight displays the graph.
+                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses.  See <a  class='showSection3' data-target='#section3Content'\>Section 3</a> for details on how GRNsight displays the graph.
                                     </li>
                                 </ul>
                             </div> <!--panel-body-->
@@ -131,7 +131,7 @@
                     <div class='panel panel-default'>
                         <div class='panel-heading'>
                             <h4 id='section3' class='panel-title'>
-                                <a data-toggle='collapse' data-parent='#accordian' href='#section3Content'>
+                                <a data-toggle='collapse' href='#section3Content'>
                                     3. How GRNsight Displays the Graph
                                 </a>
                             </h4>
