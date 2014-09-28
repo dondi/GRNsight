@@ -58,8 +58,9 @@ var multiparty = require('multiparty'),
             return res.json(400, "One of your gene names appears not to have a corresponding pair. Please fix the error and try uploading again.");
           }
           if(currentSheet.data[0][j].value.length > 12 ) {
-            return res.json(400, "Gene names must be at most 12 characters in length. The gene " + currentSheet.data[0][j].value + 
-              " is greater than 12 characters. Please edit the name and resubmit your sheet.");
+            return res.json(400, "Gene names must be between 1 and 12 characters in length. The length of the gene name, " + 
+              currentSheet.data[0][j].value + " in the " + currentSheet.name + " worksheet is greater than 12 characters. " + 
+              " Please edit the gene name, re-save it as a .xlsx file, and resubmit your spreadsheet to GRNsight.");
           }
           network.genes.push(currentGene);
         } catch (err) {
