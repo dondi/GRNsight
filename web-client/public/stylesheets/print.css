@@ -19,7 +19,7 @@ nav {
   height: 100%;
 }
 .sliders {
+  display: none;
   margin-left: 0px;
   width: 0px;
-  visibility: hidden;
 }
