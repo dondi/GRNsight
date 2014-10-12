@@ -298,7 +298,7 @@
               // Arrowheads
               defs.append("marker")
                 .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-                .attr("viewBox", "0 0 12 12")
+                .attr("viewBox", "0 0 15 15")
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr('refX', function () {
                   // Individual offsets for each possible stroke width
@@ -329,10 +329,10 @@
                 })
                 .attr("markerUnits", "userSpaceOnUse")
                 .attr("markerWidth", function() {
-                  return 12 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
+                  return 12 + ((d.strokeWidth < 7) ? d.strokeWidth*2.25 : d.strokeWidth*3);
                 })
                 .attr("markerHeight", function() {
-                  return 5 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
+                  return 5 + ((d.strokeWidth < 7) ? d.strokeWidth*2.25 : d.strokeWidth*3);
                 })
                 .attr('orient', function () {
                   return (x1 === x2 && y1 === y2) ?
