@@ -45,7 +45,8 @@ $(function() {
     if (location.hash) {
         var $elementToOpen = $(location.hash);
         if ($elementToOpen.is(".collapse:not(.in)")) {
-            $elementToOpen.collapse('show').parents(".collapse:not(.in)").collapse('show');
+            $elementToOpen.parents(".collapse:not(.in)").collapse('show');
+            $elementToOpen.collapse('show');
         }
     }
 });
