@@ -384,42 +384,57 @@
     }
     
     function lineTo(d) {
-      var node = d3.select("#node" + d.target.index),
-          w = parseFloat(node.attr("width")),
-          h = parseFloat(node.attr("height"));
+            var node = d3.select("#node" + d.target.index),
+                w = +node.attr("width"),
+                h = +node.attr("height"),
+                x1 = d.source.x,
+                y1 = d.source.y,
+                x2 = d.target.x,
+                y2 = d.target.y;
           
-      var x1 = d.source.x,
-          y1 = d.source.y,
-          x2 = d.target.x,
-          y2 = d.target.y,
-          dx,
-          dy,
-          dr,
+            d.target.centerX = d.target.x + (w / 2);
+            d.target.centerY = d.target.y + (h / 2);
 
-          // Defaults for normal edge.
-          drx,
-          dry,
-          xRotation = 0, // degrees
-          largeArc = 0 // 1 or 0
-          sweep = 0, //1 or 0
-          offset = 0;
-          
-      d.target.centerX = d.target.x + (w/2);
-      d.target.centerY = d.target.y + (h/2);
-      
-      //This function calculates the newX and newY
-      smartPathEnd(d, w, h);
-      dx = d.target.newX - x1;
-      dy = d.target.newY - y1;
-      dr = Math.sqrt(dx * dx + dy * dy);
-      drx = dr,
-      dry = dr;
-      
-      if ( ((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) || ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))){
-        sweep = 1;
-      }
-      
-      return "A" + drx + "," + dry + "," + xRotation + "," + largeArc + "," + sweep + "," + d.target.newX  + "," + d.target.newY;
+            // This function calculates the newX and newY.
+            smartPathEnd(d, w, h);
+            x1 = d.source.newX;
+            y1 = d.source.newY;
+            x2 = d.target.newX;
+            y2 = d.target.newY;
+
+            // Unit vectors.
+            var ux = x2 - x1,
+                uy = y2 - y1,
+                umagnitude = Math.sqrt(ux * ux + uy * uy),
+                vx = -uy, // Perpendicular vector.
+                vy = ux,
+                vmagnitude = Math.sqrt(vx * vx + vy * vy);
+
+            ux /= umagnitude;
+            uy /= umagnitude;
+            vx /= vmagnitude;
+            vy /= vmagnitude;
+
+            // Check for vector direction.
+            if (((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) ||
+                    ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
+                vx = -vx; vy = -vy;
+            }
+
+            var inlineOffset = umagnitude / 4,
+                orthoOffset = inlineOffset,
+                cp1x = x1 + inlineOffset * ux + vx * orthoOffset,
+                cp1y = y1 + inlineOffset * uy + vy * orthoOffset,
+                cp2x = x2 - inlineOffset * ux + vx * orthoOffset,
+                cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
+
+            cp1x = Math.min(Math.max(0, cp1x), width);
+            cp1y = Math.min(Math.max(0, cp1y), height);
+            cp2x = Math.min(Math.max(0, cp2x), width);
+            cp2y = Math.min(Math.max(0, cp2y), height);
+            return "C" + cp1x + " " + cp1y + ", " +
+                cp2x + " " + cp2y + ", " +
+                x2 + " " + y2;
     }
     
     function smartPathEnd(d, w, h) {
