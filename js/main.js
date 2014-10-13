@@ -11,7 +11,22 @@ $(function() {
         } 
     });
 
-    // Documentation page only: Makes links open their respective sections when clicked
+    var setupClickableItems = function (clickableSelector, contentId, targetHref) {
+        // Documentation page only: Makes links open their respective sections when clicked
+        $(contentId).on('shown.bs.collapse', function () {
+            window.location.href = targetHref;
+        });
+    
+        // If the links are already open, the above handlers won't fire, so we force the page to change in that case
+        // Using .on because using .click doesn't work for some reason
+        $(clickableSelector).on('click', function () {
+            $(contentId).collapse('show');
+            if($(contentId).attr('class') === 'panel-collapse collapse in') {
+                window.location.href = targetHref;
+            };
+        });
+    };
+
     $('#section2Content').on('shown.bs.collapse', function() {
         window.location.href = '#section2';
     });
