@@ -27,8 +27,12 @@ $(function() {
         });
     };
 
-    setupClickableItems('.showSection2', '#section2Content', '#section2');
-    setupClickableItems('.showSection3', '#section3Content', '#section3');
+    [
+        [ '.showSection2', '#section2Content', '#section2' ],
+        [ '.showSection3', '#section3Content', '#section3' ]
+    ].forEach(function (clickableItem) {
+        setupClickableItems.apply(null, clickableItem);
+    });
 
     // Enable logo change on-hover
     $( "#GRNsightLogo" ).on( "mouseenter", function() {
