@@ -27,26 +27,8 @@ $(function() {
         });
     };
 
-    $('#section2Content').on('shown.bs.collapse', function() {
-        window.location.href = '#section2';
-    });
-    $('#section3Content').on('shown.bs.collapse', function() {
-        window.location.href = '#section3';
-    });
-    // If the links are already open, the above handlers won't fire, so we force the page to change in that case
-    // Using .on because using .click doesn't work for some reason
-    $('.showSection3').on('click', function() {
-        $('#section3Content').collapse('show');
-        if($('#section3Content').attr('class') === 'panel-collapse collapse in') {
-            window.location.href = '#section3';
-        };
-    });
-    $('.showSection2').on('click', function() {
-        $('#section2Content').collapse('show');
-        if($('#section2Content').attr('class') === 'panel-collapse collapse in') {
-            window.location.href = '#section2';
-        };
-    });
+    setupClickableItems('.showSection2', '#section2Content', '#section2');
+    setupClickableItems('.showSection3', '#section3Content', '#section3');
 
     // Enable logo change on-hover
     $( "#GRNsightLogo" ).on( "mouseenter", function() {
