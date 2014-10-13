@@ -365,25 +365,24 @@
           });
 
     $(".link").tooltip({
-      track: true
+        track: true
     });
 
-    /*Big thanks to the following for the smart edges
-     *https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
+    /* Big thanks to the following for the smart edges
+     * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
      */
-    function moveTo(d) {
+    var moveTo = function (d) {
+            var node = d3.select("#node" + d.source.index),
+                w = parseFloat(node.attr("width")),
+                h = parseFloat(node.attr("height"));
 
-      var node = d3.select("#node" + d.source.index);
-          w = parseFloat(node.attr("width")),
-          h = parseFloat(node.attr("height"));
-          
-      d.source.newX = d.source.x + (w/2);
-      d.source.newY = d.source.y + (h/2);
-          
-      return "M" + d.source.newX + "," + d.source.newY + " ";
-    }
-    
-    function lineTo(d) {
+            d.source.newX = d.source.x + (w/2);
+            d.source.newY = d.source.y + (h/2);
+
+            return "M" + d.source.newX + "," + d.source.newY + " ";
+        },
+
+        lineTo = function (d) {
             var node = d3.select("#node" + d.target.index),
                 w = +node.attr("width"),
                 h = +node.attr("height"),
@@ -435,7 +434,7 @@
             return "C" + cp1x + " " + cp1y + ", " +
                 cp2x + " " + cp2y + ", " +
                 x2 + " " + y2;
-    }
+        };
     
     function smartPathEnd(d, w, h) {
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
