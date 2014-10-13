@@ -40,4 +40,12 @@ $(function() {
     	$("#GRNsightLogo").attr("src", "images/GRNsight_logo_20140710_main_resized.jpg")
     });
 
-})
+    // Open a hashed element if it is collapsed.  This is a little trickier than it sounds,
+    // because then we also have to open any parents that are also collapsed.
+    if (location.hash) {
+        var $elementToOpen = $(location.hash);
+        if ($elementToOpen.is(".collapse:not(.in)")) {
+            $elementToOpen.collapse('show').parents(".collapse:not(.in)").collapse('show');
+        }
+    }
+});
