@@ -1,3 +1,6 @@
+body {
+  min-width: 1426px;
+}
 .submission {
   margin-left: 10px;
 }
@@ -5,12 +8,14 @@
   font-weight: normal;
 }
 .grnsight-container {
-  position: fixed;
+  position: absolute;
   left: 250px;
-  top: 52px;
+  top: 53px;
   right: 5px;
   bottom: 5px;
-  border: 1px solid #9a9a9a;
+  width: 1200px;
+  height: 700px;
+  border: 2px solid #9a9a9a;
 }
 .sliders {
   width: 225px;
@@ -25,6 +30,7 @@ form span {
 }
 .navbar {
   top: 1px;
+  width: 1450px;
 }
 #upload {
   display: none;
