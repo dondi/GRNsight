@@ -8,14 +8,16 @@ var multiparty = require('multiparty'),
           currentSheet,
           network = {
             genes: [],
+            genePairs: [],
             links: [],
             errors: [],
             positiveWeights: [],
-            negativeWeights: []
+            negativeWeights: [],
           },
           currentLink,
           currentGene,
-          currentGenePair;
+          currentGenePair,
+          errorArray = [];
 
       try {
         sheet = xlsx.parse(path);
@@ -41,28 +43,23 @@ var multiparty = require('multiparty'),
       }
 
       if(currentSheet === undefined) {
+        // because no possible errors (currently) can occur before this, we'll just return the fatal error.
+        // TO DO: Fix this.  
         return res.json(400, "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet. Please select another" + 
           " file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
           "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
       }
       
-      for (var j = 1; j < currentSheet.data.length; j++) {
+      for (var j = 1; j < currentSheet.data[0].length; j++) {
         try {
           try {
             currentGene = {name: currentSheet.data[0][j].value}
             currentGenePair = {name: currentSheet.data[j][0].value}
-          } catch (err) {
+          } catch (err) { 
             return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
           }
-          if(currentGene.name != currentGenePair.name) {
-            return res.json(400, "One of your gene names appears not to have a corresponding pair. Please fix the error and try uploading again.");
-          }
-          if(currentSheet.data[0][j].value.length > 12 ) {
-            return res.json(400, "Gene names must be between 1 and 12 characters in length. The length of the gene name, " + 
-              currentSheet.data[0][j].value + " in the " + currentSheet.name + " worksheet is greater than 12 characters. " + 
-              " Please edit the gene name, re-save it as a .xlsx file, and resubmit your spreadsheet to GRNsight.");
-          }
           network.genes.push(currentGene);
+          network.genePairs.push(currentGenePair);
         } catch (err) {
           network.errors.push(err.message);
         }
@@ -86,8 +83,71 @@ var multiparty = require('multiparty'),
           }
         }
       }
-      return res.json(network);
+
+      var genesArray = [];
+      var genePairsArray = [];
+      for(var i = 0; i < network.genes.length; i++) {
+        genesArray[i] = network.genes[i].name;
+        genePairsArray[i] = network.genePairs[i].name;
+      }
+      genesArray.sort();
+      genePairsArray.sort();
+
+      // Have these return true/false
+      var checkErrors = [
+        checkDuplicates, 
+        checkGenePairs, 
+        checkGeneLength
+      ];
+      for(var i = 0; i < checkErrors.length; i++) {
+        checkErrors[i](errorArray, genesArray, genePairsArray);
+      }
+
+      if(errorArray.length != 0) {
+        var errorString = "Your graph failed to load.<br /><br />";
+        for(var i = 0; i < errorArray.length; i++) {
+          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br /><br />";
+        }
+        return res.json(400, errorString);
+      } else {
+        return res.json(network);
+      }
     };
+
+    newError = function(possibleCause, suggestedFix) {
+      this.possibleCause = possibleCause;
+      this.suggestedFix = suggestedFix;
+    }
+
+    checkDuplicates = function(errorArray, genesArray, genePairsArray) {
+      for(var i = 0; i < genesArray.length - 1; i++) {
+        if(genesArray[i] === genesArray[i+1]) {
+          errorArray.push(new newError("There exists a duplicate for gene " + genesArray[i] + " along the top. Please note this may cause many genes to be shown as not matching. ", "Please remove the duplicate gene and submit again. "))
+        }
+        if(genePairsArray[i] === genePairsArray[i+1]) {
+          errorArray.push(new newError("There exists a duplicate for gene " + genePairsArray[i] + " along the side. Please note this may cause many genes to be shown as not matching. ", "Please remove the duplicate gene and submit again. "))
+        }
+      }
+    }
+
+    checkGenePairs = function(errorArray, genesArray, genePairsArray) {
+      for(var i = 0; i < genesArray.length; i++) {
+        if(genesArray[i] != genePairsArray[i]) {
+          errorArray.push(new newError("Genes " + genesArray[i] + " and " + genePairsArray[i] + " are not an exact match. ", "Make sure the names match and submit again. "));
+        }
+      }
+    }
+
+    checkGeneLength = function(errorArray, genesArray, genePairsArray) {
+      for(var i = 0; i < genesArray.length; i++) {
+        if(genesArray[i].length > 12) {
+          errorArray.push(new newError("Gene " + genesArray[i] + " is more than 12 characters in length. ", "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again. "));
+        }
+        if(genePairsArray[i].length > 12) {
+          errorArray.push(new newError("Gene " + genePairsArray[i] + " is more than 12 characters in length. ", "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again. "));
+        }
+      }
+    }
 
 module.exports = function (app) {
   //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
