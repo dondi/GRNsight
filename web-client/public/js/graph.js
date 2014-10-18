@@ -54,10 +54,6 @@
       normalizedScale = d3.scale.linear()
                                 .domain(d3.extent(allWeights));
     }
-                       
-    //snapToGrid = function(val, gridSize) {
-    //  return gridSize * Math.round(val/gridSize);
-    //};
     
     var force = d3.layout.force()
         .size([width, height])
@@ -77,59 +73,6 @@
         .attr("height", height);
         
     var defs = svg.append("defs");
-          
-//Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
-// for the outline code  
-    /*var outline = defs.append("filter")
-                    .attr("id", "outline");
-
-    outline.append("feMorphology")
-            .attr("result", "offset")
-            .attr("in", "SourceGraphic")
-            .attr("operator", "dilate")
-            .attr("radius", "2");
-
-    outline.append("feColorMatrix")
-            .attr("result", "drop")
-            .attr("in", "offset")
-            .attr("type", "matrix")
-            .attr("values", function () {
-              return "1 1 1 1 1"
-                   + "\n" + "1 1 1 1 1"
-                   + "\n" + "1 1 1 1 1"
-                   + "\n" + "0 0 0 1 0";
-            });
-    
-    outline.append("feBlend")
-          .attr("in", "SourceGraphic")
-          .attr("in2", "drop")
-          .attr("mode", "normal");
-          
-    var highlight = defs.append("filter")
-                      .attr("id", "highlight");
-                      
-    highlight.append("feMorphology")
-            .attr("result", "offset")
-            .attr("in", "SourceGraphic")
-            .attr("operator", "dilate")
-            .attr("radius", "2");
-
-    highlight.append("feColorMatrix")
-            .attr("result", "drop")
-            .attr("in", "offset")
-            .attr("type", "matrix")
-            .attr("values", function () {
-              return "1 1 1 1 1"
-                   + "\n" + "1 1 0 0 0"
-                   + "\n" + "0 0 0 0 0"
-                   + "\n" + "0 0 0 1 0";
-            });
-    
-    highlight.append("feBlend")
-          .attr("in", "SourceGraphic")
-          .attr("in2", "drop")
-          .attr("mode", "normal");*/
-
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
@@ -358,7 +301,6 @@
           }
 		      return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
 		    })
-		    //.attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
             return d.value.toPrecision(4);
@@ -596,9 +538,7 @@
       .style("fill", "black")
       .text(function(d) {return d.name;})
       .on("dblclick", nodeTextDblclick);
-    
-    //$(node).draggable({ grid: [100, 30]});
-           
+               
     $('.node').css({
       'cursor': 'move',
       'fill': 'white',
@@ -611,12 +551,6 @@
       'fill': 'none',
       'stroke-width': '1.5px'
     });
-
-    /*$('.highlight').css({
-      'stroke': '#000',
-      'fill': 'none',
-      'stroke-width': '1.5px'
-    })*/
 
     function tick() {
       
@@ -718,12 +652,6 @@
       } catch(e) {
         console.warn("Detected invalid node. Moving on to next node.");
       }
-
-      //Rudimentary manual redraw. This should fix the Firefox bug where the edges don't show up.
-      //if(runNum === 0) {
-      //  runNum++;
-      //  drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls);
-      //}
     }
 
     function normalize(d) {
@@ -733,24 +661,9 @@
     function dragstart(d) {
       var node = d3.select(this);
       node.classed("fixed", d.fixed = true);
-      /*link.select("path").attr("filter", function (d) {
-        if(d.source.name == node.datum().name || d.target.name == node.datum().name) {
-          return "url(#highlight)";
-        } else {
-          return "url(#outline)";
-        }
-      });*/
+
     }
     
-    //Can't get the grid to stick for some reason
-    //function dragend (d) {
-    //  d3.select(this)
-    //    .attr("x", d.x = snapToGrid(d.x, 20))
-    //    .attr("y", d.y = snapToGrid(d.y, 20))
-    //    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
-      //link.select("path").attr("filter", "url(#outline)");
-    //}
-
     function updateLinkDist(event) {
         var toChange = $(this).val();
         force.linkDistance( toChange );
