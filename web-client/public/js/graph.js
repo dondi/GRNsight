@@ -834,15 +834,6 @@
       }
     }
 
-    /*function lockNodes(event) {
-      if( $("#lockNodes").prop('checked') ) {
-        force.stop();
-        $('.node').selectAll()
-      } else {
-        force.start();
-      }
-    }*/
-
     // Set up our controllers if any.
     if (controls) {
         $(controls.linkSlider).on('input', updateLinkDist);
@@ -855,7 +846,6 @@
         $(controls.resetSliderMenu).unbind('click').click(defaultSliders);
         $(controls.undoResetButton).unbind('click').click(undoReset);
         $(controls.undoResetMenu).unbind('click').click(undoReset);
-        //$(controls.lockNodes).unbind('click').click(lockNodes);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
@@ -863,7 +853,6 @@
 
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
-    $( "#lockNodes").prop( 'disabled', false);
     $(".startDisabled").removeClass("disabled");
 
 }

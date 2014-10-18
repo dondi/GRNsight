@@ -13,45 +13,44 @@ $(function () {
   $( "#gravityInput" ).val(0.1);
 
   var loadGrn = function (url, name, formData) {
-        // The presence of formData is taken to indicate a POST.
-        var fullUrl = $("#service-root").val() + url;
-        (formData ?
-          $.ajax({
-            url: fullUrl,
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            crossDomain: true
-          }) :
-          $.getJSON(fullUrl)
-        ).done(function (network) {
-          console.log(network);
-          $('#fileName').text(name);
-          $("input[type='range']").off("input");
-          $("#resetSliders").off("click");
-          $("#resetSlidersMenu").off("click");
-          $("#undoReset").off('click');
-          $("#undoResetMenu").off('click');
-          previousFile = [url, name, formData];
-          drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
-            linkSlider: "#linkDistInput",
-            chargeSlider: "#chargeInput",
-            chargeDistSlider: "#chargeDistInput",
-            gravitySlider: "#gravityInput",
-            resetSliderButton: "#resetSliders",
-            resetSliderMenu: "#resetSlidersMenu",
-            undoResetButton: "#undoReset",
-            undoResetMenu: "#undoResetMenu"
-            //lockNodes: "#lockNodes"
-          }, network.networkType);
-        }).error(function (xhr, status, error) {
-          var err = JSON.parse(xhr.responseText);
-          $("#upload").val(""); // De-select the bad file.
-          $("#error").html(err);
-          $("#myModal").modal('show');
-        });
-      };
+    // The presence of formData is taken to indicate a POST.
+    var fullUrl = $("#service-root").val() + url;
+    (formData ?
+      $.ajax({
+        url: fullUrl,
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        crossDomain: true
+      }) :
+      $.getJSON(fullUrl)
+    ).done(function (network) {
+      console.log(network);
+      $('#fileName').text(name);
+      $("input[type='range']").off("input");
+      $("#resetSliders").off("click");
+      $("#resetSlidersMenu").off("click");
+      $("#undoReset").off('click');
+      $("#undoResetMenu").off('click');
+      previousFile = [url, name, formData];
+      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
+        linkSlider: "#linkDistInput",
+        chargeSlider: "#chargeInput",
+        chargeDistSlider: "#chargeDistInput",
+        gravitySlider: "#gravityInput",
+        resetSliderButton: "#resetSliders",
+        resetSliderMenu: "#resetSlidersMenu",
+        undoResetButton: "#undoReset",
+        undoResetMenu: "#undoResetMenu"
+      }, network.networkType);
+    }).error(function (xhr, status, error) {
+      var err = JSON.parse(xhr.responseText);
+      $("#upload").val(""); // De-select the bad file.
+      $("#error").html(err);
+      $("#myModal").modal('show');
+    });
+  };
 
   $('#upload').on('change', function (event) {
     // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
