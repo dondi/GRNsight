@@ -6,71 +6,68 @@
         <title>GRNsight - Documentation</title>
         <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
-        <script src="https://code.jquery.com/jquery.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script type='text/javascript' src='js/main.js'></script>
-        <meta charset='utf-8'>
+        <meta charset="utf-8">
 
     </head>
 
     <body>
 
-        <div id='header'>
-            <div id='logo'>
-                <a href="http://dondi.github.io/GRNsight"><img id='GRNsightLogo' src='images/GRNsight_logo_20140710_main_resized.jpg' alt='GRNsight' width='200' height='118'></a></div>
-            <div id='lmu'>
-                <a href="http://www.lmu.edu" target='_blank'><img src='images/LMULogoHQ2.png' alt='LMU logo' width='200' height='118' id='lmuLogo' /></a><br /><br /><br />
-                <p id='subtextLMU'>A Joint Project of the<br /> LMU Bioinformatics and Biomathematics Groups</p>
+        <div id="header">
+            <div id="logo">
+                <a href="http://dondi.github.io/GRNsight"><img id="GRNsightLogo" src="images/GRNsight_logo_20140710_main_resized.jpg" alt="GRNsight" width="200" height="118"></a></div>
+            <div id="lmu">
+                <a href="http://www.lmu.edu" target="_blank"><img src="images/LMULogoHQ2.png" alt="LMU logo" width="200" height="118" id="lmuLogo" /></a><br /><br /><br />
+                <p id="subtextLMU">A Joint Project of the<br /> LMU Bioinformatics and Biomathematics Groups</p>
             </div>
-            <p id='title'><a href="http://dondi.github.io/GRNsight">GRNsight</a></p>
-            <p id='subtext'>Web app and service for visualizing models of gene regulatory networks.</p>
+            <p id="title"><a href="http://dondi.github.io/GRNsight">GRNsight</a></p>
+            <p id="subtext">Web app and service for visualizing models of gene regulatory networks.</p>
         </div>
 
-        <div id='navBar' class='.backBox'>
-            <div id='stickyBar' data-spy='affix' data-offset-top='140'>
-                <ul class='nav'>
-                    <li><a href='index.html'>Home</a></li>
-                    <li><a href='about.html'>About</a></li>
-                    <li><a href='news.html'>News</a></li>
-                    <li><a href='https://github.com/dondi/GRNsight' target="_blank">Developers</a></li>
-                    <li><a href='documentation.html'>Documentation</a></li>
-                    <li><a href='https://github.com/dondi/GRNsight/wiki' target="_blank">Wiki</a></li>
-                    <li><a href='publications.html'>Publications</a></li>
-                    <li><a href='people.html'>People</a></li>
-                    <li><a href='contact.html'>Contact</a></li>
-                    <li><a href='links.html'>Links</a></li>
-                    <li><a href='beta.html'>Beta</a></li>
+        <div id="navBar" class=".backBox">
+            <div id="stickyBar" data-spy="affix" data-offset-top="140">
+                <ul class="nav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight" target="_blank">Developers</a></li>
+                    <li><a href="documentation.html">Documentation</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight/wiki" target="_blank">Wiki</a></li>
+                    <li><a href="publications.html">Publications</a></li>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="links.html">Links</a></li>
+                    <li><a href="beta.html">Beta</a></li>
                 </ul>
-                <p id='modText' class='modNav'>
+                <p id="modText" class="modNav">
                     Last modified: 10/16/2014
                 </p>
             </div>
         </div>
 
-        <div id='mainContent'>
-            <p id='pageTitle'>Documentation</p>
-            <div id='pageContent'>
+        <div id="mainContent">
+            <p id="pageTitle">Documentation</p>
+            <div id="pageContent">
                 <h3>Getting Started</h3>
                 <p>
                     GRNsight is a web application for visualizing models of medium-scale gene regulatory networks (GRNs).  GRNsight was created to work with the input and output spreadsheets used by GRNmap, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  The following sections describe how to use GRNsight.
                 </p>
-                <div class='panel-group' id='accordian'> 
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <h5 class='panel-title' id='section1'>
-                                <a href='#section1Content' data-toggle='collapse'>
+                <div class="panel-group" id="accordian"> 
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5 class="panel-title" id="section1">
+                                <a href="#section1Content" data-toggle="collapse">
                                     1. Input Spreadsheet
                                 </a>
                             </h5>
                         </div> <!--panel-heading-->
-                        <div id='section1Content' class='panel-collapse collapse in'>
-                            <div class='panel-body'>
+                        <div id="section1Content" class="panel-collapse collapse in">
+                            <div class="panel-body">
                                 <ul>
                                     <li>
-                                        If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program GRNmap, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a class='showSection2'>Section 2</a> to learn how to load your file as an input spreadsheet.
+                                        If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program GRNmap, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a class="showSection2">Section 2</a> to learn how to load your file as an input spreadsheet.
                                     </li>
                                     <li>
-                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses. See <a class='showSection3'>Section 3</a> for details on how GRNsight displays the graph.
+                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses. See <a class="showSection3">Section 3</a> for details on how GRNsight displays the graph.
                                     </li>
                                     <li>
                                         If you want to create manually a new file to use with GRNsight, format the file in the following manner:
@@ -90,11 +87,11 @@
                                                     </li>
                                                     <li>
                                                         Each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell E6 means that FHL1 regulates FKH2.  The “1” in cell C3 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 50 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with regular arrowheads. The demonstration file "Demo #1: Unweighted GRN" corresponds to the adjacency matrix shown below.<br><br>
-                                                        <img src='images/Sample_network_worksheet.jpg' alt='network' height='290' width='832' /><br><br>
+                                                        <img src="images/Sample_network_worksheet.jpg" alt="network" height="290" width="832" /><br><br>
                                                     </li>
                                                     <li>
-                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file "Demo #2: Weighted GRN" corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class='showSection3'>Section 3</a> below.<br><br>
-                                                        <img src='images/Sample_network_optimized_weights_worksheet.jpg' alt='network_optimized_weights' height='289' width='1252' /><br><br>
+                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file "Demo #2: Weighted GRN" corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class="showSection3">Section 3</a> below.<br><br>
+                                                        <img src="images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" height="289" width="1252" /><br><br>
                                                     </li>
                                                     <li>Note that GRNsight is designed to visualized “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.</li>
                                                 </ul>
@@ -105,16 +102,16 @@
                             </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse in-->
                     </div> <!--panel panel-default-->
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <h4 class='panel-title' id='section2'>
-                                <a data-toggle='collapse' href='#section2Content'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title" id="section2">
+                                <a data-toggle="collapse" href="#section2Content">
                                     2. Loading the Input Spreadsheets
                                 </a>
                             </h4>
                         </div> <!--panel-heading-->
-                        <div id='section2Content' class='panel-collapse collapse'>
-                            <div class='panel-body'>
+                        <div id="section2Content" class="panel-collapse collapse">
+                            <div class="panel-body">
                                 <ul>
                                     <li>Once you have your appropriately formatted Excel Workbook file (*.xlsx), you can load it into GRNsight.</li>
                                     <li>Go to the GRNsight home page.  Select the menu option File > Open.  A dialog box will open for you to select your file.  Clicking the Open button will load your file.  Clicking the Cancel button will return you to the GRNsight home page.</li>
@@ -122,22 +119,22 @@
                                     <li>To load a different file, select the menu option File > Open again.</li>
                                     <li>To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been loaded.</li>
                                     <li>
-                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses.  See <a  class='showSection3' data-target='#section3Content'\>Section 3</a> for details on how GRNsight displays the graph.
+                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN will load a network graph with black edges and regular arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN will load a network graph with colored edges of varying thicknesses.  See <a  class="showSection3" data-target="#section3Content"\>Section 3</a> for details on how GRNsight displays the graph.
                                     </li>
                                 </ul>
                             </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse-->
                     </div> <!--panel panel-default-->
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <h4 id='section3' class='panel-title'>
-                                <a data-toggle='collapse' href='#section3Content'>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 id="section3" class="panel-title">
+                                <a data-toggle="collapse" href="#section3Content">
                                     3. How GRNsight Displays the Graph
                                 </a>
                             </h4>
                         </div> <!--panel-heading-->
-                        <div id='section3Content' class='panel-collapse collapse'>
-                            <div class='panel-body'>
+                        <div id="section3Content" class="panel-collapse collapse">
+                            <div class="panel-body">
                                 <ul>
                                     <li>GRNsight graphs are generated through D3.js, a JavaScript data visualization library.  We have modified the default implementation of D3 to include the following features:
                                         <ul>
@@ -157,7 +154,7 @@
                                                         The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their magnitude is near zero and that they have a weak influence on the target gene.
                                                     </li>
                                                     <li>
-                                                        For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
+                                                        For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1"s to indicated weighted edges.
                                                     </li>
                                                     <li>If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits.</li>
                                                 </ul>
@@ -165,16 +162,16 @@
                                             <li>Once you have selected the spreadsheet file to be loaded, GRNsight automatically lays out the positions of the nodes and edges based on certain Force Graph Parameters.
                                                 <ul>
                                                     <li>
-                                                        <span style='font-weight: bold'>Link Distance</span> determines the minimum distance maintained between nodes, i.e., it changes the length of the edges. Smaller numbers specify shorter lengths, larger numbers specify longer lengths. The range of values for this parameter are 1 to 1000 with a default value of 500.
+                                                        <span style="font-weight: bold">Link Distance</span> determines the minimum distance maintained between nodes, i.e., it changes the length of the edges. Smaller numbers specify shorter lengths, larger numbers specify longer lengths. The range of values for this parameter are 1 to 1000 with a default value of 500.
                                                     </li>
                                                     <li>
-                                                        <span style='font-weight: bold'>Charge</span> changes the strength of the force that causes the nodes to repel each other. A more negative value causes more repulsion between nodes. The range of values for this parameter are -2000 to 0 with a default value of -1000.
+                                                        <span style="font-weight: bold">Charge</span> changes the strength of the force that causes the nodes to repel each other. A more negative value causes more repulsion between nodes. The range of values for this parameter are -2000 to 0 with a default value of -1000.
                                                     </li>
                                                     <li>
-                                                        <span style='font-weight: bold'>Charge Distance</span> changes the size of the charged area around a node. The larger the number, the larger the size of the charged area around a node that repels other nodes. The range of values for this parameter is 0 to 2000 with a default value of 1000.
+                                                        <span style="font-weight: bold">Charge Distance</span> changes the size of the charged area around a node. The larger the number, the larger the size of the charged area around a node that repels other nodes. The range of values for this parameter is 0 to 2000 with a default value of 1000.
                                                     </li>
                                                     <li>
-                                                        <span style='font-weight: bold'>Gravity</span> determines the strength of the force holding the nodes to the center of the graph. It varies from 0 (no force) to 1 (maximum force holding the nodes in the center). The default value of this parameter is 0.10.
+                                                        <span style="font-weight: bold">Gravity</span> determines the strength of the force holding the nodes to the center of the graph. It varies from 0 (no force) to 1 (maximum force holding the nodes in the center). The default value of this parameter is 0.10.
                                                     </li>
                                                     <li>You may change the values of each of the force graph parameters by moving the sliders back and forth.</li>
                                                     <li>
@@ -195,7 +192,7 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node's responsiveness to the Force Graph Parameters, double-click on the node.
+                                                You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node"s responsiveness to the Force Graph Parameters, double-click on the node.
                                             </li>
                                         </ul>
                                     </li>
@@ -208,40 +205,45 @@
                     </div> <!--panel panel-default-->
                 </div> <!--panel-group-->
                 <h3>Further Information</h3>
-                <p>For additional documentation, please see the <a href='https://github.com/dondi/GRNsight/wiki' target='_blank'>GRNsight Wiki</a>.</p>
+                <p>For additional documentation, please see the <a href="https://github.com/dondi/GRNsight/wiki" target="_blank">GRNsight Wiki</a>.</p>
             </div>
-            <div id='footer'>
-                <hr id='separate'>
-                <ul id='footerNav'>
-                    <li><a href='index.html'>Home</a></li>
-                    <li><a href='about.html'>About</a></li>
-                    <li><a href='news.html'>News</a></li>
-                    <li><a href='https://github.com/dondi/GRNsight' target="_blank">Developers</a></li>
-                    <li><a href='documentation.html'>Documentation</a></li>
-                    <li><a href='https://github.com/dondi/GRNsight/wiki' target="_blank">Wiki</a></li>
-                    <li><a href='publications.html'>Publications</a></li>
-                    <li><a href='people.html'>People</a></li>
-                    <li><a href='contact.html'>Contact</a></li>
-                    <li><a href='links.html'>Links</a></li>
-                    <li><a href='beta.html'>Beta</a></li>
+            <div id="footer">
+                <hr id="separate">
+                <ul id="footerNav">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight" target="_blank">Developers</a></li>
+                    <li><a href="documentation.html">Documentation</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight/wiki" target="_blank">Wiki</a></li>
+                    <li><a href="publications.html">Publications</a></li>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="links.html">Links</a></li>
+                    <li><a href="beta.html">Beta</a></li>
                 </ul>
-                <p id='CCLicense'>
+                <p id="CCLicense">
                     This web site is free and open to all users and there is no login requirement.
                     <br> 
-                    Web site content is available under the <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/' target='_blank'>Creative Commons Attribution Non-Commercial Share Alike</a>. GRNsight code is available under the open source <a href='http://opensource.org/licenses/BSD-3-Clause' target='_blank'>BSD license</a>.
+                    Web site content is available under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons Attribution Non-Commercial Share Alike</a>. GRNsight code is available under the open source <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank">BSD license</a>.
                 </p>
             </div>
         </div>
+        
         <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
 
-            ga('create', 'UA-54882218-1', 'auto');
-            ga('send', 'pageview');
-
+            ga("create", "UA-54882218-1", "auto");
+            ga("send", "pageview");
         </script>
+
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+                
     </body>
     
 </html>
