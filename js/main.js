@@ -3,7 +3,7 @@ $(function() {
     $(window).scroll(function() {
         // This prevents the side bar from staying stuck when the user has scrolled left. Also, when the user would zoom
         // in, the sidebar would stay stuck. This prevents that.
-        if( ($(window).scrollLeft() >= 30 && $(window).scrollTop() > 140) || ($(window).scrollTop() < 140 &&  $('#stickyBar').attr('class') != 'affix-top') ) {
+        if( ($(window).scrollLeft() >= 1 && $(window).scrollTop() > 140) || ($(window).scrollTop() < 140 &&  $('#stickyBar').attr('class') != 'affix-top') ) {
             $('#stickyBar').attr('class', 'affix-top');
         // Re-sticks the sidebar after being unstuck due to left scroll.
         } else if($(window).scrollTop() > 140 && $('#stickyBar').attr('class') != 'affix') {
