@@ -174,10 +174,18 @@ module.exports = function (app) {
   });
 
   app.get('/demo/unweighted', function (req, res) {
-    return processGRNmap("../test-files/Demo\ Files/dahlquist_wt-data_21-gene-sample-input_20140122.xlsx", res, app);
+    return processGRNmap("../test-files/Demo\ Files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
   });
 
   app.get('/demo/weighted', function (req, res) {
-    return processGRNmap("../test-files/Demo\ Files/dahlquist_wt-data_21-gene-_sample-output_20140122_est_out_1.xlsx", res, app);x
+    return processGRNmap("../test-files/Demo\ Files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
+  });
+
+  app.get('/demo/schadeInput', function (req, res) {
+    return processGRNmap("../test-files/Demo\ Files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+  });
+
+  app.get('/demo/schadeOutput', function (req, res) {
+    return processGRNmap("../test-files/Demo\ Files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
   });
 }

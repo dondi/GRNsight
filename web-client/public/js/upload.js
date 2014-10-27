@@ -89,11 +89,19 @@ $(function () {
 
   var reload = ["", ""];
   $("#unweighted").click(function (event) {
-    loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN");
+    loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN (21 genes, 50 edges)");
   });
 
   $("#weighted").click(function (event) {
-    loadDemo("/demo/weighted", "Demo #2: Weighted GRN");
+    loadDemo("/demo/weighted", "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)");
+  });
+
+  $("#schadeInput").click(function (event) {
+    loadDemo("/demo/schadeInput", "Demo #3: Unweighted GRN (21 genes, 31 edges)");
+  });
+
+  $("#schadeOutput").click(function (event) {
+    loadDemo("/demo/schadeOutput", "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)");
   });
 
   var loadDemo = function(url, name) {
