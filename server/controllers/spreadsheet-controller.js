@@ -13,6 +13,7 @@ var multiparty = require('multiparty'),
             errors: [],
             positiveWeights: [],
             negativeWeights: [],
+            sheetType: "unweighted",
           },
           currentLink,
           currentGene,
@@ -38,6 +39,7 @@ var multiparty = require('multiparty'),
           //We found a sheet with optimized weights, which is the ideal data source.
           //So we stop looking.
           currentSheet = sheet.worksheets[i];
+          network.sheetType = "weighted";
           break;
         }
       }

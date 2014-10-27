@@ -82,6 +82,10 @@ nav.navbar.navbar-default {
   width: 225px;
   margin-top: 5px;
 }
+#mouseOver {
+  margin-top: 10px;
+  text-align: center;
+}
 .dropdown-submenu {
   position: relative;
 }

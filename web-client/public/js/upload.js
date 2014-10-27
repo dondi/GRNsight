@@ -47,7 +47,7 @@ $(function () {
         resetSliderMenu: "#resetSlidersMenu",
         undoResetButton: "#undoReset",
         undoResetMenu: "#undoResetMenu"
-      }, network.networkType);
+      }, network.sheetType);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
       $("#upload").val(""); // De-select the bad file.

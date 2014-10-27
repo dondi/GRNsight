@@ -3,7 +3,7 @@
  *and http://bl.ocks.org/mbostock/950642
  *and http://bl.ocks.org/mbostock/1153292
  */
-  var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls) {
+  var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls, sheetType) {
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
     var width = $container.width(),
@@ -11,6 +11,12 @@
         nodeHeight = 30,
         gridWidth = 300,
         colorOptimal = true;
+
+    if(sheetType === "weighted") {
+      $('#mouseOver').html("Mouse over the edges to see the weight parameter values.");
+    } else {
+      $('#mouseOver').html("");
+    }
 
     // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
     if($("#formatOptimal").attr('class') === 'deselectedColoring') {
