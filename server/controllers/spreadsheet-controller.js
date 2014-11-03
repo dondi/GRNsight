@@ -7,8 +7,6 @@ var multiparty = require('multiparty'),
       var sheet,
           currentSheet,
           network = {
-            sourceGenes: [],
-            targetGenes: [],
             genes: [],
             links: [],
             errors: [],
@@ -16,8 +14,10 @@ var multiparty = require('multiparty'),
             negativeWeights: [],
             sheetType: "unweighted",
           },
+          searchIndex,
           currentLink,
           currentGene,
+          genesList = [];
           errorArray = [];
 
       try {
@@ -58,17 +58,21 @@ var multiparty = require('multiparty'),
         try {
           while(j < currentSheet.data[i].length) {
             if (i === 0) {
-              currentGene = {name: currentSheet.data[i][j].value};
-              //network.sourceGenes.push(currentGene);
+              // These genes are source genes
+              currentGene = {name: currentSheet.data[i][j].value.toUpperCase()};
+              genesList.push(currentGene.name.value);
               network.genes.push(currentGene);
               console.log("I AM A SOURCE GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
             } else if (j === 0) { 
-              currentGene = {name: currentSheet.data[i][j].value};
-              //network.targetGenes.push(currentGene);
-              network.genes.push(currentGene);
+              // These genes are target genes
+              currentGene = {name: currentSheet.data[i][j].value.toUpperCase()};
+              if(genesList.indexOf(currentGene.name.value) === -1) {
+                network.genes.push(currentGene);
+              }
               console.log("I AM A TARGET GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
             } else {
               if (currentSheet.data[i][j].value != 0) {
+                //currentLink = {source: currentSheet.data[0][j].value, target: currentSheet.data[i][0].value, value: currentSheet.data[i][j].value};
                 currentLink = {source: j - 1, target: i - 1, value: currentSheet.data[i][j].value};
                 if (currentLink.value > 0) {
                   currentLink.type = "arrowhead";
@@ -82,7 +86,7 @@ var multiparty = require('multiparty'),
                 network.links.push(currentLink);
                 console.log("I AM A LINK! I am " + JSON.stringify(currentLink) + " from column " + i + " and row " + j + ".");
               } else {
-                console.log("I have no value. From column " + i + " and row " + j + ", I am " + currentSheet.data[i][j].value);
+                //console.log("I have no value. From column " + i + " and row " + j + ", I am " + currentSheet.data[i][j].value);
               };
             };
             j++;
@@ -92,15 +96,7 @@ var multiparty = require('multiparty'),
           res.json(400, "An error occurred. I'll get back to you on what the specific error was.");
         }
       };
-      /*var source = network.sourceGenes.sort(),
-          target = network.targetGenes.sort(),
-          length = source.length > target.length ? source.length : target.length;
-
-      for (var i = 0; i < length; i++) {
-        //
-      }*/
-
-      console.log("done.");
+      
       res.json(network);
     };
 

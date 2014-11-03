@@ -105,7 +105,7 @@
                  return d.name.length * 20;
                })
                .attr("height", nodeHeight)
-               .call(drag);
+               .call(drag);         
 
     link.append("path")
         .attr("id", function(d) {
@@ -572,6 +572,8 @@
          */
 
         link.select("path").attr("d", function(d) {
+
+          //console.log("Target: " + d.target + " Source: " + d.source);
           
           if (d.target === d.source) {
             var x1 = d.source.x,
