@@ -7,8 +7,9 @@ var multiparty = require('multiparty'),
       var sheet,
           currentSheet,
           network = {
+            sourceGenes: [],
+            targetGenes: [],
             genes: [],
-            genePairs: [],
             links: [],
             errors: [],
             positiveWeights: [],
@@ -17,7 +18,6 @@ var multiparty = require('multiparty'),
           },
           currentLink,
           currentGene,
-          currentGenePair,
           errorArray = [];
 
       try {
@@ -26,94 +26,82 @@ var multiparty = require('multiparty'),
         return res.json(400, "Unable to read input. The file may be corrupt.");
       }
 
-      // For the time being, send the result in a form readable by people
-      //TODO: Optimize the result for D3
-      res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
-      //Look for the worksheet containing the network data
-      for (var i = 0; i < sheet.worksheets.length; i++) {
-        if (sheet.worksheets[i].name == "network") {
-          //Here we have found a sheet containing simple data. We keep looking
-          //in case there is also a sheet with optimized weights
-          currentSheet = sheet.worksheets[i];
-        } else if (sheet.worksheets[i].name == "network_optimized_weights") {
-          //We found a sheet with optimized weights, which is the ideal data source.
-          //So we stop looking.
-          currentSheet = sheet.worksheets[i];
-          network.sheetType = "weighted";
-          break;
+        // For the time being, send the result in a form readable by people
+        //TODO: Optimize the result for D3
+        res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+        //Look for the worksheet containing the network data
+        for (var i = 0; i < sheet.worksheets.length; i++) {
+          if (sheet.worksheets[i].name == "network") {
+            //Here we have found a sheet containing simple data. We keep looking
+            //in case there is also a sheet with optimized weights
+            currentSheet = sheet.worksheets[i];
+          } else if (sheet.worksheets[i].name == "network_optimized_weights") {
+            //We found a sheet with optimized weights, which is the ideal data source.
+            //So we stop looking.
+            currentSheet = sheet.worksheets[i];
+            network.sheetType = "weighted";
+            break;
+          }
         }
-      }
 
-      if(currentSheet === undefined) {
+      if (currentSheet === undefined) {
         // because no possible errors (currently) can occur before this, we'll just return the fatal error.
         // TO DO: Fix this.  
         return res.json(400, "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet. Please select another" + 
           " file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
           "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
       }
-      
-      for (var j = 1; j < currentSheet.data[0].length; j++) {
+
+      for (var i = 0, j = 1; i < currentSheet.data.length; i++) {
+        // i = column, j = row. At some point, we'll want to look through all 256 columns for random data.
+        // j = 1 so it skips the first line on the first column.
         try {
-          try {
-            currentGene = {name: currentSheet.data[0][j].value}
-            currentGenePair = {name: currentSheet.data[j][0].value}
-          } catch (err) { 
-            return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
-          }
-          network.genes.push(currentGene);
-          network.genePairs.push(currentGenePair);
-        } catch (err) {
-          network.errors.push(err.message);
-        }
-        for(var k = 1; k < currentSheet.data[j].length; k++) {
-          try {
-            if (currentSheet.data[j][k].value != 0) {
-              currentLink = {source: k - 1, target: j - 1, value: currentSheet.data[j][k].value};
-              if (currentLink.value > 0) {
-                currentLink.type = "arrowhead";
-                currentLink.stroke = "MediumVioletRed";
-                network.positiveWeights.push(currentLink.value);
+          while(j < currentSheet.data[i].length) {
+            if (i === 0) {
+              currentGene = {name: currentSheet.data[i][j].value};
+              //network.sourceGenes.push(currentGene);
+              network.genes.push(currentGene);
+              console.log("I AM A SOURCE GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
+            } else if (j === 0) { 
+              currentGene = {name: currentSheet.data[i][j].value};
+              //network.targetGenes.push(currentGene);
+              network.genes.push(currentGene);
+              console.log("I AM A TARGET GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
+            } else {
+              if (currentSheet.data[i][j].value != 0) {
+                currentLink = {source: j - 1, target: i - 1, value: currentSheet.data[i][j].value};
+                if (currentLink.value > 0) {
+                  currentLink.type = "arrowhead";
+                  currentLink.stroke = "MediumVioletRed";
+                  network.positiveWeights.push(currentLink.value);
+                } else {
+                  currentLink.type = "repressor";
+                  currentLink.stroke = "DarkTurquoise";
+                  network.negativeWeights.push(currentLink.value);
+                }
+                network.links.push(currentLink);
+                console.log("I AM A LINK! I am " + JSON.stringify(currentLink) + " from column " + i + " and row " + j + ".");
               } else {
-                currentLink.type = "repressor";
-                currentLink.stroke = "DarkTurquoise";
-                network.negativeWeights.push(currentLink.value);
-              }
-              network.links.push(currentLink);
-            }
-          } catch (err) {
-            network.errors.push(err.message);
-          }
+                console.log("I have no value. From column " + i + " and row " + j + ", I am " + currentSheet.data[i][j].value);
+              };
+            };
+            j++;
+          };
+          j = 0;
+        } catch (err) {
+          res.json(400, "An error occurred. I'll get back to you on what the specific error was.");
         }
-      }
+      };
+      /*var source = network.sourceGenes.sort(),
+          target = network.targetGenes.sort(),
+          length = source.length > target.length ? source.length : target.length;
 
-      var genesArray = [];
-      var genePairsArray = [];
-      for(var i = 0; i < network.genes.length; i++) {
-        genesArray[i] = network.genes[i].name;
-        genePairsArray[i] = network.genePairs[i].name;
-      }
-      genesArray.sort();
-      genePairsArray.sort();
+      for (var i = 0; i < length; i++) {
+        //
+      }*/
 
-      // Have these return true/false
-      var checkErrors = [
-        checkDuplicates, 
-        checkGenePairs, 
-        checkGeneLength
-      ];
-      for(var i = 0; i < checkErrors.length; i++) {
-        checkErrors[i](errorArray, genesArray, genePairsArray);
-      }
-
-      if(errorArray.length != 0) {
-        var errorString = "Your graph failed to load.<br /><br />";
-        for(var i = 0; i < errorArray.length; i++) {
-          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br /><br />";
-        }
-        return res.json(400, errorString);
-      } else {
-        return res.json(network);
-      }
+      console.log("done.");
+      res.json(network);
     };
 
     newError = function(possibleCause, suggestedFix) {
@@ -128,14 +116,6 @@ var multiparty = require('multiparty'),
         }
         if(genePairsArray[i] === genePairsArray[i+1]) {
           errorArray.push(new newError("There exists a duplicate for gene " + genePairsArray[i] + " along the side. Please note this may cause many genes to be shown as not matching. ", "Please remove the duplicate gene and submit again. "))
-        }
-      }
-    }
-
-    checkGenePairs = function(errorArray, genesArray, genePairsArray) {
-      for(var i = 0; i < genesArray.length; i++) {
-        if(genesArray[i] != genePairsArray[i]) {
-          errorArray.push(new newError("Genes " + genesArray[i] + " and " + genePairsArray[i] + " are not an exact match. ", "Make sure the names match and submit again. "));
         }
       }
     }
