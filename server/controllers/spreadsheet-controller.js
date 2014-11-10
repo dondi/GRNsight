@@ -18,7 +18,9 @@ var multiparty = require('multiparty'),
           currentGene,
           sourceGene,
           targetGene,
-          geneNumber = 0,
+          sourceGeneNumber,
+          targetGeneNumber,
+          test,
           genesList = [],
           errorArray = [];
 
@@ -54,35 +56,36 @@ var multiparty = require('multiparty'),
           "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
       }
 
-      for (var column = 0, row = 1; column < currentSheet.data.length; column++) {
-        // Genes found when column = 0 are targets. Genes found when row = 0 are source genes.
-        // At some point, we'll want to look through all 256 columns for random data.
-        // row = 1 so it skips the first line on the first column.
+      for (var row = 0, column = 1, geneNumber = 0; row < currentSheet.data.length; row++) {
+        // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
+        // At some point, we'll want to look through all 256 rows for random data.
+        // column = 1 so it skips the first line on the first row.
         try {
-          console.log("Moving to column " + column);
-          while(row < currentSheet.data[column].length) {
-            console.log("Movine to row " + row);
-            if (column === 0) {
+          while(column < currentSheet.data[row].length) {
+            if (row === 0) {
               // These genes are source genes
-              currentGene = {name: currentSheet.data[column][row].value.toUpperCase(), number: geneNumber};
-              genesList.push(currentGene.name.value);
+              currentGene = {name: currentSheet.data[row][column].value.toUpperCase(), number: geneNumber};
+              genesList.push(String(currentGene.name));
               network.genes.push(currentGene);
-              console.log("I AM TARGET GENE " + geneNumber + "! I am " + currentGene.name + " from column " + column + " and row " + row + ".");
+              //console.log("I AM SOURCE GENE " + geneNumber + "! I am " + currentGene.name + " from row " + row + " and column " + column + ".");
               geneNumber++;
-            } else if (row === 0) { 
+            } else if (column === 0) { 
               // These genes are target genes
-              currentGene = {name: currentSheet.data[column][row].value.toUpperCase(), number: geneNumber};
-              if(genesList.indexOf(currentGene.name.value) === -1) {
+              currentGene = {name: currentSheet.data[row][column].value.toUpperCase(), number: geneNumber};
+              if(genesList.indexOf(String(currentGene.name)) === -1) {
+                genesList.push(String(currentGene.name));
                 network.genes.push(currentGene);
-                console.log("I AM SOURCE GENE " + geneNumber + "! I am " + currentGene.name + " from column " + column + " and row " + row + ".");
+                //console.log("I AM TARGET GENE " + geneNumber + "! I am " + currentGene.name + " from row " + row + " and column " + column + ".");
                 geneNumber++;
               }
             } else {
-              if (currentSheet.data[column][row].value != 0) {
-                sourceGene = currentSheet.data[column][0].value;
-                targetGene = currentSheet.data[0][row].value;
-                currentLink = {source: row - 1, target: column - 1, value: currentSheet.data[column][row].value};
-                console.log("Value: " + currentLink.value + ". My source is " + sourceGene + "(" + column + ") and my target is " + targetGene + "(" + row + "). My source number is " + currentLink.source + " and my target number is " + currentLink.target + ".");
+              if (currentSheet.data[row][column].value != 0) {
+                sourceGene = currentSheet.data[0][column].value.toUpperCase();
+                sourceGeneNumber = genesList.indexOf(sourceGene);
+                targetGene = currentSheet.data[row][0].value.toUpperCase();
+                targetGeneNumber = genesList.indexOf(targetGene);
+                currentLink = {source: column - 1, target: row - 1, value: currentSheet.data[row][column].value};
+                console.log("Value: " + currentLink.value + ". My source is " + sourceGene + "(" + sourceGeneNumber + ") and my target is " + targetGene + "(" + targetGeneNumber + "). My source number is " + currentLink.source + " and my target number is " + currentLink.target + ".");
                 if (currentLink.value > 0) {
                   currentLink.type = "arrowhead";
                   currentLink.stroke = "MediumVioletRed";
@@ -93,14 +96,14 @@ var multiparty = require('multiparty'),
                   network.negativeWeights.push(currentLink.value);
                 }
                 network.links.push(currentLink);
-                //console.log("I AM A LINK! I am " + JSON.stringify(currentLink) + " from column " + i + " and row " + j + ".");
+                //console.log("I AM A LINK! I am " + JSON.stringify(currentLink) + " from row " + i + " and column " + j + ".");
               } else {
-                //console.log("I have no value. From column " + i + " and row " + j + ", I am " + currentSheet.data[i][j].value);
+                //console.log("I have no value. From row " + i + " and column " + j + ", I am " + currentSheet.data[i][j].value);
               };
             };
-            row++;
+            column++;
           };
-          row = 0;
+          column = 0;
         } catch (err) {
           res.json(400, "An error occurred. I'll get back to you on what the specific error was.");
         }
