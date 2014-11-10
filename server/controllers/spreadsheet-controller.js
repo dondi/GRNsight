@@ -63,15 +63,15 @@ var multiparty = require('multiparty'),
         try {
           while(column < currentSheet.data[row].length) {
             if (row === 0) {
-              // These genes are source genes
-              currentGene = {name: currentSheet.data[row][column].value.toUpperCase(), number: geneNumber};
+              // These genes are the source genes
+              currentGene = {name: currentSheet.data[row][column].value.toUpperCase()};
               genesList.push(String(currentGene.name));
               network.genes.push(currentGene);
               //console.log("I AM SOURCE GENE " + geneNumber + "! I am " + currentGene.name + " from row " + row + " and column " + column + ".");
               geneNumber++;
             } else if (column === 0) { 
-              // These genes are target genes
-              currentGene = {name: currentSheet.data[row][column].value.toUpperCase(), number: geneNumber};
+              // These genes are the target genes
+              currentGene = {name: currentSheet.data[row][column].value.toUpperCase()};
               if(genesList.indexOf(String(currentGene.name)) === -1) {
                 genesList.push(String(currentGene.name));
                 network.genes.push(currentGene);
@@ -84,8 +84,8 @@ var multiparty = require('multiparty'),
                 sourceGeneNumber = genesList.indexOf(sourceGene);
                 targetGene = currentSheet.data[row][0].value.toUpperCase();
                 targetGeneNumber = genesList.indexOf(targetGene);
-                currentLink = {source: column - 1, target: row - 1, value: currentSheet.data[row][column].value};
-                console.log("Value: " + currentLink.value + ". My source is " + sourceGene + "(" + sourceGeneNumber + ") and my target is " + targetGene + "(" + targetGeneNumber + "). My source number is " + currentLink.source + " and my target number is " + currentLink.target + ".");
+                currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column].value};
+                console.log("Value: " + currentLink.value + ". My source is " + sourceGene + " and my target is " + targetGene + ". My source number is " + currentLink.source + " and my target number is " + currentLink.target + ".");
                 if (currentLink.value > 0) {
                   currentLink.type = "arrowhead";
                   currentLink.stroke = "MediumVioletRed";
