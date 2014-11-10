@@ -14,7 +14,6 @@ var multiparty = require('multiparty'),
             negativeWeights: [],
             sheetType: "unweighted",
           },
-          searchIndex,
           currentLink,
           currentGene,
           genesList = [];
@@ -62,14 +61,14 @@ var multiparty = require('multiparty'),
               currentGene = {name: currentSheet.data[i][j].value.toUpperCase()};
               genesList.push(currentGene.name.value);
               network.genes.push(currentGene);
-              console.log("I AM A SOURCE GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
+            //console.log("I AM A SOURCE GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
             } else if (j === 0) { 
               // These genes are target genes
               currentGene = {name: currentSheet.data[i][j].value.toUpperCase()};
               if(genesList.indexOf(currentGene.name.value) === -1) {
                 network.genes.push(currentGene);
+                //console.log("I AM A TARGET GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
               }
-              console.log("I AM A TARGET GENE! I am " + currentGene.name + " from column " + i + " and row " + j + ".");
             } else {
               if (currentSheet.data[i][j].value != 0) {
                 //currentLink = {source: currentSheet.data[0][j].value, target: currentSheet.data[i][0].value, value: currentSheet.data[i][j].value};
@@ -84,7 +83,7 @@ var multiparty = require('multiparty'),
                   network.negativeWeights.push(currentLink.value);
                 }
                 network.links.push(currentLink);
-                console.log("I AM A LINK! I am " + JSON.stringify(currentLink) + " from column " + i + " and row " + j + ".");
+                //console.log("I AM A LINK! I am " + JSON.stringify(currentLink) + " from column " + i + " and row " + j + ".");
               } else {
                 //console.log("I have no value. From column " + i + " and row " + j + ", I am " + currentSheet.data[i][j].value);
               };
@@ -96,7 +95,7 @@ var multiparty = require('multiparty'),
           res.json(400, "An error occurred. I'll get back to you on what the specific error was.");
         }
       };
-      
+
       res.json(network);
     };
 
