@@ -8,7 +8,6 @@ var multiparty = require('multiparty'),
           currentSheet,
           network = {
             genes: [],
-            genePairs: [],
             links: [],
             errors: [],
             positiveWeights: [],
@@ -17,7 +16,13 @@ var multiparty = require('multiparty'),
           },
           currentLink,
           currentGene,
-          currentGenePair,
+          sourceGene,
+          targetGene,
+          sourceGeneNumber,
+          targetGeneNumber,
+          genesList = [],
+          sourceGenes = [],
+          targetGenes = [],
           errorArray = [];
 
       try {
@@ -26,89 +31,99 @@ var multiparty = require('multiparty'),
         return res.json(400, "Unable to read input. The file may be corrupt.");
       }
 
-      // For the time being, send the result in a form readable by people
-      //TODO: Optimize the result for D3
-      res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
-      //Look for the worksheet containing the network data
-      for (var i = 0; i < sheet.worksheets.length; i++) {
-        if (sheet.worksheets[i].name == "network") {
-          //Here we have found a sheet containing simple data. We keep looking
-          //in case there is also a sheet with optimized weights
-          currentSheet = sheet.worksheets[i];
-        } else if (sheet.worksheets[i].name == "network_optimized_weights") {
-          //We found a sheet with optimized weights, which is the ideal data source.
-          //So we stop looking.
-          currentSheet = sheet.worksheets[i];
-          network.sheetType = "weighted";
-          break;
+        // For the time being, send the result in a form readable by people
+        //TODO: Optimize the result for D3
+        res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+        //Look for the worksheet containing the network data
+        for (var i = 0; i < sheet.worksheets.length; i++) {
+          if (sheet.worksheets[i].name == "network") {
+            //Here we have found a sheet containing simple data. We keep looking
+            //in case there is also a sheet with optimized weights
+            currentSheet = sheet.worksheets[i];
+          } else if (sheet.worksheets[i].name == "network_optimized_weights") {
+            //We found a sheet with optimized weights, which is the ideal data source.
+            //So we stop looking.
+            currentSheet = sheet.worksheets[i];
+            network.sheetType = "weighted";
+            break;
+          }
         }
-      }
 
-      if(currentSheet === undefined) {
-        // because no possible errors (currently) can occur before this, we'll just return the fatal error.
-        // TO DO: Fix this.  
+      if (currentSheet === undefined) {
         return res.json(400, "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet. Please select another" + 
           " file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
           "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
       }
-      
-      for (var j = 1; j < currentSheet.data[0].length; j++) {
+
+      for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
+        // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
+        // At some point, we'll want to look through all 256 rows for random data.
+        // column = 1 so it skips the first line on the first row.
         try {
-          try {
-            currentGene = {name: currentSheet.data[0][j].value}
-            currentGenePair = {name: currentSheet.data[j][0].value}
-          } catch (err) { 
-            return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
-          }
-          network.genes.push(currentGene);
-          network.genePairs.push(currentGenePair);
-        } catch (err) {
-          network.errors.push(err.message);
-        }
-        for(var k = 1; k < currentSheet.data[j].length; k++) {
-          try {
-            if (currentSheet.data[j][k].value != 0) {
-              currentLink = {source: k - 1, target: j - 1, value: currentSheet.data[j][k].value};
-              if (currentLink.value > 0) {
-                currentLink.type = "arrowhead";
-                currentLink.stroke = "MediumVioletRed";
-                network.positiveWeights.push(currentLink.value);
-              } else {
-                currentLink.type = "repressor";
-                currentLink.stroke = "DarkTurquoise";
-                network.negativeWeights.push(currentLink.value);
+          while(column < currentSheet.data[row].length) {
+            if (row === 0) {
+              // These genes are the source genes
+              try {
+                currentGene = {name: currentSheet.data[row][column].value};
+                sourceGenes.push(String(currentGene.name.toUpperCase())); // For use in error checking later.
+                genesList.push(String(currentGene.name.toUpperCase()));
+                network.genes.push(currentGene);
+              } catch (err) {
+                return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
               }
-              network.links.push(currentLink);
-            }
-          } catch (err) {
-            network.errors.push(err.message);
-          }
+            } else if (column === 0) { 
+              // These genes are the target genes
+              try {
+                currentGene = {name: currentSheet.data[row][column].value};
+                targetGenes.push(String(currentGene.name.toUpperCase()));
+                if(genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
+                  genesList.push(String(currentGene.name));
+                  network.genes.push(currentGene);
+                }
+              } catch (err) {
+                return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
+              };
+            } else {
+              try {
+                if (currentSheet.data[row][column].value != 0) {
+                  sourceGene = currentSheet.data[0][column].value.toUpperCase();
+                  sourceGeneNumber = genesList.indexOf(sourceGene);
+                  targetGene = currentSheet.data[row][0].value.toUpperCase();
+                  targetGeneNumber = genesList.indexOf(targetGene);
+                  currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column].value};
+                  if (currentLink.value > 0) {
+                    currentLink.type = "arrowhead";
+                    currentLink.stroke = "MediumVioletRed";
+                    network.positiveWeights.push(currentLink.value);
+                  } else {
+                    currentLink.type = "repressor";
+                    currentLink.stroke = "DarkTurquoise";
+                    network.negativeWeights.push(currentLink.value);
+                  }
+                  network.links.push(currentLink);
+                };
+              } catch (err) {
+                network.errors.push(err.message);
+              };
+            };
+            column++;
+          };
+          column = 0;
+        } catch (err) {
+          res.json(400, "An unexpected error occurred.");
         }
-      }
+      };
 
-      var genesArray = [];
-      var genePairsArray = [];
-      for(var i = 0; i < network.genes.length; i++) {
-        genesArray[i] = network.genes[i].name;
-        genePairsArray[i] = network.genePairs[i].name;
-      }
-      genesArray.sort();
-      genePairsArray.sort();
+      sourceGenes.sort();
+      targetGenes.sort();
 
-      // Have these return true/false
-      var checkErrors = [
-        checkDuplicates, 
-        checkGenePairs, 
-        checkGeneLength
-      ];
-      for(var i = 0; i < checkErrors.length; i++) {
-        checkErrors[i](errorArray, genesArray, genePairsArray);
-      }
+      checkDuplicates(errorArray, sourceGenes, targetGenes);
+      checkGeneLength(errorArray, genesList);
 
       if(errorArray.length != 0) {
-        var errorString = "Your graph failed to load.<br /><br />";
+        var errorString = "Your graph failed to load.<br><br>";
         for(var i = 0; i < errorArray.length; i++) {
-          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br /><br />";
+          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
         }
         return res.json(400, errorString);
       } else {
@@ -121,32 +136,23 @@ var multiparty = require('multiparty'),
       this.suggestedFix = suggestedFix;
     }
 
-    checkDuplicates = function(errorArray, genesArray, genePairsArray) {
-      for(var i = 0; i < genesArray.length - 1; i++) {
-        if(genesArray[i] === genesArray[i+1]) {
-          errorArray.push(new newError("There exists a duplicate for gene " + genesArray[i] + " along the top. Please note this may cause many genes to be shown as not matching. ", "Please remove the duplicate gene and submit again. "))
+    checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+      for(var i = 0; i < sourceGenes.length - 1; i++) {
+        if(sourceGenes[i] === sourceGenes[i + 1]) {
+          errorArray.push(new newError("There exist a duplicate for source gene " + sourceGenes[i] + ".", "Please remove the duplicate gene and submit again."));
         }
-        if(genePairsArray[i] === genePairsArray[i+1]) {
-          errorArray.push(new newError("There exists a duplicate for gene " + genePairsArray[i] + " along the side. Please note this may cause many genes to be shown as not matching. ", "Please remove the duplicate gene and submit again. "))
+      }
+      for(var j = 0; j < targetGenes.length - 1; j++) {
+        if(targetGenes[j] === targetGenes[j + 1]) {
+          errorArray.push(new newError("There exist a duplicate for target gene " + targetGenes[i] + ".", "Please remove the duplicate gene and submit again."));
         }
       }
     }
 
-    checkGenePairs = function(errorArray, genesArray, genePairsArray) {
-      for(var i = 0; i < genesArray.length; i++) {
-        if(genesArray[i] != genePairsArray[i]) {
-          errorArray.push(new newError("Genes " + genesArray[i] + " and " + genePairsArray[i] + " are not an exact match. ", "Make sure the names match and submit again. "));
-        }
-      }
-    }
-
-    checkGeneLength = function(errorArray, genesArray, genePairsArray) {
-      for(var i = 0; i < genesArray.length; i++) {
-        if(genesArray[i].length > 12) {
-          errorArray.push(new newError("Gene " + genesArray[i] + " is more than 12 characters in length. ", "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again. "));
-        }
-        if(genePairsArray[i].length > 12) {
-          errorArray.push(new newError("Gene " + genePairsArray[i] + " is more than 12 characters in length. ", "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again. "));
+    checkGeneLength = function(errorArray, genesList) {
+      for(var i = 0; i < genesList.length; i++) {
+        if(genesList[i].length > 12) {
+          errorArray.push(new newError("Gene " + genesList[i] + " is more than 12 characters in length. ", "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again. "));
         }
       }
     }
@@ -167,8 +173,9 @@ module.exports = function (app) {
       }
 
       if (path.extname(input) !== ".xlsx") {
-        return res.json(400, "Invalid input file. Please select an Excel Workbook (*.xlsx) file." +
-          "<br><br>Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight.");
+        return res.json(400, "This file cannot be loaded because:<br><br> The file is not inf a format GRnsight can read." +
+          "<br><br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+          " able to be read by GRNsight.");
       }
 
       return processGRNmap(input, res, app);
