@@ -110,7 +110,9 @@ $(function () {
     $("#upload").val("");
   };
 
-  $(".deselectedColoring").click(colorPreferences);
+  $(".deselectedColoring").click(function (event) {
+    colorPreferences(event);
+  });
 
   var colorPreferences = function(event) {
     var deselectedID = "#" + $(".deselectedColoring").attr("id");
