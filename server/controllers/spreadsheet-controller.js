@@ -50,7 +50,7 @@ var multiparty = require('multiparty'),
         }
 
       if (currentSheet === undefined) {
-        return res.json(400, "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet. Please select another" + 
+        return res.json(400, "This file cannot be loaded because:<br><br>This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.<br> Please select another" + 
           " file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
           "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
       }
@@ -174,7 +174,7 @@ module.exports = function (app) {
 
       if (path.extname(input) !== ".xlsx") {
         return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRnsight can read." +
-          "<br><br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+          "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
           " able to be read by GRNsight.");
       }
 
