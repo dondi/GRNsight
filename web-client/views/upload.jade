@@ -110,15 +110,20 @@ html
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Demo
               ul(class='dropdown-menu' role='menu')
                 li
-                  a(href='#' id='unweighted') Demo #1: Unweighted GRN
+                  a(href='#' id='unweighted') Demo #1: Unweighted GRN (21 genes, 50 edges)
                 li
-                  a(href='#' id='weighted') Demo #2: Weighted GRN
+                  a(href='#' id='weighted') Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)
+                li
+                  a(href='#' id='schadeInput') Demo #3: Unweighted GRN (21 genes, 31 edges)
+                li
+                  a(href='#' id='schadeOutput') Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)
             li
               a(href='#' id='fileName')
 
     div(class='container')
       div(class='grnsight-container')
     div(class='sliders')
+        //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         form
           label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000): 
           span(id='linkDistVal' class='forceVal') 500
@@ -138,9 +143,7 @@ html
         form
           input(id='resetSliders' type='button' class='btn btn-default' value='Reset Force Graph Parameters') 
           input(id='undoReset' type='button' class='btn btn-default' value='Undo Reset' disabled)
-        //form
-          //input(id='lockNodes', type='checkbox', value='lockNodes' disabled)
-          //label(for='lockNodes', style='font-weight:normal') Lock Nodes
+        p(id='mouseOver')
     div(id='myModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog modal-sm')
         div(class='modal-content')

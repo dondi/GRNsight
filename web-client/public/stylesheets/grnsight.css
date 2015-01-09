@@ -1,3 +1,6 @@
+body {
+  min-width: 1326px;
+}
 .submission {
   margin-left: 10px;
 }
@@ -5,12 +8,14 @@
   font-weight: normal;
 }
 .grnsight-container {
-  position: fixed;
+  position: absolute;
   left: 250px;
-  top: 52px;
+  top: 53px;
   right: 5px;
   bottom: 5px;
-  border: 1px solid #9a9a9a;
+  width: 1100px;
+  height: 700px;
+  border: 2px solid #9a9a9a;
 }
 .sliders {
   width: 225px;
@@ -25,6 +30,7 @@ form span {
 }
 .navbar {
   top: 1px;
+  width: 1350px;
 }
 #upload {
   display: none;
@@ -75,6 +81,10 @@ nav.navbar.navbar-default {
 #undoReset {
   width: 225px;
   margin-top: 5px;
+}
+#mouseOver {
+  margin-top: 10px;
+  text-align: center;
 }
 .dropdown-submenu {
   position: relative;

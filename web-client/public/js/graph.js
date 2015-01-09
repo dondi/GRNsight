@@ -3,7 +3,7 @@
  *and http://bl.ocks.org/mbostock/950642
  *and http://bl.ocks.org/mbostock/1153292
  */
-  var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls) {
+  var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls, sheetType) {
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
     var width = $container.width(),
@@ -11,6 +11,12 @@
         nodeHeight = 30,
         gridWidth = 300,
         colorOptimal = true;
+
+    if(sheetType === "weighted") {
+      $('#mouseOver').html("Mouse over the edges to see the weight parameter values.");
+    } else {
+      $('#mouseOver').html("");
+    }
 
     // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
     if($("#formatOptimal").attr('class') === 'deselectedColoring') {
@@ -54,10 +60,6 @@
       normalizedScale = d3.scale.linear()
                                 .domain(d3.extent(allWeights));
     }
-                       
-    //snapToGrid = function(val, gridSize) {
-    //  return gridSize * Math.round(val/gridSize);
-    //};
     
     var force = d3.layout.force()
         .size([width, height])
@@ -77,59 +79,6 @@
         .attr("height", height);
         
     var defs = svg.append("defs");
-          
-//Thanks to http://www.benknowscode.com/2013/09/using-svg-filters-to-create-shape-outlines.html
-// for the outline code  
-    /*var outline = defs.append("filter")
-                    .attr("id", "outline");
-
-    outline.append("feMorphology")
-            .attr("result", "offset")
-            .attr("in", "SourceGraphic")
-            .attr("operator", "dilate")
-            .attr("radius", "2");
-
-    outline.append("feColorMatrix")
-            .attr("result", "drop")
-            .attr("in", "offset")
-            .attr("type", "matrix")
-            .attr("values", function () {
-              return "1 1 1 1 1"
-                   + "\n" + "1 1 1 1 1"
-                   + "\n" + "1 1 1 1 1"
-                   + "\n" + "0 0 0 1 0";
-            });
-    
-    outline.append("feBlend")
-          .attr("in", "SourceGraphic")
-          .attr("in2", "drop")
-          .attr("mode", "normal");
-          
-    var highlight = defs.append("filter")
-                      .attr("id", "highlight");
-                      
-    highlight.append("feMorphology")
-            .attr("result", "offset")
-            .attr("in", "SourceGraphic")
-            .attr("operator", "dilate")
-            .attr("radius", "2");
-
-    highlight.append("feColorMatrix")
-            .attr("result", "drop")
-            .attr("in", "offset")
-            .attr("type", "matrix")
-            .attr("values", function () {
-              return "1 1 1 1 1"
-                   + "\n" + "1 1 0 0 0"
-                   + "\n" + "0 0 0 0 0"
-                   + "\n" + "0 0 0 1 0";
-            });
-    
-    highlight.append("feBlend")
-          .attr("in", "SourceGraphic")
-          .attr("in2", "drop")
-          .attr("mode", "normal");*/
-
   
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
@@ -298,7 +247,7 @@
               // Arrowheads
               defs.append("marker")
                 .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-                .attr("viewBox", "0 0 12 12")
+                .attr("viewBox", "0 0 15 15")
                 .attr("preserveAspectRatio", "xMinYMin meet")
                 .attr('refX', function () {
                   // Individual offsets for each possible stroke width
@@ -329,10 +278,10 @@
                 })
                 .attr("markerUnits", "userSpaceOnUse")
                 .attr("markerWidth", function() {
-                  return 12 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
+                  return 12 + ((d.strokeWidth < 7) ? d.strokeWidth*2.25 : d.strokeWidth*3);
                 })
                 .attr("markerHeight", function() {
-                  return 5 + ((d.strokeWidth < 7) ? d.strokeWidth*1.5 : d.strokeWidth*2.25);
+                  return 5 + ((d.strokeWidth < 7) ? d.strokeWidth*2.25 : d.strokeWidth*3);
                 })
                 .attr('orient', function () {
                   return (x1 === x2 && y1 === y2) ?
@@ -358,69 +307,82 @@
           }
 		      return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
 		    })
-		    //.attr("filter", "url(#outline)")
         .append("svg:title")
           .text(function (d) {
             return d.value.toPrecision(4);
           });
 
     $(".link").tooltip({
-      track: true
+        track: true
     });
 
-    /*Big thanks to the following for the smart edges
-     *https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
+    /* Big thanks to the following for the smart edges
+     * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
      */
-    function moveTo(d) {
+    var moveTo = function (d) {
+            var node = d3.select("#node" + d.source.index),
+                w = parseFloat(node.attr("width")),
+                h = parseFloat(node.attr("height"));
 
-      var node = d3.select("#node" + d.source.index);
-          w = parseFloat(node.attr("width")),
-          h = parseFloat(node.attr("height"));
-          
-      d.source.newX = d.source.x + (w/2);
-      d.source.newY = d.source.y + (h/2);
-          
-      return "M" + d.source.newX + "," + d.source.newY + " ";
-    }
-    
-    function lineTo(d) {
-      var node = d3.select("#node" + d.target.index),
-          w = parseFloat(node.attr("width")),
-          h = parseFloat(node.attr("height"));
-          
-      var x1 = d.source.x,
-          y1 = d.source.y,
-          x2 = d.target.x,
-          y2 = d.target.y,
-          dx,
-          dy,
-          dr,
+            d.source.newX = d.source.x + (w/2);
+            d.source.newY = d.source.y + (h/2);
 
-          // Defaults for normal edge.
-          drx,
-          dry,
-          xRotation = 0, // degrees
-          largeArc = 0 // 1 or 0
-          sweep = 0, //1 or 0
-          offset = 0;
+            return "M" + d.source.newX + "," + d.source.newY + " ";
+        },
+
+        lineTo = function (d) {
+            var node = d3.select("#node" + d.target.index),
+                w = +node.attr("width"),
+                h = +node.attr("height"),
+                x1 = d.source.x,
+                y1 = d.source.y,
+                x2 = d.target.x,
+                y2 = d.target.y;
           
-      d.target.centerX = d.target.x + (w/2);
-      d.target.centerY = d.target.y + (h/2);
-      
-      //This function calculates the newX and newY
-      smartPathEnd(d, w, h);
-      dx = d.target.newX - x1;
-      dy = d.target.newY - y1;
-      dr = Math.sqrt(dx * dx + dy * dy);
-      drx = dr,
-      dry = dr;
-      
-      if ( ((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) || ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))){
-        sweep = 1;
-      }
-      
-      return "A" + drx + "," + dry + "," + xRotation + "," + largeArc + "," + sweep + "," + d.target.newX  + "," + d.target.newY;
-    }
+            d.target.centerX = d.target.x + (w / 2);
+            d.target.centerY = d.target.y + (h / 2);
+
+            // This function calculates the newX and newY.
+            smartPathEnd(d, w, h);
+            x1 = d.source.newX;
+            y1 = d.source.newY;
+            x2 = d.target.newX;
+            y2 = d.target.newY;
+
+            // Unit vectors.
+            var ux = x2 - x1,
+                uy = y2 - y1,
+                umagnitude = Math.sqrt(ux * ux + uy * uy),
+                vx = -uy, // Perpendicular vector.
+                vy = ux,
+                vmagnitude = Math.sqrt(vx * vx + vy * vy);
+
+            ux /= umagnitude;
+            uy /= umagnitude;
+            vx /= vmagnitude;
+            vy /= vmagnitude;
+
+            // Check for vector direction.
+            if (((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) ||
+                    ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
+                vx = -vx; vy = -vy;
+            }
+
+            var inlineOffset = umagnitude / 4,
+                orthoOffset = inlineOffset,
+                cp1x = x1 + inlineOffset * ux + vx * orthoOffset,
+                cp1y = y1 + inlineOffset * uy + vy * orthoOffset,
+                cp2x = x2 - inlineOffset * ux + vx * orthoOffset,
+                cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
+
+            cp1x = Math.min(Math.max(0, cp1x), width);
+            cp1y = Math.min(Math.max(0, cp1y), height);
+            cp2x = Math.min(Math.max(0, cp2x), width);
+            cp2y = Math.min(Math.max(0, cp2y), height);
+            return "C" + cp1x + " " + cp1y + ", " +
+                cp2x + " " + cp2y + ", " +
+                x2 + " " + y2;
+        };
     
     function smartPathEnd(d, w, h) {
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
@@ -582,9 +544,7 @@
       .style("fill", "black")
       .text(function(d) {return d.name;})
       .on("dblclick", nodeTextDblclick);
-    
-    //$(node).draggable({ grid: [100, 30]});
-           
+               
     $('.node').css({
       'cursor': 'move',
       'fill': 'white',
@@ -597,12 +557,6 @@
       'fill': 'none',
       'stroke-width': '1.5px'
     });
-
-    /*$('.highlight').css({
-      'stroke': '#000',
-      'fill': 'none',
-      'stroke-width': '1.5px'
-    })*/
 
     function tick() {
       
@@ -704,12 +658,6 @@
       } catch(e) {
         console.warn("Detected invalid node. Moving on to next node.");
       }
-
-      //Rudimentary manual redraw. This should fix the Firefox bug where the edges don't show up.
-      //if(runNum === 0) {
-      //  runNum++;
-      //  drawGraph(runNum, nodes, links, positiveWeights, negativeWeights, controls);
-      //}
     }
 
     function normalize(d) {
@@ -719,24 +667,9 @@
     function dragstart(d) {
       var node = d3.select(this);
       node.classed("fixed", d.fixed = true);
-      /*link.select("path").attr("filter", function (d) {
-        if(d.source.name == node.datum().name || d.target.name == node.datum().name) {
-          return "url(#highlight)";
-        } else {
-          return "url(#outline)";
-        }
-      });*/
+
     }
     
-    //Can't get the grid to stick for some reason
-    //function dragend (d) {
-    //  d3.select(this)
-    //    .attr("x", d.x = snapToGrid(d.x, 20))
-    //    .attr("y", d.y = snapToGrid(d.y, 20))
-    //    .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
-      //link.select("path").attr("filter", "url(#outline)");
-    //}
-
     function updateLinkDist(event) {
         var toChange = $(this).val();
         force.linkDistance( toChange );
@@ -820,15 +753,6 @@
       }
     }
 
-    /*function lockNodes(event) {
-      if( $("#lockNodes").prop('checked') ) {
-        force.stop();
-        $('.node').selectAll()
-      } else {
-        force.start();
-      }
-    }*/
-
     // Set up our controllers if any.
     if (controls) {
         $(controls.linkSlider).on('input', updateLinkDist);
@@ -841,7 +765,6 @@
         $(controls.resetSliderMenu).unbind('click').click(defaultSliders);
         $(controls.undoResetButton).unbind('click').click(undoReset);
         $(controls.undoResetMenu).unbind('click').click(undoReset);
-        //$(controls.lockNodes).unbind('click').click(lockNodes);
     }
 
     var lockCheck = $( "#lockSliders" ).prop( 'checked' );
@@ -849,7 +772,6 @@
 
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
-    $( "#lockNodes").prop( 'disabled', false);
     $(".startDisabled").removeClass("disabled");
 
 }
