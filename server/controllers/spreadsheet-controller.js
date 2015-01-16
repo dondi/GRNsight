@@ -11,8 +11,6 @@ var processGRNmap = function (path, res, app) {
     return res.json(400, "Unable to read input. The file may be corrupt.");
   }
 
-  console.log(sheet);
-
   // For the time being, send the result in a form readable by people
   //TODO: Optimize the result for D3
   res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
