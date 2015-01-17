@@ -55,9 +55,10 @@ var parseSheet = function(sheet, res) {
   }
 
   if (currentSheet === undefined) {
-    return res.json(400, "This file cannot be loaded because:<br><br>This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.<br> Please select another" + 
-      " file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
-      "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information.");
+    network.errors.push(new newError("This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
+      "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
+      "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."))
+    return res.json(400, network);
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
@@ -74,7 +75,8 @@ var parseSheet = function(sheet, res) {
             genesList.push(String(currentGene.name.toUpperCase()));
             network.genes.push(currentGene);
           } catch (err) {
-            return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
+            network.errors.push(new newError("One of your gene names appears to be corrupt.", "Please fix the error and try uploading again."));
+            return res.json(400, network);
           }
         } else if (column === 0) { 
           // These genes are the target genes
@@ -86,7 +88,8 @@ var parseSheet = function(sheet, res) {
               network.genes.push(currentGene);
             }
           } catch (err) {
-            return res.json(400, "One of your gene names appears to be corrupt. Please fix the error and try uploading again.");
+            network.errors.push(new newError("One of your gene names appears to be corrupt.", "Please fix the error and try uploading again."));
+            return res.json(400, network);
           };
         } else {
           try {
@@ -108,29 +111,29 @@ var parseSheet = function(sheet, res) {
               network.links.push(currentLink);
             };
           } catch (err) {
-            network.errors.push(err.message);
+            // TO DO: Customize this error message to the specific issue that occurred.
+            network.errors.push(new newError("One of the cells in the adjacency matrix appears to have a missing value.", 
+              "Please ensure that all cells have a value, then upload the file again."));
+            return res.json(400, network);
           };
         };
         column++;
       };
       column = 0;
     } catch (err) {
-      res.json(400, "An unexpected error occurred.");
+      network.errors.push(new newError("An unexpected error occurred.", ""));
+      return res.json(400, network);
     }
   };
 
   sourceGenes.sort();
   targetGenes.sort();
 
-  checkDuplicates(errorArray, sourceGenes, targetGenes);
-  checkGeneLength(errorArray, genesList);
+  checkDuplicates(network.errors, sourceGenes, targetGenes);
+  checkGeneLength(network.errors, genesList);
 
-  if(errorArray.length != 0) {
-    var errorString = "Your graph failed to load.<br><br>";
-    for(var i = 0; i < errorArray.length; i++) {
-      errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
-    }
-    return res.json(400, errorString);
+  if(network.errors.length != 0) {
+    return res.json(400, network);
   } else {
     return res.json(network);
   }

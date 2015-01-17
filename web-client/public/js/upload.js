@@ -50,8 +50,14 @@ $(function () {
       }, network.sheetType);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
+      // Because the full network is returned, we pull out the errors array from the network.
+      errorArray = err.errors;
       $("#upload").val(""); // De-select the bad file.
-      $("#error").html(err);
+      var errorString = "Your graph failed to load.<br><br>";
+      for(var i = 0; i < errorArray.length; i++) {
+        errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
+      }
+      $("#error").html(errorString);
       $("#myModal").modal("show");
     });
   };
