@@ -37,31 +37,34 @@
         allWeights[i] = Math.abs((allWeights[i]).toPrecision(4));
       }
     }
-    
 
     var totalScale,
         normalizedScale,
         unweighted = false;
     
-    if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
+    if (d3.min(positiveWeights) === d3.max(positiveWeights)) {
       totalScale = d3.scale.quantile()
-                           .domain(d3.extent(allWeights))
-                           .range(["2"]);
+        .domain(d3.extent(allWeights))
+        .range(["2"]);
 
       normalizedScale = d3.scale.linear()
-                                .domain(d3.extent(allWeights))
-                                .range(["2"]);
-                              
+        .domain(d3.extent(allWeights))
+        .range(["2"]);
+
       unweighted = true;
     } else {
       totalScale = d3.scale.linear()
-                           .domain(d3.extent(allWeights))
-                           .range([2, 14]);
+        .domain(d3.extent(allWeights))
+        .range([2, 14]);
 
       normalizedScale = d3.scale.linear()
-                                .domain(d3.extent(allWeights));
+        .domain(d3.extent(allWeights));
     }
-    
+
+    var getEdgeThickness = function (edge) {
+          return Math.round(totalScale(Math.abs(edge.value)));
+        };
+
     var force = d3.layout.force()
         .size([width, height])
         .on("tick", tick)
@@ -91,11 +94,8 @@
     link = link.data(links)
                .enter().append("g")
                .attr("class", "link")
-               .attr("strokeWidth", function (d) {
-                 var d_AbsVal = Math.abs(d.value)
-                 return Math.round( totalScale(d_AbsVal) );
-               });
-                 
+               .attr('strokeWidth', getEdgeThickness);
+
     node = node.data(nodes)
                .enter().append("g")
                .attr("class", "node")
@@ -107,24 +107,19 @@
                .call(drag);
 
     link.append("path")
-        .attr("id", function(d) {
-          return "path" + d.source.index + "_" + d.target.index;
-        })
-		    .style("stroke-width", function (d) {
-          var d_absVal = Math.abs(d.value);
-		      return d.strokeWidth = Math.round( totalScale(d_absVal) );
-		    })
-		    .style("stroke", function (d) {
-		      if (unweighted || !colorOptimal) {
-		        return "black";
-          } else if(normalize(d) <= 0.05 ) {
-            return "gray";
-		      } else {
-		        return d.stroke;
-		      }
-		    })
-		    .attr("marker-end", function (d) {
-
+      .attr('id', function (d) {
+        return "path" + d.source.index + "_" + d.target.index;
+      }).style('stroke-width', function (d) {
+        return d.strokeWidth = getEdgeThickness(d);
+      }).style('stroke', function (d) {
+        if (unweighted || !colorOptimal) {
+          return "black";
+        } else if (normalize(d) <= 0.05) {
+          return "gray";
+        } else {
+          return d.stroke;
+        }
+      }).attr('marker-end', function (d) {
           var x1 = d.source.x,
               y1 = d.source.y,
               x2 = d.target.x,
@@ -572,7 +567,7 @@
 
           getSelfReferringRadius = function (d) {
             var edge = isLink(d) ? d : getSelfReferringEdge(d);
-            return edge ? 17 + (totalScale(Math.abs(edge.value)) / 2) : 0;
+            return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
           };
 
       try {
