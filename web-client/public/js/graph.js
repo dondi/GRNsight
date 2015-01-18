@@ -548,11 +548,7 @@
     });
 
     function tick() {
-      var isLink = function (d) {
-            return d.source && d.target;
-          },
-
-          getSelfReferringEdge = function (node) {
+      var getSelfReferringEdge = function (node) {
             return link.select("path")[0].map(function (path) {
               return path.__data__;
             }).filter(function (pathData) {
@@ -560,20 +556,23 @@
             })[0];
           },
 
-          getSelfReferringRadius = function (d) {
-            var edge = isLink(d) ? d : getSelfReferringEdge(d);
+          getSelfReferringRadius = function (edge) {
             return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
-          };
+          },
+
+          SELF_REFERRING_Y_OFFSET = 6;
 
       try {
         node.attr('x', function (d) {
-          var nodeWidth = getNodeWidth(d),
-              selfReferWidth = getSelfReferringRadius(d);
-
-          return d.x = Math.max(0, Math.min(width - nodeWidth - selfReferWidth, d.x));
+          var selfReferringEdge = getSelfReferringEdge(d);
+          return d.x = Math.max(0, Math.min(width - getNodeWidth(d) -
+              (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+                  (selfReferringEdge.strokeWidth * 1.5) : 0), d.x));
         }).attr('y', function (d) {
-          var selfReferHeight = getSelfReferringRadius(d);
-          return d.y = Math.max(0, Math.min(height - nodeHeight - selfReferHeight, d.y));
+          var selfReferringEdge = getSelfReferringEdge(d);
+          return d.y = Math.max(0, Math.min(height - nodeHeight -
+              (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET : 0), d.y));
         }).attr('transform', function (d) {
           return "translate(" + d.x + "," + d.y + ")";
         });
@@ -603,7 +602,7 @@
             if (x1 === x2 && y1 === y2) {
               // Move the position of the loop.
               x1 = d.source.x + getNodeWidth(d.source);
-              y1 = d.source.y + (nodeHeight / 2) + 6;
+              y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
               // Fiddle with this angle to get loop oriented.
               xRotation = 45;
