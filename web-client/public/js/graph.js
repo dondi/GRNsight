@@ -38,8 +38,13 @@
       }
     }
 
-    var totalScale,
-        normalizedScale,
+    var totalScale = d3.scale.linear()
+          .domain(d3.extent(allWeights))
+          .range([2, 14]),
+
+        normalizedScale = d3.scale.linear()
+          .domain(d3.extent(allWeights)),
+
         unweighted = false;
     
     if (d3.min(positiveWeights) === d3.max(positiveWeights)) {
@@ -47,18 +52,8 @@
         .domain(d3.extent(allWeights))
         .range(["2"]);
 
-      normalizedScale = d3.scale.linear()
-        .domain(d3.extent(allWeights))
-        .range(["2"]);
-
+      normalizedScale = normalizedScale.range(["2"]);
       unweighted = true;
-    } else {
-      totalScale = d3.scale.linear()
-        .domain(d3.extent(allWeights))
-        .range([2, 14]);
-
-      normalizedScale = d3.scale.linear()
-        .domain(d3.extent(allWeights));
     }
 
     var getEdgeThickness = function (edge) {
