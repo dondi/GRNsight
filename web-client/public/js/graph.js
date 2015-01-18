@@ -559,20 +559,40 @@
     });
 
     function tick() {
-      
+      var isLink = function (d) {
+            return d.source && d.target;
+          },
+
+          getSelfReferringEdge = function (node) {
+            return link.select("path")[0].map(function (path) {
+              return path.__data__;
+            }).filter(function (pathData) {
+              return pathData.source === node && pathData.source === pathData.target;
+            })[0];
+          },
+
+          getSelfReferringRadius = function (d) {
+            var edge = isLink(d) ? d : getSelfReferringEdge(d);
+            return edge ? 17 + (totalScale(Math.abs(edge.value)) / 2) : 0;
+          };
+
       try {
-      node.attr("x", function(d) {
-        var nodeWidth = d.name.length * 20;
-        return d.x = Math.max(0, Math.min(width - nodeWidth, d.x));
-          })
-         .attr("y", function(d) { return d.y = Math.max(0, Math.min(height - nodeHeight, d.y));})
-         .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
+        node.attr('x', function (d) {
+          var nodeWidth = d.name.length * 20,
+              selfReferWidth = getSelfReferringRadius(d);
+
+          return d.x = Math.max(0, Math.min(width - nodeWidth - selfReferWidth, d.x));
+        }).attr('y', function (d) {
+          var selfReferHeight = getSelfReferringRadius(d);
+          return d.y = Math.max(0, Math.min(height - nodeHeight - selfReferHeight, d.y));
+        }).attr('transform', function (d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
+
         /* Allows for looping edges.
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
-
-        link.select("path").attr("d", function(d) {
-          
+        link.select("path").attr('d', function (d) {
           if (d.target === d.source) {
             var x1 = d.source.x,
                 y1 = d.source.y,
@@ -581,55 +601,52 @@
                 dx = x2 - x1,
                 dy = y2 - y1,
                 dr = Math.sqrt(dx * dx + dy * dy),
-                radiusModifier = 0,
 
                 // Defaults for normal edge.
                 drx = dr,
                 dry = dr,
                 xRotation = 0, // degrees
-                largeArc = 0, // 1 or 0
-                sweep = 1, //1 or 0
+                largeArc = 0,  // 1 or 0
+                sweep = 1,     // 1 or 0
                 offset = parseFloat(d.strokeWidth);
 
-                // Self edge.
-                if ( x1 === x2 && y1 === y2 ) {
-                  //Move the position of the loop
-                  //Couldn't figure out how to derive the width of the rectangle from here,
-                  //so it is being calculated again. May need to set it when the node is created.
-                  x1 = d.source.x + (d.source.name.length * 20);
-                  y1 = d.source.y + (nodeHeight/2) + 6;
-                  // Fiddle with this angle to get loop oriented.
-                  xRotation = 45;
+            // Self edge.
+            if (x1 === x2 && y1 === y2) {
+              // Move the position of the loop.
+              // Couldn't figure out how to derive the width of the rectangle from here,
+              // so it is being calculated again. May need to set it when the node is created.
+              x1 = d.source.x + (d.source.name.length * 20);
+              y1 = d.source.y + (nodeHeight / 2) + 6;
 
-                  // Needs to be 1.
-                  largeArc = 1;
+              // Fiddle with this angle to get loop oriented.
+              xRotation = 45;
 
-                  // Change sweep to change orientation of loop. 
-                  sweep = 1;
-                  
-                  var d_AbsVal = Math.abs(d.value);
-                  radiusModifier = totalScale(d_AbsVal)/2.00;
+              // Needs to be 1.
+              largeArc = 1;
 
-                  // Make drx and dry different to get an ellipse
-                  // instead of a circle.
-                  drx = 17 + radiusModifier;
-                  dry = 17 + radiusModifier;
+              // Change sweep to change orientation of loop.
+              sweep = 1;
 
-                  // For whatever reason the arc collapses to a point if the beginning
-                  // and ending points of the arc are the same, so kludge it.
-                  x2 = d.source.x + (d.source.name.length *20)/1.2;
-                  y2 = d.source.y + nodeHeight;
-                  
-                  if (d.value < 0  && colorOptimal ) {
-                    offset = Math.max(10, parseFloat(d.strokeWidth));
-                  } 
-                } 
+              drx = getSelfReferringRadius(d);
+              dry = getSelfReferringRadius(d);
 
-           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2  + "," + (y2 + offset);
-        } else {
-           return moveTo(d) + lineTo(d);
-        }
-      });
+              // For whatever reason the arc collapses to a point if the beginning
+              // and ending points of the arc are the same, so kludge it.
+              x2 = d.source.x + (d.source.name.length * 20) / 1.2;
+              y2 = d.source.y + nodeHeight;
+
+              if (d.value < 0 && colorOptimal) {
+                offset = Math.max(10, parseFloat(d.strokeWidth));
+              }
+            }
+
+            return "M" + x1 + "," + y1 +
+                   "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
+                         x2  + "," + (y2 + offset);
+          } else {
+            return moveTo(d) + lineTo(d);
+          }
+        });
 
       link.select("path").attr("marker-end", function(d) {
         var x1 = d.source.x,
