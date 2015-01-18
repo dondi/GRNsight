@@ -6,17 +6,18 @@
   var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls, sheetType) {
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
+
     var width = $container.width(),
         height = $container.height(),
         nodeHeight = 30,
         gridWidth = 300,
         colorOptimal = true;
 
-    if(sheetType === "weighted") {
-      $('#mouseOver').html("Mouse over the edges to see the weight parameter values.");
-    } else {
-      $('#mouseOver').html("");
-    }
+    $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
+
+    var getNodeWidth = function (node) {
+          return node.name.length * 20;
+        };
 
     // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
     if($("#formatOptimal").attr('class') === 'deselectedColoring') {
@@ -101,9 +102,7 @@
                .attr("id", function(d) {
                  return "node" + d.index;
                })
-               .attr("width", function (d) {
-                 return d.name.length * 20;
-               })
+               .attr("width", getNodeWidth)
                .attr("height", nodeHeight)
                .call(drag);
 
@@ -535,7 +534,7 @@
            
     node.append("text")
       .attr("dx", function (d) {
-        return (d.name.length * 20)/2;
+        return getNodeWidth(d) / 2;
       })
       .attr("dy", 22)
       .attr("text-anchor", "middle")
@@ -578,7 +577,7 @@
 
       try {
         node.attr('x', function (d) {
-          var nodeWidth = d.name.length * 20,
+          var nodeWidth = getNodeWidth(d),
               selfReferWidth = getSelfReferringRadius(d);
 
           return d.x = Math.max(0, Math.min(width - nodeWidth - selfReferWidth, d.x));
@@ -613,9 +612,7 @@
             // Self edge.
             if (x1 === x2 && y1 === y2) {
               // Move the position of the loop.
-              // Couldn't figure out how to derive the width of the rectangle from here,
-              // so it is being calculated again. May need to set it when the node is created.
-              x1 = d.source.x + (d.source.name.length * 20);
+              x1 = d.source.x + getNodeWidth(d.source);
               y1 = d.source.y + (nodeHeight / 2) + 6;
 
               // Fiddle with this angle to get loop oriented.
@@ -632,7 +629,7 @@
 
               // For whatever reason the arc collapses to a point if the beginning
               // and ending points of the arc are the same, so kludge it.
-              x2 = d.source.x + (d.source.name.length * 20) / 1.2;
+              x2 = d.source.x + getNodeWidth(d.source) / 1.2;
               y2 = d.source.y + nodeHeight;
 
               if (d.value < 0 && colorOptimal) {
@@ -790,5 +787,4 @@
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
     $(".startDisabled").removeClass("disabled");
-
-}
+  }
