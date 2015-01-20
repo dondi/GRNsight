@@ -67,7 +67,7 @@
                                         If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a class="showSection2">Section 2</a> to learn how to load your file as an input spreadsheet.
                                     </li>
                                     <li>
-                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and pointy arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. See Section 3 for details on how GRNsight displays the graph.
+                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. See Section 3 for details on how GRNsight displays the graph.
                                     </li>
                                     <li>
                                         If you want to create manually a new file to use with GRNsight, format the file in the following manner:
@@ -78,23 +78,43 @@
                                             <li>
                                                 GRNsight reads gene regulatory network information that is in the form of an adjacency matrix to generate the nodes and edges of the graph.
                                                 <ul>
-                                                    <li>There must be at least one worksheet in your Excel Workbook entitled “network”.</li>
-                                                    <li>In this worksheet, the upper-left cell (A1) should contain the text “rows genes affected/cols genes controlling”.  This text is there as a reminder of the direction of the regulatory relationships specified by the adjacency matrix.</li>
-                                                    <li>The rest of the first row should contain the names of the transcription factors that are controlling the other genes in the network, one transcription factor name per column.</li>
-                                                    <li>The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row.</li>
                                                     <li>
-                                                        GRNsight is primarily designed to depict gene regulatory networks that contain all transcription factors that can be represented in a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF 1” or “ABF-1” would not be considered the same as “ABF1”.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet.  The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
+                                                        There must be at least one worksheet in your Excel Workbook entitled “network”.
                                                     </li>
                                                     <li>
-                                                        Each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell E6 means that FHL1 regulates FKH2.  The “1” in cell C3 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 50 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with pointy arrowheads. The demonstration file "Demo #1: Unweighted GRN" corresponds to the adjacency matrix shown below.<br><br>
-                                                        <img src="images/Sample_network_worksheet.jpg" alt="network" height="290" width="832" /><br><br>
+                                                        In this worksheet, the upper-left cell (A1) should contain the text “rows genes affected/cols genes controlling”.  This text is there as a reminder of the direction of the regulatory relationships specified by the adjacency matrix.
                                                     </li>
                                                     <li>
-                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put pointy arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file "Demo #2: Weighted GRN" corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class="showSection3">Section 3</a> below.<br><br>
-                                                        <img src="images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" height="289" width="1252" /><br><br>
+                                                        The rest of the first row should contain the names of the transcription factors that are controlling the other genes in the network, one transcription factor name per column.
                                                     </li>
-                                                    <li>Note that GRNsight is designed to visualized “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Currently, the bounding box for display of the graph has a fixed size.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.</li>
-                                                    <li>Follow <a href="https://github.com/dondi/GRNsight/wiki/Formatting-a-YEASTRACT-regulation-matrix-for-use-with-GRNsight" target="_blank">these instructions</a> to download and format a regulation matrix from the YEASTRACT database for use with GRNsight.</li>
+                                                    <li>
+                                                        The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row.
+                                                    </li>
+                                                    <li>
+                                                        GRNsight is primarily designed to depict gene regulatory networks that contain just transcription factors and that can be represented in a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF 1” or “ABF-1” would not be considered the same as “ABF1”.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet. The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
+                                                    </li>
+                                                    <li>
+                                                        Each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell E6 means that FHL1 regulates FKH2.  The “1” in cell C3 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 50 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with regular (pointy) arrowheads. The demonstration file "Demo #1: Unweighted GRN" corresponds to the adjacency matrix shown below.
+
+                                                        <br><br>
+                                                        <img src="images/Sample_network_worksheet.jpg" alt="network" height="290" width="832" />
+                                                        <br><br>
+
+                                                    </li>
+                                                    <li>
+                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular (pointy) arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file "Demo #2: Weighted GRN" corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class="showSection3">Section 3</a> below.
+
+                                                        <br><br>
+                                                        <img src="images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" height="289" width="1252" />
+                                                        <br><br>
+
+                                                    </li>
+                                                    <li>
+                                                        Note that GRNsight is designed to visualize “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Currently, the bounding box for display of the graph has a fixed size.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.
+                                                    </li>
+                                                    <li>
+                                                        Follow <a href="https://github.com/dondi/GRNsight/wiki/Formatting-a-YEASTRACT-regulation-matrix-for-use-with-GRNsight" target="_blank">these instructions</a> to download and format a regulation matrix from the YEASTRACT database for use with GRNsight.
+                                                    </li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -114,13 +134,23 @@
                         <div id="section2Content" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <ul>
-                                    <li>Once you have your appropriately formatted Excel Workbook file (*.xlsx), you can load it into GRNsight.</li>
-                                    <li>Go to the GRNsight home page.  Select the menu option File > Open.  A dialog box will open for you to select your file.  Clicking the Open button will load your file.  Clicking the Cancel button will return you to the GRNsight home page.</li>
-                                    <li>The name of the file that is currently loaded will appear in the menu bar.</li>
-                                    <li>To load a different file, select the menu option File > Open again.</li>
-                                    <li>To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been loaded.</li>
                                     <li>
-                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and pointy arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. Demo #4 is based on data from the following publication:  Schade B, Jansen G, Whiteway M, Entian KD, Thomas DY (2004) Cold adaptation in budding yeast. Mol Biol Cell 15:5492–5502. doi:10.1091/mbc.E04-03-0167.  See Section 3 for details on how GRNsight displays the graph. [Note:  link Schade et al. reference to the following web page: http://www.molbiolcell.org/content/15/12/5492]
+                                        Once you have your appropriately formatted Excel Workbook file (*.xlsx), you can load it into GRNsight.
+                                    </li>
+                                    <li>
+                                        Go to the GRNsight home page.  Select the menu option File > Open.  A dialog box will open for you to select your file.  Clicking the Open button will load your file.  Clicking the Cancel button will return you to the GRNsight home page.
+                                    </li>
+                                    <li>
+                                        The name of the file that is currently loaded will appear in the menu bar.
+                                    </li>
+                                    <li>
+                                        To load a different file, select the menu option File > Open again.
+                                    </li>
+                                    <li>
+                                        To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been loaded.
+                                    </li>
+                                    <li>
+                                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. Demo #4 is based on data from the following publication:  <a href="http://www.molbiolcell.org/content/15/12/5492" target="_blank">Schade B, Jansen G, Whiteway M, Entian KD, Thomas DY (2004) Cold adaptation in budding yeast. Mol Biol Cell 15:5492–5502. doi:10.1091/mbc.E04-03-0167.</a>  See Section 3 for details on how GRNsight displays the graph. 
                                     </li>
                                 </ul>
                             </div> <!--panel-body-->
@@ -138,16 +168,33 @@
                             <div class="panel-body">
                                 <ul>
                                     <li>GRNsight graphs are generated through D3.js, a JavaScript data visualization library.  We have modified the default implementation of D3 to include the following features:
+                                    </li>
                                         <ul>
-                                            <li>Nodes are rectangular.</li>
-                                            <li>The labels on the nodes are what is found in your “network” or “network_optimized_weights” worksheet, depending on whether you are displaying an unweighted or weighted graph.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet.  The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.</li>
-                                            <li>The nodes are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.</li>
-                                            <li>The edges are arcs instead of straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.</li>
-                                            <li>If your adjacency matrix is contained in a worksheet entitled “network” and contains just ones and zeroes, GRNsight will make the edges connecting nodes black with a regular arrowhead originating from the transcription factor (columns) to the target gene (rows) in your matrix. (Note that selecting the menu item Edit > Preferences > Default to black edges with pointy arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1"s to indicated weighted edges.)</li>
-                                            <li>If your adjacency matrix is contained in a worksheet entitled “network_optimized_weights” and contains real numbers instead of just 1’s to indicate weighted connections, it will adjust the arrowhead type, thickness, and color of the edges as follows:
+                                            <li>
+                                                Nodes are rectangular.
+                                            </li>
+                                            <li>
+                                                The labels on the nodes are what is found in your “network” or “network_optimized_weights” worksheet, depending on whether you are displaying an unweighted or weighted graph.  GRNsight is <i>case-preserving</i> in that it will keep the capitalization that the user originally entered into the spreadsheet.  The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.
+                                            </li>
+                                            <li>
+                                                The nodes are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
+                                            </li>
+                                            <li>
+                                                The edges are arcs instead of straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.
+                                            </li>
+                                            <li>
+                                                If your adjacency matrix is contained in a worksheet entitled “network” and contains just 1's and 0's, GRNsight will make the edges connecting nodes black with a regular (point) arrowhead originating from the transcription factor (columns) to the target gene (rows) in your matrix. (Note that selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.)
+                                            </li>
+                                            <li>
+                                                If your adjacency matrix is contained in a worksheet entitled “network_optimized_weights” and contains real numbers instead of just 1’s to indicate weighted connections, it will adjust the arrowhead type, thickness, and color of the edges as follows:
+                                            </li>
                                                 <ul>
-                                                    <li>For positive weights > 0, the edge will be given a regular arrowhead (pointy tip) to indicate an activation relationship between the two nodes.</li>
-                                                    <li>For negative weights &lt; 0, the edge will be given a blunt arrowhead (a line segment perpendicular to the edge direction) to indicate a repression relationship between the two nodes.</li>
+                                                    <li>
+                                                        For positive weights > 0, the edge will be given a regular (point) arrowhead to indicate an activation relationship between the two nodes.
+                                                    </li>
+                                                    <li>
+                                                        For negative weights &lt; 0, the edge will be given a blunt arrowhead (a line segment perpendicular to the edge direction) to indicate a repression relationship between the two nodes.
+                                                    </li>
                                                     <li>
                                                         The thickness of the edge will vary based on the magnitude of the absolute value of the weight.  Larger magnitudes will have thicker edges and smaller magnitudes will have thinner edges.  The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1).
                                                     </li>
@@ -155,12 +202,16 @@
                                                         The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene.
                                                     </li>
                                                     <li>
-                                                        For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with pointy arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1"s to indicated weighted edges.
+                                                        For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
                                                     </li>
-                                                    <li>If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits.</li>
+                                                    <li>
+                                                        If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits.
+                                                    </li>
                                                 </ul>
                                             </li>
-                                            <li>Once you have selected the spreadsheet file to be loaded, GRNsight automatically lays out the positions of the nodes and edges based on certain Force Graph Parameters.
+                                            <li>
+                                                Once you have selected the spreadsheet file to be loaded, GRNsight automatically lays out the positions of the nodes and edges based on certain Force Graph Parameters.
+                                            </li>
                                                 <ul>
                                                     <li>
                                                         <span style="font-weight: bold">Link Distance</span> determines the minimum distance maintained between nodes, i.e., it changes the length of the edges. Smaller numbers specify shorter lengths, larger numbers specify longer lengths. The range of values for this parameter are 1 to 1000 with a default value of 500.
@@ -174,7 +225,9 @@
                                                     <li>
                                                         <span style="font-weight: bold">Gravity</span> determines the strength of the force holding the nodes to the center of the graph. It varies from 0 (no force) to 1 (maximum force holding the nodes in the center). The default value of this parameter is 0.10.
                                                     </li>
-                                                    <li>You may change the values of each of the force graph parameters by moving the sliders back and forth.</li>
+                                                    <li>
+                                                        You may change the values of each of the force graph parameters by moving the sliders back and forth.
+                                                    </li>
                                                     <li>
                                                         Checking the box next to “Lock Force Graph Parameters” locks the current settings of the parameters (positions of the sliders) in place so that they cannot be changed. Unchecking the box unlocks the sliders again. Alternately, you can select the menu item Format > Lock Force Graph Parameters to lock the current settings. A check mark will appear next to the menu item to indicate that they are locked. Selecting the menu item Format > Lock Force Graph Parameters a second time will unlock the sliders again.
                                                     </li>
@@ -193,10 +246,10 @@
                                                 </ul>
                                             </li>
                                             <li>
-                                                You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node"s responsiveness to the Force Graph Parameters, double-click on the node.
+                                                You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node's responsiveness to the Force Graph Parameters, double-click on the node.
                                             </li>
                                             <li>
-                                                Note that GRNsight is designed to visualized “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Currently, the bounding box for display of the graph has a fixed size.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.
+                                                Note that GRNsight is designed to visualize “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Currently, the bounding box for display of the graph has a fixed size.  Adjacency matrices with a large number of nodes or edges may not load, or if they do, may just look like “spaghetti”.
                                             </li>
                                         </ul>
                                     </li>
