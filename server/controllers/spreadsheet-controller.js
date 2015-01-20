@@ -36,8 +36,7 @@ var parseSheet = function(sheet, res) {
       targetGeneNumber,
       genesList = [],
       sourceGenes = [],
-      targetGenes = [],
-      errorArray = [];
+      targetGenes = [];
   
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.worksheets.length; i++) {
