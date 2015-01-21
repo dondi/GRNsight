@@ -194,7 +194,7 @@ module.exports = function (app) {
   });
 
   app.get('/demo/weighted', function (req, res) {
-    return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data-estimation_output.xlsx", res, app);x
+    return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
   });
 
   app.get('/demo/schadeInput', function (req, res) {
