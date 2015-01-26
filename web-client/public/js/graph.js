@@ -560,19 +560,20 @@
             return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
           },
 
+          BOUNDARY_MARGIN = 5,
           SELF_REFERRING_Y_OFFSET = 6;
 
       try {
         node.attr('x', function (d) {
           var selfReferringEdge = getSelfReferringEdge(d);
-          return d.x = Math.max(0, Math.min(width - getNodeWidth(d) -
+          return d.x = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
               (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                  (selfReferringEdge.strokeWidth * 1.5) : 0), d.x));
+                  selfReferringEdge.strokeWidth + 2 : 0), d.x));
         }).attr('y', function (d) {
           var selfReferringEdge = getSelfReferringEdge(d);
-          return d.y = Math.max(0, Math.min(height - nodeHeight -
+          return d.y = Math.max(BOUNDARY_MARGIN, Math.min(height - nodeHeight - BOUNDARY_MARGIN -
               (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET : 0), d.y));
+                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0), d.y));
         }).attr('transform', function (d) {
           return "translate(" + d.x + "," + d.y + ")";
         });
