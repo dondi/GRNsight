@@ -377,7 +377,7 @@
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var offset = parseFloat(d.strokeWidth);
         
-        if (d.value < 0  && colorOptimal ) {
+        if (d.value < 0  && colorOptimal) {
           offset = Math.max(offset, 10);
         }
 				// We need to work out the (tan of the) angle between the
@@ -385,10 +385,7 @@
 				// target node and the imaginary line connecting the center of
 				// the target node with the top-left corner of the same
 				// node. Of course, this angle is fixed.
-				d.tanRatioFixed =
-						(d.target.centerY - d.target.y)
-						/
-						(d.target.centerX - d.target.x);
+				d.tanRatioFixed =(d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
 
 				// We also need to work out the (tan of the) angle between the
 				// imaginary horizontal line running through the center of the
@@ -396,10 +393,8 @@
 				// the target node with the center of the source node. This
 				// angle changes as the nodes move around the screen.
 				d.tanRatioMoveable =
-						Math.abs(d.target.centerY - d.source.newY)
-						/
-						Math.abs(d.target.centerX - d.source.newX); // Note,
-						// JavaScript handles division-by-zero by returning
+						Math.abs(d.target.centerY - d.source.newY) /Math.abs(d.target.centerX - d.source.newX); 
+            // Note, JavaScript handles division-by-zero by returning
 						// Infinity, which in this case is useful, especially
 						// since it handles the subsequent Infinity arithmetic
 						// correctly.
@@ -490,9 +485,7 @@
 
           // By default assume path intersects towards lefthand side
           d.target.newX =
-              d.target.centerX - ((d.target.centerY - d.target.y)
-                                  /
-                                  d.tanRatioMoveable) ;
+              d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable) ;
 
           // But...
           if (d.target.centerX < d.source.newX) {
