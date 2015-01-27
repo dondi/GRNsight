@@ -51,6 +51,7 @@ $(function () {
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
       // Because the full network is returned, we pull out the errors array from the network.
+      console.log(err);
       errorArray = err.errors;
       $("#upload").val(""); // De-select the bad file.
       var errorString = "Your graph failed to load.<br><br>";

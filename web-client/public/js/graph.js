@@ -385,15 +385,14 @@
 				// target node and the imaginary line connecting the center of
 				// the target node with the top-left corner of the same
 				// node. Of course, this angle is fixed.
-				d.tanRatioFixed =(d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
+				d.tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
 
 				// We also need to work out the (tan of the) angle between the
 				// imaginary horizontal line running through the center of the
 				// target node and the imaginary line connecting the center of
 				// the target node with the center of the source node. This
 				// angle changes as the nodes move around the screen.
-				d.tanRatioMoveable =
-						Math.abs(d.target.centerY - d.source.newY) /Math.abs(d.target.centerX - d.source.newX); 
+				d.tanRatioMoveable = Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX); 
             // Note, JavaScript handles division-by-zero by returning
 						// Infinity, which in this case is useful, especially
 						// since it handles the subsequent Infinity arithmetic
@@ -449,10 +448,7 @@
           // Now use a bit of trigonometry to work out the y-coord.
 
           // By default assume path intersects towards top of node								
-          d.target.newY =
-              d.target.centerY - ((d.target.centerX - d.target.x)
-                                  *
-                                  d.tanRatioMoveable);
+          d.target.newY = d.target.centerY - ((d.target.centerX - d.target.x) * d.tanRatioMoveable);
 
           // But...
           if (d.target.centerY < d.source.newY) {
@@ -484,8 +480,7 @@
           // Now use a bit of trigonometry to work out the x-coord.
 
           // By default assume path intersects towards lefthand side
-          d.target.newX =
-              d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable) ;
+          d.target.newX = d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable) ;
 
           // But...
           if (d.target.centerX < d.source.newX) {
