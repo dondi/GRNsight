@@ -6,17 +6,18 @@
   var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls, sheetType) {
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
+
     var width = $container.width(),
         height = $container.height(),
         nodeHeight = 30,
         gridWidth = 300,
         colorOptimal = true;
 
-    if(sheetType === "weighted") {
-      $('#mouseOver').html("Mouse over the edges to see the weight parameter values.");
-    } else {
-      $('#mouseOver').html("");
-    }
+    $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
+
+    var getNodeWidth = function (node) {
+          return node.name.length * 20;
+        };
 
     // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
     if($("#formatOptimal").attr('class') === 'deselectedColoring') {
@@ -36,31 +37,29 @@
         allWeights[i] = Math.abs((allWeights[i]).toPrecision(4));
       }
     }
-    
 
-    var totalScale,
-        normalizedScale,
+    var totalScale = d3.scale.linear()
+          .domain(d3.extent(allWeights))
+          .range([2, 14]),
+
+        normalizedScale = d3.scale.linear()
+          .domain(d3.extent(allWeights)),
+
         unweighted = false;
     
-    if (d3.min(positiveWeights) == d3.max(positiveWeights)) {
+    if (d3.min(positiveWeights) === d3.max(positiveWeights)) {
       totalScale = d3.scale.quantile()
-                           .domain(d3.extent(allWeights))
-                           .range(["2"]);
+        .domain(d3.extent(allWeights))
+        .range(["2"]);
 
-      normalizedScale = d3.scale.linear()
-                                .domain(d3.extent(allWeights))
-                                .range(["2"]);
-                              
+      normalizedScale = normalizedScale.range(["2"]);
       unweighted = true;
-    } else {
-      totalScale = d3.scale.linear()
-                           .domain(d3.extent(allWeights))
-                           .range([2, 14]);
-
-      normalizedScale = d3.scale.linear()
-                                .domain(d3.extent(allWeights));
     }
-    
+
+    var getEdgeThickness = function (edge) {
+          return Math.round(totalScale(Math.abs(edge.value)));
+        };
+
     var force = d3.layout.force()
         .size([width, height])
         .on("tick", tick)
@@ -90,42 +89,32 @@
     link = link.data(links)
                .enter().append("g")
                .attr("class", "link")
-               .attr("strokeWidth", function (d) {
-                 var d_AbsVal = Math.abs(d.value)
-                 return Math.round( totalScale(d_AbsVal) );
-               });
-                 
+               .attr('strokeWidth', getEdgeThickness);
+
     node = node.data(nodes)
                .enter().append("g")
                .attr("class", "node")
                .attr("id", function(d) {
                  return "node" + d.index;
                })
-               .attr("width", function (d) {
-                 return d.name.length * 20;
-               })
+               .attr("width", getNodeWidth)
                .attr("height", nodeHeight)
                .call(drag);
 
     link.append("path")
-        .attr("id", function(d) {
-          return "path" + d.source.index + "_" + d.target.index;
-        })
-		    .style("stroke-width", function (d) {
-          var d_absVal = Math.abs(d.value);
-		      return d.strokeWidth = Math.round( totalScale(d_absVal) );
-		    })
-		    .style("stroke", function (d) {
-		      if (unweighted || !colorOptimal) {
-		        return "black";
-          } else if(normalize(d) <= 0.05 ) {
-            return "gray";
-		      } else {
-		        return d.stroke;
-		      }
-		    })
-		    .attr("marker-end", function (d) {
-
+      .attr('id', function (d) {
+        return "path" + d.source.index + "_" + d.target.index;
+      }).style('stroke-width', function (d) {
+        return d.strokeWidth = getEdgeThickness(d);
+      }).style('stroke', function (d) {
+        if (unweighted || !colorOptimal) {
+          return "black";
+        } else if (normalize(d) <= 0.05) {
+          return "gray";
+        } else {
+          return d.stroke;
+        }
+      }).attr('marker-end', function (d) {
           var x1 = d.source.x,
               y1 = d.source.y,
               x2 = d.target.x,
@@ -388,7 +377,7 @@
         // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var offset = parseFloat(d.strokeWidth);
         
-        if (d.value < 0  && colorOptimal ) {
+        if (d.value < 0  && colorOptimal) {
           offset = Math.max(offset, 10);
         }
 				// We need to work out the (tan of the) angle between the
@@ -396,21 +385,15 @@
 				// target node and the imaginary line connecting the center of
 				// the target node with the top-left corner of the same
 				// node. Of course, this angle is fixed.
-				d.tanRatioFixed =
-						(d.target.centerY - d.target.y)
-						/
-						(d.target.centerX - d.target.x);
+				d.tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
 
 				// We also need to work out the (tan of the) angle between the
 				// imaginary horizontal line running through the center of the
 				// target node and the imaginary line connecting the center of
 				// the target node with the center of the source node. This
 				// angle changes as the nodes move around the screen.
-				d.tanRatioMoveable =
-						Math.abs(d.target.centerY - d.source.newY)
-						/
-						Math.abs(d.target.centerX - d.source.newX); // Note,
-						// JavaScript handles division-by-zero by returning
+				d.tanRatioMoveable = Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX); 
+            // Note, JavaScript handles division-by-zero by returning
 						// Infinity, which in this case is useful, especially
 						// since it handles the subsequent Infinity arithmetic
 						// correctly.
@@ -465,10 +448,7 @@
           // Now use a bit of trigonometry to work out the y-coord.
 
           // By default assume path intersects towards top of node								
-          d.target.newY =
-              d.target.centerY - ((d.target.centerX - d.target.x)
-                                  *
-                                  d.tanRatioMoveable);
+          d.target.newY = d.target.centerY - ((d.target.centerX - d.target.x) * d.tanRatioMoveable);
 
           // But...
           if (d.target.centerY < d.source.newY) {
@@ -500,10 +480,7 @@
           // Now use a bit of trigonometry to work out the x-coord.
 
           // By default assume path intersects towards lefthand side
-          d.target.newX =
-              d.target.centerX - ((d.target.centerY - d.target.y)
-                                  /
-                                  d.tanRatioMoveable) ;
+          d.target.newX = d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable) ;
 
           // But...
           if (d.target.centerX < d.source.newX) {
@@ -535,7 +512,7 @@
            
     node.append("text")
       .attr("dx", function (d) {
-        return (d.name.length * 20)/2;
+        return getNodeWidth(d) / 2;
       })
       .attr("dy", 22)
       .attr("text-anchor", "middle")
@@ -559,20 +536,40 @@
     });
 
     function tick() {
-      
+      var getSelfReferringEdge = function (node) {
+            return link.select("path")[0].map(function (path) {
+              return path.__data__;
+            }).filter(function (pathData) {
+              return pathData.source === node && pathData.source === pathData.target;
+            })[0];
+          },
+
+          getSelfReferringRadius = function (edge) {
+            return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
+          },
+
+          BOUNDARY_MARGIN = 5,
+          SELF_REFERRING_Y_OFFSET = 6;
+
       try {
-      node.attr("x", function(d) {
-        var nodeWidth = d.name.length * 20;
-        return d.x = Math.max(0, Math.min(width - nodeWidth, d.x));
-          })
-         .attr("y", function(d) { return d.y = Math.max(0, Math.min(height - nodeHeight, d.y));})
-         .attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")";});
+        node.attr('x', function (d) {
+          var selfReferringEdge = getSelfReferringEdge(d);
+          return d.x = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
+              (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+                  selfReferringEdge.strokeWidth + 2 : 0), d.x));
+        }).attr('y', function (d) {
+          var selfReferringEdge = getSelfReferringEdge(d);
+          return d.y = Math.max(BOUNDARY_MARGIN, Math.min(height - nodeHeight - BOUNDARY_MARGIN -
+              (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0), d.y));
+        }).attr('transform', function (d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
+
         /* Allows for looping edges.
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
-
-        link.select("path").attr("d", function(d) {
-          
+        link.select("path").attr('d', function (d) {
           if (d.target === d.source) {
             var x1 = d.source.x,
                 y1 = d.source.y,
@@ -581,55 +578,50 @@
                 dx = x2 - x1,
                 dy = y2 - y1,
                 dr = Math.sqrt(dx * dx + dy * dy),
-                radiusModifier = 0,
 
                 // Defaults for normal edge.
                 drx = dr,
                 dry = dr,
                 xRotation = 0, // degrees
-                largeArc = 0, // 1 or 0
-                sweep = 1, //1 or 0
+                largeArc = 0,  // 1 or 0
+                sweep = 1,     // 1 or 0
                 offset = parseFloat(d.strokeWidth);
 
-                // Self edge.
-                if ( x1 === x2 && y1 === y2 ) {
-                  //Move the position of the loop
-                  //Couldn't figure out how to derive the width of the rectangle from here,
-                  //so it is being calculated again. May need to set it when the node is created.
-                  x1 = d.source.x + (d.source.name.length * 20);
-                  y1 = d.source.y + (nodeHeight/2) + 6;
-                  // Fiddle with this angle to get loop oriented.
-                  xRotation = 45;
+            // Self edge.
+            if (x1 === x2 && y1 === y2) {
+              // Move the position of the loop.
+              x1 = d.source.x + getNodeWidth(d.source);
+              y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
-                  // Needs to be 1.
-                  largeArc = 1;
+              // Fiddle with this angle to get loop oriented.
+              xRotation = 45;
 
-                  // Change sweep to change orientation of loop. 
-                  sweep = 1;
-                  
-                  var d_AbsVal = Math.abs(d.value);
-                  radiusModifier = totalScale(d_AbsVal)/2.00;
+              // Needs to be 1.
+              largeArc = 1;
 
-                  // Make drx and dry different to get an ellipse
-                  // instead of a circle.
-                  drx = 17 + radiusModifier;
-                  dry = 17 + radiusModifier;
+              // Change sweep to change orientation of loop.
+              sweep = 1;
 
-                  // For whatever reason the arc collapses to a point if the beginning
-                  // and ending points of the arc are the same, so kludge it.
-                  x2 = d.source.x + (d.source.name.length *20)/1.2;
-                  y2 = d.source.y + nodeHeight;
-                  
-                  if (d.value < 0  && colorOptimal ) {
-                    offset = Math.max(10, parseFloat(d.strokeWidth));
-                  } 
-                } 
+              drx = getSelfReferringRadius(d);
+              dry = getSelfReferringRadius(d);
 
-           return "M" + x1 + "," + y1 + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + x2  + "," + (y2 + offset);
-        } else {
-           return moveTo(d) + lineTo(d);
-        }
-      });
+              // For whatever reason the arc collapses to a point if the beginning
+              // and ending points of the arc are the same, so kludge it.
+              x2 = d.source.x + getNodeWidth(d.source) / 1.2;
+              y2 = d.source.y + nodeHeight;
+
+              if (d.value < 0 && colorOptimal) {
+                offset = Math.max(10, parseFloat(d.strokeWidth));
+              }
+            }
+
+            return "M" + x1 + "," + y1 +
+                   "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
+                         x2  + "," + (y2 + offset);
+          } else {
+            return moveTo(d) + lineTo(d);
+          }
+        });
 
       link.select("path").attr("marker-end", function(d) {
         var x1 = d.source.x,
@@ -773,5 +765,4 @@
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
     $(".startDisabled").removeClass("disabled");
-
-}
+  }

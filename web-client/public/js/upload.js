@@ -50,8 +50,15 @@ $(function () {
       }, network.sheetType);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
+      // Because the full network is returned, we pull out the errors array from the network.
+      console.log(err);
+      errorArray = err.errors;
       $("#upload").val(""); // De-select the bad file.
-      $("#error").html(err);
+      var errorString = "Your graph failed to load.<br><br>";
+      for(var i = 0; i < errorArray.length; i++) {
+        errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
+      }
+      $("#error").html(errorString);
       $("#myModal").modal("show");
     });
   };
@@ -166,19 +173,20 @@ $(function () {
   };
   
   // Enter the prefix of each slider here
-  var inputs = [ "#linkDist", "#charge", "#gravity", "#chargeDist" ];
-  var values = [500, -1000, 1000, 0.1];
+  var inputs = [ "#linkDist", "#charge", "#chargeDist", "#gravity" ],
+      defaultValues = [500, -1000, 1000, 0.1],
+      newValues = [0, 0, 0, 0];
 
   function resetSliders(event) {
     var check = $( "#lockSliders" ).prop( "checked" );
     if( !check ) {
-      values = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      for(var i = 0, k = 0; i <  inputs; i = i + 2, k++) {
-        $(inputs[i] + "Input").val(values[k]);
+      newValues = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
+      for(var i = 0; i < inputs.length; i++) {
+        $(inputs[i] + "Input").val(defaultValues[i]);
         if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(values[k]);
+          $(inputs[i] + "Val").html(defaultValues[i]);
         } else {
-          $(inputs[i] + "Val").html(values[k] + "0"); // add 0 to the end of gravity so that it reads 0.10
+          $(inputs[i] + "Val").html(defaultValues[i] + "0"); // add 0 to the end of gravity so that it reads 0.10
         }
       }
       $( "#undoReset" ).prop( "disabled", false );
@@ -187,18 +195,17 @@ $(function () {
 
   function undoReset(event) {
     var check =  $( "#undoReset" ).prop( "disabled" );
-    // gravityCheck used to add on the zero to 0.1 -> 0.10, 0.2 -> 0.20, etc
     if( !check ) {
-      for(var i = 0; i <  inputs; i++) {
-        $(inputs[i] + "Input").val(values[k]);
+      for(var i = 0; i < inputs.length; i++) {
+        $(inputs[i] + "Input").val(newValues[i]);
         if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(values[k]);
+          $(inputs[i] + "Val").html(newValues[i]);
         } else {
-          var gravityCheck = "";
+          var gravityCheck = ""; 
           if( $("#gravityInput").val().length === 3 ) {
             gravityCheck = "0";
           }
-          $(inputs[i] + "Val").html(values[k] + gravityCheck); // add 0 to the end of gravity so that it reads 0.10
+          $(inputs[i] + "Val").html(newValues[i] + gravityCheck); // add 0 to the end of gravity so that it reads 0.10
         }
       }
       $( "#undoReset" ).prop( "disabled", true );
@@ -206,8 +213,8 @@ $(function () {
   }
   
   $("#printGraph").click(function (event) {
-  if(!$(".startDisabled").hasClass("disabled")) {
-    window.print();
-  }
-});
+    if(!$(".startDisabled").hasClass("disabled")) {
+      window.print();
+    }
+  });
 });
