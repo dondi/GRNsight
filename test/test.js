@@ -188,7 +188,7 @@ module.exports = function (app) {
 
 // MOCHA TESTS:
 
-var assert = require("assert")
+var assert = require("chai").assert
 
 describe('Gene Name Modifications', function(){
   describe('duplicate-gene-top-output', function(){
