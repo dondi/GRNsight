@@ -174,7 +174,7 @@ module.exports = function (app) {
   });
 
   app.get('/demo/weighted', function (req, res) {
-    return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
+    return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
   });
 
   app.get('/demo/schadeInput', function (req, res) {
@@ -193,7 +193,7 @@ var assert = require("chai").assert
 describe('Gene Name Modifications', function(){
   describe('duplicate-gene-top-output', function(){
     it('should return 1 duplicate gene error', function(){
-      assert.equal("There exist a duplicate for source gene ACE2.", );
+            assert.equal("There exist a duplicate for source gene ACE2.", "TBD");
     })
   })
 
