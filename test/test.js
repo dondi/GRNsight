@@ -190,11 +190,12 @@ module.exports = function (app) {
 
 var assert = require("chai").assert
 
-describe('Gene Name Modifications', function(){
-  describe('duplicate-gene-top-output', function(){
-    it('should return 1 duplicate gene error', function(){
-            assert.equal("There exist a duplicate for source gene ACE2.", "TBD");
+describe('Gene Name Modifications', function () {
+  describe('duplicate-gene-top-output', function () {
+    // Put code here that invokes the spreadsheet controller with the file you are testing.
+    // e.g. var result = spreadsheetController.load("/whatever/file.xlsx");
+    it('should return 1 duplicate gene error', function () {
+      assert.equal("There exist a duplicate for source gene ACE2.", "TBD" /*  result.errors[0] */);
     })
   })
-
 })
