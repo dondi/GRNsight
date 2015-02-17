@@ -21,8 +21,9 @@ app.set('corsOrigin', config.corsOrigin);
 
 console.log('CORS host: %s', app.get('corsOrigin'));
 
-// Load controllers
+// Load controllers.
 require(__dirname + '/controllers' + '/spreadsheet-controller')(app);
+require(__dirname + '/controllers' + '/ga-controller')(app);
 
 // Don't start the server if this app is run as a child process.
 if (!module.parent) {
