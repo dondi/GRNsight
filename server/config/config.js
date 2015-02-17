@@ -4,9 +4,9 @@ var path = require('path'),
 module.exports = {
   development: {
     host: 'localhost',
-    port: 3000,
+    port: 5000,
     url: 'http://' + this.host + '/' + this.port,
-    corsOrigin: 'http://localhost:3001',
+    corsOrigin: 'http://localhost:5001',
     root: rootPath,
     app: {
       name: 'GRNsight'

@@ -216,42 +216,27 @@ module.exports = function (app) {
       ['https://www.googleapis.com/auth/analytics.readonly'],
       null);
 
+    if (app.get('env') !== 'developer') {
+      res.header('Access-Control-Allow-Origin', 'http://dondi.github.io');
+    }
+
     jwt.authorize(function (err, tokens) {
       if (err) {
         console.log('jwt error', err);
         return;
       }
 
-    /*
-      ga.management.accounts.list({ auth: jwt }, function (err, result) {
-        console.log('api error', err, result);
-        res.send(result);
-      });
-
-      ga.management.webproperties.list({ auth: jwt, accountId: '54882218' }, function (err, result) {
-        console.log('api error', err, result);
-        res.send(result);
-      });
-
-      ga.management.profiles.list({
-        auth: jwt,
-        accountId: '54882218',
-        webPropertyId: 'UA-54882218-1'
-      }, function (err, result) {
-        console.log('api error', err, result);
-        res.send(result);
-      });
-    */
-
       ga.data.ga.get({
         auth: jwt,
         ids: 'ga:91279024',
         'start-date': '2014-01-01',
         'end-date': '2015-02-09',
-        'metrics': 'ga:sessions,ga:pageviews,ga:visitors',
+        'metrics': 'ga:sessions',
       }, function (err, result) {
-        console.log('api error', err, result);
-        res.send(result);
+        if (err) {
+          console.log('api error', err, result);
+        }
+        res.send(result.rows[0][0]);
       });
 
     });

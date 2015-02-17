@@ -4,13 +4,13 @@ var path = require('path'),
 module.exports = {
   development: {
     host: 'localhost',
-    port: 3001,
+    port: 5001,
     url: 'http://' + this.host + '/' + this.port,
     root: rootPath,
     app: {
       name: 'GRNsight'
     },
-    serviceRoot: 'http://localhost:3000'
+    serviceRoot: 'http://localhost:5000'
   },
 
   production: {
