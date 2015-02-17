@@ -33,7 +33,8 @@ module.exports = function (app) {
         if (err) {
           console.log('api error', err, result)
         }
-        res.send(result.rows[0][0])
+
+        res.send(result.rows && result.rows[0] ? result.rows[0][0] : '')
       })
     })
   })
