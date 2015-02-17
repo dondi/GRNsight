@@ -18,9 +18,6 @@ var processGRNmap = function (path, res, app) {
   parseSheet(sheet, res);
 };
 
-//exporting parseSheet for testing purposes
-module.exports = parseSheet;
-
 var parseSheet = function(sheet, res) {
   var currentSheet,
       network = {
@@ -168,6 +165,8 @@ checkGeneLength = function(errorArray, genesList) {
 }
 
 module.exports = function (app) {
+  if (app) {
+
   //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
   app.post('/upload', function (req, res) {
     //TODO: Add file validation
@@ -207,4 +206,12 @@ module.exports = function (app) {
   app.get('/demo/schadeOutput', function (req, res) {
     return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
   });
+
+  }
+
+  //exporting parseSheet for testing purposes
+  return {
+    parseSheet: parseSheet
+  };
+
 }
