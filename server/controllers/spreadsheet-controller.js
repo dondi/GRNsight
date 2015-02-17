@@ -3,6 +3,9 @@ var multiparty = require('multiparty'),
     util = require('util'),
     path = require('path');
 
+var google = require('googleapis'),
+    ga = google.analytics('v3');
+
 var processGRNmap = function (path, res, app) {
   var sheet;
   try {
@@ -203,5 +206,54 @@ module.exports = function (app) {
 
   app.get('/demo/schadeOutput', function (req, res) {
     return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
+  });
+
+  app.get('/ga', function (req, res) {
+    var jwt = new google.auth.JWT(
+      process.env.SERVICE_EMAIL,
+      'grnsight.pem',
+      null,
+      ['https://www.googleapis.com/auth/analytics.readonly'],
+      null);
+
+    jwt.authorize(function (err, tokens) {
+      if (err) {
+        console.log('jwt error', err);
+        return;
+      }
+
+    /*
+      ga.management.accounts.list({ auth: jwt }, function (err, result) {
+        console.log('api error', err, result);
+        res.send(result);
+      });
+
+      ga.management.webproperties.list({ auth: jwt, accountId: '54882218' }, function (err, result) {
+        console.log('api error', err, result);
+        res.send(result);
+      });
+
+      ga.management.profiles.list({
+        auth: jwt,
+        accountId: '54882218',
+        webPropertyId: 'UA-54882218-1'
+      }, function (err, result) {
+        console.log('api error', err, result);
+        res.send(result);
+      });
+    */
+
+      ga.data.ga.get({
+        auth: jwt,
+        ids: 'ga:91279024',
+        'start-date': '2014-01-01',
+        'end-date': '2015-02-09',
+        'metrics': 'ga:sessions,ga:pageviews,ga:visitors',
+      }, function (err, result) {
+        console.log('api error', err, result);
+        res.send(result);
+      });
+
+    });
   });
 }
