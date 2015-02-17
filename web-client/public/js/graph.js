@@ -146,7 +146,7 @@
                .attr("refX", function() {
                  xOffsets = {
                    2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2, 7 : 3, 8 : 2,
-                   9 : 3, 10 : 3, 11 : 4, 12 : 3, 13 : 4, 14 : 4
+                   9 : 3, 10 : 3, 11 : 4, 12 : 3, 13 : 4, 14 : 6
                  }
                  return xOffsets[d.strokeWidth];
                })
@@ -295,8 +295,7 @@
               }
           }
           return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-        })
-        .append("svg:title")
+        }).append("svg:title")
           .text(function (d) {
             return d.value.toPrecision(4);
           });
