@@ -145,8 +145,8 @@
                .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
                .attr("refX", function() {
                  xOffsets = {
-                   2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2, 7 : 3, 8 : 2,
-                   9 : 3, 10 : 3, 11 : 4, 12 : 3, 13 : 4, 14 : 6
+                   2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
+                   9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
                  }
                  return xOffsets[d.strokeWidth];
                })
@@ -201,8 +201,8 @@
                })
                .attr("refY", function() {
                  yOffsets = {
-                   2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2, 7 : 3, 8 : 2,
-                   9 : 3, 10 : 3, 11 : 4, 12 : 3, 13 : 4, 14 : 4
+                   2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
+                   9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
                  }
                  return yOffsets[d.strokeWidth];
                })
