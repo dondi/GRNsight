@@ -154,12 +154,12 @@ newError = function(possibleCause, suggestedFix) {
 checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
   for(var i = 0; i < sourceGenes.length - 1; i++) {
     if(sourceGenes[i] === sourceGenes[i + 1]) {
-      errorArray.push(new newError("There exist a duplicate for source gene " + sourceGenes[i] + ".", "Please remove the duplicate gene and submit again."));
+      errorArray.push(new newError("There exists a duplicate for source gene " + sourceGenes[i] + ".", "Please remove the duplicate gene and submit again."));
     }
   }
   for(var j = 0; j < targetGenes.length - 1; j++) {
     if(targetGenes[j] === targetGenes[j + 1]) {
-      errorArray.push(new newError("There exist a duplicate for target gene " + targetGenes[i] + ".", "Please remove the duplicate gene and submit again."));
+      errorArray.push(new newError("There exists a duplicate for target gene " + targetGenes[i] + ".", "Please remove the duplicate gene and submit again."));
     }
   }
 }
