@@ -4,7 +4,10 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
 describe('Gene Name Modifications', function(){
   describe('duplicate-gene-top-output', function(){
     it('should return 1 duplicate gene error', function(){
-      assert.equal("There exist a duplicate for source gene ACE2.", spreadsheetController.parseSheet());
+      var sheet = {genes: [21], errors: [1]},
+        possibleCause;
+      sheet.errors[0].possibleCause("There exists a duplicate for source gene ACE2.")
+      assert.equal("There exists a duplicate for source gene ACE2.", spreadsheetController.parseSheet(sheet).possibleCause);
     })
   })
 })
