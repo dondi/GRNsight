@@ -139,11 +139,7 @@ var parseSheet = function(sheet) {
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
 
-  if(network.errors.length != 0) {
-    return network;
-  } else {
-    return network;
-  }
+  return network;
 };
 
 newError = function(possibleCause, suggestedFix) {
