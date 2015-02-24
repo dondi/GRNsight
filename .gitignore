@@ -1,3 +1,4 @@
 server
 web-client
 .DS_Store
+node_modules
