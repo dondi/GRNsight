@@ -4,7 +4,8 @@ var multiparty = require('multiparty'),
     path = require('path');
 
 var processGRNmap = function (path, res, app) {
-  var sheet;
+  var sheet,
+      network = [];
   try {
     sheet = xlsx.parse(path);
   } catch (err) {
@@ -15,10 +16,17 @@ var processGRNmap = function (path, res, app) {
   //TODO: Optimize the result for D3
   res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
 
-  parseSheet(sheet, res);
+  network = parseSheet(sheet);
+
+  if(network.errors.length == 0) {
+    return res.json(network);
+  } else {
+    return res.json(400, network);
+  }
+
 };
 
-var parseSheet = function(sheet, res) {
+var parseSheet = function(sheet) {
   var currentSheet,
       network = {
         genes: [],
@@ -57,7 +65,7 @@ var parseSheet = function(sheet, res) {
     network.errors.push(new newError("This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
       "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
       "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."))
-    return res.json(400, network);
+    return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
@@ -75,7 +83,7 @@ var parseSheet = function(sheet, res) {
             network.genes.push(currentGene);
           } catch (err) {
             network.errors.push(new newError("One of your gene names appears to be corrupt.", "Please fix the error and try uploading again."));
-            return res.json(400, network);
+            return network;
           }
         } else if (column === 0) { 
           // These genes are the target genes
@@ -88,7 +96,7 @@ var parseSheet = function(sheet, res) {
             }
           } catch (err) {
             network.errors.push(new newError("One of your gene names appears to be corrupt.", "Please fix the error and try uploading again."));
-            return res.json(400, network);
+            return network;
           };
         } else {
           try {
@@ -113,7 +121,7 @@ var parseSheet = function(sheet, res) {
             // TO DO: Customize this error message to the specific issue that occurred.
             network.errors.push(new newError("One of the cells in the adjacency matrix appears to have a missing value.", 
               "Please ensure that all cells have a value, then upload the file again."));
-            return res.json(400, network);
+            return network;
           };
         };
         column++;
@@ -121,7 +129,7 @@ var parseSheet = function(sheet, res) {
       column = 0;
     } catch (err) {
       network.errors.push(new newError("An unexpected error occurred.", ""));
-      return res.json(400, network);
+      return network;
     }
   };
 
@@ -132,9 +140,9 @@ var parseSheet = function(sheet, res) {
   checkGeneLength(network.errors, genesList);
 
   if(network.errors.length != 0) {
-    return res.json(400, network);
+    return network;
   } else {
-    return res.json(network);
+    return network;
   }
 };
 
