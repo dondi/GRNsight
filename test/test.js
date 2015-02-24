@@ -3,7 +3,7 @@ var assert = require('chai').assert,
 
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
-describe('Gene Name Modifications', function () {
+describe('gene-name-modifications', function () {
   describe('duplicate-gene-top-output', function () {
     it('should return 1 duplicate gene error', function () {
       var sheet = xlsx.parse('test-files/gene-name-modifications/duplicate-gene-top-output.xlsx');
