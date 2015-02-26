@@ -5,7 +5,7 @@ var multiparty = require('multiparty'),
 
 var processGRNmap = function (path, res, app) {
   var sheet,
-      network = [];
+      network;
   try {
     sheet = xlsx.parse(path);
   } catch (err) {
@@ -62,9 +62,7 @@ var parseSheet = function(sheet) {
   }
 
   if (currentSheet === undefined) {
-    network.errors.push(new newError("This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
-      "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
-      "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."))
+    network.errors.push(errorList.missingNetworkError)
     return network;
   }
 
@@ -82,7 +80,7 @@ var parseSheet = function(sheet) {
             genesList.push(String(currentGene.name.toUpperCase()));
             network.genes.push(currentGene);
           } catch (err) {
-            network.errors.push(new newError("One of your gene names appears to be corrupt.", "Please fix the error and try uploading again."));
+            network.errors.push(errorList.corruptGeneError(row, column));
             return network;
           }
         } else if (column === 0) { 
@@ -95,7 +93,7 @@ var parseSheet = function(sheet) {
               network.genes.push(currentGene);
             }
           } catch (err) {
-            network.errors.push(new newError("One of your gene names appears to be corrupt.", "Please fix the error and try uploading again."));
+            network.errors.push(errorList.corruptGeneError(row, column));
             return network;
           };
         } else {
@@ -119,8 +117,7 @@ var parseSheet = function(sheet) {
             };
           } catch (err) {
             // TO DO: Customize this error message to the specific issue that occurred.
-            network.errors.push(new newError("One of the cells in the adjacency matrix appears to have a missing value.", 
-              "Please ensure that all cells have a value, then upload the file again."));
+            network.errors.push(errorList.missingValueError);
             return network;
           };
         };
@@ -128,7 +125,7 @@ var parseSheet = function(sheet) {
       };
       column = 0;
     } catch (err) {
-      network.errors.push(new newError("An unexpected error occurred.", ""));
+      network.errors.push(errorList.unknownError);
       return network;
     }
   };
@@ -150,12 +147,12 @@ newError = function(possibleCause, suggestedFix) {
 checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
   for(var i = 0; i < sourceGenes.length - 1; i++) {
     if(sourceGenes[i] === sourceGenes[i + 1]) {
-      errorArray.push(new newError("There exists a duplicate for source gene " + sourceGenes[i] + ".", "Please remove the duplicate gene and submit again."));
+      errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
     }
   }
   for(var j = 0; j < targetGenes.length - 1; j++) {
     if(targetGenes[j] === targetGenes[j + 1]) {
-      errorArray.push(new newError("There exists a duplicate for target gene " + targetGenes[i] + ".", "Please remove the duplicate gene and submit again."));
+      errorArray.push(errorList.duplicateGeneError("target", targetGenes[i]));
     }
   }
 }
@@ -163,8 +160,55 @@ checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
 checkGeneLength = function(errorArray, genesList) {
   for(var i = 0; i < genesList.length; i++) {
     if(genesList[i].length > 12) {
-      errorArray.push(new newError("Gene " + genesList[i] + " is more than 12 characters in length. ", "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again. "));
+      errorArray.push(errorList.geneLengthError(genesList[i]));
     }
+  }
+}
+
+var errorList = {
+  missingNetworkError: {
+    errorCode: "MISSING_NETWORK", 
+    possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
+    suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
+    "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
+  },
+
+  corruptGeneError: function (row, column) {
+    return {
+      errorCode: "CORRUPT_GENE", 
+      possibleCause: "The gene name in row " + row + ", column " + column + " appears to be invalid.", 
+      suggestedFix: "Please fix the error and try uploading again."
+    };
+  },
+
+  missingValueError: function (row, column) {
+    return {
+      errorCode: "MISSING_VALUE", 
+      possibleCause: "The cell at row " + row + ", column " + column + " in the adjacency matrix appears to have a missing value.", 
+      suggestedFix: "Please ensure that all cells have a value, then upload the file again."
+    };
+  },
+
+  duplicateGeneError: function(geneType, geneName) {
+    return {
+      errorCode: "DUPLICATE_GENE", 
+      possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".", 
+      suggestedFix: "Please remove the duplicate gene and submit again."
+    };
+  },
+
+  geneLengthError: function (geneName) {  
+    return {
+      errorCode: "INVALID_GENE_LENGTH", 
+      possibleCause: "Gene " + geneName + " is more than 12 characters in length.", 
+      suggestedFix: "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again."
+    };
+  },
+  
+  unknownError: {
+    errorCode: "UNKNOWN_ERROR", 
+    possibleCause: "An unexpected error occurred.", 
+    suggestedFix: ""
   }
 }
 
