@@ -49,14 +49,17 @@ $(function () {
         undoResetMenu: "#undoResetMenu"
       }, network.sheetType);
     }).error(function (xhr, status, error) {
-      var err = JSON.parse(xhr.responseText);
-      // Because the full network is returned, we pull out the errors array from the network.
-      console.log(err);
-      errorArray = err.errors;
+      var err = JSON.parse(xhr.responseText), 
+          errorString = "Your graph failed to load.<br><br>";
       $("#upload").val(""); // De-select the bad file.
-      var errorString = "Your graph failed to load.<br><br>";
-      for(var i = 0; i < errorArray.length; i++) {
-        errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
+      if (err.errors == undefined) { // will be undefined if an error was thrown before the network was generated 
+        errorString += err;
+      } else {
+        var errorArray = err.errors;
+        console.log(err);
+        for(var i = 0; i < errorArray.length; i++) {
+          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
+        }
       }
       $("#error").html(errorString);
       $("#myModal").modal("show");
