@@ -210,12 +210,4 @@ module.exports = function (app) {
   app.get('/demo/schadeOutput', function (req, res) {
     return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
   });
-
-  }
-
-  //exporting parseSheet for testing purposes
-  return {
-    parseSheet: parseSheet
-  };
-
 }

@@ -6,13 +6,13 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.3.8",
     "cors": "latest",
-    "node-xlsx": "latest",
+    "express": "3.3.8",
+    "googleapis": "^1.1.1",
     "mocha": "latest",
-    "supertest": "latest",
-    "should": "latest",
+    "multiparty": "latest",
     "node-xlsx": "latest",
-    "multiparty": "latest"
+    "should": "latest",
+    "supertest": "latest"
   }
 }
