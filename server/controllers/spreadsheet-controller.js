@@ -171,43 +171,49 @@ checkGeneLength = function(errorArray, genesList) {
 module.exports = function (app) {
   if (app) {
 
-  //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
-  app.post('/upload', function (req, res) {
-    //TODO: Add file validation
-    (new multiparty.Form()).parse(req, function (err, fields, files) {
-      if (err) {
-        return res.json(400, "There was a problem uploading your file. Please try again.");
-      }
+    //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+    app.post('/upload', function (req, res) {
+      //TODO: Add file validation
+      (new multiparty.Form()).parse(req, function (err, fields, files) {
+        if (err) {
+          return res.json(400, "There was a problem uploading your file. Please try again.");
+        }
 
-      try {
-        var input = files.file[0].path;
-      } catch (err) {
-        return res.json(400, "No upload file selected.");
-      }
+        try {
+          var input = files.file[0].path;
+        } catch (err) {
+          return res.json(400, "No upload file selected.");
+        }
 
-      if (path.extname(input) !== ".xlsx") {
-        return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRnsight can read." +
-          "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-          " able to be read by GRNsight.");
-      }
+        if (path.extname(input) !== ".xlsx") {
+          return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRnsight can read." +
+            "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+            " able to be read by GRNsight.");
+        }
 
-      return processGRNmap(input, res, app);
+        return processGRNmap(input, res, app);
+      });
     });
-  });
 
-  app.get('/demo/unweighted', function (req, res) {
-    return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
-  });
+    app.get('/demo/unweighted', function (req, res) {
+      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
+    });
 
-  app.get('/demo/weighted', function (req, res) {
-    return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
-  });
+    app.get('/demo/weighted', function (req, res) {
+      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
+    });
 
-  app.get('/demo/schadeInput', function (req, res) {
-    return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
-  });
+    app.get('/demo/schadeInput', function (req, res) {
+      return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+    });
 
-  app.get('/demo/schadeOutput', function (req, res) {
-    return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
-  });
+    app.get('/demo/schadeOutput', function (req, res) {
+      return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
+    });
+  }
+
+  //exporting parseSheet for use in testing
+  return { 
+    parseSheet: parseSheet
+  };
 }
