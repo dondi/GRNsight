@@ -2,7 +2,6 @@ var assert = require('chai').assert,
     xlsx = require('node-xlsx');
 
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
-console.log(spreadsheetController);
 
 describe('gene-name-modifications', function () {
   describe('duplicate-gene-top-output', function () {
