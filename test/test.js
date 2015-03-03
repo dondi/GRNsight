@@ -12,12 +12,12 @@ describe('gene-name-modifications', function () {
 
         assert.equal(2, network.errors.length);
         assert.equal(
-          "There exists a duplicate for source gene ACE2.",
-          network.errors[0].possibleCause
+          "DUPLICATE_GENE",
+          network.errors[0].errorCode
         );
         assert.equal(
-          "There exists a duplicate for target gene YAP6.",
-          network.errors[1].possibleCause
+          "DUPLICATE_GENE",
+          network.errors[1].errorCode
         );
       })
     })
@@ -29,12 +29,12 @@ describe('gene-name-modifications', function () {
 
         assert.equal(2, network.errors.length);
         assert.equal(
-          "There exists a duplicate for source gene ACE2.",
-          network.errors[0].possibleCause
+          "DUPLICATE_GENE",
+          network.errors[0].errorCode
         );
         assert.equal(
-          "There exists a duplicate for target gene YAP6.",
-          network.errors[1].possibleCause
+          "DUPLICATE_GENE",
+          network.errors[1].errorCode
         );
       })
     })
@@ -46,8 +46,8 @@ describe('gene-name-modifications', function () {
 
       assert.equal(1, network.errors.length);
       assert.equal(
-        "There exists a duplicate for target gene YAP1.",
-        network.errors[0].possibleCause
+        "DUPLICATE_GENE",
+        network.errors[0].errorCode
       );
     })
   })
@@ -59,8 +59,8 @@ describe('gene-name-modifications', function () {
 
       assert.equal(1, network.errors.length);
       assert.equal(
-        "There exists a duplicate for target gene YAP1.",
-        network.errors[0].possibleCause
+        "DUPLICATE_GENE",
+        network.errors[0].errorCode
       );
     })
   })
@@ -72,8 +72,8 @@ describe('duplicate-gene-top-input', function () {
 
       assert.equal(1, network.errors.length);
       assert.equal(
-        "There exists a duplicate for source gene ACE2.",
-        network.errors[0].possibleCause
+        "DUPLICATE_GENE",
+        network.errors[0].errorCode
       );
     })
   })
@@ -85,8 +85,8 @@ describe('duplicate-gene-top-input', function () {
 
       assert.equal(1, network.errors.length);
       assert.equal(
-        "There exists a duplicate for source gene ACE2.",
-        network.errors[0].possibleCause
+        "DUPLICATE_GENE",
+        network.errors[0].errorCode
       );
     })
   })
