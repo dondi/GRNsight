@@ -117,7 +117,7 @@ var parseSheet = function(sheet) {
             };
           } catch (err) {
             // TO DO: Customize this error message to the specific issue that occurred.
-            network.errors.push(errorList.missingValueError);
+            network.errors.push(errorList.missingValueError(row, column));
             return network;
           };
         };
