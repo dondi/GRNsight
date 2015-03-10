@@ -318,6 +318,7 @@
             return "M" + d.source.newX + "," + d.source.newY + " ";
         },
 
+        CURVE_THRESHOLD = 150,
         lineTo = function (d) {
             var node = d3.select("#node" + d.target.index),
                 w = +node.attr("width"),
@@ -336,6 +337,12 @@
             y1 = d.source.newY;
             x2 = d.target.newX;
             y2 = d.target.newY;
+
+            // Distance determines the construct.
+            var distance = Math.sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+            if (distance <= CURVE_THRESHOLD) {
+                return "L" + x2 + " " + y2;
+            }
 
             // Unit vectors.
             var ux = x2 - x1,
