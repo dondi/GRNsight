@@ -165,6 +165,7 @@ p.panel-title.aboutHeaders {
 	font-weight:normal;
 	font-size:15px;
 	margin: 0 0 0 30px;
+        white-space: nowrap;
 }
 
 h3 {
