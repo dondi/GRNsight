@@ -7,6 +7,12 @@
         <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="stylesheets/main.css">
         <meta charset="utf-8">
+        <style>
+          #mainContent { min-width: 1500px; }
+          #mainContent > div.pull-left { margin-bottom: 1em; }
+          #mainContent > div.pull-right { max-width: 720px; margin-right:200px; }
+          #footer { clear: both; }
+        </style>
 
     </head>
 
@@ -44,8 +50,8 @@
             </div>
         </div>
 
-        <div id="mainContent" style="min-width:1500px">
-            <div class="pull-left" style="margin-bottom:1em">
+        <div id="mainContent">
+            <div class="pull-left">
               <p id="pageTitle">People</p>
               <div id="pageContent">
                   <h3>Principal Investigators</h3>
@@ -76,12 +82,12 @@
                   </p>
               </div>
             </div>
-            <div class="pull-right" style="max-width:720px;margin-right:200px;">
+            <div class="pull-right">
               <img src="images/LMUSymposium_Group_20150321-2_resized.jpg"/>
               <p>The Dahlquist Lab along with the LMU Bioinformatics and Biomathematics Groups at the <a href="http://academics.lmu.edu/symposium/">7th Annual Loyola Marymount University Undergraduate Research Symposium</a> on 21 March 2015. <em>Back row, left to right:</em> Juan Carrillo, Natalie Williams, K. Grace Johnson, Kevin Wyllie, Kevin McGee, Kam Dahlquist, Ben Fitzpatrick. <em>Front row, left to right:</em> Monica Hong, Nicole Anguiano, Anindita Varshneya, Trixie Roque, John David N. Dionisio.</p>
             </div>
           </div>
-            <div id="footer" style="clear:both">
+            <div id="footer">
                 <hr id="separate">
                 <ul id="footerNav">
                     <li><a href="/GRNsight">Home</a></li>
