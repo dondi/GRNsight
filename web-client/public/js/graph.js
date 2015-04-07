@@ -318,7 +318,7 @@
             return "M" + d.source.newX + "," + d.source.newY + " ";
         },
 
-        CURVE_THRESHOLD = 200,
+        CURVE_THRESHOLD = 150,
         lineTo = function (d) {
             var node = d3.select("#node" + d.target.index),
                 w = +node.attr("width"),
@@ -340,10 +340,16 @@
 
             // Distance determines the construct.
             var cx2 = d.target.centerX,
-                cy2 = d.target.centerY;
+                cy2 = d.target.centerY,
+                sourceNode = d3.select("#node" + d.source.index),
+                sourceW = +sourceNode.attr("width"),
+                sourceH = +sourceNode.attr("height"),
+                dx = cx2 - x1 + (cx2 > x1 ? -1 : 1) * (sourceW / 2) +
+                                (cx2 > x1 ? -1 : 1) * (w / 2),
+                dy = cy2 - y1 + (cy2 > y1 ? -1 : 1) * (sourceH / 2) +
+                                (cy2 > y1 ? -1 : 1) * (h / 2);
 
-            var distance = Math.sqrt((cx2 - x1)*(cx2 - x1) + (cy2 - y1)*(cy2 - y1));
-
+            var distance = Math.sqrt(dx * dx + dy * dy);
             if (distance <= CURVE_THRESHOLD) {
                 return "L" + x2 + " " + y2;
             }
