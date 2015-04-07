@@ -318,7 +318,7 @@
             return "M" + d.source.newX + "," + d.source.newY + " ";
         },
 
-        CURVE_THRESHOLD = 150,
+        CURVE_THRESHOLD = 200,
         lineTo = function (d) {
             var node = d3.select("#node" + d.target.index),
                 w = +node.attr("width"),
@@ -337,22 +337,6 @@
             y1 = d.source.newY;
             x2 = d.target.newX;
             y2 = d.target.newY;
-
-            // Distance determines the construct.
-            var cx2 = d.target.centerX,
-                cy2 = d.target.centerY,
-                sourceNode = d3.select("#node" + d.source.index),
-                sourceW = +sourceNode.attr("width"),
-                sourceH = +sourceNode.attr("height"),
-                dx = cx2 - x1 + (cx2 > x1 ? -1 : 1) * (sourceW / 2) +
-                                (cx2 > x1 ? -1 : 1) * (w / 2),
-                dy = cy2 - y1 + (cy2 > y1 ? -1 : 1) * (sourceH / 2) +
-                                (cy2 > y1 ? -1 : 1) * (h / 2);
-
-            var distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance <= CURVE_THRESHOLD) {
-                return "L" + x2 + " " + y2;
-            }
 
             // Unit vectors.
             var ux = x2 - x1,
@@ -373,8 +357,9 @@
                 vx = -vx; vy = -vy;
             }
 
-            var inlineOffset = umagnitude / 4,
-                orthoOffset = inlineOffset,
+            var curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4,
+                inlineOffset = Math.max(umagnitude / 4, curveToStraight),
+                orthoOffset = Math.max(0, curveToStraight),
                 cp1x = x1 + inlineOffset * ux + vx * orthoOffset,
                 cp1y = y1 + inlineOffset * uy + vy * orthoOffset,
                 cp2x = x2 - inlineOffset * ux + vx * orthoOffset,
