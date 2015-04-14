@@ -3,8 +3,6 @@ var assert = require('chai').assert,
 
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
-describe('gene-name-modifications', function () {
-
   function noErrors(input) {
     var sheet = xlsx.parse(input),
           network = spreadsheetController.parseSheet(sheet);
@@ -55,8 +53,37 @@ describe('gene-name-modifications', function () {
     }
   }
 
-  // Gene Name Modifications
+  function unknownError(input, frequency) {  
+    var sheet = xlsx.parse(input),
+        network = spreadsheetController.parseSheet(sheet);
 
+    assert.equal(frequency, network.errors.length);
+
+    for(var i = 0; i < frequency; i++) {
+      assert.equal(
+        "UNKNOWN_ERROR",
+        network.errors[i].errorCode
+      );
+    }      
+  }
+
+  function missingValue(input, frequency) {  
+    var sheet = xlsx.parse(input),
+        network = spreadsheetController.parseSheet(sheet);
+
+    assert.equal(frequency, network.errors.length);
+
+    for(var i = 0; i < frequency; i++) {
+      assert.equal(
+        "MISSING_VALUE",
+        network.errors[i].errorCode
+      );
+    }      
+  }
+
+
+  // Gene Name Modifications
+describe('gene-name-modifications', function () {
   describe('duplicate-gene-side-and-top', function () {
       it('should return 2 duplicate gene errors', function () {
         duplicateGene('test-files/gene-name-modifications/duplicate-gene-side-and-top-input.xlsx', 2);
@@ -372,6 +399,120 @@ describe('duplicate-gene-top', function () {
       noErrors('test-files/gene-name-modifications/special-characters-tests/semicolon-related-output.xlsx')
       noErrors('test-files/gene-name-modifications/special-characters-tests/semicolon-unrelated-input.xlsx')
       noErrors('test-files/gene-name-modifications/special-characters-tests/semicolon-unrelated-output.xlsx')
+    })
+  })
+
+  describe('single-apostrophe', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-related-input.xlsx');
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-related-output.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-unrelated-input.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-unrelated-output.xlsx')
+    })
+  })
+
+  describe('single-line', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-line-related-input.xlsx');
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-line-related-output.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-line-unrelated-input.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-line-unrelated-output.xlsx')
+    })
+  })
+
+  describe('single-quote', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-quote-related-input.xlsx');
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-quote-related-output.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-quote-unrelated-input.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/single-quote-unrelated-output.xlsx')
+    })
+  })
+
+  describe('space', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/gene-name-modifications/special-characters-tests/space-related-input.xlsx');
+      noErrors('test-files/gene-name-modifications/special-characters-tests/space-related-output.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/space-unrelated-input.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/space-unrelated-output.xlsx')
+    })
+  })
+
+  describe('tilde', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/gene-name-modifications/special-characters-tests/tilde-related-input.xlsx');
+      noErrors('test-files/gene-name-modifications/special-characters-tests/tilde-related-output.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/tilde-unrelated-input.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/tilde-unrelated-output.xlsx')
+    })
+  })
+
+  describe('underscore', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/gene-name-modifications/special-characters-tests/underscore-related-input.xlsx');
+      noErrors('test-files/gene-name-modifications/special-characters-tests/underscore-related-output.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/underscore-unrelated-input.xlsx')
+      noErrors('test-files/gene-name-modifications/special-characters-tests/underscore-unrelated-output.xlsx')
+    })
+  })
+})
+
+  // Graph Tests
+
+describe('graph-tests', function () {
+  describe('asymmetrical-graphs', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/asymmetrical-disordered-input.xlsx');
+      noErrors('test-files/graph-tests/asymmetrical-more-source-genes.xlsx');
+      noErrors('test-files/graph-tests/asymmetrical-more-target-genes.xlsx');
+    })
+  })
+})
+
+  // Matrix Modifications
+
+describe('matrix-modifications', function () {
+  describe('asymmetrical-graphs', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/matrix-modifications/asymmetric-gene-order-input.xlsx');
+      noErrors('test-files/matrix-modifications/asymmetric-gene-order-output.xlsx');
+    })
+  })
+
+  describe('extra-data', function () {
+    it('all but extra-data-random-cell-network-only-input should return unknownError', function () {
+      unknownError('test-files/matrix-modifications/extra-data-random-cell-both-output.xlsx', 1);
+      unknownError('test-files/matrix-modifications/extra-data-random-cell-network-only-input.xlsx', 1);
+      noErrors('test-files/matrix-modifications/extra-data-random-cell-network-only-output.xlsx');
+      unknownError('test-files/matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx', 1);
+    })
+  })
+
+  describe('missing-value', function () {
+    it('should return missing value error except network-only-output', function () {
+      missingValue('test-files/matrix-modifications/missing-value-both-sheets-output.xlsx', 1);
+      missingValue('test-files/matrix-modifications/missing-value-network-only-input.xlsx', 1);
+      noErrors('test-files/matrix-modifications/missing-value-network-only-output.xlsx', 1);
+      missingValue('test-files/matrix-modifications/missing-value-network-optimized-only-output.xlsx', 1);
+    })
+  })
+
+  describe('text-data-type', function () {
+    it('all by outside-both, outside-net-only, outside-net-op-only should return no errors, those will return unknown error', function () {
+      noErrors('test-files/matrix-modifications/text-data-type-inside_related-both-output.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-inside_related-net-only-input.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-inside_related-net-only-output.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-inside-related-net-op-only-output.xlsx');
+
+      noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-both-output.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-only-input.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-only-output.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-op-only-output.xlsx');
+
+      unknownError('test-files/matrix-modifications/text-data-type-outside-both-output.xlsx', 1);
+      unknownError('test-files/matrix-modifications/text-data-type-outside-net-only-input.xlsx', 1);
+      noErrors('test-files/matrix-modifications/text-data-type-outside-net-only-output.xlsx');
+      unknownError('test-files/matrix-modifications/text-data-type-outside-net-op-only-output.xlsx', 1);
     })
   })
 })
