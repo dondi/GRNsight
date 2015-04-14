@@ -1,8 +1,6 @@
 var multiparty = require('multiparty'),
-    request = require('request'),
     xlsx = require('node-xlsx'),
     util = require('util'),
-    uuid = require('node-uuid'),
     path = require('path');
 
 var processGRNmap = function (path, res, app) {
@@ -236,14 +234,6 @@ module.exports = function (app) {
             "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
             " able to be read by GRNsight.");
         }
-
-        request.post('http://www.google-analytics.com/collect').form({
-          v: 1,
-          tid: "UA-54882218-1",
-          cid: uuid.v4(),
-          t: 'pageview',
-          dl: "http://dondi.github.io/GRNsight/upload"
-        });
 
         return processGRNmap(input, res, app);
       });

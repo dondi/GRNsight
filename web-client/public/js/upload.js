@@ -83,6 +83,11 @@ $(function () {
     var formData = new FormData();
     formData.append("file", $upload[0].files[0]);
     loadGrn("/upload", fullFilePath, formData);
+
+    if (window.ga) {
+        window.ga("send", "pageview", "/GRNsight/upload");
+    }
+
     event.preventDefault();
   });
 
