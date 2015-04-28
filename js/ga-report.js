@@ -9,7 +9,7 @@ $(function () {
             })
     	} else if(location.pathname.split("/").pop() === "index.html") {
     		$.getJSON("http://grnsight.cs.lmu.edu/server/ga?path=", function (result2) {
-    			$(".ga-report").text(result + result2)
+    			$(".ga-report").text(result + result2);
     		})
             $.getJSON("http://grnsight.cs.lmu.edu/server/ga?path=upload", function (uploadCount) {
                 $(".ga-upload").text(uploadCount);
