@@ -81,6 +81,20 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
+  function missingNetwork(input, frequency) {  
+    var sheet = xlsx.parse(input),
+        network = spreadsheetController.parseSheet(sheet);
+
+    assert.equal(frequency, network.errors.length);
+
+    for(var i = 0; i < frequency; i++) {
+      assert.equal(
+        "MISSING_NETWORK",
+        network.errors[i].errorCode
+      );
+    }      
+  }
+
 
   // Gene Name Modifications
 describe('gene-name-modifications', function () {
@@ -515,4 +529,45 @@ describe('matrix-modifications', function () {
       unknownError('test-files/matrix-modifications/text-data-type-outside-net-op-only-output.xlsx', 1);
     })
   })
+  
+  describe('value-replaced-with-spaces', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/matrix-modifications/value-replaced-w-spaces-both-output.xlsx');
+      noErrors('test-files/matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx');
+      noErrors('test-files/matrix-modifications/value-replaced–w-spaces-net-only-input.xlsx');
+      noErrors('test-files/matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx');
+    })
+  })
 })
+
+// Sheet Modificatios
+
+describe('sheet-modifications', function () {
+  describe('extra-sheet', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/extra-sheet-input.xlsx');
+      noErrors('test-files/sheet-modifications/extra-sheet-output.xlsx');
+    })
+  })
+
+  describe('missing-sheet', function () {
+    it('should return missing network error code on input sheet', function () {
+      missingNetwork('test-files/sheet-modifications/missing-sheet-input.xlsx', 1);
+      noErrors('test-files/sheet-modifications/missing-sheet-output.xlsx');
+    })
+  })
+
+  describe('sheet-names-switched', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/sheet-names-switched-output.xlsx');
+    })
+  })
+
+  describe('wrong-sheet-name', function () {
+    it('should return missing network error code on output sheet', function () {
+      noErrors('test-files/sheet-modifications/wrong-sheet-name-input.xlsx');
+      missingNetwork('test-files/sheet-modifications/wrong-sheet-name-output.xlsx', 1);
+    })
+  })
+})
+
