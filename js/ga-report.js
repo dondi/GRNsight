@@ -11,5 +11,8 @@ $(function () {
     	} else {
     		$(".ga-report").text(result);
     	}
+        if(location.pathname.split("/").pop() === "upload") {
+            $(".ga-upload").text(result);
+        }
     });
 });
