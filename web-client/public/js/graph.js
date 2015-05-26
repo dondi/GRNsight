@@ -38,6 +38,7 @@
       }
     }
 
+    //normalization all weights b/w 2-14
     var totalScale = d3.scale.linear()
           .domain(d3.extent(allWeights))
           .range([2, 14]),
@@ -47,6 +48,7 @@
 
         unweighted = false;
     
+    //if unweighted, weight is 2
     if (d3.min(positiveWeights) === d3.max(positiveWeights)) {
       totalScale = d3.scale.quantile()
         .domain(d3.extent(allWeights))
@@ -153,7 +155,7 @@
                .attr("refY", function() {
                  yOffsets = {
                    2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
-                   9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 18, 14 : 16
+                   9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 18, 14 : 19.25
                  }
                  return yOffsets[d.strokeWidth];
                })
@@ -186,7 +188,7 @@
               defs.append("marker")
                .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
                .attr("refX", function() {
-                  if(x1 === x2 && y1 === y2) {
+                  if(x1 === x2 && y1 === y2) { //if self referential...
                     xOffsets = {
                       2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
                       9 : 16.5, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 16
@@ -261,7 +263,7 @@
                     } : {
                       2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
                       8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
-                      13: 5, 14: 4.7
+                      13: 5, 14: 5.3
                     }
                   )[d.strokeWidth];
                 })
@@ -643,12 +645,12 @@
           selfRef = "_SelfReferential";
         }
         if (d.type == "repressor"  && colorOptimal ) {
-          if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) {
+          if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) { //if horizontal repressor
             return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-          } else {
+          } else { //otherwise vertical repressor
             return "url(#repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
-        } else {
+        } else { //otherwise arrowhead
           return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";        
         }
       });
@@ -665,7 +667,6 @@
     function dragstart(d) {
       var node = d3.select(this);
       node.classed("fixed", d.fixed = true);
-
     }
     
     function updateLinkDist(event) {
