@@ -1,5 +1,5 @@
 $(function () {
-  // Style of the tooltips
+  // Style of the tooltips when the user mouses over the label names
   $(".info").tooltip({
     placement: "top",
     delay: { show: 700, hide: 100 }
