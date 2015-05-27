@@ -167,7 +167,7 @@ var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
   // Run through the target genes and check if the gene in slot i is the same as the one next to it
   for(var j = 0; j < targetGenes.length - 1; j++) {
     if(targetGenes[j] === targetGenes[j + 1]) {
-      errorArray.push(errorList.duplicateGeneError("target", targetGenes[i]));
+      errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
     }
   }
 }
