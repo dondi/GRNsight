@@ -34,7 +34,7 @@ module.exports = function (app) {
           console.log('api error', err, result)
         }
 
-        res.send(result.rows && result.rows[0] ? result.rows[0][0] : '')
+        res.send(result && result.rows && result.rows[0] ? result.rows[0][0] : '(unknown)')
       })
     })
   })
