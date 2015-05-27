@@ -481,6 +481,24 @@ describe('graph-tests', function () {
       noErrors('test-files/graph-tests/asymmetrical-more-target-genes.xlsx');
     })
   })
+
+  describe('incorrect-corrupt-gene-error-dCIN5', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/dCIN5GendronModel1.xlsx');
+    })
+  })
+
+  describe('incorrect-missing-data-error-10-genes-0-edges', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/different-sized-networks/10-genes-0-edges.xlsx');
+    })
+  })
+
+  describe('incorrect-duplicate-gene-error-140-genes-0-edges', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/different-sized-networks/140-genes-0-edges.xlsx');
+    })
+  })
 })
 
   // Matrix Modifications
