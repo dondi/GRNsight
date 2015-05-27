@@ -19,8 +19,10 @@ var processGRNmap = function (path, res, app) {
   network = parseSheet(sheet);
 
   if(network.errors.length == 0) {
+    // If all looks well, return the network with an all clear
     return res.json(network);
   } else {
+    // If all does not look well, return the network with an error 400
     return res.json(400, network);
   }
 
@@ -36,13 +38,13 @@ var parseSheet = function(sheet) {
         negativeWeights: [],
         sheetType: "unweighted",
       },
-      currentLink,
+      currentLink, 
       currentGene,
       sourceGene,
       targetGene,
       sourceGeneNumber,
       targetGeneNumber,
-      genesList = [],
+      genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
       targetGenes = [];
   
@@ -61,7 +63,8 @@ var parseSheet = function(sheet) {
     }
   }
 
-  if (currentSheet === undefined) {
+  // If it didn't find a network/network_optimized_weights sheet
+  if (currentSheet === undefined) { 
     network.errors.push(errorList.missingNetworkError)
     return network;
   }
@@ -69,46 +72,54 @@ var parseSheet = function(sheet) {
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
     // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
     // At some point, we'll want to look through all 256 rows for random data.
-    // column = 1 so it skips the first line on the first row.
-    try {
-      while(column < currentSheet.data[row].length) {
-        if (row === 0) {
+    // We set column = 1 in the for loop so it skips the first line on the first row, since that contains no matrix data.
+    try { // This prevents the server from crashing if something goes wrong anywhere in here
+      while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
+        if (row === 0) { // If we are at the top of a new column...
           // These genes are the source genes
           try {
-            currentGene = {name: currentSheet.data[row][column].value};
-            sourceGenes.push(String(currentGene.name.toUpperCase())); // For use in error checking later.
-            genesList.push(String(currentGene.name.toUpperCase()));
+            currentGene = {name: currentSheet.data[0][column].value}; 
+            // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
+            sourceGenes.push(String(currentGene.name.toUpperCase())); 
+            genesList.push(String(currentGene.name.toUpperCase())); 
             network.genes.push(currentGene);
           } catch (err) {
             network.errors.push(errorList.corruptGeneError(row, column));
             return network;
-          }
-        } else if (column === 0) { 
+          } 
+        } else if (column === 0) { // If we are at the far left of a new row...
           // These genes are the target genes
           try {
-            currentGene = {name: currentSheet.data[row][column].value};
-            targetGenes.push(String(currentGene.name.toUpperCase()));
+            currentGene = {name: currentSheet.data[row][0].value}; 
+            targetGenes.push(String(currentGene.name.toUpperCase())); 
+            // Here we check to see if we've already seen the gene name that we're about to store
+            // Genes may or may not be present due to asymmetry or unorderedness
+            // If it's in the genesList, it will return a number > 0, so we won't store it
+            // If it's not there, it will return -1, so we add it. 
             if(genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
-              genesList.push(String(currentGene.name));
+              genesList.push(String(currentGene.name.toUpperCase()));
               network.genes.push(currentGene);
             }
           } catch (err) {
             network.errors.push(errorList.corruptGeneError(row, column));
             return network;
           };
-        } else {
+        } else { // If we're within the matrix and lookin' at the data...
           try {
-            if (currentSheet.data[row][column].value != 0) {
-              sourceGene = currentSheet.data[0][column].value.toUpperCase();
+            if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
+              // Grab the source gene's name and number
+              sourceGene = currentSheet.data[0][column].value.toUpperCase(); 
               sourceGeneNumber = genesList.indexOf(sourceGene);
+              // Grab the target gene's name and number
               targetGene = currentSheet.data[row][0].value.toUpperCase();
               targetGeneNumber = genesList.indexOf(targetGene);
               currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column].value};
-              if (currentLink.value > 0) {
+              // Here we set the properties of the current link before we push them to the network
+              if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
                 currentLink.type = "arrowhead";
                 currentLink.stroke = "MediumVioletRed";
                 network.positiveWeights.push(currentLink.value);
-              } else {
+              } else { // if it's a negative number, mark it as a repressor
                 currentLink.type = "repressor";
                 currentLink.stroke = "DarkTurquoise";
                 network.negativeWeights.push(currentLink.value);
@@ -121,35 +132,39 @@ var parseSheet = function(sheet) {
             return network;
           };
         };
-        column++;
-      };
-      column = 0;
+        column++; // Let's move on to the next column!
+      }; // Once we finish with the current row...
+      column = 0; // let's go back to column 0 on the next row!
     } catch (err) {
+      // We only get here if something goes drastically wrong. We don't want to get here.
       network.errors.push(errorList.unknownError);
       return network;
     }
   };
 
+
+  // We sort them here because gene order is not relevant before this point
+  // Sorting them now means duplicates will be right next to each other
   sourceGenes.sort();
   targetGenes.sort();
 
+  // Final error checks!
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
 
+  // We're done. Return the network.
   return network;
 };
 
-newError = function(possibleCause, suggestedFix) {
-  this.possibleCause = possibleCause;
-  this.suggestedFix = suggestedFix;
-}
 
-checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+  // Run through the source genes and check if the gene in slot i is the same as the one next to it
   for(var i = 0; i < sourceGenes.length - 1; i++) {
     if(sourceGenes[i] === sourceGenes[i + 1]) {
       errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
     }
   }
+  // Run through the target genes and check if the gene in slot i is the same as the one next to it
   for(var j = 0; j < targetGenes.length - 1; j++) {
     if(targetGenes[j] === targetGenes[j + 1]) {
       errorArray.push(errorList.duplicateGeneError("target", targetGenes[i]));
@@ -157,14 +172,17 @@ checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
   }
 }
 
-checkGeneLength = function(errorArray, genesList) {
+var checkGeneLength = function(errorArray, genesList) {
+  // Check if any genes are over the gene length (currently 12)
+  var maxGeneLength = 12
   for(var i = 0; i < genesList.length; i++) {
-    if(genesList[i].length > 12) {
+    if(genesList[i].length > maxGeneLength) {
       errorArray.push(errorList.geneLengthError(genesList[i]));
     }
   }
 }
 
+// This is the massive list of errors. Yay!
 var errorList = {
   missingNetworkError: {
     errorCode: "MISSING_NETWORK", 
@@ -239,6 +257,7 @@ module.exports = function (app) {
       });
     });
 
+    // Load the demos
     app.get('/demo/unweighted', function (req, res) {
       return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
     });
@@ -256,7 +275,7 @@ module.exports = function (app) {
     });
   }
 
-  //exporting parseSheet for use in testing
+  //exporting parseSheet for use in testing. Do not remove!
   return { 
     parseSheet: parseSheet
   };
