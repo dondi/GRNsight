@@ -29,15 +29,18 @@ $(function () {
       }) :
       $.getJSON(fullUrl)
     ).done(function (network) {
-      console.log(network);
-      $("#fileName").text(name);
-      $("input[type='range']").off("input");
-      // If more things need to be turned off, we"ll add them to this array
+      console.log(network); // Display the network in the console
+      if(network.warnings.length > 0) {
+        displayWarnings(network.warnings);
+      }
+      $("#fileName").text(name); // Set the name of the file to display in the top bar
+      $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
+      // If more things need to be turned off, we'll add them to this array
       var disable = [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ]
       for(var i = 0; i < disable.length; i++) {
         $(disable[i]).off("click");
       }
-      previousFile = [url, name, formData];
+      previousFile = [url, name, formData]; // Store info about the previous file for use in reload
       drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
         linkSlider: "#linkDistInput",
         chargeSlider: "#chargeInput",
@@ -56,7 +59,6 @@ $(function () {
         errorString += err;
       } else {
         var errorArray = err.errors;
-        console.log(err);
         for(var i = 0; i < errorArray.length; i++) {
           errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
         }
@@ -92,6 +94,25 @@ $(function () {
     }
 
     event.preventDefault();
+  });
+
+  var displayWarnings = function (warnings) {
+    $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
+      "It is possible that these warnings are the result of extraneous data outside of the matrix, but " + 
+      "we recommend you review your file and ensure that everything looks correct. To view the details " + 
+      "of the warning(s), please select the dropdown below.");
+    var warningsString = "";
+    for(var i = 0; i < warnings.length; i++) {
+      warningsString += warnings[i].errorDescription + " <br><br>";
+    }
+    $("#warningsList").html(warningsString);
+    $("#warningsModal").modal("show");
+  }
+
+  $("#warningsModal").on("hidden.bs.modal", function() {
+    if( $("#warningsInfo").hasClass("in") ) {
+      $("#warningsInfo").removeClass("in");
+    }
   });
 
   var previousFile = ["/upload", "", undefined];

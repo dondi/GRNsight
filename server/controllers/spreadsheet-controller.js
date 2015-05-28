@@ -16,9 +16,9 @@ var processGRNmap = function (path, res, app) {
   //TODO: Optimize the result for D3
   res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
 
-  network = parseSheet(sheet);
+  network = parseSheet(sheet); 
 
-  if(network.errors.length == 0) {
+  if(network.errors.length === 0) {
     // If all looks well, return the network with an all clear
     return res.json(network);
   } else {
@@ -34,6 +34,7 @@ var parseSheet = function(sheet) {
         genes: [],
         links: [],
         errors: [],
+        warnings: [],
         positiveWeights: [],
         negativeWeights: [],
         sheetType: "unweighted",
@@ -50,11 +51,11 @@ var parseSheet = function(sheet) {
   
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.worksheets.length; i++) {
-    if (sheet.worksheets[i].name == "network") {
+    if (sheet.worksheets[i].name === "network") {
       //Here we have found a sheet containing simple data. We keep looking
       //in case there is also a sheet with optimized weights
       currentSheet = sheet.worksheets[i];
-    } else if (sheet.worksheets[i].name == "network_optimized_weights") {
+    } else if (sheet.worksheets[i].name === "network_optimized_weights") {
       //We found a sheet with optimized weights, which is the ideal data source.
       //So we stop looking.
       currentSheet = sheet.worksheets[i];
@@ -70,9 +71,9 @@ var parseSheet = function(sheet) {
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-    if(currentSheet.data[row] === undefined) {
-      // Currently, do nothing.
-    } else {
+    if(currentSheet.data[row] === undefined) { // if the current row is empty 
+      network.warnings.push(warningsList.emptyRowWarning(row));
+    } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
       // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
@@ -84,9 +85,9 @@ var parseSheet = function(sheet) {
               currentGene = {name: currentSheet.data[0][column]}; 
               // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
               if(currentGene.name === undefined) {
-                // Currently, do nothing
+                network.warnings.push(warningsList.missingSourceGeneWarning("undefined", column));
               } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-                // Currently, do nothing
+                network.warnings.push(warningsList.missingSourceGeneWarning("NaN", column));
               } else {
                 sourceGenes.push(String(currentGene.name.value.toUpperCase())); 
                 genesList.push(String(currentGene.name.value.toUpperCase())); 
@@ -102,9 +103,9 @@ var parseSheet = function(sheet) {
             try {
               currentGene = {name: currentSheet.data[row][0]}; 
               if(currentGene.name === undefined) {
-                // Currently, do nothing
+                network.warnings.push(warningsList.missingTargetGeneWarning("undefined", row));
               } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-                // Currently, do nothing
+                network.warnings.push(warningsList.missingTargetGeneWarning("NaN", row));
               } else {
                 targetGenes.push(String(currentGene.name.value.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
@@ -124,16 +125,16 @@ var parseSheet = function(sheet) {
           } else { // If we're within the matrix and lookin' at the data...
             try {
               if(currentSheet.data[row][column] === undefined) {
-                // Currently, do nothing
+                network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
               } else {
                 if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
                   sourceGene = currentSheet.data[0][column]; 
                   targetGene = currentSheet.data[row][0];
                   if(sourceGene === undefined || targetGene === undefined) {
-                    // Currently, do nothing
+                    network.warnings.push(warningsList.randomDataWarning("undefined", row, column));
                   } else if((isNaN(sourceGene.value) && typeof sourceGene.value != "string") || (isNaN(targetGene.value) && typeof targetGene.value != "string")) {
-                    // Currently, do nothing
+                    network.warnings.push(warningsList.randomDataWarning("NaN", row, column));
                   } else {
                     // Grab the source and target genes' numbers
                     sourceGeneNumber = genesList.indexOf(sourceGene.value.toUpperCase());
@@ -211,6 +212,7 @@ var checkGeneLength = function(errorArray, genesList) {
 }
 
 // This is the massive list of errors. Yay!
+// The graph will not load if an error is detected.
 var errorList = {
   missingNetworkError: {
     errorCode: "MISSING_NETWORK", 
@@ -254,7 +256,47 @@ var errorList = {
   unknownError: {
     errorCode: "UNKNOWN_ERROR", 
     possibleCause: "An unexpected error occurred.", 
-    suggestedFix: ""
+    suggestedFix: "" // There is none, because we don't actually know what happened. 
+    // TODO: Put in a message saying to contact the GRNsight team.
+  }
+}
+
+// This is the list of warnings. 
+// The graph will still load if warnings are detected, but these will be reported to the user.
+var warningsList = {
+  missingSourceGeneWarning: function (type, column) {
+    return {
+      warningCode: "MISSING_SOURCE",
+      errorDescription: "A source gene was detected as " + type + " in column " + column + "."  
+    } 
+  },
+
+  missingTargetGeneWarning: function (type, row) {
+    return {
+      warningCode: "MISSING_TARGET",
+      errorDescription: "A target gene was detected as " + type + " in row " + row + "."
+    }
+  },
+
+  invalidMatrixDataWarning: function (row, column) {
+    return {
+      warningCode: "INVALID_DATA",
+      errorDescription: "The value in row " + row + ", column " + column + ", was detected as being undefined."
+    }
+  },
+
+  randomDataWarning: function (type, row, column) {
+    return {
+      warning: "RANDOM_DATA",
+      errorDescription: "The value in row " + row + ", column " + column + ", has a corresponding source and/or target gene that is detected as " + type + "." 
+    }
+  },
+
+  emptyRowWarning: function (row) {
+    return {
+      warningCode: "EMPTY_ROW",
+      errorDescription: "Row " + row + " was found to contain no data."
+    }
   }
 }
 
