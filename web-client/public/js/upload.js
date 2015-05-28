@@ -62,7 +62,7 @@ $(function () {
         }
       }
       $("#error").html(errorString);
-      $("#myModal").modal("show");
+      $("#errorModal").modal("show");
     });
   };
 

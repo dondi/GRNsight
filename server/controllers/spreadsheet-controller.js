@@ -70,96 +70,104 @@ var parseSheet = function(sheet) {
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-    // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
-    // At some point, we'll want to look through all 256 rows for random data.
-    // We set column = 1 in the for loop so it skips row 1 column 0, since that contains no matrix data.
-    try { // This prevents the server from crashing if something goes wrong anywhere in here
-      while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
-        if (row === 0) { // If we are at the top of a new column...
-          // These genes are the source genes
-          try {
-            currentGene = {name: currentSheet.data[0][column]}; 
-            // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
-            if(currentGene.name === undefined) {
-              // Currently, do nothing
-            } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-              // Currently, do nothing
-            } else {
-              sourceGenes.push(String(currentGene.name.value.toUpperCase())); 
-              genesList.push(String(currentGene.name.value.toUpperCase())); 
-              currentGene.name = currentGene.name.value;
-              network.genes.push(currentGene);
-            }
-          } catch (err) {
-            network.errors.push(errorList.corruptGeneError(row, column));
-            return network;
-          } 
-        } else if (column === 0) { // If we are at the far left of a new row...
-          // These genes are the target genes
-          try {
-            currentGene = {name: currentSheet.data[row][0]}; 
-            if(currentGene.name === undefined) {
-              // Currently, do nothing
-            } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-              // Currently, do nothing
-            } else {
-              targetGenes.push(String(currentGene.name.value.toUpperCase()));
-              // Here we check to see if we've already seen the gene name that we're about to store
-              // Genes may or may not be present due to asymmetry or unorderedness
-              // If it's in the genesList, it will return a number > 0, so we won't store it
-              // If it's not there, it will return -1, so we add it. 
-              if(genesList.indexOf(String(currentGene.name.value.toUpperCase())) === -1) {
-                genesList.push(String(currentGene.name.value.toUpperCase()));
-                currentGene.name = currentGene.name.value;
-                network.genes.push(currentGene);
-              } 
-            }
-          } catch (err) {
-            network.errors.push(errorList.corruptGeneError(row, column));
-            return network;
-          };
-        } else { // If we're within the matrix and lookin' at the data...
-          try {
-            if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
-              // Grab the source and target genes' names
-              sourceGene = currentSheet.data[0][column]; 
-              targetGene = currentSheet.data[row][0];
-              if(sourceGene === undefined || targetGene === undefined) {
+    if(currentSheet.data[row] === undefined) {
+      // Currently, do nothing.
+    } else {
+      // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
+      // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
+      // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
+      try { // This prevents the server from crashing if something goes wrong anywhere in here
+        while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
+          if (row === 0) { // If we are at the top of a new column...
+            // These genes are the source genes
+            try {
+              currentGene = {name: currentSheet.data[0][column]}; 
+              // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
+              if(currentGene.name === undefined) {
                 // Currently, do nothing
-              } else if((isNaN(sourceGene.value) && typeof sourceGene.value != "string") || (isNaN(targetGene.value) && typeof targetGene.value != "string")) {
+              } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
                 // Currently, do nothing
               } else {
-                // Grab the source and target genes' numbers
-                sourceGeneNumber = genesList.indexOf(sourceGene.value.toUpperCase());
-                targetGeneNumber = genesList.indexOf(targetGene.value.toUpperCase());
-                currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column].value};
-                // Here we set the properties of the current link before we push them to the network
-                if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
-                  currentLink.type = "arrowhead";
-                  currentLink.stroke = "MediumVioletRed";
-                  network.positiveWeights.push(currentLink.value);
-                } else { // if it's a negative number, mark it as a repressor
-                  currentLink.type = "repressor";
-                  currentLink.stroke = "DarkTurquoise";
-                  network.negativeWeights.push(currentLink.value);
-                }
-                network.links.push(currentLink);
+                sourceGenes.push(String(currentGene.name.value.toUpperCase())); 
+                genesList.push(String(currentGene.name.value.toUpperCase())); 
+                currentGene.name = currentGene.name.value;
+                network.genes.push(currentGene);
               }
+            } catch (err) {
+              network.errors.push(errorList.corruptGeneError(row, column));
+              return network;
+            } 
+          } else if (column === 0) { // If we are at the far left of a new row...
+            // These genes are the target genes
+            try {
+              currentGene = {name: currentSheet.data[row][0]}; 
+              if(currentGene.name === undefined) {
+                // Currently, do nothing
+              } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
+                // Currently, do nothing
+              } else {
+                targetGenes.push(String(currentGene.name.value.toUpperCase()));
+                // Here we check to see if we've already seen the gene name that we're about to store
+                // Genes may or may not be present due to asymmetry or unorderedness
+                // If it's in the genesList, it will return a number > 0, so we won't store it
+                // If it's not there, it will return -1, so we add it. 
+                if(genesList.indexOf(String(currentGene.name.value.toUpperCase())) === -1) {
+                  genesList.push(String(currentGene.name.value.toUpperCase()));
+                  currentGene.name = currentGene.name.value;
+                  network.genes.push(currentGene);
+                } 
+              }
+            } catch (err) {
+              network.errors.push(errorList.corruptGeneError(row, column));
+              return network;
             };
-          } catch (err) {
-            // TO DO: Customize this error message to the specific issue that occurred.
-            network.errors.push(errorList.missingValueError(row, column));
-            return network;
+          } else { // If we're within the matrix and lookin' at the data...
+            try {
+              if(currentSheet.data[row][column] === undefined) {
+                // Currently, do nothing
+              } else {
+                if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
+                  // Grab the source and target genes' names
+                  sourceGene = currentSheet.data[0][column]; 
+                  targetGene = currentSheet.data[row][0];
+                  if(sourceGene === undefined || targetGene === undefined) {
+                    // Currently, do nothing
+                  } else if((isNaN(sourceGene.value) && typeof sourceGene.value != "string") || (isNaN(targetGene.value) && typeof targetGene.value != "string")) {
+                    // Currently, do nothing
+                  } else {
+                    // Grab the source and target genes' numbers
+                    sourceGeneNumber = genesList.indexOf(sourceGene.value.toUpperCase());
+                    targetGeneNumber = genesList.indexOf(targetGene.value.toUpperCase());
+                    currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column].value};
+                    // Here we set the properties of the current link before we push them to the network
+                    if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
+                      currentLink.type = "arrowhead";
+                      currentLink.stroke = "MediumVioletRed";
+                      network.positiveWeights.push(currentLink.value);
+                    } else { // if it's a negative number, mark it as a repressor
+                      currentLink.type = "repressor";
+                      currentLink.stroke = "DarkTurquoise";
+                      network.negativeWeights.push(currentLink.value);
+                    }
+                    network.links.push(currentLink);
+                  }
+                };
+              }
+            } catch (err) {
+              // TO DO: Customize this error message to the specific issue that occurred.
+              network.errors.push(errorList.missingValueError(row, column));
+              return network;
+            };
           };
-        };
-        column++; // Let's move on to the next column!
-      }; // Once we finish with the current row...
+          column++; // Let's move on to the next column!
+        }; // Once we finish with the current row...
       column = 0; // let's go back to column 0 on the next row!
-    } catch (err) {
-      // We only get here if something goes drastically wrong. We don't want to get here.
-      network.errors.push(errorList.unknownError);
-      return network;
-    }
+      } catch (err) {
+        // We only get here if something goes drastically wrong. We don't want to get here.
+        network.errors.push(errorList.unknownError);
+        return network;
+      }
+    };
   };
 
 
