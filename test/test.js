@@ -494,9 +494,9 @@ describe('graph-tests', function () {
     })
   })
 
-  describe('incorrect-duplicate-gene-error-140-genes-0-edges', function () {
-    it('should not return any errors', function () {
-      noErrors('test-files/graph-tests/different-sized-networks/140-genes-0-edges.xlsx');
+  describe('duplicate-gene-error-140-genes-0-edges', function () {
+    it('should return 1 duplicate gene error', function () {
+      duplicateGene('test-files/graph-tests/different-sized-networks/140-genes-0-edges.xlsx', 1);
     })
   })
 })
