@@ -538,11 +538,6 @@ describe('matrix-modifications', function () {
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-only-input.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-only-output.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-op-only-output.xlsx');
-
-      unknownError('test-files/matrix-modifications/text-data-type-outside-both-output.xlsx', 1);
-      unknownError('test-files/matrix-modifications/text-data-type-outside-net-only-input.xlsx', 1);
-      noErrors('test-files/matrix-modifications/text-data-type-outside-net-only-output.xlsx');
-      unknownError('test-files/matrix-modifications/text-data-type-outside-net-op-only-output.xlsx', 1);
     })
   })
 
