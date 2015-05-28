@@ -523,18 +523,31 @@ describe('matrix-modifications', function () {
     })
   })
 
-  describe('text-data-type', function () {
-    it('all by outside-both, outside-net-only, outside-net-op-only should return no errors, those will return unknown error', function () {
+  describe('text-data-type-inside-related', function () {
+    it('should return no errors', function () {
       noErrors('test-files/matrix-modifications/text-data-type-inside_related-both-output.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside_related-net-only-input.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside_related-net-only-output.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside-related-net-op-only-output.xlsx');
+    })
+  })
 
+  describe('text-data-type-inside-unrelated', function () {
+    it('should return no errors', function () {
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-both-output.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-only-input.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-only-output.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-inside-unrelated-net-op-only-output.xlsx');
 
+      unknownError('test-files/matrix-modifications/text-data-type-outside-both-output.xlsx', 1);
+      unknownError('test-files/matrix-modifications/text-data-type-outside-net-only-input.xlsx', 1);
+      noErrors('test-files/matrix-modifications/text-data-type-outside-net-only-output.xlsx');
+      unknownError('test-files/matrix-modifications/text-data-type-outside-net-op-only-output.xlsx', 1);
+    })
+  })
+
+  describe('text-data-type-outside', function () {
+    it('net-only-output should return no errors, both, net-only-input, and net-op-only should return unknown error', function () {
       unknownError('test-files/matrix-modifications/text-data-type-outside-both-output.xlsx', 1);
       unknownError('test-files/matrix-modifications/text-data-type-outside-net-only-input.xlsx', 1);
       noErrors('test-files/matrix-modifications/text-data-type-outside-net-only-output.xlsx');
