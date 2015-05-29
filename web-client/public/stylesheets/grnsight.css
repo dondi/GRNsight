@@ -86,6 +86,9 @@ nav.navbar.navbar-default {
   margin-top: 10px;
   text-align: center;
 }
+.btnSidebar {
+  width: 225px;
+}
 .dropdown-submenu {
   position: relative;
 }

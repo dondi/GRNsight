@@ -50,7 +50,7 @@ $(function () {
         resetSliderMenu: "#resetSlidersMenu",
         undoResetButton: "#undoReset",
         undoResetMenu: "#undoResetMenu"
-      }, network.sheetType);
+      }, network.sheetType, network.warnings);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
           errorString = "Your graph failed to load.<br><br>";
@@ -99,7 +99,8 @@ $(function () {
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
       "It is possible that these warnings are the result of extraneous data outside of the matrix, but " + 
-      "we recommend you review your file and ensure that everything looks correct. To view the details " + 
+      "we recommend you review your file and ensure that everything looks correct. The graph will be loaded, " +
+      "but may not look the way it is expected to look. To view the details " + 
       "of the warning(s), please select the dropdown below.");
     var warningsString = "";
     for(var i = 0; i < warnings.length; i++) {

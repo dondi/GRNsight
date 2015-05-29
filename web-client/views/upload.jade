@@ -147,9 +147,10 @@ html
           input(id='lockSliders', type='checkbox', value='lockSliders')
           label(for='lockSliders' style='font-weight:normal') Lock Force Graph Parameters
         form
-          input(id='resetSliders' type='button' class='btn btn-default' value='Reset Force Graph Parameters') 
-          input(id='undoReset' type='button' class='btn btn-default' value='Undo Reset' disabled)
+          input(id='resetSliders' type='button' class='btn btn-default btnSidebar' value='Reset Force Graph Parameters') 
+          input(id='undoReset' type='button' class='btn btn-default btnSidebar' value='Undo Reset' disabled)
         p(id='mouseOver')
+        p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
     div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
