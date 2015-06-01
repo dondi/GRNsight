@@ -558,6 +558,16 @@ describe('matrix-modifications', function () {
       noErrors('test-files/matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx');
     })
   })
+
+  describe('empty-row-or-column', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/matrix-modifications/empty-column-input.xlsx');
+      noErrors('test-files/matrix-modifications/empty-column-output.xlsx');
+      noErrors('test-files/matrix-modifications/empty-row-input.xlsx');
+      noErrors('test-files/matrix-modifications/empty-row-output.xlsx');
+    })
+  })
+
 })
 
 // Sheet Modificatios
