@@ -252,6 +252,16 @@ var errorList = {
       suggestedFix: "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again."
     };
   },
+
+/*
+  networkSizeError: function (genesList) {  
+    return {
+      errorCode: "INVALID_NETWORK_SIZE", 
+      possibleCause: "Network has " + genesList.length() + " genes." 
+      suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and submit again."
+    };
+  },
+*/
   
   unknownError: {
     errorCode: "UNKNOWN_ERROR", 
@@ -298,6 +308,15 @@ var warningsList = {
       errorDescription: "Row " + row + " was found to contain no data."
     }
   }
+
+  networkSizeWarning: function (genesList) {
+    return {
+      warningCode: "INVALID_NETWORK_SIZE",
+      errorDescription: "Networks are recommended to have less than 50 genes and 100 edges."
+    }
+  }
+
+
 }
 
 module.exports = function (app) {
