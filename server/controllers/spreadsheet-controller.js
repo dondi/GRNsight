@@ -309,14 +309,14 @@ var warningsList = {
     }
   }
 
+/*
   networkSizeWarning: function (genesList) {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Networks are recommended to have less than 50 genes and 100 edges."
     }
   }
-
-
+*/
 }
 
 module.exports = function (app) {
