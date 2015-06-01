@@ -10,7 +10,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
       assert.equal(0, network.errors.length);
   }
 
-  function duplicateGene(input, frequency) {  
+  function duplicateGeneError(input, frequency) {  
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
 
@@ -24,7 +24,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
-  function invalidGeneLength(input, frequency){
+  function invalidGeneLengthError(input, frequency){
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
 
@@ -39,7 +39,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
   }
   
 
-  function corruptGene(input, frequency) {
+  function corruptGeneError(input, frequency) {
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
 
@@ -67,7 +67,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
-  function missingValue(input, frequency) {  
+  function missingValueError(input, frequency) {  
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
 
@@ -81,7 +81,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
-  function missingNetwork(input, frequency) {  
+  function missingNetworkError(input, frequency) {  
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
 
@@ -100,38 +100,38 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
 describe('gene-name-modifications', function () {
   describe('duplicate-gene-side-and-top', function () {
       it('should return 2 duplicate gene errors', function () {
-        duplicateGene('test-files/gene-name-modifications/duplicate-gene-side-and-top-input.xlsx', 2);
-        duplicateGene('test-files/gene-name-modifications/duplicate-gene-side-and-top-output.xlsx', 2);
+        duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-input.xlsx', 2);
+        duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-output.xlsx', 2);
 
       })
     })
 
   describe('duplicate-gene-side', function () {
     it('should return 1 duplicate gene error', function () {
-      duplicateGene('test-files/gene-name-modifications/duplicate-gene-side-input.xlsx', 1);
-      duplicateGene('test-files/gene-name-modifications/duplicate-gene-side-output.xlsx', 1);
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-input.xlsx', 1);
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-output.xlsx', 1);
 
     })
   })
 
 describe('duplicate-gene-top', function () {
     it('should return 1 duplicate gene error', function () {
-      duplicateGene('test-files/gene-name-modifications/duplicate-gene-top-input.xlsx', 1);
-      duplicateGene('test-files/gene-name-modifications/duplicate-gene-top-output.xlsx', 1);
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-top-input.xlsx', 1);
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-top-output.xlsx', 1);
     })
   })
 
   describe('long-gene-name-related', function () {
     it('should return 1 long gene name error', function () {
-      invalidGeneLength('test-files/gene-name-modifications/long-gene-name-related-input.xlsx', 1);
-      invalidGeneLength('test-files/gene-name-modifications/long-gene-name-related-output.xlsx', 1);
+      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-related-input.xlsx', 1);
+      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-related-output.xlsx', 1);
     })
   })
 
   describe('long-gene-name-unrelated', function () {
     it('should return 1 or 2 long gene name error', function () {
-      invalidGeneLength('test-files/gene-name-modifications/long-gene-name-unrelated-input.xlsx', 1);
-      invalidGeneLength('test-files/gene-name-modifications/long-gene-name-unrelated-output.xlsx', 2);
+      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-unrelated-input.xlsx', 1);
+      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-unrelated-output.xlsx', 2);
     })
   })
 
@@ -582,7 +582,7 @@ describe('sheet-modifications', function () {
 
   describe('missing-sheet', function () {
     it('should return missing network error code on input sheet', function () {
-      missingNetwork('test-files/sheet-modifications/missing-sheet-input.xlsx', 1);
+      missingNetworkError('test-files/sheet-modifications/missing-sheet-input.xlsx', 1);
       noErrors('test-files/sheet-modifications/missing-sheet-output.xlsx');
     })
   })
@@ -596,7 +596,7 @@ describe('sheet-modifications', function () {
   describe('wrong-sheet-name', function () {
     it('should return missing network error code on output sheet', function () {
       noErrors('test-files/sheet-modifications/wrong-sheet-name-input.xlsx');
-      missingNetwork('test-files/sheet-modifications/wrong-sheet-name-output.xlsx', 1);
+      missingNetworkError('test-files/sheet-modifications/wrong-sheet-name-output.xlsx', 1);
     })
   })
 })
