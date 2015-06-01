@@ -151,23 +151,23 @@ describe('duplicate-gene-top', function () {
   })
 
   describe('missing-gene-name-side', function () {
-    it('should return 1 missing gene error', function () {
-      corruptGene('test-files/gene-name-modifications/missing-gene-name-side-input.xlsx', 1);
-      corruptGene('test-files/gene-name-modifications/missing-gene-name-side-output.xlsx', 1);
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/gene-name-modifications/missing-gene-name-side-input.xlsx');
+      noErrors('test-files/gene-name-modifications/missing-gene-name-side-output.xlsx');
     })
   })
 
   describe('missing-gene-name-top-and-side', function () {
-    it('should return 1 missing gene error', function () {
-      corruptGene('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx', 1);
-      corruptGene('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx', 1);
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx');
+      noErrors('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx');
     })
   })
 
   describe('missing-gene-name-top', function () {
-    it('should return 1 missing gene error', function () {
-      corruptGene('test-files/gene-name-modifications/missing-gene-name-top-input.xlsx', 1);
-      corruptGene('test-files/gene-name-modifications/missing-gene-name-top-output.xlsx', 1);
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/gene-name-modifications/missing-gene-name-top-input.xlsx');
+      noErrors('test-files/gene-name-modifications/missing-gene-name-top-output.xlsx');
     })
   })
 
@@ -506,20 +506,20 @@ describe('matrix-modifications', function () {
   })
 
   describe('extra-data', function () {
-    it('all but extra-data-random-cell-network-only-input should return unknownError', function () {
-      unknownError('test-files/matrix-modifications/extra-data-random-cell-both-output.xlsx', 1);
-      unknownError('test-files/matrix-modifications/extra-data-random-cell-network-only-input.xlsx', 1);
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/matrix-modifications/extra-data-random-cell-both-output.xlsx');
+      noErrors('test-files/matrix-modifications/extra-data-random-cell-network-only-input.xlsx');
       noErrors('test-files/matrix-modifications/extra-data-random-cell-network-only-output.xlsx');
-      unknownError('test-files/matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx', 1);
+      noErrors('test-files/matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx');
     })
   })
 
   describe('missing-value', function () {
-    it('should return missing value error except network-only-output', function () {
-      missingValue('test-files/matrix-modifications/missing-value-both-sheets-output.xlsx', 1);
-      missingValue('test-files/matrix-modifications/missing-value-network-only-input.xlsx', 1);
-      noErrors('test-files/matrix-modifications/missing-value-network-only-output.xlsx', 1);
-      missingValue('test-files/matrix-modifications/missing-value-network-optimized-only-output.xlsx', 1);
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/matrix-modifications/missing-value-both-sheets-output.xlsx');
+      noErrors('test-files/matrix-modifications/missing-value-network-only-input.xlsx');
+      noErrors('test-files/matrix-modifications/missing-value-network-only-output.xlsx');
+      noErrors('test-files/matrix-modifications/missing-value-network-optimized-only-output.xlsx');
     })
   })
 
@@ -542,11 +542,11 @@ describe('matrix-modifications', function () {
   })
 
   describe('text-data-type-outside', function () {
-    it('net-only-output should return no errors, both, net-only-input, and net-op-only should return unknown error', function () {
-      unknownError('test-files/matrix-modifications/text-data-type-outside-both-output.xlsx', 1);
-      unknownError('test-files/matrix-modifications/text-data-type-outside-net-only-input.xlsx', 1);
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/matrix-modifications/text-data-type-outside-both-output.xlsx');
+      noErrors('test-files/matrix-modifications/text-data-type-outside-net-only-input.xlsx');
       noErrors('test-files/matrix-modifications/text-data-type-outside-net-only-output.xlsx');
-      unknownError('test-files/matrix-modifications/text-data-type-outside-net-op-only-output.xlsx', 1);
+      noErrors('test-files/matrix-modifications/text-data-type-outside-net-op-only-output.xlsx');
     })
   })
   
