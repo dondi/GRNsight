@@ -109,7 +109,6 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
-/*
   //Currently assuming that network size warning will come before all other warnings. Need to adjust this in order to adapt for the precense of other warnings.
   function networkSizeWarning(input, frequency) {  
     var sheet = xlsx.parse(input),
@@ -124,7 +123,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
       );
     }      
   }
-*/
+
 
 
   // Gene Name Modifications
@@ -532,14 +531,14 @@ describe('graph-tests', function () {
     })
   })
 
-/*
+
   describe('over-50-genes-or-100-nodes', function () {
     it('should return invalid network size warning', function () {
       networkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
       networkSizeWarning('test-files/graph-tests/different-sized-networks/25-genes-max-edges.xlsx', 1);
     })
   })
-*/
+
 })
 
   // Matrix Modifications
