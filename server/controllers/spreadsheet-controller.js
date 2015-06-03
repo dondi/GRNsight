@@ -272,7 +272,7 @@ var errorList = {
   networkSizeError: function (genesLength, edgesLength) {  
     return {
       errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "Network has " + genesLength + " genes, and " + edgesLength + " edges.", 
+      possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.", 
       suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
     };
   },
