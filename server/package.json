@@ -8,7 +8,7 @@
   "dependencies": {
     "cors": "latest",
     "express": "3.3.8",
-    "googleapis": "^1.1.1",
+    "googleapis": "^1.1.5",
     "mocha": "latest",
     "multiparty": "latest",
     "node-xlsx": "latest",

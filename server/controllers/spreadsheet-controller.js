@@ -180,10 +180,26 @@ var parseSheet = function(sheet) {
   // Final error checks!
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
+  checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 
   // We're done. Return the network.
   return network;
 };
+
+var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+  var genesLength = genesList.length,
+      edgesLength = positiveWeights.length + negativeWeights.length,
+      GENE_MAX_WARNING = 50,
+      EDGE_MAX_WARNING = 100,
+      GENE_MAX_ERROR = 75,
+      EDGE_MAX_ERROR = 150;
+
+  if ((genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR)|| (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)) {
+    warningArray.push(warningsList.networkSizeWarning(genesLength, edgesLength));
+  } else if (genesLength >= GENE_MAX_ERROR || edgesLength >= EDGE_MAX_ERROR) {
+    errorArray.push(errorList.networkSizeError(genesLength, edgesLength));
+  }
+}
 
 
 var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
@@ -253,11 +269,11 @@ var errorList = {
     };
   },
 
-  networkSizeError: function (genesList) {  
+  networkSizeError: function (genesLength, edgesLength) {  
     return {
       errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "Network has " + genesList.length() + " genes.", 
-      suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and submit again."
+      possibleCause: "Network has " + genesLength + " genes, and " + edgesLength + " edges.", 
+      suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
     };
   },
 
@@ -308,10 +324,10 @@ var warningsList = {
   },
 
 
-  networkSizeWarning: function (genesList) {
+  networkSizeWarning: function (genesLength, edgesLength) {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
-      errorDescription: "Networks are recommended to have less than 50 genes and 100 edges."
+      errorDescription: "You network has " + genesLength + " genes, and " + edgesLength + " edges. Please keep in mind that networks are recommended to have less than 50 genes and 100 edges."
     }
   }
 }
