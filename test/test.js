@@ -109,7 +109,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
-/*
+
   function networkSizeWarning(input, frequency) {  
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
@@ -123,7 +123,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
       );
     }      
   }
-*/
+
 
 
 
@@ -532,14 +532,13 @@ describe('graph-tests', function () {
     })
   })
 
-/*
   describe('over-50-genes-or-100-nodes', function () {
     it('should return invalid network size warning', function () {
-      networkSizeWarning('test-files/graph-tests/different-sized-networks/40-genes-0-edges.xlsx', 1);
-      //networkSizeWarning('test-files/graph-tests/different-sized-networks/25-genes-max-edges.xlsx', 1);
+      networkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
+      networkSizeWarning('test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx', 1);
     })
   })
-*/
+
 
 })
 
