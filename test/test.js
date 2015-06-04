@@ -539,7 +539,6 @@ describe('graph-tests', function () {
     })
   })
 
-
 })
 
   // Matrix Modifications
