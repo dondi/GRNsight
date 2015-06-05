@@ -327,7 +327,7 @@ var warningsList = {
   networkSizeWarning: function (genesLength, edgesLength) {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
-      errorDescription: "You network has " + genesLength + " genes, and " + edgesLength + " edges. Please keep in mind that networks are recommended to have less than 50 genes and 100 edges."
+      errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please keep in mind that networks are recommended to have less than 50 genes and 100 edges."
     }
   }
 }
