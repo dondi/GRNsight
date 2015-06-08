@@ -152,17 +152,10 @@ describe('duplicate-gene-top', function () {
     })
   })
 
-  describe('long-gene-name-related', function () {
-    it('should return 1 long gene name error', function () {
-      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-related-input.xlsx', 1);
-      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-related-output.xlsx', 1);
-    })
-  })
-
-  describe('long-gene-name-unrelated', function () {
+  describe('long-gene-name', function () {
     it('should return 1 or 2 long gene name error', function () {
-      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-unrelated-input.xlsx', 1);
-      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-unrelated-output.xlsx', 2);
+      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-input.xlsx', 1);
+      invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-output.xlsx', 2);
     })
   })
 
