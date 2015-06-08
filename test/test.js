@@ -133,15 +133,27 @@ describe('gene-name-modifications', function () {
       it('should return 2 duplicate gene errors', function () {
         duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-input.xlsx', 2);
         duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-output.xlsx', 2);
-
-      })
     })
+  })
+
+  describe('duplicate-gene-side-and-top-nonadjacent', function () {
+      it('should return 2 duplicate gene errors', function () {
+        duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-nonadjacent-input.xlsx', 2);
+        duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-nonadjacent-output.xlsx', 2);
+    })
+  })
 
   describe('duplicate-gene-side', function () {
     it('should return 1 duplicate gene error', function () {
       duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-input.xlsx', 1);
       duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-output.xlsx', 1);
+    })
+  })
 
+  describe('duplicate-gene-side-nonadjacent', function () {
+    it('should return 1 duplicate gene error', function () {
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-nonadjacent-input.xlsx', 1);
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-nonadjacent-output.xlsx', 1);
     })
   })
 
@@ -149,6 +161,13 @@ describe('duplicate-gene-top', function () {
     it('should return 1 duplicate gene error', function () {
       duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-top-input.xlsx', 1);
       duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-top-output.xlsx', 1);
+    })
+  })
+
+describe('duplicate-gene-top-nonadjacent', function () {
+    it('should return 1 duplicate gene error', function () {
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-top-nonadjacent-input.xlsx', 1);
+      duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-top-nonadjacent-output.xlsx', 1);
     })
   })
 
@@ -163,6 +182,17 @@ describe('duplicate-gene-top', function () {
     it('should not return any errors', function () {
       noErrors('test-files/gene-name-modifications/mismatched-case-related-input.xlsx');
       noErrors('test-files/gene-name-modifications/mismatched-case-related-output.xlsx');
+    })
+  })
+
+  describe('mismatched-case-related-input', function () {
+    it('should return source gene capitalization', function () {
+      var sheet = xlsx.parse('test-files/gene-name-modifications/mismatched-case-related-input.xlsx'),
+          network = spreadsheetController.parseSheet(sheet);
+          foundSource = network.genes.indexOf({ name: 'ace2' });
+          //foundTarget = network.genes.indexOf("ACE2");
+          assert.equal(1, foundSource);
+          assert.equal(-1, foundTarget);
     })
   })
 
