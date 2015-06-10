@@ -124,6 +124,21 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
+  function checkGeneCapitalization(source, target, indexOfGene, input) {
+    var sheet = xlsx.parse(input),
+        network = spreadsheetController.parseSheet(sheet);
+    for (i = 0; i < network.genes.length; i++) {
+      if (network.genes[i].name === source) {
+        assert.equal(indexOfGene, i);
+      } 
+    }
+    for (i = 0; i < network.genes.length; i++) {
+      if (network.genes[i].name === target) {
+        assert.equal(-1, i);
+      } 
+    }  
+  }
+
 
 
 
@@ -187,12 +202,13 @@ describe('duplicate-gene-top-nonadjacent', function () {
 
   describe('mismatched-case-related-input', function () {
     it('should return source gene capitalization', function () {
-      var sheet = xlsx.parse('test-files/gene-name-modifications/mismatched-case-related-input.xlsx'),
-          network = spreadsheetController.parseSheet(sheet);
-          foundSource = network.genes.indexOf({ name: 'ace2' });
-          //foundTarget = network.genes.indexOf("ACE2");
-          assert.equal(1, foundSource);
-          assert.equal(-1, foundTarget);
+      checkGeneCapitalization('ace2', 'ACE2', 1, 'test-files/gene-name-modifications/mismatched-case-related-input.xlsx'); 
+    })
+  })
+
+  describe('mismatched-case-related-output', function () {
+    it('should return source gene capitalization', function () {
+      checkGeneCapitalization('ace2', 'ACE2', 1, 'test-files/gene-name-modifications/mismatched-case-related-output.xlsx'); 
     })
   })
 
@@ -200,7 +216,18 @@ describe('duplicate-gene-top-nonadjacent', function () {
     it('should not return any errors', function () {
       noErrors('test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx');
       noErrors('test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx')
+    })
+  })
 
+  describe('mismatched-case-unrelated-input', function () {
+    it('should return source gene capitalization', function () {
+      checkGeneCapitalization('abf1', 'ABF1', 0, 'test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx');
+    })
+  })
+
+  describe('mismatched-case-related-output', function () {
+    it('should return source gene capitalization', function () {
+      checkGeneCapitalization('abf1', 'ABF1', 0, 'test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx');
     })
   })
 
@@ -666,6 +693,253 @@ describe('sheet-modifications', function () {
     it('should return missing network error code on output sheet', function () {
       noErrors('test-files/sheet-modifications/wrong-sheet-name-input.xlsx');
       missingNetworkError('test-files/sheet-modifications/wrong-sheet-name-output.xlsx', 1);
+    })
+  })
+
+  // Sheet Modifications - Cell A1 Modifications
+
+  describe('and-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/and-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/and-a1-output.xlsx');
+    })
+  })
+
+  describe('apostrophe-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/apostrophe-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/apostrophe-a1-output.xlsx');
+    })
+  })
+
+  describe('asterisk-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/asterisk-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/asterisk-a1-output.xlsx');
+    })
+  })
+
+  describe('at-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/at-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/at-a1-output.xlsx');
+    })
+  })
+
+  describe('backslash-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/backslash-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/backslash-a1-output.xlsx');
+    })
+  })
+
+  describe('bar-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/bar-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/bar-a1-output.xlsx');
+    })
+  })
+
+  describe('caret-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/caret-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/caret-a1-output.xlsx');
+    })
+  })
+
+  describe('close-curly-bracket-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/close-curly-bracket-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/close-curly-bracket-a1-output.xlsx');
+    })
+  })
+
+  describe('close-parantheses-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/close-parantheses-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/close-parantheses-a1-output.xlsx');
+    })
+  })
+
+  describe('close-square-bracket-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/close-square-bracket-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/close-square-bracket-a1-output.xlsx');
+    })
+  })
+
+  describe('colon-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/colon-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/colon-a1-output.xlsx');
+    })
+  })
+
+  describe('comma-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/comma-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/comma-a1-output.xlsx');
+    })
+  })
+
+  describe('dash-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/dash-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/dash-a1-output.xlsx');
+    })
+  })
+
+  describe('dollar-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/dollar-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/dollar-a1-output.xlsx');
+    })
+  })
+
+  describe('duplicate-gene', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/duplicate-gene-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/duplicate-gene-a1-output.xlsx');
+    })
+  })
+
+  describe('equals-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/equals-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/equals-a1-output.xlsx');
+    })
+  })
+
+  describe('exclamation-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/exclamation-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/exclamation-a1-output.xlsx');
+    })
+  })
+
+  describe('forward-slash-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/forward-slash-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/forward-slash-a1-output.xlsx');
+    })
+  })
+
+  describe('grave-accent-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/grave-accent-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/grave-accent-a1-output.xlsx');
+    })
+  })
+
+  describe('greater-than-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/greater-than-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/greater-than-a1-output.xlsx');
+    })
+  })
+
+  describe('less-than-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/less-than-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/less-than-a1-output.xlsx');
+    })
+  })
+
+  describe('null', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/null-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/null-a1-output.xlsx');
+    })
+  })
+
+  describe('open-curly-bracket-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/open-curly-bracket-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/open-curly-bracket-a1-output.xlsx');
+    })
+  })
+
+  describe('open-parantheses-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/open-parantheses-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/open-parantheses-a1-output.xlsx');
+    })
+  })
+
+  describe('open-square-bracket-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/open-square-bracket-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/open-square-bracket-a1-output.xlsx');
+    })
+  })
+
+  describe('percent-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/percent-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/percent-a1-output.xlsx');
+    })
+  })
+
+  describe('period-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/period-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/period-a1-output.xlsx');
+    })
+  })
+
+  describe('plus-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/plus-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/plus-a1-output.xlsx');
+    })
+  })
+
+  describe('pound-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/pound-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/pound-a1-output.xlsx');
+    })
+  })
+
+  describe('question-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/question-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/question-a1-output.xlsx');
+    })
+  })
+
+  describe('quotation-mark-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/quotation-mark-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/quotation-mark-a1-output.xlsx');
+    })
+  })
+
+  describe('semicolon-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/semicolon-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/semicolon-a1-output.xlsx');
+    })
+  })
+
+  describe('tilde-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/tilde-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/tilde-a1-output.xlsx');
+    })
+  })
+
+  describe('underscore-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/underscore-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/underscore-a1-output.xlsx');
+    })
+  })
+
+  describe('unique-gene-symbol', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/unique-gene-a1-input.xlsx');
+      noErrors('test-files/sheet-modifications/cell-A1-modifications/unique-gene-a1-output.xlsx');
     })
   })
 })
