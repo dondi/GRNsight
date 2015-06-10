@@ -136,7 +136,14 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
       if (network.genes[i].name === target) {
         assert.equal(-1, i);
       } 
-    }  
+    }
+    /* Consider refactor:
+    
+    assert.equal(0, network.genes.filter(function (gene) {
+      return gene.name === target; 
+    }).length);
+    
+    */
   }
 
 
