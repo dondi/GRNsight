@@ -1,7 +1,8 @@
 var assert = require('chai').assert,
     xlsx = require('node-xlsx');
-
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
+
+
 
   function noErrors(input) {
     var sheet = xlsx.parse(input),
@@ -619,6 +620,35 @@ describe('matrix-modifications', function () {
     })
   })
 
+  describe('missing-row', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-row-middle-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-row-middle-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-row-end-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-row-end-output.xlsx');
+    })
+  })
+
+  describe('missing-column', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/missing-column-top-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-column-top-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-column-middle-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-column-middle-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx');
+    })
+  })
+
+  describe('missing-data', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/missing-data-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-data-output.xlsx');
+    })
+  })
+
   describe('text-data-type-inside-related', function () {
     it('should return no errors', function () {
       noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside_related-both-output.xlsx');
@@ -685,6 +715,7 @@ describe('sheet-modifications', function () {
 
   describe('sheet-names-switched', function () {
     it('should not return any errors', function () {
+      noErrors('test-files/sheet-modifications/sheet-names-switched-input.xlsx');
       noErrors('test-files/sheet-modifications/sheet-names-switched-output.xlsx');
     })
   })
