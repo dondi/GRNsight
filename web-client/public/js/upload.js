@@ -30,6 +30,8 @@ $(function () {
       $.getJSON(fullUrl)
     ).done(function (network) {
       console.log(network); // Display the network in the console
+      $("#graph-metadata").html(network.genes.length + " nodes (genes)<br>" + network.links.length + " edges");
+
       if(network.warnings.length > 0) {
         displayWarnings(network.warnings);
       }
