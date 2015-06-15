@@ -140,7 +140,7 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }
     /* Consider refactor:
     
-    assert.equal(0, network.genes.filter(function (gene) {
+    assert.equal(0, network.genes.filter(function, gene) {
       return gene.name === target; 
     }).length);
     
@@ -597,6 +597,12 @@ describe('graph-tests', function () {
     })
   })
 
+  describe('only-self-referential-data', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/only-self-referential-edges-input.xlsx');
+      noErrors('test-files/graph-tests/only-self-referential-edges-output.xlsx');
+    })
+  })
 })
 
   // Adjacency Matrix Modifications
@@ -699,40 +705,6 @@ describe('adjacency-matrix-modifications', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-data-output.xlsx');
     })
   })
-
-  describe('only-self-referential-data', function () {
-    it('should not return any errors', function () {
-      noErrors('test-files/adjacency-matrix-modifications/only-self-referential-edges-input.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/only-self-referential-edges-output.xlsx');
-    })
-  })
-
-  describe('text-data-type-inside-related', function () {
-    it('should return no errors', function () {
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside_related-both-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside_related-net-only-input.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside_related-net-only-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside-related-net-op-only-output.xlsx');
-    })
-  })
-
-  describe('text-data-type-inside-unrelated', function () {
-    it('should return no errors', function () {
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside-unrelated-both-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside-unrelated-net-only-input.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside-unrelated-net-only-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-inside-unrelated-net-op-only-output.xlsx');
-    })
-  })
-
-  describe('text-data-type-outside', function () {
-    it('should not return any errors, but should return warnings', function () {
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-outside-both-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-outside-net-only-input.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-outside-net-only-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/text-data-type-outside-net-op-only-output.xlsx');
-    })
-  })
   
   describe('value-replaced-with-spaces', function () {
     it('should not return any errors', function () {
@@ -752,6 +724,147 @@ describe('adjacency-matrix-modifications', function () {
     })
   })
 
+  // Adjacency Matrix Modifications - Data Types
+
+  describe('accounting-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-accounting-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-accounting-input.xlsx');
+    })
+  })
+
+  describe('currency-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-currency-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-currency-input.xlsx');
+    })
+  })
+
+  describe('date-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-input.xlsx');
+    })
+  })
+
+  describe('fraction-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-fraction-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-fraction-input.xlsx');
+    })
+  })
+
+  describe('number-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-number-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-number-input.xlsx');
+    })
+  })
+
+  describe('percentage-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-percentage-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-percentage-input.xlsx');
+    })
+  })
+
+  describe('scientific-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-scientific-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-scientific-input.xlsx');
+    })
+  })
+
+  describe('special-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-special-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-special-input.xlsx');
+    })
+  })
+
+  describe('text-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-text-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-text-input.xlsx');
+    })
+  })
+
+  describe('time-data-type-header', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-input.xlsx');
+    })
+  })
+
+  describe('accounting-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-accounting-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-accounting-input.xlsx');
+    })
+  })
+
+  describe('currency-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-currency-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-currency-input.xlsx');
+    })
+  })
+
+  describe('date-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-date-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-date-input.xlsx');
+    })
+  })
+
+  describe('fraction-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-fraction-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-fraction-input.xlsx');
+    })
+  })
+
+  describe('number-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-number-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-number-input.xlsx');
+    })
+  })
+
+  describe('percentage-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-percentage-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-percentage-input.xlsx');
+    })
+  })
+
+  describe('scientific-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-scientific-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-scientific-input.xlsx');
+    })
+  })
+
+  describe('special-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-special-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-special-input.xlsx');
+    })
+  })
+
+  describe('text-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-text-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-text-input.xlsx');
+    })
+  })
+
+  describe('time-data-type-matrix', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-time-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-time-input.xlsx');
+    })
+  })
 })
 
 // Sheet Modificatios
