@@ -599,9 +599,9 @@ describe('graph-tests', function () {
 
 })
 
-  // Matrix Modifications
+  // Adjacency Matrix Modifications
 
-describe('matrix-modifications', function () {
+describe('adjacency-matrix-modifications', function () {
   describe('asymmetrical-graphs', function () {
     it('should not return any errors', function () {
       noErrors('test-files/adjacency-matrix-modifications/asymmetric-gene-order-input.xlsx');
@@ -618,32 +618,76 @@ describe('matrix-modifications', function () {
     })
   })
 
-  describe('missing-value', function () {
+  describe('extra-column', function () {
     it('should not return any errors, but should return warnings', function () {
-      noErrors('test-files/adjacency-matrix-modifications/missing-value-both-sheets-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/missing-value-network-only-input.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/missing-value-network-only-output.xlsx');
-      noErrors('test-files/adjacency-matrix-modifications/missing-value-network-optimized-only-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-column-adjacent-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-column-adjacent-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-column-one-column-skipped-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-column-one-column-skipped-output.xlsx');
     })
   })
 
-  describe('missing-row', function () {
+  describe('extra-row', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/extra-row-adjacent-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-row-adjacent-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-output.xlsx');
+    })
+  })
+
+  describe('missing-value', function () {
+    it('should not return any errors, but should return warnings', function () {
+      noErrors('test-files/adjacency-matrix-modifications/missing-value-top-corner-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-value-top-corner-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-value-middle-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-value-middle-output.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-value-bottom-corner-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/missing-value-bottom-corner-output.xlsx');
+    })
+  })
+
+  describe('missing-row-top', function () {
     it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx');
+    })
+  })
+
+  describe('missing-row-middle', function () {
+    it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-row-middle-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-row-middle-output.xlsx');
+    })
+  })
+
+  describe('missing-row-end', function () {
+    it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-row-end-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-row-end-output.xlsx');
     })
   })
 
-  describe('missing-column', function () {
+  describe('missing-column-top', function () {
     it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-column-top-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-column-top-output.xlsx');
+    })
+  })
+
+  describe('missing-column-middle', function () {
+    it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-column-middle-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-column-middle-output.xlsx');
+    })
+  })
+
+  describe('missing-column-end', function () {
+    it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx');
     })
@@ -653,6 +697,13 @@ describe('matrix-modifications', function () {
     it('should not return any errors, but should return warnings', function () {
       noErrors('test-files/adjacency-matrix-modifications/missing-data-input.xlsx');
       noErrors('test-files/adjacency-matrix-modifications/missing-data-output.xlsx');
+    })
+  })
+
+  describe('only-self-referential-data', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/adjacency-matrix-modifications/only-self-referential-edges-input.xlsx');
+      noErrors('test-files/adjacency-matrix-modifications/only-self-referential-edges-output.xlsx');
     })
   })
 
