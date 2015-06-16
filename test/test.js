@@ -2,7 +2,16 @@ var assert = require('chai').assert,
     xlsx = require('node-xlsx');
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
-
+exports.noErrors = noErrors;
+exports.duplicateGeneError = duplicateGeneError;
+exports.invalidGeneLengthError = invalidGeneLengthError;
+exports.corruptGeneError = corruptGeneError;
+exports.unknownError = unknownError;
+exports.missingValueError = missingValueError;
+exports.missingNetworkError = missingNetworkError;
+exports.networkSizeError = networkSizeError;
+exports.networkSizeWarning = networkSizeWarning;
+exports.checkForGene = checkForGene;
 
   function noErrors(input) {
     var sheet = xlsx.parse(input),
@@ -133,4 +142,3 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
       return gene.name === test; 
     }).length);
   }
-
