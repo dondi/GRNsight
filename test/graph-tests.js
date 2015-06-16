@@ -134,3 +134,46 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }).length);
   }
 
+
+describe('graph-tests', function () {
+  describe('asymmetrical-graphs', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/asymmetrical-disordered-input.xlsx');
+      noErrors('test-files/graph-tests/asymmetrical-more-source-genes.xlsx');
+      noErrors('test-files/graph-tests/asymmetrical-more-target-genes.xlsx');
+    })
+  })
+
+  describe('incorrect-corrupt-gene-error-dCIN5', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/dCIN5GendronModel1.xlsx');
+    })
+  })
+
+  describe('incorrect-missing-data-error-10-genes-0-edges', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/different-sized-networks/10-genes-0-edges.xlsx');
+    })
+  })
+
+  describe('over-75-genes-or-150-nodes', function () {
+    it('should return invalid network size error', function () {
+      networkSizeError('test-files/graph-tests/different-sized-networks/80-genes-0-edges.xlsx', 1);
+      networkSizeError('test-files/graph-tests/different-sized-networks/45-genes-max-edges.xlsx', 1);
+    })
+  })
+
+  describe('over-50-genes-or-100-nodes', function () {
+    it('should return invalid network size warning', function () {
+      networkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
+      networkSizeWarning('test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx', 1);
+    })
+  })
+
+  describe('only-self-referential-data', function () {
+    it('should not return any errors', function () {
+      noErrors('test-files/graph-tests/only-self-referential-edges-input.xlsx');
+      noErrors('test-files/graph-tests/only-self-referential-edges-output.xlsx');
+    })
+  })
+})
