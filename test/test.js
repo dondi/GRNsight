@@ -125,26 +125,17 @@ var spreadsheetController = require(__dirname + '/../server/controllers' + '/spr
     }      
   }
 
-  function checkGeneCapitalization(source, target, indexOfGene, input) {
+  function checkGeneCapitalization(source, target, input) {
     var sheet = xlsx.parse(input),
         network = spreadsheetController.parseSheet(sheet);
-    for (i = 0; i < network.genes.length; i++) {
-      if (network.genes[i].name === source) {
-        assert.equal(indexOfGene, i);
-      } 
-    }
-    for (i = 0; i < network.genes.length; i++) {
-      if (network.genes[i].name === target) {
-        assert.equal(-1, i);
-      } 
-    }
-    /* Consider refactor:
-    
-    assert.equal(0, network.genes.filter(function, gene) {
+
+    assert.equal(0, network.genes.filter(function (gene) {
       return gene.name === target; 
     }).length);
-    
-    */
+
+    assert.equal(1, network.genes.filter(function (gene) {
+      return gene.name === source; 
+    }).length); 
   }
 
 
@@ -210,13 +201,13 @@ describe('duplicate-gene-top-nonadjacent', function () {
 
   describe('mismatched-case-related-input', function () {
     it('should return source gene capitalization', function () {
-      checkGeneCapitalization('ace2', 'ACE2', 1, 'test-files/gene-name-modifications/mismatched-case-related-input.xlsx'); 
+      checkGeneCapitalization('ace2', 'ACE2', 'test-files/gene-name-modifications/mismatched-case-related-input.xlsx'); 
     })
   })
 
   describe('mismatched-case-related-output', function () {
     it('should return source gene capitalization', function () {
-      checkGeneCapitalization('ace2', 'ACE2', 1, 'test-files/gene-name-modifications/mismatched-case-related-output.xlsx'); 
+      checkGeneCapitalization('ace2', 'ACE2', 'test-files/gene-name-modifications/mismatched-case-related-output.xlsx'); 
     })
   })
 
@@ -229,13 +220,13 @@ describe('duplicate-gene-top-nonadjacent', function () {
 
   describe('mismatched-case-unrelated-input', function () {
     it('should return source gene capitalization', function () {
-      checkGeneCapitalization('abf1', 'ABF1', 0, 'test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx');
+      checkGeneCapitalization('abf1', 'ABF1', 'test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx');
     })
   })
 
   describe('mismatched-case-related-output', function () {
     it('should return source gene capitalization', function () {
-      checkGeneCapitalization('abf1', 'ABF1', 0, 'test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx');
+      checkGeneCapitalization('abf1', 'ABF1', 'test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx');
     })
   })
 
