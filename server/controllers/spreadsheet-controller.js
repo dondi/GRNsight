@@ -183,11 +183,6 @@ var parseSheet = function(sheet) {
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 
   // We're done. Return the network.
-/*
-  for (i=0; i<network.genes.length; i++) {
-    console.log(network.genes[i]);
-  }
-*/
 
 
   return network;
@@ -287,8 +282,7 @@ var errorList = {
   unknownError: {
     errorCode: "UNKNOWN_ERROR", 
     possibleCause: "An unexpected error occurred.", 
-    suggestedFix: "" // There is none, because we don't actually know what happened. 
-    // TODO: Put in a message saying to contact the GRNsight team.
+    suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload." 
   }
 }
 
