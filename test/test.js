@@ -13,132 +13,132 @@ exports.networkSizeError = networkSizeError;
 exports.networkSizeWarning = networkSizeWarning;
 exports.checkForGene = checkForGene;
 
-  function noErrors(input) {
-    var sheet = xlsx.parse(input),
-          network = spreadsheetController.parseSheet(sheet);
+function noErrors(input) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-      assert.equal(0, network.errors.length);
+    assert.equal(0, network.errors.length);
   }
 
-  function duplicateGeneError(input, frequency) {  
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function duplicateGeneError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
 
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "DUPLICATE_GENE",
-        network.errors[i].errorCode
-      );
-    }      
-  }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "DUPLICATE_GENE",
+      network.errors[i].errorCode
+    );
+  }      
+}
 
-  function invalidGeneLengthError(input, frequency){
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function invalidGeneLengthError(input, frequency){
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
       
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "INVALID_GENE_LENGTH",
-        network.errors[0].errorCode
-      );
-    }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "INVALID_GENE_LENGTH",
+      network.errors[0].errorCode
+    );
   }
+}
   
 
-  function corruptGeneError(input, frequency) {
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function corruptGeneError(input, frequency) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
       
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "CORRUPT_GENE",
-        network.errors[0].errorCode
-      );
-    }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "CORRUPT_GENE",
+      network.errors[0].errorCode
+    );
   }
+}
 
-  function unknownError(input, frequency) {  
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function unknownError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
 
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "UNKNOWN_ERROR",
-        network.errors[i].errorCode
-      );
-    }      
-  }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "UNKNOWN_ERROR",
+      network.errors[i].errorCode
+    );
+  }      
+}
 
-  function missingValueError(input, frequency) {  
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function missingValueError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
 
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "MISSING_VALUE",
-        network.errors[i].errorCode
-      );
-    }      
-  }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "MISSING_VALUE",
+      network.errors[i].errorCode
+    );
+  }     
+}
 
-  function missingNetworkError(input, frequency) {  
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function missingNetworkError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
 
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "MISSING_NETWORK",
-        network.errors[i].errorCode
-      );
-    }      
-  }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "MISSING_NETWORK",
+      network.errors[i].errorCode
+    );
+  }      
+}
 
-  function networkSizeError(input, frequency) {  
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function networkSizeError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
 
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "INVALID_NETWORK_SIZE",
-        network.errors[i].errorCode
-      );
-    }      
-  }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "INVALID_NETWORK_SIZE",
+      network.errors[i].errorCode
+    );
+  }      
+}
 
 
-  function networkSizeWarning(input, frequency) {  
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function networkSizeWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.warnings.length);
+  assert.equal(frequency, network.warnings.length);
 
-    for(var i = 0; i < frequency; i++) {
-      assert.equal(
-        "INVALID_NETWORK_SIZE",
-        network.warnings[i].warningCode
-      );
-    }      
-  }
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "INVALID_NETWORK_SIZE",
+      network.warnings[i].warningCode
+    );
+  }      
+}
 
-  function checkForGene(test, frequency, input) {
-    var sheet = xlsx.parse(input),
-        network = spreadsheetController.parseSheet(sheet);
+function checkForGene(test, frequency, input) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.genes.filter(function (gene) {
-      return gene.name === test; 
-    }).length);
-  }
+  assert.equal(frequency, network.genes.filter(function (gene) {
+    return gene.name === test; 
+  }).length);
+}
