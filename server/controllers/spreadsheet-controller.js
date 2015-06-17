@@ -127,6 +127,11 @@ var parseSheet = function(sheet) {
             try {
               if(currentSheet.data[row][column] === undefined) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
+             
+              //TODO: Check if the values are real numbers
+              //} else if (isNaN(+currentSheet.data[row][column].value))) {
+
+
               } else {
                 if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
                   // Grab the source and target genes' names

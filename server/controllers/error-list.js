@@ -1,7 +1,10 @@
 exports.errorList = errorList;
 
+function errorList() = {
+  return errors;
+}
 
-var errorList = {
+var errors = {
   missingNetworkError: {
     errorCode: "MISSING_NETWORK", 
     possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
