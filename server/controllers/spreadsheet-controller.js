@@ -1,7 +1,8 @@
 var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
     util = require('util'),
-    path = require('path');
+    path = require('path'),
+    errorList = require('./error-list');
 
 var processGRNmap = function (path, res, app) {
   var sheet,
@@ -231,6 +232,7 @@ var checkGeneLength = function(errorArray, genesList) {
 
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
+
 var errorList = {
   missingNetworkError: {
     errorCode: "MISSING_NETWORK", 
@@ -285,6 +287,7 @@ var errorList = {
     suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload." 
   }
 }
+
 
 // This is the list of warnings. 
 // The graph will still load if warnings are detected, but these will be reported to the user.
