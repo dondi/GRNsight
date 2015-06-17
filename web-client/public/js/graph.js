@@ -376,14 +376,16 @@
         };
     
     function smartPathEnd(d, w, h) {
+      var MINIMUM_DISTANCE = 8;
+
       // Set an offset if the edge is a repressor to make room for the flat arrowhead
       var globalOffset = parseFloat(d.strokeWidth);
 
       if (d.value < 0 && colorOptimal) {
-        globalOffset = Math.max(globalOffset, 10);
+        globalOffset = Math.max(globalOffset, MINIMUM_DISTANCE);
       }
 
-      var thicknessAdjustment = globalOffset > 10 ? 1 : 0;
+      var thicknessAdjustment = globalOffset > MINIMUM_DISTANCE ? 1 : 0;
 
       // We need to work out the (tan of the) angle between the
       // imaginary horizontal line running through the center of the
