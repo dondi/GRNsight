@@ -31,7 +31,15 @@ function duplicateGeneError(input, frequency) {
       "DUPLICATE_GENE",
       network.errors[i].errorCode
     );
-  }      
+  }
+
+  /* Compare to:
+  
+  network.errors.forEach(function (error) {
+    assert.equal("DUPLICATE_GENE", error.errorCode); 
+  });
+  
+  */
 }
 
 function invalidGeneLengthError(input, frequency){
