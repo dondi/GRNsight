@@ -630,31 +630,34 @@
           }
         });
 
-      link.select("path").attr("marker-end", function(d) {
-        var x1 = d.source.x,
-            y1 = d.source.y,
-            x2 = d.target.x,
-            y2 = d.target.y,
-            minimum = "",
-            selfRef = "";
-        if( normalize(d) <= 0.05) {
-          minimum = "gray";
-        }
-        if( x1 === x2 && y1 === y2 ) {
-          selfRef = "_SelfReferential";
-        }
-        if (d.type == "repressor"  && colorOptimal ) {
-          if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target == d.source)) { //if horizontal repressor
-            return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-          } else { //otherwise vertical repressor
-            return "url(#repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-          }
-        } else { //otherwise arrowhead
-          return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";        
-        }
-      });
+        link.select("path").attr("marker-end", function(d) {
+          var x1 = d.source.x,
+              y1 = d.source.y,
+              x2 = d.target.x,
+              y2 = d.target.y,
+              minimum = "",
+              selfRef = "";
 
-      } catch(e) {
+          if (normalize(d) <= 0.05) {
+            minimum = "gray";
+          }
+
+          if (x1 === x2 && y1 === y2) {
+            selfRef = "_SelfReferential";
+          }
+
+          if (d.type === "repressor" && colorOptimal) {
+            if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target === d.source)) { //if horizontal repressor
+              return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+            } else { //otherwise vertical repressor
+              return "url(#repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+            }
+          } else { //otherwise arrowhead
+            return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+          }
+        });
+
+      } catch (e) {
         console.warn("Detected invalid node. Moving on to next node.");
       }
     }
