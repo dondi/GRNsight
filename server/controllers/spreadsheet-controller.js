@@ -1,8 +1,7 @@
 var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
     util = require('util'),
-    path = require('path'),
-    errorList = require('./error-list');
+    path = require('path');
 
 var processGRNmap = function (path, res, app) {
   var sheet,
@@ -74,6 +73,7 @@ var parseSheet = function(sheet) {
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
     if(currentSheet.data[row] === undefined) { // if the current row is empty 
       network.warnings.push(warningsList.emptyRowWarning(row));
+
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
@@ -123,14 +123,16 @@ var parseSheet = function(sheet) {
               network.errors.push(errorList.corruptGeneError(row, column));
               return network;
             };
+          
+
           } else { // If we're within the matrix and lookin' at the data...
             try {
               if(currentSheet.data[row][column] === undefined) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
              
-              //TODO: Check if the values are real numbers
-              //} else if (isNaN(+currentSheet.data[row][column].value))) {
-
+              } else if (isNaN(+currentSheet.data[row][column].value)) {
+                network.errors.push(errorList.isNaNError(row, column));
+                return network;
 
               } else {
                 if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
@@ -285,6 +287,14 @@ var errorList = {
       suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
     };
   },
+
+  isNaNError: function (row, column) {  
+    return {
+      errorCode: "INVALID_NETWORK_SIZE", 
+      possibleCause: "The cell at row " + row + ", column " + column + " in the adjacency matrix appears to have a non-numerical value.", 
+      suggestedFix: "Please ensure that all cells have a numerical value, then upload the file again."
+    };
+  }, 
 
   unknownError: {
     errorCode: "UNKNOWN_ERROR", 
