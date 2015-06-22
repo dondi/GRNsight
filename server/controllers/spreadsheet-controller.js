@@ -120,6 +120,8 @@ var parseSheet = function(sheet) {
                 } 
               }
             } catch (err) {
+              sourceGene = currentSheet.data[0][column].value; 
+              targetGene = currentSheet.data[row][0].value;
               network.errors.push(errorList.corruptGeneError(row, column));
               return network;
             };
@@ -131,7 +133,9 @@ var parseSheet = function(sheet) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
              
               } else if (isNaN(+currentSheet.data[row][column].value)) {
-                network.errors.push(errorList.isNaNError(row, column));
+                sourceGene = currentSheet.data[0][column].value; 
+                targetGene = currentSheet.data[row][0].value;
+                network.errors.push(errorList.isNaNError(sourceGene, targetGene));
                 return network;
 
               } else {
@@ -164,7 +168,9 @@ var parseSheet = function(sheet) {
               }
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
-              network.errors.push(errorList.missingValueError(row, column));
+              sourceGene = currentSheet.data[0][column].value; 
+              targetGene = currentSheet.data[row][0].value;
+              network.errors.push(errorList.missingValueError(sourceGene, targetGene));
               return network;
             };
           };
@@ -258,12 +264,10 @@ var errorList = {
     };
   },
 
-  missingValueError: function (row, column) {
-    var rowNum = row + 1,
-        columnNum = column +1;
+  missingValueError: function (source, target) {
     return {
       errorCode: "MISSING_VALUE", 
-      possibleCause: "The cell at row " + rowNum + ", column " + columnNum + " in the adjacency matrix appears to have a missing value.", 
+      possibleCause: "The cell between source gene " + source + " and target gene " + target + " in the adjacency matrix appears to have a missing value.", 
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
     };
   },
@@ -292,12 +296,10 @@ var errorList = {
     };
   },
 
-  isNaNError: function (row, column) {  
-    var rowNum = row + 1,
-        columnNum = column +1;
+  isNaNError: function (source, target) {  
     return {
       errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "The cell at row " + rowNum + ", column " + columnNum + " in the adjacency matrix appears to have a non-numerical value.", 
+      possibleCause: "The cell between source gene " + source + ", and target gene " + target + " in the adjacency matrix is not a number.", 
       suggestedFix: "Please ensure that all cells have a numerical value, then upload the file again."
     };
   }, 
