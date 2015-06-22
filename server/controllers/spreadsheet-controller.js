@@ -249,17 +249,21 @@ var errorList = {
   },
 
   corruptGeneError: function (row, column) {
+    var rowNum = row + 1,
+        columnNum = column +1;
     return {
       errorCode: "CORRUPT_GENE", 
-      possibleCause: "The gene name in row " + row + ", column " + column + " appears to be invalid.", 
+      possibleCause: "The gene name in row " + rowNum + ", column " + columnNum + " appears to be invalid.", 
       suggestedFix: "Please fix the error and try uploading again."
     };
   },
 
   missingValueError: function (row, column) {
+    var rowNum = row + 1,
+        columnNum = column +1;
     return {
       errorCode: "MISSING_VALUE", 
-      possibleCause: "The cell at row " + row + ", column " + column + " in the adjacency matrix appears to have a missing value.", 
+      possibleCause: "The cell at row " + rowNum + ", column " + columnNum + " in the adjacency matrix appears to have a missing value.", 
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
     };
   },
@@ -289,9 +293,11 @@ var errorList = {
   },
 
   isNaNError: function (row, column) {  
+    var rowNum = row + 1,
+        columnNum = column +1;
     return {
       errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "The cell at row " + row + ", column " + column + " in the adjacency matrix appears to have a non-numerical value.", 
+      possibleCause: "The cell at row " + rowNum + ", column " + columnNum + " in the adjacency matrix appears to have a non-numerical value.", 
       suggestedFix: "Please ensure that all cells have a numerical value, then upload the file again."
     };
   }, 
