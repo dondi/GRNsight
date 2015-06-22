@@ -131,12 +131,12 @@ var parseSheet = function(sheet) {
             try {
               if(currentSheet.data[row][column] === undefined) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
-             
+            
               } else if (isNaN(+currentSheet.data[row][column].value)) {
-                sourceGene = currentSheet.data[0][column].value; 
-                targetGene = currentSheet.data[row][0].value;
-                network.errors.push(errorList.isNaNError(sourceGene, targetGene));
+                network.errors.push(errorList.isNaNError(row, column));
                 return network;
+            
+
 
               } else {
                 if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
@@ -166,11 +166,11 @@ var parseSheet = function(sheet) {
                   }
                 };
               }
+
+
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
-              sourceGene = currentSheet.data[0][column].value; 
-              targetGene = currentSheet.data[row][0].value;
-              network.errors.push(errorList.missingValueError(sourceGene, targetGene));
+              network.errors.push(errorList.missingValueError(row, column));
               return network;
             };
           };
@@ -255,19 +255,21 @@ var errorList = {
   },
 
   corruptGeneError: function (row, column) {
-    var rowNum = row + 1,
-        columnNum = column +1;
+    colLetter = numbersToLetters[column];
+    rowNum = row+1;
     return {
       errorCode: "CORRUPT_GENE", 
-      possibleCause: "The gene name in row " + rowNum + ", column " + columnNum + " appears to be invalid.", 
+      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.", 
       suggestedFix: "Please fix the error and try uploading again."
     };
   },
 
-  missingValueError: function (source, target) {
+  missingValueError: function (row, column) {
+    colLetter = numbersToLetters[column];
+    rowNum = row+1;
     return {
       errorCode: "MISSING_VALUE", 
-      possibleCause: "The cell between source gene " + source + " and target gene " + target + " in the adjacency matrix appears to have a missing value.", 
+      possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.", 
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
     };
   },
@@ -296,10 +298,12 @@ var errorList = {
     };
   },
 
-  isNaNError: function (source, target) {  
+  isNaNError: function (row, column) {  
+    colLetter = numbersToLetters[column];
+    rowNum = row+1;
     return {
       errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "The cell between source gene " + source + ", and target gene " + target + " in the adjacency matrix is not a number.", 
+      possibleCause: "The value in cell " + colLetter+rowNum + " in the adjacency matrix is not a number.", 
       suggestedFix: "Please ensure that all cells have a numerical value, then upload the file again."
     };
   }, 
@@ -310,6 +314,15 @@ var errorList = {
     suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload." 
   }
 }
+
+//Currently only going to number 76 because currently the network errors out at 75+ genes.
+var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8: 'I', 9:'J', 10:'K', 11:'L', 
+    12:'M', 13:'N', 14:'O', 15:'P', 16:'Q', 17:'R', 18:'S', 19:'T', 20:'U', 21:'V', 22:'W', 23:'X', 24:'Y', 
+    25:'Z', 26:'AA', 27:'AB', 28:'AC', 29:'AD', 30:'AE', 31:'AF', 32:'AG', 33:'AH', 34:'AI', 35:'AJ', 36:'AK', 
+    37:'AL',38:'AM', 39:'AN', 40:'AO', 41:'AP', 42:'AQ', 43:'AR', 44:'AS', 45:'AT', 46:'AU', 47:'AV', 48:'AW', 
+    49:'AX', 51:'AY', 51:'AZ', 52:'BA', 53:'BB', 54:'BC', 55:'BD', 56:'BE', 57:'BF', 58:'BG', 59:'BH', 60:'BI',
+    61:'BJ', 62:'BK', 63:'BL', 64:'BM', 65:'BN', 66:'BO', 67:'BP', 68:'BQ', 69:'BR', 70:'BS', 71:'BT', 72:'BU',
+    73:'BV', 74:'BW', 75:'BX', 76:'BY'}
 
 
 // This is the list of warnings. 
