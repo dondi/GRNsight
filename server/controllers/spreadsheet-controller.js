@@ -132,11 +132,10 @@ var parseSheet = function(sheet) {
               if(currentSheet.data[row][column] === undefined) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
             
+            // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
               } else if (isNaN(+currentSheet.data[row][column].value)) {
-                network.errors.push(errorList.isNaNError(row, column));
-                return network;
+                network.warnings.push(warningsList.isNaNWarning(row, column));
             
-
 
               } else {
                 if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
@@ -298,15 +297,7 @@ var errorList = {
     };
   },
 
-  isNaNError: function (row, column) {  
-    colLetter = numbersToLetters[column];
-    rowNum = row+1;
-    return {
-      errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "The value in cell " + colLetter+rowNum + " in the adjacency matrix is not a number.", 
-      suggestedFix: "Please ensure that all cells have a numerical value, then upload the file again."
-    };
-  }, 
+  
 
   unknownError: {
     errorCode: "UNKNOWN_ERROR", 
@@ -369,7 +360,16 @@ var warningsList = {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
-  }
+  },
+
+  isNaNWarning: function (row, column) {  
+    colLetter = numbersToLetters[column];
+    rowNum = row+1;
+    return {
+      warningCode: "IS_NAN", 
+      errorDescription: "The value in cell " + colLetter+rowNum + " in the adjacency matrix is not a number. Please ensure that all cells have a numerical value, then upload the file again.", 
+    };
+  } 
 }
 
 module.exports = function (app) {

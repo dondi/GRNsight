@@ -11,6 +11,7 @@ exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
 exports.networkSizeWarning = networkSizeWarning;
+exports.isNaNError = isNaNError;
 exports.checkForGene = checkForGene;
 
 function noErrors(input) {
@@ -33,7 +34,7 @@ function duplicateGeneError(input, frequency) {
     );
   }
 
-  /* Compare to:
+  /* TO DO:
   
   network.errors.forEach(function (error) {
     assert.equal("DUPLICATE_GENE", error.errorCode); 
@@ -137,6 +138,20 @@ function networkSizeWarning(input, frequency) {
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "INVALID_NETWORK_SIZE",
+      network.warnings[i].warningCode
+    );
+  }      
+}
+
+function isNaNError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.warnings.length);
+
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "IS_NAN",
       network.warnings[i].warningCode
     );
   }      

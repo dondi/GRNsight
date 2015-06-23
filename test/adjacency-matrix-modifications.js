@@ -293,4 +293,5 @@ describe('adjacency-matrix-modifications', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-matrix-time-input.xlsx');
     })
   })
+
 })
