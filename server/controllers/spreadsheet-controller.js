@@ -133,8 +133,6 @@ var parseSheet = function(sheet) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
             
             // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
-              } else if (isNaN(+currentSheet.data[row][column].value)) {
-                network.warnings.push(warningsList.isNaNWarning(row, column));
             
 
               } else {
@@ -334,23 +332,28 @@ var warningsList = {
   },
 
   invalidMatrixDataWarning: function (row, column) {
+    colLetter = numbersToLetters[column];
+    rowNum = row+1;
     return {
       warningCode: "INVALID_DATA",
-      errorDescription: "The value in row " + row + ", column " + column + ", was detected as being undefined."
+      errorDescription: "The value in cell " + colLetter+rowNum + ", was detected as being undefined."
     }
   },
 
   randomDataWarning: function (type, row, column) {
+    colLetter = numbersToLetters[column];
+    rowNum = row+1;
     return {
       warning: "RANDOM_DATA",
-      errorDescription: "The value in row " + row + ", column " + column + ", has a corresponding source and/or target gene that is detected as " + type + "." 
+      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "." 
     }
   },
 
   emptyRowWarning: function (row) {
+    rowNum = row+1;
     return {
       warningCode: "EMPTY_ROW",
-      errorDescription: "Row " + row + " was found to contain no data."
+      errorDescription: "Row " + rowNum + " was found to contain no data."
     }
   },
 
@@ -362,14 +365,6 @@ var warningsList = {
     }
   },
 
-  isNaNWarning: function (row, column) {  
-    colLetter = numbersToLetters[column];
-    rowNum = row+1;
-    return {
-      warningCode: "IS_NAN", 
-      errorDescription: "The value in cell " + colLetter+rowNum + " in the adjacency matrix is not a number. Please ensure that all cells have a numerical value, then upload the file again.", 
-    };
-  } 
 }
 
 module.exports = function (app) {
