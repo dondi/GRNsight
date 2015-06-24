@@ -129,14 +129,13 @@ var parseSheet = function(sheet) {
 
           } else { // If we're within the matrix and lookin' at the data...
             try {
-              if(currentSheet.data[row][column] === undefined) {
+              if (currentSheet.data[row][column] === undefined) {
                 network.warnings.push(warningsList.invalidMatrixDataWarning(row, column));
-            
+              } else if (isNaN(+("" + currentSheet.data[row][column].value))) {
             // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
-            
-
+                network.warnings.push(warningsList.dataTypeWarning(row, column));
               } else {
-                if (currentSheet.data[row][column].value != 0) { // We only care about non-zero values
+                if (currentSheet.data[row][column].value !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
                   sourceGene = currentSheet.data[0][column]; 
                   targetGene = currentSheet.data[row][0];
@@ -252,8 +251,8 @@ var errorList = {
   },
 
   corruptGeneError: function (row, column) {
-    colLetter = numbersToLetters[column];
-    rowNum = row+1;
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
     return {
       errorCode: "CORRUPT_GENE", 
       possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.", 
@@ -262,8 +261,8 @@ var errorList = {
   },
 
   missingValueError: function (row, column) {
-    colLetter = numbersToLetters[column];
-    rowNum = row+1;
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
     return {
       errorCode: "MISSING_VALUE", 
       possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.", 
@@ -332,8 +331,8 @@ var warningsList = {
   },
 
   invalidMatrixDataWarning: function (row, column) {
-    colLetter = numbersToLetters[column];
-    rowNum = row+1;
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
     return {
       warningCode: "INVALID_DATA",
       errorDescription: "The value in cell " + colLetter+rowNum + ", was detected as being undefined."
@@ -341,8 +340,8 @@ var warningsList = {
   },
 
   randomDataWarning: function (type, row, column) {
-    colLetter = numbersToLetters[column];
-    rowNum = row+1;
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
     return {
       warning: "RANDOM_DATA",
       errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "." 
@@ -350,18 +349,26 @@ var warningsList = {
   },
 
   emptyRowWarning: function (row) {
-    rowNum = row+1;
+    var rowNum = row + 1;
     return {
       warningCode: "EMPTY_ROW",
       errorDescription: "Row " + rowNum + " was found to contain no data."
     }
   },
 
-
   networkSizeWarning: function (genesLength, edgesLength) {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+    }
+  },
+
+  dataTypeWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "INVALID_CELL_DATA_TYPE",
+      errorDescription: "The value in cell " + colLetter+rowNum + " is not a number."
     }
   },
 
