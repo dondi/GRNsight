@@ -50,7 +50,7 @@
         unweighted = false;
     
     //if unweighted, weight is 2
-    if (d3.min(positiveWeights) === d3.max(positiveWeights)) {
+    if (sheetType === 'unweighted') {
       totalScale = d3.scale.quantile()
         .domain(d3.extent(allWeights))
         .range(["2"]);
