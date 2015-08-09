@@ -20,18 +20,16 @@ $(function () {
             getCount("index.html", function (indexCount) {
                 setReportResult(pathResult + indexResult);
             });
-
-            getUploadCount();
         } else if (pathTail === "index.html") {
             getCount("", function (homeResult) {
                 setReportResult(pathResult + homeResult);
             });
-
-            getUploadCount();
-        } else if (pathTail === "beta.html") {
-            getUploadCount();
         } else {
             setReportResult(pathResult);
+        }
+
+        if (pathTail === "" || pathTail === "index.html" || pathTail === "beta.html") {
+            getUploadCount();
         }
     });
 });
