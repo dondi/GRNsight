@@ -3,8 +3,8 @@ $(function () {
             $.getJSON("http://grnsight.cs.lmu.edu/server/ga?path=" + path).done(callback);
         },
 
-        setReportResult = function (result) {
-            $(".ga-report").text(result);            
+        setReportResult = function (count) {
+            $(".ga-report").text(count);            
         },
 
         getUploadCount = function () {
@@ -15,17 +15,17 @@ $(function () {
 
         pathTail = location.pathname.split("/").pop();
 
-    getCount(pathTail, function (pathResult) {
+    getCount(pathTail, function (pathCount) {
         if (pathTail === "") {
             getCount("index.html", function (indexCount) {
-                setReportResult(pathResult + indexResult);
+                setReportResult(pathCount + indexCount);
             });
         } else if (pathTail === "index.html") {
-            getCount("", function (homeResult) {
-                setReportResult(pathResult + homeResult);
+            getCount("", function (homeCount) {
+                setReportResult(pathCount + homeCount);
             });
         } else {
-            setReportResult(pathResult);
+            setReportResult(pathCount);
         }
 
         if (pathTail === "" || pathTail === "index.html" || pathTail === "beta.html") {
