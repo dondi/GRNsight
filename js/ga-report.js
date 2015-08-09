@@ -9,7 +9,7 @@ $(function () {
 
         getUploadCount = function () {
             getCount("upload", function (uploadCount) {
-                setReportResult(uploadCount);
+                $(".ga-upload").text(uploadCount);
             });
         },
 
