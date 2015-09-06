@@ -14,4 +14,8 @@
                     <br>
 
                     This page has been accessed <span class="ga-report"></span> times.
+
+                    {% if page.title == 'Beta' or page.title == 'Home' %}
+                        <span class="ga-upload"></span> files have been uploaded and viewed with GRNsight. 
+                    {% endif %}
                 </p>
