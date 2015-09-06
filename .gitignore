@@ -2,3 +2,4 @@ server
 web-client
 .DS_Store
 node_modules
+_gh_pages

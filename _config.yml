@@ -1,0 +1,13 @@
+# Dependencies
+markdown:         rdiscount
+highlighter:      pygments
+
+# Permalinks
+permalink:        pretty
+
+# Server
+destination:      _gh_pages
+host:             127.0.0.1
+port:             3001
+baseurl:          /GRNsight
+encoding:         UTF-8

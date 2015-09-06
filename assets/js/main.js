@@ -36,9 +36,9 @@ $(function() {
 
     // Enable logo change on-hover
     $( '#GRNsightLogo' ).on( 'mouseenter', function() {
-    	$('#GRNsightLogo').attr('src', 'images/GRNsight_logo_20140710_rollover_resized.jpg')
+    	$('#GRNsightLogo').attr('src', '/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg')
     }).on('mouseleave', function() {
-    	$('#GRNsightLogo').attr('src', 'images/GRNsight_logo_20140710_main_resized.jpg')
+    	$('#GRNsightLogo').attr('src', '/GRNsight/assets/images/GRNsight_logo_20140710_main_resized.jpg')
     });
 
     // Open a hashed element if it is collapsed.  This is a little trickier than it sounds,

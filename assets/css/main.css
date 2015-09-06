@@ -128,6 +128,18 @@ a:active {
 	padding: 5px 5px 5px 5px;
 }
 
+.fixWidthforImage { 
+	min-width: 1500px; 
+}
+
+.fixWidthforImage > div.pull-left { 
+	margin-bottom: 1em; 
+}
+
+.fixWidthforImage > div.pull-right { 
+	max-width: 720px; margin-right:200px;
+}
+
 #pageTitle {
 	font-size: 25px;
 	color: #141414;
