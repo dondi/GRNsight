@@ -3,7 +3,7 @@ markdown:         rdiscount
 highlighter:      pygments
 
 # Permalinks
-permalink:        pretty
+permalink:        none
 
 # Server
 destination:      _gh_pages
