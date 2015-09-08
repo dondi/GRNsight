@@ -72,14 +72,15 @@ modified: 9/5/15
                                             <div class="panel-body">
                                                 GRNsight v1.12 includes the following new features and bug fixes:
                                                 <ul>
-
-                                                    <li>Disable weight tooltips for unweighted networks.</li>
-                                                    <li>Added warning modal for extraneous data.</li>
-                                                    <li>Most libraries that GRNsight uses have been updated to the most current version.</li>
-                                                    <li>Return warnings for NaN's in the matrix.</li>
-                                                    <li>Refactor test.js to make unit tests more concise.</li>
-                                                    <li>Display node and edge count in green status bar.</li>
-
+                                                    <li>The node and edge count is now displayed in the green menu bar.</li>
+                                                    <li>The tooltips that display the weight values of edges were disabled for unweighted networks.</li>
+                                                    <li>Most libraries that GRNsight uses have been updated to the most current version.  See this wiki page for a list of libraries and versions: <a href=https://github.com/dondi/GRNsight/wiki/Library-Requirements> https://github.com/dondi/GRNsight/wiki/Library-Requirements</a></li>
+                                                    <li>The test suite, test.js, was refactored to make unit tests more concise.</li>
+                                                    <li>Two warning messages were created to address potential formatting problems with input Excel spreadsheets:</li>
+                                                    <ul>
+                                                        <li>Extraneous data outside of the adjacency matrix.</li>
+                                                        <li>NaN's found in the adjacency matrix.</li>
+                                                    </ul>
                                                 </ul>
                                             </div> <!--panel-body-->
                                         </div> <!--panel-collapse collapse-->
