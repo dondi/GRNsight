@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+
+    <head>
+
+        <title>GRNsight - Publications</title>
+        <link rel="stylesheet" type="text/css" href="/GRNsight/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/GRNsight/assets/css/main.css">
+        <meta charset="utf-8">
+
+    </head>
+
+    <body>
+
+        <div id="header">
+            <div id="logo">
+                <a href="http://dondi.github.io/GRNsight"><img id="GRNsightLogo" src="/GRNsight/assets/images/GRNsight_logo_20140710_main_resized.jpg" alt="GRNsight" width="200" height="118"></a></div>
+            <div id="lmu">
+                <a href="http://www.lmu.edu" target="_blank"><img src="/GRNsight/assets/images/LMULogoHQ2.png" alt="LMU logo" width="200" height="118" id="lmuLogo" /></a><br /><br /><br />
+                <p id="subtextLMU">A Joint Project of the<br /> LMU Bioinformatics and Biomathematics Groups</p>
+            </div>
+            <p id="title"><a href="/GRNsight">GRNsight</a></p>
+            <p id="subtext">Web app and service for visualizing models of gene regulatory networks.</p>
+        </div>
+
+        <div id="navBar" class=".backBox">
+            <div id="stickyBar" data-spy="affix" data-offset-top="140">
+                <ul class="nav">
+                    <li><a href="/GRNsight/">Home</a></li>
+                    <li><a href="/GRNsight/about.html">About</a></li>
+                    <li><a href="/GRNsight/news.html">News</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight" target="_blank">Developers</a></li>
+                    <li><a href="/GRNsight/documentation.html">Documentation</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight/wiki" target="_blank">Wiki</a></li>
+                    <li><a href="/GRNsight/publications.html">Publications</a></li>
+                    <li><a href="/GRNsight/people.html">People</a></li>
+                    <li><a href="/GRNsight/contact.html">Contact</a></li>
+                    <li><a href="/GRNsight/links.html">Links</a></li>
+                    <li><a href="/GRNsight/beta.html">Beta</a></li>
+                </ul>
+                <p id="modText" class="modNav">
+                    Last modified: 9/5/15
+                </p>
+            </div>
+        </div>
+
+        <div id="mainContent">
+            <p id="pageTitle">Publications</p>
+            <div id="pageContent">
+                <h3>Posters</h3>
+                <p class="abstract">
+                    <span style="font-weight:bold"><a href="http://www.pointloma.edu/experience/academics/schools-departments/department-biology/science-education-programs/wcbsurc">West Coast Biological Sciences Undergraduate Research Conference</a></span><br><br>
+                    April 25, 2015 <br>
+                    Improvements to GRNsight: a Web Application for Visualizing Models of Gene Regulatory Networks <br>
+                    <span style="font-weight:bold">Nicole Anguiano, Anindita Varshneya</span>, Kam D. Dahlquist, John David N. Dionisio, and Ben G. Fitzpatrick <br><br>
+                    Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRN). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN, can mathematically model GRNs. The general graph visualization tools that exist for displaying GRNs did not fulfill our needs, so we created GRNsight. GRNsight automatically lays out the network graph based on spreadsheets uploaded from GRNmap. GRNsight colors the edges and adjusts their thicknesses based on the sign (activation or repression) and magnitude of the GRNmap weight parameter. GRNsight uses pointed and blunt arrowheads to indicate activation and repression, respectively. Visualizations can be modified through manual node dragging and sliders that adjust the force layout parameters. Since version 1.0, GRNsight has acquired significant user interface improvements, bug fixes, extended robustness to errors, and aesthetic refinements. Demo spreadsheets are now available for users who do not have their own models. GRNsight's current release is version 1.10, with beta version 1.11 available for testing new features. GRNsight is available at <a href="http://dondi.github.io/GRNsight/">http://dondi.github.io/GRNsight/</a>.
+                </p>
+                <div class="abstract">
+                    <iframe src="http://www.slideshare.net/slideshow/embed_code/46240444" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe> 
+                    <div style="margin-bottom:5px"> 
+                        <a href="http://www.slideshare.net/GRNsight/anguiano-varshneya-lmusymposium2015" title="Anguiano varshneya lmu_symposium_2015" target="_blank">Poster Slides</a> from <a href="http://www.slideshare.net/GRNsight" target="_blank">GRNsight</a> 
+                    </div>
+                </div>
+
+                <p class="abstract">
+                    <span style="font-weight:bold">Loyola Marymount Undergraduate Research Symposium</span><br><br>
+                    March 21, 2015 <br>
+                    Improvements to GRNsight: a Web Application for Visualizing Models of Gene Regulatory Networks <br>
+                    <span style="font-weight:bold">Nicole Anguiano, Anindita Varshneya</span>, Kam D. Dahlquist, John David N. Dionisio, and Ben G. Fitzpatrick <br><br>
+                    Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRN). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNs can be mathematically modeled by GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN. The general graph visualization tools that exist for displaying GRNs did not fulfill our needs, so we created GRNsight. GRNsight automatically lays out the network graph based on spreadsheets uploaded from GRNmap. It is written in JavaScript, with diagrams facilitated by D3.js. Node.js and the Express framework handle server-side functions. GRNsight’s diagrams are based on D3.js’s force graph layout algorithm, which was then extensively customized to support the specific needs of GRN visualization. GRNsight colors the edges and adjusts their thicknesses based on the sign (activation or repression) and magnitude of the GRNmap weight parameter. GRNsight uses pointed and blunt arrowheads to indicate activation and repression, respectively. Visualizations can be modified through manual node dragging and sliders that adjust D3.js’s force layout parameters. Since version 1.0, GRNsight has acquired significant user interface improvements, bug fixes, extended robustness to errors in file formats, and aesthetic refinements, particularly for edge markers. Demo spreadsheets are now available for users who do not have their own models. GRNsight's current release is version 1.8, with beta version 1.9 available for testing new features. GRNsight is available at <a href="http://dondi.github.io/GRNsight/">http://dondi.github.io/GRNsight/</a>.
+                </p>
+                <div class="abstract">
+                    <iframe src="http://www.slideshare.net/slideshow/embed_code/46240444" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe> 
+                    <div style="margin-bottom:5px"> 
+                        <a href="http://www.slideshare.net/GRNsight/anguiano-varshneya-lmusymposium2015" title="Anguiano varshneya lmu_symposium_2015" target="_blank">Poster Slides</a> from <a href="http://www.slideshare.net/GRNsight" target="_blank">GRNsight</a> 
+                    </div>
+                </div>
+                <p class="abstract">
+                    <span style="font-weight:bold"><a href="http://ccbs.uci.edu/scsb2015home">Southern California Systems Biology Conference</a></span><br><br>
+                    January 31, 2015 <br>
+                    GRNmap and GRNsight: Open Source Software for Dynamical Systems Modeling and Visualization of Medium-Scale Gene Regulatory Networks<br>
+                    <span style="font-weight:bold">Nicole Anguiano</span>, Anindita Varshneya, Britain J. Southwick, Kam D. Dahlquist, John David N. Dionisio, and Ben G. Fitzpatrick <br><br>
+                    Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRN). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNs can be mathematically modeled by applications such as GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN. GRNsight automatically lays out the network graph based on spreadsheets uploaded from GRNmap. It is written in JavaScript, with diagrams facilitated by D3.js. Node.js and the Express framework handle server-side functions. GRNsight’s diagrams are based on D3.js’s force graph layout algorithm, which was then extensively customized to support the specific needs of GRN visualization. GRNsight colors the edges and adjusts their thicknesses based on the sign (activation or repression) and magnitude of the GRNmap weight parameter. GRNsight uses pointed and blunt arrowheads to indicate activation and repression, respectively. When a user mouses over an edge, the numerical value of the weight parameter is displayed. Visualizations can be modified through manual node dragging and sliders that adjust D3.js’s force layout parameters. Since version 1.0, GRNsight has acquired significant user interface improvements, bug fixes, extended robustness to errors in file formats, and aesthetic refinements, particularly for edge markers. Demo spreadsheets are now available for users who do not have their own models. GRNsight's current release is version 1.8, with beta version 1.9 available for testing new features. GRNsight is available at <a href="http://dondi.github.io/GRNsight/">http://dondi.github.io/GRNsight/</a>.
+                </p>
+                <div class="abstract">
+                    <iframe src="http://www.slideshare.net/slideshow/embed_code/42279842" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe> 
+                    <div style="margin-bottom:5px"> 
+                        <a href="http://www.slideshare.net/GRNsight/anguiano-varshneya-sccurposter20141122" title="Anguiano varshneya sccur-poster_20141122" target="_blank">Poster Slides</a> from <a href="http://www.slideshare.net/GRNsight" target="_blank">GRNsight</a> 
+                    </div>
+                </div>
+                <p class="abstract">
+                    <span style="font-weight:bold">Southern California Conference for Undergraduate Research</span> <br><br>
+                    November 22, 2014 <br>
+                    GRNsight: A Web Application for Visualizing Models of Gene Regulatory Networks <br>
+                    <span style="font-weight:bold">Nicole Anguiano, Anindita Varshneya</span>, John David N. Dionisio, Kam D. Dahlquist, Ben G. Fitzpatrick<br><br>
+                    Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRN). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNs can be mathematically modeled by applications such as GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN. The general graph visualization tools that exist for displaying GRNs did not fulfill our needs, so we created GRNsight. GRNsight automatically lays out the network graph based on spreadsheets uploaded from GRNmap. It is written in JavaScript, with diagrams facilitated by D3.js, a data visualization library. Node.js and the Express framework handle server-side functions. GRNsight’s diagrams are based on D3.js’s force graph layout algorithm, which was then extensively customized to support the specific needs of GRN visualization. GRNsight colors the edges and adjusts their thickness based on the sign (activation or repression) and magnitude of the GRNmap weight parameter. GRNsight uses arrowheads and perpendicular line segments to indicate activation and repression, respectively. When a user mouses over an edge, the numerical value of the weight parameter is displayed. Visualizations can be modified through manual node dragging and sliders that adjust D3.js’s force layout parameters. GRNsight follows an open development model with rigorous documentation of requirements and issues on GitHub. Since version one, GRNsight has acquired significant user interface improvements, bug fixes, extended robustness to errors in file formats, and aesthetic refinements, particularly for edge markers. Demo spreadsheets are now available for users who do not have their own models. GRNsight's current release is version 1.6, with beta version 1.7 available for testing new features. GRNsight is available at <a href="http://dondi.github.io/GRNsight/">http://dondi.github.io/GRNsight/</a>.
+                </p>
+                <div class="abstract">
+                    <iframe src="http://www.slideshare.net/slideshow/embed_code/42279842" width="476" height="400" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe> 
+                    <div style="margin-bottom:5px"> 
+                        <a href="http://www.slideshare.net/GRNsight/anguiano-varshneya-sccurposter20141122" title="Anguiano varshneya sccur-poster_20141122" target="_blank">Poster Slide</a> from <a href="http://www.slideshare.net/GRNsight" target="_blank">GRNsight</a> 
+                    </div>
+                </div>
+                <br></br>
+                <h3>Presentations</h3>
+                <p class="abstract">
+                    <span style="font-weight:bold"><a href="http://ccbs.uci.edu/scsb2015home">Southern California Systems Biology Conference</a></span><br><br>
+                    January 31, 2015 <br>
+                    GRNmap and GRNsight: Open Source Software for Dynamical Systems Modeling and Visualization of Medium-Scale Gene Regulatory Networks<br>
+                    <span style="font-weight:bold">Kam D. Dahlquist</span>,  Ben G. Fitzpatrick, John David N. Dionisio, Nicole A. Anguiano, Juan S. Carrillo, Nicholas A. Rohacz, Katrina Sherbina, Britain J. Southwick, and Anindita Varshneya <br><br>
+                    Abstract: A gene regulatory network (GRN) consists of genes, transcription factors, and the regulatory connections between them that govern the level of expression of mRNA and proteins from those genes. Our group has developed a MATLAB software package, called GRNmap, that uses ordinary differential equations to model the dynamics of medium-scale GRNs. The program uses a penalized least squares approach to estimate production rates, expression thresholds, and regulatory weights for each transcription factor in the network based on gene expression data, and then performs a forward simulation of the dynamics of the network. Parameters for a 21-gene network were optimized against DNA microarray data measuring the transcriptional response to cold shock in wild type and four transcription factor deletion strains of budding yeast, Saccharomyces cerevisiae. Model predictions fit experimental data well, within the 95% confidence interval. Open source code and a compiled executable that can run without a MATLAB license are available from <a href="http://kdahlquist.github.io/GRNmap/">http://kdahlquist.github.io/GRNmap/</a>. GRNsight is an open source web application for visualizing such models of gene regulatory networks. GRNsight accepts GRNmap- or user-generated spreadsheets containing an adjacency matrix representation of the GRN and automatically lays out the graph of the GRN model. The application colors the edges and adjusts their thicknesses based on the sign (activation or repression) and the strength (magnitude) of the regulatory relationship, respectively. Users can then modify the graph to define the best visual layout for the network. The GRNsight code and application are available from <a href="http://dondi.github.io/GRNsight/">http://dondi.github.io/GRNsight/index.html</a>. This work was partially supported by NSF award 0921038.
+                </p>
+                <div class="abstract">
+                        <iframe src="http://www.slideshare.net/slideshow/embed_code/44236648" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> 
+                        <div style="margin-bottom:5px"> 
+                            <a href="http://www.slideshare.net/GRNsight/dahlquist-so-calsysbio20140131" title="Dahlquist so calsysbio_20140131" target="_blank">Presentation Slides</a> from <a href="//www.slideshare.net/GRNsight" target="_blank">GRNsight</a>
+                        </div>
+                </div>
+                <p class="abstract">
+                    <span style="font-weight:bold">Loyola Marymount University CMSI 402 Presentation</span> <br><br>
+                    May 8, 2014 <br>
+                    GRNsight: a Web Application for Visualizing Models of Gene Regulatory Networks <br>
+                    <span style="font-weight:bold">Britain Southwick</span>
+                </p>
+                <div class="abstract">
+                    <iframe src="http://www.slideshare.net/slideshow/embed_code/35811802" width="427" height="356" allowfullscreen></iframe> 
+                    <div style="margin-bottom:5px"> 
+                        <a href="https://www.slideshare.net/GRNsight/southwick-britain-grnsightcmsi402presentation20140508" title="Southwick britain gr_nsight_cmsi402-presentation_20140508" target="_blank">Presentation Slides</a> from <a href="http://www.slideshare.net/GRNsight" target="_blank">GRNsight</a>
+                    </div>
+                </div>
+                <p class="abstract">
+                    <span style="font-weight:bold">Loyola Marymount University Undergraduate Research Symposium</span> <br><br>
+                    March 29,2014 <br>
+                    GRNsight: a Web Application for Visualizing Models of Gene Regulatory Networks <br>
+                    <span style="font-weight:bold">Britain Southwick, Nicole Anguiano</span> <br>
+                    John David N. Dionisio, Kam D. Dahlquist, Ben G. Fitzpatrick <br><br>
+                    Abstract: A gene regulatory network (GRN) consists of genes, transcription factors, and the regulatory connections between them, which govern the level of expression of mRNA and protein from those genes. GRNs can be mathematically modeled and simulated by applications such as GRNmap, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN. Computer representations of GRNs, such as the models output by GRNmap, are tabular spreadsheets that are not easily interpretable. Ideally, GRNs should be displayed as diagrams (graphs) detailing the regulatory relationships (edges) between each gene (node) in the network. To address this need, we developed GRNsight. GRNsight is an open source web application for visualizing mathematical models of GRNs. It allows users to upload spreadsheets generated by GRNmap and uses the information in these spreadsheets to automatically create and display a graph of the GRN model. The application colors the edges and adjusts their thickness based on the sign (activation or repression) and the strength (magnitude) of the regulatory relationship, respectively. Finally, GRNsight then allows the user to modify the graph in order to define the best visual layout for the network. Most of GRNsight is written in JavaScript. HTTP requests are handled using Node.js and the Express framework. Graphs are generated through D3.js, a JavaScript data visualization library. <br>
+                </p>
+                <div class="abstract">
+                    <iframe src="http://www.slideshare.net/slideshow/embed_code/35811669" width="427" height="356" allowfullscreen> </iframe> 
+                    <div style="margin-bottom:5px"> 
+                        <a href="https://www.slideshare.net/GRNsight/southwick-anguiano-lmusymposiumpresentation20140329" title="Southwick anguiano lmu-symposium_presentation_20140329" target="_blank">Presentation Slides</a> from <a href="http://www.slideshare.net/GRNsight" target="_blank">GRNsight</a> 
+                    </div>
+                </div>
+            </div>
+            <div id="footer">
+                <hr id="separate">
+                <ul id="footerNav">
+                    <li><a href="/GRNsight/">Home</a></li>
+                    <li><a href="/GRNsight/about.html">About</a></li>
+                    <li><a href="/GRNsight/news.html">News</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight" target="_blank">Developers</a></li>
+                    <li><a href="/GRNsight/documentation.html">Documentation</a></li>
+                    <li><a href="https://github.com/dondi/GRNsight/wiki" target="_blank">Wiki</a></li>
+                    <li><a href="/GRNsight/publications.html">Publications</a></li>
+                    <li><a href="/GRNsight/people.html">People</a></li>
+                    <li><a href="/GRNsight/contact.html">Contact</a></li>
+                    <li><a href="/GRNsight/links.html">Links</a></li>
+                    <li><a href="/GRNsight/beta.html">Beta</a></li>
+                </ul>
+                <p id="CCLicense">
+                    This web site is free and open to all users and there is no login requirement.
+
+                    Web site content is available under the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons
+                    <br>
+                    Attribution Non-Commercial Share Alike 3.0 Unported License</a>. 
+
+                    GRNsight code is available under the open source <a href="http://opensource.org/licenses/BSD-3-Clause" target="_blank">BSD license</a>.
+
+                    <br>
+
+                    This page has been accessed <span class="ga-report"></span> times.
+
+                    
+                </p>
+            </div>
+        </div>
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
+
+            ga("create", "UA-54882218-1", "auto");
+            ga("send", "pageview");
+        </script>
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="/GRNsight/assets/js/main.js"></script>
+        <script src="/GRNsight/assets/js/ga-report.js"></script>
+
+    </body>
+
+</html>

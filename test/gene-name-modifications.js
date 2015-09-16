@@ -117,6 +117,13 @@ describe('duplicate-gene-top-nonadjacent', function () {
     })
   })
 
+  describe('NaN-as-gene-name', function () {
+    it('should not return any errors', function () {
+      test.noErrors('test-files/gene-name-modifications/NaN-as-gene-name-input.xlsx');
+      test.noErrors('test-files/gene-name-modifications/NaN-as-gene-name-output.xlsx');
+    })
+  })
+
   // Gene Name Modifications - Special Characters
 
   describe('ampersand', function () {
