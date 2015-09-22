@@ -1,13 +1,13 @@
 $(function() {
 
-    var leftWindowBoundary = 1,
-        sidebarScrollStartPoint = 140,
-        GRNsightDefaultImage = '/GRNsight/assets/images/GRNsight_logo_20140710_main_resized.jpg',
-        GRNsightHoverImage = '/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg';
+    var LEFT_WINDOW_BOUNDARY = 1,
+        SCROLL_START_POINT = 140,
+        LOGO_DEFAULT = '/GRNsight/assets/images/GRNsight_logo_20140710_main_resized.jpg',
+        LOGO_HOVER = '/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg';
 
     var initializePage = function () {
-        changeImageOnHover('#GRNsightLogo', GRNsightDefaultImage, GRNsightHoverImage);
-        configureSidebarScrollingBehavior('#stickyBar');
+        changeImageOnHover('#GRNsightLogo', LOGO_DEFAULT, LOGO_HOVER);
+        disableSidebarHorizontalMovement('#stickyBar');
         openCollapsedHashedElements();
 
         var pageIsDocumentationPage = (location.pathname === "/GRNsight/documentation.html");
@@ -24,22 +24,17 @@ $(function() {
         })
     },
 
-    configureSidebarScrollingBehavior = function (sidebarID) {
+    disableSidebarHorizontalMovement = function (sidebarID) {
         $(window).scroll(function() {
-            disableHorizontalMovement(sidebarID);
-        });
-    },
-
-    disableHorizontalMovement = function (sidebarID) {
-        var userHasScrolledRight = $(window).scrollLeft() >= leftWindowBoundary,
-            sidebarShouldBeScrolling = $(window).scrollTop() > sidebarScrollStartPoint,
+            var userHasScrolledRight = $(window).scrollLeft() >= LEFT_WINDOW_BOUNDARY,
+            sidebarShouldScroll = $(window).scrollTop() > SCROLL_START_POINT,
             sidebarIsAttached = ($(sidebarID).attr('class')) === 'affix' ? true : false;
-
-        if ((userHasScrolledRight && sidebarShouldBeScrolling) || (!sidebarShouldBeScrolling &&  sidebarIsAttached)) {
-            detachSidebar(sidebarID);
-        } else if(sidebarShouldBeScrolling && !sidebarIsAttached) {
-            attachSidebar(sidebarID);
-        } 
+            if ((userHasScrolledRight && sidebarShouldScroll) || (!sidebarShouldScroll && sidebarIsAttached)) {
+                detachSidebar(sidebarID);
+            } else if(sidebarShouldScroll && !sidebarIsAttached) {
+                attachSidebar(sidebarID);
+            } 
+        });
     },
 
     detachSidebar = function (sidebarID) {
