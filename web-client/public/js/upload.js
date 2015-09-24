@@ -101,9 +101,10 @@ $(function () {
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
       "It is possible that these warnings are the result of extraneous data outside of the matrix, but " + 
-      "we recommend you review your file and ensure that everything looks correct. The graph will be loaded, " +
-      "but may not look the way it is expected to look. To view the details " + 
-      "of the warning(s), please select the dropdown below.");
+      "we recommend you review your file and ensure that it is formatted correctly. The graph will be loaded, " +
+      "but may not be displayed accurately. To view the details " + 
+      "of the warning(s), please click on the \"Warnings List\" below.");
+
     var warningsString = "";
     for(var i = 0; i < warnings.length; i++) {
       warningsString += warnings[i].errorDescription + " <br><br>";
