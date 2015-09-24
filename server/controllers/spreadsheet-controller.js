@@ -319,7 +319,7 @@ var warningsList = {
   missingSourceGeneWarning: function (type, column) {
     return {
       warningCode: "MISSING_SOURCE",
-      errorDescription: "A source gene was detected as " + type + " in column " + column + "."  
+      errorDescription: "A source gene name is missing in column " + column + "."  
     } 
   },
 
@@ -335,7 +335,7 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "INVALID_DATA",
-      errorDescription: "The value in cell " + colLetter+rowNum + ", was detected as being undefined."
+      errorDescription: "The value in cell " + colLetter+rowNum + ", is undefined."
     }
   },
 
