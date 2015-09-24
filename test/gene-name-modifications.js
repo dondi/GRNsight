@@ -50,7 +50,7 @@ describe('duplicate-gene-top-nonadjacent', function () {
   describe('long-gene-name', function () {
     it('should return 1 or 2 long gene name error', function () {
       test.invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-input.xlsx', 1);
-      test.invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-output.xlsx', 2);
+      test.invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-output.xlsx', 1);
     })
   })
 
