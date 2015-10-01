@@ -110,7 +110,7 @@ $(function () {
       warningsString += warnings[i].errorDescription + " <br><br>";
     }
     $("#warningsList").html(warningsString);
-    $("#warningsModal").modal("show");
+    $("#warningsModal").modal("show").css("overflow");
   }
 
   $("#warningsModal").on("hidden.bs.modal", function() {

@@ -86,9 +86,9 @@ var parseSheet = function(sheet) {
               currentGene = {name: currentSheet.data[0][column]}; 
               // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
               if(currentGene.name === undefined) {
-                network.warnings.push(warningsList.missingSourceGeneWarning("undefined", column));
+                network.warnings.push(warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-                network.warnings.push(warningsList.missingSourceGeneWarning("NaN", column));
+                network.warnings.push(warningsList.missingSourceGeneWarning(row, column));
               } else {
                 sourceGenes.push(String(currentGene.name.value.toUpperCase())); 
                 genesList.push(String(currentGene.name.value.toUpperCase())); 
@@ -104,9 +104,9 @@ var parseSheet = function(sheet) {
             try {
               currentGene = {name: currentSheet.data[row][0]}; 
               if(currentGene.name === undefined) {
-                network.warnings.push(warningsList.missingTargetGeneWarning("undefined", row));
+                network.warnings.push(warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-                network.warnings.push(warningsList.missingTargetGeneWarning("NaN", row));
+                network.warnings.push(warningsList.missingTargetGeneWarning(row, column));
               } else {
                 targetGenes.push(String(currentGene.name.value.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
@@ -316,7 +316,7 @@ var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 
 // This is the list of warnings. 
 // The graph will still load if warnings are detected, but these will be reported to the user.
 var warningsList = {
-  missingSourceGeneWarning: function (type, column) {
+  missingSourceGeneWarning: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
@@ -325,10 +325,12 @@ var warningsList = {
     } 
   },
 
-  missingTargetGeneWarning: function (type, row) {
+  missingTargetGeneWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
     return {
       warningCode: "MISSING_TARGET",
-      errorDescription: "A target gene was detected as " + type + " in row " + row + "."
+      errorDescription: "A target gene name is missing in cell " + colLetter+rowNum + "."
     }
   },
 
