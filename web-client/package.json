@@ -12,6 +12,6 @@
     "mocha": "latest",
     "supertest": "latest",
     "should": "latest",
-    "node-xlsx": "latest"
+    "node-xlsx": "0.4.0"
   }
 }

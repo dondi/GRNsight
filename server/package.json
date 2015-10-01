@@ -8,10 +8,10 @@
   "dependencies": {
     "cors": "latest",
     "express": "3.3.8",
-    "googleapis": "^1.1.5",
+    "googleapis": "^1.1.5", 
     "mocha": "latest",
     "multiparty": "latest",
-    "node-xlsx": "latest",
+    "node-xlsx": "0.4.0",
     "should": "latest",
     "supertest": "latest"
   }
