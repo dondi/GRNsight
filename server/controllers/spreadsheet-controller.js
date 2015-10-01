@@ -317,9 +317,11 @@ var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 
 // The graph will still load if warnings are detected, but these will be reported to the user.
 var warningsList = {
   missingSourceGeneWarning: function (type, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
     return {
       warningCode: "MISSING_SOURCE",
-      errorDescription: "A source gene name is missing in column " + column + "."  
+      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."  
     } 
   },
 
