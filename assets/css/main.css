@@ -180,6 +180,10 @@ p.panel-title.aboutHeaders {
         white-space: nowrap;
 }
 
+.studentName {
+	padding-left: 30px;
+}
+
 h3 {
 	padding-left: 10px;
 	margin: 15px 0 10px 0;
