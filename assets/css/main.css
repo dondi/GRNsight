@@ -128,15 +128,15 @@ a:active {
 	padding: 5px 5px 5px 5px;
 }
 
-.fixWidthforImage { 
-	min-width: 1500px; 
+.fixWidthforImage {
+	min-width: 1500px;
 }
 
-.fixWidthforImage > div.pull-left { 
-	margin-bottom: 1em; 
+.fixWidthforImage > div.pull-left {
+	margin-bottom: 1em;
 }
 
-.fixWidthforImage > div.pull-right { 
+.fixWidthforImage > div.pull-right {
 	max-width: 720px; margin-right:200px;
 }
 
@@ -168,7 +168,7 @@ p.panel-title.aboutHeaders {
 
 .name {
 	font-weight:bold;
-	font-size:18px;	
+	font-size:18px;
 	margin:0 0 0 0;
 	padding-left:15px;
 }
@@ -190,16 +190,20 @@ h3 {
 	margin-left: 30px;
 }
 
+.studentName {
+	padding: 15 px
+}
+
 div.abstract > iframe {
-	border:1px solid #CCC; 
-	border-width:1px 1px 0; 
-	margin-bottom:5px; 
+	border:1px solid #CCC;
+	border-width:1px 1px 0;
+	margin-bottom:5px;
 	max-width: 100%;
 }
 
 .newsDate {
 	font-weight:bold;
-	font-size:18px;	
+	font-size:18px;
 	line-height: 1.5;
 	margin:0 0 0 0;
 	padding-left:15px;
@@ -209,32 +213,32 @@ div.abstract > iframe {
 
 .newsHeader {
 	font-weight:bold;
-	font-size:15px;	
+	font-size:15px;
 	margin:0 0 0 0;
 	padding: 10px 0 0 30px;
 }
 
 .newsInfo {
-	font-size:14px;	
+	font-size:14px;
 	margin: 0 0 0 0;
 	padding: 10px 0 30px 30px;
 }
 
 .extraInfo {
-	font-size:14px;	
+	font-size:14px;
 	margin: 0 0 0 0;
 	padding: 10px 0 0px 30px;
 }
 
 .linkHeader {
 	font-weight:bold;
-	font-size:18px;	
+	font-size:18px;
 	margin:0 0 0 0;
 	padding-left:15px;
 }
 
 .linkInfo {
-	font-size:15px;	
+	font-size:15px;
 }
 
 #separate {
