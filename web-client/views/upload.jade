@@ -171,7 +171,7 @@ html
           div(class='modal-header')
             input(type='button' class='close' data-dismiss='modal' aria-hidden='true' value='X')
             h4(class='modal-title') Warning
-          div(class='modal-body')
+          div(class='modal-body' overflow='scroll')
             p(id='warningIntro')
             div(class='panel-group' id='accordion' role='tablist' aria-multiselectable='true')
               div(class='panel panel-default')
@@ -181,6 +181,7 @@ html
                 div(id='warningsInfo' class='panel-collapse collapse' role='tabpanel' aria-labelledby='warningsHeader')
                   div(class='panel-body')
                     p(id='warningsList')
+
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             // input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
