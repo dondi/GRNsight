@@ -1,15 +1,36 @@
 $(function () {
-  // Style of the tooltips when the user mouses over the label names
-  $(".info").tooltip({
-    placement: "top",
-    delay: { show: 700, hide: 100 }
-  });
 
-  // Defaults the sliders so that they return to their default values when the page is refreshed
-  $( "#linkDistInput" ).val(500);
-  $( "#chargeInput" ).val(-1000);
-  $( "#chargeDistInput" ).val(1000);
-  $( "#gravityInput" ).val(0.1);
+  var NUMBER_OF_SLIDERS           = 4,
+      LINK_DIST_SLIDER_ID         = "#linkDistInput",
+      LINK_DIST_VALUE             = "#linkDistVal",
+      LINK_DIST_DEFAULT           = 500,
+      CHARGE_SLIDER_ID            = "#chargeInput",
+      CHARGE_VALUE                = "#chargeVal",
+      CHARGE_DEFAULT              = -1000,
+      CHARGE_DIST_SLIDER_ID       = "#chargeDistInput",
+      CHARGE_DIST_VALUE           = "#chargeDistVal",
+      CHARGE_DIST_DEFAULT         = 1000,
+      GRAVITY_SLIDER_ID           = "#gravityInput",      
+      GRAVITY_VALUE               = "#gravityVal",      
+      GRAVITY_DEFAULT             = 0.1,
+      GRAVITY_LENGTH_WITHOUT_ZERO = 3,
+      LOCK_SLIDERS_CLASS          = ".lockSliders",
+      LOCK_SLIDERS_BUTTON         = "#lockSlidersButton",
+      LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu",
+      RESET_SLIDERS_CLASS         = ".resetSliders",
+      UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset",
+      UNDO_SLIDER_RESET_MENU      = "#undoResetMenu",
+      UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton",
+      TOOLTIP_SHOW_DELAY          = 700,
+      TOOLTIP_HIDE_DELAY          = 100;
+
+
+  styleLabelTooltips();
+  var sliders = new sliderGroup();
+  sliders.setHandlers();
+  sliders.updateValues();
+  var sliderOptions = new sliderControl(sliders);
+  sliderOptions.configureHandlers();
 
   /*
   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
@@ -143,6 +164,12 @@ $(function () {
     }
   });
 
+  function demoFiles (arrayOfDemos) {
+    this.demos = arrayOfDemos;
+
+    //this.setHandlers()
+  }
+
   var reload = ["", ""];
   $("#unweighted").click(function (event) {
     loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN (21 genes, 50 edges)");
@@ -181,89 +208,108 @@ $(function () {
     $(selectedID).attr("class", "deselectedColoring")
                  .on("click", colorPreferences);
   };
-
-  // Allow the sliders to be used before loading a graph
-
-  $("input[type='range']").on("input", function() {
-    // Due to all of the sliders and their HTML values sharing the same naming convention: NameInput/NameVal, 
-    // we can remove the Input and replace it with Val to change the correct HTML value each time.
-    var selectedSlider = $(this).attr("id").search("Input");
-    var targetID = $(this).attr("id").substring(0, selectedSlider) + "Val";
-    var gravityCheck = "";
-    if(targetID === "gravityVal"  && $(this).val().length === 3) {
-      gravityCheck = "0";
-    }
-    $("#" + targetID).html($(this).val() + gravityCheck);
-  });
-
-  // Handler is unbound first to prevent it from firing twice. 
-  // addHanders[0][i] = ID; addHandlers[1][i] = function run when that ID is clicked
-  var addHandlers = [ 
-    [ "#lockSliders", "#lockSlidersMenu", "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ],
-    [ lockSliders, lockSliders, resetSliders, resetSliders, undoReset, undoReset]
-  ]
-  for(var i = 0; i < addHandlers[0].length; i++) {
-    $(addHandlers[0][i]).unbind("click").click(addHandlers[1][i]);
-  };
-
-  function lockSliders(event) {
-    if( $("#lockSlidersMenu").attr("class") === "noGlyph" ) {
-      $("#lockSliders").prop("checked", true);
-      $("#lockSlidersMenu").removeClass("noGlyph")
-                             .html("<span class='glyphicon glyphicon-ok'></span>&nbsp; Lock Force Graph Parameters");
-    } else {
-      $("#lockSliders").prop("checked", false);
-      $("#lockSlidersMenu").addClass("noGlyph")
-                           .html("<span class='glyphicon invisible'></span>&nbsp; Lock Force Graph Parameters");
-    }
-    var check = $("#lockSliders").prop("checked");
-    $("input[type='range']").prop("disabled", check);
-    $("#resetSliders").prop("disabled", check);
-  };
-  
-  // Enter the prefix of each slider here
-  var inputs = [ "#linkDist", "#charge", "#chargeDist", "#gravity" ],
-      defaultValues = [500, -1000, 1000, 0.1],
-      newValues = [0, 0, 0, 0];
-
-  function resetSliders(event) {
-    var check = $( "#lockSliders" ).prop( "checked" );
-    if( !check ) {
-      newValues = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      for(var i = 0; i < inputs.length; i++) {
-        $(inputs[i] + "Input").val(defaultValues[i]);
-        if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(defaultValues[i]);
-        } else {
-          $(inputs[i] + "Val").html(defaultValues[i] + "0"); // add 0 to the end of gravity so that it reads 0.10
-        }
-      }
-      $( "#undoReset" ).prop( "disabled", false );
-    }
-  };
-
-  function undoReset(event) {
-    var check =  $( "#undoReset" ).prop( "disabled" );
-    if( !check ) {
-      for(var i = 0; i < inputs.length; i++) {
-        $(inputs[i] + "Input").val(newValues[i]);
-        if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(newValues[i]);
-        } else {
-          var gravityCheck = ""; 
-          if( $("#gravityInput").val().length === 3 ) {
-            gravityCheck = "0";
-          }
-          $(inputs[i] + "Val").html(newValues[i] + gravityCheck); // add 0 to the end of gravity so that it reads 0.10
-        }
-      }
-      $( "#undoReset" ).prop( "disabled", true );
-    }
-  }
   
   $("#printGraph").click(function (event) {
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
     }
   });
+
+  function styleLabelTooltips () {
+    $(".info").tooltip({
+      placement: "top",
+      delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
+    });
+  }
+
+  function sliderObject (sliderId, valueId, defaultVal) {
+    this.sliderId = sliderId;
+    this.valueId = valueId;
+    this.defaultVal = defaultVal;
+    this.currentVal = defaultVal;
+    this.backup = defaultVal;
+
+    this.activate = function () {
+      $(this.sliderId).on("input", {slider: this}, function (event) {
+        var needsAppendedZeros = (sliderId === GRAVITY_SLIDER_ID && $(this).val().length === GRAVITY_LENGTH_WITHOUT_ZERO);
+        $(event.data.slider.valueId).html($(this).val() + (needsAppendedZeros ? "0" : ""));
+        event.data.slider.currentVal = $(this).val();
+      });
+    };
+  }
+
+  function sliderGroup () {
+    this.linkDistance = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT);
+    this.charge = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT);
+    this.chargeDistance = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT);
+    this.gravity = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT);
+
+    this.sliders = [this.linkDistance, this.charge, this.chargeDistance, this.gravity];
+
+    this.backupValues = function () {
+      for (var i = 0; i < NUMBER_OF_SLIDERS; i++) {
+        this.sliders[i].backup = this.sliders[i].currentVal;
+      };
+    };
+
+    this.resetValues = function () {
+      this.backupValues();
+      for (var i = 0; i < NUMBER_OF_SLIDERS; i++) {
+        this.sliders[i].currentVal = this.sliders[i].defaultVal;
+      };
+      this.updateValues();
+    };
+
+    this.undoReset = function () {
+      for(var i = 0; i < NUMBER_OF_SLIDERS; i++) {
+        this.sliders[i].currentVal = this.sliders[i].backup;
+      }
+      this.updateValues();
+    }
+
+    this.updateValues = function () {
+      for (var i = 0; i < NUMBER_OF_SLIDERS; i++) {
+        var needsAppendedZeros = (this.sliders[i].sliderId === GRAVITY_SLIDER_ID && this.sliders[i].currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO);
+        $(this.sliders[i].sliderId).val(this.sliders[i].currentVal);
+        $(this.sliders[i].valueId).html(this.sliders[i].currentVal + (needsAppendedZeros ? "0" : ""));
+      };
+    };
+
+    this.setHandlers = function () {
+      for(var i = 0; i < NUMBER_OF_SLIDERS; i++) {
+        this.sliders[i].activate();
+      }
+    }
+
+  }
+
+  function sliderControl (sliderGroup) {
+    this.slidersToEdit = sliderGroup;
+    this.locked = false;
+
+    this.configureHandlers = function () {
+      $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
+        event.data.handler.toggle();
+      });
+      $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
+        event.data.handler.slidersToEdit.resetValues();
+        $(UNDO_SLIDER_RESET_CLASS).prop("disabled", false);
+      });
+      $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
+        event.data.handler.slidersToEdit.undoReset();
+        $(UNDO_SLIDER_RESET_CLASS).prop("disabled", true);
+      })
+    }
+
+    this.toggle = function () {
+      this.locked = !this.locked;
+      console.log(this.locked);
+      $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
+      $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
+      $.each(this.slidersToEdit.sliders, function (key, value) {
+        $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
+      })
+    }
+  }
+
 });
