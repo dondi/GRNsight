@@ -4,7 +4,7 @@
  *and http://bl.ocks.org/mbostock/1153292
  */
 
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls, sheetType, warnings, testing) {
+var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController) {
 
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
@@ -671,10 +671,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, contro
     node.classed("fixed", d.fixed = true);
   }
 
-  testing.setSliderHandlers();
-  testing.addForce(force);
-  testing.configureForceHandlers();
-  //testing.configureSliderControllers();
+  sliderController.setSliderHandlers();
+  sliderController.addForce(force);
+  sliderController.configureForceHandlers();
 
   $(".startDisabled").removeClass("disabled");
 }

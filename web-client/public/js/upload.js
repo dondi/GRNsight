@@ -90,16 +90,7 @@ $(function () {
         $(disable[i]).off("click");
       }
       previousFile = [url, name, formData]; // Store info about the previous file for use in reload
-      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
-        linkSlider: "#linkDistInput",
-        chargeSlider: "#chargeInput",
-        chargeDistSlider: "#chargeDistInput",
-        gravitySlider: "#gravityInput",
-        resetSliderButton: "#resetSliders",
-        resetSliderMenu: "#resetSlidersMenu",
-        undoResetButton: "#undoReset",
-        undoResetMenu: "#undoResetMenu"
-      }, network.sheetType, network.warnings, sliders);
+      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
           errorString = "Your graph failed to load.<br><br>";
