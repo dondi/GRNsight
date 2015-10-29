@@ -30,6 +30,9 @@ var sliderGroupController = function (sliderArray) {
   this.numberOfSliders = sliderArray.length;
   this.locked = false;
 
+  this.force = undefined;
+  this.forceParameters = undefined;
+
   this.backupValues = function () {
     for (var i = 0; i < this.numberOfSliders; i++) {
       this.sliders[i].backup = this.sliders[i].currentVal;
@@ -90,29 +93,47 @@ var sliderGroupController = function (sliderArray) {
     $.each(this.sliders, function (key, value) {
       $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
     })
-  }   
-};
-
-var sliderForceController = function (sliderGroupController, force) {
-  this.force = force;
-  this.sliderGroup = sliderGroupController;
-
-  this.configureForceHandler = function () {
-    for (var i = 0; i < this.sliderGroup.numberOfSliders; i++) {
-      //
-    }
   }
 
-  this.defaultForce = function () {
-    //for (var i = 0; i  this.sliderGroup.numberOfSliders; i++) {
-      this.sliderGroup.resetValues();
-    //}
+  this.addForce = function (force) { // make forceParameters into an inputted array
+    this.force = force;
+    this.forceParameters = [force.linkDistance, force.charge, force.chargeDistance, force.gravity];
   }
 
-  this.resetForce = function (needStop) {
-    if (needStop) {
+  this.configureForceHandlers = function () {
+    for (var i = 0; i < this.numberOfSliders; i++) {
+      $(this.sliders[i].sliderId).on("input", {handler: this, slider: this.sliders[i], force: this.forceParameters[i]}, function (event) {
+        event.data.force($(this).val());
+        event.data.handler.restartForce(event.data.slider.needsAppendedZeros);
+      });
+    };
+    $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
+      event.data.handler.resetForce();
+    });
+    $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
+      event.data.handler.undoForceReset();
+    });
+  }
+
+  this.restartForce = function (needsRestart) {
+    if (needsRestart) {
       this.force.stop();
     }
     this.force.start();
   }
-}
+
+  this.resetForce = function () {
+    for(var i = 0; i < this.numberOfSliders; i++) {
+      this.forceParameters[i](this.sliders[i].defaultVal);
+      this.restartForce(this.sliders[i].needsAppendedZeros);
+    }
+  }
+  // condense this ^ v
+
+  this.undoForceReset = function () {
+    for (var i = 0; i < this.numberOfSliders; i++) {
+      this.forceParameters[i](this.sliders[i].backup);
+      this.restartForce(this.sliders[i].needsAppendedZeros);
+    }
+  }
+}; 

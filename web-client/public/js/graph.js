@@ -5,9 +5,6 @@
  */
 
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, controls, sheetType, warnings, testing) {
-  //var forceHandler = new sliderForceController()
-  testing.setSliderHandlers();
-  //testing.configureSliderControllers();
 
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
@@ -673,108 +670,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, contro
     var node = d3.select(this);
     node.classed("fixed", d.fixed = true);
   }
-  
-  function updateLinkDist(event) {
-      var toChange = $(this).val();
-      force.linkDistance( toChange );
-      force.start();
-      $( "#linkDistVal" ).html( toChange );
-  }
 
-  function updateCharge(event) {
-      var toChange = $(this).val();
-      force.charge( toChange );
-      force.start(); 
-      $( "#chargeVal" ).html( toChange );
-  }
+  testing.setSliderHandlers();
+  testing.addForce(force);
+  testing.configureForceHandlers();
+  //testing.configureSliderControllers();
 
-  function updateChargeDist(event) {
-      var toChange = $(this).val();
-      force.chargeDistance( toChange );
-      force.start();
-      $( "#chargeDistVal" ).html( toChange );
-  }
-
-  function updateGravity(event) {
-    var toChange = $(this).val();
-      force.gravity( toChange );
-      force.stop();
-      force.start();
-
-      // Makes 0.1 appear as 0.10, 0.2 appear as 0.20, etc.
-      if(toChange.length === 3) {
-        toChange += "0";
-      }
-      $( "#gravityVal" ).html( toChange );
-  }
-
-  function defaultSliders(event) {
-    var check = $( "#lockSliders" ).prop( 'checked' );
-    if( !check ) {
-      allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      $( "#linkDistInput" ).val(500);
-      $( "#linkDistVal" ).html("500");
-      $( "#chargeInput" ).val(-1000);
-      $( "#chargeVal" ).html("-1000");
-      $( "#gravityInput" ).val(0.1);
-      $( "#gravityVal" ).html("0.10");
-      $( "#chargeDistInput" ).val(1000);
-      $( "#chargeDistVal" ).html("1000");
-      force.linkDistance(500)
-           .charge(-1000)
-           .chargeDistance(1000)
-           .gravity(0.1);
-      force.stop();
-      force.start();
-      $( "#undoReset" ).prop( 'disabled', false );
-    }
-  }
-
-  function undoReset(event) {
-    var check =  $( "#undoReset" ).prop( 'disabled' );
-
-    // gravityCheck used to add on the zero to 0.1 -> 0.10, 0.2 -> 0.20, etc
-    var gravityCheck = "";
-    if( !check ) {
-      $( "#linkDistInput" ).val( allDefaults[0] );
-      $( "#linkDistVal" ).html( allDefaults[0] );
-      $( "#chargeInput" ).val( allDefaults[1] );
-      $( "#chargeVal" ).html( allDefaults[1] );
-      $( "#gravityInput" ).val( allDefaults[3] );
-      if( $("#gravityInput").val().length === 3 ) {
-        gravityCheck = "0";
-      }
-      $( "#gravityVal" ).html( allDefaults[3] + gravityCheck );
-      $( "#chargeDistInput" ).val( allDefaults[2] );
-      $( "#chargeDistVal" ).html( allDefaults[2] );
-      force.linkDistance( allDefaults[0] )
-           .charge( allDefaults[1] )
-           .chargeDistance( allDefaults[2] )
-           .gravity( allDefaults[3] );
-      force.stop();
-      force.start();
-      $( "#undoReset" ).prop( 'disabled', true );
-    }
-  }
-
-  // Set up our controllers if any.
-  if (controls) {
-      $(controls.linkSlider).on('input', updateLinkDist);
-      $(controls.chargeSlider).on('input', updateCharge);
-      $(controls.chargeDistSlider).on('input', updateChargeDist);
-      $(controls.gravitySlider).on('input', updateGravity);
-
-      // Handler is unbound first to prevent it from firing twice.
-      $(controls.resetSliderButton).unbind('click').click(defaultSliders);
-      $(controls.resetSliderMenu).unbind('click').click(defaultSliders);
-      $(controls.undoResetButton).unbind('click').click(undoReset);
-      $(controls.undoResetMenu).unbind('click').click(undoReset);
-  }
-
-  var lockCheck = $( "#lockSliders" ).prop( 'checked' );
-  var allDefaults = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-
-  $( "input[type='range']" ).prop( 'disabled', lockCheck );
-  $( "#undoReset" ).prop( 'disabled', true );
   $(".startDisabled").removeClass("disabled");
 }
