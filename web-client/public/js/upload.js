@@ -35,17 +35,11 @@ $(function () {
   var COLOR_PREFERENCES_CLASS = ".colorPreferences",
       ACTIVE_COLOR_OPTION     = "active";
 
-
-  // Uploading Stuff
-  var RELOAD_ID = "#reload";
-
   styleLabelTooltips();
-
   var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
   var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
   var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false);
   var gravitySlider = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT, true);
-
   var sliders = new sliderGroupController([linkDistanceSlider, chargeSlider, chargeDistanceSlider, gravitySlider]);
   sliders.setSliderHandlers();
   sliders.updateValues();
@@ -62,12 +56,49 @@ $(function () {
   var settings = new settingsController();
   settings.setupSettingsHandlers();
   
-  $("#printGraph").click(function (event) {
+  $("#printGraph").on("click", function () {
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
     }
   });
 
+  var previousFile = {
+    path: "/upload",
+    name: "",
+    formdata: undefined
+  } 
+
+  var reload = ["", ""];
+
+  $("#reload").on("click", function () {
+    if(!$(".startDisabled").hasClass("disabled")) { 
+      if(reload[0] === "") {
+        loadGrn(previousFile.path, previousFile.name, previousFile.formdata);
+      } else {
+        loadGrn(reload[0], reload[1]);
+      }
+    }
+  });
+
+  $("#upload").on("change", function (event) {
+    reload = ["", ""];
+
+    var $upload = $(this),
+        fileName = $upload.val().replace(/^.*\\/, ""), // Regex removes all content before the filepath in Chrome.
+        formData = new FormData();
+
+    formData.append("file", $upload[0].files[0]);
+    loadGrn("/upload", fileName, formData);
+
+    if (window.ga) {
+        window.ga("send", "pageview", {
+            page: "/GRNsight/upload",
+            sessionControl: "start"
+        });
+    }
+
+    event.preventDefault();
+  });
 
   /*
   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
@@ -118,33 +149,7 @@ $(function () {
     });
   };
 
-  $("#upload").on("change", function (event) {
-    // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
-    // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
-    var $upload = $(this),
-        fullFilePath = $upload.val(),
-        fakePathCheck = fullFilePath.search("\\\\") + 1; // 4 \"s enables it to search for a slash character without error
-
-    // fakePathCheck will return -1 when the character is not found, so will only be -1 when all slashes are gone
-    while (fakePathCheck != 0) { 
-      fullFilePath = fullFilePath.substring(fakePathCheck);
-      fakePathCheck = fullFilePath.search("\\\\") + 1;
-    }
-    reload = ["", ""];
-
-    var formData = new FormData();
-    formData.append("file", $upload[0].files[0]);
-    loadGrn("/upload", fullFilePath, formData);
-
-    if (window.ga) {
-        window.ga("send", "pageview", {
-            page: "/GRNsight/upload",
-            sessionControl: "start"
-        });
-    }
-
-    event.preventDefault();
-  });
+  
 
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
@@ -162,8 +167,8 @@ $(function () {
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
-    var setPanel = screenHeight-BORDER+"px";
-    var minPanel = MIN_SCREEN_HEIGHT-BORDER+"px";
+    var setPanel = (screenHeight - BORDER) + "px";
+    var minPanel = (MIN_SCREEN_HEIGHT - BORDER) +"px";
     if (screenHeight > MIN_SCREEN_HEIGHT) {
       $("#list-frame").css({height: setPanel});
     } else {
@@ -176,24 +181,6 @@ $(function () {
   $("#warningsModal").on("hidden.bs.modal", function() {
     if( $("#warningsInfo").hasClass("in") ) {
       $("#warningsInfo").removeClass("in");
-    }
-  });
-
-  var previousFile = {
-    path: "/upload",
-    name: "",
-    formdata: undefined
-  } 
-
-  var reload = ["", ""];
-
-  $("#reload").click(function (event) {
-    if(!$(".startDisabled").hasClass("disabled")) { 
-      if(reload[0] === "") {
-        loadGrn(previousFile.path, previousFile.name, previousFile.formdata);
-      } else {
-        loadGrn(reload[0], reload[1]);
-      }
     }
   });
 
