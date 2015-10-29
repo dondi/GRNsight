@@ -1,36 +1,62 @@
 $(function () {
 
-  var NUMBER_OF_SLIDERS           = 4,
-      LINK_DIST_SLIDER_ID         = "#linkDistInput",
-      LINK_DIST_VALUE             = "#linkDistVal",
-      LINK_DIST_DEFAULT           = 500,
-      CHARGE_SLIDER_ID            = "#chargeInput",
-      CHARGE_VALUE                = "#chargeVal",
-      CHARGE_DEFAULT              = -1000,
-      CHARGE_DIST_SLIDER_ID       = "#chargeDistInput",
-      CHARGE_DIST_VALUE           = "#chargeDistVal",
-      CHARGE_DIST_DEFAULT         = 1000,
-      GRAVITY_SLIDER_ID           = "#gravityInput",      
-      GRAVITY_VALUE               = "#gravityVal",      
-      GRAVITY_DEFAULT             = 0.1,
-      GRAVITY_LENGTH_WITHOUT_ZERO = 3,
-      LOCK_SLIDERS_CLASS          = ".lockSliders",
-      LOCK_SLIDERS_BUTTON         = "#lockSlidersButton",
-      LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu",
-      RESET_SLIDERS_CLASS         = ".resetSliders",
-      UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset",
-      UNDO_SLIDER_RESET_MENU      = "#undoResetMenu",
-      UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton",
-      TOOLTIP_SHOW_DELAY          = 700,
-      TOOLTIP_HIDE_DELAY          = 100;
+  // Slider Values
+  var NUMBER_OF_SLIDERS     = 4,
+      LINK_DIST_SLIDER_ID   = "#linkDistInput",
+      LINK_DIST_VALUE       = "#linkDistVal",
+      LINK_DIST_DEFAULT     = 500,
+      CHARGE_SLIDER_ID      = "#chargeInput",
+      CHARGE_VALUE          = "#chargeVal",
+      CHARGE_DEFAULT        = -1000,
+      CHARGE_DIST_SLIDER_ID = "#chargeDistInput",
+      CHARGE_DIST_VALUE     = "#chargeDistVal",
+      CHARGE_DIST_DEFAULT   = 1000,
+      GRAVITY_SLIDER_ID     = "#gravityInput",      
+      GRAVITY_VALUE         = "#gravityVal",      
+      GRAVITY_DEFAULT       = 0.1,
+      TOOLTIP_SHOW_DELAY    = 700,
+      TOOLTIP_HIDE_DELAY    = 100;
 
+  // Demo Stuff
+  var UNWEIGHTED_DEMO_ID   = "#unweighted",
+      UNWEIGHTED_DEMO_PATH = "/demo/unweighted",
+      UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)",
+      WEIGHTED_DEMO_ID     = "#weighted",
+      WEIGHTED_DEMO_PATH   = "/demo/weighted",
+      WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)",
+      SCHADE_INPUT_ID      = "#schadeInput",
+      SCHADE_INPUT_PATH    = "/demo/schadeInput",
+      SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)",
+      SCHADE_OUTPUT_ID     = "#schadeOutput",
+      SCHADE_OUTPUT_PATH   = "/demo/schadeOutput",
+      SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
+
+
+  // Uploading Stuff
+  var RELOAD_ID = "#reload";
 
   styleLabelTooltips();
-  var sliders = new sliderGroup();
-  sliders.setHandlers();
+
+  var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
+  var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
+  var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false);
+  var gravitySlider = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT, true);
+
+  var sliders = new sliderGroupController([linkDistanceSlider, chargeSlider, chargeDistanceSlider, gravitySlider]);
+  sliders.setSliderHandlers();
   sliders.updateValues();
-  var sliderOptions = new sliderControl(sliders);
-  sliderOptions.configureHandlers();
+  sliders.configureSliderControllers();
+
+  var demoInformation = [ [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
+                          [ UNWEIGHTED_DEMO_ID, UNWEIGHTED_DEMO_PATH, UNWEIGHTED_DEMO_NAME ],
+                          [ SCHADE_INPUT_ID,    SCHADE_INPUT_PATH,    SCHADE_INPUT_NAME    ],
+                          [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ] ];
+  demoInformation.forEach(function (demoInfo) {
+    initializeDemoFile.apply(null, demoInfo);
+  });
+
+  // Settings Object
+
 
   /*
   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
@@ -73,7 +99,7 @@ $(function () {
         resetSliderMenu: "#resetSlidersMenu",
         undoResetButton: "#undoReset",
         undoResetMenu: "#undoResetMenu"
-      }, network.sheetType, network.warnings);
+      }, network.sheetType, network.warnings, sliders);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
           errorString = "Your graph failed to load.<br><br>";
@@ -153,7 +179,14 @@ $(function () {
     }
   });
 
+ /* var previousFile = {
+    path: "/upload",
+    name: "",
+    formdata: undefined
+  } */
+
   var previousFile = ["/upload", "", undefined];
+
   $("#reload").click(function (event) {
     if(!$(".startDisabled").hasClass("disabled")) { 
       if(reload[0] === "") {
@@ -164,28 +197,8 @@ $(function () {
     }
   });
 
-  function demoFiles (arrayOfDemos) {
-    this.demos = arrayOfDemos;
-
-    //this.setHandlers()
-  }
 
   var reload = ["", ""];
-  $("#unweighted").click(function (event) {
-    loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN (21 genes, 50 edges)");
-  });
-
-  $("#weighted").click(function (event) {
-    loadDemo("/demo/weighted", "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)");
-  });
-
-  $("#schadeInput").click(function (event) {
-    loadDemo("/demo/schadeInput", "Demo #3: Unweighted GRN (21 genes, 31 edges)");
-  });
-
-  $("#schadeOutput").click(function (event) {
-    loadDemo("/demo/schadeOutput", "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)");
-  });
 
   var loadDemo = function(url, name) {
     loadGrn(url, name);
@@ -220,96 +233,12 @@ $(function () {
       placement: "top",
       delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
     });
-  }
+  };
 
-  function sliderObject (sliderId, valueId, defaultVal) {
-    this.sliderId = sliderId;
-    this.valueId = valueId;
-    this.defaultVal = defaultVal;
-    this.currentVal = defaultVal;
-    this.backup = defaultVal;
-
-    this.activate = function () {
-      $(this.sliderId).on("input", {slider: this}, function (event) {
-        var needsAppendedZeros = (sliderId === GRAVITY_SLIDER_ID && $(this).val().length === GRAVITY_LENGTH_WITHOUT_ZERO);
-        $(event.data.slider.valueId).html($(this).val() + (needsAppendedZeros ? "0" : ""));
-        event.data.slider.currentVal = $(this).val();
-      });
-    };
-  }
-
-  function sliderGroup () {
-    this.linkDistance = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT);
-    this.charge = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT);
-    this.chargeDistance = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT);
-    this.gravity = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT);
-
-    this.sliders = [this.linkDistance, this.charge, this.chargeDistance, this.gravity];
-
-    this.backupValues = function () {
-      for (var i = 0; i < NUMBER_OF_SLIDERS; i++) {
-        this.sliders[i].backup = this.sliders[i].currentVal;
-      };
-    };
-
-    this.resetValues = function () {
-      this.backupValues();
-      for (var i = 0; i < NUMBER_OF_SLIDERS; i++) {
-        this.sliders[i].currentVal = this.sliders[i].defaultVal;
-      };
-      this.updateValues();
-    };
-
-    this.undoReset = function () {
-      for(var i = 0; i < NUMBER_OF_SLIDERS; i++) {
-        this.sliders[i].currentVal = this.sliders[i].backup;
-      }
-      this.updateValues();
-    }
-
-    this.updateValues = function () {
-      for (var i = 0; i < NUMBER_OF_SLIDERS; i++) {
-        var needsAppendedZeros = (this.sliders[i].sliderId === GRAVITY_SLIDER_ID && this.sliders[i].currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO);
-        $(this.sliders[i].sliderId).val(this.sliders[i].currentVal);
-        $(this.sliders[i].valueId).html(this.sliders[i].currentVal + (needsAppendedZeros ? "0" : ""));
-      };
-    };
-
-    this.setHandlers = function () {
-      for(var i = 0; i < NUMBER_OF_SLIDERS; i++) {
-        this.sliders[i].activate();
-      }
-    }
-
-  }
-
-  function sliderControl (sliderGroup) {
-    this.slidersToEdit = sliderGroup;
-    this.locked = false;
-
-    this.configureHandlers = function () {
-      $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
-        event.data.handler.toggle();
-      });
-      $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
-        event.data.handler.slidersToEdit.resetValues();
-        $(UNDO_SLIDER_RESET_CLASS).prop("disabled", false);
-      });
-      $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
-        event.data.handler.slidersToEdit.undoReset();
-        $(UNDO_SLIDER_RESET_CLASS).prop("disabled", true);
-      })
-    }
-
-    this.toggle = function () {
-      this.locked = !this.locked;
-      console.log(this.locked);
-      $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
-      $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
-      $.each(this.slidersToEdit.sliders, function (key, value) {
-        $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
-      })
-    }
-  }
+  function initializeDemoFile (demoId, demoPath, demoName) {
+    $(demoId).on("click", function (event) {
+      loadDemo(demoPath, demoName);
+    });
+  };
 
 });
