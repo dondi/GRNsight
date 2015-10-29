@@ -671,7 +671,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     node.classed("fixed", d.fixed = true);
   }
 
-  sliderController.setSliderHandlers();
   sliderController.addForce(force);
   sliderController.configureForceHandlers();
 

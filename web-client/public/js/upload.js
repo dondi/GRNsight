@@ -94,7 +94,6 @@ $(function () {
         displayWarnings(network.warnings);
       }
       $("#fileName").text(name); // Set the name of the file to display in the top bar
-      $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
       // If more things need to be turned off, we'll add them to this array
       var disable = [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ]
       for(var i = 0; i < disable.length; i++) {
