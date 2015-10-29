@@ -19,7 +19,7 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
 
   this.activate = function () {
     $(this.sliderId).on("input", {slider: this}, function (event) {
-      $(event.data.slider.valueId).html($(this).val() + ((this.needsAppendedZeros && $(this).val().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+      $(event.data.slider.valueId).html($(this).val() + ((event.data.slider.needsAppendedZeros && ($(this).val().length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
       event.data.slider.currentVal = $(this).val();
     });
   };
@@ -95,12 +95,18 @@ var sliderGroupController = function (sliderArray) {
 
 var sliderForceController = function (sliderGroupController, force) {
   this.force = force;
-  this.sliderGroupController = sliderGroupController;
+  this.sliderGroup = sliderGroupController;
 
   this.configureForceHandler = function () {
-    for(var i = 0; i < this.sliderGroupController.numberOfSliders; i++) {
+    for (var i = 0; i < this.sliderGroup.numberOfSliders; i++) {
       //
     }
+  }
+
+  this.defaultForce = function () {
+    //for (var i = 0; i  this.sliderGroup.numberOfSliders; i++) {
+      this.sliderGroup.resetValues();
+    //}
   }
 
   this.resetForce = function (needStop) {
