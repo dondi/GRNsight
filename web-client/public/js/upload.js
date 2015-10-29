@@ -31,6 +31,10 @@ $(function () {
       SCHADE_OUTPUT_PATH   = "/demo/schadeOutput",
       SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
+  // Settings Stuff
+  var COLOR_PREFERENCES_CLASS = ".colorPreferences",
+      ACTIVE_COLOR_OPTION     = "active";
+
 
   // Uploading Stuff
   var RELOAD_ID = "#reload";
@@ -55,7 +59,14 @@ $(function () {
     initializeDemoFile.apply(null, demoInfo);
   });
 
-  // Settings Object
+  var settings = new settingsController();
+  settings.setupSettingsHandlers();
+  
+  $("#printGraph").click(function (event) {
+    if(!$(".startDisabled").hasClass("disabled")) {
+      window.print();
+    }
+  });
 
 
   /*
@@ -89,7 +100,7 @@ $(function () {
       for(var i = 0; i < disable.length; i++) {
         $(disable[i]).off("click");
       }
-      previousFile = [url, name, formData]; // Store info about the previous file for use in reload
+      previousFile = {path: url, name: name, formdata: formData}; // Store info about the previous file for use in reload
       drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
@@ -160,7 +171,6 @@ $(function () {
       $("#list-frame").css({height: minPanel});
     }
 
-
     $("#warningsModal").modal("show");
   }
 
@@ -170,52 +180,21 @@ $(function () {
     }
   });
 
- /* var previousFile = {
+  var previousFile = {
     path: "/upload",
     name: "",
     formdata: undefined
-  } */
+  } 
 
-  var previousFile = ["/upload", "", undefined];
+  var reload = ["", ""];
 
   $("#reload").click(function (event) {
     if(!$(".startDisabled").hasClass("disabled")) { 
       if(reload[0] === "") {
-        loadGrn(previousFile[0], previousFile[1], previousFile[2]);
+        loadGrn(previousFile.path, previousFile.name, previousFile.formdata);
       } else {
         loadGrn(reload[0], reload[1]);
       }
-    }
-  });
-
-
-  var reload = ["", ""];
-
-  var loadDemo = function(url, name) {
-    loadGrn(url, name);
-    reload = [url, name];
-    $("#upload").val("");
-  };
-
-  $(".deselectedColoring").click(function (event) {
-    colorPreferences(event);
-  });
-
-  var colorPreferences = function(event) {
-    var deselectedID = "#" + $(".deselectedColoring").attr("id");
-    var selectedID = "#" + $(".selectedColoring").attr("id");
-    $(deselectedID + ">span").attr("class", "glyphicon glyphicon-ok");
-    $(selectedID + ">span").attr("class", "glyphicon invisible");
-    // Allows the click handler to swap between the two different options
-    $(deselectedID).attr("class", "selectedColoring")
-                   .off("click");
-    $(selectedID).attr("class", "deselectedColoring")
-                 .on("click", colorPreferences);
-  };
-  
-  $("#printGraph").click(function (event) {
-    if(!$(".startDisabled").hasClass("disabled")) {
-      window.print();
     }
   });
 
@@ -231,5 +210,22 @@ $(function () {
       loadDemo(demoPath, demoName);
     });
   };
+
+  var loadDemo = function(url, name) {
+    loadGrn(url, name);
+    reload = [url, name];
+    $("#upload").val("");
+  };
+
+  function settingsController () {
+    this.color = true;
+
+    this.setupSettingsHandlers = function () {
+      $(COLOR_PREFERENCES_CLASS).on("click", function () {
+        $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
+        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible")
+      })
+    }
+  }
 
 });

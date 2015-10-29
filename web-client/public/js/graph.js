@@ -23,7 +23,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   };
 
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
-  if($("#formatOptimal").attr('class') === 'deselectedColoring') {
+  if(!$("#colorEdges").hasClass('active')) {
     colorOptimal = false;
   }
 
