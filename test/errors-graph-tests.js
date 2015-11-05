@@ -4,7 +4,7 @@ var assert = require('chai').assert,
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
 
-describe('graph-tests', function () {
+describe('errors-graph-tests', function () {
   describe('asymmetrical-graphs', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/graph-tests/asymmetrical-disordered-input.xlsx');

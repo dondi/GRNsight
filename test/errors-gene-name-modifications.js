@@ -4,7 +4,7 @@ var assert = require('chai').assert,
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
 
-describe('gene-name-modifications', function () {
+describe('errors-gene-name-modifications', function () {
   describe('duplicate-gene-side-and-top', function () {
       it('should return 2 duplicate gene errors', function () {
         test.duplicateGeneError('test-files/gene-name-modifications/duplicate-gene-side-and-top-input.xlsx', 2);

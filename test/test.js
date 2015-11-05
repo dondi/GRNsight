@@ -13,6 +13,13 @@ exports.networkSizeError = networkSizeError;
 exports.networkSizeWarning = networkSizeWarning;
 exports.isNaNError = isNaNError;
 exports.checkForGene = checkForGene;
+exports.noErrors = noErrors;
+exports.missingSourceWarning = missingSourceWarning;
+exports.missingTargetWarning = missingTargetWarning;
+exports.invalidDataWarning = invalidDataWarning;
+exports.randomDataWarning = randomDataWarning;
+exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
+exports.invalidCellDataTypeWarning = invalidCellDataTypeWarning;
 
 //ERROR TEST FUNCTIONS:
 
@@ -193,7 +200,7 @@ function missingTargetWarning(input, frequency) {
   assert.equal(frequency, missingTargetCount.length);
 }
 
-function invaidDataWarning(input, frequency) {  
+function invalidDataWarning(input, frequency) {  
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});

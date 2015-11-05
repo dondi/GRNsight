@@ -4,7 +4,7 @@ var assert = require('chai').assert,
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
 
-describe('adjacency-matrix-modifications', function () {
+describe('errors-adjacency-matrix-modifications', function () {
   describe('asymmetrical-graphs', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/asymmetric-gene-order-input.xlsx');
