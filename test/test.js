@@ -14,6 +14,8 @@ exports.networkSizeWarning = networkSizeWarning;
 exports.isNaNError = isNaNError;
 exports.checkForGene = checkForGene;
 
+//ERROR TEST FUNCTIONS:
+
 function noErrors(input) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
@@ -165,3 +167,78 @@ function checkForGene(test, frequency, input) {
     return gene.name === test; 
   }).length);
 }
+
+//WARNING TEST FUNCTIONS:
+
+function noWarnings(input) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(0, network.warnings.length);
+}
+
+function missingSourceWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var missingSourceCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
+
+  assert.equal(frequency, missingSourceCount.length);
+}
+
+function missingTargetWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var missingTargetCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
+
+  assert.equal(frequency, missingTargetCount.length);
+}
+
+function invaidDataWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
+
+  assert.equal(frequency, invalidDataCount.length);
+}
+
+function randomDataWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var randomDataCount = network.warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
+
+  assert.equal(frequency, randomDataCount.length);
+}
+
+function emptyRowWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var emptyRowCount = network.warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
+
+  assert.equal(frequency, emptyRowCount.length);
+}
+
+function invalidNetworkSizeWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var invalidNetworkSizeCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
+
+  assert.equal(frequency, invalidNetworkSizeCount.length);
+}
+
+function invalidCellDataTypeWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var invalidCellDataTypeCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_CELL_DATA_TYPE"});
+
+  assert.equal(frequency, invalidCellDataTypeCount.length);
+}
+
+
+
+
+
+
+
+
+
+
