@@ -315,6 +315,8 @@ var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 
 
 // This is the list of warnings. 
 // The graph will still load if warnings are detected, but these will be reported to the user.
+
+
 var warningsList = {
   missingSourceGeneWarning: function (row, column) {
     var colLetter = numbersToLetters[column];
@@ -347,7 +349,7 @@ var warningsList = {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
-      warning: "RANDOM_DATA",
+      warningCode: "RANDOM_DATA",
       errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "." 
     }
   },

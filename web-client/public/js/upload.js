@@ -105,10 +105,41 @@ $(function () {
       "but may not be displayed accurately. To view the details " + 
       "of the warning(s), please click on the \"Warnings List\" below.");
 
+    var MAX_DUPLICATES = 3;
     var warningsString = "";
-    for(var i = 0; i < warnings.length; i++) {
-      warningsString += warnings[i].errorDescription + " <br><br>";
+  //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
+    var printed = [0,0,0,0,0,0,0];
+
+    var missingSourceCount = warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
+    var missingTargetCount = warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
+    var invalidDataCount = warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
+    var randomDataCount = warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
+    var emptyRowCount = warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
+    var invalidNetworkSizeCount = warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
+    var invalidCellDataTypeCount = warnings.filter(function(x){return x.warningCode=="INVALID_CELL_DATA_TYPE"});
+
+    function createWarningsString(warningCount, index) {
+      for (var i = 0; i < warningCount.length; i++) {        
+        if (warningCount.length <= 3) {
+            warningsString += warningCount[i].errorDescription + "<br><br>";
+        } else if (printed[index] < 3){
+            warningsString += warningCount[i].errorDescription + "<br><br>";
+            printed[index]++;
+        } else if (printed[index] = 3) {
+            warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
+            break;
+        }
+      }
     }
+
+    createWarningsString(missingSourceCount,0);
+    createWarningsString(missingTargetCount,1);
+    createWarningsString(invalidDataCount,2);
+    createWarningsString(randomDataCount,3);
+    createWarningsString(emptyRowCount,4);
+    createWarningsString(invalidNetworkSizeCount,5);
+    createWarningsString(invalidCellDataTypeCount,6);
+
     $("#warningsList").html(warningsString);
 
     var screenHeight = $(window).height();
