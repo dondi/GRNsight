@@ -3,4 +3,6 @@ var assert = require('chai').assert,
     test = require('./test');
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
-describe('warnings-adjacency-matrix-modifications', function () {})
+describe('warnings-adjacency-matrix-modifications', function () {
+
+})
