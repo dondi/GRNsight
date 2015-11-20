@@ -250,6 +250,7 @@ div.abstract > iframe {
 	list-style-type: none;
 	font-size: 12px;
 	text-align: center;
+	clear:both
 }
 
 #footerNav li {
