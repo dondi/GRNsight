@@ -175,6 +175,8 @@ function checkForGene(test, frequency, input) {
   }).length);
 }
 
+
+
 //WARNING TEST FUNCTIONS:
 
 function noWarnings(input) {
