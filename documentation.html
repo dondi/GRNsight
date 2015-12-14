@@ -40,16 +40,16 @@ modified: 9/5/15
                                                 GRNsight reads gene regulatory network information that is in the form of an adjacency matrix to generate the nodes and edges of the graph.
                                                 <ul>
                                                     <li>
-                                                        There must be at least one worksheet in your Excel Workbook entitled “network”.
+                                                        There must be one worksheet in your Excel Workbook entitled “network”.
                                                     </li>
                                                     <li>
                                                         In this worksheet, the upper-left cell (A1) should contain the text “rows genes affected/cols genes controlling”.  This text is there as a reminder of the direction of the regulatory relationships specified by the adjacency matrix.
                                                     </li>
                                                     <li>
-                                                        The rest of the first row should contain the names of the transcription factors that are controlling the other genes in the network, one transcription factor name per column.
+                                                        The rest of the first row should contain the names of the transcription factors that are controlling the other genes in the network, one transcription factor name per column. Transcription factor names must be unique for each column.
                                                     </li>
                                                     <li>
-                                                        The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row.
+                                                        The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row. Transcription factor names must be unique for each row.
                                                     </li>
                                                     <li>
                                                         GRNsight is primarily designed to depict gene regulatory networks that contain just transcription factors and that can be represented in a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF 1” or “ABF-1” would not be considered the same as “ABF1”.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet. The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
