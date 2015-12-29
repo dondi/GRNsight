@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Documentation
-modified: 12/28/15
+modified: 12/29/15
 ---
             <p id="pageTitle">Documentation</p>
             <div id="pageContent">
-                <h3>Getting Started</h3>
+            <h3>Getting Started</h3>
                 <p>
                     GRNsight is a web application for visualizing models of small- to medium-scale gene regulatory networks (GRNs). GRNsight was created to work with the input and output spreadsheets used by <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  GRNsight is best-suited for visualizing networks of fewer than 35 genes (nodes) and 70 regulatory relationships (edges), but can display networks of up to 75 nodes and 150 edges. The following sections describe how to use GRNsight. 
                 </p>
@@ -221,7 +221,24 @@ modified: 12/28/15
                             </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse-->
                     </div> <!--panel panel-default-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 id="dataprivacy" class="panel-title">
+                                <a data-toggle="collapse" href="#dataPrivacyContent">
+                                    Data Privacy Statement
+                                </a>
+                            </h4>
+                        </div> <!--panel-heading-->
+                            <div id="dataPrivacyContent" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul>
+                                        Every user's submitted data are private and not viewable by anyone other than the user. Uploaded data reside as temporary files and are deleted from the GRNsight server during standard operating system file cleanup procedures.</li>
+                                    </ul>
+                                </div> <!--panel-body-->
+                        </div> <!--panel-collapse collapse-->
+                    </div> <!--panel panel-default-->
                 </div> <!--panel-group-->
+
                 <h3>Further Information</h3>
                 <p>For additional documentation, please see the <a href="https://github.com/dondi/GRNsight/wiki" target="_blank">GRNsight Wiki</a>.</p>
             </div>
