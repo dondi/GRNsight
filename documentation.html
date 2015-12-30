@@ -66,7 +66,7 @@ modified: 12/29/15
                                                         When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular (pointy) arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx">Demo #2: Weighted GRN"</a> corresponds to the adjacency matrix shown below. For the weighted edges to display with different colors and thicknesses, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class="showSection3">Section 3</a> below.
 
                                                         <br><br>
-                                                        <img src="{{ site.baseurl }}/assets/images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" height="289" width="1252" />
+                                                        <img src="{{ site.baseurl }}/assets/images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" width="900" />
                                                         <br><br>
 
                                                     </li>
@@ -221,6 +221,44 @@ modified: 12/29/15
                             </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse-->
                     </div> <!--panel panel-default-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 id="section4" class="panel-title">
+                                <a data-toggle="collapse" href="#section4Content">
+                                    4. Interpreting the Results
+                                </a>
+                            </h4>
+                        </div> <!--panel-heading-->
+                            <div id="section4Content" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul>
+                                        <li>
+                                            <a class="showSection3">Section 3</a>  above described how GRNsight uses the data in the adjacency matrix to automatically display a graph.  This section describes how to interpret the results of the resulting gene regulatory network graph biologically, focusing on the demonstration files Demo #3: Unweighted GRN (21 genes, 31 edges) and Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  These two files correspond to supplementary data published in the paper, <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, and when displayed by GRNsight, represent interactive versions of Figures 1 and 8 of that paper respectively.
+                                        </li>
+                                        <li>
+                                            The figures shown below give a side-by-side view of the same adjacency matrices laid out by GRNsight and by hand.  The top three figures are derived from Demo #3: Unweighted GRN (21 genes, 31 edges), and the bottom three panels are derived from Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  The left two panels show an example of the automatic layout performed by GRNsight.  The right two panels show the same adjacency matrix laid out by hand in Adobe Illustrator, corresponding to Figure 1 (top right) and Figure 8 (bottom right) of the <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a> paper. The middle two panels started with the automatic layout from GRNsight and then were manually manipulated from within GRNsight to lay them out similarly to the right-hand panels.  The use of GRNsight represents a substantial time savings compared to creating the same figure entirely by hand.
+                                        </li>
+                                        
+                                        <br>
+                                        <table style="width:100%">
+                                              <tr>
+                                                <td><img src="{{ site.baseurl }}/assets/images/Demo-3-auto-layout.jpg" alt="demo-3-auto"  width="327" /></td>
+                                                <td><img src="{{ site.baseurl }}/assets/images/Demo-3-paper-layout.jpg" alt="demo-3-paper"  width="327" /></td> 
+                                                <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig1.jpg" alt="demo-3-illustrator"  width="327" /></td>
+                                              </tr>
+                                              <tr>
+                                                <td><img src="{{ site.baseurl }}/assets/images/Demo-4-auto-layout.jpg" alt="demo-4-auto"  width="327" /></td>
+                                                <td><img src="{{ site.baseurl }}/assets/images/Demo-4-paper-layout.jpg" alt="demo-4-auto"  width="327" /></td> 
+                                                <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig8.jpg" alt="demo-4-auto"  width="327" /></td>
+                                              </tr>
+                                            </table>
+                                        <br><br>
+
+                                    </ul>
+                                </div> <!--panel-body-->
+                        </div> <!--panel-collapse collapse-->
+                    </div> <!--panel panel-default-->
+                    
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 id="dataprivacy" class="panel-title">
