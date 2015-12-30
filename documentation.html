@@ -274,6 +274,10 @@ modified: 12/30/15
                                             The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
                                         </li>
 
+                                        <li>
+                                            Because of this visualization of the weight parameters, one can make some interesting observations about the behavior of the network.  The expression of several genes is controlled by a balance of activation and repression by different regulators.  For example, the expression of MSN1 is strongly activated by CIN5, but even more strongly repressed by ABF1.  Furthermore, some transcription factors themselves act both as activators of some targets and repressors of other targets.  For example, RAP1 activates the expression of MSN4 and RPH1, but represses the expression of AFT1, HSF1, and itself.  RAP1 is known to act as both an activator and a repressor [link to SGD].  Thus, GRNsight enables one to interpret the weight parameters more easily than one could from the adjacency matrix alone.  For more information about the interpretation of the model results, see Dahlquist et al. (2015).
+                                        </li>
+
                                     </ul>
                                 </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse-->
