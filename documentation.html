@@ -266,6 +266,10 @@ modified: 12/30/15
                                             In particular, GRNsight is displaying the results of the weight parameters.  Positive weights > 0 represent an activation relationship and are shown by regular (pointy) arrowheads.  One example is that CIN5 activates the expression of MSN1.  Negative weights < 0 represent a repression relationship and are shown by a blunt arrowhead (a line segment perpendicular to the edge direction).  One example is that ABF1 represses the expression of MSN1.
                                         </li>
 
+                                        <li>
+                                            The thicknesses of the edges also vary based on the magnitude of the absolute value of the weight. Larger magnitudes have thicker edges and smaller magnitudes have thinner edges. The way that GRNsight determines the edge thickness is as follows. GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1. GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1). For example, in the bottom panel, the thickest edge corresponds to the repression of the expression of MSN1 by ABF1 because it has the highest magnitude weight parameter of -2.97.
+                                        </li>
+
                                     </ul>
                                 </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse-->
