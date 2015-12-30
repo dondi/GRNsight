@@ -270,6 +270,10 @@ modified: 12/30/15
                                             The thicknesses of the edges also vary based on the magnitude of the absolute value of the weight. Larger magnitudes have thicker edges and smaller magnitudes have thinner edges. The way that GRNsight determines the edge thickness is as follows. GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1. GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1). For example, in the bottom panel, the thickest edge corresponds to the repression of the expression of MSN1 by ABF1 because it has the highest magnitude weight parameter of -2.97.
                                         </li>
 
+                                        <li>
+                                            The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
+                                        </li>
+
                                     </ul>
                                 </div> <!--panel-body-->
                         </div> <!--panel-collapse collapse-->
