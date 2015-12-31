@@ -1,30 +1,19 @@
-$(function() {
+$(function () {
 
-    var LEFT_WINDOW_BOUNDARY = 1,
-        SCROLL_START_POINT = 140,
-        LOGO_DEFAULT = '/GRNsight/assets/images/GRNsight_logo_20140710_main_resized.jpg',
-        LOGO_HOVER = '/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg';
+    var LEFT_WINDOW_BOUNDARY = 1;
+    var SCROLL_START_POINT = 140;
+    var LOGO_DEFAULT = '/GRNsight/assets/images/GRNsight_logo_20140710_main_resized.jpg';
+    var LOGO_HOVER = '/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg';
 
-    var initializePage = function () {
-        changeImageOnHover('#GRNsightLogo', LOGO_DEFAULT, LOGO_HOVER);
-        disableSidebarHorizontalMovement('#stickyBar');
-        openCollapsedHashedElements();
-
-        var pageIsDocumentationPage = (location.pathname === "/GRNsight/documentation.html");
-        if (pageIsDocumentationPage) {
-            setupDocumentationPanels();
-        } 
-    },
-
-    changeImageOnHover = function (contentID, imageSrcDefault, imageSrcOnHover) {
+    var changeImageOnHover = function (contentID, imageSrcDefault, imageSrcOnHover) {
         $(contentID).on('mouseenter', function () {
             $(contentID).attr('src', imageSrcOnHover)
         }).on('mouseleave', function () {
             $(contentID).attr('src', imageSrcDefault)
         })
-    },
+    };
 
-    disableSidebarHorizontalMovement = function (sidebarID) {
+    var disableSidebarHorizontalMovement = function (sidebarID) {
         $(window).scroll(function() {
             var userHasScrolledRight = $(window).scrollLeft() >= LEFT_WINDOW_BOUNDARY,
             sidebarShouldScroll = $(window).scrollTop() > SCROLL_START_POINT,
@@ -35,17 +24,17 @@ $(function() {
                 attachSidebar(sidebarID);
             } 
         });
-    },
+    };
 
-    detachSidebar = function (sidebarID) {
+    var detachSidebar = function (sidebarID) {
         $(sidebarID).attr('class', 'affix-top');
-    },
+    };
 
-    attachSidebar = function (sidebarID) {
+    var attachSidebar = function (sidebarID) {
         $(sidebarID).attr('class', 'affix');
-    },
+    };
 
-    openCollapsedHashedElements = function () {
+    var openCollapsedHashedElements = function () {
         // Open a hashed element if it is collapsed.  This is a little trickier than it sounds,
         // because then we also have to open any parents that are also collapsed.
         if (location.hash) {
@@ -55,24 +44,24 @@ $(function() {
                 $elementToOpen.collapse('show');
             }
         }
-    },
+    };
 
-    setupDocumentationPanels = function () {
+    var setupDocumentationPanels = function () {
         var documentationPanelInformation = [ [ '.showSection2', '#section2Content', '#section2' ],
                                               [ '.showSection3', '#section3Content', '#section3' ] ];
         documentationPanelInformation.forEach(function (panelInfo) {
             configurePanelBehavior.apply(null, panelInfo);
         });
-    },
+    };
 
-    configurePanelBehavior = function (linkToPanel, panelID, targetHref) {
+    var configurePanelBehavior = function (linkToPanel, panelID, targetHref) {
         $(panelID).on('shown.bs.collapse', function () {
             focusWindowOn(targetHref);
         });
         changePageFocusEvenIfPanelsOpen(linkToPanel, panelID, targetHref);
-    },
+    };
 
-    changePageFocusEvenIfPanelsOpen = function (linkToPanel, panelID, targetHref) {
+    var changePageFocusEvenIfPanelsOpen = function (linkToPanel, panelID, targetHref) {
         $(linkToPanel).on('click', function () {
             openPanel(panelID);
 
@@ -81,16 +70,26 @@ $(function() {
                 focusWindowOn(targetHref);
             };
         });
-    },
+    };
 
-    focusWindowOn = function (location) {
+    var focusWindowOn = function (location) {
         window.location.href = location;
-    },
+    };
 
-    openPanel = function (panelID) {
+    var openPanel = function (panelID) {
         $(panelID).collapse('show');
     };
 
-    initializePage();
+    var initializePage = function () {
+        changeImageOnHover('#GRNsightLogo', LOGO_DEFAULT, LOGO_HOVER);
+        disableSidebarHorizontalMovement('#stickyBar');
+        openCollapsedHashedElements();
 
+        var pageIsDocumentationPage = (location.pathname === "/GRNsight/documentation.html");
+        if (pageIsDocumentationPage) {
+            setupDocumentationPanels();
+        }
+    };
+
+    initializePage();
 });
