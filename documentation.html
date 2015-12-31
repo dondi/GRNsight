@@ -141,7 +141,7 @@ modified: 12/30/15
                                                 The nodes are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
                                             </li>
                                             <li>
-                                                The edges are arcs instead of straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.
+                                                Edges are arcs, but when two nodes get close together, the edges become straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.
                                             </li>
                                             <li>
                                                 If your adjacency matrix is contained in a worksheet entitled “network” and contains just 1's and 0's, GRNsight will make the edges connecting nodes black with a regular (pointy) arrowhead originating from the transcription factor (columns) to the target gene (rows) in your matrix. (Note that selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.)
