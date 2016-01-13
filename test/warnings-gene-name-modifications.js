@@ -54,4 +54,8 @@ describe('warnings-gene-name-modifications', function () {
       		test.noWarnings('test-files/gene-name-modifications/NaN-as-gene-name-output.xlsx');
     	})
   	})
+
+  	describe('special-characters', function () {
+  		
+  	})
 })
