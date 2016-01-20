@@ -20,11 +20,11 @@ describe('warnings-gene-name-modifications', function () {
   	})
 
   	describe('missing-gene-name-side', function () {
-    	it('return 1 target and 4 randon data warnings per file', function () {
+    	it('return 1 target and 1 randon data warnings per file', function () {
       		test.missingTargetWarning('test-files/gene-name-modifications/missing-gene-name-side-input.xlsx',1);
-      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-side-input.xlsx',4);
+      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-side-input.xlsx',1);
       		test.missingTargetWarning('test-files/gene-name-modifications/missing-gene-name-side-output.xlsx',1);
-      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-side-output.xlsx',4);
+      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-side-output.xlsx',1);
     	})
   	})
 
@@ -32,10 +32,10 @@ describe('warnings-gene-name-modifications', function () {
     	it('return 1 target 1 source and 5 randon data warnings per file', function () {
       		test.missingTargetWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx',1);
       		test.missingSourceWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx',1)
-      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx',5);
+      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx',2);
       		test.missingTargetWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx',1);
       		test.missingSourceWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx',1)
-      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx',5);
+      		test.randomDataWarning('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx',2);
     	})
   	})
 
