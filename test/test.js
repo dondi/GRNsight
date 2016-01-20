@@ -10,6 +10,7 @@ exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
+
 exports.networkSizeWarning = networkSizeWarning;
 exports.isNaNError = isNaNError;
 exports.checkForGene = checkForGene;
@@ -18,6 +19,7 @@ exports.missingSourceWarning = missingSourceWarning;
 exports.missingTargetWarning = missingTargetWarning;
 exports.invalidDataWarning = invalidDataWarning;
 exports.randomDataWarning = randomDataWarning;
+exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
 exports.invalidCellDataTypeWarning = invalidCellDataTypeWarning;
 
