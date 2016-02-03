@@ -69,18 +69,18 @@ html
                     | &nbsp; Preferences
                   ul(class='dropdown-menu')
                     li
-                      a(href='#' id='formatOptimal' class='selectedColoring') 
+                      a(href='#' id='colorEdges' class='colorPreferences active') 
                         span(class='glyphicon glyphicon-ok')
                         | &nbsp; Format edges based on optimized weight parameters
                     li
-                      a(href='#' id='formatDefault' class='deselectedColoring') 
+                      a(href='#' id='blackEdges' class='colorPreferences') 
                         span(class='glyphicon invisible')
                         | &nbsp; Default to black edges with regular arrowheads
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Format
               ul(class='dropdown-menu' role='menu')
                 li
-                  a(href='#' class='noGlyph' id='lockSlidersMenu')
+                  a(href='#' id='lockSlidersMenu' class="lockSliders")
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Force Graph Parameters
                 li(class='disabled')
@@ -89,11 +89,11 @@ html
                     | &nbsp; Lock Nodes
                 li(class='divider')
                 li
-                  a(href='#' id='resetSlidersMenu') 
+                  a(href='#' id='resetSlidersMenu' class="resetSliders") 
                     span(class='glyphicon invisible')
                     | &nbsp; Reset Force Graph Parameters
-                li
-                  a(href='#' id='undoResetMenu')
+                li(class='disabled')
+                  a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
             li(class='dropdown') 
@@ -147,11 +147,11 @@ html
           span(id='gravityVal' class='forceVal') 0.10
           input(class='form-control', type='range', min='0', max='1', value='0.1', step='0.01', id='gravityInput', name='gravityInput')
         form
-          input(id='lockSliders', type='checkbox', value='lockSliders')
-          label(for='lockSliders' style='font-weight:normal') Lock Force Graph Parameters
+          input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
+          label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
         form
-          input(id='resetSliders' type='button' class='btn btn-default btnSidebar' value='Reset Force Graph Parameters') 
-          input(id='undoReset' type='button' class='btn btn-default btnSidebar' value='Undo Reset' disabled)
+          input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters') 
+          input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
     div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
@@ -188,5 +188,6 @@ html
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js')
+  script(src='js/sliders.js')
   script(src='js/graph.js')
   script(src='js/upload.js')

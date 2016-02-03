@@ -1,15 +1,104 @@
 $(function () {
-  // Style of the tooltips when the user mouses over the label names
-  $(".info").tooltip({
-    placement: "top",
-    delay: { show: 700, hide: 100 }
+
+  // Slider Values
+  var NUMBER_OF_SLIDERS     = 4,
+      LINK_DIST_SLIDER_ID   = "#linkDistInput",
+      LINK_DIST_VALUE       = "#linkDistVal",
+      LINK_DIST_DEFAULT     = 500,
+      CHARGE_SLIDER_ID      = "#chargeInput",
+      CHARGE_VALUE          = "#chargeVal",
+      CHARGE_DEFAULT        = -1000,
+      CHARGE_DIST_SLIDER_ID = "#chargeDistInput",
+      CHARGE_DIST_VALUE     = "#chargeDistVal",
+      CHARGE_DIST_DEFAULT   = 1000,
+      GRAVITY_SLIDER_ID     = "#gravityInput",      
+      GRAVITY_VALUE         = "#gravityVal",      
+      GRAVITY_DEFAULT       = 0.1,
+      TOOLTIP_SHOW_DELAY    = 700,
+      TOOLTIP_HIDE_DELAY    = 100;
+
+  // Demo Stuff
+  var UNWEIGHTED_DEMO_ID   = "#unweighted",
+      UNWEIGHTED_DEMO_PATH = "/demo/unweighted",
+      UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)",
+      WEIGHTED_DEMO_ID     = "#weighted",
+      WEIGHTED_DEMO_PATH   = "/demo/weighted",
+      WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)",
+      SCHADE_INPUT_ID      = "#schadeInput",
+      SCHADE_INPUT_PATH    = "/demo/schadeInput",
+      SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)",
+      SCHADE_OUTPUT_ID     = "#schadeOutput",
+      SCHADE_OUTPUT_PATH   = "/demo/schadeOutput",
+      SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
+
+  // Settings Stuff
+  var COLOR_PREFERENCES_CLASS = ".colorPreferences",
+      ACTIVE_COLOR_OPTION     = "active";
+
+  styleLabelTooltips();
+  var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
+  var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
+  var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false);
+  var gravitySlider = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT, true);
+  var sliders = new sliderGroupController([linkDistanceSlider, chargeSlider, chargeDistanceSlider, gravitySlider]);
+  sliders.setSliderHandlers();
+  sliders.updateValues();
+  sliders.configureSliderControllers();
+
+  var demoInformation = [ [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
+                          [ UNWEIGHTED_DEMO_ID, UNWEIGHTED_DEMO_PATH, UNWEIGHTED_DEMO_NAME ],
+                          [ SCHADE_INPUT_ID,    SCHADE_INPUT_PATH,    SCHADE_INPUT_NAME    ],
+                          [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ] ];
+  demoInformation.forEach(function (demoInfo) {
+    initializeDemoFile.apply(null, demoInfo);
   });
 
-  // Defaults the sliders so that they return to their default values when the page is refreshed
-  $( "#linkDistInput" ).val(500);
-  $( "#chargeInput" ).val(-1000);
-  $( "#chargeDistInput" ).val(1000);
-  $( "#gravityInput" ).val(0.1);
+  var settings = new settingsController();
+  settings.setupSettingsHandlers();
+  
+  $("#printGraph").on("click", function () {
+    if(!$(".startDisabled").hasClass("disabled")) {
+      window.print();
+    }
+  });
+
+  var previousFile = {
+    path: "/upload",
+    name: "",
+    formdata: undefined
+  } 
+
+  var reload = ["", ""];
+
+  $("#reload").on("click", function () {
+    if(!$(".startDisabled").hasClass("disabled")) { 
+      if(reload[0] === "") {
+        loadGrn(previousFile.path, previousFile.name, previousFile.formdata);
+      } else {
+        loadGrn(reload[0], reload[1]);
+      }
+    }
+  });
+
+  $("#upload").on("change", function (event) {
+    reload = ["", ""];
+
+    var $upload = $(this),
+        fileName = $upload.val().replace(/^.*\\/, ""), // Regex removes all content before the filepath in Chrome.
+        formData = new FormData();
+
+    formData.append("file", $upload[0].files[0]);
+    loadGrn("/upload", fileName, formData);
+
+    if (window.ga) {
+        window.ga("send", "pageview", {
+            page: "/GRNsight/upload",
+            sessionControl: "start"
+        });
+    }
+
+    event.preventDefault();
+  });
 
   /*
   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
@@ -36,23 +125,13 @@ $(function () {
         displayWarnings(network.warnings);
       }
       $("#fileName").text(name); // Set the name of the file to display in the top bar
-      $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
       // If more things need to be turned off, we'll add them to this array
       var disable = [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ]
       for(var i = 0; i < disable.length; i++) {
         $(disable[i]).off("click");
       }
-      previousFile = [url, name, formData]; // Store info about the previous file for use in reload
-      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
-        linkSlider: "#linkDistInput",
-        chargeSlider: "#chargeInput",
-        chargeDistSlider: "#chargeDistInput",
-        gravitySlider: "#gravityInput",
-        resetSliderButton: "#resetSliders",
-        resetSliderMenu: "#resetSlidersMenu",
-        undoResetButton: "#undoReset",
-        undoResetMenu: "#undoResetMenu"
-      }, network.sheetType, network.warnings);
+      previousFile = {path: url, name: name, formdata: formData}; // Store info about the previous file for use in reload
+      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
           errorString = "Your graph failed to load.<br><br>";
@@ -70,33 +149,7 @@ $(function () {
     });
   };
 
-  $("#upload").on("change", function (event) {
-    // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
-    // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
-    var $upload = $(this),
-        fullFilePath = $upload.val(),
-        fakePathCheck = fullFilePath.search("\\\\") + 1; // 4 \"s enables it to search for a slash character without error
-
-    // fakePathCheck will return -1 when the character is not found, so will only be -1 when all slashes are gone
-    while (fakePathCheck != 0) { 
-      fullFilePath = fullFilePath.substring(fakePathCheck);
-      fakePathCheck = fullFilePath.search("\\\\") + 1;
-    }
-    reload = ["", ""];
-
-    var formData = new FormData();
-    formData.append("file", $upload[0].files[0]);
-    loadGrn("/upload", fullFilePath, formData);
-
-    if (window.ga) {
-        window.ga("send", "pageview", {
-            page: "/GRNsight/upload",
-            sessionControl: "start"
-        });
-    }
-
-    event.preventDefault();
-  });
+  
 
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
@@ -145,14 +198,13 @@ $(function () {
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
-    var setPanel = screenHeight-BORDER+"px";
-    var minPanel = MIN_SCREEN_HEIGHT-BORDER+"px";
+    var setPanel = (screenHeight - BORDER) + "px";
+    var minPanel = (MIN_SCREEN_HEIGHT - BORDER) +"px";
     if (screenHeight > MIN_SCREEN_HEIGHT) {
       $("#list-frame").css({height: setPanel});
     } else {
       $("#list-frame").css({height: minPanel});
     }
-
 
     $("#warningsModal").modal("show");
   }
@@ -163,33 +215,18 @@ $(function () {
     }
   });
 
-  var previousFile = ["/upload", "", undefined];
-  $("#reload").click(function (event) {
-    if(!$(".startDisabled").hasClass("disabled")) { 
-      if(reload[0] === "") {
-        loadGrn(previousFile[0], previousFile[1], previousFile[2]);
-      } else {
-        loadGrn(reload[0], reload[1]);
-      }
-    }
-  });
+  function styleLabelTooltips () {
+    $(".info").tooltip({
+      placement: "top",
+      delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
+    });
+  };
 
-  var reload = ["", ""];
-  $("#unweighted").click(function (event) {
-    loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN (21 genes, 50 edges)");
-  });
-
-  $("#weighted").click(function (event) {
-    loadDemo("/demo/weighted", "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)");
-  });
-
-  $("#schadeInput").click(function (event) {
-    loadDemo("/demo/schadeInput", "Demo #3: Unweighted GRN (21 genes, 31 edges)");
-  });
-
-  $("#schadeOutput").click(function (event) {
-    loadDemo("/demo/schadeOutput", "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)");
-  });
+  function initializeDemoFile (demoId, demoPath, demoName) {
+    $(demoId).on("click", function (event) {
+      loadDemo(demoPath, demoName);
+    });
+  };
 
   var loadDemo = function(url, name) {
     loadGrn(url, name);
@@ -197,104 +234,15 @@ $(function () {
     $("#upload").val("");
   };
 
-  $(".deselectedColoring").click(function (event) {
-    colorPreferences(event);
-  });
+  function settingsController () {
+    this.color = true;
 
-  var colorPreferences = function(event) {
-    var deselectedID = "#" + $(".deselectedColoring").attr("id");
-    var selectedID = "#" + $(".selectedColoring").attr("id");
-    $(deselectedID + ">span").attr("class", "glyphicon glyphicon-ok");
-    $(selectedID + ">span").attr("class", "glyphicon invisible");
-    // Allows the click handler to swap between the two different options
-    $(deselectedID).attr("class", "selectedColoring")
-                   .off("click");
-    $(selectedID).attr("class", "deselectedColoring")
-                 .on("click", colorPreferences);
-  };
-
-  // Allow the sliders to be used before loading a graph
-
-  $("input[type='range']").on("input", function() {
-    // Due to all of the sliders and their HTML values sharing the same naming convention: NameInput/NameVal, 
-    // we can remove the Input and replace it with Val to change the correct HTML value each time.
-    var selectedSlider = $(this).attr("id").search("Input");
-    var targetID = $(this).attr("id").substring(0, selectedSlider) + "Val";
-    var gravityCheck = "";
-    if(targetID === "gravityVal"  && $(this).val().length === 3) {
-      gravityCheck = "0";
-    }
-    $("#" + targetID).html($(this).val() + gravityCheck);
-  });
-
-  // Handler is unbound first to prevent it from firing twice. 
-  // addHanders[0][i] = ID; addHandlers[1][i] = function run when that ID is clicked
-  var addHandlers = [ 
-    [ "#lockSliders", "#lockSlidersMenu", "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ],
-    [ lockSliders, lockSliders, resetSliders, resetSliders, undoReset, undoReset]
-  ]
-  for(var i = 0; i < addHandlers[0].length; i++) {
-    $(addHandlers[0][i]).unbind("click").click(addHandlers[1][i]);
-  };
-
-  function lockSliders(event) {
-    if( $("#lockSlidersMenu").attr("class") === "noGlyph" ) {
-      $("#lockSliders").prop("checked", true);
-      $("#lockSlidersMenu").removeClass("noGlyph")
-                             .html("<span class='glyphicon glyphicon-ok'></span>&nbsp; Lock Force Graph Parameters");
-    } else {
-      $("#lockSliders").prop("checked", false);
-      $("#lockSlidersMenu").addClass("noGlyph")
-                           .html("<span class='glyphicon invisible'></span>&nbsp; Lock Force Graph Parameters");
-    }
-    var check = $("#lockSliders").prop("checked");
-    $("input[type='range']").prop("disabled", check);
-    $("#resetSliders").prop("disabled", check);
-  };
-  
-  // Enter the prefix of each slider here
-  var inputs = [ "#linkDist", "#charge", "#chargeDist", "#gravity" ],
-      defaultValues = [500, -1000, 1000, 0.1],
-      newValues = [0, 0, 0, 0];
-
-  function resetSliders(event) {
-    var check = $( "#lockSliders" ).prop( "checked" );
-    if( !check ) {
-      newValues = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      for(var i = 0; i < inputs.length; i++) {
-        $(inputs[i] + "Input").val(defaultValues[i]);
-        if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(defaultValues[i]);
-        } else {
-          $(inputs[i] + "Val").html(defaultValues[i] + "0"); // add 0 to the end of gravity so that it reads 0.10
-        }
-      }
-      $( "#undoReset" ).prop( "disabled", false );
-    }
-  };
-
-  function undoReset(event) {
-    var check =  $( "#undoReset" ).prop( "disabled" );
-    if( !check ) {
-      for(var i = 0; i < inputs.length; i++) {
-        $(inputs[i] + "Input").val(newValues[i]);
-        if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(newValues[i]);
-        } else {
-          var gravityCheck = ""; 
-          if( $("#gravityInput").val().length === 3 ) {
-            gravityCheck = "0";
-          }
-          $(inputs[i] + "Val").html(newValues[i] + gravityCheck); // add 0 to the end of gravity so that it reads 0.10
-        }
-      }
-      $( "#undoReset" ).prop( "disabled", true );
+    this.setupSettingsHandlers = function () {
+      $(COLOR_PREFERENCES_CLASS).on("click", function () {
+        $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
+        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible")
+      })
     }
   }
-  
-  $("#printGraph").click(function (event) {
-    if(!$(".startDisabled").hasClass("disabled")) {
-      window.print();
-    }
-  });
+
 });
