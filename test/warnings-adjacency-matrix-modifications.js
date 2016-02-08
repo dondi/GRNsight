@@ -75,6 +75,85 @@ describe('warnings-adjacency-matrix-modifications', function () {
       		test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-row-adjacent-output.xlsx', 1);
     	})
   	})
+
+    describe('missing-column-end', function () {
+      it('no warnings', function () {
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx');
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx');
+      })
+    })
+
+    describe('missing-column-middle', function () {
+      it('5 invalid data warnings', function () {
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-column-middle-input.xlsx', 5);
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-column-middle-output.xlsx', 5);
+      })
+    })
+
+    describe('missing-column-top', function () {
+      it('5 invalid data warnings', function () {
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-column-top-input.xlsx', 5);
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-column-top-output.xlsx', 5);
+      })
+    })
+
+    describe('missing-data', function () {
+      it('no warnings', function () {
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-data-input.xlsx');
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-data-output.xlsx');
+      })
+    })
+
+    describe('missing-row-end', function () {
+      it('no warnings', function () {
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-row-end-input.xlsx');
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-row-end-output.xlsx');
+      })
+    })
+
+    describe('missing-row-middle', function () {
+      it('noWarnings', function () {
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-row-middle-input.xlsx');
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-row-middle-output.xlsx');
+      })
+    })
+
+    describe('missing-row-top', function () {
+      it('5 invalid cell data type warnings', function () {
+          test.invalidCellDataTypeWarning('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx', 5);
+          test.invalidCellDataTypeWarning('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx', 5);
+      })
+    })
+
+    describe('missing-value-bottom-corner', function () {
+      it('no warnings', function () {
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-value-bottom-corner-input.xlsx');
+          test.noWarnings('test-files/adjacency-matrix-modifications/missing-value-bottom-corner-output.xlsx');
+      })
+    })
+
+    describe('missing-value-middle', function () {
+      it('1 invalid data warning', function () {
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-value-middle-input.xlsx', 1);
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-value-middle-output.xlsx', 2);
+      })
+    })
+
+    describe('missing-value-top-corner', function () {
+      it('1 invalid data warning', function () {
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-value-top-corner-input.xlsx', 1);
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/missing-value-top-corner-output.xlsx', 1);
+      })
+    })
+
+    describe('value-replaced-w-spaces', function () {
+      it('1 invalid data warning each', function () {
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/value-replaced-w-spaces-both-output.xlsx', 1);
+          test.invalidDataWarning('test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx', 1);
+          test.noWarnings('test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-input.xlsx');
+          test.noWarnings('test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx');      
+      })
+    })
 })
 
 
