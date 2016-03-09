@@ -47,7 +47,8 @@ var parseSheet = function(sheet) {
       targetGeneNumber,
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
-      targetGenes = [];
+      targetGenes = [],
+      warningsCount = 0;
   
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.worksheets.length; i++) {
@@ -75,6 +76,8 @@ var parseSheet = function(sheet) {
       network.warnings.push(warningsList.emptyRowWarning(row));
 
     } else { // if the row has data...
+
+
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
       // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
@@ -163,7 +166,6 @@ var parseSheet = function(sheet) {
                 };
               }
 
-
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
               network.errors.push(errorList.missingValueError(row, column));
@@ -194,9 +196,30 @@ var parseSheet = function(sheet) {
 
   // We're done. Return the network.
 
-
   return network;
 };
+
+
+var addMessageToArray = function (messageArray, message) {
+    messageArray.push(message);
+    //warningsCount++;
+    //checkWarningsCount(warningsCount);
+}
+
+var addWarning = function (message) {
+    addMessageToArray(network.warnings, message);
+};
+
+var addError = function (message) {
+    addMessageToArray(network.errors, message);
+};
+
+var checkWarningsCount = function (warningsCount) {
+  var MAX_WARNINGS = 75;
+  if (warningsCount > MAX_WARNINGS) {
+    network.errors.push(warningsCountError);
+  }
+}
 
 var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
   var genesLength = genesList.length,
@@ -292,9 +315,13 @@ var errorList = {
       possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.", 
       suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
     };
-  },
+  }, 
 
-  
+  warningsCountError: {  
+    errorCode: "WARNINGS_OVERLOAD", 
+    possibleCause: "This network has over 75 warnings.", 
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the Documentation page and try again." 
+  }, 
 
   unknownError: {
     errorCode: "UNKNOWN_ERROR", 

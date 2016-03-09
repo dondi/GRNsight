@@ -10,6 +10,7 @@ exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
+exports.warningsCountError = warningsCountError;
 
 exports.networkSizeWarning = networkSizeWarning;
 exports.isNaNError = isNaNError;
@@ -63,7 +64,7 @@ function invalidGeneLengthError(input, frequency){
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "INVALID_GENE_LENGTH",
-      network.errors[0].errorCode
+      network.errors[i].errorCode
     );
   }
 }
@@ -78,7 +79,7 @@ function corruptGeneError(input, frequency) {
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "CORRUPT_GENE",
-      network.errors[0].errorCode
+      network.errors[i].errorCode
     );
   }
 }
@@ -139,21 +140,6 @@ function networkSizeError(input, frequency) {
   }      
 }
 
-
-function networkSizeWarning(input, frequency) {  
-  var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
-
-  assert.equal(frequency, network.warnings.length);
-
-  for(var i = 0; i < frequency; i++) {
-    assert.equal(
-      "INVALID_NETWORK_SIZE",
-      network.warnings[i].warningCode
-    );
-  }      
-}
-
 function isNaNError(input, frequency) {  
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
@@ -175,6 +161,22 @@ function checkForGene(test, frequency, input) {
   assert.equal(frequency, network.genes.filter(function (gene) {
     return gene.name === test; 
   }).length);
+}
+
+
+function warningsCountError(input, frequency) {  
+  /*var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.warnings.length);
+
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "WARNINGS_OVERLOAD",
+      network.warnings[i].warningCode
+    );
+  } 
+  */     
 }
 
 
@@ -245,6 +247,19 @@ function invalidCellDataTypeWarning(input, frequency) {
 }
 
 
+function networkSizeWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.warnings.length);
+
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "INVALID_NETWORK_SIZE",
+      network.warnings[i].warningCode
+    );
+  }      
+}
 
 
 
