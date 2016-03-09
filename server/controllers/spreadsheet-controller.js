@@ -67,13 +67,13 @@ var parseSheet = function(sheet) {
 
   // If it didn't find a network/network_optimized_weights sheet
   if (currentSheet === undefined) { 
-    addError(errorList.missingNetworkError)
+    addError(network, errorList.missingNetworkError)
     return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
     if(currentSheet.data[row] === undefined) { // if the current row is empty 
-      addWarning(warningsList.emptyRowWarning(row));
+      addWarning(network, warningsList.emptyRowWarning(row));
 
     } else { // if the row has data...
 
@@ -89,9 +89,9 @@ var parseSheet = function(sheet) {
               currentGene = {name: currentSheet.data[0][column]}; 
               // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
               if(currentGene.name === undefined) {
-                addWarning(warningsList.missingSourceGeneWarning(row, column));
+                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-                addWarning(warningsList.missingSourceGeneWarning(row, column));
+                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else {
                 sourceGenes.push(String(currentGene.name.value.toUpperCase())); 
                 genesList.push(String(currentGene.name.value.toUpperCase())); 
@@ -99,7 +99,7 @@ var parseSheet = function(sheet) {
                 network.genes.push(currentGene);
               }
             } catch (err) {
-              addError(errorList.corruptGeneError(row, column));
+              addError(network, errorList.corruptGeneError(row, column));
               return network;
             } 
           } else if (column === 0) { // If we are at the far left of a new row...
@@ -107,9 +107,9 @@ var parseSheet = function(sheet) {
             try {
               currentGene = {name: currentSheet.data[row][0]}; 
               if(currentGene.name === undefined) {
-                addWarning(warningsList.missingTargetGeneWarning(row, column));
+                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name.value) && typeof currentGene.name.value != "string") {
-                addWarning(warningsList.missingTargetGeneWarning(row, column));
+                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else {
                 targetGenes.push(String(currentGene.name.value.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
@@ -125,7 +125,7 @@ var parseSheet = function(sheet) {
             } catch (err) {
               sourceGene = currentSheet.data[0][column].value; 
               targetGene = currentSheet.data[row][0].value;
-              addError(errorList.corruptGeneError(row, column));
+              addError(network, errorList.corruptGeneError(row, column));
               return network;
             };
           
@@ -133,19 +133,19 @@ var parseSheet = function(sheet) {
           } else { // If we're within the matrix and lookin' at the data...
             try {
               if (currentSheet.data[row][column] === undefined) {
-                addWarning(warningsList.invalidMatrixDataWarning(row, column));
+                addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column].value))) {
             // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
-                addWarning(warningsList.dataTypeWarning(row, column));
+                addWarning(network, warningsList.dataTypeWarning(row, column));
               } else {
                 if (currentSheet.data[row][column].value !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
                   sourceGene = currentSheet.data[0][column]; 
                   targetGene = currentSheet.data[row][0];
                   if(sourceGene === undefined || targetGene === undefined) {
-                    addWarning(warningsList.randomDataWarning("undefined", row, column));
+                    addWarning(network, warningsList.randomDataWarning("undefined", row, column));
                   } else if((isNaN(sourceGene.value) && typeof sourceGene.value != "string") || (isNaN(targetGene.value) && typeof targetGene.value != "string")) {
-                    addWarning(warningsList.randomDataWarning("NaN", row, column));
+                    addWarning(network, warningsList.randomDataWarning("NaN", row, column));
                   } else {
                     // Grab the source and target genes' numbers
                     sourceGeneNumber = genesList.indexOf(sourceGene.value.toUpperCase());
@@ -168,7 +168,7 @@ var parseSheet = function(sheet) {
 
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
-              addError(errorList.missingValueError(row, column));
+              addError(network, errorList.missingValueError(row, column));
               return network;
             };
           };
@@ -177,7 +177,7 @@ var parseSheet = function(sheet) {
       column = 0; // let's go back to column 0 on the next row!
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
-        addError(errorList.unknownError);
+        addError(network, errorList.unknownError);
         return network;
       }
     };
@@ -206,18 +206,18 @@ var addMessageToArray = function (messageArray, message) {
     //checkWarningsCount(warningsCount);
 }
 
-var addWarning = function (message) {
+var addWarning = function (network, message) {
     addMessageToArray(network.warnings, message);
 };
 
-var addError = function (message) {
+var addError = function (network, message) {
     addMessageToArray(network.errors, message);
 };
 
 var checkWarningsCount = function (warningsCount) {
   var MAX_WARNINGS = 75;
   if (warningsCount > MAX_WARNINGS) {
-    addError(warningsCountError);
+    addError(network, warningsCountError);
   }
 }
 
