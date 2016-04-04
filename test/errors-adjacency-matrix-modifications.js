@@ -87,8 +87,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('missing-row-top', function () {
     it('should not return any errors, but should return warnings', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx');
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx', 5);
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx', 5);
     })
   })
 
@@ -169,8 +169,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('date-data-type-header', function () {
     it('should not return any errors, but should return warnings', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-output.xlsx');
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-input.xlsx', 225);
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-output.xlsx', 225);
     })
   })
 
@@ -218,8 +218,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('time-data-type-header', function () {
     it('should not return any errors, but should return warnings', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-output.xlsx');
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-input.xlsx', 225);
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-output.xlsx', 225);
     })
   })
 

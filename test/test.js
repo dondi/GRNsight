@@ -11,6 +11,7 @@ exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
+exports.invalidDataTypeError = invalidDataTypeError;
 
 exports.networkSizeWarning = networkSizeWarning;
 exports.isNaNError = isNaNError;
@@ -18,7 +19,6 @@ exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
 exports.missingSourceWarning = missingSourceWarning;
 exports.missingTargetWarning = missingTargetWarning;
-exports.invalidDataWarning = invalidDataWarning;
 exports.randomDataWarning = randomDataWarning;
 exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
@@ -64,6 +64,21 @@ function invalidGeneLengthError(input, frequency){
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "INVALID_GENE_LENGTH",
+      network.errors[i].errorCode
+    );
+  }
+}
+
+function invalidDataTypeError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
+
+  assert.equal(frequency, network.errors.length);
+      
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "INCORRECT_DATA",
       network.errors[i].errorCode
     );
   }
@@ -204,14 +219,6 @@ function missingTargetWarning(input, frequency) {
   var missingTargetCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
 
   assert.equal(frequency, missingTargetCount.length);
-}
-
-function invalidDataWarning(input, frequency) {  
-  var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
-  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
-
-  assert.equal(frequency, invalidDataCount.length);
 }
 
 function randomDataWarning(input, frequency) {  

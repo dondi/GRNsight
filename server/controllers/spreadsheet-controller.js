@@ -136,7 +136,7 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column].value))) {
             // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
-                addWarning(network, warningsList.dataTypeWarning(row, column));
+                addError(network, errorList.dataTypeError(row, column));
               } else {
                 if (currentSheet.data[row][column].value !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
@@ -283,6 +283,16 @@ var errorList = {
     };
   },
 
+  invalidDataTypeError: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      errorCode: "INCORRECT_DATA", 
+      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.", 
+      suggestedFix: "Please fix the error and try uploading again."
+    };
+  },
+
   missingValueError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
@@ -316,6 +326,16 @@ var errorList = {
       suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
     };
   }, 
+
+  dataTypeError: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      errorCode: "INVALID_CELL_DATA_TYPE",
+      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
+      suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
+    }
+  },
 
   warningsCountError: {  
     errorCode: "WARNINGS_OVERLOAD", 
@@ -394,17 +414,7 @@ var warningsList = {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
-  },
-
-  dataTypeWarning: function (row, column) {
-    var colLetter = numbersToLetters[column];
-    var rowNum = row + 1;
-    return {
-      warningCode: "INVALID_CELL_DATA_TYPE",
-      errorDescription: "The value in cell " + colLetter+rowNum + " is not a number."
-    }
-  },
-
+  }
 }
 
 module.exports = function (app) {
