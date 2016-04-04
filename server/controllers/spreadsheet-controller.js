@@ -195,7 +195,6 @@ var parseSheet = function(sheet) {
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 
   // We're done. Return the network.
-
   return network;
 };
 
