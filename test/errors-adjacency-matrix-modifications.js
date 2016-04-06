@@ -87,8 +87,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('missing-row-top', function () {
     it('should not return any errors, but should return warnings', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx');
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx', 5);
+      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx', 5);
     })
   })
 

@@ -135,8 +135,7 @@ var parseSheet = function(sheet) {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column].value))) {
-            // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
-                addWarning(network, warningsList.dataTypeWarning(row, column));
+                addError(network, errorList.dataTypeError(row, column));
               } else {
                 if (currentSheet.data[row][column].value !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
@@ -193,7 +192,7 @@ var parseSheet = function(sheet) {
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
-
+  checkWarningsCount(warningsCount);
   // We're done. Return the network.
   return network;
 };
@@ -201,8 +200,6 @@ var parseSheet = function(sheet) {
 
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
-    //warningsCount++;
-    //checkWarningsCount(warningsCount);
 }
 
 var addWarning = function (network, message) {
@@ -300,6 +297,16 @@ var errorList = {
     };
   },
 
+  dataTypeError: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      errorCode: "INVALID_CELL_DATA_TYPE",
+      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
+      suggestedFix: "Please ensure that all data within the adjacency matrix is a number and try again."
+    };
+  },
+
   geneLengthError: function (geneName) {  
     return {
       errorCode: "INVALID_GENE_LENGTH", 
@@ -393,16 +400,7 @@ var warningsList = {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
-  },
-
-  dataTypeWarning: function (row, column) {
-    var colLetter = numbersToLetters[column];
-    var rowNum = row + 1;
-    return {
-      warningCode: "INVALID_CELL_DATA_TYPE",
-      errorDescription: "The value in cell " + colLetter+rowNum + " is not a number."
-    }
-  },
+  }
 
 }
 

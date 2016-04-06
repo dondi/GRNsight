@@ -11,9 +11,9 @@ exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
+exports.invalidDataTypeError = invalidDataTypeError;
 
 exports.networkSizeWarning = networkSizeWarning;
-exports.isNaNError = isNaNError;
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
 exports.missingSourceWarning = missingSourceWarning;
@@ -22,7 +22,6 @@ exports.invalidDataWarning = invalidDataWarning;
 exports.randomDataWarning = randomDataWarning;
 exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
-exports.invalidCellDataTypeWarning = invalidCellDataTypeWarning;
 
 //ERROR TEST FUNCTIONS:
 
@@ -126,6 +125,20 @@ function missingNetworkError(input, frequency) {
   }      
 }
 
+function invalidDataTypeError(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.errors.length);
+
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "INVALID_CELL_DATA_TYPE",
+      network.errors[i].errorCode
+    );
+  } 
+}
+
 function networkSizeError(input, frequency) {  
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
@@ -140,19 +153,6 @@ function networkSizeError(input, frequency) {
   }      
 }
 
-function isNaNError(input, frequency) {  
-  var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
-
-  assert.equal(frequency, network.warnings.length);
-
-  for(var i = 0; i < frequency; i++) {
-    assert.equal(
-      "IS_NAN",
-      network.warnings[i].warningCode
-    );
-  }      
-}
 
 function checkForGene(test, frequency, input) {
   var sheet = xlsx.parse(input),
@@ -163,20 +163,18 @@ function checkForGene(test, frequency, input) {
   }).length);
 }
 
-
-function warningsCountError(input, frequency) {  
-  /*var sheet = xlsx.parse(input),
+function warningsCountError(test, frequency, input) {
+  var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
-  assert.equal(frequency, network.warnings.length);
+  assert.equal(frequency, network.errors.length);
 
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "WARNINGS_OVERLOAD",
-      network.warnings[i].warningCode
+      network.errors[i].errorCode
     );
   } 
-  */     
 }
 
 
@@ -237,15 +235,6 @@ function invalidNetworkSizeWarning(input, frequency) {
 
   assert.equal(frequency, invalidNetworkSizeCount.length);
 }
-
-function invalidCellDataTypeWarning(input, frequency) {  
-  var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
-  var invalidCellDataTypeCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_CELL_DATA_TYPE"});
-
-  assert.equal(frequency, invalidCellDataTypeCount.length);
-}
-
 
 function networkSizeWarning(input, frequency) {  
   var sheet = xlsx.parse(input),
