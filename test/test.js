@@ -1,5 +1,7 @@
 var assert = require('chai').assert,
-    xlsx = require('node-xlsx');
+    xlsx = require('node-xlsx'),
+    cytoscape = require('cytoscape');
+
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
 exports.noErrors = noErrors;
@@ -22,6 +24,9 @@ exports.invalidDataWarning = invalidDataWarning;
 exports.randomDataWarning = randomDataWarning;
 exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
+
+exports.shortestPath = shortestPath;
+exports.betweennessCentrality = betweennessCentrality;
 
 //ERROR TEST FUNCTIONS:
 
@@ -291,6 +296,9 @@ var grnSightToCytoscape = function (network) {
     })
   });
 
+  return result;
+};
+
 function shortestPath(input, directed, source, target, length) {
   var sheet = xlsx.parse(input);
   var network = spreadsheetController.parseSheet(sheet);
@@ -303,6 +311,20 @@ function shortestPath(input, directed, source, target, length) {
 
   var dijkstra = cy.elements().dijkstra("#" + source, null, directed);
   assert.equal(dijkstra.distanceTo("#" + target), length);
+}
+
+function betweennessCentrality(input, directed, node, centrality) {
+  var sheet = xlsx.parse(input);
+  var network = spreadsheetController.parseSheet(sheet);
+  var cytoscapeElements = grnSightToCytoscape(network);
+
+  var cy = cytoscape({
+    headless: true,
+    elements: cytoscapeElements
+  })
+
+  var bc = cy.$().bc();
+  assert.equal(bc.betweenness('#' + node, null, directed), centrality);
 }
 
 
