@@ -84,12 +84,52 @@ describe.only('graph-library-tests', function() {
     })
 
     describe('betweenness centrality', function() {
+        it('returns the undirected betweenness centrality of a', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "a", 0);
+        })
+
+        it('returns the directed betweenness centrality of a', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "a", 0);
+        })
+
         it('returns the undirected betweenness centrality of b', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "b", 11);
         })
 
         it('returns the directed betweenness centrality of b', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "b", 11);
+        })
+
+        it('returns the undirected betweenness centrality of c', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "c", 6);
+        })
+
+        it('returns the directed betweenness centrality of c', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "c", 3);
+        })
+
+        it('returns the undirected betweenness centrality of d', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "d", 11);
+        })
+
+        it('returns the directed betweenness centrality of d', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "d", 11);
+        })
+
+        it('returns the undirected betweenness centrality of e', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "e", 6);
+        })
+
+        it('returns the directed betweenness centrality of e', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "e", 2);
+        })
+
+        it('returns the undirected betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "f", 4);
+        })
+
+        it('returns the directed betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "f", 0);
         })
     })
 });
