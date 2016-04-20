@@ -47,8 +47,7 @@ var parseSheet = function(sheet) {
       targetGeneNumber,
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
-      targetGenes = [],
-      warningsCount = 0;
+      targetGenes = [];
   
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.worksheets.length; i++) {
@@ -72,8 +71,12 @@ var parseSheet = function(sheet) {
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
+    console.log(warningsCount);
+    checkWarningsCount(warningsCount);
+
     if(currentSheet.data[row] === undefined) { // if the current row is empty 
       addWarning(network, warningsList.emptyRowWarning(row));
+
 
     } else { // if the row has data...
 
@@ -192,30 +195,32 @@ var parseSheet = function(sheet) {
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
-  checkWarningsCount(warningsCount);
+  //checkWarningsCount(warningsCount);
   // We're done. Return the network.
   return network;
-};
 
-
-var addMessageToArray = function (messageArray, message) {
+  var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
-}
-
-var addWarning = function (network, message) {
-    addMessageToArray(network.warnings, message);
-};
-
-var addError = function (network, message) {
-    addMessageToArray(network.errors, message);
-};
-
-var checkWarningsCount = function (warningsCount) {
-  var MAX_WARNINGS = 75;
-  if (warningsCount > MAX_WARNINGS) {
-    addError(network, warningsCountError);
   }
-}
+
+  var addWarning = function (network, message) {
+    addMessageToArray(network.warnings, message);
+    warningsCount++;
+  };
+
+  var addError = function (network, message) {
+    addMessageToArray(network.errors, message);
+  };
+
+  var checkWarningsCount = function (warningsCount) {
+    var MAX_WARNINGS = 75;
+    if (warningsCount > MAX_WARNINGS) {
+      addError(network, warningsCountError);
+    }
+  }
+};
+
+
 
 var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
   var genesLength = genesList.length,

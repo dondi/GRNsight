@@ -31,7 +31,7 @@ var grnSightToCytoscape = function (network) {
   return result;
 };
 
-describe.only('graph-library-tests', function() {
+describe('graph-library-tests', function() {
     describe('basic-cytoscape-conversion', function() {
         it('convert to cytoscape correctly', function() {
             var input = 'test-files/graph-statistics-tests/graph-stats-demo.xlsx';
@@ -101,11 +101,11 @@ describe.only('graph-library-tests', function() {
         })
 
         it('returns the undirected betweenness centrality of c', function() {
-            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "c", 6);
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "c", 2);
         })
 
         it('returns the directed betweenness centrality of c', function() {
-            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "c", 3);
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "c", 2);
         })
 
         it('returns the undirected betweenness centrality of d', function() {
@@ -117,7 +117,7 @@ describe.only('graph-library-tests', function() {
         })
 
         it('returns the undirected betweenness centrality of e', function() {
-            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "e", 6);
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "e", 2);
         })
 
         it('returns the directed betweenness centrality of e', function() {
@@ -125,7 +125,7 @@ describe.only('graph-library-tests', function() {
         })
 
         it('returns the undirected betweenness centrality of f', function() {
-            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "f", 4);
+            test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "f", 0);
         })
 
         it('returns the directed betweenness centrality of f', function() {

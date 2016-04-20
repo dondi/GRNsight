@@ -15,13 +15,13 @@ describe('errors-graph-tests', function () {
 
   describe('incorrect-corrupt-gene-error-dCIN5', function () {
     it('should not return any errors', function () {
-      test.noErrors('test-files/graph-tests/dCIN5GendronModel1.xlsx');
+      test.invalidDataTypeError('test-files/graph-tests/dCIN5GendronModel1.xlsx', 81);
     })
   })
 
   describe('incorrect-missing-data-error-10-genes-0-edges', function () {
     it('should not return any errors', function () {
-      test.noErrors('test-files/graph-tests/different-sized-networks/10-genes-0-edges.xlsx');
+      test.invalidDataTypeError('test-files/graph-tests/different-sized-networks/10-genes-0-edges.xlsx', 1);
     })
   })
 
