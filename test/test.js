@@ -12,7 +12,7 @@ exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
 exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
-exports.warningsCountError = warningsCountError;
+//exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
 
 exports.networkSizeWarning = networkSizeWarning;
@@ -168,7 +168,7 @@ function checkForGene(test, frequency, input) {
   }).length);
 }
 
-function warningsCountError(test, frequency, input) {
+/*function warningsCountError(test, frequency, input) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -180,7 +180,7 @@ function warningsCountError(test, frequency, input) {
       network.errors[i].errorCode
     );
   } 
-}
+}*/
 
 
 
@@ -255,54 +255,13 @@ function networkSizeWarning(input, frequency) {
   }      
 }
 
-describe('shortest path', function() {
-        it('returns the directed shortest path', function() {
-            var input = 'test-files/graph-statistics-tests/graph-stats-demo.xlsx';
-            var sheet = xlsx.parse(input);
-            var network = spreadsheetController.parseSheet(sheet);
-            var cytoscapeElements = grnSightToCytoscape(network);
-//require calls cytoscape as a function so the below code is needed to call cytoscape
-            var cy = cytoscape({
-              headless: true,
-              elements: cytoscapeElements
-            })
-
-            var dijkstra = cy.elements().dijkstra("#b", null, true);
-            assert.equal(dijkstra.distanceTo("#f"), Infinity);
-        })
-    })
-
-//Graph Statistics
-
-var grnSightToCytoscape = function (network) {
-  var result = [];
-  network.genes.forEach(function (gene) {
-    result.push({
-      data: {
-        id: gene.name
-      }
-    })
-  });
-
-  network.links.forEach(function (link) {
-    var sourceGene = network.genes[link.source];
-    var targetGene = network.genes[link.target];
-    result.push({
-      data: {
-        id: sourceGene.name + targetGene.name,
-        source: sourceGene.name,
-        target: targetGene.name
-      }
-    })
-  });
-
-  return result;
-};
+//GRAPH STATISTICS
 
 function shortestPath(input, directed, source, target, length) {
   var sheet = xlsx.parse(input);
   var network = spreadsheetController.parseSheet(sheet);
-  var cytoscapeElements = grnSightToCytoscape(network);
+  //var cytoscapeElements = grnSightToCytoscape(network);
+  var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 
   var cy = cytoscape({
     headless: true,
@@ -316,7 +275,8 @@ function shortestPath(input, directed, source, target, length) {
 function betweennessCentrality(input, directed, node, centrality) {
   var sheet = xlsx.parse(input);
   var network = spreadsheetController.parseSheet(sheet);
-  var cytoscapeElements = grnSightToCytoscape(network);
+  //var cytoscapeElements = grnSightToCytoscape(network);
+  var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 
   var cy = cytoscape({
     headless: true,

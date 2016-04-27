@@ -37,7 +37,8 @@ describe('graph-library-tests', function() {
             var input = 'test-files/graph-statistics-tests/graph-stats-demo.xlsx';
             var sheet = xlsx.parse(input);
             var network = spreadsheetController.parseSheet(sheet);
-            var cytoscapeElements = grnSightToCytoscape(network);
+            //var cytoscapeElements = grnSightToCytoscape(network);
+            var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 //require calls cytoscape as a function so the below code is needed to call cytoscape
             var cy = cytoscape({
               headless: true,
@@ -80,6 +81,30 @@ describe('graph-library-tests', function() {
 
         it('returns the directed shortest path from b to f', function() {
             test.shortestPath('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "b", "f", Infinity);
+        })
+
+        it('returns the undirected shortest path from f to b', function() {
+            test.shortestPath('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', false, "CDC28", "ADA2", 3);
+        })
+
+        it('returns the directed shortest path from f to b', function() {
+            test.shortestPath('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', true, "CDC28", "ADA2", Infinity);
+        })
+
+        it('returns the undirected shortest path from f to b', function() {
+            test.shortestPath('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', false, "DAL80", "ECM22", 1);
+        })
+
+        it('returns the directed shortest path from f to b', function() {
+            test.shortestPath('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', true, "DAL80", "ECM22", 1);
+        })
+
+        it('returns the undirected shortest path from f to b', function() {
+            test.shortestPath('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', false, "DAL80", "ECM22", 1);
+        })
+
+        it('returns the directed shortest path from f to b', function() {
+            test.shortestPath('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', true, "DAL80", "ECM22", 1);
         })
     })
 
@@ -130,6 +155,30 @@ describe('graph-library-tests', function() {
 
         it('returns the directed betweenness centrality of f', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "f", 0);
+        })
+
+        it('returns the undirected betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', false, "CDC28", 171.50351735503662);
+        })
+
+        it('returns the directed betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', true, "CDC28", 171.50351735503662);
+        })
+
+        it('returns the undirected betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', false, "DAL80", 0);
+        })
+
+        it('returns the directed betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', true, "DAL80", 0);
+        })
+
+        it('returns the undirected betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', false, "DAL80", 0);
+        })
+
+        it('returns the directed betweenness centrality of f', function() {
+            test.betweennessCentrality('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', true, "DAL80", 0);
         })
     })
 });

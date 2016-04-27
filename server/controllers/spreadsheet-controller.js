@@ -194,15 +194,66 @@ var parseSheet = function(sheet) {
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
-  checkWarningsCount(warningsCount);
+  checkWarningsCount(network, warningsCount);
 
   // We're done. Return the network.
   return network;
 };
 
+var grnSightToCytoscape = function (network) {
+  var result = [];
+  network.genes.forEach(function (gene) {
+    result.push({
+      data: {
+        id: gene.name
+      }
+    })
+  });
+
+  network.links.forEach(function (link) {
+    var sourceGene = network.genes[link.source];
+    var targetGene = network.genes[link.target];
+    result.push({
+      data: {
+        id: sourceGene.name + targetGene.name,
+        source: sourceGene.name,
+        target: targetGene.name
+      }
+    })
+  });
+
+  return result;
+};
+
+var graphStatisticsReport = function(network)  {
+  var result = [];
+  var betweennessCentrality = [];
+  var shortestPath = [];
+
+  for (var i = 0; i < network.genes.length; i++) {
+    betweennessCentrality.push({
+      gene: network.genes[i],
+      //can I write gene instead of network.genes[i] in the line below?
+      betweennessCentrality: bc.betweenness('#' + network.genes[i], null, true)
+    })
+
+    for (var j = 0; j < network.genes.length; j++) {
+      shortestPath.push({
+        source: network.genes[i],
+        pathData: {
+          target: network.genes[j],
+          //functionally same question as above
+          shortestPath: dijkstra.distanceTo("#" + network.genes[j], null, true)
+        }
+      })
+    } 
+  }
+}
+
 
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
+    //warningsCount++;
 }
 
 var addWarning = function (network, message) {
@@ -213,7 +264,7 @@ var addError = function (network, message) {
     addMessageToArray(network.errors, message);
 };
 
-var checkWarningsCount = function (warningsCount) {
+var checkWarningsCount = function (network, warningsCount) {
   var MAX_WARNINGS = 75;
   if (warningsCount > MAX_WARNINGS) {
     addError(network, warningsCountError);
