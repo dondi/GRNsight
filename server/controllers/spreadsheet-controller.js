@@ -1,7 +1,9 @@
 var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
     util = require('util'),
-    path = require('path');
+    path = require('path'),
+    cytoscape = require('cytoscape');
+
 
 var processGRNmap = function (path, res, app) {
   var sheet,
@@ -196,6 +198,8 @@ var parseSheet = function(sheet) {
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
   checkWarningsCount(network, warningsCount);
 
+  network.graphStatisticsReport = graphStatisticsReport(network);
+
   // We're done. Return the network.
   return network;
 };
@@ -226,28 +230,39 @@ var grnSightToCytoscape = function (network) {
 };
 
 var graphStatisticsReport = function(network)  {
-  var result = [];
   var betweennessCentrality = [];
   var shortestPath = [];
+  var cytoscapeElements = grnSightToCytoscape(network);
+
+  var cy = cytoscape({
+    headless: true,
+    elements: cytoscapeElements
+  })
 
   for (var i = 0; i < network.genes.length; i++) {
+    var bc = cy.$().bc();    
     betweennessCentrality.push({
       gene: network.genes[i],
-      //can I write gene instead of network.genes[i] in the line below?
-      betweennessCentrality: bc.betweenness('#' + network.genes[i], null, true)
+      betweennessCentrality: bc.betweenness('#' + network.genes[i].name, null, true)
     })
+    
+    var dijkstra = cy.elements().dijkstra("#" + network.genes[i].name, null, true);
 
     for (var j = 0; j < network.genes.length; j++) {
       shortestPath.push({
-        source: network.genes[i],
+        source: network.genes[i].name,
         pathData: {
-          target: network.genes[j],
-          //functionally same question as above
-          shortestPath: dijkstra.distanceTo("#" + network.genes[j], null, true)
+          target: network.genes[j].name,
+          shortestPath: dijkstra.distanceTo("#" + network.genes[j].name, null, true)
         }
       })
     } 
   }
+
+  return {
+    betweennessCentrality: betweennessCentrality,
+    shortestPath: shortestPath
+  };
 }
 
 
@@ -505,6 +520,7 @@ module.exports = function (app) {
 
   //exporting parseSheet for use in testing. Do not remove!
   return { 
-    parseSheet: parseSheet
+    parseSheet: parseSheet,
+    grnSightToCytoscape: grnSightToCytoscape
   };
 }

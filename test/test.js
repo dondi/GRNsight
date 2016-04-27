@@ -260,7 +260,6 @@ function networkSizeWarning(input, frequency) {
 function shortestPath(input, directed, source, target, length) {
   var sheet = xlsx.parse(input);
   var network = spreadsheetController.parseSheet(sheet);
-  //var cytoscapeElements = grnSightToCytoscape(network);
   var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 
   var cy = cytoscape({
@@ -275,7 +274,6 @@ function shortestPath(input, directed, source, target, length) {
 function betweennessCentrality(input, directed, node, centrality) {
   var sheet = xlsx.parse(input);
   var network = spreadsheetController.parseSheet(sheet);
-  //var cytoscapeElements = grnSightToCytoscape(network);
   var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 
   var cy = cytoscape({
