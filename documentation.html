@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 12/30/15
+modified: 5/17/16
 ---
             <p id="pageTitle">Documentation</p>
             <div id="pageContent">
@@ -74,7 +74,7 @@ modified: 12/30/15
                                                         Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display.  If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.
                                                     </li>
                                                     <li>
-                                                        Follow <a href="https://github.com/dondi/GRNsight/wiki/Formatting-a-YEASTRACT-regulation-matrix-for-use-with-GRNsight" target="_blank">these instructions</a> to download and format a regulation matrix from the YEASTRACT database for use with GRNsight.
+                                                        Follow <a href="#yeastract_instructions">these instructions</a> to download and format a regulation matrix from the YEASTRACT database for use with GRNsight.
                                                     </li>
                                                 </ul>
                                             </li>
@@ -92,7 +92,27 @@ modified: 12/30/15
                                   </div> <!--panel-heading-->
                                   <div id="yeastract_instructions" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                      <p>(to be populated)</p>
+                                      This section has instructions for formatting a gene regulation matrix downloaded from <a href="http://www.yeastract.com">YEASTRACT</a> for use with GRNsight. 
+                                      <ul>
+                                        <li>Navigate to <a href="http://www.yeastract.com/formgenerateregulationmatrix.php">Generate Regulation Matrix</a> on the YEASTRACT site.</li>
+                                        <li>Select the appropriate radio buttons/check boxes for the filters.</li>
+                                        <li>Paste a list of transcription factors into the appropriate field.</li>
+                                        <li>Paste a list of targets into the Target ORF/Genes field, or check the box to consider all ORF/Genes.</li>
+                                        <li>Click the Generate button.</li>
+                                        <li>In the results window that appears, click the link to download the Regulation matrix results file as a Semicolon Separated Values (CSV) file (not the Two-column table, Tab Separated Values (TSV) file).</li>
+                                        <li>Once you have downloaded the file, launch Microsoft Excel.</li>
+                                        <li>Select the menu item, File &gt; Open and select the file that you downloaded.</li>
+                                        <li>Select Column A.</li>
+                                        <li>Select the menu item, Data &gt; Text to Columns...</li>
+                                        <li>In the first window of the wizard that appears, select the radio button for "Delimited" and click Next.</li>
+                                        <li>In the second window of the wizard that appears, check the box for "Other" under "Delimiters" and type a semicolon in the field to the right and click Finish.</li>
+                                        <li>Select the menu item, File &gt; Save As... and save the file as an Excel Workbook (.xlsx).</li>
+                                        <li>YEASTRACT organizes the adjacency matrix with the transcription factors as rows and the target genes as columns, which is opposite to the format that GRNmap and GRNsight expects.  To flip this orientation, first create a new worksheet by clicking on the new worksheet icon at the bottom of the screen.  Name this new worksheet "network".</li>
+                                        <li>Select the adjacency matrix from the first worksheet and copy it to the clipboard.  Go to the "network" worksheet and click on cell A1.  Select the menu item Edit &gt; Paste Special.  In the window that appears, check the box "Transpose" and click OK.</li>
+                                        <li>The labels for the genes in the columns and rows needs to match.  Thus, delete the "p" from each of the gene names in the columns.</li>
+                                        <li>Paste the following text into cell A1 "cols regulators/rows targets".</li>
+                                        <li>Save your work.  This file is now ready for loading into GRNsight.  You can choose to delete the original worksheet or keep it in your workbook.</li>
+                                      </ul>
                                     </div> <!--panel-body-->
                                   </div> <!--panel-collapse collapse-->
                                 </div>
