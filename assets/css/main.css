@@ -190,16 +190,28 @@ h3 {
 	margin: 15px 0 10px 0;
 }
 
-.abstract {
+.abstract, figure.publication {
 	font-size: 15px;
+    margin-bottom: 3em;
+}
+
+.abstract {
 	margin-left: 30px;
 }
 
-div.abstract > iframe {
+figure.publication {
+    margin-left: 90px;
+}
+
+figure.publication > iframe {
 	border:1px solid #CCC;
 	border-width:1px 1px 0;
 	margin-bottom:5px;
 	max-width: 100%;
+}
+
+figure.publication > figcaption > a {
+    font-weight: bold;
 }
 
 .newsDate {
