@@ -149,14 +149,15 @@ a:active {
 	color:#141414;
 	font-size: 14px;
 	padding: 0px 5px 5px 10px;
+    margin-right: 8em;
 }
 
 #pageContent p {
 	text-align: justify;
-	width: 90%;
 }
 
 #pageContent li {
+    margin-bottom: 0.65ex;
 	text-align: justify;
 	width: 95%;
 }
