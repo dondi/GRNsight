@@ -306,3 +306,44 @@ html {
 .panel-heading {
 	padding: 7px 15px;
 }
+
+/* This is derived from .alert.alert-success in full Bootstrap.
+   We are not using full Bootstrap on this site however, thus
+   the derivation. */
+#cookie-notice {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: rgba(60, 60, 60, 0.5) 0 8px 16px;
+    color: #3c763d;
+    font-family: sans-serif;
+    margin-bottom: 20px;
+    max-width: 40em;
+    padding: 15px;
+    position: absolute;
+    right: 1ex;
+    text-shadow: none;
+    top: 1ex;
+}
+
+.cookie-action {
+    background: none;
+    border: none;
+    float: right;
+    margin-left: 1em;
+    margin-top: 1em;
+    padding: 0;
+    text-align: right;
+}
+
+.cookie-action:hover {
+	color: #69163F;
+    text-decoration: underline;
+}
+
+.cookie-action:active {
+	color: #125432;
+    text-decoration: underline;
+}
+
