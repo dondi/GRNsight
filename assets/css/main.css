@@ -319,10 +319,10 @@ html {
     color: #3c763d;
     font-family: sans-serif;
     margin-bottom: 20px;
-    max-width: 40em;
+    max-width: 34em;
     padding: 15px;
     position: absolute;
-    right: 1ex;
+    right: 2ex;
     text-shadow: none;
     top: 1ex;
 }
