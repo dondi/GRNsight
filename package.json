@@ -1,0 +1,37 @@
+{
+  "name": "grnsight",
+  "version": "1.12.0",
+  "description": "Web app and service for visualizing models of gene regulatory networks",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "multiparty": "^4.1.2",
+    "node-xlsx": "^0.4.0"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.1.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dondi/GRNsight.git"
+  },
+  "keywords": [
+    "biojs",
+    "GRN",
+    "gene regulatory networks",
+    "network visualization",
+    "force graph visualization"
+  ],
+  "author": "LMU Bioinformatics Group",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dondi/GRNsight/issues"
+  },
+  "homepage": "http://dondi.github.io/GRNsight/"
+}
