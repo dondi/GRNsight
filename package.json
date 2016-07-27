@@ -20,7 +20,13 @@
     "type": "git",
     "url": "git+https://github.com/dondi/GRNsight.git"
   },
-  "keywords": [],
+  "keywords": [
+    "biojs",
+    "GRN",
+    "gene regulatory networks",
+    "network visualization",
+    "force graph visualization"
+  ],
   "author": "LMU Bioinformatics Group",
   "license": "ISC",
   "bugs": {
