@@ -118,13 +118,6 @@ describe('warnings-adjacency-matrix-modifications', function () {
       })
     })
 
-    describe('missing-row-top', function () {
-      it('5 invalid cell data type warnings', function () {
-          test.invalidCellDataTypeWarning('test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx', 5);
-          test.invalidCellDataTypeWarning('test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx', 5);
-      })
-    })
-
     describe('missing-value-bottom-corner', function () {
       it('no warnings', function () {
           test.noWarnings('test-files/adjacency-matrix-modifications/missing-value-bottom-corner-input.xlsx');

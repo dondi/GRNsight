@@ -137,3 +137,8 @@ nav.navbar.navbar-default {
 .panel-body {
   overflow: scroll;
 }
+.graph-statistics-container {
+  margin-top: 256px;
+  margin-left: 15px;
+  width: 1335px;
+}

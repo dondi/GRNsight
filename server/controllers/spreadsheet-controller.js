@@ -1,7 +1,9 @@
 var multiparty = require('multiparty'),
     xlsx = require('node-xlsx'),
     util = require('util'),
-    path = require('path');
+    path = require('path'),
+    cytoscape = require('cytoscape');
+
 
 var processGRNmap = function (path, res, app) {
   var sheet,
@@ -47,9 +49,10 @@ var parseSheet = function(sheet) {
       targetGeneNumber,
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
-      targetGenes = [],
+      targetGenes = [];
       warningsCount = 0;
   
+
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.worksheets.length; i++) {
     if (sheet.worksheets[i].name === "network") {
@@ -72,6 +75,7 @@ var parseSheet = function(sheet) {
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
+
     if(currentSheet.data[row] === undefined) { // if the current row is empty 
       addWarning(network, warningsList.emptyRowWarning(row));
 
@@ -135,7 +139,6 @@ var parseSheet = function(sheet) {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column].value))) {
-            // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
                 addError(network, errorList.dataTypeError(row, column));
               } else {
                 if (currentSheet.data[row][column].value !== 0) { // We only care about non-zero values
@@ -193,17 +196,79 @@ var parseSheet = function(sheet) {
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
+  checkWarningsCount(network, warningsCount);
+
+  network.graphStatisticsReport = graphStatisticsReport(network);
 
   // We're done. Return the network.
-
   return network;
 };
+
+var grnSightToCytoscape = function (network) {
+  var result = [];
+  network.genes.forEach(function (gene) {
+    result.push({
+      data: {
+        id: gene.name
+      }
+    })
+  });
+
+  network.links.forEach(function (link) {
+    var sourceGene = network.genes[link.source];
+    var targetGene = network.genes[link.target];
+    result.push({
+      data: {
+        id: sourceGene.name + targetGene.name,
+        source: sourceGene.name,
+        target: targetGene.name
+      }
+    })
+  });
+
+  return result;
+};
+
+var graphStatisticsReport = function(network)  {
+  var betweennessCentrality = [];
+  var shortestPath = [];
+  var cytoscapeElements = grnSightToCytoscape(network);
+
+  var cy = cytoscape({
+    headless: true,
+    elements: cytoscapeElements
+  })
+
+  for (var i = 0; i < network.genes.length; i++) {
+    var bc = cy.$().bc();    
+    betweennessCentrality.push({
+      gene: network.genes[i],
+      betweennessCentrality: bc.betweenness('#' + network.genes[i].name, null, true)
+    })
+    
+    var dijkstra = cy.elements().dijkstra("#" + network.genes[i].name, null, true);
+
+    for (var j = 0; j < network.genes.length; j++) {
+      shortestPath.push({
+        source: network.genes[i].name,
+        pathData: {
+          target: network.genes[j].name,
+          shortestPath: dijkstra.distanceTo("#" + network.genes[j].name, null, true)
+        }
+      })
+    } 
+  }
+
+  return {
+    betweennessCentrality: betweennessCentrality,
+    shortestPath: shortestPath
+  };
+}
 
 
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
     //warningsCount++;
-    //checkWarningsCount(warningsCount);
 }
 
 var addWarning = function (network, message) {
@@ -214,7 +279,7 @@ var addError = function (network, message) {
     addMessageToArray(network.errors, message);
 };
 
-var checkWarningsCount = function (warningsCount) {
+var checkWarningsCount = function (network, warningsCount) {
   var MAX_WARNINGS = 75;
   if (warningsCount > MAX_WARNINGS) {
     addError(network, warningsCountError);
@@ -308,6 +373,16 @@ var errorList = {
       errorCode: "DUPLICATE_GENE", 
       possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".", 
       suggestedFix: "Please remove the duplicate gene and submit again."
+    };
+  },
+
+  dataTypeError: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      errorCode: "INVALID_CELL_DATA_TYPE",
+      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
+      suggestedFix: "Please ensure that all data within the adjacency matrix is a number and try again."
     };
   },
 
@@ -464,6 +539,7 @@ module.exports = function (app) {
 
   //exporting parseSheet for use in testing. Do not remove!
   return { 
-    parseSheet: parseSheet
+    parseSheet: parseSheet,
+    grnSightToCytoscape: grnSightToCytoscape
   };
 }

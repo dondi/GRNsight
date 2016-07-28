@@ -131,6 +131,7 @@ html
 
     div(class='container')
       div(class='grnsight-container')
+
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         form
@@ -154,6 +155,23 @@ html
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
+
+    div(class='graph-statistics-container hidden')
+      div(class='panel panel-default')
+        div(class='panel-heading' role='tab' id='graph-statistics-heading')
+          h4(class='panel-title')
+            a(role='button' data-toggle='collapse' href='#graph-statistics' aria-expanded='true') Graph Statistics
+        div(id='graph-statistics' class='panel-collapse collapse' role='tabpanel' aria-labelledby='graph-statistics-heading')
+          div(class='panel-body')
+            table(class='table table-condensed')
+              thead
+                tr
+                  th(rowspan='2')
+                  th(rowspan='2') Betweenness Centrality
+                  th(class='shortest-path-header') Shortest Path
+                tr(class='shortest-path-column-headers')
+              tbody
+
     div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
@@ -165,6 +183,7 @@ html
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+
     div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
@@ -185,9 +204,11 @@ html
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             // input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js')
   script(src='js/sliders.js')
   script(src='js/graph.js')
+  script(src='js/graph-statistics.js')
   script(src='js/upload.js')

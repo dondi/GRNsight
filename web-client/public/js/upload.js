@@ -132,6 +132,7 @@ $(function () {
       }
       previousFile = {path: url, name: name, formdata: formData}; // Store info about the previous file for use in reload
       drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
+      displayStatistics(network);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
           errorString = "Your graph failed to load.<br><br>";
