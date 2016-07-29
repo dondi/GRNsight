@@ -43,7 +43,19 @@ var grnsightToSif = function (network) {
 
 module.exports = function (app) {
   if (app) {
-    // TODO Define routes that invoke the various export formats.
+    app.post("/export-to-sif", function (req, res) {
+      try {
+        return res.json(200, grnsightToSif(req.body));
+      } catch (error) {
+        return res.json(400, {
+          message: "Invalid GRNsight format.",
+          details: {
+            name: error.name,
+            message: error.message
+          }
+        });
+      }
+    });
   }
 
   return {
