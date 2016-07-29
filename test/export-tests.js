@@ -1,5 +1,5 @@
-var assert = require('chai').assert;
-var exportController = require(__dirname + '/../server/controllers' + '/export-controller')();
+var expect = require("chai").expect;
+var exportController = require(__dirname + "/../server/controllers" + "/export-controller")();
 
 var unweightedTestNetwork = {
   "genes": [
@@ -31,12 +31,12 @@ var unweightedTestNetwork = {
 // TODO unweightedTestNetworkWithCycle
 // TODO weightedTestNetworkWithCycle
 
-describe('Export to SIF', function () {
-  it('should export unweighted networks to SIF correctly', function () {
-    var sif = exportController.grnsightToSif(unweightedTestNetwork);
-    assert.isNotNull(sif.match(/^A\n/));
-    assert.isNotNull(sif.match(/\nB\tpd\tA\tC\n/));
-    assert.isNotNull(sif.match(/\nC\tpd\tB\n/));
-    assert.isNotNull(sif.match(/\nD\n$/));
+describe("Export to SIF", function () {
+  it("should export unweighted networks to SIF correctly", function () {
+    var sifLines = exportController.grnsightToSif(unweightedTestNetwork).split("\n");
+    expect(sifLines[0]).to.equal("A");
+    expect(sifLines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
+    expect(sifLines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
+    expect(sifLines[3]).to.equal("D");
   });
 });
