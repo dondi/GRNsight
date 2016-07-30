@@ -42,10 +42,28 @@ html
                     span(class='glyphicon glyphicon-repeat')
                     | &nbsp; Reload
                 li(class='divider')
-                li(class='disabled')
+                li(class='dropdown-submenu')
+                  a(href='#')
+                    span(class='glyphicon glyphicon-import')
+                    | &nbsp; Import
+                  ul(class='dropdown-menu')
+                    li(class='disabled')
+                      a(href='#' id='importSif') SIF…
+                    li(class='disabled')
+                      a(href='#' id='importGraphMl') GraphML…
+                    li(class='disabled')
+                      a(href='#' id='importGml') GML…
+                li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-export')
                     | &nbsp; Export
+                  ul(class='dropdown-menu')
+                    li(class='startDisabled disabled')
+                      a(href='#' id='exportAsSif') SIF…
+                    li(class='disabled')
+                      a(href='#' id='exportAsGraphMl') GraphML…
+                    li(class='disabled')
+                      a(href='#' id='exportAsGml') GML…
                 li(class='divider')
                 li(class=' startDisabled disabled')
                   a(href='#' id='printGraph')

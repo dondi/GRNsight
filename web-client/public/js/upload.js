@@ -1,4 +1,6 @@
 $(function () {
+  var currentNetwork = null;
+
   // Style of the tooltips when the user mouses over the label names
   $(".info").tooltip({
     placement: "top",
@@ -29,6 +31,7 @@ $(function () {
       }) :
       $.getJSON(fullUrl)
     ).done(function (network) {
+      currentNetwork = network;
       console.log(network); // Display the network in the console
       $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
@@ -250,6 +253,50 @@ $(function () {
   $("#printGraph").click(function (event) {
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
+    }
+  });
+
+  var flattenNetwork = function (network) {
+    var result = $.extend(true, { }, network);
+    result.links.forEach(function (link) {
+      link.source = link.source.index;
+      link.target = link.target.index;
+    });
+    return result;
+  };
+
+  var filenameWithExtension = function (extension) {
+    var filename = $("#fileName").text();
+    var dotSegments = filename.split(".");
+    if (dotSegments[0] !== filename) {
+      dotSegments.pop();
+      dotSegments.push(extension);
+      filename = dotSegments.join(".");
+    } else {
+      filename += "." + extension;
+    }
+
+    return filename;
+  };
+
+  $("#exportAsSif").click(function (event) {
+    if (!$(".startDisabled").hasClass("disabled")) {
+      var networkToExport = flattenNetwork(currentNetwork);
+      var exportForm = $("<form></form>").attr({
+        method: "POST",
+        action: $("#service-root").val() + "/export-to-sif"
+      }).append($("<input></input>").attr({
+        type: "hidden",
+        name: "filename",
+        value: filenameWithExtension("sif")
+      })).append($("<input></input>").attr({
+        type: "hidden",
+        name: "network",
+        value: JSON.stringify(networkToExport)
+      }));
+      $("body").append(exportForm);
+      exportForm.submit();
+      exportForm.remove();
     }
   });
 });
