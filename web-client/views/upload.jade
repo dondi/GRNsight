@@ -35,8 +35,8 @@ html
                     label(for='upload' id='open')
                       span(class='glyphicon glyphicon-folder-open')
                       | &nbsp; Open
-                    input(type='file', name='upload', id='upload', accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                    input(type='hidden', id='service-root', value='#{serviceRoot}')
+                    input(class='upload' type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                    input(type='hidden' id='service-root' value='#{serviceRoot}')
                 li(class='startDisabled disabled')
                   a(href='#' id='reload')
                     span(class='glyphicon glyphicon-repeat')
@@ -47,8 +47,10 @@ html
                     span(class='glyphicon glyphicon-import')
                     | &nbsp; Import
                   ul(class='dropdown-menu')
-                    li(class='disabled')
-                      a(href='#' id='importSif') SIF…
+                    li
+                      a(href='#' id='importSif')
+                        label(for='upload-sif' id='import-sif') SIF…
+                        input(class='upload' type='file' name='upload-sif' id='upload-sif' accept='.sif')
                     li(class='disabled')
                       a(href='#' id='importGraphMl') GraphML…
                     li(class='disabled')

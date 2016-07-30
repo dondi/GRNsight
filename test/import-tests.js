@@ -64,6 +64,8 @@ var expectedUnweightedNetwork = {
     { source: 2, target: 1 }
   ],
 
+  errors: [],
+  warnings: [],
   sheetType: "unweighted"
 };
 
@@ -81,6 +83,8 @@ var expectedWeightedNetwork = {
     { source: 2, target: 1, value: 0.5 }
   ],
 
+  errors: [],
+  warnings: [],
   sheetType: "weighted"
 };
 
@@ -92,6 +96,7 @@ var expectedUnweightedNetworkWithCycle = {
     { name: "D" },
     { name: "E" }
   ],
+
   links: [
     { source: 0, target: 0 },
     { source: 1, target: 0 },
@@ -99,6 +104,9 @@ var expectedUnweightedNetworkWithCycle = {
     { source: 2, target: 1 },
     { source: 3, target: 3 }
   ],
+
+  errors: [],
+  warnings: [],
   sheetType: "unweighted"
 };
 
@@ -110,6 +118,7 @@ var expectedWeightedNetworkWithCycle = {
     { name: "D" },
     { name: "E" }
   ],
+
   links: [
     { source: 0, target: 0, value: 0.875 },
     { source: 1, target: 0, value: -0.75 },
@@ -117,6 +126,9 @@ var expectedWeightedNetworkWithCycle = {
     { source: 2, target: 1, value: 0.5 },
     { source: 3, target: 3, value: -0.375 }
   ],
+
+  errors: [],
+  warnings: [],
   sheetType: "weighted"
 };
 

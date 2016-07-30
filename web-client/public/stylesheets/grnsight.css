@@ -32,7 +32,7 @@ form span {
   top: 1px;
   width: 1350px;
 }
-#upload {
+input.upload[type=file] {
   display: none;
 }
 .glyphicon {

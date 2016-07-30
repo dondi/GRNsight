@@ -13,10 +13,63 @@ $(function () {
   $( "#chargeDistInput" ).val(1000);
   $( "#gravityInput" ).val(0.1);
 
+  var displayNetwork = function (network, name) {
+    currentNetwork = network;
+    console.log(network); // Display the network in the console
+    $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
+
+    if (network.warnings.length > 0) {
+      displayWarnings(network.warnings);
+    }
+
+    $("#fileName").text(name); // Set the name of the file to display in the top bar
+    $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
+
+    // If more things need to be turned off, we'll add them to this array
+    [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
+      $(selector).off("click");
+    });
+
+    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
+      linkSlider: "#linkDistInput",
+      chargeSlider: "#chargeInput",
+      chargeDistSlider: "#chargeDistInput",
+      gravitySlider: "#gravityInput",
+      resetSliderButton: "#resetSliders",
+      resetSliderMenu: "#resetSlidersMenu",
+      undoResetButton: "#undoReset",
+      undoResetMenu: "#undoResetMenu"
+    }, network.sheetType, network.warnings);
+  };
+
+  var annotateLinks = function (network) {
+    // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.
+    //      Think of a way to consolidate it. Having discovered this, it seems like this should
+    //      be done on the client side because it rearranges data redundantly, for ease of display.
+    network.positiveWeights = [];
+    network.negativeWeights = [];
+
+    network.links.forEach(function (link) {
+      if (network.sheetType === "unweighted" && !link.value) {
+        link.value = 1;
+      }
+
+      if (link.value > 0) {
+        link.type = "arrowhead";
+        link.stroke = "MediumVioletRed";
+        network.positiveWeights.push(link.value);
+      } else {
+        link.type = "repressor";
+        link.stroke = "DarkTurquoise";
+        network.negativeWeights.push(link.value);
+      }
+    });
+  };
+
   /*
-  * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
-  * for helping to resolve this.
-  */
+   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+   * for helping to resolve this.
+   */
   var loadGrn = function (url, name, formData) {
     // The presence of formData is taken to indicate a POST.
     var fullUrl = $("#service-root").val() + url;
@@ -31,31 +84,8 @@ $(function () {
       }) :
       $.getJSON(fullUrl)
     ).done(function (network) {
-      currentNetwork = network;
-      console.log(network); // Display the network in the console
-      $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
-
-      if(network.warnings.length > 0) {
-        displayWarnings(network.warnings);
-      }
-      $("#fileName").text(name); // Set the name of the file to display in the top bar
-      $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
-      // If more things need to be turned off, we'll add them to this array
-      var disable = [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ]
-      for(var i = 0; i < disable.length; i++) {
-        $(disable[i]).off("click");
-      }
+      displayNetwork(network, name);
       previousFile = [url, name, formData]; // Store info about the previous file for use in reload
-      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
-        linkSlider: "#linkDistInput",
-        chargeSlider: "#chargeInput",
-        chargeDistSlider: "#chargeDistInput",
-        gravitySlider: "#gravityInput",
-        resetSliderButton: "#resetSliders",
-        resetSliderMenu: "#resetSlidersMenu",
-        undoResetButton: "#undoReset",
-        undoResetMenu: "#undoResetMenu"
-      }, network.sheetType, network.warnings);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText), 
           errorString = "Your graph failed to load.<br><br>";
@@ -97,6 +127,36 @@ $(function () {
             sessionControl: "start"
         });
     }
+
+    event.preventDefault();
+  });
+
+  // TODO Consolidate code with original upload sequence---lots of similarities.
+  $("#upload-sif").on("change", function (event) {
+    var $upload = $(this);
+    var fullFilePath = $upload.val();
+    var fakePathCheck = fullFilePath.search("\\\\") + 1;
+
+    while (fakePathCheck) {
+      fullFilePath = fullFilePath.substring(fakePathCheck);
+      fakePathCheck = fullFilePath.search("\\\\") + 1;
+    }
+
+    var formData = new FormData();
+    formData.append("file", $upload[0].files[0]);
+
+    var fullUrl = $("#service-root").val() + "/upload-sif";
+    $.ajax({
+      url: fullUrl,
+      data: formData,
+      processData: false,
+      contentType: false,
+      type: "POST",
+      crossDomain: true
+    }).done(function (network) {
+      annotateLinks(network);
+      displayNetwork(network, fullFilePath);
+    });
 
     event.preventDefault();
   });
