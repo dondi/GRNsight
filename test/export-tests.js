@@ -2,133 +2,77 @@ var expect = require("chai").expect;
 var exportController = require(__dirname + "/../server/controllers" + "/export-controller")();
 
 var unweightedTestNetwork = {
-  "genes": [
-    { "name": "A" },
-    { "name": "B" },
-    { "name": "C" },
-    { "name": "D" }
+  genes: [
+    { name: "A" },
+    { name: "B" },
+    { name: "C" },
+    { name: "D" }
   ],
-  "links": [
-    {
-      "source": 2,
-      "target": 1
-    },
-    {
-      "source": 1,
-      "target": 0
-    },
-    {
-      "source": 1,
-      "target": 2
-    }
+  links: [
+    { source: 2, target: 1 },
+    { source: 1, target: 0 },
+    { source: 1, target: 2 }
   ],
-  "errors": [],
-  "warnings": [],
-  "sheetType": "unweighted"
+  errors: [],
+  warnings: [],
+  sheetType: "unweighted"
 };
 
 var weightedTestNetwork = {
-  "genes": [
-    { "name": "A" },
-    { "name": "B" },
-    { "name": "C" },
-    { "name": "D" }
+  genes: [
+    { name: "A" },
+    { name: "B" },
+    { name: "C" },
+    { name: "D" }
   ],
-  "links": [
-    {
-      "source": 2,
-      "target": 1,
-      "value": 0.5
-    },
-    {
-      "source": 1,
-      "target": 0,
-      "value": -0.75
-    },
-    {
-      "source": 1,
-      "target": 2,
-      "value": 0.25
-    }
+  links: [
+    { source: 2, target: 1, value: 0.5 },
+    { source: 1, target: 0, value: -0.75 },
+    { source: 1, target: 2, value: 0.25 }
   ],
-  "errors": [],
-  "warnings": [],
-  "sheetType": "weighted"
+  errors: [],
+  warnings: [],
+  sheetType: "weighted"
 };
 
 var unweightedTestNetworkWithCycle = {
-  "genes": [
-    { "name": "A" },
-    { "name": "B" },
-    { "name": "C" },
-    { "name": "D" },
-    { "name": "E" }
+  genes: [
+    { name: "A" },
+    { name: "B" },
+    { name: "C" },
+    { name: "D" },
+    { name: "E" }
   ],
-  "links": [
-    {
-      "source": 2,
-      "target": 1
-    },
-    {
-      "source": 1,
-      "target": 0
-    },
-    {
-      "source": 1,
-      "target": 2
-    },
-    {
-      "source": 3,
-      "target": 3
-    },
-    {
-      "source": 0,
-      "target": 0
-    }
+  links: [
+    { source: 2, target: 1 },
+    { source: 1, target: 0 },
+    { source: 1, target: 2 },
+    { source: 3, target: 3 },
+    { source: 0, target: 0 }
   ],
-  "errors": [],
-  "warnings": [],
-  "sheetType": "unweighted"
+  errors: [],
+  warnings: [],
+  sheetType: "unweighted"
 };
 
 var weightedTestNetworkWithCycle = {
-  "genes": [
-    { "name": "A" },
-    { "name": "B" },
-    { "name": "C" },
-    { "name": "D" },
-    { "name": "E" }
+  genes: [
+    { name: "A" },
+    { name: "B" },
+    { name: "C" },
+    { name: "D" },
+    { name: "E" }
   ],
-  "links": [
-    {
-      "source": 2,
-      "target": 1,
-      "value": 0.5
-    },
-    {
-      "source": 1,
-      "target": 0,
-      "value": -0.75
-    },
-    {
-      "source": 1,
-      "target": 2,
-      "value": 0.25
-    },
-    {
-      "source": 3,
-      "target": 3,
-      "value": -0.375
-    },
-    {
-      "source": 0,
-      "target": 0,
-      "value": 0.875
-    }
+  links: [
+    { source: 2, target: 1, value: 0.5 },
+    { source: 1, target: 0, value: -0.75 },
+    { source: 1, target: 2, value: 0.25 },
+    { source: 3, target: 3, value: -0.375 },
+    { source: 0, target: 0, value: 0.875 }
   ],
-  "errors": [],
-  "warnings": [],
-  "sheetType": "weighted"
+  errors: [],
+  warnings: [],
+  sheetType: "weighted"
 };
 
 describe("Export to SIF", function () {
