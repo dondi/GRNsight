@@ -56,14 +56,25 @@ html
                 li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-export')
-                    | &nbsp; Export
+                    | &nbsp; Export Data
                   ul(class='dropdown-menu')
                     li(class='startDisabled disabled')
-                      a(href='#' id='exportAsSif') SIF…
+                      a(href='#' id='exportAsSif') To SIF
                     li(class='disabled')
-                      a(href='#' id='exportAsGraphMl') GraphML…
+                      a(href='#' id='exportAsGraphMl') To GraphML
                     li(class='disabled')
-                      a(href='#' id='exportAsGml') GML…
+                      a(href='#' id='exportAsGml') To GML
+                li(class='dropdown-submenu disabled')
+                  a(href='#')
+                    span(class='glyphicon glyphicon-picture')
+                    | &nbsp; Export Image
+                  ul(class='dropdown-menu')
+                    li(class='disabled')
+                      a(href='#' id='exportAsJpg') To JPEG
+                    li(class='disabled')
+                      a(href='#' id='exportAsPdf') To PDF
+                    li(class='disabled')
+                      a(href='#' id='exportAsSvg') To SVG
                 li(class='divider')
                 li(class=' startDisabled disabled')
                   a(href='#' id='printGraph')
