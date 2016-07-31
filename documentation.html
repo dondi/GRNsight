@@ -22,6 +22,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </a>
                             </h5>
                         </div> <!--panel-heading-->
+
                         <div id="section1Content" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <ul>
@@ -43,54 +44,52 @@ description: Learn how to format and upload files to GRNsight, a web application
                                   </div>
                                   <div id="excel_instructions" class="panel-collapse collapse">
                                     <div class="panel-body">
+                                      <p>
+                                        If you want to create manually a new file to use with GRNsight, format the file in the following manner:
+                                      </p>
                                       <ul>
                                         <li>
-                                          If you want to create manually a new file to use with GRNsight, format the file in the following manner:
+                                          GRNsight will only accept Microsoft Excel Workbook (*.xlsx) files.  Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight, nor are any other file formats (*.txt, *.csv, etc.)
+                                        </li>
+                                        <li>
+                                          GRNsight reads gene regulatory network information that is in the form of an adjacency matrix to generate the nodes and edges of the graph.
                                           <ul>
                                             <li>
-                                                GRNsight will only accept Microsoft Excel Workbook (*.xlsx) files.  Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight, nor are any other file formats (*.txt, *.csv, etc.)
+                                              There must be one worksheet in your Excel Workbook entitled “network” or “network_optimized_weights”. Generally, the “network” worksheet describes an unweighted network and the “network_optimized_weights” worksheet describes a weighted network.  If the Workbook contains worksheets with both names, the display of the “network_optimized_weights” data will take precedence.
                                             </li>
                                             <li>
-                                                GRNsight reads gene regulatory network information that is in the form of an adjacency matrix to generate the nodes and edges of the graph.
-                                                <ul>
-                                                    <li>
-                                                        There must be one worksheet in your Excel Workbook entitled “network” or “network_optimized_weights”. Generally, the “network” worksheet describes an unweighted network and the “network_optimized_weights” worksheet describes a weighted network.  If the Workbook contains worksheets with both names, the display of the “network_optimized_weights” data will take precedence.
-                                                    </li>
-                                                    <li>
-                                                        In the “network” and “network_optimized_weights” worksheets, the upper-left cell (A1) should contain the text “rows genes affected/cols genes controlling”.  This text is there as a reminder of the direction of the regulatory relationships specified by the adjacency matrix.
-                                                    </li>
-                                                    <li>
-                                                        The rest of the first row should contain the names of the transcription factors that are controlling the other genes in the network, one transcription factor name per column. Transcription factor names must be unique for each column and must be 12 characters or fewer.
-                                                    </li>
-                                                    <li>
-                                                        The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row. Transcription factor names must be unique for each row and must be 12 characters or fewer.
-                                                    </li>
-                                                    <li>
-                                                        GRNsight is primarily designed to depict gene regulatory networks that contain just transcription factors and that can be represented by a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF 1” or “ABF-1” would not be considered the same as “ABF1”.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet. The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
-                                                    </li>
-                                                    <li>
-                                                        For unweighted networks in the “network” worksheet, each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell E6 means that FHL1 regulates FKH2.  The “1” in cell C3 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 50 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with regular (pointy) arrowheads. The demonstration file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx">"Demo #1: Unweighted GRN"</a> corresponds to the adjacency matrix shown below.  Follow the link to download the file.
-
-                                                        <br><br>
-                                                        <img src="{{ site.baseurl }}/assets/images/Sample_network_worksheet.jpg" alt="network" height="290" width="832" />
-                                                        <br><br>
-
-                                                    </li>
-                                                    <li>
-                                                        When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular (pointy) arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx">Demo #2: Weighted GRN</a> corresponds to the adjacency matrix shown below. Follow the link to download the file.  For the weighted edges to display with different colors and thicknesses, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class="showSection3">Section 3</a> below.
-
-                                                        <br><br>
-                                                        <img src="{{ site.baseurl }}/assets/images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" width="900" />
-                                                        <br><br>
-
-                                                    </li>
-                                                    <li>
-                                                        Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display.  If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.
-                                                    </li>
-                                                    <li>
-                                                        Follow <a href="#yeastract_instructions" data-toggle="collapse">these instructions</a> to download and format a regulation matrix from the YEASTRACT database for use with GRNsight.
-                                                    </li>
-                                                </ul>
+                                              In the “network” and “network_optimized_weights” worksheets, the upper-left cell (A1) should contain the text “rows genes affected/cols genes controlling”.  This text is there as a reminder of the direction of the regulatory relationships specified by the adjacency matrix.
+                                            </li>
+                                            <li>
+                                              The rest of the first row should contain the names of the transcription factors that are controlling the other genes in the network, one transcription factor name per column. Transcription factor names must be unique for each column and must be 12 characters or fewer.
+                                            </li>
+                                            <li>
+                                              The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row. Transcription factor names must be unique for each row and must be 12 characters or fewer.
+                                            </li>
+                                            <li>
+                                              GRNsight is primarily designed to depict gene regulatory networks that contain just transcription factors and that can be represented by a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF 1” or “ABF-1” would not be considered the same as “ABF1”.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet. The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
+                                            </li>
+                                            <li>
+                                              For unweighted networks in the “network” worksheet, each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell E6 means that FHL1 regulates FKH2.  The “1” in cell C3 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 50 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with regular (pointy) arrowheads. The demonstration file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx">"Demo #1: Unweighted GRN"</a> corresponds to the adjacency matrix shown below.  Follow the link to download the file.
+    
+                                              <br><br>
+                                              <img src="{{ site.baseurl }}/assets/images/Sample_network_worksheet.jpg" alt="network" height="290" width="832" />
+                                              <br><br>
+    
+                                            </li>
+                                            <li>
+                                              When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular (pointy) arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx">Demo #2: Weighted GRN</a> corresponds to the adjacency matrix shown below. Follow the link to download the file.  For the weighted edges to display with different colors and thicknesses, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a class="showSection3">Section 3</a> below.
+    
+                                              <br><br>
+                                              <img src="{{ site.baseurl }}/assets/images/Sample_network_optimized_weights_worksheet.jpg" alt="network_optimized_weights" width="900" />
+                                              <br><br>
+    
+                                            </li>
+                                            <li>
+                                              Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display.  If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.
+                                            </li>
+                                            <li>
+                                              Follow <a href="#yeastract_instructions" data-toggle="collapse">these instructions</a> to download and format a regulation matrix from the YEASTRACT database for use with GRNsight.
                                             </li>
                                           </ul>
                                         </li>
