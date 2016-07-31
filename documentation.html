@@ -291,95 +291,134 @@ description: Learn how to format and upload files to GRNsight, a web application
 
                 <div id="section3Content" class="panel-collapse collapse">
                   <div class="panel-body">
+                    <p>
+                      GRNsight graphs are generated through D3.js, a JavaScript data visualization library.  We have modified the default implementation of D3 to include the following features:
+                    </p>
+
                     <ul>
                       <li>
-                        GRNsight graphs are generated through D3.js, a JavaScript data visualization library.  We have modified the default implementation of D3 to include the following features:
+                        Nodes are rectangular.
                       </li>
-                                  <ul>
-                                      <li>
-                                          Nodes are rectangular.
-                                      </li>
-                                      <li>
-                                          The labels on the nodes are what is found in your “network” or “network_optimized_weights” worksheet, depending on whether you are displaying an unweighted or weighted graph.  GRNsight is <i>case-preserving</i> in that it will keep the capitalization that the user originally entered into the spreadsheet.  The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.
-                                      </li>
-                                      <li>
-                                          The nodes are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
-                                      </li>
-                                      <li>
-                                          Edges are arcs, but when two nodes get close together, the edges become straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.
-                                      </li>
-                                      <li>
-                                          If your adjacency matrix is contained in a worksheet entitled “network” and contains just 1's and 0's, GRNsight will make the edges connecting nodes black with a regular (pointy) arrowhead originating from the transcription factor (columns) to the target gene (rows) in your matrix. (Note that selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.)
-                                      </li>
-                                      <li>
-                                          If your adjacency matrix is contained in a worksheet entitled “network_optimized_weights” and contains real numbers instead of just 1’s to indicate weighted connections, it will adjust the arrowhead type, thickness, and color of the edges as follows:
-                                      </li>
-                                          <ul>
-                                              <li>
-                                                  For positive weights > 0, the edge will be given a regular (pointy) arrowhead to indicate an activation relationship between the two nodes.
-                                              </li>
-                                              <li>
-                                                  For negative weights &lt; 0, the edge will be given a blunt arrowhead (a line segment perpendicular to the edge direction) to indicate a repression relationship between the two nodes.
-                                              </li>
-                                              <li>
-                                                  The thickness of the edge will vary based on the magnitude of the absolute value of the weight.  Larger magnitudes will have thicker edges and smaller magnitudes will have thinner edges.  The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1).
-                                              </li>
-                                              <li>
-                                                  The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene.
-                                              </li>
-                                              <li>
-                                                  For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
-                                              </li>
-                                              <li>
-                                                  If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits.
-                                              </li>
-                                          </ul>
-                                      </li>
-                                      <li>
-                                          Once you have selected the spreadsheet file to be loaded, GRNsight automatically lays out the positions of the nodes and edges based on certain Force Graph Parameters.
-                                      </li>
-                                          <ul>
-                                              <li>
-                                                  <span style="font-weight: bold">Link Distance</span> determines the minimum distance maintained between nodes, i.e., it changes the length of the edges. Smaller numbers specify shorter lengths, larger numbers specify longer lengths. The range of values for this parameter are 1 to 1000 with a default value of 500.
-                                              </li>
-                                              <li>
-                                                  <span style="font-weight: bold">Charge</span> changes the strength of the force that causes the nodes to repel each other. A more negative value causes more repulsion between nodes. The range of values for this parameter are -2000 to 0 with a default value of -1000.
-                                              </li>
-                                              <li>
-                                                  <span style="font-weight: bold">Charge Distance</span> changes the size of the charged area around a node. The larger the number, the larger the size of the charged area around a node that repels other nodes. The range of values for this parameter is 0 to 2000 with a default value of 1000.
-                                              </li>
-                                              <li>
-                                                  <span style="font-weight: bold">Gravity</span> determines the strength of the force holding the nodes to the center of the graph. It varies from 0 (no force) to 1 (maximum force holding the nodes in the center). The default value of this parameter is 0.10.
-                                              </li>
-                                              <li>
-                                                  You may change the values of each of the force graph parameters by moving the sliders back and forth.
-                                              </li>
-                                              <li>
-                                                  Checking the box next to “Lock Force Graph Parameters” locks the current settings of the parameters (positions of the sliders) in place so that they cannot be changed. Unchecking the box unlocks the sliders again. Alternately, you can select the menu item Format > Lock Force Graph Parameters to lock the current settings. A check mark will appear next to the menu item to indicate that they are locked. Selecting the menu item Format > Lock Force Graph Parameters a second time will unlock the sliders again.
-                                              </li>
-                                              <li>
-                                                  Clicking the “Reset Force Graph Parameters” button will restore the default settings. Alternately, you can select the menu item Format > Reset Force Graph Parameters to restore the default settings.
-                                              </li>
-                                              <li>
-                                                  Clicking the "Undo Reset" button will restore the Force Graph Parameter settings that were in place before the Force Graph Parameters were reset either by clicking the button or selecting the menu item. "Undo Reset" is also a menu item under the Format menu.
-                                              </li>
-                                              <li>
-                                                  The force graph parameter sliders, lock force graph parameter sliders check box and menu item, and reset force graph parameter button and menu item are all active before a spreadsheet is loaded. The values set before loading will be used when a spreadsheet is loaded.
-                                              </li>
-                                              <li>
-                                                  Note that reloading the input file with the same Force Graph Parameter settings (even the defaults) will not necessarily lead to the exact same layout of the graph due to some randomness in D3’s layout algorithm.
-                                              </li>
-                                          </ul>
-                                      </li>
-                                      <li>
-                                          You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node's responsiveness to the Force Graph Parameters, double-click on the node.
-                                      </li>
-                                      <li>
-                                          Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, the bounding box for display of the graph has a fixed size.  Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display, although it may just look like “spaghetti”. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display. 
-                                      </li>
-                                  </ul>
-                              </li>
+                      <li>
+                        The labels on the nodes are what is found in your “network” or “network_optimized_weights” worksheet, depending on whether you are displaying an unweighted or weighted graph.  GRNsight is <i>case-preserving</i> in that it will keep the capitalization that the user originally entered into the spreadsheet.  The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.
+                      </li>
+                      <li>
+                        The nodes are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
+                      </li>
+                      <li>
+                        Edges are arcs, but when two nodes get close together, the edges become straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.
+                      </li>
+                    </ul>
+
+                    <p>
+                      Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, the bounding box for display of the graph has a fixed size.  Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display, although it may just look like “spaghetti”. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display. 
+                    </p>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#unweighted_vs_weighted" data-toggle="collapse">
+                            3a. Unweighted and weighted graph display
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="unweighted_vs_weighted" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            If your adjacency matrix is contained in a worksheet entitled “network” and contains just 1's and 0's, GRNsight will make the edges connecting nodes black with a regular (pointy) arrowhead originating from the transcription factor (columns) to the target gene (rows) in your matrix. (Note that selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.)
+                          </p>
+
+                          <p>
+                            If your adjacency matrix is contained in a worksheet entitled “network_optimized_weights” and contains real numbers instead of just 1’s to indicate weighted connections, it will adjust the arrowhead type, thickness, and color of the edges as follows:
+                          </p>
+                          <ul>
+                            <li>
+                              For positive weights > 0, the edge will be given a regular (pointy) arrowhead to indicate an activation relationship between the two nodes.
+                            </li>
+                            <li>
+                              For negative weights &lt; 0, the edge will be given a blunt arrowhead (a line segment perpendicular to the edge direction) to indicate a repression relationship between the two nodes.
+                            </li>
+                            <li>
+                              The thickness of the edge will vary based on the magnitude of the absolute value of the weight.  Larger magnitudes will have thicker edges and smaller magnitudes will have thinner edges.  The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1).
+                            </li>
+                            <li>
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene.
+                            </li>
+                            <li>
+                              For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
+                            </li>
+                            <li>
+                              If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits.
+                            </li>
                           </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#force_graph_parameters" data-toggle="collapse">
+                            3b. Force graph layout parameters
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="force_graph_parameters" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            Once you have selected the spreadsheet file to be loaded, GRNsight automatically lays out the positions of the nodes and edges based on certain Force Graph Parameters.
+                          </p>
+                          <ul>
+                            <li>
+                              <b>Link Distance</b> determines the minimum distance maintained between nodes, i.e., it changes the length of the edges. Smaller numbers specify shorter lengths, larger numbers specify longer lengths. The range of values for this parameter are 1 to 1000 with a default value of 500.
+                            </li>
+                            <li>
+                              <b>Charge</b> changes the strength of the force that causes the nodes to repel each other. A more negative value causes more repulsion between nodes. The range of values for this parameter are -2000 to 0 with a default value of -1000.
+                            </li>
+                            <li>
+                              <b>Charge Distance</b> changes the size of the charged area around a node. The larger the number, the larger the size of the charged area around a node that repels other nodes. The range of values for this parameter is 0 to 2000 with a default value of 1000.
+                            </li>
+                            <li>
+                              <b>Gravity</b> determines the strength of the force holding the nodes to the center of the graph. It varies from 0 (no force) to 1 (maximum force holding the nodes in the center). The default value of this parameter is 0.10.
+                            </li>
+                            <li>
+                              You may change the values of each of the force graph parameters by moving the sliders back and forth.
+                            </li>
+                            <li>
+                              Checking the box next to “Lock Force Graph Parameters” locks the current settings of the parameters (positions of the sliders) in place so that they cannot be changed. Unchecking the box unlocks the sliders again. Alternately, you can select the menu item Format > Lock Force Graph Parameters to lock the current settings. A check mark will appear next to the menu item to indicate that they are locked. Selecting the menu item Format > Lock Force Graph Parameters a second time will unlock the sliders again.
+                            </li>
+                            <li>
+                              Clicking the “Reset Force Graph Parameters” button will restore the default settings. Alternately, you can select the menu item Format > Reset Force Graph Parameters to restore the default settings.
+                            </li>
+                            <li>
+                              Clicking the “Undo Reset” button will restore the Force Graph Parameter settings that were in place before the Force Graph Parameters were reset either by clicking the button or selecting the menu item. “Undo Reset” is also a menu item under the Format menu.
+                            </li>
+                            <li>
+                              The force graph parameter sliders, lock force graph parameter sliders check box and menu item, and reset force graph parameter button and menu item are all active before a spreadsheet is loaded. The values set before loading will be used when a spreadsheet is loaded.
+                            </li>
+                            <li>
+                              Note that reloading the input file with the same Force Graph Parameter settings (even the defaults) will not necessarily lead to the exact same layout of the graph due to some randomness in D3’s layout algorithm.
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#manual_manipulation" data-toggle="collapse">
+                            3c. Manually manipulating the graph
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="manual_manipulation" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          You have the option of manually moving nodes on the graph. Left-click on a node, and with the mouse button depressed, move the node to any position within the graph bounding box. Release the mouse button to leave the node in that position. Once a node has been moved, it will no longer respond to changes in the Force Graph Parameters. To restore the node's responsiveness to the Force Graph Parameters, double-click on the node.
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
