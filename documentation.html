@@ -13,12 +13,12 @@ description: Learn how to format and upload files to GRNsight, a web application
                 <p>
                     GRNsight has been tested with and confirmed to be working in Chrome version 43.0.2357.65 or higher and Firefox version 38.0.1 or higher on Windows 7 and Mac OS X operating systems. It may not work with other browsers, versions, or operating systems.
                 </p>
-                <div class="panel-group" id="accordian"> 
+                <div class="panel-group">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5 class="panel-title" id="section1">
                                 <a href="#section1Content" data-toggle="collapse">
-                                    1. Input Spreadsheet
+                                    1. Formatting the input file
                                 </a>
                             </h5>
                         </div> <!--panel-heading-->
@@ -31,9 +31,22 @@ description: Learn how to format and upload files to GRNsight, a web application
                                     <li>
                                         If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. See <a class="showSection3">Section 3</a> for details on how GRNsight displays the graph.
                                     </li>
-                                    <li>
-                                        If you want to create manually a new file to use with GRNsight, format the file in the following manner:
-                                        <ul>
+                                </ul>
+
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                      <a href="#excel_instructions" data-toggle="collapse">
+                                        1a. Creating a GRNsight input Excel workbook
+                                      </a>
+                                    </h4>
+                                  </div>
+                                  <div id="excel_instructions" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                      <ul>
+                                        <li>
+                                          If you want to create manually a new file to use with GRNsight, format the file in the following manner:
+                                          <ul>
                                             <li>
                                                 GRNsight will only accept Microsoft Excel Workbook (*.xlsx) files.  Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight, nor are any other file formats (*.txt, *.csv, etc.)
                                             </li>
@@ -79,15 +92,18 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                     </li>
                                                 </ul>
                                             </li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                                          </ul>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
 
                                 <div class="panel panel-default">
                                   <div class="panel-heading">
                                     <h4 class="panel-title">
                                       <a href="#yeastract_instructions" data-toggle="collapse">
-                                        1a. Formatting a YEASTRACT Regulation Matrix for Use with GRNsight
+                                        1b. Formatting a YEASTRACT Regulation Matrix for Use with GRNsight
                                       </a>
                                     </h4>
                                   </div> <!--panel-heading-->
@@ -114,12 +130,27 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>Paste the following text into cell A1 "cols regulators/rows targets".</li>
                                         <li>Save your work.  This file is now ready for loading into GRNsight.  You can choose to delete the original worksheet or keep it in your workbook.</li>
                                       </ul>
-                                    </div> <!--panel-body-->
-                                  </div> <!--panel-collapse collapse-->
+                                    </div>
+                                  </div>
                                 </div>
-                            </div> <!--panel-body-->
-                        </div> <!--panel-collapse collapse in-->
-                    </div> <!--panel panel-default-->
+
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                      <a href="#cytoscape_sif_instructions" data-toggle="collapse">
+                                        1c. Formatting a Cytoscape SIF file for use with GRNsight
+                                      </a>
+                                    </h4>
+                                  </div>
+                                  <div id="cytoscape_sif_instructions" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title" id="section2">
