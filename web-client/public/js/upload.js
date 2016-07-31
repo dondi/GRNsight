@@ -104,45 +104,41 @@ $(function () {
     });
   };
 
-  $("#upload").on("change", function (event) {
-    // In google chrome, the value returned from the file input will be C:\fakepath\filename. This while loop
-    // will remove the C:\fakepath\ so that it only displays the file name in the navigation bar.
-    var $upload = $(this),
-        fullFilePath = $upload.val(),
-        fakePathCheck = fullFilePath.search("\\\\") + 1; // 4 \"s enables it to search for a slash character without error
+  var submittedFilename = function ($upload) {
+    var path = $upload.val();
+    var fakePathCheck = path.search("\\\\") + 1;
 
-    // fakePathCheck will return -1 when the character is not found, so will only be -1 when all slashes are gone
-    while (fakePathCheck != 0) { 
-      fullFilePath = fullFilePath.substring(fakePathCheck);
-      fakePathCheck = fullFilePath.search("\\\\") + 1;
+    while (fakePathCheck) {
+      path = path.substring(fakePathCheck);
+      fakePathCheck = path.search("\\\\") + 1;
     }
+
+    return path;
+  };
+
+  $("#upload").on("change", function (event) {
+    var $upload = $(this);
+    var filename = submittedFilename($upload);
+
     reload = ["", ""];
 
     var formData = new FormData();
     formData.append("file", $upload[0].files[0]);
-    loadGrn("/upload", fullFilePath, formData);
+    loadGrn("/upload", filename, formData);
 
     if (window.ga) {
-        window.ga("send", "pageview", {
-            page: "/GRNsight/upload",
-            sessionControl: "start"
-        });
+      window.ga("send", "pageview", {
+        page: "/GRNsight/upload",
+        sessionControl: "start"
+      });
     }
 
     event.preventDefault();
   });
 
-  // TODO Consolidate code with original upload sequence---lots of similarities.
   $("#upload-sif").on("change", function (event) {
     var $upload = $(this);
-    var fullFilePath = $upload.val();
-    var fakePathCheck = fullFilePath.search("\\\\") + 1;
-
-    while (fakePathCheck) {
-      fullFilePath = fullFilePath.substring(fakePathCheck);
-      fakePathCheck = fullFilePath.search("\\\\") + 1;
-    }
-
+    var filename = submittedFilename($upload);
     var formData = new FormData();
     formData.append("file", $upload[0].files[0]);
 
@@ -156,7 +152,7 @@ $(function () {
       crossDomain: true
     }).done(function (network) {
       annotateLinks(network);
-      displayNetwork(network, fullFilePath);
+      displayNetwork(network, filename);
     }).error(function (xhr, status, error) {
       $("#importErrorMessage").text(xhr.responseText);
       $("#importErrorModal").modal("show");
