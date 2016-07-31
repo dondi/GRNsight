@@ -32,22 +32,22 @@ form span {
   top: 1px;
   width: 1350px;
 }
-input.upload[type=file] {
-  display: none;
-}
 .glyphicon {
   min-width: 22px;
 }
-#open-item {
+.dropdown-menu > li > a.upload {
   padding-left: 0;
   padding-right: 0;
 }
-#open {
+.dropdown-menu > li > a.upload > label {
   font-weight: normal;
   margin-bottom: 0;
   padding-left: 20px;
   padding-right: 20px;
   width: 100%;
+}
+.dropdown-menu > li > a.upload > input[type=file] {
+  display: none;
 }
 #fileName {
   color: #000;

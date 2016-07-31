@@ -31,11 +31,11 @@ html
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') File
               ul(class='dropdown-menu' role='menu')
                 li
-                  a(href='#' id='open-item')
+                  a(class='upload' href='#' id='open-item')
                     label(for='upload' id='open')
                       span(class='glyphicon glyphicon-folder-open')
                       | &nbsp; Open
-                    input(class='upload' type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                    input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
                     input(type='hidden' id='service-root' value='#{serviceRoot}')
                 li(class='startDisabled disabled')
                   a(href='#' id='reload')
@@ -48,13 +48,15 @@ html
                     | &nbsp; Import
                   ul(class='dropdown-menu')
                     li
-                      a(href='#' id='importSif')
+                      a(class='upload' href='#' id='importSif')
                         label(for='upload-sif' id='import-sif') SIF…
-                        input(class='upload' type='file' name='upload-sif' id='upload-sif' accept='.sif')
+                        input(type='file' name='upload-sif' id='upload-sif' accept='.sif')
                     li(class='disabled')
-                      a(href='#' id='importGraphMl') GraphML…
+                      a(class='upload' href='#' id='importGraphMl')
+                        label(for='upload-graphml' id='import-graphml') GraphML…
                     li(class='disabled')
-                      a(href='#' id='importGml') GML…
+                      a(class='upload' href='#' id='importGml')
+                        label(for='upload-gml' id='import-gml') GML…
                 li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-export')
