@@ -80,17 +80,17 @@ module.exports = function (app) {
 
       (new multiparty.Form()).parse(req, function (error, fields, files) {
         if (error) {
-          return res.json(400, "There was a problem uploading your file. Please try again.");
+          return res.send(400, "There was a problem uploading your file. Please try again.");
         }
 
         try {
           var input = files.file[0].path;
         } catch (error) {
-          return res.json(400, "No import file selected.");
+          return res.send(400, "No import file selected.");
         }
 
         if (path.extname(input) !== ".sif") {
-          return res.json(400, "The filename does not end in .sif.");
+          return res.send(400, "The filename does not end in .sif.");
         }
 
         fs.readFile(input, { encoding: "utf-8" }, function (error, data) {

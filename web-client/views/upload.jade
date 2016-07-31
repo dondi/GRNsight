@@ -16,7 +16,6 @@ html
       ga("create", "UA-54882218-1", "auto");
   
   body
-
     nav(class='navbar navbar-default' role='navigation')
       div(class='container-fluid')
         div(class='navbar-header')
@@ -187,22 +186,24 @@ html
           input(id='undoReset' type='button' class='btn btn-default btnSidebar' value='Undo Reset' disabled)
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
-    div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
-            input(type='button' class='close' data-dismiss='modal' aria-hidden='true' value='X')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
             h4(class='modal-title') Error
           div(class='modal-body')
             p(id='error')
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
-    div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
-            input(type='button' class='close' data-dismiss='modal' aria-hidden='true' value='X')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
             h4(class='modal-title') Warning
           div(class='modal-body')
             p(id='warningIntro')
@@ -216,7 +217,19 @@ html
                     p(id='warningsList')
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
-            // input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+    div(id='importErrorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
+      div(class='modal-dialog')
+        div(class='modal-content')
+          div(class='modal-header')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+            h4(class='modal-title') Import Error
+          div(class='modal-body')
+            p The following error was encountered during the import attempt:
+            blockquote(id='importErrorMessage')
+            div Please verify that the file being imported is in the right format then try the import again.
+          div(class='modal-footer')
+            input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js')

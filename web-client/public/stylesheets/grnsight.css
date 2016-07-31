@@ -93,6 +93,9 @@ nav.navbar.navbar-default {
 .btnSidebar {
   width: 225px;
 }
+#warningsModal #accordion {
+  margin-bottom: 0;
+}
 .dropdown-submenu {
   position: relative;
 }

@@ -87,17 +87,18 @@ $(function () {
       displayNetwork(network, name);
       previousFile = [url, name, formData]; // Store info about the previous file for use in reload
     }).error(function (xhr, status, error) {
-      var err = JSON.parse(xhr.responseText), 
-          errorString = "Your graph failed to load.<br><br>";
+      var err = JSON.parse(xhr.responseText);
+      var errorString = "Your graph failed to load.<br><br>";
+
       $("#upload").val(""); // De-select the bad file.
-      if (err.errors == undefined) { // will be undefined if an error was thrown before the network was generated 
+      if (!err.errors) { // will be falsy if an error was thrown before the network was generated
         errorString += err;
       } else {
-        var errorArray = err.errors;
-        for(var i = 0; i < errorArray.length; i++) {
-          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
-        }
+        errorString = err.errors.reduce(function (currentErrorString, currentError) {
+          return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
+        }, errorString);
       }
+
       $("#error").html(errorString);
       $("#errorModal").modal("show");
     });
@@ -156,6 +157,9 @@ $(function () {
     }).done(function (network) {
       annotateLinks(network);
       displayNetwork(network, fullFilePath);
+    }).error(function (xhr, status, error) {
+      $("#importErrorMessage").text(xhr.responseText);
+      $("#importErrorModal").modal("show");
     });
 
     event.preventDefault();
@@ -167,16 +171,16 @@ $(function () {
       "we recommend you review your file and ensure that everything looks correct. The graph will be loaded, " +
       "but may not look the way it is expected to look. To view the details " + 
       "of the warning(s), please select the dropdown below.");
-    var warningsString = "";
-    for(var i = 0; i < warnings.length; i++) {
-      warningsString += warnings[i].errorDescription + " <br><br>";
-    }
-    $("#warningsList").html(warningsString);
+
+    $("#warningsList").html(warnings.reduce(function (currentWarningString, currentWarning) {
+      return currentWarningString + currentWarning.errorDescription + "<br><br>";
+    }, ""));
+
     $("#warningsModal").modal("show");
   }
 
-  $("#warningsModal").on("hidden.bs.modal", function() {
-    if( $("#warningsInfo").hasClass("in") ) {
+  $("#warningsModal").on("hidden.bs.modal", function () {
+    if ($("#warningsInfo").hasClass("in")) {
       $("#warningsInfo").removeClass("in");
     }
   });
