@@ -424,69 +424,159 @@ description: Learn how to format and upload files to GRNsight, a web application
               </div>
 
               <div class="panel panel-default">
-                  <div class="panel-heading">
-                      <h4 id="section4" class="panel-title">
-                          <a data-toggle="collapse" href="#section4Content">
-                              4. Interpreting the Results
+                <div class="panel-heading">
+                  <h4 id="section4" class="panel-title">
+                    <a data-toggle="collapse" href="#section4Content">
+                      4. Interpreting the Results
+                    </a>
+                  </h4>
+                </div>
+
+                <div id="section4Content" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <p>
+                      <a href="#section3">Section 3</a> above described how GRNsight uses the data in the adjacency matrix to automatically display a graph.  This section describes how to interpret the results of the resulting gene regulatory network graph biologically, focusing on the demonstration files Demo #3: Unweighted GRN (21 genes, 31 edges) and Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  These two files describe gene regulatory networks from budding yeast, <i>Saccharomyces cerevisiae</i>, and correspond to supplementary data published in the paper, <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, and when displayed by GRNsight, represent interactive versions of Figures 1 and 8 of that paper respectively.
+                    </p>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#visual_inspection" data-toggle="collapse">
+                            4a. Visual inspection of the display
                           </a>
-                      </h4>
-                  </div> <!--panel-heading-->
-                      <div id="section4Content" class="panel-collapse collapse">
-                          <div class="panel-body">
-                              <ul>
-                                  <li>
-                                      <a href="#section3">Section 3</a>  above described how GRNsight uses the data in the adjacency matrix to automatically display a graph.  This section describes how to interpret the results of the resulting gene regulatory network graph biologically, focusing on the demonstration files Demo #3: Unweighted GRN (21 genes, 31 edges) and Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  These two files describe gene regulatory networks from budding yeast, <i>Saccharomyces cerevisiae</i>, and correspond to supplementary data published in the paper, <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, and when displayed by GRNsight, represent interactive versions of Figures 1 and 8 of that paper respectively.
-                                  </li>
-                                  <li>
-                                      The figures shown below give a side-by-side view of the same adjacency matrices laid out by GRNsight and by hand.  The top three figures are derived from Demo #3: Unweighted GRN (21 genes, 31 edges), and the bottom three panels are derived from Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  The left two panels show an example of the automatic layout performed by GRNsight.  The right two panels show the same adjacency matrix laid out by hand in Adobe Illustrator, corresponding to Figure 1 (top right) and Figure 8 (bottom right) of the <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a> paper. The middle two panels started with the automatic layout from GRNsight and then were manually manipulated from within GRNsight to lay them out similarly to the right-hand panels.  The use of GRNsight represents a substantial time savings compared to creating the same figure entirely by hand.
-                                  </li>
-                                  
-                                  <br>
-                                  <table style="width:100%">
-                                        <tr>
-                                          <td><img src="{{ site.baseurl }}/assets/images/Demo-3-auto-layout.jpg" alt="demo-3-auto"  width="327" /></td>
-                                          <td><img src="{{ site.baseurl }}/assets/images/Demo-3-paper-layout.jpg" alt="demo-3-paper"  width="327" /></td> 
-                                          <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig1.jpg" alt="demo-3-illustrator"  width="327" /></td>
-                                        </tr>
-                                        <tr>
-                                          <td><img src="{{ site.baseurl }}/assets/images/Demo-4-auto-layout.jpg" alt="demo-4-auto"  width="327" /></td>
-                                          <td><img src="{{ site.baseurl }}/assets/images/Demo-4-paper-layout.jpg" alt="demo-4-auto"  width="327" /></td> 
-                                          <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig8.jpg" alt="demo-4-auto"  width="327" /></td>
-                                        </tr>
-                                      </table>
-                                  <br><br>
+                        </h4>
+                      </div>
+                      <div id="visual_inspection" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            The figures shown below give a side-by-side view of the same adjacency matrices laid out by GRNsight and by hand.  The top three figures are derived from Demo #3: Unweighted GRN (21 genes, 31 edges), and the bottom three panels are derived from Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data).  The left two panels show an example of the automatic layout performed by GRNsight.  The right two panels show the same adjacency matrix laid out by hand in Adobe Illustrator, corresponding to Figure 1 (top right) and Figure 8 (bottom right) of the <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a> paper. The middle two panels started with the automatic layout from GRNsight and then were manually manipulated from within GRNsight to lay them out similarly to the right-hand panels.  The use of GRNsight represents a substantial time savings compared to creating the same figure entirely by hand.
+                          </p>
 
-                                  <li>
-                                      Viewing the unweighted network (top panel) allows one to make observations about the network structure.  For example, YAP6 has the highest in-degree, being regulated by six other transcription factors.  RAP1 has an out-degree of five, regulating four other transcription factors and itself.  Four genes, AFT1, NRG1, RAP1, and YAP6, regulate themselves.  Many of the transcription factors are involved in regulatory chains, with the longest including five nodes originating at SKN7.  There are several other 4-node chains that originate at CIN5, MAC1, PHD1, SKN7, and YAP1. Finally, there are two feedforward motifs involving CIN5, ROX1, and YAP6 and SKN7, YAP1, and ROX1.  More information about this network can be found in <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a>.
-                                  </li>
+                          <br>
+                          <table style="width:100%">
+                            <tr>
+                              <td><img src="{{ site.baseurl }}/assets/images/Demo-3-auto-layout.jpg" alt="demo-3-auto"  width="327" /></td>
+                              <td><img src="{{ site.baseurl }}/assets/images/Demo-3-paper-layout.jpg" alt="demo-3-paper"  width="327" /></td> 
+                              <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig1.jpg" alt="demo-3-illustrator"  width="327" /></td>
+                            </tr>
+                            <tr>
+                              <td><img src="{{ site.baseurl }}/assets/images/Demo-4-auto-layout.jpg" alt="demo-4-auto"  width="327" /></td>
+                              <td><img src="{{ site.baseurl }}/assets/images/Demo-4-paper-layout.jpg" alt="demo-4-auto"  width="327" /></td> 
+                              <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig8.jpg" alt="demo-4-auto"  width="327" /></td>
+                            </tr>
+                          </table>
+                          <br>
 
-                                  <li>
-                                      The networks with colored edges shown in the bottom panel display the results of a mathematical model, called <a href="http://kdahlquist.github.io/GRNmap/" target="blank">GRNmap</a>, where the expression levels of the individual transcription factors were modeled using mass balance ordinary differential equations with a sigmoidal production function. Each equation in the model included a production rate, a degradation rate, weights that denote the magnitude and type of influence of the connected transcription factors (activation or repression), and a threshold of expression. The differential equation model was fit to published yeast cold shock microarray data from <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> using a penalized nonlinear least squares approach. Model predictions fit the experimental data well, within the 95% confidence interval.  
-                                  </li>
+                          <ul>
+                            <li>
+                              Viewing the unweighted network (top panel) allows one to make observations about the network structure.  For example, YAP6 has the highest in-degree, being regulated by six other transcription factors.  RAP1 has an out-degree of five, regulating four other transcription factors and itself.  Four genes, AFT1, NRG1, RAP1, and YAP6, regulate themselves.  Many of the transcription factors are involved in regulatory chains, with the longest including five nodes originating at SKN7.  There are several other 4-node chains that originate at CIN5, MAC1, PHD1, SKN7, and YAP1. Finally, there are two feedforward motifs involving CIN5, ROX1, and YAP6 and SKN7, YAP1, and ROX1.  More information about this network can be found in <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a>.
+                            </li>
 
-                                  <li>
-                                      In particular, GRNsight is displaying the results of the optimized weight parameters.  Positive weights > 0 represent an activation relationship and are shown by regular (pointy) arrowheads.  One example is that CIN5 activates the expression of MSN1.  Negative weights < 0 represent a repression relationship and are shown by a blunt arrowhead (a line segment perpendicular to the edge direction).  One example is that ABF1 represses the expression of MSN1.
-                                  </li>
+                            <li>
+                              The networks with colored edges shown in the bottom panel display the results of a mathematical model, called <a href="http://kdahlquist.github.io/GRNmap/" target="blank">GRNmap</a>, where the expression levels of the individual transcription factors were modeled using mass balance ordinary differential equations with a sigmoidal production function. Each equation in the model included a production rate, a degradation rate, weights that denote the magnitude and type of influence of the connected transcription factors (activation or repression), and a threshold of expression. The differential equation model was fit to published yeast cold shock microarray data from <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> using a penalized nonlinear least squares approach. Model predictions fit the experimental data well, within the 95% confidence interval.  
+                            </li>
 
-                                  <li>
-                                      The thicknesses of the edges also vary based on the magnitude of the absolute value of the weight. Larger magnitudes have thicker edges and smaller magnitudes have thinner edges. The way that GRNsight determines the edge thickness is as follows. GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1. GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1). For example, in the bottom panel, the thickest edge corresponds to the repression of the expression of MSN1 by ABF1 because it has the highest magnitude weight parameter of -2.97.
-                                  </li>
+                            <li>
+                              In particular, GRNsight is displaying the results of the optimized weight parameters.  Positive weights > 0 represent an activation relationship and are shown by regular (pointy) arrowheads.  One example is that CIN5 activates the expression of MSN1.  Negative weights < 0 represent a repression relationship and are shown by a blunt arrowhead (a line segment perpendicular to the edge direction).  One example is that ABF1 represses the expression of MSN1.
+                            </li>
 
-                                  <li>
-                                      The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
-                                  </li>
+                            <li>
+                              The thicknesses of the edges also vary based on the magnitude of the absolute value of the weight. Larger magnitudes have thicker edges and smaller magnitudes have thinner edges. The way that GRNsight determines the edge thickness is as follows. GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1. GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1). For example, in the bottom panel, the thickest edge corresponds to the repression of the expression of MSN1 by ABF1 because it has the highest magnitude weight parameter of -2.97.
+                            </li>
 
-                                  <li>
-                                      Because of this visualization of the weight parameters, one can make some interesting observations about the behavior of the network.  The expression of several genes is controlled by a balance of activation and repression by different regulators.  For example, the expression of MSN1 is strongly activated by CIN5, but even more strongly repressed by ABF1.  Furthermore, some transcription factors themselves act both as activators of some targets and repressors of other targets.  For example, RAP1 activates the expression of MSN4 and RPH1, but represses the expression of AFT1, HSF1, and itself.  <a href="http://www.yeastgenome.org/locus/S000005160/overview" target="blank">RAP1 is known to act as both an activator and a repressor.</a>  Thus, GRNsight enables one to interpret the weight parameters more easily than one could from the adjacency matrix alone.  For more information about the interpretation of the model results, see <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a>.
-                                  </li>
+                            <li>
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
+                            </li>
 
-                                  <li>
-                                      Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and grey representing no significant change in expression relative to the control).  This feature has not yet been implemented in GRNsight, but is currently under development for version 2.
-                                  </li>
+                            <li>
+                              Because of this visualization of the weight parameters, one can make some interesting observations about the behavior of the network.  The expression of several genes is controlled by a balance of activation and repression by different regulators.  For example, the expression of MSN1 is strongly activated by CIN5, but even more strongly repressed by ABF1.  Furthermore, some transcription factors themselves act both as activators of some targets and repressors of other targets.  For example, RAP1 activates the expression of MSN4 and RPH1, but represses the expression of AFT1, HSF1, and itself.  <a href="http://www.yeastgenome.org/locus/S000005160/overview" target="blank">RAP1 is known to act as both an activator and a repressor.</a>  Thus, GRNsight enables one to interpret the weight parameters more easily than one could from the adjacency matrix alone.  For more information about the interpretation of the model results, see <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a>.
+                            </li>
 
-                              </ul>
-                          </div>
+                            <li>
+                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and grey representing no significant change in expression relative to the control).  This feature has not yet been implemented in GRNsight, but is currently under development for version 2.
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#graph_statistics" data-toggle="collapse">
+                            4b. Graph statistics
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="graph_statistics" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          (to be written)
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a href="#exporting" data-toggle="collapse">
+                      5. Exporting to other file formats
+                    </a>
+                  </h4>
+                </div>
+                <div id="exporting" class="panel-collapse collapse">
+                  <div class="panel-body">
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#cytoscape_sif_export" data-toggle="collapse">
+                            5a. Exporting data to Cytoscape SIF format
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="cytoscape_sif_export" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          (to be written)
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#graphml_export" data-toggle="collapse">
+                            5b. Exporting data to GraphML format
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="graphml_export" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          (to be written)
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#gml_export" data-toggle="collapse">
+                            5c. Exporting data to GML format
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="gml_export" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          (to be written)
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
               </div>
 
               <div class="panel panel-default">
