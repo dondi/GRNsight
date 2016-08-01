@@ -186,12 +186,108 @@ var unweightedTestGraphMl = [
   '    <edge source="C" target="B"/>',
   '  </graph>',
   '</graphml>'
-].join("\n") + "\n";
+].join("\n");
+
+var weightedTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+  '  <graph edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id">-0.75</data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id">0.25</data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id">0.5</data>',
+  '    </edge>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
+
+var unweightedTestGraphMlWithCycle = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <graph edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <node id="E"/>',
+  '    <edge source="A" target="A"/>',
+  '    <edge source="B" target="A"/>',
+  '    <edge source="B" target="C"/>',
+  '    <edge source="C" target="B"/>',
+  '    <edge source="D" target="D"/>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
+
+var weightedTestGraphMlWithCycle = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+  '  <graph edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <node id="E"/>',
+  '    <edge source="A" target="A">',
+  '      <data key="edge-value-id">0.875</data>',
+  '    </edge>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id">-0.75</data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id">0.25</data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id">0.5</data>',
+  '    </edge>',
+  '    <edge source="D" target="D">',
+  '      <data key="edge-value-id">-0.375</data>',
+  '    </edge>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
 
 describe("Import from GraphML", function () {
   it("should import unweighted networks from GraphML correctly", function () {
     expect(
       importController.graphMlToGrnsight(unweightedTestGraphMl)
     ).to.deep.equal(expectedUnweightedNetwork);
+  });
+
+  it("should import weighted networks from GraphML correctly", function () {
+    expect(
+      importController.graphMlToGrnsight(weightedTestGraphMl)
+    ).to.deep.equal(expectedWeightedNetwork);
+  });
+
+  it("should import unweighted networks with cycles from GraphML correctly", function () {
+    expect(
+      importController.graphMlToGrnsight(unweightedTestGraphMlWithCycle)
+    ).to.deep.equal(expectedUnweightedNetworkWithCycle);
+  });
+
+  it("should import weighted networks with cycles from GraphML correctly", function () {
+    expect(
+      importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
+    ).to.deep.equal(expectedWeightedNetworkWithCycle);
   });
 });
