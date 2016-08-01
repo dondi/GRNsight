@@ -339,24 +339,29 @@ $(function () {
     return filename;
   };
 
-  $("#exportAsSif").click(function (event) {
-    if (!$(".startDisabled").hasClass("disabled")) {
-      var networkToExport = flattenNetwork(currentNetwork);
-      var exportForm = $("<form></form>").attr({
-        method: "POST",
-        action: $("#service-root").val() + "/export-to-sif"
-      }).append($("<input></input>").attr({
-        type: "hidden",
-        name: "filename",
-        value: filenameWithExtension("sif")
-      })).append($("<input></input>").attr({
-        type: "hidden",
-        name: "network",
-        value: JSON.stringify(networkToExport)
-      }));
-      $("body").append(exportForm);
-      exportForm.submit();
-      exportForm.remove();
-    }
-  });
+  var performExport = function (route, extension) {
+    return function (event) {
+      if (!$(".startDisabled").hasClass("disabled")) {
+        var networkToExport = flattenNetwork(currentNetwork);
+        var exportForm = $("<form></form>").attr({
+          method: "POST",
+          action: $("#service-root").val() + "/" + route
+        }).append($("<input></input>").attr({
+          type: "hidden",
+          name: "filename",
+          value: filenameWithExtension(extension)
+        })).append($("<input></input>").attr({
+          type: "hidden",
+          name: "network",
+          value: JSON.stringify(networkToExport)
+        }));
+        $("body").append(exportForm);
+        exportForm.submit();
+        exportForm.remove();
+      }
+    };
+  };
+
+  $("#exportAsSif").click(performExport("export-to-sif", "sif"));
+  $("#exportAsGraphMl").click(performExport("export-to-graphml", "graphml"));
 });

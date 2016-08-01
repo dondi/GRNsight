@@ -1,6 +1,17 @@
 var grnsightToSif = require(__dirname + "/exporters/sif");
 var grnsightToGraphMl = require(__dirname + "/exporters/graphml");
 
+var convertResponse = function (app, req, res, converter) {
+  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+  return res.status(200).send(converter(req.body));
+};
+
+var exportResponse = function (app, req, res, converter) {
+  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+  res.header('Content-Disposition', 'attachment;filename="' + req.body.filename + '"');
+  return res.status(200).send(converter(JSON.parse(req.body.network)));
+};
+
 var generalExportError = function (res, error) {
   return res.json(400, {
     message: "Invalid GRNsight format.",
@@ -17,8 +28,8 @@ module.exports = function (app) {
     // the /export-* ones wrap this around a file download.
     app.post("/convert-to-sif", function (req, res) {
       try {
-        res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
-        return res.status(200).send(grnsightToSif(req.body));
+        res.header('Content-Type', "text/plain");
+        return convertResponse(app, req, res, grnsightToSif);
       } catch (error) {
         return generalExportError(res, error);
       }
@@ -26,9 +37,26 @@ module.exports = function (app) {
 
     app.post("/export-to-sif", function (req, res) {
       try {
-        res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
-        res.header('Content-Disposition', 'attachment;filename="' + req.body.filename + '"');
-        return res.status(200).send(grnsightToSif(JSON.parse(req.body.network)));
+        res.header('Content-Type', "text/plain");
+        return exportResponse(app, req, res, grnsightToSif);
+      } catch (error) {
+        return generalExportError(res, error);
+      }
+    });
+
+    app.post("/convert-to-graphml", function (req, res) {
+      try {
+        res.header('Content-Type', "text/xml");
+        return convertResponse(app, req, res, grnsightToGraphMl);
+      } catch (error) {
+        return generalExportError(res, error);
+      }
+    });
+
+    app.post("/export-to-graphml", function (req, res) {
+      try {
+        res.header('Content-Type', "text/xml");
+        return exportResponse(app, req, res, grnsightToGraphMl);
       } catch (error) {
         return generalExportError(res, error);
       }
