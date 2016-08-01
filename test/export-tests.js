@@ -77,62 +77,176 @@ var weightedTestNetworkWithCycle = {
 
 describe("Export to SIF", function () {
   it("should export unweighted networks to SIF correctly", function () {
-    var sifLines = exportController.grnsightToSif(unweightedTestNetwork).split("\n");
-    expect(sifLines[0]).to.equal("A");
-    expect(sifLines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
-    expect(sifLines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
-    expect(sifLines[3]).to.equal("D");
+    var lines = exportController.grnsightToSif(unweightedTestNetwork).split("\n");
+    expect(lines[0]).to.equal("A");
+    expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
+    expect(lines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
+    expect(lines[3]).to.equal("D");
   });
 
   it("should export weighted networks to SIF correctly", function () {
-    var sifLines = exportController.grnsightToSif(weightedTestNetwork).split("\n");
-    expect(sifLines[0]).to.equal("A");
-    expect(sifLines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
-    expect(sifLines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
-    expect(sifLines[3].split("\t")).to.deep.equal([ "C", "0.5", "B" ]);
-    expect(sifLines[4]).to.equal("D");
+    var lines = exportController.grnsightToSif(weightedTestNetwork).split("\n");
+    expect(lines[0]).to.equal("A");
+    expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
+    expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
+    expect(lines[3].split("\t")).to.deep.equal([ "C", "0.5", "B" ]);
+    expect(lines[4]).to.equal("D");
   });
 
   it("should export unweighted networks with cycles to SIF correctly", function () {
-    var sifLines = exportController.grnsightToSif(unweightedTestNetworkWithCycle).split("\n");
-    expect(sifLines[0].split("\t")).to.deep.equal([ "A", "pd", "A" ]);
-    expect(sifLines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
-    expect(sifLines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
-    expect(sifLines[3].split("\t")).to.deep.equal([ "D", "pd", "D" ]);
-    expect(sifLines[4]).to.equal("E");
+    var lines = exportController.grnsightToSif(unweightedTestNetworkWithCycle).split("\n");
+    expect(lines[0].split("\t")).to.deep.equal([ "A", "pd", "A" ]);
+    expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
+    expect(lines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
+    expect(lines[3].split("\t")).to.deep.equal([ "D", "pd", "D" ]);
+    expect(lines[4]).to.equal("E");
   });
 
   it("should export weighted networks with cycles to SIF correctly", function () {
-    var sifLines = exportController.grnsightToSif(weightedTestNetworkWithCycle).split("\n");
-    expect(sifLines[0].split("\t")).to.deep.equal([ "A", "0.875", "A" ]);
-    expect(sifLines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
-    expect(sifLines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
-    expect(sifLines[3].split("\t")).to.deep.equal([ "C", "0.5", "B" ]);
-    expect(sifLines[4].split("\t")).to.deep.equal([ "D", "-0.375", "D" ]);
-    expect(sifLines[5]).to.equal("E");
+    var lines = exportController.grnsightToSif(weightedTestNetworkWithCycle).split("\n");
+    expect(lines[0].split("\t")).to.deep.equal([ "A", "0.875", "A" ]);
+    expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
+    expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
+    expect(lines[3].split("\t")).to.deep.equal([ "C", "0.5", "B" ]);
+    expect(lines[4].split("\t")).to.deep.equal([ "D", "-0.375", "D" ]);
+    expect(lines[5]).to.equal("E");
   });
 });
 
 describe("Export to GraphML", function () {
   it("should export unweighted networks to GraphML correctly", function () {
-    var graphMlLines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
+    var lines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
       return line.trim();
     });
 
-    expect(graphMlLines[0]).to.equal('<?xml version="1.0" encoding="UTF-8"?>');
-    expect(graphMlLines[1]).to.equal('<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
-      'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-      'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
-      'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">');
-    expect(graphMlLines[2]).to.equal('<graph edgedefault="directed">');
-    expect(graphMlLines[3]).to.equal('<node id="A"/>');
-    expect(graphMlLines[4]).to.equal('<node id="B"/>');
-    expect(graphMlLines[5]).to.equal('<node id="C"/>');
-    expect(graphMlLines[6]).to.equal('<node id="D"/>');
-    expect(graphMlLines[7]).to.equal('<edge source="C" target="B"/>');
-    expect(graphMlLines[8]).to.equal('<edge source="B" target="A"/>');
-    expect(graphMlLines[9]).to.equal('<edge source="B" target="C"/>');
-    expect(graphMlLines[10]).to.equal('</graph>');
-    expect(graphMlLines[11]).to.equal('</graphml>');
+    var expectedGraphMlLines = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+        'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+        'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      '<graph edgedefault="directed">',
+      '<node id="A"/>',
+      '<node id="B"/>',
+      '<node id="C"/>',
+      '<node id="D"/>',
+      '<edge source="C" target="B"/>',
+      '<edge source="B" target="A"/>',
+      '<edge source="B" target="C"/>',
+      '</graph>',
+      '</graphml>'
+    ];
+
+    lines.forEach(function (line, index) {
+      expect(line).to.equal(expectedGraphMlLines[index]);
+    });
+  });
+
+  it("should export weighted networks to GraphML correctly", function () {
+    var lines = exportController.grnsightToGraphMl(weightedTestNetwork).split("\n").map(function (line) {
+      return line.trim();
+    });
+
+    var expectedGraphMlLines = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+        'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+        'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      '<key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+      '<graph edgedefault="directed">',
+      '<node id="A"/>',
+      '<node id="B"/>',
+      '<node id="C"/>',
+      '<node id="D"/>',
+      '<edge source="C" target="B">',
+      '<data key="edge-value-id">0.5</data>',
+      '</edge>',
+      '<edge source="B" target="A">',
+      '<data key="edge-value-id">-0.75</data>',
+      '</edge>',
+      '<edge source="B" target="C">',
+      '<data key="edge-value-id">0.25</data>',
+      '</edge>',
+      '</graph>',
+      '</graphml>'
+    ];
+
+    lines.forEach(function (line, index) {
+      expect(line).to.equal(expectedGraphMlLines[index]);
+    });
+  });
+
+  it("should export unweighted networks with cycles to GraphML correctly", function () {
+    var lines = exportController.grnsightToGraphMl(unweightedTestNetworkWithCycle).split("\n").map(function (line) {
+      return line.trim();
+    });
+
+    var expectedGraphMlLines = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+        'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+        'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      '<graph edgedefault="directed">',
+      '<node id="A"/>',
+      '<node id="B"/>',
+      '<node id="C"/>',
+      '<node id="D"/>',
+      '<node id="E"/>',
+      '<edge source="C" target="B"/>',
+      '<edge source="B" target="A"/>',
+      '<edge source="B" target="C"/>',
+      '<edge source="D" target="D"/>',
+      '<edge source="A" target="A"/>',
+      '</graph>',
+      '</graphml>'
+    ];
+
+    lines.forEach(function (line, index) {
+      expect(line).to.equal(expectedGraphMlLines[index]);
+    });
+  });
+
+  it("should export weighted networks with cycles to GraphML correctly", function () {
+    var lines = exportController.grnsightToGraphMl(weightedTestNetworkWithCycle).split("\n").map(function (line) {
+      return line.trim();
+    });
+
+    var expectedGraphMlLines = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+        'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+        'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      '<key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+      '<graph edgedefault="directed">',
+      '<node id="A"/>',
+      '<node id="B"/>',
+      '<node id="C"/>',
+      '<node id="D"/>',
+      '<node id="E"/>',
+      '<edge source="C" target="B">',
+      '<data key="edge-value-id">0.5</data>',
+      '</edge>',
+      '<edge source="B" target="A">',
+      '<data key="edge-value-id">-0.75</data>',
+      '</edge>',
+      '<edge source="B" target="C">',
+      '<data key="edge-value-id">0.25</data>',
+      '</edge>',
+      '<edge source="D" target="D">',
+      '<data key="edge-value-id">-0.375</data>',
+      '</edge>',
+      '<edge source="A" target="A">',
+      '<data key="edge-value-id">0.875</data>',
+      '</edge>',
+      '</graph>',
+      '</graphml>'
+    ];
+
+    lines.forEach(function (line, index) {
+      expect(line).to.equal(expectedGraphMlLines[index]);
+    });
   });
 });
