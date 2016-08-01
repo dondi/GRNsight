@@ -112,3 +112,27 @@ describe("Export to SIF", function () {
     expect(sifLines[5]).to.equal("E");
   });
 });
+
+describe("Export to GraphML", function () {
+  it("should export unweighted networks to GraphML correctly", function () {
+    var graphMlLines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
+      return line.trim();
+    });
+
+    expect(graphMlLines[0]).to.equal('<?xml version="1.0" encoding="UTF-8"?>');
+    expect(graphMlLines[1]).to.equal('<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+      'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+      'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+      'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">');
+    expect(graphMlLines[2]).to.equal('<graph edgedefault="directed">');
+    expect(graphMlLines[3]).to.equal('<node id="A"/>');
+    expect(graphMlLines[4]).to.equal('<node id="B"/>');
+    expect(graphMlLines[5]).to.equal('<node id="C"/>');
+    expect(graphMlLines[6]).to.equal('<node id="D"/>');
+    expect(graphMlLines[7]).to.equal('<edge source="C" target="B"/>');
+    expect(graphMlLines[8]).to.equal('<edge source="B" target="A"/>');
+    expect(graphMlLines[9]).to.equal('<edge source="B" target="C"/>');
+    expect(graphMlLines[10]).to.equal('</graph>');
+    expect(graphMlLines[11]).to.equal('</graphml>');
+  });
+});
