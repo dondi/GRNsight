@@ -1,55 +1,6 @@
 var expect = require("chai").expect;
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 
-var unweightedTestSif = [
-  "A",
-  [ "B", "pd", "A", "C" ].join("\t"),
-  [ "C", "pd", "B" ].join("\t"),
-  "D"
-].join("\n") + "\n";
-
-var weightedTestSif = [
-  "A",
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "0.25", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  "D"
-].join("\n") + "\n";
-
-var inconsistentlyWeightedTestSif = [
-  "A",
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "pd", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  "D"
-].join("\n") + "\n";
-
-var unweightedTestSifWithCycle = [
-  [ "A", "pd", "A" ].join("\t"),
-  [ "B", "pd", "A", "C" ].join("\t"),
-  [ "C", "pd", "B" ].join("\t"),
-  [ "D", "pd", "D" ].join("\t"),
-  "E"
-].join("\n") + "\n";
-
-var weightedTestSifWithCycle = [
-  [ "A", "0.875", "A" ].join("\t"),
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "0.25", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  [ "D", "-0.375", "D" ].join("\t"),
-  "E"
-].join("\n") + "\n";
-
-var inconsistentlyWeightedTestSifWithCycle = [
-  [ "A", "0.875", "A" ].join("\t"),
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "0.25", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  [ "D", "pd", "D" ].join("\t"),
-  "E"
-].join("\n") + "\n";
-
 var expectedUnweightedNetwork = {
   genes: [
     { name: "A" },
@@ -132,6 +83,55 @@ var expectedWeightedNetworkWithCycle = {
   sheetType: "weighted"
 };
 
+var unweightedTestSif = [
+  "A",
+  [ "B", "pd", "A", "C" ].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  "D"
+].join("\n") + "\n";
+
+var weightedTestSif = [
+  "A",
+  [ "B", "-0.75", "A" ].join("\t"),
+  [ "B", "0.25", "C" ].join("\t"),
+  [ "C", "0.5", "B" ].join("\t"),
+  "D"
+].join("\n") + "\n";
+
+var inconsistentlyWeightedTestSif = [
+  "A",
+  [ "B", "-0.75", "A" ].join("\t"),
+  [ "B", "pd", "C" ].join("\t"),
+  [ "C", "0.5", "B" ].join("\t"),
+  "D"
+].join("\n") + "\n";
+
+var unweightedTestSifWithCycle = [
+  [ "A", "pd", "A" ].join("\t"),
+  [ "B", "pd", "A", "C" ].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  [ "D", "pd", "D" ].join("\t"),
+  "E"
+].join("\n") + "\n";
+
+var weightedTestSifWithCycle = [
+  [ "A", "0.875", "A" ].join("\t"),
+  [ "B", "-0.75", "A" ].join("\t"),
+  [ "B", "0.25", "C" ].join("\t"),
+  [ "C", "0.5", "B" ].join("\t"),
+  [ "D", "-0.375", "D" ].join("\t"),
+  "E"
+].join("\n") + "\n";
+
+var inconsistentlyWeightedTestSifWithCycle = [
+  [ "A", "0.875", "A" ].join("\t"),
+  [ "B", "-0.75", "A" ].join("\t"),
+  [ "B", "0.25", "C" ].join("\t"),
+  [ "C", "0.5", "B" ].join("\t"),
+  [ "D", "pd", "D" ].join("\t"),
+  "E"
+].join("\n") + "\n";
+
 describe("Import from SIF", function () {
   it("should import unweighted networks from SIF correctly", function () {
     expect(
@@ -167,5 +167,31 @@ describe("Import from SIF", function () {
     expect(
       importController.sifToGrnsight(inconsistentlyWeightedTestSifWithCycle)
     ).to.deep.equal(expectedUnweightedNetworkWithCycle);
+  });
+});
+
+var unweightedTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <graph edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A"/>',
+  '    <edge source="B" target="C"/>',
+  '    <edge source="C" target="B"/>',
+  '  </graph>',
+  '</graphml>'
+].join("\n") + "\n";
+
+describe("Import from GraphML", function () {
+  it("should import unweighted networks from GraphML correctly", function () {
+    expect(
+      importController.graphMlToGrnsight(unweightedTestGraphMl)
+    ).to.deep.equal(expectedUnweightedNetwork);
   });
 });
