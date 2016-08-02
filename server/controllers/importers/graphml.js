@@ -58,11 +58,15 @@ module.exports = function (graphml) {
   }
 
   if (graph.edge) {
-    network.links = graph.edge.map(function (edge) {
+    graph.edge.forEach(function (edge) {
       var link = {
         source: geneNames.indexOf(edge.$.source),
         target: geneNames.indexOf(edge.$.target)
       };
+
+      if (link.source === constants.NOT_FOUND || link.target === constants.NOT_FOUND) {
+        return;
+      }
 
       if (network.sheetType === constants.WEIGHTED) {
         link.value = +edge.data.filter(function (data) {
@@ -70,7 +74,7 @@ module.exports = function (graphml) {
         })[0]._;
       }
 
-      return link;
+      network.links.push(link);
     });
   }
 

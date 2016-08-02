@@ -325,4 +325,61 @@ describe("Import from GraphML", function () {
       importController.graphMlToGrnsight(nanWeight).warnings
     ).to.deep.equal([EDGES_WITHOUT_WEIGHTS_WARNING]);
   });
+
+  it("should ignore unsupported GraphML features", function () {
+    var fs = require("fs");
+    var UTF8 = { encoding: "utf-8" };
+
+    fs.readFile(__dirname + "/../test-files/import-samples/hyper.graphml", UTF8, function (error, data) {
+      expect(
+        importController.graphMlToGrnsight(data)
+      ).to.deep.equal({
+        genes: [
+          { name: "n0" },
+          { name: "n1" },
+          { name: "n2" },
+          { name: "n3" },
+          { name: "n4" },
+          { name: "n5" },
+          { name: "n6" }
+        ],
+
+        links: [
+          { source: 0, target: 4 }
+        ],
+
+        errors: [],
+        warnings: [],
+        sheetType: "unweighted"
+      }); // Look ma, no hyperedges.
+    });
+
+    fs.readFile(__dirname + "/../test-files/import-samples/nested.graphml", UTF8, function (error, data) {
+      expect(
+        importController.graphMlToGrnsight(data)
+      ).to.deep.equal({
+        genes: [
+          { name: "n0" },
+          { name: "n1" },
+          { name: "n2" },
+          { name: "n3" },
+          { name: "n4" },
+          { name: "n5" },
+          { name: "n6" }
+        ],
+
+        links: [
+          { source: 0, target: 2 },
+          { source: 0, target: 1 },
+          { source: 1, target: 3 },
+          { source: 3, target: 2 },
+          { source: 2, target: 4 }
+        ],
+
+        errors: [],
+        warnings: [],
+        sheetType: "unweighted"
+      }); // Look ma, no nested graphs (nor edges that refer to them).
+    });
+  });
 });
