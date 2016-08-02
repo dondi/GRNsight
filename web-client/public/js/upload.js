@@ -116,6 +116,17 @@ $(function () {
     return path;
   };
 
+  var uploadEpilogue = function (event) {
+    if (window.ga) {
+      window.ga("send", "pageview", {
+        page: "/GRNsight/upload",
+        sessionControl: "start"
+      });
+    }
+
+    event.preventDefault();
+  };
+
   $("#upload").on("change", function (event) {
     var $upload = $(this);
     var filename = submittedFilename($upload);
@@ -126,14 +137,7 @@ $(function () {
     formData.append("file", $upload[0].files[0]);
     loadGrn("/upload", filename, formData);
 
-    if (window.ga) {
-      window.ga("send", "pageview", {
-        page: "/GRNsight/upload",
-        sessionControl: "start"
-      });
-    }
-
-    event.preventDefault();
+    uploadEpilogue(event);
   });
 
   // TODO More consolidation possible, esp. if adding GA and implementing reload for imports
@@ -160,7 +164,7 @@ $(function () {
         $("#importErrorModal").modal("show");
       });
 
-      event.preventDefault();
+      uploadEpilogue(event);
     };
   };
 
