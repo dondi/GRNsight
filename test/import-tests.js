@@ -88,7 +88,7 @@ var unweightedTestSif = [
   [ "B", "pd", "A", "C" ].join("\t"),
   [ "C", "pd", "B" ].join("\t"),
   "D"
-].join("\n") + "\n";
+].join("\n");
 
 var weightedTestSif = [
   "A",
@@ -96,7 +96,7 @@ var weightedTestSif = [
   [ "B", "0.25", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
   "D"
-].join("\n") + "\n";
+].join("\n");
 
 var inconsistentlyWeightedTestSif = [
   "A",
@@ -104,7 +104,7 @@ var inconsistentlyWeightedTestSif = [
   [ "B", "pd", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
   "D"
-].join("\n") + "\n";
+].join("\n");
 
 var unweightedTestSifWithCycle = [
   [ "A", "pd", "A" ].join("\t"),
@@ -112,7 +112,7 @@ var unweightedTestSifWithCycle = [
   [ "C", "pd", "B" ].join("\t"),
   [ "D", "pd", "D" ].join("\t"),
   "E"
-].join("\n") + "\n";
+].join("\n");
 
 var weightedTestSifWithCycle = [
   [ "A", "0.875", "A" ].join("\t"),
@@ -121,7 +121,7 @@ var weightedTestSifWithCycle = [
   [ "C", "0.5", "B" ].join("\t"),
   [ "D", "-0.375", "D" ].join("\t"),
   "E"
-].join("\n") + "\n";
+].join("\n");
 
 var inconsistentlyWeightedTestSifWithCycle = [
   [ "A", "0.875", "A" ].join("\t"),
@@ -130,7 +130,7 @@ var inconsistentlyWeightedTestSifWithCycle = [
   [ "C", "0.5", "B" ].join("\t"),
   [ "D", "pd", "D" ].join("\t"),
   "E"
-].join("\n") + "\n";
+].join("\n");
 
 describe("Import from SIF", function () {
   it("should import unweighted networks from SIF correctly", function () {
