@@ -42,7 +42,7 @@ module.exports = function (graphml) {
     });
   }
 
-  if (graph.$.edgedefault !== "directed") {
+  if (!graph.$ || graph.$.edgedefault !== "directed") {
     network.warnings.push({
       warningCode: "EDGE_DEFAULT_NOT_DIRECTED",
       errorDescription: "GRNsight interprets the graph as directed unconditionally."
