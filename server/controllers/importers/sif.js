@@ -20,8 +20,8 @@ var sifNetworkType = function (sifEntries) {
 };
 
 module.exports = function (sif) {
-  var entries = sif.split("\n").map(function (line) {
-    return line.split("\t");
+  var entries = sif.match(/[^\r\n]+/g).map(function (line) {
+    return line.match(/[^\t]+/g);
   });
 
   var genes = [];

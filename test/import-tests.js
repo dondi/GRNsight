@@ -88,7 +88,7 @@ var unweightedTestSif = [
   [ "B", "pd", "A", "C" ].join("\t"),
   [ "C", "pd", "B" ].join("\t"),
   "D"
-].join("\n");
+].join("\r\n"); // Mix up linebreak types to test normalization.
 
 var weightedTestSif = [
   "A",
@@ -104,7 +104,7 @@ var inconsistentlyWeightedTestSif = [
   [ "B", "pd", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
   "D"
-].join("\n");
+].join("\r\n");
 
 var unweightedTestSifWithCycle = [
   [ "A", "pd", "A" ].join("\t"),
@@ -112,7 +112,7 @@ var unweightedTestSifWithCycle = [
   [ "C", "pd", "B" ].join("\t"),
   [ "D", "pd", "D" ].join("\t"),
   "E"
-].join("\n");
+].join("\r\n");
 
 var weightedTestSifWithCycle = [
   [ "A", "0.875", "A" ].join("\t"),
@@ -121,7 +121,7 @@ var weightedTestSifWithCycle = [
   [ "C", "0.5", "B" ].join("\t"),
   [ "D", "-0.375", "D" ].join("\t"),
   "E"
-].join("\n");
+].join("\r");
 
 var inconsistentlyWeightedTestSifWithCycle = [
   [ "A", "0.875", "A" ].join("\t"),
