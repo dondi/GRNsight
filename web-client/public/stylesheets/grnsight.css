@@ -53,6 +53,10 @@ form span {
   color: #000;
   cursor: text;
 }
+.not-yet-implemented,
+.nav > li.not-yet-implemented {
+  display: none;
+}
 nav.navbar.navbar-default {
   background-color: #dfebe5;
   border-color: #dfebe5;
