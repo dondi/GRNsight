@@ -136,30 +136,36 @@ $(function () {
     event.preventDefault();
   });
 
-  $("#upload-sif").on("change", function (event) {
-    var $upload = $(this);
-    var filename = submittedFilename($upload);
-    var formData = new FormData();
-    formData.append("file", $upload[0].files[0]);
+  // TODO More consolidation possible, esp. if adding GA and implementing reload for imports
+  var uploadHandler = function (uploadRoute) {
+    return function (event) {
+      var $upload = $(this);
+      var filename = submittedFilename($upload);
+      var formData = new FormData();
+      formData.append("file", $upload[0].files[0]);
 
-    var fullUrl = $("#service-root").val() + "/upload-sif";
-    $.ajax({
-      url: fullUrl,
-      data: formData,
-      processData: false,
-      contentType: false,
-      type: "POST",
-      crossDomain: true
-    }).done(function (network) {
-      annotateLinks(network);
-      displayNetwork(network, filename);
-    }).error(function (xhr, status, error) {
-      $("#importErrorMessage").text(xhr.responseText);
-      $("#importErrorModal").modal("show");
-    });
+      var fullUrl = $("#service-root").val() + "/" + uploadRoute;
+      $.ajax({
+        url: fullUrl,
+        data: formData,
+        processData: false,
+        contentType: false,
+        type: "POST",
+        crossDomain: true
+      }).done(function (network) {
+        annotateLinks(network);
+        displayNetwork(network, filename);
+      }).error(function (xhr, status, error) {
+        $("#importErrorMessage").text(xhr.responseText);
+        $("#importErrorModal").modal("show");
+      });
 
-    event.preventDefault();
-  });
+      event.preventDefault();
+    };
+  };
+
+  $("#upload-sif").on("change", uploadHandler("upload-sif"));
+  $("#upload-graphml").on("change", uploadHandler("upload-graphml"));
 
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 

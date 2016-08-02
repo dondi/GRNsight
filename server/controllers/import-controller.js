@@ -7,7 +7,7 @@ module.exports = function (app) {
     var path = require("path");
     var fs = require("fs");
 
-    app.post("/upload-sif", function (req, res) {
+    var performUpload = function (req, res, extension, importer) {
       res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
 
       (new multiparty.Form()).parse(req, function (error, fields, files) {
@@ -21,18 +21,26 @@ module.exports = function (app) {
           return res.send(400, "No import file selected.");
         }
 
-        if (path.extname(input) !== ".sif") {
-          return res.send(400, "The filename does not end in .sif.");
+        if (path.extname(input) !== "." + extension) {
+          return res.send(400, "The filename does not end in ." + extension + ".");
         }
 
         fs.readFile(input, { encoding: "utf-8" }, function (error, data) {
           if (error) {
             throw error;
           } else {
-            return res.json(200, sifToGrnsight(data));
+            return res.json(200, importer(data));
           }
         });
       });
+    };
+
+    app.post("/upload-sif", function (req, res) {
+      performUpload(req, res, "sif", sifToGrnsight)
+    });
+
+    app.post("/upload-graphml", function (req, res) {
+      performUpload(req, res, "graphml", graphMlToGrnsight)
     });
   }
 
