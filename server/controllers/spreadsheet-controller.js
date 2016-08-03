@@ -1,31 +1,29 @@
-var multiparty = require('multiparty'),
-    xlsx = require('node-xlsx'),
-    util = require('util'),
-    path = require('path');
+var multiparty = require('multiparty');
+var xlsx = require('node-xlsx');
+var path = require('path');
+
+var helpers = require(__dirname + "/helpers");
 
 var processGRNmap = function (path, res, app) {
-  var sheet,
-      network;
+  var sheet;
+  var network;
+
+  helpers.attachCorsHeader(res, app);
+
   try {
     sheet = xlsx.parse(path);
   } catch (err) {
     return res.json(400, "Unable to read input. The file may be corrupt.");
   }
 
-  // For the time being, send the result in a form readable by people
-  //TODO: Optimize the result for D3
-  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
-
+  helpers.attachFileHeaders(res, path);
   network = parseSheet(sheet); 
 
-  if(network.errors.length === 0) {
+  return (network.errors.length === 0) ?
     // If all looks well, return the network with an all clear
-    return res.json(network);
-  } else {
+    res.json(network) :
     // If all does not look well, return the network with an error 400
-    return res.json(400, network);
-  }
-
+    res.json(400, network);
 };
 
 var parseSheet = function(sheet) {
@@ -407,7 +405,7 @@ module.exports = function (app) {
     });
 
     app.get('/demo/weighted', function (req, res) {
-      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
+      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
     });
 
     app.get('/demo/schadeInput', function (req, res) {

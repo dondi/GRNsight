@@ -1,3 +1,5 @@
+var helpers = require(__dirname + "/helpers");
+
 var sifToGrnsight = require(__dirname + "/importers/sif");
 var graphMlToGrnsight = require(__dirname + "/importers/graphml");
 
@@ -8,7 +10,7 @@ module.exports = function (app) {
     var fs = require("fs");
 
     var performUpload = function (req, res, extension, importer) {
-      res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+      helpers.attachCorsHeader(res, app);
 
       (new multiparty.Form()).parse(req, function (error, fields, files) {
         if (error) {
@@ -29,6 +31,7 @@ module.exports = function (app) {
           if (error) {
             throw error;
           } else {
+            helpers.attachFileHeaders(res, input);
             return res.json(200, importer(data));
           }
         });

@@ -1,5 +1,6 @@
 $(function () {
   var currentNetwork = null;
+  var reloader = function () { };
 
   // Style of the tooltips when the user mouses over the label names
   $(".info").tooltip({
@@ -72,7 +73,7 @@ $(function () {
    */
   var loadGrn = function (url, name, formData) {
     // The presence of formData is taken to indicate a POST.
-    var fullUrl = $("#service-root").val() + url;
+    var fullUrl = [ $("#service-root").val(), url ].join("/");
     (formData ?
       $.ajax({
         url: fullUrl,
@@ -83,14 +84,15 @@ $(function () {
         crossDomain: true
       }) :
       $.getJSON(fullUrl)
-    ).done(function (network) {
-      displayNetwork(network, name);
-      previousFile = [url, name, formData]; // Store info about the previous file for use in reload
+    ).done(function (network, textStatus, jqXhr) {
+      displayNetwork(network, name || jqXhr.getResponseHeader('X-GRNsight-Filename'));
+      reloader = function () {
+        loadGrn(url, name, formData);
+      };
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
       var errorString = "Your graph failed to load.<br><br>";
 
-      $("#upload").val(""); // De-select the bad file.
       if (!err.errors) { // will be falsy if an error was thrown before the network was generated
         errorString += err;
       } else {
@@ -101,6 +103,28 @@ $(function () {
 
       $("#error").html(errorString);
       $("#errorModal").modal("show");
+    });
+  };
+
+  // TODO Some opportunity for unification with loadGrn?
+  var importGrn = function (uploadRoute, filename, formData) {
+    var fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+    $.ajax({
+      url: fullUrl,
+      data: formData,
+      processData: false,
+      contentType: false,
+      type: "POST",
+      crossDomain: true
+    }).done(function (network) {
+      annotateLinks(network);
+      displayNetwork(network, filename);
+      reloader = function () {
+        importGrn(uploadRoute, filename, formData);
+      };
+    }).error(function (xhr, status, error) {
+      $("#importErrorMessage").text(xhr.responseText);
+      $("#importErrorModal").modal("show");
     });
   };
 
@@ -116,6 +140,12 @@ $(function () {
     return path;
   };
 
+  var createFileForm = function ($upload) {
+    var formData = new FormData();
+    formData.append("file", $upload[0].files[0]);
+    return formData;
+  };
+
   var uploadEpilogue = function (event) {
     if (window.ga) {
       window.ga("send", "pageview", {
@@ -124,52 +154,23 @@ $(function () {
       });
     }
 
+    $("a.upload > input[type=file]").val("");
     event.preventDefault();
   };
 
-  $("#upload").on("change", function (event) {
-    var $upload = $(this);
-    var filename = submittedFilename($upload);
-
-    reload = ["", ""];
-
-    var formData = new FormData();
-    formData.append("file", $upload[0].files[0]);
-    loadGrn("/upload", filename, formData);
-
-    uploadEpilogue(event);
-  });
-
-  // TODO More consolidation possible, esp. if adding GA and implementing reload for imports
-  var uploadHandler = function (uploadRoute) {
+  var uploadHandler = function (uploadRoute, uploader) {
     return function (event) {
       var $upload = $(this);
       var filename = submittedFilename($upload);
-      var formData = new FormData();
-      formData.append("file", $upload[0].files[0]);
-
-      var fullUrl = $("#service-root").val() + "/" + uploadRoute;
-      $.ajax({
-        url: fullUrl,
-        data: formData,
-        processData: false,
-        contentType: false,
-        type: "POST",
-        crossDomain: true
-      }).done(function (network) {
-        annotateLinks(network);
-        displayNetwork(network, filename);
-      }).error(function (xhr, status, error) {
-        $("#importErrorMessage").text(xhr.responseText);
-        $("#importErrorModal").modal("show");
-      });
-
+      var formData = createFileForm($upload);
+      uploader(uploadRoute, filename, formData);
       uploadEpilogue(event);
     };
   };
 
-  $("#upload-sif").on("change", uploadHandler("upload-sif"));
-  $("#upload-graphml").on("change", uploadHandler("upload-graphml"));
+  $("#upload").on("change", uploadHandler("upload", loadGrn));
+  $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
+  $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
@@ -191,38 +192,37 @@ $(function () {
     }
   });
 
-  var previousFile = ["/upload", "", undefined];
   $("#reload").click(function (event) {
-    if(!$(".startDisabled").hasClass("disabled")) { 
-      if(reload[0] === "") {
-        loadGrn(previousFile[0], previousFile[1], previousFile[2]);
-      } else {
-        loadGrn(reload[0], reload[1]);
+    if (!$(".startDisabled").hasClass("disabled")) {
+      if ($.isFunction(reloader)) {
+        reloader();
       }
     }
   });
 
-  var reload = ["", ""];
   $("#unweighted").click(function (event) {
-    loadDemo("/demo/unweighted", "Demo #1: Unweighted GRN (21 genes, 50 edges)");
+    loadDemo("demo/unweighted");
   });
 
   $("#weighted").click(function (event) {
-    loadDemo("/demo/weighted", "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)");
+    loadDemo("demo/weighted");
   });
 
   $("#schadeInput").click(function (event) {
-    loadDemo("/demo/schadeInput", "Demo #3: Unweighted GRN (21 genes, 31 edges)");
+    loadDemo("demo/schadeInput");
   });
 
   $("#schadeOutput").click(function (event) {
-    loadDemo("/demo/schadeOutput", "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)");
+    loadDemo("demo/schadeOutput");
   });
 
-  var loadDemo = function(url, name) {
-    loadGrn(url, name);
-    reload = [url, name];
-    $("#upload").val("");
+  var loadDemo = function(url) {
+    loadGrn(url);
+    reloader = function () {
+      loadGrn(url);
+    };
+
+    $("a.upload > input[type=file]").val("");
   };
 
   $(".deselectedColoring").click(function (event) {

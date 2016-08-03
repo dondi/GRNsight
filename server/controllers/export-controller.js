@@ -1,13 +1,15 @@
+var helpers = require(__dirname + "/helpers");
+
 var grnsightToSif = require(__dirname + "/exporters/sif");
 var grnsightToGraphMl = require(__dirname + "/exporters/graphml");
 
 var convertResponse = function (app, req, res, converter) {
-  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+  helpers.attachCorsHeader(res, app);
   return res.status(200).send(converter(req.body));
 };
 
 var exportResponse = function (app, req, res, converter) {
-  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
+  helpers.attachCorsHeader(res, app);
   res.header('Content-Disposition', 'attachment;filename="' + req.body.filename + '"');
   return res.status(200).send(converter(JSON.parse(req.body.network)));
 };
