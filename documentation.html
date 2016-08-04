@@ -268,10 +268,10 @@ description: Learn how to format and upload files to GRNsight, a web application
                          </div>
                       <div id="cytoscape_sif_load_instructions" class="panel-collapse collapse">
                       <div class="panel-body">
-                         This feature is currently only available in <a href="http://dondi.github.io/GRNsight/beta.html">beta</a>.
+                         This feature is currently only available in <a href="http://dondi.github.io/GRNsight/beta.html" target="_blank">beta</a>.
                          <ul>
                             <li>
-                              Once you have your appropriately formatted SIF file (*.sif), you can import it into GRNsight.
+                              Once you have your appropriately formatted SIF file (*.sif; see <a href="#cytoscape_sif_instructions">Section 1c</a>), you can import it into GRNsight.
                             </li>
                             <li>
                               Go to the GRNsight <a href="http://dondi.github.io/GRNsight/beta.html">beta</a> page. Select the menu option File > Import > SIF…. A dialog box will open for you to select your file. Clicking the Open button will load your file. Clicking the Cancel button will return you to the GRNsight home page.
@@ -286,7 +286,13 @@ description: Learn how to format and upload files to GRNsight, a web application
                             
                             <li>
                               To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML format. 
-                            </li>                        
+                            </li>
+                            <li>GRNsight will automatically detect a SIF file representing a weighted network when it finds numerical values as the relationship type.  It will change the arrowhead type and the thickness and color of the edges as described in <a href="#unweighted_vs_weighted">Section 3a</a>.
+                            </li>
+                            <ul>
+                                      <li>However, if GRNsight detects a mix of numerical and text string values as the relationship type, it will display the network as an unweighted network.</li>
+                                      <li>If the user has selected the menu item Edit > Preferences > Default to black edges with regular arrowheads, GRNsight will ignore the numerical weight values and display the network as an unweighted graph.</li>
+                            </ul>
                           </ul>
                          </div>
                       </div>
