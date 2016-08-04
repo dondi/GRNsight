@@ -36,17 +36,11 @@ module.exports = function (graphml) {
     })) {
     network.sheetType = constants.WEIGHTED;
   } else if (weightId) {
-    network.warnings.push({
-      warningCode: "EDGES_WITHOUT_WEIGHTS",
-      errorDescription: "GRNsight attempted to import the graph as weighted, but some edges did not have a weight."
-    });
+    network.warnings.push(constants.warnings.EDGES_WITHOUT_WEIGHTS);
   }
 
   if (!graph.$ || graph.$.edgedefault !== "directed") {
-    network.warnings.push({
-      warningCode: "EDGE_DEFAULT_NOT_DIRECTED",
-      errorDescription: "GRNsight interprets the graph as directed unconditionally."
-    });
+    network.warnings.push(constants.warnings.EDGE_DEFAULT_NOT_DIRECTED);
   }
 
   var geneNames = [];

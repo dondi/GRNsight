@@ -1,5 +1,7 @@
 var expect = require("chai").expect;
+
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
+var constants = require(__dirname + "/../server/controllers" + "/constants");
 
 var expectedUnweightedNetwork = {
   genes: [
@@ -323,38 +325,28 @@ describe("Import from GraphML", function () {
   });
 
   it("should issue a warning if edgedefault is not set to 'directed'", function () {
-    var EDGE_DEFAULT_NOT_DIRECTED_WARNING = {
-      warningCode: "EDGE_DEFAULT_NOT_DIRECTED",
-      errorDescription: "GRNsight interprets the graph as directed unconditionally."
-    };
-
     var undirected = unweightedTestGraphMl.replace('edgedefault="directed"', 'edgedefault="undirected"');
     expect(
       importController.graphMlToGrnsight(undirected).warnings
-    ).to.deep.equal([EDGE_DEFAULT_NOT_DIRECTED_WARNING]);
+    ).to.deep.equal([ constants.warnings.EDGE_DEFAULT_NOT_DIRECTED ]);
 
     var noEdgedefault = unweightedTestGraphMl.replace('edgedefault="directed"', "");
     expect(
       importController.graphMlToGrnsight(noEdgedefault).warnings
-    ).to.deep.equal([EDGE_DEFAULT_NOT_DIRECTED_WARNING]);
+    ).to.deep.equal([ constants.warnings.EDGE_DEFAULT_NOT_DIRECTED ]);
   });
 
   it("should issue a warning if a weighted graph has edges without weights", function () {
-    var EDGES_WITHOUT_WEIGHTS_WARNING = {
-      warningCode: "EDGES_WITHOUT_WEIGHTS",
-      errorDescription: "GRNsight attempted to import the graph as weighted, but some edges did not have a weight."
-    };
-
     var missingWeight = weightedTestGraphMl.replace('<data key="edge-value-id">0.5</data>', "");
     expect(
       importController.graphMlToGrnsight(missingWeight).warnings
-    ).to.deep.equal([EDGES_WITHOUT_WEIGHTS_WARNING]);
+    ).to.deep.equal([ constants.warnings.EDGES_WITHOUT_WEIGHTS ]);
 
     var nanWeight = weightedTestGraphMl.replace('<data key="edge-value-id">0.5</data>',
         '<data key="edge-value-id">pizza pizza</data>');
     expect(
       importController.graphMlToGrnsight(nanWeight).warnings
-    ).to.deep.equal([EDGES_WITHOUT_WEIGHTS_WARNING]);
+    ).to.deep.equal([ constants.warnings.EDGES_WITHOUT_WEIGHTS ]);
   });
 
   it("should ignore unsupported GraphML features", function () {
