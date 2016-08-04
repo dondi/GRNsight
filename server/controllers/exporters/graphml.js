@@ -1,4 +1,5 @@
 var xmlbuilder = require("xmlbuilder");
+var constants = require(__dirname + "/../constants");
 
 var EDGE_VALUE_ID = "edge-value-id";
 
@@ -12,7 +13,7 @@ var grnsightToGraphMlJson = function (network) {
     }
   };
 
-  if (network.sheetType === "weighted") {
+  if (network.sheetType === constants.WEIGHTED) {
     convertedNetwork.graphml.key = {
       "@id": EDGE_VALUE_ID,
       "@for": "edge",
@@ -34,7 +35,7 @@ var grnsightToGraphMlJson = function (network) {
         "@target": network.genes[link.target].name
       };
 
-      if (network.sheetType === "weighted") {
+      if (network.sheetType === constants.WEIGHTED) {
         edge.data = {
           "@key": EDGE_VALUE_ID,
           "#text": link.value
