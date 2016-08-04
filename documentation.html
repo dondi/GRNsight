@@ -170,28 +170,28 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>In the first example below, each source node in the network is listed in the first column, the relationship type “pd” is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  A node may regulate itself (for example, AFT1).  Note that FHL1, GTS1, MSN1, and RPH1 do not have any target nodes, but are still listed as source nodes.  While they can be listed, it is not necessary to do so, as is shown in the second example.
                                         
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary_sif.png" alt="SIF sample 1 unweighted network" height="290" width="832" />
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary_sif.png" alt="SIF sample 1 unweighted network" height="792" width="283" />
                                   <br><br>
                                         
                                         </li>
                                         <li>In the second example below, only source nodes that have target nodes are listed in the first column, the relationship type “pd” is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  (FHL1, GTS1, MSN1, and RPH1 were removed because they did not have any target nodes.)
                                         
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary-no-targetless-genes_sif.png" alt="SIF sample 2 unweighted network" height="290" width="832" />
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary-no-targetless-genes_sif.png" alt="SIF sample 2 unweighted network" height="705" width="283" />
                                   <br><br>
                                         
                                         </li>
                                         <li>In the third example below, each source node is only listed once on one line, followed by the relationship type “pd”, followed by a series of target nodes, separated by tab characters.  Note that FHL1, GTS1, MSN1, and RPH1 do not have any target nodes, but are still listed as source nodes.  While they can be listed, it is not necessary to do so, as is shown in the fourth example.
                                         
                                  <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_concatenated_sif.png" alt="SIF sample 3 unweighted network" height="290" width="832" />
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_concatenated_sif.png" alt="SIF sample 3 unweighted network" height="485" width="615" />
                                   <br><br>
                                         
                                         </li>
                                         <li>In the fourth example below, each source node is only listed on one line, followed by the relationship type “pd”, followed by a series of target nodes, separated by tab characters.  (FHL1, GTS1, MSN1, and RPH1 were removed because they did not have any target nodes.)
                                         
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_concatenated-no-targetless-genes_sif.png" alt="SIF sample 4 unweighted network" height="290" width="832" />
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_concatenated-no-targetless-genes_sif.png" alt="SIF sample 4 unweighted network" height="396" width="615" />
                                   <br><br>  
                                         
                                         </li>
@@ -202,7 +202,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>In the first example below, each source node in the network is listed in the first column, the numerical value of the weight is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  Note that FHL1, GTS1, MSN1, and RPH1 do not have any target nodes, but are still listed as source nodes.  While they can be listed, it is not necessary to do so, as is shown in the second example.
                                         
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary_sif.png" alt="SIF sample 5 weighted network" height="290" width="832" />
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary_sif.png" alt="SIF sample 5 weighted network" height="792" width="283" />
                                   <br><br>   
                                         
                                         
@@ -210,7 +210,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>In the second example below, only source nodes that have target nodes are listed in the first column, the numerical value of the weight is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  (FHL1, GTS1, MSN1, and RPH1 were removed because they did not have any target nodes.)
                                         
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary-no-targetless-genes_sif.png" alt="SIF sample 6 weighted network" height="290" width="832" />
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary-no-targetless-genes_sif.png" alt="SIF sample 6 weighted network" height="704" width="283" />
                                   <br><br>  
                                         
                                         </li>
@@ -643,7 +643,17 @@ description: Learn how to format and upload files to GRNsight, a web application
                                       <li>The suggested filename for export will default to the same filename as was opened/imported with the file extension changed to .sif.</li>
                                       <li>For unweighted networks, the relationship type “pd” will be used.  The relationship type of “pd” is used because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community.  This default value cannot be changed from within GRNsight, but the exported SIF file could be edited in another program to do so.</li>
                                       <li>For weighted networks, the user has the option of exporting the data as an unweighted network with the relationship type “pd” or as a weighted network with the numerical weight value for each edge given as the relationship type.</li>
-                                      <li>In either case, each line will consist of source node, relationship type, and target node, separated by tab characters.  If a particular source node has multiple targets, they will be listed on separate lines.  The screenshots shown below are examples of how GRNsight exports "Demo #3: Unweighted GRN" and "Demo #4: Weighted GRN", respectively, to SIF files.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)</li>
+                                      <li>In either case, each line will consist of source node, relationship type, and target node, separated by tab characters.  If a particular source node has multiple targets, they will be listed on separate lines.  The screenshots shown below are examples of how GRNsight exports "Demo #3: Unweighted GRN" and "Demo #4: Weighted GRN", respectively, to SIF files.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)
+ 
+                                  <br><br>
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary-no-targetless-genes_sif.png" alt="SIF sample 2 unweighted network" height="705" width="283" />
+                                  <br><br>
+                                      
+                                  <br><br>
+                                  <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary-no-targetless-genes_sif.png" alt="SIF sample 6 weighted network" height="704" width="283" />
+                                  <br><br>  
+                                      
+                                      </li>
                                       <li>One benefit from this export behavior is that GRNsight can be used to convert network data from an adjacency matrix (in the native GRNsight .xlsx format as described in <a href="#excel_instructions">Section 1a</a> to a list of binary interactions as a SIF file).</li>
                             </ul>
                             </li>
