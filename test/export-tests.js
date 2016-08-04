@@ -78,28 +78,30 @@ var weightedTestNetworkWithCycle = {
 describe("Export to SIF", function () {
   it("should export unweighted networks to SIF correctly", function () {
     var lines = exportController.grnsightToSif(unweightedTestNetwork).split("\n");
-    expect(lines[0]).to.equal("A");
-    expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
-    expect(lines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
-    expect(lines[3]).to.equal("D");
+    expect(lines[0].split("\t")).to.deep.equal([ "A", "", "" ]);
+    expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A" ]);
+    expect(lines[2].split("\t")).to.deep.equal([ "B", "pd", "C" ]);
+    expect(lines[3].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
+    expect(lines[4].split("\t")).to.deep.equal([ "D", "", "" ]);
   });
 
   it("should export weighted networks to SIF correctly", function () {
     var lines = exportController.grnsightToSif(weightedTestNetwork).split("\n");
-    expect(lines[0]).to.equal("A");
+    expect(lines[0].split("\t")).to.deep.equal([ "A", "", "" ]);
     expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
     expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
     expect(lines[3].split("\t")).to.deep.equal([ "C", "0.5", "B" ]);
-    expect(lines[4]).to.equal("D");
+    expect(lines[4].split("\t")).to.deep.equal([ "D", "", "" ]);
   });
 
   it("should export unweighted networks with cycles to SIF correctly", function () {
     var lines = exportController.grnsightToSif(unweightedTestNetworkWithCycle).split("\n");
     expect(lines[0].split("\t")).to.deep.equal([ "A", "pd", "A" ]);
-    expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A", "C" ]);
-    expect(lines[2].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
-    expect(lines[3].split("\t")).to.deep.equal([ "D", "pd", "D" ]);
-    expect(lines[4]).to.equal("E");
+    expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A" ]);
+    expect(lines[2].split("\t")).to.deep.equal([ "B", "pd", "C" ]);
+    expect(lines[3].split("\t")).to.deep.equal([ "C", "pd", "B" ]);
+    expect(lines[4].split("\t")).to.deep.equal([ "D", "pd", "D" ]);
+    expect(lines[5].split("\t")).to.deep.equal([ "E", "", "" ]);
   });
 
   it("should export weighted networks with cycles to SIF correctly", function () {
@@ -109,7 +111,7 @@ describe("Export to SIF", function () {
     expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
     expect(lines[3].split("\t")).to.deep.equal([ "C", "0.5", "B" ]);
     expect(lines[4].split("\t")).to.deep.equal([ "D", "-0.375", "D" ]);
-    expect(lines[5]).to.equal("E");
+    expect(lines[5].split("\t")).to.deep.equal([ "E", "", "" ]);
   });
 });
 
