@@ -596,11 +596,19 @@ description: Learn how to format and upload files to GRNsight, a web application
                       </div>
                       <div id="cytoscape_sif_export" class="panel-collapse collapse">
                         <div class="panel-body">
-                         This feature is currently only available in <a href="http://dondi.github.io/GRNsight/beta.html">beta</a>.
+                         This feature is currently only available in <a href="http://dondi.github.io/GRNsight/beta.html" target="_blank">beta</a>.
                           <ul>
                             <li>To export your data to SIF format, select the menu option File > Export Data > To SIF…. A dialog box will open for you to Save your file. Clicking the Cancel button will return you to the GRNsight web page.
                             </li>
-                            <li>The SIF file will be formatted according to the description in Section 1c.
+                            <li>While there are several ways valid ways that a SIF file can be formatted for import into GRNsight (<a href="#cytoscape_sif_instructions">Section 1c</a>), GRNsight follows a particular convention when exporting to SIF.
+                            <ul>
+                                      <li>GRNsight will export the network data as a tab-delimited text file (not space delimited) with a .sif file extension.</li>
+                                      <li>The suggested filename for export will default to the same filename as was opened/imported with the file extension changed to .sif.</li>
+                                      <li>For unweighted networks, the relationship type “pd” will be used.  The relationship type of “pd” is used because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community.  This default value cannot be changed from within GRNsight, but the exported SIF file could be edited in another program to do so.</li>
+                                      <li>For weighted networks, the user has the option of exporting the data as an unweighted network with the relationship type “pd” or as a weighted network with the numerical weight value for each edge given as the relationship type.</li>
+                                      <li>In either case, each line will consist of source node, relationship type, and target node, separated by tab characters.  If a particular source node has multiple targets, they will be listed on separate lines.  The screenshots shown below are examples of how GRNsight exports "Demo #3: Unweighted GRN" and "Demo #4: Weighted GRN", respectively, to SIF files.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)</li>
+                                      <li>One benefit from this export behavior is that GRNsight can be used to convert network data from an adjacency matrix (in the native GRNsight format as described in <a href="#excel_instructions">Section 1a</a> to a list of binary interactions as a SIF file).</li>
+                            </ul>
                             </li>
                           </ul>
                         </div>
