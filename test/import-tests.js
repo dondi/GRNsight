@@ -132,6 +132,12 @@ var inconsistentlyWeightedTestSifWithCycle = [
   "E"
 ].join("\n");
 
+var unweightedTestSifWithUntargeted = [
+  [ "A", "pd", "A" ].join("\t"),
+  [ "B", "pd", "A", "C" ].join("\t"),
+  [ "D", "pd", "E" ].join("\t"),
+].join("\r\n");
+
 describe("Import from SIF", function () {
   it("should import unweighted networks from SIF correctly", function () {
     expect(
@@ -167,6 +173,31 @@ describe("Import from SIF", function () {
     expect(
       importController.sifToGrnsight(inconsistentlyWeightedTestSifWithCycle)
     ).to.deep.equal(expectedUnweightedNetworkWithCycle);
+  });
+
+  it("should import nodes mentioned only in edges (i.e., targeted but targetless)", function () {
+    expect(
+      importController.sifToGrnsight(unweightedTestSifWithUntargeted)
+    ).to.deep.equal({
+      genes: [
+        { name: "A" },
+        { name: "B" },
+        { name: "D" },
+        { name: "C" },
+        { name: "E" }
+      ],
+
+      links: [
+        { source: 0, target: 0 },
+        { source: 1, target: 0 },
+        { source: 1, target: 3 },
+        { source: 2, target: 4 }
+      ],
+
+      errors: [],
+      warnings: [],
+      sheetType: "unweighted"
+    });
   });
 });
 

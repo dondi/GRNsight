@@ -40,18 +40,21 @@ module.exports = function (sif) {
       var targets = entry.slice(TARGET);
       targets.forEach(function (target) {
         var targetIndex = genes.indexOf(target);
-        if (targetIndex !== constants.NOT_FOUND) {
-          var link = {
-            source: sourceIndex,
-            target: targetIndex
-          };
-
-          if (sheetType === constants.WEIGHTED) {
-            link.value = +entry[RELATIONSHIP];
-          }
-
-          links.push(link);
+        if (targetIndex === constants.NOT_FOUND) {
+          genes.push(target);
+          targetIndex = genes.indexOf(target);
         }
+
+        var link = {
+          source: sourceIndex,
+          target: targetIndex
+        };
+
+        if (sheetType === constants.WEIGHTED) {
+          link.value = +entry[RELATIONSHIP];
+        }
+
+        links.push(link);
       });
     }
   });
