@@ -772,4 +772,7 @@
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
     $(".startDisabled").removeClass("disabled");
+    if (sheetType === "unweighted") {
+      $(".startDisabled.weighted.export").addClass("disabled");
+    }
   }

@@ -62,12 +62,20 @@ html
                     span(class='glyphicon glyphicon-export')
                     | &nbsp; Export Data
                   ul(class='dropdown-menu')
-                    li(class='startDisabled disabled')
-                      a(href='#' id='exportAsSif') To SIF
-                    li(class='startDisabled disabled')
-                      a(href='#' id='exportAsGraphMl') To GraphML
-                    li(class='disabled not-yet-implemented')
-                      a(href='#' id='exportAsGml') To GML
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedSif') To Unweighted SIF
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedSif') To Weighted SIF
+                    li(class='divider')
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
+                    li(class='divider not-yet-implemented')
+                    li(class='startDisabled disabled not-yet-implemented unweighted export')
+                      a(href='#' id='exportAsUnweightedGml') To Unweighted GML
+                    li(class='startDisabled disabled not-yet-implemented weighted export')
+                      a(href='#' id='exportAsWeightedGml') To Weighted GML
                 li(class='dropdown-submenu disabled not-yet-implemented')
                   a(href='#')
                     span(class='glyphicon glyphicon-picture')

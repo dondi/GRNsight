@@ -193,7 +193,7 @@ $(function () {
   });
 
   $("#reload").click(function (event) {
-    if (!$(".startDisabled").hasClass("disabled")) {
+    if (!$(this).parent().hasClass("disabled")) {
       if ($.isFunction(reloader)) {
         reloader();
       }
@@ -321,13 +321,13 @@ $(function () {
   }
   
   $("#printGraph").click(function (event) {
-    if(!$(".startDisabled").hasClass("disabled")) {
+    if(!$(this).parent().hasClass("disabled")) {
       window.print();
     }
   });
 
-  var flattenNetwork = function (network) {
-    var result = $.extend(true, { }, network);
+  var flattenNetwork = function (network, sheetType) {
+    var result = $.extend(true, { }, network, { sheetType: sheetType });
     result.links.forEach(function (link) {
       link.source = link.source.index;
       link.target = link.target.index;
@@ -349,10 +349,10 @@ $(function () {
     return filename;
   };
 
-  var performExport = function (route, extension) {
+  var performExport = function (route, extension, sheetType) {
     return function (event) {
-      if (!$(".startDisabled").hasClass("disabled")) {
-        var networkToExport = flattenNetwork(currentNetwork);
+      if (!$(this).parent().hasClass("disabled")) {
+        var networkToExport = flattenNetwork(currentNetwork, sheetType);
         var exportForm = $("<form></form>").attr({
           method: "POST",
           action: $("#service-root").val() + "/" + route
@@ -372,6 +372,8 @@ $(function () {
     };
   };
 
-  $("#exportAsSif").click(performExport("export-to-sif", "sif"));
-  $("#exportAsGraphMl").click(performExport("export-to-graphml", "graphml"));
+  $("#exportAsUnweightedSif").click(performExport("export-to-sif", "sif", "unweighted"));
+  $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
+  $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
+  $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
 });
