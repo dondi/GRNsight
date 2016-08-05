@@ -12,6 +12,7 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "istanbul": "^0.4.2",
+    "jquery-extend": "^2.0.3",
     "mocha": "^2.1.0"
   },
   "scripts": {

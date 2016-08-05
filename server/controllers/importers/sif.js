@@ -16,7 +16,12 @@ var sifNetworkType = function (sifEntries) {
     }
   });
 
-  return relationships.every(isNumber) ? constants.WEIGHTED : constants.UNWEIGHTED;
+  var hasNumbers = relationships.some(isNumber);
+  var allNumbers = relationships.every(isNumber);
+  return {
+    sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
+    warnings: hasNumbers && !allNumbers ? [ constants.warnings.EDGES_WITHOUT_WEIGHTS ] : []
+  };
 };
 
 module.exports = function (sif) {
@@ -31,7 +36,7 @@ module.exports = function (sif) {
     }
   });
 
-  var sheetType = sifNetworkType(entries);
+  var networkType = sifNetworkType(entries);
 
   var links = [];
   entries.forEach(function (entry) {
@@ -50,7 +55,7 @@ module.exports = function (sif) {
           target: targetIndex
         };
 
-        if (sheetType === constants.WEIGHTED) {
+        if (networkType.sheetType === constants.WEIGHTED) {
           link.value = +entry[RELATIONSHIP];
         }
 
@@ -65,8 +70,8 @@ module.exports = function (sif) {
     }),
     links: links,
     errors: [],
-    warnings: [],
-    sheetType: sheetType
+    warnings: networkType.warnings,
+    sheetType: networkType.sheetType
   };
 };
 

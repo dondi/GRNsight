@@ -1,4 +1,5 @@
 var expect = require("chai").expect;
+var extend = require("jquery-extend");
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
@@ -93,7 +94,7 @@ var unweightedTestSif = [
 ].join("\r\n"); // Mix up linebreak types to test normalization.
 
 var weightedTestSif = [
-  "A",
+  [ "A", "", "" ].join("\t"), // Include trivially-tabbed cases.
   [ "B", "-0.75", "A" ].join("\t"),
   [ "B", "0.25", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
@@ -105,14 +106,14 @@ var inconsistentlyWeightedTestSif = [
   [ "B", "-0.75", "A" ].join("\t"),
   [ "B", "pd", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
-  "D"
+  [ "D", "", "" ].join("\t")
 ].join("\r\n");
 
 var unweightedTestSifWithCycle = [
   [ "A", "pd", "A" ].join("\t"),
   [ "B", "pd", "A", "C" ].join("\t"),
-  [ "C", "pd", "B" ].join("\t"),
-  [ "D", "pd", "D" ].join("\t"),
+  [ "C", "interacts with", "B" ].join("\t"), // Allow any non-numeric relationship.
+  [ "D", "neg", "D" ].join("\t"),
   "E"
 ].join("\r\n");
 
@@ -156,7 +157,11 @@ describe("Import from SIF", function () {
   it("should import inconsistently weighted networks from SIF as unweighted", function () {
     expect(
       importController.sifToGrnsight(inconsistentlyWeightedTestSif)
-    ).to.deep.equal(expectedUnweightedNetwork);
+    ).to.deep.equal(extend(true, {}, expectedUnweightedNetwork, {
+      warnings: [
+        constants.warnings.EDGES_WITHOUT_WEIGHTS
+      ]
+    }));
   });
 
   it("should import unweighted networks with cycles from SIF correctly", function () {
@@ -174,7 +179,11 @@ describe("Import from SIF", function () {
   it("should import inconsistently weighted networks with cycles from SIF as unweighted", function () {
     expect(
       importController.sifToGrnsight(inconsistentlyWeightedTestSifWithCycle)
-    ).to.deep.equal(expectedUnweightedNetworkWithCycle);
+    ).to.deep.equal(extend(true, {}, expectedUnweightedNetworkWithCycle, {
+      warnings: [
+        constants.warnings.EDGES_WITHOUT_WEIGHTS
+      ]
+    }));
   });
 
   it("should import nodes mentioned only in edges (i.e., targeted but targetless)", function () {
