@@ -1,7 +1,7 @@
 var xmlbuilder = require("xmlbuilder");
 var constants = require(__dirname + "/../constants");
 
-var EDGE_VALUE_ID = "edge-value-id";
+var EDGE_VALUE_ID = "edge-value";
 
 var grnsightToGraphMlJson = function (network) {
   var convertedNetwork = {
@@ -45,6 +45,10 @@ var grnsightToGraphMlJson = function (network) {
       return edge;
     })
   };
+
+  if (network.filename) {
+    convertedNetwork.graphml.graph["@id"] = network.filename;
+  }
 
   return convertedNetwork;
 };

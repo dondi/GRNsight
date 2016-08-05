@@ -1,4 +1,6 @@
 var expect = require("chai").expect;
+var extend = require("jquery-extend");
+
 var exportController = require(__dirname + "/../server/controllers" + "/export-controller")();
 
 var unweightedTestNetwork = {
@@ -155,20 +157,20 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
-      '<key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+      '<key id="edge-value" for="edge" attr.name="weight" attr.type="double"/>',
       '<graph edgedefault="directed">',
       '<node id="A"/>',
       '<node id="B"/>',
       '<node id="C"/>',
       '<node id="D"/>',
       '<edge source="C" target="B">',
-      '<data key="edge-value-id">0.5</data>',
+      '<data key="edge-value">0.5</data>',
       '</edge>',
       '<edge source="B" target="A">',
-      '<data key="edge-value-id">-0.75</data>',
+      '<data key="edge-value">-0.75</data>',
       '</edge>',
       '<edge source="B" target="C">',
-      '<data key="edge-value-id">0.25</data>',
+      '<data key="edge-value">0.25</data>',
       '</edge>',
       '</graph>',
       '</graphml>'
@@ -221,7 +223,7 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
-      '<key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+      '<key id="edge-value" for="edge" attr.name="weight" attr.type="double"/>',
       '<graph edgedefault="directed">',
       '<node id="A"/>',
       '<node id="B"/>',
@@ -229,20 +231,49 @@ describe("Export to GraphML", function () {
       '<node id="D"/>',
       '<node id="E"/>',
       '<edge source="C" target="B">',
-      '<data key="edge-value-id">0.5</data>',
+      '<data key="edge-value">0.5</data>',
       '</edge>',
       '<edge source="B" target="A">',
-      '<data key="edge-value-id">-0.75</data>',
+      '<data key="edge-value">-0.75</data>',
       '</edge>',
       '<edge source="B" target="C">',
-      '<data key="edge-value-id">0.25</data>',
+      '<data key="edge-value">0.25</data>',
       '</edge>',
       '<edge source="D" target="D">',
-      '<data key="edge-value-id">-0.375</data>',
+      '<data key="edge-value">-0.375</data>',
       '</edge>',
       '<edge source="A" target="A">',
-      '<data key="edge-value-id">0.875</data>',
+      '<data key="edge-value">0.875</data>',
       '</edge>',
+      '</graph>',
+      '</graphml>'
+    ];
+
+    lines.forEach(function (line, index) {
+      expect(line).to.equal(expectedGraphMlLines[index]);
+    });
+  });
+
+  if("should export networks with a filename as the graph element id", function () {
+    var networkWithFilename = extend(true, unweightedTestNetwork, { filename: "hello.graphml" });
+    var lines = exportController.grnsightToGraphMl(networkWithFilename).split("\n").map(function (line) {
+      return line.trim();
+    });
+
+    var expectedGraphMlLines = [
+      '<?xml version="1.0" encoding="UTF-8"?>',
+      '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+        'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+        'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      '<graph edgedefault="directed" id="hello.graphml">',
+      '<node id="A"/>',
+      '<node id="B"/>',
+      '<node id="C"/>',
+      '<node id="D"/>',
+      '<edge source="C" target="B"/>',
+      '<edge source="B" target="A"/>',
+      '<edge source="B" target="C"/>',
       '</graph>',
       '</graphml>'
     ];

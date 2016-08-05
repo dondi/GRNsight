@@ -353,13 +353,16 @@ $(function () {
     return function (event) {
       if (!$(this).parent().hasClass("disabled")) {
         var networkToExport = flattenNetwork(currentNetwork, sheetType);
+        var networkFilename = filenameWithExtension(extension);
+        networkToExport.filename = networkFilename;
+
         var exportForm = $("<form></form>").attr({
           method: "POST",
           action: $("#service-root").val() + "/" + route
         }).append($("<input></input>").attr({
           type: "hidden",
           name: "filename",
-          value: filenameWithExtension(extension)
+          value: networkFilename
         })).append($("<input></input>").attr({
           type: "hidden",
           name: "network",
