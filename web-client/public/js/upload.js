@@ -335,25 +335,25 @@ $(function () {
     return result;
   };
 
-  var filenameWithExtension = function (extension) {
+  var filenameWithExtension = function (suffix, extension) {
     var filename = $("#fileName").text();
-    var dotSegments = filename.split(".");
-    if (dotSegments[0] !== filename) {
-      dotSegments.pop();
-      dotSegments.push(extension);
-      filename = dotSegments.join(".");
-    } else {
-      filename += "." + extension;
+    var currentExtension = filename.match(/\.[^\.]+$/);
+    if (currentExtension && currentExtension.length) {
+      filename = filename.substr(0, filename.length - currentExtension[0].length);
     }
 
-    return filename;
+    if (suffix) {
+      filename = filename + "_" + suffix;
+    }
+
+    return filename + "." + extension;
   };
 
   var performExport = function (route, extension, sheetType) {
     return function (event) {
       if (!$(this).parent().hasClass("disabled")) {
         var networkToExport = flattenNetwork(currentNetwork, sheetType);
-        var networkFilename = filenameWithExtension(extension);
+        var networkFilename = filenameWithExtension(sheetType !== currentNetwork.sheetType ? sheetType : "", extension);
         networkToExport.filename = networkFilename;
 
         var exportForm = $("<form></form>").attr({
