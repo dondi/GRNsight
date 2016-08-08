@@ -1,7 +1,7 @@
 var xmlbuilder = require("xmlbuilder");
 var constants = require(__dirname + "/../constants");
 
-var EDGE_VALUE_ID = "edge-value";
+var EDGE_VALUE_ID = "weight";
 
 var grnsightToGraphMlJson = function (network) {
   var convertedNetwork = {
