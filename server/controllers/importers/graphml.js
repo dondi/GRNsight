@@ -25,7 +25,8 @@ module.exports = function (graphml) {
   // (a) A key for the weight attribute is present, AND
   // (b) Every edge in the file has a data element with that key
   var weightId = key && key.reduce(function (weightId, keyElement) {
-    return weightId || (keyElement.$['attr.name'] === "weight" && keyElement.$.for === "edge" ?
+    // Edge condition temporarily commented out pending Cytoscape GraphML export bug fix.
+    return weightId || (keyElement.$['attr.name'] === "weight" /*&& keyElement.$.for === "edge"*/ ?
       keyElement.$.id : null);
   }, "");
 
