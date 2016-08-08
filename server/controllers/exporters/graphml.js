@@ -1,7 +1,9 @@
 var xmlbuilder = require("xmlbuilder");
 var constants = require(__dirname + "/../constants");
 
-var EDGE_VALUE_ID = "weight";
+var INTERACTION_ID = "interaction";
+var NAME_ID = "name";
+var WEIGHT_ID = "weight";
 
 var grnsightToGraphMlJson = function (network) {
   var convertedNetwork = {
@@ -9,17 +11,34 @@ var grnsightToGraphMlJson = function (network) {
       "@xmlns": "http://graphml.graphdrawing.org/xmlns",
       "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
       "@xsi:schemaLocation": "http://graphml.graphdrawing.org/xmlns " +
-        "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"
+        "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd",
+
+      key: [
+        {
+          "@id": INTERACTION_ID,
+          "@for": "edge",
+          "@attr.name": "interaction",
+          "@attr.type": "string"
+        },
+
+        {
+          "@id": NAME_ID,
+          "@for": "edge",
+          "@attr.name": "name",
+          "@attr.type": "string"
+        },
+
+      ]
     }
   };
 
   if (network.sheetType === constants.WEIGHTED) {
-    convertedNetwork.graphml.key = {
-      "@id": EDGE_VALUE_ID,
+    convertedNetwork.graphml.key.push({
+      "@id": WEIGHT_ID,
       "@for": "edge",
       "@attr.name": "weight",
       "@attr.type": "double"
-    };
+    });
   }
 
   convertedNetwork.graphml.graph = {
@@ -30,16 +49,30 @@ var grnsightToGraphMlJson = function (network) {
     }),
 
     edge: network.links.map(function (link) {
+      var sourceGeneId = network.genes[link.source].name;
+      var targetGeneId = network.genes[link.target].name;
+
       var edge = {
-        "@source": network.genes[link.source].name,
-        "@target": network.genes[link.target].name
+        "@source": sourceGeneId,
+        "@target": targetGeneId,
+        data: [
+          {
+            "@key": INTERACTION_ID,
+            "#text": "pd"
+          },
+
+          {
+            "@key": NAME_ID,
+            "#text": sourceGeneId + " (pd) " + targetGeneId
+          }
+        ]
       };
 
       if (network.sheetType === constants.WEIGHTED) {
-        edge.data = {
-          "@key": EDGE_VALUE_ID,
+        edge.data.push({
+          "@key": WEIGHT_ID,
           "#text": link.value
-        };
+        });
       }
 
       return edge;
