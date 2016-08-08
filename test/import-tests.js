@@ -1,5 +1,7 @@
 var expect = require("chai").expect;
 var extend = require("jquery-extend");
+var fs = require("fs");
+var UTF8 = { encoding: "utf-8" };
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
@@ -359,9 +361,6 @@ describe("Import from GraphML", function () {
   });
 
   it("should ignore unsupported GraphML features", function () {
-    var fs = require("fs");
-    var UTF8 = { encoding: "utf-8" };
-
     fs.readFile(__dirname + "/../test-files/import-samples/hyper.graphml", UTF8, function (error, data) {
       expect(
         importController.graphMlToGrnsight(data)
@@ -412,6 +411,32 @@ describe("Import from GraphML", function () {
         warnings: [],
         sheetType: "unweighted"
       }); // Look ma, no nested graphs (nor edges that refer to them).
+    });
+  });
+
+  it("should read labels from keys if available", function () {
+    fs.readFile(__dirname + "/../test-files/import-samples/4-gene_4-edge_Manual-Cytoscape_test-naming.graphml", UTF8, function (error, data) {
+      expect(
+        importController.graphMlToGrnsight(data)
+      ).to.deep.equal({
+        genes: [
+          { name: "Gene4_name" },
+          { name: "Gene3_name" },
+          { name: "Gene2_name" },
+          { name: "Gene1_name" }
+        ],
+
+        links: [
+          { source: 0, target: 0 },
+          { source: 1, target: 0 },
+          { source: 2, target: 1 },
+          { source: 3, target: 2 }
+        ],
+
+        errors: [],
+        warnings: [],
+        sheetType: "unweighted"
+      });
     });
   });
 });

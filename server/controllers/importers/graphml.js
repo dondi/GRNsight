@@ -13,6 +13,25 @@ module.exports = function (graphml) {
     graph = result.graphml && result.graphml.graph && result.graphml.graph[0];
   });
 
+  var findKeyId = function (attrName, attrFor) {
+    return key && key.reduce(function (keyId, keyElement) {
+      return keyId || (keyElement.$['attr.name'] === attrName &&
+        (attrFor ? keyElement.$.for === attrFor : true) ? keyElement.$.id : null);
+    }, "");
+  };
+
+  var findKey = function (element, keyId) {
+    if (!element.data) {
+      return null;
+    }
+
+    var keyMatch = element.data.filter(function (data) {
+      return data.$.key === keyId;
+    });
+
+    return keyMatch.length ? keyMatch[0]._ : null;
+  };
+
   var network = {
     genes: [],
     links: [],
@@ -24,11 +43,8 @@ module.exports = function (graphml) {
   // We will only consider GraphML data to be weighted if:
   // (a) A key for the weight attribute is present, AND
   // (b) Every edge in the file has a data element with that key
-  var weightId = key && key.reduce(function (weightId, keyElement) {
-    // Edge condition temporarily commented out pending Cytoscape GraphML export bug fix.
-    return weightId || (keyElement.$['attr.name'] === "weight" /*&& keyElement.$.for === "edge"*/ ?
-      keyElement.$.id : null);
-  }, "");
+  var weightId = findKeyId("weight"/*, "edge"*/);
+      // Edge condition temporarily commented out pending Cytoscape GraphML export bug fix.
 
   if (weightId && graph.edge && graph.edge.every(function (edge) {
       return edge.data && edge.data.some(function (data) {
@@ -44,19 +60,37 @@ module.exports = function (graphml) {
     network.warnings.push(constants.warnings.EDGE_DEFAULT_NOT_DIRECTED);
   }
 
-  var geneNames = [];
+  var nameId = findKeyId("name", "node");
+  var sharedNameId = findKeyId("shared name", "node");
+
+  var geneIds = [];
   if (graph.node) {
     network.genes = graph.node.map(function (node) {
-      geneNames.push(node.$.id);
-      return { name: node.$.id };
+      var nodeName = node.$.id;
+      if (sharedNameId) {
+        var sharedName = findKey(node, sharedNameId);
+        if (sharedName) {
+          nodeName = sharedName;
+        }
+      }
+
+      if (nameId) {
+        var name = findKey(node, nameId);
+        if (name) {
+          nodeName = name;
+        }
+      }
+
+      geneIds.push(node.$.id);
+      return { name: nodeName };
     });
   }
 
   if (graph.edge) {
     graph.edge.forEach(function (edge) {
       var link = {
-        source: geneNames.indexOf(edge.$.source),
-        target: geneNames.indexOf(edge.$.target)
+        source: geneIds.indexOf(edge.$.source),
+        target: geneIds.indexOf(edge.$.target)
       };
 
       if (link.source === constants.NOT_FOUND || link.target === constants.NOT_FOUND) {
