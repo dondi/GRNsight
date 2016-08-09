@@ -81,7 +81,7 @@
         .attr("height", height);
         
     var defs = svg.append("defs");
-  
+
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
 
@@ -298,12 +298,16 @@
               }
           }
           return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-        }).append("svg:title")
-          .text(function (d) {
-            if (sheetType !== "unweighted") {
-              return d.value.toPrecision(4);
-            }
-          });
+        });
+
+    if (sheetType === "weighted") {
+      link.append("text")
+        .attr("class", "weight")
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return d.value.toPrecision(4);
+        });
+    }
 
     /* Big thanks to the following for the smart edges
      * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
@@ -365,6 +369,11 @@
                 cp1y = y1 + inlineOffset * uy + vy * orthoOffset,
                 cp2x = x2 - inlineOffset * ux + vx * orthoOffset,
                 cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
+
+            d.label = {
+                x: (x1 + cp1x + cp2x + x2) / 4,
+                y: (y1 + cp1y + cp2y + y2) / 4
+            };
 
             cp1x = Math.min(Math.max(0, cp1x), width);
             cp1y = Math.min(Math.max(0, cp1y), height);
@@ -620,6 +629,7 @@
               }
             }
 
+            d.label = { x: x1, y: y1 + dry * 3 };
             return "M" + x1 + "," + y1 +
                    "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
                          x2  + "," + (y2 + offset);
@@ -653,6 +663,12 @@
           } else { //otherwise arrowhead
             return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
+        });
+
+        link.select("text").attr("x", function (d) {
+          return d.label.x;
+        }).attr("y", function (d) {
+          return d.label.y;
         });
 
       } catch (e) {

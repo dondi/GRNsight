@@ -141,3 +141,15 @@ nav.navbar.navbar-default {
   -moz-border-radius: 6px 0 6px 6px;
   border-radius: 6px 0 6px 6px;
 }
+text.weight {
+  font-size: 20px;
+  font-weight: 900;
+  fill: #000;
+  opacity: 0;
+  stroke: #fff;
+  stroke-width: 0.5px;
+  transition: opacity 0.25s;
+}
+g.link > path:hover + text.weight {
+  opacity: 1;
+}
