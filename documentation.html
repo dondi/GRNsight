@@ -76,7 +76,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                   For unweighted networks in the “network” worksheet, each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell B7 means that ABF1 regulates FHl1.  The “1” in cell D4 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 31 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with regular (pointy) arrowheads. The demonstration file <a href="https://github.com/dondi/GRNsight/blob/import-export/test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx?raw=true">"Demo #3: Unweighted GRN"</a> corresponds to the adjacency matrix shown below.  Follow the link to download the file.
 
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/demo-3_network-sheet.png" alt="network" height="450" width="1302" />
+                                  <img src="{{ site.baseurl }}/assets/images/demo-3_network-sheet.png" alt="network" height="225" width="651" />
                                   <br><br>
 
                                 </li>
@@ -84,7 +84,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                   When GRNsight encounters a worksheet entitled “network” with all 1’s and 0’s specifying an adjacency matrix, it will automatically color the edges black and put regular (pointy) arrowheads on the edges. However, GRNsight can also be used to display weighted edges with varying thicknesses and colors based on the magnitude and sign of the weights, respectively. To generate this type of adjacency matrix by hand, create a worksheet called “network_optimized_weights”. Instead of using 1’s to indicate connections in the network, use values that are real numbers > 0 to indicate an activation relationship or &lt; 0 to indicate a repression relationship. The screenshot below gives an example of this type of adjacency matrix. The demonstration file <a href="https://github.com/dondi/GRNsight/blob/import-export/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx?raw=true">Demo #4: Weighted GRN</a> corresponds to the adjacency matrix shown below. Follow the link to download the file.  For the weighted edges to display with different colors and thicknesses, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. For more information on how GRNsight displays weighted edges on the graph, see <a href="#section3">Section 3</a> below.
 
                                   <br><br>
-                                  <img src="{{ site.baseurl }}/assets/images/demo-4_network-optimized-weights-sheet.png" alt="network_optimized_weights" height="450" width="1302" />
+                                  <img src="{{ site.baseurl }}/assets/images/demo-4_network-optimized-weights-sheet.png" alt="network_optimized_weights" height="225" width="651" />
                                   <br><br>
 
                                 </li>
