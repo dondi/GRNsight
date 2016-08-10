@@ -440,7 +440,7 @@ describe("Import from GraphML", function () {
     });
   });
 
-  it("should read labels from yED keys if available", function () {
+  it("should read text labels from yED keys if available", function () {
     fs.readFile(__dirname + "/../test-files/import-samples/graph-with-yed-tags.graphml", UTF8, function (error, data) {
       expect(
         importController.graphMlToGrnsight(data)
@@ -452,6 +452,32 @@ describe("Import from GraphML", function () {
 
         links: [
           { source: 1, target: 0 }
+        ],
+
+        errors: [],
+        warnings: [],
+        sheetType: "unweighted"
+      });
+    });
+  });
+
+  it("should read node label objects from yED keys if available", function () {
+    fs.readFile(__dirname + "/../test-files/import-samples/4-node_4-edge_manual-yED.graphml", UTF8, function (error, data) {
+      expect(
+        importController.graphMlToGrnsight(data)
+      ).to.deep.equal({
+        genes: [
+          { name: "A" },
+          { name: "B" },
+          { name: "C" },
+          { name: "D" }
+        ],
+
+        links: [
+          { source: 0, target: 1 },
+          { source: 1, target: 2 },
+          { source: 2, target: 3 },
+          { source: 3, target: 3 }
         ],
 
         errors: [],
