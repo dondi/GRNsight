@@ -20,6 +20,13 @@ module.exports = function (graphml) {
     }, "");
   };
 
+  var findYFilesKeyId = function (yFilesType, attrFor) {
+    return key && key.reduce(function (keyId, keyElement) {
+      return keyId || (keyElement.$['yfiles.type'] === yFilesType &&
+        (attrFor ? keyElement.$.for === attrFor : true) ? keyElement.$.id : null);
+    }, "");
+  };
+
   var findKey = function (element, keyId) {
     if (!element.data) {
       return null;
@@ -30,6 +37,18 @@ module.exports = function (graphml) {
     });
 
     return keyMatch.length ? keyMatch[0]._ : null;
+  };
+
+  var findYFilesKey = function (element, keyId) {
+    if (!element.data) {
+      return null;
+    }
+
+    var keyMatch = element.data.filter(function (data) {
+      return data.$.key === keyId;
+    });
+
+    return keyMatch.length ? keyMatch[0] : null;
   };
 
   var network = {
@@ -62,11 +81,23 @@ module.exports = function (graphml) {
 
   var nameId = findKeyId("name", "node");
   var sharedNameId = findKeyId("shared name", "node");
+  var yFilesNodeId = findYFilesKeyId("nodegraphics", "node");
 
   var geneIds = [];
   if (graph.node) {
     network.genes = graph.node.map(function (node) {
       var nodeName = node.$.id;
+
+      if (yFilesNodeId) {
+        var yNodeGraphics = findYFilesKey(node, yFilesNodeId);
+        if (yNodeGraphics) {
+          var yShapeNode = yNodeGraphics["y:ShapeNode"];
+          if (yShapeNode && yShapeNode[0]["y:NodeLabel"]) {
+            nodeName = yShapeNode[0]["y:NodeLabel"][0];
+          }
+        }
+      }
+
       if (sharedNameId) {
         var sharedName = findKey(node, sharedNameId);
         if (sharedName) {

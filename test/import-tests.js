@@ -439,4 +439,25 @@ describe("Import from GraphML", function () {
       });
     });
   });
+
+  it("should read labels from yED keys if available", function () {
+    fs.readFile(__dirname + "/../test-files/import-samples/graph-with-yed-tags.graphml", UTF8, function (error, data) {
+      expect(
+        importController.graphMlToGrnsight(data)
+      ).to.deep.equal({
+        genes: [
+          { name: "January" },
+          { name: "n1" }
+        ],
+
+        links: [
+          { source: 1, target: 0 }
+        ],
+
+        errors: [],
+        warnings: [],
+        sheetType: "unweighted"
+      });
+    });
+  });
 });

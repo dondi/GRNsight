@@ -15,6 +15,13 @@ var grnsightToGraphMlJson = function (network) {
 
       key: [
         {
+          "@id": NAME_ID,
+          "@for": "node",
+          "@attr.name": "name",
+          "@attr.type": "string"
+        },
+
+        {
           "@id": INTERACTION_ID,
           "@for": "edge",
           "@attr.name": "interaction",
@@ -26,8 +33,7 @@ var grnsightToGraphMlJson = function (network) {
           "@for": "edge",
           "@attr.name": "name",
           "@attr.type": "string"
-        },
-
+        }
       ]
     }
   };
@@ -45,7 +51,13 @@ var grnsightToGraphMlJson = function (network) {
     "@edgedefault": "directed",
 
     node: network.genes.map(function (gene) {
-      return { "@id": gene.name };
+      return {
+        "@id": gene.name,
+        data: {
+          "@key": NAME_ID,
+          "#text": gene.name
+        }
+      };
     }),
 
     edge: network.links.map(function (link) {
