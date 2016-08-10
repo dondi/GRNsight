@@ -82,13 +82,14 @@
         
     var defs = svg.append("defs");
 
-    var link = svg.selectAll(".link"),
-        node = svg.selectAll(".node");
+    var link = svg.selectAll(".link");
+    var node = svg.selectAll(".node");
+    var weight = svg.selectAll(".weight");
 
     force.nodes(nodes)
          .links(links)
          .start();
-  
+
     link = link.data(links)
                .enter().append("g")
                .attr("class", "link")
@@ -104,7 +105,17 @@
                .attr("height", nodeHeight)
                .call(drag);
 
+    if (sheetType === "weighted") {
+      link.append("path")
+        .attr("class", "mousezone")
+        .style("stroke-width", function (d) {
+          var baseThickness = getEdgeThickness(d);
+          return Math.max(baseThickness, 7);
+        });
+    }
+
     link.append("path")
+      .attr('class', "main")
       .attr('id', function (d) {
         return "path" + d.source.index + "_" + d.target.index;
       }).style('stroke-width', function (d) {
@@ -301,12 +312,23 @@
         });
 
     if (sheetType === "weighted") {
-      link.append("text")
+      weight = weight.data(links)
+        .enter().append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
-        .text(function (d) {
-          return d.value.toPrecision(4);
-        });
+        .text(function (d) { return d.value.toPrecision(4); })
+        .each(function (d) { d.weightElement = d3.select(this); });
+
+      var showWeight = function (d) {
+        d.weightElement.classed("visible", true);
+      };
+
+      var hideWeight = function (d) {
+        d.weightElement.classed("visible", false);
+      };
+
+      link.on('mouseover', showWeight).on('mouseout', hideWeight);
+      weight.on('mouseover', showWeight).on('mouseout', hideWeight);
     }
 
     /* Big thanks to the following for the smart edges
@@ -583,7 +605,7 @@
         /* Allows for looping edges.
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
-        link.select("path").attr('d', function (d) {
+        link.selectAll("path").attr('d', function (d) {
           if (d.target === d.source) {
             var x1 = d.source.x,
                 y1 = d.source.y,
@@ -638,7 +660,7 @@
           }
         });
 
-        link.select("path").attr("marker-end", function(d) {
+        link.select("path.main").attr("marker-end", function(d) {
           var x1 = d.source.x,
               y1 = d.source.y,
               x2 = d.target.x,
@@ -665,7 +687,7 @@
           }
         });
 
-        link.select("text").attr("x", function (d) {
+        weight.attr("x", function (d) {
           return d.label.x;
         }).attr("y", function (d) {
           return d.label.y;

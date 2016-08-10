@@ -149,7 +149,12 @@ text.weight {
   stroke: #fff;
   stroke-width: 0.5px;
   transition: opacity 0.25s;
+  visibility: hidden;
 }
-g.link > path:hover + text.weight {
+text.weight.visible {
   opacity: 1;
+  visibility: visible;
+}
+path.mousezone {
+  opacity: 0;
 }
