@@ -331,6 +331,7 @@ $(function () {
     result.links.forEach(function (link) {
       link.source = link.source.index;
       link.target = link.target.index;
+      delete link.weightElement;
     });
     return result;
   };
