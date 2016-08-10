@@ -92,8 +92,10 @@ module.exports = function (graphml) {
         var yNodeGraphics = findYFilesKey(node, yFilesNodeId);
         if (yNodeGraphics) {
           var yShapeNode = yNodeGraphics["y:ShapeNode"];
-          if (yShapeNode && yShapeNode[0]["y:NodeLabel"]) {
-            nodeName = yShapeNode[0]["y:NodeLabel"][0];
+          var yNodeLabel = yShapeNode && yShapeNode[0]["y:NodeLabel"];
+          if (yNodeLabel) {
+            // The yNodeLabel may either be plain text or have subelements, so...
+            nodeName = (yNodeLabel[0]._ || yNodeLabel[0]).trim();
           }
         }
       }
