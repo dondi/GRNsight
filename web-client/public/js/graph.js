@@ -139,7 +139,7 @@
               xOffsets,
               color;
 
-          if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+          if (Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
             minimum = "gray";
           }
           if( x1 === x2 && y1 === y2 ) {
@@ -320,7 +320,11 @@
         .each(function (d) { d.weightElement = d3.select(this); });
 
       var showWeight = function (d) {
-        d.weightElement.classed("visible", true);
+        var mouse = d3.mouse(this);
+        d.weightElement
+          .attr("x", mouse[0])
+          .attr("y", mouse[1])
+          .classed("visible", true);
       };
 
       var hideWeight = function (d) {
@@ -391,11 +395,6 @@
                 cp1y = y1 + inlineOffset * uy + vy * orthoOffset,
                 cp2x = x2 - inlineOffset * ux + vx * orthoOffset,
                 cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
-
-            d.label = {
-                x: (x1 + cp1x + cp2x + x2) / 4,
-                y: (y1 + cp1y + cp2y + y2) / 4
-            };
 
             cp1x = Math.min(Math.max(0, cp1x), width);
             cp1y = Math.min(Math.max(0, cp1y), height);
@@ -651,7 +650,6 @@
               }
             }
 
-            d.label = { x: x1, y: y1 + dry * 3 };
             return "M" + x1 + "," + y1 +
                    "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
                          x2  + "," + (y2 + offset);
@@ -686,13 +684,6 @@
             return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
         });
-
-        weight.attr("x", function (d) {
-          return d.label.x;
-        }).attr("y", function (d) {
-          return d.label.y;
-        });
-
       } catch (e) {
         console.warn("Detected invalid node. Moving on to next node.");
       }
