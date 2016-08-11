@@ -1,6 +1,6 @@
 {
   "name": "grnsight-server",
-  "version": "1.12.0",
+  "version": "1.18",
   "scripts": {
     "start": "node app.js"
   },
