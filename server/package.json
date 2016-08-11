@@ -10,8 +10,10 @@
     "googleapis": "^1.1.5",
     "mocha": "latest",
     "multiparty": "latest",
-    "node-xlsx": "latest",
+    "node-xlsx": "^0.4.0",
     "should": "latest",
-    "supertest": "latest"
+    "supertest": "latest",
+    "xml2js": "^0.4.17",
+    "xmlbuilder": "^8.2.2"
   }
 }

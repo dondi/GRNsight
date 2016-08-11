@@ -16,7 +16,6 @@ html
       ga("create", "UA-54882218-1", "auto");
   
   body
-
     nav(class='navbar navbar-default' role='navigation')
       div(class='container-fluid')
         div(class='navbar-header')
@@ -31,21 +30,63 @@ html
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') File
               ul(class='dropdown-menu' role='menu')
                 li
-                  a(href='#' id='open-item')
+                  a(class='upload' href='#' id='open-item')
                     label(for='upload' id='open')
                       span(class='glyphicon glyphicon-folder-open')
                       | &nbsp; Open
-                    input(type='file', name='upload', id='upload', accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                    input(type='hidden', id='service-root', value='#{serviceRoot}')
+                    input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                    input(type='hidden' id='service-root' value='#{serviceRoot}')
                 li(class='startDisabled disabled')
                   a(href='#' id='reload')
                     span(class='glyphicon glyphicon-repeat')
                     | &nbsp; Reload
                 li(class='divider')
-                li(class='disabled')
+                li(class='dropdown-submenu')
+                  a(href='#')
+                    span(class='glyphicon glyphicon-import')
+                    | &nbsp; Import
+                  ul(class='dropdown-menu')
+                    li
+                      a(class='upload' href='#' id='importSif')
+                        label(for='upload-sif' id='import-sif') SIF…
+                        input(type='file' name='upload-sif' id='upload-sif' accept='.sif')
+                    li
+                      a(class='upload' href='#' id='importGraphMl')
+                        label(for='upload-graphml' id='import-graphml') GraphML…
+                        input(type='file' name='upload-graphml' id='upload-graphml' accept='.graphml')
+                    li(class='disabled not-yet-implemented')
+                      a(class='upload' href='#' id='importGml')
+                        label(for='upload-gml' id='import-gml') GML…
+                li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-export')
-                    | &nbsp; Export
+                    | &nbsp; Export Data
+                  ul(class='dropdown-menu')
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedSif') To Unweighted SIF
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedSif') To Weighted SIF
+                    li(class='divider')
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
+                    li(class='divider not-yet-implemented')
+                    li(class='startDisabled disabled not-yet-implemented unweighted export')
+                      a(href='#' id='exportAsUnweightedGml') To Unweighted GML
+                    li(class='startDisabled disabled not-yet-implemented weighted export')
+                      a(href='#' id='exportAsWeightedGml') To Weighted GML
+                li(class='dropdown-submenu disabled not-yet-implemented')
+                  a(href='#')
+                    span(class='glyphicon glyphicon-picture')
+                    | &nbsp; Export Image
+                  ul(class='dropdown-menu')
+                    li(class='disabled')
+                      a(href='#' id='exportAsJpg') To JPEG
+                    li(class='disabled')
+                      a(href='#' id='exportAsPdf') To PDF
+                    li(class='disabled')
+                      a(href='#' id='exportAsSvg') To SVG
                 li(class='divider')
                 li(class=' startDisabled disabled')
                   a(href='#' id='printGraph')
@@ -54,15 +95,15 @@ html
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown' disabled) Edit
               ul(class='dropdown-menu' role='menu')
-                li(class='disabled')
+                li(class='disabled not-yet-implemented')
                   a(href='#') 
                     span(class='glyphicon invisible')
                     | &nbsp; Undo
-                li(class='disabled')
+                li(class='disabled not-yet-implemented')
                   a(href='#') 
                     span(class='glyphicon invisible')
                     | &nbsp; Redo
-                li(class='divider')
+                li(class='divider not-yet-implemented')
                 li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-wrench')
@@ -83,7 +124,7 @@ html
                   a(href='#' class='noGlyph' id='lockSlidersMenu')
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Force Graph Parameters
-                li(class='disabled')
+                li(class='disabled not-yet-implemented')
                   a(href='#' class='noGlyph') 
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Nodes
@@ -96,7 +137,7 @@ html
                   a(href='#' id='undoResetMenu')
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
-            li(class='dropdown') 
+            li(class='dropdown not-yet-implemented')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
               ul(class='dropdown-menu' role='menu')
                 li(class='disabled')
@@ -154,22 +195,24 @@ html
           input(id='undoReset' type='button' class='btn btn-default btnSidebar' value='Undo Reset' disabled)
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
-    div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
-            input(type='button' class='close' data-dismiss='modal' aria-hidden='true' value='X')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
             h4(class='modal-title') Error
           div(class='modal-body')
             p(id='error')
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
-    div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
-            input(type='button' class='close' data-dismiss='modal' aria-hidden='true' value='X')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
             h4(class='modal-title') Warning
           div(class='modal-body')
             p(id='warningIntro')
@@ -183,7 +226,19 @@ html
                     p(id='warningsList')
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
-            // input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+    div(id='importErrorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
+      div(class='modal-dialog')
+        div(class='modal-content')
+          div(class='modal-header')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+            h4(class='modal-title') Import Error
+          div(class='modal-body')
+            p The following error was encountered during the import attempt:
+            blockquote(id='importErrorMessage')
+            div Please verify that the file being imported is in the right format then try the import again.
+          div(class='modal-footer')
+            input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js')

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml>
+    <key attr.name="SUID" attr.type="long" for="node" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="node" id="shared name"/>
+    <key attr.name="name" attr.type="string" for="node" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="node" id="selected"/>
+    <key attr.name="SUID" attr.type="long" for="node" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="node" id="shared name"/>
+    <key attr.name="shared interaction" attr.type="string" for="node" id="shared interaction"/>
+    <key attr.name="name" attr.type="string" for="node" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="node" id="selected"/>
+    <key attr.name="interaction" attr.type="string" for="node" id="interaction"/>
+    <key attr.name="SUID" attr.type="long" for="node" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="node" id="shared name"/>
+    <key attr.name="name" attr.type="string" for="node" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="node" id="selected"/>
+    <key attr.name="__Annotations" attr.type="string" for="node" id="__Annotations"/>
+    <graph edgedefault="directed" id="New_manual_Network_name">
+        <node id="122">
+            <data key="SUID">122</data>
+            <data key="shared name">Gene4_sharedname</data>
+            <data key="name">Gene4_name</data>
+            <data key="selected">false</data>
+        </node>
+        <node id="120">
+            <data key="SUID">120</data>
+            <data key="shared name">Gene3_sharedname</data>
+            <data key="name">Gene3_name</data>
+            <data key="selected">false</data>
+        </node>
+        <node id="118">
+            <data key="SUID">118</data>
+            <data key="shared name">Gene2_sharedname</data>
+            <data key="name">Gene2_name</data>
+            <data key="selected">false</data>
+        </node>
+        <node id="116">
+            <data key="SUID">116</data>
+            <data key="shared name">Gene1_sharedname</data>
+            <data key="name">Gene1_name</data>
+            <data key="selected">false</data>
+        </node>
+        <edge source="122" target="122">
+            <data key="SUID">130</data>
+            <data key="shared name">Gene4_sharedname (interacts with) Gene4_sharedname</data>
+            <data key="shared interaction">interacts with_sharedinteraction</data>
+            <data key="name">Gene4_sharedname (interacts with) Gene4_sharedname</data>
+            <data key="selected">false</data>
+            <data key="interaction">interacts with_interaction</data>
+        </edge>
+        <edge source="120" target="122">
+            <data key="SUID">128</data>
+            <data key="shared name">Gene3_sharedname (interacts with) Gene4_sharedname</data>
+            <data key="shared interaction">interacts with_sharedinteraction</data>
+            <data key="name">Gene3_sharedname (interacts with) Gene4_sharedname</data>
+            <data key="selected">false</data>
+            <data key="interaction">interacts with_interaction</data>
+        </edge>
+        <edge source="118" target="120">
+            <data key="SUID">126</data>
+            <data key="shared name">Gene2_sharedname (interacts with) Gene3_sharedname</data>
+            <data key="shared interaction">interacts with_sharedinteraction</data>
+            <data key="name">Gene2_sharedname (interacts with) Gene3_sharedname</data>
+            <data key="selected">false</data>
+            <data key="interaction">interacts with_interaction</data>
+        </edge>
+        <edge source="116" target="118">
+            <data key="SUID">124</data>
+            <data key="shared name">Gene1_sharedname (interacts with) Gene2_sharedname</data>
+            <data key="shared interaction">interacts with_sharedinteraction</data>
+            <data key="name">Gene1_sharedname (interacts with) Gene2_sharedname</data>
+            <data key="selected">false</data>
+            <data key="interaction">interacts with_interaction</data>
+        </edge>
+    </graph>
+</graphml>

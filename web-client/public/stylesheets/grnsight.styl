@@ -33,26 +33,29 @@ form label, form span
   top: 1px
   width: 1350px
 
-#upload
-  display: none
-
 .glyphicon
   min-width: 22px
 
-#open-item
+.dropdown-menu > li > a.upload
   padding-left: 0
   padding-right: 0
 
-#open
+.dropdown-menu > li > a.upload > label
   font-weight: normal
   margin-bottom: 0
   padding-left: 20px
   padding-right: 20px
   width: 100%
 
+.dropdown-menu > li > a.upload > input[type=file]
+  display: none
+
 #fileName
   color: #000000
   cursor: text
+
+.not-yet-implemented, .nav > li.not-yet-implemented
+  display: none
 
 nav.navbar.navbar-default
   background-color: #dfebe5
@@ -91,6 +94,9 @@ nav.navbar.navbar-default
 
 .btnSidebar
   width: 225px
+
+#warningsModal #accordion
+  margin-bottom: 0
 
 // Many thanks to Skelly from http://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing
 // for the solution to creating submenus in bootstrap!
@@ -135,3 +141,21 @@ nav.navbar.navbar-default
     -webkit-border-radius:6px 0 6px 6px
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
+
+text.weight
+    cursor: default
+    font-size: 20px
+    font-weight: 900
+    fill: black
+    opacity: 0.0
+    stroke: white
+    stroke-width: 0.5px
+    transition: opacity 0.25s
+    visibility: hidden
+
+text.weight.visible
+    opacity: 1.0
+    visibility: visible
+
+path.mousezone
+    opacity: 0.0

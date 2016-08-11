@@ -81,14 +81,15 @@
         .attr("height", height);
         
     var defs = svg.append("defs");
-  
-    var link = svg.selectAll(".link"),
-        node = svg.selectAll(".node");
+
+    var link = svg.selectAll(".link");
+    var node = svg.selectAll(".node");
+    var weight = svg.selectAll(".weight");
 
     force.nodes(nodes)
          .links(links)
          .start();
-  
+
     link = link.data(links)
                .enter().append("g")
                .attr("class", "link")
@@ -104,7 +105,17 @@
                .attr("height", nodeHeight)
                .call(drag);
 
+    if (sheetType === "weighted") {
+      link.append("path")
+        .attr("class", "mousezone")
+        .style("stroke-width", function (d) {
+          var baseThickness = getEdgeThickness(d);
+          return Math.max(baseThickness, 7);
+        });
+    }
+
     link.append("path")
+      .attr('class', "main")
       .attr('id', function (d) {
         return "path" + d.source.index + "_" + d.target.index;
       }).style('stroke-width', function (d) {
@@ -128,7 +139,7 @@
               xOffsets,
               color;
 
-          if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+          if (Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
             minimum = "gray";
           }
           if( x1 === x2 && y1 === y2 ) {
@@ -298,12 +309,31 @@
               }
           }
           return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-        }).append("svg:title")
-          .text(function (d) {
-            if (sheetType !== "unweighted") {
-              return d.value.toPrecision(4);
-            }
-          });
+        });
+
+    if (sheetType === "weighted") {
+      weight = weight.data(links)
+        .enter().append("text")
+        .attr("class", "weight")
+        .attr("text-anchor", "middle")
+        .text(function (d) { return d.value.toPrecision(4); })
+        .each(function (d) { d.weightElement = d3.select(this); });
+
+      var showWeight = function (d) {
+        var mouse = d3.mouse(this);
+        d.weightElement
+          .attr("x", mouse[0])
+          .attr("y", mouse[1])
+          .classed("visible", true);
+      };
+
+      var hideWeight = function (d) {
+        d.weightElement.classed("visible", false);
+      };
+
+      link.on('mouseover', showWeight).on('mouseout', hideWeight);
+      weight.on('mouseover', showWeight).on('mouseout', hideWeight);
+    }
 
     /* Big thanks to the following for the smart edges
      * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
@@ -574,7 +604,7 @@
         /* Allows for looping edges.
          * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
          */
-        link.select("path").attr('d', function (d) {
+        link.selectAll("path").attr('d', function (d) {
           if (d.target === d.source) {
             var x1 = d.source.x,
                 y1 = d.source.y,
@@ -628,7 +658,7 @@
           }
         });
 
-        link.select("path").attr("marker-end", function(d) {
+        link.select("path.main").attr("marker-end", function(d) {
           var x1 = d.source.x,
               y1 = d.source.y,
               x2 = d.target.x,
@@ -654,7 +684,6 @@
             return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
           }
         });
-
       } catch (e) {
         console.warn("Detected invalid node. Moving on to next node.");
       }
@@ -772,4 +801,7 @@
     $( "input[type='range']" ).prop( 'disabled', lockCheck );
     $( "#undoReset" ).prop( 'disabled', true );
     $(".startDisabled").removeClass("disabled");
+    if (sheetType === "unweighted") {
+      $(".startDisabled.weighted.export").addClass("disabled");
+    }
   }
