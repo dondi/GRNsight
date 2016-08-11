@@ -13,6 +13,10 @@ var grnsightToGraphMlJson = function (network) {
       "@xsi:schemaLocation": "http://graphml.graphdrawing.org/xmlns " +
         "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd",
 
+      "#comment": "Exported by GRNsight v" + constants.VERSION + "  " +
+        "http://dondi.github.io/GRNsight/  " +
+        "https://github.com/dondi/GRNsight/releases/tag/v" + constants.VERSION,
+
       key: [
         {
           "@id": NAME_ID,
