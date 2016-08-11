@@ -2,6 +2,7 @@ var expect = require("chai").expect;
 var extend = require("jquery-extend");
 
 var exportController = require(__dirname + "/../server/controllers" + "/export-controller")();
+var constants = require(__dirname + "/../server/controllers" + "/constants");
 
 var unweightedTestNetwork = {
   genes: [
@@ -117,6 +118,10 @@ describe("Export to SIF", function () {
   });
 });
 
+var EXPORT_COMMENT = "<!-- Exported by GRNsight v" + constants.VERSION + "  " +
+  "http://dondi.github.io/GRNsight/  " +
+  "https://github.com/dondi/GRNsight/releases/tag/v" + constants.VERSION + " -->";
+
 describe("Export to GraphML", function () {
   it("should export unweighted networks to GraphML correctly", function () {
     var lines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
@@ -129,6 +134,7 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      EXPORT_COMMENT,
       '<key id="name" for="node" attr.name="name" attr.type="string"/>',
       '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
       '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
@@ -177,6 +183,7 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      EXPORT_COMMENT,
       '<key id="name" for="node" attr.name="name" attr.type="string"/>',
       '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
       '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
@@ -229,6 +236,7 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      EXPORT_COMMENT,
       '<key id="name" for="node" attr.name="name" attr.type="string"/>',
       '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
       '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
@@ -288,6 +296,7 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      EXPORT_COMMENT,
       '<key id="name" for="node" attr.name="name" attr.type="string"/>',
       '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
       '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
@@ -354,6 +363,7 @@ describe("Export to GraphML", function () {
         'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
         'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
         'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+      EXPORT_COMMENT,
       '<key id="name" for="node" attr.name="name" attr.type="string"/>',
       '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
       '<key id="name" for="edge" attr.name="name" attr.type="string"/>',

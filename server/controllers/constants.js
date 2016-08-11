@@ -1,4 +1,6 @@
 module.exports = {
+  VERSION: "1.18",
+
   NOT_FOUND: -1,
   WEIGHTED: "weighted",
   UNWEIGHTED: "unweighted",
