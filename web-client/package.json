@@ -1,6 +1,6 @@
 {
   "name": "grnsight-web-client",
-  "version": "1.18",
+  "version": "1.18.1",
   "scripts": {
     "start": "node app.js",
     "test": "mocha -R spec" 
