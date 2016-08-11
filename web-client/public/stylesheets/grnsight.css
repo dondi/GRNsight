@@ -142,6 +142,7 @@ nav.navbar.navbar-default {
   border-radius: 6px 0 6px 6px;
 }
 text.weight {
+  cursor: default;
   font-size: 20px;
   font-weight: 900;
   fill: #000;
