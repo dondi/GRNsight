@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 8/16/16
+modified: 8/17/16
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small- to medium-scale gene regulatory networks.
 ---
           <p id="pageTitle">Documentation</p>
@@ -242,12 +242,18 @@ description: Learn how to format and upload files to GRNsight, a web application
                       </div>
                       <div id="graphml_instructions" class="panel-collapse collapse">
                         <div class="panel-body">
-                          GraphML is a comprehensive and easy-to-use file format for graphs, based on XML. It consists of a language core to describe the structural properties of a graph and a flexible extension mechanism to add application-specific data.  Users who have data in GraphML format can import these files directly into GRNsight. However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>. A primer for the GraphML format can be found at <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">http://graphml.graphdrawing.org/primer/graphml-primer.html</a>, whereas the detailed specification can be found at <a href= "http://graphml.graphdrawing.org/specification.html" target="_blank">http://graphml.graphdrawing.org/specification.html</a>.<br><br>
+                          According to <a href="http://graphml.graphdrawing.org">http://graphml.graphdrawing.org</a>, "GraphML is a comprehensive and easy-to-use file format for graphs. It consists of a language core to describe the structural properties of a graph and a flexible extension mechanism to add application-specific data."<br><br>
+                          
+                          Users who have data in GraphML format can import these files directly into GRNsight. However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.<br><br>
+                          
+                          A primer for the GraphML format can be found at <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">http://graphml.graphdrawing.org/primer/graphml-primer.html</a>, whereas the detailed specification can be found at <a href= "http://graphml.graphdrawing.org/specification.html" target="_blank">http://graphml.graphdrawing.org/specification.html</a>.  The instructions below borrow heavily from the GraphML primer.<br><br>
                           
                           <ul>
-                            <li>A GraphML file is an XML file with the extension .graphml.</li>
+                            <li>A GraphML file is an E<b>x</b>tensible <b>M</b>arkup <b>L</b>anguage (XML) file with the extension .graphml.</li>
+
+                            <li>GraphML has the ability to specify graph features that GRNsight cannot display.  In those cases, GRNsight will ignore the features that are not relevant.</li>
                             
-                            <li>The minimum requirements for an unweighted GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.graphml" target="_blank">Demo #3 Unweighted GRN (21 genes, 31 edges)</a> GraphML file as exported by GRNsight.  (The screenshots were created with the <a href="http://www.firstobject.com/dn_editor.htm" target="_blank">firstobject XML Editor</a>).  Click the link to download the file.
+                            <li>The minimum requirements for an unweighted GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.graphml" target="_blank">Demo #3 Unweighted GRN (21 genes, 31 edges)</a> GraphML file as exported by GRNsight.  (The screenshots were created from a view from the <a href="http://www.firstobject.com/dn_editor.htm" target="_blank">firstobject XML Editor</a>).  Click the link to download the file.
                             
                             <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_graphml_header-and-3-nodes.png" alt="GraphML sample 1 unweighted network top" height="242" width="1569" />
@@ -258,6 +264,70 @@ description: Learn how to format and upload files to GRNsight, a web application
                                   <br><br>
                             
                             </li>
+                            <li>“The first line of the document is an XML process instruction which defines that the document adheres to the XML 1.0 standard and that the encoding of the document is UTF-8, the standard encoding for XML documents.”—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
+                            
+                            <li>“The second line contains the root-element element of a GraphML document: the graphml element. The graphml element, like all other GraphML elements, belongs to the namespace http://graphml.graphdrawing.org/xmlns. For this reason we define this namespace as the default namespace in the document by adding the XML Attribute xmlns="http://graphml.graphdrawing.org/xmlns" to it. The two other XML Attributes are needed to specify the XML Schema for this document. In our example we use the standard schema for GraphML documents located on the graphdrawing.org server. The first attribute, xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance", defines xsi as the XML Schema namespace. The second attribute, xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd" , defines the XML Schema location for all elements in the GraphML namespace.”—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
+                            
+                            <li>The third line is a comment injected by GRNsight, giving the name of the program that created the document (GRNsight), the version (in this case v1.18), URL of the GRNsight home page, and URL to the GitHub release page for the specified version.  This information is provided upon export of a GraphML file by GRNsight to assist with keeping track of the provenance of the data, and is optional for the import of GraphML files into GRNsight.</li>
+                            
+                            <li>The next three lines are key elements.  GraphML standardizes only the representation of nodes and edges and their directions; all other characteristics, such as names, weights, and other values, are left for others to specify through a key element, which is not subject to a controlled vocabulary. For an unweighted network, GRNsight-exported GraphML uses the keys:</li>
+                              <ul>
+                                        
+                                <li>name for the node label (The node name is defined for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
+                                
+                                <li>interaction for the relationship type of the edge (The relationship type is defined in the same way as for SIF files described in Section 1c for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
+                                
+                                <li>name for the edge (The edge name is defined for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
+                                        
+                              </ul>
+                            
+                            <li>"A graph is, not surprisingly, denoted by a graph element. Nested inside a graph element are the declarations of nodes and edges. A node is declared with a node element, and an edge with an edge element."—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
+                              <ul>
+                                        
+                                <li>In the graph element in line 7, the edgedefault attribute is set to “directed”.  GRNsight will only display directed graphs, not undirected or mixed graphs.</li>  
+                                
+                                <li>The id attribute gives the name of the GraphML file, and is optional for GRNsight to read and display the graph.  The id is provided for compatibility with Cytoscape.</li>
+                                        
+                              </ul>
+                              
+                              <li>The next three elements in the screenshot are node declarations, giving an id and name for the nodes “ABF1”, “ACE2”, and “AFT1”.</li>
+                              
+                              <ul>
+                                        
+                                <li>Note that for GRNsight-exported GraphML, the node id and name are identical and unique to the file.  However, other programs may have a node name that is different than the node id.  For example, both Cytoscape v3.4.0 and yED v3.16 assign internal node IDs that the user cannot edit.  The user can edit the node label and can actually assign the same label to two different nodes.</li>
+                                
+                                <li>Cytoscape uses the name key to assign a label to nodes and a shared name key to assign a label to the root network when subnetworks are present.</li>
+                                
+                                <li>yED uses a y:NodeLabel key to assign the label to nodes.</li>
+                                
+                                <li>In order to read GraphML exported from Cytoscape and yED, if all three keys are present name gets top priority, followed by shared name, then y:NodeLabel, then id)</li>
+                                        
+                              </ul>
+                              
+                            <li>The next three elements are edge declarations for the edges ROX1-to-YAP6, YAP1-to-YAP6, and YAP6-to-YAP6.</li>
+                            
+                            <ul>
+                                      
+                              <li>The edge element attributes source and target give the node id for the source and target node, respectively.</li>
+                              
+                              <li>The interaction key is the relationship type noted above.  It is given for compatibility with Cytoscape and defaults to “pd” for protein DNA, but is otherwise ignored by GRNsight for display.</li>
+                              
+                              <li>The edge name key is given for compatibility with Cytoscape, but is otherwise ignored by GRNsight for display.</li>
+                                      
+                            </ul>
+                            
+                            <li>As noted above, GraphML has the ability to specify graph features that GRNsight cannot display.  In those cases, GRNsight will ignore the features that are not relevant.</li>
+                            
+                            <ul>
+                                      
+                              <li>GRNsight cannot display nested graph.  Any links that connect nodes from the main graph to nodes in the subgraph will not display.</li>
+                              
+                              <li>Any other specifications for the display of the graph (layout, colors, etc.) will be ignored by GRNsight.</li>
+                                      
+                            </ul>
+                            
+                            <li>We have tested the display of networks exported in GraphML format from Cytoscape v3.4.0 and yED v3.16, but because the flexibility of the GraphML standard enables divergence in implementation, we cannot guarantee that GraphML exported from other programs will be read and displayed correctly by GRNsight.  If you encounter problems, To request support, please submit an issue to GRNsight @ GitHub (requires free GitHub account).</li>
+                          
                             <li>The minimum requirements for a weighted GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.graphml" target="_blank">Demo #4 Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</a> GraphML file as exported by GRNsight.  Click the link to download the file.
                             
                                                         <br><br>
@@ -269,6 +339,29 @@ description: Learn how to format and upload files to GRNsight, a web application
                                   <br><br>
                             
                             </li>
+                            
+                            <ul>
+                                      
+                              <li>Note that there are only two major differences between the unweighted and weighted GraphML formats:</li>
+                              
+                              <ul>
+                                        
+                                <li>A key declaration defining a weight attribute for an edge as the datatype “double”.</li>
+                                
+                                <li>The addition of the weight key for each edge.</li>
+                                        
+                              </ul>
+                              
+                              <li>GRNsight automatically detects if a GraphML file specifying a weighted graph has been imported.</li>
+                              
+                              <ul>
+                                        
+                                <li>For a weighted graph to display, the weight attribute must be present for each edge declared in the graph.  If one or more weights are not present, GRNsight will display the graph as unweighted with black arrows and pointed arrowheads.</li>
+                                        
+                              </ul>
+                                      
+                            </ul>
+                            
                             <li>Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, it is recommended that you import networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.</li>
                           </ul>
                         </div>
