@@ -275,9 +275,9 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         
                                 <li><i>name</i> for the node label (The node name is defined for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
                                 
-                                <li><i>interaction</i> for the relationship type of the edge (The relationship type is defined in the same way as for SIF files described in <a href="#cytoscape_sif_instructions" data-toggle="collapse">Section 1c</a> for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
+                                <li><i>interaction</i> for the relationship type of the edge (The relationship type is defined in the same way as for SIF files described in <a href="#cytoscape_sif_instructions" data-toggle="collapse">Section 1c</a> for compatibility with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, but is optional for GRNsight to read and display the graph.)</li>
                                 
-                                <li><i>name</i> for the edge (The edge name is defined for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
+                                <li><i>name</i> for the edge (The edge name is defined for compatibility with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, but is optional for GRNsight to read and display the graph.)</li>
                                         
                               </ul>
                             
@@ -294,11 +294,11 @@ description: Learn how to format and upload files to GRNsight, a web application
                               
                               <ul>
                                         
-                                <li>Note that for GRNsight-exported GraphML, the node <i>id</i> and <i>name</i> are identical and unique to the file.  However, other programs may have a node <i>name</i> that is different than the node <i>id</i>.  For example, both Cytoscape v3.4.0 and yED v3.16 assign internal node identifiers that the user cannot edit.  The user does have the ability edit the node label, and it is for this reason that GRNsight will preferentially display the node label on the graph.  However, user editability in Cytoscape and yED leads to a situation where a user can actually assign the same label to two different nodes.  In this case, duplicate node labels will be displayed by GRNsight, and the user is directed to go back and edit the source file.</li>
+                                <li>Note that for GRNsight-exported GraphML, the node <i>id</i> and <i>name</i> are identical and unique to the file.  However, other programs may have a node <i>name</i> that is different than the node <i>id</i>.  For example, both <a href="http://www.cytoscape.org/download.php" target="_blank">Cytoscape v3.4.0</a> and <a href="https://www.yworks.com/products/yed" target="_blank"></a>yED</a> v3.16 assign internal node identifiers that the user cannot edit.  The user does have the ability edit the node label, and it is for this reason that GRNsight will preferentially display the node label on the graph.  However, user editability in Cytoscape and yED leads to a situation where a user can actually assign the same label to two different nodes.  In this case, duplicate node labels will be displayed by GRNsight, and the user is directed to go back and edit the source file.</li>
                                 
-                                <li>Cytoscape uses the <i>name</i> key to assign a label to nodes and a <i>shared name</i> key to assign a label to the root network when subnetworks are present.</li>
+                                <li><a href="http://www.cytoscape.org" target="_blank">Cytoscape</a> uses the <i>name</i> key to assign a label to nodes and a <i>shared name</i> key to assign a label to the root network when subnetworks are present.</li>
                                 
-                                <li>yED uses a <i>y:NodeLabel</i> key to assign the label to nodes.</li>
+                                <li><a href="https://www.yworks.com/products/yed" target="_blank"></a>yED</a> uses a <i>y:NodeLabel</i> key to assign the label to nodes.</li>
                                 
                                 <li>In order to maximize the ability for GRNsight to read GraphML exported from Cytoscape and yED, the following conditions are followed when displaying a graph:  if all three keys are present <i>name</i> gets top priority, followed by <i>shared name</i>, then <i>y:NodeLabel</i>, then <i>id</i>.</li>
                                         
@@ -310,7 +310,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                       
                               <li>The <i>edge</i> element attributes <i>source</i> and <i>target</i> give the node <i>id</i> for the source and target node, respectively.</li>
                               
-                              <li>The <i>interaction</i> key is the relationship type, similar to what is defined for SIF files.  It is given for compatibility with Cytoscape and defaults to “pd” for protein->DNA, but is otherwise ignored by GRNsight for display.</li>
+                              <li>The <i>interaction</i> key is the relationship type, similar to what is defined for SIF files.  It is given for compatibility with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a> and defaults to “pd” for protein->DNA, but is otherwise ignored by GRNsight for display.</li>
                               
                               <li>The edge <i>name</i> key is given for compatibility with Cytoscape, but is otherwise ignored by GRNsight for display.</li>
                                       
@@ -326,7 +326,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                       
                             </ul>
                             
-                            <li>We have tested the display of networks exported in GraphML format from Cytoscape v3.4.0 and yED v3.16, but because the flexibility of the GraphML standard enables divergence in implementation, we cannot guarantee that GraphML exported from other programs will be read and displayed correctly by GRNsight.  If you encounter problems, please submit an issue to <a href="https://github.com/dondi/GRNsight/issues" target="_blank">GRNsight @ GitHub</a> (requires free <a href="http://www.github.com" target="_blank">GitHub</a> account).</li>
+                            <li>We have tested the display of networks exported in GraphML format from <a href="http://www.cytoscape.org/download.php" target="_blank">Cytoscape v3.4.0</a> and <a href="https://www.yworks.com/products/yed" target="_blank"></a>yED</a> v3.16, but because the flexibility of the GraphML standard enables divergence in implementation, we cannot guarantee that GraphML exported from other programs will be read and displayed correctly by GRNsight.  If you encounter problems, please submit an issue to <a href="https://github.com/dondi/GRNsight/issues" target="_blank">GRNsight @ GitHub</a> (requires free <a href="http://www.github.com" target="_blank">GitHub</a> account).</li>
                           
                             <li>The minimum requirements for a <u>weighted</u> GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.graphml" target="_blank">Demo #4 Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</a> GraphML file as exported by GRNsight.  Click the link to download the file.
                             
@@ -347,6 +347,11 @@ description: Learn how to format and upload files to GRNsight, a web application
                               <ul>
                                         
                                 <li>A <i>key</i> declaration defining a <i>weight</i> attribute for an edge as the datatype “double”.</li>
+                                  <ul>
+                                            
+                                    <li>Note that there is currently a bug in <a href="http://www.cytoscape.org/download.php" target="_blank">Cytoscape v3.4.0</a> with the way it exports GraphML files.  It currently assigns the <i>weight</i> attribute for a node instead of an edge.  To maximize the ability for GRNsight to read and display Cytoscape-exported GraphML, GRNsight does not currently enforce that the <i>weight</i> attribute be declared "for an edge".  The bug has been reported to the Cytoscape group.</li>
+                                            
+                                  </ul>
                                 
                                 <li>The addition of the <i>weight</i> key for each edge.  For example, the weight for the edge ROX1-to-YAP6 is -0.7503313690638223.</li>
                                         
