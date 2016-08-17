@@ -281,38 +281,38 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         
                               </ul>
                             
-                            <li>"A graph is, not surprisingly, denoted by a graph element. Nested inside a graph element are the declarations of nodes and edges. A node is declared with a node element, and an edge with an edge element."—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
+                            <li>"A graph is, not surprisingly, denoted by a <code>graph</code> element. Nested inside a <code>graph</code> element are the declarations of nodes and edges. A node is declared with a <code>node</code> element, and an <code>edge</code> with an edge element."—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
                               <ul>
                                         
-                                <li>In the graph element in line 7, the edgedefault attribute is set to “directed”.  GRNsight will only display directed graphs, not undirected or mixed graphs.</li>  
+                                <li>In the <i>graph</i> element in line 7, the <i>edgedefault</i> attribute is set to “directed”.  GRNsight will only display directed graphs, not undirected or mixed graphs.</li>  
                                 
-                                <li>The id attribute gives the name of the GraphML file, and is optional for GRNsight to read and display the graph.  The id is provided for compatibility with Cytoscape.</li>
+                                <li>The <i>id</i> attribute gives the name of the GraphML file, and is optional for GRNsight to read and display the graph.  The id is provided for compatibility with Cytoscape.</li>
                                         
                               </ul>
                               
-                              <li>The next three elements in the screenshot are node declarations, giving an id and name for the nodes “ABF1”, “ACE2”, and “AFT1”.</li>
+                              <li>The next three elements in the screenshot are node declarations, giving an <i>id</i> and <i>name</i> for the nodes “ABF1”, “ACE2”, and “AFT1”.</li>
                               
                               <ul>
                                         
-                                <li>Note that for GRNsight-exported GraphML, the node id and name are identical and unique to the file.  However, other programs may have a node name that is different than the node id.  For example, both Cytoscape v3.4.0 and yED v3.16 assign internal node IDs that the user cannot edit.  The user can edit the node label and can actually assign the same label to two different nodes.</li>
+                                <li>Note that for GRNsight-exported GraphML, the node <i>id</i> and <i>name</i> are identical and unique to the file.  However, other programs may have a node name that is different than the node <i>id</i>.  For example, both Cytoscape v3.4.0 and yED v3.16 assign internal node identifiers that the user cannot edit.  The user does have the ability edit the node label, and it is for this reason that GRNsight will preferentially display the node label on the graph.  However, user editability in Cytoscape and yED leads to a situation where a user can actually assign the same label to two different nodes.  In this case, duplicate node labels will be displayed by GRNsight, and the user is directed to go back and edit the source file.</li>
                                 
-                                <li>Cytoscape uses the name key to assign a label to nodes and a shared name key to assign a label to the root network when subnetworks are present.</li>
+                                <li>Cytoscape uses the <i>name</i> key to assign a label to nodes and a <i>shared name</i> key to assign a label to the root network when subnetworks are present.</li>
                                 
-                                <li>yED uses a y:NodeLabel key to assign the label to nodes.</li>
+                                <li>yED uses a <i>y:NodeLabel</i> key to assign the label to nodes.</li>
                                 
-                                <li>In order to read GraphML exported from Cytoscape and yED, if all three keys are present name gets top priority, followed by shared name, then y:NodeLabel, then id)</li>
+                                <li>In order to maximize the ability for GRNsight to read GraphML exported from Cytoscape and yED, the following conditions are followed when displaying a graph:  if all three keys are present <i>name</i> gets top priority, followed by <i>shared name</i>, then <i>y:NodeLabel</i>, then <i>id</i>.</li>
                                         
                               </ul>
                               
-                            <li>The next three elements are edge declarations for the edges ROX1-to-YAP6, YAP1-to-YAP6, and YAP6-to-YAP6.</li>
+                            <li>The next three elements shown in the screenshot are edge declarations for the edges ROX1-to-YAP6, YAP1-to-YAP6, and YAP6-to-YAP6.</li>
                             
                             <ul>
                                       
-                              <li>The edge element attributes source and target give the node id for the source and target node, respectively.</li>
+                              <li>The <i>edge</i> element attributes <i>source</i> and <i>target</i> give the node id for the source and target node, respectively.</li>
                               
-                              <li>The interaction key is the relationship type noted above.  It is given for compatibility with Cytoscape and defaults to “pd” for protein DNA, but is otherwise ignored by GRNsight for display.</li>
+                              <li>The <i>interaction</i> key is the relationship type, similar to what is defined for SIF files.  It is given for compatibility with Cytoscape and defaults to “pd” for protein->DNA, but is otherwise ignored by GRNsight for display.</li>
                               
-                              <li>The edge name key is given for compatibility with Cytoscape, but is otherwise ignored by GRNsight for display.</li>
+                              <li>The edge <i>name</i> key is given for compatibility with Cytoscape, but is otherwise ignored by GRNsight for display.</li>
                                       
                             </ul>
                             
@@ -320,15 +320,15 @@ description: Learn how to format and upload files to GRNsight, a web application
                             
                             <ul>
                                       
-                              <li>GRNsight cannot display nested graph.  Any links that connect nodes from the main graph to nodes in the subgraph will not display.</li>
+                              <li>GRNsight cannot display a nested graph.  Any links that connect nodes from the main graph to nodes in the subgraph will not display.</li>
                               
                               <li>Any other specifications for the display of the graph (layout, colors, etc.) will be ignored by GRNsight.</li>
                                       
                             </ul>
                             
-                            <li>We have tested the display of networks exported in GraphML format from Cytoscape v3.4.0 and yED v3.16, but because the flexibility of the GraphML standard enables divergence in implementation, we cannot guarantee that GraphML exported from other programs will be read and displayed correctly by GRNsight.  If you encounter problems, To request support, please submit an issue to GRNsight @ GitHub (requires free GitHub account).</li>
+                            <li>We have tested the display of networks exported in GraphML format from Cytoscape v3.4.0 and yED v3.16, but because the flexibility of the GraphML standard enables divergence in implementation, we cannot guarantee that GraphML exported from other programs will be read and displayed correctly by GRNsight.  If you encounter problems, please submit an issue to <a href="https://github.com/dondi/GRNsight/issues" target="_blank">GRNsight @ GitHub</a> (requires free <a href="http://www.github.com" target="_blank">GitHub</a> account).</li>
                           
-                            <li>The minimum requirements for a weighted GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.graphml" target="_blank">Demo #4 Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</a> GraphML file as exported by GRNsight.  Click the link to download the file.
+                            <li>The minimum requirements for a <u>weighted</u> GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.graphml" target="_blank">Demo #4 Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</a> GraphML file as exported by GRNsight.  Click the link to download the file.
                             
                                                         <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_graphml_output_header-and-3-nodes.png" alt="GraphML sample 2 weighted network top" height="276" width="1571" />
@@ -342,13 +342,13 @@ description: Learn how to format and upload files to GRNsight, a web application
                             
                             <ul>
                                       
-                              <li>Note that there are only two major differences between the unweighted and weighted GraphML formats:</li>
+                              <li>Note that there are only two major differences between the unweighted and weighted GraphML formats that GRNsight exports:</li>
                               
                               <ul>
                                         
-                                <li>A key declaration defining a weight attribute for an edge as the datatype “double”.</li>
+                                <li>A <i>key</i> declaration defining a <i>weight</i> attribute for an edge as the datatype “double”.</li>
                                 
-                                <li>The addition of the weight key for each edge.</li>
+                                <li>The addition of the <i>weight</i> key for each edge.  For example, the weight for the edge ROX1-to-YAP6 is -0.7503313690638223.</li>
                                         
                               </ul>
                               
@@ -356,7 +356,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                               
                               <ul>
                                         
-                                <li>For a weighted graph to display, the weight attribute must be present for each edge declared in the graph.  If one or more weights are not present, GRNsight will display the graph as unweighted with black arrows and pointed arrowheads.</li>
+                                <li>For a weighted graph to display, the weight attribute must be present for each edge declared in the graph.  If one or more weights are missing, GRNsight will display the graph as unweighted with black edges and pointed arrowheads.</li>
                                         
                               </ul>
                                       
