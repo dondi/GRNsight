@@ -50,9 +50,14 @@ describe('adjacency-matrix-modifications', function () {
     })
   })
 
-  describe('extra-row-end-of-sheet', function () {
+  describe('extra-row-end-of-sheet-input', function () {
     it('should not return any errors, but should return warnings', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx');
+    })
+  })
+
+  describe('extra-row-end-of-sheet-output', function () {
+    it('should not return any errors, but should return warnings', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx');
     })
   })
