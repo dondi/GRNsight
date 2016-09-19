@@ -76,7 +76,6 @@ function invalidGeneLengthError(input, frequency){
 function invalidDataTypeError(input, frequency) {  
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
 
   assert.equal(frequency, network.errors.length);
       

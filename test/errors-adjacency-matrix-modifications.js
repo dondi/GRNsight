@@ -169,8 +169,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('date-data-type-header', function () {
     it('should not return any errors, but should return warnings', function () {
-      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-input.xlsx', 225);
-      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-output.xlsx', 225);
+      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-input.xlsx');
+      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-date-output.xlsx');
     })
   })
 
@@ -218,8 +218,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('time-data-type-header', function () {
     it('should not return any errors, but should return warnings', function () {
-      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-input.xlsx', 225);
-      test.invalidDataTypeError('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-output.xlsx', 225);
+      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-input.xlsx', 225);
+      test.noErrors('test-files/adjacency-matrix-modifications/data-types/data-type-header-time-output.xlsx', 225);
     })
   })
 
