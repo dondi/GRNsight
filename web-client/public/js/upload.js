@@ -33,7 +33,10 @@ $(function () {
 
   // Settings Stuff
   var COLOR_PREFERENCES_CLASS = ".colorPreferences",
-      ACTIVE_COLOR_OPTION     = "active";
+      ACTIVE_COLOR_OPTION     = "active",
+      WEIGHTS_SHOW_MOUSE_OVER = ".weightsMouseOver",
+      WEIGHTS_SHOW_ALWAYS     = ".weightsAlways",
+      WEIGHTS_HIDE            = ".weightsNever";
 
   styleLabelTooltips();
   var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);

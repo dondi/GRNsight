@@ -96,6 +96,22 @@ html
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
+                
+                li(class='divider')
+                li(class='disabled')
+                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Only Show Edge Weights With Mouse Over
+                li(class='disabled')
+                  a(href='#' id='weightsAlwaysMenu' class='weightsAlways') 
+                    span(class='glyphicon invisible')
+                    | &nbsp; Always Show Edge Weights
+                li(class='disabled')
+                  a(href='#' id='weightsNeverMenu' class='weightsNever') 
+                    span(class='glyphicon invisible')
+                    | &nbsp; Never Show Edge Weights
+                li(class='divider')
+
             li(class='dropdown') 
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
               ul(class='dropdown-menu' role='menu')
