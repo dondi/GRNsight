@@ -23,6 +23,7 @@ exports.missingTargetWarning = missingTargetWarning;
 exports.randomDataWarning = randomDataWarning;
 exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
+exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 
 exports.shortestPath = shortestPath;
 exports.betweennessCentrality = betweennessCentrality;
@@ -213,6 +214,14 @@ function missingSourceWarning(input, frequency) {
   var missingSourceCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
 
   assert.equal(frequency, missingSourceCount.length);
+}
+
+function invalidMatrixDataWarning(input, frequency) {  
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
+
+  assert.equal(frequency, invalidDataCount.length);
 }
 
 function missingTargetWarning(input, frequency) {  
