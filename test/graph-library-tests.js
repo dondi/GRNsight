@@ -45,7 +45,6 @@ describe('graph-library-tests', function() {
               elements: cytoscapeElements
             })
 
-            console.log(cytoscapeElements);
             assert.equal(cytoscapeElements.length, 13);
 
             assert.equal(cytoscapeElements[0].data.id  , "a");
@@ -67,117 +66,121 @@ describe('graph-library-tests', function() {
     })
 
     describe('shortest path', function() {
-        it('returns the undirected shortest path from f to b', function() {
+        it('returns the undirected shortest path from f to b in graph-stats-demo', function() {
             test.shortestPath('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "f", "b", 2);
         })
 
-        it('returns the directed shortest path from f to b', function() {
+        it('returns the directed shortest path from f to b in graph-stats-demo', function() {
             test.shortestPath('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "f", "b", 2);
         })
 
-        it('returns the undirected shortest path from b to f', function() {
+        it('returns the undirected shortest path from b to f in graph-stats-demo', function() {
             test.shortestPath('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "b", "f", 2);
         })
 
-        it('returns the directed shortest path from b to f', function() {
+        it('returns the directed shortest path from b to f in graph-stats-demo', function() {
             test.shortestPath('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "b", "f", Infinity);
         })
 
-        it('returns the undirected shortest path from f to b', function() {
+        it('returns the undirected shortest path from f to b in 75-genes-150-edges', function() {
+            this.timeout(10000);
             test.shortestPath('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', false, "CDC28", "ADA2", 3);
         })
 
-        it('returns the directed shortest path from f to b', function() {
+        it('returns the directed shortest path from f to b in 75-genes-150-edges', function() {
+            this.timeout(10000);
             test.shortestPath('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', true, "CDC28", "ADA2", Infinity);
         })
 
-        it('returns the undirected shortest path from f to b', function() {
+        it('returns the undirected shortest path from f to b in 10-genes-max-edges', function() {
             test.shortestPath('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', false, "DAL80", "ECM22", 1);
         })
 
-        it('returns the directed shortest path from f to b', function() {
+        it('returns the directed shortest path from f to b in 10-genes-max-edges', function() {
             test.shortestPath('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', true, "DAL80", "ECM22", 1);
         })
 
-        it('returns the undirected shortest path from f to b', function() {
+        it('returns the undirected shortest path from f to b in 12-genes-max-edges', function() {
             test.shortestPath('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', false, "DAL80", "ECM22", 1);
         })
 
-        it('returns the directed shortest path from f to b', function() {
+        it('returns the directed shortest path from f to b in 12-genes-max-edges', function() {
             test.shortestPath('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', true, "DAL80", "ECM22", 1);
         })
     })
 
     describe('betweenness centrality', function() {
-        it('returns the undirected betweenness centrality of a', function() {
+        it('returns the undirected betweenness centrality of a in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "a", 0);
         })
 
-        it('returns the directed betweenness centrality of a', function() {
+        it('returns the directed betweenness centrality of a in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "a", 0);
         })
 
-        it('returns the undirected betweenness centrality of b', function() {
+        it('returns the undirected betweenness centrality of b in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "b", 11);
         })
 
-        it('returns the directed betweenness centrality of b', function() {
+        it('returns the directed betweenness centrality of b in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "b", 11);
         })
 
-        it('returns the undirected betweenness centrality of c', function() {
+        it('returns the undirected betweenness centrality of c in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "c", 2);
         })
 
-        it('returns the directed betweenness centrality of c', function() {
+        it('returns the directed betweenness centrality of c in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "c", 2);
         })
 
-        it('returns the undirected betweenness centrality of d', function() {
+        it('returns the undirected betweenness centrality of d in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "d", 11);
         })
 
-        it('returns the directed betweenness centrality of d', function() {
+        it('returns the directed betweenness centrality of d in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "d", 11);
         })
 
-        it('returns the undirected betweenness centrality of e', function() {
+        it('returns the undirected betweenness centrality of e in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "e", 2);
         })
 
-        it('returns the directed betweenness centrality of e', function() {
+        it('returns the directed betweenness centrality of e in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "e", 2);
         })
 
-        it('returns the undirected betweenness centrality of f', function() {
+        it('returns the undirected betweenness centrality of f in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', false, "f", 0);
         })
 
-        it('returns the directed betweenness centrality of f', function() {
+        it('returns the directed betweenness centrality of f in graph-stats-demo', function() {
             test.betweennessCentrality('test-files/graph-statistics-tests/graph-stats-demo.xlsx', true, "f", 0);
         })
 
-        it('returns the undirected betweenness centrality of f', function() {
+        it('returns the undirected betweenness centrality of f in 75-genes-150-edges', function() {
+            this.timeout(10000);
             test.betweennessCentrality('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', false, "CDC28", 171.50351735503662);
         })
 
-        it('returns the directed betweenness centrality of f', function() {
+        it('returns the directed betweenness centrality of f in 75-genes-150-edges', function() {
+            this.timeout(10000);
             test.betweennessCentrality('test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx', true, "CDC28", 171.50351735503662);
         })
 
-        it('returns the undirected betweenness centrality of f', function() {
+        it('returns the undirected betweenness centrality of f in 10-genes-max-edges', function() {
             test.betweennessCentrality('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', false, "DAL80", 0);
         })
 
-        it('returns the directed betweenness centrality of f', function() {
+        it('returns the directed betweenness centrality of f in 10-genes-max-edges', function() {
             test.betweennessCentrality('test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx', true, "DAL80", 0);
         })
 
-        it('returns the undirected betweenness centrality of f', function() {
+        it('returns the undirected betweenness centrality of f in 12-genes-max-edges', function() {
             test.betweennessCentrality('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', false, "DAL80", 0);
         })
 
-        it('returns the directed betweenness centrality of f', function() {
+        it('returns the directed betweenness centrality of f in 12-genes-max-edges', function() {
             test.betweennessCentrality('test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx', true, "DAL80", 0);
         })
     })

@@ -71,22 +71,7 @@ function invalidGeneLengthError(input, frequency){
       network.errors[i].errorCode
     );
   }
-}
-
-function invalidDataTypeError(input, frequency) {  
-  var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
-
-  assert.equal(frequency, network.errors.length);
-      
-  for(var i = 0; i < frequency; i++) {
-    assert.equal(
-      "INCORRECT_DATA",
-      network.errors[i].errorCode
-    );
-  }
-}
-  
+} 
 
 function corruptGeneError(input, frequency) {
   var sheet = xlsx.parse(input),
@@ -182,7 +167,7 @@ function checkForGene(test, frequency, input) {
   }).length);
 }
 
-function warningsCountError(test, frequency, input) {
+function warningsCountError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -195,8 +180,6 @@ function warningsCountError(test, frequency, input) {
     );
   } 
 }
-
-
 
 //WARNING TEST FUNCTIONS:
 

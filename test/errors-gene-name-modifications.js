@@ -48,7 +48,7 @@ describe('duplicate-gene-top-nonadjacent', function () {
   })
 
   describe('long-gene-name', function () {
-    it('should return 1 or 2 long gene name error', function () {
+    it('should return 1 long gene name error', function () {
       test.invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-input.xlsx', 1);
       test.invalidGeneLengthError('test-files/gene-name-modifications/long-gene-name-output.xlsx', 1);
     })
@@ -97,21 +97,21 @@ describe('duplicate-gene-top-nonadjacent', function () {
   })
 
   describe('missing-gene-name-side', function () {
-    it('should not return any errors, but should return warnings', function () {
+    it('should not return any errors', function () {
       test.noErrors('test-files/gene-name-modifications/missing-gene-name-side-input.xlsx');
       test.noErrors('test-files/gene-name-modifications/missing-gene-name-side-output.xlsx');
     })
   })
 
   describe('missing-gene-name-top-and-side', function () {
-    it('should not return any errors, but should return warnings', function () {
+    it('should not return any errors', function () {
       test.noErrors('test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx');
       test.noErrors('test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx');
     })
   })
 
   describe('missing-gene-name-top', function () {
-    it('should not return any errors, but should return warnings', function () {
+    it('should not return any errors', function () {
       test.noErrors('test-files/gene-name-modifications/missing-gene-name-top-input.xlsx');
       test.noErrors('test-files/gene-name-modifications/missing-gene-name-top-output.xlsx');
     })

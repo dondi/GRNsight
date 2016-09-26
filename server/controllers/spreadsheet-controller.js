@@ -76,7 +76,7 @@ var parseSheet = function(sheet) {
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
 
-    if(currentSheet.data[row] === undefined) { // if the current row is empty 
+    if(currentSheet.data[row].length === 0) { // if the current row is empty 
       addWarning(network, warningsList.emptyRowWarning(row));
 
     } else { // if the row has data...
@@ -273,7 +273,7 @@ var graphStatisticsReport = function(network)  {
 
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
-    //warningsCount++;
+    warningsCount++;
 }
 
 var addWarning = function (network, message) {
@@ -287,7 +287,7 @@ var addError = function (network, message) {
 var checkWarningsCount = function (network, warningsCount) {
   var MAX_WARNINGS = 75;
   if (warningsCount > MAX_WARNINGS) {
-    addError(network, warningsCountError);
+    addError(network, errorList.warningsCountError);
   }
 }
 
@@ -353,16 +353,6 @@ var errorList = {
     };
   },
 
-  invalidDataTypeError: function (row, column) {
-    var colLetter = numbersToLetters[column];
-    var rowNum = row + 1;
-    return {
-      errorCode: "INCORRECT_DATA", 
-      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.", 
-      suggestedFix: "Please fix the error and try uploading again."
-    };
-  },
-
   missingValueError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
@@ -378,16 +368,6 @@ var errorList = {
       errorCode: "DUPLICATE_GENE", 
       possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".", 
       suggestedFix: "Please remove the duplicate gene and submit again."
-    };
-  },
-
-  dataTypeError: function (row, column) {
-    var colLetter = numbersToLetters[column];
-    var rowNum = row + 1;
-    return {
-      errorCode: "INVALID_CELL_DATA_TYPE",
-      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
-      suggestedFix: "Please ensure that all data within the adjacency matrix is a number and try again."
     };
   },
 
