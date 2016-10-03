@@ -12,6 +12,13 @@ describe('errors-adjacency-matrix-modifications', function () {
     })
   })
 
+  describe('empty-row', function () {
+    it('1 target gene warning', function () {
+        test.emptyRowError('test-files/adjacency-matrix-modifications/empty-row-input.xlsx', 1);
+        test.emptyRowError('test-files/adjacency-matrix-modifications/empty-row-output.xlsx', 1);
+    })
+  })
+
   describe('extra-data', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx');

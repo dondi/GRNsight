@@ -14,6 +14,7 @@ exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
+exports.emptyRowError = emptyRowError;
 
 exports.networkSizeWarning = networkSizeWarning;
 exports.checkForGene = checkForGene;
@@ -180,6 +181,13 @@ function warningsCountError(input, frequency) {
     );
   } 
 }
+
+function emptyRowError(input, frequency) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.errors.length);
+};
 
 //WARNING TEST FUNCTIONS:
 
