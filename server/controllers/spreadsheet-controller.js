@@ -49,9 +49,8 @@ var parseSheet = function(sheet) {
       targetGeneNumber,
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
-      targetGenes = [],
-      warningsCount = 0,
-      strictness = 0; // A strictness parameter that tracks how many times we want to allow data to be missing
+      targetGenes = [];
+      warningsCount = 0;
   
 
   //Look for the worksheet containing the network data
@@ -77,11 +76,12 @@ var parseSheet = function(sheet) {
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
 
-
     if(currentSheet.data[row].length === 0) { // if the current row is empty 
-      addError(network, errorList.emptyRowError(row));
-      return network;
+      addWarning(network, warningsList.emptyRowWarning(row));
+
     } else { // if the row has data...
+
+
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
       // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
@@ -348,7 +348,7 @@ var errorList = {
     var rowNum = row + 1;
     return {
       errorCode: "CORRUPT_GENE", 
-      possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.", 
+      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.", 
       suggestedFix: "Please fix the error and try uploading again."
     };
   },
@@ -394,15 +394,6 @@ var errorList = {
       errorCode: "INVALID_CELL_DATA_TYPE",
       possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
       suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
-    }
-  },
-
-  emptyRowError: function (row) {
-    var rowNum = row + 1;
-    return {
-      errorCode: "EMPTY_ROW",
-      possibleCause: "Row " + rowNum + "contains no data.",
-      suggestedFix: "Please ensure that all rows contain data, and all empty rows are removed before processing."
     }
   },
 
@@ -467,6 +458,14 @@ var warningsList = {
     return {
       warningCode: "RANDOM_DATA",
       errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "." 
+    }
+  },
+
+  emptyRowWarning: function (row) {
+    var rowNum = row + 1;
+    return {
+      warningCode: "EMPTY_ROW",
+      errorDescription: "Row " + rowNum + " was found to contain no data."
     }
   },
 

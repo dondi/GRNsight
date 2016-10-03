@@ -20,6 +20,13 @@ describe('warnings-adjacency-matrix-modifications', function () {
     	})
   	})
 
+  	describe('empty-row', function () {
+    	it('1 target gene warning', function () {
+      		test.missingTargetWarning('test-files/adjacency-matrix-modifications/empty-row-input.xlsx', 1);
+      		test.missingTargetWarning('test-files/adjacency-matrix-modifications/empty-row-output.xlsx', 1);
+    	})
+  	})
+
   	describe('extra-column-adjacent', function () {
     	it('should not return any warnings', function () {
       		test.noWarnings('test-files/adjacency-matrix-modifications/extra-column-adjacent-input.xlsx');
