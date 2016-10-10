@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <!-- Exported by GRNsight v1.18  http://dondi.github.io/GRNsight/  https://github.com/dondi/GRNsight/releases/tag/v1.18 -->
+  <key id="name" for="node" attr.name="name" attr.type="string"/>
+  <key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>
+  <key id="name" for="edge" attr.name="name" attr.type="string"/>
+  <graph edgedefault="directed" id="21-genes_31-edges_Schade-data_input.graphml">
+    <node id="ABF1">
+      <data key="name">ABF1</data>
+    </node>
+    <node id="ACE2">
+      <data key="name">ACE2</data>
+    </node>
+    <node id="AFT1">
+      <data key="name">AFT1</data>
+    </node>
+    <node id="CIN5">
+      <data key="name">CIN5</data>
+    </node>
+    <node id="CUP9">
+      <data key="name">CUP9</data>
+    </node>
+    <node id="FHL1">
+      <data key="name">FHL1</data>
+    </node>
+    <node id="GTS1">
+      <data key="name">GTS1</data>
+    </node>
+    <node id="HAL9">
+      <data key="name">HAL9</data>
+    </node>
+    <node id="HSF1">
+      <data key="name">HSF1</data>
+    </node>
+    <node id="MAC1">
+      <data key="name">MAC1</data>
+    </node>
+    <node id="MSN1">
+      <data key="name">MSN1</data>
+    </node>
+    <node id="MSN4">
+      <data key="name">MSN4</data>
+    </node>
+    <node id="NRG1">
+      <data key="name">NRG1</data>
+    </node>
+    <node id="PHD1">
+      <data key="name">PHD1</data>
+    </node>
+    <node id="RAP1">
+      <data key="name">RAP1</data>
+    </node>
+    <node id="REB1">
+      <data key="name">REB1</data>
+    </node>
+    <node id="ROX1">
+      <data key="name">ROX1</data>
+    </node>
+    <node id="RPH1">
+      <data key="name">RPH1</data>
+    </node>
+    <node id="SKN7">
+      <data key="name">SKN7</data>
+    </node>
+    <node id="YAP1">
+      <data key="name">YAP1</data>
+    </node>
+    <node id="YAP6">
+      <data key="name">YAP6</data>
+    </node>
+    <edge source="AFT1" target="AFT1">
+      <data key="interaction">pd</data>
+      <data key="name">AFT1 (pd) AFT1</data>
+    </edge>
+    <edge source="RAP1" target="AFT1">
+      <data key="interaction">pd</data>
+      <data key="name">RAP1 (pd) AFT1</data>
+    </edge>
+    <edge source="YAP6" target="CIN5">
+      <data key="interaction">pd</data>
+      <data key="name">YAP6 (pd) CIN5</data>
+    </edge>
+    <edge source="MAC1" target="CUP9">
+      <data key="interaction">pd</data>
+      <data key="name">MAC1 (pd) CUP9</data>
+    </edge>
+    <edge source="PHD1" target="CUP9">
+      <data key="interaction">pd</data>
+      <data key="name">PHD1 (pd) CUP9</data>
+    </edge>
+    <edge source="ABF1" target="FHL1">
+      <data key="interaction">pd</data>
+      <data key="name">ABF1 (pd) FHL1</data>
+    </edge>
+    <edge source="MSN4" target="FHL1">
+      <data key="interaction">pd</data>
+      <data key="name">MSN4 (pd) FHL1</data>
+    </edge>
+    <edge source="REB1" target="GTS1">
+      <data key="interaction">pd</data>
+      <data key="name">REB1 (pd) GTS1</data>
+    </edge>
+    <edge source="RAP1" target="HSF1">
+      <data key="interaction">pd</data>
+      <data key="name">RAP1 (pd) HSF1</data>
+    </edge>
+    <edge source="ABF1" target="MSN1">
+      <data key="interaction">pd</data>
+      <data key="name">ABF1 (pd) MSN1</data>
+    </edge>
+    <edge source="CIN5" target="MSN1">
+      <data key="interaction">pd</data>
+      <data key="name">CIN5 (pd) MSN1</data>
+    </edge>
+    <edge source="HAL9" target="MSN4">
+      <data key="interaction">pd</data>
+      <data key="name">HAL9 (pd) MSN4</data>
+    </edge>
+    <edge source="PHD1" target="MSN4">
+      <data key="interaction">pd</data>
+      <data key="name">PHD1 (pd) MSN4</data>
+    </edge>
+    <edge source="RAP1" target="MSN4">
+      <data key="interaction">pd</data>
+      <data key="name">RAP1 (pd) MSN4</data>
+    </edge>
+    <edge source="NRG1" target="NRG1">
+      <data key="interaction">pd</data>
+      <data key="name">NRG1 (pd) NRG1</data>
+    </edge>
+    <edge source="SKN7" target="NRG1">
+      <data key="interaction">pd</data>
+      <data key="name">SKN7 (pd) NRG1</data>
+    </edge>
+    <edge source="RAP1" target="RAP1">
+      <data key="interaction">pd</data>
+      <data key="name">RAP1 (pd) RAP1</data>
+    </edge>
+    <edge source="HSF1" target="REB1">
+      <data key="interaction">pd</data>
+      <data key="name">HSF1 (pd) REB1</data>
+    </edge>
+    <edge source="CIN5" target="ROX1">
+      <data key="interaction">pd</data>
+      <data key="name">CIN5 (pd) ROX1</data>
+    </edge>
+    <edge source="SKN7" target="ROX1">
+      <data key="interaction">pd</data>
+      <data key="name">SKN7 (pd) ROX1</data>
+    </edge>
+    <edge source="YAP1" target="ROX1">
+      <data key="interaction">pd</data>
+      <data key="name">YAP1 (pd) ROX1</data>
+    </edge>
+    <edge source="YAP6" target="ROX1">
+      <data key="interaction">pd</data>
+      <data key="name">YAP6 (pd) ROX1</data>
+    </edge>
+    <edge source="RAP1" target="RPH1">
+      <data key="interaction">pd</data>
+      <data key="name">RAP1 (pd) RPH1</data>
+    </edge>
+    <edge source="ACE2" target="YAP1">
+      <data key="interaction">pd</data>
+      <data key="name">ACE2 (pd) YAP1</data>
+    </edge>
+    <edge source="SKN7" target="YAP1">
+      <data key="interaction">pd</data>
+      <data key="name">SKN7 (pd) YAP1</data>
+    </edge>
+    <edge source="CIN5" target="YAP6">
+      <data key="interaction">pd</data>
+      <data key="name">CIN5 (pd) YAP6</data>
+    </edge>
+    <edge source="CUP9" target="YAP6">
+      <data key="interaction">pd</data>
+      <data key="name">CUP9 (pd) YAP6</data>
+    </edge>
+    <edge source="NRG1" target="YAP6">
+      <data key="interaction">pd</data>
+      <data key="name">NRG1 (pd) YAP6</data>
+    </edge>
+    <edge source="ROX1" target="YAP6">
+      <data key="interaction">pd</data>
+      <data key="name">ROX1 (pd) YAP6</data>
+    </edge>
+    <edge source="YAP1" target="YAP6">
+      <data key="interaction">pd</data>
+      <data key="name">YAP1 (pd) YAP6</data>
+    </edge>
+    <edge source="YAP6" target="YAP6">
+      <data key="interaction">pd</data>
+      <data key="name">YAP6 (pd) YAP6</data>
+    </edge>
+  </graph>
+</graphml>

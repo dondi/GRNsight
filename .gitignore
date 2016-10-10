@@ -18,5 +18,7 @@ node_modules
 
 .DS_Store
 *.pem
+*.p12
 
+.bundle
 _gh_pages

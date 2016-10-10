@@ -35,8 +35,8 @@ describe('errors-graph-tests', function () {
 
   describe('over-50-genes-or-100-nodes', function () {
     it('should return invalid network size warning', function () {
-      test.networkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
-      test.networkSizeWarning('test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx', 1);
+      test.invalidNetworkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
+      test.invalidNetworkSizeWarning('test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx', 1);
     })
   })
 

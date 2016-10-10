@@ -4,30 +4,28 @@ var multiparty = require('multiparty'),
     path = require('path'),
     cytoscape = require('cytoscape');
 
+var helpers = require(__dirname + "/helpers");
 
 var processGRNmap = function (path, res, app) {
-  var sheet,
-      network;
+  var sheet;
+  var network;
+
+  helpers.attachCorsHeader(res, app);
+
   try {
     sheet = xlsx.parse(path);
   } catch (err) {
     return res.json(400, "Unable to read input. The file may be corrupt.");
   }
 
-  // For the time being, send the result in a form readable by people
-  //TODO: Optimize the result for D3
-  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));
-
+  helpers.attachFileHeaders(res, path);
   network = parseSheet(sheet); 
 
-  if(network.errors.length === 0) {
+  return (network.errors.length === 0) ?
     // If all looks well, return the network with an all clear
-    return res.json(network);
-  } else {
+    res.json(network) :
     // If all does not look well, return the network with an error 400
-    return res.json(400, network);
-  }
-
+    res.json(400, network);
 };
 
 var parseSheet = function(sheet) {
@@ -50,8 +48,7 @@ var parseSheet = function(sheet) {
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
       targetGenes = [],
-      emptyRowStrictness = 25,
-      errorAmountCap = 1000;
+      emptyRowStrictness = 25;
 
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.length; i++) {
@@ -70,14 +67,14 @@ var parseSheet = function(sheet) {
 
   // If it didn't find a network/network_optimized_weights sheet
   if (currentSheet === undefined) { 
-    addError(network, errorList.missingNetworkError, errorAmountCap)
+    addError(network, errorList.missingNetworkError)
     return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
 
     if(currentSheet.data[row].length === 0) { // if the current row is empty 
-      addError(network, errorList.emptyRowError(row), errorAmountCap);
+      addError(network, errorList.emptyRowError(row));
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
@@ -100,7 +97,7 @@ var parseSheet = function(sheet) {
                 network.genes.push(currentGene);
               }
             } catch (err) {
-              addError(network, errorList.corruptGeneError(row, column), errorAmountCap);
+              addError(network, errorList.corruptGeneError(row, column));
               return network;
             } 
           } else if (column === 0) { // If we are at the far left of a new row...
@@ -126,23 +123,21 @@ var parseSheet = function(sheet) {
             } catch (err) {
               sourceGene = currentSheet.data[0][column]; 
               targetGene = currentSheet.data[row][0];
-              addError(network, errorList.corruptGeneError(row, column), errorAmountCap);
+              addError(network, errorList.corruptGeneError(row, column));
               return network;
             };
           } else { // If we're within the matrix and lookin' at the data...
-            //console.log(currentSheet.data[row][column]);
             try {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
-                addError(network, errorList.dataTypeError(row, column), errorAmountCap);
+                addError(network, errorList.dataTypeError(row, column));
                 return network;
               } else {
                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
                   sourceGene = currentSheet.data[0][column]; 
                   targetGene = currentSheet.data[row][0];
-                  //console.log("Source: " + sourceGene + " Target: " + targetGene);
                   if(sourceGene === undefined || targetGene === undefined) {
                     addWarning(network, warningsList.randomDataWarning("undefined", row, column));
                   } else if((isNaN(sourceGene) && typeof sourceGene != "string") || (isNaN(targetGene) && typeof targetGene != "string")) {
@@ -169,7 +164,7 @@ var parseSheet = function(sheet) {
 
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
-              addError(network, errorList.missingValueError(row, column), errorAmountCap);
+              addError(network, errorList.missingValueError(row, column));
               return network;
             };
           };
@@ -178,7 +173,7 @@ var parseSheet = function(sheet) {
       column = 0; // let's go back to column 0 on the next row!
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
-        addError(network, errorList.unknownError, errorAmountCap);
+        addError(network, errorList.unknownError);
         return network;
       }
     };
@@ -195,12 +190,8 @@ var parseSheet = function(sheet) {
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
   var warningsCount = network.warnings.length;
-  checkWarningsCount(network, warningsCount, errorAmountCap);
+  checkWarningsCount(network, warningsCount);
   checkEmptyRowErrors(network, emptyRowStrictness);
-
-  //console.log(network.warnings);
-  //console.log(network.warnings.length);
-  //console.log(network.errors);
 
   try {
     network.graphStatisticsReport = graphStatisticsReport(network);
@@ -282,16 +273,14 @@ var addWarning = function (network, message) {
     addMessageToArray(network.warnings, message);
 };
 
-var addError = function (network, message, allowedAmount) {
-    if (network.errors.length < allowedAmount) {
-      addMessageToArray(network.errors, message);
-    }
+var addError = function (network, message) {
+    addMessageToArray(network.errors, message);
 };
 
-var checkWarningsCount = function (network, warningsCount, errorAmountCap) {
+var checkWarningsCount = function (network, warningsCount) {
   var MAX_WARNINGS = 75;
   if (warningsCount > MAX_WARNINGS) {
-    addError(network, errorList.warningsCountError, errorAmountCap);
+    addError(network, errorList.warningsCountError);
   }
 }
 
@@ -344,7 +333,7 @@ var checkEmptyRowErrors = function (network, strictness) {
     var lastError = network.errors.pop();
     var lastErrorRow = lastError.possibleCause.substring(4, lastError.possibleCause.indexOf(" does"));
     network.errors = [];
-    addMessageToArray(network.warnings, warningsList.extraneousDataWarningRow(lastErrorRow, strictness));
+    addMessageToArray(network.warnings, warningsList.extraneousDataWarning(lastErrorRow, strictness));
   }
 }
 
@@ -514,10 +503,10 @@ var warningsList = {
     }
   },
 
-  extraneousDataWarningRow: function (row, strictness) {
+  extraneousDataWarning: function (row, strictness) {
     return {
       warningCode: "EXTRANEOUS_DATA",
-      errorDescription: "More than " + strictness + " rows were empty in the file." +
+      errorDescription: "More than " + strictness + " rows were empty in the file. " +
                         "There is likely extraneous data in row " + row + "."
     }
   }
@@ -556,7 +545,7 @@ module.exports = function (app) {
     });
 
     app.get('/demo/weighted', function (req, res) {
-      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);x
+      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
     });
 
     app.get('/demo/schadeInput', function (req, res) {

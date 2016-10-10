@@ -68,12 +68,17 @@ describe('errors-adjacency-matrix-modifications', function () {
     it('should return no error', function () {
       this.timeout(10000);
       test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx');
+    })
+  })
+
+  describe('extra-row-end-of-sheet-output', function () {
+    it('should not return any errors, but should return warnings', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx');
     })
   })
 
   describe('extra-row-one-row-skipped', function () {
-    it('should not empty row error', function () {
+    it('should return empty row error', function () {
       test.emptyRowError('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-input.xlsx', 1);
       test.emptyRowError('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-output.xlsx', 1);
     })

@@ -1,6 +1,6 @@
 {
   "name": "GRNsight-server",
-  "version": "1.19.1",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "start": "nodejs app.js"
@@ -13,6 +13,8 @@
     "multiparty": "latest",
     "node-xlsx": "@0.7.2",
     "should": "latest",
-    "supertest": "latest"
+    "supertest": "latest",
+    "xml2js": "^0.4.17",
+    "xmlbuilder": "^8.2.2"
   }
 }

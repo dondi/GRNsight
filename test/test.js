@@ -16,7 +16,6 @@ exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
 exports.emptyRowError = emptyRowError;
 
-exports.networkSizeWarning = networkSizeWarning;
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
 exports.missingSourceWarning = missingSourceWarning;
@@ -260,20 +259,6 @@ function extraneousDataWarning(input, frequency) {
   var extraneousDataWarning = network.warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
 
   assert.equal(frequency, extraneousDataWarning.length);
-}
-
-function networkSizeWarning(input, frequency) {  
-  var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
-
-  assert.equal(frequency, network.warnings.length);
-
-  for(var i = 0; i < frequency; i++) {
-    assert.equal(
-      "INVALID_NETWORK_SIZE",
-      network.warnings[i].warningCode
-    );
-  }      
 }
 
 //GRAPH STATISTICS

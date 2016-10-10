@@ -19,16 +19,16 @@ $(function () {
 
   // Demo Stuff
   var UNWEIGHTED_DEMO_ID   = "#unweighted",
-      UNWEIGHTED_DEMO_PATH = "/demo/unweighted",
+      UNWEIGHTED_DEMO_PATH = "demo/unweighted",
       UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)",
       WEIGHTED_DEMO_ID     = "#weighted",
-      WEIGHTED_DEMO_PATH   = "/demo/weighted",
+      WEIGHTED_DEMO_PATH   = "demo/weighted",
       WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)",
       SCHADE_INPUT_ID      = "#schadeInput",
-      SCHADE_INPUT_PATH    = "/demo/schadeInput",
+      SCHADE_INPUT_PATH    = "demo/schadeInput",
       SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)",
       SCHADE_OUTPUT_ID     = "#schadeOutput",
-      SCHADE_OUTPUT_PATH   = "/demo/schadeOutput",
+      SCHADE_OUTPUT_PATH   = "demo/schadeOutput",
       SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
   // Settings Stuff
@@ -59,57 +59,72 @@ $(function () {
   var settings = new settingsController();
   settings.setupSettingsHandlers();
   
-  $("#printGraph").on("click", function () {
+  $("#printGraph").on("click", function () { 
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
     }
   });
 
-  var previousFile = {
-    path: "/upload",
-    name: "",
-    formdata: undefined
-  } 
+  var currentNetwork = null;
+  var reloader = function () { };
 
-  var reload = ["", ""];
+  // Style of the tooltips when the user mouses over the label names
+  $(".info").tooltip({
+    placement: "top",
+    delay: { show: 700, hide: 100 }
+  });
 
-  $("#reload").on("click", function () {
-    if(!$(".startDisabled").hasClass("disabled")) { 
-      if(reload[0] === "") {
-        loadGrn(previousFile.path, previousFile.name, previousFile.formdata);
-      } else {
-        loadGrn(reload[0], reload[1]);
+  var displayNetwork = function (network, name) {
+    currentNetwork = network;
+    console.log(network); // Display the network in the console
+    $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
+
+    if (network.warnings.length > 0) {
+      displayWarnings(network.warnings);
+    }
+
+    $("#fileName").text(name); // Set the name of the file to display in the top bar
+    $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
+
+    // If more things need to be turned off, we'll add them to this array
+    [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
+      $(selector).off("click");
+    });
+
+    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
+  };
+
+  var annotateLinks = function (network) {
+    // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.
+    //      Think of a way to consolidate it. Having discovered this, it seems like this should
+    //      be done on the client side because it rearranges data redundantly, for ease of display.
+    network.positiveWeights = [];
+    network.negativeWeights = [];
+
+    network.links.forEach(function (link) {
+      if (network.sheetType === "unweighted" && !link.value) {
+        link.value = 1;
       }
-    }
-  });
 
-  $("#upload").on("change", function (event) {
-    reload = ["", ""];
-
-    var $upload = $(this),
-        fileName = $upload.val().replace(/^.*\\/, ""), // Regex removes all content before the filepath in Chrome.
-        formData = new FormData();
-
-    formData.append("file", $upload[0].files[0]);
-    loadGrn("/upload", fileName, formData);
-
-    if (window.ga) {
-        window.ga("send", "pageview", {
-            page: "/GRNsight/upload",
-            sessionControl: "start"
-        });
-    }
-
-    event.preventDefault();
-  });
+      if (link.value > 0) {
+        link.type = "arrowhead";
+        link.stroke = "MediumVioletRed";
+        network.positiveWeights.push(link.value);
+      } else {
+        link.type = "repressor";
+        link.stroke = "DarkTurquoise";
+        network.negativeWeights.push(link.value);
+      }
+    });
+  };
 
   /*
-  * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
-  * for helping to resolve this.
-  */
+   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+   * for helping to resolve this.
+   */
   var loadGrn = function (url, name, formData) {
     // The presence of formData is taken to indicate a POST.
-    var fullUrl = $("#service-root").val() + url;
+    var fullUrl = [ $("#service-root").val(), url ].join("/");
     (formData ?
       $.ajax({
         url: fullUrl,
@@ -120,40 +135,95 @@ $(function () {
         crossDomain: true
       }) :
       $.getJSON(fullUrl)
-    ).done(function (network) {
+    ).done(function (network, textStatus, jqXhr) {
       console.log(network); // Display the network in the console
-      $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
-
-      if(network.warnings.length > 0) {
-        displayWarnings(network.warnings);
-      }
-      $("#fileName").text(name); // Set the name of the file to display in the top bar
-      // If more things need to be turned off, we'll add them to this array
-      var disable = [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ]
-      for(var i = 0; i < disable.length; i++) {
-        $(disable[i]).off("click");
-      }
-      previousFile = {path: url, name: name, formdata: formData}; // Store info about the previous file for use in reload
-      drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
+      displayNetwork(network, name || jqXhr.getResponseHeader('X-GRNsight-Filename'));
+      reloader = function () {
+        loadGrn(url, name, formData);
+      };
       displayStatistics(network);
     }).error(function (xhr, status, error) {
-      var err = JSON.parse(xhr.responseText), 
-          errorString = "Your graph failed to load.<br><br>";
-      $("#upload").val(""); // De-select the bad file.
-      if (err.errors == undefined) { // will be undefined if an error was thrown before the network was generated 
+      var err = JSON.parse(xhr.responseText);
+      var errorString = "Your graph failed to load.<br><br>";
+
+      if (!err.errors) { // will be falsy if an error was thrown before the network was generated
         errorString += err;
       } else {
-        var errorArray = err.errors;
-        for(var i = 0; i < errorArray.length; i++) {
-          errorString += errorArray[i].possibleCause + " " + errorArray[i].suggestedFix + "<br><br>";
-        }
+        errorString = err.errors.reduce(function (currentErrorString, currentError) {
+          return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
+        }, errorString);
       }
+
       $("#error").html(errorString);
       $("#errorModal").modal("show");
     });
   };
 
-  
+  // TODO Some opportunity for unification with loadGrn?
+  var importGrn = function (uploadRoute, filename, formData) {
+    var fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+    $.ajax({
+      url: fullUrl,
+      data: formData,
+      processData: false,
+      contentType: false,
+      type: "POST",
+      crossDomain: true
+    }).done(function (network) {
+      annotateLinks(network);
+      displayNetwork(network, filename);
+      reloader = function () {
+        importGrn(uploadRoute, filename, formData);
+      };
+    }).error(function (xhr, status, error) {
+      $("#importErrorMessage").text(xhr.responseText);
+      $("#importErrorModal").modal("show");
+    });
+  };
+
+  var submittedFilename = function ($upload) {
+    var path = $upload.val();
+    var fakePathCheck = path.search("\\\\") + 1;
+
+    while (fakePathCheck) {
+      path = path.substring(fakePathCheck);
+      fakePathCheck = path.search("\\\\") + 1;
+    }
+
+    return path;
+  };
+
+  var createFileForm = function ($upload) {
+    var formData = new FormData();
+    formData.append("file", $upload[0].files[0]);
+    return formData;
+  };
+
+  var uploadEpilogue = function (event) {
+    if (window.ga) {
+      window.ga("send", "pageview", {
+        page: "/GRNsight/upload",
+        sessionControl: "start"
+      });
+    }
+
+    $("a.upload > input[type=file]").val("");
+    event.preventDefault();
+  };
+
+  var uploadHandler = function (uploadRoute, uploader) {
+    return function (event) {
+      var $upload = $(this);
+      var filename = submittedFilename($upload);
+      var formData = createFileForm($upload);
+      uploader(uploadRoute, filename, formData);
+      uploadEpilogue(event);
+    };
+  };
+
+  $("#upload").on("change", uploadHandler("upload", loadGrn));
+  $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
+  $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
@@ -173,7 +243,7 @@ $(function () {
     var randomDataCount = warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
     var emptyRowCount = warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
     var invalidNetworkSizeCount = warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
-    var invalidCellDataTypeCount = warnings.filter(function(x){return x.warningCode=="INVALID_CELL_DATA_TYPE"});
+    var extraneousDataCount = warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
 
     function createWarningsString(warningCount, index) {
       for (var i = 0; i < warningCount.length; i++) {        
@@ -195,7 +265,7 @@ $(function () {
     createWarningsString(randomDataCount,3);
     createWarningsString(emptyRowCount,4);
     createWarningsString(invalidNetworkSizeCount,5);
-    createWarningsString(invalidCellDataTypeCount,6);
+    createWarningsString(extraneousDataCount,6);
 
     $("#warningsList").html(warningsString);
 
@@ -213,8 +283,8 @@ $(function () {
     $("#warningsModal").modal("show");
   }
 
-  $("#warningsModal").on("hidden.bs.modal", function() {
-    if( $("#warningsInfo").hasClass("in") ) {
+  $("#warningsModal").on("hidden.bs.modal", function () {
+    if ($("#warningsInfo").hasClass("in")) {
       $("#warningsInfo").removeClass("in");
     }
   });
@@ -232,10 +302,13 @@ $(function () {
     });
   };
 
-  var loadDemo = function(url, name) {
-    loadGrn(url, name);
-    reload = [url, name];
-    $("#upload").val("");
+  var loadDemo = function(url) {
+    loadGrn(url);
+    reloader = function () {
+      loadGrn(url);
+    };
+
+    $("a.upload > input[type=file]").val("");
   };
 
   function settingsController () {
@@ -248,5 +321,65 @@ $(function () {
       })
     }
   }
+  
+  $("#printGraph").click(function (event) {
+    if(!$(this).parent().hasClass("disabled")) {
+      window.print();
+    }
+  });
 
+  var flattenNetwork = function (network, sheetType) {
+    var result = $.extend(true, { }, network, { sheetType: sheetType });
+    result.links.forEach(function (link) {
+      link.source = link.source.index;
+      link.target = link.target.index;
+      delete link.weightElement;
+    });
+    return result;
+  };
+
+  var filenameWithExtension = function (suffix, extension) {
+    var filename = $("#fileName").text();
+    var currentExtension = filename.match(/\.[^\.]+$/);
+    if (currentExtension && currentExtension.length) {
+      filename = filename.substr(0, filename.length - currentExtension[0].length);
+    }
+
+    if (suffix) {
+      filename = filename + "_" + suffix;
+    }
+
+    return filename + "." + extension;
+  };
+
+  var performExport = function (route, extension, sheetType) {
+    return function (event) {
+      if (!$(this).parent().hasClass("disabled")) {
+        var networkToExport = flattenNetwork(currentNetwork, sheetType);
+        var networkFilename = filenameWithExtension(sheetType !== currentNetwork.sheetType ? sheetType : "", extension);
+        networkToExport.filename = networkFilename;
+
+        var exportForm = $("<form></form>").attr({
+          method: "POST",
+          action: $("#service-root").val() + "/" + route
+        }).append($("<input></input>").attr({
+          type: "hidden",
+          name: "filename",
+          value: networkFilename
+        })).append($("<input></input>").attr({
+          type: "hidden",
+          name: "network",
+          value: JSON.stringify(networkToExport)
+        }));
+        $("body").append(exportForm);
+        exportForm.submit();
+        exportForm.remove();
+      }
+    };
+  };
+
+  $("#exportAsUnweightedSif").click(performExport("export-to-sif", "sif", "unweighted"));
+  $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
+  $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
+  $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
 });

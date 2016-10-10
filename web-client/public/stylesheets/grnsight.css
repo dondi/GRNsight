@@ -32,26 +32,30 @@ form span {
   top: 1px;
   width: 1350px;
 }
-#upload {
-  display: none;
-}
 .glyphicon {
   min-width: 22px;
 }
-#open-item {
+.dropdown-menu > li > a.upload {
   padding-left: 0;
   padding-right: 0;
 }
-#open {
+.dropdown-menu > li > a.upload > label {
   font-weight: normal;
   margin-bottom: 0;
   padding-left: 20px;
   padding-right: 20px;
   width: 100%;
 }
+.dropdown-menu > li > a.upload > input[type=file] {
+  display: none;
+}
 #fileName {
   color: #000;
   cursor: text;
+}
+.not-yet-implemented,
+.nav > li.not-yet-implemented {
+  display: none;
 }
 nav.navbar.navbar-default {
   background-color: #dfebe5;
@@ -92,6 +96,9 @@ nav.navbar.navbar-default {
 }
 .btnSidebar {
   width: 225px;
+}
+#warningsModal #accordion {
+  margin-bottom: 0;
 }
 .dropdown-submenu {
   position: relative;
@@ -141,4 +148,22 @@ nav.navbar.navbar-default {
   margin-top: 256px;
   margin-left: 15px;
   width: 1335px;
+}
+text.weight {
+  cursor: default;
+  font-size: 20px;
+  font-weight: 900;
+  fill: #000;
+  opacity: 0;
+  stroke: #fff;
+  stroke-width: 0.5px;
+  transition: opacity 0.25s;
+  visibility: hidden;
+}
+text.weight.visible {
+  opacity: 1;
+  visibility: visible;
+}
+path.mousezone {
+  opacity: 0;
 }
