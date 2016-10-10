@@ -14,6 +14,7 @@ exports.missingNetworkError = missingNetworkError;
 exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
+exports.emptyRowError = emptyRowError;
 
 exports.networkSizeWarning = networkSizeWarning;
 exports.checkForGene = checkForGene;
@@ -23,6 +24,7 @@ exports.missingTargetWarning = missingTargetWarning;
 exports.randomDataWarning = randomDataWarning;
 exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
+exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 
 exports.shortestPath = shortestPath;
@@ -181,6 +183,20 @@ function warningsCountError(input, frequency) {
   } 
 }
 
+function emptyRowError(input, frequency) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.errors.length);
+
+  for(var i = 0; i < frequency; i++) {
+    assert.equal(
+      "EMPTY_ROW",
+      network.errors[i].errorCode
+    );
+  }  
+}
+
 //WARNING TEST FUNCTIONS:
 
 function noWarnings(input) {
@@ -236,6 +252,14 @@ function invalidNetworkSizeWarning(input, frequency) {
   var invalidNetworkSizeCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
 
   assert.equal(frequency, invalidNetworkSizeCount.length);
+}
+
+function extraneousDataWarning(input, frequency) {
+  var sheet = xlsx.parse(input),
+    network = spreadsheetController.parseSheet(sheet);
+  var extraneousDataWarning = network.warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
+
+  assert.equal(frequency, extraneousDataWarning.length);
 }
 
 function networkSizeWarning(input, frequency) {  

@@ -12,12 +12,19 @@ describe('errors-adjacency-matrix-modifications', function () {
     })
   })
 
+  describe('empty-row', function () {
+    it('should return empty row error', function () {
+        test.emptyRowError('test-files/adjacency-matrix-modifications/empty-row-input.xlsx', 1);
+        test.emptyRowError('test-files/adjacency-matrix-modifications/empty-row-output.xlsx', 1);
+    })
+  })
+
   describe('extra-data', function () {
-    it('should not return any errors', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx');
+    it('should return empty row errors', function () {
+      test.emptyRowError('test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx', 6);
+      test.emptyRowError('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx', 14);
       test.noErrors('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-output.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx');
+      test.emptyRowError('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx', 9);
     })
   })
 
@@ -43,6 +50,13 @@ describe('errors-adjacency-matrix-modifications', function () {
     })
   })
 
+  describe('extra-data-random-cell-other', function () {
+    it('should return empty row error', function () {
+        test.emptyRowError('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx', 14);
+        test.noErrors('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-output.xlsx');
+    })
+  })
+
   describe('extra-row-adjacent', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/extra-row-adjacent-input.xlsx');
@@ -51,17 +65,26 @@ describe('errors-adjacency-matrix-modifications', function () {
   })
 
   describe('extra-row-end-of-sheet', function () {
-    it('should return warnings count error', function () {
+    it('should return no error', function () {
       this.timeout(10000);
-      test.warningsCountError('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx', 1);
-      test.warningsCountError('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx', 1);
+      test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx');
+      test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx');
     })
   })
 
   describe('extra-row-one-row-skipped', function () {
+    it('should not empty row error', function () {
+      test.emptyRowError('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-input.xlsx', 1);
+      test.emptyRowError('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-output.xlsx', 1);
+    })
+  })
+
+  describe('empty-row-or-column', function () {
     it('should not return any errors', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-row-one-row-skipped-output.xlsx');
+      test.noErrors('test-files/adjacency-matrix-modifications/empty-column-input.xlsx');
+      test.noErrors('test-files/adjacency-matrix-modifications/empty-column-output.xlsx');
+      test.emptyRowError('test-files/adjacency-matrix-modifications/empty-row-input.xlsx', 1);
+      test.emptyRowError('test-files/adjacency-matrix-modifications/empty-row-output.xlsx', 1);
     })
   })
 
@@ -141,15 +164,6 @@ describe('errors-adjacency-matrix-modifications', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx');
       test.noErrors('test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-only-input.xlsx');
       test.noErrors('test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx');
-    })
-  })
-
-  describe('empty-row-or-column', function () {
-    it('should not return any errors', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/empty-column-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/empty-column-output.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/empty-row-input.xlsx');
-      test.noErrors('test-files/adjacency-matrix-modifications/empty-row-output.xlsx');
     })
   })
 

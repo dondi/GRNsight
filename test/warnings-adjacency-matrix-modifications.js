@@ -20,24 +20,10 @@ describe('warnings-adjacency-matrix-modifications', function () {
     	})
   	})
 
-  	describe('empty-row', function () {
-    	it('1 target gene warning', function () {
-      		test.missingTargetWarning('test-files/adjacency-matrix-modifications/empty-row-input.xlsx', 1);
-      		test.missingTargetWarning('test-files/adjacency-matrix-modifications/empty-row-output.xlsx', 1);
-    	})
-  	})
-
   	describe('extra-column-adjacent', function () {
     	it('should not return any warnings', function () {
       		test.noWarnings('test-files/adjacency-matrix-modifications/extra-column-adjacent-input.xlsx');
       		test.randomDataWarning('test-files/adjacency-matrix-modifications/extra-column-adjacent-output.xlsx', 1);
-    	})
-  	})
-
-  	describe('extra-column-end-of-sheet', function () {
-    	it('should not return any warnings', function () {
-      		test.noWarnings('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx');
-      		test.noWarnings('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx');
     	})
   	})
 
@@ -52,19 +38,16 @@ describe('warnings-adjacency-matrix-modifications', function () {
   	})
 
   	describe('extra-data-random-cell-both', function () {
-    	it('6 empty row, 1 target gene, and 3 invalid data warnings', function () {
-      		test.emptyRowWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx', 6);
+    	it('1 target gene, and 3 invalid data warnings', function () {
       		test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx', 1);
       		test.invalidMatrixDataWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx', 3);
     	})
   	})
 
   	describe('extra-data-random-cell-other', function () {
-    	it('15 empty row, 5 invalid data', function () {
-      		test.emptyRowWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx', 14);
+    	it('5 invalid data', function () {
       		test.invalidMatrixDataWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx', 5);
       		test.noWarnings('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-output.xlsx');
-      		test.emptyRowWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx', 14);
       		test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx', 1);
     	})
   	})
@@ -75,6 +58,16 @@ describe('warnings-adjacency-matrix-modifications', function () {
       		test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-row-adjacent-output.xlsx', 1);
     	})
   	})
+
+    describe('extra-row-end-of-sheet', function () {
+      it('1 extraneous data warnings', function () {
+        this.timeout(10000);
+        test.extraneousDataWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx', 1);
+        test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx', 1)
+        test.extraneousDataWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx', 1);
+        test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx', 1);
+      })
+    })
 
     describe('missing-column-end', function () {
       it('no warnings', function () {
