@@ -48,7 +48,8 @@ var parseSheet = function(sheet) {
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
       targetGenes = [],
-      emptyRowStrictness = 25;
+      emptyRowStrictness = 20,
+      maxAllowedErrors = 20;
 
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.length; i++) {
@@ -67,14 +68,14 @@ var parseSheet = function(sheet) {
 
   // If it didn't find a network/network_optimized_weights sheet
   if (currentSheet === undefined) { 
-    addError(network, errorList.missingNetworkError)
+    addError(network, errorList.missingNetworkError, maxAllowedErrors)
     return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
 
     if(currentSheet.data[row].length === 0) { // if the current row is empty 
-      addError(network, errorList.emptyRowError(row));
+      addError(network, errorList.emptyRowError(row), maxAllowedErrors);
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
@@ -97,7 +98,7 @@ var parseSheet = function(sheet) {
                 network.genes.push(currentGene);
               }
             } catch (err) {
-              addError(network, errorList.corruptGeneError(row, column));
+              addError(network, errorList.corruptGeneError(row, column), maxAllowedErrors);
               return network;
             } 
           } else if (column === 0) { // If we are at the far left of a new row...
@@ -123,7 +124,7 @@ var parseSheet = function(sheet) {
             } catch (err) {
               sourceGene = currentSheet.data[0][column]; 
               targetGene = currentSheet.data[row][0];
-              addError(network, errorList.corruptGeneError(row, column));
+              addError(network, errorList.corruptGeneError(row, column), maxAllowedErrors);
               return network;
             };
           } else { // If we're within the matrix and lookin' at the data...
@@ -131,7 +132,7 @@ var parseSheet = function(sheet) {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
-                addError(network, errorList.dataTypeError(row, column));
+                addError(network, errorList.dataTypeError(row, column), maxAllowedErrors);
                 return network;
               } else {
                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
@@ -164,7 +165,7 @@ var parseSheet = function(sheet) {
 
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
-              addError(network, errorList.missingValueError(row, column));
+              addError(network, errorList.missingValueError(row, column), maxAllowedErrors);
               return network;
             };
           };
@@ -173,7 +174,7 @@ var parseSheet = function(sheet) {
       column = 0; // let's go back to column 0 on the next row!
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
-        addError(network, errorList.unknownError);
+        addError(network, errorList.unknownError, maxAllowedErrors);
         return network;
       }
     };
@@ -190,7 +191,7 @@ var parseSheet = function(sheet) {
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
   var warningsCount = network.warnings.length;
-  checkWarningsCount(network, warningsCount);
+  checkWarningsCount(network, warningsCount, maxAllowedErrors);
   checkEmptyRowErrors(network, emptyRowStrictness);
 
   try {
@@ -273,14 +274,16 @@ var addWarning = function (network, message) {
     addMessageToArray(network.warnings, message);
 };
 
-var addError = function (network, message) {
-    addMessageToArray(network.errors, message);
+var addError = function (network, message, maxAllowedErrors) {
+    if (network.errors.length < maxAllowedErrors) {
+      addMessageToArray(network.errors, message);
+    }
 };
 
-var checkWarningsCount = function (network, warningsCount) {
+var checkWarningsCount = function (network, warningsCount, maxAllowedErrors) {
   var MAX_WARNINGS = 75;
   if (warningsCount > MAX_WARNINGS) {
-    addError(network, errorList.warningsCountError);
+    addError(network, errorList.warningsCountError, maxAllowedErrors);
   }
 }
 
