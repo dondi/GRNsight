@@ -194,11 +194,11 @@ var parseSheet = function(sheet) {
   checkWarningsCount(network, warningsCount, maxAllowedErrors);
   checkEmptyRowErrors(network, emptyRowStrictness);
 
-  try {
+  /*try {
     network.graphStatisticsReport = graphStatisticsReport(network);
   } catch (err) {
     console.log ("Graph statistics report failed to be complete.");
-  }
+  }*/
 
   // We're done. Return the network.
   return network;

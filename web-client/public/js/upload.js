@@ -141,7 +141,7 @@ $(function () {
       reloader = function () {
         loadGrn(url, name, formData);
       };
-      displayStatistics(network);
+      //displayStatistics(network);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
       var errorString = "Your graph failed to load.<br><br>";
