@@ -35,9 +35,6 @@ body {
   width: 2080px;
   height: 1170px;
 }
-.containerScroll {
-  overflow: auto;
-}
 .sliders {
   width: 225px;
   margin-left: 10px;
