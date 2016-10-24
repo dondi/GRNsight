@@ -60,12 +60,10 @@ describe('warnings-adjacency-matrix-modifications', function () {
   	})
 
     describe('extra-row-end-of-sheet', function () {
-      it('1 extraneous data warnings', function () {
+      it('no warnings', function () {
         this.timeout(10000);
-        test.extraneousDataWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx', 1);
-        test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx', 1)
-        test.extraneousDataWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx', 1);
-        test.missingTargetWarning('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx', 1);
+        test.noWarnings('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx');
+        test.noWarnings('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx');
       })
     })
 
