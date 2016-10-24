@@ -19,7 +19,7 @@ var processGRNmap = function (path, res, app) {
   }
 
   helpers.attachFileHeaders(res, path);
-  network = parseSheet(sheet); 
+  network = parseSheet(sheet);
 
   return (network.errors.length === 0) ?
     // If all looks well, return the network with an all clear
@@ -39,7 +39,7 @@ var parseSheet = function(sheet) {
         negativeWeights: [],
         sheetType: "unweighted",
       },
-      currentLink, 
+      currentLink,
       currentGene,
       sourceGene,
       targetGene,
@@ -67,14 +67,14 @@ var parseSheet = function(sheet) {
   }
 
   // If it didn't find a network/network_optimized_weights sheet
-  if (currentSheet === undefined) { 
+  if (currentSheet === undefined) {
     addError(network, errorList.missingNetworkError, maxAllowedErrors)
     return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
 
-    if(currentSheet.data[row].length === 0) { // if the current row is empty 
+    if(currentSheet.data[row].length === 0) { // if the current row is empty
       addError(network, errorList.emptyRowError(row), maxAllowedErrors);
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
@@ -85,26 +85,26 @@ var parseSheet = function(sheet) {
           if (row === 0) { // If we are at the top of a new column...
             // These genes are the source genes
             try {
-              currentGene = {name: currentSheet.data[0][column]}; 
+              currentGene = {name: currentSheet.data[0][column]};
               // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
               if(currentGene.name === undefined) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else {
-                sourceGenes.push(String(currentGene.name.toUpperCase())); 
-                genesList.push(String(currentGene.name.toUpperCase())); 
+                sourceGenes.push(String(currentGene.name.toUpperCase()));
+                genesList.push(String(currentGene.name.toUpperCase()));
                 currentGene.name = currentGene.name;
                 network.genes.push(currentGene);
               }
             } catch (err) {
               addError(network, errorList.corruptGeneError(row, column), maxAllowedErrors);
               return network;
-            } 
+            }
           } else if (column === 0) { // If we are at the far left of a new row...
             // These genes are the target genes
             try {
-              currentGene = {name: currentSheet.data[row][0]}; 
+              currentGene = {name: currentSheet.data[row][0]};
               if(currentGene.name === undefined) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
@@ -114,15 +114,15 @@ var parseSheet = function(sheet) {
                 // Here we check to see if we've already seen the gene name that we're about to store
                 // Genes may or may not be present due to asymmetry or unorderedness
                 // If it's in the genesList, it will return a number > 0, so we won't store it
-                // If it's not there, it will return -1, so we add it. 
+                // If it's not there, it will return -1, so we add it.
                 if(genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
                   genesList.push(String(currentGene.name.toUpperCase()));
                   currentGene.name = currentGene.name;
                   network.genes.push(currentGene);
-                } 
+                }
               }
             } catch (err) {
-              sourceGene = currentSheet.data[0][column]; 
+              sourceGene = currentSheet.data[0][column];
               targetGene = currentSheet.data[row][0];
               addError(network, errorList.corruptGeneError(row, column), maxAllowedErrors);
               return network;
@@ -137,7 +137,7 @@ var parseSheet = function(sheet) {
               } else {
                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
-                  sourceGene = currentSheet.data[0][column]; 
+                  sourceGene = currentSheet.data[0][column];
                   targetGene = currentSheet.data[row][0];
                   if(sourceGene === undefined || targetGene === undefined) {
                     addWarning(network, warningsList.randomDataWarning("undefined", row, column));
@@ -240,12 +240,12 @@ var graphStatisticsReport = function(network)  {
   })
 
   for (var i = 0; i < network.genes.length; i++) {
-    var bc = cy.$().bc();    
+    var bc = cy.$().bc();
     betweennessCentrality.push({
       gene: network.genes[i],
       betweennessCentrality: bc.betweenness('#' + network.genes[i].name, null, true)
     })
-    
+
     var dijkstra = cy.elements().dijkstra("#" + network.genes[i].name, null, true);
 
     for (var j = 0; j < network.genes.length; j++) {
@@ -256,7 +256,7 @@ var graphStatisticsReport = function(network)  {
           shortestPath: dijkstra.distanceTo("#" + network.genes[j].name, null, true)
         }
       })
-    } 
+    }
   }
 
   return {
@@ -330,7 +330,7 @@ var checkGeneLength = function(errorArray, genesList) {
 
 var checkEmptyRowErrors = function (network, strictness) {
   // Right now, we won't check the specific content of the errors because
-  // emptyRowError is the only error that does not return the network 
+  // emptyRowError is the only error that does not return the network
   // after being thrown.
   if (network.errors.length >= strictness) {
     var lastError = network.errors.pop();
@@ -340,14 +340,18 @@ var checkEmptyRowErrors = function (network, strictness) {
   }
 }
 
+var checkSpecailCharacter = function (currentSheet.data, currentGene.name){
+
+}
+
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
 
 var errorList = {
   missingNetworkError: {
-    errorCode: "MISSING_NETWORK", 
-    possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
-    suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
+    errorCode: "MISSING_NETWORK",
+    possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
+    suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " +
     "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
   },
 
@@ -355,8 +359,8 @@ var errorList = {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
-      errorCode: "CORRUPT_GENE", 
-      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.", 
+      errorCode: "CORRUPT_GENE",
+      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.",
       suggestedFix: "Please fix the error and try uploading again."
     };
   },
@@ -365,35 +369,45 @@ var errorList = {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
-      errorCode: "MISSING_VALUE", 
-      possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.", 
+      errorCode: "MISSING_VALUE",
+      possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.",
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
     };
   },
 
   duplicateGeneError: function(geneType, geneName) {
     return {
-      errorCode: "DUPLICATE_GENE", 
-      possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".", 
+      errorCode: "DUPLICATE_GENE",
+      possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
       suggestedFix: "Please remove the duplicate gene and submit again."
     };
   },
 
-  geneLengthError: function (geneName) {  
+  geneLengthError: function (geneName) {
     return {
-      errorCode: "INVALID_GENE_LENGTH", 
-      possibleCause: "Gene " + geneName + " is more than 12 characters in length.", 
+      errorCode: "INVALID_GENE_LENGTH",
+      possibleCause: "Gene " + geneName + " is more than 12 characters in length.",
       suggestedFix: "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again."
     };
   },
 
-  networkSizeError: function (genesLength, edgesLength) {  
+  networkSizeError: function (genesLength, edgesLength) {
     return {
-      errorCode: "INVALID_NETWORK_SIZE", 
-      possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.", 
+      errorCode: "INVALID_NETWORK_SIZE",
+      possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.",
       suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
     };
-  }, 
+  },
+
+  specialCharacterError: function(row, column){
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      errorCode: "INVALID_CHARACTER",
+      possibleCause: "The value in cell " + colLetter + rowNum + " contains invalid character.",
+      suggestedFix: "Please ensure all values in the data does not contain special characters except for '-' and '_'."
+    }
+  }
 
   dataTypeError: function (row, column) {
     var colLetter = numbersToLetters[column];
@@ -410,8 +424,8 @@ var errorList = {
     return {
       errorCode: "EMPTY_ROW",
       possibleCause: "Row " + rowNum + " does not contain any data.",
-      suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " + 
-                    "Also, please ensure that no extraneous data is outside of the matrix, " + 
+      suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " +
+                    "Also, please ensure that no extraneous data is outside of the matrix, " +
                     "as this may cause this error."
     }
   },
@@ -422,35 +436,36 @@ var errorList = {
     return {
       errorCode: "EMPTY_CELL",
       possibleCause: "The cell at " + colLetter + rowNum + " contains data that is outside the matrix.",
-      suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" + 
+      suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" +
                     " the matrix is "
     }
   },
 
-  warningsCountError: {  
-    errorCode: "WARNINGS_OVERLOAD", 
-    possibleCause: "This network has over 75 warnings.", 
-    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the Documentation page and try again." 
-  }, 
+  warningsCountError: {
+    errorCode: "WARNINGS_OVERLOAD",
+    possibleCause: "This network has over 75 warnings.",
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the Documentation page and try again."
+  },
 
   unknownError: {
-    errorCode: "UNKNOWN_ERROR", 
-    possibleCause: "An unexpected error occurred.", 
-    suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload." 
+    errorCode: "UNKNOWN_ERROR",
+    possibleCause: "An unexpected error occurred.",
+    suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
   }
+
 }
 
 //Currently only going to number 76 because currently the network errors out at 75+ genes.
-var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8: 'I', 9:'J', 10:'K', 11:'L', 
-    12:'M', 13:'N', 14:'O', 15:'P', 16:'Q', 17:'R', 18:'S', 19:'T', 20:'U', 21:'V', 22:'W', 23:'X', 24:'Y', 
-    25:'Z', 26:'AA', 27:'AB', 28:'AC', 29:'AD', 30:'AE', 31:'AF', 32:'AG', 33:'AH', 34:'AI', 35:'AJ', 36:'AK', 
-    37:'AL',38:'AM', 39:'AN', 40:'AO', 41:'AP', 42:'AQ', 43:'AR', 44:'AS', 45:'AT', 46:'AU', 47:'AV', 48:'AW', 
+var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8: 'I', 9:'J', 10:'K', 11:'L',
+    12:'M', 13:'N', 14:'O', 15:'P', 16:'Q', 17:'R', 18:'S', 19:'T', 20:'U', 21:'V', 22:'W', 23:'X', 24:'Y',
+    25:'Z', 26:'AA', 27:'AB', 28:'AC', 29:'AD', 30:'AE', 31:'AF', 32:'AG', 33:'AH', 34:'AI', 35:'AJ', 36:'AK',
+    37:'AL',38:'AM', 39:'AN', 40:'AO', 41:'AP', 42:'AQ', 43:'AR', 44:'AS', 45:'AT', 46:'AU', 47:'AV', 48:'AW',
     49:'AX', 51:'AY', 51:'AZ', 52:'BA', 53:'BB', 54:'BC', 55:'BD', 56:'BE', 57:'BF', 58:'BG', 59:'BH', 60:'BI',
     61:'BJ', 62:'BK', 63:'BL', 64:'BM', 65:'BN', 66:'BO', 67:'BP', 68:'BQ', 69:'BR', 70:'BS', 71:'BT', 72:'BU',
     73:'BV', 74:'BW', 75:'BX', 76:'BY'}
 
 
-// This is the list of warnings. 
+// This is the list of warnings.
 // The graph will still load if warnings are detected, but these will be reported to the user.
 
 
@@ -460,8 +475,8 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "MISSING_SOURCE",
-      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."  
-    } 
+      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."
+    }
   },
 
   missingTargetGeneWarning: function (row, column) {
@@ -487,7 +502,7 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "RANDOM_DATA",
-      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "." 
+      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
     }
   },
 
@@ -561,7 +576,7 @@ module.exports = function (app) {
   }
 
   //exporting parseSheet for use in testing. Do not remove!
-  return { 
+  return {
     parseSheet: parseSheet,
     grnSightToCytoscape: grnSightToCytoscape
   };
