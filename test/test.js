@@ -15,6 +15,7 @@ exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
 exports.emptyRowError = emptyRowError;
+exports.errorsCountError = errorsCountError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
@@ -170,16 +171,18 @@ function checkForGene(test, frequency, input) {
 
 function warningsCountError(input, frequency) {
   var sheet = xlsx.parse(input),
-      network = spreadsheetController.parseSheet(sheet);
+      network = spreadsheetController.parseSheet(sheet),
+      warningsCountErrorArray = network.errors.filter(function(x){return x.errorCode == "WARNINGS_OVERLOAD"});
 
-  assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, warningsCountErrorArray.length);
+}
 
-  for(var i = 0; i < frequency; i++) {
-    assert.equal(
-      "WARNINGS_OVERLOAD",
-      network.errors[i].errorCode
-    );
-  } 
+function errorsCountError(input, frequency) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet),
+      errorsCountErrorArray = network.errors.filter(function(x){return x.errorCode == "ERRORS_OVERLOAD"});
+
+  assert.equal(frequency, errorsCountErrorArray.length);
 }
 
 function emptyRowError(input, frequency) {

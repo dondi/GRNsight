@@ -47,9 +47,7 @@ var parseSheet = function(sheet) {
       targetGeneNumber,
       genesList = [], // This will contain all of the genes in upper case for use in error checking
       sourceGenes = [],
-      targetGenes = [],
-      emptyRowStrictness = 20,
-      maxAllowedErrors = 20;
+      targetGenes = [];
 
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.length; i++) {
@@ -68,14 +66,16 @@ var parseSheet = function(sheet) {
 
   // If it didn't find a network/network_optimized_weights sheet
   if (currentSheet === undefined) { 
-    addError(network, errorList.missingNetworkError, maxAllowedErrors)
+    addError(network, errorList.missingNetworkError);
     return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
 
     if(currentSheet.data[row].length === 0) { // if the current row is empty 
-      addError(network, errorList.emptyRowError(row), maxAllowedErrors);
+      if (addError(network, errorList.emptyRowError(row)) == false) {
+        return network;
+      }
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
@@ -98,7 +98,7 @@ var parseSheet = function(sheet) {
                 network.genes.push(currentGene);
               }
             } catch (err) {
-              addError(network, errorList.corruptGeneError(row, column), maxAllowedErrors);
+              addError(network, errorList.corruptGeneError(row, column));
               return network;
             } 
           } else if (column === 0) { // If we are at the far left of a new row...
@@ -124,7 +124,7 @@ var parseSheet = function(sheet) {
             } catch (err) {
               sourceGene = currentSheet.data[0][column]; 
               targetGene = currentSheet.data[row][0];
-              addError(network, errorList.corruptGeneError(row, column), maxAllowedErrors);
+              addError(network, errorList.corruptGeneError(row, column));
               return network;
             };
           } else { // If we're within the matrix and lookin' at the data...
@@ -132,7 +132,7 @@ var parseSheet = function(sheet) {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
-                addError(network, errorList.dataTypeError(row, column), maxAllowedErrors);
+                addError(network, errorList.dataTypeError(row, column));
                 return network;
               } else {
                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
@@ -165,7 +165,7 @@ var parseSheet = function(sheet) {
 
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
-              addError(network, errorList.missingValueError(row, column), maxAllowedErrors);
+              addError(network, errorList.missingValueError(row, column));
               return network;
             };
           };
@@ -174,7 +174,7 @@ var parseSheet = function(sheet) {
       column = 0; // let's go back to column 0 on the next row!
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
-        addError(network, errorList.unknownError, maxAllowedErrors);
+        addError(network, errorList.unknownError);
         return network;
       }
     };
@@ -190,9 +190,6 @@ var parseSheet = function(sheet) {
   checkDuplicates(network.errors, sourceGenes, targetGenes);
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
-  var warningsCount = network.warnings.length;
-  checkWarningsCount(network, warningsCount, maxAllowedErrors);
-  checkEmptyRowErrors(network, emptyRowStrictness);
 
   /*try {
     network.graphStatisticsReport = graphStatisticsReport(network);
@@ -265,27 +262,31 @@ var graphStatisticsReport = function(network)  {
   };
 }
 
-
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
 }
 
 var addWarning = function (network, message) {
-    addMessageToArray(network.warnings, message);
+    var warningsCount = network.warnings.length;
+    var MAX_WARNINGS = 75;
+    if (warningsCount < MAX_WARNINGS) {
+      addMessageToArray(network.warnings, message);
+    } else {
+      addMessageToArray(network.errors, errorsList.warningsCountError);
+      return false;
+    };
 };
 
-var addError = function (network, message, maxAllowedErrors) {
-    if (network.errors.length < maxAllowedErrors) {
+var addError = function (network, message) {
+    var errorsCount = network.errors.length;
+    var MAX_ERRORS = 20;
+    if (errorsCount < MAX_ERRORS) {
       addMessageToArray(network.errors, message);
-    }
+    } else {
+      addMessageToArray(network.errors, errorList.errorsCountError);
+      return false;
+    };
 };
-
-var checkWarningsCount = function (network, warningsCount, maxAllowedErrors) {
-  var MAX_WARNINGS = 75;
-  if (warningsCount > MAX_WARNINGS) {
-    addError(network, errorList.warningsCountError, maxAllowedErrors);
-  }
-}
 
 var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
   var genesLength = genesList.length,
@@ -328,17 +329,6 @@ var checkGeneLength = function(errorArray, genesList) {
   }
 }
 
-var checkEmptyRowErrors = function (network, strictness) {
-  // Right now, we won't check the specific content of the errors because
-  // emptyRowError is the only error that does not return the network 
-  // after being thrown.
-  if (network.errors.length >= strictness) {
-    var lastError = network.errors.pop();
-    var lastErrorRow = lastError.possibleCause.substring(4, lastError.possibleCause.indexOf(" does"));
-    network.errors = [];
-    addMessageToArray(network.warnings, warningsList.extraneousDataWarning(lastErrorRow, strictness));
-  }
-}
 
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
@@ -427,10 +417,22 @@ var errorList = {
     }
   },
 
+  errorsCountError: {  
+    errorCode: "ERRORS_OVERLOAD", 
+    possibleCause: "This network has over 20 errors.", 
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" + 
+    "Documentation page and try again. If you fix these errors and try to upload again, there may be " + 
+    "further errors detected. As a general approach for fixing the errors, consider copying and " + 
+    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it." 
+  },
+
   warningsCountError: {  
     errorCode: "WARNINGS_OVERLOAD", 
     possibleCause: "This network has over 75 warnings.", 
-    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the Documentation page and try again." 
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" + 
+    "Documentation page and try again. If you fix these errors and try to upload again, there may be " + 
+    "further errors detected. As a general approach for fixing the errors, consider copying and " + 
+    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it." 
   }, 
 
   unknownError: {
@@ -503,14 +505,6 @@ var warningsList = {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
-    }
-  },
-
-  extraneousDataWarning: function (row, strictness) {
-    return {
-      warningCode: "EXTRANEOUS_DATA",
-      errorDescription: "More than " + strictness + " rows were empty in the file. " +
-                        "There is likely extraneous data in row " + row + "."
     }
   }
 }

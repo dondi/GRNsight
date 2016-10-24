@@ -38,8 +38,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('extra-column-end-of-sheet', function () {
     it('should return warnings count error', function () {
-      test.warningsCountError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx', 1);
-      test.warningsCountError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx', 1);
+      test.missingValueError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx', 1);
+      test.missingValueError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx', 1);
     })
   })
 
@@ -65,15 +65,16 @@ describe('errors-adjacency-matrix-modifications', function () {
   })
 
   describe('extra-row-end-of-sheet', function () {
-    it('should return no error', function () {
+    it('should return errors count error', function () {
       this.timeout(10000);
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx');
+      test.errorsCountError('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx', 1);
     })
   })
 
   describe('extra-row-end-of-sheet-output', function () {
-    it('should not return any errors, but should return warnings', function () {
-      test.noErrors('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx');
+    it('should return errors count error', function () {
+      this.timeout(10000);
+      test.errorsCountError('test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx', 1);
     })
   })
 
