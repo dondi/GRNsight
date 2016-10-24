@@ -13,9 +13,27 @@ body {
   top: 53px;
   right: 5px;
   bottom: 5px;
-  width: 1100px;
-  height: 700px;
   border: 2px solid #9a9a9a;
+}
+.containerXS {
+  width: 640px;
+  height: 360px;
+}
+.containerS {
+  width: 960px;
+  height: 540px;
+}
+.containerM {
+  width: 1280px;
+  height: 720px;
+}
+.containerL {
+  width: 1600px;
+  height: 900px;
+}
+.containerXL {
+  width: 2080px;
+  height: 1170px;
 }
 .sliders {
   width: 225px;

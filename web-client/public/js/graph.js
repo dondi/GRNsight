@@ -14,6 +14,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       nodeHeight = 30,
       gridWidth = 300,
       colorOptimal = true;
+  
 
   $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
@@ -82,6 +83,16 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .attr("width", width)
       .attr("height", height);
       
+  /*var zoom = d3.behavior.zoom()
+                        .scaleExtent([1, 10])
+                        .on("zoom", function () {
+                          console.log("Zooming?");
+                        });
+
+  if ($("#enableZoom").prop('checked')) {
+    svg.call(zoom);
+  }*/
+
   var defs = svg.append("defs");
 
   var link = svg.selectAll(".link"),
