@@ -274,8 +274,8 @@ var addWarning = function (network, message) {
     } else {
       addMessageToArray(network.errors, errorsList.warningsCountError);
       return false;
-    };
-};
+    }
+}
 
 var addError = function (network, message) {
     var errorsCount = network.errors.length;
@@ -285,8 +285,8 @@ var addError = function (network, message) {
     } else {
       addMessageToArray(network.errors, errorList.errorsCountError);
       return false;
-    };
-};
+    }
+}
 
 var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
   var genesLength = genesList.length,

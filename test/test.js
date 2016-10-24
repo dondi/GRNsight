@@ -159,7 +159,6 @@ function networkSizeError(input, frequency) {
   }      
 }
 
-
 function checkForGene(test, frequency, input) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
