@@ -355,7 +355,10 @@ var checkEmptyRowErrors = function (network, strictness) {
 >>>>>>> db7692eca70ca6d3454d4d277b82044695012f86
 
 var checkSpecialCharacter = function (currentSheet.data, currentGene.name){
-
+  var str = currentSheet.data;
+  var str2 = currentGene.name;
+  var regex = /[^a-z0-9\_\-]/gi;
+  return str.match(regex)==null && str.match(newstr2)==null;
 }
 
 // This is the massive list of errors. Yay!
