@@ -130,6 +130,9 @@ var parseSheet = function(sheet) {
             try {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
+              // } else if (checkSpecialCharacter(currentSheet.data[row][column],currentGene.name) === false ){
+              //   addError(network, errorList.specialCharacterError(row, column));
+              //   return network;
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
                 return network;

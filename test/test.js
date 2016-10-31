@@ -16,6 +16,7 @@ exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
 exports.emptyRowError = emptyRowError;
 exports.errorsCountError = errorsCountError;
+exports.specialCharacterError = specialCharacterError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
@@ -39,7 +40,7 @@ function noErrors(input) {
     assert.equal(0, network.errors.length);
   }
 
-function duplicateGeneError(input, frequency) {  
+function duplicateGeneError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -53,11 +54,11 @@ function duplicateGeneError(input, frequency) {
   }
 
   /* TO DO:
-  
+
   network.errors.forEach(function (error) {
-    assert.equal("DUPLICATE_GENE", error.errorCode); 
+    assert.equal("DUPLICATE_GENE", error.errorCode);
   });
-  
+
   */
 }
 
@@ -66,21 +67,21 @@ function invalidGeneLengthError(input, frequency){
       network = spreadsheetController.parseSheet(sheet);
 
   assert.equal(frequency, network.errors.length);
-      
+
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "INVALID_GENE_LENGTH",
       network.errors[i].errorCode
     );
   }
-} 
+}
 
 function corruptGeneError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
   assert.equal(frequency, network.errors.length);
-      
+
   for(var i = 0; i < frequency; i++) {
     assert.equal(
       "CORRUPT_GENE",
@@ -89,7 +90,7 @@ function corruptGeneError(input, frequency) {
   }
 }
 
-function unknownError(input, frequency) {  
+function unknownError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -100,10 +101,10 @@ function unknownError(input, frequency) {
       "UNKNOWN_ERROR",
       network.errors[i].errorCode
     );
-  }      
+  }
 }
 
-function missingValueError(input, frequency) {  
+function missingValueError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -114,10 +115,10 @@ function missingValueError(input, frequency) {
       "MISSING_VALUE",
       network.errors[i].errorCode
     );
-  }     
+  }
 }
 
-function missingNetworkError(input, frequency) {  
+function missingNetworkError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -128,10 +129,24 @@ function missingNetworkError(input, frequency) {
       "MISSING_NETWORK",
       network.errors[i].errorCode
     );
-  }      
+  }
 }
 
-function invalidDataTypeError(input, frequency) {  
+function specialCharacterError(input, frequency) {
+  var sheet = xlsx.parse(input),
+      network = spreadsheetController.parseSheet(sheet);
+
+  assert.equal(frequency, network.errors.length);
+
+  for(var i = 0; i < frequency; i++){
+    assert.equal(
+      "INVALID_CHARACTER",
+      network.errors[i].errorCode
+    );
+  }
+}
+
+function invalidDataTypeError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -142,10 +157,10 @@ function invalidDataTypeError(input, frequency) {
       "INVALID_CELL_DATA_TYPE",
       network.errors[i].errorCode
     );
-  } 
+  }
 }
 
-function networkSizeError(input, frequency) {  
+function networkSizeError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
 
@@ -156,7 +171,7 @@ function networkSizeError(input, frequency) {
       "INVALID_NETWORK_SIZE",
       network.errors[i].errorCode
     );
-  }      
+  }
 }
 
 function checkForGene(test, frequency, input) {
@@ -164,7 +179,7 @@ function checkForGene(test, frequency, input) {
       network = spreadsheetController.parseSheet(sheet);
 
   assert.equal(frequency, network.genes.filter(function (gene) {
-    return gene.name === test; 
+    return gene.name === test;
   }).length);
 }
 
@@ -195,7 +210,7 @@ function emptyRowError(input, frequency) {
       "EMPTY_ROW",
       network.errors[i].errorCode
     );
-  }  
+  }
 }
 
 //WARNING TEST FUNCTIONS:
@@ -207,7 +222,7 @@ function noWarnings(input) {
   assert.equal(0, network.warnings.length);
 }
 
-function missingSourceWarning(input, frequency) {  
+function missingSourceWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var missingSourceCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
@@ -215,7 +230,7 @@ function missingSourceWarning(input, frequency) {
   assert.equal(frequency, missingSourceCount.length);
 }
 
-function invalidMatrixDataWarning(input, frequency) {  
+function invalidMatrixDataWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
@@ -223,7 +238,7 @@ function invalidMatrixDataWarning(input, frequency) {
   assert.equal(frequency, invalidDataCount.length);
 }
 
-function missingTargetWarning(input, frequency) {  
+function missingTargetWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var missingTargetCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
@@ -231,7 +246,7 @@ function missingTargetWarning(input, frequency) {
   assert.equal(frequency, missingTargetCount.length);
 }
 
-function randomDataWarning(input, frequency) {  
+function randomDataWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var randomDataCount = network.warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
@@ -239,7 +254,7 @@ function randomDataWarning(input, frequency) {
   assert.equal(frequency, randomDataCount.length);
 }
 
-function emptyRowWarning(input, frequency) {  
+function emptyRowWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var emptyRowCount = network.warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
@@ -247,7 +262,7 @@ function emptyRowWarning(input, frequency) {
   assert.equal(frequency, emptyRowCount.length);
 }
 
-function invalidNetworkSizeWarning(input, frequency) {  
+function invalidNetworkSizeWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
   var invalidNetworkSizeCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
@@ -292,10 +307,3 @@ function betweennessCentrality(input, directed, node, centrality) {
   var bc = cy.$().bc();
   assert.equal(bc.betweenness('#' + node, null, directed), centrality);
 }
-
-
-
-
-
-
-
