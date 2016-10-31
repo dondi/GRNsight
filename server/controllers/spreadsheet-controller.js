@@ -335,9 +335,8 @@ var checkGeneLength = function(errorArray, genesList) {
 }
 
 var checkSpecialCharacter = function (currentGene){
-  var str = currentGene;
   var regex = /[^a-z0-9\_\-]/gi;
-  return str.match(regex)===null;
+  return currentGene.match(regex)===null;
 }
 
 // This is the massive list of errors. Yay!
