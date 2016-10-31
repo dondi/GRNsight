@@ -21,8 +21,4 @@ $(function () {
     }
   });
 
-  /*$("#enableScroll").on("click", function () {
-    $(".grnsight-container").toggleClass("containerScroll");
-  });*/
-
 })
