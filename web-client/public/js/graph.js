@@ -14,13 +14,13 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       nodeHeight = 30,
       gridWidth = 300,
       colorOptimal = true;
-  
+
 
   $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
-    return node.name.length * 20;
+    return node.name.length * 15;
   };
 
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
@@ -51,7 +51,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .domain(d3.extent(allWeights)),
 
       unweighted = false;
-  
+
   //if unweighted, weight is 2
   if (sheetType === 'unweighted') {
     totalScale = d3.scale.quantile()
@@ -82,7 +82,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var svg = d3.select($container[0]).append("svg")
       .attr("width", width)
       .attr("height", height);
-      
+
   /*var zoom = d3.behavior.zoom()
                         .scaleExtent([1, 10])
                         .on("zoom", function () {
@@ -162,9 +162,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         // If the same ID is created twice (usually happens in the unweighted GRNS), it causes unpredictable behavior
         // in the markers. To prevent this, first we check to make sure the ID about to be created doesn't exist.
         if( $("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum).length != 0 ) {
-          return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";  
+          return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         } else {
-         
+
           // If negative, you need one bar for horizontal and one for vertical. If the user is not coloring the weighted
           // sheets, then we make all of the markers arrowheads.
           if(d.value < 0 && colorOptimal) {
@@ -371,7 +371,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               y1 = d.source.y,
               x2 = d.target.x,
               y2 = d.target.y;
-        
+
           d.target.centerX = d.target.x + (w / 2);
           d.target.centerY = d.target.y + (h / 2);
 
@@ -417,7 +417,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               cp2x + " " + cp2y + ", " +
               x2 + " " + y2;
       };
-  
+
   function smartPathEnd(d, w, h) {
     var MINIMUM_DISTANCE = 8;
 
@@ -537,8 +537,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         d.target.newX = (2 * d.target.x) - d.target.newX + w;
       }
     }
-  }    
-      
+  }
+
   var dblclick = function (d) {
     d3.select(this).classed("fixed", d.fixed = false);
   };
@@ -557,7 +557,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
      })
      .attr("stroke-width", "2px")
      .on("dblclick", dblclick);
-         
+
   node.append("text")
     .attr("dx", function (d) {
       return getNodeWidth(d) / 2;
@@ -569,7 +569,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     .style("fill", "black")
     .text(function(d) {return d.name;})
     .on("dblclick", nodeTextDblclick);
-             
+
   $('.node').css({
     'cursor': 'move',
     'fill': 'white',
