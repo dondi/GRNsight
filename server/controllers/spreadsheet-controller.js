@@ -65,27 +65,16 @@ var parseSheet = function(sheet) {
   }
 
   // If it didn't find a network/network_optimized_weights sheet
-<<<<<<< HEAD
-  if (currentSheet === undefined) {
-    addError(network, errorList.missingNetworkError, maxAllowedErrors)
-=======
   if (currentSheet === undefined) {
     addError(network, errorList.missingNetworkError);
->>>>>>> db7692eca70ca6d3454d4d277b82044695012f86
     return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-
-<<<<<<< HEAD
-    if(currentSheet.data[row].length === 0) { // if the current row is empty
-      addError(network, errorList.emptyRowError(row), maxAllowedErrors);
-=======
     if(currentSheet.data[row].length === 0) { // if the current row is empty
       if (addError(network, errorList.emptyRowError(row)) == false) {
         return network;
       }
->>>>>>> db7692eca70ca6d3454d4d277b82044695012f86
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
@@ -339,22 +328,7 @@ var checkGeneLength = function(errorArray, genesList) {
   }
 }
 
-<<<<<<< HEAD
-var checkEmptyRowErrors = function (network, strictness) {
-  // Right now, we won't check the specific content of the errors because
-  // emptyRowError is the only error that does not return the network
-  // after being thrown.
-  if (network.errors.length >= strictness) {
-    var lastError = network.errors.pop();
-    var lastErrorRow = lastError.possibleCause.substring(4, lastError.possibleCause.indexOf(" does"));
-    network.errors = [];
-    addMessageToArray(network.warnings, warningsList.extraneousDataWarning(lastErrorRow, strictness));
-  }
-}
-=======
->>>>>>> db7692eca70ca6d3454d4d277b82044695012f86
-
-var checkSpecialCharacter = function (currentSheet.data, currentGene.name){
+var checkSpecialCharacter = function (currentSheet, currentGene){
   var str = currentSheet.data;
   var str2 = currentGene.name;
   var regex = /[^a-z0-9\_\-]/gi;
@@ -424,7 +398,7 @@ var errorList = {
       possibleCause: "The value in cell " + colLetter + rowNum + " contains invalid character.",
       suggestedFix: "Please ensure all values in the data does not contain special characters except for '-' and '_'."
     }
-  }
+  },
 
   dataTypeError: function (row, column) {
     var colLetter = numbersToLetters[column];
@@ -457,14 +431,6 @@ var errorList = {
                     " the matrix is "
     }
   },
-
-<<<<<<< HEAD
-  warningsCountError: {
-    errorCode: "WARNINGS_OVERLOAD",
-    possibleCause: "This network has over 75 warnings.",
-    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the Documentation page and try again."
-  },
-=======
   errorsCountError: {
     errorCode: "ERRORS_OVERLOAD",
     possibleCause: "This network has over 20 errors.",
@@ -482,7 +448,6 @@ var errorList = {
     "further errors detected. As a general approach for fixing the errors, consider copying and " +
     "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
   },
->>>>>>> db7692eca70ca6d3454d4d277b82044695012f86
 
   unknownError: {
     errorCode: "UNKNOWN_ERROR",
