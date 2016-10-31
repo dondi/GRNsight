@@ -5,6 +5,7 @@ $(function () {
     var grnsightContainerClass = "grnsight-container " + currentValue;
     if (!$(".grnsight-container").hasClass(currentValue)) {
       $(".grnsight-container").attr("class", grnsightContainerClass);
+      $("#reload").trigger("click");
     };
   });
 
