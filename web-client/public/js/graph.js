@@ -86,7 +86,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   /*var zoom = d3.behavior.zoom()
                         .scaleExtent([1, 10])
                         .on("zoom", function () {
-                          console.log("Zooming?");
+                          console.log("zooming?");
+                          svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
                         });
 
   if ($("#enableZoom").prop('checked')) {
