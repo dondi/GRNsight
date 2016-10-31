@@ -141,6 +141,7 @@ $(function () {
       reloader = function () {
         loadGrn(url, name, formData);
       };
+      $("#reload").off("click").on("click", reloader);
       //displayStatistics(network);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
@@ -175,6 +176,7 @@ $(function () {
       reloader = function () {
         importGrn(uploadRoute, filename, formData);
       };
+      $("#reload").off("click").on("click", reloader);
     }).error(function (xhr, status, error) {
       $("#importErrorMessage").text(xhr.responseText);
       $("#importErrorModal").modal("show");
@@ -307,6 +309,7 @@ $(function () {
     reloader = function () {
       loadGrn(url);
     };
+    $("#reload").off("click").on("click", reloader);
 
     $("a.upload > input[type=file]").val("");
   };
