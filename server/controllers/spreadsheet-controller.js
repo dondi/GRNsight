@@ -90,6 +90,9 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
+              } else if (checkSpecialCharacter(currentGene.name) === false ){
+                 addError(network, errorList.specialCharacterError(row, column));
+                 return network;
               } else {
                 sourceGenes.push(String(currentGene.name.toUpperCase()));
                 genesList.push(String(currentGene.name.toUpperCase()));
@@ -108,6 +111,9 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
+              } else if (checkSpecialCharacter(currentGene.name) === false ){
+                 addError(network, errorList.specialCharacterError(row, column));
+                 return network;
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
@@ -130,9 +136,6 @@ var parseSheet = function(sheet) {
             try {
               if (currentSheet.data[row][column] === undefined) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-              // } else if (checkSpecialCharacter(currentSheet.data[row][column],currentGene.name) === false ){
-              //   addError(network, errorList.specialCharacterError(row, column));
-              //   return network;
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
                 return network;
@@ -331,11 +334,10 @@ var checkGeneLength = function(errorArray, genesList) {
   }
 }
 
-var checkSpecialCharacter = function (currentSheet, currentGene){
-  var str = currentSheet.data;
-  var str2 = currentGene.name;
+var checkSpecialCharacter = function (currentGene){
+  var str = currentGene;
   var regex = /[^a-z0-9\_\-]/gi;
-  return str.match(regex)==null && str.match(newstr2)==null;
+  return str.match(regex)===null;
 }
 
 // This is the massive list of errors. Yay!
