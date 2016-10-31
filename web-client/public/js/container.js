@@ -9,6 +9,18 @@ $(function () {
     };
   });
 
+  $("#enableScroll").on("click", function () {
+    if ($(this).prop("checked")) {
+      $(".grnTest").css("overflow", "auto");
+      $(".grnTest").css("height", "");
+      $(".grnTest").css("width", "");
+    } else {
+      $(".grnTest").css("overflow", "visible");
+      $(".grnTest").css("height", $(".grnsight-container").height());
+      $(".grnTest").css("width", $(".grnsight-container").width());
+    }
+  });
+
   /*$("#enableScroll").on("click", function () {
     $(".grnsight-container").toggleClass("containerScroll");
   });*/
