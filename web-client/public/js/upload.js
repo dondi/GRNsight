@@ -358,9 +358,6 @@ $(function () {
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
     $(WEIGHTS_HIDE_SIDE).prop("checked", "checked");
   });
-
-
-
   
   $("#printGraph").click(function (event) {
     if(!$(this).parent().hasClass("disabled")) {
