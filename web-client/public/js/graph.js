@@ -79,14 +79,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       //.on("drag", dragmove)
       //.on("dragend", dragend);
 
-  var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
-
   var svg = d3.select($container[0]).append("svg")
       .attr("width", width)
       .attr("height", height)
       .append("g"); // required for zoom to work
 
   /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
+  var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
+  
   function zoomed() {
     svg.attr("transform",
         "translate(" + zoom.translate() + ")" +
