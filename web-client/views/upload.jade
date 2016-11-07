@@ -231,8 +231,8 @@ html
           label(for='boundBoxXl' style='font-weight:normal') Extra Large
           br 
           | Zoom: 
-          button(id='zoom_in') +
-          button(id='zoom_out') -
+          input(type='button' class='zoomBtn' id='zoomIn' value='+')
+          input(type='button' class='zoomBtn' id='zoomOut' value='-')
           br
           input(type='checkbox' id='enableScroll' checked) 
           label(for='enableScroll' style='font-weight:normal') Enable Scroll

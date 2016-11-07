@@ -79,13 +79,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       //.on("drag", dragmove)
       //.on("dragend", dragend);
 
-  var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
-
   var svg = d3.select($container[0]).append("svg")
       .attr("width", width)
       .attr("height", height)
       .append("g"); // required for zoom to work
 
+  /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
+  var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
+  
   function zoomed() {
     svg.attr("transform",
         "translate(" + zoom.translate() + ")" +
@@ -120,7 +121,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           view = {x: translate[0], y: translate[1], k: zoom.scale()};
 
       d3.event.preventDefault();
-      direction = (this.id === 'zoom_in') ? 1 : -1;
+      direction = (this.id === 'zoomIn') ? 1 : -1;
       target_zoom = zoom.scale() * (1 + factor * direction);
 
       if (target_zoom < extent[0] || target_zoom > extent[1]) { 
@@ -143,7 +144,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       interpolateZoom([view.x, view.y], view.k);
   }
 
-  d3.selectAll('button').on('click', zoomClick);
+  d3.selectAll('.zoomBtn').on('click', zoomClick);
 
   var defs = svg.append("defs");
 
