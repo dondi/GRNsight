@@ -90,7 +90,7 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              } else if (checkSpecialCharacter(currentGene.name) === false ){
+              } else if (!checkSpecialCharacter(currentGene.name)){
                  addError(network, errorList.specialCharacterError(row, column));
                  return network;
               } else {
@@ -111,7 +111,7 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              } else if (checkSpecialCharacter(currentGene.name) === false ){
+              } else if (!checkSpecialCharacter(currentGene.name)){
                  addError(network, errorList.specialCharacterError(row, column));
                  return network;
               } else {
@@ -336,7 +336,7 @@ var checkGeneLength = function(errorArray, genesList) {
 
 var checkSpecialCharacter = function (currentGene){
   var regex = /[^a-z0-9\_\-]/gi;
-  return currentGene.match(regex)===null;
+  return !currentGene.match(regex);
 }
 
 // This is the massive list of errors. Yay!
