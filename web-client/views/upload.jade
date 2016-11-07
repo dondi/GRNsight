@@ -139,19 +139,18 @@ html
                     | &nbsp; Undo Reset
                 
                 li(class='divider')
-                li(class='disabled')
+                li
                   a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver')
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Only Show Edge Weights With Mouse Over
-                li(class='disabled')
+                li
                   a(href='#' id='weightsAlwaysMenu' class='weightsAlways') 
                     span(class='glyphicon invisible')
                     | &nbsp; Always Show Edge Weights
-                li(class='disabled')
+                li
                   a(href='#' id='weightsNeverMenu' class='weightsNever') 
                     span(class='glyphicon invisible')
                     | &nbsp; Never Show Edge Weights
-                li(class='divider')
 
             li(class='dropdown') 
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
@@ -215,8 +214,7 @@ html
           input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
           label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
         form 
-          | &nbsp; Toggle Switches
-          br
+          h4 &nbsp; Toggle Switches
           input(type='radio' id='boundBoxXs' class='boundBoxSize' name='size' value='containerXS') 
           label(for='boundBoxXs' style='font-weight:normal') Extra Small
           br
@@ -237,6 +235,17 @@ html
           br
           input(type='checkbox' id='enableScroll' checked) 
           label(for='enableScroll' style='font-weight:normal') Enable Scroll
+          br
+        form 
+          h4 &nbsp; Hide/Show Weights
+          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' checked) 
+          label(for='weightsMouseOverSide' style='font-weight:normal') Weights With Mouse Over
+          br
+          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
+          label(for='weightsAlwaysSide' style='font-weight:normal') Always Show Weights
+          br
+          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size') 
+          label(for='weightsNeverSide' style='font-weight:normal') Never Show Weights
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 

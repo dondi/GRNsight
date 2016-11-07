@@ -33,10 +33,7 @@ $(function () {
 
   // Settings Stuff
   var COLOR_PREFERENCES_CLASS = ".colorPreferences",
-      ACTIVE_COLOR_OPTION     = "active",
-      WEIGHTS_SHOW_MOUSE_OVER = ".weightsMouseOver",
-      WEIGHTS_SHOW_ALWAYS     = ".weightsAlways",
-      WEIGHTS_HIDE            = ".weightsNever";
+      ACTIVE_COLOR_OPTION     = "active";
 
   styleLabelTooltips();
   var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
@@ -321,6 +318,45 @@ $(function () {
       })
     }
   }
+
+  var WEIGHTS_SHOW_MOUSE_OVER_MENU = "#weightsMouseOverMenu",
+      WEIGHTS_SHOW_ALWAYS_MENU     = "#weightsAlwaysMenu",
+      WEIGHTS_HIDE_MENU            = "#weightsNeverMenu",
+      WEIGHTS_SHOW_MOUSE_OVER_SIDE = "#weightsMouseOverSide",
+      WEIGHTS_SHOW_ALWAYS_SIDE     = "#weightsAlwaysSide",
+      WEIGHTS_HIDE_SIDE            = "#weightsNeverSide";
+
+  $(WEIGHTS_SHOW_MOUSE_OVER_MENU).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).addClass("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("checked");
+    $(WEIGHTS_HIDE_SIDE).removeClass("checked");
+  });
+
+  $(WEIGHTS_SHOW_ALWAYS_MENU).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).addClass("checked");
+    $(WEIGHTS_HIDE_SIDE).removeClass("checked");
+  });
+
+  $(WEIGHTS_HIDE_MENU).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").addClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("checked");
+    $(WEIGHTS_HIDE_SIDE).addClass("checked");
+  });
+
+
   
   $("#printGraph").click(function (event) {
     if(!$(this).parent().hasClass("disabled")) {
