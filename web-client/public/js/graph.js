@@ -83,17 +83,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .attr("width", width)
       .attr("height", height);
 
-  /*var zoom = d3.behavior.zoom()
-                        .scaleExtent([1, 10])
-                        .on("zoom", function () {
-                          console.log("zooming?");
-                          svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-                        });
-
-  if ($("#enableZoom").prop('checked')) {
-    svg.call(zoom);
-  }*/
-
   var defs = svg.append("defs");
 
   var link = svg.selectAll(".link"),

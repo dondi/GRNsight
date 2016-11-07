@@ -10,15 +10,10 @@ $(function () {
   });
 
   $("#enableScroll").on("click", function () {
-    if ($(this).prop("checked")) {
-      $(".grnTest").css("overflow", "auto");
-      $(".grnTest").css("height", "");
-      $(".grnTest").css("width", "");
-    } else {
-      $(".grnTest").css("overflow", "visible");
-      $(".grnTest").css("height", $(".grnsight-container").height());
-      $(".grnTest").css("width", $(".grnsight-container").width());
-    }
+    var enabled = $(this).prop("checked");
+    $(".grnTest").css("overflow", (enabled ? "auto" : "visible"));
+    $(".grnTest").css("height", (enabled ? "" : $(".grnsight-container").height()));
+    $(".grnTest").css("width", (enabled ? "" : $(".grnsight-container").width()));
   });
 
 })
