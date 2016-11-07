@@ -229,9 +229,10 @@ html
           br
           input(type='radio' id='boundBoxXl' class='boundBoxSize' name='size' value='containerXL') 
           label(for='boundBoxXl' style='font-weight:normal') Extra Large
-          //br 
-          //input(type='checkbox' id='enableZoom' checked) 
-          //label(for='enableZoom' style='font-weight:normal') Enable Zoom
+          br 
+          | Zoom: 
+          button(id='zoom_in') +
+          button(id='zoom_out') -
           br
           input(type='checkbox' id='enableScroll' checked) 
           label(for='enableScroll' style='font-weight:normal') Enable Scroll
