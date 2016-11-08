@@ -210,9 +210,16 @@ html
         form
           input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters') 
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
-        form
-          input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
-          label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
+        form 
+          h4 &nbsp; Hide/Show Edge Weights
+          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' checked) 
+          label(for='weightsMouseOverSide' style='font-weight:normal') Show With Mouse Over
+          <br>
+          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
+          label(for='weightsAlwaysSide' style='font-weight:normal') Always Show Edge Weights
+          <br>
+          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size') 
+          label(for='weightsNeverSide' style='font-weight:normal') Never Show Edge Weights
         form 
           h4 &nbsp; Toggle Switches
           input(type='radio' id='boundBoxXs' class='boundBoxSize' name='size' value='containerXS') 
@@ -237,16 +244,6 @@ html
           input(type='checkbox' id='enableScroll' checked) 
           label(for='enableScroll' style='font-weight:normal') Enable Scroll
           br
-        form 
-          h4 &nbsp; Hide/Show Weights
-          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' checked) 
-          label(for='weightsMouseOverSide' style='font-weight:normal') Show Weights w/ Mouse Over
-          br
-          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
-          label(for='weightsAlwaysSide' style='font-weight:normal') Always Show Weights
-          br
-          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size') 
-          label(for='weightsNeverSide' style='font-weight:normal') Never Show Weights
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 
