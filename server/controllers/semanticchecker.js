@@ -6,6 +6,41 @@ var multiparty = require('multiparty'),
 
 var helpers = require(__dirname + "/helpers");
 
+
+/*
+
+var parseSheet = function(...){
+  if.. else{..
+    if(row===0 | column===0){
+      try{
+        if (!checkSpecialCharacter(currentGene.name)){
+           addError(network, errorList.specialCharacterError(row, column));
+           return network;
+         }
+       }
+     }
+    ...
+    }
+  }
+  ...
+  checkDuplicates(network.errors, sourceGenes, targetGenes);
+  checkGeneLength(network.errors, genesList);
+  checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
+}
+
+*/
+
+var addWarning = function (network, message) {
+    var warningsCount = network.warnings.length;
+    var MAX_WARNINGS = 75;
+    if (warningsCount < MAX_WARNINGS) {
+      addMessageToArray(network.warnings, message);
+    } else {
+      addMessageToArray(network.errors, errorsList.warningsCountError);
+      return false;
+    }
+}
+
 var checkGeneLength = function(errorArray, genesList) {
   // Check if any genes are over the gene length (currently 12)
   var maxGeneLength = 12
@@ -20,8 +55,6 @@ var checkSpecialCharacter = function (currentGene){
   var regex = /[^a-z0-9\_\-]/gi;
   return !currentGene.match(regex);
 }
-
-  checkGeneLength(network.errors, genesList);
 
 
 var errorList = {
@@ -68,5 +101,5 @@ var errorList = {
     "further errors detected. As a general approach for fixing the errors, consider copying and " +
     "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
   }
-  
+
 }
