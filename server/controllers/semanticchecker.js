@@ -102,4 +102,9 @@ var errorList = {
     "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
   }
 
-}
+};
+
+// TODO Entry-point semantic checker function goes here.
+module.exports = function (network) {
+    return network;
+};
