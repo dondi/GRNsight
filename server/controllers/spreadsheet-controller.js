@@ -6,6 +6,8 @@ var multiparty = require('multiparty'),
 
 var helpers = require(__dirname + "/helpers");
 
+var semanticChecker = require(__dirname + "/semanticchecker");
+
 var processGRNmap = function (path, res, app) {
   var sheet;
   var network;
@@ -65,15 +67,17 @@ var parseSheet = function(sheet) {
   }
 
   // If it didn't find a network/network_optimized_weights sheet
+  // TODO For expediency, we are wrapping every `return network` statement in `semanticChecker`.
+  //      Some refactoring may be desirable to prevent excessive repetition.
   if (currentSheet === undefined) {
     addError(network, errorList.missingNetworkError);
-    return network;
+    return semanticChecker(network);
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
     if(currentSheet.data[row].length === 0) { // if the current row is empty
       if (addError(network, errorList.emptyRowError(row)) == false) {
-        return network;
+        return semanticChecker(network);
       }
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
@@ -101,7 +105,7 @@ var parseSheet = function(sheet) {
               }
             } catch (err) {
               addError(network, errorList.corruptGeneError(row, column));
-              return network;
+              return semanticChecker(network);
             }
           } else if (column === 0) { // If we are at the far left of a new row...
             // These genes are the target genes
@@ -113,14 +117,14 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if (!checkSpecialCharacter(currentGene.name)){
                  addError(network, errorList.specialCharacterError(row, column));
-                 return network;
+                 return semanticChecker(network);
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
                 // Genes may or may not be present due to asymmetry or unorderedness
                 // If it's in the genesList, it will return a number > 0, so we won't store it
                 // If it's not there, it will return -1, so we add it.
-                if(genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
+                if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
                   genesList.push(String(currentGene.name.toUpperCase()));
                   currentGene.name = currentGene.name;
                   network.genes.push(currentGene);
@@ -130,7 +134,7 @@ var parseSheet = function(sheet) {
               sourceGene = currentSheet.data[0][column];
               targetGene = currentSheet.data[row][0];
               addError(network, errorList.corruptGeneError(row, column));
-              return network;
+              return semanticChecker(network);
             };
           } else { // If we're within the matrix and lookin' at the data...
             try {
@@ -138,7 +142,7 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
-                return network;
+                return semanticChecker(network);
               } else {
                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
@@ -171,7 +175,7 @@ var parseSheet = function(sheet) {
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
               addError(network, errorList.missingValueError(row, column));
-              return network;
+              return semanticChecker(network);
             };
           };
           column++; // Let's move on to the next column!
@@ -180,7 +184,7 @@ var parseSheet = function(sheet) {
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
         addError(network, errorList.unknownError);
-        return network;
+        return semanticChecker(network);
       }
     };
   };
@@ -203,7 +207,7 @@ var parseSheet = function(sheet) {
   }*/
 
   // We're done. Return the network.
-  return network;
+  return semanticChecker(network);
 };
 
 var grnSightToCytoscape = function (network) {
