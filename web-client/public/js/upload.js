@@ -35,6 +35,17 @@ $(function () {
   var COLOR_PREFERENCES_CLASS = ".colorPreferences",
       ACTIVE_COLOR_OPTION     = "active";
 
+  //Weights Stuff
+    var WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu",
+        WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu",
+        WEIGHTS_HIDE_MENU             = "#weightsNeverMenu",
+        WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide",
+        WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide",
+        WEIGHTS_HIDE_SIDE             = "#weightsNeverSide",
+        WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver",
+        WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways",
+        WEIGHTS_HIDE_CLASS            = ".weightsNever";
+
   styleLabelTooltips();
   var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
   var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
@@ -319,16 +330,6 @@ $(function () {
     }
   }
 
-  var WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu",
-      WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu",
-      WEIGHTS_HIDE_MENU             = "#weightsNeverMenu",
-      WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide",
-      WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide",
-      WEIGHTS_HIDE_SIDE             = "#weightsNeverSide",
-      WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver",
-      WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways",
-      WEIGHTS_HIDE_CLASS            = ".weightsNever";
-
   $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function() {
     $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
     $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
@@ -337,6 +338,14 @@ $(function () {
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).prop("checked", "checked");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
     $(WEIGHTS_HIDE_SIDE).removeProp("checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).addClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_MENU).removeClass("selected");
+    $(WEIGHTS_HIDE_MENU).removeClass("selected");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).addClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("selected");
+    $(WEIGHTS_HIDE_SIDE).removeClass("selected");
   });
 
   $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function() {
@@ -347,6 +356,14 @@ $(function () {
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).prop("checked", "checked");
     $(WEIGHTS_HIDE_SIDE).removeProp("checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_MENU).addClass("selected");
+    $(WEIGHTS_HIDE_MENU).removeClass("selected");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).addClass("selected");
+    $(WEIGHTS_HIDE_SIDE).removeClass("selected");
   });
 
   $(WEIGHTS_HIDE_CLASS).click(function() {
@@ -357,6 +374,14 @@ $(function () {
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
     $(WEIGHTS_HIDE_SIDE).prop("checked", "checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_MENU).removeClass("selected");
+    $(WEIGHTS_HIDE_MENU).addClass("selected");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("selected");
+    $(WEIGHTS_HIDE_SIDE).addClass("selected");
   });
   
   $("#printGraph").click(function (event) {

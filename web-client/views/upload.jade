@@ -140,7 +140,7 @@ html
                 
                 li(class='divider')
                 li
-                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver')
+                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Only Show Edge Weights With Mouse Over
                 li
@@ -212,7 +212,7 @@ html
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form 
           h4 &nbsp; Hide/Show Edge Weights
-          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' checked) 
+          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked) 
           label(for='weightsMouseOverSide' style='font-weight:normal') Show With Mouse Over
           <br>
           input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
