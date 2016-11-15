@@ -412,27 +412,15 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
         link.on('mouseover', showWeight).on('mouseout', hideWeight);
         weight.on('mouseover', showWeight).on('mouseout', hideWeight);
-        console.log("mouse over to show")
-
       } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
         var showWeight = function (d) {
-          var mouse = d3.mouse(this);
           d.weightElement
-            .attr("x", mouse[0])
-            .attr("y", mouse[1])
+            .attr("x", 0)
+            .attr("y", 0)
             .classed("visible", true);
         };
-
-        link.on('mouseover', showWeight).on('mouseout', showWeight);
-        weight.on('mouseover', showWeight).on('mouseout', showWeight);
-
-        console.log("always show")
-
-      } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
-        link.on('mouseover', hideWeight).on('mouseout', hideWeight);
-        weight.on('mouseover', hideWeight).on('mouseout', hideWeight);
-        console.log("always hide")
-      }
+        console.log("sorry, this hasn't been buffed out quite yet")
+      } 
     }
 
   /* Big thanks to the following for the smart edges

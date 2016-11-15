@@ -346,6 +346,8 @@ $(function () {
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).addClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("selected");
     $(WEIGHTS_HIDE_SIDE).removeClass("selected");
+
+    reloader();
   });
 
   $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function() {
@@ -364,6 +366,7 @@ $(function () {
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).addClass("selected");
     $(WEIGHTS_HIDE_SIDE).removeClass("selected");
+    reloader();
   });
 
   $(WEIGHTS_HIDE_CLASS).click(function() {
@@ -382,6 +385,7 @@ $(function () {
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("selected");
     $(WEIGHTS_HIDE_SIDE).addClass("selected");
+    reloader();
   });
   
   $("#printGraph").click(function (event) {
