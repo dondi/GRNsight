@@ -6,29 +6,16 @@ var multiparty = require('multiparty'),
 
 var helpers = require(__dirname + "/helpers");
 
-
-/*
-
-var parseSheet = function(...){
-  if.. else{..
-    if(row===0 | column===0){
-      try{
-        if (!checkSpecialCharacter(currentGene.name)){
-           addError(network, errorList.specialCharacterError(row, column));
-           return network;
-         }
-       }
-     }
-    ...
+var addError = function (network, message) {
+    var errorsCount = network.errors.length;
+    var MAX_ERRORS = 20;
+    if (errorsCount < MAX_ERRORS) {
+      addMessageToArray(network.errors, message);
+    } else {
+      addMessageToArray(network.errors, errorList.errorsCountError);
+      return false;
     }
-  }
-  ...
-  checkDuplicates(network.errors, sourceGenes, targetGenes);
-  checkGeneLength(network.errors, genesList);
-  checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 }
-
-*/
 
 var addWarning = function (network, message) {
     var warningsCount = network.warnings.length;
@@ -39,6 +26,36 @@ var addWarning = function (network, message) {
       addMessageToArray(network.errors, errorsList.warningsCountError);
       return false;
     }
+}
+
+var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+  var genesLength = genesList.length,
+      edgesLength = positiveWeights.length + negativeWeights.length,
+      GENE_MAX_WARNING = 50,
+      EDGE_MAX_WARNING = 100,
+      GENE_MAX_ERROR = 75,
+      EDGE_MAX_ERROR = 150;
+
+  if ((genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR)|| (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)) {
+    warningArray.push(warningsList.networkSizeWarning(genesLength, edgesLength));
+  } else if (genesLength >= GENE_MAX_ERROR || edgesLength >= EDGE_MAX_ERROR) {
+    errorArray.push(errorList.networkSizeError(genesLength, edgesLength));
+  }
+}
+
+var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+  // Run through the source genes and check if the gene in slot i is the same as the one next to it
+  for(var i = 0; i < sourceGenes.length - 1; i++) {
+    if(sourceGenes[i] === sourceGenes[i + 1]) {
+      errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+    }
+  }
+  // Run through the target genes and check if the gene in slot j is the same as the one next to it
+  for(var j = 0; j < targetGenes.length - 1; j++) {
+    if(targetGenes[j] === targetGenes[j + 1]) {
+      errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
+    }
+  }
 }
 
 var checkGeneLength = function(errorArray, genesList) {
@@ -54,6 +71,59 @@ var checkGeneLength = function(errorArray, genesList) {
 var checkSpecialCharacter = function (currentGene){
   var regex = /[^a-z0-9\_\-]/gi;
   return !currentGene.match(regex);
+}
+
+var warningsList = {
+  missingSourceGeneWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "MISSING_SOURCE",
+      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."
+    }
+  },
+
+  missingTargetGeneWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "MISSING_TARGET",
+      errorDescription: "A target gene name is missing in cell " + colLetter+rowNum + "."
+    }
+  },
+
+  invalidMatrixDataWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "INVALID_DATA",
+      errorDescription: "The value in cell " + colLetter+rowNum + ", is undefined."
+    }
+  },
+
+  randomDataWarning: function (type, row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "RANDOM_DATA",
+      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
+    }
+  },
+
+  emptyRowWarning: function (row) {
+    var rowNum = row + 1;
+    return {
+      warningCode: "EMPTY_ROW",
+      errorDescription: "Row " + rowNum + " was found to contain no data."
+    }
+  },
+
+  networkSizeWarning: function (genesLength, edgesLength) {
+    return {
+      warningCode: "INVALID_NETWORK_SIZE",
+      errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+    }
+  }
 }
 
 
@@ -100,11 +170,87 @@ var errorList = {
     "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
     "further errors detected. As a general approach for fixing the errors, consider copying and " +
     "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+  },
+
+  unknownError: {
+    errorCode: "UNKNOWN_ERROR",
+    possibleCause: "An unexpected error occurred.",
+    suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
   }
 
-};
+}
 
 // TODO Entry-point semantic checker function goes here.
-module.exports = function (network) {
+module.exports = function (network, sourceGenes, targetGenes, genesList, currentSheet, currentGene) {
+
+  // for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
+  //   while (column < currentSheet.data[row].length){
+  //     if (row===0){
+  //       currentGene = {name: currentSheet.data[0][column]};
+  //       if (!checkSpecialCharacter(currentGene.name)){
+  //          addError(network, errorList.specialCharacterError(row, column));
+  //          return network;
+  //       }
+  //     } else if (column === 0){
+  //       currentGene = {name: currentSheet.data[row][0]};
+  //       if (!checkSpecialCharacter(currentGene.name)){
+  //          addError(network, errorList.specialCharacterError(row, column));
+  //          return network;
+  //       }
+  //     }
+  //     column++;
+  //   };
+  //   column = 0;
+  // };
+
+    for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
+
+      try { // This prevents the server from crashing if something goes wrong anywhere in here
+        while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
+          if (row === 0) { // If we are at the top of a new column...
+            // These genes are the source genes
+            try {
+              currentGene = {name: currentSheet.data[0][column]};
+              // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
+              if (!checkSpecialCharacter(currentGene.name)){
+                 addError(network, errorList.specialCharacterError(row, column));
+                 return network;
+              }
+            } catch (err) {
+              return network;
+            }
+          } else if (column === 0) { // If we are at the far left of a new row...
+            // These genes are the target genes
+            try {
+              currentGene = {name: currentSheet.data[row][0]};
+              if (!checkSpecialCharacter(currentGene.name)){
+                 addError(network, errorList.specialCharacterError(row, column));
+                 return network;
+              }
+            } catch (err) {
+              return network;
+            };
+          };
+          column++; // Let's move on to the next column!
+        }; // Once we finish with the current row...
+      column = 0; // let's go back to column 0 on the next row!
+      } catch (err) {
+        // We only get here if something goes drastically wrong. We don't want to get here.
+        addError(network, errorList.unknownError);
+        return network;
+      }
+    };
+
+    // We sort them here because gene order is not relevant before this point
+    // Sorting them now means duplicates will be right next to each other
+    sourceGenes.sort();
+    targetGenes.sort();
+
+    // Final error checks!
+    checkDuplicates(network.errors, sourceGenes, targetGenes);
+    checkGeneLength(network.errors, genesList);
+    checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
+
+    // We're done. Return the network.
     return network;
 };

@@ -71,13 +71,13 @@ var parseSheet = function(sheet) {
   //      Some refactoring may be desirable to prevent excessive repetition.
   if (currentSheet === undefined) {
     addError(network, errorList.missingNetworkError);
-    return semanticChecker(network);
+    return network;
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
     if(currentSheet.data[row].length === 0) { // if the current row is empty
       if (addError(network, errorList.emptyRowError(row)) == false) {
-        return semanticChecker(network);
+        return network;
       }
     } else { // if the row has data...
       // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
@@ -94,9 +94,9 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              } else if (!checkSpecialCharacter(currentGene.name)){
-                 addError(network, errorList.specialCharacterError(row, column));
-                 return network;
+              // } else if (!checkSpecialCharacter(currentGene.name)){
+              //    addError(network, errorList.specialCharacterError(row, column));
+              //    return network;
               } else {
                 sourceGenes.push(String(currentGene.name.toUpperCase()));
                 genesList.push(String(currentGene.name.toUpperCase()));
@@ -105,7 +105,7 @@ var parseSheet = function(sheet) {
               }
             } catch (err) {
               addError(network, errorList.corruptGeneError(row, column));
-              return semanticChecker(network);
+              return network;
             }
           } else if (column === 0) { // If we are at the far left of a new row...
             // These genes are the target genes
@@ -115,9 +115,9 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              } else if (!checkSpecialCharacter(currentGene.name)){
-                 addError(network, errorList.specialCharacterError(row, column));
-                 return semanticChecker(network);
+              // } else if (!checkSpecialCharacter(currentGene.name)){
+              //    addError(network, errorList.specialCharacterError(row, column));
+              //    return network;
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
@@ -134,7 +134,7 @@ var parseSheet = function(sheet) {
               sourceGene = currentSheet.data[0][column];
               targetGene = currentSheet.data[row][0];
               addError(network, errorList.corruptGeneError(row, column));
-              return semanticChecker(network);
+              return network;
             };
           } else { // If we're within the matrix and lookin' at the data...
             try {
@@ -142,7 +142,7 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
-                return semanticChecker(network);
+                return network;
               } else {
                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
                   // Grab the source and target genes' names
@@ -175,7 +175,7 @@ var parseSheet = function(sheet) {
             } catch (err) {
               // TO DO: Customize this error message to the specific issue that occurred.
               addError(network, errorList.missingValueError(row, column));
-              return semanticChecker(network);
+              return network;
             };
           };
           column++; // Let's move on to the next column!
@@ -184,21 +184,11 @@ var parseSheet = function(sheet) {
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
         addError(network, errorList.unknownError);
-        return semanticChecker(network);
+        return network;
       }
     };
   };
 
-
-  // We sort them here because gene order is not relevant before this point
-  // Sorting them now means duplicates will be right next to each other
-  sourceGenes.sort();
-  targetGenes.sort();
-
-  // Final error checks!
-  checkDuplicates(network.errors, sourceGenes, targetGenes);
-  checkGeneLength(network.errors, genesList);
-  checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 
   /*try {
     network.graphStatisticsReport = graphStatisticsReport(network);
@@ -206,8 +196,8 @@ var parseSheet = function(sheet) {
     console.log ("Graph statistics report failed to be complete.");
   }*/
 
-  // We're done. Return the network.
-  return semanticChecker(network);
+  // Move on to semanticChecker.
+  return semanticChecker(network, sourceGenes, targetGenes, genesList, currentSheet, currentGene);
 };
 
 var grnSightToCytoscape = function (network) {
@@ -297,46 +287,6 @@ var addError = function (network, message) {
     }
 }
 
-var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
-  var genesLength = genesList.length,
-      edgesLength = positiveWeights.length + negativeWeights.length,
-      GENE_MAX_WARNING = 50,
-      EDGE_MAX_WARNING = 100,
-      GENE_MAX_ERROR = 75,
-      EDGE_MAX_ERROR = 150;
-
-  if ((genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR)|| (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)) {
-    warningArray.push(warningsList.networkSizeWarning(genesLength, edgesLength));
-  } else if (genesLength >= GENE_MAX_ERROR || edgesLength >= EDGE_MAX_ERROR) {
-    errorArray.push(errorList.networkSizeError(genesLength, edgesLength));
-  }
-}
-
-
-var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
-  // Run through the source genes and check if the gene in slot i is the same as the one next to it
-  for(var i = 0; i < sourceGenes.length - 1; i++) {
-    if(sourceGenes[i] === sourceGenes[i + 1]) {
-      errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
-    }
-  }
-  // Run through the target genes and check if the gene in slot j is the same as the one next to it
-  for(var j = 0; j < targetGenes.length - 1; j++) {
-    if(targetGenes[j] === targetGenes[j + 1]) {
-      errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
-    }
-  }
-}
-
-var checkGeneLength = function(errorArray, genesList) {
-  // Check if any genes are over the gene length (currently 12)
-  var maxGeneLength = 12
-  for(var i = 0; i < genesList.length; i++) {
-    if(genesList[i].length > maxGeneLength) {
-      errorArray.push(errorList.geneLengthError(genesList[i]));
-    }
-  }
-}
 
 var checkSpecialCharacter = function (currentGene){
   var regex = /[^a-z0-9\_\-]/gi;
@@ -487,7 +437,7 @@ var warningsList = {
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
   }
-}
+};
 
 module.exports = function (app) {
   if (app) {
