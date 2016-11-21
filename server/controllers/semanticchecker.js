@@ -183,35 +183,13 @@ var errorList = {
 // TODO Entry-point semantic checker function goes here.
 module.exports = function (network, sourceGenes, targetGenes, genesList, currentSheet, currentGene) {
 
-  // for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-  //   while (column < currentSheet.data[row].length){
-  //     if (row===0){
-  //       currentGene = {name: currentSheet.data[0][column]};
-  //       if (!checkSpecialCharacter(currentGene.name)){
-  //          addError(network, errorList.specialCharacterError(row, column));
-  //          return network;
-  //       }
-  //     } else if (column === 0){
-  //       currentGene = {name: currentSheet.data[row][0]};
-  //       if (!checkSpecialCharacter(currentGene.name)){
-  //          addError(network, errorList.specialCharacterError(row, column));
-  //          return network;
-  //       }
-  //     }
-  //     column++;
-  //   };
-  //   column = 0;
-  // };
-
-    for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-
+  for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
+    if(currentSheet.data[row].length !== 0) {
       try { // This prevents the server from crashing if something goes wrong anywhere in here
         while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
-          if (row === 0) { // If we are at the top of a new column...
-            // These genes are the source genes
+          if (row === 0) {
             try {
               currentGene = {name: currentSheet.data[0][column]};
-              // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
               if (!checkSpecialCharacter(currentGene.name)){
                  addError(network, errorList.specialCharacterError(row, column));
                  return network;
@@ -219,8 +197,7 @@ module.exports = function (network, sourceGenes, targetGenes, genesList, current
             } catch (err) {
               return network;
             }
-          } else if (column === 0) { // If we are at the far left of a new row...
-            // These genes are the target genes
+          } else if (column === 0) {
             try {
               currentGene = {name: currentSheet.data[row][0]};
               if (!checkSpecialCharacter(currentGene.name)){
@@ -230,7 +207,7 @@ module.exports = function (network, sourceGenes, targetGenes, genesList, current
             } catch (err) {
               return network;
             };
-          };
+          }
           column++; // Let's move on to the next column!
         }; // Once we finish with the current row...
       column = 0; // let's go back to column 0 on the next row!
@@ -240,6 +217,7 @@ module.exports = function (network, sourceGenes, targetGenes, genesList, current
         return network;
       }
     };
+  };
 
     // We sort them here because gene order is not relevant before this point
     // Sorting them now means duplicates will be right next to each other
