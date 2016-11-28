@@ -197,7 +197,7 @@ var parseSheet = function(sheet) {
   }*/
 
   // Move on to semanticChecker.
-  return semanticChecker(network);
+  return semanticChecker(network, sourceGenes, targetGenes, genesList, currentSheet, currentGene);
 };
 
 var grnSightToCytoscape = function (network) {
