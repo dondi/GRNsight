@@ -77,10 +77,6 @@ var checkSpecialCharacter = function (errorArray, network.genes){
   }
 }
 
-var checkSpecialCharacter2 = function (currentGene){
-  var regex = /[^a-z0-9\_\-]/gi;
-  return !currentGene.match(regex);
-}
 
 var warningsList = {
   missingSourceGeneWarning: function (row, column) {
