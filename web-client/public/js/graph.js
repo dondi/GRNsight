@@ -396,6 +396,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     
       var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
       var WEIGHTS_HIDE_CLASS            = ".weightsNever";
+      var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
 
       if ($(WEIGHTS_SHOW_MOUSE_OVER_CLASS).hasClass("selected")) {
         var showWeight = function (d) {
@@ -414,10 +415,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         weight.on('mouseover', showWeight).on('mouseout', hideWeight);
           
       } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
-        var hideWeight = function (d) {
-          d.weightElement.classed("visible", false);
-        };
-      } 
+        svg.selectAll(".weight").classed("visible", false);
+      } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
+        svg.selectAll(".weight").classed("visible", true);
+      }
     }
 
   /* Big thanks to the following for the smart edges
@@ -692,13 +693,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       /* Allows for looping edges.
        * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
        */
-      var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
-
-      if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
-        var showWeight = function (d) {
-          d.weightElement.classed("visible", true);
-        };
-      }
 
       link.selectAll("path").attr('d', function (d) {
         if (d.target === d.source) {
