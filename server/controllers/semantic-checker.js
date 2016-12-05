@@ -6,6 +6,10 @@ var multiparty = require('multiparty'),
 
 var helpers = require(__dirname + "/helpers");
 
+var addMessageToArray = function (messageArray, message) {
+    messageArray.push(message);
+}
+
 var addError = function (network, message) {
     var errorsCount = network.errors.length;
     var MAX_ERRORS = 20;
@@ -68,11 +72,11 @@ var checkGeneLength = function(errorArray, genesList) {
   }
 }
 
-var checkSpecialCharacter = function (errorArray, network.genes){
+var checkSpecialCharacter = function (errorArray, network){
   var regex = /[^a-z0-9\_\-]/gi;
   for(var i = 0; i < network.genes.length; i++){
-    if(currentGene.match(regex)!=null){
-      addError(network, errorList.specialCharacterError(row, column));
+    if(network.genes[i].name.match(regex)!=null){
+      addError(network, errorList.specialCharacterError(network.genes[i].name));
     }
   }
 }
@@ -158,12 +162,10 @@ var errorList = {
     };
   },
 
-  specialCharacterError: function(row, column){
-    var colLetter = numbersToLetters[column];
-    var rowNum = row + 1;
+  specialCharacterError: function(geneName){
     return {
       errorCode: "INVALID_CHARACTER",
-      possibleCause: "The value in cell " + colLetter + rowNum + " contains invalid character.",
+      possibleCause: "The value under gene name " + geneName + " contains invalid character.",
       suggestedFix: "Please ensure all values in the data does not contain special characters except for '-' and '_'."
     }
   },
@@ -188,12 +190,13 @@ var errorList = {
 // TODO Entry-point semantic checker function goes here.
 module.exports = function (network, sourceGenes, targetGenes, genesList, currentSheet, currentGene) {
 
-    // We sort them here because gene order is not relevant before this point
-    // Sorting them now means duplicates will be right next to each other
-    sourceGenes.sort();
-    targetGenes.sort();
+    // // We sort them here because gene order is not relevant before this point
+    // // Sorting them now means duplicates will be right next to each other
+    // sourceGenes.sort();
+    // targetGenes.sort();
 
     // Final error checks!
+    checkSpecialCharacter(network.errors, network);
     checkDuplicates(network.errors, sourceGenes, targetGenes);
     checkGeneLength(network.errors, genesList);
     checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
