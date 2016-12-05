@@ -6,7 +6,7 @@ var multiparty = require('multiparty'),
 
 var helpers = require(__dirname + "/helpers");
 
-var semanticChecker = require(__dirname + "/semanticchecker");
+var semanticChecker = require(__dirname + "/semantic-checker");
 
 var processGRNmap = function (path, res, app) {
   var sheet;
