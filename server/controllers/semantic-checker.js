@@ -47,19 +47,30 @@ var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWei
   }
 }
 
-var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+var checkDuplicates = function(errorArray, linksList) {
+  var targetGenes = [];
+  var sourceGenes = [];
+
+  for(var i = 0; i < linksList.length; i++){
+    //sourceGenes.push(linksList[i].source.name.toUpperCase());
+    //targetGenes.push(linksList[i].target.name.toUpperCase());
+  }
+
+  sourceGenes.sort();
+  targetGenes.sort();
+
   // Run through the source genes and check if the gene in slot i is the same as the one next to it
   for(var i = 0; i < sourceGenes.length - 1; i++) {
-    if(sourceGenes[i] === sourceGenes[i + 1]) {
-      errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+      if(sourceGenes[i] === sourceGenes[i + 1]) {
+        errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+      }
     }
-  }
-  // Run through the target genes and check if the gene in slot j is the same as the one next to it
-  for(var j = 0; j < targetGenes.length - 1; j++) {
-    if(targetGenes[j] === targetGenes[j + 1]) {
-      errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
+    // Run through the target genes and check if the gene in slot j is the same as the one next to it
+    for(var j = 0; j < targetGenes.length - 1; j++) {
+      if(targetGenes[j] === targetGenes[j + 1]) {
+        errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
+      }
     }
-  }
 }
 
 var checkGeneLength = function(errorArray, genesList) {
@@ -67,16 +78,16 @@ var checkGeneLength = function(errorArray, genesList) {
   var maxGeneLength = 12
   for(var i = 0; i < genesList.length; i++) {
     if(genesList[i].name.length > maxGeneLength) {
-      errorArray.push(errorList.geneLengthError(genesList[i]));
+      errorArray.push(errorList.geneLengthError(genesList[i].name));
     }
   }
 }
 
-var checkSpecialCharacter = function (network){
+var checkSpecialCharacter = function (errorArray, genesList){
   var regex = /[^a-z0-9\_\-]/gi;
-  for(var i = 0; i < network.genes.length; i++){
-    if(network.genes[i].name.match(regex)!=null){
-      addError(network, errorList.specialCharacterError(network.genes[i].name));
+  for(var i = 0; i < genesList.length; i++){
+    if(genesList[i].name.match(regex)!=null){
+      errorArray.push(errorList.specialCharacterError(genesList[i].name));
     }
   }
 }
@@ -188,7 +199,7 @@ var errorList = {
 }
 
 // TODO Entry-point semantic checker function goes here.
-module.exports = function (network, sourceGenes, targetGenes, genesList) {
+module.exports = function (network) {
 
     // // We sort them here because gene order is not relevant before this point
     // // Sorting them now means duplicates will be right next to each other
@@ -196,9 +207,8 @@ module.exports = function (network, sourceGenes, targetGenes, genesList) {
     // targetGenes.sort();
 
     // Final error checks!
-    checkSpecialCharacter(network);
-    //TODO: replaace soruceGenes and targetGenes with network.genes.sort() and run through a for loop checking i and i+1 equals
-    checkDuplicates(network.errors, sourceGenes, targetGenes);
+    checkSpecialCharacter(network.errors, network.genes);
+    checkDuplicates(network.errors, network.links);
     checkGeneLength(network.errors, network.genes);
     checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
 
