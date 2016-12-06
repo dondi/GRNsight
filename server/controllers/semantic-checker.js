@@ -66,7 +66,7 @@ var checkGeneLength = function(errorArray, genesList) {
   // Check if any genes are over the gene length (currently 12)
   var maxGeneLength = 12
   for(var i = 0; i < genesList.length; i++) {
-    if(genesList[i].length > maxGeneLength) {
+    if(genesList[i].name.length > maxGeneLength) {
       errorArray.push(errorList.geneLengthError(genesList[i]));
     }
   }
@@ -200,7 +200,6 @@ module.exports = function (network, sourceGenes, targetGenes, genesList) {
     //TODO: replaace soruceGenes and targetGenes with network.genes.sort() and run through a for loop checking i and i+1 equals
     checkDuplicates(network.errors, sourceGenes, targetGenes);
     checkGeneLength(network.errors, network.genes);
-    //TODO: figure out why network.genes does not pass one test while genesList passes all of them
     checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
 
     // We're done. Return the network.
