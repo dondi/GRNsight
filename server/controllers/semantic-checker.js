@@ -72,7 +72,7 @@ var checkGeneLength = function(errorArray, genesList) {
   }
 }
 
-var checkSpecialCharacter = function (errorArray, network){
+var checkSpecialCharacter = function (network){
   var regex = /[^a-z0-9\_\-]/gi;
   for(var i = 0; i < network.genes.length; i++){
     if(network.genes[i].name.match(regex)!=null){
@@ -188,7 +188,7 @@ var errorList = {
 }
 
 // TODO Entry-point semantic checker function goes here.
-module.exports = function (network, sourceGenes, targetGenes, genesList, currentSheet, currentGene) {
+module.exports = function (network, sourceGenes, targetGenes, genesList) {
 
     // // We sort them here because gene order is not relevant before this point
     // // Sorting them now means duplicates will be right next to each other
@@ -196,10 +196,12 @@ module.exports = function (network, sourceGenes, targetGenes, genesList, current
     // targetGenes.sort();
 
     // Final error checks!
-    checkSpecialCharacter(network.errors, network);
+    checkSpecialCharacter(network);
+    //TODO: replaace soruceGenes and targetGenes with network.genes.sort() and run through a for loop checking i and i+1 equals
     checkDuplicates(network.errors, sourceGenes, targetGenes);
-    checkGeneLength(network.errors, genesList);
-    checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
+    checkGeneLength(network.errors, network.genes);
+    //TODO: figure out why network.genes does not pass one test while genesList passes all of them
+    checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
 
     // We're done. Return the network.
     return network;
