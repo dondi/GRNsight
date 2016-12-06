@@ -185,12 +185,6 @@ text.weight.visible {
   opacity: 1;
   visibility: visible;
 }
-#weightsButton {
-  margin: 1px;
-}
-#weightsSide{
-  color: black;
-}
 path.mousezone {
   opacity: 0;
 }

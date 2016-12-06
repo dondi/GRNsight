@@ -331,9 +331,9 @@ $(function () {
   }
 
   $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function() {
-    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).prop("checked", "checked");
-    $(WEIGHTS_SHOW_ALWAYS_MENU).removeProp("checked");
-    $(WEIGHTS_HIDE_MENU).removeProp("checked");
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
 
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).prop("checked", "checked");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
@@ -351,9 +351,9 @@ $(function () {
   });
 
   $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function() {
-    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).removeProp("checked");
-    $(WEIGHTS_SHOW_ALWAYS_MENU).prop("checked", "checked");
-    $(WEIGHTS_HIDE_MENU).removeProp("checked");
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
 
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).prop("checked", "checked");
@@ -370,9 +370,9 @@ $(function () {
   });
 
   $(WEIGHTS_HIDE_CLASS).click(function() {
-    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).removeProp("checked");
-    $(WEIGHTS_SHOW_ALWAYS_MENU).removeProp("checked");
-    $(WEIGHTS_HIDE_MENU).prop("checked", "checked");
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").addClass("glyphicon-ok");
 
     $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");

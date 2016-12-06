@@ -128,28 +128,39 @@ html
                   a(href='#' class='noGlyph') 
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Nodes
+                li(class='divider')
                 li
                   a(href='#' id='resetSlidersMenu' class="resetSliders") 
                     span(class='glyphicon invisible')
                     | &nbsp; Reset Force Graph Parameters
-                li(class='disabled not-yet-implemented')
+                li(class='disabled')
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
+                
                 li(class='divider')
                 li
-                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver')
-                    label(class='radio' style='font-weight:normal' id = 'weightsButton') Only Show Weights With Mouse Over
-                      input(type='radio' id ='weightsMenu' name='weights' checked)
+                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Only Show Edge Weights With Mouse Over
                 li
-                  a(href='#' id='weightsAlwaysMenu' class='weightsAlways')
-                    label(class='radio' style='font-weight:normal' id = 'weightsButton') Always Show Weights
-                      input(type='radio' id ='weightsMenu' name='weights')
+                  a(href='#' id='weightsAlwaysMenu' class='weightsAlways') 
+                    span(class='glyphicon')
+                    | &nbsp; Always Show Edge Weights
                 li
-                  a(href='#' id='weightsNeverMenu' class='weightsNever')
-                    label(class='radio' style='font-weight:normal' id = 'weightsButton') Never Show Weights
-                      input(type='radio' id ='weightsMenu' name='weights')
-
+                  a(href='#' id='weightsNeverMenu' class='weightsNever') 
+                    span(class='glyphicon')
+                    | &nbsp; Never Show Edge Weights
+                li
+                  a(href='#' id='whatever')
+                    label(class='radio')
+                      input(type='radio' name='test' checked='checked')
+                      | Hello
+                li
+                  a(href='#' id='whatever2')
+                    label(class='radio')
+                      input(type='radio' name='test')
+                      | Goodbye
 
             li(class='dropdown') 
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
@@ -211,7 +222,7 @@ html
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form 
           h4 &nbsp; Hide/Show Edge Weights
-          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' checked) 
+          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked) 
           label(for='weightsMouseOverSide' style='font-weight:normal') Show With Mouse Over
           <br>
           input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
