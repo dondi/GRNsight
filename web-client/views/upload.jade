@@ -211,15 +211,15 @@ html
           input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters') 
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form 
-          h4 &nbsp; Hide/Show Edge Weights
+          p(id='weightsSideHeader') &nbsp; Hide/Show Edge Weights
           input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked) 
-          label(for='weightsMouseOverSide' style='font-weight:normal') Show With Mouse Over
+          label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
           <br>
           input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
-          label(for='weightsAlwaysSide' style='font-weight:normal') Always Show Edge Weights
+          label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
           <br>
           input(type='radio' id='weightsNeverSide' class='weightsNever' name='size') 
-          label(for='weightsNeverSide' style='font-weight:normal') Never Show Edge Weights
+          label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
         form 
           h4 &nbsp; Toggle Switches
           input(type='radio' id='boundBoxXs' class='boundBoxSize' name='size' value='containerXS') 
