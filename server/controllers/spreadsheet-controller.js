@@ -94,9 +94,6 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              // } else if (!checkSpecialCharacter(currentGene.name)){
-              //    addError(network, errorList.specialCharacterError(row, column));
-              //    return network;
               } else {
                 sourceGenes.push(String(currentGene.name.toUpperCase()));
                 genesList.push(String(currentGene.name.toUpperCase()));
@@ -115,9 +112,6 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              // } else if (!checkSpecialCharacter(currentGene.name)){
-              //    addError(network, errorList.specialCharacterError(row, column));
-              //    return network;
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
