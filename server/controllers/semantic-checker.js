@@ -52,6 +52,9 @@ var checkDuplicates = function(errorArray, genesList, links) {
    var targetGenes = [];
    var sourceGenes = [];
 
+   for(var i = 0; i = (links.length - 1); i++){
+     targetGenes.push(links[i])
+   }
 }
 
 var checkGeneLength = function(errorArray, genesList) {
