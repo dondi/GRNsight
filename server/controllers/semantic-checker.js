@@ -47,47 +47,12 @@ var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWei
   }
 }
 
-var checkDuplicates = function(errorArray, genesList) {
-  var genesName = [];
-  for(var gene of genesList){
-    genesName.push(gene.name);
-  }
-  genesName.sort();
-  for(var i = 0; i<genesName.length-1; i++){
-    if(genesName[i] === genesName[i+1]){
-      errorArray.push(errorList.duplicateGeneError("source", genesName[i]));
-    }
-  }
+var checkDuplicates = function(errorArray, genesList, links) {
+  console.log(links)
+   var targetGenes = [];
+   var sourceGenes = [];
+
 }
- 
-// var checkDuplicates = function(errorArray, genesList, linksList) {
-//   var targetGenes = [];
-//   var sourceGenes = [];
-//
-//   for(var i = 0; i < linksList.length; i++){
-//     var source = linksList[i].source;
-//     var target = linksList[i].target;
-//     // change to genesList[source].name.toUpperCase() ad targetGene toUpperCase later
-//     sourceGenes.push(genesList[source].name);
-//     targetGenes.push(genesList[target].name);
-//   }
-//
-//   sourceGenes.sort();
-//   targetGenes.sort();
-//
-//   // Run through the source genes and check if the gene in slot i is the same as the one next to it
-//   for(var i = 0; i < sourceGenes.length - 1; i++) {
-//     if(sourceGenes[i] === sourceGenes[i + 1]) {
-//       errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
-//     }
-//   }
-//   // Run through the target genes and check if the gene in slot j is the same as the one next to it
-//   for(var j = 0; j < targetGenes.length - 1; j++) {
-//     if(targetGenes[j] === targetGenes[j + 1]) {
-//       errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
-//     }
-//   }
-// }
 
 var checkGeneLength = function(errorArray, genesList) {
   // Check if any genes are over the gene length (currently 12)
