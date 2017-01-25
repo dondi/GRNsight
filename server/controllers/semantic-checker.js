@@ -64,7 +64,7 @@ var checkDuplicates = function(errorArray, genesList) {
     genesName.sort();
     for(var i = 0; i<genesName.length-1; i++){
       if(genesName[i] === genesName[i+1]){
-        errorArray.push(errorList.duplicateGeneError("target", genesName[i]));
+        errorArray.push(errorList.semanticduplicateGeneError(genesName[i]));
       }
     }
   }
