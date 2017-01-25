@@ -191,6 +191,16 @@ var parseSheet = function(sheet) {
   }*/
 
   // Move on to semanticChecker.
+
+
+  // We sort them here because gene order is not relevant before this point
+  // Sorting them now means duplicates will be right next to each other
+  sourceGenes.sort();
+  targetGenes.sort();
+
+  //syntactic duplicate checker for both columns and rows
+  checkDuplicates(network.errors, sourceGenes, targetGenes);
+
   return semanticChecker(network);
 };
 
@@ -281,10 +291,19 @@ var addError = function (network, message) {
     }
 }
 
-
-var checkSpecialCharacter = function (currentGene){
-  var regex = /[^a-z0-9\_\-]/gi;
-  return !currentGene.match(regex);
+var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+  // Run through the source genes and check if the gene in slot i is the same as the one next to it
+  for(var i = 0; i < sourceGenes.length - 1; i++) {
+    if(sourceGenes[i] === sourceGenes[i + 1]) {
+      errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+    }
+  }
+  // Run through the target genes and check if the gene in slot j is the same as the one next to it
+  for(var j = 0; j < targetGenes.length - 1; j++) {
+    if(targetGenes[j] === targetGenes[j + 1]) {
+      errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
+    }
+  }
 }
 
 // This is the massive list of errors. Yay!
@@ -315,6 +334,14 @@ var errorList = {
       errorCode: "MISSING_VALUE",
       possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.",
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
+    };
+  },
+
+  duplicateGeneError: function(geneType, geneName) {
+    return {
+      errorCode: "DUPLICATE_GENE",
+      possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
+      suggestedFix: "Please remove the duplicate gene and submit again."
     };
   },
 

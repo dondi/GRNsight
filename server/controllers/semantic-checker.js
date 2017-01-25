@@ -47,47 +47,28 @@ var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWei
   }
 }
 
-var checkDuplicates = function(errorArray, genesList) {
-  var genesName = [];
-  for(var gene of genesList){
-    genesName.push(gene.name);
-  }
-  genesName.sort();
-  for(var i = 0; i<genesName.length-1; i++){
-    if(genesName[i] === genesName[i+1]){
-      errorArray.push(errorList.duplicateGeneError("source", genesName[i]));
+var checkDuplicateErrors = function(errorArray){
+  for(var error of errorArray){
+    if(error.errorCode == 'DUPLICATE_GENE'){
+      return true;
     }
   }
 }
- 
-// var checkDuplicates = function(errorArray, genesList, linksList) {
-//   var targetGenes = [];
-//   var sourceGenes = [];
-//
-//   for(var i = 0; i < linksList.length; i++){
-//     var source = linksList[i].source;
-//     var target = linksList[i].target;
-//     // change to genesList[source].name.toUpperCase() ad targetGene toUpperCase later
-//     sourceGenes.push(genesList[source].name);
-//     targetGenes.push(genesList[target].name);
-//   }
-//
-//   sourceGenes.sort();
-//   targetGenes.sort();
-//
-//   // Run through the source genes and check if the gene in slot i is the same as the one next to it
-//   for(var i = 0; i < sourceGenes.length - 1; i++) {
-//     if(sourceGenes[i] === sourceGenes[i + 1]) {
-//       errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
-//     }
-//   }
-//   // Run through the target genes and check if the gene in slot j is the same as the one next to it
-//   for(var j = 0; j < targetGenes.length - 1; j++) {
-//     if(targetGenes[j] === targetGenes[j + 1]) {
-//       errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
-//     }
-//   }
-// }
+
+var checkDuplicates = function(errorArray, genesList) {
+  if(!checkDuplicateErrors(errorArray)){
+    var genesName = [];
+    for(var gene of genesList){
+      genesName.push(gene.name);
+    }
+    genesName.sort();
+    for(var i = 0; i<genesName.length-1; i++){
+      if(genesName[i] === genesName[i+1]){
+        errorArray.push(errorList.duplicateGeneError("target", genesName[i]));
+      }
+    }
+  }
+}
 
 var checkGeneLength = function(errorArray, genesList) {
   // Check if any genes are over the gene length (currently 12)
@@ -165,10 +146,10 @@ var warningsList = {
 
 var errorList = {
 
-  duplicateGeneError: function(geneType, geneName) {
+  semanticDuplicateGeneError: function(geneName) {
     return {
-      errorCode: "DUPLICATE_GENE",
-      possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
+      errorCode: "SEMANTIC_DUPLICATE_GENE",
+      possibleCause: "There exists a duplicate for " + geneName + ".",
       suggestedFix: "Please remove the duplicate gene and submit again."
     };
   },
@@ -212,19 +193,13 @@ var errorList = {
     suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
   }
 
+
+
 }
 
 // TODO Entry-point semantic checker function goes here.
 module.exports = function (network) {
-
-    // // We sort them here because gene order is not relevant before this point
-    // // Sorting them now means duplicates will be right next to each other
-    // sourceGenes.sort();
-    // targetGenes.sort();
-
-    // Final error checks!
     checkSpecialCharacter(network.errors, network.genes);
-    //checkDuplicates(network.errors, network.genes, network.links);
     checkDuplicates(network.errors, network.genes);
     checkGeneLength(network.errors, network.genes);
     checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
