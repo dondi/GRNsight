@@ -7,9 +7,21 @@
     "test": "test"
   },
   "dependencies": {
+    "cors": "latest",
+    "express": "3.3.8",
+    "googleapis": "^1.1.5",
+    "mocha": "^2.1.0",
+    "moment": "^2.15.1",
+    "multiparty": "latest",
+    "should": "latest",
+    "supertest": "latest",
+    "xml2js": "^0.4.17",
+    "xmlbuilder": "^8.2.2",
     "multiparty": "^4.1.2",
     "node-xlsx": "^0.7.2",
-    "cytoscape": "^2.7.10"
+    "cytoscape": "^2.7.10",
+    "jade": "*",
+    "stylus": "*"
   },
   "devDependencies": {
     "chai": "^1.10.0",
