@@ -211,7 +211,7 @@ html
           input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters') 
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form 
-          p(id='weightsSideHeader') &nbsp; Hide/Show Edge Weights
+          p(id='sideHeader') &nbsp; Hide/Show Edge Weights
           input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked) 
           label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
           <br>
@@ -246,6 +246,11 @@ html
           br
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
+      div(class='input-group')
+        p(id='sideHeader') &nbsp; Set Normalization Factor:
+        input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
+        br
+        input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')

@@ -60,6 +60,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     normalizedScale = normalizedScale.range(["2"]);
     unweighted = true;
+    $(".normalization-form").append("placeholder='unweighted'");
+  } else if (sheetType === 'weighted') {
+    $(".normalization-form").append("placeholder='weighted'");    
   }
 
   var getEdgeThickness = function (edge) {

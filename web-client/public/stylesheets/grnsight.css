@@ -189,7 +189,7 @@ text.weight.visible {
   line-height: 3px;
   font-size: 13px;
 }
-#weightsSideHeader {
+#sideHeader {
   line-height: 5px;
   font-weight: bold;
   font-size: 14.5px;
@@ -208,4 +208,8 @@ text.weight.visible {
 }
 path.mousezone {
   opacity: 0;
+}
+.normalization-form {
+  margin-left: 35px;
+  margin-bottom: 8px;
 }
