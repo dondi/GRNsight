@@ -62,7 +62,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     unweighted = true;
     $(".normalization-form").append("placeholder='unweighted'");
   } else if (sheetType === 'weighted') {
-    $(".normalization-form").append("placeholder='weighted'");    
+    $(".normalization-form").append("placeholder='weighted'");
   }
 
   var getEdgeThickness = function (edge) {
@@ -89,7 +89,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
   var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
-  
+
   function zoomed() {
     svg.attr("transform",
         "translate(" + zoom.translate() + ")" +
@@ -127,7 +127,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       direction = (this.id === 'zoomIn') ? 1 : -1;
       target_zoom = zoom.scale() * (1 + factor * direction);
 
-      if (target_zoom < extent[0] || target_zoom > extent[1]) { 
+      if (target_zoom < extent[0] || target_zoom > extent[1]) {
         if(zoom.scale() !== extent[0] && target_zoom < extent[0]) {
           target_zoom = 1;
         } else if (zoom.scale() !== extent[1] && target_zoom > extent[1]) {
@@ -387,7 +387,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .attr("text-anchor", "middle")
         .text(function (d) {
           return d.value.toPrecision(4);
-        }); 
+        });
 
       weight = weight.data(links)
         .enter().append("text")
@@ -395,8 +395,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .attr("text-anchor", "middle")
         .text(function (d) { return d.value.toPrecision(4); })
         .each(function (d) { d.weightElement = d3.select(this); });
-    
-    
+
+
       var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
       var WEIGHTS_HIDE_CLASS            = ".weightsNever";
       var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
@@ -416,7 +416,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
         link.on('mouseover', showWeight).on('mouseout', hideWeight);
         weight.on('mouseover', showWeight).on('mouseout', hideWeight);
-          
+
       } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
         svg.selectAll(".weight").classed("visible", false);
       } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {

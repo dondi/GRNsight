@@ -38,6 +38,10 @@ body {
   width: 2080px;
   height: 1170px;
 }
+.containerInfinite {
+  width: 10000px;
+  height: 10000px;
+}
 .sliders {
   width: 225px;
   margin-left: 10px;
