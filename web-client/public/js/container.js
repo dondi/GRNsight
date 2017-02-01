@@ -7,8 +7,8 @@ $(function () {
       $(".grnsight-container").attr("class", grnsightContainerClass);
       $("#reload").trigger("click");
       if (currentValue === "containerInfinite") {
-          $(".grnTest").css("height", "720px");
-          $(".grnTest").css("width", "1280px");
+          $(".grnTest").css("height", "900px");
+          $(".grnTest").css("width", "1600px");
           let halfVisibleHeight =
                 ($(".grnsight-container").height() / 2) -
                 ($(".grnTest").height() / 2);
@@ -24,6 +24,8 @@ $(function () {
           $(".grnTest").removeClass("grnTestNoScroll");
           console.log("Have scroll now please.");
           $("#enableScroll").prop("disabled", false);
+          $("#enableScroll").trigger("click");
+          $("#enableScroll").trigger("click");
       }
     };
   });
