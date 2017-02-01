@@ -20,12 +20,13 @@ $(function () {
           $(".grnTest").css("overflow", "auto");
           $(".grnTest").addClass("grnTestNoScroll");
           $("#enableScroll").prop("disabled", true);
+          $(".grnParent").css("overflow", "hidden")
       } else if ($(".grnTest").hasClass("grnTestNoScroll")) {
           $(".grnTest").removeClass("grnTestNoScroll");
-          console.log("Have scroll now please.");
           $("#enableScroll").prop("disabled", false);
           $("#enableScroll").trigger("click");
           $("#enableScroll").trigger("click");
+          $(".grnParent").css("overflow", "auto")
       }
     };
   });
