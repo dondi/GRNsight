@@ -196,11 +196,11 @@ var parseSheet = function(sheet) {
   checkGeneLength(network.errors, genesList);
   checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 
-  /*try {
+  try {
     network.graphStatisticsReport = graphStatisticsReport(network);
   } catch (err) {
     console.log ("Graph statistics report failed to be complete.");
-  }*/
+  }
 
   // We're done. Return the network.
   return network;
