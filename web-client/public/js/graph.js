@@ -396,32 +396,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .text(function (d) { return d.value.toPrecision(4); })
         .each(function (d) { d.weightElement = d3.select(this); });
 
-
-      var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
-      var WEIGHTS_HIDE_CLASS            = ".weightsNever";
-      var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
-
-      if ($(WEIGHTS_SHOW_MOUSE_OVER_CLASS).hasClass("selected")) {
-        var showWeight = function (d) {
-          var mouse = d3.mouse(this);
-          d.weightElement
-            .attr("x", mouse[0])
-            .attr("y", mouse[1])
-            .classed("visible", true);
-        };
-
-        var hideWeight = function (d) {
-          d.weightElement.classed("visible", false);
-        };
-
-        link.on('mouseover', showWeight).on('mouseout', hideWeight);
-        weight.on('mouseover', showWeight).on('mouseout', hideWeight);
-
-      } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
-        svg.selectAll(".weight").classed("visible", false);
-      } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
-        svg.selectAll(".weight").classed("visible", true);
-      }
     }
 
   /* Big thanks to the following for the smart edges
@@ -744,6 +718,32 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           }
 
           d.label = { x: x1, y: y1 + dry * 3 };
+
+          var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
+          var WEIGHTS_HIDE_CLASS            = ".weightsNever";
+          var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
+
+          if ($(WEIGHTS_SHOW_MOUSE_OVER_CLASS).hasClass("selected")) {
+            var showWeight = function (d) {
+              var mouse = d3.mouse(this);
+              d.weightElement
+                .attr("x", mouse[0])
+                .attr("y", mouse[1])
+                .classed("visible", true);
+            };
+
+            var hideWeight = function (d) {
+              d.weightElement.classed("visible", false);
+            };
+
+            link.on('mouseover', showWeight).on('mouseout', hideWeight);
+            weight.on('mouseover', showWeight).on('mouseout', hideWeight);
+
+          } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
+            svg.selectAll(".weight").classed("visible", false);
+          } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
+            svg.selectAll(".weight").classed("visible", true);
+          }
 
           return "M" + x1 + "," + y1 +
                  "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
