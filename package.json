@@ -7,15 +7,26 @@
     "test": "test"
   },
   "dependencies": {
-    "multiparty": "^4.1.2",
+    "cors": "2.8.1",
+    "express": "3.3.8",
+    "googleapis": "1.1.5",
+    "mocha": "2.5.3",
+    "moment": "2.17.1",
+    "multiparty": "4.1.3",
+    "should": "11.2.0",
+    "supertest": "3.0.0",
+    "xml2js": "0.4.17",
+    "xmlbuilder": "8.2.2",
     "node-xlsx": "0.7.2",
-    "cytoscape": "^2.7.10"
+    "cytoscape": "2.7.14",
+    "jade": "1.11.0",
+    "stylus": "0.54.5"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "istanbul": "^0.4.2",
-    "jquery-extend": "^2.0.3",
-    "mocha": "^2.1.0"
+    "chai": "1.10.0",
+    "istanbul": "0.4.5",
+    "jquery-extend": "2.0.3",
+    "mocha": "2.5.3"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter list"

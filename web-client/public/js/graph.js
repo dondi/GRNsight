@@ -60,6 +60,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     normalizedScale = normalizedScale.range(["2"]);
     unweighted = true;
+    $(".normalization-form").append("placeholder='unweighted'");
+  } else if (sheetType === 'weighted') {
+    $(".normalization-form").append("placeholder='weighted'");
   }
 
   var getEdgeThickness = function (edge) {
@@ -86,7 +89,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
   var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
-  
+
   function zoomed() {
     svg.attr("transform",
         "translate(" + zoom.translate() + ")" +
@@ -124,7 +127,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       direction = (this.id === 'zoomIn') ? 1 : -1;
       target_zoom = zoom.scale() * (1 + factor * direction);
 
-      if (target_zoom < extent[0] || target_zoom > extent[1]) { 
+      if (target_zoom < extent[0] || target_zoom > extent[1]) {
         if(zoom.scale() !== extent[0] && target_zoom < extent[0]) {
           target_zoom = 1;
         } else if (zoom.scale() !== extent[1] && target_zoom > extent[1]) {
@@ -378,6 +381,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       });
 
     if (sheetType === "weighted") {
+      link.append("text")
+        .attr("class", "weight")
+        .attr("text-anchor", "middle")
+        .attr("text-anchor", "middle")
+        .text(function (d) {
+          return d.value.toPrecision(4);
+        });
+
       weight = weight.data(links)
         .enter().append("text")
         .attr("class", "weight")
@@ -385,20 +396,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .text(function (d) { return d.value.toPrecision(4); })
         .each(function (d) { d.weightElement = d3.select(this); });
 
-      var showWeight = function (d) {
-        var mouse = d3.mouse(this);
-        d.weightElement
-          .attr("x", mouse[0])
-          .attr("y", mouse[1])
-          .classed("visible", true);
-      };
-
-      var hideWeight = function (d) {
-        d.weightElement.classed("visible", false);
-      };
-
-      link.on('mouseover', showWeight).on('mouseout', hideWeight);
-      weight.on('mouseover', showWeight).on('mouseout', hideWeight);
     }
 
   /* Big thanks to the following for the smart edges
@@ -461,6 +458,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               cp1y = y1 + inlineOffset * uy + vy * orthoOffset,
               cp2x = x2 - inlineOffset * ux + vx * orthoOffset,
               cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
+
+          d.label = {
+            x: (x1 + cp1x + cp2x + x2) / 4,
+            y: (y1 + cp1y + cp2y + y2) / 4
+          };
 
           cp1x = Math.min(Math.max(0, cp1x), width);
           cp1y = Math.min(Math.max(0, cp1y), height);
@@ -668,6 +670,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       /* Allows for looping edges.
        * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
        */
+
       link.selectAll("path").attr('d', function (d) {
         if (d.target === d.source) {
           var x1 = d.source.x,
@@ -714,6 +717,34 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             }
           }
 
+          d.label = { x: x1, y: y1 + dry * 3 };
+
+          var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
+          var WEIGHTS_HIDE_CLASS            = ".weightsNever";
+          var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
+
+          if ($(WEIGHTS_SHOW_MOUSE_OVER_CLASS).hasClass("selected")) {
+            var showWeight = function (d) {
+              var mouse = d3.mouse(this);
+              d.weightElement
+                .attr("x", mouse[0])
+                .attr("y", mouse[1])
+                .classed("visible", true);
+            };
+
+            var hideWeight = function (d) {
+              d.weightElement.classed("visible", false);
+            };
+
+            link.on('mouseover', showWeight).on('mouseout', hideWeight);
+            weight.on('mouseover', showWeight).on('mouseout', hideWeight);
+
+          } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
+            svg.selectAll(".weight").classed("visible", false);
+          } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
+            svg.selectAll(".weight").classed("visible", true);
+          }
+
           return "M" + x1 + "," + y1 +
                  "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
                        x2  + "," + (y2 + offset);
@@ -747,6 +778,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         } else { //otherwise arrowhead
           return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         }
+      });
+
+      link.select("text").attr("x", function (d) {
+        return d.label.x;
+      }).attr("y", function (d) {
+        return d.label.y;
       });
 
     } catch (e) {

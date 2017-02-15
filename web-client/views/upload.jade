@@ -14,7 +14,7 @@ html
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
       ga("create", "UA-54882218-1", "auto");
-  
+
   body
     nav(class='navbar navbar-default' role='navigation')
       div(class='container-fluid')
@@ -96,11 +96,11 @@ html
               a(href='#' class='dropdown-toggle' data-toggle='dropdown' disabled) Edit
               ul(class='dropdown-menu' role='menu')
                 li(class='disabled not-yet-implemented')
-                  a(href='#') 
+                  a(href='#')
                     span(class='glyphicon invisible')
                     | &nbsp; Undo
                 li(class='disabled not-yet-implemented')
-                  a(href='#') 
+                  a(href='#')
                     span(class='glyphicon invisible')
                     | &nbsp; Redo
                 li(class='divider not-yet-implemented')
@@ -110,11 +110,11 @@ html
                     | &nbsp; Preferences
                   ul(class='dropdown-menu')
                     li
-                      a(href='#' id='colorEdges' class='colorPreferences active') 
+                      a(href='#' id='colorEdges' class='colorPreferences active')
                         span(class='glyphicon glyphicon-ok')
                         | &nbsp; Format edges based on optimized weight parameters
                     li
-                      a(href='#' id='blackEdges' class='colorPreferences') 
+                      a(href='#' id='blackEdges' class='colorPreferences')
                         span(class='glyphicon invisible')
                         | &nbsp; Default to black edges with regular arrowheads
             li(class='dropdown')
@@ -125,34 +125,34 @@ html
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Force Graph Parameters
                 li(class='disabled not-yet-implemented')
-                  a(href='#' class='noGlyph') 
+                  a(href='#' class='noGlyph')
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Nodes
                 li(class='divider')
                 li
-                  a(href='#' id='resetSlidersMenu' class="resetSliders") 
+                  a(href='#' id='resetSlidersMenu' class="resetSliders")
                     span(class='glyphicon invisible')
                     | &nbsp; Reset Force Graph Parameters
                 li(class='disabled')
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
-                
+
                 li(class='divider')
                 li
-                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver')
+                  a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Only Show Edge Weights With Mouse Over
                 li
-                  a(href='#' id='weightsAlwaysMenu' class='weightsAlways') 
-                    span(class='glyphicon invisible')
+                  a(href='#' id='weightsAlwaysMenu' class='weightsAlways')
+                    span(class='glyphicon')
                     | &nbsp; Always Show Edge Weights
                 li
-                  a(href='#' id='weightsNeverMenu' class='weightsNever') 
-                    span(class='glyphicon invisible')
+                  a(href='#' id='weightsNeverMenu' class='weightsNever')
+                    span(class='glyphicon')
                     | &nbsp; Never Show Edge Weights
 
-            li(class='dropdown') 
+            li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
               ul(class='dropdown-menu' role='menu')
                 li(class='disabled')
@@ -163,7 +163,7 @@ html
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
               ul(class='dropdown-menu' role='menu')
                 li
-                  a(href='http://dondi.github.io/GRNsight/documentation.html#gettingStarted', target='_blank') Getting Started 
+                  a(href='http://dondi.github.io/GRNsight/documentation.html#gettingStarted', target='_blank') Getting Started
                 li
                   a(href='https://github.com/dondi/GRNsight/wiki', target='_blank') GRNsight Wiki
                 li
@@ -186,13 +186,14 @@ html
               small(id='graph-metadata')
 
     div(class='container')
-      div(class='grnTest')
-        div(class='grnsight-container containerM')
+      div(class='grnParent')
+        div(class='grnTest')
+          div(class='grnsight-container containerM')
 
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         form
-          label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000): 
+          label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
           span(id='linkDistVal' class='forceVal') 500
           input(class='form-control', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
           label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (-2000 - 0):
@@ -208,47 +209,52 @@ html
           input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
           label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
         form
-          input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters') 
+          input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form
-          input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
-          label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
-        form 
+          p(id='sideHeader') &nbsp; Hide/Show Edge Weights
+          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+          label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
+          <br>
+          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+          label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
+          <br>
+          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+          label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
+        form
           h4 &nbsp; Toggle Switches
-          input(type='radio' id='boundBoxXs' class='boundBoxSize' name='size' value='containerXS') 
+          input(type='radio' id='boundBoxXs' class='boundBoxSize' name='size' value='containerXS')
           label(for='boundBoxXs' style='font-weight:normal') Extra Small
           br
-          input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS') 
+          input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
           label(for='boundBoxS' style='font-weight:normal') Small
           br
-          input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM' checked) 
+          input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM' checked)
           label(for='boundBoxM' style='font-weight:normal') Medium
           br
-          input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL') 
+          input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
           label(for='boundBoxL' style='font-weight:normal') Large
           br
-          input(type='radio' id='boundBoxXl' class='boundBoxSize' name='size' value='containerXL') 
+          input(type='radio' id='boundBoxXl' class='boundBoxSize' name='size' value='containerXL')
           label(for='boundBoxXl' style='font-weight:normal') Extra Large
-          br 
-          | Zoom: 
+          br
+          input(type='radio' id='boundBoxInfinite' class='boundBoxSize' name='size' value='containerInfinite')
+          label(for='boundBoxInfinite' style='font-weight:normal') Infinite
+          br
+          | Zoom:
           input(type='button' class='zoomBtn' id='zoomIn' value='+')
           input(type='button' class='zoomBtn' id='zoomOut' value='-')
           br
-          input(type='checkbox' id='enableScroll' checked) 
+          input(type='checkbox' id='enableScroll' checked)
           label(for='enableScroll' style='font-weight:normal') Enable Scroll
           br
-        form 
-          h4 &nbsp; Hide/Show Weights
-          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' checked) 
-          label(for='weightsMouseOverSide' style='font-weight:normal') Weights With Mouse Over
-          br
-          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size') 
-          label(for='weightsAlwaysSide' style='font-weight:normal') Always Show Weights
-          br
-          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size') 
-          label(for='weightsNeverSide' style='font-weight:normal') Never Show Weights
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
+      div(class='input-group')
+        p(id='sideHeader') &nbsp; Set Normalization Factor:
+        input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
+        br
+        input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
