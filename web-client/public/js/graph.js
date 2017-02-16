@@ -638,6 +638,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     'stroke-width': '1.5px'
   });
 
+  //Tick only runs while the graph physics are still running. (I.e. when the graph is completely relaxed, tick stops running.)
   function tick() {
     var getSelfReferringEdge = function (node) {
           return link.select("path")[0].map(function (path) {
@@ -729,7 +730,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               d.weightElement
                 .attr("x", mouse[0])
                 .attr("y", mouse[1])
-                .classed("visible", true);
+                .classed("visible", true)
             };
 
             var hideWeight = function (d) {
@@ -740,9 +741,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             weight.on('mouseover', showWeight).on('mouseout', hideWeight);
 
           } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
-            svg.selectAll(".weight").classed("visible", false);
+            svg.selectAll(".weight")
+              .classed("visible", false)
           } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
-            svg.selectAll(".weight").classed("visible", true);
+            svg.selectAll(".weight")
+              .classed("visible", true)
           }
 
           return "M" + x1 + "," + y1 +

@@ -339,14 +339,9 @@ $(function () {
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
     $(WEIGHTS_HIDE_SIDE).removeProp("checked");
 
-    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).addClass("selected");
-    $(WEIGHTS_SHOW_ALWAYS_MENU).removeClass("selected");
-    $(WEIGHTS_HIDE_MENU).removeClass("selected");
-
-    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).addClass("selected");
-    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("selected");
-    $(WEIGHTS_HIDE_SIDE).removeClass("selected");
-
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).addClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
+    $(WEIGHTS_HIDE_CLASS).removeClass("selected");
   });
 
   $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function() {
@@ -358,13 +353,9 @@ $(function () {
     $(WEIGHTS_SHOW_ALWAYS_SIDE).prop("checked", "checked");
     $(WEIGHTS_HIDE_SIDE).removeProp("checked");
 
-    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).removeClass("selected");
-    $(WEIGHTS_SHOW_ALWAYS_MENU).addClass("selected");
-    $(WEIGHTS_HIDE_MENU).removeClass("selected");
-
-    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("selected");
-    $(WEIGHTS_SHOW_ALWAYS_SIDE).addClass("selected");
-    $(WEIGHTS_HIDE_SIDE).removeClass("selected");
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).addClass("selected");
+    $(WEIGHTS_HIDE_CLASS).removeClass("selected");
   });
 
   $(WEIGHTS_HIDE_CLASS).click(function() {
@@ -376,13 +367,9 @@ $(function () {
     $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
     $(WEIGHTS_HIDE_SIDE).prop("checked", "checked");
 
-    $(WEIGHTS_SHOW_MOUSE_OVER_MENU).removeClass("selected");
-    $(WEIGHTS_SHOW_ALWAYS_MENU).removeClass("selected");
-    $(WEIGHTS_HIDE_MENU).addClass("selected");
-
-    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeClass("selected");
-    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeClass("selected");
-    $(WEIGHTS_HIDE_SIDE).addClass("selected");
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
+    $(WEIGHTS_HIDE_CLASS).addClass("selected");
   });
   
   $("#printGraph").click(function (event) {
