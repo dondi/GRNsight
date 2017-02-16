@@ -6,6 +6,8 @@ var multiparty = require('multiparty'),
 
 var helpers = require(__dirname + "/helpers");
 
+var semanticChecker = require(__dirname + "/semantic-checker");
+
 var processGRNmap = function (path, res, app) {
   var sheet;
   var network;
@@ -65,6 +67,8 @@ var parseSheet = function(sheet) {
   }
 
   // If it didn't find a network/network_optimized_weights sheet
+  // TODO For expediency, we are wrapping every `return network` statement in `semanticChecker`.
+  //      Some refactoring may be desirable to prevent excessive repetition.
   if (currentSheet === undefined) {
     addError(network, errorList.missingNetworkError);
     return network;
@@ -90,9 +94,6 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              } else if (!checkSpecialCharacter(currentGene.name)){
-                 addError(network, errorList.specialCharacterError(row, column));
-                 return network;
               } else {
                 sourceGenes.push(String(currentGene.name.toUpperCase()));
                 genesList.push(String(currentGene.name.toUpperCase()));
@@ -111,16 +112,13 @@ var parseSheet = function(sheet) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              } else if (!checkSpecialCharacter(currentGene.name)){
-                 addError(network, errorList.specialCharacterError(row, column));
-                 return network;
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
                 // Here we check to see if we've already seen the gene name that we're about to store
                 // Genes may or may not be present due to asymmetry or unorderedness
                 // If it's in the genesList, it will return a number > 0, so we won't store it
                 // If it's not there, it will return -1, so we add it.
-                if(genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
+                if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
                   genesList.push(String(currentGene.name.toUpperCase()));
                   currentGene.name = currentGene.name;
                   network.genes.push(currentGene);
@@ -186,15 +184,22 @@ var parseSheet = function(sheet) {
   };
 
 
+  /*try {
+    network.graphStatisticsReport = graphStatisticsReport(network);
+  } catch (err) {
+    console.log ("Graph statistics report failed to be complete.");
+  }*/
+
+  // Move on to semanticChecker.
+
+
   // We sort them here because gene order is not relevant before this point
   // Sorting them now means duplicates will be right next to each other
   sourceGenes.sort();
   targetGenes.sort();
 
-  // Final error checks!
+  //syntactic duplicate checker for both columns and rows
   checkDuplicates(network.errors, sourceGenes, targetGenes);
-  checkGeneLength(network.errors, genesList);
-  checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
 
   try {
     network.graphStatisticsReport = graphStatisticsReport(network);
@@ -202,8 +207,7 @@ var parseSheet = function(sheet) {
     console.log ("Graph statistics report failed to be complete.");
   }
 
-  // We're done. Return the network.
-  return network;
+  return semanticChecker(network);
 };
 
 var grnSightToCytoscape = function (network) {
@@ -293,22 +297,6 @@ var addError = function (network, message) {
     }
 }
 
-var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
-  var genesLength = genesList.length,
-      edgesLength = positiveWeights.length + negativeWeights.length,
-      GENE_MAX_WARNING = 50,
-      EDGE_MAX_WARNING = 100,
-      GENE_MAX_ERROR = 75,
-      EDGE_MAX_ERROR = 150;
-
-  if ((genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR)|| (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)) {
-    warningArray.push(warningsList.networkSizeWarning(genesLength, edgesLength));
-  } else if (genesLength >= GENE_MAX_ERROR || edgesLength >= EDGE_MAX_ERROR) {
-    errorArray.push(errorList.networkSizeError(genesLength, edgesLength));
-  }
-}
-
-
 var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
   // Run through the source genes and check if the gene in slot i is the same as the one next to it
   for(var i = 0; i < sourceGenes.length - 1; i++) {
@@ -322,21 +310,6 @@ var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
       errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
     }
   }
-}
-
-var checkGeneLength = function(errorArray, genesList) {
-  // Check if any genes are over the gene length (currently 12)
-  var maxGeneLength = 12
-  for(var i = 0; i < genesList.length; i++) {
-    if(genesList[i].length > maxGeneLength) {
-      errorArray.push(errorList.geneLengthError(genesList[i]));
-    }
-  }
-}
-
-var checkSpecialCharacter = function (currentGene){
-  var regex = /[^a-z0-9\_\-]/gi;
-  return !currentGene.match(regex);
 }
 
 // This is the massive list of errors. Yay!
@@ -378,32 +351,6 @@ var errorList = {
     };
   },
 
-  geneLengthError: function (geneName) {
-    return {
-      errorCode: "INVALID_GENE_LENGTH",
-      possibleCause: "Gene " + geneName + " is more than 12 characters in length.",
-      suggestedFix: "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again."
-    };
-  },
-
-  networkSizeError: function (genesLength, edgesLength) {
-    return {
-      errorCode: "INVALID_NETWORK_SIZE",
-      possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.",
-      suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
-    };
-  },
-
-  specialCharacterError: function(row, column){
-    var colLetter = numbersToLetters[column];
-    var rowNum = row + 1;
-    return {
-      errorCode: "INVALID_CHARACTER",
-      possibleCause: "The value in cell " + colLetter + rowNum + " contains invalid character.",
-      suggestedFix: "Please ensure all values in the data does not contain special characters except for '-' and '_'."
-    }
-  },
-
   dataTypeError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
@@ -438,15 +385,6 @@ var errorList = {
   errorsCountError: {
     errorCode: "ERRORS_OVERLOAD",
     possibleCause: "This network has over 20 errors.",
-    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-    "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-    "further errors detected. As a general approach for fixing the errors, consider copying and " +
-    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-  },
-
-  warningsCountError: {
-    errorCode: "WARNINGS_OVERLOAD",
-    possibleCause: "This network has over 75 warnings.",
     suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
     "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
     "further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -526,7 +464,7 @@ var warningsList = {
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
   }
-}
+};
 
 module.exports = function (app) {
   if (app) {
