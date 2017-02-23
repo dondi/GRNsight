@@ -1,4 +1,8 @@
 var constants = require(__dirname + "/../constants");
+var semanticChecker = require(__dirname + "/../semantic-checker");
+
+// Eventually wrap the final return in the semanticChecker
+// semanticChecker(network);
 
 var GENE_NAME = 0;
 var RELATIONSHIP = 1;
@@ -64,14 +68,18 @@ module.exports = function (sif) {
     }
   });
 
-  return {
+  var network =
+  {
     genes: genes.map(function (geneName) {
       return { name: geneName };
     }),
     links: links,
     errors: [],
     warnings: networkType.warnings,
-    sheetType: networkType.sheetType
+    sheetType: networkType.sheetType,
+    positiveWeights: [],
+    negativeWeights: []
   };
-};
 
+  return semanticChecker(network);
+};

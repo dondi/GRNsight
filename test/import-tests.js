@@ -22,6 +22,8 @@ var expectedUnweightedNetwork = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "unweighted"
 };
 
@@ -41,6 +43,8 @@ var expectedWeightedNetwork = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "weighted"
 };
 
@@ -63,6 +67,8 @@ var expectedUnweightedNetworkWithCycle = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "unweighted"
 };
 
@@ -85,6 +91,8 @@ var expectedWeightedNetworkWithCycle = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "weighted"
 };
 
@@ -209,6 +217,8 @@ describe("Import from SIF", function () {
 
       errors: [],
       warnings: [],
+      positiveWeights: [],
+      negativeWeights: [],
       sheetType: "unweighted"
     });
   });
@@ -381,6 +391,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       }); // Look ma, no hyperedges.
     });
@@ -409,6 +421,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       }); // Look ma, no nested graphs (nor edges that refer to them).
     });
@@ -435,6 +449,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       });
     });
@@ -456,6 +472,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       });
     });

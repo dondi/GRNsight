@@ -193,8 +193,6 @@ var errorList = {
     suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
   }
 
-
-
 }
 
 // TODO Entry-point semantic checker function goes here.
