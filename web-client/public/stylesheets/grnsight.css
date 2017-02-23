@@ -28,13 +28,9 @@ body {
 .grnsight-container {
   border: 2px solid #9a9a9a;
 }
-.containerXS {
-  width: 640px;
-  height: 360px;
-}
 .containerS {
-  width: 960px;
-  height: 540px;
+  width: 1152px;
+  height: 648px;
 }
 .containerM {
   width: 1280px;
@@ -43,10 +39,6 @@ body {
 .containerL {
   width: 1600px;
   height: 900px;
-}
-.containerXL {
-  width: 2080px;
-  height: 1170px;
 }
 .containerInfinite {
   width: 100000px;
