@@ -638,14 +638,29 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     'stroke-width': '1.5px'
   });
 
+  var currentWeightVisibilitySetting = null;
 
-
-  var setWeightsVisability = function(d) {
+  var setWeightsVisability = function() {
 
     var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
     var WEIGHTS_HIDE_CLASS            = ".weightsNever";
     var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
 
+    var WEIGHT_VISIBILITY_SETTINGS = [
+      WEIGHTS_SHOW_MOUSE_OVER_CLASS,
+      WEIGHTS_HIDE_CLASS,
+      WEIGHTS_SHOW_ALWAYS_CLASS
+    ];
+
+    var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(function (setting) {
+      return $(setting).hasClass("selected");
+    })[0];
+
+    if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
+      return;
+    }
+
+    currentWeightVisibilitySetting = latestWeightVisibilitySetting;
     var showWeight = function (d) {
       var mouse = d3.mouse(this);
       d.weightElement
@@ -661,26 +676,26 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .classed("visible", false);
     };
 
-    if ($(WEIGHTS_SHOW_MOUSE_OVER_CLASS).hasClass("selected")) {
+    if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
       svg.selectAll(".weight")
-        .classed("visible", true)
+        .classed("visible", false)
 
       link.on('mouseover', showWeight).on('mouseout', hideWeight);
       weight.on('mouseover', showWeight).on('mouseout', hideWeight);
 
-    } else if ($(WEIGHTS_HIDE_CLASS).hasClass("selected")) {
+    } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
       svg.selectAll(".weight")
         .classed("visible", false)
 
-      link.on('mouseover', hideWeight).on('mouseout', hideWeight);
-      weight.on('mouseover', hideWeight).on('mouseout', hideWeight);
+      link.on('mouseover', null).on('mouseout', null);
+      weight.on('mouseover', null).on('mouseout', null);
 
-    } else if ($(WEIGHTS_SHOW_ALWAYS_CLASS).hasClass("selected")) {
+    } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
       svg.selectAll(".weight")
         .classed("visible", true)
 
-      link.on('mouseover', hideWeight).on('mouseout', hideWeight);
-      weight.on('mouseover', hideWeight).on('mouseout', hideWeight);
+      link.on('mouseover', null).on('mouseout', null);
+      weight.on('mouseover', null).on('mouseout', null);
     }
   }
 
