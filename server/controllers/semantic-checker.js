@@ -48,7 +48,7 @@ var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWei
 }
 
 var checkDuplicateErrors = function(errorArray){
-  for(var error of errorArray){
+  for(var error in errorArray){
     if(error.errorCode == 'DUPLICATE_GENE'){
       return true;
     }
@@ -58,7 +58,7 @@ var checkDuplicateErrors = function(errorArray){
 var checkDuplicates = function(errorArray, genesList) {
   if(!checkDuplicateErrors(errorArray)){
     var genesName = [];
-    for(var gene of genesList){
+    for(var gene in genesList){
       genesName.push(gene.name);
     }
     genesName.sort();
