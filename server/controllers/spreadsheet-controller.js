@@ -207,7 +207,8 @@ var parseSheet = function(sheet) {
     console.log ("Graph statistics report failed to be complete.");
   }
 
-  return semanticChecker(network);
+  // return semanticChecker(network);
+  return network;
 };
 
 var grnSightToCytoscape = function (network) {
