@@ -3,6 +3,18 @@ $(function () {
   var grnParent = $(".grnParent");
   var container = $(".grnsight-container");
   var enableScroll = $("#enableScroll");
+  var pageWidth = $(window).width();
+
+  if (pageWidth < 1200) {
+      container.addClass('containerS');
+      $('#boundBoxS').prop('checked', true);
+  } else if (pageWidth > 1200 && pageWidth < 2300) {
+      container.addClass('containerM');
+      $('#boundBoxM').prop('checked', true);
+  } else {
+      container.addClass('containerL');
+      $('#boundBoxL').prop('checked', true);
+  }
 
   $(".boundBoxSize").on("click", function () {
     var currentValue = $(this).val();
@@ -10,26 +22,26 @@ $(function () {
     if (!container.hasClass(currentValue)) {
       container.attr("class", grnsightContainerClass);
       $("#reload").trigger("click");
-      if (currentValue === "containerInfinite") {
-          grnTest.css("height", "900px");
-          grnTest.css("width", "1600px");
-          let halfVisibleHeight =
-                (container.height() / 2) - (grnTest.height() / 2);
-          let halfVisibleWidth =
-                (container.width() / 2) - (grnTest.width() / 2);
-          grnTest.scrollTop(halfVisibleHeight);
-          grnTest.scrollLeft(halfVisibleWidth);
-          grnTest.css("overflow", "auto");
-          grnTest.addClass("grnTestNoScroll");
-          enableScroll.prop("disabled", true);
-          grnParent.css("overflow", "hidden")
-      } else if ($(".grnTest").hasClass("grnTestNoScroll")) {
-          grnTest.removeClass("grnTestNoScroll");
-          enableScroll.prop("disabled", false);
-          enableScroll.trigger("click");
-          enableScroll.trigger("click");
-          grnParent.css("overflow", "auto")
-      }
+    //   if (currentValue === "containerInfinite") {
+    //       grnTest.css("height", "900px");
+    //       grnTest.css("width", "1600px");
+    //       let halfVisibleHeight =
+    //             (container.height() / 2) - (grnTest.height() / 2);
+    //       let halfVisibleWidth =
+    //             (container.width() / 2) - (grnTest.width() / 2);
+    //       grnTest.scrollTop(halfVisibleHeight);
+    //       grnTest.scrollLeft(halfVisibleWidth);
+    //       grnTest.css("overflow", "auto");
+    //       grnTest.addClass("grnTestNoScroll");
+    //       enableScroll.prop("disabled", true);
+    //       grnParent.css("overflow", "hidden")
+    //   } else if ($(".grnTest").hasClass("grnTestNoScroll")) {
+    //       grnTest.removeClass("grnTestNoScroll");
+    //       enableScroll.prop("disabled", false);
+    //       enableScroll.trigger("click");
+    //       enableScroll.trigger("click");
+    //       grnParent.css("overflow", "auto")
+    //   }
     };
   });
 
