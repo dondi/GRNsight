@@ -18,6 +18,15 @@ iframe.embedded-demo {
     border:0;
 }
 
+iframe.embedded-demo-beta {
+	padding:0;
+	margin:0;
+	height:770px;
+	width:100%;
+    overflow:scroll;
+    border:0;
+}
+
 #header {
 	right:0;
 	left:0;
@@ -146,7 +155,7 @@ a:active {
 }
 
 #pageContent {
-	color:#141414;
+    color: #141414;
 	font-size: 14px;
 	padding: 0px 5px 5px 10px;
     margin-right: 8em;
@@ -160,6 +169,17 @@ a:active {
     margin-bottom: 0.65ex;
 	text-align: justify;
 	width: 95%;
+}
+
+#graphPageContent {
+    color: #141414,inherit;
+    font-size: 14px;
+    padding: 0;
+    margin: 0 auto;
+}
+
+#iframeContainer {
+    margin: 0 auto;
 }
 
 p.panel-title.aboutHeaders {
@@ -346,4 +366,3 @@ html {
 	color: #125432;
     text-decoration: underline;
 }
-
