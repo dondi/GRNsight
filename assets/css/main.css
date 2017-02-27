@@ -21,9 +21,9 @@ iframe.embedded-demo {
 iframe.embedded-demo-beta {
 	padding:0;
 	margin:0;
-	height:770px;
+	height:1200px;
 	width:100%;
-    overflow:scroll;
+    overflow: auto;
     border:0;
 }
 
@@ -175,10 +175,6 @@ a:active {
     color: #141414,inherit;
     font-size: 14px;
     padding: 0;
-    margin: 0 auto;
-}
-
-#iframeContainer {
     margin: 0 auto;
 }
 
