@@ -7,7 +7,7 @@ body {
 .file-input-name {
   font-weight: normal;
 }
-.grnParent {
+.grnTest {
   left: 250px;
   top: 53px;
   right: 5px;
@@ -15,38 +15,20 @@ body {
   position: absolute;
   overflow: auto;
 }
-.grnTest {
-  position: absolute;
-  overflow: auto;
-}
-.grnTest::-webkit-scrollbar {
-  display: auto;
-}
-.grnTestNoScroll::-webkit-scrollbar {
-  display: none;
-}
 .grnsight-container {
   border: 2px solid #9a9a9a;
 }
-.containerXS {
-  width: 640px;
-  height: 360px;
-}
 .containerS {
-  width: 960px;
-  height: 540px;
+  width: 1152px;
+  height: 648px;
 }
 .containerM {
-  width: 1280px;
-  height: 720px;
+  width: 1366px;
+  height: 768px;
 }
 .containerL {
-  width: 1600px;
-  height: 900px;
-}
-.containerXL {
-  width: 2080px;
-  height: 1170px;
+  width: 1920px;
+  height: 1080px;
 }
 .containerInfinite {
   width: 100000px;
@@ -65,7 +47,7 @@ form span {
 }
 .navbar {
   top: 1px;
-  width: 1350px;
+  margin-right: auto;
 }
 .glyphicon {
   min-width: 22px;

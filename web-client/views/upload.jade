@@ -186,9 +186,9 @@ html
               small(id='graph-metadata')
 
     div(class='container')
-      div(class='grnParent')
-        div(class='grnTest')
-          div(class='grnsight-container containerM')
+      //- div(class='grnParent')
+      div(class='grnTest')
+        div(class='grnsight-container')
 
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
@@ -223,9 +223,6 @@ html
           label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
         form
           h4 &nbsp; Toggle Switches
-          input(type='radio' id='boundBoxXs' class='boundBoxSize' name='size' value='containerXS')
-          label(for='boundBoxXs' style='font-weight:normal') Extra Small
-          br
           input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
           label(for='boundBoxS' style='font-weight:normal') Small
           br
@@ -235,12 +232,9 @@ html
           input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
           label(for='boundBoxL' style='font-weight:normal') Large
           br
-          input(type='radio' id='boundBoxXl' class='boundBoxSize' name='size' value='containerXL')
-          label(for='boundBoxXl' style='font-weight:normal') Extra Large
-          br
-          input(type='radio' id='boundBoxInfinite' class='boundBoxSize' name='size' value='containerInfinite')
-          label(for='boundBoxInfinite' style='font-weight:normal') Infinite
-          br
+        //-   input(type='radio' id='boundBoxInfinite' class='boundBoxSize' name='size' value='containerInfinite')
+        //-   label(for='boundBoxInfinite' style='font-weight:normal') Infinite
+        //-   br
           | Zoom:
           input(type='button' class='zoomBtn' id='zoomIn' value='+')
           input(type='button' class='zoomBtn' id='zoomOut' value='-')
@@ -305,7 +299,7 @@ html
 
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
-            // input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+            //- input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
 
     div(id='importErrorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
       div(class='modal-dialog')

@@ -11,8 +11,8 @@ $(function () {
       CHARGE_DIST_SLIDER_ID = "#chargeDistInput",
       CHARGE_DIST_VALUE     = "#chargeDistVal",
       CHARGE_DIST_DEFAULT   = 1000,
-      GRAVITY_SLIDER_ID     = "#gravityInput",      
-      GRAVITY_VALUE         = "#gravityVal",      
+      GRAVITY_SLIDER_ID     = "#gravityInput",
+      GRAVITY_VALUE         = "#gravityVal",
       GRAVITY_DEFAULT       = 0.1,
       TOOLTIP_SHOW_DELAY    = 700,
       TOOLTIP_HIDE_DELAY    = 100;
@@ -66,8 +66,8 @@ $(function () {
 
   var settings = new settingsController();
   settings.setupSettingsHandlers();
-  
-  $("#printGraph").on("click", function () { 
+
+  $("#printGraph").on("click", function () {
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
     }
@@ -234,10 +234,10 @@ $(function () {
   $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 
   var displayWarnings = function (warnings) {
-    $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
-      "It is possible that these warnings are the result of extraneous data outside of the matrix, but " + 
+    $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " +
+      "It is possible that these warnings are the result of extraneous data outside of the matrix, but " +
       "we recommend you review your file and ensure that it is formatted correctly. The graph will be loaded, " +
-      "but may not be displayed accurately. To view the details " + 
+      "but may not be displayed accurately. To view the details " +
       "of the warning(s), please click on the \"Warnings List\" below.");
 
     var MAX_DUPLICATES = 3;
@@ -254,7 +254,7 @@ $(function () {
     var extraneousDataCount = warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
 
     function createWarningsString(warningCount, index) {
-      for (var i = 0; i < warningCount.length; i++) {        
+      for (var i = 0; i < warningCount.length; i++) {
         if (warningCount.length <= 3) {
             warningsString += warningCount[i].errorDescription + "<br><br>";
         } else if (printed[index] < 3){
@@ -371,7 +371,7 @@ $(function () {
     $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
   });
-  
+
   $("#printGraph").click(function (event) {
     if(!$(this).parent().hasClass("disabled")) {
       window.print();
