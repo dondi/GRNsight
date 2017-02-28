@@ -5,10 +5,10 @@ $(function () {
   var enableScroll = $("#enableScroll");
   var pageWidth = $(window).width();
 
-  if (pageWidth < 1200) {
+  if (pageWidth < 1300) {
       container.addClass('containerS');
       $('#boundBoxS').prop('checked', true);
-  } else if (pageWidth > 1200 && pageWidth < 2300) {
+  } else if (pageWidth > 1300 && pageWidth < 2300) {
       container.addClass('containerM');
       $('#boundBoxM').prop('checked', true);
   } else {
