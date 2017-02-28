@@ -6,17 +6,17 @@ $(function () {
   var pageWidth = $(window).width();
 
   if (pageWidth < 1300) {
-      container.addClass('containerS');
       $('#boundBoxS').prop('checked', true);
   } else if (pageWidth > 1300 && pageWidth < 2300) {
-      container.addClass('containerM');
       $('#boundBoxM').prop('checked', true);
   } else {
-      container.addClass('containerL');
       $('#boundBoxL').prop('checked', true);
   }
 
   $(".boundBoxSize").on("click", function () {
+    if (container.hasClass('containerDefault')) {
+      container.removeClass('containerDefault');
+    }
     var currentValue = $(this).val();
     var grnsightContainerClass = "grnsight-container " + currentValue;
     if (!container.hasClass(currentValue)) {
