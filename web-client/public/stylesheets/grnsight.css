@@ -15,16 +15,34 @@ body {
   position: absolute;
   overflow: auto;
 }
+@media (min-width: 0px) {
+  .containerDefault {
+    width: 1104px;
+    height: 648px;
+  }
+}
+@media (min-width: 1300px) {
+  .containerDefault {
+    width: 1414px;
+    height: 840px;
+  }
+}
+@media (min-width: 2300px) {
+  .containerDefault {
+    width: 1920px;
+    height: 1080px;
+  }
+}
 .grnsight-container {
   border: 2px solid #9a9a9a;
 }
 .containerS {
-  width: 1152px;
+  width: 1104px;
   height: 648px;
 }
 .containerM {
-  width: 1366px;
-  height: 768px;
+  width: 1414px;
+  height: 840px;
 }
 .containerL {
   width: 1920px;
