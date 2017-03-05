@@ -232,16 +232,20 @@ html
           input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
           label(for='boundBoxL' style='font-weight:normal') Large
           br
-        //-   input(type='radio' id='boundBoxInfinite' class='boundBoxSize' name='size' value='containerInfinite')
-        //-   label(for='boundBoxInfinite' style='font-weight:normal') Infinite
-        //-   br
-          | Zoom:
-          input(type='button' class='zoomBtn' id='zoomIn' value='+')
-          input(type='button' class='zoomBtn' id='zoomOut' value='-')
+          h4 &nbsp; Viewport Options
+          input(type='radio' id='viewportHard' class='viewport' name='viewport' value='viewportHard' checked)
+          label(for='viewportHard' style='font-weight:normal') Hard
           br
-          input(type='checkbox' id='enableScroll' checked)
-          label(for='enableScroll' style='font-weight:normal') Enable Scroll
+          input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt')
+          label(for='viewportAdapt' style='font-weight:normal') Adaptive
           br
+          //- | Zoom:
+          //- input(type='button' class='zoomBtn' id='zoomIn' value='+')
+          //- input(type='button' class='zoomBtn' id='zoomOut' value='-')
+          //- br
+          //- input(type='checkbox' id='enableScroll' checked)
+          //- label(for='enableScroll' style='font-weight:normal') Enable Scroll
+          //- br
         p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
       div(class='input-group')
