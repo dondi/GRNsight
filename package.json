@@ -26,10 +26,13 @@
     "chai": "1.10.0",
     "istanbul": "0.4.5",
     "jquery-extend": "2.0.3",
-    "mocha": "2.5.3"
+    "mocha": "2.5.3",
+    "nodemon": "1.11.0",
+    "parallelshell": "2.0.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter list"
+    "test": "mocha --reporter list",
+    "start": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\""
   },
   "repository": {
     "type": "git",
