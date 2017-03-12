@@ -85,9 +85,6 @@ module.exports = function (sif) {
     }
   });
 
-  console.log(warnings);
-  console.log(errors);
-
   var network = {
     genes: genes.map(function (geneName) {
       return { name: geneName };
