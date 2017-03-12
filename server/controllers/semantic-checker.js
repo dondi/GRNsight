@@ -48,8 +48,8 @@ var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWei
 }
 
 var checkDuplicateErrors = function(errorArray){
-  for(var error of errorArray){
-    if(error.errorCode == 'DUPLICATE_GENE'){
+  for(var i = 0; i < errorArray.length; i++){
+      if(errorArray[i].errorCode == 'DUPLICATE_GENE'){
       return true;
     }
   }
@@ -58,13 +58,13 @@ var checkDuplicateErrors = function(errorArray){
 var checkDuplicates = function(errorArray, genesList) {
   if(!checkDuplicateErrors(errorArray)){
     var genesName = [];
-    for(var gene of genesList){
-      genesName.push(gene.name);
+    for(var i = 0; i < genesList.length; i++){
+      genesName.push(genesList[i].name);
     }
     genesName.sort();
-    for(var i = 0; i<genesName.length-1; i++){
+    for(var i = 0; i < genesName.length - 1; i++){
       if(genesName[i] === genesName[i+1]){
-        errorArray.push(errorList.semanticduplicateGeneError(genesName[i]));
+        errorArray.push(errorList.semanticDuplicateGeneError(genesName[i]));
       }
     }
   }
