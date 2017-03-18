@@ -5,42 +5,38 @@ var GENE_NAME = 0;
 var RELATIONSHIP = 1;
 var TARGET = 2;
 
-var isNumber = function (relationship) {
-  return !isNaN(+relationship);
-};
-
-var sifNetworkType = function (sifEntries) {
-  var relationships = [];
-  sifEntries.forEach(function (entry) {
-    if (entry.length > TARGET) {
-      relationships.push(entry[RELATIONSHIP]);
-    }
-  });
-
-  var hasNumbers = relationships.some(isNumber);
-  var allNumbers = relationships.every(isNumber);
-  return {
-    sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
-    warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null
-  };
-};
 
 module.exports = function (sif) {
 
   var warnings = [];
   var errors = [];
 
-  var errorList = {
-    sifFormatError: {
-      errorCode: "SIF_FORMAT_ERRROR",
-      possibleCause: "No tabs are detected in the SIF input file",
-      suggestedFix: "SIF files accepted by GRNsight must delimit data using tabs. Please review the SIF input standards" +
-      "that are outlined in the documentation."
-    }
+  var isNumber = function (relationship) {
+    return !isNaN(+relationship);
+  };
+
+  var sifNetworkType = function (sifEntries) {
+    var relationships = [];
+    var rowNum = 0;
+    var numRowsWithTwoColumns = 0;
+    sifEntries.forEach(function (entry) {
+      if (entry.length > TARGET) {
+        relationships.push(entry[RELATIONSHIP]);
+      } else if (entry.length == 2) {
+        numRowsWithTwoColumns++;
+      }
+    });
+    var hasNumbers = relationships.some(isNumber);
+    var allNumbers = relationships.every(isNumber);
+    return {
+      sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
+      warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null,
+      errors: numRowsWithTwoColumns > 0 ? constants.errors.SIF_MISSING_DATA_ERROR : null
+    };
   };
 
   if (!sif.match(/[\t]+/g)) {
-    errors.push(errorList.sifFormatError);
+    errors.push(constants.errors.SIF_FORMAT_ERRROR);
   }
 
   var entries = sif.match(/[^\r\n]+/g).map(function (line) {
@@ -57,6 +53,10 @@ module.exports = function (sif) {
   var networkType = sifNetworkType(entries);
   if (networkType.warnings !== null) {
     warnings.push(networkType.warnings);
+  }
+
+  if (networkType.errors != null) {
+    errors.push(networkType.errors);
   }
 
   var links = [];

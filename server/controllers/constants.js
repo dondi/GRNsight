@@ -17,5 +17,18 @@ module.exports = {
       warningCode: "EDGE_DEFAULT_NOT_DIRECTED",
       errorDescription: "GRNsight interprets the graph as directed unconditionally."
     }
+  },
+
+  errors: {
+    SIF_FORMAT_ERRROR: {
+      possibleCause: "No tabs are detected in the SIF input file",
+      suggestedFix: "SIF files accepted by GRNsight must delimit data using tabs. Please review the SIF input standards" +
+      "that are outlined in the documentation."
+    },
+
+    SIF_MISSING_DATA_ERROR: {
+      possibleCause: "The SIF file contains a row in which a relationship or a target gene is missing",
+      suggestedFix: "A row in the SIF file may not have two columns. Please review the data."
   }
+}
 };

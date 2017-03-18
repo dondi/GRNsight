@@ -126,6 +126,22 @@ $(function () {
     });
   };
 
+  var networkErrorDisplayer = function (xhr, status, error) {
+    var err = JSON.parse(xhr.responseText);
+    var errorString = "Your graph failed to load.<br><br>";
+
+    if (!err.errors) { // will be falsy if an error was thrown before the network was generated
+      errorString += err;
+    } else {
+      errorString = err.errors.reduce(function (currentErrorString, currentError) {
+        return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
+      }, errorString);
+    }
+
+    $("#error").html(errorString);
+    $("#errorModal").modal("show");
+  };
+
   /*
    * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
    * for helping to resolve this.
@@ -150,21 +166,7 @@ $(function () {
         loadGrn(url, name, formData);
       };
       //displayStatistics(network);
-    }).error(function (xhr, status, error) {
-      var err = JSON.parse(xhr.responseText);
-      var errorString = "Your graph failed to load.<br><br>";
-
-      if (!err.errors) { // will be falsy if an error was thrown before the network was generated
-        errorString += err;
-      } else {
-        errorString = err.errors.reduce(function (currentErrorString, currentError) {
-          return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
-        }, errorString);
-      }
-
-      $("#error").html(errorString);
-      $("#errorModal").modal("show");
-    });
+    }).error(networkErrorDisplayer);
   };
 
   // TODO Some opportunity for unification with loadGrn?
@@ -183,10 +185,7 @@ $(function () {
       reloader = function () {
         importGrn(uploadRoute, filename, formData);
       };
-    }).error(function (xhr, status, error) {
-      $("#importErrorMessage").text(xhr.responseText);
-      $("#importErrorModal").modal("show");
-    });
+    }).error(networkErrorDisplayer);
   };
 
   var submittedFilename = function ($upload) {

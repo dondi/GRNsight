@@ -484,9 +484,10 @@ module.exports = function (app) {
         }
 
         if (path.extname(input) !== ".xlsx") {
-          return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRnsight can read." +
+          return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRNsight can read." +
             "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-            " able to be read by GRNsight.");
+            " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded using the importer under File > Import." +
+            " Additional information about file types that GRNsight supports is in the Documentation.");
         }
 
         return processGRNmap(input, res, app);
