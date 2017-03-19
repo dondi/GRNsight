@@ -16,22 +16,33 @@ module.exports = function (sif) {
   };
 
   var sifNetworkType = function (sifEntries) {
+    var errors = [];
     var relationships = [];
     var rowNum = 0;
     var numRowsWithTwoColumns = 0;
     sifEntries.forEach(function (entry) {
       if (entry.length > TARGET) {
+        if (!isNumber(entry[RELATIONSHIP])) {
+          if (entry[RELATIONSHIP] !== "pd") {
+            errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERRROR);
+          }
+        }
         relationships.push(entry[RELATIONSHIP]);
       } else if (entry.length == 2) {
         numRowsWithTwoColumns++;
       }
     });
+
+    if (numRowsWithTwoColumns > 0) {
+      errors.push(constants.errors.SIF_MISSING_DATA_ERROR);
+    }
+
     var hasNumbers = relationships.some(isNumber);
     var allNumbers = relationships.every(isNumber);
     return {
       sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
       warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null,
-      errors: numRowsWithTwoColumns > 0 ? constants.errors.SIF_MISSING_DATA_ERROR : null
+      errors: errors
     };
   };
 
@@ -56,7 +67,9 @@ module.exports = function (sif) {
   }
 
   if (networkType.errors != null) {
-    errors.push(networkType.errors);
+    for (i = 0; i < networkType.errors.length; i++) {
+      errors.push(networkType.errors[i]);
+    }
   }
 
   var links = [];

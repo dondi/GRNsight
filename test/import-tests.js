@@ -103,6 +103,13 @@ var unweightedTestSif = [
   "D"
 ].join("\r\n"); // Mix up linebreak types to test normalization.
 
+var unweightedTestSifCommaSeparated = [
+  "A",
+  [ "B", "pd", "A", "C" ].join(","),
+  [ "C", "pd", "B" ].join(","),
+  "D"
+].join("\r\n");
+
 var weightedTestSif = [
   [ "A", "", "" ].join("\t"), // Include trivially-tabbed cases.
   [ "B", "-0.75", "A" ].join("\t"),
@@ -122,8 +129,40 @@ var inconsistentlyWeightedTestSif = [
 var unweightedTestSifWithCycle = [
   [ "A", "pd", "A" ].join("\t"),
   [ "B", "pd", "A", "C" ].join("\t"),
-  [ "C", "interacts with", "B" ].join("\t"), // Allow any non-numeric relationship.
-  [ "D", "neg", "D" ].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  [ "D", "pd", "D" ].join("\t"),
+  "E"
+].join("\r\n");
+
+var unweightedTestSifMissingSource = [
+  [ "A", "pd" ].join("\t"),
+  [ "B", "pd", "A" ].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  [ "D", "pd", "D" ].join("\t"),
+  "E"
+].join("\r\n");
+
+var unweightedTestSifMissingRelationship = [
+  [ "A", "pd", "A" ].join("\t"),
+  [ "B", "A"].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  [ "D", "pd", "D" ].join("\t"),
+  "E"
+].join("\r\n");
+
+var unweightedTestSifMissingTarget = [
+  [ "A", "pd", "A" ].join("\t"),
+  [ "B", "pd", "A" ].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  [ "D", "pd", ].join("\t"),
+  "E"
+].join("\r\n");
+
+var unweightedTestSifWithIncorrectRelationshipType = [
+  [ "A", "pd", "A" ].join("\t"),
+  [ "B", "pd", "A", "C" ].join("\t"),
+  [ "C", "interacts with", "B" ].join("\t"),
+  [ "D", "pd", "D" ].join("\t"),
   "E"
 ].join("\r\n");
 
@@ -222,6 +261,43 @@ describe("Import from SIF", function () {
       sheetType: "unweighted"
     });
   });
+
+  it ("should not return warnings or errors for correct data", function () {
+    expect(
+      importController.sifToGrnsight(unweightedTestSif).errors.length
+    ).to.equal(0);
+  });
+
+  it("should throw an error if it detects an unweighted graph with relationship types other than 'pd'", function () {
+    expect(
+      importController.sifToGrnsight(unweightedTestSifWithIncorrectRelationshipType).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.sifToGrnsight(unweightedTestSifWithIncorrectRelationshipType).errors[0].errorCode
+    ).to.equal("SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERRROR");
+  });
+
+  it("should throw an error if it detects that a SIF file is comma separated", function () {
+    expect(
+      importController.sifToGrnsight(unweightedTestSifCommaSeparated).errors[0].errorCode
+    ).to.equal("SIF_FORMAT_ERRROR");
+  });
+
+  it("should throw an error if there is missing data", function () {
+    expect(
+      importController.sifToGrnsight(unweightedTestSifMissingTarget).errors[0].errorCode
+    ).to.equal("SIF_MISSING_DATA_ERROR");
+
+    expect(
+      importController.sifToGrnsight(unweightedTestSifMissingSource).errors[0].errorCode
+    ).to.equal("SIF_MISSING_DATA_ERROR");
+
+    expect(
+      importController.sifToGrnsight(unweightedTestSifMissingRelationship).errors[0].errorCode
+    ).to.equal("SIF_MISSING_DATA_ERROR");
+  });
+
 });
 
 var unweightedTestGraphMl = [
