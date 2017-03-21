@@ -15,7 +15,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       gridWidth = 300,
       colorOptimal = true;
 
-
   $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
@@ -719,14 +718,24 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     try {
       node.attr('x', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        return d.x = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
+        var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
             (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                 selfReferringEdge.strokeWidth + 2 : 0), d.x));
+        if (currentXPos === 5) {
+          width += 5;
+          svg.attr("width", width);
+        }
+        return d.x = currentXPos;
       }).attr('y', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        return d.y = Math.max(BOUNDARY_MARGIN, Math.min(height - nodeHeight - BOUNDARY_MARGIN -
+        var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(height - nodeHeight - BOUNDARY_MARGIN -
             (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                 selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0), d.y));
+        if (currentYPos === 5) {
+          height += 5;
+          svg.attr("height", height);
+        }
+        return d.y = currentYPos;
       }).attr('transform', function (d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
