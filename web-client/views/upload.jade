@@ -189,9 +189,23 @@ html
       div(class='grnTest')
         div(class='grnsight-container containerDefault')
           div(class='scale-and-scroll')
-            p(class='scrollLeft') Left
-            p(class='zoomable') ZOOM
-            p(class='scrollRight') Right
+            table(class='scrollTable')
+              tr
+                td
+                td Up
+                td
+              tr
+                td Left
+                td
+                td Right
+              tr
+                td
+                td Down
+                td
+              tr
+                td - 
+                td zoom
+                td +
 
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
