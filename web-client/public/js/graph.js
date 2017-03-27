@@ -718,22 +718,26 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     try {
       node.attr('x', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
-            (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                selfReferringEdge.strokeWidth + 2 : 0), d.x));
-        if (currentXPos === 5) {
-          width += 5;
-          svg.attr("width", width);
+        var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+              selfReferringEdge.strokeWidth + 2 : 0)
+        var rightBoundary = width - getNodeWidth(d) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+        var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
+        if (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary) {
+            width += 5;
+            svg.attr("width", width);
+            force.size([width, height]).resume();
         }
         return d.x = currentXPos;
       }).attr('y', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(height - nodeHeight - BOUNDARY_MARGIN -
-            (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0), d.y));
-        if (currentYPos === 5) {
-          height += 5;
-          svg.attr("height", height);
+        var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+            selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
+        var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
+        var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
+        if (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary) {
+            height += 5;
+            svg.attr("height", height);
+            force.size([width, height]).resume();
         }
         return d.y = currentYPos;
       }).attr('transform', function (d) {
