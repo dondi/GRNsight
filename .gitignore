@@ -23,5 +23,4 @@ node_modules
 .bundle
 _gh_pages
 
-coverage
-coverage/*
+coverage/

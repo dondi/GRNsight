@@ -32,7 +32,8 @@
   },
   "scripts": {
     "test": "mocha --reporter list",
-    "start": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\""
+    "start": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\"",
+    "coverage": "istanbul cover _mocha"
   },
   "repository": {
     "type": "git",
