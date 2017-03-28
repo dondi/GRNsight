@@ -86,7 +86,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var zoom = d3.behavior.zoom()
     .center([width / 2, height / 2])
-    .scaleExtent([0.5, 10])
+    .scaleExtent([0.25, 10])
     .on("zoom", zoomed);
 
   var svg = d3.select($container[0]).append("svg")
@@ -746,6 +746,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         },
         BOUNDARY_MARGIN = 5,
         SELF_REFERRING_Y_OFFSET = 6;
+        MAX_WIDTH = 5000;
+        MAX_HEIGHT = 5000;
 
     try {
       node.attr('x', function (d) {
@@ -754,7 +756,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               selfReferringEdge.strokeWidth + 2 : 0)
         var rightBoundary = width - getNodeWidth(d) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
-        if (adaptive && (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
+        if (adaptive && width < MAX_WIDTH &&
+             (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
             width += 5;
             svg.attr("width", width);
             force.size([width, height]).resume();
@@ -766,7 +769,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
         var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
         var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
-        if (adaptive && (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
+        if (adaptive && height < MAX_HEIGHT &&
+             (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
             height += 5;
             svg.attr("height", height);
             force.size([width, height]).resume();
