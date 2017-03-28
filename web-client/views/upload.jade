@@ -245,7 +245,14 @@ html
           input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
           label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
         form
-          h4 &nbsp; Toggle Switches
+          h4 &nbsp; Viewport Options
+          input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt' checked)
+          label(for='viewportAdapt' style='font-weight:normal') Adaptive
+          br
+          input(type='radio' id='viewportHard' class='viewport' name='viewport' value='viewportHard')
+          label(for='viewportHard' style='font-weight:normal') Fixed
+          br
+          h4 &nbsp; Viewport Size
           input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
           label(for='boundBoxS' style='font-weight:normal') Small
           br
@@ -255,21 +262,6 @@ html
           input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
           label(for='boundBoxL' style='font-weight:normal') Large
           br
-          h4 &nbsp; Viewport Options
-          input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt' checked)
-          label(for='viewportAdapt' style='font-weight:normal') Adaptive
-          br
-          input(type='radio' id='viewportHard' class='viewport' name='viewport' value='viewportHard')
-          label(for='viewportHard' style='font-weight:normal') Fixed
-          br
-          //- | Zoom:
-          //- input(type='button' class='zoomBtn' id='zoomIn' value='+')
-          //- input(type='button' class='zoomBtn' id='zoomOut' value='-')
-          //- br
-          //- input(type='checkbox' id='enableScroll' checked)
-          //- label(for='enableScroll' style='font-weight:normal') Enable Scroll
-          //- br
-        p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
       div(class='input-group')
         p(id='sideHeader') &nbsp; Set Normalization Factor:

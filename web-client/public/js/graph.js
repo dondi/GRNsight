@@ -18,7 +18,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var MIN_SCALE = 0.25;
   var MAX_SCALE = 10;
 
-  $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
