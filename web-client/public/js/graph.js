@@ -105,6 +105,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                      .attr("height", height)
                      .style("fill", "none")
                      .style("pointer-events", "all")
+                     .attr("stroke", adaptive ? "none" : "#9A9A9A")
                      .append("g")
 
 
