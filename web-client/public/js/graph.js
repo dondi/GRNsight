@@ -27,6 +27,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     colorOptimal = false;
   }
 
+  var adaptive = $("input[name='viewport']:checked").val() === "viewportAdapt";
+
+  $(".viewport").attr("disabled", true);
+
   var allWeights = positiveWeights.concat(negativeWeights);
 
   if(!colorOptimal) {
@@ -79,11 +83,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var drag = force.drag()
       .origin(function(d) { return d; })
       .on("dragstart", dragstart);
-      //.on("drag", dragmove)
-      //.on("dragend", dragend);
 
   var zoom = d3.behavior.zoom()
-    .scaleExtent([0.2, 10])
+    .center([width / 2, height / 2])
+    .scaleExtent([0.5, 10])
     .on("zoom", zoomed);
 
   var svg = d3.select($container[0]).append("svg")
@@ -751,7 +754,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               selfReferringEdge.strokeWidth + 2 : 0)
         var rightBoundary = width - getNodeWidth(d) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
-        if (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary) {
+        if (adaptive && (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
             width += 5;
             svg.attr("width", width);
             force.size([width, height]).resume();
@@ -763,7 +766,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
         var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
         var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
-        if (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary) {
+        if (adaptive && (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
             height += 5;
             svg.attr("height", height);
             force.size([width, height]).resume();

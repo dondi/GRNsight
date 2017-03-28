@@ -24,11 +24,14 @@ $(function () {
     };
   });
 
-  enableScroll.on("click", function () {
-    var enabled = $(this).prop("checked");
-    grnTest.css("overflow", (enabled ? "auto" : "visible"));
-    grnTest.css("height", (enabled ? "" : container.height()));
-    grnTest.css("width", (enabled ? "" : container.width()));
+  $(".viewport").on("click", function () {
+    var showingOptions = !$(".scrollTable").hasClass("hidden");
+    var adaptiveViewport = $("input[name='viewport']:checked").val() === "viewportAdapt";
+    if (adaptiveViewport && !showingOptions) {
+      $(".scrollTable").removeClass("hidden");
+    } else if (!adaptiveViewport && showingOptions) {
+      $(".scrollTable").addClass("hidden");
+    }
   });
 
 })
