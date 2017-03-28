@@ -15,6 +15,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       gridWidth = 300,
       colorOptimal = true;
 
+  var MIN_SCALE = 0.25;
+  var MAX_SCALE = 10;
+
   $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
@@ -86,7 +89,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var zoom = d3.behavior.zoom()
     .center([width / 2, height / 2])
-    .scaleExtent([0.25, 10])
+    .scaleExtent([MIN_SCALE, MAX_SCALE])
     .on("zoom", zoomed);
 
   var svg = d3.select($container[0]).append("svg")
@@ -95,90 +98,73 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .call(zoom)
       .append("g") // required for zoom to work
 
-
+  // This rectangle catches all of the mousewheel and pan events, without letting
+  // them bubble up to the body.
   var innerRect = svg.append("rect")
                      .attr("width", width)
                      .attr("height", height)
                      .style("fill", "none")
                      .style("pointer-events", "all")
+                     .append("g")
 
-  var container = svg.append("g");
 
   function zoomed() {
+    // var tx = Math.min(0, d3.event.translate[0]);
+    // var ty = Math.min(0, d3.event.translate[1]);
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    // svg.attr("transform", "translate(" + [tx, ty] + ")scale(" + d3.event.scale + ")");
   }
 
+  d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
+  d3.select(".scrollUp").on("click", function () {
+    move("up", true)
+  });
 
-  /* Credit to https://bl.ocks.org/mbostock/6226534 */
+  d3.select(".scrollLeft").on("click", function () {
+    move("left", true)
+  });
 
-  /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
-  /* TODO Check this method https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
-  // var zoom = d3.behavior.zoom()
-  //     .scaleExtent([0, 5])
-  //     .on("zoom", zoomed);
-  //
-  // svg.call(zoom);
-  //
-  // function zoomed() {
-  //   svg.attr("transform",
-  //       "translate(" + zoom.translate() + ")" +
-  //       "scale(" + zoom.scale() + ")"
-  //   );
-  // }
-  //
-  // function interpolateZoom (translate, scale) {
-  //   var self = this;
-  //   return d3.transition().duration(350).tween("zoom", function () {
-  //       var iTranslate = d3.interpolate(zoom.translate(), translate),
-  //           iScale = d3.interpolate(zoom.scale(), scale);
-  //       return function (t) {
-  //         console.log(iScale(t));
-  //           zoom
-  //               .scale(iScale(t))
-  //               .translate(iTranslate(t));
-  //           zoomed();
-  //       };
-  //   });
-  // }
-  //
-  // function zoomClick() {
-  //   var clicked = d3.event.target,
-  //       direction = 1,
-  //       factor = 0.2,
-  //       target_zoom = 0,
-  //       center = [width / 2, height / 2],
-  //       extent = zoom.scaleExtent(),
-  //       translate = zoom.translate(),
-  //       translate0 = [],
-  //       l = [],
-  //       view = {x: translate[0], y: translate[1], k: zoom.scale()};
-  //
-  //   d3.event.stopPropagation();
-  //   direction = (this.id === 'zoomIn') ? 1 : -1;
-  //   target_zoom = zoom.scale() * (1 + factor * direction);
-  //
-  //   if (target_zoom < extent[0] || target_zoom > extent[1]) {
-  //     if(zoom.scale() !== extent[0] && target_zoom < extent[0]) {
-  //       target_zoom = 0;
-  //     } else if (zoom.scale() !== extent[1] && target_zoom > extent[1]) {
-  //       target_zoom = 10;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  //
-  //   translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
-  //   view.k = target_zoom;
-  //   l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
-  //
-  //   view.x += center[0] - l[0];
-  //   view.y += center[1] - l[1];
-  //
-  //   interpolateZoom([view.x, view.y], view.k);
-  // }
-  //
-  // d3.selectAll('.zoomBtn')
-  //   .on('click', zoomClick);
+  d3.select(".scrollRight").on("click", function () {
+    move("right", true)
+  });
+
+  d3.select(".scrollDown").on("click", function () {
+    move("down", true)
+  });
+
+  d3.select("#zoomIn").on("click", function () {
+    move("in", false)
+  });
+
+  d3.select("#zoomOut").on("click", function () {
+    move("out", false)
+  });
+
+  /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
+  function move(direction, isMove) {
+    svg.call(zoom.event);
+    var currentTransform = d3.transform(svg.attr("transform"));
+    var currentTranslate = [0, 0];
+    var currentScale = 1;
+    if (currentTransform) {
+      currentTranslate = d3.transform(currentTransform).translate;
+      currentScale = d3.transform(currentTransform).scale[0]; // x and y scale will always be equal
+    }
+    if (isMove) {
+      currentTranslate[0] += (direction === "left" ? 50 : (direction === "right" ? -50 : 0));
+      currentTranslate[1] += (direction === "up" ? 50 : (direction === "down" ? -50 : 0));
+    } else {
+      currentScale += (direction === "in" ? 0.05 : -0.05)
+      if (currentScale > MAX_SCALE) {
+        currentScale = MAX_SCALE;
+      } else if (currentScale < MIN_SCALE) {
+        currentScale = MIN_SCALE;
+      }
+    }
+    zoom.scale(currentScale);
+    zoom.translate(currentTranslate);
+    svg.transition().call(zoom.event);
+  }
 
   var defs = svg.append("defs");
 

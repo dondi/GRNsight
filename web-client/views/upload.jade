@@ -192,20 +192,26 @@ html
             table(class='scrollTable')
               tr
                 td
-                td Up
+                td
+                  input(class='scrollBtn scrollUp', type='button', value="Up")
                 td
               tr
-                td Left
                 td
-                td Right
+                  input(class='scrollBtn scrollLeft', type='button', value="Left")
+                td
+                td
+                  input(class='scrollBtn scrollRight', type='button', value="Right")
               tr
                 td
-                td Down
+                td
+                  input(class='scrollBtn scrollDown', type='button', value="Down")
                 td
               tr
-                td(class="zoomBtn" id="zoomOut") - 
+                td
+                  input(class="zoomBtn" id="zoomOut" type="button" value="-")
                 td zoom
-                td(class="zoomBtn" id="zoomIn") +
+                td
+                  input(class="zoomBtn" id="zoomIn" type="button" value="+")
 
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
