@@ -86,80 +86,74 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .attr("height", height)
       .append("g"); // required for zoom to work
 
+  /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
   var zoom = d3.behavior.zoom()
       .center([width / 2, height / 2])
-      .scaleExtent([1, 10])
+      .scaleExtent([0, 5])
       .on("zoom", zoomed);
 
   svg.call(zoom);
 
   function zoomed() {
-     console.log(d3.event.scale);
-     console.log(d3.event.translate);
-     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    svg.attr("transform",
+        "translate(" + zoom.translate() + ")" +
+        "scale(" + zoom.scale() + ")"
+    );
   }
 
-  /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
-  // var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
+  function interpolateZoom (translate, scale) {
+    var self = this;
+    return d3.transition().duration(350).tween("zoom", function () {
+        var iTranslate = d3.interpolate(zoom.translate(), translate),
+            iScale = d3.interpolate(zoom.scale(), scale);
+        return function (t) {
+          console.log(iScale(t));
+            zoom
+                .scale(iScale(t))
+                .translate(iTranslate(t));
+            zoomed();
+        };
+    });
+  }
 
-  // function zoomed() {
-  //   svg.attr("transform",
-  //       "translate(" + zoom.translate() + ")" +
-  //       "scale(" + zoom.scale() + ")"
-  //   );
-  // }
+  function zoomClick() {
+    var clicked = d3.event.target,
+        direction = 1,
+        factor = 0.2,
+        target_zoom = 0,
+        center = [width / 2, height / 2],
+        extent = zoom.scaleExtent(),
+        translate = zoom.translate(),
+        translate0 = [],
+        l = [],
+        view = {x: translate[0], y: translate[1], k: zoom.scale()};
 
-  // function interpolateZoom (translate, scale) {
-  //   var self = this;
-  //   return d3.transition().duration(350).tween("zoom", function () {
-  //       var iTranslate = d3.interpolate(zoom.translate(), translate),
-  //           iScale = d3.interpolate(zoom.scale(), scale);
-  //       return function (t) {
-  //           zoom
-  //               .scale(iScale(t))
-  //               .translate(iTranslate(t));
-  //           zoomed();
-  //       };
-  //   });
-  // }
-  //
-  // function zoomClick() {
-  //     var clicked = d3.event.target,
-  //         direction = 1,
-  //         factor = 0.2,
-  //         target_zoom = 1,
-  //         center = [width / 2, height / 2],
-  //         extent = zoom.scaleExtent(),
-  //         translate = zoom.translate(),
-  //         translate0 = [],
-  //         l = [],
-  //         view = {x: translate[0], y: translate[1], k: zoom.scale()};
-  //
-  //     d3.event.preventDefault();
-  //     direction = (this.id === 'zoomIn') ? 1 : -1;
-  //     target_zoom = zoom.scale() * (1 + factor * direction);
-  //
-  //     if (target_zoom < extent[0] || target_zoom > extent[1]) {
-  //       if(zoom.scale() !== extent[0] && target_zoom < extent[0]) {
-  //         target_zoom = 1;
-  //       } else if (zoom.scale() !== extent[1] && target_zoom > extent[1]) {
-  //         target_zoom = 2;
-  //       } else {
-  //         return false;
-  //       }
-  //     }
-  //
-  //     translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
-  //     view.k = target_zoom;
-  //     l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
-  //
-  //     view.x += center[0] - l[0];
-  //     view.y += center[1] - l[1];
-  //
-  //     interpolateZoom([view.x, view.y], view.k);
-  // }
+    d3.event.preventDefault();
+    direction = (this.id === 'zoomIn') ? 1 : -1;
+    target_zoom = zoom.scale() * (1 + factor * direction);
 
-  // d3.selectAll('.zoomBtn').on('click', zoomClick);
+    if (target_zoom < extent[0] || target_zoom > extent[1]) {
+      if(zoom.scale() !== extent[0] && target_zoom < extent[0]) {
+        target_zoom = 0;
+      } else if (zoom.scale() !== extent[1] && target_zoom > extent[1]) {
+        target_zoom = 10;
+      } else {
+        return false;
+      }
+    }
+
+    translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
+    view.k = target_zoom;
+    l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
+
+    view.x += center[0] - l[0];
+    view.y += center[1] - l[1];
+
+    interpolateZoom([view.x, view.y], view.k);
+  }
+
+  d3.selectAll('.zoomBtn')
+    .on('click', zoomClick);
 
   var defs = svg.append("defs");
 
