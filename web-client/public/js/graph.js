@@ -77,14 +77,36 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .gravity($("#gravityInput").val());
 
   var drag = force.drag()
+      .origin(function(d) { return d; })
       .on("dragstart", dragstart);
       //.on("drag", dragmove)
       //.on("dragend", dragend);
 
+  var zoom = d3.behavior.zoom()
+    .scaleExtent([0.2, 10])
+    .on("zoom", zoomed);
+
   var svg = d3.select($container[0]).append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g"); // required for zoom to work
+        .attr("width", width)
+        .attr("height", height)
+        .call(zoom)
+      .append("g") // required for zoom to work
+
+
+  var innerRect = svg.append("rect")
+                     .attr("width", width)
+                     .attr("height", height)
+                     .style("fill", "none")
+                     .style("pointer-events", "all")
+
+  var container = svg.append("g");
+
+  function zoomed() {
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  }
+
+
+  /* Credit to https://bl.ocks.org/mbostock/6226534 */
 
   /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
   /* TODO Check this method https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
@@ -855,6 +877,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   function dragstart(d) {
     var node = d3.select(this);
+    d3.event.sourceEvent.stopPropagation();
     node.classed("fixed", d.fixed = true);
   }
 
