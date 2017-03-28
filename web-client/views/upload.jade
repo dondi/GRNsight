@@ -235,16 +235,6 @@ html
           input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form
-          p(id='sideHeader') &nbsp; Hide/Show Edge Weights
-          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-          label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
-          <br>
-          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-          label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
-          <br>
-          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-          label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
-        form
           h4 &nbsp; Viewport Options
           input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt' checked)
           label(for='viewportAdapt' style='font-weight:normal') Adaptive
@@ -264,7 +254,17 @@ html
           br
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
       div(class='input-group')
-        p(id='sideHeader') &nbsp; Set Normalization Factor:
+      form(class='weightedGraphOptions hidden')
+        p(class='sideHeader') &nbsp; Hide/Show Edge Weights
+        input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+        label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
+        <br>
+        input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+        label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
+        <br>
+        input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+        label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
+        p(class='sideHeader') &nbsp; Set Normalization Factor:
         input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
         br
         input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')

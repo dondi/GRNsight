@@ -670,66 +670,75 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var currentWeightVisibilitySetting = null;
 
-  var setWeightsVisability = function() {
+  if (sheetType === "weighted") {
+    if ($(".weightedGraphOptions").hasClass("hidden")) {
+      $(".weightedGraphOptions").removeClass("hidden");
+    }
+    var setWeightsVisability = function() {
 
-    var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
-    var WEIGHTS_HIDE_CLASS            = ".weightsNever";
-    var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
+      var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
+      var WEIGHTS_HIDE_CLASS            = ".weightsNever";
+      var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
 
-    var WEIGHT_VISIBILITY_SETTINGS = [
-      WEIGHTS_SHOW_MOUSE_OVER_CLASS,
-      WEIGHTS_HIDE_CLASS,
-      WEIGHTS_SHOW_ALWAYS_CLASS
-    ];
+      var WEIGHT_VISIBILITY_SETTINGS = [
+        WEIGHTS_SHOW_MOUSE_OVER_CLASS,
+        WEIGHTS_HIDE_CLASS,
+        WEIGHTS_SHOW_ALWAYS_CLASS
+      ];
 
-    var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(function (setting) {
-      return $(setting).hasClass("selected");
-    })[0];
+      var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(function (setting) {
+        return $(setting).hasClass("selected");
+      })[0];
 
-    if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
-      return;
+      if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
+        return;
+      }
+
+      currentWeightVisibilitySetting = latestWeightVisibilitySetting;
+      var showWeight = function (d) {
+        var mouse = d3.mouse(this);
+        d.weightElement
+          .attr("x", mouse[0])
+          .attr("y", mouse[1])
+          .classed("visible", true)
+      };
+
+      var hideWeight = function (d) {
+        d.weightElement
+          .attr("x", null)
+          .attr("y", null)
+          .classed("visible", false);
+      };
+
+      if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
+        svg.selectAll(".weight")
+          .classed("visible", false)
+
+        link.on('mouseover', showWeight).on('mouseout', hideWeight);
+        weight.on('mouseover', showWeight).on('mouseout', hideWeight);
+
+      } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
+        svg.selectAll(".weight")
+          .classed("visible", false)
+
+        link.on('mouseover', null).on('mouseout', null);
+        weight.on('mouseover', null).on('mouseout', null);
+
+      } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
+        svg.selectAll(".weight")
+          .classed("visible", true)
+
+        link.on('mouseover', null).on('mouseout', null);
+        weight.on('mouseover', null).on('mouseout', null);
+      }
     }
 
-    currentWeightVisibilitySetting = latestWeightVisibilitySetting;
-    var showWeight = function (d) {
-      var mouse = d3.mouse(this);
-      d.weightElement
-        .attr("x", mouse[0])
-        .attr("y", mouse[1])
-        .classed("visible", true)
-    };
-
-    var hideWeight = function (d) {
-      d.weightElement
-        .attr("x", null)
-        .attr("y", null)
-        .classed("visible", false);
-    };
-
-    if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
-      svg.selectAll(".weight")
-        .classed("visible", false)
-
-      link.on('mouseover', showWeight).on('mouseout', hideWeight);
-      weight.on('mouseover', showWeight).on('mouseout', hideWeight);
-
-    } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
-      svg.selectAll(".weight")
-        .classed("visible", false)
-
-      link.on('mouseover', null).on('mouseout', null);
-      weight.on('mouseover', null).on('mouseout', null);
-
-    } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
-      svg.selectAll(".weight")
-        .classed("visible", true)
-
-      link.on('mouseover', null).on('mouseout', null);
-      weight.on('mouseover', null).on('mouseout', null);
+    setInterval(setWeightsVisability, 100);
+  } else {
+    if (!$(".weightedGraphOptions").hasClass("hidden")) {
+      $(".weightedGraphOptions").addClass("hidden");
     }
   }
-
-  setInterval(setWeightsVisability, 100);
 
   //Tick only runs while the graph physics are still running. (I.e. when the graph is completely relaxed, tick stops running.)
   function tick() {
