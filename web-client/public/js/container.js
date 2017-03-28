@@ -20,7 +20,6 @@ $(function () {
     var grnsightContainerClass = "grnsight-container " + currentValue;
     if (!container.hasClass(currentValue)) {
       container.attr("class", grnsightContainerClass);
-      $("#reload").trigger("click");
     };
   });
 

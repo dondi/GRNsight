@@ -109,10 +109,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
 
   function zoomed() {
+    // These comments are for when we restrict the zoom to the available space.
     // var tx = Math.min(0, d3.event.translate[0]);
     // var ty = Math.min(0, d3.event.translate[1]);
-    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     // svg.attr("transform", "translate(" + [tx, ty] + ")scale(" + d3.event.scale + ")");
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   }
 
   d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -138,6 +139,18 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   d3.select("#zoomOut").on("click", function () {
     move("out", false)
+  });
+
+  d3.selectAll(".boundBoxSize").on("click", function () {
+    var newWidth = d3.select(".grnsight-container").style("width");
+    var newHeight = d3.select(".grnsight-container").style("height");
+    var BORDER_OFFSET = 4;
+
+    // Remove trailing "px"
+    newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
+    newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
+
+    d3.select("svg").attr("width", newWidth).attr("height", newHeight);
   });
 
   /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
