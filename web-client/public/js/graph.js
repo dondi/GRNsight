@@ -20,7 +20,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
-    return node.name.length * 15;
+    return node.name.length * 12 + 5;
+    //console.log(text.node().getBBox());
   };
 
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
@@ -87,6 +88,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .attr("height", height)
       .append("g"); // required for zoom to work
 
+
   /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
   var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
 
@@ -147,13 +149,17 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       interpolateZoom([view.x, view.y], view.k);
   }
 
+
+
   d3.selectAll('.zoomBtn').on('click', zoomClick);
 
   var defs = svg.append("defs");
 
+
   var link = svg.selectAll(".link"),
       node = svg.selectAll(".node"),
       weight = svg.selectAll(".weight");
+
 
   force.nodes(nodes)
        .links(links)
@@ -603,8 +609,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     dblclick.call(this.parentNode, d);
   };
 
-  node.append("rect")
-     .attr("width", function() {
+  var rect = node.append("rect")
+     .attr("width", function(d) {
        return this.parentNode.getAttribute("width");
      })
      .attr("height", function() {
@@ -613,17 +619,38 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
      .attr("stroke-width", "2px")
      .on("dblclick", dblclick);
 
-  node.append("text")
-    .attr("dx", function (d) {
-      return getNodeWidth(d) / 2;
-    })
+// var text =  node.append("text")
+//     .attr("dx", function (d) {
+//       return getNodeWidth(d) / 2;
+//     })
+//     .attr("dy", 22)
+//     .attr("text-anchor", "middle")
+//     .style("font-size", "18px")
+//     .style("stroke-width", "0")
+//     .style("fill", "black")
+//     .text(function(d) {return d.name;})
+//     .on("dblclick", nodeTextDblclick);
+
+var text = node.append("text")
     .attr("dy", 22)
     .attr("text-anchor", "middle")
     .style("font-size", "18px")
     .style("stroke-width", "0")
     .style("fill", "black")
     .text(function(d) {return d.name;})
+    .attr("dx", function (d) {
+      var textWidth = this.getBBox().width;
+      this.parentNode.width = textWidth * 2;
+      console.log(d.name, textWidth);
+      d.textWidth = textWidth;
+      return textWidth / 2;
+    })
     .on("dblclick", nodeTextDblclick);
+
+  rect
+    .attr("width", function(d) {
+      return d.textWidth * 2; // this.parentNode.getAttribute("width");
+    });
 
   $('.node').css({
     'cursor': 'move',
