@@ -186,9 +186,32 @@ html
               small(id='graph-metadata')
 
     div(class='container')
-      //- div(class='grnParent')
       div(class='grnTest')
         div(class='grnsight-container containerDefault')
+          div(class='scale-and-scroll')
+            table(class='scrollTable')
+              tr
+                td
+                td
+                  input(class='scrollBtn scrollUp', type='button', value="Up")
+                td
+              tr
+                td
+                  input(class='scrollBtn scrollLeft', type='button', value="Left")
+                td
+                td
+                  input(class='scrollBtn scrollRight', type='button', value="Right")
+              tr
+                td
+                td
+                  input(class='scrollBtn scrollDown', type='button', value="Down")
+                td
+              tr
+                td
+                  input(class="zoomBtn" id="zoomOut" type="button" value="-")
+                td zoom
+                td
+                  input(class="zoomBtn" id="zoomIn" type="button" value="+")
 
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
@@ -212,17 +235,14 @@ html
           input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
         form
-          p(id='sideHeader') &nbsp; Hide/Show Edge Weights
-          input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-          label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
-          <br>
-          input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-          label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
-          <br>
-          input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-          label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
-        form
-          h4 &nbsp; Toggle Switches
+          h4 &nbsp; Viewport Options
+          input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt' checked)
+          label(for='viewportAdapt' style='font-weight:normal') Adaptive
+          br
+          input(type='radio' id='viewportHard' class='viewport' name='viewport' value='viewportHard')
+          label(for='viewportHard' style='font-weight:normal') Fixed
+          br
+          h4 &nbsp; Viewport Size
           input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
           label(for='boundBoxS' style='font-weight:normal') Small
           br
@@ -232,27 +252,22 @@ html
           input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
           label(for='boundBoxL' style='font-weight:normal') Large
           br
-          h4 &nbsp; Viewport Options
-          input(type='radio' id='viewportHard' class='viewport' name='viewport' value='viewportHard' checked)
-          label(for='viewportHard' style='font-weight:normal') Hard
-          br
-          input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt')
-          label(for='viewportAdapt' style='font-weight:normal') Adaptive
-          br
-          //- | Zoom:
-          //- input(type='button' class='zoomBtn' id='zoomIn' value='+')
-          //- input(type='button' class='zoomBtn' id='zoomOut' value='-')
-          //- br
-          //- input(type='checkbox' id='enableScroll' checked)
-          //- label(for='enableScroll' style='font-weight:normal') Enable Scroll
-          //- br
-        p(id='mouseOver')
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
       div(class='input-group')
-        p(id='sideHeader') &nbsp; Set Normalization Factor:
-        input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
-        br
-        input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+      form(class='weightedGraphOptions hidden')
+        p(class='sideHeader') &nbsp; Hide/Show Edge Weights
+        input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+        label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
+        <br>
+        input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+        label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
+        <br>
+        input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+        label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
+      p(class='sideHeader') &nbsp; Set Normalization Factor:
+      input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
+      br
+      input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
