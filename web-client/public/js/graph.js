@@ -30,6 +30,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var MIN_SCALE = 0.25;
   var MAX_SCALE = (adaptive) ? 10 : 1;
+  d3.select(".zoomSlider").attr("max", MAX_SCALE);
 
   var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -84,6 +85,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .origin(function(d) { return d; })
       .on("dragstart", dragstart);
 
+  var MANUAL_ZOOM = false;
   var zoom = d3.behavior.zoom()
     .center([width / 2, height / 2])
     .scaleExtent([MIN_SCALE, MAX_SCALE])
@@ -106,11 +108,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                      .append("g")
 
 
-  function zoomed() {
-    // These comments are for when we restrict the zoom to the available space.
-    // var tx = Math.min(0, d3.event.translate[0]);
-    // var ty = Math.min(0, d3.event.translate[1]);
-    // svg.attr("transform", "translate(" + [tx, ty] + ")scale(" + d3.event.scale + ")");
+  function zoomed(manual = false) {
+    if (!MANUAL_ZOOM) {
+      $(".zoomSlider").val(d3.event.scale.toFixed(2)); // This doesn't work using d3 selection for some reason
+    }
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   }
 
@@ -118,27 +119,29 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   // TODO: Make this less bad
   d3.select(".scrollUp").on("click", function () {
-    move("up", true);
+    move("up");
   });
 
   d3.select(".scrollLeft").on("click", function () {
-    move("left", true);
+    move("left");
   });
 
   d3.select(".scrollRight").on("click", function () {
-    move("right", true);
+    move("right");
   });
 
   d3.select(".scrollDown").on("click", function () {
-    move("down", true);
+    move("down");
   });
 
-  d3.select("#zoomIn").on("click", function () {
-    move("in", false);
-  });
+  d3.select(".center").on("click", center);
 
-  d3.select("#zoomOut").on("click", function () {
-    move("out", false);
+  d3.select(".zoomSlider").on("input", function () {
+      scale(this.value);
+  }).on("mousedown", function () {
+    MANUAL_ZOOM = true;
+  }).on("mouseup", function () {
+    MANUAL_ZOOM = false;
   });
 
   d3.selectAll(".boundBoxSize").on("click", function () {
@@ -167,42 +170,55 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     let value = $(this).attr("value");
     if (!adaptive && value === "viewportAdapt") {
       adaptive = true;
+      MAX_SCALE = 10;
       d3.select("rect").attr("stroke", "none");
+      zoom.scaleExtent([MIN_SCALE, MAX_SCALE])
+      d3.select(".zoomSlider").attr("max", MAX_SCALE);
     } else if (adaptive && value === "viewportHard") {
       var BORDER_OFFSET = 4;
       var newWidth = d3.select(".grnsight-container").style("width");
       var newHeight = d3.select(".grnsight-container").style("height");
+
       adaptive = false;
+      MAX_SCALE = 1;
       d3.select("rect").attr("stroke", "#9A9A9A");
+      zoom.scaleExtent([MIN_SCALE, MAX_SCALE]);
+      console.log(zoom.scale());
+      if (zoom.scale() > 1) {
+          scale(1);
+      }
+      d3.select(".zoomSlider").attr("max", MAX_SCALE);
       width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
       height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
       force.size([width, height]).resume();
     }
   });
 
+  function center() {
+    svg.call(zoom.event);
+    zoom.translate([0, 0]);
+    zoom.scale(1);
+    svg.transition().call(zoom.event);
+  }
+
   /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
-  function move(direction, isMove) {
+  function move(direction) {
     svg.call(zoom.event);
     var currentTransform = d3.transform(svg.attr("transform"));
     var currentTranslate = [0, 0];
-    var currentScale = 1;
     if (currentTransform) {
       currentTranslate = d3.transform(currentTransform).translate;
       currentScale = d3.transform(currentTransform).scale[0]; // x and y scale will always be equal
     }
-    if (isMove) {
-      currentTranslate[0] += (direction === "left" ? 50 : (direction === "right" ? -50 : 0));
-      currentTranslate[1] += (direction === "up" ? 50 : (direction === "down" ? -50 : 0));
-    } else {
-      currentScale += (direction === "in" ? 0.05 : -0.05)
-      if (currentScale > MAX_SCALE) {
-        currentScale = MAX_SCALE;
-      } else if (currentScale < MIN_SCALE) {
-        currentScale = MIN_SCALE;
-      }
-    }
-    zoom.scale(currentScale);
+    currentTranslate[0] += (direction === "left" ? 50 : (direction === "right" ? -50 : 0));
+    currentTranslate[1] += (direction === "up" ? 50 : (direction === "down" ? -50 : 0));
     zoom.translate(currentTranslate);
+    svg.transition().call(zoom.event);
+  }
+
+  function scale(amount) {
+    zoom.scale(amount);
+    console.log(zoom);
     svg.transition().call(zoom.event);
   }
 
