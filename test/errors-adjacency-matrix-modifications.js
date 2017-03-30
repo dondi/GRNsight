@@ -163,7 +163,7 @@ describe('errors-adjacency-matrix-modifications', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/missing-data-output.xlsx');
     })
   })
-  
+
   describe('value-replaced-with-spaces', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/adjacency-matrix-modifications/value-replaced-w-spaces-both-output.xlsx');

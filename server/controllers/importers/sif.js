@@ -11,6 +11,16 @@ module.exports = function (sif) {
   var warnings = [];
   var errors = [];
 
+  // sif files must contain tabs
+  if (!sif.match(/[\t]+/g)) {
+    errors.push(constants.errors.SIF_FORMAT_ERRROR);
+  }
+
+  // sif files must not contain two or more consecutive tabs in a row not followed by a newline, this is how we are checking for stray data
+  if (sif.match(/(?=.*[\t]{2,}[^\n\t]).*/g)) {
+      errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
+  }
+
   var isNumber = function (relationship) {
     return !isNaN(+relationship);
   };
@@ -45,18 +55,6 @@ module.exports = function (sif) {
       errors: errors
     };
   };
-
-  // sif files must contain tabs
-  if (!sif.match(/[\t]+/g)) {
-    errors.push(constants.errors.SIF_FORMAT_ERRROR);
-  }
-
-  // sif files must not contain two or more consecutive tabs in a row, this is how we are checking for stray data
-  if (sif.match(/[\t]{2,}/g)) {
-      console.log(sif.match(/[\t]{2,}/g));
-      console.log("here");
-      errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
-  }
 
   var entries = sif.match(/[^\r\n]+/g).map(function (line) {
     return line.match(/[^\t]+/g);

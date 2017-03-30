@@ -189,7 +189,7 @@ var inconsistentlyWeightedTestSif = [
   [ "B", "-0.75", "A" ].join("\t"),
   [ "B", "pd", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
-  [ "D", "", "" ].join("\t")
+  [ "D"].join("\t")
 ].join("\r\n");
 
 
@@ -212,8 +212,8 @@ var inconsistentlyWeightedTestSifWithCycle = [
 ].join("\n");
 
 var strayDataIn3ColumnFormat = [
-  [ "straydata", "\t", "\t", "\t", "A", "0.25", "C"  ].join("\t"),
-  [ "B", "-0.75", "A" ].join("\t"),
+  [ "A", "0.25", "C" ].join("\t"),
+  [ "B", "-0.75", "A", "", "", "straydata" ].join("\t"),
   [ "B", "0.25", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
   "D"
@@ -221,10 +221,17 @@ var strayDataIn3ColumnFormat = [
 
 var strayDataInMultiColumnFormat = [
   [ "A", "pd", "A", "B", "C", "E"].join("\t"),
-  [ "B", "pd", "A", "\t", "\t", "straydata"].join("\t"), // Stray data here
+  [ "B", "pd", "A", "", "", "straydata"].join("\t"), // Stray data here
   [ "C", "pd", "B" ].join("\t"),
   [ "D", "pd", "E"].join("\t"),
   "E"
+].join("\r\n");
+
+var triviallyTabbedUnweightedNetwork = [
+  "A",
+  [ "B", "pd", "A", "C" ].join("\t"),
+  [ "C", "pd", "B" ].join("\t"),
+  [ "D", "", "", "", ""].join("\t")    // extra tabs before the newline
 ].join("\r\n");
 
 describe("Import from SIF", function () {
@@ -359,6 +366,12 @@ describe ("Import from SIF syntactic checker", function () {
       expect(
         importController.sifToGrnsight(strayDataInMultiColumnFormat).errors[0].errorCode
       ).to.equal("SIF_STRAY_DATA_ERROR");
+    });
+
+    it ("should accept trivially tabbed networks", function () {
+        expect(
+            importController.sifToGrnsight(triviallyTabbedUnweightedNetwork)
+        ).to.deep.equal(expectedUnweightedNetwork);
     });
 
 });
