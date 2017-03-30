@@ -137,7 +137,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   d3.select(".center").on("click", center);
 
   d3.select(".zoomSlider").on("input", function () {
-      scale(this.value);
+    var newScale = this.value;
+    scale(newScale);
   }).on("mousedown", function () {
     MANUAL_ZOOM = true;
   }).on("mouseup", function () {
@@ -183,7 +184,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       MAX_SCALE = 1;
       d3.select("rect").attr("stroke", "#9A9A9A");
       zoom.scaleExtent([MIN_SCALE, MAX_SCALE]);
-      console.log(zoom.scale());
       if (zoom.scale() > 1) {
           scale(1);
       }
@@ -218,7 +218,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   function scale(amount) {
     zoom.scale(amount);
-    console.log(zoom);
     svg.transition().call(zoom.event);
   }
 
