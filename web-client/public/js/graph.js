@@ -163,6 +163,23 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     force.size([width, height]).resume();
   });
 
+  d3.selectAll("input[name=viewport]").on("change", function () {
+    let value = $(this).attr("value");
+    if (!adaptive && value === "viewportAdapt") {
+      adaptive = true;
+      d3.select("rect").attr("stroke", "none");
+    } else if (adaptive && value === "viewportHard") {
+      var BORDER_OFFSET = 4;
+      var newWidth = d3.select(".grnsight-container").style("width");
+      var newHeight = d3.select(".grnsight-container").style("height");
+      adaptive = false;
+      d3.select("rect").attr("stroke", "#9A9A9A");
+      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
+      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
+      force.size([width, height]).resume();
+    }
+  });
+
   /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
   function move(direction, isMove) {
     svg.call(zoom.event);
