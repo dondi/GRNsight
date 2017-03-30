@@ -67,6 +67,23 @@ $(function () {
   var settings = new settingsController();
   settings.setupSettingsHandlers();
 
+  // TODO: Make this less bad
+  $("#upload-sif").on("click", function () {
+    $("#launchFileOpen").on("click", function () {
+      $("#upload-sif").click();
+    })
+  });
+  $("#upload-graphml").on("click", function () {
+    $("#launchFileOpen").on("click", function () {
+      $("#upload-graphml").click();
+    })
+  });
+  $("#upload").on("click", function () {
+    $("#launchFileOpen").on("click", function () {
+      $("#upload").click();
+    })
+  });
+
   $("#printGraph").on("click", function () {
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
