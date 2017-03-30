@@ -115,6 +115,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
+
+  // TODO: Make this less bad
   d3.select(".scrollUp").on("click", function () {
     move("up", true);
   });
@@ -623,6 +625,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var dblclick = function (d) {
+    d3.event.stopPropagation();
     d3.select(this).classed("fixed", d.fixed = false);
   };
 
