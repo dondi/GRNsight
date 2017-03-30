@@ -15,9 +15,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       gridWidth = 300,
       colorOptimal = true;
 
-  var MIN_SCALE = 0.25;
-  var MAX_SCALE = 10;
-
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
@@ -30,6 +27,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var adaptive = $("input[name='viewport']:checked").val() === "viewportAdapt";
+
+  var MIN_SCALE = 0.25;
+  var MAX_SCALE = (adaptive) ? 10 : 1;
 
   var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -150,7 +150,17 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
     newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
 
-    d3.select("svg").attr("width", newWidth).attr("height", newHeight);
+    if (adaptive) {
+      width = (width < newWidth) ? newWidth : width;
+      height = (height < newHeight) ? newHeight : height;
+    } else {
+      width = newWidth;
+      height = newHeight;
+    }
+
+    d3.select("svg").attr("width", width).attr("height", height);
+    d3.select("rect").attr("width", width).attr("height", height);
+    force.size([width, height]).resume();
   });
 
   /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
