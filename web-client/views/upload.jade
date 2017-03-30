@@ -193,25 +193,25 @@ html
               tr
                 td
                 td
-                  input(class='scrollBtn scrollUp', type='button', value="Up")
+                    p(class='scrollBtn scrollUp') &#8593;
+                    
                 td
               tr
                 td
-                  input(class='scrollBtn scrollLeft', type='button', value="Left")
+                  p(class='scrollBtn scrollLeft') &#8592;
+                td 
+                  p(class='scrollBtn center') &#9788;
                 td
-                td
-                  input(class='scrollBtn scrollRight', type='button', value="Right")
+                  p(class='scrollBtn scrollRight') &#8594;
               tr
                 td
                 td
-                  input(class='scrollBtn scrollDown', type='button', value="Down")
+                  p(class='scrollBtn scrollDown') &#8595;
                 td
-              tr
+            table(class='zoomTable') 
+              tr 
                 td
-                  input(class="zoomBtn" id="zoomOut" type="button" value="-")
-                td zoom
-                td
-                  input(class="zoomBtn" id="zoomIn" type="button" value="+")
+                    input(class="zoomSlider" type="range" min="0.25" max="1" value="1" step="0.01")
 
     div(class='sliders')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
