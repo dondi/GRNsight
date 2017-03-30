@@ -31,8 +31,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var adaptive = $("input[name='viewport']:checked").val() === "viewportAdapt";
 
-  $(".viewport").attr("disabled", true);
-
   var allWeights = positiveWeights.concat(negativeWeights);
 
   if(!colorOptimal) {
@@ -118,27 +116,27 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
   d3.select(".scrollUp").on("click", function () {
-    move("up", true)
+    move("up", true);
   });
 
   d3.select(".scrollLeft").on("click", function () {
-    move("left", true)
+    move("left", true);
   });
 
   d3.select(".scrollRight").on("click", function () {
-    move("right", true)
+    move("right", true);
   });
 
   d3.select(".scrollDown").on("click", function () {
-    move("down", true)
+    move("down", true);
   });
 
   d3.select("#zoomIn").on("click", function () {
-    move("in", false)
+    move("in", false);
   });
 
   d3.select("#zoomOut").on("click", function () {
-    move("out", false)
+    move("out", false);
   });
 
   d3.selectAll(".boundBoxSize").on("click", function () {

@@ -6,31 +6,21 @@ $(function () {
 
   if (pageWidth < 1500) {
       $('#boundBoxS').prop('checked', true);
+      $(".containerDefault").attr("class", "grnsight-container containerS");
   } else if (pageWidth > 1500 && pageWidth < 2300) {
       $('#boundBoxM').prop('checked', true);
+      $(".containerDefault").attr("class", "grnsight-container containerM");
   } else {
       $('#boundBoxL').prop('checked', true);
+      $(".containerDefault").attr("class", "grnsight-container containerL");
   }
 
   $(".boundBoxSize").on("click", function () {
-    if (container.hasClass('containerDefault')) {
-      container.removeClass('containerDefault');
-    }
     var currentValue = $(this).val();
     var grnsightContainerClass = "grnsight-container " + currentValue;
     if (!container.hasClass(currentValue)) {
       container.attr("class", grnsightContainerClass);
     };
-  });
-
-  $(".viewport").on("click", function () {
-    var showingOptions = !$(".scrollTable").hasClass("hidden");
-    var adaptiveViewport = $("input[name='viewport']:checked").val() === "viewportAdapt";
-    if (adaptiveViewport && !showingOptions) {
-      $(".scrollTable").removeClass("hidden");
-    } else if (!adaptiveViewport && showingOptions) {
-      $(".scrollTable").addClass("hidden");
-    }
   });
 
 })
