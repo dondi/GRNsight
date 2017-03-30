@@ -40,8 +40,15 @@ module.exports = {
 
     SIF_MISSING_DATA_ERROR: {
       errorCode: "SIF_MISSING_DATA_ERROR",
-      possibleCause: "GRNsight has detected that your SIF file contains missing data.",
-      suggestedFix: " Please review the data.  "
+      possibleCause: "GRNsight has detected that your SIF file contains missing data. ",
+      suggestedFix: "Please review the data. Each row must have a source, relationship, and at least one target, " +
+      "separated by tabs. Self referential loops are allowed, and are represented by a row with a single gene."
+    },
+
+    SIF_STRAY_DATA_ERROR: {
+      errorCode: "SIF_STRAY_DATA_ERROR",
+      possibleCause: "GRNsight has detected stray data in your SIF file. ",
+      suggestedFix: "Please review the data and delete extraneous data from the file."
     }
   }
 };

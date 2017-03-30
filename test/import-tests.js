@@ -112,7 +112,6 @@ var unweightedTestSifCommaSeparated = [
   "D"
 ].join("\r\n");
 
-
 var unweightedTestSifWithCycle = [
   [ "A", "pd", "A" ].join("\t"),
   [ "B", "pd", "A", "C" ].join("\t"),
@@ -178,7 +177,7 @@ var unweightedTestSifWithUntargeted = [
 // Weighted SIF
 
 var weightedTestSif = [
-  [ "A", "", "" ].join("\t"), // Include trivially-tabbed cases.
+  [ "A"].join("\t"),
   [ "B", "-0.75", "A" ].join("\t"),
   [ "B", "0.25", "C" ].join("\t"),
   [ "C", "0.5", "B" ].join("\t"),
@@ -350,17 +349,17 @@ describe ("Import from SIF syntactic checker", function () {
       ).to.equal("SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERRROR");
     });
 
-    // it ("should throw an error if there is stray data in the 3-column format", function () {
-    //   expect(
-    //     importController.sifToGrnsight(strayDataIn3ColumnFormat).errors[0].errorCode
-    //   ).to.equal("SIF_RANDOM_DATA_ERROR");
-    // });
-    //
-    // it("should throw an error if there is stray data in the multi-column format", function () {
-    //   expect(
-    //     importController.sifToGrnsight(strayDataInMultiColumnFormat).errors[0].errorCode
-    //   ).to.equal("SIF_RANDOM_DATA_ERROR");
-    // });
+    it ("should throw an error if there is stray data in the 3-column format", function () {
+      expect(
+        importController.sifToGrnsight(strayDataIn3ColumnFormat).errors[0].errorCode
+      ).to.equal("SIF_STRAY_DATA_ERROR");
+    });
+
+    it("should throw an error if there is stray data in the multi-column format", function () {
+      expect(
+        importController.sifToGrnsight(strayDataInMultiColumnFormat).errors[0].errorCode
+      ).to.equal("SIF_STRAY_DATA_ERROR");
+    });
 
 });
 
