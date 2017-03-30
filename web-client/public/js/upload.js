@@ -68,18 +68,18 @@ $(function () {
   settings.setupSettingsHandlers();
 
   // TODO: Make this less bad
-  $("#upload-sif").on("click", function () {
-    $("#launchFileOpen").on("click", function () {
+  $("#upload-sif").on("click", function (event) {
+    $("#launchFileOpen").off("click").on("click", function () {
       $("#upload-sif").click();
     })
   });
-  $("#upload-graphml").on("click", function () {
-    $("#launchFileOpen").on("click", function () {
+  $("#upload-graphml").on("click", function (event) {
+    $("#launchFileOpen").off("click").on("click", function () {
       $("#upload-graphml").click();
     })
   });
-  $("#upload").on("click", function () {
-    $("#launchFileOpen").on("click", function () {
+  $("#upload").on("click", function (event) {
+    $("#launchFileOpen").off("click").on("click", function () {
       $("#upload").click();
     })
   });
