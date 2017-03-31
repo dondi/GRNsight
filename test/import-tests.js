@@ -234,6 +234,17 @@ var triviallyTabbedUnweightedNetwork = [
   [ "D", "", "", "", ""].join("\t")    // extra tabs before the newline
 ].join("\r\n");
 
+var emptySIFFileWithOnlyTabs = [
+  ["", ""].join("\t"),
+  [""]
+].join("\r\n");
+
+var emptyFile = [];
+
+var sifWithOneNode = [
+  "A"
+];
+
 describe("Import from SIF", function () {
   it("should import unweighted networks from SIF correctly", function () {
     expect(
@@ -372,6 +383,36 @@ describe ("Import from SIF syntactic checker", function () {
         expect(
             importController.sifToGrnsight(triviallyTabbedUnweightedNetwork)
         ).to.deep.equal(expectedUnweightedNetwork);
+    });
+
+    it ("should throw an error for SIF files with no data", function() {
+      expect(
+        importController.sifToGrnsight(emptySIFFileWithOnlyTabs).errors[0].errorCode
+      ).to.equal("SIF_NO_DATA_ERROR");
+
+      expect(
+        importController.sifToGrnsight(emptyFile).errors[0].errorCode
+      ).to.equal("SIF_NO_DATA_ERROR");
+    });
+
+    it ("should accept SIF files with a single node", function () {
+      expect(
+        importController.sifToGrnsight(sifWithOneNode)
+      ).to.deep.equal({
+        genes: [
+          { name: "A" }
+        ],
+
+        links: [
+          { source: 0, target: 0 }
+        ],
+
+        errors: [],
+        warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
+        sheetType: "unweighted"
+      })
     });
 
 });
