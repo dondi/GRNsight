@@ -902,6 +902,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         if (normalize(d) <= 0.05) {
           minimum = "gray";
         }
+        else{
+          minimum = "black";
+        }
 
         if (x1 === x2 && y1 === y2) {
           selfRef = "_SelfReferential";
