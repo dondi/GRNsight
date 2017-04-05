@@ -11,13 +11,12 @@ module.exports = function (sif) {
   var warnings = [];
   var errors = [];
 
+  if (!sif) {
+    sif = " ";
+  }
+
   // Replace any carriage return characters with new lines.
   sif = sif.replace(/\r/g, "\n");
-
-  // sif files must contain tabs
-  if (!sif.match(/[\t]+/g)) {
-    errors.push(constants.errors.SIF_FORMAT_ERRROR);
-  }
 
   // sif files must not contain two or more consecutive tabs in a row not followed by a newline, this is how we are checking for stray data
   if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g)) {
