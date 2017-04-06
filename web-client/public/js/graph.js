@@ -21,7 +21,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var getNodeWidth = function (node) {
     return node.name.length * 12 + 5;
-    //console.log(text.node().getBBox());
   };
 
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
@@ -619,18 +618,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
      .attr("stroke-width", "2px")
      .on("dblclick", dblclick);
 
-// var text =  node.append("text")
-//     .attr("dx", function (d) {
-//       return getNodeWidth(d) / 2;
-//     })
-//     .attr("dy", 22)
-//     .attr("text-anchor", "middle")
-//     .style("font-size", "18px")
-//     .style("stroke-width", "0")
-//     .style("fill", "black")
-//     .text(function(d) {return d.name;})
-//     .on("dblclick", nodeTextDblclick);
-
 var text = node.append("text")
     .attr("dy", 22)
     .attr("text-anchor", "middle")
@@ -640,16 +627,14 @@ var text = node.append("text")
     .text(function(d) {return d.name;})
     .attr("dx", function (d) {
       var textWidth = this.getBBox().width;
-      this.parentNode.width = textWidth * 2;
-      console.log(d.name, textWidth);
       d.textWidth = textWidth;
-      return textWidth / 2;
+      return textWidth / 2 + 5;
     })
     .on("dblclick", nodeTextDblclick);
 
   rect
     .attr("width", function(d) {
-      return d.textWidth * 2; // this.parentNode.getAttribute("width");
+      return d.textWidth + 10;
     });
 
   $('.node').css({
@@ -746,7 +731,8 @@ var text = node.append("text")
     try {
       node.attr('x', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        return d.x = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
+        var textWidth = this.getBBox().width;
+        return d.x = Math.max(BOUNDARY_MARGIN, Math.min(width - textWidth - BOUNDARY_MARGIN -
             (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                 selfReferringEdge.strokeWidth + 2 : 0), d.x));
       }).attr('y', function (d) {
