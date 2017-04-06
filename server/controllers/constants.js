@@ -13,36 +13,40 @@ module.exports = {
       errorDescription: "GRNsight has detected that one or more edges in your network are missing numerical weight" +
       " values. Because the algorithm GRNsight uses for determining the arrowhead type and the color and thickness of" +
       " the edges requires numerical weight values, your graph will display as an unweighted graph with black edges" +
-      "and pointed arrowheads. If you want to display the network as a weighted graph, please modify your input file" +
-      "to include weight values for all edges."
+      " and pointed arrowheads. If you want to display the network as a weighted graph, please modify your input file" +
+      " to include weight values for all edges."
     },
 
     EDGE_DEFAULT_NOT_DIRECTED: {
       warningCode: "EDGE_DEFAULT_NOT_DIRECTED",
       errorDescription: "GRNsight interprets the graph as directed unconditionally."
+    },
+
+    SIF_FORMAT_WARNING: {
+      warningCode: "SIF_FORMAT_WARNING",
+      errorDescription: " GRNsight has detected that there are no tabs in your file. The GRNsight specification for " +
+      " SIF files states that data must be delimited by tabs. Please review your data. This warning may suggest that " +
+      " your SIF file has comma separated data or contains no data at all. Additionally, valid networks which consist" +
+      "of single source nodes may also trigger this warning."
     }
   },
 
   errors: {
-    SIF_FORMAT_ERRROR: {
-      errorCode: "SIF_FORMAT_ERRROR",
-      possibleCause: "No tabs are detected in the SIF input file",
-      suggestedFix: "SIF files accepted by GRNsight must delimit data using tabs. Please review the SIF input standards" +
-      "that are outlined in the documentation."
-    },
 
-    SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERRROR: {
-      errorCode: "SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERRROR",
+    SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR: {
+      errorCode: "SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR",
       possibleCause: "The SIF importer detects an unweighted network with an unsupported relationship type.",
-      suggestedFix: "SIF files accepted by GRNsight must use 'pd' as the text string for the relationship type in unweighted networks." +
-      " Please review the SIF input documentation."
+      suggestedFix: "SIF files accepted by GRNsight must use 'pd' as the text string for the relationship type in" +
+      " unweighted networks. Please review the SIF input documentation. Additionally, this error may be have been" +
+      " caused by missing data in your file, which caused the importer to incorrectly interpret a source or target" +
+      " as the relationship."
     },
 
     SIF_MISSING_DATA_ERROR: {
       errorCode: "SIF_MISSING_DATA_ERROR",
       possibleCause: "GRNsight has detected that your SIF file contains missing data. ",
-      suggestedFix: "Please review the data. Each row must have a source, relationship, and at least one target, " +
-      "separated by tabs. Self referential loops are allowed, and are represented by a row with a single gene."
+      suggestedFix: "Please review the data. In a SIF file, each entry must have a source node, relationship type, and" +
+      " at least one target node, separated by tabs. An entry with a single source node is also allowed."
     },
 
     SIF_STRAY_DATA_ERROR: {

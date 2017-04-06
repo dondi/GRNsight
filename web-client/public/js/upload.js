@@ -150,6 +150,7 @@ $(function () {
     if (!err.errors) { // will be falsy if an error was thrown before the network was generated
       errorString += err;
     } else {
+      console.log(err.errors);
       errorString = err.errors.reduce(function (currentErrorString, currentError) {
         return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
       }, errorString);
@@ -260,9 +261,13 @@ $(function () {
     var warningsString = "";
     //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
 
-    // var NUM_POSSIBLE_WARNINGS = 8;
-    // var printed = [];
-    var printed = [0,0,0,0,0,0,0,0,0];
+    var NUM_POSSIBLE_WARNINGS = 9;
+
+    // Fill printed with 0s programatically
+    var printed = [];
+    for (var i = 0; i < NUM_POSSIBLE_WARNINGS; i++) {
+      printed.push(0);
+    }
 
     var missingSourceCount = warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
     var missingTargetCount = warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
@@ -273,19 +278,24 @@ $(function () {
     var extraneousDataCount = warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
     var edgesWithoutWeightsCount = warnings.filter(function(x){return x.warningCode=="EDGES_WITHOUT_WEIGHTS"});
     var edgeDefaultNotDirectedCount = warnings.filter(function(x){return x.warningCode=="EDGE_DEFAULT_NOT_DIRECTED"});
+    var sifFormatWarningCount = warnings.filter(function(x){return x.warningCode=="SIF_FORMAT_WARNING"});
 
     function createWarningsString(warningCount, index) {
       for (var i = 0; i < warningCount.length; i++) {
         if (warningCount.length <= 3) {
-            warningsString += warningCount[i].errorDescription + "<br><br>";
+          appendWarning(warningCount[i]);
         } else if (printed[index] < 3){
-            warningsString += warningCount[i].errorDescription + "<br><br>";
-            printed[index]++;
+          appendWarning(warningCount[i]);
+          printed[index]++;
         } else if (printed[index] = 3) {
-            warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
-            break;
+          warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
+          break;
         }
       }
+    }
+
+    function appendWarning(warning) {
+      warningsString += warning.errorDescription + "<br><br>";
     }
 
     createWarningsString(missingSourceCount,0);
@@ -297,6 +307,7 @@ $(function () {
     createWarningsString(extraneousDataCount,6);
     createWarningsString(edgesWithoutWeightsCount,7);
     createWarningsString(edgeDefaultNotDirectedCount,8);
+    createWarningsString(sifFormatWarningCount, 9);
 
     $("#warningsList").html(warningsString);
 

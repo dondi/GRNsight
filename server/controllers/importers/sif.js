@@ -11,16 +11,27 @@ module.exports = function (sif) {
   var warnings = [];
   var errors = [];
 
+  // Empty SIF files must return a network, thus must contain some data.
   if (!sif) {
     sif = " ";
   }
 
   // Replace any carriage return characters with new lines.
-  sif = sif.replace(/\r/g, "\n");
+  sif = sif.replace(/\r\n/g, "\n");
 
-  // sif files must not contain two or more consecutive tabs in a row not followed by a newline, this is how we are checking for stray data
+  // Stray data detected when there are 2 or more consecutive tabs NOT followed by a newline in the SIF file.
   if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g)) {
       errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
+  }
+
+  // Stray data detected when there are 2 or more consecutive new lines
+  if (sif.match(/[\n]{2,}/g)) {
+      errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
+  }
+
+  // Detects SIF file containing no tabs. Warning triggered advising users of possible consequences.
+  if (!sif.match(/[\t]+/g)) {
+    errors.push(constants.warnings.SIF_FORMAT_WARNING);
   }
 
   var isNumber = function (relationship) {
@@ -36,7 +47,7 @@ module.exports = function (sif) {
       if (entry.length > TARGET) {
         if (!isNumber(entry[RELATIONSHIP])) {
           if (entry[RELATIONSHIP] !== "pd") {
-            errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERRROR);
+            errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
           }
         }
         relationships.push(entry[RELATIONSHIP]);
@@ -91,16 +102,13 @@ module.exports = function (sif) {
           genes.push(target);
           targetIndex = genes.indexOf(target);
         }
-
         var link = {
           source: sourceIndex,
           target: targetIndex
         };
-
         if (networkType.sheetType === constants.WEIGHTED) {
           link.value = +entry[RELATIONSHIP];
         }
-
         links.push(link);
       });
     }
