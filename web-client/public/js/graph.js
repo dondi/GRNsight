@@ -43,31 +43,53 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   //normalization all weights b/w 2-14
-  var totalScale = d3.scale.linear()
+  /*var totalScale = d3.scale.linear()
         .domain(d3.extent(allWeights))
-        .range([2, 14]),
+        .range([2, 14])
 
-      normalizedScale = d3.scale.linear()
+  var normalizedScale = d3.scale.linear()
         .domain(d3.extent(allWeights)),
 
-      unweighted = false;
+      unweighted = false;*/
 
   //if unweighted, weight is 2
   if (sheetType === 'unweighted') {
-    totalScale = d3.scale.quantile()
-      .domain(d3.extent(allWeights))
-      .range(["2"]);
+    var totalScale = d3.scale.quantile()
+        .domain(d3.extent(allWeights))
+        .range(["2"]),
 
-    normalizedScale = normalizedScale.range(["2"]);
+        normalizedScale = d3.scale.linear()
+        .domain(d3.extent(allWeights))
+        .range(["2"]);
+
     unweighted = true;
     $(".normalization-form").append("placeholder='unweighted'");
   } else if (sheetType === 'weighted') {
-    $(".normalization-form").append("placeholder='weighted'");
+    var totalScale = d3.scale.linear()
+        .domain(d3.extent(allWeights))
+        .range([2, 14])
+
+        normalizedScale = d3.scale.linear()
+        .domain(d3.extent(allWeights))
+
+      unweighted = false;
+    document.getElementById("normalization-min").setAttribute("placeholder", "min is " + d3.min(allWeights));
+    document.getElementById("normalization-max").setAttribute("placeholder", "max is " + d3.max(allWeights));
+    $("#normalization-button").click(function(){
+      var normMin = $("#normalization-min").val()
+      var normMax = $("#normalization-max").val()
+      if (normMax != 0 && normMin >= 0) {
+        totalScale.domain([normMin, normMax])
+        normalizedScale.domain([normMin, normMax]);
+        console.log("you're here");
+      }
+    });
   }
 
   var getEdgeThickness = function (edge) {
-        return Math.round(totalScale(Math.abs(edge.value)));
-      };
+      return Math.round(totalScale(Math.abs(edge.value)));
+      console.log(totalScale);
+  };
 
   var force = d3.layout.force()
       .size([width, height])
