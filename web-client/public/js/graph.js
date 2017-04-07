@@ -699,13 +699,13 @@ var text = node.append("text")
     .attr("dx", function (d) {
       var textWidth = this.getBBox().width;
       d.textWidth = textWidth;
-      return textWidth / 2 + 5;
+      return textWidth / 2 + 3;
     })
     .on("dblclick", nodeTextDblclick);
 
   rect
     .attr("width", function(d) {
-      return d.textWidth + 10;
+      return d.textWidth + 6;
     });
 
   $('.node').css({
