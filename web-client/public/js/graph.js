@@ -18,7 +18,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
-    return node.name.length * 15;
+    return node.name.length * 12 + 5;
   };
 
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
@@ -216,6 +216,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     svg.transition().call(zoom.event);
   }
 
+
   function scale(amount) {
     zoom.scale(amount);
     svg.transition().call(zoom.event);
@@ -223,9 +224,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var defs = svg.append("defs");
 
+
   var link = svg.selectAll(".link"),
       node = svg.selectAll(".node"),
       weight = svg.selectAll(".weight");
+
 
   force.nodes(nodes)
        .links(links)
@@ -676,8 +679,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     dblclick.call(this.parentNode, d);
   };
 
-  node.append("rect")
-     .attr("width", function() {
+  var rect = node.append("rect")
+     .attr("width", function(d) {
        return this.parentNode.getAttribute("width");
      })
      .attr("height", function() {
@@ -686,17 +689,30 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
      .attr("stroke-width", "2px")
      .on("dblclick", dblclick);
 
-  node.append("text")
-    .attr("dx", function (d) {
-      return getNodeWidth(d) / 2;
-    })
+var text = node.append("text")
     .attr("dy", 22)
     .attr("text-anchor", "middle")
     .style("font-size", "18px")
     .style("stroke-width", "0")
     .style("fill", "black")
     .text(function(d) {return d.name;})
+    .attr("dx", function (d) {
+      var textWidth = this.getBBox().width;
+      d.textWidth = textWidth;
+      return textWidth / 2 + 3;
+    })
     .on("dblclick", nodeTextDblclick);
+
+  rect
+    .attr("width", function(d) {
+      return d.textWidth + 6;
+    });
+
+  node
+    .attr("width", function(d) {
+      return d.textWidth;
+    });
+
 
   $('.node').css({
     'cursor': 'move',
@@ -803,9 +819,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     try {
       node.attr('x', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
+
         var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
               selfReferringEdge.strokeWidth + 2 : 0)
-        var rightBoundary = width - getNodeWidth(d) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+        var rightBoundary = width - d.textWidth - BOUNDARY_MARGIN - selfReferringEdgeWidth;
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
         if (adaptive && width < MAX_WIDTH &&
              (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
@@ -856,7 +873,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           // Self edge.
           if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-            x1 = d.source.x + getNodeWidth(d.source);
+            x1 = d.source.x + (d.source.textWidth);
             y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -873,7 +890,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-            x2 = d.source.x + getNodeWidth(d.source) / 1.2;
+            x2 = d.source.x + d.source.textWidth / 1.2;
             y2 = d.source.y + nodeHeight;
 
             if (d.value < 0 && colorOptimal) {
