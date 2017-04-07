@@ -708,6 +708,12 @@ var text = node.append("text")
       return d.textWidth + 6;
     });
 
+  node
+    .attr("width", function(d) {
+      return d.textWidth;
+    });
+
+
   $('.node').css({
     'cursor': 'move',
     'fill': 'white',
@@ -816,7 +822,7 @@ var text = node.append("text")
 
         var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
               selfReferringEdge.strokeWidth + 2 : 0)
-        var rightBoundary = width - getNodeWidth(d) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+        var rightBoundary = width - d.textWidth - BOUNDARY_MARGIN - selfReferringEdgeWidth;
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
         if (adaptive && width < MAX_WIDTH &&
              (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
@@ -867,7 +873,7 @@ var text = node.append("text")
           // Self edge.
           if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-            x1 = d.source.x + getNodeWidth(d.source);
+            x1 = d.source.x + (d.source.textWidth);
             y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -884,7 +890,7 @@ var text = node.append("text")
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-            x2 = d.source.x + getNodeWidth(d.source) / 1.2;
+            x2 = d.source.x + d.source.textWidth / 1.2;
             y2 = d.source.y + nodeHeight;
 
             if (d.value < 0 && colorOptimal) {
