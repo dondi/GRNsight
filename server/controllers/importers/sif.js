@@ -81,14 +81,14 @@ module.exports = function (sif) {
   });
 
   var networkType = sifNetworkType(entries);
-  if (networkType.warnings !== null) {
+  if (networkType.warnings) {
     warnings.push(networkType.warnings);
   }
 
-  if (networkType.errors != null) {
-    for (i = 0; i < networkType.errors.length; i++) {
-      errors.push(networkType.errors[i]);
-    }
+  if (networkType.errors) {
+    networkType.errors.forEach(function (error) {
+      errors.push(error);
+    });
   }
 
   var links = [];

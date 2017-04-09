@@ -71,17 +71,17 @@ $(function () {
   $("#upload-sif").on("click", function (event) {
     $("#launchFileOpen").off("click").on("click", function () {
       $("#upload-sif").click();
-    })
+    });
   });
   $("#upload-graphml").on("click", function (event) {
     $("#launchFileOpen").off("click").on("click", function () {
       $("#upload-graphml").click();
-    })
+    });
   });
   $("#upload").on("click", function (event) {
     $("#launchFileOpen").off("click").on("click", function () {
       $("#upload").click();
-    })
+    });
   });
 
   $("#printGraph").on("click", function () {
@@ -269,16 +269,16 @@ $(function () {
       printed.push(0);
     }
 
-    var missingSourceCount = warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
-    var missingTargetCount = warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
-    var invalidDataCount = warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
-    var randomDataCount = warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
-    var emptyRowCount = warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
-    var invalidNetworkSizeCount = warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
-    var extraneousDataCount = warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
-    var edgesWithoutWeightsCount = warnings.filter(function(x){return x.warningCode=="EDGES_WITHOUT_WEIGHTS"});
-    var edgeDefaultNotDirectedCount = warnings.filter(function(x){return x.warningCode=="EDGE_DEFAULT_NOT_DIRECTED"});
-    var sifFormatWarningCount = warnings.filter(function(x){return x.warningCode=="SIF_FORMAT_WARNING"});
+    var missingSourceCount = warnings.filter(function (x) { return x.warningCode === "MISSING_SOURCE"; });
+    var missingTargetCount = warnings.filter(function (x) { return x.warningCode === "MISSING_TARGET"; });
+    var invalidDataCount = warnings.filter(function (x) { return x.warningCode === "INVALID_DATA"; });
+    var randomDataCount = warnings.filter(function (x) { return x.warningCode === "RANDOM_DATA"; });
+    var emptyRowCount = warnings.filter(function (x) { return x.warningCode === "EMPTY_ROW"; });
+    var invalidNetworkSizeCount = warnings.filter(function (x) { return x.warningCode === "INVALID_NETWORK_SIZE"; });
+    var extraneousDataCount = warnings.filter(function (x) { return x.warningCode === "EXTRANEOUS_DATA"; });
+    var edgesWithoutWeightsCount = warnings.filter(function (x) { return x.warningCode === "EDGES_WITHOUT_WEIGHTS"; });
+    var edgeDefaultNotDirectedCount = warnings.filter(function (x) { return x.warningCode === "EDGE_DEFAULT_NOT_DIRECTED"; });
+    var sifFormatWarningCount = warnings.filter(function (x) { return x.warningCode === "SIF_FORMAT_WARNING"; });
 
     function createWarningsString(warningCount, index) {
       for (var i = 0; i < warningCount.length; i++) {
@@ -287,7 +287,7 @@ $(function () {
         } else if (printed[index] < 3){
           appendWarning(warningCount[i]);
           printed[index]++;
-        } else if (printed[index] = 3) {
+        } else if (printed[index] === 3) {
           warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
           break;
         }
@@ -323,7 +323,7 @@ $(function () {
     }
 
     $("#warningsModal").modal("show");
-  }
+  };
 
   $("#warningsModal").on("hidden.bs.modal", function () {
     if ($("#warningsInfo").hasClass("in")) {
@@ -336,13 +336,13 @@ $(function () {
       placement: "top",
       delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
     });
-  };
+  }
 
   function initializeDemoFile (demoId, demoPath, demoName) {
     $(demoId).on("click", function (event) {
       loadDemo(demoPath, demoName);
     });
-  };
+  }
 
   var loadDemo = function(url) {
     loadGrn(url);
@@ -359,9 +359,9 @@ $(function () {
     this.setupSettingsHandlers = function () {
       $(COLOR_PREFERENCES_CLASS).on("click", function () {
         $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
-        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible")
-      })
-    }
+        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible");
+      });
+    };
   }
 
   $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function() {

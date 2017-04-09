@@ -40,11 +40,11 @@ module.exports = function (app) {
     };
 
     app.post("/upload-sif", function (req, res) {
-      performUpload(req, res, "sif", sifToGrnsight)
+      performUpload(req, res, "sif", sifToGrnsight);
     });
 
     app.post("/upload-graphml", function (req, res) {
-      performUpload(req, res, "graphml", graphMlToGrnsight)
+      performUpload(req, res, "graphml", graphMlToGrnsight);
     });
   }
 
@@ -52,4 +52,4 @@ module.exports = function (app) {
     sifToGrnsight: sifToGrnsight,
     graphMlToGrnsight: graphMlToGrnsight
   };
-}
+};

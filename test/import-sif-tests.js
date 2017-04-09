@@ -401,7 +401,7 @@ describe ("Import from SIF syntactic checker", function () {
       expect(
         importController.sifToGrnsight(unweightedTestSifWithStrayDataAtBottom).errors[0].errorCode
       ).to.equal("SIF_STRAY_DATA_ERROR");
-    })
+    });
 
     it ("should accept trivially tabbed networks", function () {
         expect(
