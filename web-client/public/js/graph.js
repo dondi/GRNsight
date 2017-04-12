@@ -401,8 +401,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 // Individual offsets for each possible stroke width
                 return ((x1 === x2 && y1 === y2) ?
                   {
-                    2: 11.75, 3: 11, 4: 9.75, 5: 11,  6: 8.5, 7: 10,
-                    8: 10, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                    2: 11.75, 3: 7, 4: 8, 5: 9, 6: 8, 7: 7,
+                    8: 7, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
                     14: 8.3
                   } : {
                     2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
