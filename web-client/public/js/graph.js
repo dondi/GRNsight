@@ -392,6 +392,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
           } else {
             // Arrowheads
+            if(d.strokeWidth === 2) d.strokeWidth = 4;
             defs.append("marker")
               .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
               .attr("viewBox", "0 0 15 15")
@@ -712,7 +713,6 @@ var text = node.append("text")
     .attr("width", function(d) {
       return d.textWidth;
     });
-
 
   $('.node').css({
     'cursor': 'move',
