@@ -699,8 +699,8 @@ var text = node.append("text")
     .text(function(d) {return d.name;})
     .attr("dx", function (d) {
       var textWidth = this.getBBox().width;
-      d.textWidth = textWidth;
-      return textWidth / 2 + 3;
+      d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
+      return d.textWidth / 2 + 3;
     })
     .on("dblclick", nodeTextDblclick);
 
