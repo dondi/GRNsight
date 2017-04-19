@@ -32,18 +32,19 @@ module.exports = function (app) {
             throw error;
           } else {
             helpers.attachFileHeaders(res, input);
-            return res.json(200, importer(data));
+            var network = importer(data);
+            return res.json((network.errors.length === 0) ? 200 : 400, network);
           }
         });
       });
     };
 
     app.post("/upload-sif", function (req, res) {
-      performUpload(req, res, "sif", sifToGrnsight)
+      performUpload(req, res, "sif", sifToGrnsight);
     });
 
     app.post("/upload-graphml", function (req, res) {
-      performUpload(req, res, "graphml", graphMlToGrnsight)
+      performUpload(req, res, "graphml", graphMlToGrnsight);
     });
   }
 
@@ -51,4 +52,4 @@ module.exports = function (app) {
     sifToGrnsight: sifToGrnsight,
     graphMlToGrnsight: graphMlToGrnsight
   };
-}
+};
