@@ -24,7 +24,7 @@ body {
     height: 840px;
   }
 }
-@media (min-width: 2300px) {
+@media (min-width: 2200px) {
   .containerDefault {
     width: 1920px;
     height: 1080px;

@@ -7,7 +7,7 @@ $(function () {
   if (pageWidth < 1500) {
       $('#boundBoxS').prop('checked', true);
       $(".containerDefault").attr("class", "grnsight-container containerS");
-  } else if (pageWidth > 1500 && pageWidth < 2300) {
+  } else if (pageWidth > 1500 && pageWidth < 2200) {
       $('#boundBoxM').prop('checked', true);
       $(".containerDefault").attr("class", "grnsight-container containerM");
   } else {
