@@ -67,6 +67,23 @@ $(function () {
   var settings = new settingsController();
   settings.setupSettingsHandlers();
 
+  // TODO: Make this less bad
+  $("#upload-sif").on("click", function (event) {
+    $("#launchFileOpen").off("click").on("click", function () {
+      $("#upload-sif").click();
+    });
+  });
+  $("#upload-graphml").on("click", function (event) {
+    $("#launchFileOpen").off("click").on("click", function () {
+      $("#upload-graphml").click();
+    });
+  });
+  $("#upload").on("click", function (event) {
+    $("#launchFileOpen").off("click").on("click", function () {
+      $("#upload").click();
+    });
+  });
+
   $("#printGraph").on("click", function () {
     if(!$(".startDisabled").hasClass("disabled")) {
       window.print();
@@ -126,6 +143,23 @@ $(function () {
     });
   };
 
+  var networkErrorDisplayer = function (xhr, status, error) {
+    var err = JSON.parse(xhr.responseText);
+    var errorString = "Your graph failed to load.<br><br>";
+
+    if (!err.errors) { // will be falsy if an error was thrown before the network was generated
+      errorString += err;
+    } else {
+      console.log(err.errors);
+      errorString = err.errors.reduce(function (currentErrorString, currentError) {
+        return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
+      }, errorString);
+    }
+
+    $("#error").html(errorString);
+    $("#errorModal").modal("show");
+  };
+
   /*
    * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
    * for helping to resolve this.
@@ -150,21 +184,7 @@ $(function () {
         loadGrn(url, name, formData);
       };
       //displayStatistics(network);
-    }).error(function (xhr, status, error) {
-      var err = JSON.parse(xhr.responseText);
-      var errorString = "Your graph failed to load.<br><br>";
-
-      if (!err.errors) { // will be falsy if an error was thrown before the network was generated
-        errorString += err;
-      } else {
-        errorString = err.errors.reduce(function (currentErrorString, currentError) {
-          return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
-        }, errorString);
-      }
-
-      $("#error").html(errorString);
-      $("#errorModal").modal("show");
-    });
+    }).error(networkErrorDisplayer);
   };
 
   // TODO Some opportunity for unification with loadGrn?
@@ -183,10 +203,7 @@ $(function () {
       reloader = function () {
         importGrn(uploadRoute, filename, formData);
       };
-    }).error(function (xhr, status, error) {
-      $("#importErrorMessage").text(xhr.responseText);
-      $("#importErrorModal").modal("show");
-    });
+    }).error(networkErrorDisplayer);
   };
 
   var submittedFilename = function ($upload) {
@@ -242,29 +259,43 @@ $(function () {
 
     var MAX_DUPLICATES = 3;
     var warningsString = "";
-  //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
-    var printed = [0,0,0,0,0,0,0];
+    //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
 
-    var missingSourceCount = warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
-    var missingTargetCount = warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
-    var invalidDataCount = warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
-    var randomDataCount = warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
-    var emptyRowCount = warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
-    var invalidNetworkSizeCount = warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
-    var extraneousDataCount = warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
+    var NUM_POSSIBLE_WARNINGS = 9;
+
+    // Fill printed with 0s programatically
+    var printed = [];
+    for (var i = 0; i < NUM_POSSIBLE_WARNINGS; i++) {
+      printed.push(0);
+    }
+
+    var missingSourceCount = warnings.filter(function (x) { return x.warningCode === "MISSING_SOURCE"; });
+    var missingTargetCount = warnings.filter(function (x) { return x.warningCode === "MISSING_TARGET"; });
+    var invalidDataCount = warnings.filter(function (x) { return x.warningCode === "INVALID_DATA"; });
+    var randomDataCount = warnings.filter(function (x) { return x.warningCode === "RANDOM_DATA"; });
+    var emptyRowCount = warnings.filter(function (x) { return x.warningCode === "EMPTY_ROW"; });
+    var invalidNetworkSizeCount = warnings.filter(function (x) { return x.warningCode === "INVALID_NETWORK_SIZE"; });
+    var extraneousDataCount = warnings.filter(function (x) { return x.warningCode === "EXTRANEOUS_DATA"; });
+    var edgesWithoutWeightsCount = warnings.filter(function (x) { return x.warningCode === "EDGES_WITHOUT_WEIGHTS"; });
+    var edgeDefaultNotDirectedCount = warnings.filter(function (x) { return x.warningCode === "EDGE_DEFAULT_NOT_DIRECTED"; });
+    var sifFormatWarningCount = warnings.filter(function (x) { return x.warningCode === "SIF_FORMAT_WARNING"; });
 
     function createWarningsString(warningCount, index) {
       for (var i = 0; i < warningCount.length; i++) {
         if (warningCount.length <= 3) {
-            warningsString += warningCount[i].errorDescription + "<br><br>";
+          appendWarning(warningCount[i]);
         } else if (printed[index] < 3){
-            warningsString += warningCount[i].errorDescription + "<br><br>";
-            printed[index]++;
-        } else if (printed[index] = 3) {
-            warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
-            break;
+          appendWarning(warningCount[i]);
+          printed[index]++;
+        } else if (printed[index] === 3) {
+          warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
+          break;
         }
       }
+    }
+
+    function appendWarning(warning) {
+      warningsString += warning.errorDescription + "<br><br>";
     }
 
     createWarningsString(missingSourceCount,0);
@@ -274,6 +305,9 @@ $(function () {
     createWarningsString(emptyRowCount,4);
     createWarningsString(invalidNetworkSizeCount,5);
     createWarningsString(extraneousDataCount,6);
+    createWarningsString(edgesWithoutWeightsCount,7);
+    createWarningsString(edgeDefaultNotDirectedCount,8);
+    createWarningsString(sifFormatWarningCount, 9);
 
     $("#warningsList").html(warningsString);
 
@@ -289,7 +323,7 @@ $(function () {
     }
 
     $("#warningsModal").modal("show");
-  }
+  };
 
   $("#warningsModal").on("hidden.bs.modal", function () {
     if ($("#warningsInfo").hasClass("in")) {
@@ -302,13 +336,13 @@ $(function () {
       placement: "top",
       delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
     });
-  };
+  }
 
   function initializeDemoFile (demoId, demoPath, demoName) {
     $(demoId).on("click", function (event) {
       loadDemo(demoPath, demoName);
     });
-  };
+  }
 
   var loadDemo = function(url) {
     loadGrn(url);
@@ -325,9 +359,9 @@ $(function () {
     this.setupSettingsHandlers = function () {
       $(COLOR_PREFERENCES_CLASS).on("click", function () {
         $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
-        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible")
-      })
-    }
+        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible");
+      });
+    };
   }
 
   $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function() {
