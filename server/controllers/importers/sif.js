@@ -77,7 +77,9 @@ module.exports = function (sif) {
   var links = [];
   var networkType = "unweighted";
 
-  if (entries.includes(null)) {
+  var nullEntries = entries.filter(function (entry) { return entry === null; });
+
+  if (nullEntries.length > 0) {
     errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
   } else {
     entries.forEach(function (entry) {

@@ -392,15 +392,6 @@ var errorList = {
     "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
   },
 
-  unknownFileError: {
-    errorCode: "unknownFileError",
-    possibleCause: "An unexpected error occured originating in the file.",
-    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-    "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-    "further errors detected. As a general approach for fixing the errors, consider copying and " +
-    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-  },
-
   unknownError: {
     errorCode: "UNKNOWN_ERROR",
     possibleCause: "An unexpected error occurred.",
