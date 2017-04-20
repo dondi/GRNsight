@@ -133,6 +133,7 @@ var parseSheet = function(sheet) {
           } else { // If we're within the matrix and lookin' at the data...
             try {
               if (currentSheet.data[row][column] === undefined) {
+                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
@@ -167,8 +168,8 @@ var parseSheet = function(sheet) {
               }
 
             } catch (err) {
-              // TO DO: Customize this error message to the specific issue that occurred.
               addError(network, errorList.missingValueError(row, column));
+              // SHOULD BE: addError(network, errorList.unknownFileError);
               return network;
             };
           };
@@ -385,6 +386,15 @@ var errorList = {
   errorsCountError: {
     errorCode: "ERRORS_OVERLOAD",
     possibleCause: "This network has over 20 errors.",
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+    "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+    "further errors detected. As a general approach for fixing the errors, consider copying and " +
+    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+  },
+
+  unknownFileError: {
+    errorCode: "unknownFileError",
+    possibleCause: "An unexpected error occured originating in the file.",
     suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
     "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
     "further errors detected. As a general approach for fixing the errors, consider copying and " +
