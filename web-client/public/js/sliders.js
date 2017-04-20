@@ -14,15 +14,25 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
   this.valueId = valueId;
   this.defaultVal = defaultVal;
   this.currentVal = defaultVal;
-  this.backup = defaultVal;  
+  this.backup = defaultVal;
   this.needsAppendedZeros = needsAppendedZeros;
 
   this.activate = function () {
     $(this.sliderId).on("input", {slider: this}, function (event) {
-      $(event.data.slider.valueId).html($(this).val() + ((event.data.slider.needsAppendedZeros && ($(this).val().length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
-      event.data.slider.currentVal = $(this).val();
+      updateSliderDisplayedValue(event.data.slider, this);
     });
   };
+
+  this.setCurrentVal = function (newVal) {
+    this.currentVal = newVal;
+  }
+
+};
+
+var updateSliderDisplayedValue = function (slider, element) {
+  var value = $("#" + $(element).attr("id")).val();
+  $(slider.valueId).html(value + ((slider.needsAppendedZeros && (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+  slider.setCurrentVal(value);
 };
 
 var sliderGroupController = function (sliderArray) {
@@ -89,7 +99,7 @@ var sliderGroupController = function (sliderArray) {
     $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
     $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
     $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
-    
+
     $.each(this.sliders, function (key, value) {
       $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
     })
@@ -105,6 +115,7 @@ var sliderGroupController = function (sliderArray) {
       $(this.sliders[i].sliderId).on("input", {handler: this, slider: this.sliders[i], force: this.forceParameters[i]}, function (event) {
         event.data.force($(this).val());
         event.data.handler.restartForce(event.data.slider.needsAppendedZeros);
+        updateSliderDisplayedValue(event.data.slider, this);
       });
     };
     $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
@@ -136,4 +147,4 @@ var sliderGroupController = function (sliderArray) {
       this.restartForce(this.sliders[i].needsAppendedZeros);
     }
   }
-}; 
+};
