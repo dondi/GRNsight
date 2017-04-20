@@ -51,7 +51,7 @@ module.exports = {
 
     SIF_STRAY_DATA_ERROR: {
       errorCode: "SIF_STRAY_DATA_ERROR",
-      possibleCause: "GRNsight has detected stray data in your SIF file. ",
+      possibleCause: "GRNsight has detected stray data and/or extraneous blank rows in your SIF file. ",
       suggestedFix: "Please review the data and delete extraneous data from the file."
     }
   }
