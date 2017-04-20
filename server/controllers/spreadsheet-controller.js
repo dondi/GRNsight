@@ -133,6 +133,7 @@ var parseSheet = function(sheet) {
           } else { // If we're within the matrix and lookin' at the data...
             try {
               if (currentSheet.data[row][column] === undefined) {
+                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
@@ -167,8 +168,8 @@ var parseSheet = function(sheet) {
               }
 
             } catch (err) {
-              // TO DO: Customize this error message to the specific issue that occurred.
               addError(network, errorList.missingValueError(row, column));
+              // SHOULD BE: addError(network, errorList.unknownFileError);
               return network;
             };
           };

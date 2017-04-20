@@ -74,45 +74,54 @@ module.exports = function (sif) {
   });
 
   var genes = [];
-  entries.forEach(function (entry) {
-    if (entry.length && entry[GENE_NAME] && genes.indexOf(entry[GENE_NAME]) == constants.NOT_FOUND) {
-      genes.push(entry[GENE_NAME]);
-    }
-  });
-
-  var networkType = sifNetworkType(entries);
-  if (networkType.warnings) {
-    warnings.push(networkType.warnings);
-  }
-
-  if (networkType.errors) {
-    networkType.errors.forEach(function (error) {
-      errors.push(error);
-    });
-  }
-
   var links = [];
-  entries.forEach(function (entry) {
-    if (entry.length > TARGET) {
-      var sourceIndex = genes.indexOf(entry[GENE_NAME]);
-      var targets = entry.slice(TARGET);
-      targets.forEach(function (target) {
-        var targetIndex = genes.indexOf(target);
-        if (targetIndex === constants.NOT_FOUND) {
-          genes.push(target);
-          targetIndex = genes.indexOf(target);
-        }
-        var link = {
-          source: sourceIndex,
-          target: targetIndex
-        };
-        if (networkType.sheetType === constants.WEIGHTED) {
-          link.value = +entry[RELATIONSHIP];
-        }
-        links.push(link);
+  var networkType = "unweighted";
+
+  var nullEntries = entries.filter(function (entry) { return entry === null; });
+
+  if (nullEntries.length > 0) {
+    errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
+  } else {
+    entries.forEach(function (entry) {
+      if (entry.length && entry[GENE_NAME] && genes.indexOf(entry[GENE_NAME]) == constants.NOT_FOUND) {
+        genes.push(entry[GENE_NAME]);
+      }
+    });
+
+    networkType = sifNetworkType(entries);
+    if (networkType.warnings) {
+      warnings.push(networkType.warnings);
+    }
+
+    if (networkType.errors) {
+      networkType.errors.forEach(function (error) {
+        errors.push(error);
       });
     }
-  });
+
+    entries.forEach(function (entry) {
+      if (entry.length > TARGET) {
+        var sourceIndex = genes.indexOf(entry[GENE_NAME]);
+        var targets = entry.slice(TARGET);
+        targets.forEach(function (target) {
+          var targetIndex = genes.indexOf(target);
+          if (targetIndex === constants.NOT_FOUND) {
+            genes.push(target);
+            targetIndex = genes.indexOf(target);
+          }
+          var link = {
+            source: sourceIndex,
+            target: targetIndex
+          };
+          if (networkType.sheetType === constants.WEIGHTED) {
+            link.value = +entry[RELATIONSHIP];
+          }
+          links.push(link);
+        });
+      }
+    });
+
+  }
 
   var network = {
     genes: genes.map(function (geneName) {
