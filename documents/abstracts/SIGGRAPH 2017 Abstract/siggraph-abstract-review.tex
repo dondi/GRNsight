@@ -116,16 +116,13 @@ GRNsight is a web application and service for visualizing models of small- to me
   \label{fig:ferrari}
 \end{figure}
 
-Maecenas pharetra libero ac sapien accumsan, iaculis suscipit ex fringilla. Etiam urna mauris, maximus at sapien sed, semper hendrerit libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. Phasellus felis velit, finibus at felis a, commodo mollis odio. Praesent efficitur lobortis quam, et volutpat erat dignissim eu. 
-
 \section{Materials and Methods}
 
 \subsection{Graph Customizations}
 GRNsight's diagrams are based on force graph layout algorithms in the D3.js visualization library \cite{d3}, which was then extensively customized to support the specific needs of biologists for GRN visualization. D3.js's baseline force graph implementation had round, unlabeled nodes and undirected, straight-line edges. The following customizations were made for the nodes: (a) the nodes were made rectangular; (b) a label of up to 12 characters was added; (c) node size was varied, depending on the size of the label.
 
 \subsection{User Interface}
-
-
+The GRNsight user interface includes a menu/status bar and sliders that adjust D3.js?s force graph layout parameters. Users can move force graph parameter sliders to refine the automated visualization. Nodes have a charge, which repels or attracts other nodes. The charge distance determines at what range a node?s charge will affect other nodes. The link distance determines the minimum distance maintained between nodes. Gravity determines the strength of the force drawing the nodes to the center of the graph. Sliders can be locked to prevent changes and also reset to default values. Graph visualizations can also be modified through manual node dragging. Design decisions for the user interface were driven by applicable interaction design guidelines and principles \cite{norman2013design,shneiderman2010designing,nielsen1994usability} in alignment with the mental model and expectations of the target user base, consisting primarily of biologists.
 
 \begin{figure}[h]
 %\includegraphics[height=1in, width=1in]{rosette}
@@ -136,14 +133,11 @@ been resized with the \texttt{includegraphics} command.}
 
 \section{Results and Discussion}
 
-
 \subsection{A Subsection}
 
-
-\subsection{Another Subsection}
-
 \section{Conclusion and Future Work}
-
+We have successfully implemented GRNsight, a web application and service for visualizing small- to medium-scale GRNs that is simple and intuitive to use. GRNsight accepts an input file, reading reading a weighted or unweighted representation of a GRN, and automatically lays out and displays unweighted and weighted network graphs in a way that is familiar to biologists. It has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. Thus, GRNsight inhabits a niche not satisfied by other software, doing ?one thing well.? 
+~future work here...~
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{siggraph-abstract-review} 
