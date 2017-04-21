@@ -35,6 +35,7 @@ var updateSliderDisplayedValue = function (slider, element) {
   slider.setCurrentVal(value);
 };
 
+
 var sliderGroupController = function (sliderArray) {
   this.sliders = sliderArray;
   this.numberOfSliders = sliderArray.length;
@@ -118,11 +119,25 @@ var sliderGroupController = function (sliderArray) {
         updateSliderDisplayedValue(event.data.slider, this);
       });
     };
+
     $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
       event.data.handler.resetForce();
     });
+
+    $(RESET_SLIDERS_MENU_OPTION).on("click", {handler: this}, function (event) {
+      event.data.handler.resetValues();
+      $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
+      $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
+    });
+
     $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
       event.data.handler.undoForceReset();
+    });
+
+    $(UNDO_SLIDER_RESET_MENU).on("click", {handler: this}, function(event) {
+      event.data.handler.undoReset();
+      $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
+      $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
     });
   }
 
