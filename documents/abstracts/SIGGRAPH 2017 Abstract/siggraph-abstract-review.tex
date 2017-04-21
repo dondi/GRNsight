@@ -58,7 +58,7 @@
 
 \begin{abstract}
 
-GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight imports data from an adjacency matrix in an Excel workbook, then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. GRNsight is best-suited for visualizing networks of fewer than 35 nodes and 70 edges, although it accepts networks of up to 75 nodes or 150 edges. GRNsight has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The GRNsight application (http://dondi.github.io/GRNsight/) and code (https://github.com/dondi/GRNsight) are available under the open source BSD license.
+GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs from an Excel spreadsheet containing an adjacency matrix where regulators are named in the columns and target genes in the rows, a Simple Interaction Format (SIF) text file, or a GraphML XML file. GRNsight represents genes as nodes and regulatory connections as edges with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. GRNsight is best-suited for visualizing networks of fewer than 35 nodes and 70 edges, although it accepts networks of up to 75 nodes or 150 edges. GRNsight has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The GRNsight application (http://dondi.github.io/GRNsight/) and code (https://github.com/dondi/GRNsight) are available under the open source BSD license.
 
 \end{abstract}
 
@@ -69,33 +69,21 @@ GRNsight is a web application and service for visualizing small- to medium-scale
 %
 \begin{CCSXML}
 <ccs2012>
- <concept>
-  <concept_id>10010520.10010553.10010562</concept_id>
-  <concept_desc>Computer systems organization~Embedded systems</concept_desc>
-  <concept_significance>500</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010520.10010575.10010755</concept_id>
-  <concept_desc>Computer systems organization~Redundancy</concept_desc>
-  <concept_significance>300</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010520.10010553.10010554</concept_id>
-  <concept_desc>Computer systems organization~Robotics</concept_desc>
-  <concept_significance>100</concept_significance>
- </concept>
- <concept>
-  <concept_id>10003033.10003083.10003095</concept_id>
-  <concept_desc>Networks~Network reliability</concept_desc>
-  <concept_significance>100</concept_significance>
- </concept>
-</ccs2012>  
+<concept>
+<concept_id>10003120.10003145.10003147.10010364</concept_id>
+<concept_desc>Human-centered computing~Scientific visualization</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003120.10003145.10003151.10011771</concept_id>
+<concept_desc>Human-centered computing~Visualization toolkits</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
 \end{CCSXML}
 
 \ccsdesc[500]{Human-centered computing~Scientific visualization}
-\ccsdesc[300]{Computer systems organization~Redundancy}
-\ccsdesc{Computer systems organization~Robotics}
-\ccsdesc[100]{Networks~Network reliability}
+\ccsdesc[500]{Human-centered computing~Visualization toolkits}
 
 % We no longer use \terms command
 %\terms{Theory}
@@ -103,7 +91,7 @@ GRNsight is a web application and service for visualizing small- to medium-scale
 \keywords{ACM proceedings, \LaTeX, text tagging}
 
 \begin{teaserfigure}
-  \includegraphics[width=\textwidth]{sampleteaser}
+  %\includegraphics[width=\textwidth]{sampleteaser}
   \caption{This is a teaser image.}
   \label{fig:teaser}
 \end{teaserfigure}
@@ -111,13 +99,20 @@ GRNsight is a web application and service for visualizing small- to medium-scale
 
 \maketitle
 
-\section{Introduction}
+\section{Introduction and Motivation}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit~\cite{Pellacini:2005:LAH}. Suspendisse eget lobortis orci~\cite{Boechat:2016:RSP:2980179.2980227}. Proin pharetra ac nibh sed feugiat. Ut et est at mauris accumsan venenatis ut non quam. Maecenas vitae augue purus. Cras convallis vehicula molestie. Maecenas non vulputate diam, id mollis lorem. Nam consequat imperdiet lorem, a fermentum elit mollis vitae. Curabitur elit turpis, commodo quis vestibulum a, tristique eget felis. Nulla eu semper nulla~\cite{notes2002, Jobson95}. Sed nec libero eu tortor feugiat placerat a at ex. Sed quis venenatis orci. Proin sed nunc fringilla sapien tincidunt eleifend vel et elit. Sed mollis ante ornare arcu pharetra dignissim. Curabitur pretium viverra neque id facilisis. Nunc laoreet risus id ipsum ultrices tristique. Etiam sit amet euismod orci, eget tempus sapien.
+GRNsight is a web application and service for visualizing models of small- to medium-scale gene regulatory networks (GRNs). A gene regulatory network (GRN) consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. A review by Pavlopoulos et al. \cite{doi:10.1186/s13742-015-0077-2}, describes the types, trends, and usage of visualization tools available for genomics and systems biology. Their list of 47 tools for network analysis is representative of what was available to us at our project inception in January 2014 (given the caveat that the list itself is a moving target with some tools dropping out, new ones being added, and others evolving in their functions). With such a large number of tools available, it would be reasonable to expect that one already existed that could fulfill our needs. However, our use case was narrow, and the tools we investigated out of this diverse set each had properties that limited their use for us.
+
+Requirements of our tool:
+\begin{enumerate}
+\item Exist as a web application without the need to download and install specialized software;
+\item Be simple and intuitive to use;
+\item Automatically lay out and display small- to medium-scale, unweighted and weighted, directed network graphs in a way that is familiar to biologists and adds value to the interpretation of the modeling results.
+\end{enumerate}
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=3.0in]{ferrari_laferrari}
+  %\includegraphics[width=3.0in]{ferrari_laferrari}
   \caption{Ferrari LaFerrari. (Image courtesy Flickr user ``gfreeman23.'')}
   \label{fig:ferrari}
 \end{figure}
@@ -145,7 +140,7 @@ L_o(x, \omega_o, \lambda, t) = L_e(x, \omega_o, \lambda, t)  + \\
 (Yes, that's the Rendering Equation.)~\cite{Kajiya:1986:RE:15922.15902}. Aenean pharetra ipsum eu mi fermentum dictum. Maecenas vel dolor semper, efficitur elit eget, bibendum diam. Duis vitae varius nisl. Proin aliquet sapien enim, eu vehicula ipsum euismod ut. Curabitur quis luctus quam, at ultricies ligula. Etiam imperdiet efficitur ipsum eu feugiat. Maecenas quis laoreet eros. Morbi molestie ac dui ac vestibulum. Donec maximus ex at neque posuere, et blandit tellus iaculis.
 
 \begin{figure}[h]
-\includegraphics[height=1in, width=1in]{rosette}
+%\includegraphics[height=1in, width=1in]{rosette}
 \caption{A sample black and white graphic that has
 been resized with the \texttt{includegraphics} command.}
 \end{figure}
@@ -177,6 +172,6 @@ Curabitur ac feugiat odio, ut molestie sem. Vestibulum ultricies tellus nibh, a 
 Morbi sodales iaculis dolor id finibus. Cras bibendum odio nulla, eget sodales tortor posuere nec. Nulla eu massa odio. Phasellus fringilla massa nec augue maximus, vitae lacinia lectus sodales. Etiam nec placerat leo. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In hac habitasse platea dictumst. Sed at condimentum leo, id tincidunt velit. Etiam volutpat tempus aliquet. Praesent sollicitudin arcu et eleifend tincidunt. Quisque convallis, dui ac tristique auctor, dolor libero ultrices ligula, quis mollis diam diam in dolor. Nunc sed vehicula ligula, eget dignissim arcu.
 
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{template} 
+\bibliography{siggraph-abstract-review} 
 
 \end{document}
