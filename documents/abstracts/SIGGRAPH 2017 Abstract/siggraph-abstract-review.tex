@@ -2,6 +2,7 @@
 
 \usepackage{booktabs} % For formal tables
 \usepackage{subfigure}
+\usepackage{url}
 
 % Copyright
 \setcopyright{none}
@@ -59,7 +60,7 @@
 
 \begin{abstract}
 
-We present new features in v2 of GRNsight, a web application and service for interactive visualization of small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs from an Excel spreadsheet containing an adjacency matrix where regulators are named in the columns and target genes in the rows, a Simple Interaction Format (SIF) text file, or a GraphML XML file. GRNsight represents genes as nodes and regulatory connections as edges with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. GRNsight is best-suited for visualizing networks of fewer than 35 nodes and 70 edges, and has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The GRNsight application (http://dondi.github.io/GRNsight/) and code (https://github.com/dondi/GRNsight) are available under the open source BSD license.
+We present new features in v2 of GRNsight, a web application and service for interactive visualization of small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs from an Excel spreadsheet containing an adjacency matrix where regulators are named in the columns and target genes in the rows, a Simple Interaction Format (SIF) text file, or a GraphML XML file. GRNsight represents genes as nodes and regulatory connections as edges with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. GRNsight is best-suited for visualizing networks of fewer than 35 nodes and 70 edges, and has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The GRNsight application (\url{http://dondi.github.io/GRNsight/}) and code (\url{https://github.com/dondi/GRNsight}) are available under the open source BSD license.
 
 \end{abstract}
 
@@ -96,27 +97,27 @@ We present new features in v2 of GRNsight, a web application and service for int
     \subfigure[Screenshot of GRNsight]
     {
         \includegraphics[height=1.5in]{screenshot-auto.png}
-        \label{fig:first_sub}
+        \label{fig:full-screenshot}
     }
     \subfigure[Weighted graph after manual manipulation.]
     {
         \includegraphics[height=1.5in]{never-weights.png}
-        \label{fig:third_sub}
+        \label{fig:no-weights}
     }
     \subfigure[Weighted graph with edge weights displayed.]
     {
         \includegraphics[height=1.5in]{always-weights.png}	
-        \label{fig:third_sub}
+        \label{fig:with-weights}
     }
-    \caption{GRNsight's automatic graph layout of Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) in (a) is manipulated through manual node dragging and adjusting force graph parameters to produce the graphs in (b) and (c).}
-    \label{fig:sample_subfigures}
+    \caption{GRNsight's automatic graph layout of Demo \#4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) in (a) is manipulated through manual node dragging and adjusting force graph parameters to produce the graphs in (b) and (c).}
+    \label{fig:screenshots}
 \end{teaserfigure}
 
 \maketitle
 
 \section{Introduction and Motivation}
 
-GRNsight is a web application and service for the interactive visualization of small- to medium-scale gene regulatory networks (GRNs), optimized for use by novice and experienced biologists alike to quickly and easily view unweighted and weighted network graphs. Visual inspection has long been recognized as distinct from other forms of purely numeric, computational, or algorithmic data analysis \cite{mulrow2002visual, card1999readings}, and GRNsight enables the potential for insight derived specifically by visual inspection. The following are the requirements for GRNsight:
+GRNsight is a web application and service for the interactive visualization of small- to medium-scale gene regulatory networks (GRNs), optimized for use by novice and experienced biologists alike to quickly and easily view unweighted and weighted network graphs. Visual inspection has long been recognized as distinct from other forms of purely numeric, computational, or algorithmic data analysis \cite{Tufte:1986:VDQ:33404, card1999readings}, and GRNsight enables the potential for insight derived specifically by visual inspection. The following are the requirements for GRNsight:
 
 \begin{enumerate}
 \item Exist as a web application without the need to download and install specialized software;
@@ -124,7 +125,7 @@ GRNsight is a web application and service for the interactive visualization of s
 \item Automatically lay out and display small- to medium-scale, unweighted and weighted, directed network graphs in a way that is familiar to biologists and adds value to the interpretation of the modeling results.
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure}[ht]
    \centering
    \includegraphics[width=3in]{GRNsight-Architecture.pdf} 
    \caption{GRNsight architecture and component interactions.}
