@@ -196,16 +196,9 @@ GRNsight is a web application and service for the interactive visualization of s
 Since the release of GRNsight v1, further research, as well as feature requests from peer review have motivated the following improvements to GRNsight v2. We focus on features which have enhanced the visualization and display of the network graph GRNsight produces.
 
 \subsection{Separation of Viewport from Graph Bounding Box}
+The default behavior of D3.js's force graph layout algorithm is to give the graph an a priori bounding box. However, the fixed size did not allow for graphs above a relatively small number of nodes to fully come to rest. Nodes would instead bump up against the edge of the bounding box. This was inefficient, as it resulted in the force graph parameters not being fully applied. To accommodate the range of possible GRNs that GRNsight may display, we revised that algorithm so that the option for an adaptive, expandable bounding box can be chosen. This allows the graph to expand the bounding box as far as required for it to fully come to rest, allowing the force parameters to be fully applied and utilized. To accommodate this change, the ability for the user to zoom and scroll the viewport was also added. Should the user not want to use the adaptive bounding box algorithm, the option to utilize the default fixed behavior is also given. 
 
-The default behavior of D3.js's force graph layout algorithm is to give the graph an a priori bounding box. However, the fixed size did not allow for graphs above a relatively small number of nodes to fully come to rest. Nodes would instead bump up against the edge of the bounding box. This was inefficient, as it resulted in the force graph parameters not being fully applied. To accommodate the range of possible GRNs that GRNsight may display, we revised that algorithm so that the option for an adaptive, expandable bounding box can be chosen. This allows the graph to expand the bounding box as far as required for it to fully come to rest, allowing the force parameters to be fully applied and utilized. To accommodate this change, the ability for the user to zoom and scroll the graph was also added. A variety of other viewport and bounding box related changes were also implemented, including:
-
-\begin{enumerate}
-  \item The bounding box can now be fixed to the size of the viewport or adapted to the size of the graph
-  \item The viewport size can be selected from among small, medium, and large options
-  \item The best viewport size is automatically detected from the browser
-  \item The viewport can be fit to the size of the browser window 
-  \item Zooming and scrolling have been enabled
-\end{enumerate}
+There are three initial sizes given for both the viewport and bounding box: Small, medium and large. Initially upon loading GRNsight, the best viewport and bounding box sizes are chosen based on the available space on the user's screen. The viewport and bounding box can also be custom-fit to the size of the available space in the browser window. These sizes can later be changed if desired. 
 
 \subsection{Edge Weight Display Options}
 A new visualization feature for weighted graphs introduced in GRNsight v2 is an options menu for displaying the edge weights of the graph. Prior to the addition of this options menu, edge weights were only shown upon mouse-over of the edge. When visualizing a graph, the need to be able to see all of the weights of every edge became apparent. The introduction of this options menu allowed users to choose to always show or always hide weights, as well as the default option of viewing only on mouse-over. Edge Options exist in the sidebar menu, and under the Format tab in the File menu.
