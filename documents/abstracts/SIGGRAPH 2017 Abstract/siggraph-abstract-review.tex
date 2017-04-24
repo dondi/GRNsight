@@ -197,7 +197,7 @@ Since the release of GRNsight v1, further research, as well as feature requests 
 
 \subsection{Separation of Viewport from Graph Bounding Box}
 
-The default behavior of D3.js's force graph layout algorithm is to give the graph an a priori bounding box. To accommodate the range of possible GRNs that GRNsight may display, we revised that algorithm so that the option for an adaptive, expandable bounding box can be chosen.
+The default behavior of D3.js's force graph layout algorithm is to give the graph an a priori bounding box. However, the fixed size did not allow for graphs above a relatively small number of nodes to fully come to rest. Nodes would instead bump up against the edge of the bounding box. This was inefficient, as it resulted in the force graph parameters not being fully applied. To accommodate the range of possible GRNs that GRNsight may display, we revised that algorithm so that the option for an adaptive, expandable bounding box can be chosen. This allows the graph to expand the bounding box as far as required for it to fully come to rest, allowing the force parameters to be fully applied and utilized. To accommodate this change, the ability for the user to zoom and scroll the graph was also added. A variety of other viewport and bounding box related changes were also implemented, including:
 
 \begin{enumerate}
   \item The bounding box can now be fixed to the size of the viewport or adapted to the size of the graph
@@ -207,15 +207,14 @@ The default behavior of D3.js's force graph layout algorithm is to give the grap
   \item Zooming and scrolling have been enabled
 \end{enumerate}
 
-
 \subsection{Edge Weight Display Options}
-A new visualization feature for weighted graphs introduced in GRNsight v2 is an options menu for displaying the edge weights of the graph. By default, edge weights are shown only upon mouse-over of the edge. Users can now choose to always show or always hide weights. Edge Options exist in the sidebar menu, and under the Format tab in the File menu.
+A new visualization feature for weighted graphs introduced in GRNsight v2 is an options menu for displaying the edge weights of the graph. Prior to the addition of this options menu, edge weights were only shown upon mouse-over of the edge. When visualizing a graph, the need to be able to see all of the weights of every edge became apparent. The introduction of this options menu allowed users to choose to always show or always hide weights, as well as the default option of viewing only on mouse-over. Edge Options exist in the sidebar menu, and under the Format tab in the File menu.
 
 \subsection{Graph Normalization}
-To allow for the comparision of weighted network graphs, a feature request was made for the user to have the option to customize the normalization factor applied to the edge thickness of the graph. By default, GRNsight detects the maximum and minimum relationship values of a network, and normalizes the data to fit within 12 distict edge thicknesses corresponding to the strength of its regulatory relationship. By adding the option to user-specified minimum and maximum values, the edge thicknesses can be consistently normalized in a weighted graph, so the user can compare different graphs on the same scale. 
+To allow for the comparison of weighted network graphs, a feature request was made for the user to have the option to customize the normalization factor applied to the edge thickness of the graph. By default, GRNsight detects the maximum and minimum relationship values of a network, and normalizes the data to fit within 12 distinct edge thicknesses corresponding to the strength of its regulatory relationship. However, with this model, a graph with weights in the range -1 to 1 could appear the same as a graph with weights in the range -10 to 10. By adding the option to user-specified minimum and maximum values, the edge thicknesses can be consistently normalized in a weighted graph, so the user can compare different graphs on the same scale. 
 
 \section{Conclusion and Future Work}
-We have successfully implemented GRNsight, a web application and service for visualizing small- to medium-scale GRNs that is simple and intuitive to use. GRNsight reads a weighted or unweighted representation of a GRN, and automatically lays out and displays unweighted and weighted network graphs, enabling interpretation of the weight parameters more easily than one could from an adjacency matrix alone. Extensions to GRNsight in v2 have expanded GRNsight's visualization and layout capababilities, giving the user more control over the visual display of the network graph.
+We have successfully implemented GRNsight, a web application and service for visualizing small- to medium-scale GRNs that is simple and intuitive to use. GRNsight reads a weighted or unweighted representation of a GRN, and automatically lays out and displays unweighted and weighted network graphs, enabling interpretation of the weight parameters more easily than one could from an adjacency matrix alone. Extensions to GRNsight in v2 have expanded GRNsight's visualization and layout capabilities, giving the user more control over the visual display of the network graph.
 
 GRNsight is in active development, we would like to further enhance the tool to compute and display graph statistics, as betweenness centrality measure. Further research will be conducted to evaluate different graph layout options, such as a hierarchical or block layout and the effectiveness that alternate visualization paradigms for the biologist...
 
