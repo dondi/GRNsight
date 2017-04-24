@@ -1,4 +1,4 @@
-\documentclass[sigconf,review,anonymous]{acmart}
+\documentclass[sigconf,review]{acmart}
 
 \usepackage{booktabs} % For formal tables
 \usepackage{subfigure}
@@ -32,35 +32,97 @@
 \setcitestyle{square}
 
 \begin{document}
-\title{GRNsight: a web application and service for visualizing models of small- to medium-scale gene regulatory networks}
+\title{New Features for GRNsight v2: a web application and service for visualizing models of small- to medium-scale gene regulatory networks}
 
-\author{Eileen Choe}
-\orcid{1234-5678-9012}
-\affiliation{%
-  \institution{Loyola Marymount University}
+\author{Eileen J. Choe}
+\orcid{0002-8116-9224}
+\affiliation{
+  \institution{Loyola Marymount University \\ Department of Electrical Engineering and Computer Science}
   \streetaddress{1 LMU Drive}
   \city{Los Angeles} 
   \state{California} 
-  \postcode{43017-6221}
+  \postcode{90045}
 }
-\email{trovato@corporation.com}
+\email{echoe@lion.lmu.edu}
 
-\author{G.K.M. Tobin}
-\affiliation{%
-  \institution{Institute for Clarity in Documentation}
-  \streetaddress{P.O. Box 1212}
-  \city{Dublin} 
-  \state{Ohio} 
-  \postcode{43017-6221}
+\author{Nicole A. Anguiano}
+\affiliation{
+ \institution{Loyola Marymount University \\ Department of Electrical Engineering and Computer Science}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
 }
-\email{webmaster@marysville-ohio.com}
+\email{TBD}
+
+\author{Anindita Varshneya}
+\affiliation{
+ \institution{Loyola Marymount University \\Department of Biology}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
+}
+\email{TBD}
+
+\author{Mihir Samdarshi}
+\affiliation{
+ \institution{Loyola Marymount University \\Department of Biology}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
+}
+\email{TBD}
+
+\author{Yeon-Soo Shin}
+\affiliation{
+ \institution{Loyola Marymount University \\Department of Electrical Engineering and Computer Science}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
+}
+\email{TBD}
+
+\author{Edward B. Bachoura}
+\affiliation{
+ \institution{Loyola Marymount University \\Department of Electrical Engineering and Computer Science}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
+}
+\email{TBD}
+
+\author{John David N. Dionisio}
+\affiliation{
+ \institution{Loyola Marymount University \\Department of Electrical Engineering and Computer Science}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
+}
+\email{TBD}
+
+
+\author{Kam D. Dahlquist}
+\affiliation{
+ \institution{Loyola Marymount University \\Department of Biology}
+  \streetaddress{1 LMU Drive}
+  \city{Los Angeles} 
+  \state{California} 
+  \postcode{90045}
+}
+\email{TBD}
+
 
 % The default list of authors is too long for headers}
 \renewcommand{\shortauthors}{B. Trovato et. al.}
 
 \begin{abstract}
 
-We present new features in v2 of GRNsight, a web application and service for interactive visualization of small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs from an Excel spreadsheet containing an adjacency matrix where regulators are named in the columns and target genes in the rows, a Simple Interaction Format (SIF) text file, or a GraphML XML file. GRNsight represents genes as nodes and regulatory connections as edges with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. GRNsight is best-suited for visualizing networks of fewer than 35 nodes and 70 edges, and has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The GRNsight application (\url{http://dondi.github.io/GRNsight/}) and code (\url{https://github.com/dondi/GRNsight}) are available under the open source BSD license.
+We present new features in v2 of GRNsight, a web application and service for interactive visualization of small- to medium-scale gene regulatory networks (GRNs) \cite{peerj}. A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs from an Excel spreadsheet containing an adjacency matrix where regulators are named in the columns and target genes in the rows, a Simple Interaction Format (SIF) text file, or a GraphML XML file. GRNsight represents genes as nodes and regulatory connections as edges with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. For GRNsight v2, the user was given greater control over the network visualization's bounding box and viewport as well as the way edges and their weights are displayed. GRNsight is best-suited for visualizing networks of fewer than 35 nodes and 70 edges, and has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The GRNsight application (\url{http://dondi.github.io/GRNsight/}) and code (\url{https://github.com/dondi/GRNsight}) are available under the open source BSD license.
 
 \end{abstract}
 
@@ -109,7 +171,8 @@ We present new features in v2 of GRNsight, a web application and service for int
         \includegraphics[height=1.5in]{always-weights.png}	
         \label{fig:with-weights}
     }
-    \caption{GRNsight's automatic graph layout of Demo \#4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) in (a) is manipulated through manual node dragging and adjusting force graph parameters to produce the graphs in (b) and (c).}
+    \caption{GRNsight v2's automatic graph layout of Demo \#4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) in (a) allows the demo gene regulatory network to fully relax. Zooming and scrolling options allow the user to see the entire graph when it moves beyond the viewport; (b) the user can manipulate the display of the graph through manual node dragging, and can either hide (b), or show (c) all the weight values, which display on the edges.
+    }
     \label{fig:screenshots}
 \end{teaserfigure}
 
@@ -117,21 +180,13 @@ We present new features in v2 of GRNsight, a web application and service for int
 
 \section{Introduction and Motivation}
 
-GRNsight is a web application and service for the interactive visualization of small- to medium-scale gene regulatory networks (GRNs), optimized for use by novice and experienced biologists alike to quickly and easily view unweighted and weighted network graphs. Visual inspection has long been recognized as distinct from other forms of purely numeric, computational, or algorithmic data analysis \cite{Tufte:1986:VDQ:33404, card1999readings}, and GRNsight enables the potential for insight derived specifically by visual inspection. The following are the requirements for GRNsight:
+GRNsight is a web application and service for the interactive visualization of small- to medium-scale gene regulatory networks (GRNs), optimized for use by novice and experienced biologists alike to quickly and easily view unweighted and weighted network graphs \cite{peerj}. Visual inspection has long been recognized as distinct from other forms of purely numeric, computational, or algorithmic data analysis \cite{Tufte:1986:VDQ:33404, card1999readings}, and GRNsight enables the potential for insight derived specifically by visual inspection. The following are the requirements for GRNsight:
 
 \begin{enumerate}
 \item Exist as a web application without the need to download and install specialized software;
 \item Be simple and intuitive to use;
 \item Automatically lay out and display small- to medium-scale, unweighted and weighted, directed network graphs in a way that is familiar to biologists and adds value to the interpretation of the modeling results.
-\end{enumerate}
-
-\begin{figure}[ht]
-   \centering
-   \includegraphics[width=3in]{GRNsight-Architecture.pdf} 
-   \caption{GRNsight architecture and component interactions.}
-   \label{fig:architecture}
-\end{figure}
-
+\end{enumerate} 
 
 \textbf{Software Architecture}: GRNsight has a service-oriented architecture, consisting of separate server and web client components The server provides a web API that accepts files in Microsoft Excel workbook (.xlsx), SIF (.sif), and GraphML (.graphml) formats and converts them into a unified JSON representation. A converse import function accepts this JSON representation and converts it into either SIF (.sif) or GraphML (.graphml) formats for export. The web application server provides code and resources for the graphical user interface that displays this JSON representation of the graph.\\
 
@@ -142,7 +197,8 @@ Since the release of GRNsight v1, further research, as well as feature requests 
 
 \subsection{Separation of Viewport from Graph Bounding Box}
 
-The bounding box and viewport for the graph have been separated allowing for the following new features
+The default behavior of D3.js's force graph layout algorithm is to give the graph an a priori bounding box. To accommodate the range of possible GRNs that GRNsight may display, we revised that algorithm so that the option for an adaptive, expandable bounding box can be chosen.
+
 \begin{enumerate}
   \item The bounding box can now be fixed to the size of the viewport or adapted to the size of the graph
   \item The viewport size can be selected from among small, medium, and large options
