@@ -201,7 +201,7 @@ In GRNsight v1, edge weight values were only displayed upon mouse-over of the ed
 
 \subsection{Graph Normalization}
 
-To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be normalized to consistent values, so the user can compare different graphs on the same scale.
+To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of the regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be normalized to consistent values, so the user can compare different graphs on the same scale.
 
 \begin{figure}[h]
     \centering
@@ -225,7 +225,7 @@ To allow for the comparison of weighted network graphs, GRNsight v2 adds the opt
 \end{figure}
 
 \section{Conclusion and Future Work}
-We have successfully built upon GRNsight in v2 to expand GRNsight's visualization and layout capabilities, giving the user more control over the visual display of the network graph. GRNsight's visualization and automatic layout of unweighted and weighted network graphs enables the interpretation of weight parameters more easily than one could from an adjacency matrix alone.
+We have successfully built upon GRNsight in v2 to expand its visualization and layout capabilities, giving the user more control over the visual display of the network graph. GRNsight's visualization and automatic layout of unweighted and weighted network graphs enables the interpretation of weight parameters more easily than one could from an adjacency matrix alone.
 
 GRNsight is in active development, closely interacting with the GRNmap modeling group. We plan to add features to compute and display graph statistics, such as betweenness centrality, and provide different graph layout options, such as a hierarchical or block layout, as well as explore the effectiveness of alternate visualization paradigms for biologist users who are seeking visual insight into GRNs.
 
