@@ -187,21 +187,12 @@ We present new features in v2 of GRNsight, a web application and service for int
 
 \maketitle
 
-\section{Introduction and Motivation}
+\section{Graph Customizations for GRNs}
 
-GRNsight is a web application and service for the interactive visualization of small- to medium-scale gene regulatory networks (GRNs), optimized for use by novice and experienced biologists alike to quickly and easily view unweighted and weighted network graphs \cite{peerj}. Visual inspection has long been recognized as distinct from other forms of purely numeric, computational, or algorithmic data analysis \cite{Tufte:1986:VDQ:33404, card1999readings}, and GRNsight enables the potential for insight derived specifically by visual inspection. The following are the requirements for GRNsight:
-
-\begin{enumerate}
-\item Exist as a web application without the need to download and install specialized software;
-\item Be simple and intuitive to use;
-\item Read an Excel spreadsheet output from the GRNmap modeling software \cite{Dahlquist2015}, a Simple Interaction Format (SIF) text file, or a GraphML XML file;
-\item Automatically lay out and display small- to medium-scale, unweighted and weighted, directed network graphs in a way that is familiar to biologists and adds value to the interpretation of the modeling results.
-\end{enumerate} 
-
-\paragraph{Graph Customizations} Graph visualization is facilitated by the Data-Driven Documents JavaScript library \cite{d3}. D3.js provides data mapping and layout routines which GRNsight heavily customizes to achieve the desired graph visualization. The resulting graph is a Scalable Vector Graphics (SVG) drawing in which D3.js maps gene objects from the JSON representation provided by the web API server onto labeled rectangles. Edge weights are mapped into Bezier curves. The resulting graph is interactive, initially using D3.js's force graph layout algorithm to automatically determine the positions of the gene rectangles. Since the release of GRNsight v1, feedback from peer review and the GRNmap modeling team \cite{Dahlquist2015} have motivated the following improvements to the visualization and display of the network graph in GRNsight v2.
+GRNsight is a web application and service for the interactive visualization of small- to medium-scale gene regulatory networks (GRNs), optimized for use by novice and experienced biologists alike to quickly and easily view unweighted and weighted network graphs \cite{peerj}. Graph visualization in GRNsight is facilitated by the Data-Driven Documents JavaScript library \cite{d3}. D3.js provides data mapping and layout routines which are heavily customized, producint a graph as a Scalable Vector Graphics (SVG) drawing in which D3.js maps gene objects from the JSON representation provided by the web API server onto labeled rectangles. Directed edges are mapped into Bezier curves. The resulting graph is interactive, initially using D3.js's force graph layout algorithm to automatically determine the positions of the gene rectangles, but also allowing the user to manually manipulate the graph by node dragging. Since the release of GRNsight v1, feedback from peer review and the related GRNmap software modeling team \cite{http://kdahlquist.github.io/GRNmap/} have motivated the following improvements in GRNsight v2.
 
 \subsection{Separation of Viewport from Graph Bounding Box}
-The default behavior of D3.js's force graph layout algorithm is to give the graph an \emph{a priori} bounding box, which was initially set to fit to a single viewport size. However, the fixed size did not allow for graphs above a relatively small number of nodes to fully come to rest. Nodes would instead bump up against the edge of the bounding box. To accommodate the range of possible GRNs that GRNsight may display, we revised the algorithm to provide an option for an adaptive bounding box that could expand beyond the viewport. This allows the graph to expand as far as required for it to converge to a steady state, allowing the force graph parameters to be fully applied. To accommodate this change, the ability for the user to zoom and scroll the graph within the viewport was also added. Should the user not want to use the adaptive bounding box algorithm, the option to utilize the default behavior of a bounding box fixed to the viewport is also given.
+The default behavior of D3.js's force graph layout algorithm is to give the graph an \emph{a priori} bounding box, which was initially set to fit to a single viewport size. However, the fixed size did not allow for graphs above a relatively small number of nodes to fully come to rest. Nodes would instead bump up against the edge of the bounding box. Thus, we revised the algorithm to provide an option for an adaptive bounding box that could expand beyond the viewport. This allows the graph to expand as far as required for it to converge to a steady state, allowing the force graph parameters to be fully applied. Because of this change, the ability for the user to zoom and scroll the graph within the viewport was also added. The option to utilize the default behavior of a bounding box fixed to the viewport was also retained.
 
 There are three size options for the viewport: small, medium and large. Initially upon loading GRNsight, the best of these preset viewport sizes is chosen using the current size of the browser window. The viewport (and bounding box, if fixed to viewport) can also be custom-fit to the maximize the available space in the browser, beyond these three presets. These settings can be changed at any time. 
 
@@ -210,7 +201,7 @@ In GRNsight v1, edge weight values were only displayed upon mouse-over of the ed
 
 \subsection{Graph Normalization}
 
-To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be consistently normalized in a weighted graph, so the user can compare different graphs on the same scale (see Figure~\ref{fig:network-screenshots}).
+To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be normalized to consistent values, so the user can compare different graphs on the same scale (see Figure~\ref{fig:network-screenshots}).
 
 \begin{figure}[h]
     \centering
@@ -229,7 +220,7 @@ To allow for the comparison of weighted network graphs, GRNsight v2 adds the opt
         \includegraphics[height=1in]{networkB-normalized.png}	
         \label{fig:networkB-normalized}
     }
-    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to normalize and set edge thicknesses. By overriding the maximum and minimum values of Network B to \(-3, 3\) in (c), Network B is now normalized to match the scale of Network A. Now the network visualization in (a) and (c) can be directly compared.}
+    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to normalize and set edge thicknesses. By overriding the maximum and minimum values of Network B and setting them to \(-3, 3\) in (c), Network B is now normalized to match the scale of Network A. Now the network visualization in (a) and (c) can be directly compared.}
     \label{fig:network-screenshots}
 \end{figure}
 
