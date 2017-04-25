@@ -210,7 +210,7 @@ In GRNsight v1, edge weight values were only displayed upon mouse-over of the ed
 
 \subsection{Graph Normalization}
 
-To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to the edge thickness of the graph. By default, GRNsight detects the maximum and minimum relationship values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be consistently normalized in a weighted graph, so the user can compare different graphs on the same scale (see Figure~\ref{fig:network-screenshots}).
+To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be consistently normalized in a weighted graph, so the user can compare different graphs on the same scale (see Figure~\ref{fig:network-screenshots}).
 
 \begin{figure}[h]
     \centering
@@ -229,7 +229,7 @@ To allow for the comparison of weighted network graphs, GRNsight v2 adds the opt
         \includegraphics[height=1in]{networkB-normalized.png}	
         \label{fig:networkB-normalized}
     }
-    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to calculate the edge weights. By overriding the maximum and minimum values of Network B to \(-3, 3\) in (c), Network B is now normalized to match the scale of Network A. Now the networks in (a) and (c) can be compared.}
+    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to normalize and set edge thicknesses. By overriding the maximum and minimum values of Network B to \(-3, 3\) in (c), Network B is now normalized to match the scale of Network A. Now the network visualization in (a) and (c) can be directly compared.}
     \label{fig:network-screenshots}
 \end{figure}
 
