@@ -197,32 +197,32 @@ The default behavior of D3.js's force graph layout algorithm is to give the grap
 There are three size options for the viewport: small, medium and large. Initially upon loading GRNsight, the best of these preset viewport sizes is chosen using the current size of the browser window. The viewport (and bounding box, if fixed to viewport) can also be custom-fit to the maximize the available space in the browser, beyond these three presets. These settings can be changed at any time. 
 
 \subsection{Edge Weight Value Display Options}
-In GRNsight v1, edge weight values were only displayed upon mouse-over of the edge, one value at a time, making it difficult to compare weight values between two edges. In GRNsight v2, the option now exists for users to always show or always hide weights, as well as the default option of viewing weight values only upon mouse-over. Edge Options are selected in the sidebar menu, and under the Format dropdown in the menu bar.
+In GRNsight v1, edge weight values were only displayed upon mouse-over of the edge, one value at a time, making it difficult to compare weight values between two edges. In GRNsight v2, the option now exists for users to always show or always hide weights, as well as the default option of viewing weight values only upon mouse-over (Figure~\ref{fig:screenshots}). Edge Options are selected in the sidebar menu, and under the Format dropdown in the menu bar.
 
 \subsection{Graph Normalization}
 
-To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be normalized to consistent values, so the user can compare different graphs on the same scale (see Figure~\ref{fig:network-screenshots}).
-
-\begin{figure}[h]
-    \centering
-    \subfigure[Network A]
-    {
-        \includegraphics[height=1in]{networkA.png}
-        \label{fig:networkA}
-    }
-    \subfigure[Network B without Normalization]
-    {
-        \includegraphics[height=1in]{networkB.png}
-        \label{fig:networkB}
-    }
-    \subfigure[Network B with Normalization]
-    {
-        \includegraphics[height=1in]{networkB-normalized.png}	
-        \label{fig:networkB-normalized}
-    }
-    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to normalize and set edge thicknesses. By overriding the maximum and minimum values of Network B and setting them to \(-3, 3\) in (c), Network B is now normalized to match the scale of Network A. Now the network visualization in (a) and (c) can be directly compared.}
-    \label{fig:network-screenshots}
-\end{figure}
+To allow for the comparison of weighted network graphs, GRNsight v2 adds the option to customize the normalization factor applied to edge thicknesses. By default, GRNsight detects the maximum and minimum edge weight values of a network, and normalizes the data to fit within 12 distinct preset edge thicknesses corresponding to the strength of its regulatory relationship. This ensures that the edges of a weighted graph are visually distinguishable regardless of the absolute values of the weights. However, with this model, a graph with weights in the range \(-1\) to \(1\) could appear the same as a graph with weights in the range \(-10\) to \(10\). By adding the option for user-specified minimum and maximum values, the edge thicknesses can be normalized to consistent values, so the user can compare different graphs on the same scale (Figure~\ref{fig:network-screenshots}).
+%
+%\begin{figure}[h]
+%    \centering
+%    \subfigure[Network A]
+%    {
+%        \includegraphics[height=1in]{networkA.png}
+ %       \label{fig:networkA}
+%    }
+%    \subfigure[Network B without Normalization]
+%    {
+%        \includegraphics[height=1in]{networkB.png}
+%        \label{fig:networkB}
+%    }
+%    \subfigure[Network B with Normalization]
+%    {
+%        \includegraphics[height=1in]{networkB-normalized.png}	
+%        \label{fig:networkB-normalized}
+%    }
+%    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to normalize and set edge thicknesses. By overriding the maximum and minimum values of Network B and setting them to \(-3, 3\) in (c), Network B is now normalized to match the scale of Network A. Now the network visualization in (a) and (c) can be directly compared.}
+%    \label{fig:network-screenshots}
+%\end{figure}
 
 \section{Conclusion and Future Work}
 We have successfully built upon GRNsight v1, a web application and service for visualizing small- to medium-scale GRNs that is simple and intuitive to use. GRNsight reads a weighted or unweighted representation of a GRN, and automatically lays out and displays unweighted and weighted network graphs, enabling interpretation of the weight parameters more easily than one could from an adjacency matrix alone. Extensions to GRNsight in v2 have expanded GRNsight's visualization and layout capabilities, giving the user more control over the visual display of the network graph.
