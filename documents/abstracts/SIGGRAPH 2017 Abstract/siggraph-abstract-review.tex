@@ -204,7 +204,29 @@ There are three initial sizes given for both the viewport and bounding box: Smal
 A new visualization feature for weighted graphs introduced in GRNsight v2 is an options menu for displaying the edge weights of the graph. Prior to the addition of this options menu, edge weights were only shown upon mouse-over of the edge. When visualizing a graph, the need to be able to see all of the weights of every edge became apparent. The introduction of this options menu allowed users to choose to always show or always hide weights, as well as the default option of viewing only on mouse-over. Edge Options exist in the sidebar menu, and under the Format tab in the File menu.
 
 \subsection{Graph Normalization}
+
 To allow for the comparison of weighted network graphs, a feature request was made for the user to have the option to customize the normalization factor applied to the edge thickness of the graph. By default, GRNsight detects the maximum and minimum relationship values of a network, and normalizes the data to fit within 12 distinct edge thicknesses corresponding to the strength of its regulatory relationship. However, with this model, a graph with weights in the range -1 to 1 could appear the same as a graph with weights in the range -10 to 10. By adding the option to user-specified minimum and maximum values, the edge thicknesses can be consistently normalized in a weighted graph, so the user can compare different graphs on the same scale. 
+
+\begin{figure}[h]
+    \centering
+    \subfigure[Network A]
+    {
+        \includegraphics[height=1in]{networkA.png}
+        \label{fig:networkA}
+    }
+    \subfigure[Network B without Normalization]
+    {
+        \includegraphics[height=1in]{networkB.png}
+        \label{fig:networkB}
+    }
+    \subfigure[Network B with Normalization]
+    {
+        \includegraphics[height=1in]{networkB-normalized.png}	
+        \label{fig:networkB-normalized}
+    }
+    \caption{GRNsight automatically detects the minimum and maximum weights in (a) and (b) to calculate the edge weights. By overriding the maximum and minimum values of Network B to -3, 3 in (c), Network B is now normalized to match the scale of Network A. Now the networks in (a) and (c) can be compared.}
+    \label{fig:screenshots}
+\end{figure}
 
 \section{Conclusion and Future Work}
 We have successfully implemented GRNsight, a web application and service for visualizing small- to medium-scale GRNs that is simple and intuitive to use. GRNsight reads a weighted or unweighted representation of a GRN, and automatically lays out and displays unweighted and weighted network graphs, enabling interpretation of the weight parameters more easily than one could from an adjacency matrix alone. Extensions to GRNsight in v2 have expanded GRNsight's visualization and layout capabilities, giving the user more control over the visual display of the network graph.
