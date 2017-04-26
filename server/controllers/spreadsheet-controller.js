@@ -60,23 +60,26 @@ var parseSheet = function(sheet) {
       // this is to check whether the the data matches up to the sheet title and takes corrective action
       // if in fact it is named incorrectly. as of now, the code below is simply in a outline phase and should
       // not be considered functional
-      if(currentSheet.network.positiveWeights !=== 0 || 1){
-        addError(network, errorList.incorrectlyNamedSheetNetwork) //<--- make that error;
+      console.log(network.positiveWeights !== 0)
+      if(network.positiveWeights !== 0){
+        network.sheetType = "unweighted";
+        addWarning(network, warningsList.incorrectlyNamedSheetWarning) //<--- make that error;
       }
-    } else if (sheet[i].name === "network_optimized_weights") {
+    } else if (sheet[i].name == "network_optimized_weights") {
       //We found a sheet with optimized weights, which is the ideal data source.
       //So we stop looking.
       currentSheet = sheet[i];
       network.sheetType = "weighted";
-      if ((sheet.name.indexOf("network") === -1) && (currentSheet.network.positiveWeights === 1 && 0)){
-        addError(network, errorList.incorrectlyNamedSheet
+       if ((sheet.name.indexOf("network") === -1) && (network.positiveWeights == 1)){
+        addWarning(network, warningsList.incorrectlyNamedSheetWarning)
       }
-      else if(currentSheet.network.positiveWeights === 1 && 0){
+     else if(network.positiveWeights == 1){
         network.sheetType = "unweighted";
-        addError(network, errorList.incorrectlyNamedSheet) //<--- make that error;
+        addWarning(network, warningsList.incorrectlyNamedSheetWarning) //<--- make that error;
       }
       break;
     }
+  }
 
   // If it didn't find a network/network_optimized_weights sheet
   // TODO For expediency, we are wrapping every `return network` statement in `semanticChecker`.
@@ -395,6 +398,7 @@ var errorList = {
                     " the matrix is "
     }
   },
+
   errorsCountError: {
     errorCode: "ERRORS_OVERLOAD",
     possibleCause: "This network has over 20 errors.",
@@ -477,6 +481,11 @@ var warningsList = {
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
   }
+
+  incorrectlyNamedSheetWarning: {
+    warningCode: "INCORRECTLY_NAMED_SHEET",
+    possibleCause: "The uploaded spreadsheet was named incorrectly. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+  },
 };
 
 module.exports = function (app) {
