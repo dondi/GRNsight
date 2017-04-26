@@ -480,11 +480,13 @@ var warningsList = {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
     }
-  }
+  },
 
-  incorrectlyNamedSheetWarning: {
+  incorrectlyNamedSheetWarning: function {
+    return{
     warningCode: "INCORRECTLY_NAMED_SHEET",
     possibleCause: "The uploaded spreadsheet was named incorrectly. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+    }
   },
 };
 
