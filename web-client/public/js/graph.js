@@ -68,32 +68,37 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     */
 
     var adjustedWeights = allWeights.concat(0); //force a minimum domain value to 0
-    var normMax = $("#normalization-max").val()
+    var normMax = $("#normalization-max").val();
+
+    for (var i = 0; i < links.length; i++) {
+      links[i].displayWeight = links[i].value;
+    }
 
     if (normalization & normMax > 0) {
 
       var newScaledData = [];
- 
+
       var normalizeWeights = d3.scale.linear()
-          .domain(adjustedWeights)
+          .domain(d3.extent(adjustedWeights))
           .range([0,normMax]);
- 
-      for (var i = 0; i < adjustedWeights.length; i++) {
+
+      for (var i = 0, j = 0; i < adjustedWeights.length; i++) {
         newScaledData[i] = +normalizeWeights(adjustedWeights[i]);
+        if (adjustedWeights[i] !== 0) {
+          links[j].value = newScaledData[i];
+          j++;
+        }
       }
 
-      console.log(newScaledData);
-
       var totalScale = d3.scale.linear()
-        .domain(newScaledData)
+        .domain(d3.extent(newScaledData))
         .range([2, 14]),
 
         normalizedScale = d3.scale.linear()
-        .domain(newScaledData)
+        .domain(d3.extent(newScaledData))
         .range([2, 14]);
 
     } else {
-      console.log(adjustedWeights)
       var totalScale = d3.scale.linear()
           .domain(d3.extent(adjustedWeights))
           .range([2, 14]),
@@ -106,12 +111,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
       document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
 
-    } 
+    }
   }
 
   var getEdgeThickness = function (edge) {
       return Math.round(totalScale(Math.abs(edge.value)));
-      console.log(totalScale);
   };
 
   var force = d3.layout.force()
@@ -339,7 +343,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
           // If negative, you need one bar for horizontal and one for vertical. If the user is not coloring the weighted
           // sheets, then we make all of the markers arrowheads.
-          if(d.value < 0 && colorOptimal) {
+          if(d.displayWeight < 0 && colorOptimal) {
             defs.append("marker")
              .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
              .attr("refX", function() {
@@ -503,14 +507,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .attr("text-anchor", "middle")
         .attr("text-anchor", "middle")
         .text(function (d) {
-          return d.value.toPrecision(4);
+          return d.displayWeight.toPrecision(4);
         });
 
       weight = weight.data(links)
         .enter().append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
-        .text(function (d) { return d.value.toPrecision(4); })
+        .text(function (d) { return d.displayWeight.toPrecision(4); })
         .each(function (d) { d.weightElement = d3.select(this); });
 
     }
@@ -596,7 +600,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
     var globalOffset = parseFloat(d.strokeWidth);
 
-    if (d.value < 0 && colorOptimal) {
+    if (d.displayWeight < 0 && colorOptimal) {
       globalOffset = Math.max(globalOffset, MINIMUM_DISTANCE);
     }
 
@@ -934,7 +938,7 @@ var text = node.append("text")
             x2 = d.source.x + d.source.textWidth / 1.2;
             y2 = d.source.y + nodeHeight;
 
-            if (d.value < 0 && colorOptimal) {
+            if (d.displayWeight < 0 && colorOptimal) {
               offset = Math.max(10, parseFloat(d.strokeWidth));
             }
           }
