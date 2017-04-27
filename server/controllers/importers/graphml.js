@@ -1,5 +1,6 @@
 var constants = require(__dirname + "/../constants");
 var parseString = require("xml2js").parseString;
+var semanticChecker = require(__dirname + "/../semantic-checker");
 
 module.exports = function (graphml) {
   var graph, key;
@@ -56,6 +57,8 @@ module.exports = function (graphml) {
     links: [],
     errors: [],
     warnings: [],
+    positiveWeights: [],
+    negativeWeights: [],
     sheetType: constants.UNWEIGHTED
   };
 
@@ -140,5 +143,5 @@ module.exports = function (graphml) {
     });
   }
 
-  return network;
+  return semanticChecker(network);
 };

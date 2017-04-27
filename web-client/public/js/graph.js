@@ -15,18 +15,22 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       gridWidth = 300,
       colorOptimal = true;
 
-
-  $('#mouseOver').html(sheetType === 'weighted' ? "Mouse over the edges to see the weight parameter values." : "");
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
-    return node.name.length * 15;
+    return node.name.length * 12 + 5;
   };
 
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
   if(!$("#colorEdges").hasClass('active')) {
     colorOptimal = false;
   }
+
+  var adaptive = $("input[name='viewport']:checked").val() === "viewportAdapt";
+
+  var MIN_SCALE = 0.25;
+  var MAX_SCALE = (adaptive) ? 10 : 1;
+  d3.select(".zoomSlider").attr("max", MAX_SCALE);
 
   var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -58,7 +62,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   } else if (sheetType === 'weighted') {
 
     /*
-    currently, we are hard coding the smallest value in the domain to be 0 
+    currently, we are hard coding the smallest value in the domain to be 0
     as opposed to the smallest weight in the adjacency matrix
     */
 
@@ -100,80 +104,153 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .gravity($("#gravityInput").val());
 
   var drag = force.drag()
+      .origin(function(d) { return d; })
       .on("dragstart", dragstart);
 
+  var MANUAL_ZOOM = false;
+  var zoom = d3.behavior.zoom()
+    .center([width / 2, height / 2])
+    .scaleExtent([MIN_SCALE, MAX_SCALE])
+    .on("zoom", zoomed);
+
   var svg = d3.select($container[0]).append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g"); // required for zoom to work
+        .attr("width", width)
+        .attr("height", height)
+        .call(zoom)
+      .append("g") // required for zoom to work
 
-  /* Credit to http://bl.ocks.org/linssen/7352810 for zoom on center */
-  var zoom = d3.behavior.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
+  // This rectangle catches all of the mousewheel and pan events, without letting
+  // them bubble up to the body.
+  var innerRect = svg.append("rect")
+                     .attr("width", width)
+                     .attr("height", height)
+                     .style("fill", "none")
+                     .style("pointer-events", "all")
+                     .attr("stroke", adaptive ? "none" : "#9A9A9A")
+                     .append("g")
 
-  function zoomed() {
-    svg.attr("transform",
-        "translate(" + zoom.translate() + ")" +
-        "scale(" + zoom.scale() + ")"
-    );
+
+  function zoomed(manual = false) {
+    if (!MANUAL_ZOOM) {
+      $(".zoomSlider").val(d3.event.scale.toFixed(2)); // This doesn't work using d3 selection for some reason
+    }
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   }
 
-  function interpolateZoom (translate, scale) {
-    var self = this;
-    return d3.transition().duration(350).tween("zoom", function () {
-        var iTranslate = d3.interpolate(zoom.translate(), translate),
-            iScale = d3.interpolate(zoom.scale(), scale);
-        return function (t) {
-            zoom
-                .scale(iScale(t))
-                .translate(iTranslate(t));
-            zoomed();
-        };
-    });
-  }
+  d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
 
-  function zoomClick() {
-      var clicked = d3.event.target,
-          direction = 1,
-          factor = 0.2,
-          target_zoom = 1,
-          center = [width / 2, height / 2],
-          extent = zoom.scaleExtent(),
-          translate = zoom.translate(),
-          translate0 = [],
-          l = [],
-          view = {x: translate[0], y: translate[1], k: zoom.scale()};
+  // TODO: Make this less bad
+  d3.select(".scrollUp").on("click", function () {
+    move("up");
+  });
 
-      d3.event.preventDefault();
-      direction = (this.id === 'zoomIn') ? 1 : -1;
-      target_zoom = zoom.scale() * (1 + factor * direction);
+  d3.select(".scrollLeft").on("click", function () {
+    move("left");
+  });
 
-      if (target_zoom < extent[0] || target_zoom > extent[1]) {
-        if(zoom.scale() !== extent[0] && target_zoom < extent[0]) {
-          target_zoom = 1;
-        } else if (zoom.scale() !== extent[1] && target_zoom > extent[1]) {
-          target_zoom = 2;
-        } else {
-          return false;
-        }
+  d3.select(".scrollRight").on("click", function () {
+    move("right");
+  });
+
+  d3.select(".scrollDown").on("click", function () {
+    move("down");
+  });
+
+  d3.select(".center").on("click", center);
+
+  d3.select(".zoomSlider").on("input", function () {
+    var newScale = this.value;
+    scale(newScale);
+  }).on("mousedown", function () {
+    MANUAL_ZOOM = true;
+  }).on("mouseup", function () {
+    MANUAL_ZOOM = false;
+  });
+
+  d3.selectAll(".boundBoxSize").on("click", function () {
+    var newWidth = d3.select(".grnsight-container").style("width");
+    var newHeight = d3.select(".grnsight-container").style("height");
+    var BORDER_OFFSET = 4;
+
+    // Remove trailing "px"
+    newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
+    newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
+
+    if (adaptive) {
+      width = (width < newWidth) ? newWidth : width;
+      height = (height < newHeight) ? newHeight : height;
+    } else {
+      width = newWidth;
+      height = newHeight;
+    }
+
+    d3.select("svg").attr("width", width).attr("height", height);
+    d3.select("rect").attr("width", width).attr("height", height);
+    force.size([width, height]).resume();
+  });
+
+  d3.selectAll("input[name=viewport]").on("change", function () {
+    let value = $(this).attr("value");
+    if (!adaptive && value === "viewportAdapt") {
+      adaptive = true;
+      MAX_SCALE = 10;
+      d3.select("rect").attr("stroke", "none");
+      zoom.scaleExtent([MIN_SCALE, MAX_SCALE])
+      d3.select(".zoomSlider").attr("max", MAX_SCALE);
+    } else if (adaptive && value === "viewportHard") {
+      var BORDER_OFFSET = 4;
+      var newWidth = d3.select(".grnsight-container").style("width");
+      var newHeight = d3.select(".grnsight-container").style("height");
+
+      adaptive = false;
+      MAX_SCALE = 1;
+      d3.select("rect").attr("stroke", "#9A9A9A");
+      zoom.scaleExtent([MIN_SCALE, MAX_SCALE]);
+      if (zoom.scale() > 1) {
+          scale(1);
       }
+      d3.select(".zoomSlider").attr("max", MAX_SCALE);
+      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
+      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
+      force.size([width, height]).resume();
+    }
+  });
 
-      translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
-      view.k = target_zoom;
-      l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
-
-      view.x += center[0] - l[0];
-      view.y += center[1] - l[1];
-
-      interpolateZoom([view.x, view.y], view.k);
+  function center() {
+    svg.call(zoom.event);
+    zoom.translate([0, 0]);
+    zoom.scale(1);
+    svg.transition().call(zoom.event);
   }
 
-  d3.selectAll('.zoomBtn').on('click', zoomClick);
+  /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
+  function move(direction) {
+    svg.call(zoom.event);
+    var currentTransform = d3.transform(svg.attr("transform"));
+    var currentTranslate = [0, 0];
+    if (currentTransform) {
+      currentTranslate = d3.transform(currentTransform).translate;
+      currentScale = d3.transform(currentTransform).scale[0]; // x and y scale will always be equal
+    }
+    currentTranslate[0] += (direction === "left" ? 50 : (direction === "right" ? -50 : 0));
+    currentTranslate[1] += (direction === "up" ? 50 : (direction === "down" ? -50 : 0));
+    zoom.translate(currentTranslate);
+    svg.transition().call(zoom.event);
+  }
+
+
+  function scale(amount) {
+    zoom.scale(amount);
+    svg.transition().call(zoom.event);
+  }
 
   var defs = svg.append("defs");
+
 
   var link = svg.selectAll(".link"),
       node = svg.selectAll(".node"),
       weight = svg.selectAll(".weight");
+
 
   force.nodes(nodes)
        .links(links)
@@ -337,6 +414,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
           } else {
             // Arrowheads
+            if(d.strokeWidth === 2) d.strokeWidth = 4;
             defs.append("marker")
               .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
               .attr("viewBox", "0 0 15 15")
@@ -345,8 +423,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 // Individual offsets for each possible stroke width
                 return ((x1 === x2 && y1 === y2) ?
                   {
-                    2: 11.75, 3: 11, 4: 9.75, 5: 11,  6: 8.5, 7: 10,
-                    8: 10, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                    2: 9, 3: 8.5, 4: 9, 5: 9, 6: 9, 7: 9,
+                    8: 8.3, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
                     14: 8.3
                   } : {
                     2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
@@ -615,6 +693,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var dblclick = function (d) {
+    d3.event.stopPropagation();
     d3.select(this).classed("fixed", d.fixed = false);
   };
 
@@ -623,8 +702,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     dblclick.call(this.parentNode, d);
   };
 
-  node.append("rect")
-     .attr("width", function() {
+  var rect = node.append("rect")
+     .attr("width", function(d) {
        return this.parentNode.getAttribute("width");
      })
      .attr("height", function() {
@@ -633,17 +712,29 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
      .attr("stroke-width", "2px")
      .on("dblclick", dblclick);
 
-  node.append("text")
-    .attr("dx", function (d) {
-      return getNodeWidth(d) / 2;
-    })
+var text = node.append("text")
     .attr("dy", 22)
     .attr("text-anchor", "middle")
     .style("font-size", "18px")
     .style("stroke-width", "0")
     .style("fill", "black")
     .text(function(d) {return d.name;})
+    .attr("dx", function (d) {
+      var textWidth = this.getBBox().width;
+      d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
+      return d.textWidth / 2 + 3;
+    })
     .on("dblclick", nodeTextDblclick);
+
+  rect
+    .attr("width", function(d) {
+      return d.textWidth + 6;
+    });
+
+  node
+    .attr("width", function(d) {
+      return d.textWidth;
+    });
 
   $('.node').css({
     'cursor': 'move',
@@ -660,66 +751,75 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var currentWeightVisibilitySetting = null;
 
-  var setWeightsVisability = function() {
+  if (sheetType === "weighted") {
+    if ($(".weightedGraphOptions").hasClass("hidden")) {
+      $(".weightedGraphOptions").removeClass("hidden");
+    }
+    var setWeightsVisability = function() {
 
-    var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
-    var WEIGHTS_HIDE_CLASS            = ".weightsNever";
-    var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
+      var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
+      var WEIGHTS_HIDE_CLASS            = ".weightsNever";
+      var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
 
-    var WEIGHT_VISIBILITY_SETTINGS = [
-      WEIGHTS_SHOW_MOUSE_OVER_CLASS,
-      WEIGHTS_HIDE_CLASS,
-      WEIGHTS_SHOW_ALWAYS_CLASS
-    ];
+      var WEIGHT_VISIBILITY_SETTINGS = [
+        WEIGHTS_SHOW_MOUSE_OVER_CLASS,
+        WEIGHTS_HIDE_CLASS,
+        WEIGHTS_SHOW_ALWAYS_CLASS
+      ];
 
-    var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(function (setting) {
-      return $(setting).hasClass("selected");
-    })[0];
+      var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(function (setting) {
+        return $(setting).hasClass("selected");
+      })[0];
 
-    if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
-      return;
+      if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
+        return;
+      }
+
+      currentWeightVisibilitySetting = latestWeightVisibilitySetting;
+      var showWeight = function (d) {
+        var mouse = d3.mouse(this);
+        d.weightElement
+          .attr("x", mouse[0])
+          .attr("y", mouse[1])
+          .classed("visible", true)
+      };
+
+      var hideWeight = function (d) {
+        d.weightElement
+          .attr("x", null)
+          .attr("y", null)
+          .classed("visible", false);
+      };
+
+      if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
+        svg.selectAll(".weight")
+          .classed("visible", false)
+
+        link.on('mouseover', showWeight).on('mouseout', hideWeight);
+        weight.on('mouseover', showWeight).on('mouseout', hideWeight);
+
+      } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
+        svg.selectAll(".weight")
+          .classed("visible", false)
+
+        link.on('mouseover', null).on('mouseout', null);
+        weight.on('mouseover', null).on('mouseout', null);
+
+      } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
+        svg.selectAll(".weight")
+          .classed("visible", true)
+
+        link.on('mouseover', null).on('mouseout', null);
+        weight.on('mouseover', null).on('mouseout', null);
+      }
     }
 
-    currentWeightVisibilitySetting = latestWeightVisibilitySetting;
-    var showWeight = function (d) {
-      var mouse = d3.mouse(this);
-      d.weightElement
-        .attr("x", mouse[0])
-        .attr("y", mouse[1])
-        .classed("visible", true)
-    };
-
-    var hideWeight = function (d) {
-      d.weightElement
-        .attr("x", null)
-        .attr("y", null)
-        .classed("visible", false);
-    };
-
-    if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
-      svg.selectAll(".weight")
-        .classed("visible", false)
-
-      link.on('mouseover', showWeight).on('mouseout', hideWeight);
-      weight.on('mouseover', showWeight).on('mouseout', hideWeight);
-
-    } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
-      svg.selectAll(".weight")
-        .classed("visible", false)
-
-      link.on('mouseover', null).on('mouseout', null);
-      weight.on('mouseover', null).on('mouseout', null);
-
-    } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
-      svg.selectAll(".weight")
-        .classed("visible", true)
-
-      link.on('mouseover', null).on('mouseout', null);
-      weight.on('mouseover', null).on('mouseout', null);
+    setInterval(setWeightsVisability, 100);
+  } else {
+    if (!$(".weightedGraphOptions").hasClass("hidden")) {
+      $(".weightedGraphOptions").addClass("hidden");
     }
   }
-
-  setInterval(setWeightsVisability, 100);
 
   //Tick only runs while the graph physics are still running. (I.e. when the graph is completely relaxed, tick stops running.)
   function tick() {
@@ -735,18 +835,37 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         },
         BOUNDARY_MARGIN = 5,
         SELF_REFERRING_Y_OFFSET = 6;
+        MAX_WIDTH = 5000;
+        MAX_HEIGHT = 5000;
 
     try {
       node.attr('x', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        return d.x = Math.max(BOUNDARY_MARGIN, Math.min(width - getNodeWidth(d) - BOUNDARY_MARGIN -
-            (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                selfReferringEdge.strokeWidth + 2 : 0), d.x));
+
+        var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+              selfReferringEdge.strokeWidth + 2 : 0)
+        var rightBoundary = width - d.textWidth - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+        var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
+        if (adaptive && width < MAX_WIDTH &&
+             (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
+            width += 5;
+            svg.attr("width", width);
+            force.size([width, height]).resume();
+        }
+        return d.x = currentXPos;
       }).attr('y', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
-        return d.y = Math.max(BOUNDARY_MARGIN, Math.min(height - nodeHeight - BOUNDARY_MARGIN -
-            (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0), d.y));
+        var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
+            selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
+        var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
+        var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
+        if (adaptive && height < MAX_HEIGHT &&
+             (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
+            height += 5;
+            svg.attr("height", height);
+            force.size([width, height]).resume();
+        }
+        return d.y = currentYPos;
       }).attr('transform', function (d) {
         return "translate(" + d.x + "," + d.y + ")";
       });
@@ -776,7 +895,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           // Self edge.
           if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-            x1 = d.source.x + getNodeWidth(d.source);
+            x1 = d.source.x + (d.source.textWidth);
             y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -793,7 +912,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-            x2 = d.source.x + getNodeWidth(d.source) / 1.2;
+            x2 = d.source.x + d.source.textWidth / 1.2;
             y2 = d.source.y + nodeHeight;
 
             if (d.value < 0 && colorOptimal) {
@@ -855,6 +974,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   function dragstart(d) {
     var node = d3.select(this);
+    d3.event.sourceEvent.stopPropagation();
     node.classed("fixed", d.fixed = true);
   }
 

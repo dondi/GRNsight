@@ -133,6 +133,7 @@ var parseSheet = function(sheet) {
           } else { // If we're within the matrix and lookin' at the data...
             try {
               if (currentSheet.data[row][column] === undefined) {
+                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
               } else if (isNaN(+("" + currentSheet.data[row][column]))) {
                 addError(network, errorList.dataTypeError(row, column));
@@ -167,8 +168,8 @@ var parseSheet = function(sheet) {
               }
 
             } catch (err) {
-              // TO DO: Customize this error message to the specific issue that occurred.
               addError(network, errorList.missingValueError(row, column));
+              // SHOULD BE: addError(network, errorList.unknownFileError);
               return network;
             };
           };
@@ -484,9 +485,10 @@ module.exports = function (app) {
         }
 
         if (path.extname(input) !== ".xlsx") {
-          return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRnsight can read." +
+          return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRNsight can read." +
             "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-            " able to be read by GRNsight.");
+            " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded using the importer under File > Import." +
+            " Additional information about file types that GRNsight supports is in the Documentation.");
         }
 
         return processGRNmap(input, res, app);
@@ -495,19 +497,19 @@ module.exports = function (app) {
 
     // Load the demos
     app.get('/demo/unweighted', function (req, res) {
-      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
+      return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
     });
 
     app.get('/demo/weighted', function (req, res) {
-      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
+      return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
     });
 
     app.get('/demo/schadeInput', function (req, res) {
-      return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+      return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
     });
 
     app.get('/demo/schadeOutput', function (req, res) {
-      return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
+      return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
     });
   }
 

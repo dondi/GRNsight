@@ -186,7 +186,7 @@ function checkForGene(test, frequency, input) {
 function warningsCountError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet),
-      warningsCountErrorArray = network.errors.filter(function(x){return x.errorCode == "WARNINGS_OVERLOAD"});
+      warningsCountErrorArray = network.errors.filter(function(x){return x.errorCode == "WARNINGS_OVERLOAD";});
 
   assert.equal(frequency, warningsCountErrorArray.length);
 }
