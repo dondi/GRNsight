@@ -42,16 +42,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
   }
 
-  //normalization all weights b/w 2-14
-  /*var totalScale = d3.scale.linear()
-        .domain(d3.extent(allWeights))
-        .range([2, 14])
-
-  var normalizedScale = d3.scale.linear()
-        .domain(d3.extent(allWeights)),
-
-      unweighted = false;*/
-
+  //normalization all weights b/w size 2 and size 14
   //if unweighted, weight is 2
   if (sheetType === 'unweighted') {
     var totalScale = d3.scale.quantile()
@@ -65,23 +56,32 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     unweighted = true;
     $(".normalization-form").append("placeholder='unweighted'");
   } else if (sheetType === 'weighted') {
+
+    /*
+    currently, we are hard coding the smallest value in the domain to be 0 
+    as opposed to the smallest weight in the adjacency matrix
+    */
+
+    var scalableWeights = allWeights.concat(0);
     var totalScale = d3.scale.linear()
-        .domain(d3.extent(allWeights))
+        .domain(d3.extent(scalableWeights))
         .range([2, 14])
 
         normalizedScale = d3.scale.linear()
-        .domain(d3.extent(allWeights))
+        .domain(d3.extent(scalableWeights))
 
       unweighted = false;
-    document.getElementById("normalization-min").setAttribute("placeholder", "min is " + d3.min(allWeights));
-    document.getElementById("normalization-max").setAttribute("placeholder", "max is " + d3.max(allWeights));
+    document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
     $("#normalization-button").click(function(){
-      var normMin = $("#normalization-min").val()
       var normMax = $("#normalization-max").val()
-      if (normMax != 0 && normMin >= 0) {
-        totalScale.domain([normMin, normMax])
-        normalizedScale.domain([normMin, normMax]);
-        console.log("you're here");
+      if (normMax > 0) {
+        var scaledWeights = scalableWeights.concat(+normMax);
+        totalScale.domain(scaledWeights);
+        normalizedScale.domain(scaledWeights);
+        $("#reload").click()
+        console.log(scaledWeights)
+      } else {
+        //???????????
       }
     });
   }
@@ -101,8 +101,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var drag = force.drag()
       .on("dragstart", dragstart);
-      //.on("drag", dragmove)
-      //.on("dragend", dragend);
 
   var svg = d3.select($container[0]).append("svg")
       .attr("width", width)
