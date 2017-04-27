@@ -67,29 +67,39 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     as opposed to the smallest weight in the adjacency matrix
     */
 
-    var scalableWeights = allWeights.concat(0);
+    var adjustedWeights = allWeights.concat(0); //force a minimum domain value to 0
     var normMax = $("#normalization-max").val()
 
-    if (normalization & normMax > 1) {
+    if (normalization & normMax > 0) {
 
-        var scaledWeights = scalableWeights.concat(+normMax);
-        var totalScale = d3.scale.linear()
-          .domain([0, normMax])
-          .range([2, 14]),
+      var newScaledData = [];
+ 
+      var normalizeWeights = d3.scale.linear()
+          .domain(adjustedWeights)
+          .range([0,normMax]);
+ 
+      for (var i = 0; i < adjustedWeights.length; i++) {
+        newScaledData[i] = +normalizeWeights(adjustedWeights[i]);
+      }
 
-          normalizedScale = d3.scale.linear()
-          .domain([0, normMax])
-          .range([2, 14]);
+      console.log(newScaledData);
 
-        console.log(scaledWeights)
-    } else {
-      console.log(scalableWeights)
       var totalScale = d3.scale.linear()
-          .domain(d3.extent(scalableWeights))
+        .domain(newScaledData)
+        .range([2, 14]),
+
+        normalizedScale = d3.scale.linear()
+        .domain(newScaledData)
+        .range([2, 14]);
+
+    } else {
+      console.log(adjustedWeights)
+      var totalScale = d3.scale.linear()
+          .domain(d3.extent(adjustedWeights))
           .range([2, 14]),
 
           normalizedScale = d3.scale.linear()
-          .domain(d3.extent(scalableWeights))
+          .domain(d3.extent(adjustedWeights))
           .range([2, 14]);
 
       unweighted = false;
