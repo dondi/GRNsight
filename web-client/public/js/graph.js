@@ -770,21 +770,21 @@ var text = node.append("text")
       };
 
       if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
-        svg.selectAll(".weight")
+        link.selectAll(".weight")
           .classed("visible", false)
 
         link.on('mouseover', showWeight).on('mouseout', hideWeight);
         weight.on('mouseover', showWeight).on('mouseout', hideWeight);
 
       } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
-        svg.selectAll(".weight")
+        link.selectAll(".weight")
           .classed("visible", false)
 
         link.on('mouseover', null).on('mouseout', null);
         weight.on('mouseover', null).on('mouseout', null);
 
       } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
-        svg.selectAll(".weight")
+        link.selectAll(".weight")
           .classed("visible", true)
 
         link.on('mouseover', null).on('mouseout', null);
