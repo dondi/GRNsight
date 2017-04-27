@@ -61,43 +61,42 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     unweighted = true;
     $(".normalization-form").append("placeholder='unweighted'");
   } else if (sheetType === 'weighted') {
+
     /*
     currently, we are hard coding the smallest value in the domain to be 0
     as opposed to the smallest weight in the adjacency matrix
     */
 
-    var totalScale = d3.scale.quantile()
-        .range([2, 14]);
-
-    var normalizedScale = d3.scale.linear()
-        .range([2,14]);
-
     var scalableWeights = allWeights.concat(0);
+    var normMax = $("#normalization-max").val()
 
-    if (!normalization) {
+    if (normalization & normMax > 1) {
+
+        var scaledWeights = scalableWeights.concat(+normMax);
+        var totalScale = d3.scale.linear()
+          .domain([0, normMax])
+          .range([2, 14]),
+
+          normalizedScale = d3.scale.linear()
+          .domain([0, normMax])
+          .range([2, 14]);
+
+        console.log(scaledWeights)
+    } else {
       console.log(scalableWeights)
       var totalScale = d3.scale.linear()
           .domain(d3.extent(scalableWeights))
-          .range([2, 14])
+          .range([2, 14]),
 
           normalizedScale = d3.scale.linear()
           .domain(d3.extent(scalableWeights))
+          .range([2, 14]);
 
       unweighted = false;
 
       document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
 
-    } else if (normalization) {
-      var normMax = $("#normalization-max").val()
-      console.log()
-      if (normMax > 0) {
-        var scaledWeights = scalableWeights.concat(+normMax);
-        totalScale.domain(scaledWeights);
-        normalizedScale.domain(scaledWeights);
-        console.log(scaledWeights)
-        $("#reload").click()
-      }
-    }
+    } 
   }
 
   var getEdgeThickness = function (edge) {

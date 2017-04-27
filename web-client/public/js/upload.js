@@ -106,7 +106,7 @@ $(function () {
   $("#normalization-button").click(function(){
     normalization = true;
     console.log("holla")
-    //displayNetwork(currentNetwork, name, normalization);
+    displayNetwork(currentNetwork, name, normalization);
   });
 
 
