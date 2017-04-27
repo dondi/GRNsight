@@ -4,7 +4,7 @@
  *and http://bl.ocks.org/mbostock/1153292
  */
 
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController) {
+var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization) {
 
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
@@ -46,6 +46,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
   }
 
+
   //normalization all weights b/w size 2 and size 14
   //if unweighted, weight is 2
   if (sheetType === 'unweighted') {
@@ -60,34 +61,43 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     unweighted = true;
     $(".normalization-form").append("placeholder='unweighted'");
   } else if (sheetType === 'weighted') {
-
     /*
     currently, we are hard coding the smallest value in the domain to be 0
     as opposed to the smallest weight in the adjacency matrix
     */
 
-    var scalableWeights = allWeights.concat(0);
-    var totalScale = d3.scale.linear()
-        .domain(d3.extent(scalableWeights))
-        .range([2, 14])
+    var totalScale = d3.scale.quantile()
+        .range([2, 14]);
 
-        normalizedScale = d3.scale.linear()
-        .domain(d3.extent(scalableWeights))
+    var normalizedScale = d3.scale.linear()
+        .range([2,14]);
+
+    var scalableWeights = allWeights.concat(0);
+
+    if (!normalization) {
+      console.log(scalableWeights)
+      var totalScale = d3.scale.linear()
+          .domain(d3.extent(scalableWeights))
+          .range([2, 14])
+
+          normalizedScale = d3.scale.linear()
+          .domain(d3.extent(scalableWeights))
 
       unweighted = false;
-    document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
-    $("#normalization-button").click(function(){
+
+      document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
+
+    } else if (normalization) {
       var normMax = $("#normalization-max").val()
+      console.log()
       if (normMax > 0) {
         var scaledWeights = scalableWeights.concat(+normMax);
         totalScale.domain(scaledWeights);
         normalizedScale.domain(scaledWeights);
-        $("#reload").click()
         console.log(scaledWeights)
-      } else {
-        //???????????
+        $("#reload").click()
       }
-    });
+    }
   }
 
   var getEdgeThickness = function (edge) {
