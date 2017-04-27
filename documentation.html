@@ -163,10 +163,15 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 <li>For a network defined in SIF format, node names should be unique, as identically named nodes will be treated as identical nodes.</li>
                                 <li>Node names must be 12 characters or fewer.</li>
                               </ul>
+                              <!--Uncomment after the release of GRNsight v2-->
+                              <!--<li>Starting from GRNsight v2, the relationship type for a weighted network is required to be "pd". "pd" was chosen because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community. A strict requirement for the relationship type was specified to expand upon SIF syntactic error checking capabilities.</li>-->
+                              <!--Delete starting here after the release of GRNsight v2-->
                               <li>The relationship type can be any text string description.  The relationship type of “pd” is used in the examples below because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community, but other types could be used.</li>
                               <ul>
                                         <li>If different text strings representing different relationship types are present in the SIF file, GRNsight will treat them as the same type because it does not have the ability to differentiate them in the display.</li>
                               </ul>
+                              <!--Delete ending here after the release of GRNsight v2-->
+                                    
                               <li>Duplicate entries are ignored (as would occur if the same source-target pair was listed twice with two different relationship types).</li>
                               <li>GRNsight automatically detects whether the SIF file represents an unweighted or weighted network through the examination of the relationship type.  The screenshots and descriptions below are four valid ways that an unweighted network can be specified as a SIF file, using the file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.sif">Demo #3: Unweighted GRN"</a> as an example.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)  Follow the link to download a sample SIF file.</li>
                               <ul>
@@ -220,6 +225,9 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>For a weighted network, each source-to-target relationship should be on a separate line.  While it is possible that two or more source-to-target relationships would have the same exact weight value, it is not recommended to use the shorthand of listing multiple target nodes on the same row.</li>
                                         <li>GRNsight will automatically detect a SIF file representing a weighted network when it finds numerical values as the relationship type.  It will change the arrowhead type and the thickness and color of the edges as described in <a href="#unweighted_vs_weighted" data-toggle="collapse">Section 3a</a>.</li>
                                         <ul>
+                                                  <!-- Uncomment upon release of GRNsight v2-->
+                                                  <!--<li>However, if it detects a mix of numerical and "pd" string values as the relationship type, it will issue a warning to the user that this was detected, but still display the network as an unweighted network.</li>-->
+                                                  <!-- Delete line below upon release of GRNsight v2-->
                                                   <li>However, if it detects a mix of numerical and text string values as the relationship type, it will display the network as an unweighted network.</li>
                                                   <li>If the user has selected the menu item Edit > Preferences > Default to black edges with regular arrowheads, GRNsight will ignore the numerical weight values and display the network as an unweighted graph.</li>
                                                   <li>Note that these “weighted” SIF files are able to be imported in to Cytoscape (tested with v3.4.0), but the weight values will not be properly stored as edge attributes by Cytoscape because it does not use the SIF format in this way.</li>
