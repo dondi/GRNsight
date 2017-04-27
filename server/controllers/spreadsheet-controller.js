@@ -63,7 +63,7 @@ var parseSheet = function(sheet) {
       console.log(network.positiveWeights !== 0)
       if(network.positiveWeights !== 0){
         network.sheetType = "unweighted";
-        addWarning(network, warningsList.incorrectlyNamedSheetWarning) //<--- make that error;
+        addWarning(network, warningsList.incorrectlyNamedSheetWarning()); //<--- make that error;
       }
     } else if (sheet[i].name == "network_optimized_weights") {
       //We found a sheet with optimized weights, which is the ideal data source.
@@ -71,11 +71,11 @@ var parseSheet = function(sheet) {
       currentSheet = sheet[i];
       network.sheetType = "weighted";
        if ((sheet.name.indexOf("network") === -1) && (network.positiveWeights == 1)){
-        addWarning(network, warningsList.incorrectlyNamedSheetWarning)
+        addWarning(network, warningsList.incorrectlyNamedSheetWarning());
       }
      else if(network.positiveWeights == 1){
         network.sheetType = "unweighted";
-        addWarning(network, warningsList.incorrectlyNamedSheetWarning) //<--- make that error;
+        addWarning(network, warningsList.incorrectlyNamedSheetWarning()); //<--- make that error;
       }
       break;
     }
@@ -482,10 +482,10 @@ var warningsList = {
     }
   },
 
-  incorrectlyNamedSheetWarning: function {
-    return{
-    warningCode: "INCORRECTLY_NAMED_SHEET",
-    possibleCause: "The uploaded spreadsheet was named incorrectly. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+  incorrectlyNamedSheetWarning: function () {
+    return {
+      warningCode: "INCORRECTLY_NAMED_SHEET",
+      errorDescription: "The uploaded spreadsheet was named incorrectly. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     }
   },
 };

@@ -261,7 +261,7 @@ $(function () {
     var warningsString = "";
     //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
 
-    var NUM_POSSIBLE_WARNINGS = 9;
+    var NUM_POSSIBLE_WARNINGS = 10;
 
     // Fill printed with 0s programatically
     var printed = [];
@@ -279,6 +279,7 @@ $(function () {
     var edgesWithoutWeightsCount = warnings.filter(function (x) { return x.warningCode === "EDGES_WITHOUT_WEIGHTS"; });
     var edgeDefaultNotDirectedCount = warnings.filter(function (x) { return x.warningCode === "EDGE_DEFAULT_NOT_DIRECTED"; });
     var sifFormatWarningCount = warnings.filter(function (x) { return x.warningCode === "SIF_FORMAT_WARNING"; });
+    var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) { return x.warningCode === "INCORRECTLY_NAMED_SHEET"; });
 
     function createWarningsString(warningCount, index) {
       for (var i = 0; i < warningCount.length; i++) {
@@ -308,6 +309,8 @@ $(function () {
     createWarningsString(edgesWithoutWeightsCount,7);
     createWarningsString(edgeDefaultNotDirectedCount,8);
     createWarningsString(sifFormatWarningCount, 9);
+    createWarningsString(incorrectlyNamedSheetWarningCount, 10);
+
 
     $("#warningsList").html(warningsString);
 
