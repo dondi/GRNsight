@@ -75,7 +75,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       var newScaledData = [];
  
       var normalizeWeights = d3.scale.linear()
-          .domain(adjustedWeights)
+          .domain(d3.extent(adjustedWeights))
           .range([0,normMax]);
  
       for (var i = 0; i < adjustedWeights.length; i++) {
