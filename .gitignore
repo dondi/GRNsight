@@ -24,3 +24,4 @@ node_modules
 _gh_pages
 
 coverage/
+web-client/public/stylesheets/*.css
