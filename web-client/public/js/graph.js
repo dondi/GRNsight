@@ -67,6 +67,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     as opposed to the smallest weight in the adjacency matrix
     */
 
+    allWeights.sort(); // forces 0 to always be at the end of the weights list
     var adjustedWeights = allWeights.concat(0); //force a minimum domain value to 0
     var normMax = $("#normalization-max").val();
 
@@ -75,19 +76,24 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     if (normalization & normMax > 0) {
-
       var newScaledData = [];
 
       var normalizeWeights = d3.scale.linear()
           .domain(d3.extent(adjustedWeights))
           .range([0,normMax]);
 
-      for (var i = 0, j = 0; i < adjustedWeights.length; i++) {
+      // Sort links so that the links match up with the weights
+      links.sort(function(a, b) {
+        var absoluteA = Math.abs(a.displayWeight);
+        var absoluteB = Math.abs(b.displayWeight);
+        return (absoluteA > absoluteB) ? 1 : ((absoluteB > absoluteA) ? -1 : 0);
+      });
+
+
+      // We subtract 1 to account for the final 0.
+      for (var i = 0; i < adjustedWeights.length - 1; i++) {
         newScaledData[i] = +normalizeWeights(adjustedWeights[i]);
-        if (adjustedWeights[i] !== 0) {
-          links[j].value = newScaledData[i];
-          j++;
-        }
+        links[i].value = newScaledData[i];
       }
 
       var totalScale = d3.scale.linear()
