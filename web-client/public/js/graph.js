@@ -71,9 +71,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var adjustedWeights = allWeights.concat(0); //force a minimum domain value to 0
     var normMax = $("#normalization-max").val();
 
+    console.log(links);
     for (var i = 0; i < links.length; i++) {
-      links[i].displayWeight = links[i].value;
+      links[i].normalizedValue = links[i].value;
     }
+    console.log(links);
 
     if (normalization & normMax > 0) {
       var newScaledData = [];
@@ -84,16 +86,17 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
       // Sort links so that the links match up with the weights
       links.sort(function(a, b) {
-        var absoluteA = Math.abs(a.displayWeight);
-        var absoluteB = Math.abs(b.displayWeight);
+        var absoluteA = Math.abs(a.value);
+        var absoluteB = Math.abs(b.value);
         return (absoluteA > absoluteB) ? 1 : ((absoluteB > absoluteA) ? -1 : 0);
       });
+      //console.log(links);
 
 
       // We subtract 1 to account for the final 0.
       for (var i = 0; i < adjustedWeights.length - 1; i++) {
         newScaledData[i] = +normalizeWeights(adjustedWeights[i]);
-        links[i].value = newScaledData[i];
+        links[i].normalizedValue = newScaledData[i];
       }
 
       var totalScale = d3.scale.linear()
@@ -121,7 +124,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var getEdgeThickness = function (edge) {
-      return Math.round(totalScale(Math.abs(edge.value)));
+      return Math.round(totalScale(Math.abs(edge.normalizedValue)));
   };
 
   var force = d3.layout.force()
@@ -334,7 +337,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             xOffsets,
             color;
 
-        if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+        if(Math.abs(d.normalizedValue/(d3.max(allWeights))) <= 0.05) {
           minimum = "gray";
         }
         if( x1 === x2 && y1 === y2 ) {
@@ -349,7 +352,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
           // If negative, you need one bar for horizontal and one for vertical. If the user is not coloring the weighted
           // sheets, then we make all of the markers arrowheads.
-          if(d.displayWeight < 0 && colorOptimal) {
+          if(d.value < 0 && colorOptimal) {
             defs.append("marker")
              .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
              .attr("refX", function() {
@@ -513,14 +516,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .attr("text-anchor", "middle")
         .attr("text-anchor", "middle")
         .text(function (d) {
-          return d.displayWeight.toPrecision(4);
+          return d.value.toPrecision(4);
         });
 
       weight = weight.data(links)
         .enter().append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
-        .text(function (d) { return d.displayWeight.toPrecision(4); })
+        .text(function (d) { return d.value.toPrecision(4); })
         .each(function (d) { d.weightElement = d3.select(this); });
 
     }
@@ -606,7 +609,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
     var globalOffset = parseFloat(d.strokeWidth);
 
-    if (d.displayWeight < 0 && colorOptimal) {
+    if (d.value < 0 && colorOptimal) {
       globalOffset = Math.max(globalOffset, MINIMUM_DISTANCE);
     }
 
@@ -944,7 +947,7 @@ var text = node.append("text")
             x2 = d.source.x + d.source.textWidth / 1.2;
             y2 = d.source.y + nodeHeight;
 
-            if (d.displayWeight < 0 && colorOptimal) {
+            if (d.value < 0 && colorOptimal) {
               offset = Math.max(10, parseFloat(d.strokeWidth));
             }
           }
@@ -998,7 +1001,7 @@ var text = node.append("text")
   }
 
   function normalize(d) {
-    return Math.abs(d.value/(d3.max(allWeights)));
+    return Math.abs(d.normalizedValue/(d3.max(allWeights)));
   }
 
   function dragstart(d) {
