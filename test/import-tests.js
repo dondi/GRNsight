@@ -377,3 +377,10 @@ describe("Import from GraphML", function () {
     });
   });
 });
+
+describe('sheet-named-incorrectly', function () {
+  it('1 wrong name warning per file', function () {
+      test.incorrectlyNamedSheetWarning('sheet-tests/incorrecly-named-sheet-network.xlsx');
+      test.incorrectlyNamedSheetWarning('sheet-tests/gene-name-modifications/incorrecly-named-sheet-network-optimized-weights.xlsx');
+  })
+})

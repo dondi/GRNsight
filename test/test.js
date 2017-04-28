@@ -27,6 +27,7 @@ exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
 exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
+exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
 
 exports.shortestPath = shortestPath;
 exports.betweennessCentrality = betweennessCentrality;
@@ -276,6 +277,14 @@ function extraneousDataWarning(input, frequency) {
   var extraneousDataWarning = network.warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
 
   assert.equal(frequency, extraneousDataWarning.length);
+}
+
+function incorrectlyNamedSheetWarning(input, frequency){
+  var sheet = xlsx.parse(input),
+    network = spreadsheetController.parseSheet(sheet);
+  var incorrectlyNamedSheetWarning = network.warnings.filter(function(x){return x.warningCode=="INCORRECTLY_NAMED_SHEET"});
+
+  assert.equal(frequency, incorrectlyNamedSheetWarning.length);
 }
 
 //GRAPH STATISTICS
