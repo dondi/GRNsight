@@ -198,7 +198,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   });
 
   $(window).on("resize", function () {
-    $(".boundBoxSize").trigger("click");
+      if ( $(".grnsight-container").hasClass("containerFit")) {
+          $(".boundBoxSize").trigger("click");
+      }
   });
 
   function center() {
