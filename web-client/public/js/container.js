@@ -4,15 +4,24 @@ $(function () {
   var enableScroll = $("#enableScroll");
   var pageWidth = $(window).width();
 
-  if (pageWidth < 1500) {
+  var WIDTH_OFFSET = 250;
+  var HEIGHT_OFFSET = 53;
+
+  var MEDIUM_PAGE_WIDTH = 1500;
+  var LARGE_PAGE_WIDTH = 2200;
+
+  var windowWidth = $(window).width() - WIDTH_OFFSET;
+  var windowHeight = $(window).height() - HEIGHT_OFFSET;
+
+  if (pageWidth < MEDIUM_PAGE_WIDTH) {
       $('#boundBoxS').prop('checked', true);
-      $(".containerDefault").attr("class", "grnsight-container containerS");
-  } else if (pageWidth > 1500 && pageWidth < 2200) {
+      container.addClass("containerS");
+  } else if (pageWidth > MEDIUM_PAGE_WIDTH && pageWidth < LARGE_PAGE_WIDTH) {
       $('#boundBoxM').prop('checked', true);
-      $(".containerDefault").attr("class", "grnsight-container containerM");
+      container.addClass("containerM");
   } else {
       $('#boundBoxL').prop('checked', true);
-      $(".containerDefault").attr("class", "grnsight-container containerL");
+      container.addClass("containerL");
   }
 
   $(".boundBoxSize").on("click", function () {
@@ -20,7 +29,19 @@ $(function () {
     var grnsightContainerClass = "grnsight-container " + currentValue;
     if (!container.hasClass(currentValue)) {
       container.attr("class", grnsightContainerClass);
+      container.css(currentValue === "containerFit" ?
+          {width: windowWidth, height: windowHeight} :
+          {width: "", height: ""}
+      );
     };
+  });
+
+  $(window).on("resize", function () {
+    windowWidth = $(window).width() - WIDTH_OFFSET;
+    windowHeight = $(window).height() - HEIGHT_OFFSET;
+    if (container.hasClass("containerFit")) {
+        container.css({width: windowWidth, height: windowHeight});
+    }
   });
 
 })

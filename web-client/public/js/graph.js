@@ -26,11 +26,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     colorOptimal = false;
   }
 
-  var adaptive = $("input[name='viewport']:checked").val() === "viewportAdapt";
+  var adaptive = !$("input[name='viewport']").prop("checked");
 
   var MIN_SCALE = 0.25;
   var MAX_SCALE = (adaptive) ? 10 : 1;
   d3.select(".zoomSlider").attr("max", MAX_SCALE);
+  var BORDER_OFFSET = 4;
+  var WIDTH_OFFSET = 250;
+  var HEIGHT_OFFSET = 53;
 
   var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -96,6 +99,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .attr("height", height)
         .call(zoom)
       .append("g") // required for zoom to work
+        .attr("class", "boundingBox");
 
   // This rectangle catches all of the mousewheel and pan events, without letting
   // them bubble up to the body.
@@ -146,11 +150,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   });
 
   d3.selectAll(".boundBoxSize").on("click", function () {
-    var newWidth = d3.select(".grnsight-container").style("width");
-    var newHeight = d3.select(".grnsight-container").style("height");
-    var BORDER_OFFSET = 4;
-
-    // Remove trailing "px"
+    var newWidth = $(".grnsight-container").css("width");
+    var newHeight = $(".grnsight-container").css("height");
     newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
     newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
 
@@ -162,42 +163,61 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       height = newHeight;
     }
 
-    d3.select("svg").attr("width", width).attr("height", height);
+    d3.select("svg").attr("width", newWidth).attr("height", newHeight);
     d3.select("rect").attr("width", width).attr("height", height);
+    d3.select(".boundingBox").attr("width", width).attr("height", height);
     force.size([width, height]).resume();
   });
 
   d3.selectAll("input[name=viewport]").on("change", function () {
-    let value = $(this).attr("value");
-    if (!adaptive && value === "viewportAdapt") {
+    let fixed = $(this).prop("checked");
+    if (!adaptive && !fixed) {
       adaptive = true;
       MAX_SCALE = 10;
       d3.select("rect").attr("stroke", "none");
       zoom.scaleExtent([MIN_SCALE, MAX_SCALE])
       d3.select(".zoomSlider").attr("max", MAX_SCALE);
-    } else if (adaptive && value === "viewportHard") {
-      var BORDER_OFFSET = 4;
-      var newWidth = d3.select(".grnsight-container").style("width");
-      var newHeight = d3.select(".grnsight-container").style("height");
+    } else if (adaptive && fixed) {
+      var newWidth = $(".grnsight-container").css("width");
+      var newHeight = $(".grnsight-container").css("height");
+      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
+      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
 
       adaptive = false;
       MAX_SCALE = 1;
-      d3.select("rect").attr("stroke", "#9A9A9A");
+      d3.select("rect").attr("stroke", "#9A9A9A").attr("width", width).attr("height", height);
+      $(".boundingBox").attr("width", width).attr("height", height);
       zoom.scaleExtent([MIN_SCALE, MAX_SCALE]);
       if (zoom.scale() > 1) {
           scale(1);
       }
       d3.select(".zoomSlider").attr("max", MAX_SCALE);
-      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
-      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
+
       force.size([width, height]).resume();
     }
   });
 
+  $(window).on("resize", function () {
+    $(".boundBoxSize").trigger("click");
+  });
+
   function center() {
     svg.call(zoom.event);
-    zoom.translate([0, 0]);
-    zoom.scale(1);
+    var scale = zoom.scale();
+    var viewportWidth = $(".grnsight-container").css("width");
+    var viewportHeight = $(".grnsight-container").css("height");
+    viewportWidth = viewportWidth.substring(0, viewportWidth.length - 2) - BORDER_OFFSET;
+    viewportHeight = viewportHeight.substring(0, viewportHeight.length - 2) - BORDER_OFFSET;
+
+    var boundingBoxWidth = $(".boundingBox").attr("width");
+    var boundingBoxHeight = $(".boundingBox").attr("height");
+
+    var scaledWidth = scale * boundingBoxWidth;
+    var scaledHeight = scale * boundingBoxHeight;
+
+    var translatedWidth = (viewportWidth - scaledWidth) / 2;
+    var translatedHeight = (viewportHeight - scaledHeight) / 2;
+    zoom.translate([translatedWidth, translatedHeight]);
     svg.transition().call(zoom.event);
   }
 
