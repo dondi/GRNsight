@@ -311,7 +311,6 @@ $(function () {
     createWarningsString(sifFormatWarningCount, 9);
     createWarningsString(incorrectlyNamedSheetWarningCount, 10);
 
-
     $("#warningsList").html(warningsString);
 
     var screenHeight = $(window).height();

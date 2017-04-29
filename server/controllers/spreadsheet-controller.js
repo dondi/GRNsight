@@ -1,14 +1,14 @@
 var multiparty = require('multiparty'),
-  xlsx = require('node-xlsx'),
-  util = require('util'),
-  path = require('path'),
-  cytoscape = require('cytoscape');
+    xlsx = require('node-xlsx'),
+    util = require('util'),
+    path = require('path'),
+    cytoscape = require('cytoscape');
 
 var helpers = require(__dirname + "/helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
-var processGRNmap = function(path, res, app) {
+var processGRNmap = function (path, res, app) {
   var sheet;
   var network;
 
@@ -32,35 +32,32 @@ var processGRNmap = function(path, res, app) {
 
 var parseSheet = function(sheet) {
   var currentSheet,
-    network = {
-      genes: [],
-      links: [],
-      errors: [],
-      warnings: [],
-      positiveWeights: [],
-      negativeWeights: [],
-      sheetType: "unweighted",
-    },
-    currentLink,
-    currentGene,
-    sourceGene,
-    targetGene,
-    sourceGeneNumber,
-    targetGeneNumber,
-    genesList = [], // This will contain all of the genes in upper case for use in error checking
-    sourceGenes = [],
-    targetGenes = [];
+      network = {
+        genes: [],
+        links: [],
+        errors: [],
+        warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
+        sheetType: "unweighted",
+      },
+      currentLink,
+      currentGene,
+      sourceGene,
+      targetGene,
+      sourceGeneNumber,
+      targetGeneNumber,
+      genesList = [], // This will contain all of the genes in upper case for use in error checking
+      sourceGenes = [],
+      targetGenes = [];
 
   //Look for the worksheet containing the network data
   for (var i = 0; i < sheet.length; i++) {
-    if (sheet[i].name == "network") {
+    if (sheet[i].name === "network") {
       //Here we have found a sheet containing simple data. We keep looking
       //in case there is also a sheet with optimized weights
       currentSheet = sheet[i];
-      // this is to check whether the the data matches up to the sheet title and takes corrective action
-      // if in fact it is named incorrectly. as of now, the code below is simply in a outline phase and should
-      // not be considered functional
-    } else if (sheet[i].name == "network_optimized_weights") {
+    } else if (sheet[i].name === "network_optimized_weights") {
       //We found a sheet with optimized weights, which is the ideal data source.
       //So we stop looking.
       currentSheet = sheet[i];
@@ -78,7 +75,7 @@ var parseSheet = function(sheet) {
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-    if (currentSheet.data[row].length === 0) { // if the current row is empty
+    if(currentSheet.data[row].length === 0) { // if the current row is empty
       if (addError(network, errorList.emptyRowError(row)) == false) {
         return network;
       }
@@ -87,17 +84,15 @@ var parseSheet = function(sheet) {
       // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
       // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
       try { // This prevents the server from crashing if something goes wrong anywhere in here
-        while (column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
+        while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
           if (row === 0) { // If we are at the top of a new column...
             // These genes are the source genes
             try {
-              currentGene = {
-                name: currentSheet.data[0][column]
-              };
+              currentGene = {name: currentSheet.data[0][column]};
               // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
-              if (currentGene.name === undefined) {
+              if(currentGene.name === undefined) {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              } else if (isNaN(currentGene.name) && typeof currentGene.name != "string") {
+              } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
               } else {
                 sourceGenes.push(String(currentGene.name.toUpperCase()));
@@ -112,12 +107,10 @@ var parseSheet = function(sheet) {
           } else if (column === 0) { // If we are at the far left of a new row...
             // These genes are the target genes
             try {
-              currentGene = {
-                name: currentSheet.data[row][0]
-              };
-              if (currentGene.name === undefined) {
+              currentGene = {name: currentSheet.data[row][0]};
+              if(currentGene.name === undefined) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              } else if (isNaN(currentGene.name) && typeof currentGene.name != "string") {
+              } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
@@ -150,19 +143,15 @@ var parseSheet = function(sheet) {
                   // Grab the source and target genes' names
                   sourceGene = currentSheet.data[0][column];
                   targetGene = currentSheet.data[row][0];
-                  if (sourceGene === undefined || targetGene === undefined) {
+                  if(sourceGene === undefined || targetGene === undefined) {
                     addWarning(network, warningsList.randomDataWarning("undefined", row, column));
-                  } else if ((isNaN(sourceGene) && typeof sourceGene != "string") || (isNaN(targetGene) && typeof targetGene != "string")) {
+                  } else if((isNaN(sourceGene) && typeof sourceGene != "string") || (isNaN(targetGene) && typeof targetGene != "string")) {
                     addWarning(network, warningsList.randomDataWarning("NaN", row, column));
                   } else {
                     // Grab the source and target genes' numbers
                     sourceGeneNumber = genesList.indexOf(sourceGene.toUpperCase());
                     targetGeneNumber = genesList.indexOf(targetGene.toUpperCase());
-                    currentLink = {
-                      source: sourceGeneNumber,
-                      target: targetGeneNumber,
-                      value: currentSheet.data[row][column]
-                    };
+                    currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column]};
                     // Here we set the properties of the current link before we push them to the network
                     if (network.sheetType === "weighted") {
                       if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
@@ -195,7 +184,7 @@ var parseSheet = function(sheet) {
           };
           column++; // Let's move on to the next column!
         }; // Once we finish with the current row...
-        column = 0; // let's go back to column 0 on the next row!
+      column = 0; // let's go back to column 0 on the next row!
       } catch (err) {
         // We only get here if something goes drastically wrong. We don't want to get here.
         addError(network, errorList.unknownError);
@@ -225,15 +214,15 @@ var parseSheet = function(sheet) {
   try {
     network.graphStatisticsReport = graphStatisticsReport(network);
   } catch (err) {
-    console.log("Graph statistics report failed to be complete.");
+    console.log ("Graph statistics report failed to be complete.");
   }
 
   return semanticChecker(network);
 };
 
-var grnSightToCytoscape = function(network) {
+var grnSightToCytoscape = function (network) {
   var result = [];
-  network.genes.forEach(function(gene) {
+  network.genes.forEach(function (gene) {
     result.push({
       data: {
         id: gene.name
@@ -241,7 +230,7 @@ var grnSightToCytoscape = function(network) {
     })
   });
 
-  network.links.forEach(function(link) {
+  network.links.forEach(function (link) {
     var sourceGene = network.genes[link.source];
     var targetGene = network.genes[link.target];
     result.push({
@@ -256,7 +245,7 @@ var grnSightToCytoscape = function(network) {
   return result;
 };
 
-var graphStatisticsReport = function(network) {
+var graphStatisticsReport = function(network)  {
   var betweennessCentrality = [];
   var shortestPath = [];
   var cytoscapeElements = grnSightToCytoscape(network);
@@ -292,42 +281,42 @@ var graphStatisticsReport = function(network) {
   };
 }
 
-var addMessageToArray = function(messageArray, message) {
-  messageArray.push(message);
+var addMessageToArray = function (messageArray, message) {
+    messageArray.push(message);
 }
 
-var addWarning = function(network, message) {
-  var warningsCount = network.warnings.length;
-  var MAX_WARNINGS = 75;
-  if (warningsCount < MAX_WARNINGS) {
-    addMessageToArray(network.warnings, message);
-  } else {
-    addMessageToArray(network.errors, errorsList.warningsCountError);
-    return false;
-  }
+var addWarning = function (network, message) {
+    var warningsCount = network.warnings.length;
+    var MAX_WARNINGS = 75;
+    if (warningsCount < MAX_WARNINGS) {
+      addMessageToArray(network.warnings, message);
+    } else {
+      addMessageToArray(network.errors, errorsList.warningsCountError);
+      return false;
+    }
 }
 
-var addError = function(network, message) {
-  var errorsCount = network.errors.length;
-  var MAX_ERRORS = 20;
-  if (errorsCount < MAX_ERRORS) {
-    addMessageToArray(network.errors, message);
-  } else {
-    addMessageToArray(network.errors, errorList.errorsCountError);
-    return false;
-  }
+var addError = function (network, message) {
+    var errorsCount = network.errors.length;
+    var MAX_ERRORS = 20;
+    if (errorsCount < MAX_ERRORS) {
+      addMessageToArray(network.errors, message);
+    } else {
+      addMessageToArray(network.errors, errorList.errorsCountError);
+      return false;
+    }
 }
 
 var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
   // Run through the source genes and check if the gene in slot i is the same as the one next to it
-  for (var i = 0; i < sourceGenes.length - 1; i++) {
-    if (sourceGenes[i] === sourceGenes[i + 1]) {
+  for(var i = 0; i < sourceGenes.length - 1; i++) {
+    if(sourceGenes[i] === sourceGenes[i + 1]) {
       errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
     }
   }
   // Run through the target genes and check if the gene in slot j is the same as the one next to it
-  for (var j = 0; j < targetGenes.length - 1; j++) {
-    if (targetGenes[j] === targetGenes[j + 1]) {
+  for(var j = 0; j < targetGenes.length - 1; j++) {
+    if(targetGenes[j] === targetGenes[j + 1]) {
       errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
     }
   }
@@ -341,25 +330,25 @@ var errorList = {
     errorCode: "MISSING_NETWORK",
     possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
     suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " +
-      "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
+    "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
   },
 
-  corruptGeneError: function(row, column) {
+  corruptGeneError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       errorCode: "CORRUPT_GENE",
-      possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.",
+      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.",
       suggestedFix: "Please fix the error and try uploading again."
     };
   },
 
-  missingValueError: function(row, column) {
+  missingValueError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       errorCode: "MISSING_VALUE",
-      possibleCause: "The value in the cell " + colLetter + rowNum + " in the adjacency matrix appears to have a missing value.",
+      possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.",
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
     };
   },
@@ -372,45 +361,44 @@ var errorList = {
     };
   },
 
-  dataTypeError: function(row, column) {
+  dataTypeError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       errorCode: "INVALID_CELL_DATA_TYPE",
-      possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
+      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
       suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
     }
   },
 
-  emptyRowError: function(row) {
+  emptyRowError: function (row) {
     var rowNum = row + 1;
     return {
       errorCode: "EMPTY_ROW",
       possibleCause: "Row " + rowNum + " does not contain any data.",
       suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " +
-        "Also, please ensure that no extraneous data is outside of the matrix, " +
-        "as this may cause this error."
+                    "Also, please ensure that no extraneous data is outside of the matrix, " +
+                    "as this may cause this error."
     }
   },
 
-  outsideCellError: function(row, column) {
+  outsideCellError: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       errorCode: "EMPTY_CELL",
       possibleCause: "The cell at " + colLetter + rowNum + " contains data that is outside the matrix.",
       suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" +
-        " the matrix is "
+                    " the matrix is "
     }
   },
-
   errorsCountError: {
     errorCode: "ERRORS_OVERLOAD",
     possibleCause: "This network has over 20 errors.",
     suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-      "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-      "further errors detected. As a general approach for fixing the errors, consider copying and " +
-      "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+    "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+    "further errors detected. As a general approach for fixing the errors, consider copying and " +
+    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
   },
 
   unknownError: {
@@ -422,85 +410,13 @@ var errorList = {
 }
 
 //Currently only going to number 76 because currently the network errors out at 75+ genes.
-var numbersToLetters = {
-  0: 'A',
-  1: 'B',
-  2: 'C',
-  3: 'D',
-  4: 'E',
-  5: 'F',
-  6: 'G',
-  7: 'H',
-  8: 'I',
-  9: 'J',
-  10: 'K',
-  11: 'L',
-  12: 'M',
-  13: 'N',
-  14: 'O',
-  15: 'P',
-  16: 'Q',
-  17: 'R',
-  18: 'S',
-  19: 'T',
-  20: 'U',
-  21: 'V',
-  22: 'W',
-  23: 'X',
-  24: 'Y',
-  25: 'Z',
-  26: 'AA',
-  27: 'AB',
-  28: 'AC',
-  29: 'AD',
-  30: 'AE',
-  31: 'AF',
-  32: 'AG',
-  33: 'AH',
-  34: 'AI',
-  35: 'AJ',
-  36: 'AK',
-  37: 'AL',
-  38: 'AM',
-  39: 'AN',
-  40: 'AO',
-  41: 'AP',
-  42: 'AQ',
-  43: 'AR',
-  44: 'AS',
-  45: 'AT',
-  46: 'AU',
-  47: 'AV',
-  48: 'AW',
-  49: 'AX',
-  51: 'AY',
-  51: 'AZ',
-  52: 'BA',
-  53: 'BB',
-  54: 'BC',
-  55: 'BD',
-  56: 'BE',
-  57: 'BF',
-  58: 'BG',
-  59: 'BH',
-  60: 'BI',
-  61: 'BJ',
-  62: 'BK',
-  63: 'BL',
-  64: 'BM',
-  65: 'BN',
-  66: 'BO',
-  67: 'BP',
-  68: 'BQ',
-  69: 'BR',
-  70: 'BS',
-  71: 'BT',
-  72: 'BU',
-  73: 'BV',
-  74: 'BW',
-  75: 'BX',
-  76: 'BY'
-}
+var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8: 'I', 9:'J', 10:'K', 11:'L',
+    12:'M', 13:'N', 14:'O', 15:'P', 16:'Q', 17:'R', 18:'S', 19:'T', 20:'U', 21:'V', 22:'W', 23:'X', 24:'Y',
+    25:'Z', 26:'AA', 27:'AB', 28:'AC', 29:'AD', 30:'AE', 31:'AF', 32:'AG', 33:'AH', 34:'AI', 35:'AJ', 36:'AK',
+    37:'AL',38:'AM', 39:'AN', 40:'AO', 41:'AP', 42:'AQ', 43:'AR', 44:'AS', 45:'AT', 46:'AU', 47:'AV', 48:'AW',
+    49:'AX', 51:'AY', 51:'AZ', 52:'BA', 53:'BB', 54:'BC', 55:'BD', 56:'BE', 57:'BF', 58:'BG', 59:'BH', 60:'BI',
+    61:'BJ', 62:'BK', 63:'BL', 64:'BM', 65:'BN', 66:'BO', 67:'BP', 68:'BQ', 69:'BR', 70:'BS', 71:'BT', 72:'BU',
+    73:'BV', 74:'BW', 75:'BX', 76:'BY'}
 
 
 // This is the list of warnings.
@@ -508,43 +424,43 @@ var numbersToLetters = {
 
 
 var warningsList = {
-  missingSourceGeneWarning: function(row, column) {
+  missingSourceGeneWarning: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       warningCode: "MISSING_SOURCE",
-      errorDescription: "A source gene name is missing in cell " + colLetter + rowNum + "."
+      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."
     }
   },
 
-  missingTargetGeneWarning: function(row, column) {
+  missingTargetGeneWarning: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       warningCode: "MISSING_TARGET",
-      errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
+      errorDescription: "A target gene name is missing in cell " + colLetter+rowNum + "."
     }
   },
 
-  invalidMatrixDataWarning: function(row, column) {
+  invalidMatrixDataWarning: function (row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       warningCode: "INVALID_DATA",
-      errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
+      errorDescription: "The value in cell " + colLetter+rowNum + ", is undefined."
     }
   },
 
-  randomDataWarning: function(type, row, column) {
+  randomDataWarning: function (type, row, column) {
     var colLetter = numbersToLetters[column];
     var rowNum = row + 1;
     return {
       warningCode: "RANDOM_DATA",
-      errorDescription: "The value in cell " + colLetter + rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
+      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
     }
   },
 
-  emptyRowWarning: function(row) {
+  emptyRowWarning: function (row) {
     var rowNum = row + 1;
     return {
       warningCode: "EMPTY_ROW",
@@ -552,7 +468,7 @@ var warningsList = {
     }
   },
 
-  networkSizeWarning: function(genesLength, edgesLength) {
+  networkSizeWarning: function (genesLength, edgesLength) {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
@@ -562,18 +478,18 @@ var warningsList = {
   incorrectlyNamedSheetWarning: function() {
     return {
       warningCode: "INCORRECTLY_NAMED_SHEET",
-      errorDescription: "The uploaded spreadsheet was named incorrectly. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+      errorDescription: "The uploaded file appears to contain a weighted network, but contains no 'network_optimized_weights' sheet. A weighted network must be contained in a sheet called 'network_optimized_weights' in order to be drawn as a weighted graph. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     }
-  },
+  }
 };
 
-module.exports = function(app) {
+module.exports = function (app) {
   if (app) {
 
     //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
-    app.post('/upload', function(req, res) {
+    app.post('/upload', function (req, res) {
       //TODO: Add file validation
-      (new multiparty.Form()).parse(req, function(err, fields, files) {
+      (new multiparty.Form()).parse(req, function (err, fields, files) {
         if (err) {
           return res.json(400, "There was a problem uploading your file. Please try again.");
         }
@@ -596,19 +512,19 @@ module.exports = function(app) {
     });
 
     // Load the demos
-    app.get('/demo/unweighted', function(req, res) {
+    app.get('/demo/unweighted', function (req, res) {
       return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
     });
 
-    app.get('/demo/weighted', function(req, res) {
+    app.get('/demo/weighted', function (req, res) {
       return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
     });
 
-    app.get('/demo/schadeInput', function(req, res) {
+    app.get('/demo/schadeInput', function (req, res) {
       return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
     });
 
-    app.get('/demo/schadeOutput', function(req, res) {
+    app.get('/demo/schadeOutput', function (req, res) {
       return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
     });
   }

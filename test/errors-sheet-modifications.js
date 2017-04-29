@@ -33,6 +33,12 @@ describe('errors-sheet-modifications', function () {
     })
   })
 
+  describe('sheet-named-incorrectly', function () {
+    it('should return a wrong name warning', function () {
+        test.incorrectlyNamedSheetWarning('test-files/sheet-tests/incorrecly-named-sheet-network.xlsx');
+    })
+  })
+
   // Sheet Modifications - Cell A1 Modifications
 
   describe('and-symbol', function () {
