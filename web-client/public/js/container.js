@@ -33,11 +33,6 @@ $(function () {
           {width: windowWidth, height: windowHeight} :
           {width: "", height: ""}
       );
-      // if (currentValue === "containerFit") {
-      //     container.css({width: windowWidth, height: windowHeight});
-      // } else {
-      //     container.css({width: "", height: ""});
-      // }
     };
   });
 
