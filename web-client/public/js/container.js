@@ -7,13 +7,16 @@ $(function () {
   var WIDTH_OFFSET = 250;
   var HEIGHT_OFFSET = 53;
 
+  var MEDIUM_PAGE_WIDTH = 1500;
+  var LARGE_PAGE_WIDTH = 2200;
+
   var windowWidth = $(window).width() - WIDTH_OFFSET;
   var windowHeight = $(window).height() - HEIGHT_OFFSET;
 
-  if (pageWidth < 1500) {
+  if (pageWidth < MEDIUM_PAGE_WIDTH) {
       $('#boundBoxS').prop('checked', true);
       container.addClass("containerS");
-  } else if (pageWidth > 1500 && pageWidth < 2200) {
+  } else if (pageWidth > MEDIUM_PAGE_WIDTH && pageWidth < LARGE_PAGE_WIDTH) {
       $('#boundBoxM').prop('checked', true);
       container.addClass("containerM");
   } else {
@@ -26,11 +29,15 @@ $(function () {
     var grnsightContainerClass = "grnsight-container " + currentValue;
     if (!container.hasClass(currentValue)) {
       container.attr("class", grnsightContainerClass);
-      if (currentValue === "containerFit") {
-          container.css({width: windowWidth, height: windowHeight});
-      } else {
-          container.css({width: "", height: ""});
-      }
+      container.css(currentValue === "containerFit" ?
+          {width: windowWidth, height: windowHeight} :
+          {width: "", height: ""}
+      );
+      // if (currentValue === "containerFit") {
+      //     container.css({width: windowWidth, height: windowHeight});
+      // } else {
+      //     container.css({width: "", height: ""});
+      // }
     };
   });
 

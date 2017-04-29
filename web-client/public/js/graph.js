@@ -155,7 +155,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
     newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
 
-
     if (adaptive) {
       width = (width < newWidth) ? newWidth : width;
       height = (height < newHeight) ? newHeight : height;
@@ -186,9 +185,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
       adaptive = false;
       MAX_SCALE = 1;
-      d3.select("rect").attr("stroke", "#9A9A9A")
-                       .attr("width", width)
-                       .attr("height", height);
+      d3.select("rect").attr("stroke", "#9A9A9A").attr("width", width).attr("height", height);
       $(".boundingBox").attr("width", width).attr("height", height);
       zoom.scaleExtent([MIN_SCALE, MAX_SCALE]);
       if (zoom.scale() > 1) {
