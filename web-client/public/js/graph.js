@@ -46,6 +46,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
   }
 
+  // Initialize normalized value. This will not change if we are not normalizing.
+  for (var i = 0; i < links.length; i++) {
+    links[i].normalizedValue = links[i].value;
+  }
+
 
   //normalization all weights b/w size 2 and size 14
   //if unweighted, weight is 2
@@ -70,12 +75,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     allWeights.sort(); // forces 0 to always be at the end of the weights list
     var adjustedWeights = allWeights.concat(0); //force a minimum domain value to 0
     var normMax = $("#normalization-max").val();
-
-    console.log(links);
-    for (var i = 0; i < links.length; i++) {
-      links[i].normalizedValue = links[i].value;
-    }
-    console.log(links);
 
     if (normalization & normMax > 0) {
       var newScaledData = [];
