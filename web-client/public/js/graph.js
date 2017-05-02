@@ -89,7 +89,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         var absoluteB = Math.abs(b.value);
         return (absoluteA > absoluteB) ? 1 : ((absoluteB > absoluteA) ? -1 : 0);
       });
-      //console.log(links);
 
 
       // We subtract 1 to account for the final 0.

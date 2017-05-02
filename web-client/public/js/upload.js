@@ -105,7 +105,6 @@ $(function () {
 
   $("#normalization-button").click(function(){
     normalization = true;
-    console.log("holla")
     displayNetwork(currentNetwork, name, normalization);
   });
 
@@ -199,7 +198,6 @@ $(function () {
       //displayStatistics(network);
     }).error(networkErrorDisplayer);
   };
-  
 
   // TODO Some opportunity for unification with loadGrn?
   var importGrn = function (uploadRoute, filename, formData) {
