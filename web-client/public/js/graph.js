@@ -128,8 +128,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var previousMax = [width, height];
   var previousScale = zoom.scale();
   function zoomed(manual = false) {
-    let scaleRange = maximumScale - minimumScale;
-    let percentZoom = zoom.scale() / scaleRange * 100;
+    var scaleRange = maximumScale - minimumScale;
+    var percentZoom = zoom.scale() / scaleRange * 100;
     if (!MANUAL_ZOOM) {
       $(".zoomSlider").val(d3.event.scale.toFixed(2)); // This doesn't work using d3 selection for some reason
     }
@@ -167,7 +167,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
-  let arrowMovememnt = [ "Up", "Left", "Right", "Down" ];
+  var arrowMovememnt = [ "Up", "Left", "Right", "Down" ];
   arrowMovememnt.forEach((direction) => {
     d3.select(".scroll" + direction).on("click", function () {
       move(direction.toLowerCase());
