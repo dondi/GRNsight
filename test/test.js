@@ -187,7 +187,7 @@ function checkForGene(test, frequency, input) {
 function warningsCountError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet),
-      warningsCountErrorArray = network.errors.filter(function(x){return x.errorCode == "WARNINGS_OVERLOAD";});
+      warningsCountErrorArray = network.errors.filter(function(x){return x.errorCode === "WARNINGS_OVERLOAD";});
 
   assert.equal(frequency, warningsCountErrorArray.length);
 }
@@ -195,7 +195,7 @@ function warningsCountError(input, frequency) {
 function errorsCountError(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet),
-      errorsCountErrorArray = network.errors.filter(function(x){return x.errorCode == "ERRORS_OVERLOAD"});
+      errorsCountErrorArray = network.errors.filter(function(x){return x.errorCode === "ERRORS_OVERLOAD"});
 
   assert.equal(frequency, errorsCountErrorArray.length);
 }
@@ -226,7 +226,7 @@ function noWarnings(input) {
 function missingSourceWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var missingSourceCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
+  var missingSourceCount = network.warnings.filter(function(x){return x.warningCode === "MISSING_SOURCE"});
 
   assert.equal(frequency, missingSourceCount.length);
 }
@@ -234,7 +234,7 @@ function missingSourceWarning(input, frequency) {
 function invalidMatrixDataWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
+  var invalidDataCount = network.warnings.filter(function(x){return x.warningCode === "INVALID_DATA"});
 
   assert.equal(frequency, invalidDataCount.length);
 }
@@ -242,7 +242,7 @@ function invalidMatrixDataWarning(input, frequency) {
 function missingTargetWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var missingTargetCount = network.warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
+  var missingTargetCount = network.warnings.filter(function(x){return x.warningCode === "MISSING_TARGET"});
 
   assert.equal(frequency, missingTargetCount.length);
 }
@@ -250,7 +250,7 @@ function missingTargetWarning(input, frequency) {
 function randomDataWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var randomDataCount = network.warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
+  var randomDataCount = network.warnings.filter(function(x){return x.warningCode === "RANDOM_DATA"});
 
   assert.equal(frequency, randomDataCount.length);
 }
@@ -258,7 +258,7 @@ function randomDataWarning(input, frequency) {
 function emptyRowWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var emptyRowCount = network.warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
+  var emptyRowCount = network.warnings.filter(function(x){return x.warningCode === "EMPTY_ROW"});
 
   assert.equal(frequency, emptyRowCount.length);
 }
@@ -266,7 +266,7 @@ function emptyRowWarning(input, frequency) {
 function invalidNetworkSizeWarning(input, frequency) {
   var sheet = xlsx.parse(input),
       network = spreadsheetController.parseSheet(sheet);
-  var invalidNetworkSizeCount = network.warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
+  var invalidNetworkSizeCount = network.warnings.filter(function(x){return x.warningCode === "INVALID_NETWORK_SIZE"});
 
   assert.equal(frequency, invalidNetworkSizeCount.length);
 }
@@ -274,7 +274,7 @@ function invalidNetworkSizeWarning(input, frequency) {
 function extraneousDataWarning(input, frequency) {
   var sheet = xlsx.parse(input),
     network = spreadsheetController.parseSheet(sheet);
-  var extraneousDataWarning = network.warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
+  var extraneousDataWarning = network.warnings.filter(function(x){return x.warningCode === "EXTRANEOUS_DATA"});
 
   assert.equal(frequency, extraneousDataWarning.length);
 }
@@ -282,7 +282,7 @@ function extraneousDataWarning(input, frequency) {
 function incorrectlyNamedSheetWarning(input, frequency){
   var sheet = xlsx.parse(input),
     network = spreadsheetController.parseSheet(sheet);
-  var incorrectlyNamedSheetWarning = network.warnings.filter(function(x){return x.warningCode=="INCORRECTLY_NAMED_SHEET"});
+  var incorrectlyNamedSheetWarning = network.warnings.filter(function(x){return x.warningCode === "INCORRECTLY_NAMED_SHEET"});
 
   assert.equal(frequency, incorrectlyNamedSheetWarning.length);
 }

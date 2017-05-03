@@ -166,10 +166,11 @@ var parseSheet = function(sheet) {
                     } else if (network.sheetType === "unweighted") {
                         currentLink.type = "arrowhead";
                         currentLink.stroke = "black";
-                      if (currentLink.value != 0 && currentLink.value != 1) {
-                        addWarning(network, warningsList.incorrectlyNamedSheetWarning());
-                        currentLink.value = 1;
-                      }
+                        if (currentLink.value !== 1) {
+                          addWarning(network, warningsList.incorrectlyNamedSheetWarning());
+                          currentLink.value = 1;
+                        }
+                        network.positiveWeights.push(currentLink.value);
                     }
                     network.links.push(currentLink);
                   }
@@ -193,16 +194,6 @@ var parseSheet = function(sheet) {
     };
   };
 
-
-  /*try {
-    network.graphStatisticsReport = graphStatisticsReport(network);
-  } catch (err) {
-    console.log ("Graph statistics report failed to be complete.");
-  }*/
-
-  // Move on to semanticChecker.
-
-
   // We sort them here because gene order is not relevant before this point
   // Sorting them now means duplicates will be right next to each other
   sourceGenes.sort();
@@ -217,6 +208,9 @@ var parseSheet = function(sheet) {
     console.log ("Graph statistics report failed to be complete.");
   }
 
+  // console.log(network.warnings);
+
+  // Move on to semantic Checker.
   return semanticChecker(network);
 };
 
