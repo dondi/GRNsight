@@ -31,7 +31,7 @@ var grnSightToCytoscape = function (network) {
   return result;
 };
 
-describe('graph-library-tests', function() {
+describe.skip('graph-library-tests', function() {
     describe('basic-cytoscape-conversion', function() {
         it('convert to cytoscape correctly', function() {
             var input = 'test-files/graph-statistics-tests/graph-stats-demo.xlsx';

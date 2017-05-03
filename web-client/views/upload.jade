@@ -191,25 +191,28 @@ html
           table(class='scrollTable')
             tr
               td
-              td
-                  p(class='scrollBtn scrollUp') &#8593;
+              td(class='scrollBtn scrollUp')
+                  p(class='movementArrow') &#8593;
               td
             tr
+              td(class='scrollBtn scrollLeft')
+                p(class='movementArrow') &#8592;
+              td(class='scrollBtn center')
+                p(class='movementArrow') &#9788;
+              td(class='scrollBtn scrollRight')
+                p(class='movementArrow') &#8594;
+            tr
               td
-                p(class='scrollBtn scrollLeft') &#8592;
+              td(class='scrollBtn scrollDown')
+                p(class='movementArrow') &#8595;
               td 
-                p(class='scrollBtn center') &#9788;
-              td
-                p(class='scrollBtn scrollRight') &#8594;
-            tr
-              td
-              td
-                p(class='scrollBtn scrollDown') &#8595;
-              td
-          table(class='zoomTable') 
+          table(class='zoomTable')
             tr 
               td
-                  input(class="zoomSlider" type="range" min="0.25" max="1" value="1" step="0.01")
+                input(class="zoomSlider" type="range" min="0" max="0" value="1" step="0.1")
+            //- tr
+            //-   td
+            //-     span(style="color:#AAA" id="zoomPercent") 100%
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
