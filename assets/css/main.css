@@ -14,17 +14,17 @@ iframe.embedded-demo {
 	margin:0;
 	height:770px;
 	width:1350px;
-    overflow:scroll;
-    border:0;
+  overflow:scroll;
+  border:0;
 }
 
 iframe.embedded-demo-beta {
 	padding:0;
 	margin:0;
-	height:1200px;
+  min-height: 750px;
 	width:100%;
-    overflow: auto;
-    border:0;
+  overflow: auto;
+  border:0;
 }
 
 #header {
