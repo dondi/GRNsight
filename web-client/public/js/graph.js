@@ -27,6 +27,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var adaptive = !$("input[name='viewport']").prop("checked");
+  var scrolling = adaptive;
 
   var MIN_SCALE = 0.25;
   var MAX_SCALE = (adaptive) ? 10 : 1;
@@ -101,6 +102,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .append("g") // required for zoom to work
         .attr("class", "boundingBox");
 
+  if (scrolling) {
+      $container.addClass("cursorGrab");
+  }
+
   // This rectangle catches all of the mousewheel and pan events, without letting
   // them bubble up to the body.
   var innerRect = svg.append("rect")
@@ -115,6 +120,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   function zoomed(manual = false) {
     if (!MANUAL_ZOOM) {
       $(".zoomSlider").val(d3.event.scale.toFixed(2)); // This doesn't work using d3 selection for some reason
+    }
+    if (!scrolling && d3.event.scale < 1) {
+      $container.addClass("cursorGrab");
+      scrolling = true;
+    } else if (!adaptive && scrolling && d3.event.scale >= 1) {
+      if ($container.hasClass("cursorGrab")) $container.removeClass("cursorGrab");
+      if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrabbing");
+      scrolling = false;
     }
     svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
   }
@@ -142,7 +155,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   d3.select(".zoomSlider").on("input", function () {
     var newScale = this.value;
-    scale(newScale);
+    zoom.scale(newScale);
+    svg.transition().call(zoom.event);
   }).on("mousedown", function () {
     MANUAL_ZOOM = true;
   }).on("mouseup", function () {
@@ -150,8 +164,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   });
 
   d3.selectAll(".boundBoxSize").on("click", function () {
-    var newWidth = $(".grnsight-container").css("width");
-    var newHeight = $(".grnsight-container").css("height");
+    var newWidth = $container.css("width");
+    var newHeight = $container.css("height");
     newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
     newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
 
@@ -171,43 +185,61 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   d3.selectAll("input[name=viewport]").on("change", function () {
     let fixed = $(this).prop("checked");
-    if (!adaptive && !fixed) {
+    if (!fixed) {
+      if (!scrolling) {
+        $container.addClass("cursorGrab");
+        scrolling = true;
+      }
       adaptive = true;
       MAX_SCALE = 10;
       d3.select("rect").attr("stroke", "none");
       zoom.scaleExtent([MIN_SCALE, MAX_SCALE])
       d3.select(".zoomSlider").attr("max", MAX_SCALE);
-    } else if (adaptive && fixed) {
-      var newWidth = $(".grnsight-container").css("width");
-      var newHeight = $(".grnsight-container").css("height");
-      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
-      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
-
+    } else if (fixed) {
       adaptive = false;
       MAX_SCALE = 1;
+      var newWidth = $container.css("width");
+      var newHeight = $container.css("height");
+      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
+      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
       d3.select("rect").attr("stroke", "#9A9A9A").attr("width", width).attr("height", height);
       $(".boundingBox").attr("width", width).attr("height", height);
       zoom.scaleExtent([MIN_SCALE, MAX_SCALE]);
-      if (zoom.scale() > 1) {
-          scale(1);
+      if (zoom.scale() >= 1) {
+        zoom.scale(1);
+        scrolling = false;
+        if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrabbing");
+        if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrab");
       }
+      center();
       d3.select(".zoomSlider").attr("max", MAX_SCALE);
-
-      force.size([width, height]).resume();
     }
+    force.size([width, height]).resume();
   });
 
   $(window).on("resize", function () {
-      if ( $(".grnsight-container").hasClass("containerFit")) {
+      if ($container.hasClass("containerFit")) {
           $(".boundBoxSize").trigger("click");
       }
+  });
+
+  $container.on("mousedown", function () {
+     if (scrolling) {
+       if ($container.hasClass("cursorGrab")) $container.removeClass("cursorGrab");
+       if (!$container.hasClass("cursorGrabbing")) $container.addClass("cursorGrabbing");
+     }
+  }).on("mouseup", function () {
+    if (scrolling) {
+      if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrabbing");
+      if (!$container.hasClass("cursorGrab")) $container.addClass("cursorGrab");
+    }
   });
 
   function center() {
     svg.call(zoom.event);
     var scale = zoom.scale();
-    var viewportWidth = $(".grnsight-container").css("width");
-    var viewportHeight = $(".grnsight-container").css("height");
+    var viewportWidth = $container.css("width");
+    var viewportHeight = $container.css("height");
     viewportWidth = viewportWidth.substring(0, viewportWidth.length - 2) - BORDER_OFFSET;
     viewportHeight = viewportHeight.substring(0, viewportHeight.length - 2) - BORDER_OFFSET;
 

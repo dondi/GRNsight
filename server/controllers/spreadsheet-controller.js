@@ -184,13 +184,6 @@ var parseSheet = function(sheet) {
     };
   };
 
-
-  /*try {
-    network.graphStatisticsReport = graphStatisticsReport(network);
-  } catch (err) {
-    console.log ("Graph statistics report failed to be complete.");
-  }*/
-
   // Move on to semanticChecker.
 
 

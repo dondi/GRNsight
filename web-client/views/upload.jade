@@ -186,32 +186,30 @@ html
               small(id='graph-metadata')
 
     div(class='container')
-      div(class='grnTest')
-        div(class='grnsight-container')
-          div(class='scale-and-scroll')
-            table(class='scrollTable')
-              tr
-                td
-                td
-                    p(class='scrollBtn scrollUp') &#8593;
-                    
-                td
-              tr
-                td
-                  p(class='scrollBtn scrollLeft') &#8592;
-                td 
-                  p(class='scrollBtn center') &#9788;
-                td
-                  p(class='scrollBtn scrollRight') &#8594;
-              tr
-                td
-                td
-                  p(class='scrollBtn scrollDown') &#8595;
-                td
-            table(class='zoomTable') 
-              tr 
-                td
-                    input(class="zoomSlider" type="range" min="0.25" max="1" value="1" step="0.01")
+      div(class='grnsight-container')
+        div(class='scale-and-scroll')
+          table(class='scrollTable')
+            tr
+              td
+              td
+                  p(class='scrollBtn scrollUp') &#8593;
+              td
+            tr
+              td
+                p(class='scrollBtn scrollLeft') &#8592;
+              td 
+                p(class='scrollBtn center') &#9788;
+              td
+                p(class='scrollBtn scrollRight') &#8594;
+            tr
+              td
+              td
+                p(class='scrollBtn scrollDown') &#8595;
+              td
+          table(class='zoomTable') 
+            tr 
+              td
+                  input(class="zoomSlider" type="range" min="0.25" max="1" value="1" step="0.01")
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
