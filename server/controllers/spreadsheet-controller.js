@@ -110,7 +110,7 @@ var parseSheet = function(sheet) {
               currentGene = {name: currentSheet.data[row][0]};
               if(currentGene.name === undefined) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
+              } else if(isNaN(currentGene.name) && typeof currentGene.name !== "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
@@ -135,7 +135,7 @@ var parseSheet = function(sheet) {
               if (currentSheet.data[row][column] === undefined) {
                 // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-              } else if (isNaN(+("" + currentSheet.data[row][column]))) {
+            } else if (isNaN(+("" + currentSheet.data[row][column])) || typeof currentSheet.data[row][column] !== "number") {
                 addError(network, errorList.dataTypeError(row, column));
                 return network;
               } else {
@@ -207,8 +207,6 @@ var parseSheet = function(sheet) {
   } catch (err) {
     console.log ("Graph statistics report failed to be complete.");
   }
-
-  // console.log(network.warnings);
 
   // Move on to semantic Checker.
   return semanticChecker(network);
