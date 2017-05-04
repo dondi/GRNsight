@@ -184,13 +184,6 @@ var parseSheet = function(sheet) {
     };
   };
 
-
-  /*try {
-    network.graphStatisticsReport = graphStatisticsReport(network);
-  } catch (err) {
-    console.log ("Graph statistics report failed to be complete.");
-  }*/
-
   // Move on to semanticChecker.
 
 
@@ -202,11 +195,12 @@ var parseSheet = function(sheet) {
   //syntactic duplicate checker for both columns and rows
   checkDuplicates(network.errors, sourceGenes, targetGenes);
 
-  try {
-    network.graphStatisticsReport = graphStatisticsReport(network);
-  } catch (err) {
-    console.log ("Graph statistics report failed to be complete.");
-  }
+  // NOTE: Temporarily commented out pending resolution of #474, and other related issues
+  // try {
+  //   network.graphStatisticsReport = graphStatisticsReport(network);
+  // } catch (err) {
+  //   console.log ("Graph statistics report failed to be complete.");
+  // }
 
   return semanticChecker(network);
 };
