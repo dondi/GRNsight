@@ -195,6 +195,7 @@ var parseSheet = function(sheet) {
   //syntactic duplicate checker for both columns and rows
   checkDuplicates(network.errors, sourceGenes, targetGenes);
 
+  // NOTE: Temporarily commented out pending resolution of #474, and other related issues
   // try {
   //   network.graphStatisticsReport = graphStatisticsReport(network);
   // } catch (err) {
