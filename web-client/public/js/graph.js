@@ -15,6 +15,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       gridWidth = 300,
       colorOptimal = true;
 
+  var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
+
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
   var getNodeWidth = function (node) {
@@ -29,12 +31,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var adaptive = !$("input[name='viewport']").prop("checked");
   var scrolling = adaptive;
 
-  var MIN_SCALE = 0.25
+  var MIN_SCALE = 0.25;
   var FIXED_MAX_SCALE = 1;
   var ADAPTIVE_MAX_SCALE = 4;
 
   var minimumScale = MIN_SCALE;
-  var maximumScale = (adaptive) ? ADAPTIVE_MAX_SCALE : FIXED_MAX_SCALE;
+  var maximumScale = adaptive ? ADAPTIVE_MAX_SCALE : FIXED_MAX_SCALE;
   d3.select(".zoomSlider").attr("max", maximumScale);
 
   var BORDER_OFFSET = 4;
@@ -94,7 +96,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .origin(function(d) { return d; })
       .on("dragstart", dragstart);
 
-  var MANUAL_ZOOM = false;
+  var manualZoom = false;
   var zoom = d3.behavior.zoom()
     .center([width / 2, height / 2])
     .scaleExtent([minimumScale, maximumScale])
@@ -127,10 +129,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var previousValue = zoom.translate().slice();
   var previousMax = [width, height];
   var previousScale = zoom.scale();
-  function zoomed(manual = false) {
+  function zoomed() {
     var scaleRange = maximumScale - minimumScale;
     var percentZoom = zoom.scale() / scaleRange * 100;
-    if (!MANUAL_ZOOM) {
+    if (!manualZoom) {
       $(".zoomSlider").val(d3.event.scale.toFixed(2)); // This doesn't work using d3 selection for some reason
     }
     if (!adaptive) { // Limit to viewport
@@ -140,35 +142,23 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       var maxX = width - scaledWidth;
       var maxY = height - scaledHeight;
 
-      if (d3.event.translate[0] < 0) {
-        d3.event.translate[0] = 0;
-      } else if (d3.event.translate[0] > maxX) {
-        d3.event.translate[0] = maxX;
-      }
-
-      if (d3.event.translate[1] < 0) {
-        d3.event.translate[1] = 0;
-      } else if (d3.event.translate[1] > maxY) {
-        d3.event.translate[1] = maxY;
-      }
-
+      d3.event.translate[0] = Math.min(Math.max(d3.event.translate[0], 0), maxX);
+      d3.event.translate[1] = Math.min(Math.max(d3.event.translate[1], 0), maxY);
       zoom.translate([d3.event.translate[0], d3.event.translate[1]]);
     }
     if (!scrolling && d3.event.scale < 1) {
-      $container.addClass("cursorGrab");
+      $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
       scrolling = true;
     } else if (!adaptive && scrolling && d3.event.scale >= 1) {
-      if ($container.hasClass("cursorGrab")) $container.removeClass("cursorGrab");
-      if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrabbing");
+      $container.removeClass(CURSOR_CLASSES);
       scrolling = false;
     }
-    // $("#zoomPercent").html(percentZoom.toFixed(1) + "%");
     svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
   }
 
   d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
   var arrowMovememnt = [ "Up", "Left", "Right", "Down" ];
-  arrowMovememnt.forEach((direction) => {
+  arrowMovememnt.forEach(function (direction) {
     d3.select(".scroll" + direction).on("click", function () {
       move(direction.toLowerCase());
     });
@@ -181,9 +171,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     zoom.scale(newScale);
     svg.transition().call(zoom.event);
   }).on("mousedown", function () {
-    MANUAL_ZOOM = true;
+    manualZoom = true;
   }).on("mouseup", function () {
-    MANUAL_ZOOM = false;
+    manualZoom = false;
   });
 
   d3.selectAll(".boundBoxSize").on("click", function () {
@@ -226,8 +216,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       if (zoom.scale() >= 1) {
         zoom.scale(1);
         scrolling = false;
-        if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrabbing");
-        if ($container.hasClass("cursorGrab")) $container.removeClass("cursorGrab");
+        $container.removeClass(CURSOR_CLASSES);
       }
       d3.select(".zoomSlider").attr("max", maximumScale);
 
@@ -251,13 +240,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   $container.on("mousedown", function () {
      if (scrolling) {
-       if ($container.hasClass("cursorGrab")) $container.removeClass("cursorGrab");
-       if (!$container.hasClass("cursorGrabbing")) $container.addClass("cursorGrabbing");
+       $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
      }
   }).on("mouseup", function () {
     if (scrolling) {
-      if ($container.hasClass("cursorGrabbing")) $container.removeClass("cursorGrabbing");
-      if (!$container.hasClass("cursorGrab")) $container.addClass("cursorGrab");
+      $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
     }
   });
 

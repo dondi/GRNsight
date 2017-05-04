@@ -31,6 +31,7 @@ var grnSightToCytoscape = function (network) {
   return result;
 };
 
+// NOTE: Temporarily commented out pending resolution of #474, and other related issues
 describe.skip('graph-library-tests', function() {
     describe('basic-cytoscape-conversion', function() {
         it('convert to cytoscape correctly', function() {
@@ -39,7 +40,7 @@ describe.skip('graph-library-tests', function() {
             var network = spreadsheetController.parseSheet(sheet);
             //var cytoscapeElements = grnSightToCytoscape(network);
             var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
-//require calls cytoscape as a function so the below code is needed to call cytoscape
+            //require calls cytoscape as a function so the below code is needed to call cytoscape
             var cy = cytoscape({
               headless: true,
               elements: cytoscapeElements
