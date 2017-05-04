@@ -176,6 +176,16 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   d3.select(".center").on("click", center);
 
+  var getRangePoints = function (fractional, nonfractional) {
+      var minimumScaleAsReverse = 100 / (minimumScale * 100); // 1/4 scale is the opposite of 4x scale. We're getting the opposite.
+      var difference = maximumScale - minimumScaleAsReverse;
+      // if difference is positive, maxScale is bigger. if difference is negative, minScale is bigger.
+      // if it is 0, they are the same.
+      // Regardless, we want to use that difference.
+      // The proportion of the difference will give us the # extra points we'll need to normalize for..
+
+  }
+
   d3.select(".zoomSlider").on("input", function () {
     var newScale = this.value;
     zoom.scale(newScale);
