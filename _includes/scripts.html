@@ -13,13 +13,22 @@
         <script src="{{ site.baseurl }}/assets/js/ga-report.js"></script>
     {% if page.title == 'Beta' %}
         <script>
-        // https://stackoverflow.com/questions/20125340/can-i-use-jquery-to-resize-an-iframe-to-fill-the-remaining-window-space
+            // https://stackoverflow.com/questions/20125340/can-i-use-jquery-to-resize-an-iframe-to-fill-the-remaining-window-space
             $(window).on('load resize', function(){
                   var $window = $(window);
                   var footer = $("#footer");
                   var MIN_HEIGHT = 750;
                   $('iframe').height(function() {
-                      var display = $window.height() - $(this).offset().top - footer.height();
+                      var display = $window.height() - $(this).offset().top;
+                      var HEIGHT_OFFSET = 53;
+                      var SMALL_HEIGHT = 648 + HEIGHT_OFFSET;
+                      var MEDIUM_HEIGHT = 840 + HEIGHT_OFFSET;
+                      var LARGE_HEIGHT = 1080 + HEIGHT_OFFSET;
+                      if (display < SMALL_HEIGHT) {
+                        display = SMALL_HEIGHT;
+                      } else if (display > SMALL_HEIGHT && display < LARGE_HEIGHT) {
+                        display = MEDIUM_HEIGHT;
+                      }
                       return (display >= MIN_HEIGHT) ? display : MIN_HEIGHT;
                   });
               });
