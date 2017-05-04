@@ -3,21 +3,63 @@
 body
   min-width: 1326px
 
-.submission 
+.submission
   margin-left: 10px
 
-.file-input-name 
+.file-input-name
   font-weight: normal
 
-.grnsight-container
-  position: absolute
+.grnParent
   left: 250px
   top: 53px
   right: 5px
   bottom: 5px
-  width: 1100px
-  height: 700px
+  position: absolute
+  overflow: auto
+
+.grnTest
+  // left: 250px
+  // top: 53px
+  // right: 5px
+  // bottom: 5px
+  position: absolute
+  overflow: auto
+
+.grnTest::-webkit-scrollbar
+  display: auto
+
+.grnTestNoScroll::-webkit-scrollbar
+  display: none
+
+.grnsight-container
   border:2px solid #9A9A9A
+
+.containerXS
+  width: 640px
+  height: 360px
+
+.containerS
+  width: 960px
+  height: 540px
+
+.containerM
+  width: 1280px
+  height: 720px
+
+.containerL
+  width: 1600px
+  height: 900px
+
+.containerXL
+  width: 2080px
+  height: 1170px
+
+.containerInfinite
+  width: 100000px
+  height: 100000px
+
+//.containerScroll
+//  overflow: auto
 
 .sliders
 	width: 225px
@@ -81,14 +123,14 @@ nav.navbar.navbar-default
 .forceVal
   font-size: 12px
 
-.dropdown-menu > li > a:hover 
+.dropdown-menu > li > a:hover
   background-color: #dfebe5
 
-#undoReset
+#undoResetButton
   width: 225px
   margin-top: 5px
 
-#mouseOver 
+#mouseOver
   margin-top: 10px
   text-align: center
 
@@ -113,7 +155,7 @@ nav.navbar.navbar-default
     -moz-border-radius:0 6px 6px 6px
     border-radius:0 6px 6px 6px
 
-.dropdown-submenu:hover>.dropdown-menu 
+.dropdown-submenu:hover>.dropdown-menu
     display:block
 
 .dropdown-submenu>a:after
@@ -129,18 +171,27 @@ nav.navbar.navbar-default
     margin-top:5px
     margin-right:-10px
 
-.dropdown-submenu:hover>a:after 
+.dropdown-submenu:hover>a:after
     border-left-color:#ffffff
 
-.dropdown-submenu.pull-left 
+.dropdown-submenu.pull-left
     float:none
 
-.dropdown-submenu.pull-left>.dropdown-menu 
+.dropdown-submenu.pull-left>.dropdown-menu
     left:-100%
     margin-left:10px
     -webkit-border-radius:6px 0 6px 6px
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
+
+.panel-body
+  overflow: scroll;
+
+// Graph statistics styling is due to absolute position and size of grnsight-container
+.graph-statistics-container
+  margin-top: 256px
+  margin-left: 15px
+  width: 1335px // 1335 + 15 = 1350
 
 text.weight
     cursor: default
@@ -157,5 +208,30 @@ text.weight.visible
     opacity: 1.0
     visibility: visible
 
+#weightsSideLabel
+  line-height: 3px;
+  font-size: 13px;
+
+#sideHeader
+  line-height: 5px;
+  font-weight: bold;
+  font-size: 14.5px;
+  margin-left: 17px;
+  margin-bottom: 10px;
+  margin-top: 25px;
+
+#weightsMouseOverSide
+  margin-left: 7px;
+
+#weightsAlwaysSide
+  margin-left: 7px;
+
+#weightsNeverSide
+  margin-left: 7px;
+
 path.mousezone
     opacity: 0.0
+
+.normalization-form
+    margin-left: 35px;
+    margin-bottom: 8px;

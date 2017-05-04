@@ -1,4 +1,78 @@
 $(function () {
+
+  // Slider Values
+  var NUMBER_OF_SLIDERS     = 4,
+      LINK_DIST_SLIDER_ID   = "#linkDistInput",
+      LINK_DIST_VALUE       = "#linkDistVal",
+      LINK_DIST_DEFAULT     = 500,
+      CHARGE_SLIDER_ID      = "#chargeInput",
+      CHARGE_VALUE          = "#chargeVal",
+      CHARGE_DEFAULT        = -1000,
+      CHARGE_DIST_SLIDER_ID = "#chargeDistInput",
+      CHARGE_DIST_VALUE     = "#chargeDistVal",
+      CHARGE_DIST_DEFAULT   = 1000,
+      GRAVITY_SLIDER_ID     = "#gravityInput",      
+      GRAVITY_VALUE         = "#gravityVal",      
+      GRAVITY_DEFAULT       = 0.1,
+      TOOLTIP_SHOW_DELAY    = 700,
+      TOOLTIP_HIDE_DELAY    = 100;
+
+  // Demo Stuff
+  var UNWEIGHTED_DEMO_ID   = "#unweighted",
+      UNWEIGHTED_DEMO_PATH = "demo/unweighted",
+      UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)",
+      WEIGHTED_DEMO_ID     = "#weighted",
+      WEIGHTED_DEMO_PATH   = "demo/weighted",
+      WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)",
+      SCHADE_INPUT_ID      = "#schadeInput",
+      SCHADE_INPUT_PATH    = "demo/schadeInput",
+      SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)",
+      SCHADE_OUTPUT_ID     = "#schadeOutput",
+      SCHADE_OUTPUT_PATH   = "demo/schadeOutput",
+      SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
+
+  // Settings Stuff
+  var COLOR_PREFERENCES_CLASS = ".colorPreferences",
+      ACTIVE_COLOR_OPTION     = "active";
+
+  //Weights Stuff
+    var WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu",
+        WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu",
+        WEIGHTS_HIDE_MENU             = "#weightsNeverMenu",
+        WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide",
+        WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide",
+        WEIGHTS_HIDE_SIDE             = "#weightsNeverSide",
+        WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver",
+        WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways",
+        WEIGHTS_HIDE_CLASS            = ".weightsNever";
+
+  styleLabelTooltips();
+  var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
+  var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
+  var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false);
+  var gravitySlider = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT, true);
+  var sliders = new sliderGroupController([linkDistanceSlider, chargeSlider, chargeDistanceSlider, gravitySlider]);
+  sliders.setSliderHandlers();
+  sliders.updateValues();
+  sliders.configureSliderControllers();
+
+  var demoInformation = [ [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
+                          [ UNWEIGHTED_DEMO_ID, UNWEIGHTED_DEMO_PATH, UNWEIGHTED_DEMO_NAME ],
+                          [ SCHADE_INPUT_ID,    SCHADE_INPUT_PATH,    SCHADE_INPUT_NAME    ],
+                          [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ] ];
+  demoInformation.forEach(function (demoInfo) {
+    initializeDemoFile.apply(null, demoInfo);
+  });
+
+  var settings = new settingsController();
+  settings.setupSettingsHandlers();
+  
+  $("#printGraph").on("click", function () { 
+    if(!$(".startDisabled").hasClass("disabled")) {
+      window.print();
+    }
+  });
+
   var currentNetwork = null;
   var reloader = function () { };
 
@@ -7,12 +81,6 @@ $(function () {
     placement: "top",
     delay: { show: 700, hide: 100 }
   });
-
-  // Defaults the sliders so that they return to their default values when the page is refreshed
-  $( "#linkDistInput" ).val(500);
-  $( "#chargeInput" ).val(-1000);
-  $( "#chargeDistInput" ).val(1000);
-  $( "#gravityInput" ).val(0.1);
 
   var displayNetwork = function (network, name) {
     currentNetwork = network;
@@ -31,16 +99,7 @@ $(function () {
       $(selector).off("click");
     });
 
-    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, {
-      linkSlider: "#linkDistInput",
-      chargeSlider: "#chargeInput",
-      chargeDistSlider: "#chargeDistInput",
-      gravitySlider: "#gravityInput",
-      resetSliderButton: "#resetSliders",
-      resetSliderMenu: "#resetSlidersMenu",
-      undoResetButton: "#undoReset",
-      undoResetMenu: "#undoResetMenu"
-    }, network.sheetType, network.warnings);
+    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
   };
 
   var annotateLinks = function (network) {
@@ -85,10 +144,12 @@ $(function () {
       }) :
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
+      console.log(network); // Display the network in the console
       displayNetwork(network, name || jqXhr.getResponseHeader('X-GRNsight-Filename'));
       reloader = function () {
         loadGrn(url, name, formData);
       };
+      //displayStatistics(network);
     }).error(function (xhr, status, error) {
       var err = JSON.parse(xhr.responseText);
       var errorString = "Your graph failed to load.<br><br>";
@@ -175,13 +236,57 @@ $(function () {
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " + 
       "It is possible that these warnings are the result of extraneous data outside of the matrix, but " + 
-      "we recommend you review your file and ensure that everything looks correct. The graph will be loaded, " +
-      "but may not look the way it is expected to look. To view the details " + 
-      "of the warning(s), please select the dropdown below.");
+      "we recommend you review your file and ensure that it is formatted correctly. The graph will be loaded, " +
+      "but may not be displayed accurately. To view the details " + 
+      "of the warning(s), please click on the \"Warnings List\" below.");
 
-    $("#warningsList").html(warnings.reduce(function (currentWarningString, currentWarning) {
-      return currentWarningString + currentWarning.errorDescription + "<br><br>";
-    }, ""));
+    var MAX_DUPLICATES = 3;
+    var warningsString = "";
+  //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
+    var printed = [0,0,0,0,0,0,0];
+
+    var missingSourceCount = warnings.filter(function(x){return x.warningCode=="MISSING_SOURCE"});
+    var missingTargetCount = warnings.filter(function(x){return x.warningCode=="MISSING_TARGET"});
+    var invalidDataCount = warnings.filter(function(x){return x.warningCode=="INVALID_DATA"});
+    var randomDataCount = warnings.filter(function(x){return x.warningCode=="RANDOM_DATA"});
+    var emptyRowCount = warnings.filter(function(x){return x.warningCode=="EMPTY_ROW"});
+    var invalidNetworkSizeCount = warnings.filter(function(x){return x.warningCode=="INVALID_NETWORK_SIZE"});
+    var extraneousDataCount = warnings.filter(function(x){return x.warningCode=="EXTRANEOUS_DATA"});
+
+    function createWarningsString(warningCount, index) {
+      for (var i = 0; i < warningCount.length; i++) {        
+        if (warningCount.length <= 3) {
+            warningsString += warningCount[i].errorDescription + "<br><br>";
+        } else if (printed[index] < 3){
+            warningsString += warningCount[i].errorDescription + "<br><br>";
+            printed[index]++;
+        } else if (printed[index] = 3) {
+            warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
+            break;
+        }
+      }
+    }
+
+    createWarningsString(missingSourceCount,0);
+    createWarningsString(missingTargetCount,1);
+    createWarningsString(invalidDataCount,2);
+    createWarningsString(randomDataCount,3);
+    createWarningsString(emptyRowCount,4);
+    createWarningsString(invalidNetworkSizeCount,5);
+    createWarningsString(extraneousDataCount,6);
+
+    $("#warningsList").html(warningsString);
+
+    var screenHeight = $(window).height();
+    var MIN_SCREEN_HEIGHT = 600;
+    var BORDER = 425;
+    var setPanel = (screenHeight - BORDER) + "px";
+    var minPanel = (MIN_SCREEN_HEIGHT - BORDER) +"px";
+    if (screenHeight > MIN_SCREEN_HEIGHT) {
+      $("#list-frame").css({height: setPanel});
+    } else {
+      $("#list-frame").css({height: minPanel});
+    }
 
     $("#warningsModal").modal("show");
   }
@@ -192,29 +297,18 @@ $(function () {
     }
   });
 
-  $("#reload").click(function (event) {
-    if (!$(this).parent().hasClass("disabled")) {
-      if ($.isFunction(reloader)) {
-        reloader();
-      }
-    }
-  });
+  function styleLabelTooltips () {
+    $(".info").tooltip({
+      placement: "top",
+      delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
+    });
+  };
 
-  $("#unweighted").click(function (event) {
-    loadDemo("demo/unweighted");
-  });
-
-  $("#weighted").click(function (event) {
-    loadDemo("demo/weighted");
-  });
-
-  $("#schadeInput").click(function (event) {
-    loadDemo("demo/schadeInput");
-  });
-
-  $("#schadeOutput").click(function (event) {
-    loadDemo("demo/schadeOutput");
-  });
+  function initializeDemoFile (demoId, demoPath, demoName) {
+    $(demoId).on("click", function (event) {
+      loadDemo(demoPath, demoName);
+    });
+  };
 
   var loadDemo = function(url) {
     loadGrn(url);
@@ -225,100 +319,58 @@ $(function () {
     $("a.upload > input[type=file]").val("");
   };
 
-  $(".deselectedColoring").click(function (event) {
-    colorPreferences(event);
-  });
+  function settingsController () {
+    this.color = true;
 
-  var colorPreferences = function(event) {
-    var deselectedID = "#" + $(".deselectedColoring").attr("id");
-    var selectedID = "#" + $(".selectedColoring").attr("id");
-    $(deselectedID + ">span").attr("class", "glyphicon glyphicon-ok");
-    $(selectedID + ">span").attr("class", "glyphicon invisible");
-    // Allows the click handler to swap between the two different options
-    $(deselectedID).attr("class", "selectedColoring")
-                   .off("click");
-    $(selectedID).attr("class", "deselectedColoring")
-                 .on("click", colorPreferences);
-  };
-
-  // Allow the sliders to be used before loading a graph
-
-  $("input[type='range']").on("input", function() {
-    // Due to all of the sliders and their HTML values sharing the same naming convention: NameInput/NameVal, 
-    // we can remove the Input and replace it with Val to change the correct HTML value each time.
-    var selectedSlider = $(this).attr("id").search("Input");
-    var targetID = $(this).attr("id").substring(0, selectedSlider) + "Val";
-    var gravityCheck = "";
-    if(targetID === "gravityVal"  && $(this).val().length === 3) {
-      gravityCheck = "0";
-    }
-    $("#" + targetID).html($(this).val() + gravityCheck);
-  });
-
-  // Handler is unbound first to prevent it from firing twice. 
-  // addHanders[0][i] = ID; addHandlers[1][i] = function run when that ID is clicked
-  var addHandlers = [ 
-    [ "#lockSliders", "#lockSlidersMenu", "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ],
-    [ lockSliders, lockSliders, resetSliders, resetSliders, undoReset, undoReset]
-  ]
-  for(var i = 0; i < addHandlers[0].length; i++) {
-    $(addHandlers[0][i]).unbind("click").click(addHandlers[1][i]);
-  };
-
-  function lockSliders(event) {
-    if( $("#lockSlidersMenu").attr("class") === "noGlyph" ) {
-      $("#lockSliders").prop("checked", true);
-      $("#lockSlidersMenu").removeClass("noGlyph")
-                             .html("<span class='glyphicon glyphicon-ok'></span>&nbsp; Lock Force Graph Parameters");
-    } else {
-      $("#lockSliders").prop("checked", false);
-      $("#lockSlidersMenu").addClass("noGlyph")
-                           .html("<span class='glyphicon invisible'></span>&nbsp; Lock Force Graph Parameters");
-    }
-    var check = $("#lockSliders").prop("checked");
-    $("input[type='range']").prop("disabled", check);
-    $("#resetSliders").prop("disabled", check);
-  };
-  
-  // Enter the prefix of each slider here
-  var inputs = [ "#linkDist", "#charge", "#chargeDist", "#gravity" ],
-      defaultValues = [500, -1000, 1000, 0.1],
-      newValues = [0, 0, 0, 0];
-
-  function resetSliders(event) {
-    var check = $( "#lockSliders" ).prop( "checked" );
-    if( !check ) {
-      newValues = [ $("#linkDistInput").val(), $("#chargeInput").val(), $("#chargeDistInput").val(), $("#gravityInput").val() ];
-      for(var i = 0; i < inputs.length; i++) {
-        $(inputs[i] + "Input").val(defaultValues[i]);
-        if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(defaultValues[i]);
-        } else {
-          $(inputs[i] + "Val").html(defaultValues[i] + "0"); // add 0 to the end of gravity so that it reads 0.10
-        }
-      }
-      $( "#undoReset" ).prop( "disabled", false );
-    }
-  };
-
-  function undoReset(event) {
-    var check =  $( "#undoReset" ).prop( "disabled" );
-    if( !check ) {
-      for(var i = 0; i < inputs.length; i++) {
-        $(inputs[i] + "Input").val(newValues[i]);
-        if(inputs[i] != "#gravity") {
-          $(inputs[i] + "Val").html(newValues[i]);
-        } else {
-          var gravityCheck = ""; 
-          if( $("#gravityInput").val().length === 3 ) {
-            gravityCheck = "0";
-          }
-          $(inputs[i] + "Val").html(newValues[i] + gravityCheck); // add 0 to the end of gravity so that it reads 0.10
-        }
-      }
-      $( "#undoReset" ).prop( "disabled", true );
+    this.setupSettingsHandlers = function () {
+      $(COLOR_PREFERENCES_CLASS).on("click", function () {
+        $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
+        $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible")
+      })
     }
   }
+
+  $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).prop("checked", "checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
+    $(WEIGHTS_HIDE_SIDE).removeProp("checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).addClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
+    $(WEIGHTS_HIDE_CLASS).removeClass("selected");
+  });
+
+  $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).prop("checked", "checked");
+    $(WEIGHTS_HIDE_SIDE).removeProp("checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).addClass("selected");
+    $(WEIGHTS_HIDE_CLASS).removeClass("selected");
+  });
+
+  $(WEIGHTS_HIDE_CLASS).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").addClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
+    $(WEIGHTS_HIDE_SIDE).prop("checked", "checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
+    $(WEIGHTS_HIDE_CLASS).addClass("selected");
+  });
   
   $("#printGraph").click(function (event) {
     if(!$(this).parent().hasClass("disabled")) {
@@ -380,4 +432,12 @@ $(function () {
   $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
   $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
   $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
+
+  $("#reload").click(function (event) {
+    if (!$(this).parent().hasClass("disabled")) {
+      if ($.isFunction(reloader)) {
+        reloader();
+      }
+    }
+  });
 });

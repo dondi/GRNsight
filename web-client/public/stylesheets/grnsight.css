@@ -7,15 +7,50 @@ body {
 .file-input-name {
   font-weight: normal;
 }
-.grnsight-container {
-  position: absolute;
+.grnParent {
   left: 250px;
   top: 53px;
   right: 5px;
   bottom: 5px;
-  width: 1100px;
-  height: 700px;
+  position: absolute;
+  overflow: auto;
+}
+.grnTest {
+  position: absolute;
+  overflow: auto;
+}
+.grnTest::-webkit-scrollbar {
+  display: auto;
+}
+.grnTestNoScroll::-webkit-scrollbar {
+  display: none;
+}
+.grnsight-container {
   border: 2px solid #9a9a9a;
+}
+.containerXS {
+  width: 640px;
+  height: 360px;
+}
+.containerS {
+  width: 960px;
+  height: 540px;
+}
+.containerM {
+  width: 1280px;
+  height: 720px;
+}
+.containerL {
+  width: 1600px;
+  height: 900px;
+}
+.containerXL {
+  width: 2080px;
+  height: 1170px;
+}
+.containerInfinite {
+  width: 100000px;
+  height: 100000px;
 }
 .sliders {
   width: 225px;
@@ -86,7 +121,7 @@ nav.navbar.navbar-default {
 .dropdown-menu > li > a:hover {
   background-color: #dfebe5;
 }
-#undoReset {
+#undoResetButton {
   width: 225px;
   margin-top: 5px;
 }
@@ -141,6 +176,14 @@ nav.navbar.navbar-default {
   -moz-border-radius: 6px 0 6px 6px;
   border-radius: 6px 0 6px 6px;
 }
+.panel-body {
+  overflow: scroll;
+}
+.graph-statistics-container {
+  margin-top: 256px;
+  margin-left: 15px;
+  width: 1335px;
+}
 text.weight {
   cursor: default;
   font-size: 20px;
@@ -156,6 +199,31 @@ text.weight.visible {
   opacity: 1;
   visibility: visible;
 }
+#weightsSideLabel {
+  line-height: 3px;
+  font-size: 13px;
+}
+#sideHeader {
+  line-height: 5px;
+  font-weight: bold;
+  font-size: 14.5px;
+  margin-left: 17px;
+  margin-bottom: 10px;
+  margin-top: 25px;
+}
+#weightsMouseOverSide {
+  margin-left: 7px;
+}
+#weightsAlwaysSide {
+  margin-left: 7px;
+}
+#weightsNeverSide {
+  margin-left: 7px;
+}
 path.mousezone {
   opacity: 0;
+}
+.normalization-form {
+  margin-left: 35px;
+  margin-bottom: 8px;
 }

@@ -1,0 +1,1442 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for controllers/spreadsheet-controller.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">controllers/</a> spreadsheet-controller.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">72.09% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>124/172</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>60/70</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">64.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>18/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">72.51% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>124/171</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">409×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">409×</span>
+<span class="cline-any cline-yes">3006×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">346×</span>
+<span class="cline-any cline-yes">2660×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">201×</span>
+<span class="cline-any cline-yes">201×</span>
+<span class="cline-any cline-yes">201×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">409×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">6628×</span>
+<span class="cline-any cline-yes">110×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6518×</span>
+<span class="cline-any cline-yes">6518×</span>
+<span class="cline-any cline-yes">132914×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6080×</span>
+<span class="cline-any cline-yes">6080×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6080×</span>
+<span class="cline-any cline-yes">14×</span>
+<span class="cline-any cline-yes">6066×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6058×</span>
+<span class="cline-any cline-yes">6058×</span>
+<span class="cline-any cline-yes">6058×</span>
+<span class="cline-any cline-yes">6058×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">126834×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6091×</span>
+<span class="cline-any cline-yes">6091×</span>
+<span class="cline-any cline-yes">6091×</span>
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">6061×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6057×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6057×</span>
+<span class="cline-any cline-yes">87×</span>
+<span class="cline-any cline-yes">87×</span>
+<span class="cline-any cline-yes">87×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120743×</span>
+<span class="cline-any cline-yes">120743×</span>
+<span class="cline-any cline-yes">132×</span>
+<span class="cline-any cline-yes">120611×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1000×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">119611×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11166×</span>
+<span class="cline-any cline-yes">11166×</span>
+<span class="cline-any cline-yes">11166×</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-yes">11123×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11123×</span>
+<span class="cline-any cline-yes">11123×</span>
+<span class="cline-any cline-yes">11123×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11123×</span>
+<span class="cline-any cline-yes">8828×</span>
+<span class="cline-any cline-yes">8828×</span>
+<span class="cline-any cline-yes">8828×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2295×</span>
+<span class="cline-any cline-yes">2295×</span>
+<span class="cline-any cline-yes">2295×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11123×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">132914×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6518×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1343×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1341×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">405×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">5651×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">5650×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">407×</span>
+<span class="cline-any cline-yes">6145×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">132×</span>
+<span class="cline-any cline-yes">132×</span>
+<span class="cline-any cline-yes">132×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-yes">43×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">110×</span>
+<span class="cline-any cline-yes">110×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1000×</span>
+<span class="cline-any cline-yes">1000×</span>
+<span class="cline-any cline-yes">1000×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var multiparty = require('multiparty'),
+    xlsx = require('node-xlsx'),
+    util = require('util'),
+    path = require('path');
+&nbsp;
+var processGRNmap = <span class="fstat-no" title="function not covered" >function (path, res, app) {</span>
+<span class="cstat-no" title="statement not covered" >  var sheet,</span>
+      network;
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    sheet = xlsx.parse(path);</span>
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    return res.json(400, "Unable to read input. The file may be corrupt.");</span>
+  }
+&nbsp;
+  // For the time being, send the result in a form readable by people
+  //TODO: Optimize the result for D3
+<span class="cstat-no" title="statement not covered" >  res.header('Access-Control-Allow-Origin', app.get('corsOrigin'));</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  network = parseSheet(sheet); </span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if(network.errors.length === 0) {</span>
+    // If all looks well, return the network with an all clear
+<span class="cstat-no" title="statement not covered" >    return res.json(network);</span>
+  } else {
+    // If all does not look well, return the network with an error 400
+<span class="cstat-no" title="statement not covered" >    return res.json(400, network);</span>
+  }
+&nbsp;
+};
+&nbsp;
+var parseSheet = function(sheet) {
+  var currentSheet,
+      network = {
+        genes: [],
+        links: [],
+        errors: [],
+        warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
+        sheetType: "unweighted",
+      },
+      currentLink, 
+      currentGene,
+      sourceGene,
+      targetGene,
+      sourceGeneNumber,
+      targetGeneNumber,
+      genesList = [], // This will contain all of the genes in upper case for use in error checking
+      sourceGenes = [],
+      targetGenes = [],
+      warningsCount = 0;
+  
+  //Look for the worksheet containing the network data
+  for (var i = 0; i &lt; sheet.worksheets.length; i++) {
+    if (sheet.worksheets[i].name === "network") {
+      //Here we have found a sheet containing simple data. We keep looking
+      //in case there is also a sheet with optimized weights
+      currentSheet = sheet.worksheets[i];
+    } else if (sheet.worksheets[i].name === "network_optimized_weights") {
+      //We found a sheet with optimized weights, which is the ideal data source.
+      //So we stop looking.
+      currentSheet = sheet.worksheets[i];
+      network.sheetType = "weighted";
+      break;
+    }
+  }
+&nbsp;
+  // If it didn't find a network/network_optimized_weights sheet
+  if (currentSheet === undefined) { 
+    addError(network, errorList.missingNetworkError)
+    return network;
+  }
+&nbsp;
+  for (var row = 0, column = 1; row &lt; currentSheet.data.length; row++) {
+    if(currentSheet.data[row] === undefined) { // if the current row is empty 
+      addWarning(network, warningsList.emptyRowWarning(row));
+&nbsp;
+    } else { // if the row has data...
+&nbsp;
+&nbsp;
+      // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
+      // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
+      // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
+      try { // This prevents the server from crashing if something goes wrong anywhere in here
+        while(column &lt; currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
+          if (row === 0) { // If we are at the top of a new column...
+            // These genes are the source genes
+            try {
+              currentGene = {name: currentSheet.data[0][column]}; 
+              // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
+              if(currentGene.name === undefined) {
+                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
+              } else if(isNaN(currentGene.name.value) &amp;&amp; typeof currentGene.name.value != "string") {
+                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
+              } else {
+                sourceGenes.push(String(currentGene.name.value.toUpperCase())); 
+                genesList.push(String(currentGene.name.value.toUpperCase())); 
+                currentGene.name = currentGene.name.value;
+                network.genes.push(currentGene);
+              }
+            } catch (err) {
+<span class="cstat-no" title="statement not covered" >              addError(network, errorList.corruptGeneError(row, column));</span>
+<span class="cstat-no" title="statement not covered" >              return network;</span>
+            } 
+          } else if (column === 0) { // If we are at the far left of a new row...
+            // These genes are the target genes
+            try {
+              currentGene = {name: currentSheet.data[row][0]}; 
+              if(currentGene.name === undefined) {
+                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
+              } else if(isNaN(currentGene.name.value) &amp;&amp; typeof currentGene.name.value != "string") {
+                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
+              } else {
+                targetGenes.push(String(currentGene.name.value.toUpperCase()));
+                // Here we check to see if we've already seen the gene name that we're about to store
+                // Genes may or may not be present due to asymmetry or unorderedness
+                // If it's in the genesList, it will return a number &gt; 0, so we won't store it
+                // If it's not there, it will return -1, so we add it. 
+                if(genesList.indexOf(String(currentGene.name.value.toUpperCase())) === -1) {
+                  genesList.push(String(currentGene.name.value.toUpperCase()));
+                  currentGene.name = currentGene.name.value;
+                  network.genes.push(currentGene);
+                } 
+              }
+            } catch (err) {
+<span class="cstat-no" title="statement not covered" >              sourceGene = currentSheet.data[0][column].value; </span>
+<span class="cstat-no" title="statement not covered" >              targetGene = currentSheet.data[row][0].value;</span>
+<span class="cstat-no" title="statement not covered" >              addError(network, errorList.corruptGeneError(row, column));</span>
+<span class="cstat-no" title="statement not covered" >              return network;</span>
+            };
+          
+&nbsp;
+          } else { // If we're within the matrix and lookin' at the data...
+            try {
+              if (currentSheet.data[row][column] === undefined) {
+                addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
+              } else if (isNaN(+("" + currentSheet.data[row][column].value))) {
+            // TODO: Check for NaNs within the matrix and return an error - determine what is "inside the matrix"
+                addWarning(network, warningsList.dataTypeWarning(row, column));
+              } else {
+                if (currentSheet.data[row][column].value !== 0) { // We only care about non-zero values
+                  // Grab the source and target genes' names
+                  sourceGene = currentSheet.data[0][column]; 
+                  targetGene = currentSheet.data[row][0];
+                  if(sourceGene === undefined || targetGene === undefined) {
+                    addWarning(network, warningsList.randomDataWarning("undefined", row, column));
+                  } else <span class="missing-if-branch" title="if path not taken" >I</span>if((isNaN(sourceGene.value) &amp;&amp; typeof sourceGene.value != "string") || (isNaN(targetGene.value) &amp;&amp; typeof targetGene.value != "string")) {
+<span class="cstat-no" title="statement not covered" >                    addWarning(network, warningsList.randomDataWarning("NaN", row, column));</span>
+                  } else {
+                    // Grab the source and target genes' numbers
+                    sourceGeneNumber = genesList.indexOf(sourceGene.value.toUpperCase());
+                    targetGeneNumber = genesList.indexOf(targetGene.value.toUpperCase());
+                    currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column].value};
+                    // Here we set the properties of the current link before we push them to the network
+                    if (currentLink.value &gt; 0) { // If it's a positive number, mark it as an activator
+                      currentLink.type = "arrowhead";
+                      currentLink.stroke = "MediumVioletRed";
+                      network.positiveWeights.push(currentLink.value);
+                    } else { // if it's a negative number, mark it as a repressor
+                      currentLink.type = "repressor";
+                      currentLink.stroke = "DarkTurquoise";
+                      network.negativeWeights.push(currentLink.value);
+                    }
+                    network.links.push(currentLink);
+                  }
+                };
+              }
+&nbsp;
+            } catch (err) {
+              // TO DO: Customize this error message to the specific issue that occurred.
+<span class="cstat-no" title="statement not covered" >              addError(network, errorList.missingValueError(row, column));</span>
+<span class="cstat-no" title="statement not covered" >              return network;</span>
+            };
+          };
+          column++; // Let's move on to the next column!
+        }; // Once we finish with the current row...
+      column = 0; // let's go back to column 0 on the next row!
+      } catch (err) {
+        // We only get here if something goes drastically wrong. We don't want to get here.
+<span class="cstat-no" title="statement not covered" >        addError(network, errorList.unknownError);</span>
+<span class="cstat-no" title="statement not covered" >        return network;</span>
+      }
+    };
+  };
+&nbsp;
+&nbsp;
+  // We sort them here because gene order is not relevant before this point
+  // Sorting them now means duplicates will be right next to each other
+  sourceGenes.sort();
+  targetGenes.sort();
+&nbsp;
+  // Final error checks!
+  checkDuplicates(network.errors, sourceGenes, targetGenes);
+  checkGeneLength(network.errors, genesList);
+  checkNetworkSize(network.errors, network.warnings, genesList, network.positiveWeights, network.negativeWeights);
+&nbsp;
+  // We're done. Return the network.
+&nbsp;
+  return network;
+};
+&nbsp;
+&nbsp;
+var addMessageToArray = function (messageArray, message) {
+    messageArray.push(message);
+    //warningsCount++;
+    //checkWarningsCount(warningsCount);
+}
+&nbsp;
+var addWarning = function (network, message) {
+    addMessageToArray(network.warnings, message);
+};
+&nbsp;
+var addError = function (network, message) {
+    addMessageToArray(network.errors, message);
+};
+&nbsp;
+var checkWarningsCount = <span class="fstat-no" title="function not covered" >function (warningsCount) {</span>
+<span class="cstat-no" title="statement not covered" >  var MAX_WARNINGS = 75;</span>
+<span class="cstat-no" title="statement not covered" >  if (warningsCount &gt; MAX_WARNINGS) {</span>
+<span class="cstat-no" title="statement not covered" >    addError(network, warningsCountError);</span>
+  }
+}
+&nbsp;
+var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+  var genesLength = genesList.length,
+      edgesLength = positiveWeights.length + negativeWeights.length,
+      GENE_MAX_WARNING = 50,
+      EDGE_MAX_WARNING = 100,
+      GENE_MAX_ERROR = 75,
+      EDGE_MAX_ERROR = 150;
+&nbsp;
+  if ((genesLength &gt;= GENE_MAX_WARNING &amp;&amp; genesLength &lt; GENE_MAX_ERROR)|| (edgesLength &gt;= EDGE_MAX_WARNING &amp;&amp; edgesLength &lt; EDGE_MAX_ERROR)) {
+    warningArray.push(warningsList.networkSizeWarning(genesLength, edgesLength));
+  } else if (genesLength &gt;= GENE_MAX_ERROR || edgesLength &gt;= EDGE_MAX_ERROR) {
+    errorArray.push(errorList.networkSizeError(genesLength, edgesLength));
+  }
+}
+&nbsp;
+&nbsp;
+var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+  // Run through the source genes and check if the gene in slot i is the same as the one next to it
+  for(var i = 0; i &lt; sourceGenes.length - 1; i++) {
+    if(sourceGenes[i] === sourceGenes[i + 1]) {
+      errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+    }
+  }
+  // Run through the target genes and check if the gene in slot j is the same as the one next to it
+  for(var j = 0; j &lt; targetGenes.length - 1; j++) {
+    if(targetGenes[j] === targetGenes[j + 1]) {
+      errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
+    }
+  }
+}
+&nbsp;
+var checkGeneLength = function(errorArray, genesList) {
+  // Check if any genes are over the gene length (currently 12)
+  var maxGeneLength = 12
+  for(var i = 0; i &lt; genesList.length; i++) {
+    if(genesList[i].length &gt; maxGeneLength) {
+      errorArray.push(errorList.geneLengthError(genesList[i]));
+    }
+  }
+}
+&nbsp;
+// This is the massive list of errors. Yay!
+// The graph will not load if an error is detected.
+&nbsp;
+var errorList = {
+  missingNetworkError: {
+    errorCode: "MISSING_NETWORK", 
+    possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.", 
+    suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " + 
+    "&lt;a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'&gt;Documentation page&lt;/a&gt; for more information."
+  },
+&nbsp;
+  corruptGeneError: <span class="fstat-no" title="function not covered" >function (row, column) {</span>
+<span class="cstat-no" title="statement not covered" >    var colLetter = numbersToLetters[column];</span>
+<span class="cstat-no" title="statement not covered" >    var rowNum = row + 1;</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      errorCode: "CORRUPT_GENE", 
+      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.", 
+      suggestedFix: "Please fix the error and try uploading again."
+    };
+  },
+&nbsp;
+  missingValueError: <span class="fstat-no" title="function not covered" >function (row, column) {</span>
+<span class="cstat-no" title="statement not covered" >    var colLetter = numbersToLetters[column];</span>
+<span class="cstat-no" title="statement not covered" >    var rowNum = row + 1;</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      errorCode: "MISSING_VALUE", 
+      possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.", 
+      suggestedFix: "Please ensure that all cells have a value, then upload the file again."
+    };
+  },
+&nbsp;
+  duplicateGeneError: function(geneType, geneName) {
+    return {
+      errorCode: "DUPLICATE_GENE", 
+      possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".", 
+      suggestedFix: "Please remove the duplicate gene and submit again."
+    };
+  },
+&nbsp;
+  geneLengthError: function (geneName) {  
+    return {
+      errorCode: "INVALID_GENE_LENGTH", 
+      possibleCause: "Gene " + geneName + " is more than 12 characters in length.", 
+      suggestedFix: "Genes may only be between 1 and 12 characters in length. Please shorten the name and submit again."
+    };
+  },
+&nbsp;
+  networkSizeError: function (genesLength, edgesLength) {  
+    return {
+      errorCode: "INVALID_NETWORK_SIZE", 
+      possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.", 
+      suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size of your network and try again."
+    };
+  }, 
+&nbsp;
+  warningsCountError: {  
+    errorCode: "WARNINGS_OVERLOAD", 
+    possibleCause: "This network has over 75 warnings.", 
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the Documentation page and try again." 
+  }, 
+&nbsp;
+  unknownError: {
+    errorCode: "UNKNOWN_ERROR", 
+    possibleCause: "An unexpected error occurred.", 
+    suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload." 
+  }
+}
+&nbsp;
+//Currently only going to number 76 because currently the network errors out at 75+ genes.
+var numbersToLetters = {0:'A', 1:'B', 2:'C', 3:'D', 4:'E', 5:'F', 6:'G', 7:'H', 8: 'I', 9:'J', 10:'K', 11:'L', 
+    12:'M', 13:'N', 14:'O', 15:'P', 16:'Q', 17:'R', 18:'S', 19:'T', 20:'U', 21:'V', 22:'W', 23:'X', 24:'Y', 
+    25:'Z', 26:'AA', 27:'AB', 28:'AC', 29:'AD', 30:'AE', 31:'AF', 32:'AG', 33:'AH', 34:'AI', 35:'AJ', 36:'AK', 
+    37:'AL',38:'AM', 39:'AN', 40:'AO', 41:'AP', 42:'AQ', 43:'AR', 44:'AS', 45:'AT', 46:'AU', 47:'AV', 48:'AW', 
+    49:'AX', 51:'AY', 51:'AZ', 52:'BA', 53:'BB', 54:'BC', 55:'BD', 56:'BE', 57:'BF', 58:'BG', 59:'BH', 60:'BI',
+    61:'BJ', 62:'BK', 63:'BL', 64:'BM', 65:'BN', 66:'BO', 67:'BP', 68:'BQ', 69:'BR', 70:'BS', 71:'BT', 72:'BU',
+    73:'BV', 74:'BW', 75:'BX', 76:'BY'}
+&nbsp;
+&nbsp;
+// This is the list of warnings. 
+// The graph will still load if warnings are detected, but these will be reported to the user.
+&nbsp;
+&nbsp;
+var warningsList = {
+  missingSourceGeneWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "MISSING_SOURCE",
+      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."  
+    } 
+  },
+&nbsp;
+  missingTargetGeneWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "MISSING_TARGET",
+      errorDescription: "A target gene name is missing in cell " + colLetter+rowNum + "."
+    }
+  },
+&nbsp;
+  invalidMatrixDataWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "INVALID_DATA",
+      errorDescription: "The value in cell " + colLetter+rowNum + ", is undefined."
+    }
+  },
+&nbsp;
+  randomDataWarning: function (type, row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "RANDOM_DATA",
+      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "." 
+    }
+  },
+&nbsp;
+  emptyRowWarning: function (row) {
+    var rowNum = row + 1;
+    return {
+      warningCode: "EMPTY_ROW",
+      errorDescription: "Row " + rowNum + " was found to contain no data."
+    }
+  },
+&nbsp;
+  networkSizeWarning: function (genesLength, edgesLength) {
+    return {
+      warningCode: "INVALID_NETWORK_SIZE",
+      errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+    }
+  },
+&nbsp;
+  dataTypeWarning: function (row, column) {
+    var colLetter = numbersToLetters[column];
+    var rowNum = row + 1;
+    return {
+      warningCode: "INVALID_CELL_DATA_TYPE",
+      errorDescription: "The value in cell " + colLetter+rowNum + " is not a number."
+    }
+  },
+&nbsp;
+}
+&nbsp;
+module.exports = function (app) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (app) {
+&nbsp;
+    //parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+<span class="cstat-no" title="statement not covered" >    app.post('/upload', <span class="fstat-no" title="function not covered" >function (req, res) {</span></span>
+      //TODO: Add file validation
+<span class="cstat-no" title="statement not covered" >      (new multiparty.Form()).parse(req, <span class="fstat-no" title="function not covered" >function (err, fields, files) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (err) {</span>
+<span class="cstat-no" title="statement not covered" >          return res.json(400, "There was a problem uploading your file. Please try again.");</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        try {</span>
+<span class="cstat-no" title="statement not covered" >          var input = files.file[0].path;</span>
+        } catch (err) {
+<span class="cstat-no" title="statement not covered" >          return res.json(400, "No upload file selected.");</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (path.extname(input) !== ".xlsx") {</span>
+<span class="cstat-no" title="statement not covered" >          return res.json(400, "This file cannot be loaded because:&lt;br&gt;&lt;br&gt; The file is not in a format GRnsight can read." +</span>
+            "&lt;br&gt;Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+            " able to be read by GRNsight.");
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return processGRNmap(input, res, app);</span>
+      });
+    });
+&nbsp;
+    // Load the demos
+<span class="cstat-no" title="statement not covered" >    app.get('/demo/unweighted', <span class="fstat-no" title="function not covered" >function (req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);</span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    app.get('/demo/weighted', <span class="fstat-no" title="function not covered" >function (req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return processGRNmap("../test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);<span class="cstat-no" title="statement not covered" >x</span></span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    app.get('/demo/schadeInput', <span class="fstat-no" title="function not covered" >function (req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);</span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    app.get('/demo/schadeOutput', <span class="fstat-no" title="function not covered" >function (req, res) {</span></span>
+<span class="cstat-no" title="statement not covered" >      return processGRNmap("../test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);</span>
+    });
+  }
+&nbsp;
+  //exporting parseSheet for use in testing. Do not remove!
+  return { 
+    parseSheet: parseSheet
+  };
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 09 2016 17:48:12 GMT-0800 (PST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
