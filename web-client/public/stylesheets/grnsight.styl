@@ -3,60 +3,53 @@
 body
   min-width: 1326px
 
+p
+  margin: 0
+
 .submission
   margin-left: 10px
 
 .file-input-name
   font-weight: normal
 
-// .grnParent
-//   left: 250px
-//   top: 53px
-//   right: 5px
-//   bottom: 5px
-//   position: absolute
-//   overflow: auto
-
-.grnTest
+.grnsight-container
   left: 250px
   top: 53px
-  position: absolute
-
-// .grnTest::-webkit-scrollbar
-//   display: auto
-//
-// .grnTestNoScroll::-webkit-scrollbar
-//   display: none
-
-@media (min-width: 0px)
-    .containerDefault
-        width: 1104px
-        height: 648px
-
-@media (min-width: 1500px )
-    .containerDefault
-        width: 1414px
-        height: 840px
-
-@media (min-width: 2200px)
-    .containerDefault
-        width: 1920px
-        height: 1080px
-
-.grnsight-container
   border:2px solid #9A9A9A
+  position: absolute
 
 .scale-and-scroll
   position: absolute
   bottom: 0px
   left: 0px
+  z-index: 1
+  cursor: default
+  margin-left: 15px
 
 .scrollTable
   text-align: center
   table-layout: fixed
+  margin-bottom: 10px
 
 .scrollTable td
-  width: 30px
+  width: 40px
+  height: 40px
+
+.scrollBtn
+  border: 1px solid #AAA
+
+.movementArrow
+  font-weight: bolder;
+  font-size: 24px;
+
+.zoomTable
+  margin-bottom: 5px
+  text-align: center
+  table-layout: fixed
+
+.zoomTable td
+  height: 20px
+  width: 120px
 
 .containerS
   width: 1104px
@@ -70,26 +63,20 @@ body
   width: 1920px
   height: 1080px
 
-.containerInfinite
-  width: 100000px
-  height: 100000px
-
-//.containerScroll
-//  overflow: auto
-
-.sliders
+.sidebar
 	width: 225px
 	margin-left: 10px
 
-form
-  margin-bottom: 1ex
+#lockSlidersButton
+  margin-bottom: 15px
 
 form label, form span
-  margin: 1ex
+  margin: 5px
 
 .navbar
   top: 1px
   margin-right: auto
+  margin-bottom: 10px
 
 .glyphicon
   min-width: 22px
@@ -234,16 +221,7 @@ text.weight.visible
   font-size: 14.5px;
   margin-left: 17px;
   margin-bottom: 10px;
-  margin-top: 25px;
-
-#weightsMouseOverSide
-  margin-left: 7px;
-
-#weightsAlwaysSide
-  margin-left: 7px;
-
-#weightsNeverSide
-  margin-left: 7px;
+  margin-top: 10px;
 
 path.mousezone
     opacity: 0.0
@@ -255,3 +233,11 @@ path.mousezone
 #normalization-button
   margin-left: 34px;
   margin-bottom: 8px;
+
+.cursorGrab
+    cursor: -webkit-grab
+    cursor: grab;
+
+.cursorGrabbing
+    cursor: -webkit-grabbing
+    cursor: grabbing;

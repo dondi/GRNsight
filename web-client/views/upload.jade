@@ -186,34 +186,32 @@ html
               small(id='graph-metadata')
 
     div(class='container')
-      div(class='grnTest')
-        div(class='grnsight-container containerDefault')
-          div(class='scale-and-scroll')
-            table(class='scrollTable')
-              tr
-                td
-                td
-                    p(class='scrollBtn scrollUp') &#8593;
-                    
-                td
-              tr
-                td
-                  p(class='scrollBtn scrollLeft') &#8592;
-                td 
-                  p(class='scrollBtn center') &#9788;
-                td
-                  p(class='scrollBtn scrollRight') &#8594;
-              tr
-                td
-                td
-                  p(class='scrollBtn scrollDown') &#8595;
-                td
-            table(class='zoomTable') 
-              tr 
-                td
-                    input(class="zoomSlider" type="range" min="0.25" max="1" value="1" step="0.01")
+      div(class='grnsight-container')
+        div(class='scale-and-scroll')
+          table(class='scrollTable')
+            tr
+              td
+              td(class='scrollBtn scrollUp')
+                  p(class='movementArrow') &#8593;
+              td
+            tr
+              td(class='scrollBtn scrollLeft')
+                p(class='movementArrow') &#8592;
+              td(class='scrollBtn center')
+                p(class='movementArrow') &#9788;
+              td(class='scrollBtn scrollRight')
+                p(class='movementArrow') &#8594;
+            tr
+              td
+              td(class='scrollBtn scrollDown')
+                p(class='movementArrow') &#8595;
+              td 
+          table(class='zoomTable')
+            tr 
+              td
+                input(class="zoomSlider" type="range" min="0" max="0" value="1" step="0.1")
 
-    div(class='sliders')
+    div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         form
           label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
@@ -234,39 +232,42 @@ html
         form
           input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
           input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
-        form
-          h4 &nbsp; Viewport Options
-          input(type='radio' id='viewportAdapt' class='viewport' name='viewport' value='viewportAdapt' checked)
-          label(for='viewportAdapt' style='font-weight:normal') Adaptive
-          br
-          input(type='radio' id='viewportHard' class='viewport' name='viewport' value='viewportHard')
-          label(for='viewportHard' style='font-weight:normal') Fixed
-          br
-          h4 &nbsp; Viewport Size
-          input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
-          label(for='boundBoxS' style='font-weight:normal') Small
-          br
-          input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM' checked)
-          label(for='boundBoxM' style='font-weight:normal') Medium
-          br
-          input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
-          label(for='boundBoxL' style='font-weight:normal') Large
-          br
         p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
-      div(class='input-group')
-        input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
-        br
-        button(type="button" class="btn btn-default btn-sm" id="normalization-button") Set Normalization Factor
-      form(class='weightedGraphOptions hidden')
-        p(class='sideHeader') &nbsp; Hide/Show Edge Weights
-        input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-        label(for='weightsMouseOverSide' style='font-weight:normal' id='weightsSideLabel') Show With Mouse Over
-        <br>
-        input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-        label(for='weightsAlwaysSide' style='font-weight:normal' id='weightsSideLabel') Always Show Edge Weights
-        <br>
-        input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-        label(for='weightsNeverSide' style='font-weight:normal' id='weightsSideLabel') Never Show Edge Weights
+        div(class='input-group')
+          form
+            input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
+            label(for='viewport' style='font-weight:normal' class='sideLabel') Restrict graph to viewport
+            br
+            p(class='sideHeader')  &nbsp; Viewport Size
+            input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
+            label(for='boundBoxS' style='font-weight:normal' class='sideLabel') Small
+            small (1104 X 648 pixels)
+            br
+            input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
+            label(for='boundBoxM' style='font-weight:normal' class='sideLabel') Medium
+            small (1414 X 840 pixels)
+            br
+            input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
+            label(for='boundBoxL' style='font-weight:normal' class='sideLabel') Large
+            small (1920 X 1080 pixels)
+            br
+            input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
+            label(for='boundBoxFit' style='font-weight:normal' class='sideLabel') Fit to window
+            br
+          form(class='weightedGraphOptions hidden')
+            p(class='sideHeader') &nbsp; Hide/Show Edge Weights
+            input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+            label(for='weightsMouseOverSide' style='font-weight:normal' class='sideLabel') Show With Mouse Over
+            <br>
+            input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+            label(for='weightsAlwaysSide' style='font-weight:normal' class='sideLabel') Always Show Edge Weights
+            <br>
+            input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+            label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
+          p(class='sideHeader') Set Normalization Factor:
+          input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+          br
+          button(type="button" class="btn btn-default btn-sm" id="normalization-button") Set Normalization Factor
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
