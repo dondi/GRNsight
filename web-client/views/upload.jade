@@ -264,10 +264,11 @@ html
             <br>
             input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
             label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
-          p(class='sideHeader') &nbsp; Set Normalization Factor:
-          input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
-          br
+          p(class='sideHeader') Set Normalization Factor:
           input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+          br
+          button(type="button" class="btn btn-default btn-sm" id="normalization-button") Set Normalization Factor
+          p(id='normalizationStatement') * Assumes a min. value of 0.
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
