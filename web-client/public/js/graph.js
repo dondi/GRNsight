@@ -57,82 +57,29 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
   }
 
-  // Initialize normalized value. This will not change if we are not normalizing.
-  for (var i = 0; i < links.length; i++) {
-    links[i].normalizedValue = links[i].value;
-  }
+  //normalization all weights b/w 2-14
+  var normMax = +$("#normalization-max").val();
+  var totalScale = d3.scale.linear()
+    .domain(normalization && normMax > 0 ? [0, normMax] : d3.extent(allWeights))
+    .range([2, 14])
+    .clamp(true);
 
+  var unweighted = false;
 
   //normalization all weights b/w size 2 and size 14
   //if unweighted, weight is 2
   if (sheetType === 'unweighted') {
-    var totalScale = d3.scale.quantile()
-        .domain(d3.extent(allWeights))
-        .range(["2"]),
-
-        normalizedScale = d3.scale.linear()
+    totalScale = d3.scale.quantile()
         .domain(d3.extent(allWeights))
         .range(["2"]);
-
     unweighted = true;
     $(".normalization-form").append("placeholder='unweighted'");
-  } else if (sheetType === 'weighted') {
-
-    /*
-    currently, we are hard coding the smallest value in the domain to be 0
-    as opposed to the smallest weight in the adjacency matrix
-    */
-
-    allWeights.sort(); // forces 0 to always be at the end of the weights list
-    var adjustedWeights = allWeights.concat(0); //force a minimum domain value to 0
-    var normMax = $("#normalization-max").val();
-
-    if (normalization && normMax > 0) {
-      var newScaledData = [];
-
-      var normalizeWeights = d3.scale.linear()
-          .domain(d3.extent(adjustedWeights))
-          .range([0,normMax]);
-
-      // Sort links so that the links match up with the weights
-      links.sort(function(a, b) {
-        var absoluteA = Math.abs(a.value);
-        var absoluteB = Math.abs(b.value);
-        return (absoluteA > absoluteB) ? 1 : ((absoluteB > absoluteA) ? -1 : 0);
-      });
-
-
-      // We subtract 1 to account for the final 0.
-      for (var i = 0; i < adjustedWeights.length - 1; i++) {
-        newScaledData[i] = +normalizeWeights(adjustedWeights[i]);
-        links[i].normalizedValue = newScaledData[i];
-      }
-
-      var totalScale = d3.scale.linear()
-        .domain(d3.extent(newScaledData))
-        .range([2, 14]),
-
-        normalizedScale = d3.scale.linear()
-        .domain(d3.extent(newScaledData))
-        .range([2, 14]);
-    } else {
-      var totalScale = d3.scale.linear()
-          .domain(d3.extent(adjustedWeights))
-          .range([2, 14]),
-
-          normalizedScale = d3.scale.linear()
-          .domain(d3.extent(adjustedWeights))
-          .range([2, 14]);
-
-      unweighted = false;
-
+  } else {
       document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
-
-    }
   }
 
   var getEdgeThickness = function (edge) {
-      return Math.round(totalScale(Math.abs(edge.normalizedValue)));
+      return Math.round(totalScale(Math.abs(edge.value)));
   };
 
   var force = d3.layout.force()
@@ -394,7 +341,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             xOffsets,
             color;
 
-        if(Math.abs(d.normalizedValue/(d3.max(allWeights))) <= 0.05) {
+        if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
           minimum = "gray";
         }
         if( x1 === x2 && y1 === y2 ) {
@@ -1058,7 +1005,7 @@ var text = node.append("text")
   }
 
   function normalize(d) {
-    return Math.abs(d.normalizedValue/(d3.max(allWeights)));
+    return Math.abs(d.value/(d3.max(allWeights)));
   }
 
   function dragstart(d) {
