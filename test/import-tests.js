@@ -192,6 +192,79 @@ var weightedTestGraphMlWithCycle = [
   '</graphml>'
 ].join("\n");
 
+var missingEndTagTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+  '  <graph edgedefault="directed"',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id">-0.75</data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id">0.25</data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id">0.5</data>',
+  '    </edge>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
+
+var missingGraphMlEndTagTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <graph edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id"></data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id"></data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id"></data>',
+  '    </edge>',
+  '  </graph>'
+].join("\n");
+
+var misspelledGraphTagTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+  '  <grah edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id">-0.75</data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id">0.25</data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id">0.5</data>',
+  '    </edge>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
+
 describe("Import from GraphML", function () {
   it("should import unweighted networks from GraphML correctly", function () {
     expect(
@@ -215,6 +288,36 @@ describe("Import from GraphML", function () {
     expect(
       importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
     ).to.deep.equal(expectedWeightedNetworkWithCycle);
+  });
+
+  it("should issue an general graphML syntax error because there is a missing end tag", function () {
+    expect(
+      importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors[0].errorCode
+    ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR")
+  });
+
+  it("should issue an general graphML syntax error because </graphml> is missing", function () {
+    expect(
+      importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors[0].errorCode
+    ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR")
+  });
+
+  it("should issue an general graphML syntax error because the graph tag is misspelled", function () {
+    expect(
+      importController.graphMlToGrnsight(misspelledGraphTagTestGraphMl).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.graphMlToGrnsight(misspelledGraphTagTestGraphMl).errors[0].errorCode
+    ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR")
   });
 
   it("should issue a warning if edgedefault is not set to 'directed'", function () {
