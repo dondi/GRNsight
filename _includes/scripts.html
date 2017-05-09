@@ -13,24 +13,22 @@
         <script src="{{ site.baseurl }}/assets/js/ga-report.js"></script>
     {% if page.title == 'Beta' %}
         <script>
+            var $window = $(window);
             // https://stackoverflow.com/questions/20125340/can-i-use-jquery-to-resize-an-iframe-to-fill-the-remaining-window-space
-            $(window).on('load resize', function(){
-                  var $window = $(window);
-                  var footer = $("#footer");
-                  var HEIGHT_OFFSET = 53;
-                  var WIDTH_OFFSET = 250;
-                  var SMALL_DIMENSIONS = [1104 + WIDTH_OFFSET, 648 + HEIGHT_OFFSET];
-                  var MEDIUM_DIMENSIONS = [1414 + WIDTH_OFFSET, 840 + HEIGHT_OFFSET];
-                  var LARGE_DIMENSIONS = [1920 + WIDTH_OFFSET, 1080 + HEIGHT_OFFSET];
-                  $('iframe').height(function() {
-                      var display = $window.height() - $(this).offset().top;
-                      if (display < SMALL_DIMENSIONS[1]) {
-                        display = SMALL_DIMENSIONS[1];
-                      } else if (display > SMALL_DIMENSIONS[1] && display < LARGE_DIMENSIONS[1]) {
-                        display = MEDIUM_DIMENSIONS[1];
-                      }
-                      return display + 20;
-                  })
-              });
+            $window.on('load resize', function(){
+                var HEIGHT_OFFSET = 53;
+                var SMALL_HEIGHT = 648 + HEIGHT_OFFSET;
+                var MEDIUM_HEIGHT = 840 + HEIGHT_OFFSET;
+                var LARGE_HEIGHT = 1080 + HEIGHT_OFFSET;
+                $('iframe').height(function() {
+                    var display = $window.height() - $(this).offset().top;
+                    if (display < SMALL_HEIGHT) {
+                      display = SMALL_HEIGHT;
+                    } else if (display > SMALL_HEIGHT && display < LARGE_HEIGHT) {
+                      display = MEDIUM_HEIGHT;
+                    }
+                    return display + 20;
+                });
+            });
         </script>
     {% endif %}
