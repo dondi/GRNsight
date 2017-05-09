@@ -9,8 +9,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
 
-  var width = $container.width(),
-      height = $container.height(),
+  var BORDER_OFFSET = 4;
+  var width = $container.width() - BORDER_OFFSET,
+      height = $container.height() - BORDER_OFFSET,
       nodeHeight = 30,
       gridWidth = 300,
       colorOptimal = true;
@@ -37,9 +38,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var minimumScale = MIN_SCALE;
   var maximumScale = adaptive ? ADAPTIVE_MAX_SCALE : FIXED_MAX_SCALE;
+  d3.select(".zoomSlider").attr("min", minimumScale);
   d3.select(".zoomSlider").attr("max", maximumScale);
-
-  var BORDER_OFFSET = 4;
   var WIDTH_OFFSET = 250;
   var HEIGHT_OFFSET = 53;
 
@@ -133,7 +133,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var scaleRange = maximumScale - minimumScale;
     var percentZoom = zoom.scale() / scaleRange * 100;
     if (!manualZoom) {
-      $(".zoomSlider").val(d3.event.scale.toFixed(2)); // This doesn't work using d3 selection for some reason
+      getMappedValue(d3.event.scale);
     }
     if (!adaptive) { // Limit to viewport
       var scale = zoom.scale();
@@ -166,19 +166,87 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   d3.select(".center").on("click", center);
 
-  var getRangePoints = function (fractional, nonfractional) {
-      var minimumScaleAsReverse = 100 / (minimumScale * 100); // 1/4 scale is the opposite of 4x scale. We're getting the opposite.
-      var difference = maximumScale - minimumScaleAsReverse;
-      // if difference is positive, maxScale is bigger. if difference is negative, minScale is bigger.
-      // if it is 0, they are the same.
-      // Regardless, we want to use that difference.
-      // The proportion of the difference will give us the # extra points we'll need to normalize for..
+    var leftPoints;
+    var rightPoints;
+    var scaleIncreasePerLeftPoint;
+    var scaleIncreasePerRightPoint;
+  /*
+      We have to do some mapping so that the zoom slider appears as it should.
+      Zooming out sets the scale to a value between 0 and 1. Zooming in sets it
+      to a value between 1 and infinity. A scale of 0.25 to 5 on a zoom slider
+      without transformations will have 1 at the very far left. However, that's
+      an inaccurate way to represent what's actually happening. So this function
+      maps the scale from 0 to some x, with that x being calculated based on the
+      input scales.
+  */
+  var setupZoomSlider = function (minScale, maxScale) {
+      // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
+      // So we'll just treat it as 0.
+      maxScale = (maxScale !== 1) ? maxScale : 0;
 
+      // Each integer on the zoom is equivalent to 100 steps.
+      var NUMBER_POINTS_PER_INT = 100;
+
+      // Get the value that, if multiplied by the minScale value, would return 1. (ex: 0.25 * 4 = 1)
+      // This gives us the equivalent value of this minimum scale, should it be treated
+      // as a scale increase. This mostly allows us to treat this minimum scale as a non-decimal value,
+      // but it also provides a way to compare the total effect this minimum scale would have
+      // in a way that is easier to understand.
+      var minScaleReversed = 100 / (minScale * 100);
+
+      // Number of points required to display the minimum scale, now that's it's been transformed. These
+      // are the points that represent everything on the scale less than one.
+      leftPoints = minScaleReversed * NUMBER_POINTS_PER_INT;
+
+      // We want to end up with a total increase that, once we've gone through all the
+      // left points, produces 1 when added to minscale. So for scale 0.25 with 400
+      // left points, we need to know what we could add to 0.25 400 times to produce 1.
+      // We divide 0.75 by 400  to get that result.
+      scaleIncreasePerLeftPoint = (1 - minScale) / leftPoints;
+
+      // Points representing scales greater than 1.
+      var rightPoints = maxScale * NUMBER_POINTS_PER_INT;
+
+      // For the same concept as above, we need to figure out what to add to 1 so
+      // so that we can end up with maxScale. Note that we start at 1 and not 0 because
+      // the scale is beginning at 1.
+      scaleIncreasePerRightPoint = (maxScale - 1) / rightPoints;
+      var totalPoints = leftPoints + rightPoints;
+
+      // Returns the x that we're mapping to. Now we can set up the range slider.
+      var maxRangeValue = totalPoints / 100;
+      $(".zoomSlider").attr("min", 0);
+      $(".zoomSlider").attr("max", maxRangeValue);
+      $(".zoomSlider").val(0.01 * leftPoints);
+  }
+
+  setupZoomSlider(minimumScale, maximumScale);
+
+  function getMappedValue(scale) {
+      // Reverse the calculations from setupZoomSlider to get value from equivalentScale
+      var equivalentPoint;
+      if (scale <= 1) {
+        equivalentPoint = (scale - minimumScale) / (scaleIncreasePerLeftPoint * 100);
+      } else {
+        equivalentPoint = (scale - 1) / scaleIncreasePerRightPoint + leftPoints;
+        equivalentPoint /= 100;
+      }
+      $(".zoomSlider").val(equivalentPoint.toFixed(2));
   }
 
   d3.select(".zoomSlider").on("input", function () {
-    var newScale = this.value;
-    zoom.scale(newScale);
+    var value = $(this).val();
+    var currentPoint = value * 100;
+    var equivalentScale;
+    if (currentPoint <= leftPoints) {
+      equivalentScale = minimumScale;
+      equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+    } else {
+      currentPoint = currentPoint - leftPoints;
+      equivalentScale = 1;
+      equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+    }
+    zoom.scale(equivalentScale);
     svg.transition().call(zoom.event);
   }).on("mousedown", function () {
     manualZoom = true;
@@ -187,10 +255,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   });
 
   d3.selectAll(".boundBoxSize").on("click", function () {
-    var newWidth = $container.css("width");
-    var newHeight = $container.css("height");
-    newWidth = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
-    newHeight = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
+    var newWidth = $container.width();
+    var newHeight = $container.height();
 
     if (adaptive) {
       width = (width < newWidth) ? newWidth : width;
@@ -200,7 +266,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       height = newHeight;
     }
 
-    d3.select("svg").attr("width", newWidth).attr("height", newHeight);
+    // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+    // Is inconsistent, but I'm tired of fighting with it...
+    d3.select("svg").attr("width", newWidth)
+        .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
     d3.select("rect").attr("width", width).attr("height", height);
     d3.select(".boundingBox").attr("width", width).attr("height", height);
     force.size([width, height]).resume();
@@ -216,25 +285,27 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       adaptive = true;
       maximumScale = ADAPTIVE_MAX_SCALE;
       zoom.scaleExtent([minimumScale, maximumScale])
-      d3.select(".zoomSlider").attr("max", maximumScale);
+      setupZoomSlider(minimumScale, maximumScale);
 
       d3.select("rect").attr("stroke", "none");
     } else if (fixed) {
       adaptive = false;
-      maximumScale = 1;
+      maximumScale = FIXED_MAX_SCALE;
       zoom.scaleExtent([minimumScale, maximumScale]);
       if (zoom.scale() >= 1) {
         zoom.scale(1);
         scrolling = false;
         $container.removeClass(CURSOR_CLASSES);
       }
-      d3.select(".zoomSlider").attr("max", maximumScale);
+      setupZoomSlider(minimumScale, maximumScale)
 
       var newWidth = $container.css("width");
       var newHeight = $container.css("height");
-      width = newWidth.substring(0, newWidth.length - 2) - BORDER_OFFSET;
-      height = newHeight.substring(0, newHeight.length - 2) - BORDER_OFFSET;
-      d3.select("rect").attr("stroke", "#9A9A9A").attr("width", width).attr("height", height);
+      width = $container.width();
+      height = $container.height();
+      d3.select("rect").attr("stroke", "#9A9A9A")
+          .attr("width", width)
+          .attr("height", height);
       $(".boundingBox").attr("width", width).attr("height", height);
 
       center();
@@ -261,10 +332,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   function center() {
     svg.call(zoom.event);
     var scale = zoom.scale();
-    var viewportWidth = $container.css("width");
-    var viewportHeight = $container.css("height");
-    viewportWidth = viewportWidth.substring(0, viewportWidth.length - 2) - BORDER_OFFSET;
-    viewportHeight = viewportHeight.substring(0, viewportHeight.length - 2) - BORDER_OFFSET;
+    var viewportWidth = $container.width();
+    var viewportHeight = $container.height();
 
     var boundingBoxWidth = $(".boundingBox").attr("width");
     var boundingBoxHeight = $(".boundingBox").attr("height");

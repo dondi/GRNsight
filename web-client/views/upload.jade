@@ -209,10 +209,13 @@ html
           table(class='zoomTable')
             tr 
               td
-                input(class="zoomSlider" type="range" min="0" max="0" value="1" step="0.1")
-            tr
-              td
-                span(style="color:#AAA" id="zoomPercent") 100%
+                //- Initial setup for zoom center bar
+                //- div(class="zoomCenter")
+                input(class="zoomSlider" type="range" min="0" max="0" value="1" step="0.01")
+            //- Initial setup for showing zoom percentage
+            //- tr
+            //-   td
+            //-     span(style="color:#AAA" id="zoomPercent") 100%
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
@@ -267,10 +270,11 @@ html
             <br>
             input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
             label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
-          p(class='sideHeader') &nbsp; Set Normalization Factor:
-          input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
-          br
-          input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+        //- Normalization controls hidden as per @kdahlquist's comment on issue #422
+        //-   p(class='sideHeader') &nbsp; Set Normalization Factor:
+        //-   input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
+        //-   br
+        //-   input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
