@@ -4,7 +4,7 @@ var assert = require('chai').assert,
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
 
-describe('sheet-modifications', function () {
+describe('errors-sheet-modifications', function () {
   describe('extra-sheet', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/sheet-modifications/extra-sheet-input.xlsx');

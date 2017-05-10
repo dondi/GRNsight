@@ -3,35 +3,86 @@
 body
   min-width: 1326px
 
-.submission 
+p
+  margin: 0
+
+.submission
   margin-left: 10px
 
-.file-input-name 
+.file-input-name
   font-weight: normal
 
 .grnsight-container
-  position: absolute
   left: 250px
   top: 53px
-  right: 5px
-  bottom: 5px
-  width: 1100px
-  height: 700px
   border:2px solid #9A9A9A
+  position: absolute
 
-.sliders
+.scale-and-scroll
+  position: absolute
+  bottom: 0px
+  left: 0px
+  z-index: 1
+  cursor: default
+  margin-left: 15px
+
+.scrollTable
+  text-align: center
+  table-layout: fixed
+  margin-bottom: 10px
+
+.scrollTable td
+  width: 40px
+  height: 40px
+
+.scrollBtn
+  border: 1px solid #AAA
+
+.movementArrow
+  font-weight: bolder;
+  font-size: 24px;
+
+.zoomTable
+  margin-bottom: 5px
+  text-align: center
+  table-layout: fixed
+
+.zoomTable td
+  height: 20px
+  width: 120px
+
+.zoomCenter
+  position:absolute
+  width: 2px
+  background-color: #AAA
+  height: 20px
+
+.containerS
+  width: 1104px
+  height: 648px
+
+.containerM
+  width: 1414px
+  height: 840px
+
+.containerL
+  width: 1920px
+  height: 1080px
+
+.sidebar
 	width: 225px
 	margin-left: 10px
 
-form
-  margin-bottom: 1ex
+#lockSlidersButton
+  margin-bottom: 15px
 
 form label, form span
-  margin: 1ex
+  margin: 5px
 
 .navbar
   top: 1px
-  width: 1350px
+  margin-right: auto
+  margin-bottom: 10px
 
 .glyphicon
   min-width: 22px
@@ -81,14 +132,14 @@ nav.navbar.navbar-default
 .forceVal
   font-size: 12px
 
-.dropdown-menu > li > a:hover 
+.dropdown-menu > li > a:hover
   background-color: #dfebe5
 
-#undoReset
+#undoResetButton
   width: 225px
   margin-top: 5px
 
-#mouseOver 
+#mouseOver
   margin-top: 10px
   text-align: center
 
@@ -113,7 +164,7 @@ nav.navbar.navbar-default
     -moz-border-radius:0 6px 6px 6px
     border-radius:0 6px 6px 6px
 
-.dropdown-submenu:hover>.dropdown-menu 
+.dropdown-submenu:hover>.dropdown-menu
     display:block
 
 .dropdown-submenu>a:after
@@ -129,18 +180,27 @@ nav.navbar.navbar-default
     margin-top:5px
     margin-right:-10px
 
-.dropdown-submenu:hover>a:after 
+.dropdown-submenu:hover>a:after
     border-left-color:#ffffff
 
-.dropdown-submenu.pull-left 
+.dropdown-submenu.pull-left
     float:none
 
-.dropdown-submenu.pull-left>.dropdown-menu 
+.dropdown-submenu.pull-left>.dropdown-menu
     left:-100%
     margin-left:10px
     -webkit-border-radius:6px 0 6px 6px
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
+
+.panel-body
+  overflow: scroll;
+
+// Graph statistics styling is due to absolute position and size of grnsight-container
+.graph-statistics-container
+  margin-top: 256px
+  margin-left: 15px
+  width: 1335px // 1335 + 15 = 1350
 
 text.weight
     cursor: default
@@ -157,5 +217,29 @@ text.weight.visible
     opacity: 1.0
     visibility: visible
 
+#weightsSideLabel
+  line-height: 3px;
+  font-size: 13px;
+
+.sideHeader
+  line-height: 5px;
+  font-weight: bold;
+  font-size: 14.5px;
+  margin-left: 17px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+
 path.mousezone
     opacity: 0.0
+
+.normalization-form
+    margin-left: 35px;
+    margin-bottom: 8px;
+
+.cursorGrab
+    cursor: -webkit-grab
+    cursor: grab;
+
+.cursorGrabbing
+    cursor: -webkit-grabbing
+    cursor: grabbing;

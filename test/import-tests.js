@@ -22,6 +22,8 @@ var expectedUnweightedNetwork = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "unweighted"
 };
 
@@ -41,6 +43,8 @@ var expectedWeightedNetwork = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "weighted"
 };
 
@@ -63,6 +67,8 @@ var expectedUnweightedNetworkWithCycle = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "unweighted"
 };
 
@@ -85,134 +91,10 @@ var expectedWeightedNetworkWithCycle = {
 
   errors: [],
   warnings: [],
+  positiveWeights: [],
+  negativeWeights: [],
   sheetType: "weighted"
 };
-
-var unweightedTestSif = [
-  "A",
-  [ "B", "pd", "A", "C" ].join("\t"),
-  [ "C", "pd", "B" ].join("\t"),
-  "D"
-].join("\r\n"); // Mix up linebreak types to test normalization.
-
-var weightedTestSif = [
-  [ "A", "", "" ].join("\t"), // Include trivially-tabbed cases.
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "0.25", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  "D"
-].join("\n");
-
-var inconsistentlyWeightedTestSif = [
-  "A",
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "pd", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  [ "D", "", "" ].join("\t")
-].join("\r\n");
-
-var unweightedTestSifWithCycle = [
-  [ "A", "pd", "A" ].join("\t"),
-  [ "B", "pd", "A", "C" ].join("\t"),
-  [ "C", "interacts with", "B" ].join("\t"), // Allow any non-numeric relationship.
-  [ "D", "neg", "D" ].join("\t"),
-  "E"
-].join("\r\n");
-
-var weightedTestSifWithCycle = [
-  [ "A", "0.875", "A" ].join("\t"),
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "0.25", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  [ "D", "-0.375", "D" ].join("\t"),
-  "E"
-].join("\r");
-
-var inconsistentlyWeightedTestSifWithCycle = [
-  [ "A", "0.875", "A" ].join("\t"),
-  [ "B", "-0.75", "A" ].join("\t"),
-  [ "B", "0.25", "C" ].join("\t"),
-  [ "C", "0.5", "B" ].join("\t"),
-  [ "D", "pd", "D" ].join("\t"),
-  "E"
-].join("\n");
-
-var unweightedTestSifWithUntargeted = [
-  [ "A", "pd", "A" ].join("\t"),
-  [ "B", "pd", "A", "C" ].join("\t"),
-  [ "D", "pd", "E" ].join("\t"),
-].join("\r\n");
-
-describe("Import from SIF", function () {
-  it("should import unweighted networks from SIF correctly", function () {
-    expect(
-      importController.sifToGrnsight(unweightedTestSif)
-    ).to.deep.equal(expectedUnweightedNetwork);
-  });
-
-  it("should import weighted networks from SIF correctly", function () {
-    expect(
-      importController.sifToGrnsight(weightedTestSif)
-    ).to.deep.equal(expectedWeightedNetwork);
-  });
-
-  it("should import inconsistently weighted networks from SIF as unweighted", function () {
-    expect(
-      importController.sifToGrnsight(inconsistentlyWeightedTestSif)
-    ).to.deep.equal(extend(true, {}, expectedUnweightedNetwork, {
-      warnings: [
-        constants.warnings.EDGES_WITHOUT_WEIGHTS
-      ]
-    }));
-  });
-
-  it("should import unweighted networks with cycles from SIF correctly", function () {
-    expect(
-      importController.sifToGrnsight(unweightedTestSifWithCycle)
-    ).to.deep.equal(expectedUnweightedNetworkWithCycle);
-  });
-
-  it("should import weighted networks with cycles from SIF correctly", function () {
-    expect(
-      importController.sifToGrnsight(weightedTestSifWithCycle)
-    ).to.deep.equal(expectedWeightedNetworkWithCycle);
-  });
-
-  it("should import inconsistently weighted networks with cycles from SIF as unweighted", function () {
-    expect(
-      importController.sifToGrnsight(inconsistentlyWeightedTestSifWithCycle)
-    ).to.deep.equal(extend(true, {}, expectedUnweightedNetworkWithCycle, {
-      warnings: [
-        constants.warnings.EDGES_WITHOUT_WEIGHTS
-      ]
-    }));
-  });
-
-  it("should import nodes mentioned only in edges (i.e., targeted but targetless)", function () {
-    expect(
-      importController.sifToGrnsight(unweightedTestSifWithUntargeted)
-    ).to.deep.equal({
-      genes: [
-        { name: "A" },
-        { name: "B" },
-        { name: "D" },
-        { name: "C" },
-        { name: "E" }
-      ],
-
-      links: [
-        { source: 0, target: 0 },
-        { source: 1, target: 0 },
-        { source: 1, target: 3 },
-        { source: 2, target: 4 }
-      ],
-
-      errors: [],
-      warnings: [],
-      sheetType: "unweighted"
-    });
-  });
-});
 
 var unweightedTestGraphMl = [
   '<?xml version="1.0" encoding="UTF-8"?>',
@@ -310,6 +192,79 @@ var weightedTestGraphMlWithCycle = [
   '</graphml>'
 ].join("\n");
 
+var missingEndTagTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+  '  <graph edgedefault="directed"',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id">-0.75</data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id">0.25</data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id">0.5</data>',
+  '    </edge>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
+
+var missingGraphMlEndTagTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <graph edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id"></data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id"></data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id"></data>',
+  '    </edge>',
+  '  </graph>'
+].join("\n");
+
+var misspelledGraphTagTestGraphMl = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+    'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+    'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+    'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+  '  <key id="edge-value-id" for="edge" attr.name="weight" attr.type="double"/>',
+  '  <grah edgedefault="directed">',
+  '    <node id="A"/>',
+  '    <node id="B"/>',
+  '    <node id="C"/>',
+  '    <node id="D"/>',
+  '    <edge source="B" target="A">',
+  '      <data key="edge-value-id">-0.75</data>',
+  '    </edge>',
+  '    <edge source="B" target="C">',
+  '      <data key="edge-value-id">0.25</data>',
+  '    </edge>',
+  '    <edge source="C" target="B">',
+  '      <data key="edge-value-id">0.5</data>',
+  '    </edge>',
+  '  </graph>',
+  '</graphml>'
+].join("\n");
+
 describe("Import from GraphML", function () {
   it("should import unweighted networks from GraphML correctly", function () {
     expect(
@@ -333,6 +288,36 @@ describe("Import from GraphML", function () {
     expect(
       importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
     ).to.deep.equal(expectedWeightedNetworkWithCycle);
+  });
+
+  it("should issue an general graphML syntax error because there is a missing end tag", function () {
+    expect(
+      importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors[0].errorCode
+    ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR")
+  });
+
+  it("should issue an general graphML syntax error because </graphml> is missing", function () {
+    expect(
+      importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors[0].errorCode
+    ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR")
+  });
+
+  it("should issue an general graphML syntax error because the graph tag is misspelled", function () {
+    expect(
+      importController.graphMlToGrnsight(misspelledGraphTagTestGraphMl).errors.length
+    ).to.equal(1);
+
+    expect(
+      importController.graphMlToGrnsight(misspelledGraphTagTestGraphMl).errors[0].errorCode
+    ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR")
   });
 
   it("should issue a warning if edgedefault is not set to 'directed'", function () {
@@ -381,6 +366,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       }); // Look ma, no hyperedges.
     });
@@ -409,6 +396,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       }); // Look ma, no nested graphs (nor edges that refer to them).
     });
@@ -435,6 +424,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       });
     });
@@ -456,6 +447,8 @@ describe("Import from GraphML", function () {
 
         errors: [],
         warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
         sheetType: "unweighted"
       });
     });

@@ -4,7 +4,7 @@ var assert = require('chai').assert,
 var spreadsheetController = require(__dirname + '/../server/controllers' + '/spreadsheet-controller')();
 
 
-describe('graph-tests', function () {
+describe('errors-graph-tests', function () {
   describe('asymmetrical-graphs', function () {
     it('should not return any errors', function () {
       test.noErrors('test-files/graph-tests/asymmetrical-disordered-input.xlsx');
@@ -27,6 +27,7 @@ describe('graph-tests', function () {
 
   describe('over-75-genes-or-150-nodes', function () {
     it('should return invalid network size error', function () {
+      this.timeout(10000);
       test.networkSizeError('test-files/graph-tests/different-sized-networks/80-genes-0-edges.xlsx', 1);
       test.networkSizeError('test-files/graph-tests/different-sized-networks/45-genes-max-edges.xlsx', 1);
     })
@@ -34,8 +35,8 @@ describe('graph-tests', function () {
 
   describe('over-50-genes-or-100-nodes', function () {
     it('should return invalid network size warning', function () {
-      test.networkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
-      test.networkSizeWarning('test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx', 1);
+      test.invalidNetworkSizeWarning('test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx', 1);
+      test.invalidNetworkSizeWarning('test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx', 1);
     })
   })
 
