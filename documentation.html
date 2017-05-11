@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 8/21/16
+modified: 5/11/17
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small- to medium-scale gene regulatory networks.
 ---
           <p id="pageTitle">Documentation</p>
@@ -10,10 +10,10 @@ description: Learn how to format and upload files to GRNsight, a web application
             <h3>Getting Started</h3>
 
             <p>
-              GRNsight is a web application for visualizing models of small- to medium-scale gene regulatory networks (GRNs). GRNsight was created to work with the input and output spreadsheets used by <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  GRNsight is best-suited for visualizing networks of fewer than 35 genes (nodes) and 70 regulatory relationships (edges), but can display networks of up to 75 nodes and 150 edges. Although originally designed for gene regulatory networks, we believe that GRNsight has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The following sections describe how to use GRNsight. 
+              GRNsight is a web application for visualizing models of small- to medium-scale gene regulatory networks (GRNs). GRNsight was created to work with the input and output spreadsheets used by <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  GRNsight is best-suited for visualizing networks of fewer than 35 genes (nodes) and 70 regulatory relationships (edges), but can display networks of up to 75 nodes and 150 edges. Although originally designed for gene regulatory networks, we believe that GRNsight has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The following sections describe how to use GRNsight.
             </p>
             <p>
-              GRNsight has been tested with and confirmed to be working in Chrome version 43.0.2357.65 or higher and Firefox version 38.0.1 or higher on Windows 7 and Mac OS X operating systems. It may not work with other browsers, versions, or operating systems.
+              GRNsight has been tested with and confirmed to be working in Chrome version 58.0.3029.96 or higher and Firefox version 53.0 or higher on Windows 7 and Mac OS X operating systems. It may not work with other browsers, versions, or operating systems.
             </p>
 
             <div class="panel-group">
@@ -52,11 +52,11 @@ description: Learn how to format and upload files to GRNsight, a web application
                           </p>
                           <ul>
                             <li>
-                              GRNsight accepts Microsoft Excel Workbook (*.xlsx) files as its native format.  
+                              GRNsight accepts Microsoft Excel Workbook (*.xlsx) files as its native format.
                               <ul>
                                 <li>Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight.</li>
                                 <li>If you have a SIF (*.sif) or GraphML (*.graphml) file, please see <a href="#cytoscape_sif_instructions" data-toggle="collapse"> Section 1c</a> or <a href="#graphml_instructions" data-toggle="collapse">Section 1d</a>, respectively, to verify that your files are formatted correctly for import into GRNsight.</li>
-                              </ul> 
+                              </ul>
                             </li>
                             <li>
                               GRNsight reads gene regulatory network information that is in the form of an adjacency matrix to generate the nodes and edges of the graph.
@@ -74,7 +74,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                   The rest of the first column should contain the names of the target genes that are being controlled by the transcription factors heading each of the columns in the matrix, one target gene name per row. Transcription factor names must be unique for each row and must be 12 characters or fewer.
                                 </li>
                                 <li>
-                                  GRNsight is primarily designed to depict gene regulatory networks that contain just transcription factors and that can be represented by a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF 1” or “ABF-1” would not be considered the same as “ABF1”.  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet. The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
+                                  GRNsight is primarily designed to depict gene regulatory networks that contain just transcription factors and that can be represented by a symmetric adjacency matrix. However, starting with version 1.8, GRNsight allows the user to upload spreadsheets with asymmetric adjacency matrices.  I.e., the number, identity, and order of genes across the top and side of the adjacency matrix do not have to match.  A gene name at the top of the matrix will be considered the same as a gene name on the side if it contains the same text string, regardless of capitalization.  For example, “ABF1”, “Abf1”, and “abf1” would all be considered the same gene, but “ABF_1” or “ABF-1” would not be considered the same as “ABF1”. Gene names may not contain any special characters other than "-" and "_".  GRNsight is case-preserving in that it will keep the capitalization that the user originally entered into the spreadsheet. The gene name capitalization occurring across the top takes precedence over the gene name capitalization occurring on the side of the adjacency matrix for display of the gene names on the nodes of the graph.  The nodes that display on the graph are automatically sized to accommodate the size of the label. Labels are restricted to 12 characters; use shorter gene symbols for nodes so that the node boxes do not get too large.
                                 </li>
                                 <li>
                                   For unweighted networks in the “network” worksheet, each cell in the matrix should then contain a zero (0) if there is no regulatory relationship between those two transcription factors, or a one (1) if there is a regulatory relationship between them.  In the screenshot below, the “1” in cell B7 means that ABF1 regulates FHl1.  The “1” in cell D4 means that AFT1 regulates itself.  When this file is loaded into GRNsight, it will generate a graph with 21 nodes, one for each transcription factor, and 31 edges, for each of the cells that contain a “1” in this adjacency matrix.  The edges will be black with regular (pointy) arrowheads. The demonstration file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx">"Demo #3: Unweighted GRN"</a> corresponds to the adjacency matrix shown below.  Follow the link to download the file.
@@ -116,7 +116,7 @@ description: Learn how to format and upload files to GRNsight, a web application
 
                       <div id="yeastract_instructions" class="panel-collapse collapse">
                         <div class="panel-body">
-                          This section has instructions for formatting a gene regulation matrix downloaded from <a href="http://www.yeastract.com">YEASTRACT</a> as a .xlsx file in the native GRNsight format. 
+                          This section has instructions for formatting a gene regulation matrix downloaded from <a href="http://www.yeastract.com">YEASTRACT</a> as a .xlsx file in the native GRNsight format.
                           <ul>
                             <li>Navigate to <a href="http://www.yeastract.com/formgenerateregulationmatrix.php">Generate Regulation Matrix</a> on the YEASTRACT site.</li>
                             <li>Select the appropriate radio buttons/check boxes for the filters.</li>
@@ -152,7 +152,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                       <div id="cytoscape_sif_instructions" class="panel-collapse collapse">
                         <div class="panel-body">
 
-                          Simple Interaction Format (SIF or .sif) was originally created for use with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, an open source bioinformatics software platform for visualizing molecular interaction networks, but is now used to exchange network data between many different software packages.  Users who have data in SIF format can import these files directly into GRNsight.  However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.  An extended description of the SIF format can be found in the <a href="http://manual.cytoscape.org/en/3.4.0/Supported_Network_File_Formats.html#sif-format" target="_blank">Cytoscape v3.4.0 User Manual</a>, from which the description below is derived.  
+                          Simple Interaction Format (SIF or .sif) was originally created for use with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, an open source bioinformatics software platform for visualizing molecular interaction networks, but is now used to exchange network data between many different software packages.  Users who have data in SIF format can import these files directly into GRNsight.  However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.  An extended description of the SIF format can be found in the <a href="http://manual.cytoscape.org/en/3.4.0/Supported_Network_File_Formats.html#sif-format" target="_blank">Cytoscape v3.4.0 User Manual</a>, from which the description below is derived.
                           <ul>
                               <li>A SIF file is a tab-delimited text file with the file extension .sif.</li>
                               <ul>
@@ -171,56 +171,55 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>If different text strings representing different relationship types are present in the SIF file, GRNsight will treat them as the same type because it does not have the ability to differentiate them in the display.</li>
                               </ul>
                               <!--Delete ending here after the release of GRNsight v2-->
-                                    
+
                               <li>Duplicate entries are ignored (as would occur if the same source-target pair was listed twice with two different relationship types).</li>
                               <li>GRNsight automatically detects whether the SIF file represents an unweighted or weighted network through the examination of the relationship type.  The screenshots and descriptions below are four valid ways that an unweighted network can be specified as a SIF file, using the file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.sif">Demo #3: Unweighted GRN"</a> as an example.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)  Follow the link to download a sample SIF file.</li>
                               <ul>
                                         <li>In the first example below, each source node in the network is listed in the first column, the relationship type “pd” is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  A node may regulate itself (for example, AFT1).  Note that FHL1, GTS1, MSN1, and RPH1 do not have any target nodes, but are still listed as source nodes.  While they can be listed, it is not necessary to do so, as is shown in the second example.
-                                        
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary_sif.png" alt="SIF sample 1 unweighted network" height="594" width="212" />
                                   <br><br>
-                                        
+
                                         </li>
                                         <li>In the second example below, only source nodes that have target nodes are listed in the first column, the relationship type “pd” is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  (FHL1, GTS1, MSN1, and RPH1 were removed because they did not have any target nodes.)
-                                        
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary-no-targetless-genes_sif.png" alt="SIF sample 2 unweighted network" height="529" width="212" />
                                   <br><br>
-                                        
+
                                         </li>
                                         <li>In the third example below, each source node is only listed once on one line, followed by the relationship type “pd”, followed by a series of target nodes, separated by tab characters.  Note that FHL1, GTS1, MSN1, and RPH1 do not have any target nodes, but are still listed as source nodes.  While they can be listed, it is not necessary to do so, as is shown in the fourth example.
-                                        
+
                                  <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_concatenated_sif.png" alt="SIF sample 3 unweighted network" height="364" width="461" />
                                   <br><br>
-                                        
+
                                         </li>
                                         <li>In the fourth example below, each source node is only listed on one line, followed by the relationship type “pd”, followed by a series of target nodes, separated by tab characters.  (FHL1, GTS1, MSN1, and RPH1 were removed because they did not have any target nodes.)
-                                        
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_concatenated-no-targetless-genes_sif.png" alt="SIF sample 4 unweighted network" height="297" width="461" />
-                                  <br><br>  
-                                        
+                                  <br><br>
+
                                         </li>
                               </ul>
                               <li>A Cytoscape SIF file is only intended to convey the network nodes and edge connections; it does not support the storage of other node or edge attributes or display properties.  However, with a modification to the relationship type, a SIF file can represent a weighted network and be displayed as such in GRNsight upon import (See <a href="#unweighted_vs_weighted" data-toggle="collapse">Section 3a</a>).</li>
                               <ul>
                                         <li>To encode a weighted network in a SIF file, instead of using a text string like “pd” as the relationship type, substitute the numerical weight value.  Use real numbers > 0 to indicate an activation relationship or < 0 to indicate a repression relationship.  The screenshots and descriptions below are two valid ways that a weighted network can be specified as a SIF file, using the file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.sif">Demo #4: Weighted GRN"</a> as an example.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)  Follow the link to download a sample SIF file.</li>
                                         <li>In the first example below, each source node in the network is listed in the first column, the numerical value of the weight is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  Note that FHL1, GTS1, MSN1, and RPH1 do not have any target nodes, but are still listed as source nodes.  While they can be listed, it is not necessary to do so, as is shown in the second example.
-                                        
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary_sif.png" alt="SIF sample 5 weighted network" height="594" width="212" />
-                                  <br><br>   
-                                        
-                                        
+                                  <br><br>
+
                                         </li>
                                         <li>In the second example below, only source nodes that have target nodes are listed in the first column, the numerical value of the weight is listed in the second column, and the target node is listed in the third column.  If a node has multiple target nodes, it is listed multiple times, one relationship per line.  (FHL1, GTS1, MSN1, and RPH1 were removed because they did not have any target nodes.)
-                                        
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary-no-targetless-genes_sif.png" alt="SIF sample 6 weighted network" height="528" width="212" />
-                                  <br><br>  
-                                        
+                                  <br><br>
+
                                         </li>
                                         <li>For a weighted network, each source-to-target relationship should be on a separate line.  While it is possible that two or more source-to-target relationships would have the same exact weight value, it is not recommended to use the shorthand of listing multiple target nodes on the same row.</li>
                                         <li>GRNsight will automatically detect a SIF file representing a weighted network when it finds numerical values as the relationship type.  It will change the arrowhead type and the thickness and color of the edges as described in <a href="#unweighted_vs_weighted" data-toggle="collapse">Section 3a</a>.</li>
@@ -251,130 +250,130 @@ description: Learn how to format and upload files to GRNsight, a web application
                       <div id="graphml_instructions" class="panel-collapse collapse">
                         <div class="panel-body">
                           According to <a href="http://graphml.graphdrawing.org">http://graphml.graphdrawing.org</a>, "GraphML is a comprehensive and easy-to-use file format for graphs. It consists of a language core to describe the structural properties of a graph and a flexible extension mechanism to add application-specific data."<br><br>
-                          
+
                           Users who have data in GraphML format can import these files directly into GRNsight. However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.<br><br>
-                          
+
                           A primer for the GraphML format can be found at <a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">http://graphml.graphdrawing.org/primer/graphml-primer.html</a>, whereas the detailed specification can be found at <a href= "http://graphml.graphdrawing.org/specification.html" target="_blank">http://graphml.graphdrawing.org/specification.html</a>.  The instructions below borrow heavily from the GraphML primer.<br><br>
-                          
+
                           <ul>
                             <li>A GraphML file is an E<b>x</b>tensible <b>M</b>arkup <b>L</b>anguage (XML) file with the extension .graphml.</li>
 
                             <li>GraphML has the ability to specify graph features that GRNsight cannot display.  In those cases, GRNsight will ignore the features that it does not support.</li>
-                            
+
                             <li>The minimum requirements for an <u>unweighted</u> GraphML file that GRNsight can read and display is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.graphml" target="_blank">Demo #3 Unweighted GRN (21 genes, 31 edges)</a> GraphML file as exported by GRNsight.  (The screenshots were created from a view of this file in the <a href="http://www.firstobject.com/dn_editor.htm" target="_blank">firstobject XML Editor</a>).  Click the link to download the file.
-                            
+
                             <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_graphml_header-and-3-nodes.png" alt="GraphML sample 1 unweighted network top" height="260" width="1567" />
-                                  <br><br>   
-...                            
+                                  <br><br>
+...
                             <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_graphml_3-edges-and-footer.png" alt="GraphML sample 1 unweighted network bottom" height="228" width="1571" />
                                   <br><br>
-                            
+
                             </li>
                             <li>“The first line of the document is an XML process instruction which defines that the document adheres to the XML 1.0 standard and that the encoding of the document is UTF-8, the standard encoding for XML documents.”—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
-                            
+
                             <li>“The second line contains the <i>root-element</i> element of a GraphML document: the <code>graphml</code> element. The graphml element, like all other GraphML elements, belongs to the namespace <code>http://graphml.graphdrawing.org/xmlns</code>. For this reason we define this namespace as the default namespace in the document by adding the XML Attribute <code>xmlns="http://graphml.graphdrawing.org/xmlns"</code> to it. The two other XML Attributes are needed to specify the XML Schema for this document. In our example we use the standard schema for GraphML documents located on the <code>graphdrawing.org</code> server. The first attribute, <code>xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</code>, defines <code>xsi</code> as the XML Schema namespace. The second attribute, <code>xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"</code>, defines the XML Schema location for all elements in the GraphML namespace.”—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
-                            
+
                             <li>The third line is a comment injected by GRNsight, giving the name of the program that created the document (GRNsight), the version (in this case v1.18), URL of the GRNsight home page, and URL to the GitHub release page for the specified version.  This information is provided upon export of a GraphML file by GRNsight to assist with keeping track of the provenance of the data, and is optional for the import of GraphML files into GRNsight.</li>
-                            
+
                             <li>The next three lines are <i>key</i> elements.  GraphML standardizes only the representation of nodes and edges and their directions; all other characteristics, such as names, weights, and other values, are left for others to specify through a <i>key</i> element, which is not subject to a controlled vocabulary. For an unweighted network, GRNsight-exported GraphML defines the keys:</li>
                               <ul>
-                                        
+
                                 <li><i>name</i> for the node label (The node name is defined for compatibility with Cytoscape, but is optional for GRNsight to read and display the graph.)</li>
-                                
+
                                 <li><i>interaction</i> for the relationship type of the edge (The relationship type is defined in the same way as for SIF files described in <a href="#cytoscape_sif_instructions" data-toggle="collapse">Section 1c</a> for compatibility with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, but is optional for GRNsight to read and display the graph.)</li>
-                                
+
                                 <li><i>name</i> for the edge (The edge name is defined for compatibility with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, but is optional for GRNsight to read and display the graph.)</li>
-                                        
+
                               </ul>
-                            
+
                             <li>"A graph is, not surprisingly, denoted by a <code>graph</code> element. Nested inside a <code>graph</code> element are the declarations of nodes and edges. A node is declared with a <code>node</code> element, and an <code>edge</code> with an edge element."—<a href="http://graphml.graphdrawing.org/primer/graphml-primer.html" target="_blank">GraphML Primer</a></li>
                               <ul>
-                                        
-                                <li>In the <i>graph</i> element in line 7, the <i>edgedefault</i> attribute is set to “directed”.  GRNsight will only display directed graphs, not undirected or mixed graphs.</li>  
-                                
+
+                                <li>In the <i>graph</i> element in line 7, the <i>edgedefault</i> attribute is set to “directed”.  GRNsight will only display directed graphs, not undirected or mixed graphs.</li>
+
                                 <li>The <i>id</i> attribute gives the name of the GraphML file, and is optional for GRNsight to read and display the graph.  The <i>id</i> is provided for compatibility with Cytoscape.</li>
-                                        
+
                               </ul>
-                              
+
                               <li>The next three elements in the screenshot are node declarations, giving an <i>id</i> and <i>name</i> for the nodes “ABF1”, “ACE2”, and “AFT1”.</li>
-                              
+
                               <ul>
-                                        
+
                                 <li>Note that for GRNsight-exported GraphML, the node <i>id</i> and <i>name</i> are identical and unique to the file.  However, other programs may have a node <i>name</i> that is different than the node <i>id</i>.  For example, both <a href="http://www.cytoscape.org/download.php" target="_blank">Cytoscape v3.4.0</a> and <a href="https://www.yworks.com/products/yed" target="_blank">yED</a> v3.16 assign internal node identifiers that the user cannot edit.  The user does have the ability edit the node label, and it is for this reason that GRNsight will preferentially display the node label on the graph.  However, user editability in Cytoscape and yED leads to a situation where a user can actually assign the same label to two different nodes.  In this case, duplicate node labels will be displayed by GRNsight, and the user is directed to go back and edit the source file.</li>
-                                
+
                                 <li><a href="http://www.cytoscape.org" target="_blank">Cytoscape</a> uses the <i>name</i> key to assign a label to nodes and a <i>shared name</i> key to assign a label to the root network when subnetworks are present.</li>
-                                
+
                                 <li><a href="https://www.yworks.com/products/yed" target="_blank">yED</a> uses a <i>y:NodeLabel</i> key to assign the label to nodes.</li>
-                                
+
                                 <li>In order to maximize the ability for GRNsight to read GraphML exported from Cytoscape and yED, the following conditions are followed when displaying a graph:  if all three keys are present <i>name</i> gets top priority, followed by <i>shared name</i>, then <i>y:NodeLabel</i>, then <i>id</i>.</li>
-                                        
+
                               </ul>
-                              
+
                             <li>The next three elements shown in the screenshot are edge declarations for the edges ROX1-to-YAP6, YAP1-to-YAP6, and YAP6-to-YAP6.</li>
-                            
+
                             <ul>
-                                      
+
                               <li>The <i>edge</i> element attributes <i>source</i> and <i>target</i> give the node <i>id</i> for the source and target node, respectively.</li>
-                              
+
                               <li>The <i>interaction</i> key is the relationship type, similar to what is defined for SIF files.  It is given for compatibility with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a> and defaults to “pd” for protein->DNA, but is otherwise ignored by GRNsight for display.</li>
-                              
+
                               <li>The edge <i>name</i> key is given for compatibility with Cytoscape, but is otherwise ignored by GRNsight for display.</li>
-                                      
+
                             </ul>
-                            
+
                             <li>As noted above, GraphML has the ability to specify graph features that GRNsight cannot display.  In those cases, GRNsight will ignore these features. The original imported file will not be changed, but a GRNsight re-export of the same graph will omit these elements.</li>
-                            
+
                             <ul>
-                                      
+
                               <li>GRNsight cannot display a nested graph.  Any links that connect nodes from the main graph to nodes in the subgraph will not display.</li>
-                              
+
                               <li>Any other specifications for the display of the graph (layout, colors, etc.) will be ignored by GRNsight.</li>
-                                      
+
                             </ul>
-                            
+
                             <li>We have tested the display of networks exported in GraphML format from <a href="http://www.cytoscape.org/download.php" target="_blank">Cytoscape v3.4.0</a> and <a href="https://www.yworks.com/products/yed" target="_blank"></a>yED</a> v3.16, but because the flexibility of the GraphML standard enables divergence in implementation, we cannot guarantee that GraphML exported from other programs will be read and displayed correctly by GRNsight.  If you encounter problems, please submit an issue to <a href="https://github.com/dondi/GRNsight/issues" target="_blank">GRNsight @ GitHub</a> (requires free <a href="http://www.github.com" target="_blank">GitHub</a> account).</li>
-                          
+
                             <li>The minimum requirements for a <u>weighted</u> GraphML file that GRNsight can read is best illustrated by an example.  The screenshots below show the top and bottom of the <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.graphml" target="_blank">Demo #4 Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</a> GraphML file as exported by GRNsight.  Click the link to download the file.
-                            
+
                                                         <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_graphml_output_header-and-3-nodes.png" alt="GraphML sample 2 weighted network top" height="276" width="1571" />
-                                  <br><br>   
-...                            
+                                  <br><br>
+...
                             <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_graphml_output_3-edges-and-footer.png" alt="GraphML sample 2 weighted network bottom" height="275" width="1568" />
                                   <br><br>
-                            
+
                             </li>
-                            
+
                             <ul>
-                                      
+
                               <li>Note that there are only two major differences between the unweighted and weighted GraphML formats that GRNsight exports:</li>
-                              
+
                               <ul>
-                                        
+
                                 <li>A <i>key</i> declaration defining a <i>weight</i> attribute for an edge as the datatype “double”.</li>
                                   <ul>
-                                            
+
                                     <li>Note that there is currently a bug in <a href="http://www.cytoscape.org/download.php" target="_blank">Cytoscape v3.4.0</a> with the way it exports GraphML files.  It currently assigns the <i>weight</i> attribute for a node instead of an edge.  To maximize the ability for GRNsight to read and display Cytoscape-exported GraphML, GRNsight does not currently enforce that the <i>weight</i> attribute be declared "for an edge".  The bug has been reported to the Cytoscape group.</li>
-                                            
+
                                   </ul>
-                                
+
                                 <li>The addition of the <i>weight</i> key for each edge.  For example, the weight for the edge ROX1-to-YAP6 is -0.7503313690638223.</li>
-                                        
+
                               </ul>
-                              
+
                               <li>GRNsight automatically detects if a GraphML file specifying a weighted graph has been imported.</li>
-                              
+
                               <ul>
-                                        
+
                                 <li>For a weighted graph to display, the <i>weight</i> attribute must be present and valid for <em>all</em> edges declared in the graph.  If one or more weights are missing, GRNsight will display the graph as unweighted with black edges and pointed arrowheads.</li>
-                                        
+
                               </ul>
-                                      
+
                             </ul>
-                            
+
                             <li>Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, it is recommended that you import networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.</li>
                           </ul>
                         </div>
@@ -419,13 +418,13 @@ description: Learn how to format and upload files to GRNsight, a web application
                               The name of the file that is currently loaded will appear in the menu bar.  The number of nodes and edges in the graph will display on the right-hand side of the menu bar.
                             </li>
                             <li>
-                              To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML. 
+                              To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML.
                             </li>
                             <li>
                               To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been loaded.
                             </li>
                             <li>
-                              If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. Demos #3 and 4 are based on modeling reported in the following publication: <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, which, in turn, is based on microarray data from this publication:  <a href="http://www.molbiolcell.org/content/15/12/5492" target="_blank">Schade B, Jansen G, Whiteway M, Entian KD, Thomas DY (2004) Cold adaptation in budding yeast. Mol Biol Cell 15:5492–5502. doi:10.1091/mbc.E04-03-0167.</a>  See <a href="#section3">Section 3</a> for details on how GRNsight displays the graph. 
+                              If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. Demos #3 and 4 are based on modeling reported in the following publication: <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, which, in turn, is based on microarray data from this publication:  <a href="http://www.molbiolcell.org/content/15/12/5492" target="_blank">Schade B, Jansen G, Whiteway M, Entian KD, Thomas DY (2004) Cold adaptation in budding yeast. Mol Biol Cell 15:5492–5502. doi:10.1091/mbc.E04-03-0167.</a>  See <a href="#section3">Section 3</a> for details on how GRNsight displays the graph.
                             </li>
                           </ul>
                         </div>
@@ -457,9 +456,9 @@ description: Learn how to format and upload files to GRNsight, a web application
                            <li>
                               To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been imported.
                             </li>
-                            
+
                             <li>
-                              To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML format. 
+                              To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML format.
                             </li>
                             <li>GRNsight will automatically detect a SIF file representing a weighted network when it finds numerical values as the relationship type.  It will change the arrowhead type and the thickness and color of the edges as described in <a href="#unweighted_vs_weighted">Section 3a</a>.
                             </li>
@@ -493,13 +492,13 @@ description: Learn how to format and upload files to GRNsight, a web application
                             <li>
                               The name of the file that is currently loaded will appear in the menu bar.  The number of nodes and edges in the graph will display on the right-hand side of the menu bar.
                             </li>
- 
+
                            <li>
                               To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been imported.
                             </li>
 
                             <li>
-                              To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML format. 
+                              To load a different file, select the menu option File > Open to load a GRNsight-formatted .xlsx file or File > Import to import a file in SIF or GraphML format.
                             </li>
                             <li>GRNsight will automatically detect a GraphML file representing a weighted network when it finds numerical values stored as <i>weight</i> attributes for the edges.  It will change the arrowhead type and the thickness and color of the edges as described in <a href="#unweighted_vs_weighted">Section 3a</a>.
                             </li>
@@ -510,7 +509,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                          </div>
                       </div>
                     </div>
-                    
+
                   </div>
                 </div>
               </div>
@@ -546,7 +545,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                     </ul>
 
                     <p>
-                      Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, the bounding box for display of the graph has a fixed size.  Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display, although it may just look like “spaghetti”. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display. 
+                      Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display, although it may just look like “spaghetti”. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.
                     </p>
 
                     <div class="panel panel-default">
@@ -583,7 +582,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                               For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
                             </li>
                             <li>
-                              If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits.
+                              If you hover your mouse over an edge on the graph, a tooltip will display the weight value to four significant digits. This behavior can be changed by selecting options under the "Hide/Show Edge Weights" sidebar menu header. "Always Show Edge Weights" will cause edge weights to display even when not moused over. "Never Show Edge Weights" will prevent any edge weights from showing up even if an edge is moused over.
                             </li>
                           </ul>
                         </div>
@@ -638,12 +637,27 @@ description: Learn how to format and upload files to GRNsight, a web application
                         </div>
                       </div>
                     </div>
-
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#bounding_box" data-toggle="collapse">
+                            3c. The bounding box
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="bounding_box" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            The bounding box can be changed between three different sizes, or fit to the available space in the window. The initial default size that best fits the available space on the screen is selected when GRNsight is loaded, though this setting can be changed at any time. As the network loads, it will by default expand the bounding box outwards until the force graph parameters have fully been applied. The full size of the expanded graph can be seen using zooming or scrolling. The graph can be zoomed using the mouse wheel, as well as the on-screen zoom slider. The graph can be scrolled by clicking and draggong, or by using the arrow buttons. Should the graph go off-screen, the sun button in the center of the arrow buttons will center the graph. Choosing the "Restrict Graph to Viewport" option will prevent this expansion, and revert GRNsight to the behavior seen in versions before v2.0.20. The available space in the bounding box on restricted graphs will vary based on the size of the viewport, and will be indicated by a light grey border that can be seen upon zooming out. Note that if the graph is being restricted to the viewport, it will not be able to be scrolled past the visible area of the viewport. It also will not be able to be zoomed in past the bounding box.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4 class="panel-title">
                           <a href="#manual_manipulation" data-toggle="collapse">
-                            3c. Manually manipulating the graph
+                            3d. Manually manipulating the graph
                           </a>
                         </h4>
                       </div>
@@ -691,12 +705,12 @@ description: Learn how to format and upload files to GRNsight, a web application
                           <table style="width:100%">
                             <tr>
                               <td><img src="{{ site.baseurl }}/assets/images/Demo-3-auto-layout.jpg" alt="demo-3-auto"  width="327" /></td>
-                              <td><img src="{{ site.baseurl }}/assets/images/Demo-3-paper-layout.jpg" alt="demo-3-paper"  width="327" /></td> 
+                              <td><img src="{{ site.baseurl }}/assets/images/Demo-3-paper-layout.jpg" alt="demo-3-paper"  width="327" /></td>
                               <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig1.jpg" alt="demo-3-illustrator"  width="327" /></td>
                             </tr>
                             <tr>
                               <td><img src="{{ site.baseurl }}/assets/images/Demo-4-auto-layout.jpg" alt="demo-4-auto"  width="327" /></td>
-                              <td><img src="{{ site.baseurl }}/assets/images/Demo-4-paper-layout.jpg" alt="demo-4-auto"  width="327" /></td> 
+                              <td><img src="{{ site.baseurl }}/assets/images/Demo-4-paper-layout.jpg" alt="demo-4-auto"  width="327" /></td>
                               <td><br><img src="{{ site.baseurl }}/assets/images/Dahlquist-BMB-2015-Fig8.jpg" alt="demo-4-auto"  width="327" /></td>
                             </tr>
                           </table>
@@ -708,7 +722,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                             </li>
 
                             <li>
-                              The networks with colored edges shown in the bottom panel display the results of a mathematical model, called <a href="http://kdahlquist.github.io/GRNmap/" target="blank">GRNmap</a>, where the expression levels of the individual transcription factors were modeled using mass balance ordinary differential equations with a sigmoidal production function. Each equation in the model included a production rate, a degradation rate, weights that denote the magnitude and type of influence of the connected transcription factors (activation or repression), and a threshold of expression. The differential equation model was fit to published yeast cold shock microarray data from <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> using a penalized nonlinear least squares approach. Model predictions fit the experimental data well, within the 95% confidence interval.  
+                              The networks with colored edges shown in the bottom panel display the results of a mathematical model, called <a href="http://kdahlquist.github.io/GRNmap/" target="blank">GRNmap</a>, where the expression levels of the individual transcription factors were modeled using mass balance ordinary differential equations with a sigmoidal production function. Each equation in the model included a production rate, a degradation rate, weights that denote the magnitude and type of influence of the connected transcription factors (activation or repression), and a threshold of expression. The differential equation model was fit to published yeast cold shock microarray data from <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> using a penalized nonlinear least squares approach. Model predictions fit the experimental data well, within the 95% confidence interval.
                             </li>
 
                             <li>
@@ -794,15 +808,15 @@ description: Learn how to format and upload files to GRNsight, a web application
                                       <li>For weighted networks, if the user has selected the option of exporting the data as an unweighted network, the relationship type “pd” will be used.</li>
                                       <li>If the user has selected the option to export a weighted network as a weighted network, the numerical weight value for each edge is given as the relationship type.</li>
                                       <li>In each case, each line will consist of source node, relationship type, and target node, separated by tab characters.  If a particular source node has multiple targets, they will be listed on separate lines.  If a particular source node has no targets, it will still be listed on a separate line.  The screenshots shown below are examples of how GRNsight exports <a href="https://github.com/dondi/GRNsight/raw/import-export/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.sif">Demo #3: Unweighted GRN"</a> and <a href="https://github.com/dondi/GRNsight/raw/import-export/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.sif">Demo #4: Weighted GRN"</a>, respectively, to SIF files.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)  Follow the links to download the sample SIF files.
- 
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_input_binary_sif.png" alt="SIF sample 1 unweighted network" height="594" width="212" />
                                   <br><br>
-                                      
+
                                   <br><br>
                                   <img src="{{ site.baseurl }}/assets/images/21-genes_31-edges_Schade-data_estimation_output_binary_sif.png" alt="SIF sample 5 weighted network" height="594" width="212" />
-                                  <br><br>   
-                                      
+                                  <br><br>
+
                                       </li>
                                       <li>Note that these “weighted” SIF files are able to be imported in to Cytoscape (tested with v3.4.0), but the weight values will not be properly stored as edge attributes by Cytoscape because it does not use the SIF format in this way.</li>
                                       <li>One benefit from this export behavior is that GRNsight can be used to convert network data from an adjacency matrix (in the native GRNsight .xlsx format as described in <a href="#excel_instructions">Section 1a</a>) to a list of binary interactions (as a SIF file).</li>

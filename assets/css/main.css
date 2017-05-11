@@ -12,15 +12,6 @@ body {
 iframe.embedded-demo {
 	padding:0;
 	margin:0;
-	height:770px;
-	width:1350px;
-  overflow:scroll;
-  border:0;
-}
-
-iframe.embedded-demo-beta {
-	padding:0;
-	margin:0;
   min-height: 750px;
 	width:100%;
   overflow: visible;

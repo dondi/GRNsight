@@ -11,12 +11,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <script src="{{ site.baseurl }}/assets/js/main.js"></script>
         <script src="{{ site.baseurl }}/assets/js/ga-report.js"></script>
-    {% if page.title == 'Beta' %}
+    {% if page.title == 'Beta' or page.title == 'Home' %}
         <script>
             var $window = $(window);
             // https://stackoverflow.com/questions/20125340/can-i-use-jquery-to-resize-an-iframe-to-fill-the-remaining-window-space
             $window.on('load resize', function(){
                 var HEIGHT_OFFSET = 53;
+                var HEIGHT_PADDING = 20;
                 var SMALL_HEIGHT = 648 + HEIGHT_OFFSET;
                 var MEDIUM_HEIGHT = 840 + HEIGHT_OFFSET;
                 var LARGE_HEIGHT = 1080 + HEIGHT_OFFSET;
@@ -27,7 +28,7 @@
                     } else if (display > SMALL_HEIGHT && display < LARGE_HEIGHT) {
                       display = MEDIUM_HEIGHT;
                     }
-                    return display + 20;
+                    return display + HEIGHT_PADDING;
                 });
             });
         </script>
