@@ -1,19 +1,19 @@
 $(function () {
     var getCount = function (path, callback) {
-            $.getJSON("http://grnsight.cs.lmu.edu/server/ga?path=" + path).done(callback);
-        },
+        $.getJSON("http://grnsight.cs.lmu.edu/server/ga?path=" + path).done(callback);
+    };
 
-        setReportResult = function (count) {
-            $(".ga-report").text(count);            
-        },
+    var setReportResult = function (count) {
+        $(".ga-report").text(count);
+    };
 
-        getUploadCount = function () {
-            getCount("upload", function (uploadCount) {
-                $(".ga-upload").text(uploadCount);
-            });
-        },
+    var getUploadCount = function () {
+        getCount("upload", function (uploadCount) {
+            $(".ga-upload").text(uploadCount);
+        });
+    };
 
-        pathTail = location.pathname.split("/").pop();
+    var pathTail = location.pathname.split("/").pop();
 
     getCount(pathTail, function (pathCount) {
         if (pathTail === "") {
