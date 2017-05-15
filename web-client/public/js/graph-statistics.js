@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 var displayStatistics = function (network) {
     var $container = $(".graph-statistics-container").removeClass("hidden");
     var $thead = $container.find("thead");
