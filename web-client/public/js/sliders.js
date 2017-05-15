@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 var GRAVITY_LENGTH_WITHOUT_ZERO = 3;
 var LOCK_SLIDERS_CLASS          = ".lockSliders";
 var LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
@@ -17,7 +16,7 @@ var updateSliderDisplayedValue = function (slider, element) {
     slider.setCurrentVal(value);
 };
 
-var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
+var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) { // eslint-disable-line no-unused-vars
     this.sliderId = sliderId;
     this.valueId = valueId;
     this.defaultVal = defaultVal;
@@ -37,7 +36,7 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
 
 };
 
-var sliderGroupController = function (sliderArray) {
+var sliderGroupController = function (sliderArray) { // eslint-disable-line no-unused-vars
     this.sliders = sliderArray;
     this.numberOfSliders = sliderArray.length;
     this.locked = false;
