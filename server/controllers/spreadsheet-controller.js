@@ -194,6 +194,8 @@ var parseSheet = function(sheet) {
     };
   };
 
+  // Move on to semanticChecker.
+  
   // We sort them here because gene order is not relevant before this point
   // Sorting them now means duplicates will be right next to each other
   sourceGenes.sort();
@@ -202,11 +204,12 @@ var parseSheet = function(sheet) {
   //syntactic duplicate checker for both columns and rows
   checkDuplicates(network.errors, sourceGenes, targetGenes);
 
-  try {
-    network.graphStatisticsReport = graphStatisticsReport(network);
-  } catch (err) {
-    console.log ("Graph statistics report failed to be complete.");
-  }
+  // NOTE: Temporarily commented out pending resolution of #474, and other related issues
+  // try {
+  //   network.graphStatisticsReport = graphStatisticsReport(network);
+  // } catch (err) {
+  //   console.log ("Graph statistics report failed to be complete.");
+  // }
 
   // Move on to semantic Checker.
   return semanticChecker(network);
