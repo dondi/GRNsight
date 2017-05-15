@@ -99,13 +99,22 @@ var errorList = {
         };
     },
 
-    specialCharacterError: function(geneName){
+    specialCharacterError: function (geneName) {
         return {
             errorCode: "INVALID_CHARACTER",
             possibleCause: "The value under gene name " + geneName + " contains invalid character.",
             suggestedFix: "Please ensure all values in the data does not contain special characters" +
             " except for '-' and '_'."
         };
+    },
+
+    errorsCountError: {
+        errorCode: "ERRORS_OVERLOAD",
+        possibleCause: "This network has over 20 errors.",
+        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+        "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+        "further errors detected. As a general approach for fixing the errors, consider copying and " +
+        "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
     },
 
     warningsCountError: {
@@ -170,24 +179,24 @@ var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWei
     }
 };
 
-var checkDuplicateErrors = function (errorArray){
-    for (var i = 0; i < errorArray.length; i++){
-        if (errorArray[i].errorCode === "DUPLICATE_GENE"){
+var checkDuplicateErrors = function (errorArray) {
+    for (var i = 0; i < errorArray.length; i++) {
+        if (errorArray[i].errorCode === "DUPLICATE_GENE") {
             return true;
         }
     }
 };
 
 var checkDuplicates = function(errorArray, genesList) {
-    if (!checkDuplicateErrors(errorArray)){
+    if (!checkDuplicateErrors(errorArray)) {
         var genesName = [];
-        for (var i = 0; i < genesList.length; i++){
+        for (var i = 0; i < genesList.length; i++) {
             genesName.push(genesList[i].name);
         }
 
         genesName.sort();
-        for (var j = 0; j < genesName.length - 1; j++){
-            if (genesName[j] === genesName[j + 1]){
+        for (var j = 0; j < genesName.length - 1; j++) {
+            if (genesName[j] === genesName[j + 1]) {
                 errorArray.push(errorList.semanticDuplicateGeneError(genesName[j]));
             }
         }
@@ -204,10 +213,10 @@ var checkGeneLength = function(errorArray, genesList) {
     }
 };
 
-var checkSpecialCharacter = function (errorArray, genesList){
+var checkSpecialCharacter = function (errorArray, genesList) {
     var regex = /[^a-z0-9\_\-]/gi;
-    for (var i = 0; i < genesList.length; i++){
-        if (genesList[i].name.match(regex) !== null){
+    for (var i = 0; i < genesList.length; i++) {
+        if (genesList[i].name.match(regex) !== null) {
             errorArray.push(errorList.specialCharacterError(genesList[i].name));
         }
     }

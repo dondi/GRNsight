@@ -38,8 +38,8 @@ describe('errors-adjacency-matrix-modifications', function () {
 
   describe('extra-column-end-of-sheet', function () {
     it('should return warnings count error', function () {
-      test.missingValueError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx', 1);
-      test.missingValueError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx', 1);
+      test.warningsCountError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx', 49062);
+      test.warningsCountError('test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx', 49062);
     });
   });
 

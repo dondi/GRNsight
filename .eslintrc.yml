@@ -49,3 +49,7 @@ rules:
     - off
   space-infix-ops:
     - error
+  spaced-comment:
+    - error
+  space-before-blocks:
+    - error
