@@ -10,7 +10,6 @@
     "cors": "2.8.1",
     "express": "3.3.8",
     "googleapis": "1.1.5",
-    "mocha": "2.5.3",
     "moment": "2.17.1",
     "multiparty": "4.1.3",
     "should": "11.2.0",
@@ -24,6 +23,7 @@
   },
   "devDependencies": {
     "chai": "1.10.0",
+    "eslint": "3.19.0",
     "istanbul": "0.4.5",
     "jquery-extend": "2.0.3",
     "mocha": "2.5.3",
@@ -33,7 +33,8 @@
   "scripts": {
     "test": "mocha --reporter list",
     "start": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\"",
-    "coverage": "istanbul cover _mocha"
+    "coverage": "istanbul cover _mocha",
+    "lint": "eslint **/*.js"
   },
   "repository": {
     "type": "git",
