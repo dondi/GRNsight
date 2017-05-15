@@ -47,3 +47,5 @@ rules:
     - error
   no-console:
     - off
+  space-infix-ops:
+    - error
