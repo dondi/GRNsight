@@ -45,3 +45,5 @@ rules:
     - 120
   no-tabs:
     - error
+  no-console:
+    - off
