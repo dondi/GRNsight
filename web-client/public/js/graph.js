@@ -10,7 +10,6 @@
  * and http://bl.ocks.org/mbostock/950642
  * and http://bl.ocks.org/mbostock/1153292
  */
-
 /* eslint-disable no-unused-vars */
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController) {
 /* eslint-enable no-unused-vars */
@@ -76,6 +75,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         $(".normalization-form").append("placeholder='unweighted'");
     } else if (sheetType === "weighted") {
         $(".normalization-form").append("placeholder='weighted'");
+
     }
 
     var getEdgeThickness = function (edge) {
