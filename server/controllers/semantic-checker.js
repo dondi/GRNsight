@@ -73,6 +73,14 @@ var warningsList = {
 
 var errorList = {
 
+    emptyNetworkError: function () {
+        return {
+            errorCode: "EMPTY_NETWORK_ERROR",
+            possibleCause: "GRNsight detects that an empty network has been uploaded.",
+            suggestedFix: "Please review the file and ensure that it contains data."
+        }
+    },
+
     semanticDuplicateGeneError: function(geneName) {
         return {
             errorCode: "SEMANTIC_DUPLICATE_GENE",
@@ -222,13 +230,19 @@ var checkSpecialCharacter = function (errorArray, genesList) {
     }
 };
 
+var checkIfEmptyNetwork = function (errorArray, genesList) {
+    if (genesList.length === 0) {
+        errorArray.push(errorList.emptyNetworkError());
+    }
+}
+
 // TODO Entry-point semantic checker function goes here.
 module.exports = function (network) {
     checkSpecialCharacter(network.errors, network.genes);
     checkDuplicates(network.errors, network.genes);
     checkGeneLength(network.errors, network.genes);
     checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
-
+    checkIfEmptyNetwork(network.errors, network.genes);
     // We're done. Return the network.
     return network;
 };

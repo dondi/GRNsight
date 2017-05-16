@@ -11,10 +11,9 @@ module.exports = function (sif) {
     var warnings = [];
     var errors = [];
 
-    // Empty SIF files must return a network, thus must contain some data.
-    if (!sif) {
-        sif = " ";
-    }
+    // Workaround for empty SIF file handling
+    var emptySifFile = sif === "";
+    sif =  sif ? sif : " ";
 
     // Replace any carriage return characters with new lines.
     sif = sif.replace(/\r\n/g, "\n");
@@ -30,9 +29,9 @@ module.exports = function (sif) {
     }
 
     // Detects SIF file containing no tabs. Warning triggered advising users of possible consequences.
-    if (!sif.match(/[\t]+/g)) {
-        errors.push(constants.warnings.SIF_FORMAT_WARNING);
-    }
+    // if (!sif.match(/[\t]+/g)) {
+    //     errors.push(constants.warnings.SIF_FORMAT_WARNING);
+    // }
 
     var isNumber = function (relationship) {
         return !isNaN(+relationship);
@@ -122,11 +121,10 @@ module.exports = function (sif) {
                 });
             }
         });
-
   }
 
   var network = {
-    genes: genes.map(function (geneName) {
+    genes: emptySifFile ? [] : genes.map(function (geneName) {
       return { name: geneName };
     }),
     links: links,
