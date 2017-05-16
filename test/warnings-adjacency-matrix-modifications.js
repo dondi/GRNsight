@@ -138,9 +138,9 @@ describe("warnings-adjacency-matrix-modifications", function () {
             test.noWarnings("test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx");
         });
     });
-    describe('sheet-named-incorrectly', function () {
-        it('should return a wrong name warning', function () {
-            test.incorrectlyNamedSheetWarning('test-files/sheet-tests/incorrecly-named-sheet-network.xlsx', 25);
+    describe("sheet-named-incorrectly", function () {
+        it("should return a wrong name warning", function () {
+            test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-network.xlsx", 25);
         });
     });
 });

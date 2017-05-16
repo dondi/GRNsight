@@ -41,11 +41,10 @@ describe("errors-graph-tests", function () {
         });
     });
 
-  describe('only-self-referential-data', function () {
-        it('should not return any errors', function () {
-            test.noErrors('test-files/graph-tests/only-self-referential-edges-input.xlsx');
-            test.noErrors('test-files/graph-tests/only-self-referential-edges-output.xlsx');
-       });
+    describe("only-self-referential-data", function () {
+        it("should not return any errors", function () {
+            test.noErrors("test-files/graph-tests/only-self-referential-edges-input.xlsx");
+            test.noErrors("test-files/graph-tests/only-self-referential-edges-output.xlsx");
+        });
     });
 });
-

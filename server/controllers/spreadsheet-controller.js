@@ -90,32 +90,37 @@ var errorList = {
         };
     },
 
-    errorsCountError: {
-        errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This network has over 20 errors.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-        "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-        "further errors detected. As a general approach for fixing the errors, consider copying and " +
-        "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+    errorsCountError: function () {
+        return {
+            errorCode: "ERRORS_OVERLOAD",
+            possibleCause: "This network has over 20 errors.",
+            suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+            "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+            "further errors detected. As a general approach for fixing the errors, consider copying and " +
+            "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+        };
     },
 
-    warningsCountError: {
-        errorCode: "WARNINGS_OVERLOAD",
+    warningsCountError: function () {
+        return {
+            errorCode: "WARNINGS_OVERLOAD",
         possibleCause: "This network has over 75 warnings.",
         suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
         " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
         " further errors detected. As a general approach for fixing the errors, consider copying and " +
         " pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+        };
     },
 
-    unknownError: {
+    unknownError: function () {
+        return {
         errorCode: "UNKNOWN_ERROR",
         possibleCause: "An unexpected error occurred.",
         suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you" +
         " attempted to upload."
-    }
-  }
-};
+        };
+    },
+}
 
 var warningsList = {
     missingSourceGeneWarning: function (row, column) {
@@ -384,7 +389,7 @@ var parseSheet = function(sheet) {
   };
 
   // Move on to semanticChecker.
-  
+
   // We sort them here because gene order is not relevant before this point
   // Sorting them now means duplicates will be right next to each other
   sourceGenes.sort();
