@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <!-- Exported by GRNsight v1.18  http://dondi.github.io/GRNsight/  https://github.com/dondi/GRNsight/releases/tag/v1.18 -->
+  <key id="name" for="node" attr.name="name" attr.type="string"/>
+  <key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>
+  <key id="name" for="edge" attr.name="name" attr.type="string"/>
+  <graph edgedefault="directed" id="21-genes_31-edges_Schade-data_estimation_output_unweighted.graphml">
+  </graph>
+</graphml>
