@@ -212,6 +212,9 @@ $(function () {
         var sifFormatWarningCount = warnings.filter(function (x) {
             return x.warningCode === "SIF_FORMAT_WARNING";
         });
+        var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) {
+            return x.warningCode === "INCORRECTLY_NAMED_SHEET";
+        });
 
         var appendWarning = function (warning) {
             warningsString += warning.errorDescription + "<br><br>";
@@ -242,6 +245,7 @@ $(function () {
         createWarningsString(edgesWithoutWeightsCount, 7);
         createWarningsString(edgeDefaultNotDirectedCount, 8);
         createWarningsString(sifFormatWarningCount, 9);
+        createWarningsString(incorrectlyNamedSheetWarningCount, 10);
 
         $("#warningsList").html(warningsString);
 
