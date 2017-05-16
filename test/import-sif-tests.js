@@ -257,7 +257,25 @@ var triviallyTabbedUnweightedNetwork = [
 //
 // var emptyFile = [];
 
+
+// Special Cases
 var sifWithOneNode = "A";
+
+var sifWithSemanticAndSyntacticErrors = [
+    [ "@%^&", "A" ].join("\t"), // Missing relationship data and source gene contains special characters
+    [ "B", "pd", "A", "C" ].join("\t"),
+    [ "C", "pd", "B" ].join("\t"),
+    [ "D", "pd", "D" ].join("\t"),
+    "E"
+].join("\r\n");
+
+var sifWithSemanticErrorOnly = [
+    [ "@%^&", "pd", "A" ].join("\t"), // Source gene contains special characters
+    [ "B", "pd", "A", "C" ].join("\t"),
+    [ "C", "pd", "B" ].join("\t"),
+    [ "D", "pd", "D" ].join("\t"),
+    "E"
+].join("\r\n");
 
 describe("Import from SIF", function () {
     it("should import unweighted networks from SIF correctly", function () {
@@ -331,6 +349,20 @@ describe("Import from SIF", function () {
         });
     });
 
+});
+
+describe ("Import from SIF semantic checker", function () {
+    it ("should be disabled when syntactic errors are detected", function () {
+        expect(
+            importController.sifToGrnsight(sifWithSemanticAndSyntacticErrors).errors.length
+        ).to.equal(1);
+    });
+
+    it ("should be enabled when there are no syntactic errors", function () {
+        expect(
+            importController.sifToGrnsight(sifWithSemanticErrorOnly).errors[0].errorCode
+        ).to.equal("INVALID_CHARACTER");
+    });
 });
 
 describe ("Import from SIF syntactic checker", function () {
