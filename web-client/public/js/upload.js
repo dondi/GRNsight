@@ -340,21 +340,6 @@ $(function () {
     });
   }
 
-  function initializeDemoFile (demoId, demoPath, demoName) {
-    $(demoId).on("click", function (event) {
-      loadDemo(demoPath, demoName);
-    });
-  }
-
-  var loadDemo = function(url) {
-    loadGrn(url);
-    reloader = function () {
-      loadGrn(url);
-    };
-
-    $("a.upload > input[type=file]").val("");
-  };
-
   function settingsController () {
     this.color = true;
 
@@ -413,6 +398,25 @@ $(function () {
       window.print();
     }
   });
+
+//DEMO HANDLING
+
+  var loadDemo = function(url) {
+    loadGrn(url);
+    reloader = function () {
+      loadGrn(url);
+    };
+
+    $("a.upload > input[type=file]").val("");
+  };
+
+  function initializeDemoFile (demoId, demoPath, demoName) {
+    $(demoId).on("click", function (event) {
+      loadDemo(demoPath, demoName);
+    });
+  }
+
+//EXPORT FUNCTIONS
 
   var flattenNetwork = function (network, sheetType) {
     var result = $.extend(true, { }, network, { sheetType: sheetType });
