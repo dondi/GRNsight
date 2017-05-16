@@ -175,11 +175,12 @@ var warningsList = {
             " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
         };
     },
+
     incorrectlyNamedSheetWarning: function() {
         return {
             warningCode: "INCORRECTLY_NAMED_SHEET",
             errorDescription: "The uploaded file appears to contain a weighted network, but contains no 'network_optimized_weights' sheet. A weighted network must be contained in a sheet called 'network_optimized_weights' in order to be drawn as a weighted graph. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
-        }
+        };
       }
 };
 
@@ -269,35 +270,37 @@ var parseSheet = function(sheet) {
   }
 
   for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-    if(currentSheet.data[row].length === 0) { // if the current row is empty
-      if (addError(network, errorList.emptyRowError(row)) == false) {
-        return network;
-      }
-    } else { // if the row has data...
-      // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
-      // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
-      // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
-      try { // This prevents the server from crashing if something goes wrong anywhere in here
-        while(column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
-          if (row === 0) { // If we are at the top of a new column...
-            // These genes are the source genes
-            try {
-              currentGene = {name: currentSheet.data[0][column]};
-              // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
-              if(currentGene.name === undefined) {
-                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
-                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-              } else {
-                sourceGenes.push(String(currentGene.name.toUpperCase()));
-                genesList.push(String(currentGene.name.toUpperCase()));
-                currentGene.name = currentGene.name;
-                network.genes.push(currentGene);
-              }
-            } catch (err) {
-              addError(network, errorList.corruptGeneError(row, column));
+      if (currentSheet.data[row].length === 0) { // if the current row is empty
+          if (addError(network, errorList.emptyRowError(row)) === false) {
               return network;
-            }
+          }
+      } else { // if the row has data...
+          // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
+          // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
+          // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
+          try { // This prevents the server from crashing if something goes wrong anywhere in here
+              // While we haven't gone through all of the columns in this row...
+              while (column < currentSheet.data[row].length) {
+                  if (row === 0) { // If we are at the top of a new column...
+                      // These genes are the source genes
+                      try {
+                          currentGene = { name: currentSheet.data[0][column] };
+                          // Set genes to upper case so case doesn't matter in error checking
+                          // ie: Cin5 is the same as cin5
+                          if (currentGene.name === undefined) {
+                              addWarning(network, warningsList.missingSourceGeneWarning(row, column));
+                          } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
+                              addWarning(network, warningsList.missingSourceGeneWarning(row, column));
+                          } else {
+                              sourceGenes.push(String(currentGene.name.toUpperCase()));
+                              genesList.push(String(currentGene.name.toUpperCase()));
+                              currentGene.name = currentGene.name;
+                              network.genes.push(currentGene);
+                          }
+                      } catch (err) {
+                          addError(network, errorList.corruptGeneError(row, column));
+                          return network;
+                      }
           } else if (column === 0) { // If we are at the far left of a new row...
             // These genes are the target genes
             try {
