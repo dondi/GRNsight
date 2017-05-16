@@ -205,5 +205,9 @@ module.exports = function (graphml) {
     });
   }
 
-  return semanticChecker(network);
+  if (network.errors.length === 0 && network.warnings.length === 0) {
+      return semanticChecker(network);
+  }
+  return network;
+
 };
