@@ -36,15 +36,15 @@ $(function () {
       ACTIVE_COLOR_OPTION     = "active";
 
   //Weights Stuff
-    var WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu",
-        WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu",
-        WEIGHTS_HIDE_MENU             = "#weightsNeverMenu",
-        WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide",
-        WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide",
-        WEIGHTS_HIDE_SIDE             = "#weightsNeverSide",
-        WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver",
-        WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways",
-        WEIGHTS_HIDE_CLASS            = ".weightsNever";
+  var WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu",
+      WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu",
+      WEIGHTS_HIDE_MENU             = "#weightsNeverMenu",
+      WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide",
+      WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide",
+      WEIGHTS_HIDE_SIDE             = "#weightsNeverSide",
+      WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver",
+      WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways",
+      WEIGHTS_HIDE_CLASS            = ".weightsNever";
 
   styleLabelTooltips();
   var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
@@ -99,9 +99,21 @@ $(function () {
     delay: { show: 700, hide: 100 }
   });
 
-  var displayNetwork = function (network, name) {
+  //normalization stuff
+
+  var normalization = false;
+
+  $("#normalization-button").click(function(){
+    normalization = true;
+    displayNetwork(currentNetwork, name, normalization);
+  });
+
+
+  var displayNetwork = function (network, name, normalization) {
+
     currentNetwork = network;
     console.log(network); // Display the network in the console
+    console.log(normalization);
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
     if (network.warnings.length > 0) {
@@ -116,7 +128,7 @@ $(function () {
       $(selector).off("click");
     });
 
-    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders);
+    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders, normalization);
   };
 
   var annotateLinks = function (network) {
@@ -179,7 +191,7 @@ $(function () {
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
       console.log(network); // Display the network in the console
-      displayNetwork(network, name || jqXhr.getResponseHeader('X-GRNsight-Filename'));
+      displayNetwork(network, name || jqXhr.getResponseHeader('X-GRNsight-Filename'), normalization);
       reloader = function () {
         loadGrn(url, name, formData);
       };
@@ -199,7 +211,7 @@ $(function () {
       crossDomain: true
     }).done(function (network) {
       annotateLinks(network);
-      displayNetwork(network, filename);
+      displayNetwork(network, filename, normalization);
       reloader = function () {
         importGrn(uploadRoute, filename, formData);
       };
@@ -261,7 +273,7 @@ $(function () {
     var warningsString = "";
     //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
 
-    var NUM_POSSIBLE_WARNINGS = 10;
+    var NUM_POSSIBLE_WARNINGS = 9;
 
     // Fill printed with 0s programatically
     var printed = [];
@@ -279,7 +291,6 @@ $(function () {
     var edgesWithoutWeightsCount = warnings.filter(function (x) { return x.warningCode === "EDGES_WITHOUT_WEIGHTS"; });
     var edgeDefaultNotDirectedCount = warnings.filter(function (x) { return x.warningCode === "EDGE_DEFAULT_NOT_DIRECTED"; });
     var sifFormatWarningCount = warnings.filter(function (x) { return x.warningCode === "SIF_FORMAT_WARNING"; });
-    var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) { return x.warningCode === "INCORRECTLY_NAMED_SHEET"; });
 
     function createWarningsString(warningCount, index) {
       for (var i = 0; i < warningCount.length; i++) {
@@ -309,7 +320,6 @@ $(function () {
     createWarningsString(edgesWithoutWeightsCount,7);
     createWarningsString(edgeDefaultNotDirectedCount,8);
     createWarningsString(sifFormatWarningCount, 9);
-    createWarningsString(incorrectlyNamedSheetWarningCount, 10);
 
     $("#warningsList").html(warningsString);
 
@@ -339,6 +349,21 @@ $(function () {
       delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
     });
   }
+
+  function initializeDemoFile (demoId, demoPath, demoName) {
+    $(demoId).on("click", function (event) {
+      loadDemo(demoPath, demoName);
+    });
+  }
+
+  var loadDemo = function(url) {
+    loadGrn(url);
+    reloader = function () {
+      loadGrn(url);
+    };
+
+    $("a.upload > input[type=file]").val("");
+  };
 
   function settingsController () {
     this.color = true;
@@ -398,25 +423,6 @@ $(function () {
       window.print();
     }
   });
-
-//DEMO HANDLING
-
-  var loadDemo = function(url) {
-    loadGrn(url);
-    reloader = function () {
-      loadGrn(url);
-    };
-
-    $("a.upload > input[type=file]").val("");
-  };
-
-  function initializeDemoFile (demoId, demoPath, demoName) {
-    $(demoId).on("click", function (event) {
-      loadDemo(demoPath, demoName);
-    });
-  }
-
-//EXPORT FUNCTIONS
 
   var flattenNetwork = function (network, sheetType) {
     var result = $.extend(true, { }, network, { sheetType: sheetType });
