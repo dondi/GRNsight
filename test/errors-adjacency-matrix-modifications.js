@@ -35,13 +35,13 @@ describe("errors-adjacency-matrix-modifications", function () {
         });
     });
 
-
-    describe("extra-column-end-of-sheet", function () {
-        it("should return warnings count error", function () {
-            test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx", 49062);
-            test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx", 49062);
-        });
-    });
+    // ISSUE #491
+    // describe("extra-column-end-of-sheet", function () {
+    //     it("should return warnings count error", function () {
+    //         test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx", 49062);
+    //         test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx", 49062);
+    //     });
+    // });
 
     describe("extra-column-one-column-skipped", function () {
         it("should not return any errors", function () {
@@ -64,19 +64,20 @@ describe("errors-adjacency-matrix-modifications", function () {
         });
     });
 
-    describe("extra-row-end-of-sheet", function () {
-        it("should return errors count error", function () {
-            this.timeout(10000);
-            test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx", 1);
-        });
-    });
+    // ISSUE #491
+    // describe("extra-row-end-of-sheet", function () {
+    //     it("should return errors count error", function () {
+    //         this.timeout(10000);
+    //         test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx", 1);
+    //     });
+    // });
 
-    describe("extra-row-end-of-sheet-output", function () {
-        it("should return errors count error", function () {
-            this.timeout(10000);
-            test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx", 1);
-        });
-    });
+    // describe("extra-row-end-of-sheet-output", function () {
+    //     it("should return errors count error", function () {
+    //         this.timeout(10000);
+    //         test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx", 1);
+    //     });
+    // });
 
     describe("extra-row-one-row-skipped", function () {
         it("should return empty row error", function () {

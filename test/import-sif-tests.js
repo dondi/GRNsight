@@ -249,13 +249,7 @@ var triviallyTabbedUnweightedNetwork = [
     [ "D", "", "", "", ""].join("\t")    // extra tabs before the newline
 ].join("\r\n");
 
-// Currently Unused (see line 414)
-// var emptySIFFileWithOnlyTabs = [
-//     ["", ""].join("\t"),
-//     [""]
-// ].join("\r\n");
-//
-// var emptyFile = [];
+var emptyFile = "";
 
 
 // Special Cases
@@ -349,6 +343,22 @@ describe("Import from SIF", function () {
         });
     });
 
+    it("should import a network with a single node correctly", function () {
+        expect(
+            importController.sifToGrnsight(sifWithOneNode)
+        ).to.deep.equal({
+            genes: [
+                { name: "A" }
+            ],
+            links: [],
+            errors: [],
+            warnings: [],
+            positiveWeights: [],
+            negativeWeights: [],
+            sheetType: "weighted"
+        });
+    });
+
 });
 
 describe ("Import from SIF semantic checker", function () {
@@ -363,6 +373,17 @@ describe ("Import from SIF semantic checker", function () {
             importController.sifToGrnsight(sifWithSemanticErrorOnly).errors[0].errorCode
         ).to.equal("INVALID_CHARACTER");
     });
+
+    it ("should throw an error for SIF files with no data", function() {
+      expect(
+        importController.sifToGrnsight(emptySIFFileWithOnlyTabs).errors[0].errorCode
+      ).to.equal("SIF_NO_DATA_ERROR");
+
+      expect(
+        importController.sifToGrnsight(emptyFile).errors[0].errorCode
+      ).to.equal("SIF_NO_DATA_ERROR");
+    });
+
 });
 
 describe ("Import from SIF syntactic checker", function () {
@@ -441,24 +462,6 @@ describe ("Import from SIF syntactic checker", function () {
         expect(
             importController.sifToGrnsight(triviallyTabbedUnweightedNetwork)
         ).to.deep.equal(expectedUnweightedNetwork);
-    });
-
-    // This should be handled with a semantic error testing (To be written in issue #428)
-
-    // it ("should throw an error for SIF files with no data", function() {
-    //   expect(
-    //     importController.sifToGrnsight(emptySIFFileWithOnlyTabs).errors[0].errorCode
-    //   ).to.equal("SIF_NO_DATA_ERROR");
-    //
-    //   expect(
-    //     importController.sifToGrnsight(emptyFile).errors[0].errorCode
-    //   ).to.equal("SIF_NO_DATA_ERROR");
-    // });
-
-    it("should generate a warning for SIF files with one source node even if they are valid", function () {
-        expect(
-            importController.sifToGrnsight(sifWithOneNode).errors[0].warningCode
-        ).to.equal("SIF_FORMAT_WARNING");
     });
 
 });

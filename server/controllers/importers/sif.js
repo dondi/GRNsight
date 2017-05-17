@@ -28,10 +28,10 @@ module.exports = function (sif) {
         errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
     }
 
-    // Detects SIF file containing no tabs. Warning triggered advising users of possible consequences.
-    // if (!sif.match(/[\t]+/g)) {
-    //     errors.push(constants.warnings.SIF_FORMAT_WARNING);
-    // }
+    // Detects comma separated SIF files
+    if (!sif.match(/[\t]+/g) && sif.match(/[,]+/g)) {
+        errors.push(constants.warnings.SIF_FORMAT_WARNING);
+    }
 
     var isNumber = function (relationship) {
         return !isNaN(+relationship);
