@@ -375,13 +375,9 @@ describe ("Import from SIF semantic checker", function () {
     });
 
     it ("should throw an error for SIF files with no data", function() {
-      expect(
-        importController.sifToGrnsight(emptySIFFileWithOnlyTabs).errors[0].errorCode
-      ).to.equal("SIF_NO_DATA_ERROR");
-
-      expect(
-        importController.sifToGrnsight(emptyFile).errors[0].errorCode
-      ).to.equal("SIF_NO_DATA_ERROR");
+        expect(
+            importController.sifToGrnsight(emptyFile).errors[0].errorCode
+        ).to.equal("EMPTY_NETWORK_ERROR");
     });
 
 });

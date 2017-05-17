@@ -244,5 +244,7 @@ module.exports = function (network) {
     checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
     checkIfEmptyNetwork(network.errors, network.genes);
     // We're done. Return the network.
+    // console.log("after semantic checker");
+    // console.log(network);
     return network;
 };

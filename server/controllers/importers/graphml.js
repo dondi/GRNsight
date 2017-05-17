@@ -85,7 +85,7 @@ module.exports = function (graphml) {
     });
 
     if (network.errors.length > 0) {
-        return semanticChecker(network);
+        return network;
     }
 
     var findKeyId = function (attrName, attrFor) {
@@ -207,6 +207,7 @@ module.exports = function (graphml) {
             network.links.push(link);
         });
     }
+
 
   if (network.errors.length === 0) {
       return semanticChecker(network);
