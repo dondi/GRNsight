@@ -2,7 +2,7 @@ var constants = require(__dirname + "/../constants");
 var parseString = require("xml2js").parseString;
 var semanticChecker = require(__dirname + "/../semantic-checker");
 
-/* 
+/*
 var graphmlWarnings = {
     EDGES_WITHOUT_WEIGHTS: {
         warningCode: "EDGES_WITHOUT_WEIGHTS",
@@ -85,7 +85,7 @@ module.exports = function (graphml) {
     });
 
     if (network.errors.length > 0) {
-        return semanticChecker(network);
+        return network;
     }
 
     var findKeyId = function (attrName, attrFor) {
@@ -208,5 +208,6 @@ module.exports = function (graphml) {
         });
     }
 
-    return semanticChecker(network);
+  return (network.errors.length === 0) ? semanticChecker(network) : network;
+
 };

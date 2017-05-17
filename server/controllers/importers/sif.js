@@ -11,26 +11,21 @@ module.exports = function (sif) {
     var warnings = [];
     var errors = [];
 
-    // Empty SIF files must return a network, thus must contain some data.
-    if (!sif) {
-        sif = " ";
-    }
+    // Workaround for empty SIF file handling
+    var emptySifFile = sif === "";
+    sif = sif || " ";
 
     // Replace any carriage return characters with new lines.
     sif = sif.replace(/\r\n/g, "\n");
 
     // Stray data detected when there are 2 or more consecutive tabs NOT followed by a newline in the SIF file.
-    if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g)) {
+    // OR Stray data detected when there are 2 or more consecutive new lines
+    if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g) || sif.match(/[\n]{2,}/g)) {
         errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
     }
 
-    // Stray data detected when there are 2 or more consecutive new lines
-    if (sif.match(/[\n]{2,}/g)) {
-        errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
-    }
-
-    // Detects SIF file containing no tabs. Warning triggered advising users of possible consequences.
-    if (!sif.match(/[\t]+/g)) {
+    // Detects comma separated SIF files
+    if (!sif.match(/[\t]+/g) && sif.match(/[,]+/g)) {
         errors.push(constants.warnings.SIF_FORMAT_WARNING);
     }
 
@@ -41,13 +36,14 @@ module.exports = function (sif) {
     var sifNetworkType = function (sifEntries) {
         var errors = [];
         var relationships = [];
-        // var rowNum = 0;
         var numRowsWithTwoColumns = 0;
+        var unweightedRelationshipTypeErrorDetected = false;
+
         sifEntries.forEach(function (entry) {
             if (entry.length > TARGET) {
                 if (!isNumber(entry[RELATIONSHIP])) {
                     if (entry[RELATIONSHIP] !== "pd") {
-                        errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
+                        unweightedRelationshipTypeErrorDetected = true;
                     }
                 }
                 relationships.push(entry[RELATIONSHIP]);
@@ -55,6 +51,10 @@ module.exports = function (sif) {
                 numRowsWithTwoColumns++;
             }
         });
+
+        if (unweightedRelationshipTypeErrorDetected) {
+            errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
+        }
 
         if (numRowsWithTwoColumns > 0) {
             errors.push(constants.errors.SIF_MISSING_DATA_ERROR);
@@ -122,20 +122,20 @@ module.exports = function (sif) {
                 });
             }
         });
+  }
 
-    }
+  var network = {
+    genes: emptySifFile ? [] : genes.map(function (geneName) {
+      return { name: geneName };
+    }),
+    links: links,
+    errors: errors,
+    warnings: warnings,
+    sheetType: networkType.sheetType,
+    positiveWeights: [],
+    negativeWeights: []
+  };
 
-    var network = {
-        genes: genes.map(function (geneName) {
-            return { name: geneName };
-        }),
-        links: links,
-        errors: errors,
-        warnings: warnings,
-        sheetType: networkType.sheetType,
-        positiveWeights: [],
-        negativeWeights: []
-    };
+  return (network.errors.length === 0) ? semanticChecker(network) : network;
 
-    return semanticChecker(network);
 };
