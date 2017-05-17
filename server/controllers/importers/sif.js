@@ -19,12 +19,8 @@ module.exports = function (sif) {
     sif = sif.replace(/\r\n/g, "\n");
 
     // Stray data detected when there are 2 or more consecutive tabs NOT followed by a newline in the SIF file.
-    if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g)) {
-        errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
-    }
-
-    // Stray data detected when there are 2 or more consecutive new lines
-    if (sif.match(/[\n]{2,}/g)) {
+    // OR Stray data detected when there are 2 or more consecutive new lines
+    if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g) || sif.match(/[\n]{2,}/g)) {
         errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
     }
 
@@ -40,13 +36,14 @@ module.exports = function (sif) {
     var sifNetworkType = function (sifEntries) {
         var errors = [];
         var relationships = [];
-        // var rowNum = 0;
         var numRowsWithTwoColumns = 0;
+        var unweightedRelationshipTypeErrorDetected = false;
+
         sifEntries.forEach(function (entry) {
             if (entry.length > TARGET) {
                 if (!isNumber(entry[RELATIONSHIP])) {
                     if (entry[RELATIONSHIP] !== "pd") {
-                        errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
+                        unweightedRelationshipTypeErrorDetected = true;
                     }
                 }
                 relationships.push(entry[RELATIONSHIP]);
@@ -54,6 +51,10 @@ module.exports = function (sif) {
                 numRowsWithTwoColumns++;
             }
         });
+
+        if (unweightedRelationshipTypeErrorDetected) {
+            errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
+        }
 
         if (numRowsWithTwoColumns > 0) {
             errors.push(constants.errors.SIF_MISSING_DATA_ERROR);
