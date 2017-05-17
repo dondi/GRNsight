@@ -13,7 +13,7 @@ module.exports = function (sif) {
 
     // Workaround for empty SIF file handling
     var emptySifFile = sif === "";
-    sif =  sif ? sif : " ";
+    sif = sif || " ";
 
     // Replace any carriage return characters with new lines.
     sif = sif.replace(/\r\n/g, "\n");
@@ -136,9 +136,6 @@ module.exports = function (sif) {
     negativeWeights: []
   };
 
-  if (network.errors.length === 0) {
-      return semanticChecker(network);
-  }
-  return network;
+  return (network.errors.length === 0) ? semanticChecker(network) : network;
 
 };

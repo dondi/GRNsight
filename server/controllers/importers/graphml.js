@@ -208,10 +208,6 @@ module.exports = function (graphml) {
         });
     }
 
-
-  if (network.errors.length === 0) {
-      return semanticChecker(network);
-  }
-  return network;
+  return (network.errors.length === 0) ? semanticChecker(network) : network;
 
 };
