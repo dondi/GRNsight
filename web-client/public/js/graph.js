@@ -239,9 +239,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        if (!adaptive && value > ADAPTIVE_MAX_SCALE) {
-            $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
-        } else {
+        if (!adaptive && value <= ADAPTIVE_MAX_SCALE || adaptive) {
             var currentPoint = value * 100;
             var equivalentScale;
             if (currentPoint <= leftPoints) {
@@ -254,12 +252,18 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             }
             zoom.scale(equivalentScale);
             svg.transition().call(zoom.event);
+        } else {
+            // Clamp maximal zoomSlider value to ADAPTIVE_MAX_SCALE to "disable" zoomSlider when the viewport is
+            // fixed and the zoom value exceeds ADAPTIVE_MAX_SCALE
+            $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
         }
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
         manualZoom = false;
     });
+
+
 
     d3.selectAll(".boundBoxSize").on("click", function () {
         var newWidth = $container.width();
@@ -292,8 +296,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             adaptive = true;
             maximumScale = ADAPTIVE_MAX_SCALE;
             zoom.scaleExtent([minimumScale, maximumScale]);
-            setupZoomSlider(minimumScale, maximumScale);
-
             d3.select("rect").attr("stroke", "none");
         } else if (fixed) {
             adaptive = false;
@@ -304,7 +306,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 scrolling = false;
                 $container.removeClass(CURSOR_CLASSES);
             }
-            setupZoomSlider(minimumScale, maximumScale);
             width = $container.width();
             height = $container.height();
             d3.select("rect").attr("stroke", "#9A9A9A")
