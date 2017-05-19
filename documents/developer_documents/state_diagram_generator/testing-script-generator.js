@@ -1,4 +1,4 @@
-// node testing-script-generator.js 
+// node testing-script-generator.js
 
 var grnsightOptions = [
     {

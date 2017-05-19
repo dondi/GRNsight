@@ -148,6 +148,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             scrolling = false;
         }
         svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
+        // Update percentage on zoom slider
+        $("#zoomPercent").html(Math.round($(".zoomSlider").val() / 8 * 100) + "%");
     }
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -157,7 +159,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             move(direction.toLowerCase());
         });
     });
-
+    center();  
     d3.select(".center").on("click", center);
 
     var leftPoints;
