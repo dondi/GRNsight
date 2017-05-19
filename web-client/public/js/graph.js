@@ -148,18 +148,23 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             scrolling = false;
         }
         if (manualZoom) {
-            svg.attr("transform", "translate(" + (zoom.translate()) + ")scale(" + d3.event.scale + ")");
+            svg.attr("transform",
+                    "translate(" + width / 2 + ", " + height / 2 + ") " +
+                    "scale(" + d3.event.scale + ") " +
+                    "translate(" + (-width / 2) + ", " + (-height / 2) + ")"
+                );
         } else {
             svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
         }
+
         // svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
         // Update percentage on zoom slider
         $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
     }
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
-    var arrowMovememnt = [ "Up", "Left", "Right", "Down" ];
-    arrowMovememnt.forEach(function (direction) {
+    var arrowMovement = [ "Up", "Left", "Right", "Down" ];
+    arrowMovement.forEach(function (direction) {
         d3.select(".scroll" + direction).on("click", function () {
             move(direction.toLowerCase());
         });
@@ -262,8 +267,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }).on("mouseup", function () {
         manualZoom = false;
     });
-
-
 
     d3.selectAll(".boundBoxSize").on("click", function () {
         var newWidth = $container.width();
