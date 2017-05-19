@@ -108,6 +108,7 @@ $(function () {
       displayWarnings(network.warnings);
     }
 
+
     $("#fileName").text(name); // Set the name of the file to display in the top bar
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 

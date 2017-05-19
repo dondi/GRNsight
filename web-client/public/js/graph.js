@@ -147,9 +147,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             $container.removeClass(CURSOR_CLASSES);
             scrolling = false;
         }
-        svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
+        if (manualZoom) {
+            svg.attr("transform", "translate(" + (zoom.translate()) + ")scale(" + d3.event.scale + ")");
+        } else {
+            svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
+        }
+        // svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
         // Update percentage on zoom slider
-        $("#zoomPercent").html(Math.round($(".zoomSlider").val() / 8 * 100) + "%");
+        $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
     }
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -159,7 +164,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             move(direction.toLowerCase());
         });
     });
-    center();  
+    center();
     d3.select(".center").on("click", center);
 
     var leftPoints;
@@ -179,6 +184,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
         // So we'll just treat it as 0.
         maxScale = (maxScale !== 1) ? maxScale : 0;
+        // EXPERIMENTAL
+        maxScale = 4;
 
         // Each integer on the zoom is equivalent to 100 steps.
         var NUMBER_POINTS_PER_INT = 100;
@@ -232,18 +239,22 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        var currentPoint = value * 100;
-        var equivalentScale;
-        if (currentPoint <= leftPoints) {
-            equivalentScale = minimumScale;
-            equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+        if (!adaptive && value > ADAPTIVE_MAX_SCALE) {
+            $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
         } else {
-            currentPoint = currentPoint - leftPoints;
-            equivalentScale = 1;
-            equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            var currentPoint = value * 100;
+            var equivalentScale;
+            if (currentPoint <= leftPoints) {
+                equivalentScale = minimumScale;
+                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+            } else {
+                currentPoint = currentPoint - leftPoints;
+                equivalentScale = 1;
+                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            }
+            zoom.scale(equivalentScale);
+            svg.transition().call(zoom.event);
         }
-        zoom.scale(equivalentScale);
-        svg.transition().call(zoom.event);
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
@@ -300,7 +311,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 .attr("width", width)
                 .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
-
             center();
         }
         force.size([width, height]).resume();
