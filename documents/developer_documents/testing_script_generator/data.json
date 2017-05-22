@@ -1,0 +1,53 @@
+[
+    {
+        "title": "Hide/Show Edge Weights",
+        "text": "The edge weight should",
+        "options": {
+            "Show With Mouse Over": "display when user mouses over an edge.",
+            "Always Show Edge Weights": "always be visible.",
+            "Never Show Edge Weights": "not be displayed."
+        }
+
+    },
+    {
+        "title": "Viewport Size",
+        "text": "The viewport size should",
+        "options": {
+            "Detected": "be automatically detected and set to small, medium, or large, based on the browser window.",
+            "Small": "be set to small, unless this was the size automatically detected.",
+            "Medium": "be set to medium, unless this was the size automatically detected.",
+            "Large": "be set to large, unless this was the size automatically detected"
+        }
+    },
+    {
+        "title" : "Restrict Graph to Viewport",
+        "text": "The bounding box should",
+        "options" : {
+            "Checked": "always be within the viewport.",
+            "Unchecked": "be allowed to be past the viewport"
+        }
+    },
+    {
+        "title": "Lock Force Graph Parameters",
+        "text": "The sliders should",
+        "options": {
+            "Checked": "be disabled",
+            "Unchecked": "be enabled"
+        }
+    },
+    {
+        "title": "Sliders",
+        "text": "The graph",
+        "options": {
+            "Link Distance Increase": "edges should visibly decrease in length",
+            "Link Distance Decrease": "edges should visibly increase in length",
+            "Charge Increase": "nodes should visibly increase attraction with each other",
+            "Charge Decrease": "nodes should visibly decrease attraction with each other",
+            "Charge Distance Increase" : "nodes should visibly increase charge distance",
+            "Charge Distance Decrease" : "nodes should visibly decrease charge distance",
+            "Gravity Increase": "response to gravity should increase",
+            "Gravity Decrease": "response to gravity should decrease"
+        },
+        "conditional": "if Lock Force Graph Parameters is unchecked."
+    }
+]
