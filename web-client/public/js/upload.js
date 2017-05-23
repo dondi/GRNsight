@@ -118,8 +118,8 @@ $(function () {
 
     currentNetwork = network;
     console.log(network); // Display the network in the console
-    console.log(normalization);
-    console.log(grayThreshold);
+    console.log("normalization: " + normalization);
+    console.log("grayThreshold: " + grayThreshold);
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
     if (network.warnings.length > 0) {
