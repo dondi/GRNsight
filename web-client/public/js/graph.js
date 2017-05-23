@@ -187,12 +187,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       maps the scale from 0 to some x, with that x being calculated based on the
       input scales.
   */
-    var setupZoomSlider = function (minScale, maxScale) {
+    var setupZoomSlider = function (minScale) {
         // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
         // So we'll just treat it as 0.
-        maxScale = (maxScale !== 1) ? maxScale : 0;
-        // EXPERIMENTAL
-        maxScale = 4;
+
+        maxScale = ADAPTIVE_MAX_SCALE;
 
         // Each integer on the zoom is equivalent to 100 steps.
         var NUMBER_POINTS_PER_INT = 100;
@@ -230,7 +229,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         $(".zoomSlider").val(0.01 * leftPoints);
     };
 
-    setupZoomSlider(minimumScale, maximumScale);
+    setupZoomSlider(minimumScale);
 
     function getMappedValue(scale) {
         // Reverse the calculations from setupZoomSlider to get value from equivalentScale
