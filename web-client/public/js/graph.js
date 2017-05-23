@@ -147,17 +147,31 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             $container.removeClass(CURSOR_CLASSES);
             scrolling = false;
         }
-        svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
+
+        // Initial Work for #468
+        // if (manualZoom) {
+        //     svg.attr("transform",
+        //             "translate(" + width / 2 + ", " + height / 2 + ") " +
+        //             "scale(" + d3.event.scale + ") " +
+        //             "translate(" + (-width / 2) + ", " + (-height / 2) + ")"
+        //         );
+        // } else {
+        //     svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
+        // }
+
+        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        // Update percentage on zoom slider
+        $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
     }
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
-    var arrowMovememnt = [ "Up", "Left", "Right", "Down" ];
-    arrowMovememnt.forEach(function (direction) {
+    var arrowMovement = [ "Up", "Left", "Right", "Down" ];
+    arrowMovement.forEach(function (direction) {
         d3.select(".scroll" + direction).on("click", function () {
             move(direction.toLowerCase());
         });
     });
-
+    center();
     d3.select(".center").on("click", center);
 
     var leftPoints;
@@ -173,10 +187,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       maps the scale from 0 to some x, with that x being calculated based on the
       input scales.
   */
-    var setupZoomSlider = function (minScale, maxScale) {
+    var setupZoomSlider = function (minScale) {
         // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
         // So we'll just treat it as 0.
-        maxScale = (maxScale !== 1) ? maxScale : 0;
+
+        maxScale = ADAPTIVE_MAX_SCALE;
 
         // Each integer on the zoom is equivalent to 100 steps.
         var NUMBER_POINTS_PER_INT = 100;
@@ -214,7 +229,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         $(".zoomSlider").val(0.01 * leftPoints);
     };
 
-    setupZoomSlider(minimumScale, maximumScale);
+    setupZoomSlider(minimumScale);
 
     function getMappedValue(scale) {
         // Reverse the calculations from setupZoomSlider to get value from equivalentScale
@@ -230,18 +245,37 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        var currentPoint = value * 100;
-        var equivalentScale;
-        if (currentPoint <= leftPoints) {
-            equivalentScale = minimumScale;
-            equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
-        } else {
-            currentPoint = currentPoint - leftPoints;
-            equivalentScale = 1;
-            equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+        if (!adaptive && value >= ADAPTIVE_MAX_SCALE) {
+            value = 4;
+            var currentPoint = value * 100;
+            var equivalentScale;
+            if (currentPoint <= leftPoints) {
+                equivalentScale = minimumScale;
+                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+            } else {
+                currentPoint = currentPoint - leftPoints;
+                equivalentScale = 1;
+                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            }
+            zoom.scale(equivalentScale);
+            svg.transition().call(zoom.event);
+            $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
+            return;
         }
-        zoom.scale(equivalentScale);
-        svg.transition().call(zoom.event);
+        if (!adaptive && value < ADAPTIVE_MAX_SCALE || adaptive) {
+            var currentPoint = value * 100;
+            var equivalentScale;
+            if (currentPoint <= leftPoints) {
+                equivalentScale = minimumScale;
+                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+            } else {
+                currentPoint = currentPoint - leftPoints;
+                equivalentScale = 1;
+                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            }
+            zoom.scale(equivalentScale);
+            svg.transition().call(zoom.event);
+        }
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
@@ -279,8 +313,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             adaptive = true;
             maximumScale = ADAPTIVE_MAX_SCALE;
             zoom.scaleExtent([minimumScale, maximumScale]);
-            setupZoomSlider(minimumScale, maximumScale);
-
             d3.select("rect").attr("stroke", "none");
         } else if (fixed) {
             adaptive = false;
@@ -291,14 +323,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 scrolling = false;
                 $container.removeClass(CURSOR_CLASSES);
             }
-            setupZoomSlider(minimumScale, maximumScale);
             width = $container.width();
             height = $container.height();
             d3.select("rect").attr("stroke", "#9A9A9A")
                 .attr("width", width)
                 .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
-
             center();
         }
         force.size([width, height]).resume();
