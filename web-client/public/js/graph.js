@@ -245,7 +245,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        if (!adaptive && value <= ADAPTIVE_MAX_SCALE || adaptive) {
+        if (!adaptive && value >= ADAPTIVE_MAX_SCALE) {
+            value = 4;
             var currentPoint = value * 100;
             var equivalentScale;
             if (currentPoint <= leftPoints) {
@@ -258,10 +259,22 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             }
             zoom.scale(equivalentScale);
             svg.transition().call(zoom.event);
-        } else {
-            // Clamp maximal zoomSlider value to ADAPTIVE_MAX_SCALE to "disable" zoomSlider when the viewport is
-            // fixed and the zoom value exceeds ADAPTIVE_MAX_SCALE
             $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
+            return;
+        }
+        if (!adaptive && value < ADAPTIVE_MAX_SCALE || adaptive) {
+            var currentPoint = value * 100;
+            var equivalentScale;
+            if (currentPoint <= leftPoints) {
+                equivalentScale = minimumScale;
+                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+            } else {
+                currentPoint = currentPoint - leftPoints;
+                equivalentScale = 1;
+                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            }
+            zoom.scale(equivalentScale);
+            svg.transition().call(zoom.event);
         }
     }).on("mousedown", function () {
         manualZoom = true;
