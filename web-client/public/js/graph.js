@@ -147,17 +147,19 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             $container.removeClass(CURSOR_CLASSES);
             scrolling = false;
         }
-        if (manualZoom) {
-            svg.attr("transform",
-                    "translate(" + width / 2 + ", " + height / 2 + ") " +
-                    "scale(" + d3.event.scale + ") " +
-                    "translate(" + (-width / 2) + ", " + (-height / 2) + ")"
-                );
-        } else {
-            svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
-        }
 
-        // svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        // Initial Work for #468
+        // if (manualZoom) {
+        //     svg.attr("transform",
+        //             "translate(" + width / 2 + ", " + height / 2 + ") " +
+        //             "scale(" + d3.event.scale + ") " +
+        //             "translate(" + (-width / 2) + ", " + (-height / 2) + ")"
+        //         );
+        // } else {
+        //     svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
+        // }
+
+        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
         // Update percentage on zoom slider
         $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
     }
