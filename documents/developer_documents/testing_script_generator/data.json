@@ -1,13 +1,39 @@
 [
     {
-        "title": "Hide/Show Edge Weights",
+        "title": "File - Print",
+        "text": "GRNsight should",
+        "options": {
+            "Click": "open the Print Dialogue Box, if there is a graph loaded",
+            "NULL": "do nothing"
+        }
+    },
+    {
+        "title": "File - Export Data",
+        "text": "GRNsight should",
+        "options": {
+            "NULL": "do nothing",
+            "To Unweighted SIF": "export an unweighted SIF file from the graph currently loaded, if there is a graph loaded",
+            "To Weighted SIF": "export an weighted SIF file from the graph currently loaded, if there is a graph loaded",
+            "To Unweighted GraphML": "export an unweighted GraphML file from the graph currently loaded, if there is a graph loaded",
+            "To Weighted GraphML": "export an weighted GraphML file from the graph currently loaded, if there is a graph loaded"
+        }
+    },
+    {
+        "title": "File - Reload",
+        "text": "The graph should",
+        "options": {
+            "Click": "center, zoom to 100%, and reapply the force graph parameters, if there is a graph loaded",
+            "NULL": "not change"
+        }
+    },
+    {
+        "title": "Side Bar - Hide/Show Edge Weights",
         "text": "The edge weight should",
         "options": {
             "Show With Mouse Over": "display when user mouses over an edge.",
             "Always Show Edge Weights": "always be visible.",
             "Never Show Edge Weights": "not be displayed."
         }
-
     },
     {
         "title": "Viewport Size",
@@ -16,7 +42,7 @@
             "Detected": "be automatically detected and set to small, medium, or large, based on the browser window.",
             "Small": "be set to small, unless this was the size automatically detected.",
             "Medium": "be set to medium, unless this was the size automatically detected.",
-            "Large": "be set to large, unless this was the size automatically detected"
+            "Large": "be set to large, unless this was the size automatically detected."
         }
     },
     {
@@ -28,26 +54,53 @@
         }
     },
     {
+        "title": "Undo Reset",
+        "text": "The sliders should",
+        "options": {
+            "Click": "undo the effects of the reset, if the Undo Reset button is enabled.",
+            "NULL": "remain the same."
+        }
+    },
+    {
+        "title": "Reset",
+        "text": "The sliders should",
+        "options": {
+            "Click": "revert to its original configuration, if Lock Force Graph Parameters is unchecked.",
+            "NULL": "remain at the same spot."
+        }
+    },
+    {
         "title": "Lock Force Graph Parameters",
         "text": "The sliders should",
         "options": {
-            "Checked": "be disabled",
-            "Unchecked": "be enabled"
+            "Checked": "be disabled.",
+            "Unchecked": "be enabled."
         }
     },
     {
         "title": "Sliders",
         "text": "The graph",
         "options": {
-            "Link Distance Increase": "edges should visibly decrease in length",
-            "Link Distance Decrease": "edges should visibly increase in length",
-            "Charge Increase": "nodes should visibly increase attraction with each other",
-            "Charge Decrease": "nodes should visibly decrease attraction with each other",
-            "Charge Distance Increase" : "nodes should visibly increase charge distance",
-            "Charge Distance Decrease" : "nodes should visibly decrease charge distance",
-            "Gravity Increase": "response to gravity should increase",
-            "Gravity Decrease": "response to gravity should decrease"
+            "Keep at Default Values": "should configure according to its default values",
+            "Link Distance Increase": "edges should visibly decrease in length if Lock Force Graph Parameters is unchecked and ",
+            "Link Distance Decrease": "edges should visibly increase in length if Lock Force Graph Parameters is unchecked and ",
+            "Charge Increase": "nodes should visibly increase attraction with each other if Lock Force Graph Parameters is unchecked and ",
+            "Charge Decrease": "nodes should visibly decrease attraction with each other if Lock Force Graph Parameters is unchecked and ",
+            "Charge Distance Increase" : "nodes should visibly increase charge distance if Lock Force Graph Parameters is unchecked and ",
+            "Charge Distance Decrease" : "nodes should visibly decrease charge distance if Lock Force Graph Parameters is unchecked and ",
+            "Gravity Increase": "response to gravity should visibly increase if Lock Force Graph Parameters is unchecked and ",
+            "Gravity Decrease": "response to gravity should visibly decrease if Lock Force Graph Parameters is unchecked and "
         },
-        "conditional": "if Lock Force Graph Parameters is unchecked."
+        "conditional": "if there is a graph loaded."
+    },
+    {
+        "title": "Load Graph",
+        "text": "GRNsight should",
+        "options": {
+            "None": "have no graph in the viewport",
+            "File Tab - Open Excel Workbook": "generate a network graph from the Excel workbook given no warnings or errors are generated.",
+            "File Tab - Import SIF": "generate a network graph from the SIF file given no warnings or errors are generated.",
+            "File Tab - Import GraphML": "generate a network graph from the SIF file given no warnings or errors are generated."
+        }
     }
 ]

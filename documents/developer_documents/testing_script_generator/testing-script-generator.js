@@ -1,4 +1,7 @@
-// node testing-script-generator.js
+// Instructions for generating new testing document:
+// Make any changes in the data.json file
+// Navigate to documents>developer_documents>testing-script-generator folder on the command line
+// Run node testing-script-generator.js to generate new Testing Document file
 
 fs = require('fs');
 var grnsightOptions = JSON.parse(fs.readFileSync('data.json', 'utf8'));
@@ -37,12 +40,14 @@ var addChildren = function (arrayOfNodes, optionKeys, test) {
         var parentInstructions = node.instructions;
         var parentResults = node.results;
         optionKeys.forEach(function(option) {
-            var instruction = test.title + "-" + option;
+            var instruction = test.title + " - " + option;
             var result = test.text + " " + test.options[option];
             result = test.conditional ? result + " " +  test.conditional : result;
             var newNode = new Node();
-            newNode.addInstruction(instruction);
-            newNode.addResult(result);
+            if (option !== "NULL") {
+                newNode.addInstruction(instruction);
+                newNode.addResult(result);
+            }
             for (var i = 0; i < node.instructions.length; i++) {
                 newNode.addInstruction(parentInstructions[i]);
                 newNode.addResult(parentResults[i]);
@@ -74,3 +79,6 @@ fs = require('fs');
 fs.writeFile('GRNsightTestingDocument.md', markdownDocument, function (err) {
   if (err) return console.log(err);
 });
+
+console.log("\nGRNsightTestingDocument.md has been successfully regenerated, and includes " + arrayOfNodes.length + " tests.");
+console.log("Update the wiki by copy/pasting Markdown code to: https://github.com/dondi/GRNsight/wiki/Client-Side-Testing-Document\n")
