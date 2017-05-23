@@ -209,10 +209,8 @@ html
           table(class='zoomTable')
             tr 
               td
-                //- Initial setup for zoom center bar
-                //- div(class="zoomCenter")
-                input(class="zoomSlider" type="range" min="0" max="0" value="1" step=".25")
-            //- Initial setup for showing zoom percentage
+                div(class="zoomCenter")
+                input(class="zoomSlider" type="range" min="0" max="0" value="1" step=".25" list="tickmarks")
             tr
               td
                 span(style="color:#AAA" id="zoomPercent")

@@ -4,7 +4,7 @@ $(function () {
 
     var WIDTH_OFFSET = 250;
     var HEIGHT_OFFSET = 53;
-
+    
     var MEDIUM_PAGE_WIDTH = 1500;
     var LARGE_PAGE_WIDTH = 2200;
 
