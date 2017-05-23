@@ -205,9 +205,9 @@ html
               td
               td(class='scrollBtn scrollDown')
                 p(class='movementArrow') &#8595;
-              td 
+              td
           table(class='zoomTable')
-            tr 
+            tr
               td
                 input(class="zoomSlider" type="range" min="0" max="0" value="1" step="0.1")
 
@@ -269,6 +269,13 @@ html
           br
           button(type="button" class="btn btn-default btn-sm" id="normalization-button") Set Normalization Factor
           p(id='normalizationStatement') * Assumes a min. value of 0.
+          //-p(class='sideHeader') Set Gray Line Threshold:
+          //-label(for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold to make edges appear gray.') Gray Threshold (0 - 1):
+          //-output(for='fader', id='grayThresholdVal') 50
+          //-input(class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='grayThresholdOutput(value)')
+          label(for='grayThresholdInput') Volume
+          output(for='grayThresholdInput', id='grayThresholdValue') 0.05
+          input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate(value)')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')

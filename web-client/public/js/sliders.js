@@ -163,3 +163,10 @@ var sliderGroupController = function (sliderArray) {
     }
   };
 };
+
+//Gray Threshold Slider Settings
+var graySlider = document.getElementById('grayThresholdInput')
+
+function outputUpdate(vol) {
+	document.querySelector('#grayThresholdValue').value = vol;
+}

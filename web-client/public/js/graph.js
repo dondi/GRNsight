@@ -1,11 +1,20 @@
-/*http://bl.ocks.org/mbostock/4062045 used as reference
- *As well as http://bl.ocks.org/mbostock/3750558
- *and http://bl.ocks.org/mbostock/950642
- *and http://bl.ocks.org/mbostock/1153292
+
+/* globals d3 */
+/* eslint-disable no-use-before-define, func-style */
+/*
+  By D3's nature, it can be a bit difficult to adhere to our given guidelines..
+  This file needs to be organized a bit more before it can fully adhere to
+  them.
+*/
+/* http://bl.ocks.org/mbostock/4062045 used as reference
+ * As well as http://bl.ocks.org/mbostock/3750558
+ * and http://bl.ocks.org/mbostock/950642
+ * and http://bl.ocks.org/mbostock/1153292
  */
 
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization) {
-
+/* eslint-disable no-unused-vars */
+var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization, grayThreshold) {
+/* eslint-enable no-unused-vars */
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
 
@@ -316,6 +325,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       });
   }
 
+var grayThreshold = +$("#grayThresholdValue").val();
+
   link.append("path")
     .attr('class', "main")
     .attr('id', function (d) {
@@ -325,7 +336,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }).style('stroke', function (d) {
       if (unweighted || !colorOptimal) {
         return "black";
-      } else if (normalize(d) <= 0.05) {
+      } else if (normalize(d) <= grayThreshold) {
         return "gray";
       } else {
         return d.stroke;
@@ -341,7 +352,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             xOffsets,
             color;
 
-        if(Math.abs(d.value/(d3.max(allWeights))) <= 0.05) {
+        if(Math.abs(d.value/(d3.max(allWeights))) <= grayThreshold) {
           minimum = "gray";
         }
         if( x1 === x2 && y1 === y2 ) {
@@ -391,7 +402,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 .attr("rx", 10)
                 .attr("ry", 10)
                 .attr("style", function() {
-                  if( normalize(d) <= 0.05) {
+                  if( normalize(d) <= grayThreshold) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -440,7 +451,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 .attr("rx", 10)
                 .attr("ry", 10)
                 .attr("style", function() {
-                  if(normalize(d) <= 0.05) {
+                  if(normalize(d) <= grayThreshold) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -502,7 +513,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 .attr("style", function () {
                   if (unweighted || !colorOptimal) {
                     color = "black";
-                  } else if( normalize(d) <= 0.05) {
+                  } else if( normalize(d) <= grayThreshold) {
                     color = "gray";
                   } else {
                     color = d.stroke;
@@ -974,7 +985,7 @@ var text = node.append("text")
             minimum = "",
             selfRef = "";
 
-        if (normalize(d) <= 0.05) {
+        if (normalize(d) <= grayThreshold) {
           minimum = "gray";
         }
 

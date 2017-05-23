@@ -102,18 +102,24 @@ $(function () {
   //normalization stuff
 
   var normalization = false;
+  var grayThreshold = false;
 
   $("#normalization-button").click(function(){
     normalization = true;
     displayNetwork(currentNetwork, name, normalization);
   });
 
+  $('#grayThresholdInput').on("change", function(){
+    grayThreshold = true;
+    displayNetwork(currentNetwork, name, normalization, grayThreshold);
+  });
 
-  var displayNetwork = function (network, name, normalization) {
+  var displayNetwork = function (network, name, normalization, grayThreshold) {
 
     currentNetwork = network;
     console.log(network); // Display the network in the console
     console.log(normalization);
+    console.log(grayThreshold);
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
     if (network.warnings.length > 0) {
@@ -128,7 +134,7 @@ $(function () {
       $(selector).off("click");
     });
 
-    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders, normalization);
+    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders, normalization, drawGraph);
   };
 
   var annotateLinks = function (network) {
