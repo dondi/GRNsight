@@ -10,6 +10,7 @@ $(function () {
   var MEDIUM_PAGE_WIDTH = 1500;
   var LARGE_PAGE_WIDTH = 2200;
 
+
   var windowWidth = $(window).width() - WIDTH_OFFSET;
   var windowHeight = $(window).height() - HEIGHT_OFFSET;
 

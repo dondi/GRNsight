@@ -76,8 +76,8 @@ var errorList = {
     emptyNetworkError: function () {
         return {
             errorCode: "EMPTY_NETWORK_ERROR",
-            possibleCause: "GRNsight detects that an empty network has been uploaded.",
-            suggestedFix: "Please review the file and ensure that it contains data."
+            possibleCause: "GRNsight detects that the file you uploaded is empty and does not contain any network information.",
+            suggestedFix: "Please review the file and ensure that it specifies a network."
         }
     },
 
