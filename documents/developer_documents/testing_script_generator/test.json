@@ -45,7 +45,9 @@
         "options": {
             "Checked": "be disabled.",
             "Unchecked": "be enabled."
-        }
+        },
+        "default": "Checked",
+        "disabled": false
     },
     {
         "title": "Load Graph",
@@ -55,6 +57,8 @@
             "File Tab - Open Excel Workbook": "generate a network graph from the Excel workbook given no warnings or errors are generated.",
             "File Tab - Import SIF": "generate a network graph from the SIF file given no warnings or errors are generated.",
             "File Tab - Import GraphML": "generate a network graph from the SIF file given no warnings or errors are generated."
-        }
+        },
+        "default": "None",
+        "disabled": true
     }
 ]
