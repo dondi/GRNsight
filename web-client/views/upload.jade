@@ -205,9 +205,9 @@ html
               td
               td(class='scrollBtn scrollDown')
                 p(class='movementArrow') &#8595;
-              td 
+              td
           table(class='zoomTable')
-            tr 
+            tr
               td
                 div(class="zoomCenter")
                 input(class="zoomSlider" type="range" min="0" max="1" value="0.5" step="0.25" list="tickmarks")
@@ -268,12 +268,15 @@ html
             <br>
             input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
             label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
-     
-        //- Normalization controls hidden as per @kdahlquist's comment on issue #422
-        //-   p(class='sideHeader') &nbsp; Set Normalization Factor:
-        //-   input(type='text' class='normalization-form' id='normalization-min' placeholder='minimum' aria-describedby='basic-addon1')
-        //-   br
-        //-   input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+          p(class='sideHeader') Set Normalization Factor:
+          input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+          br
+          button(type="button" class="btn btn-default btn-sm" id="normalization-button") Set Normalization Factor
+          p(id='normalizationStatement') * Assumes a min. value of 0.
+          p(class='sideHeader') Set Gray Line Threshold:
+          label(for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold to make edges appear gray.') Gray Threshold (0 - 1):&nbsp;&nbsp;
+          output(for='grayThresholdInput', class='forceVal', id='grayThresholdValue') 0.05
+          input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate(value)')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
