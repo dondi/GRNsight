@@ -1,0 +1,64 @@
+[
+    {
+        "title": "Sliders",
+        "text": "The graph",
+        "options": {
+            "Keep at Default Values": "should configure according to its default values",
+            "Link Distance Increase": "edges should visibly decrease in length if Lock Force Graph Parameters is unchecked and ",
+            "Link Distance Decrease": "edges should visibly increase in length if Lock Force Graph Parameters is unchecked and ",
+            "Charge Increase": "nodes should visibly increase attraction with each other if Lock Force Graph Parameters is unchecked and ",
+            "Charge Decrease": "nodes should visibly decrease attraction with each other if Lock Force Graph Parameters is unchecked and ",
+            "Charge Distance Increase" : "nodes should visibly increase charge distance if Lock Force Graph Parameters is unchecked and ",
+            "Charge Distance Decrease" : "nodes should visibly decrease charge distance if Lock Force Graph Parameters is unchecked and ",
+            "Gravity Increase": "response to gravity should visibly increase if Lock Force Graph Parameters is unchecked and ",
+            "Gravity Decrease": "response to gravity should visibly decrease if Lock Force Graph Parameters is unchecked and "
+        },
+        "conditional": "if there is a graph loaded.",
+        "default": "Keep at Default Values",
+        "disabled": false
+    },
+    {
+        "title": "File - Print",
+        "text": "GRNsight should",
+        "options": {
+            "Click": "open the Print Dialogue Box, if there is a graph loaded",
+            "NULL": "do nothing"
+        },
+        "default": "NULL",
+        "disabled": true
+    },
+    {
+        "title": "Viewport Size",
+        "text": "The viewport size should",
+        "options": {
+            "Detected": "be automatically detected and set to small, medium, or large, based on the browser window.",
+            "Small": "be set to small, unless this was the size automatically detected.",
+            "Medium": "be set to medium, unless this was the size automatically detected.",
+            "Large": "be set to large, unless this was the size automatically detected."
+        },
+        "default": "Detected",
+        "disabled": true
+    },
+    {
+        "title": "Lock Force Graph Parameters",
+        "text": "The sliders should",
+        "options": {
+            "Checked": "be disabled.",
+            "Unchecked": "be enabled."
+        },
+        "default": "Checked",
+        "disabled": false
+    },
+    {
+        "title": "Load Graph",
+        "text": "GRNsight should",
+        "options": {
+            "None": "have no graph in the viewport",
+            "File Tab - Open Excel Workbook": "generate a network graph from the Excel workbook given no warnings or errors are generated.",
+            "File Tab - Import SIF": "generate a network graph from the SIF file given no warnings or errors are generated.",
+            "File Tab - Import GraphML": "generate a network graph from the SIF file given no warnings or errors are generated."
+        },
+        "default": "None",
+        "disabled": true
+    }
+]
