@@ -312,7 +312,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       adaptive = true;
       maximumScale = ADAPTIVE_MAX_SCALE;
       zoom.scaleExtent([minimumScale, maximumScale])
-      // d3.select("rect").attr("stroke", "none");
+      d3.select("rect").attr("stroke", "none");
     } else if (fixed) {
       adaptive = false;
       maximumScale = FIXED_MAX_SCALE;
