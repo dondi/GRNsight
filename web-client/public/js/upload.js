@@ -116,6 +116,10 @@ $(function () {
 
   var displayNetwork = function (network, name, normalization, grayThreshold) {
 
+    if (document.getElementById("zoomSlider").disabled) {
+        document.getElementById("zoomSlider").disabled = false;
+    }
+
     currentNetwork = network;
     console.log(network); // Display the network in the console
     console.log("normalization: " + normalization);

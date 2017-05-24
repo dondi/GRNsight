@@ -206,14 +206,17 @@ html
               td(class='scrollBtn scrollDown')
                 p(class='movementArrow') &#8595;
               td
+          
+          span(class="pull-left zoomLabel")
+            b
+              | Zoom (0-200%):&nbsp;
+          span(class="pull-right zoomLabel" id="zoomPercent") 100%
+          br
           table(class='zoomTable')
             tr
               td
                 div(class="zoomCenter")
-                input(class="zoomSlider" type="range" min="0" max="1" value="0.5" step="0.25" list="tickmarks")
-            tr
-              td
-                span(style="color:#AAA" id="zoomPercent") 100%
+                input(id="zoomSlider" class="zoomSlider" type="range" min="0" max="1" value="0.5" step="0.25" list="tickmarks" disabled="true")
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
