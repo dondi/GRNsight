@@ -975,6 +975,10 @@ var text = node.append("text")
         SELF_REFERRING_Y_OFFSET = 6;
         MAX_WIDTH = 5000;
         MAX_HEIGHT = 5000;
+        OFFSET_VALUE = 5;
+
+        var widthIncrease = false;
+        var heightIncrease = false;
 
     try {
       node.attr('x', function (d) {
@@ -986,8 +990,9 @@ var text = node.append("text")
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
         if (adaptive && width < MAX_WIDTH &&
              (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
-            width += 5;
+            width += OFFSET_VALUE;
             svg.attr("width", width);
+            widthIncrease = true;
             force.size([width, height]).resume();
         }
         return d.x = currentXPos;
@@ -999,13 +1004,23 @@ var text = node.append("text")
         var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
         if (adaptive && height < MAX_HEIGHT &&
              (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
-            height += 5;
+            height += OFFSET_VALUE;
             svg.attr("height", height);
+            heightIncrease = true;
             force.size([width, height]).resume();
         }
         return d.y = currentYPos;
       }).attr('transform', function (d) {
-        return "translate(" + d.x + "," + d.y + ")";
+          return "translate(" + d.x + "," + d.y + ")";
+
+        // Ideas for #471
+        //   if (widthIncrease) {
+        //         return "translate(" + (d.x - OFFSET_VALUE / 2) + "," + d.y + ")";
+        //     } else if (heightIncrease) {
+        //         return "translate(" + d.x + "," + (d.y - OFFSET_VALUE / 2) + ")";
+        //     } else {
+        //         return "translate(" + d.x + "," + d.y + ")";
+        //     }
       });
 
       /* Allows for looping edges.

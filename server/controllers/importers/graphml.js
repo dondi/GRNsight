@@ -79,6 +79,10 @@ module.exports = function (graphml) {
         if (err) {
             pushRelevantError(err);
         } else {
+            // Quick fix to handle completely empty GraphML file. #428
+            if (!result) {
+                return semanticChecker(network);
+            }
             key = result.graphml && result.graphml.key;
             graph = result.graphml && result.graphml.graph && result.graphml.graph[0];
         }
