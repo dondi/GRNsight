@@ -216,6 +216,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   setupZoomSlider(minimumScale);
 
+  function updateZoomPercent() {
+      var value = Math.round(($(".zoomSlider").val() / 8 * 200));
+      value = value === 0 ? 1 : value;
+      $("#zoomPercent").html(value + "%");
+  }
+
   function getMappedValue(scale) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
       var equivalentPoint;
@@ -246,7 +252,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           // zoom.scale(equivalentScale);
           manualZoomFunction(equivalentScale);
           $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
-          $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
+          updateZoomPercent();
           return;
       }
       if (!adaptive && value < ADAPTIVE_MAX_SCALE || adaptive) {
@@ -278,7 +284,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           $container.removeClass(CURSOR_CLASSES);
           scrolling = false;
       }
-      $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
+      updateZoomPercent();
       var container = d3.select($container[0]).select("svg").select("g");
       var h = container.attr("height"), w = container.attr("width");
       container.attr("transform",
@@ -312,26 +318,23 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   d3.selectAll("input[name=viewport]").on("change", function () {
     var fixed = $(this).prop("checked");
     if (!fixed) {
-      if (!scrolling) {
-        $container.addClass("cursorGrab");
-        scrolling = true;
-      }
-      adaptive = true;
-      maximumScale = ADAPTIVE_MAX_SCALE;
-      zoom.scaleExtent([minimumScale, maximumScale])
+    //   if (!scrolling) {
+    //     $container.addClass("cursorGrab");
+    //     scrolling = true;
+    //   }
+    //   adaptive = true;
+    //   maximumScale = ADAPTIVE_MAX_SCALE;
+    //   zoom.scaleExtent([minimumScale, maximumScale])
       d3.select("rect").attr("stroke", "none");
     } else if (fixed) {
-      adaptive = false;
-      maximumScale = FIXED_MAX_SCALE;
-      zoom.scaleExtent([minimumScale, maximumScale]);
-      if (zoom.scale() >= 1) {
-        zoom.scale(1);
-        scrolling = false;
-        $container.removeClass(CURSOR_CLASSES);
-      }
+    //   adaptive = false;
+    //   maximumScale = ADAPTIVE_MAX_SCALE;
+    //   zoom.scaleExtent([minimumScale, maximumScale]);
       if (zoomSliderScale > 1) {
           $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
           manualZoomFunction(1);
+          scrolling = false;
+          $container.removeClass(CURSOR_CLASSES);
       }
       width = $container.width();
       height = $container.height();
@@ -368,6 +371,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     console.log("viewportWidth: " + viewportWidth);
     var viewportHeight = $container.height();
 
+    //$(".boundingBox").attr("width")
     var boundingBoxWidth = d3.select(".boundingBox").select("g").attr("width");
     console.log("bbWidth: " + boundingBoxWidth);
     var boundingBoxHeight = d3.select(".boundingBox").select("g").attr("height");
