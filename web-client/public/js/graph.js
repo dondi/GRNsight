@@ -289,23 +289,25 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   d3.selectAll(".boundBoxSize").on("click", function () {
-    var newWidth = $container.css("width");
-    var newHeight = $container.css("height");
+      var newWidth = $container.width();
+      var newHeight = $container.height();
 
-    if (adaptive) {
-      width = (width < newWidth) ? newWidth : width;
-      height = (height < newHeight) ? newHeight : height;
-    } else {
-      width = newWidth;
-      height = newHeight;
-    }
+      if (adaptive) {
+        width = (width < newWidth) ? newWidth : width;
+        height = (height < newHeight) ? newHeight : height;
+      } else {
+        width = newWidth;
+        height = newHeight;
+      }
 
-    d3.select("svg").attr("width", newWidth).attr("height", newHeight)
-      .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
-    d3.select("rect").attr("width", width).attr("height", height);
-    d3.select(".boundingBox").attr("width", width).attr("height", height);
-    force.size([width, height]).resume();
-  });
+      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+      // Is inconsistent, but I'm tired of fighting with it...
+      d3.select("svg").attr("width", newWidth)
+          .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
+      d3.select("rect").attr("width", width).attr("height", height);
+      d3.select(".boundingBox").attr("width", width).attr("height", height);
+      force.size([width, height]).resume();
+    });
 
   d3.selectAll("input[name=viewport]").on("change", function () {
     var fixed = $(this).prop("checked");
@@ -361,10 +363,13 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   function center() {
     svg.call(zoom.event);
     var scale = zoom.scale();
+    console.log(zoom.scale());
     var viewportWidth = $container.width();
+    console.log("viewportWidth: " + viewportWidth);
     var viewportHeight = $container.height();
 
     var boundingBoxWidth = d3.select(".boundingBox").select("g").attr("width");
+    console.log("bbWidth: " + boundingBoxWidth);
     var boundingBoxHeight = d3.select(".boundingBox").select("g").attr("height");
 
     var scaledWidth = scale * boundingBoxWidth;

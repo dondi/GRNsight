@@ -139,7 +139,7 @@ $(function () {
       $(selector).off("click");
     });
 
-    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders, normalization, drawGraph);
+    drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType, network.warnings, sliders, normalization, grayThreshold);
   };
 
   var annotateLinks = function (network) {
