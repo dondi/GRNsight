@@ -76,8 +76,8 @@ describe("errors-adjacency-matrix-modifications", function () {
         it("output has 5 invalid data warnings", function () {
             test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
             test.incorrectlyNamedSheetWarning("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx", 5);
-          });
-      });
+        });
+    });
 
     // describe("extra-row-end-of-sheet-output", function () {
     //     it("should return errors count error", function () {
