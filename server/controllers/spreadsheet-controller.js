@@ -30,6 +30,7 @@ var processGRNmap = function (path, res, app) {
     res.json(400, network);
 };
 
+
 var parseSheet = function(sheet) {
   var currentSheet,
       network = {
@@ -110,7 +111,7 @@ var parseSheet = function(sheet) {
               currentGene = {name: currentSheet.data[row][0]};
               if(currentGene.name === undefined) {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-              } else if(isNaN(currentGene.name) && typeof currentGene.name != "string") {
+              } else if(isNaN(currentGene.name) && typeof currentGene.name !== "string") {
                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
               } else {
                 targetGenes.push(String(currentGene.name.toUpperCase()));
@@ -135,7 +136,7 @@ var parseSheet = function(sheet) {
               if (currentSheet.data[row][column] === undefined) {
                 // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-              } else if (isNaN(+("" + currentSheet.data[row][column]))) {
+            } else if (isNaN(+("" + currentSheet.data[row][column])) || typeof currentSheet.data[row][column] !== "number") {
                 addError(network, errorList.dataTypeError(row, column));
                 return network;
               } else {
@@ -153,14 +154,24 @@ var parseSheet = function(sheet) {
                     targetGeneNumber = genesList.indexOf(targetGene.toUpperCase());
                     currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column]};
                     // Here we set the properties of the current link before we push them to the network
-                    if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
-                      currentLink.type = "arrowhead";
-                      currentLink.stroke = "MediumVioletRed";
-                      network.positiveWeights.push(currentLink.value);
-                    } else { // if it's a negative number, mark it as a repressor
-                      currentLink.type = "repressor";
-                      currentLink.stroke = "DarkTurquoise";
-                      network.negativeWeights.push(currentLink.value);
+                    if (network.sheetType === "weighted") {
+                      if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
+                        currentLink.type = "arrowhead";
+                        currentLink.stroke = "MediumVioletRed";
+                        network.positiveWeights.push(currentLink.value);
+                      } else { // if it's a negative number, mark it as a repressor
+                        currentLink.type = "repressor";
+                        currentLink.stroke = "DarkTurquoise";
+                        network.negativeWeights.push(currentLink.value);
+                      }
+                    } else if (network.sheetType === "unweighted") {
+                        currentLink.type = "arrowhead";
+                        currentLink.stroke = "black";
+                        if (currentLink.value !== 1) {
+                          addWarning(network, warningsList.incorrectlyNamedSheetWarning());
+                          currentLink.value = 1;
+                        }
+                        network.positiveWeights.push(currentLink.value);
                     }
                     network.links.push(currentLink);
                   }
@@ -457,6 +468,13 @@ var warningsList = {
     return {
       warningCode: "INVALID_NETWORK_SIZE",
       errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+    }
+  },
+
+  incorrectlyNamedSheetWarning: function() {
+    return {
+      warningCode: "INCORRECTLY_NAMED_SHEET",
+      errorDescription: "The uploaded file appears to contain a weighted network, but contains no 'network_optimized_weights' sheet. A weighted network must be contained in a sheet called 'network_optimized_weights' in order to be drawn as a weighted graph. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     }
   }
 };

@@ -132,17 +132,17 @@ describe("warnings-adjacency-matrix-modifications", function () {
     });
 
     describe("value-replaced-w-spaces", function () {
-        it("1 invalid data warning each", function () {
+        it("1 invalid data warning for the top two", function () {
             test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-both-output.xlsx", 1);
             test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx", 1);
             test.noWarnings("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-only-input.xlsx");
-            test.noWarnings("test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx");
+            test.noWarnings('test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx');
         });
     });
-    // ISSUE #491
-    // describe("sheet-named-incorrectly", function () {
-    //     it("should return a wrong name warning", function () {
-    //         test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-network.xlsx", 25);
-    //     });
-    // });
+
+    describe("sheet-named-incorrectly", function () {
+         it("should return a wrong name warning", function () {
+             test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-network.xlsx", 25);
+        });
+    });
 });
