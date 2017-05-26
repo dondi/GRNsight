@@ -15,6 +15,8 @@
 /* eslint-disable no-unused-vars */
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
+
+  $("#zoomPercent").html(100 + "%");
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
 
@@ -322,12 +324,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     //     $container.addClass("cursorGrab");
     //     scrolling = true;
     //   }
-    //   adaptive = true;
+    adaptive = true;
     //   maximumScale = ADAPTIVE_MAX_SCALE;
     //   zoom.scaleExtent([minimumScale, maximumScale])
       d3.select("rect").attr("stroke", "none");
     } else if (fixed) {
-    //   adaptive = false;
+      adaptive = false;
     //   maximumScale = ADAPTIVE_MAX_SCALE;
     //   zoom.scaleExtent([minimumScale, maximumScale]);
       if (zoomSliderScale > 1) {
@@ -366,15 +368,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   function center() {
     svg.call(zoom.event);
     var scale = zoom.scale();
-    console.log(zoom.scale());
     var viewportWidth = $container.width();
-    console.log("viewportWidth: " + viewportWidth);
     var viewportHeight = $container.height();
-
-    //$(".boundingBox").attr("width")
-    var boundingBoxWidth = d3.select(".boundingBox").select("g").attr("width");
-    console.log("bbWidth: " + boundingBoxWidth);
+    var boundingBoxWidth = $(".boundingBox").attr("width");
     var boundingBoxHeight = d3.select(".boundingBox").select("g").attr("height");
+    boundingBoxHeight = boundingBoxHeight === null ? $(".boundingBox").attr("height") : boundingBoxHeight;
 
     var scaledWidth = scale * boundingBoxWidth;
     var scaledHeight = scale * boundingBoxHeight;
@@ -995,9 +993,6 @@ var text = node.append("text")
         MAX_HEIGHT = 5000;
         OFFSET_VALUE = 5;
 
-        var widthIncrease = false;
-        var heightIncrease = false;
-
     try {
       node.attr('x', function (d) {
         var selfReferringEdge = getSelfReferringEdge(d);
@@ -1010,7 +1005,6 @@ var text = node.append("text")
              (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
             width += OFFSET_VALUE;
             svg.attr("width", width);
-            widthIncrease = true;
             force.size([width, height]).resume();
         }
         return d.x = currentXPos;
@@ -1024,21 +1018,11 @@ var text = node.append("text")
              (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
             height += OFFSET_VALUE;
             svg.attr("height", height);
-            heightIncrease = true;
             force.size([width, height]).resume();
         }
         return d.y = currentYPos;
       }).attr('transform', function (d) {
           return "translate(" + d.x + "," + d.y + ")";
-
-        // Ideas for #471
-        //   if (widthIncrease) {
-        //         return "translate(" + (d.x - OFFSET_VALUE / 2) + "," + d.y + ")";
-        //     } else if (heightIncrease) {
-        //         return "translate(" + d.x + "," + (d.y - OFFSET_VALUE / 2) + ")";
-        //     } else {
-        //         return "translate(" + d.x + "," + d.y + ")";
-        //     }
       });
 
       /* Allows for looping edges.

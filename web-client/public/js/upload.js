@@ -106,12 +106,14 @@ $(function () {
 
   $("#normalization-button").click(function(){
     normalization = true;
-    displayNetwork(currentNetwork, name, normalization);
+    // displayNetwork(currentNetwork, name, normalization);
+    drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights, currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings, sliders, normalization, grayThreshold);
   });
 
   $('#grayThresholdInput').on("change", function(){
     grayThreshold = true;
-    displayNetwork(currentNetwork, name, normalization, grayThreshold);
+    // displayNetwork(currentNetwork, name, normalization, grayThreshold);
+    drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights, currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings, sliders, normalization, grayThreshold);
   });
 
   var displayNetwork = function (network, name, normalization, grayThreshold) {
