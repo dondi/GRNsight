@@ -16,9 +16,10 @@
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
 
-  $("#zoomPercent").html(100 + "%");
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
+
+  $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
 
   var width = $container.width(),
       height = $container.height(),
@@ -27,8 +28,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-  // Tracks the value of the zoom slider
-   var zoomSliderScale = 1;
+   var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
+   $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
 
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
@@ -42,14 +43,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var adaptive = !$("input[name='viewport']").prop("checked");
-  var scrolling = adaptive;
 
   var MIN_SCALE = 0.25;
-  var FIXED_MAX_SCALE = 1;
-  var ADAPTIVE_MAX_SCALE = 4;
+  var ADAPTIVE_MAX_SCALE = 4; // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
   var minimumScale = MIN_SCALE;
-  var maximumScale = adaptive ? ADAPTIVE_MAX_SCALE : FIXED_MAX_SCALE;
+  var maximumScale = ADAPTIVE_MAX_SCALE;
 
   var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -119,10 +118,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .append("g"); // appended another g here...
 
   d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
-
-  if (scrolling) {
-      $container.addClass("cursorGrab");
-  }
 
   // This rectangle catches all of the mousewheel and pan events, without letting
   // them bubble up to the body.
@@ -283,10 +278,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var manualZoomFunction = function (zoomScale) {
       if (zoomScale < 1) {
           $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-          scrolling = true;
       } else if (!adaptive && zoomScale >= 1) {
           $container.removeClass(CURSOR_CLASSES);
-          scrolling = false;
       }
       updateZoomPercent();
       var container = d3.select($container[0]).select("svg").select("g");
@@ -322,22 +315,15 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   d3.selectAll("input[name=viewport]").on("change", function () {
     var fixed = $(this).prop("checked");
     if (!fixed) {
-      if (!scrolling) {
-        $container.addClass("cursorGrab");
-        scrolling = true;
-      }
-        adaptive = true;
-    //   maximumScale = ADAPTIVE_MAX_SCALE;
-    //   zoom.scaleExtent([minimumScale, maximumScale])
+      $container.addClass("cursorGrab");
+      adaptive = true;
       d3.select("rect").attr("stroke", "none");
     } else if (fixed) {
       adaptive = false;
-    //   maximumScale = ADAPTIVE_MAX_SCALE;
-    //   zoom.scaleExtent([minimumScale, maximumScale]);
+      $container.removeClass(CURSOR_CLASSES);
       if (zoomSliderScale > 1) {
           $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
           manualZoomFunction(1);
-          scrolling = false;
           $container.removeClass(CURSOR_CLASSES);
       }
       width = $container.width();
@@ -358,12 +344,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   });
 
   $container.on("mousedown", function () {
-     if (scrolling) {
-       $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+     if(!adaptive) {
+       $container.removeClass(CURSOR_CLASSES);
      }
   }).on("mouseup", function () {
-    if (scrolling) {
-      $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    if (!adaptive) {
+        $container.removeClass(CURSOR_CLASSES);
     }
   });
 
