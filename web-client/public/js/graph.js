@@ -111,12 +111,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
         .attr("height", height)
-        .call(zoom).on("wheel.zoom", null)
+        .call(zoom).on("wheel.zoom", null) // disables mouse wheel zooming
       .append("g") // required for zoom to work
         .attr("class", "boundingBox")
         .attr("width", width)
         .attr("height", height)
         .append("g"); // appended another g here...
+
+  d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
   if (scrolling) {
       $container.addClass("cursorGrab");
@@ -320,11 +322,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   d3.selectAll("input[name=viewport]").on("change", function () {
     var fixed = $(this).prop("checked");
     if (!fixed) {
-    //   if (!scrolling) {
-    //     $container.addClass("cursorGrab");
-    //     scrolling = true;
-    //   }
-    adaptive = true;
+      if (!scrolling) {
+        $container.addClass("cursorGrab");
+        scrolling = true;
+      }
+        adaptive = true;
     //   maximumScale = ADAPTIVE_MAX_SCALE;
     //   zoom.scaleExtent([minimumScale, maximumScale])
       d3.select("rect").attr("stroke", "none");
