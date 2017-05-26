@@ -15,8 +15,11 @@
 /* eslint-disable no-unused-vars */
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
+
   var $container = $(".grnsight-container");
   d3.selectAll("svg").remove();
+
+  $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
 
   var width = $container.width(),
       height = $container.height(),
@@ -24,6 +27,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       colorOptimal = true;
 
   var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
+
+   var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
+   $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
 
   $('#warningMessage').html(warnings.length != 0 ? "Click here in order to view warnings." : "");
 
@@ -37,14 +43,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   }
 
   var adaptive = !$("input[name='viewport']").prop("checked");
-  var scrolling = adaptive;
 
   var MIN_SCALE = 0.25;
-  var FIXED_MAX_SCALE = 1;
-  var ADAPTIVE_MAX_SCALE = 4;
+  var ADAPTIVE_MAX_SCALE = 4; // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
   var minimumScale = MIN_SCALE;
-  var maximumScale = adaptive ? ADAPTIVE_MAX_SCALE : FIXED_MAX_SCALE;
+  var maximumScale = ADAPTIVE_MAX_SCALE;
 
   var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -106,15 +110,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
         .attr("height", height)
-        .call(zoom)
+        .call(zoom).on("wheel.zoom", null) // disables mouse wheel zooming
       .append("g") // required for zoom to work
         .attr("class", "boundingBox")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .append("g"); // appended another g here...
 
-  if (scrolling) {
-      $container.addClass("cursorGrab");
-  }
+  d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
   // This rectangle catches all of the mousewheel and pan events, without letting
   // them bubble up to the body.
@@ -126,10 +129,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                      .attr("stroke", adaptive ? "none" : "#9A9A9A")
                      .append("g");
 
+
   function zoomed() {
-      if (!manualZoom) {
-          getMappedValue(d3.event.scale);
-      }
+      // this part is not working
       if (!adaptive) { // Limit to viewport
           var scale = zoom.scale();
           var scaledWidth = scale * width;
@@ -141,28 +143,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           d3.event.translate[1] = Math.min(Math.max(d3.event.translate[1], 0), maxY);
           zoom.translate([d3.event.translate[0], d3.event.translate[1]]);
       }
-      if (!scrolling && d3.event.scale < 1) {
-          $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-          scrolling = true;
-      } else if (!adaptive && scrolling && d3.event.scale >= 1) {
-          $container.removeClass(CURSOR_CLASSES);
-          scrolling = false;
-      }
+      svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
 
-      // Initial Work for #468
-      // if (manualZoom) {
-      //     svg.attr("transform",
-      //             "translate(" + width / 2 + ", " + height / 2 + ") " +
-      //             "scale(" + d3.event.scale + ") " +
-      //             "translate(" + (-width / 2) + ", " + (-height / 2) + ")"
-      //         );
-      // } else {
-      //     svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
-      // }
-
-      svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-      // Update percentage on zoom slider
-      $("#zoomPercent").html(Math.round(($(".zoomSlider").val() / 8 * 200)) + "%");
   }
 
   d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -172,7 +154,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           move(direction.toLowerCase());
       });
   });
-  center();
+
   d3.select(".center").on("click", center);
 
   var leftPoints;
@@ -225,12 +207,19 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
       // Returns the x that we're mapping to. Now we can set up the range slider.
       var maxRangeValue = totalPoints / 100;
+
       $(".zoomSlider").attr("min", 0);
       $(".zoomSlider").attr("max", maxRangeValue);
       $(".zoomSlider").val(0.01 * leftPoints);
   };
 
   setupZoomSlider(minimumScale);
+
+  function updateZoomPercent() {
+      var value = Math.round(($(".zoomSlider").val() / 8 * 200));
+      value = value === 0 ? 1 : value;
+      $("#zoomPercent").html(value + "%");
+  }
 
   function getMappedValue(scale) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
@@ -258,9 +247,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               equivalentScale = 1;
               equivalentScale += scaleIncreasePerRightPoint * currentPoint;
           }
-          zoom.scale(equivalentScale);
-          svg.transition().call(zoom.event);
+          zoomSliderScale = equivalentScale;
+          // zoom.scale(equivalentScale);
+          manualZoomFunction(equivalentScale);
           $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
+          updateZoomPercent();
           return;
       }
       if (!adaptive && value < ADAPTIVE_MAX_SCALE || adaptive) {
@@ -274,8 +265,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               equivalentScale = 1;
               equivalentScale += scaleIncreasePerRightPoint * currentPoint;
           }
-          zoom.scale(equivalentScale);
-          svg.transition().call(zoom.event);
+          zoomSliderScale = equivalentScale;
+          // zoom.scale(equivalentScale);
+          manualZoomFunction(equivalentScale);
       }
   }).on("mousedown", function () {
       manualZoom = true;
@@ -283,44 +275,56 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       manualZoom = false;
   });
 
+  var manualZoomFunction = function (zoomScale) {
+      if (zoomScale < 1) {
+          $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+      } else if (!adaptive && zoomScale >= 1) {
+          $container.removeClass(CURSOR_CLASSES);
+      }
+      updateZoomPercent();
+      var container = d3.select($container[0]).select("svg").select("g");
+      var h = container.attr("height"), w = container.attr("width");
+      container.attr("transform",
+              "translate(" + w / 2 + ", " + h / 2 + ") " +
+              "scale(" + zoomScale + ") " +
+              "translate(" + (-w / 2) + ", " + (-h / 2) + ")"
+          );
+  }
+
   d3.selectAll(".boundBoxSize").on("click", function () {
-    var newWidth = $container.css("width");
-    var newHeight = $container.css("height");
+      var newWidth = $container.width();
+      var newHeight = $container.height();
 
-    if (adaptive) {
-      width = (width < newWidth) ? newWidth : width;
-      height = (height < newHeight) ? newHeight : height;
-    } else {
-      width = newWidth;
-      height = newHeight;
-    }
+      if (adaptive) {
+        width = (width < newWidth) ? newWidth : width;
+        height = (height < newHeight) ? newHeight : height;
+      } else {
+        width = newWidth;
+        height = newHeight;
+      }
 
-    d3.select("svg").attr("width", newWidth).attr("height", newHeight)
-      .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
-    d3.select("rect").attr("width", width).attr("height", height);
-    d3.select(".boundingBox").attr("width", width).attr("height", height);
-    force.size([width, height]).resume();
-  });
+      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+      // Is inconsistent, but I'm tired of fighting with it...
+      d3.select("svg").attr("width", newWidth)
+          .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
+      d3.select("rect").attr("width", width).attr("height", height);
+      d3.select(".boundingBox").attr("width", width).attr("height", height);
+      force.size([width, height]).resume();
+    });
 
   d3.selectAll("input[name=viewport]").on("change", function () {
     var fixed = $(this).prop("checked");
     if (!fixed) {
-      if (!scrolling) {
-        $container.addClass("cursorGrab");
-        scrolling = true;
-      }
+      $container.addClass("cursorGrab");
       adaptive = true;
-      maximumScale = ADAPTIVE_MAX_SCALE;
-      zoom.scaleExtent([minimumScale, maximumScale])
       d3.select("rect").attr("stroke", "none");
     } else if (fixed) {
       adaptive = false;
-      maximumScale = FIXED_MAX_SCALE;
-      zoom.scaleExtent([minimumScale, maximumScale]);
-      if (zoom.scale() >= 1) {
-        zoom.scale(1);
-        scrolling = false;
-        $container.removeClass(CURSOR_CLASSES);
+      $container.removeClass(CURSOR_CLASSES);
+      if (zoomSliderScale > 1) {
+          $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
+          manualZoomFunction(1);
+          $container.removeClass(CURSOR_CLASSES);
       }
       width = $container.width();
       height = $container.height();
@@ -340,12 +344,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   });
 
   $container.on("mousedown", function () {
-     if (scrolling) {
-       $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+     if(!adaptive) {
+       $container.removeClass(CURSOR_CLASSES);
      }
   }).on("mouseup", function () {
-    if (scrolling) {
-      $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    if (!adaptive) {
+        $container.removeClass(CURSOR_CLASSES);
     }
   });
 
@@ -354,9 +360,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var scale = zoom.scale();
     var viewportWidth = $container.width();
     var viewportHeight = $container.height();
-
     var boundingBoxWidth = $(".boundingBox").attr("width");
-    var boundingBoxHeight = $(".boundingBox").attr("height");
+    var boundingBoxHeight = d3.select(".boundingBox").select("g").attr("height");
+    boundingBoxHeight = boundingBoxHeight === null ? $(".boundingBox").attr("height") : boundingBoxHeight;
 
     var scaledWidth = scale * boundingBoxWidth;
     var scaledHeight = scale * boundingBoxHeight;
@@ -975,6 +981,7 @@ var text = node.append("text")
         SELF_REFERRING_Y_OFFSET = 6;
         MAX_WIDTH = 5000;
         MAX_HEIGHT = 5000;
+        OFFSET_VALUE = 5;
 
     try {
       node.attr('x', function (d) {
@@ -986,9 +993,11 @@ var text = node.append("text")
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
         if (adaptive && width < MAX_WIDTH &&
              (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
-            width += 5;
-            svg.attr("width", width);
-            force.size([width, height]).resume();
+            if (!d3.select(this).classed("fixed")) {
+                width += OFFSET_VALUE;
+                svg.attr("width", width);
+                force.size([width, height]).resume();
+            }
         }
         return d.x = currentXPos;
       }).attr('y', function (d) {
@@ -999,13 +1008,15 @@ var text = node.append("text")
         var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
         if (adaptive && height < MAX_HEIGHT &&
              (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
-            height += 5;
+            if (!d3.select(this).classed("fixed")) {
+            height += OFFSET_VALUE;
             svg.attr("height", height);
             force.size([width, height]).resume();
+            }
         }
         return d.y = currentYPos;
       }).attr('transform', function (d) {
-        return "translate(" + d.x + "," + d.y + ")";
+          return "translate(" + d.x + "," + d.y + ")";
       });
 
       /* Allows for looping edges.
