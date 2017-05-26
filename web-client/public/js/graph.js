@@ -1003,9 +1003,11 @@ var text = node.append("text")
         var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
         if (adaptive && width < MAX_WIDTH &&
              (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
-            width += OFFSET_VALUE;
-            svg.attr("width", width);
-            force.size([width, height]).resume();
+            if (!d3.select(this).classed("fixed")) {
+                width += OFFSET_VALUE;
+                svg.attr("width", width);
+                force.size([width, height]).resume();
+            }
         }
         return d.x = currentXPos;
       }).attr('y', function (d) {
@@ -1016,9 +1018,11 @@ var text = node.append("text")
         var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
         if (adaptive && height < MAX_HEIGHT &&
              (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
+            if (!d3.select(this).classed("fixed")) {
             height += OFFSET_VALUE;
             svg.attr("height", height);
             force.size([width, height]).resume();
+            }
         }
         return d.y = currentYPos;
       }).attr('transform', function (d) {
