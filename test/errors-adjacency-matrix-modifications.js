@@ -35,13 +35,12 @@ describe("errors-adjacency-matrix-modifications", function () {
         });
     });
 
-    // ISSUE #491
-    // describe("extra-column-end-of-sheet", function () {
-    //     it("should return warnings count error", function () {
-    //         test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx", 49062);
-    //         test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx", 49062);
-    //     });
-    // });
+    describe("extra-column-end-of-sheet", function () {
+        it("should return warnings count error", function () {
+            test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-input.xlsx", 49062);
+            test.warningsCountError("test-files/adjacency-matrix-modifications/extra-column-end-of-sheet-output.xlsx", 49062);
+        });
+    });
 
     describe("extra-column-one-column-skipped", function () {
         it("should not return any errors", function () {
@@ -64,27 +63,26 @@ describe("errors-adjacency-matrix-modifications", function () {
         });
     });
 
-    // ISSUE #491
-    // describe("extra-row-end-of-sheet", function () {
-    //     it("should return errors count error", function () {
-    //         this.timeout(10000);
-    //         test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx", 1);
-    //     });
-    // });
+    describe("extra-row-end-of-sheet", function () {
+        it("should return errors count error", function () {
+            this.timeout(10000);
+            test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx", 1);
+        });
+    });
+
+    describe("extra-row-end-of-sheet-output", function () {
+        it("should return errors count error", function () {
+            this.timeout(10000);
+            test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx", 1);
+        });
+    });
 
     describe("missing-column-end", function () {
         it("output has 5 invalid data warnings", function () {
             test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
-            test.incorrectlyNamedSheetWarning("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx", 5);
+            test.incorrectlyNamedSheetWarning("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx", 0);
         });
     });
-
-    // describe("extra-row-end-of-sheet-output", function () {
-    //     it("should return errors count error", function () {
-    //         this.timeout(10000);
-    //         test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx", 1);
-    //     });
-    // });
 
     describe("extra-row-one-row-skipped", function () {
         it("should return empty row error", function () {
@@ -172,15 +170,14 @@ describe("errors-adjacency-matrix-modifications", function () {
         });
     });
 
-    /* will fix in issue #491
     describe("value-replaced-with-spaces", function () {
         it("should not return any errors", function () {
             test.noErrors("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-both-output.xlsx");
             test.noErrors("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx");
             test.invalidDataTypeError("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-only-input.xlsx", 1);
             test.noErrors("test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx");
-        });
-    }); */
+      });
+    });
 
     // Adjacency Matrix Modifications - Data Types
     describe("accounting-data-type-header", function () {

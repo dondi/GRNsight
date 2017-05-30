@@ -87,6 +87,7 @@ var errorList = {
                         " the matrix is "
         };
     },
+
     errorsCountError: {
         errorCode: "ERRORS_OVERLOAD",
         possibleCause: "This network has over 20 errors.",
@@ -94,6 +95,15 @@ var errorList = {
         "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
         "further errors detected. As a general approach for fixing the errors, consider copying and " +
         "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+    },
+
+    warningsCountError: {
+        errorCode: "WARNINGS_OVERLOAD",
+        possibleCause: "This network has over 75 warnings.",
+        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+        " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+        " further errors detected. As a general approach for fixing the errors, consider copying and " +
+        " pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
     },
 
     unknownError: {
@@ -105,8 +115,8 @@ var errorList = {
 };
 
 
-    // This is the list of warnings.
-    // The graph will still load if warnings are detected, but these will be reported to the user.
+// This is the list of warnings.
+// The graph will still load if warnings are detected, but these will be reported to the user.
 var warningsList = {
     missingSourceGeneWarning: function (row, column) {
         var colLetter = numbersToLetters[column];
@@ -175,12 +185,12 @@ var addWarning = function (network, message) {
     var warningsCount = network.warnings.length;
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        addMessageToArray(network.warnings, message);
+      addMessageToArray(network.warnings, message);
     } else {
-        addMessageToArray(network.errors, warningsList.warningsCountError);
-        return false;
+      addMessageToArray(network.errors, errorList.warningsCountError);
+      return false;
     }
-};
+}
 
 var addError = function (network, message) {
     var errorsCount = network.errors.length;
@@ -229,15 +239,15 @@ var parseSheet = function(sheet) {
     var sourceGenes = [];
     var targetGenes = [];
 
-  // Look for the worksheet containing the network data
+    // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
         if (sheet[i].name === "network") {
-      // Here we have found a sheet containing simple data. We keep looking
-      // in case there is also a sheet with optimized weights
+            // Here we have found a sheet containing simple data. We keep looking
+            // in case there is also a sheet with optimized weights
             currentSheet = sheet[i];
         } else if (sheet[i].name === "network_optimized_weights") {
-      // We found a sheet with optimized weights, which is the ideal data source.
-      // So we stop looking.
+            // We found a sheet with optimized weights, which is the ideal data source.
+            // So we stop looking.
             currentSheet = sheet[i];
             network.sheetType = "weighted";
             break;
@@ -258,16 +268,16 @@ var parseSheet = function(sheet) {
                 return network;
             }
         } else { // if the row has data...
-      // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
-      // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
-      // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
+            // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
+            // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
+            // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
             try { // This prevents the server from crashing if something goes wrong anywhere in here
                 while (column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
                     if (row === 0) { // If we are at the top of a new column...
-            // These genes are the source genes
+                        // These genes are the source genes
                         try {
                             currentGene = {name: currentSheet.data[0][column]};
-              // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
+                            // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
                             if (currentGene.name === undefined) {
                                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
                             } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
@@ -283,7 +293,7 @@ var parseSheet = function(sheet) {
                             return network;
                         }
                     } else if (column === 0) { // If we are at the far left of a new row...
-            // These genes are the target genes
+                        // These genes are the target genes
                         try {
                             currentGene = {name: currentSheet.data[row][0]};
                             if (currentGene.name === undefined) {
@@ -292,10 +302,10 @@ var parseSheet = function(sheet) {
                                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
                             } else {
                                 targetGenes.push(String(currentGene.name.toUpperCase()));
-                // Here we check to see if we've already seen the gene name that we're about to store
-                // Genes may or may not be present due to asymmetry or unorderedness
-                // If it's in the genesList, it will return a number > 0, so we won't store it
-                // If it's not there, it will return -1, so we add it.
+                                // Here we check to see if we've already seen the gene name that we're about to store
+                                // Genes may or may not be present due to asymmetry or unorderedness
+                                // If it's in the genesList, it will return a number > 0, so we won't store it
+                                // If it's not there, it will return -1, so we add it.
                                 if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
                                     genesList.push(String(currentGene.name.toUpperCase()));
                                     currentGene.name = currentGene.name;
@@ -311,14 +321,14 @@ var parseSheet = function(sheet) {
                     } else { // If we're within the matrix and lookin' at the data...
                         try {
                             if (currentSheet.data[row][column] === undefined) {
-                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
+                                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
                             } else if (isNaN(+("" + currentSheet.data[row][column])) || typeof currentSheet.data[row][column] !== "number") {
                                 addError(network, errorList.dataTypeError(row, column));
                                 return network;
                             } else {
                                 if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
-                  // Grab the source and target genes' names
+                                    // Grab the source and target genes' names
                                     sourceGene = currentSheet.data[0][column];
                                     targetGene = currentSheet.data[row][0];
                                     if (sourceGene === undefined || targetGene === undefined) {
@@ -326,11 +336,11 @@ var parseSheet = function(sheet) {
                                     } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") || (isNaN(targetGene) && typeof targetGene !== "string")) {
                                         addWarning(network, warningsList.randomDataWarning("NaN", row, column));
                                     } else {
-                    // Grab the source and target genes' numbers
+                                        // Grab the source and target genes' numbers
                                         sourceGeneNumber = genesList.indexOf(sourceGene.toUpperCase());
                                         targetGeneNumber = genesList.indexOf(targetGene.toUpperCase());
                                         currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column]};
-                    // Here we set the properties of the current link before we push them to the network
+                                        // Here we set the properties of the current link before we push them to the network
                                         if (network.sheetType === "weighted") {
                                             if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
                                                 currentLink.type = "arrowhead";
@@ -357,7 +367,7 @@ var parseSheet = function(sheet) {
 
                         } catch (err) {
                             addError(network, errorList.missingValueError(row, column));
-              // SHOULD BE: addError(network, errorList.unknownFileError);
+                            // SHOULD BE: addError(network, errorList.unknownFileError);
                             return network;
                         }
                     }
@@ -365,7 +375,7 @@ var parseSheet = function(sheet) {
                 } // Once we finish with the current row...
                 column = 0; // let's go back to column 0 on the next row!
             } catch (err) {
-        // We only get here if something goes drastically wrong. We don't want to get here.
+                // We only get here if something goes drastically wrong. We don't want to get here.
                 addError(network, errorList.unknownError);
                 return network;
             }
@@ -504,7 +514,7 @@ module.exports = function (app) {
             });
         });
 
-    // Load the demos
+        // Load the demos
         app.get("/demo/unweighted", function (req, res) {
             return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
         });
@@ -522,7 +532,7 @@ module.exports = function (app) {
         });
     }
 
-  // exporting parseSheet for use in testing. Do not remove!
+    // exporting parseSheet for use in testing. Do not remove!
     return {
         parseSheet: parseSheet,
         grnSightToCytoscape: grnSightToCytoscape

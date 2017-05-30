@@ -67,13 +67,13 @@ describe("warnings-adjacency-matrix-modifications", function () {
         });
     });
 
-    // ISSUE #491
-    // describe("missing-column-end", function () {
-    //     it("no warnings", function () {
-    //         test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
-    //         test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx");
-    //     });
-    // });
+    // here...
+    describe('missing-column-end', function () {
+        it('no warnings', function () {
+            test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
+            test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx");
+        });
+    });
 
     describe("missing-column-middle", function () {
         it("5 invalid data warnings", function () {
@@ -145,4 +145,5 @@ describe("warnings-adjacency-matrix-modifications", function () {
             test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-network.xlsx", 25);
         });
     });
+
 });
