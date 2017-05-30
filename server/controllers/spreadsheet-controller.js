@@ -1,8 +1,8 @@
-var multiparty = require('multiparty'),
-    xlsx = require('node-xlsx'),
-    util = require('util'),
-    path = require('path'),
-    cytoscape = require('cytoscape');
+var multiparty = require('multiparty');
+var xlsx = require('node-xlsx');
+var util = require('util');
+var path = require('path');
+// var cytoscape = require("cytoscape"); // NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
 
@@ -166,7 +166,6 @@ var parseSheet = function(sheet) {
                   }
                 };
               }
-
             } catch (err) {
               addError(network, errorList.missingValueError(row, column));
               // SHOULD BE: addError(network, errorList.unknownFileError);
@@ -276,7 +275,7 @@ var addWarning = function (network, message) {
     if (warningsCount < MAX_WARNINGS) {
       addMessageToArray(network.warnings, message);
     } else {
-      addMessageToArray(network.errors, errorsList.warningsCountError);
+      addMessageToArray(network.errors, errorList.warningsCountError);
       return false;
     }
 }
@@ -323,7 +322,7 @@ var errorList = {
     var rowNum = row + 1;
     return {
       errorCode: "CORRUPT_GENE",
-      possibleCause: "The gene name in cell " + colLetter+rowNum + " appears to be invalid.",
+      possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.",
       suggestedFix: "Please fix the error and try uploading again."
     };
   },
@@ -333,7 +332,7 @@ var errorList = {
     var rowNum = row + 1;
     return {
       errorCode: "MISSING_VALUE",
-      possibleCause: "The value in the cell " + colLetter+rowNum + " in the adjacency matrix appears to have a missing value.",
+      possibleCause: "The value in the cell " + colLetter + rowNum + " in the adjacency matrix appears to have a missing value.",
       suggestedFix: "Please ensure that all cells have a value, then upload the file again."
     };
   },
@@ -351,7 +350,7 @@ var errorList = {
     var rowNum = row + 1;
     return {
       errorCode: "INVALID_CELL_DATA_TYPE",
-      possibleCause: "The value in cell " + colLetter+rowNum + " is not a number.",
+      possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
       suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
     }
   },
@@ -377,6 +376,7 @@ var errorList = {
                     " the matrix is "
     }
   },
+
   errorsCountError: {
     errorCode: "ERRORS_OVERLOAD",
     possibleCause: "This network has over 20 errors.",
@@ -384,6 +384,15 @@ var errorList = {
     "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
     "further errors detected. As a general approach for fixing the errors, consider copying and " +
     "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+  },
+
+  warningsCountError: {
+    errorCode: "WARNINGS_OVERLOAD",
+    possibleCause: "This network has over 75 warnings.",
+    suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+    " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+    " further errors detected. As a general approach for fixing the errors, consider copying and " +
+    " pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
   },
 
   unknownError: {
@@ -414,7 +423,7 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "MISSING_SOURCE",
-      errorDescription: "A source gene name is missing in cell " + colLetter+rowNum + "."
+      errorDescription: "A source gene name is missing in cell " + colLetter + rowNum + "."
     }
   },
 
@@ -423,7 +432,7 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "MISSING_TARGET",
-      errorDescription: "A target gene name is missing in cell " + colLetter+rowNum + "."
+      errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
     }
   },
 
@@ -432,7 +441,7 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "INVALID_DATA",
-      errorDescription: "The value in cell " + colLetter+rowNum + ", is undefined."
+      errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
     }
   },
 
@@ -441,7 +450,7 @@ var warningsList = {
     var rowNum = row + 1;
     return {
       warningCode: "RANDOM_DATA",
-      errorDescription: "The value in cell " + colLetter+rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
+      errorDescription: "The value in cell " + colLetter + rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
     }
   },
 
