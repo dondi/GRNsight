@@ -275,16 +275,15 @@ $(function () {
 
   var displayWarnings = function (warnings) {
     $("#warningIntro").html("There were " + warnings.length + " warning(s) detected in this file. " +
-      "It is possible that these warnings are the result of extraneous data outside of the matrix, but " +
-      "we recommend you review your file and ensure that it is formatted correctly. The graph will be loaded, " +
-      "but may not be displayed accurately. To view the details " +
-      "of the warning(s), please click on the \"Warnings List\" below.");
+      "The graph will be loaded, but may not be displayed accurately. " +
+      "We recommend you review your file and ensure that it is formatted correctly. " +
+      "To view the details of the warning(s), please click on the \"Warnings List\" below.");
 
     var MAX_DUPLICATES = 3;
     var warningsString = "";
     //printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
 
-    var NUM_POSSIBLE_WARNINGS = 10;
+    var NUM_POSSIBLE_WARNINGS = 11;
 
     // Fill printed with 0s programatically
     var printed = [];
@@ -311,11 +310,9 @@ $(function () {
         } else if (printed[index] < 3){
           appendWarning(warningCount[i]);
           printed[index]++;
-        } else if (printed[index] === 3) {
+        } else {
           warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
-        }
-        else {
-          appendWarning(warningCount[i]);
+          break;
         }
       }
     }
