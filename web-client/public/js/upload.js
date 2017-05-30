@@ -313,7 +313,9 @@ $(function () {
           printed[index]++;
         } else if (printed[index] === 3) {
           warningsString += "<i> " + (+warningCount.length-3) + " more warning(s) like this exist. </i> <br><br>";
-          break;
+        }
+        else {
+          appendWarning(warningCount[i]);
         }
       }
     }

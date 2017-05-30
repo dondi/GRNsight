@@ -1,56 +1,233 @@
 var multiparty = require("multiparty");
 var xlsx = require("node-xlsx");
-var util = require("util");
+// var util = require("util");
 var path = require("path");
-var cytoscape = require("cytoscape");
+// var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
-var processGRNmap = function (path, res, app) {
-    var sheet;
-    var network;
+// Currently only going to number 76 because currently the network errors out at 75+ genes.
+var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
+    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
+    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
+    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
+    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
+    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
+    74:"BV", 75:"BW", 76:"BX"};
 
-    helpers.attachCorsHeader(res, app);
+// TODO: Put this and the warnings list into helpers.
+// This is the massive list of errors. Yay!
+// The graph will not load if an error is detected.
+var errorList = {
+    missingNetworkError: {
+        errorCode: "MISSING_NETWORK",
+        possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
+        suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " +
+        "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
+    },
 
-    try {
-        sheet = xlsx.parse(path);
-    } catch (err) {
-        return res.json(400, "Unable to read input. The file may be corrupt.");
+    corruptGeneError: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            errorCode: "CORRUPT_GENE",
+            possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.",
+            suggestedFix: "Please fix the error and try uploading again."
+        };
+    },
+
+    missingValueError: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            errorCode: "MISSING_VALUE",
+            possibleCause: "The value in the cell " + colLetter + rowNum + " in the adjacency matrix appears to have a missing value.",
+            suggestedFix: "Please ensure that all cells have a value, then upload the file again."
+        };
+    },
+
+    duplicateGeneError: function(geneType, geneName) {
+        return {
+            errorCode: "DUPLICATE_GENE",
+            possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
+            suggestedFix: "Please remove the duplicate gene and submit again."
+        };
+    },
+
+    dataTypeError: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            errorCode: "INVALID_CELL_DATA_TYPE",
+            possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
+            suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
+        };
+    },
+
+    emptyRowError: function (row) {
+        var rowNum = row + 1;
+        return {
+            errorCode: "EMPTY_ROW",
+            possibleCause: "Row " + rowNum + " does not contain any data.",
+            suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " +
+                        "Also, please ensure that no extraneous data is outside of the matrix, " +
+                        "as this may cause this error."
+        };
+    },
+
+    outsideCellError: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            errorCode: "EMPTY_CELL",
+            possibleCause: "The cell at " + colLetter + rowNum + " contains data that is outside the matrix.",
+            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" +
+                        " the matrix is "
+        };
+    },
+    errorsCountError: {
+        errorCode: "ERRORS_OVERLOAD",
+        possibleCause: "This network has over 20 errors.",
+        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+        "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
+        "further errors detected. As a general approach for fixing the errors, consider copying and " +
+        "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
+    },
+
+    unknownError: {
+        errorCode: "UNKNOWN_ERROR",
+        possibleCause: "An unexpected error occurred.",
+        suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
     }
 
-    helpers.attachFileHeaders(res, path);
-    network = parseSheet(sheet);
-
-    return (network.errors.length === 0) ?
-    // If all looks well, return the network with an all clear
-    res.json(network) :
-    // If all does not look well, return the network with an error 400
-    res.json(400, network);
 };
 
+
+    // This is the list of warnings.
+    // The graph will still load if warnings are detected, but these will be reported to the user.
+var warningsList = {
+    missingSourceGeneWarning: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            warningCode: "MISSING_SOURCE",
+            errorDescription: "A source gene name is missing in cell " + colLetter + rowNum + "."
+        };
+    },
+
+    missingTargetGeneWarning: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            warningCode: "MISSING_TARGET",
+            errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
+        };
+    },
+
+    invalidMatrixDataWarning: function (row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            warningCode: "INVALID_DATA",
+            errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
+        };
+    },
+
+    randomDataWarning: function (type, row, column) {
+        var colLetter = numbersToLetters[column];
+        var rowNum = row + 1;
+        return {
+            warningCode: "RANDOM_DATA",
+            errorDescription: "The value in cell " + colLetter + rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
+        };
+    },
+
+    emptyRowWarning: function (row) {
+        var rowNum = row + 1;
+        return {
+            warningCode: "EMPTY_ROW",
+            errorDescription: "Row " + rowNum + " was found to contain no data."
+        };
+    },
+
+    networkSizeWarning: function (genesLength, edgesLength) {
+        return {
+            warningCode: "INVALID_NETWORK_SIZE",
+            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+        };
+    },
+
+    incorrectlyNamedSheetWarning: function() {
+        return {
+            warningCode: "INCORRECTLY_NAMED_SHEET",
+            errorDescription: "The uploaded file appears to contain a weighted network, but contains no 'network_optimized_weights' sheet. A weighted network must be contained in a sheet called 'network_optimized_weights' in order to be drawn as a weighted graph. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+        };
+    }
+};
+
+var addMessageToArray = function (messageArray, message) {
+    messageArray.push(message);
+};
+
+var addWarning = function (network, message) {
+    var warningsCount = network.warnings.length;
+    var MAX_WARNINGS = 75;
+    if (warningsCount < MAX_WARNINGS) {
+        addMessageToArray(network.warnings, message);
+    } else {
+        addMessageToArray(network.errors, warningsList.warningsCountError);
+        return false;
+    }
+};
+
+var addError = function (network, message) {
+    var errorsCount = network.errors.length;
+    var MAX_ERRORS = 20;
+    if (errorsCount < MAX_ERRORS) {
+        addMessageToArray(network.errors, message);
+    } else {
+        addMessageToArray(network.errors, errorList.errorsCountError);
+        return false;
+    }
+};
+
+var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+  // Run through the source genes and check if the gene in slot i is the same as the one next to it
+    for (var i = 0; i < sourceGenes.length - 1; i++) {
+        if (sourceGenes[i] === sourceGenes[i + 1]) {
+            errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+        }
+    }
+  // Run through the target genes and check if the gene in slot j is the same as the one next to it
+    for (var j = 0; j < targetGenes.length - 1; j++) {
+        if (targetGenes[j] === targetGenes[j + 1]) {
+            errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
+        }
+    }
+};
 
 var parseSheet = function(sheet) {
     var currentSheet;
     var network = {
-            genes: [],
-            links: [],
-            errors: [],
-            warnings: [],
-            positiveWeights: [],
-            negativeWeights: [],
-            sheetType: "unweighted",
-        },
-        currentLink,
-        currentGene,
-        sourceGene,
-        targetGene,
-        sourceGeneNumber,
-        targetGeneNumber,
-        genesList = [], // This will contain all of the genes in upper case for use in error checking
-        sourceGenes = [],
-        targetGenes = [];
+        genes: [],
+        links: [],
+        errors: [],
+        warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
+        sheetType: "unweighted",
+    };
+    var currentLink;
+    var currentGene;
+    var sourceGene;
+    var targetGene;
+    var sourceGeneNumber;
+    var targetGeneNumber;
+    var genesList = []; // This will contain all of the genes in upper case for use in error checking
+    var sourceGenes = [];
+    var targetGenes = [];
 
   // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
@@ -212,8 +389,29 @@ var parseSheet = function(sheet) {
   // } catch (err) {
   //   console.log ("Graph statistics report failed to be complete.");
   // }
-
     return semanticChecker(network);
+};
+
+var processGRNmap = function (path, res, app) {
+    var sheet;
+    var network;
+
+    helpers.attachCorsHeader(res, app);
+
+    try {
+        sheet = xlsx.parse(path);
+    } catch (err) {
+        return res.json(400, "Unable to read input. The file may be corrupt.");
+    }
+
+    helpers.attachFileHeaders(res, path);
+    network = parseSheet(sheet);
+
+    return (network.errors.length === 0) ?
+    // If all looks well, return the network with an all clear
+    res.json(network) :
+    // If all does not look well, return the network with an error 400
+    res.json(400, network);
 };
 
 var grnSightToCytoscape = function (network) {
@@ -241,6 +439,7 @@ var grnSightToCytoscape = function (network) {
     return result;
 };
 
+/* NOTE: See above. Commented out until resolution of #474
 var graphStatisticsReport = function(network)  {
     var betweennessCentrality = [];
     var shortestPath = [];
@@ -270,214 +469,12 @@ var graphStatisticsReport = function(network)  {
             });
         }
     }
-
     return {
         betweennessCentrality: betweennessCentrality,
         shortestPath: shortestPath
     };
 };
-
-var addMessageToArray = function (messageArray, message) {
-    messageArray.push(message);
-};
-
-var addWarning = function (network, message) {
-    var warningsCount = network.warnings.length;
-    var MAX_WARNINGS = 75;
-    if (warningsCount < MAX_WARNINGS) {
-        addMessageToArray(network.warnings, message);
-    } else {
-        addMessageToArray(network.errors, errorsList.warningsCountError);
-        return false;
-    }
-};
-
-var addError = function (network, message) {
-    var errorsCount = network.errors.length;
-    var MAX_ERRORS = 20;
-    if (errorsCount < MAX_ERRORS) {
-        addMessageToArray(network.errors, message);
-    } else {
-        addMessageToArray(network.errors, errorList.errorsCountError);
-        return false;
-    }
-};
-
-var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
-  // Run through the source genes and check if the gene in slot i is the same as the one next to it
-    for (var i = 0; i < sourceGenes.length - 1; i++) {
-        if (sourceGenes[i] === sourceGenes[i + 1]) {
-            errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
-        }
-    }
-  // Run through the target genes and check if the gene in slot j is the same as the one next to it
-    for (var j = 0; j < targetGenes.length - 1; j++) {
-        if (targetGenes[j] === targetGenes[j + 1]) {
-            errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
-        }
-    }
-};
-
-// This is the massive list of errors. Yay!
-// The graph will not load if an error is detected.
-
-var errorList = {
-    missingNetworkError: {
-        errorCode: "MISSING_NETWORK",
-        possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
-        suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " +
-    "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
-    },
-
-    corruptGeneError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "CORRUPT_GENE",
-            possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.",
-            suggestedFix: "Please fix the error and try uploading again."
-        };
-    },
-
-    missingValueError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "MISSING_VALUE",
-            possibleCause: "The value in the cell " + colLetter + rowNum + " in the adjacency matrix appears to have a missing value.",
-            suggestedFix: "Please ensure that all cells have a value, then upload the file again."
-        };
-    },
-
-    duplicateGeneError: function(geneType, geneName) {
-        return {
-            errorCode: "DUPLICATE_GENE",
-            possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
-            suggestedFix: "Please remove the duplicate gene and submit again."
-        };
-    },
-
-    dataTypeError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "INVALID_CELL_DATA_TYPE",
-            possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
-            suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
-        };
-    },
-
-    emptyRowError: function (row) {
-        var rowNum = row + 1;
-        return {
-            errorCode: "EMPTY_ROW",
-            possibleCause: "Row " + rowNum + " does not contain any data.",
-            suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " +
-                    "Also, please ensure that no extraneous data is outside of the matrix, " +
-                    "as this may cause this error."
-        };
-    },
-
-    outsideCellError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "EMPTY_CELL",
-            possibleCause: "The cell at " + colLetter + rowNum + " contains data that is outside the matrix.",
-            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" +
-                    " the matrix is "
-        };
-    },
-    errorsCountError: {
-        errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This network has over 20 errors.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-    "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-    "further errors detected. As a general approach for fixing the errors, consider copying and " +
-    "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-    },
-
-    unknownError: {
-        errorCode: "UNKNOWN_ERROR",
-        possibleCause: "An unexpected error occurred.",
-        suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
-    }
-
-};
-
-// Currently only going to number 76 because currently the network errors out at 75+ genes.
-var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
-    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
-    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
-    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
-    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
-    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
-    74:"BV", 75:"BW", 76:"BX"};
-
-
-// This is the list of warnings.
-// The graph will still load if warnings are detected, but these will be reported to the user.
-
-
-var warningsList = {
-    missingSourceGeneWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "MISSING_SOURCE",
-            errorDescription: "A source gene name is missing in cell " + colLetter + rowNum + "."
-        };
-    },
-
-    missingTargetGeneWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "MISSING_TARGET",
-            errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
-        };
-    },
-
-    invalidMatrixDataWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "INVALID_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
-        };
-    },
-
-    randomDataWarning: function (type, row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "RANDOM_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
-        };
-    },
-
-    emptyRowWarning: function (row) {
-        var rowNum = row + 1;
-        return {
-            warningCode: "EMPTY_ROW",
-            errorDescription: "Row " + rowNum + " was found to contain no data."
-        };
-    },
-
-    networkSizeWarning: function (genesLength, edgesLength) {
-        return {
-            warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
-        };
-    },
-
-    incorrectlyNamedSheetWarning: function() {
-        return {
-            warningCode: "INCORRECTLY_NAMED_SHEET",
-            errorDescription: "The uploaded file appears to contain a weighted network, but contains no 'network_optimized_weights' sheet. A weighted network must be contained in a sheet called 'network_optimized_weights' in order to be drawn as a weighted graph. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
-        };
-    }
-};
+*/
 
 module.exports = function (app) {
     if (app) {

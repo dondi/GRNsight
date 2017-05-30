@@ -68,7 +68,7 @@ var warningsList = {
             errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength +
             " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
         };
-    }
+    },
 };
 
 var errorList = {
@@ -147,7 +147,6 @@ var errorList = {
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
 };
-
 var addError = function (network, message) {
     var errorsCount = network.errors.length;
     var MAX_ERRORS = 20;
@@ -158,7 +157,6 @@ var addError = function (network, message) {
         return false;
     }
 };
-
 var addWarning = function (network, message) {
     var warningsCount = network.warnings.length;
     var MAX_WARNINGS = 75;
