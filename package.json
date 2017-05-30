@@ -1,6 +1,6 @@
 {
   "name": "grnsight-beta",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "private": true,
   "description": "Web app and service for visualizing models of gene regulatory networks",
   "directories": {
