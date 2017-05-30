@@ -67,10 +67,11 @@ describe("warnings-adjacency-matrix-modifications", function () {
         });
     });
 
+    // here...
     describe('missing-column-end', function () {
         it('no warnings', function () {
-            test.noWarnings('test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx');
-            test.noWarnings('test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx');
+            test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
+            test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx");
         });
     });
 
@@ -131,11 +132,18 @@ describe("warnings-adjacency-matrix-modifications", function () {
     });
 
     describe("value-replaced-w-spaces", function () {
-        it("1 invalid data warning each", function () {
+        it("1 invalid data warning for the top two", function () {
             test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-both-output.xlsx", 1);
             test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx", 1);
             test.noWarnings("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-only-input.xlsx");
             test.noWarnings("test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx");
         });
     });
+
+    describe("sheet-named-incorrectly", function () {
+        it("should return a wrong name warning", function () {
+            test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-network.xlsx", 25);
+        });
+    });
+
 });

@@ -1,6 +1,6 @@
 {
   "name": "grnsight-beta",
-  "version": "2.1.5",
+  "version": "2.1.7",
   "private": true,
   "description": "Web app and service for visualizing models of gene regulatory networks",
   "directories": {
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "chai": "1.10.0",
-    "eslint": "3.19.0",
+    "eslint": "^3.19.0",
     "istanbul": "0.4.5",
     "jquery-extend": "2.0.3",
     "mocha": "2.5.3",
