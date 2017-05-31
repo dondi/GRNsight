@@ -341,7 +341,7 @@ var parseSheet = function(sheet) {
                                                 currentLink.stroke = "DarkTurquoise";
                                                 network.negativeWeights.push(currentLink.value);
                                             }
-                                        } else if (network.sheetType === "unweighted") {
+                                          } else if (network.sheetType === "unweighted") {
                                             currentLink.type = "arrowhead";
                                             currentLink.stroke = "black";
                                             if (currentLink.value !== 1) {
