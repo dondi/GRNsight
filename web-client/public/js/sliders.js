@@ -170,4 +170,4 @@ var graySlider = document.getElementById('grayThresholdInput')
 function outputUpdate(val) {
   //val = Math.round(val * 100) + '%';
 	document.querySelector('#grayThresholdValue').value = val;
-}
+} 
