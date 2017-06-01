@@ -67,7 +67,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scale.linear()
-    .domain(normalization && normMax > 0 ? [0, normMax] : d3.extent(allWeights))
+    .domain(normalization && normMax > 0 ? [0, normMax] : d3.max(allWeights))
     .range([2, 14])
     .clamp(true);
 
