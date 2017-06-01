@@ -273,9 +273,9 @@ html
             input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
             label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
           div(class='weightedGraphOptions hidden')
-            p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor:
+            p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
+            p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
             input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
-            p(class='forceVal') &nbsp; 0.0001 - 1000
             div(id='btn-side')
               button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
               button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
