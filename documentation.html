@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 5/11/17
+modified: 5/31/17
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small- to medium-scale gene regulatory networks.
 ---
           <p id="pageTitle">Documentation</p>
@@ -576,7 +576,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                               The thickness of the edge will vary based on the magnitude of the absolute value of the weight.  Larger magnitudes will have thicker edges and smaller magnitudes will have thinner edges.  The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1).
                             </li>
                             <li>
-                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene.
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene.
                             </li>
                             <li>
                               For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
@@ -648,7 +648,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                       <div id="bounding_box" class="panel-collapse collapse">
                         <div class="panel-body">
                           <p>
-                            The bounding box can be changed between three different sizes, or fit to the available space in the window. The initial default size that best fits the available space on the screen is selected when GRNsight is loaded, though this setting can be changed at any time. As the network loads, it will by default expand the bounding box outwards until the force graph parameters have fully been applied. The full size of the expanded graph can be seen using zooming or scrolling. The graph can be zoomed using the mouse wheel, as well as the on-screen zoom slider. The graph can be scrolled by clicking and draggong, or by using the arrow buttons. Should the graph go off-screen, the sun button in the center of the arrow buttons will center the graph. Choosing the "Restrict Graph to Viewport" option will prevent this expansion, and revert GRNsight to the behavior seen in versions before v2.0.20. The available space in the bounding box on restricted graphs will vary based on the size of the viewport, and will be indicated by a light grey border that can be seen upon zooming out. Note that if the graph is being restricted to the viewport, it will not be able to be scrolled past the visible area of the viewport. It also will not be able to be zoomed in past the bounding box.
+                            The bounding box can be changed between three different sizes, or fit to the available space in the window. The initial default size that best fits the available space on the screen is selected when GRNsight is loaded, though this setting can be changed at any time. As the network loads, it will by default expand the bounding box outwards until the force graph parameters have fully been applied. The full size of the expanded graph can be seen using zooming or scrolling. The graph can be zoomed using the mouse wheel, as well as the on-screen zoom slider. The graph can be scrolled by clicking and draggong, or by using the arrow buttons. Should the graph go off-screen, the sun button in the center of the arrow buttons will center the graph. Choosing the "Restrict Graph to Viewport" option will prevent this expansion, and revert GRNsight to the behavior seen in versions before v2.0.20. The available space in the bounding box on restricted graphs will vary based on the size of the viewport, and will be indicated by a light gray border that can be seen upon zooming out. Note that if the graph is being restricted to the viewport, it will not be able to be scrolled past the visible area of the viewport. It also will not be able to be zoomed in past the bounding box.
                           </p>
                         </div>
                       </div>
@@ -734,7 +734,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                             </li>
 
                             <li>
-                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored grey to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
                             </li>
 
                             <li>
@@ -742,7 +742,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                             </li>
 
                             <li>
-                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and grey representing no significant change in expression relative to the control).  This feature has not yet been implemented in GRNsight, but is currently under development for version 2.
+                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and gray representing no significant change in expression relative to the control).  This feature has not yet been implemented in GRNsight, but is currently under development for version 2.
                             </li>
                           </ul>
                         </div>
