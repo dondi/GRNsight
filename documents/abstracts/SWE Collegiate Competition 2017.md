@@ -1,6 +1,6 @@
 Abstract (500 words)
 
-Title- GRNsight v2: a web app for visualizing small gene regulatory networks
+**GRNsight v2: a web application for visualizing models of small gene regulatory networks**
 
 Authors - Eileen J. Choe, Nicole A. Anguiano, Anindita Varshneya, Mihir Samdarshi, Yeon-Soo Shin, Edward B. Bachoura, John David N. Dionisio, and Kam D. Dahlquist
 
