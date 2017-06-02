@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 5/16/17
+modified: 6/2/17
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -48,7 +48,7 @@ description: >-
 
                         <div id="compatibilityContent" class="panel-collapse collapse">
                             <div class="panel-body">
-                                GRNsight has been tested with and confirmed to be working in Chrome version 58.0.3029.96 or higher and Firefox version 53.0.1 or higher on Windows 7 and Mac OS X operating systems. It may not work with other browsers, versions, or operating systems.
+                                GRNsight has been tested with and confirmed to be working in Chrome version 58.0.3029.110 (64-bit) or higher and Firefox version 53.0.1 or higher on Windows 7 and Mac OS X operating systems. It may not work with other browsers, versions, or operating systems.
                             </div>
                         </div>
                     </div>
@@ -65,6 +65,47 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
+
+                                  <div class="panel panel-default">
+                                      <div class="panel-heading">
+                                          <p class="panel-title aboutHeaders">
+                                              <a href="#v2_1_11Content" data-toggle="collapse">
+                                                  GRNsight v2.1.11
+                                              </a>
+                                          </p>
+                                      </div>
+
+                                      <div id="v2_1_11Content" class="panel-collapse collapse">
+                                          <div class="panel-body">
+                                              GRNsight v2.1.11 includes the following new features and bug fixes:
+                                              <ul>
+                                                  <li>Improvements were made to the zoom functionality, including:</li>
+                                                    <ul>
+                                                      <li>Zoom now originates from the center of the graph</li>
+                                                      <li>Zoom factor is now annotated on zoom slider</li>
+                                                      <li>A vertical bar on the zoom slider indicates where the 100% zoom level is</li>
+                                                      <li>Mousewheel zoom was disabled</li>
+                                                      <li>Various bugs were fixed</li>
+                                                    </ul>
+                                                  <li>The user can now customize the normalization factor which controls how the thicknesses of the edges are determined based on the weight values or reset it back to the default value for that graph</li>
+                                                    <ul>
+                                                      <li>The user can also set the threshold upon which a weighted edge is colored gray using a slider</li>
+                                                    </ul>
+                                                  <li>Additional tests were added:</li>
+                                                    <ul>
+                                                      <li>Syntactic tests for malformed Simple Interaction Format (.sif) files were completed which return errors to the user if an incorrectly formatted SIF file is imported into GRNsight</li>
+                                                      <li>The routine that checks for syntactic errors in SIF and GraphML files was integrated with the semantic checker routine that looks for error common to all file formats that GRNsight supports</li>
+                                                      <li>Tests for incorrectly named Excel worksheets were added</li>
+                                                      <li>GRNsight now returns an error if a blank Excel, SIF , or GraphML file is uploaded</li>
+                                                    </ul>
+                                                  <li>An automatic client-side test generator was created that generates a document that can be followed by a user to systematically test specific combinations of user interface functions</li>
+                                                  <li>Additional bugs were fixed</li>
+                                                  <li>Code quality was improved by the use of ESLint</li>
+                                              </ul>
+                                          </div>
+                                      </div>
+                                  </div>
+
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
@@ -73,7 +114,6 @@ description: >-
                                                 </a>
                                             </p>
                                         </div>
-
                                         <div id="v2_0_20Content" class="panel-collapse collapse">
                                             <div class="panel-body">
                                                 GRNsight v2.0.20 includes the following new features and bug fixes:
