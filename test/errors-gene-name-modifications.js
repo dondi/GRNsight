@@ -4,121 +4,121 @@
 var test = require("./test");
 // var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
-describe("errors-gene-name-modifications", function() {
-    describe("duplicate-gene-side-and-top", function() {
-        it("should return 2 duplicate gene errors", function() {
+describe("errors-gene-name-modifications", function () {
+    describe("duplicate-gene-side-and-top", function () {
+        it("should return 2 duplicate gene errors", function () {
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-and-top-input.xlsx", 2);
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-and-top-output.xlsx", 2);
         });
     });
 
-    describe("duplicate-gene-side-and-top-nonadjacent", function() {
-        it("should return 2 duplicate gene errors", function() {
+    describe("duplicate-gene-side-and-top-nonadjacent", function () {
+        it("should return 2 duplicate gene errors", function () {
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-and-top-nonadjacent-input.xlsx", 2);
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-and-top-nonadjacent-output.xlsx", 2);
         });
     });
 
-    describe("duplicate-gene-side", function() {
-        it("should return 1 duplicate gene error", function() {
+    describe("duplicate-gene-side", function () {
+        it("should return 1 duplicate gene error", function () {
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-input.xlsx", 1);
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-output.xlsx", 1);
         });
     });
 
-    describe("duplicate-gene-side-nonadjacent", function() {
-        it("should return 1 duplicate gene error", function() {
+    describe("duplicate-gene-side-nonadjacent", function () {
+        it("should return 1 duplicate gene error", function () {
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-nonadjacent-input.xlsx", 1);
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-side-nonadjacent-output.xlsx", 1);
         });
     });
 
-    describe("duplicate-gene-top", function() {
-        it("should return 1 duplicate gene error", function() {
+    describe("duplicate-gene-top", function () {
+        it("should return 1 duplicate gene error", function () {
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-top-input.xlsx", 1);
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-top-output.xlsx", 1);
         });
     });
 
-    describe("duplicate-gene-top-nonadjacent", function() {
-        it("should return 1 duplicate gene error", function() {
+    describe("duplicate-gene-top-nonadjacent", function () {
+        it("should return 1 duplicate gene error", function () {
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-top-nonadjacent-input.xlsx", 1);
             test.duplicateGeneError("test-files/gene-name-modifications/duplicate-gene-top-nonadjacent-output.xlsx", 1);
         });
     });
 
-    describe("long-gene-name", function() {
-        it("should return 1 long gene name error", function() {
+    describe("long-gene-name", function () {
+        it("should return 1 long gene name error", function () {
             test.invalidGeneLengthError("test-files/gene-name-modifications/long-gene-name-input.xlsx", 1);
             test.invalidGeneLengthError("test-files/gene-name-modifications/long-gene-name-output.xlsx", 1);
         });
     });
 
-    describe("mismatched-case-related", function() {
-        it("should not return any errors", function() {
+    describe("mismatched-case-related", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/mismatched-case-related-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/mismatched-case-related-output.xlsx");
         });
     });
 
-    describe("mismatched-case-related-input", function() {
-        it("should return source gene capitalization", function() {
+    describe("mismatched-case-related-input", function () {
+        it("should return source gene capitalization", function () {
             test.checkForGene("ace2", 1, "test-files/gene-name-modifications/mismatched-case-related-input.xlsx");
             test.checkForGene("ACE2", 0, "test-files/gene-name-modifications/mismatched-case-related-input.xlsx");
         });
     });
 
-    describe("mismatched-case-related-output", function() {
-        it("should return source gene capitalization", function() {
+    describe("mismatched-case-related-output", function () {
+        it("should return source gene capitalization", function () {
             test.checkForGene("ace2", 1, "test-files/gene-name-modifications/mismatched-case-related-output.xlsx");
             test.checkForGene("ACE2", 0, "test-files/gene-name-modifications/mismatched-case-related-output.xlsx");
         });
     });
 
-    describe("mismatched-case-unrelated", function() {
-        it("should not return any errors", function() {
+    describe("mismatched-case-unrelated", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx");
         });
     });
 
-    describe("mismatched-case-unrelated-input", function() {
-        it("should return source gene capitalization", function() {
+    describe("mismatched-case-unrelated-input", function () {
+        it("should return source gene capitalization", function () {
             test.checkForGene("abf1", 1, "test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx");
             test.checkForGene("ABF1", 0, "test-files/gene-name-modifications/mismatched-case-unrelated-input.xlsx");
         });
     });
 
-    describe("mismatched-case-related-output", function() {
-        it("should return source gene capitalization", function() {
+    describe("mismatched-case-related-output", function () {
+        it("should return source gene capitalization", function () {
             test.checkForGene("abf1", 1, "test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx");
             test.checkForGene("ABF1", 0, "test-files/gene-name-modifications/mismatched-case-unrelated-output.xlsx");
         });
     });
 
-    describe("missing-gene-name-side", function() {
-        it("should not return any errors", function() {
+    describe("missing-gene-name-side", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/missing-gene-name-side-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/missing-gene-name-side-output.xlsx");
         });
     });
 
-    describe("missing-gene-name-top-and-side", function() {
-        it("should not return any errors", function() {
+    describe("missing-gene-name-top-and-side", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/missing-gene-name-top-and-side-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/missing-gene-name-top-and-side-output.xlsx");
         });
     });
 
-    describe("missing-gene-name-top", function() {
-        it("should not return any errors", function() {
+    describe("missing-gene-name-top", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/missing-gene-name-top-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/missing-gene-name-top-output.xlsx");
         });
     });
 
-    describe("NaN-as-gene-name", function() {
-        it("should not return any errors", function() {
+    describe("NaN-as-gene-name", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/NaN-as-gene-name-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/NaN-as-gene-name-output.xlsx");
         });
@@ -126,8 +126,8 @@ describe("errors-gene-name-modifications", function() {
 
     // Gene Name Modifications - Special Characters
 
-    describe("ampersand", function() {
-        it("should return special character error", function() {
+    describe("ampersand", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/ampersand-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/ampersand-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/ampersand-unrelated-input.xlsx", 1);
@@ -135,8 +135,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("asterisk", function() {
-        it("should return special character error", function() {
+    describe("asterisk", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/asterisk-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/asterisk-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/asterisk-unrelated-input.xlsx", 1);
@@ -144,8 +144,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("at", function() {
-        it("should return special character error", function() {
+    describe("at", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/at-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/at-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/at-unrelated-input.xlsx", 1);
@@ -153,8 +153,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("backwards-slash", function() {
-        it("should return special character error", function() {
+    describe("backwards-slash", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/backwards-slash-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/backwards-slash-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/backwards-slash-unrelated-input.xlsx", 1);
@@ -162,8 +162,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("caret", function() {
-        it("should return special character error", function() {
+    describe("caret", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/caret-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/caret-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/caret-unrelated-input.xlsx", 1);
@@ -171,8 +171,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("close-parentheses", function() {
-        it("should return special character error", function() {
+    describe("close-parentheses", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-parentheses-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-parentheses-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-parentheses-unrelated-input.xlsx", 1);
@@ -180,8 +180,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("close-square-bracket", function() {
-        it("should return special character error", function() {
+    describe("close-square-bracket", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-square-bracket-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-square-bracket-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-square-bracket-unrelated-input.xlsx", 1);
@@ -189,8 +189,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("close-twirly-bracket", function() {
-        it("should return special character error", function() {
+    describe("close-twirly-bracket", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-twirly-bracket-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-twirly-bracket-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/close-twirly-bracket-unrelated-input.xlsx", 1);
@@ -198,8 +198,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("colon", function() {
-        it("should return special character error", function() {
+    describe("colon", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/colon-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/colon-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/colon-unrelated-input.xlsx", 1);
@@ -207,8 +207,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("comma", function() {
-        it("should return special character error", function() {
+    describe("comma", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/comma-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/comma-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/comma-unrelated-input.xlsx", 1);
@@ -216,8 +216,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("dash", function() {
-        it("should not return any errors", function() {
+    describe("dash", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/dash-related-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/dash-related-output.xlsx");
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/dash-unrelated-input.xlsx");
@@ -225,8 +225,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("dollar", function() {
-        it("should return special character error", function() {
+    describe("dollar", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/dollar-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/dollar-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/dollar-unrelated-input.xlsx", 1);
@@ -234,8 +234,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("double-quotes", function() {
-        it("should return special character error", function() {
+    describe("double-quotes", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/double-quotes-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/double-quotes-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/double-quotes-unrelated-input.xlsx", 1);
@@ -243,8 +243,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("equals", function() {
-        it("should return special character error", function() {
+    describe("equals", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/equals-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/equals-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/equals-unrelated-input.xlsx", 1);
@@ -252,8 +252,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("exclamation-point", function() {
-        it("should return special character error", function() {
+    describe("exclamation-point", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/exclamation-point-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/exclamation-point-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/exclamation-point-unrelated-input.xlsx", 1);
@@ -261,8 +261,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("forward-slash", function() {
-        it("should return special character error", function() {
+    describe("forward-slash", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/forward-slash-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/forward-slash-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/forward-slash-unrelated-input.xlsx", 1);
@@ -270,8 +270,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("greater-than", function() {
-        it("should return special character error", function() {
+    describe("greater-than", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/greater-than-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/greater-than-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/greater-than-unrelated-input.xlsx", 1);
@@ -279,8 +279,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("less-than", function() {
-        it("should return special character error", function() {
+    describe("less-than", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/less-than-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/less-than-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/less-than-unrelated-input.xlsx", 1);
@@ -288,8 +288,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("modulo", function() {
-        it("should return special character error", function() {
+    describe("modulo", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/modulo-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/modulo-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/modulo-unrelated-input.xlsx", 1);
@@ -297,8 +297,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("open-parentheses", function() {
-        it("should return special character error", function() {
+    describe("open-parentheses", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-parentheses-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-parentheses-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-parentheses-unrelated-input.xlsx", 1);
@@ -306,8 +306,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("open-square-bracket", function() {
-        it("should return special character error", function() {
+    describe("open-square-bracket", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-square-bracket-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-square-bracket-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-square-bracket-unrelated-input.xlsx", 1);
@@ -315,8 +315,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("open-twirly-bracket", function() {
-        it("should return special character error", function() {
+    describe("open-twirly-bracket", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-twirly-bracket-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-twirly-bracket-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/open-twirly-bracket-unrelated-input.xlsx", 1);
@@ -324,8 +324,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("period", function() {
-        it("should return special character error", function() {
+    describe("period", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/period-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/period-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/period-unrelated-input.xlsx", 1);
@@ -333,8 +333,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("plus-sign", function() {
-        it("should return special character error", function() {
+    describe("plus-sign", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/plus-sign-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/plus-sign-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/plus-sign-unrelated-input.xlsx", 1);
@@ -342,8 +342,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("pound-symbol", function() {
-        it("should return special character error", function() {
+    describe("pound-symbol", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/pound-symbol-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/pound-symbol-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/pound-symbol-unrelated-input.xlsx", 1);
@@ -351,8 +351,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("question-mark", function() {
-        it("should return special character error", function() {
+    describe("question-mark", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/question-mark-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/question-mark-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/question-mark-unrelated-input.xlsx", 1);
@@ -360,8 +360,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("semicolon", function() {
-        it("should return special character error", function() {
+    describe("semicolon", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/semicolon-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/semicolon-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/semicolon-unrelated-input.xlsx", 1);
@@ -369,8 +369,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("single-apostrophe", function() {
-        it("should return special character error", function() {
+    describe("single-apostrophe", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-apostrophe-open-unrelated-input.xlsx", 1);
@@ -378,8 +378,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("single-line", function() {
-        it("should return special character error", function() {
+    describe("single-line", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-line-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-line-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-line-unrelated-input.xlsx", 1);
@@ -387,8 +387,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("single-quote", function() {
-        it("should return special character error", function() {
+    describe("single-quote", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-quote-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-quote-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/single-quote-unrelated-input.xlsx", 1);
@@ -396,8 +396,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("space", function() {
-        it("should return special character error", function() {
+    describe("space", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/space-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/space-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/space-unrelated-input.xlsx", 1);
@@ -405,8 +405,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("tilde", function() {
-        it("should return special character error", function() {
+    describe("tilde", function () {
+        it("should return special character error", function () {
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/tilde-related-input.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/tilde-related-output.xlsx", 1);
             test.specialCharacterError("test-files/gene-name-modifications/special-characters-tests/tilde-unrelated-input.xlsx", 1);
@@ -414,8 +414,8 @@ describe("errors-gene-name-modifications", function() {
         });
     });
 
-    describe("underscore", function() {
-        it("should not return any errors", function() {
+    describe("underscore", function () {
+        it("should not return any errors", function () {
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/underscore-related-input.xlsx");
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/underscore-related-output.xlsx");
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/underscore-unrelated-input.xlsx");

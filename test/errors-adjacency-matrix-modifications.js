@@ -176,7 +176,7 @@ describe("errors-adjacency-matrix-modifications", function () {
             test.noErrors("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-op-only-output.xlsx");
             test.invalidDataTypeError("test-files/adjacency-matrix-modifications/value-replaced-w-spaces-net-only-input.xlsx", 1);
             test.noErrors("test-files/adjacency-matrix-modifications/value-replaced–w-spaces-net-only-output.xlsx");
-      });
+        });
     });
 
     // Adjacency Matrix Modifications - Data Types

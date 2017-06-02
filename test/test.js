@@ -157,7 +157,7 @@ var checkForGene = function (test, frequency, input) {
 var warningsCountError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var warningsCountErrorArray = network.errors.filter(function(x) {
+    var warningsCountErrorArray = network.errors.filter(function (x) {
         return x.errorCode === "WARNINGS_OVERLOAD";
     });
 
@@ -167,7 +167,7 @@ var warningsCountError = function (input, frequency) {
 var errorsCountError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var errorsCountErrorArray = network.errors.filter(function(x) {
+    var errorsCountErrorArray = network.errors.filter(function (x) {
         return x.errorCode === "ERRORS_OVERLOAD";
     });
 
@@ -200,7 +200,7 @@ var noWarnings = function (input) {
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var missingSourceCount = network.warnings.filter(function(x) {
+    var missingSourceCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_SOURCE";
     });
 
@@ -210,7 +210,7 @@ var missingSourceWarning = function (input, frequency) {
 var invalidMatrixDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var invalidDataCount = network.warnings.filter(function(x) {
+    var invalidDataCount = network.warnings.filter(function (x) {
         return x.warningCode === "INVALID_DATA";
     });
 
@@ -220,7 +220,7 @@ var invalidMatrixDataWarning = function (input, frequency) {
 var missingTargetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var missingTargetCount = network.warnings.filter(function(x) {
+    var missingTargetCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_TARGET";
     });
 
@@ -230,7 +230,7 @@ var missingTargetWarning = function (input, frequency) {
 var randomDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var randomDataCount = network.warnings.filter(function(x) {
+    var randomDataCount = network.warnings.filter(function (x) {
         return x.warningCode === "RANDOM_DATA";
     });
 
@@ -240,7 +240,7 @@ var randomDataWarning = function (input, frequency) {
 var emptyRowWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var emptyRowCount = network.warnings.filter(function(x) {
+    var emptyRowCount = network.warnings.filter(function (x) {
         return x.warningCode === "EMPTY_ROW";
     });
 
@@ -250,7 +250,7 @@ var emptyRowWarning = function (input, frequency) {
 var invalidNetworkSizeWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var invalidNetworkSizeCount = network.warnings.filter(function(x) {
+    var invalidNetworkSizeCount = network.warnings.filter(function (x) {
         return x.warningCode === "INVALID_NETWORK_SIZE";
     });
 
@@ -260,7 +260,7 @@ var invalidNetworkSizeWarning = function (input, frequency) {
 var extraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var extraneousDataWarning = network.warnings.filter(function(x) {
+    var extraneousDataWarning = network.warnings.filter(function (x) {
         return x.warningCode === "EXTRANEOUS_DATA";
     });
 
@@ -270,7 +270,7 @@ var extraneousDataWarning = function (input, frequency) {
 var incorrectlyNamedSheetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var incorrectlyNamedSheetWarning = network.warnings.filter(function(x) {
+    var incorrectlyNamedSheetWarning = network.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
 

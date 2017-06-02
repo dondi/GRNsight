@@ -53,3 +53,9 @@ rules:
     - error
   space-before-blocks:
     - error
+  space-before-function-paren:
+    - error
+    - anonymous: 'always'
+  no-trailing-spaces:
+    - error
+

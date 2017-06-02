@@ -68,8 +68,8 @@ describe("warnings-adjacency-matrix-modifications", function () {
     });
 
     // here...
-    describe('missing-column-end', function () {
-        it('no warnings', function () {
+    describe("missing-column-end", function () {
+        it("no warnings", function () {
             test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
             test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx");
         });

@@ -374,7 +374,7 @@ describe ("Import from SIF semantic checker", function () {
         ).to.equal("INVALID_CHARACTER");
     });
 
-    it ("should throw an error for SIF files with no data", function() {
+    it ("should throw an error for SIF files with no data", function () {
         expect(
             importController.sifToGrnsight(emptyFile).errors[0].errorCode
         ).to.equal("EMPTY_NETWORK_ERROR");
@@ -400,7 +400,7 @@ describe ("Import from SIF syntactic checker", function () {
         ).to.equal("SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR");
     });
 
-    it("should generate a warning if the data is comma separated", function() {
+    it("should generate a warning if the data is comma separated", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifCommaSeparated).errors[0].warningCode
         ).to.equal("SIF_FORMAT_WARNING");
@@ -442,7 +442,7 @@ describe ("Import from SIF syntactic checker", function () {
         ).to.equal("SIF_STRAY_DATA_ERROR");
     });
 
-    it("should throw an error if there is stray data for unweighted networks", function() {
+    it("should throw an error if there is stray data for unweighted networks", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithStrayData).errors[0].errorCode
         ).to.equal("SIF_STRAY_DATA_ERROR");
