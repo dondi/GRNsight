@@ -6,6 +6,9 @@ body
 p
   margin: 0
 
+.zoomLabel
+  font-size: 9px
+
 .submission
   margin-left: 10px
 
@@ -54,8 +57,11 @@ p
 .zoomCenter
   position:absolute
   width: 2px
+  z-index: -1;
   background-color: #AAA
-  height: 20px
+  height: 25.5px
+  left: 59.5px
+  top: 148.5px
 
 .containerS
   width: 1104px
@@ -131,6 +137,7 @@ nav.navbar.navbar-default
 
 .forceVal
   font-size: 12px
+  display: inline-block
 
 .dropdown-menu > li > a:hover
   background-color: #dfebe5
@@ -224,8 +231,7 @@ text.weight.visible
 .sideHeader
   line-height: 5px;
   font-weight: bold;
-  font-size: 14.5px;
-  margin-left: 17px;
+  font-size: 13px;
   margin-bottom: 10px;
   margin-top: 10px;
 
@@ -233,13 +239,27 @@ path.mousezone
     opacity: 0.0
 
 .normalization-form
-    margin-left: 35px;
+    width: 50px;
     margin-bottom: 8px;
 
 .cursorGrab
-    cursor: -webkit-grab
+    cursor: -webkit-grab;
     cursor: grab;
 
 .cursorGrabbing
-    cursor: -webkit-grabbing
+    cursor: -webkit-grabbing;
     cursor: grabbing;
+
+.btn-norm
+    display: inline-block;
+    width: 100px;
+
+#normalization-button
+    margin-right: 5px;
+
+#grayLabel
+    margin-top: 10px;
+
+#normLabel
+    margin-bottom: 10px;
+    display: inline-block;

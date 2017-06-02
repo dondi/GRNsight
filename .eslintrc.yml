@@ -1,0 +1,63 @@
+env:
+  browser: true
+  node: true
+  jquery: true
+  mocha: true
+extends: 'eslint:recommended'
+rules:
+  indent:
+    - error
+    - 4
+  linebreak-style:
+    - error
+    - unix
+  quotes:
+    - error
+    - double
+  semi:
+    - error
+    - always
+  block-scoped-var:
+    - error
+  curly:
+    - error
+  eqeqeq:
+    - error
+  no-use-before-define:
+    - error
+  camelcase:
+    - error
+  no-multi-assign:
+    - error
+  one-var:
+    - error
+    - never
+  func-call-spacing:
+    - error
+  func-style:
+    - error
+  keyword-spacing:
+    - error
+  brace-style:
+    - error
+  comma-spacing:
+    - error
+  max-len:
+    - error
+    - 120
+  no-tabs:
+    - error
+  no-console:
+    - off
+  space-infix-ops:
+    - error
+  spaced-comment:
+    - error
+  space-before-blocks:
+    - error
+  space-before-function-paren:
+    - error
+    - anonymous: 'always'
+  no-trailing-spaces:
+    - error
+
