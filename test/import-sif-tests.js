@@ -361,20 +361,20 @@ describe("Import from SIF", function () {
 
 });
 
-describe ("Import from SIF semantic checker", function () {
-    it ("should be disabled when syntactic errors are detected", function () {
+describe("Import from SIF semantic checker", function () {
+    it("should be disabled when syntactic errors are detected", function () {
         expect(
             importController.sifToGrnsight(sifWithSemanticAndSyntacticErrors).errors.length
         ).to.equal(1);
     });
 
-    it ("should be enabled when there are no syntactic errors", function () {
+    it("should be enabled when there are no syntactic errors", function () {
         expect(
             importController.sifToGrnsight(sifWithSemanticErrorOnly).errors[0].errorCode
         ).to.equal("INVALID_CHARACTER");
     });
 
-    it ("should throw an error for SIF files with no data", function () {
+    it("should throw an error for SIF files with no data", function () {
         expect(
             importController.sifToGrnsight(emptyFile).errors[0].errorCode
         ).to.equal("EMPTY_NETWORK_ERROR");
@@ -382,9 +382,9 @@ describe ("Import from SIF semantic checker", function () {
 
 });
 
-describe ("Import from SIF syntactic checker", function () {
+describe("Import from SIF syntactic checker", function () {
 
-    it ("should produce no warnings or errors for correct data", function () {
+    it("should produce no warnings or errors for correct data", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSif).errors.length
         ).to.equal(0);
@@ -430,7 +430,7 @@ describe ("Import from SIF syntactic checker", function () {
         ).to.equal("SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR");
     });
 
-    it ("should throw an error if there is stray data in the 3-column format", function () {
+    it("should throw an error if there is stray data in the 3-column format", function () {
         expect(
             importController.sifToGrnsight(strayDataIn3ColumnFormat).errors[0].errorCode
         ).to.equal("SIF_STRAY_DATA_ERROR");
@@ -454,7 +454,7 @@ describe ("Import from SIF syntactic checker", function () {
         ).to.equal("SIF_STRAY_DATA_ERROR");
     });
 
-    it ("should accept trivially tabbed networks", function () {
+    it("should accept trivially tabbed networks", function () {
         expect(
             importController.sifToGrnsight(triviallyTabbedUnweightedNetwork)
         ).to.deep.equal(expectedUnweightedNetwork);

@@ -32,6 +32,8 @@ rules:
   one-var:
     - error
     - never
+  func-call-spacing:
+    - error
   func-style:
     - error
   keyword-spacing:
