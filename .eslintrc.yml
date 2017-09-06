@@ -8,9 +8,6 @@ rules:
   indent:
     - error
     - 4
-  linebreak-style:
-    - error
-    - unix
   quotes:
     - error
     - double
@@ -60,4 +57,3 @@ rules:
     - anonymous: 'always'
   no-trailing-spaces:
     - error
-
