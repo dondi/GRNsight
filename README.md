@@ -1,6 +1,8 @@
 GRNsight
 ========
 
+[![Build Status](https://travis-ci.org/eileenchoe/GRNsight.svg?branch=beta)](https://travis-ci.org/eileenchoe/GRNsight)
+
 http://dondi.github.io/GRNsight/
 
 GRNsight is an open source web application and service for visualizing models of small- to medium-scale gene regulatory networks. GRNsight is a joint project of the [Loyola Marymount University](http://www.lmu.edu) Bioinformatics and Biomathematics Groups, headed by [Dr. Kam Dahlquist](http://myweb.lmu.edu/kdahlqui/index.htm), [Dr. John David N. Dionisio](http://myweb.lmu.edu/dondi/), and [Dr. Ben G. Fitzpatrick](http://myweb.lmu.edu/bfitzpatrick/). Undergraduate students initiated the development of GRNsight in Spring 2014, including Britain Southwick (Computer Science, ’14) and Nicole Anguiano (Computer Science, ’16), with consultation from Katrina Sherbina (Biomathematics, ’14). For current contributors, please see our [People](http://dondi.github.io/GRNsight/people.html) page.
