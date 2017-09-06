@@ -66,7 +66,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
-    var totalScale = d3.scale.linear()
+    var totalScale = d3.scaleLinear()
     .domain(normalization && normMax > 0 ? [0, normMax] : d3.extent(allWeights))
     .range([2, 14])
     .clamp(true);
@@ -89,7 +89,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         return Math.round(totalScale(Math.abs(edge.value)));
     };
 
-    var force = d3.layout.force()
+    var force = d3.forceSimulation()
+    // d3 no longer supports .size() changed to x.x and y.y (https://github.com/d3/d3/blob/master/CHANGES.md#forces-d3-force)
+    // Documentation for v4 force: https://github.com/d3/d3-force/blob/master/README.md
       .size([width, height])
       .on("tick", tick)
       .linkDistance($("#linkDistInput").val())
@@ -104,7 +106,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .on("dragstart", dragstart);
 
     var manualZoom = false;
-    var zoom = d3.behavior.zoom()
+    var zoom = d3.zoom()
     .center([width / 2, height / 2])
     .scaleExtent([minimumScale, maximumScale])
     .on("zoom", zoomed);
