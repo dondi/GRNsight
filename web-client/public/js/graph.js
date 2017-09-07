@@ -1049,11 +1049,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     var largeArc = 0;  // 1 or 0
                     var sweep = 1;     // 1 or 0
                     var offset = parseFloat(d.strokeWidth);
+                    var nodeShift = 1.033;
 
           // Self edge.
                     if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-                        x1 = d.source.x + (d.source.textWidth);
+                        x1 = d.source.x + (d.source.textWidth) * nodeShift;
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -1070,7 +1071,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-                        x2 = d.source.x + d.source.textWidth / 1.2;
+                        if(d.source.textWidth > 135){
+                            nodeShift += 0.07;
+                        }
+                        x2 = d.source.x + d.source.textWidth / 1.2 * nodeShift;
                         y2 = d.source.y + nodeHeight;
 
                         if (d.value < 0 && colorOptimal) {
