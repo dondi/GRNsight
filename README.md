@@ -1,5 +1,7 @@
 GRNsight
 ========
+[![Build Status](https://travis-ci.org/dondi/GRNsight.svg?branch=beta)](https://travis-ci.org/dondi/GRNsight)
+[![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=beta)](https://coveralls.io/github/dondi/GRNsight?branch=beta)
 
 http://dondi.github.io/GRNsight/
 
