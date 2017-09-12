@@ -1,5 +1,7 @@
 GRNsight
 ========
+[![Build Status](https://travis-ci.org/dondi/GRNsight.svg?branch=beta)](https://travis-ci.org/dondi/GRNsight)
+[![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=beta)](https://coveralls.io/github/dondi/GRNsight?branch=beta)
 
 [![Build Status](https://travis-ci.org/eileenchoe/GRNsight.svg?branch=beta)](https://travis-ci.org/eileenchoe/GRNsight)
 [![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=master)](https://coveralls.io/github/dondi/GRNsight?branch=master)
