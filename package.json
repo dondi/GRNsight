@@ -28,6 +28,7 @@
     "eslint": "^3.19.0",
     "istanbul": "0.4.5",
     "jquery-extend": "2.0.3",
+    "markdown-pdf": "^8.0.0",
     "mocha": "2.5.3",
     "mocha-lcov-reporter": "^1.3.0"
   },

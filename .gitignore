@@ -10,6 +10,7 @@ lib-cov
 ~$*.xls
 
 documents/developer_documents/testing_script_generator/GRNsightTestingDocument.md
+documents/developer_documents/testing_script_generator/GRNsightTestingDocument.pdf
 
 pids
 logs

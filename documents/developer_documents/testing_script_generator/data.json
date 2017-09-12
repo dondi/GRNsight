@@ -179,7 +179,7 @@
             "Select \"Fit to Window\"": "The viewport size should automatically be set to the size of the browser window"
         },
         "default": "Keep as Detected",
-        "included": true
+        "included": false
     },
     {
         "title": "Hide/Show Edge Weights",
