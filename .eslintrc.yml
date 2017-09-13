@@ -57,3 +57,7 @@ rules:
     - anonymous: 'always'
   no-trailing-spaces:
     - error
+<<<<<<< HEAD
+=======
+    
+>>>>>>> a259d5aeb768cba10c9996dca1bea6768bd9aa6b
