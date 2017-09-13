@@ -1,5 +1,6 @@
 GRNsight
 ========
+[![DOI](https://zenodo.org/badge/16195791.svg)](https://zenodo.org/badge/latestdoi/16195791)
 [![Build Status](https://travis-ci.org/dondi/GRNsight.svg?branch=beta)](https://travis-ci.org/dondi/GRNsight)
 [![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=beta)](https://coveralls.io/github/dondi/GRNsight?branch=beta)
 
@@ -20,7 +21,3 @@ Documentation on how to use GRNsight is found at https://github.com/dondi/GRNsig
 If you use GRNsight in your work, please cite:
 
 Dahlquist, K.D., Dionisio, J.D.N., Fitzpatrick, B.G., Anguiano, N.A., Varshneya, A., Southwick, B.J., Samdarshi, M. (2016) GRNsight: a web application and service for visualizing models of small- to medium-scale gene regulatory networks. _PeerJ Computer Science_ 2:e85. [DOI: 10.7717/peerj-cs.85](https://doi.org/10.7717/peerj-cs.85).
-
-The DOI for the latest release is:
-
-[![DOI](https://zenodo.org/badge/16195791.svg)](https://zenodo.org/badge/latestdoi/16195791) 
