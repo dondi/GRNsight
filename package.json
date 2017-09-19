@@ -1,6 +1,6 @@
 {
   "name": "grnsight",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Web app and service for visualizing models of gene regulatory networks",
   "directories": {
     "test": "test"
@@ -24,16 +24,19 @@
   },
   "devDependencies": {
     "chai": "1.10.0",
+    "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
     "istanbul": "0.4.5",
     "jquery-extend": "2.0.3",
-    "mocha": "2.5.3"
+    "mocha": "2.5.3",
+    "mocha-lcov-reporter": "^1.3.0"
   },
   "scripts": {
     "test": "mocha --reporter list",
     "start": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\"",
     "coverage": "istanbul cover _mocha",
-    "lint": "eslint **/*.js"
+    "lint": "eslint **/*.js",
+    "coveralls": "npm run coverage -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
