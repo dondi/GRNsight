@@ -1060,7 +1060,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             // Self edge.
                     if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-                        x1 = d.source.x + (d.source.textWidth) * nodeShift;
+                        x1 = d.source.x + (d.source.textWidth) * DEFAULT_NODE_SHIFT;
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -1080,7 +1080,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                         if (d.source.textWidth > SHORT_NODE_LIMIT) {
                             nodeShift += ADDITIONAL_SHIFT;
                         }
-                        x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * nodeShift;
+                        x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
 
                         if (d.value < 0 && colorOptimal) {
