@@ -570,8 +570,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 // Individual offsets for each possible stroke width
                   return ((x1 === x2 && y1 === y2) ?
                   {
-                      2: 9, 3: 8.5, 4: 9, 5: 9, 6: 9, 7: 9,
-                      8: 8.3, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                      2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
+                      8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
                       14: 8.3
                   } : {
                       2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
@@ -583,9 +583,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               .attr("refY", function () {
                   return ((x1 === x2 && y1 === y2) ?
                   {
-                      2: 6.7, 3: 6, 4: 6, 5: 5.5, 6: 5, 7: 5.75,
-                      8: 5.7, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
-                      14: 5.75
+                      2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
+                      8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
+                      14: 6
                   } : {
                       2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
                       8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
@@ -1050,10 +1050,17 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     var sweep = 1;     // 1 or 0
                     var offset = parseFloat(d.strokeWidth);
 
-          // Self edge.
+              // Edge adjustment values when long self-node edges get hidden behind the node.
+                    var DEFAULT_NODE_SHIFT = 1.033;
+                    var SHORT_NODE_LIMIT = 135;
+                    var ADDITIONAL_SHIFT = 0.07;
+                    var END_POINT_ADJUSTMENT = 1.2;
+
+
+            // Self edge.
                     if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-                        x1 = d.source.x + (d.source.textWidth);
+                        x1 = d.source.x + (d.source.textWidth) * DEFAULT_NODE_SHIFT;
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -1070,7 +1077,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-                        x2 = d.source.x + d.source.textWidth / 1.2;
+                        if (d.source.textWidth > SHORT_NODE_LIMIT) {
+                            nodeShift += ADDITIONAL_SHIFT;
+                        }
+                        x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
 
                         if (d.value < 0 && colorOptimal) {
