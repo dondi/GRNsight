@@ -15,7 +15,7 @@
 /* eslint-disable no-unused-vars */
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
-
+    console.log(links);
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
 
@@ -76,8 +76,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // normalization all weights b/w size 2 and size 14
   // if unweighted, weight is 2
     if (sheetType === "unweighted") {
-        totalScale = d3.scale.quantile()
-        .domain(d3.extent(allWeights))
+        totalScale = d3.scaleQuantile()
+        .domain([d3.extent(allWeights)])
         .range(["2"]);
         unweighted = true;
         $(".normalization-form").append("placeholder='unweighted'");
@@ -89,26 +89,36 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         return Math.round(totalScale(Math.abs(edge.value)));
     };
 
-    var force = d3.forceSimulation()
+    var simulation = d3.forceSimulation()
     // d3 no longer supports .size() changed to x.x and y.y (https://github.com/d3/d3/blob/master/CHANGES.md#forces-d3-force)
     // Documentation for v4 force: https://github.com/d3/d3-force/blob/master/README.md
-      .size([width, height])
+      // .size([width, height])
+      // .force("link", d3.forceLink().id(function(d) { return d.id; }))
+      // .force("link", d3.forceLink(+$("#linkDistInput").val()))
+      .force("link", d3.forceLink(+$("#linkDistInput").val()))
+      .force("charge", d3.forceManyBody($("#chargeInput").val()))
+      .force("x", d3.forceX(width / 2))
+      .force("y", d3.forceY(height / 2))
       .on("tick", tick)
-      .linkDistance($("#linkDistInput").val())
-      .charge($("#chargeInput").val())
-      .chargeDistance($("#chargeDistInput").val())
-      .gravity($("#gravityInput").val());
+      // .linkDistance($("#linkDistInput").val())
+      // .charge($("#chargeInput").val())
 
-    var drag = force.drag()
-      .origin(function(d) {
-          return d;
-      })
-      .on("dragstart", dragstart);
+      // .chargeDistance($("#chargeDistInput").val())
+      // .gravity($("#gravityInput").val());
+
+      // TODO: gravity function does not exist now, need to write custom force function for this
+
+    var drag = d3.drag()
+      // .origin(function(d) {
+      //     return d;
+      // })
+      .on("start", dragstart);
 
     var manualZoom = false;
     var zoom = d3.zoom()
-    .center([width / 2, height / 2])
     .scaleExtent([minimumScale, maximumScale])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [weight, height]])
     .on("zoom", zoomed);
 
     var svg = d3.select($container[0]).append("svg")
@@ -314,7 +324,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
           .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
-        force.size([width, height]).resume();
+        simulation
+        .force("x", d3.forceX(width / 2))
+        .force("y", d3.forceY(height / 2))
+        .resume();
     });
 
     d3.selectAll("input[name=viewport]").on("change", function () {
@@ -339,7 +352,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
-        force.size([width, height]).resume();
+        simulation
+        .force("x", d3.forceX(width / 2))
+        .force("y", d3.forceY(height / 2))
+        .resume();
     });
 
     $(window).on("resize", function () {
@@ -399,9 +415,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var weight = svg.selectAll(".weight");
 
 
-    force.nodes(nodes)
-       .links(links)
-       .start();
+    simulation.nodes(nodes);
+    simulation.force("link")
+        .links(links);
+        simulation.restart();
 
     link = link.data(links)
              .enter().append("g")
@@ -979,7 +996,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // Tick only runs while the graph physics are still running. (I.e. when the graph is completely relaxed, tick stops running.)
     function tick() {
         var getSelfReferringEdge = function (node) {
-            return link.select("path")[0].map(function (path) {
+          console.log("HERE: ", link.select("path")["_groups"][0]);
+          // console.log("HERE: ", link.select("path")[0]); // TODO: somehow the path array got stuck in _groups hidden property
+            return link.select("path")["_groups"][0].map(function (path) { // TODO: make this less bad
                 return path.__data__;
             }).filter(function (pathData) {
                 return pathData.source === node && pathData.source === pathData.target;
@@ -1007,7 +1026,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         svg.attr("width", width);
-                        force.size([width, height]).resume();
+                        // force.size([width, height]).resume();
+                        simulation
+                        .force("x", d3.forceX(width / 2))
+                        .force("y", d3.forceY(height / 2))
+                        .resume();
                     }
                 }
                 return d.x = currentXPos;
@@ -1022,7 +1045,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         svg.attr("height", height);
-                        force.size([width, height]).resume();
+                        // force.size([width, height]).resume();
+                        simulation
+                        .force("x", d3.forceX(width / 2))
+                        .force("y", d3.forceY(height / 2))
+                        .resume();
                     }
                 }
                 return d.y = currentYPos;
@@ -1124,6 +1151,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             });
 
         } catch (e) {
+          console.log(e);
             console.warn("Detected invalid node. Moving on to next node.");
         }
     }
@@ -1138,7 +1166,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         node.classed("fixed", d.fixed = true);
     }
 
-    sliderController.addForce(force);
+    sliderController.addForce(simulation);
     sliderController.configureForceHandlers();
 
     $(".startDisabled").removeClass("disabled");
