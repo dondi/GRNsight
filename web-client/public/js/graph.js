@@ -1078,7 +1078,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
                         if (d.source.textWidth > SHORT_NODE_LIMIT) {
-                            nodeShift += ADDITIONAL_SHIFT;
+                            DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
                         }
                         x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
