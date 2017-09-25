@@ -109,6 +109,7 @@ var sliderGroupController = function (sliderArray) {
   this.addForce = function (force) { // make forceParameters into an inputted array
     this.force = force;
     this.forceParameters = [force.linkDistance, force.charge, force.chargeDistance, force.gravity];
+    // this.forceParameters = [ "link", "charge", ...... ]
   };
 
   this.configureForceHandlers = function () {
@@ -151,6 +152,7 @@ var sliderGroupController = function (sliderArray) {
   this.resetForce = function () {
     for(var i = 0; i < this.numberOfSliders; i++) {
       this.forceParameters[i](this.sliders[i].defaultVal);
+      // this.simulation.force(this.forceParameters[i], this.sliders[i].defaultVal)
       this.restartForce(this.sliders[i].needsAppendedZeros);
     }
   };
@@ -170,4 +172,4 @@ var graySlider = document.getElementById('grayThresholdInput')
 function outputUpdate(val) {
   //val = Math.round(val * 100) + '%';
 	document.querySelector('#grayThresholdValue').value = val;
-} 
+}
