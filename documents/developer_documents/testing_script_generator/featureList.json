@@ -12,7 +12,8 @@
             "Demo Menu -> Demo #3": "lay out an unweighted network graph from Demo #3",
             "Demo Menu -> Demo #4": "lay out a weighted network graph from Demo #4"
         },
-        "included": true
+        "included": true,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "File Menu -> Reload",
@@ -21,7 +22,8 @@
             "Select": "center, zoom to 100%, and reapply the force graph parameters",
             "NULL": "not change"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "File Menu -> Export Data",
@@ -33,7 +35,8 @@
             "Select \"To Unweighted GraphML\"": "export an unweighted GraphML file from the graph currently loaded",
             "Select \"To Weighted GraphML\"": "export a weighted GraphML file from the graph currently loaded"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "File Menu -> Print",
@@ -42,7 +45,8 @@
             "Select": "open the Print Dialogue Box",
             "NULL": "do nothing"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Edit Menu -> Preferences",
@@ -51,7 +55,8 @@
             "Select \"Format edges based on optimized weight parameters\"": "format edges based on optimized weight parameters",
             "Select \"Default to black edges with regular arrowheads\"": "default to black edges with regular arrowheads"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Format Menu",
@@ -60,7 +65,8 @@
             "Check \"Lock Force Graph Parameters\"": "be disabled.",
             "Uncheck \"Lock Force Graph Parameters\"": "be enabled."
         },
-        "included": true
+        "included": true,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Format Menu",
@@ -69,7 +75,8 @@
             "NULL": "",
             "Select \"Reset Force Graph Parameters\"": "revert to the default values, if Lock Force Graph Parameters is unchecked"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Format Menu",
@@ -78,7 +85,8 @@
             "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.",
             "NULL": "remain the same."
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Format Menu",
@@ -88,7 +96,8 @@
             "Select \"Always Show Edge Weights\"": "always be visible.",
             "Select \"Never Show Edge Weights\"": "not be displayed."
         },
-        "included": true
+        "included": true,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Help Menu",
@@ -99,7 +108,8 @@
             "Select \"GRNsight Wiki\"": "open the GRNsight wiki page",
             "Select \"About GRNsight\"": "open the About GRNsight page"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Force Graph Parameter Sliders",
@@ -115,7 +125,8 @@
             "Increase Gravity": "The graph's nodes should more tightly cluster together towards the center of the graph if Lock Force Graph Parameters is unchecked",
             "Decrease Gravity": "The graph's nodes should expand away from the center of the graph if Lock Force Graph Parameters is unchecked"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Lock Force Graph Parameters CheckBox",
@@ -124,7 +135,8 @@
             "Check": "be disabled.",
             "Uncheck": "be enabled."
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Reset Force Graph Parameters Button",
@@ -133,7 +145,8 @@
             "Click": "revert to the default values, if Lock Force Graph Parameters is unchecked.",
             "NULL": "remain at the same spot."
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Undo Reset Button",
@@ -142,7 +155,8 @@
             "Click": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.",
             "NULL": "remain the same."
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title" : "Restrict Graph to Viewport",
@@ -151,7 +165,8 @@
             "Check": "always be contained within the viewport.",
             "Uncheck": "be allowed to extend past the viewport"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Viewport Size",
@@ -163,7 +178,8 @@
             "Select \"Large\"": "The viewport size should be set to large",
             "Select \"Fit to Window\"": "The viewport size should automatically be set to the size of the browser window"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Hide/Show Edge Weights",
@@ -173,7 +189,8 @@
             "Select \"Always Show Edge Weights\"": "All edge weights should always be visible.",
             "Select \"Never Show Edge Weights\"": "No edge weights should be visible."
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
         "title": "Set Normalization Factor",
@@ -182,7 +199,8 @@
             "NULL": "do nothing",
             "Enter a Number in the Box and Click \"Set Normalization Factor\" button": "reload with the new normalization factor applied to its edge weight thicknesses"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
         "title": "Reset Normalization Parameters Button",
@@ -191,7 +209,8 @@
             "NULL": "do nothing",
             "Click": "reset to its default normalization factor and reload the graph"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
         "title": "Gray Threshold Slider",
@@ -200,7 +219,8 @@
             "NULL": "do nothing",
             "Change the Grey Threshold Value": "edges that fall below the threshold value colored gray"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
         "title": "D-Pad Control",
@@ -214,7 +234,8 @@
             "Click Center Button": "move to the center of the bounding box (note that it is not the same thing as the viewport"
         },
         "conditional": "if \"Restrict Graph to Viewport\" is Unchecked.",
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Zoom Slider",
@@ -224,6 +245,7 @@
             "Increase Zoom Level": "zoom in (get larger)",
             "Decrease Zoom Level": "zoom out (get smaller)"
         },
-        "included": false
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     }
 ]

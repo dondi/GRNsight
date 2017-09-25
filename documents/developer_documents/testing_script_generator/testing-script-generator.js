@@ -5,9 +5,10 @@
 
 var fs = require("fs");
 var markdownpdf = require("markdown-pdf");
+var moment = require("moment");
 
 // Imports JSON data from data.json
-var grnsightOptions = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+var grnsightOptions = JSON.parse(fs.readFileSync('featureList.json', 'utf8'));
 
 // Node class for representing each test
 class Node {
@@ -39,6 +40,7 @@ class Node {
 var root = new Node();
 var arrayOfNodes = [root];
 var testDescription = "";
+var availabilityDescription = "";
 
 var addChildren = function (arrayOfNodes, optionKeys, test) {
     var newArrayOfNodes = [];
@@ -84,44 +86,48 @@ grnsightOptions.forEach(function(test) {
     var entry = "|" + test.title + "|";
     var status = test.included ? "YES" : "NO";
     var entry = "|" + status + " | " + test.title + "|";
+    var noGraphLoadedAvailability = test.availability['NoGraphLoaded'] ? "YES": "NO";
+    var weightedGraphLoadedAvailability = test.availability['WeightedGraphLoaded'] ? "YES": "NO";
+    var unweightedGraphLoadedAvailability = test.availability['UnWeightedGraphLoaded'] ? "YES": "NO";
+    var availability = `| ${noGraphLoadedAvailability} | ${weightedGraphLoadedAvailability} | ${unweightedGraphLoadedAvailability} | `
     optionKeys.forEach(function(option) {
         if (option !== "NULL") {
             var result = test.text + " " + test.options[option];
             result = test.conditional ? result + " " +  test.conditional : result;
             testDescription += entry + option +  " | " + result + "|\n";
+            availabilityDescription += `| ${test.title} - ${option} ${availability}\n`
         }
     });
 });
 
 // Generates the markdown document, combining the table with the test listing
 var formatMarkdown = function (arrayOfNodes) {
-    var md = "# GRNsight Client Side Testing Overview";
+    var md = "## GRNsight Client Side Testing Overview";
+    md += "\nLast Updated: " + moment().format("YYYY-MM-DD");
     md += "\n\n";
     md += "| Included in Testing Protocol  | GRNsight Option |  User Action | Result | \n"
     md += "| --------------- | ------ | ------- | ------ | \n"
     md += testDescription;
-    md += "\n# Client Side Tests\n";
+    md += formatFunctionAvailabilityTable();
+    md += "\n## Client Side Tests\n";
     for (var i = 0; i < arrayOfNodes.length; i++) {
-        md += "## Test " + (i + 1) + "\n";
+        md += "### Test " + (i + 1) + "\n";
         md += arrayOfNodes[i].print() + "\n";
     }
     return md;
 }
 
-var formatFunctionAvailabilityTable = function(grnsightOptions) {
-    var md = "# GRNsight Function Availability Table";
+var formatFunctionAvailabilityTable = function() {
+    var md = "\n## GRNsight Function Availability Table";
     md += "\n\n";
-    md += "| GRNsight Function | No Graph Loaded | Unweighted Graph Loaded | Weighted Graph Loaded  | \n";
+    md += "| GRNsight Function | No Graph Loaded | Weighted Graph Loaded | Unweighted Graph Loaded  | \n";
     md += "|  ---------------- | --------------- | ----------------------- | ---------------------- | \n";
-
-    grnsightOptions.forEach(function(option) {
-
-    });
-
+    md += availabilityDescription;
+    return md;
 }
 
 var markdownDocument = formatMarkdown(arrayOfNodes);
-var functionAvailability = formatFunctionAvailabilityTable(grnsightOptions);
+// var functionAvailability = formatFunctionAvailabilityTable();
 
 // Writes over the GRNsightTestingDocument.md file
 fs.writeFile('GRNsightTestingDocument.md', markdownDocument, function (err) {
@@ -129,13 +135,17 @@ fs.writeFile('GRNsightTestingDocument.md', markdownDocument, function (err) {
 });
 
 // Generates the GRNsight Function Availability Markdown file
-fs.writeFile("GRNsightFunctionAvailability.md", functionAvailability, function (err) {
-    if (err) return console.log(err);
-})
+// fs.writeFile("GRNsightFunctionAvailability.md", functionAvailability, function (err) {
+//     if (err) return console.log(err);
+// })
 
 markdownpdf().from("GRNsightTestingDocument.md").to("GRNsightTestingDocument.pdf", function () {
-  console.log("Done")
+  console.log("Created GRNsightTestingDocument.pdf");
 })
+
+// markdownpdf().from("GRNsightFunctionAvailability.md").to("GRNsightFunctionAvailability.pdf", function () {
+//   console.log("Created GRNsightFunctionAvailability.pdf");
+// })
 
 console.log("\nGRNsightTestingDocument.md has been successfully regenerated, and includes " + arrayOfNodes.length + " tests.");
 console.log("Update the wiki by copy/pasting Markdown code to: https://github.com/dondi/GRNsight/wiki/Client-Side-Testing-Document\n")
