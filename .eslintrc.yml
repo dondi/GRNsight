@@ -57,4 +57,3 @@ rules:
     - anonymous: 'always'
   no-trailing-spaces:
     - error
-    
