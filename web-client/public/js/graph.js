@@ -723,7 +723,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     };
 
     function smartPathEnd(d, w, h) {
-        var MINIMUM_DISTANCE = 8;
+    // If target node is left of the source node make the distance larger
+    // If target node is left of the source node and thicker than 9, make the distance even larger
+        var MINIMUM_DISTANCE_LEFT = d.strokeWidth > 10 ? 18 : 14;
+        var MINIMUM_DISTANCE = d.target.centerX < d.source.newX ? MINIMUM_DISTANCE_LEFT : 8;
+    // For arrowheads when target node is to the left of source node
+        var LEFT_ADJUSTMENT = 7;
 
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var globalOffset = parseFloat(d.strokeWidth);
@@ -793,7 +798,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 if (d.type !== "arrowhead") {
                     d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
-                    d.target.newX = d.target.x + w + globalOffset;
+                    d.target.newX = d.target.x + w + globalOffset + LEFT_ADJUSTMENT;
                 }
             }
 
@@ -1078,7 +1083,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
                         if (d.source.textWidth > SHORT_NODE_LIMIT) {
-                            nodeShift += ADDITIONAL_SHIFT;
+                            DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
                         }
                         x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
