@@ -24,8 +24,9 @@ var errorList = {
     missingNetworkError: {
         errorCode: "MISSING_NETWORK",
         possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
-        suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. Please refer to the " +
-        "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' target='_blank'>Documentation page</a> for more information."
+        suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. \
+        Please refer to the " + "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' \
+        target='_blank'>Documentation page</a> for more information."
     },
 
     corruptGeneError: function (row, column) {
@@ -43,12 +44,13 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "MISSING_VALUE",
-            possibleCause: "The value in the cell " + colLetter + rowNum + " in the adjacency matrix appears to have a missing value.",
+            possibleCause: "The value in the cell " + colLetter + rowNum +
+            " in the adjacency matrix appears to have a missing value.",
             suggestedFix: "Please ensure that all cells have a value, then upload the file again."
         };
     },
 
-    duplicateGeneError: function(geneType, geneName) {
+    duplicateGeneError: function (geneType, geneName) {
         return {
             errorCode: "DUPLICATE_GENE",
             possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
@@ -109,7 +111,8 @@ var errorList = {
     unknownError: {
         errorCode: "UNKNOWN_ERROR",
         possibleCause: "An unexpected error occurred.",
-        suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, and attach the spreadsheet you attempted to upload."
+        suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, \
+        and attach the spreadsheet you attempted to upload."
     }
 
 };
@@ -150,7 +153,8 @@ var warningsList = {
         var rowNum = row + 1;
         return {
             warningCode: "RANDOM_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum + ", has a corresponding source and/or target gene that is detected as " + type + "."
+            errorDescription: "The value in cell " + colLetter + rowNum +
+            ", has a corresponding source and/or target gene that is detected as " + type + "."
         };
     },
 
@@ -165,14 +169,18 @@ var warningsList = {
     networkSizeWarning: function (genesLength, edgesLength) {
         return {
             warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength + " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength +
+            " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
         };
     },
 
-    incorrectlyNamedSheetWarning: function() {
+    incorrectlyNamedSheetWarning: function () {
         return {
             warningCode: "INCORRECTLY_NAMED_SHEET",
-            errorDescription: "The uploaded file appears to contain a weighted network, but contains no 'network_optimized_weights' sheet. A weighted network must be contained in a sheet called 'network_optimized_weights' in order to be drawn as a weighted graph. Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+            errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
+             'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
+             'network_optimized_weights' in order to be drawn as a weighted graph. \
+             Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
         };
     }
 };
@@ -185,12 +193,12 @@ var addWarning = function (network, message) {
     var warningsCount = network.warnings.length;
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-      addMessageToArray(network.warnings, message);
+        addMessageToArray(network.warnings, message);
     } else {
-      addMessageToArray(network.errors, errorList.warningsCountError);
-      return false;
+        addMessageToArray(network.errors, errorList.warningsCountError);
+        return false;
     }
-}
+};
 
 var addError = function (network, message) {
     var errorsCount = network.errors.length;
@@ -203,7 +211,7 @@ var addError = function (network, message) {
     }
 };
 
-var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
+var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
   // Run through the source genes and check if the gene in slot i is the same as the one next to it
     for (var i = 0; i < sourceGenes.length - 1; i++) {
         if (sourceGenes[i] === sourceGenes[i + 1]) {
@@ -218,7 +226,7 @@ var checkDuplicates = function(errorArray, sourceGenes, targetGenes) {
     }
 };
 
-var parseSheet = function(sheet) {
+var parseSheet = function (sheet) {
     var currentSheet;
     var network = {
         genes: [],
@@ -272,12 +280,14 @@ var parseSheet = function(sheet) {
             // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
             // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
             try { // This prevents the server from crashing if something goes wrong anywhere in here
-                while (column < currentSheet.data[row].length) { // While we haven't gone through all of the columns in this row...
+                while (column < currentSheet.data[row].length) {
+                // While we haven't gone through all of the columns in this row...
                     if (row === 0) { // If we are at the top of a new column...
                         // These genes are the source genes
                         try {
                             currentGene = {name: currentSheet.data[0][column]};
-                            // Set genes to upper case so case doesn't matter in error checking; ie: Cin5 is the same as cin5
+                            // Set genes to upper case so case doesn't matter in error checking;
+                            // ie: Cin5 is the same as cin5
                             if (currentGene.name === undefined) {
                                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
                             } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
@@ -323,7 +333,8 @@ var parseSheet = function(sheet) {
                             if (currentSheet.data[row][column] === undefined) {
                                 // SHOULD BE: addError(network, errorList.missingValueError(row, column));
                                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-                            } else if (isNaN(+("" + currentSheet.data[row][column])) || typeof currentSheet.data[row][column] !== "number") {
+                            } else if (isNaN(+("" + currentSheet.data[row][column])) ||
+                                        typeof currentSheet.data[row][column] !== "number") {
                                 addError(network, errorList.dataTypeError(row, column));
                                 return network;
                             } else {
@@ -333,16 +344,20 @@ var parseSheet = function(sheet) {
                                     targetGene = currentSheet.data[row][0];
                                     if (sourceGene === undefined || targetGene === undefined) {
                                         addWarning(network, warningsList.randomDataWarning("undefined", row, column));
-                                    } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") || (isNaN(targetGene) && typeof targetGene !== "string")) {
+                                    } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
+                                                (isNaN(targetGene) && typeof targetGene !== "string")) {
                                         addWarning(network, warningsList.randomDataWarning("NaN", row, column));
                                     } else {
                                         // Grab the source and target genes' numbers
                                         sourceGeneNumber = genesList.indexOf(sourceGene.toUpperCase());
                                         targetGeneNumber = genesList.indexOf(targetGene.toUpperCase());
-                                        currentLink = {source: sourceGeneNumber, target: targetGeneNumber, value: currentSheet.data[row][column]};
-                                        // Here we set the properties of the current link before we push them to the network
+                                        currentLink = {source: sourceGeneNumber, target: targetGeneNumber,
+                                            value: currentSheet.data[row][column]};
+                                        // Here we set the properties of the current link
+                                        // before we push them to the network
                                         if (network.sheetType === "weighted") {
-                                            if (currentLink.value > 0) { // If it's a positive number, mark it as an activator
+                                            if (currentLink.value > 0) {
+                                                // If it's a positive number, mark it as an activator
                                                 currentLink.type = "arrowhead";
                                                 currentLink.stroke = "MediumVioletRed";
                                                 network.positiveWeights.push(currentLink.value);
@@ -351,7 +366,7 @@ var parseSheet = function(sheet) {
                                                 currentLink.stroke = "DarkTurquoise";
                                                 network.negativeWeights.push(currentLink.value);
                                             }
-                                          } else if (network.sheetType === "unweighted") {
+                                        } else if (network.sheetType === "unweighted") {
                                             currentLink.type = "arrowhead";
                                             currentLink.stroke = "black";
                                             if (currentLink.value !== 1) {
@@ -496,18 +511,20 @@ module.exports = function (app) {
                 if (err) {
                     return res.json(400, "There was a problem uploading your file. Please try again.");
                 }
-
+                var input;
                 try {
-                    var input = files.file[0].path;
+                    input = files.file[0].path;
                 } catch (err) {
                     return res.json(400, "No upload file selected.");
                 }
 
                 if (path.extname(input) !== ".xlsx") {
-                    return res.json(400, "This file cannot be loaded because:<br><br> The file is not in a format GRNsight can read." +
-            "<br>Please select an Excel Workbook (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-            " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded using the importer under File > Import." +
-            " Additional information about file types that GRNsight supports is in the Documentation.");
+                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
+                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
+                        (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
+                        using the importer under File > Import." + " Additional information about file \
+                        types that GRNsight supports is in the Documentation.");
                 }
 
                 return processGRNmap(input, res, app);
@@ -520,7 +537,8 @@ module.exports = function (app) {
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx", res, app);
+            return processGRNmap("test-files/demo-files/21-genes_50-edges_\
+                Dahlquist-data_estimation_output.xlsx", res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
@@ -528,7 +546,8 @@ module.exports = function (app) {
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
+            return processGRNmap("test-files/demo-files/21-genes_31-edges_\
+                Schade-data_estimation_output.xlsx", res, app);
         });
     }
 

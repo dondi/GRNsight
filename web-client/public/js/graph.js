@@ -648,7 +648,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
   /* Big thanks to the following for the smart edges
-   * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
+   * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e
+   /visualize/conn-net-svg.js#L119
    */
     var moveTo = function (d) {
         var node = d3.select("#node" + d.source.index);
@@ -722,7 +723,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               x2 + " " + y2;
     };
 
-    function smartPathEnd(d, w, h) {
+    function smartPathEnd (d, w, h) {
     // If target node is left of the source node make the distance larger
     // If target node is left of the source node and thicker than 9, make the distance even larger
         var MINIMUM_DISTANCE_LEFT = d.strokeWidth > 10 ? 18 : 14;
@@ -859,10 +860,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     };
 
     var rect = node.append("rect")
-     .attr("width", function(d) {
+     .attr("width", function () {
          return this.parentNode.getAttribute("width");
      })
-     .attr("height", function() {
+     .attr("height", function () {
          return this.parentNode.getAttribute("height");
      })
      .attr("stroke-width", "2px")
@@ -874,7 +875,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     .style("font-size", "18px")
     .style("stroke-width", "0")
     .style("fill", "black")
-    .text(function(d) {
+    .text(function (d) {
         return d.name;
     })
     .attr("dx", function (d) {
@@ -885,12 +886,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     .on("dblclick", nodeTextDblclick);
 
     rect
-    .attr("width", function(d) {
+    .attr("width", function (d) {
         return d.textWidth + 6;
     });
 
     node
-    .attr("width", function(d) {
+    .attr("width", function (d) {
         return d.textWidth;
     });
 
@@ -913,7 +914,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
-        var setWeightsVisability = function() {
+        var setWeightsVisability = function () {
 
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
             var WEIGHTS_HIDE_CLASS            = ".weightsNever";
@@ -979,8 +980,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
-  // Tick only runs while the graph physics are still running. (I.e. when the graph is completely relaxed, tick stops running.)
-    function tick() {
+  // Tick only runs while the graph physics are still running.
+  // (I.e. when the graph is completely relaxed, tick stops running.)
+    function tick () {
         var getSelfReferringEdge = function (node) {
             return link.select("path")[0].map(function (path) {
                 return path.__data__;
@@ -993,9 +995,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         };
         var BOUNDARY_MARGIN = 5;
         var SELF_REFERRING_Y_OFFSET = 6;
-        MAX_WIDTH = 5000;
-        MAX_HEIGHT = 5000;
-        OFFSET_VALUE = 5;
+        var MAX_WIDTH = 5000;
+        var MAX_HEIGHT = 5000;
+        var OFFSET_VALUE = 5;
 
         try {
             node.attr("x", function (d) {
@@ -1103,7 +1105,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 }
             });
 
-            link.select("path.main").attr("marker-end", function(d) {
+            link.select("path.main").attr("marker-end", function (d) {
                 var x1 = d.source.x;
                 var y1 = d.source.y;
                 var x2 = d.target.x;
@@ -1141,11 +1143,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
-    function normalize(d) {
+    function normalize (d) {
         return Math.abs(d.value / (d3.max(allWeights)));
     }
 
-    function dragstart(d) {
+    function dragstart (d) {
         var node = d3.select(this);
         d3.event.sourceEvent.stopPropagation();
         node.classed("fixed", d.fixed = true);
