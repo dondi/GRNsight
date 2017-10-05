@@ -134,7 +134,7 @@ module.exports = function (graphml) {
     // We will only consider GraphML data to be weighted if:
     // (a) A key for the weight attribute is present, AND
     // (b) Every edge in the file has a data element with that key
-    var weightId = findKeyId("weight"/*, "edge"*/);
+    var weightId = findKeyId("weight"/* , "edge"*/);
     // Edge condition temporarily commented out pending Cytoscape GraphML export bug fix.
 
     if (weightId && graph.edge && graph.edge.every(function (edge) { // What
@@ -212,6 +212,6 @@ module.exports = function (graphml) {
         });
     }
 
-  return (network.errors.length === 0) ? semanticChecker(network) : network;
+    return (network.errors.length === 0) ? semanticChecker(network) : network;
 
 };
