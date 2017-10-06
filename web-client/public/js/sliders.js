@@ -1,5 +1,7 @@
-/* eslint-env browser */
-/* exported graySlider, outputUpdate, sliderGroupController, sliderObject */
+/* We can't use `exported` here because the eslint environment includes node and eslint-env does not work as an inlined
+   setting; this is the next closest thing. */
+
+/* eslint no-unused-vars: [2, {"varsIgnorePattern": "graySlider|outputUpdate|sliderGroupController|sliderObject"}] */
 
 var GRAVITY_LENGTH_WITHOUT_ZERO = 3;
 var LOCK_SLIDERS_CLASS          = ".lockSliders";
