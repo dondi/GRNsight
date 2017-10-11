@@ -16,24 +16,19 @@ module.exports = function (graphml) {
         negativeWeights: [],
         sheetType: constants.UNWEIGHTED
     };
-    var parseErr = function (err) {
-        // err = err.toString().split("\n").join(" ");
-        // var error = err.slice(err.indexOf("Error: ") + 7, err.indexOf(" Line: "));
-        // var line = err.slice(err.indexOf("Line: ") + 6, err.indexOf(" Column: "));
-        // var column = err.slice(err.indexOf("Column: ") + 8, err.indexOf(" Char: "));
-        return err.toString().split("\n").map(function (line) { return line.split(": "); }).reduce(function (accum, current) { saccum[current[0]] = current[1]; return accum; }, {})
 
-        // return {error: error, line: line, column: column};
+    var parseErr = function (err) {
+        err = err.toString().split("\n").join(" ");
+        var error = err.slice(err.indexOf("Error: ") + 7, err.indexOf(" Line: "));
+        var line = err.slice(err.indexOf("Line: ") + 6, err.indexOf(" Column: "));
+        var column = err.slice(err.indexOf("Column: ") + 8, err.indexOf(" Char: "));
+        var char = err.slice(err.indexOf("Char: ") + 6, err.length);
+        return {error: error, line: line, column: column, char:char};
     };
 
     var pushRelevantError = function (err) {
-
-        // err is an object that has the key values error, line, column, and char
-        console.log(Object.keys(err));
-        console.log(err);
-        console.log(typeof err);
-        console.log(err.toString());
-        network.errors.push(graphmlConstants.graphmlErrors.GRAPHML_GENERAL_SYNTAX_ERROR(err));
+        var parsedError = parseErr(err);
+        network.errors.push(graphmlConstants.pairError(parsedError));
     };
 
     // Note this relies on sync execution being the default, *not* async.
@@ -44,7 +39,6 @@ module.exports = function (graphml) {
         if (err) {
             pushRelevantError(err);
         } else {
-            // Fix to handle completely empty GraphML file. #428
             if (!result) {
                 return semanticChecker(network);
             }
@@ -54,7 +48,7 @@ module.exports = function (graphml) {
     });
 
     if (network.errors.length > 0) {
-        return network;
+        return semanticChecker(network);
     }
 
     var findKeyId = function (attrName, attrFor) {

@@ -15,27 +15,42 @@ var graphmlWarnings = {
 };
 
 var graphmlErrors = {
-    GRAPHML_GENERAL_SYNTAX_ERROR: function (err) {
+    GRAPHML_GENERAL_SYNTAX_ERROR: function (error) {
         return {
             errorCode: "GRAPHML_GENERAL_SYNTAX_ERROR",
-            possibleCause: err.error,
-            suggestedFix: "",
-            // possibleCause: "There are a number of things that could've triggered this error, but the general gist" +
-            // " is that there is something syntactically wrong with your file. The parcer we are using" +
-            // " has associated your syntax error with this message: " + error + ".",
-            // suggestedFix:  "Please check the format of your file and make sure that it is in line with our" +
-            // " Documentation page. Some common errors to check for are missing start/end tags, missing" +
-            // " quotation marks, and proper spelling of all attribute names."
+            possibleCause: "There are a number of things that could've triggered this error, but the general gist" +
+            " is that there is something syntactically wrong with your file. The parcer we are using" +
+            " has associated your syntax error with this message: " + error.error + ".",
+            suggestedFix:  "Please check the format of your file and make sure that it is in line with our" +
+            " Documentation page. Some common errors to check for are missing start/end tags, missing" +
+            " quotation marks, and proper spelling of all attribute names."
+        };
+    },
+    GRAPHML_MISSING_CLOSE_TAG: function (error) {
+        return {
+            errorCode: "GRAPHML_MISSING_CLOSE_TAG",
+            possibleCause: error,
+            suggestedFix:  "Please check the format of your file and make sure that it is in line with our" +
+            " Documentation page. Some common errors to check for are missing start/end tags, missing" +
+            " quotation marks, and proper spelling of all attribute names."
         };
     },
 };
 
-var errRelevantMessage = {
-    "test example": graphmlErrors.GRAPHML_GENERAL_SYNTAX_ERROR,
+var errorMessageToGraphmlError = {
+    "Invalid attribute name": graphmlErrors.GRAPHML_MISSING_CLOSE_TAG,
+};
+
+var pairError = function (error) {
+    if (!errorMessageToGraphmlError.hasOwnProperty(error.error)) {
+        return graphmlErrors.GRAPHML_GENERAL_SYNTAX_ERROR(error);
+    }
+    return errorMessageToGraphmlError[error.error](error);
 };
 
 module.exports = {
     graphmlErrors: graphmlErrors,
     graphmlWarnings: graphmlWarnings,
-    errRelevantMessage: errRelevantMessage,
+    errorMessageToGraphmlError: errorMessageToGraphmlError,
+    pairError: pairError,
 };
