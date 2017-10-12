@@ -517,12 +517,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                  if (x1 === x2 && y1 === y2) { // if self referential...
                      xOffsets = {
                          2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
-                         9 : 17, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 16
+                         9 : 17, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 20.5
                      };
                  } else {
                      xOffsets = {
                          2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 16.5, 8 : 17,
-                         9 : 16, 10 : 17, 11 : 17, 12 : 16, 13 : 18, 14 : 18
+                         9 : 16, 10 : 17, 11 : 17, 12 : 18, 13 : 18, 14 : 19
                      };
                  }
                  return xOffsets[d.strokeWidth];
@@ -732,7 +732,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         var MINIMUM_DISTANCE = d.target.centerX < d.source.newX ? MINIMUM_DISTANCE_LEFT : 8;
     // For arrowheads when target node is to the left of source node
         var LEFT_ADJUSTMENT = 7;
-
+        
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var globalOffset = parseFloat(d.strokeWidth);
 
