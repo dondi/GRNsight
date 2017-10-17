@@ -76,12 +76,13 @@ var errorList = {
     emptyNetworkError: function () {
         return {
             errorCode: "EMPTY_NETWORK_ERROR",
-            possibleCause: "GRNsight detects that the file you uploaded is empty and does not contain any network information.",
+            possibleCause: "GRNsight detects that the file you uploaded is empty and \
+            does not contain any network information.",
             suggestedFix: "Please review the file and ensure that it specifies a network."
-        }
+        };
     },
 
-    semanticDuplicateGeneError: function(geneName) {
+    semanticDuplicateGeneError: function (geneName) {
         return {
             errorCode: "SEMANTIC_DUPLICATE_GENE",
             possibleCause: "There exists a duplicate for " + geneName + ".",
@@ -169,7 +170,7 @@ var addWarning = function (network, message) {
 };
 */
 
-var checkNetworkSize = function(errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+var checkNetworkSize = function (errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
     var genesLength = genesList.length;
     var edgesLength = positiveWeights.length + negativeWeights.length;
     var GENE_MAX_WARNING = 50;
@@ -193,7 +194,7 @@ var checkDuplicateErrors = function (errorArray) {
     }
 };
 
-var checkDuplicates = function(errorArray, genesList) {
+var checkDuplicates = function (errorArray, genesList) {
     if (!checkDuplicateErrors(errorArray)) {
         var genesName = [];
         for (var i = 0; i < genesList.length; i++) {
@@ -209,7 +210,7 @@ var checkDuplicates = function(errorArray, genesList) {
     }
 };
 
-var checkGeneLength = function(errorArray, genesList) {
+var checkGeneLength = function (errorArray, genesList) {
     // Check if any genes are over the gene length (currently 12)
     var maxGeneLength = 12;
     for (var i = 0; i < genesList.length; i++) {
@@ -232,7 +233,7 @@ var checkIfEmptyNetwork = function (errorArray, genesList) {
     if (genesList.length === 0) {
         errorArray.push(errorList.emptyNetworkError());
     }
-}
+};
 
 // TODO Entry-point semantic checker function goes here.
 module.exports = function (network) {

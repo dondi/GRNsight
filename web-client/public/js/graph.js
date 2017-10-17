@@ -12,8 +12,11 @@
  * and http://bl.ocks.org/mbostock/1153292
  */
 
+/* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
+
 /* eslint-disable no-unused-vars */
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType, warnings, sliderController, normalization, grayThreshold) {
+var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
+  warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
 
     var $container = $(".grnsight-container");
@@ -45,7 +48,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var adaptive = !$("input[name='viewport']").prop("checked");
 
     var MIN_SCALE = 0.25;
-    var ADAPTIVE_MAX_SCALE = 4; // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
+    var ADAPTIVE_MAX_SCALE = 4;
+    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     var minimumScale = MIN_SCALE;
     var maximumScale = ADAPTIVE_MAX_SCALE;
@@ -59,8 +63,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             }
         }
     } else {
-        for (var i = 0; i < allWeights.length; i++ ) {
-            allWeights[i] = Math.abs((allWeights[i]).toPrecision(4));
+        for (var j = 0; j < allWeights.length; j++ ) {
+            allWeights[j] = Math.abs((allWeights[j]).toPrecision(4));
         }
     }
 
@@ -98,7 +102,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .gravity($("#gravityInput").val());
 
     var drag = force.drag()
-      .origin(function(d) {
+      .origin(function (d) {
           return d;
       })
       .on("dragstart", dragstart);
@@ -132,7 +136,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                      .append("g");
 
 
-    function zoomed() {
+    function zoomed () {
       // this part is not working
         if (!adaptive) { // Limit to viewport
             var scale = zoom.scale();
@@ -176,7 +180,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
       // So we'll just treat it as 0.
 
-        maxScale = ADAPTIVE_MAX_SCALE;
+        var maxScale = ADAPTIVE_MAX_SCALE;
 
       // Each integer on the zoom is equivalent to 100 steps.
         var NUMBER_POINTS_PER_INT = 100;
@@ -217,13 +221,13 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     setupZoomSlider(minimumScale);
 
-    function updateZoomPercent() {
+    function updateZoomPercent () {
         var value = Math.round(($(".zoomSlider").val() / 8 * 200));
         value = value === 0 ? 1 : value;
         $("#zoomPercent").html(value + "%");
     }
 
-    function getMappedValue(scale) {
+    function getMappedValue (scale) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
         var equivalentPoint;
         if (scale <= 1) {
@@ -237,10 +241,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
+        var currentPoint = value * 100;
+        var equivalentScale;
         if (!adaptive && value >= ADAPTIVE_MAX_SCALE) {
             value = 4;
-            var currentPoint = value * 100;
-            var equivalentScale;
             if (currentPoint <= leftPoints) {
                 equivalentScale = minimumScale;
                 equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
@@ -257,8 +261,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             return;
         }
         if (!adaptive && value < ADAPTIVE_MAX_SCALE || adaptive) {
-            var currentPoint = value * 100;
-            var equivalentScale;
             if (currentPoint <= leftPoints) {
                 equivalentScale = minimumScale;
                 equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
@@ -358,7 +360,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     });
 
-    function center() {
+    function center () {
         svg.call(zoom.event);
         var scale = zoom.scale();
         var viewportWidth = $container.width();
@@ -377,7 +379,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
   /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
-    function move(direction) {
+    function move (direction) {
         svg.call(zoom.event);
         var currentTransform = d3.transform(svg.attr("transform"));
         var currentTranslate = [0, 0];
@@ -409,7 +411,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     node = node.data(nodes)
              .enter().append("g")
              .attr("class", "node")
-             .attr("id", function(d) {
+             .attr("id", function (d) {
                  return "node" + d.index;
              })
              .attr("width", getNodeWidth)
@@ -425,7 +427,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       });
     }
 
-    var grayThreshold = +$("#grayThresholdValue").val();
+    grayThreshold = +$("#grayThresholdValue").val();
 
     link.append("path")
     .attr("class", "main")
@@ -469,14 +471,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             if (d.value < 0 && colorOptimal) {
                 defs.append("marker")
              .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-             .attr("refX", function() {
+             .attr("refX", function () {
                  xOffsets = {
                      2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
                      9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
                  };
                  return xOffsets[d.strokeWidth];
              })
-             .attr("refY", function() {
+             .attr("refY", function () {
                  yOffsets = {
                      2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
                      9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 18, 14 : 19.25
@@ -484,15 +486,15 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                  return yOffsets[d.strokeWidth];
              })
              .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", function() {
+             .attr("markerWidth", function () {
                  return d.strokeWidth;
              })
-             .attr("markerHeight", function() {
+             .attr("markerHeight", function () {
                  return 25 + d.strokeWidth;
              })
              .attr("orient", 180)
              .append("rect")
-                .attr("width", function() {
+                .attr("width", function () {
                     return d.strokeWidth;
                 })
                 .attr("height", function () {
@@ -500,7 +502,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 })
                 .attr("rx", 10)
                 .attr("ry", 10)
-                .attr("style", function() {
+                .attr("style", function () {
                     if ( normalize(d) <= grayThreshold) {
                         color = "gray";
                     } else {
@@ -511,7 +513,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
                 defs.append("marker")
              .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-             .attr("refX", function() {
+             .attr("refX", function () {
                  if (x1 === x2 && y1 === y2) { // if self referential...
                      xOffsets = {
                          2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
@@ -525,7 +527,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                  }
                  return xOffsets[d.strokeWidth];
              })
-             .attr("refY", function() {
+             .attr("refY", function () {
                  yOffsets = {
                      2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
                      9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
@@ -533,23 +535,23 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                  return yOffsets[d.strokeWidth];
              })
              .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", function() {
+             .attr("markerWidth", function () {
                  return 25 + d.strokeWidth;
              })
-             .attr("markerHeight", function() {
+             .attr("markerHeight", function () {
                  return d.strokeWidth;
              })
              .attr("orient", 180)
              .append("rect")
-                .attr("width", function() {
+                .attr("width", function () {
                     return 25 + d.strokeWidth;
                 })
-                .attr("height", function() {
+                .attr("height", function () {
                     return d.strokeWidth;
                 })
                 .attr("rx", 10)
                 .attr("ry", 10)
-                .attr("style", function() {
+                .attr("style", function () {
                     if (normalize(d) <= grayThreshold) {
                         color = "gray";
                     } else {
@@ -570,8 +572,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 // Individual offsets for each possible stroke width
                   return ((x1 === x2 && y1 === y2) ?
                   {
-                      2: 9, 3: 8.5, 4: 9, 5: 9, 6: 9, 7: 9,
-                      8: 8.3, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                      2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
+                      8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
                       14: 8.3
                   } : {
                       2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
@@ -583,9 +585,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               .attr("refY", function () {
                   return ((x1 === x2 && y1 === y2) ?
                   {
-                      2: 6.7, 3: 6, 4: 6, 5: 5.5, 6: 5, 7: 5.75,
-                      8: 5.7, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
-                      14: 5.75
+                      2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
+                      8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
+                      14: 6
                   } : {
                       2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
                       8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
@@ -594,10 +596,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 )[d.strokeWidth];
               })
               .attr("markerUnits", "userSpaceOnUse")
-              .attr("markerWidth", function() {
+              .attr("markerWidth", function () {
                   return 12 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
               })
-              .attr("markerHeight", function() {
+              .attr("markerHeight", function () {
                   return 5 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
               })
               .attr("orient", function () {
@@ -648,7 +650,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
   /* Big thanks to the following for the smart edges
-   * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e/visualize/conn-net-svg.js#L119
+   * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e
+   /visualize/conn-net-svg.js#L119
    */
     var moveTo = function (d) {
         var node = d3.select("#node" + d.source.index);
@@ -722,8 +725,13 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
               x2 + " " + y2;
     };
 
-    function smartPathEnd(d, w, h) {
-        var MINIMUM_DISTANCE = 8;
+    function smartPathEnd (d, w, h) {
+    // If target node is left of the source node make the distance larger
+    // If target node is left of the source node and thicker than 9, make the distance even larger
+        var MINIMUM_DISTANCE_LEFT = d.strokeWidth > 10 ? 18 : 14;
+        var MINIMUM_DISTANCE = d.target.centerX < d.source.newX ? MINIMUM_DISTANCE_LEFT : 8;
+    // For arrowheads when target node is to the left of source node
+        var LEFT_ADJUSTMENT = 7;
 
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var globalOffset = parseFloat(d.strokeWidth);
@@ -793,7 +801,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 if (d.type !== "arrowhead") {
                     d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
-                    d.target.newX = d.target.x + w + globalOffset;
+                    d.target.newX = d.target.x + w + globalOffset + LEFT_ADJUSTMENT;
                 }
             }
 
@@ -854,10 +862,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     };
 
     var rect = node.append("rect")
-     .attr("width", function(d) {
+     .attr("width", function () {
          return this.parentNode.getAttribute("width");
      })
-     .attr("height", function() {
+     .attr("height", function () {
          return this.parentNode.getAttribute("height");
      })
      .attr("stroke-width", "2px")
@@ -869,7 +877,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     .style("font-size", "18px")
     .style("stroke-width", "0")
     .style("fill", "black")
-    .text(function(d) {
+    .text(function (d) {
         return d.name;
     })
     .attr("dx", function (d) {
@@ -880,12 +888,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     .on("dblclick", nodeTextDblclick);
 
     rect
-    .attr("width", function(d) {
+    .attr("width", function (d) {
         return d.textWidth + 6;
     });
 
     node
-    .attr("width", function(d) {
+    .attr("width", function (d) {
         return d.textWidth;
     });
 
@@ -908,7 +916,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
-        var setWeightsVisability = function() {
+        var setWeightsVisability = function () {
 
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
             var WEIGHTS_HIDE_CLASS            = ".weightsNever";
@@ -974,8 +982,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
-  // Tick only runs while the graph physics are still running. (I.e. when the graph is completely relaxed, tick stops running.)
-    function tick() {
+  // Tick only runs while the graph physics are still running.
+  // (I.e. when the graph is completely relaxed, tick stops running.)
+    function tick () {
         var getSelfReferringEdge = function (node) {
             return link.select("path")[0].map(function (path) {
                 return path.__data__;
@@ -988,9 +997,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         };
         var BOUNDARY_MARGIN = 5;
         var SELF_REFERRING_Y_OFFSET = 6;
-        MAX_WIDTH = 5000;
-        MAX_HEIGHT = 5000;
-        OFFSET_VALUE = 5;
+        var MAX_WIDTH = 5000;
+        var MAX_HEIGHT = 5000;
+        var OFFSET_VALUE = 5;
 
         try {
             node.attr("x", function (d) {
@@ -1050,10 +1059,17 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     var sweep = 1;     // 1 or 0
                     var offset = parseFloat(d.strokeWidth);
 
-          // Self edge.
+              // Edge adjustment values when long self-node edges get hidden behind the node.
+                    var DEFAULT_NODE_SHIFT = 1.033;
+                    var SHORT_NODE_LIMIT = 135;
+                    var ADDITIONAL_SHIFT = 0.07;
+                    var END_POINT_ADJUSTMENT = 1.2;
+
+
+            // Self edge.
                     if (x1 === x2 && y1 === y2) {
             // Move the position of the loop.
-                        x1 = d.source.x + (d.source.textWidth);
+                        x1 = d.source.x + (d.source.textWidth) * DEFAULT_NODE_SHIFT;
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
             // Fiddle with this angle to get loop oriented.
@@ -1070,7 +1086,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
             // For whatever reason the arc collapses to a point if the beginning
             // and ending points of the arc are the same, so kludge it.
-                        x2 = d.source.x + d.source.textWidth / 1.2;
+                        if (d.source.textWidth > SHORT_NODE_LIMIT) {
+                            DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
+                        }
+                        x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
 
                         if (d.value < 0 && colorOptimal) {
@@ -1088,7 +1107,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 }
             });
 
-            link.select("path.main").attr("marker-end", function(d) {
+            link.select("path.main").attr("marker-end", function (d) {
                 var x1 = d.source.x;
                 var y1 = d.source.y;
                 var x2 = d.target.x;
@@ -1126,11 +1145,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
-    function normalize(d) {
+    function normalize (d) {
         return Math.abs(d.value / (d3.max(allWeights)));
     }
 
-    function dragstart(d) {
+    function dragstart (d) {
         var node = d3.select(this);
         d3.event.sourceEvent.stopPropagation();
         node.classed("fixed", d.fixed = true);

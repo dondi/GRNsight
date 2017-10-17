@@ -45,7 +45,7 @@ $(function () {
     var WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways";
     var WEIGHTS_HIDE_CLASS            = ".weightsNever";
 
-    var styleLabelTooltips = function() {
+    var styleLabelTooltips = function () {
         $(".info").tooltip({
             placement: "top",
             delay: { show: TOOLTIP_SHOW_DELAY, hide: TOOLTIP_HIDE_DELAY }
@@ -54,6 +54,7 @@ $(function () {
 
     styleLabelTooltips();
 
+    /* global sliderObject, sliderGroupController*/
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
     var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false);
@@ -72,7 +73,8 @@ $(function () {
       "To view the details of the warning(s), please click on the \"Warnings List\" below.");
 
         var warningsString = "";
-    // printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
+    // printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,
+    // EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
 
         var NUM_POSSIBLE_WARNINGS = 11;
 
@@ -116,11 +118,11 @@ $(function () {
             return x.warningCode === "INCORRECTLY_NAMED_SHEET";
         });
 
-        var appendWarning = function(warning) {
+        var appendWarning = function (warning) {
             warningsString += warning.errorDescription + "<br><br>";
         };
 
-        var createWarningsString = function(warningCount, index) {
+        var createWarningsString = function (warningCount, index) {
             for (var i = 0; i < warningCount.length; i++) {
                 if (warningCount.length <= 3) {
                     appendWarning(warningCount[i]);
@@ -128,7 +130,8 @@ $(function () {
                     appendWarning(warningCount[i]);
                     printed[index]++;
                 } else {
-                    warningsString += "<i> " + (+warningCount.length - 3) + " more warning(s) like this exist. </i> <br><br>";
+                    warningsString += "<i> " + (+warningCount.length - 3) +
+                    " more warning(s) like this exist. </i> <br><br>";
                     break;
                 }
             }
@@ -188,12 +191,13 @@ $(function () {
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-
+        /* global drawGraph */
         drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType,
           network.warnings, sliders, normalization, grayThreshold);
     };
 
-    var networkErrorDisplayer = function (xhr, status, error) {
+    var networkErrorDisplayer = function (xhr) {
+        // Deleted status, error for argument because it was never used
         var err = JSON.parse(xhr.responseText);
         var errorString = "Your graph failed to load.<br><br>";
 
@@ -235,7 +239,7 @@ $(function () {
     }).error(networkErrorDisplayer);
     };
 
-    var loadDemo = function(url) {
+    var loadDemo = function (url) {
         loadGrn(url);
         reloader = function () {
             loadGrn(url);
@@ -245,7 +249,8 @@ $(function () {
     };
 
     var initializeDemoFile = function (demoId, demoPath, demoName) {
-        $(demoId).on("click", function (event) {
+        $(demoId).on("click", function () {
+            // Deleted parameter event
             loadDemo(demoPath, demoName);
         });
     };
@@ -258,7 +263,7 @@ $(function () {
         initializeDemoFile.apply(null, demoInfo);
     });
 
-    var settingsController = function() {
+    var settingsController = function () {
         this.color = true;
 
         this.setupSettingsHandlers = function () {
@@ -273,17 +278,20 @@ $(function () {
     settings.setupSettingsHandlers();
 
   // TODO: Make this less bad
-    $("#upload-sif").on("click", function (event) {
+    $("#upload-sif").on("click", function () {
+        // deleted event parameter
         $("#launchFileOpen").off("click").on("click", function () {
             $("#upload-sif").click();
         });
     });
-    $("#upload-graphml").on("click", function (event) {
+    $("#upload-graphml").on("click", function () {
+        // deleted event parameter
         $("#launchFileOpen").off("click").on("click", function () {
             $("#upload-graphml").click();
         });
     });
-    $("#upload").on("click", function (event) {
+    $("#upload").on("click", function () {
+        // deleted event parameter
         $("#launchFileOpen").off("click").on("click", function () {
             $("#upload").click();
         });
@@ -303,26 +311,29 @@ $(function () {
 
     var grayThreshold = false;
 
-    $("#normalization-button").click(function() {
+    $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights, currentNetwork.negativeWeights,
-          currentNetwork.sheetType, currentNetwork.warnings, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
+            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
+            sliders, normalization, grayThreshold);
     });
 
-    $("#resetNormalizationButton").click(function() {
+    $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights, currentNetwork.negativeWeights,
-          currentNetwork.sheetType, currentNetwork.warnings, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
+            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
+            sliders, normalization, grayThreshold);
     });
 
-    $("#grayThresholdInput").on("change", function() {
+    $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights, currentNetwork.negativeWeights,
-          currentNetwork.sheetType, currentNetwork.warnings, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
+            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
+            sliders, normalization, grayThreshold);
     });
 
     var annotateLinks = function (network) {
@@ -423,7 +434,7 @@ $(function () {
         }
     });
 
-    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function() {
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function () {
         $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
         $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
         $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
@@ -437,7 +448,7 @@ $(function () {
         $(WEIGHTS_HIDE_CLASS).removeClass("selected");
     });
 
-    $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function() {
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function () {
         $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
         $(WEIGHTS_SHOW_ALWAYS_MENU + " span").addClass("glyphicon-ok");
         $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
@@ -451,7 +462,7 @@ $(function () {
         $(WEIGHTS_HIDE_CLASS).removeClass("selected");
     });
 
-    $(WEIGHTS_HIDE_CLASS).click(function() {
+    $(WEIGHTS_HIDE_CLASS).click(function () {
         $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
         $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
         $(WEIGHTS_HIDE_MENU + " span").addClass("glyphicon-ok");
@@ -465,7 +476,8 @@ $(function () {
         $(WEIGHTS_HIDE_CLASS).addClass("selected");
     });
 
-    $("#printGraph").click(function (event) {
+    $("#printGraph").click(function () {
+        // Deleted event parameter
         if (!$(this).parent().hasClass("disabled")) {
             window.print();
         }
@@ -496,10 +508,12 @@ $(function () {
     };
 
     var performExport = function (route, extension, sheetType) {
-        return function (event) {
+        return function () {
+            // Deleted event parameter
             if (!$(this).parent().hasClass("disabled")) {
                 var networkToExport = flattenNetwork(currentNetwork, sheetType);
-                var networkFilename = filenameWithExtension(sheetType !== currentNetwork.sheetType ? sheetType : "", extension);
+                var networkFilename = filenameWithExtension(sheetType !== currentNetwork.sheetType ?
+                    sheetType : "", extension);
                 networkToExport.filename = networkFilename;
 
                 var exportForm = $("<form></form>").attr({
@@ -526,7 +540,8 @@ $(function () {
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
     $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
 
-    $("#reload").click(function (event) {
+    $("#reload").click(function () {
+        // Deleted event parameter
         if (!$(this).parent().hasClass("disabled")) {
             if ($.isFunction(reloader)) {
                 reloader();

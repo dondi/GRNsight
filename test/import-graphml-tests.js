@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 var expect = require("chai").expect;
-// var extend = require("jquery-extend");
 var fs = require("fs");
 var UTF8 = { encoding: "utf-8" };
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
+// var graphmlConstants = require(__dirname + "/../server/controllers" + "/graphml-constants");
 
 var expectedUnweightedNetwork = {
     genes: [
@@ -310,7 +310,7 @@ describe("Import from GraphML", function () {
 
         expect(
             importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors[0].errorCode
-        ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR");
+        ).to.equal("GRAPHML_MISSING_CLOSE_TAG");
     });
 
     it("should issue an general graphML syntax error because the graph tag is misspelled", function () {

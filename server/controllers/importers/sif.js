@@ -122,20 +122,20 @@ module.exports = function (sif) {
                 });
             }
         });
-  }
+    }
 
-  var network = {
-    genes: emptySifFile ? [] : genes.map(function (geneName) {
-      return { name: geneName };
-    }),
-    links: links,
-    errors: errors,
-    warnings: warnings,
-    sheetType: networkType.sheetType,
-    positiveWeights: [],
-    negativeWeights: []
-  };
+    var network = {
+        genes: emptySifFile ? [] : genes.map(function (geneName) {
+            return { name: geneName };
+        }),
+        links: links,
+        errors: errors,
+        warnings: warnings,
+        sheetType: networkType.sheetType,
+        positiveWeights: [],
+        negativeWeights: []
+    };
 
-  return (network.errors.length === 0) ? semanticChecker(network) : network;
+    return (network.errors.length === 0) ? semanticChecker(network) : network;
 
 };

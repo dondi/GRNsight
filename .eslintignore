@@ -1,4 +1,5 @@
 assets/
+coverage/
 documents/
 test-files/
 web-client/public/lib/
