@@ -300,7 +300,7 @@ describe("Import from GraphML", function () {
 
         expect(
             importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors[0].errorCode
-        ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR");
+        ).to.equal("GRAPHML_MISSING_CLOSE_TAG");
     });
 
     it("should issue an general graphML syntax error because </graphml> is missing", function () {
@@ -310,7 +310,7 @@ describe("Import from GraphML", function () {
 
         expect(
             importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors[0].errorCode
-        ).to.equal("GRAPHML_MISSING_CLOSE_TAG");
+        ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR");
     });
 
     it("should issue an general graphML syntax error because the graph tag is misspelled", function () {
