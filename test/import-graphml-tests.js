@@ -268,6 +268,150 @@ var misspelledGraphTagTestGraphMl = [
     '</graphml>'
 ].join("\n");
 
+
+// Added networks and GraphML documents
+var newExpectedWeightedNetwork = {
+    genes: [
+        { name: "A" },
+        { name: "B" },
+        { name: "C" },
+        { name: "D" }
+    ],
+
+    links: [
+        { source: 0, target: 1, value: 1 },
+        { source: 1, target: 2, value: -2 },
+        { source: 2, target: 0, value: 3 },
+        { source: 2, target: 2, value: 0.5 }
+    ],
+
+    errors: [],
+    warnings: [],
+    positiveWeights: [],
+    negativeWeights: [],
+    sheetType: "weighted"
+};
+var templateGraphmlFileForNewTests = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">0.5</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var missingEdgeSourceAttributeName = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge ="A" target="B">',     // Source Mssing
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var missingCloseTagAfterForwardSlash = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/',                   // Missing Closing Tag
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var missingGraphOpenTag = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  graph id="G" edgedefault="directed">',       // Missing <graph> Opening Tag
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var incompleteClosingTag = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </',                                // There is a </ instead of </graph> closing tag
+    '</graphml>'
+].join("\n");
+
 describe("Import from GraphML", function () {
     it("should import unweighted networks from GraphML correctly", function () {
         expect(
@@ -481,5 +625,48 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted"
             });
         });
+    });
+
+    // Added Tests
+    it("should import this weighted network from GraphML correctly", function () {
+        expect(
+            importController.graphMlToGrnsight(templateGraphmlFileForNewTests)
+        ).to.deep.equal(newExpectedWeightedNetwork);
+    });
+    it("should issue an invalid attribute name graphML syntax error because there is a missing source tag name", function () {
+        expect(
+            importController.graphMlToGrnsight(missingEdgeSourceAttributeName).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(missingEdgeSourceAttributeName).errors[0].errorCode
+        ).to.equal("GRAPHML_INVALID_ATTRIBUTE_NAME");
+    });
+    it("should issue a missing end tag because there there is a missing graph open tag", function () {
+        expect(
+            importController.graphMlToGrnsight(missingGraphOpenTag).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(missingGraphOpenTag).errors[0].errorCode
+        ).to.equal("GRAPHML_UNMATCHED_CLOSE_TAG");
+    });
+    it("should issue a missing tag after forward slash error because there is a missing end tag after the backslash", function () {
+        expect(
+            importController.graphMlToGrnsight(missingCloseTagAfterForwardSlash).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(missingCloseTagAfterForwardSlash).errors[0].errorCode
+        ).to.equal("GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH");
+    });
+    it("should issue an incorrect closing tag error because there is a '</' instead of '</graph>'", function () {
+        expect(
+            importController.graphMlToGrnsight(incompleteClosingTag).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(incompleteClosingTag).errors[0].errorCode
+        ).to.equal("GRAPHML_UNFINISHED_CLOSING_TAG");
     });
 });

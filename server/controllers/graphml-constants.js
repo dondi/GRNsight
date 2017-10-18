@@ -20,65 +20,65 @@ var graphmlErrors = {
             errorCode: "GRAPHML_GENERAL_SYNTAX_ERROR",
             possibleCause: "There are a number of things that could've triggered this error, but the general gist" +
             " is that there is something syntactically wrong with your file. The parcer we are using" +
-            " has associated your syntax error with this message: " + error.error + ".",
+            " has associated your syntax error with this message: <b>\"" + error.error + "\"</b>.<br><br>",
             suggestedFix:  "Please check the format of your file and make sure that it is in line with our" +
-            " Documentation page. Some common errors to check for are missing start/end tags, missing" +
-            " quotation marks, and proper spelling of all attribute names."
+            " Documentation page. Some common errors to check for are <em>missing start/end tags, missing" +
+            " quotation marks, and proper spelling of all attribute names</em>."
         };
     },
     GRAPHML_INVALID_ATTRIBUTE_NAME: function (error) {
         return {
             errorCode: "GRAPHML_INVALID_ATTRIBUTE_NAME",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
     GRAPHML_UNMATCHED_CLOSE_TAG: function (error) {
         return {
             errorCode: "GRAPHML_UNMATCHED_CLOSE_TAG",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
     GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH: function (error) {
         return {
-            errorCode: "",
-            possibleCause: error,
+            errorCode: "GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH",
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
-    GRAPHML_INCORRECT_CLOSING_TAG: function (error) {
+    GRAPHML_UNFINISHED_CLOSING_TAG: function (error) {
         return {
             errorCode: "GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
     GRAPHML_MISSING_GRAPHML_CLOSE_TAG: function (error) {
         return {
             errorCode: "GRAPHML_MISSING_GRAPHML_CLOSE_TAG",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
     GRAPHML_UNPAIRED_QUOTE: function (error) {
         return {
             errorCode: "GRAPHML_UNPAIRED_QUOTE",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
     GRAPHML_INVALID_CHARACTER_IN_NAME: function (error) {
         return {
             errorCode: "GRAPHML_INVALID_CHARACTER_IN_NAME",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
     GRAPHML_UNENCODED_TAG: function (error) {
         return {
             errorCode: "GRAPHML_UNENCODED_TAG",
-            possibleCause: error,
+            possibleCause: error.error,
             suggestedFix: "",
         };
     },
@@ -89,7 +89,7 @@ var errorMessageToGraphmlError = {
     // This error message is also associated with a missing close tag
     "Unexpected close tag": graphmlErrors.GRAPHML_UNMATCHED_CLOSE_TAG,
     "Forward-slash in opening tag not followed by >": graphmlErrors.GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH,
-    "Invalid tagname in closing tag.": graphmlErrors.GRAPHML_INCORRECT_CLOSING_TAG,
+    "Invalid tagname in closing tag.": graphmlErrors.GRAPHML_UNFINISHED_CLOSING_TAG,
     "Unclosed root tag": graphmlErrors.GRAPHML_MISSING_GRAPHML_CLOSE_TAG,
     "No whitespace between attributes": graphmlErrors.GRAPHML_UNPAIRED_QUOTE,
     "Invalid character in entity name": graphmlErrors.GRAPHML_INVALID_CHARACTER_IN_NAME,
