@@ -26,19 +26,74 @@ var graphmlErrors = {
             " quotation marks, and proper spelling of all attribute names."
         };
     },
-    GRAPHML_MISSING_CLOSE_TAG: function (error) {
+    GRAPHML_INVALID_ATTRIBUTE_NAME: function (error) {
         return {
-            errorCode: "GRAPHML_MISSING_CLOSE_TAG",
+            errorCode: "GRAPHML_INVALID_ATTRIBUTE_NAME",
             possibleCause: error,
-            suggestedFix:  "Please check the format of your file and make sure that it is in line with our" +
-            " Documentation page. Some common errors to check for are missing start/end tags, missing" +
-            " quotation marks, and proper spelling of all attribute names."
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_UNMATCHED_CLOSE_TAG: function (error) {
+        return {
+            errorCode: "GRAPHML_UNMATCHED_CLOSE_TAG",
+            possibleCause: error,
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH: function (error) {
+        return {
+            errorCode: "",
+            possibleCause: error,
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_INCORRECT_CLOSING_TAG: function (error) {
+        return {
+            errorCode: "GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH",
+            possibleCause: error,
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_MISSING_GRAPHML_CLOSE_TAG: function (error) {
+        return {
+            errorCode: "GRAPHML_MISSING_GRAPHML_CLOSE_TAG",
+            possibleCause: error,
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_UNPAIRED_QUOTE: function (error) {
+        return {
+            errorCode: "GRAPHML_UNPAIRED_QUOTE",
+            possibleCause: error,
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_INVALID_CHARACTER_IN_NAME: function (error) {
+        return {
+            errorCode: "GRAPHML_INVALID_CHARACTER_IN_NAME",
+            possibleCause: error,
+            suggestedFix: "",
+        };
+    },
+    GRAPHML_UNENCODED_TAG: function (error) {
+        return {
+            errorCode: "GRAPHML_UNENCODED_TAG",
+            possibleCause: error,
+            suggestedFix: "",
         };
     },
 };
 
 var errorMessageToGraphmlError = {
-    "Invalid attribute name": graphmlErrors.GRAPHML_MISSING_CLOSE_TAG,
+    "Invalid attribute name": graphmlErrors.GRAPHML_INVALID_ATTRIBUTE_NAME,
+    // This error message is also associated with a missing close tag
+    "Unexpected close tag": graphmlErrors.GRAPHML_UNMATCHED_CLOSE_TAG,
+    "Forward-slash in opening tag not followed by >": graphmlErrors.GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH,
+    "Invalid tagname in closing tag.": graphmlErrors.GRAPHML_INCORRECT_CLOSING_TAG,
+    "Unclosed root tag": graphmlErrors.GRAPHML_MISSING_GRAPHML_CLOSE_TAG,
+    "No whitespace between attributes": graphmlErrors.GRAPHML_UNPAIRED_QUOTE,
+    "Invalid character in entity name": graphmlErrors.GRAPHML_INVALID_CHARACTER_IN_NAME,
+    "Unencoded <": graphmlErrors.GRAPHML_UNENCODED_TAG,
 };
 
 var pairError = function (error) {

@@ -300,7 +300,7 @@ describe("Import from GraphML", function () {
 
         expect(
             importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors[0].errorCode
-        ).to.equal("GRAPHML_MISSING_CLOSE_TAG");
+        ).to.equal("GRAPHML_INVALID_ATTRIBUTE_NAME");
     });
 
     it("should issue an general graphML syntax error because </graphml> is missing", function () {
@@ -310,7 +310,7 @@ describe("Import from GraphML", function () {
 
         expect(
             importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors[0].errorCode
-        ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR");
+        ).to.equal("GRAPHML_MISSING_GRAPHML_CLOSE_TAG");
     });
 
     it("should issue an general graphML syntax error because the graph tag is misspelled", function () {
@@ -320,7 +320,7 @@ describe("Import from GraphML", function () {
 
         expect(
             importController.graphMlToGrnsight(misspelledGraphTagTestGraphMl).errors[0].errorCode
-        ).to.equal("GRAPHML_GENERAL_SYNTAX_ERROR");
+        ).to.equal("GRAPHML_UNMATCHED_CLOSE_TAG");
     });
 
     it("should issue a warning if edgedefault is not set to 'directed'", function () {
