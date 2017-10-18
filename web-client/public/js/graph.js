@@ -729,15 +729,15 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     // For arrowheads when target node is to the left of source node
         var LEFT_ADJUSTMENT = 7;
         var MINIMUM_DISTANCE = 8;
+        var NODE_HALF_HEIGHT = 30 / 2;
 
         var targetStartX = d.target.centerX + d.target.textWidth / 2;
         var currentPointX = (targetStartX - d.target.centerX) / (d.source.newX - d.target.centerX);
         var currentPointY = (1 - currentPointX) * d.target.centerY + currentPointX * d.source.newY;
-        var nodeHeight = 30;
-        var upperBound = d.target.centerY + nodeHeight / 2;
-        var lowerBound = d.target.centerY - nodeHeight / 2;
+        var upperBound = d.target.centerY + NODE_HALF_HEIGHT;
+        var lowerBound = d.target.centerY - NODE_HALF_HEIGHT;
         if (currentPointX > 0 && currentPointY >= lowerBound && currentPointY <= upperBound) {
-            MINIMUM_DISTANCE = d.strokeWidth > 10 ? 18 : 14;
+            MINIMUM_DISTANCE = d.strokeWidth > 11 ? 16.5 : 15;
         }
 
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
