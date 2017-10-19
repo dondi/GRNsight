@@ -5,6 +5,9 @@ var test = require("./test");
 // var spreadsheetController = require(__dirname + "/../server/controllers/spreadsheet-controller")();
 
 describe("errors-adjacency-matrix-modifications", function () {
+	// Some operations involve really large sheets thus need to change the test timeout
+	var LENGTHY_OPERATION_TIMEOUT = 20000;
+
     describe("asymmetrical-graphs", function () {
         it("should not return any errors", function () {
             test.noErrors("test-files/adjacency-matrix-modifications/asymmetric-gene-order-input.xlsx");
@@ -65,14 +68,14 @@ describe("errors-adjacency-matrix-modifications", function () {
 
     describe("extra-row-end-of-sheet", function () {
         it("should return errors count error", function () {
-            this.timeout(10000);
+            this.timeout(LENGTHY_OPERATION_TIMEOUT);
             test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-input.xlsx", 1);
         });
     });
 
     describe("extra-row-end-of-sheet-output", function () {
         it("should return errors count error", function () {
-            this.timeout(10000);
+            this.timeout(LENGTHY_OPERATION_TIMEOUT);
             test.errorsCountError("test-files/adjacency-matrix-modifications/extra-row-end-of-sheet-output.xlsx", 1);
         });
     });
