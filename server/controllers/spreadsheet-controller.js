@@ -537,8 +537,8 @@ module.exports = function (app) {
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_50-edges_\
-                Dahlquist-data_estimation_output.xlsx", res, app);
+            return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx",
+                res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
@@ -546,8 +546,8 @@ module.exports = function (app) {
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_31-edges_\
-                Schade-data_estimation_output.xlsx", res, app);
+            return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
+                res, app);
         });
     }
 
