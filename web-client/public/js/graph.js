@@ -118,14 +118,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       // .force("link", d3.forceLink().id(function(d) { return d.id; }))
       .force("link", d3.forceLink())
       .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .on("tick", tick);
+      .force("center", d3.forceCenter(width / 2, height / 2));
 
     var drag = d3.drag()
       // .origin(function(d) {
       //     return d;
       // })
-      .on("start", dragstart);
+      .on("start", dragstart)
+      .on("drag", dragged);
 
     var manualZoom = false;
     var zoom = d3.zoom()
@@ -439,7 +439,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     //   .links(links)
     //   .start();
 
-    simulation.nodes(nodes);
+    simulation
+      .nodes(nodes)
+      .on("tick", tick);
+
     simulation.force("link")
       .links(links);
 
@@ -456,7 +459,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
              })
              .attr("width", getNodeWidth)
              .attr("height", nodeHeight)
-             .call(drag);
+             .call(drag)
+             .on("dblclick", dblclick);
 
     if (sheetType === "weighted") {
         link.append("path")
@@ -892,8 +896,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     var dblclick = function (d) {
-        d3.event.stopPropagation();
-        d3.select(this).classed("fixed", d.fixed = false);
+        // d3.event.stopPropagation();
+        // d3.select(this).classed("fixed", d.fixed = false);
+        d.fx = null;
+        d.fx = null;
     };
 
     var nodeTextDblclick = function (d) {
@@ -1209,9 +1215,17 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     function dragstart (d) {
-        var node = d3.select(this);
-        d3.event.sourceEvent.stopPropagation();
-        node.classed("fixed", d.fixed = true);
+        // var node = d3.select(this);
+        // d3.event.sourceEvent.stopPropagation();
+        // node.classed("fixed", d.fixed = true);
+        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
     }
 
     sliderController.addForce(simulation);
