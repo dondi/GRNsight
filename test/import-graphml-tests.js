@@ -367,7 +367,7 @@ var missingGraphOpenTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
     '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
-    '  graph id="G" edgedefault="directed">',       // Missing <graph> Opening Tag
+    '  graph id="G" edgedefault="directed">',       // Missing <graph> opening tag
     '    <node id="A"/>',
     '    <node id="B"/>',
     '    <node id="C"/>',
@@ -391,7 +391,7 @@ var incompleteClosingTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
     '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
-    '  graph id="G" edgedefault="directed">',
+    '  <graph id="G" edgedefault="directed">',
     '    <node id="A"/>',
     '    <node id="B"/>',
     '    <node id="C"/>',
@@ -409,6 +409,149 @@ var incompleteClosingTag = [
     '      <data key="weight">-4</data>',
     '    </edge>',
     '  </',                                // There is a </ instead of </graph> closing tag
+    '</graphml>'
+].join("\n");
+var unclosedRootTag = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',                         // Missing </graphml> closing tag
+].join("\n");
+var unpairedQuote = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A target="B">',                  // missing close quote
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var invalidCharacterInName = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">&</data>',              // invalid character in name value for edge data
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var unencodedTag = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data><><>',               // extra empty tags at the end of the line
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var incompleteClosingTagSecondCase = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source="B" target="C">',
+    '      <data key="weight">-2</data>',
+    '    </ed',                                                   // incomplete closing tag here
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
+    '</graphml>'
+].join("\n");
+var missingOpeningQuote = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+    '  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+    '  <graph id="G" edgedefault="directed">',
+    '    <node id="A"/>',
+    '    <node id="B"/>',
+    '    <node id="C"/>',
+    '    <node id="D"/>',
+    '    <edge source="A" target="B">',
+    '      <data key="weight">1</data>',
+    '    </edge>',
+    '    <edge source=B" target="C">',                     // missing opening quote here
+    '      <data key="weight">-2</data>',
+    '    </edge>',
+    '    <edge source="C" target="A">',
+    '      <data key="weight">3</data>',
+    '    </edge>',
+    '    <edge source="C" target="C">',
+    '      <data key="weight">-4</data>',
+    '    </edge>',
+    '  </graph>',
     '</graphml>'
 ].join("\n");
 
@@ -668,5 +811,59 @@ describe("Import from GraphML", function () {
         expect(
             importController.graphMlToGrnsight(incompleteClosingTag).errors[0].errorCode
         ).to.equal("GRAPHML_UNFINISHED_CLOSING_TAG");
+    });
+    it("should issue an unclosed root tag when the </graphml> closing tag is missing", function () {
+        expect(
+            importController.graphMlToGrnsight(unclosedRootTag).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(unclosedRootTag).errors[0].errorCode
+        ).to.equal("GRAPHML_MISSING_GRAPHML_CLOSE_TAG");
+    });
+    it("should issue unpaired quotation mark error because there is a missing end quote", function () {
+        expect(
+            importController.graphMlToGrnsight(unpairedQuote).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(unpairedQuote).errors[0].errorCode
+        ).to.equal("GRAPHML_UNPAIRED_QUOTE");
+    });
+    it("should issue an invalid character error because there is an invalid character somewhere", function () {
+        expect(
+            importController.graphMlToGrnsight(invalidCharacterInName).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(invalidCharacterInName).errors[0].errorCode
+        ).to.equal("GRAPHML_INVALID_CHARACTER_IN_NAME");
+    });
+    it("should issue an unencoded tag error because there are extra tags at the end of a line", function () {
+        expect(
+            importController.graphMlToGrnsight(unencodedTag).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(unencodedTag).errors[0].errorCode
+        ).to.equal("GRAPHML_UNENCODED_TAG");
+    });
+    it("should issue an incomplete closing tag error because one of the closing tags is incomplete", function () {
+        expect(
+            importController.graphMlToGrnsight(incompleteClosingTagSecondCase).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(incompleteClosingTagSecondCase).errors[0].errorCode
+        ).to.equal("GRAPHML_INCOMPLETE_CLOSING_TAG");
+    });
+    it("should issue missing opening quote error because there is a missing opening quote", function () {
+        expect(
+            importController.graphMlToGrnsight(missingOpeningQuote).errors.length
+        ).to.equal(1);
+
+        expect(
+            importController.graphMlToGrnsight(missingOpeningQuote).errors[0].errorCode
+        ).to.equal("GRAPHML_MISSING_OPEN_QUOTE");
     });
 });

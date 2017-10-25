@@ -23,7 +23,8 @@ module.exports = function (graphml) {
         var line = err.slice(err.indexOf("Line: ") + 6, err.indexOf(" Column: "));
         var column = err.slice(err.indexOf("Column: ") + 8, err.indexOf(" Char: "));
         var char = err.slice(err.indexOf("Char: ") + 6, err.length);
-        return {error: error, line: line, column: column, char:char};
+        // There seems to be a one-off-error with the line value, so this below was a workaround
+        return {error: error, line: +line + 1, column: column, char:char};
     };
 
     var pushRelevantError = function (err) {
@@ -31,10 +32,6 @@ module.exports = function (graphml) {
         network.errors.push(graphmlConstants.pairError(parsedError));
     };
 
-    // Note this relies on sync execution being the default, *not* async.
-    //
-    // Limitation is due to the way the import function is expected to return its result.
-    // To address this later on, import functions should accept a callback instead.
     parseString(graphml, function (err, result) {
         if (err) {
             pushRelevantError(err);
