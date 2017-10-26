@@ -30,9 +30,17 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
     this.needsAppendedZeros = needsAppendedZeros;
 
     this.activate = function () {
-        $(this.sliderId).on("input", {slider: this}, function (event) {
-            updateSliderDisplayedValue(event.data.slider, this);
-        });
+        console.log(sliderId);
+        $(this.sliderId).oninput = function() {
+            console.log(this.sliderId);
+            if (this.sliderId === "#chargeInput") {
+                simulation.force(this.sliderId).strength(this.value);
+                simulation.alpha(1); // reheat
+            }
+        }
+        // $(this.sliderId).on("input", {slider: this}, function (event) {
+        //     updateSliderDisplayedValue(event.data.slider, this);
+        // });
     };
 
     this.setCurrentVal = function (newVal) {
@@ -115,14 +123,14 @@ var sliderGroupController = function (sliderArray) {
 
     this.addForce = function (force) { // make forceParameters into an inputted array
         this.force = force;
-        this.forceParameters = [force.linkDistance, force.charge, force.chargeDistance, force.gravity];
+        this.forceParameters = [force.linkDistance, force.charge/*, force.chargeDistance, force.gravity*/];
     };
 
     this.configureForceHandlers = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
             $(this.sliders[i].sliderId).on("input", {handler: this, slider: this.sliders[i],
                 force: this.forceParameters[i]}, function (event) {
-                    event.data.force($(this).val());
+                    // event.data.force($(this).val());
                     event.data.handler.restartForce(event.data.slider.needsAppendedZeros);
                     updateSliderDisplayedValue(event.data.slider, this);
                 });

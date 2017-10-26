@@ -1072,6 +1072,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                         // .force("x", d3.forceX(width / 2))
                         // .force("y", d3.forceY(height / 2))
                         // .resume();
+                        link
+                            .attr("x1", function(d) { return d.source.x; })
+                            .attr("x2", function(d) { return d.target.x; });
+
+                        node
+                            .attr("x", function(d) { return d.x; });
                     }
                 }
                 return d.x = currentXPos;
@@ -1094,6 +1100,13 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                         // .force("x", d3.forceX(width / 2))
                         // .force("y", d3.forceY(height / 2))
                         // .resume();
+
+                        link
+                            .attr("y1", function(d) { return d.source.y; })
+                            .attr("y2", function(d) { return d.target.y; });
+
+                        node
+                            .attr("y", function(d) { return d.y; });
                     }
                 }
                 return d.y = currentYPos;
@@ -1215,9 +1228,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     function dragstart (d) {
-        // var node = d3.select(this);
-        // d3.event.sourceEvent.stopPropagation();
-        // node.classed("fixed", d.fixed = true);
         if (!d3.event.active) simulation.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
