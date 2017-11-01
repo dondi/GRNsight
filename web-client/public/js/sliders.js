@@ -137,7 +137,6 @@ var sliderGroupController = function (sliderArray) {
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetForce();
         });
-
         $(RESET_SLIDERS_MENU_OPTION).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
@@ -157,21 +156,29 @@ var sliderGroupController = function (sliderArray) {
 
     this.resetForce = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            this.forceParameters[i](this.sliders[i].defaultVal);
-            this.restartForce(this.sliders[i].needsAppendedZeros);
+            if (this.forceParameters[i] === "charge") {
+                this.simulation.force("charge").strength(this.sliders[i].defaultVal);
+                this.simulation.alpha(1); // reheat
+            }
+            if (this.forceParameters[i] === "link") {
+                this.simulation.force("link").distance(this.sliders[i].defaultVal);
+                this.simulation.alpha(1); // reheat
+            }
         }
     };
     // condense this ^ v
 
     this.undoForceReset = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            this.forceParameters[i](this.sliders[i].backup);
-            this.restartForce(this.sliders[i].needsAppendedZeros);
+            if (this.forceParameters[i] === "charge") {
+                this.simulation.force("charge").strength(this.sliders[i].backup);
+                this.simulation.alpha(1); // reheat
+            }
+            if (this.forceParameters[i] === "link") {
+                this.simulation.force("link").distance(this.sliders[i].backup);
+                this.simulation.alpha(1); // reheat
+            }
         }
-    };
-
-    this.restartForce = function () {
-        this.simulation.alpha(1);
     };
 };
 
