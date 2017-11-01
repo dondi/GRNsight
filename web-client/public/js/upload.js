@@ -3,10 +3,10 @@ $(function () {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
-    var LINK_DIST_DEFAULT     = 500;
+    var LINK_DIST_DEFAULT     = 400;
     var CHARGE_SLIDER_ID      = "#chargeInput";
     var CHARGE_VALUE          = "#chargeVal";
-    var CHARGE_DEFAULT        = -1000;
+    var CHARGE_DEFAULT        = -50;
     // var CHARGE_DIST_SLIDER_ID = "#chargeDistInput";
     // var CHARGE_DIST_VALUE     = "#chargeDistVal";
     // var CHARGE_DIST_DEFAULT   = 1000;
@@ -57,9 +57,9 @@ $(function () {
     /* global sliderObject, sliderGroupController*/
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
-    // var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false);
+    // var chargeDistanceSlider = new sliderObject(CHARGE_DIST_SLIDER_ID, CHARGE_DIST_VALUE, CHARGE_DIST_DEFAULT, false)
     // var gravitySlider = new sliderObject(GRAVITY_SLIDER_ID, GRAVITY_VALUE, GRAVITY_DEFAULT, true);
-    var sliders = new sliderGroupController([linkDistanceSlider, chargeSlider]);
+    var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
     sliders.setSliderHandlers();
     sliders.updateValues();
     sliders.configureSliderControllers();

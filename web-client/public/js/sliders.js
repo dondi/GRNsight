@@ -30,17 +30,9 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
     this.needsAppendedZeros = needsAppendedZeros;
 
     this.activate = function () {
-        console.log(sliderId);
-        $(this.sliderId).oninput = function() {
-            console.log(this.sliderId);
-            if (this.sliderId === "#chargeInput") {
-                simulation.force(this.sliderId).strength(this.value);
-                simulation.alpha(1); // reheat
-            }
-        }
-        // $(this.sliderId).on("input", {slider: this}, function (event) {
-        //     updateSliderDisplayedValue(event.data.slider, this);
-        // });
+        $(this.sliderId).on("input", {slider: this}, function (event) {
+            updateSliderDisplayedValue(event.data.slider, this);
+        });
     };
 
     this.setCurrentVal = function (newVal) {
@@ -54,7 +46,7 @@ var sliderGroupController = function (sliderArray) {
     this.numberOfSliders = sliderArray.length;
     this.locked = false;
 
-    this.force = undefined;
+    this.simulation = undefined;
     this.forceParameters = undefined;
 
     this.backupValues = function () {
@@ -121,17 +113,23 @@ var sliderGroupController = function (sliderArray) {
         });
     };
 
-    this.addForce = function (force) { // make forceParameters into an inputted array
-        this.force = force;
-        this.forceParameters = [force.linkDistance, force.charge/*, force.chargeDistance, force.gravity*/];
+    this.addForce = function (simulation) { // make forceParameters into an inputted array
+        this.simulation = simulation;
+        this.forceParameters = [ "charge", "link"];
     };
 
     this.configureForceHandlers = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
             $(this.sliders[i].sliderId).on("input", {handler: this, slider: this.sliders[i],
-                force: this.forceParameters[i]}, function (event) {
-                    // event.data.force($(this).val());
-                    event.data.handler.restartForce(event.data.slider.needsAppendedZeros);
+                force: this.forceParameters[i], simulation: this.simulation}, function (event) {
+                    if (event.data.force === "charge") {
+                        event.data.simulation.force("charge").strength($(this).val());
+                        event.data.simulation.alpha(1); // reheat
+                    }
+                    if (event.data.force === "link") {
+                        event.data.simulation.force("link").distance($(this).val());
+                        event.data.simulation.alpha(1); // reheat
+                    }
                     updateSliderDisplayedValue(event.data.slider, this);
                 });
         }
@@ -157,13 +155,6 @@ var sliderGroupController = function (sliderArray) {
         });
     };
 
-    this.restartForce = function (needsRestart) {
-        if (needsRestart) {
-            this.force.stop();
-        }
-        this.force.start();
-    };
-
     this.resetForce = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.forceParameters[i](this.sliders[i].defaultVal);
@@ -177,6 +168,10 @@ var sliderGroupController = function (sliderArray) {
             this.forceParameters[i](this.sliders[i].backup);
             this.restartForce(this.sliders[i].needsAppendedZeros);
         }
+    };
+
+    this.restartForce = function () {
+        this.simulation.alpha(1);
     };
 };
 

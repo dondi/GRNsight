@@ -18,10 +18,6 @@
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
   warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
-    // console.log('LINKS', links);
-    // console.log('NODES', nodes);
-    // console.log('POSITIVE WEIGHTS', positiveWeights);
-    // console.log('NEGATIVE WEIGHTS', negativeWeights);
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
 
@@ -1228,18 +1224,25 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     function dragstart (d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        if (!d3.event.active) {
+            simulation.alphaTarget(0.3).restart();
+        }
         d.fx = d.x;
         d.fy = d.y;
     }
 
-    function dragged(d) {
+    function dragged (d) {
         d.fx = d3.event.x;
         d.fy = d3.event.y;
     }
 
     sliderController.addForce(simulation);
     sliderController.configureForceHandlers();
+    // TODO: refactor this to an "init forces" function
+    simulation.force("charge").strength(-50);
+    simulation.force("link").distance(400);
+    simulation.alpha(1); // reheat
+
 
     $(".startDisabled").removeClass("disabled");
 };
