@@ -5,7 +5,6 @@ var UTF8 = { encoding: "utf-8" };
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
-// var graphmlConstants = require(__dirname + "/../server/controllers" + "/graphml-constants");
 
 var expectedUnweightedNetwork = {
     genes: [
@@ -291,6 +290,7 @@ var newExpectedWeightedNetwork = {
     negativeWeights: [],
     sheetType: "weighted"
 };
+
 var templateGraphmlFileForNewTests = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -315,6 +315,7 @@ var templateGraphmlFileForNewTests = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var missingEdgeSourceAttributeName = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -339,6 +340,7 @@ var missingEdgeSourceAttributeName = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var missingCloseTagAfterForwardSlash = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -363,6 +365,7 @@ var missingCloseTagAfterForwardSlash = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var missingGraphOpenTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -387,6 +390,7 @@ var missingGraphOpenTag = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var incompleteClosingTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -411,6 +415,7 @@ var incompleteClosingTag = [
     '  </',                                // There is a </ instead of </graph> closing tag
     '</graphml>'
 ].join("\n");
+
 var unclosedRootTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -434,6 +439,7 @@ var unclosedRootTag = [
     '    </edge>',
     '  </graph>',                         // Missing </graphml> closing tag
 ].join("\n");
+
 var unpairedQuote = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -458,6 +464,7 @@ var unpairedQuote = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var invalidCharacterInName = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -482,6 +489,7 @@ var invalidCharacterInName = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var unencodedTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -506,6 +514,7 @@ var unencodedTag = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var incompleteClosingTagSecondCase = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -530,6 +539,7 @@ var incompleteClosingTagSecondCase = [
     '  </graph>',
     '</graphml>'
 ].join("\n");
+
 var missingOpeningQuote = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -776,6 +786,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(templateGraphmlFileForNewTests)
         ).to.deep.equal(newExpectedWeightedNetwork);
     });
+
     it("should issue an invalid attribute name graphML syntax error because there is a missing source tag name", function () {
         expect(
             importController.graphMlToGrnsight(missingEdgeSourceAttributeName).errors.length
@@ -785,6 +796,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(missingEdgeSourceAttributeName).errors[0].errorCode
         ).to.equal("GRAPHML_INVALID_ATTRIBUTE_NAME");
     });
+
     it("should issue a missing end tag because there there is a missing graph open tag", function () {
         expect(
             importController.graphMlToGrnsight(missingGraphOpenTag).errors.length
@@ -794,6 +806,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(missingGraphOpenTag).errors[0].errorCode
         ).to.equal("GRAPHML_UNMATCHED_CLOSE_TAG");
     });
+
     it("should issue a missing tag after forward slash error because there is a missing end tag after the backslash", function () {
         expect(
             importController.graphMlToGrnsight(missingCloseTagAfterForwardSlash).errors.length
@@ -803,6 +816,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(missingCloseTagAfterForwardSlash).errors[0].errorCode
         ).to.equal("GRAPHML_MISSING_CLOSE_TAG_AFTER_FORWARD_SLASH");
     });
+
     it("should issue an incorrect closing tag error because there is a '</' instead of '</graph>'", function () {
         expect(
             importController.graphMlToGrnsight(incompleteClosingTag).errors.length
@@ -812,6 +826,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(incompleteClosingTag).errors[0].errorCode
         ).to.equal("GRAPHML_UNFINISHED_CLOSING_TAG");
     });
+
     it("should issue an unclosed root tag when the </graphml> closing tag is missing", function () {
         expect(
             importController.graphMlToGrnsight(unclosedRootTag).errors.length
@@ -821,6 +836,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(unclosedRootTag).errors[0].errorCode
         ).to.equal("GRAPHML_MISSING_GRAPHML_CLOSE_TAG");
     });
+
     it("should issue unpaired quotation mark error because there is a missing end quote", function () {
         expect(
             importController.graphMlToGrnsight(unpairedQuote).errors.length
@@ -830,6 +846,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(unpairedQuote).errors[0].errorCode
         ).to.equal("GRAPHML_UNPAIRED_QUOTE");
     });
+
     it("should issue an invalid character error because there is an invalid character somewhere", function () {
         expect(
             importController.graphMlToGrnsight(invalidCharacterInName).errors.length
@@ -839,6 +856,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(invalidCharacterInName).errors[0].errorCode
         ).to.equal("GRAPHML_INVALID_CHARACTER_IN_NAME");
     });
+
     it("should issue an unencoded tag error because there are extra tags at the end of a line", function () {
         expect(
             importController.graphMlToGrnsight(unencodedTag).errors.length
@@ -848,6 +866,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(unencodedTag).errors[0].errorCode
         ).to.equal("GRAPHML_UNENCODED_TAG");
     });
+
     it("should issue an incomplete closing tag error because one of the closing tags is incomplete", function () {
         expect(
             importController.graphMlToGrnsight(incompleteClosingTagSecondCase).errors.length
@@ -857,6 +876,7 @@ describe("Import from GraphML", function () {
             importController.graphMlToGrnsight(incompleteClosingTagSecondCase).errors[0].errorCode
         ).to.equal("GRAPHML_INCOMPLETE_CLOSING_TAG");
     });
+
     it("should issue missing opening quote error because there is a missing opening quote", function () {
         expect(
             importController.graphMlToGrnsight(missingOpeningQuote).errors.length

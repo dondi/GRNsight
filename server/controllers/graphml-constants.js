@@ -159,10 +159,9 @@ var errorMessageToGraphmlError = {
 };
 
 var pairError = function (error) {
-    if (!errorMessageToGraphmlError.hasOwnProperty(error.error)) {
-        return graphmlErrors.GRAPHML_GENERAL_SYNTAX_ERROR(error);
-    }
-    return errorMessageToGraphmlError[error.error](error);
+    return errorMessageToGraphmlError.hasOwnProperty(error.error) ?
+        errorMessageToGraphmlError[error.error](error) :
+        graphmlErrors.GRAPHML_GENERAL_SYNTAX_ERROR(error);
 };
 
 module.exports = {

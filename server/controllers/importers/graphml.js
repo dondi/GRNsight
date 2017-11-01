@@ -28,8 +28,7 @@ module.exports = function (graphml) {
     };
 
     var pushRelevantError = function (err) {
-        var parsedError = parseErr(err);
-        network.errors.push(graphmlConstants.pairError(parsedError));
+        network.errors.push(graphmlConstants.pairError(parseErr(err)));
     };
 
     parseString(graphml, function (err, result) {
