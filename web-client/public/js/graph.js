@@ -164,10 +164,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
             d3.event.translate[0] = Math.min(Math.max(d3.event.translate[0], 0), maxX);
             d3.event.translate[1] = Math.min(Math.max(d3.event.translate[1], 0), maxY);
-            zoom.translate([d3.event.translate[0], d3.event.translate[1]]);
+            zoom.translateTo([d3.event.translate[0], d3.event.translate[1]]);
         }
-        svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + d3.event.scale + ")");
 
+        var transform = d3.zoomTransform(d3.event.transform);
+        // svg.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+        svg.attr("transform", transform);
     }
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -177,7 +179,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             move(direction.toLowerCase());
         });
     });
-
     d3.select(".center").on("click", center);
 
     var leftPoints;
@@ -406,7 +407,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
         var translatedWidth = (viewportWidth - scaledWidth) / 2;
         var translatedHeight = (viewportHeight - scaledHeight) / 2;
-        zoom.translate([translatedWidth, translatedHeight]);
+        zoom.translateBy([translatedWidth, translatedHeight]);
         svg.transition().call(zoom.event);
     }
 
@@ -420,7 +421,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
         currentTranslate[0] += (direction === "left" ? 50 : (direction === "right" ? -50 : 0));
         currentTranslate[1] += (direction === "up" ? 50 : (direction === "down" ? -50 : 0));
-        zoom.translate(currentTranslate);
+        zoom.translateTo(currentTranslate);
         svg.transition().call(zoom.event);
     }
 
