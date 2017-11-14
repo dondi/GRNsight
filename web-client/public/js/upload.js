@@ -3,16 +3,10 @@ $(function () {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
-    var LINK_DIST_DEFAULT     = 400;
+    var LINK_DIST_DEFAULT     = 500;
     var CHARGE_SLIDER_ID      = "#chargeInput";
     var CHARGE_VALUE          = "#chargeVal";
-    var CHARGE_DEFAULT        = -50;
-    // var CHARGE_DIST_SLIDER_ID = "#chargeDistInput";
-    // var CHARGE_DIST_VALUE     = "#chargeDistVal";
-    // var CHARGE_DIST_DEFAULT   = 1000;
-    // var GRAVITY_SLIDER_ID     = "#gravityInput";
-    // var GRAVITY_VALUE         = "#gravityVal";
-    // var GRAVITY_DEFAULT       = 0.1;
+    var CHARGE_DEFAULT        = -1000;
     var TOOLTIP_SHOW_DELAY    = 700;
     var TOOLTIP_HIDE_DELAY    = 100;
 
