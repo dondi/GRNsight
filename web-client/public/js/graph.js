@@ -92,34 +92,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         return Math.round(totalScale(Math.abs(edge.value)));
     };
 
-    // OLD FORCE
-    /*
-    var force = d3.layout.force()
-      .size([width, height])
-      https://github.com/d3/d3/issues/2971
-      The only effect of layout.size in 3.x was to set the focal point of the “gravity” force.
-      This force has been replaced by the positioning forces d3.forceX and d3.forceY, and you can
-      set the focal point using x.x and y.y, respectively. Or if you prefer, you can use d3.forceCenter
-      to keep the view centered on a given point, set via center.x and center.y.
-
-      .on("tick", tick)
-      .linkDistance($("#linkDistInput").val())
-      .charge($("#chargeInput").val())
-      .chargeDistance($("#chargeDistInput").val())
-      .gravity($("#gravityInput").val());
-    */
-
-    // Documentation for v4 force: https://github.com/d3/d3-force/blob/master/README.md
     var simulation = d3.forceSimulation()
-      // .force("link", d3.forceLink().id(function(d) { return d.id; }))
       .force("link", d3.forceLink())
       .force("charge", d3.forceManyBody())
       .force("center", d3.forceCenter(width / 2, height / 2));
 
     var drag = d3.drag()
-      // .origin(function(d) {
-      //     return d;
-      // })
       .on("start", dragstart)
       .on("drag", dragged);
 
@@ -1036,8 +1014,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
         var getSelfReferringEdge = function (node) {
-          // console.log("HERE: ", link.select("path")["_groups"][0]);
-          // console.log("HERE: ", link.select("path")[0]);
           // TODO: somehow the path array got stuck in _groups hidden property
             return link.select("path")["_groups"][0].map(function (path) {
               // TODO: make this less bad
@@ -1068,20 +1044,21 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         svg.attr("width", width);
-                        // OLD CODE -- what this does is resets the center of gravity to the new width and height
+                        // OLD CODE -- resets the center of gravity to the new width and height
                         // force.size([width, height]).resume();
 
-                        // TODO: Equivalent d3v4
-                        // simulation
-                        // .force("x", d3.forceX(width / 2))
-                        // .force("y", d3.forceY(height / 2))
-                        // .resume();
                         link
-                            .attr("x1", function(d) { return d.source.x; })
-                            .attr("x2", function(d) { return d.target.x; });
+                            .attr("x1", function (d) {
+                                return d.source.x;
+                            })
+                            .attr("x2", function (d) {
+                                return d.target.x;
+                            });
 
                         node
-                            .attr("x", function(d) { return d.x; });
+                            .attr("x", function (d) {
+                                return d.x;
+                            });
                     }
                 }
                 return d.x = currentXPos;
@@ -1096,21 +1073,21 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         svg.attr("height", height);
-                        // OLD CODE -- what this does is resets the center of gravity to the new width and height
+                        // OLD CODE -- resets the center of gravity to the new width and height
                         // force.size([width, height]).resume();
 
-                        // TODO: Equivalent d3v4
-                        // simulation
-                        // .force("x", d3.forceX(width / 2))
-                        // .force("y", d3.forceY(height / 2))
-                        // .resume();
-
                         link
-                            .attr("y1", function(d) { return d.source.y; })
-                            .attr("y2", function(d) { return d.target.y; });
+                            .attr("y1", function (d) {
+                                return d.source.y;
+                            })
+                            .attr("y2", function (d) {
+                                return d.target.y;
+                            });
 
                         node
-                            .attr("y", function(d) { return d.y; });
+                            .attr("y", function (d) {
+                                return d.y;
+                            });
                     }
                 }
                 return d.y = currentYPos;
