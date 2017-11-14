@@ -156,28 +156,28 @@ var sliderGroupController = function (sliderArray) {
 
     this.resetForce = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            if (this.forceParameters[i] === "charge") {
-                this.simulation.force("charge").strength(this.sliders[i].defaultVal);
-                this.simulation.alpha(1); // reheat
-            }
-            if (this.forceParameters[i] === "link") {
-                this.simulation.force("link").distance(this.sliders[i].defaultVal);
-                this.simulation.alpha(1); // reheat
-            }
+            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].defaultVal);
         }
     };
-    // condense this ^ v
 
     this.undoForceReset = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            if (this.forceParameters[i] === "charge") {
-                this.simulation.force("charge").strength(this.sliders[i].backup);
-                this.simulation.alpha(1); // reheat
-            }
-            if (this.forceParameters[i] === "link") {
-                this.simulation.force("link").distance(this.sliders[i].backup);
-                this.simulation.alpha(1); // reheat
-            }
+            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].backup);
+        }
+    };
+
+    this.modifyForceParameter = function (parameterType, value) {
+        switch (parameterType) {
+        case "charge":
+            this.simulation.force("charge").strength(value);
+            this.simulation.alpha(1);
+            break;
+        case "link":
+            this.simulation.force("link").distance(value);
+            this.simulation.alpha(1);
+            break;
+        default:
+            break;
         }
     };
 };
