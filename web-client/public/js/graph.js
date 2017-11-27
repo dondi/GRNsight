@@ -121,20 +121,21 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .scaleExtent([1 / 2, 4])
       .on("zoom", zoomed);
 
-    boundingBoxContainer.style("pointer-events", "all")
-        .call(zoomDrag);
-      // .call(zoom).on("wheel.zoom", null); // disables wheel zoom
+    boundingBoxContainer.style("pointer-events", "all").call(zoomDrag);
 
     function zoomed () {
-        // console.log("HHHEEEEYYYAAA", d3.event.transform);
         zoomContainer.attr("transform", d3.event.transform);
     }
 
-
     function zoomDragged () {
-        var h = zoomContainer.attr("height");
-        var w = zoomContainer.attr("width");
-        zoom.translateBy(zoomContainer, d3.event.x - w / 2, d3.event.y - h / 2);
+        if (adaptive) {
+            // var ch = zoomContainer.attr("height");
+            // var cw = zoomContainer.attr("width");
+
+            var w = $container.width();
+            var h = $container.height();
+            zoom.translateBy(zoomContainer, d3.event.x - w / 2, d3.event.y - h / 2);
+        }
     }
 
 
@@ -146,7 +147,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     .attr("width", width)
                     .attr("height", height)
                     .style("fill", "none")
-                    // .style("pointer-events", "all")
+                    .style("pointer-events", "all")
                     .attr("stroke", adaptive ? "none" : "#9A9A9A")
                     .append("g");
 
@@ -175,7 +176,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
     arrowMovement.forEach(function (direction) {
         d3.select(".scroll" + direction).on("click", function () {
-            // move(direction.toLowerCase()); // TODO: disabled
+            move(direction.toLowerCase()); // TODO: disabled
         });
     });
     d3.select(".center").on("click", center);
@@ -318,7 +319,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
       // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
-          .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
+          // .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
+
+          .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
 
@@ -349,19 +352,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             width = $container.width();
             height = $container.height();
             d3.select("rect").attr("stroke", "#9A9A9A")
-          .attr("width", width)
-          .attr("height", height);
+              .attr("width", width)
+              .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
-            // center(); // TODO: need to write a v4-complient center function
+            center();
         }
-        // OLD CODE -- what this does is resets the center of gravity to the new width and height
-        // force.size([width, height]).resume();
-
-        // TODO: do we need this anymore?
-        // simulation
-        // .force("x", d3.forceX(width / 2))
-        // .force("y", d3.forceY(height / 2))
-        // .resume();
     });
 
     $(window).on("resize", function () {
@@ -370,12 +365,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     });
 
-    $container.on("mousedown", function () {
+    d3.select("rect").on("mousedown", function () {
+        console.log("mousedown");
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
         if (!adaptive) {
             $container.removeClass(CURSOR_CLASSES);
         }
     }).on("mouseup", function () {
+        console.log("mouseup!");
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         if (!adaptive) {
             $container.removeClass(CURSOR_CLASSES);
@@ -383,48 +380,22 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     });
 
     function center () {
-        boundingBoxContainer.call(zoom.event);
-        // var scale = zoom.scale();
-        var scale = 1;
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
-        var boundingBoxWidth = $(".boundingBox").attr("width");
-        var boundingBoxHeight = d3.select(".boundingBox").select("g").attr("height");
-        boundingBoxHeight = boundingBoxHeight === null ? $(".boundingBox").attr("height") : boundingBoxHeight;
-
-        var scaledWidth = scale * boundingBoxWidth;
-        var scaledHeight = scale * boundingBoxHeight;
-
-        var translatedWidth = (viewportWidth - scaledWidth) / 2;
-        var translatedHeight = (viewportHeight - scaledHeight) / 2;
-        zoom.translateBy([translatedWidth, translatedHeight]);
-        boundingBoxContainer.transition().call(zoom.event);
+        zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
     }
 
-  /* Credit to https://bl.ocks.org/mbostock/7ec977c95910dd026812 */
-    // function move (direction) {
-    //     boundingBoxContainer.call(zoom.event);
-    //     var currentTransform = d3.transform(boundingBoxContainer.attr("transform"));
-    //     var currentTranslate = [0, 0];
-    //     if (currentTransform) {
-    //         currentTranslate = d3.transform(currentTransform).translate;
-    //     }
-    //     currentTranslate[0] += (direction === "left" ? 50 : (direction === "right" ? -50 : 0));
-    //     currentTranslate[1] += (direction === "up" ? 50 : (direction === "down" ? -50 : 0));
-    //     zoom.translateTo(currentTranslate);
-    //     boundingBoxContainer.transition().call(zoom.event);
-    // }
+    function move (direction) {
+        var width = direction === "left" ? 50 : (direction === "right" ? -50 : 0);
+        var height = direction === "up" ? 50 : (direction === "down" ? -50 : 0);
+        zoom.translateBy(zoomContainer, width, height);
+    }
 
     var defs = boundingBoxContainer.append("defs");
 
     var link = boundingBoxContainer.selectAll(".links");
     var node = boundingBoxContainer.selectAll(".nodes");
     var weight = boundingBoxContainer.selectAll(".weight");
-
-    // OLD CODE
-    // force.nodes(nodes)
-    //   .links(links)
-    //   .start();
 
     simulation
       .nodes(nodes)
@@ -1236,11 +1207,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     sliderController.addForce(simulation);
     sliderController.configureForceHandlers();
     sliderController.initializeDefaultForces();
-    // TODO: refactor this to an "init forces" function
-    // simulation.force("charge").strength(-50);
-    // simulation.force("link").distance(500);
-    // simulation.alpha(1); // reheat
-
 
     $(".startDisabled").removeClass("disabled");
 };
