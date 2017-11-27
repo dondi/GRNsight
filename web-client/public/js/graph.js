@@ -51,7 +51,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     var minimumScale = MIN_SCALE;
-    var maximumScale = ADAPTIVE_MAX_SCALE;
+    // var maximumScale = ADAPTIVE_MAX_SCALE;
 
     var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -150,27 +150,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     .style("pointer-events", "all")
                     .attr("stroke", adaptive ? "none" : "#9A9A9A")
                     .append("g");
-
-    // function zoomed () {
-    //     if (adaptive) { // Limit to viewport
-    //         console.log("d3.event.tranform in zoom: ", d3.event.transform);
-    //         // var scale = zoom.scale();
-    //         var scale = 1;
-    //         var scaledWidth = scale * width;
-    //         var scaledHeight = scale * height;
-    //         var maxX = width - scaledWidth;
-    //         var maxY = height - scaledHeight;
-    //         // console.log("d3.event.translate: ", d3.event.translate);
-    //         // console.log("d3.event.transform: ", d3.event.transform);
-    //         // d3.event.translate[0] = Math.min(Math.max(d3.event.translate[0], 0), maxX);
-    //         // d3.event.translate[1] = Math.min(Math.max(d3.event.translate[1], 0), maxY);
-    //         // zoom.translateTo([d3.event.translate[0], d3.event.translate[1]]);
-    //     }
-    //
-    //     // var transform = d3.zoomTransform(d3.event.transform);
-    //     // boundingBoxContainer.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
-    //     // boundingBoxContainer.attr("transform",  "translate(" + 50 + "," + 50 + ") scale(" + 1 + ")");
-    // }
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
