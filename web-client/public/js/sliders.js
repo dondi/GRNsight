@@ -14,6 +14,17 @@ var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
+var SLIDER_ADJUSTER = {
+    charge: function (sliderController, value) {
+        sliderController.simulation.force("charge").strength(value);
+        sliderController.simulation.alpha(1);
+    },
+    link: function (sliderController, value) {
+        sliderController.simulation.force("link").distance(value);
+        sliderController.simulation.alpha(1);
+    }
+};
+
 var updateSliderDisplayedValue = function (slider, element) {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
@@ -85,6 +96,11 @@ var sliderGroupController = function (sliderArray) {
         }
     };
 
+    this.initializeDefaultForces = function () {
+        this.modifyForceParameter("charge", -50);
+        this.modifyForceParameter("link", 500);
+    };
+
     this.configureSliderControllers = function () {
         $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.toggle();
@@ -115,21 +131,14 @@ var sliderGroupController = function (sliderArray) {
 
     this.addForce = function (simulation) { // make forceParameters into an inputted array
         this.simulation = simulation;
-        this.forceParameters = [ "charge", "link"];
+        this.forceParameters = Object.keys(SLIDER_ADJUSTER);
     };
 
     this.configureForceHandlers = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
             $(this.sliders[i].sliderId).on("input", {handler: this, slider: this.sliders[i],
-                force: this.forceParameters[i], simulation: this.simulation}, function (event) {
-                    if (event.data.force === "charge") {
-                        event.data.simulation.force("charge").strength($(this).val());
-                        event.data.simulation.alpha(1); // reheat
-                    }
-                    if (event.data.force === "link") {
-                        event.data.simulation.force("link").distance($(this).val());
-                        event.data.simulation.alpha(1); // reheat
-                    }
+                force: this.forceParameters[i]}, function (event) {
+                    event.data.handler.modifyForceParameter(event.data.force, $(this).val());
                     updateSliderDisplayedValue(event.data.slider, this);
                 });
         }
@@ -167,17 +176,8 @@ var sliderGroupController = function (sliderArray) {
     };
 
     this.modifyForceParameter = function (parameterType, value) {
-        switch (parameterType) {
-        case "charge":
-            this.simulation.force("charge").strength(value);
-            this.simulation.alpha(1);
-            break;
-        case "link":
-            this.simulation.force("link").distance(value);
-            this.simulation.alpha(1);
-            break;
-        default:
-            break;
+        if (SLIDER_ADJUSTER[parameterType]) {
+            SLIDER_ADJUSTER[parameterType](this, value);
         }
     };
 };
