@@ -878,8 +878,16 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         return d.textWidth / 2 + 3;
     })
     .on("dblclick", nodeTextDblclick)
-    .on("contextmenu", function () {
-        console.log("pugs are great");
+    .on("contextmenu", function (gene) {
+        console.log(gene);
+        var tempLink = $("<a></a>")
+            .attr({
+                href: "http://dogtime.com/dog-breeds/pug",
+                target: "_blank"
+            });
+        $("body").append(tempLink);
+        tempLink.get(0).click();
+        tempLink.remove();
         d3.event.preventDefault();
     });
 
