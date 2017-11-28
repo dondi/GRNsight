@@ -877,7 +877,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
         return d.textWidth / 2 + 3;
     })
-    .on("dblclick", nodeTextDblclick);
+    .on("dblclick", nodeTextDblclick)
+    .on("contextmenu", function () {
+        console.log("pugs are great");
+        d3.event.preventDefault();
+    });
 
     rect
     .attr("width", function(d) {
