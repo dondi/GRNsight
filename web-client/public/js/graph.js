@@ -255,7 +255,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             manualZoomFunction(equivalentScale);
         } else {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
-            console.log("VAL:",$(".zoomSlider").val());
             $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
             manualZoomFunction(MIDDLE_SCALE);
             updateZoomPercent();
@@ -347,19 +346,19 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     });
 
-    d3.select("rect").on("mousedown", function () {
-        console.log("mousedown");
-        $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
-    }).on("mouseup", function () {
-        console.log("mouseup!");
-        $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
-    });
+    // d3.select("rect").on("mousedown", function () {
+    //     console.log("mousedown");
+    //     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+    //     if (!adaptive) {
+    //         $container.removeClass(CURSOR_CLASSES);
+    //     }
+    // }).on("mouseup", function () {
+    //     console.log("mouseup!");
+    //     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    //     if (!adaptive) {
+    //         $container.removeClass(CURSOR_CLASSES);
+    //     }
+    // });
 
     function center () {
         var viewportWidth = $container.width();
