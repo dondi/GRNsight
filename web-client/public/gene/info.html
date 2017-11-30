@@ -5,6 +5,16 @@
   </head>
   <body>
     <h1>Hello Gene!</h1>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+  var search = location.search.substring(1);
+  console.log(search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+                 function(key, value) { return key===""?value:decodeURIComponent(value) }):{})
+  // This is cite used to find the parsing:
+  // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
+</script>
   </body>
 
 </html>
