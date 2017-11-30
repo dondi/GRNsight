@@ -410,6 +410,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
         zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
+        simulation.alphaTarget(0.3).restart();
     }
 
     function move (direction) {
