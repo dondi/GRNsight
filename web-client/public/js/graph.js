@@ -99,10 +99,67 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var drag = d3.drag()
       .on("start", dragstart)
-      .on("drag", dragged);
+      .on("drag", dragged)
+      .on("end", dragended);
+
+    var dragended = function () {
+        d3.event.stopPropagation();
+    };
+
+
+    var savex = 0;
+    var savey = 0;
+    var zoomDragStarted = function () {
+        savex = d3.event.x;
+        savey = d3.event.y;
+        $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+        if (!adaptive) {
+            $container.removeClass(CURSOR_CLASSES);
+        }
+    };
+
+    var zoomDragged = function () {
+        if (adaptive) {
+            var scale = 1;
+            if (zoomContainer.attr("transform")) {
+                var string = zoomContainer.attr("transform");
+                scale = 1 / (+(string.substring(string.indexOf("scale(") + 6, string.lastIndexOf(")"))));
+            }
+            zoom.translateBy(zoomContainer, scale * (d3.event.x - savex), scale * (d3.event.y - savey));
+            savex = d3.event.x;
+            savey = d3.event.y;
+
+            // if (zoomContainer.attr("transform")) {
+            //     var transformArr;
+            //     var string = zoomContainer.attr("transform");
+            //     console.log('d3.event.x' + ' ' + d3.event.x + ' y: ' + d3.event.y);
+            //     console.log(string);
+            //     transformArr = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(",");
+            //     var xTransform = d3.event.x - (+transformArr[0]);
+            //     var yTransform = d3.event.y - (+transformArr[1]);
+            //     console.log("xTransform: " + (d3.event.x - savex) + "yTransform: " + (d3.event.y - savey));
+            //     // console.log("yTransform: ", yTransform)
+            //     if (+transformArr[0] && +transformArr[1]) {
+            //         // zoom.translateBy(zoomContainer, xTransform, yTransform);
+            //         zoom.translateBy(d3.event.x - savex, d3.event.y - savey);
+            //     }
+            // } else {
+            //     zoom.translateBy(zoomContainer, d3.event.x, d3.event.y);
+            // }
+        }
+    };
+
+    var zoomDragEnded = function () {
+        $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+        if (!adaptive) {
+            $container.removeClass(CURSOR_CLASSES);
+        }
+    };
 
     var zoomDrag = d3.drag()
-        .on("drag", zoomDragged);
+        .on("start", zoomDragStarted)
+        .on("drag", zoomDragged)
+        .on("end", zoomDragEnded);
 
     var manualZoom = false;
 
@@ -121,21 +178,10 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       .scaleExtent([1 / 2, 4])
       .on("zoom", zoomed);
 
-    boundingBoxContainer.style("pointer-events", "all").call(zoomDrag);
+    svg.style("pointer-events", "all").call(zoomDrag);
 
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
-    }
-
-    function zoomDragged () {
-        if (adaptive) {
-            // var ch = zoomContainer.attr("height");
-            // var cw = zoomContainer.attr("width");
-
-            var w = $container.width();
-            var h = $container.height();
-            zoom.translateBy(zoomContainer, d3.event.x - w / 2, d3.event.y - h / 2);
-        }
     }
 
 
@@ -155,7 +201,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
     arrowMovement.forEach(function (direction) {
         d3.select(".scroll" + direction).on("click", function () {
-            move(direction.toLowerCase()); // TODO: disabled
+            move(direction.toLowerCase());
         });
     });
     d3.select(".center").on("click", center);
@@ -344,19 +390,19 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     });
 
-    d3.select("rect").on("mousedown", function () {
-        console.log("mousedown");
-        $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
-    }).on("mouseup", function () {
-        console.log("mouseup!");
-        $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
-    });
+    // d3.select("rect").on("mousedown", function () {
+    //     console.log("mousedown");
+    //     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+    //     if (!adaptive) {
+    //         $container.removeClass(CURSOR_CLASSES);
+    //     }
+    // }).on("mouseup", function () {
+    //     console.log("mouseup!");
+    //     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    //     if (!adaptive) {
+    //         $container.removeClass(CURSOR_CLASSES);
+    //     }
+    // });
 
     function center () {
         var viewportWidth = $container.width();
