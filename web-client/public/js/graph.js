@@ -48,6 +48,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var MIN_SCALE = 0.25;
     var ADAPTIVE_MAX_SCALE = 4;
+    var MIDDLE_SCALE = 1;
     // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     var minimumScale = MIN_SCALE;
@@ -251,7 +252,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       // For the same concept as above, we need to figure out what to add to 1 so
       // so that we can end up with maxScale. Note that we start at 1 and not 0 because
       // the scale is beginning at 1.
-        scaleIncreasePerRightPoint = (maxScale - 1) / rightPoints;
+        scaleIncreasePerRightPoint = (maxScale - MIDDLE_SCALE) / rightPoints;
         var totalPoints = leftPoints + rightPoints;
 
       // Returns the x that we're mapping to. Now we can set up the range slider.
@@ -266,14 +267,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     function updateZoomPercent () {
         var value = Math.round(($(".zoomSlider").val() / 8 * 200));
-        value = value === 0 ? 1 : value;
+        value = value === 0 ? MIDDLE_SCALE : value;
         $("#zoomPercent").html(value + "%");
     }
 
     function getMappedValue (scale) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
         var equivalentPoint;
-        if (scale <= 1) {
+        if (scale <= MIDDLE_SCALE) {
             equivalentPoint = (scale - minimumScale) / (scaleIncreasePerLeftPoint * 100);
         } else {
             equivalentPoint = (scale - 1) / scaleIncreasePerRightPoint + leftPoints;
@@ -292,7 +293,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
             } else {
                 currentPoint = currentPoint - leftPoints;
-                equivalentScale = 1;
+                equivalentScale = MIDDLE_SCALE;
                 equivalentScale += scaleIncreasePerRightPoint * currentPoint;
             }
             zoomSliderScale = equivalentScale;
@@ -301,6 +302,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         } else {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
             $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
+            manualZoomFunction(MIDDLE_SCALE);
             updateZoomPercent();
         }
     }).on("mousedown", function () {
@@ -310,9 +312,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     });
 
     var manualZoomFunction = function (zoomScale) {
-        if (zoomScale < 1) {
+        if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        } else if (!adaptive && zoomScale >= 1) {
+        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES);
         }
         updateZoomPercent();
