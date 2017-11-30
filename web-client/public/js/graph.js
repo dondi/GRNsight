@@ -882,7 +882,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         console.log(gene);
         var tempLink = $("<a></a>")
             .attr({
-                href: "/gene/info.html",
+                href: "/gene/info.html?" + $.param({symbol: gene.name}),
                 target: "_blank"
             });
         $("body").append(tempLink);
