@@ -4,8 +4,7 @@
 
 (function () {
     window.api = {
-        getGeneInformation: function ()
-
+        getGeneInformation: function () {
         }
     };
 })();
