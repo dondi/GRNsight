@@ -3,8 +3,7 @@
 var doStuff = function() {
 
 $.get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=853313").done(response => {
-     var title = response.getElementsByTagName("Name")[0];
-     $("#someElement").append(title);
+     $("#someElement").append(response.getElementsByTagName("Name")[0]);
     });
 }
 
