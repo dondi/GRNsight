@@ -44,7 +44,15 @@
             };
 
             var getYeastMineInfo = function (geneSymbol) {
-                // John Lopez
+                return $.get({
+                    url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("content-type", "application/json");
+                    },
+                }).then(function(data) {
+                    return $.get({
+                       //TODO: This part                
             };
 
             var getEnsemblInfo = function (geneSymbol) {
