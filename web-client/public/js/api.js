@@ -51,6 +51,7 @@
                         xhr.setRequestHeader("content-type", "application/json");
                     },
                 }).then(function (data) {
+                    console.log(data.results[0]);
                     return $.get({
                        // TODO: This part
                     });
