@@ -24,11 +24,8 @@ var callUniprot = function() {
       $("#proteinType").append("Protein Type/Name: "+ proteinType);
 
       var organism = response.getElementsByTagName("organism")[0];
-
       var species = serializer.serializeToString(organism.childNodes[1]);
-      //Can we please cut the common name out???
-      var commonName = serializer.serializeToString(organism.childNodes[3]);
-      $("#species").append("Species: " + species + " Common Name:" + commonName );
+      $("#species").append("Species: " + species);
 
       var sequence = serializer.serializeToString(response.getElementsByTagName("sequence")[0]);
       $("#sequence").append("Sequence: " + sequence);
