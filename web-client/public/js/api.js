@@ -44,17 +44,17 @@
             };
 
             var getYeastMineInfo = function (geneSymbol) {
-                return $.get({
-                    url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
-                    dataType: "json",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("content-type", "application/json");
-                    },
-                }).then(function (data) {
-                    return $.get({
-                       // TODO: This part
-                    });
-                });
+                // return $.get({
+                //     url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
+                //     dataType: "json",
+                //     beforeSend: function (xhr) {
+                //         xhr.setRequestHeader("content-type", "application/json");
+                //     },
+                // }).then(function (data) {
+                //     return $.get({
+                //        // TODO: This part
+                //     });
+                // });
             };
 
             var getEnsemblInfo = function (geneSymbol) {
@@ -76,21 +76,13 @@
             };
 
             var getJasparInfo = function (geneSymbol) {
-                return $.get({
-                    url: "http://jaspar.genereg.net/api/v1/matrix/?tax_id=4932&search=" + geneSymbol,
-                    dataType: "json",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("content-type", "application/json");
-                    },
+                return window.fetch("http://jaspar.genereg.net/api/v1/matrix/?tax_id=4932&search=" + geneSymbol, {
+                    mode: "no-cors",
                 }).then(function (data) {
                     return (data.count === 0 ?
                         null :
-                        $.get({
-                            url: "http://jaspar.genereg.net/api/v1/matrix/" + data.results[0].matrix_id,
-                            dataType: "json",
-                            beforeSend: function (xhr) {
-                                xhr.setRequestHeader("content-type", "application/json");
-                            },
+                        window.fetch("http://jaspar.genereg.net/api/v1/matrix/" + data.results[0].matrix_id, {
+                            mode: "no-cors",
                         })
                     );
                 });
