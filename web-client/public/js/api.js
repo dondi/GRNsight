@@ -97,8 +97,67 @@
             };
 
             // change if any preprocessing needs to be done on the data before being given to the application
-            var filterData = function (data) {
-                return data;
+            var filterData = function () {
+                // Layed out the object with everything we need and where we get it from
+                // All of the example data
+                return {
+                    jaspar: {
+                        jasparID : "etc.",
+                        class: "etc.",
+                        family: "etc.",
+                        sequenceLogo: "URL",
+                        frequencyMatric: "URL",
+                    },
+                    ncbi: {
+                        ncbiID: "etc.",
+                        locusTag: "etc.",
+                        alsoKnownAs: "etc.",
+                        chromosomeSequence: "etc.",
+                        genomicSequence: "etc.",
+                        proteinSequence: "etc.",
+                    },
+                    emsembl: {
+                        ensemblID: "etc.",
+                        description: "etc.",
+                        dnaSequence: "etc.",
+                        geneLocation: "etc.",
+                        geneMap: "URL",
+                    },
+                    uniprot: {
+                        uniprotID: "etc.",
+                        proteinSequence: "etc.",
+                        similarProtein: { name: "etc.", id: "etc." },
+                        proteinType: "etc.",
+                        species: "etc.",
+                    },
+                    sgd: {
+                        sgdID: "etc.",
+                        standardName: "etc.",
+                        systematicName: "etc.",
+                        regulators: 1,
+                        targets: 12,
+                        totalInteractions: "etc.",
+                        affinityCaptureMS: 11,
+                        affinityCaptureRNA: 1,
+                        affinityCaptureWestern: 4,
+                        biochemicalActivity: 11,
+                        colocalization: 3,
+                        reconstitutedComplex: 2,
+                        twoHybrid: 3,
+                        dosageRescue: 16,
+                        negativeGenetic: 8,
+                        phenotypicEnhancement: 1,
+                        phenotypicSuppression: 5,
+                        syntheticGrowthDefect: 2,
+                        syntheticHaploinsufficiency: 1,
+                        syntheticLethality: 6,
+                        syntheticRescue: 11,
+                        geneOntologySummary: "etc.",
+                        molecularFunction: "etc.",
+                        biologicalProcess: "etc.",
+                        cellularComponent: "etc.",
+                    },
+                };
             };
 
             // TODO: Error Handling, Mock Testing, Data filtering
