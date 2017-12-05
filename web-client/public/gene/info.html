@@ -1,31 +1,158 @@
 <!doctype html>
 <html>
   <head>
-    <title>Hi</title>
+    <title>Loading... </title> <!-- Your gene name goes here! -->
+    <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   </head>
   <body>
-    <h1>Hello Gene!</h1>
 
-    <ul id="geneIDs"> <!-- This is where we'll list out all the gene ID's from the given databases, we expect that it specifies what database the ID is associated to-->
-    </ul>
-    <div id="DNA_Sequence"> <!-- this is where the DNA sequence from ensemble will go, should use monospace/fixed width font-->
-    </div>
-    <div id="RNA_Sequence"> <!-- Also from ensemble, also should be monospace/fixed width font-->
-    </div>
-    <p id= "locus_tag"> <!-- should just be a short string, it might be changed from p to div but either way the info goes here -->
-    </p>
+    <div class="row">
+      <div class="col-12">
+        <div class="jumbotron" style="background-color: white; padding-bottom:0px !important;">
+          <div>
+            <a class="lead" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database" style="color:#CC3F0C;font-weight:700;">S000001855</a>&nbsp;&nbsp;
+            <a class="lead" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information" style="color:#677DB7;font-weight:700;">850504</a>&nbsp;&nbsp;
+            <a class="lead" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl" style="color:#33673B;font-weight:700;">YFL039C</a>&nbsp;&nbsp;
+            <a class="lead" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt" style="color:#F09D51;font-weight:700;">P60010</a>
+            <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
+          </div>
+          <h1 class="display-4">Gene Name - Genus species</h1> <!-- Style in Italics -->
+          <p class="lead">
+            General information about your gene goes here.
+          </p> <!-- this information should be pulled from ensemble -->
+        </div>
+      </div>
+    </div> <!-- Inspired by ACT1's formatting, the Gene Name, gene ID's and general description would go here -->
+
+        <div class="row">
+          <div class="col-12">
+            <div id="mainContent" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="card">
+                <div class="card-header" role="tab" id="dnaSequenceHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">
+                      DNA Sequence
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="dnaSequence" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="card-block">
+                    <!--THIS IS WHERE THE DNA SEQUENCE FROM ENSEMBLE SHOULD GO, USE <BR> TAGS FOR DNA AND RNA -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="proteinSequenceHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#proteinSequence" aria-expanded="true" aria-controls="collapseOne">
+                      Protein Sequence
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="locusTag" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="card-block">
+                    <!--This is where the protein sequence should go from UniProt -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="locusTagHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#proteinSequence" aria-expanded="true" aria-controls="collapseOne">
+                      Locus Tag
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="locusTag" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                  <div class="card-block">
+                    <!--This is where the locus tag should go from NCBI -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="regulationHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
+                      Regulation
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="regulation" class="collapse" role="tabpanel" aria-labelledby="headingFive">
+                  <div class="card-block">
+                    <!--This is where the information for regulation should go from SGD -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="interactionHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
+                      Interaction
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="interaction" class="collapse" role="tabpanel" aria-labelledby="headingSix">
+                  <div class="card-block">
+                    <!--This is where the information for interaction should go from SGD -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="similarProteinsHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#similarProteins" aria-expanded="true" aria-controls="collapseOne">
+                      Similar Proteins
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="similarProteins" class="collapse" role="tabpanel" aria-labelledby="headingSeven">
+                  <div class="card-block">
+                    <!--This is where the information for similar proteins should go from UniProt-->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="geneOntologyHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
+                      Gene Ontology
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="geneOntology" class="collapse" role="tabpanel" aria-labelledby="headingEight">
+                  <div class="card-block">
+                    <!--This is where the information for gene ontology should go from SGD -->
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" role="tab" id="jasparInfoHeading">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#jasparInfo" aria-expanded="true" aria-controls="collapseOne">
+                      Transcription Factor Information from JASPAR
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="jasparInfo" class="collapse" role="tabpanel" aria-labelledby="headingNine">
+                  <div class="card-block">
+                    <!--This is where the additional information from jaspar such as matrix ID, class heat shock factors, consensus sequence, etc should go -->
+                  </div>
+                </div>
+              </div>
 
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
-<script>
-  var search = location.search.substring(1);
-  console.log(search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
-                 function(key, value) { return key===""?value:decodeURIComponent(value) }):{})
-  // This is cite used to find the parsing:
-  // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
-</script>
-<script src="api.js"></script>
   </body>
-
+  <script src='info.js'></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 </html>
