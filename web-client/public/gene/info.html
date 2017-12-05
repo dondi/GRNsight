@@ -18,10 +18,10 @@
             <a class="lead" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt" style="color:#F09D51;font-weight:700;">P60010</a> -->
             <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
           </div>
-          <h1 class="display-4">your gene name should go here - Saccharomyces cerevisiae</h1>
+          <h1 class="display-4">Gene Name - Genus species</h1> <!-- Style in Italics -->
           <p class="lead">
             General information about your gene goes here.
-          </p>
+          </p> <!-- this information should be pulled from ensemble -->
         </div>
       </div>
     </div> <!-- Inspired by ACT1's formatting, the Gene Name, gene ID's and general description would go here -->
@@ -75,21 +75,6 @@
                 </div>
               </div>
               <div class="card">
-                <div class="card-header" role="tab" id="consensusSequenceHeading">
-                  <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#consensusSequence" aria-expanded="true" aria-controls="collapseOne">
-                      Consensus Sequence
-                    </a>
-                  </h5>
-                </div>
-
-                <div id="consensusSequence" class="collapse" role="tabpanel" aria-labelledby="headingFour">
-                  <div class="card-block">
-                    <!--This is where the consensus sequence should go from JASPAR -->
-                  </div>
-                </div>
-              </div>
-              <div class="card">
                 <div class="card-header" role="tab" id="regulationHeading">
                   <h5 class="mb-0">
                     <a data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
@@ -123,7 +108,7 @@
                 <div class="card-header" role="tab" id="similarProteinsHeading">
                   <h5 class="mb-0">
                     <a data-toggle="collapse" data-parent="#accordion" href="#similarProteins" aria-expanded="true" aria-controls="collapseOne">
-                      Regulation
+                      Similar Proteins
                     </a>
                   </h5>
                 </div>
@@ -153,14 +138,14 @@
                 <div class="card-header" role="tab" id="jasparInfoHeading">
                   <h5 class="mb-0">
                     <a data-toggle="collapse" data-parent="#accordion" href="#jasparInfo" aria-expanded="true" aria-controls="collapseOne">
-                      Additional JASPAR information
+                      Transcription Factor Information from JASPAR
                     </a>
                   </h5>
                 </div>
 
                 <div id="jasparInfo" class="collapse" role="tabpanel" aria-labelledby="headingNine">
                   <div class="card-block">
-                    <!--This is where the additional information from jaspar such as matrix ID, class heat shock factors, etc should go -->
+                    <!--This is where the additional information from jaspar such as matrix ID, class heat shock factors, consensus sequence, etc should go -->
                   </div>
                 </div>
               </div>
