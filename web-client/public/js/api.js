@@ -50,9 +50,11 @@
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
                     },
-                }).then(function(data) {
+                }).then(function (data) {
                     return $.get({
-                       //TODO: This part                
+                       // TODO: This part
+                    });
+                });
             };
 
             var getEnsemblInfo = function (geneSymbol) {
@@ -74,7 +76,13 @@
             };
 
             var getJasparInfo = function (geneSymbol) {
-                // JASPAR group
+                return $.get({
+                    url: "http://jaspar.genereg.net/api/v1/matrix/?tax_id=4932&search=" + geneSymbol,
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("content-type", "application/json");
+                    },
+                });
             };
 
             // change if any preprocessing needs to be done on the data before being given to the application
