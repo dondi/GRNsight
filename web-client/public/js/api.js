@@ -82,6 +82,17 @@
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
                     },
+                }).then(function (data) {
+                    return (data.count === 0 ?
+                        null :
+                        $.get({
+                            url: "http://jaspar.genereg.net/api/v1/matrix/" + data.results[0].matrix_id,
+                            dataType: "json",
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("content-type", "application/json");
+                            },
+                        })
+                    );
                 });
             };
 
