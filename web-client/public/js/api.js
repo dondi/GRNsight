@@ -97,16 +97,14 @@
             };
 
             // change if any preprocessing needs to be done on the data before being given to the application
-            var filterData = function () {
-                // Layed out the object with everything we need and where we get it from
-                // All of the example data
+            var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 return {
                     jaspar: {
-                        jasparID : "etc.",
-                        class: "etc.",
-                        family: "etc.",
-                        sequenceLogo: "URL",
-                        frequencyMatric: "URL",
+                        jasparID : jasparInfo.matrix_id, // string
+                        class: jasparInfo.class, // string
+                        family: jasparInfo.family, // array
+                        sequenceLogo: jasparInfo.sequence_logo, // string: URL to image
+                        frequencyMatrix: jasparInfo.pfm,  // object with keys ACIG, each key mapping to an array of ints
                     },
                     ncbi: {
                         ncbiID: "etc.",
@@ -168,15 +166,7 @@
                 getEnsemblInfo(symbol),
                 getJasparInfo(symbol)
             ).done(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
-                var data = {
-                    Uniprot: uniprotInfo,
-                    NCBI: ncbiInfo,
-                    "SGD/YeastMine": yeastmineInfo,
-                    Ensembl: ensemblInfo,
-                    JASPAR: jasparInfo,
-                };
-                console.log(data);
-                return filterData(data);
+                return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
             });
         }
     };
