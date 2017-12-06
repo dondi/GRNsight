@@ -107,7 +107,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         d3.event.stopPropagation();
     };
 
-
     var savex = 0;
     var savey = 0;
     var zoomDragStarted = function () {
@@ -129,24 +128,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             zoom.translateBy(zoomContainer, scale * (d3.event.x - savex), scale * (d3.event.y - savey));
             savex = d3.event.x;
             savey = d3.event.y;
-
-            // if (zoomContainer.attr("transform")) {
-            //     var transformArr;
-            //     var string = zoomContainer.attr("transform");
-            //     console.log('d3.event.x' + ' ' + d3.event.x + ' y: ' + d3.event.y);
-            //     console.log(string);
-            //     transformArr = string.substring(string.indexOf("(") + 1, string.indexOf(")")).split(",");
-            //     var xTransform = d3.event.x - (+transformArr[0]);
-            //     var yTransform = d3.event.y - (+transformArr[1]);
-            //     console.log("xTransform: " + (d3.event.x - savex) + "yTransform: " + (d3.event.y - savey));
-            //     // console.log("yTransform: ", yTransform)
-            //     if (+transformArr[0] && +transformArr[1]) {
-            //         // zoom.translateBy(zoomContainer, xTransform, yTransform);
-            //         zoom.translateBy(d3.event.x - savex, d3.event.y - savey);
-            //     }
-            // } else {
-            //     zoom.translateBy(zoomContainer, d3.event.x, d3.event.y);
-            // }
         }
     };
 
@@ -184,7 +165,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
     }
-
 
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
@@ -297,7 +277,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 equivalentScale += scaleIncreasePerRightPoint * currentPoint;
             }
             zoomSliderScale = equivalentScale;
-            // zoom.scale(equivalentScale);
             manualZoomFunction(equivalentScale);
         } else {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
@@ -319,15 +298,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
         updateZoomPercent();
         var container = zoomContainer;
-        // var container = d3.select($container[0]).select("svg").select("g");
-        // var h = container.attr("height");
-        // var w = container.attr("width");
-        // container.attr("transform",
-        //       // "translate(" + w / 2 + ", " + h / 2 + ") " +
-        //       "scale(" + zoomScale + ") "
-        //       // +
-        //       // "translate(" + (-w / 2) + ", " + (-h / 2) + ")"
-        //   );
         zoom.scaleTo(container, zoomScale);
     };
 
@@ -346,20 +316,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
       // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
-          // .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight - 1 : newHeight);
-
           .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
-
-        // OLD CODE -- what this does is resets the center of gravity to the new width and height
-        // force.size([width, height]).resume();
-
-        // TODO: Equivalent d3v4
-        // simulation
-        // .force("x", d3.forceX(width / 2)) /
-        // .force("y", d3.forceY(height / 2))
-        // .resume();
     });
 
     d3.selectAll("input[name=viewport]").on("change", function () {
@@ -391,20 +350,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             $(".boundBoxSize").trigger("click");
         }
     });
-
-    // d3.select("rect").on("mousedown", function () {
-    //     console.log("mousedown");
-    //     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
-    //     if (!adaptive) {
-    //         $container.removeClass(CURSOR_CLASSES);
-    //     }
-    // }).on("mouseup", function () {
-    //     console.log("mouseup!");
-    //     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-    //     if (!adaptive) {
-    //         $container.removeClass(CURSOR_CLASSES);
-    //     }
-    // });
 
     function center () {
         var viewportWidth = $container.width();
@@ -889,8 +834,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     var dblclick = function (d) {
-        // d3.event.stopPropagation();
-        // d3.select(this).classed("fixed", d.fixed = false);
         d.fx = null;
         d.fx = null;
     };
@@ -1025,9 +968,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
         var getSelfReferringEdge = function (node) {
-          // TODO: somehow the path array got stuck in _groups hidden property
             return link.select("path")["_groups"][0].map(function (path) {
-              // TODO: make this less bad
                 return path.__data__;
             }).filter(function (pathData) {
                 return pathData.source === node && pathData.source === pathData.target;
@@ -1055,8 +996,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         boundingBoxContainer.attr("width", width);
-                        // OLD CODE -- resets the center of gravity to the new width and height
-                        // force.size([width, height]).resume();
 
                         link
                             .attr("x1", function (d) {
@@ -1084,8 +1023,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
-                        // OLD CODE -- resets the center of gravity to the new width and height
-                        // force.size([width, height]).resume();
 
                         link
                             .attr("y1", function (d) {
@@ -1232,6 +1169,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         d.fy = d3.event.y;
     }
 
+    // Configures sliderController
     sliderController.addForce(simulation);
     sliderController.configureForceHandlers();
     sliderController.initializeDefaultForces();
