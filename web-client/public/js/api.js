@@ -157,7 +157,7 @@
                 getYeastMineInfo(symbol),
                 getEnsemblInfo(symbol),
                 getJasparInfo(symbol)
-            ).done(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
+            ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
             });
         }
