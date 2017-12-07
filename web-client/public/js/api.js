@@ -76,13 +76,21 @@
             };
 
             var getJasparInfo = function (geneSymbol) {
-                return window.fetch("http://jaspar.genereg.net/api/v1/matrix/?tax_id=4932&search=" + geneSymbol, {
-                    mode: "no-cors",
+                return $.get({
+                    url: "/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("content-type", "application/json");
+                    },
                 }).then(function (data) {
                     return (data.count === 0 ?
                         null :
-                        window.fetch("http://jaspar.genereg.net/api/v1/matrix/" + data.results[0].matrix_id, {
-                            mode: "no-cors",
+                        $.get({
+                            url: "/api/v1/matrix/" + data.results[0].matrix_id,
+                            dataType: "json",
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("content-type", "application/json");
+                            },
                         })
                     );
                 });
