@@ -11,5 +11,9 @@
 
     api.getGeneInformation(obj.symbol).done(function (gene) {
         console.log(gene);
+
+        var sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
+        var sgdId = "YOOHOO";
+        $(".sgd-link").text(sgdId).attr({ href: sgdHrefTemplate + sgdId });
     })
 })();
