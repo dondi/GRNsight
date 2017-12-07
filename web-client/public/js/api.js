@@ -77,16 +77,15 @@
 
             var getJasparInfo = function (geneSymbol) {
                 return $.get({
-                    url: "/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+                    url: "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
                     dataType: "json",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
                     },
                 }).then(function (data) {
-                    return (data.count === 0 ?
-                        null :
+                    return (data.count === 0 ? {} :
                         $.get({
-                            url: "/api/v1/matrix/" + data.results[0].matrix_id,
+                            url: "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                             dataType: "json",
                             beforeSend: function (xhr) {
                                 xhr.setRequestHeader("content-type", "application/json");
@@ -99,7 +98,7 @@
             // change if any preprocessing needs to be done on the data before being given to the application
             var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 return {
-                    jaspar: {
+                    jaspar: !jasparInfo ? {} : {
                         jasparID : jasparInfo.matrix_id, // string
                         class: jasparInfo.class, // string
                         family: jasparInfo.family, // array
@@ -166,7 +165,7 @@
                 getEnsemblInfo(symbol),
                 getJasparInfo(symbol)
             ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
-                return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
+                return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo[0]);
             });
         }
     };
