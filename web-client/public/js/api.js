@@ -83,8 +83,7 @@
                         xhr.setRequestHeader("content-type", "application/json");
                     },
                 }).then(function (data) {
-                    return (data.count === 0 ?
-                        null :
+                    return (data.count === 0 ? {} :
                         $.get({
                             url: "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                             dataType: "json",
@@ -99,7 +98,7 @@
             // change if any preprocessing needs to be done on the data before being given to the application
             var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 return {
-                    jaspar: {
+                    jaspar: !jasparInfo ? {} : {
                         jasparID : jasparInfo.matrix_id, // string
                         class: jasparInfo.class, // string
                         family: jasparInfo.family, // array
