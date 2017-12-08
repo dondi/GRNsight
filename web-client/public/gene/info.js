@@ -28,5 +28,9 @@
         var uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
         var uniprotId = gene.uniprot.uniprotID;
         $(".uniprot-link").text(uniprotId).attr({ href: uniprotHrefTemplate + uniprotId });
+
+      //  var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
+      //  var jasparId = gene.jaspar.jasparID;
+      //  $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
     })
 })();
