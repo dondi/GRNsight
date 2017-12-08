@@ -16,11 +16,13 @@
                         query: geneSymbol,
                     },
                     dataType: "text",
+                    timeout: 5000,
                 }).then(function (data) {
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
                     return $.get({
                         url: "http://www.uniprot.org/uniprot/" + id + ".xml",
+                        timeout: 5000,
                     });
                 });
             };
@@ -33,12 +35,14 @@
                         term: geneSymbol + "[gene]+Saccharomyces+cerevisiae[Organism]",
                     },
                     dataType: "text",
+                    timeout: 5000,
                 }).then(function (data) {
                     var regex = /<Id>(\d*)<\/Id>/gm;
                     var id = regex.exec(data)[1];
                     return $.get({
                         url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
                         dataType: "xml",
+                        timeout: 5000,
                     });
                 });
             };
@@ -47,6 +51,7 @@
                 // return $.get({
                 //     url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
                 //     dataType: "json",
+                //     timeout: 5000,
                 //     beforeSend: function (xhr) {
                 //         xhr.setRequestHeader("content-type", "application/json");
                 //     },
@@ -61,6 +66,7 @@
                 return $.get({
                     url: "http://rest.ensembl.org/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
                     dataType: "json",
+                    timeout: 5000,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
                     },
@@ -68,6 +74,7 @@
                     return $.get({
                         url: "http://rest.ensembl.org/lookup/id/" + data.id + "?expand=1",
                         dataType: "json",
+                        timeout: 5000,
                         beforeSend: function (xhr) {
                             xhr.setRequestHeader("content-type", "application/json");
                         },
@@ -79,6 +86,7 @@
                 return $.get({
                     url: "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
                     dataType: "json",
+                    timeout: 5000,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
                     },
@@ -87,6 +95,7 @@
                         $.get({
                             url: "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                             dataType: "json",
+                            timeout: 5000,
                             beforeSend: function (xhr) {
                                 xhr.setRequestHeader("content-type", "application/json");
                             },
@@ -165,7 +174,10 @@
                 getEnsemblInfo(symbol),
                 getJasparInfo(symbol)
             ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
+                console.log(uniprotInfo[2].responseXML, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
                 return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo[0]);
+            }).fail(function () {
+                alert("There was an error retrieving the data from the databases. Please try again later.");
             });
         }
     };
