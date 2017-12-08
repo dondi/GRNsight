@@ -75,9 +75,9 @@
 
                 <div id="proteinInfo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="card-block">
-                    <div class="proteinSequence">Protein Sequence:<code>it goes here from UniProt</code></div>
-                    <p class = "similarProtein">from uni prot</p>
+                    <p class = "similarProtein">Similar Protein:</p>
                     <p class = "proteinType">Protein Type/Name:</p>
+                    <div class="proteinSequence">Protein Sequence:<code>it goes here from UniProt</code></div>
                   </div>
                 </div>
               </div>
@@ -108,8 +108,8 @@
 
                 <div id="regulation" class="collapse" role="tabpanel" aria-labelledby="headingFive">
                   <div class="card-block">
-                    <p class="regulators"></p>
-                    <p class="Targets"></p>
+                    <p class="regulators">Regulators:</p>
+                    <p class="Targets">Targets:</p>
                   </div>
                 </div>
               </div>
@@ -162,9 +162,10 @@
                   <div class="card-block">
                     <img class="sequenceLogo" src="image.svg" /> <!-- This is where the image from Jaspar's matrix comes from -->
                     <div class="container">
+
   <table class="frequencyMatrix">
     <thead>
-      <tr>
+      <tr> <!-- It's not always 15, it vary's so that's just a template, also might be null, if that's the case just a p that says "no frequency matrix available" -->
         <th>A:</th>
         <td>0</td>
         <td>1</td>
