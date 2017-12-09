@@ -189,20 +189,20 @@
                     }
                 }
 
-                var parseJaspar = function (data) {
-                    return {
-                        jasparID : data.matrix_id, // string
-                        class: data.class, // string
-                        family: data.family, // array
-                        sequenceLogo: data.sequence_logo, // string: URL to image
-                        frequencyMatrix: data.pfm,  // object with keys ACIG, each key mapping to an array of ints
-                    }
-                }
+                // var parseJaspar = function (data) {
+                //     return {
+                //         jasparID : data.matrix_id, // string
+                //         class: data.class, // string
+                //         family: data.family, // array
+                //         sequenceLogo: data.sequence_logo, // string: URL to image
+                //         frequencyMatrix: data.pfm,  // object with keys ACIG, each key mapping to an array of ints
+                //     }
+                // }
                 return {
                     // jaspar: parseJaspar(),
                     ncbi: parseNCBI(ncbiInfo[0]),
                     emsembl: parseEnsembl(ensemblInfo[0]),
-                    uniprot: parseUniprot(uniprotInfo[0]) ,
+                    uniprot: parseUniprot(uniprotInfo[0]),
                     sgd: parseYeastmine(yeastmineInfo[0]),
                 };
             };
@@ -212,20 +212,13 @@
                 getUniProtInfo(symbol),
                 getNCBIInfo(symbol),
                 getYeastMineInfo(symbol),
-<<<<<<< HEAD
-                getEnsemblInfo(symbol),
-                getJasparInfo(symbol)
-            ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
-                console.log(uniprotInfo[2].responseXML, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
-                return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo[0]);
-            }).fail(function () {
-                alert("There was an error retrieving the data from the databases. Please try again later.");
-=======
                 getEnsemblInfo(symbol)
                 // getJasparInfo(symbol)
-            ).done(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
+            ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
+                console.log(uniprotInfo[2].responseXML, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
                 return filterData(uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo);
->>>>>>> f1f68674238dc3331d2b926dd6fb88811def7666
+            }).fail(function () {
+                alert("There was an error retrieving the data from the databases. Please try again later.");
             });
         }
     };
