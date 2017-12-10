@@ -77,6 +77,31 @@
 
       // Genetic Interactions
 
+        var sgdDosage = gene.sgd.dosageRescue;
+        $(".dosageRescue").text("Dosage Rescue: " + sgdDosage).attr({ href: sgdHrefTemplate + sgdDosage });
+
+        var sgdNegGen = gene.sgd.negativeGenetic;
+        $(".negativeGenetic").text("Negative Genetic: " + sgdNegGen).attr({ href: sgdHrefTemplate + sgdNegGen });
+
+        var sgdEnhance = gene.sgd.phenotypicEnhancement;
+        $(".phenotypicEnhancement").text("Phenotypic Enhancement: " + sgdEnhance).attr({ href: sgdHrefTemplate + sgdEnhance });
+
+        var sgdSuppress = gene.sgd.phenotypicSuppression;
+        $(".phenotypicSuppression").text("Phenotypic Suppression: " + sgdSuppress).attr({ href: sgdHrefTemplate + sgdSuppress });
+
+        var sgdGrowthDefect = gene.sgd.syntheticGrowthDefect;
+        $(".syntheticGrowthDefect").text("Synthetic Growth Defect: " + sgdGrowthDefect).attr({ href: sgdHrefTemplate + sgdGrowthDefect });
+
+        var sgdHaploin = gene.sgd.syntheticHaploinsufficiency;
+        $(".syntheticHaploinsufficiency").text("Synthetic Haploin Sufficiency: " + sgdHaploin).attr({ href: sgdHrefTemplate + sgdHaploin });
+
+        var sgdLethality = gene.sgd.syntheticLethality;
+        $(".syntheticLethality").text("Synthetic Lethality: " + sgdLethality).attr({ href: sgdHrefTemplate + sgdLethality });
+
+        var sgdRescue = gene.sgd.sgdRescue;
+        $(".syntheticRescue").text("Synthetic Rescue: " + sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
+
+
       // Gene Ontology
         var sgdSummary = gene.sgd.geneOntologySummary;
         $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
