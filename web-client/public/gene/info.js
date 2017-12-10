@@ -34,7 +34,7 @@
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
         // General Information Section
-        
+
         var ensemblInfo = gene.ensembl.description;
         $(".ensemblDescription").text("Description: " + ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
 
@@ -77,30 +77,30 @@
 
       // Genetic Interactions
 
-      //Interaction: Physical Reaaction
+      // Interaction: Physical Reaaction
         var sgdInteractions = gene.sgd.totalInteractions;
-        $(".totalInteractions").text(sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
+        $(".totalInteractions").text("Total Interactions: " + sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
 
         var sgdAffinityCaptureMS = gene.sgd.affinityCaptureMS;
-        $(".affinityCaptureMS").text(sgdAffinityCaptureMS).attr({ href: sgdHrefTemplate + sgdAffinityCaptureMS });
+        $(".affinityCaptureMS").text("Affinity Capture MS: " + sgdAffinityCaptureMS).attr({ href: sgdHrefTemplate + sgdAffinityCaptureMS });
 
         var sgdAffinityCaptureRNA = gene.sgd.affinityCaptureRNA;
-        $(".affinityCaptureRNA").text(sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
+        $(".affinityCaptureRNA").text("Affinity Capture RNA: " + sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
 
         var sgdAffinityCaptureWesterns = gene.sgd.affinityCaptureWestern;
-        $(".affinityCaptureWestern").text(sgdAffinityCaptureWesterns).attr({ href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
+        $(".affinityCaptureWestern").text("Affinity Capture Westerns: " + sgdAffinityCaptureWesterns).attr({ href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
 
         var sgdBiochemicalActivity = gene.sgd.biochemicalActivity;
-        $(".biochemicalActivity").text(sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
+        $(".biochemicalActivity").text("Biochemical Activity: " + sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
 
         var sgdColocalization = gene.sgd.colocalization;
-        $(".colocalization").text(sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
+        $(".colocalization").text("Colocalization: " + sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
 
         var sgdReconstitutedComplex = gene.sgd.reconstitutedComplex;
-        $(".reconstitutedComplex").text(sgdReconstitutedComplex).attr({ href: sgdHrefTemplate + sgdReconstitutedComplex });
+        $(".reconstitutedComplex").text("Reconstituted Complex: " + sgdReconstitutedComplex).attr({ href: sgdHrefTemplate + sgdReconstitutedComplex });
 
         var sgdTwoHybrid = gene.sgd.twoHybrid;
-        $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
+        $(".twoHybrid").text("Two Hybrid: " + sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
 
       // Gene Ontology
         var sgdSummary = gene.sgd.geneOntologySummary;
