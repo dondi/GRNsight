@@ -75,6 +75,32 @@
         var sgdTargets = gene.sgd.targets;
         $(".targets").text("Targets: " + sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
 
+        // Interaction: Physical Reaaction
+
+        var sgdInteractions = gene.sgd.totalInteractions;
+        $(".totalInteractions").text(sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
+
+        var sgdAffinityCaptureMS = gene.sgd.affinityCaptureMS;
+        $(".affinityCaptureMS").text(sgdAffinityCaptureMS).attr({ href: sgdHrefTemplate + sgdAffinityCaptureMS });
+
+        var sgdAffinityCaptureRNA = gene.sgd.affinityCaptureRNA;
+        $(".affinityCaptureRNA").text(sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
+
+        var sgdAffinityCaptureWesterns = gene.sgd.affinityCaptureWestern;
+        $(".affinityCaptureWestern").text(sgdAffinityCaptureWesterns).attr({ href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
+
+        var sgdBiochemicalActivity = gene.sgd.biochemicalActivity;
+        $(".biochemicalActivity").text(sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
+
+        var sgdColocalization = gene.sgd.colocalization;
+        $(".colocalization").text(sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
+
+        var sgdReconstitutedComplex = gene.sgd.reconstitutedComplex;
+        $(".reconstitutedComplex").text(sgdReconstitutedComplex).attr({ href: sgdHrefTemplate + sgdReconstitutedComplex });
+
+        var sgdTwoHybrid = gene.sgd.twoHybrid;
+        $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
+
       // Genetic Interactions
 
         var sgdDosage = gene.sgd.dosageRescue;
