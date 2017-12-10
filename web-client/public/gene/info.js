@@ -29,9 +29,9 @@
         var uniprotId = gene.uniprot.uniprotID;
         $(".uniprot-link").text(uniprotId).attr({ href: uniprotHrefTemplate + uniprotId });
 
-      //  var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
-      //  var jasparId = gene.jaspar.jasparID;
-      //  $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
+        var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
+        var jasparId = gene.jaspar.jasparID;
+        $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
       //DNA Sequence Tab
         var ensemblDNA = gene.emsembl.dnaSequence;
@@ -47,4 +47,27 @@
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
         $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
     })
+
+
+        // General Information Section
+
+        var ensemblInfo = gene.ensembl.description;
+        $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
+
+        var uniSpecies = gene.uniprot.species;
+        $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
+
+        var ncbiLocus = gene.ncbi.locusTag;
+        $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
+
+        var jasparFam = gene.jaspar.family;
+        $(".jasparFamily").text(jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
+
+        var jasparMatrix = gene.jaspar.frequencyMatrix;
+        $(".matrixID").text(jasparMatrix).attr({ href: jasparHrefTemplate + jasparMatrix });
+
+        var ncbiChromosome = gene.ncbi.chromosomeSequence;
+        $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
+
+    });
 })();
