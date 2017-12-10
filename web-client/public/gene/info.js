@@ -34,100 +34,32 @@
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
         // General Information Section
-<<<<<<< HEAD
 
         var ensemblInfo = gene.ensembl.description;
-        $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
+        $(".ensemblDescription").text("Description: " + ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
 
         var uniSpecies = gene.uniprot.species;
-        $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
+        $(".uniProtSpecies").text("Species: " + uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
 
         var ncbiLocus = gene.ncbi.locusTag;
-        $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
+        $(".ncbiLocusTag").text("Locus Tag: " + ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
 
         var jasparFam = gene.jaspar.family;
-        $(".jasparFamily").text(jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
+        $(".jasparFamily").text("Family: " + jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
 
         var jasparMatrix = gene.jaspar.frequencyMatrix;
-        $(".matrixID").text(jasparMatrix).attr({ href: jasparHrefTemplate + jasparMatrix });
+        $(".matrixID").text("Matrix ID: " + jasparMatrix).attr({ href: jasparHrefTemplate + jasparMatrix });
 
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
-        $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
-      //DNA Sequence Tab
-        var ensemblDNA = gene.ensembl.dnaSequence;
-        $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
+        $(".chromosomeSequence").text("Chromosome Sequence: " + ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
-      //Protein Information
-        var similarUniprotProtein = gene.uniprot.similarProtein;
-        $(".similarProtein").text(similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein }); 
-
-        var uniprotProteinType = gene.uniprot.proteinType;
-        $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
-
-        var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
-
-
-      //Regulation Information
-        var sgdRequlators = gene.sgd.regulators;
-        $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators }); 
-
-        var sgdTargets = gene.uniprot.targets;
-        $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
-
-      // Gene Ontology
-        var sgdSummary = gene.sgd.geneOntologySummary;
-        $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
-
-        var sgdMolecularFunction = gene.sgd.molecularFunction;
-        $(".molecularFunction").text(sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });  
-
-        var sgdBiologicalProcess = gene.sgd.biologicalProcess;
-        $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });    
-
-        var sgdCellularComponent = gene.sgd.cellularComponent;
-        $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });  
-    })
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> c2a5865c036566fd3c272e89f6d0d7eeee015ad4
-
-
-
-
-
-
-
-<<<<<<< HEAD
-=======
       // DNA Sequence Tab
         var ensemblDNA = gene.ensembl.dnaSequence;
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
       // Protein Information
         var similarUniprotProtein = gene.uniprot.similarProtein;
-        $(".similarProtein").text(similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
+        $(".similarProtein").text("Similar Protein: " + similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
 
         var uniprotProteinType = gene.uniprot.proteinType;
         $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
@@ -135,6 +67,28 @@
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
         $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
 
+
+      // Regulation Information
+        var sgdRequlators = gene.sgd.regulators;
+        $(".regulators").text("Regulators: " + sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
+
+        var sgdTargets = gene.sgd.targets;
+        $(".targets").text("Targets: " + sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
+
+      // Genetic Interactions
+
+      // Gene Ontology
+        var sgdSummary = gene.sgd.geneOntologySummary;
+        $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
+
+        var sgdMolecularFunction = gene.sgd.molecularFunction;
+        $(".molecularFunction").text(sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
+
+        var sgdBiologicalProcess = gene.sgd.biologicalProcess;
+        $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
+
+        var sgdCellularComponent = gene.sgd.cellularComponent;
+        $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+
     });
->>>>>>> c2a5865c036566fd3c272e89f6d0d7eeee015ad4
 })();
