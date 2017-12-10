@@ -22,7 +22,7 @@
 
         var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/" +
         "/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=";
-        var ensemblId = gene.emsembl.ensemblID;
+        var ensemblId = gene.ensembl.ensemblID;
         $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
 
         var uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
@@ -34,6 +34,7 @@
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
         // General Information Section
+<<<<<<< HEAD
 
         var ensemblInfo = gene.ensembl.description;
         $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
@@ -109,6 +110,8 @@
 
 
 
+=======
+>>>>>>> c2a5865c036566fd3c272e89f6d0d7eeee015ad4
 
 
 
@@ -116,4 +119,22 @@
 
 
 
+<<<<<<< HEAD
+=======
+      // DNA Sequence Tab
+        var ensemblDNA = gene.ensembl.dnaSequence;
+        $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
+
+      // Protein Information
+        var similarUniprotProtein = gene.uniprot.similarProtein;
+        $(".similarProtein").text(similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
+
+        var uniprotProteinType = gene.uniprot.proteinType;
+        $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
+
+        var uniprotProteinSequence = gene.uniprot.proteinSequence;
+        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
+
+    });
+>>>>>>> c2a5865c036566fd3c272e89f6d0d7eeee015ad4
 })();

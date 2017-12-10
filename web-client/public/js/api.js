@@ -21,7 +21,7 @@
                 }).then(function (data) {
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
-                    return id ? $.get({
+                    return $.get({
                         url: "http://www.uniprot.org/uniprot/" + id + ".xml",
                         timeout: 5000,
                     });
@@ -178,7 +178,7 @@
                 return {
                     jaspar: parseJaspar(jasparInfo),
                     ncbi: parseNCBI(ncbiInfo),
-                    emsembl: parseEnsembl(ensemblInfo),
+                    ensembl: parseEnsembl(ensemblInfo),
                     uniprot: parseUniprot(uniprotInfo),
                     sgd: parseYeastmine(yeastmineInfo),
                 };
