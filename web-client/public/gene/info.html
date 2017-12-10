@@ -13,9 +13,10 @@
           <div>
 
             <a class="lead sgd-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database" style="color:#CC3F0C;font-weight:700;">S000001855</a>&nbsp;&nbsp;
-            <a class="lead" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information" style="color:#677DB7;font-weight:700;">850504</a>&nbsp;&nbsp;
-            <a class="lead" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl" style="color:#33673B;font-weight:700;">YFL039C</a>&nbsp;&nbsp;
-            <a class="lead" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt" style="color:#F09D51;font-weight:700;">P60010</a>
+            <a class="lead ncbi-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information" style="color:#677DB7;font-weight:700;">850504</a>&nbsp;&nbsp;
+            <a class="lead ensembl-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl" style="color:#33673B;font-weight:700;">YFL039C</a>&nbsp;&nbsp;
+            <a class="lead uniprot-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt" style="color:#F09D51;font-weight:700;">P60010</a>
+            <a class="lead jaspar-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar" style="color:#768EFC;font-weight:700;">MA0276.1</a>
             <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
           </div>
           <h1 class="display-4">Gene Name - Genus species</h1> <!-- Style in Italics -->
@@ -37,10 +38,10 @@
 
       <div id="generalInfo" class="collapse" role="tabpanel" aria-labelledby="headingThree">
         <div class="card-block">
-          <p class ="description">Description from ensemble </p>
-          <p class = "species"> From uniprot </p>
-          <p class="locusTag">Locus Tag: Locus tag from NCBI </p>
-          <p class = "family">Family:return family Class: class here </p>
+          <p class ="ensemblDescription">Description from ensemble </p>
+          <p class = "uniProtSpecies"> From uniprot </p>
+          <p class="ncbiLocusTag">Locus Tag: Locus tag from NCBI </p>
+          <p class = "jasparFamily">Family:return family Class: class here </p>
           <p class ="matrixID"> matrix ID: it's just a string from jaspar </p>
           <img class = "chromosomeSequence" src=""> chromosome sequence from ncbi</img>
 
@@ -179,7 +180,7 @@
 
                 <div id="jasparInfo" class="collapse" role="tabpanel" aria-labelledby="headingNine">
                   <div class="card-block">
-                    <img class="sequenceLogo" src="image.svg" /> <!-- This is where the image from Jaspar's matrix comes from -->
+                    <!-- <img class="sequenceLogo" src="image.svg" /> This is where the image from Jaspar's matrix comes from -->
                     <div class="container">
 
   <table class="frequencyMatrix">
