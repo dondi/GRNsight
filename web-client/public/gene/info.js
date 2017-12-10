@@ -33,22 +33,6 @@
         var jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
-      //DNA Sequence Tab
-        var ensemblDNA = gene.emsembl.dnaSequence;
-        $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
-
-      //Protein Information
-        var similarUniprotProtein = gene.uniprot.similarProtein;
-        $(".similarProtein").text(similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein }); 
-
-        var uniprotProteinType = gene.uniprot.proteinType;
-        $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
-
-        var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
-    })
-
-
         // General Information Section
 
         var ensemblInfo = gene.ensembl.description;
@@ -68,6 +52,20 @@
 
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
+
+      // DNA Sequence Tab
+        var ensemblDNA = gene.emsembl.dnaSequence;
+        $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
+
+      // Protein Information
+        var similarUniprotProtein = gene.uniprot.similarProtein;
+        $(".similarProtein").text(similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
+
+        var uniprotProteinType = gene.uniprot.proteinType;
+        $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
+
+        var uniprotProteinSequence = gene.uniprot.proteinSequence;
+        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
 
     });
 })();
