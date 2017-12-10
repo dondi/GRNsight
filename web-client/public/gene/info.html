@@ -6,11 +6,12 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   </head>
   <body>
-
+<div id="GrnSightLogo"> <img src="GRNSight.svg"></div>
     <div class="row">
       <div class="col-12">
         <div class="jumbotron" style="background-color: white; padding-bottom:0px !important;">
           <div>
+
             <a class="lead sgd-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database" style="color:#CC3F0C;font-weight:700;">S000001855</a>&nbsp;&nbsp;
             <a class="lead ncbi-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information" style="color:#677DB7;font-weight:700;">850504</a>&nbsp;&nbsp;
             <a class="lead ensembl-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl" style="color:#33673B;font-weight:700;">YFL039C</a>&nbsp;&nbsp;
@@ -19,13 +20,34 @@
             <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
           </div>
           <h1 class="display-4">Gene Name - Genus species</h1> <!-- Style in Italics -->
-          <p class="lead">
+          <p class="summary">
             General information about your gene goes here.
           </p> <!-- this information should be pulled from ensemble -->
         </div>
       </div>
     </div> <!-- Inspired by ACT1's formatting, the Gene Name, gene ID's and general description would go here -->
 
+    <div class="card">
+      <div class="card-header" role="tab" id="generalInfoHeading">
+        <h5 class="mb-0">
+          <a data-toggle="collapse" data-parent="#accordion" href="#generalInfo" aria-expanded="true" aria-controls="collapseOne">
+      General Information
+          </a>
+        </h5>
+      </div>
+
+      <div id="generalInfo" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="card-block">
+          <p class ="description">Description from ensemble </p>
+          <p class = "species"> From uniprot </p>
+          <p class="locusTag">Locus Tag: Locus tag from NCBI </p>
+          <p class = "family">Family:return family Class: class here </p>
+          <p class ="matrixID"> matrix ID: it's just a string from jaspar </p>
+          <img class = "chromosomeSequence" src=""> chromosome sequence from ncbi</img>
+
+        </div>
+      </div>
+    </div>
         <div class="row">
           <div class="col-12">
             <div id="mainContent" id="accordion" role="tablist" aria-multiselectable="true">
@@ -40,42 +62,43 @@
 
                 <div id="dnaSequence" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                   <div class="card-block">
-                    <!--THIS IS WHERE THE DNA SEQUENCE FROM ENSEMBLE SHOULD GO, USE <BR> TAGS FOR DNA AND RNA -->
+                    <code></code> <!-- DNA sequence goes there -->
                   </div>
                 </div>
               </div>
               <div class="card">
-                <div class="card-header" role="tab" id="proteinSequenceHeading">
+                <div class="card-header" role="tab" id="proteinInfoHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#proteinSequence" aria-expanded="true" aria-controls="collapseOne">
-                      Protein Sequence
+                    <a data-toggle="collapse" data-parent="#accordion" href="#proteinInfo" aria-expanded="true" aria-controls="collapseOne">
+                      Protein Information
                     </a>
                   </h5>
                 </div>
 
-                <div id="proteinSequence" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div id="proteinInfo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="card-block">
-                    <!--This is where the protein sequence should go from UniProt -->
-                    protein sequence
+                    <p class = "similarProtein">Similar Protein:</p>
+                    <p class = "proteinType">Protein Type/Name:</p>
+                    <div class="proteinSequence">Protein Sequence:<code>it goes here from UniProt</code></div>
                   </div>
                 </div>
               </div>
               <div class="card">
-                <div class="card-header" role="tab" id="locusTagHeading">
+                <div class="card-header" role="tab" id="geneMapHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#locusTag" aria-expanded="true" aria-controls="collapseOne">
-                      Locus Tag
+                    <a data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne">
+                      Gene Map
                     </a>
                   </h5>
                 </div>
 
-                <div id="locusTag" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div id="geneMap" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="card-block">
-                    <!--This is where the locus tag should go from NCBI -->
-                    locus tag
+                    <img class "geneMapImg" src=""></img>
                   </div>
                 </div>
               </div>
+
               <div class="card">
                 <div class="card-header" role="tab" id="regulationHeading">
                   <h5 class="mb-0">
@@ -87,7 +110,8 @@
 
                 <div id="regulation" class="collapse" role="tabpanel" aria-labelledby="headingFive">
                   <div class="card-block">
-                    <!--This is where the information for regulation should go from SGD -->
+                    <p class="regulators">Regulators:</p>
+                    <p class="Targets">Targets:</p>
                   </div>
                 </div>
               </div>
@@ -102,22 +126,9 @@
 
                 <div id="interaction" class="collapse" role="tabpanel" aria-labelledby="headingSix">
                   <div class="card-block">
-                    <!--This is where the information for interaction should go from SGD -->
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-header" role="tab" id="similarProteinsHeading">
-                  <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#similarProteins" aria-expanded="true" aria-controls="collapseOne">
-                      Similar Proteins
-                    </a>
-                  </h5>
-                </div>
-
-                <div id="similarProteins" class="collapse" role="tabpanel" aria-labelledby="headingSeven">
-                  <div class="card-block">
-                    <!--This is where the information for similar proteins should go from UniProt-->
+                    <p class = "totalInteractions"></p>
+                    <div class= "physicalInteractions"><code></code></div>
+                      <div class= "geneticInteractions"><code></code></div>
                   </div>
                 </div>
               </div>
@@ -132,7 +143,11 @@
 
                 <div id="geneOntology" class="collapse" role="tabpanel" aria-labelledby="headingEight">
                   <div class="card-block">
-                    <!--This is where the information for gene ontology should go from SGD -->
+                    <p class = "geneSummary"></p>
+                    <p class = "molecularFunction"> </p>
+                    <p class = "biologicalProcess"></p>
+                    <p class = "cellularComponent"></p>
+
                   </div>
                 </div>
               </div>
@@ -140,14 +155,96 @@
                 <div class="card-header" role="tab" id="jasparInfoHeading">
                   <h5 class="mb-0">
                     <a data-toggle="collapse" data-parent="#accordion" href="#jasparInfo" aria-expanded="true" aria-controls="collapseOne">
-                      Transcription Factor Information from JASPAR
+                      Frequency Matrix and Sequence Logo
                     </a>
                   </h5>
                 </div>
 
                 <div id="jasparInfo" class="collapse" role="tabpanel" aria-labelledby="headingNine">
                   <div class="card-block">
-                    <!--This is where the additional information from jaspar such as matrix ID, class heat shock factors, consensus sequence, etc should go -->
+                    <img class="sequenceLogo" src="image.svg" /> <!-- This is where the image from Jaspar's matrix comes from -->
+                    <div class="container">
+
+  <table class="frequencyMatrix">
+    <thead>
+      <tr> <!-- It's not always 15, it vary's so that's just a template, also might be null, if that's the case just a p that says "no frequency matrix available" -->
+        <th>A:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>C:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+      </tr>
+      <tr>
+        <th>G:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+      </tr>
+      <tr>
+        <th>T:</th>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
                   </div>
                 </div>
               </div>
