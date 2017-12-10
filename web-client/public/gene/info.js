@@ -22,7 +22,7 @@
 
         var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/" +
         "/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=";
-        var ensemblId = gene.emsembl.ensemblID;
+        var ensemblId = gene.ensembl.ensemblID;
         $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
 
         var uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
