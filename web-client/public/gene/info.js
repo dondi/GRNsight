@@ -54,7 +54,7 @@
         $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
       // DNA Sequence Tab
-        var ensemblDNA = gene.emsembl.dnaSequence;
+        var ensemblDNA = gene.ensembl.dnaSequence;
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
       // Protein Information
