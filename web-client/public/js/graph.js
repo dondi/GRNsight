@@ -107,11 +107,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         d3.event.stopPropagation();
     };
 
-    var savex = 0;
-    var savey = 0;
+    var zoomDragPrevX = 0;
+    var zoomDragPrevY = 0;
     var zoomDragStarted = function () {
-        savex = d3.event.x;
-        savey = d3.event.y;
+        zoomDragPrevX = d3.event.x;
+        zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
         if (!adaptive) {
             $container.removeClass(CURSOR_CLASSES);
@@ -125,9 +125,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 var string = zoomContainer.attr("transform");
                 scale = 1 / (+(string.substring(string.indexOf("scale(") + 6, string.lastIndexOf(")"))));
             }
-            zoom.translateBy(zoomContainer, scale * (d3.event.x - savex), scale * (d3.event.y - savey));
-            savex = d3.event.x;
-            savey = d3.event.y;
+            zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
+            zoomDragPrevX = d3.event.x;
+            zoomDragPrevY = d3.event.y;
         }
     };
 
