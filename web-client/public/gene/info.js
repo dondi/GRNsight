@@ -9,6 +9,7 @@
     // This is cite used to find the parsing:
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
+    var api = window.api;
     api.getGeneInformation(obj.symbol).done(function (gene) {
         console.log(gene);
 
