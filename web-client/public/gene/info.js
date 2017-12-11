@@ -62,10 +62,10 @@
         $(".similarProtein").text("Similar Protein: " + similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
 
         var uniprotProteinType = gene.uniprot.proteinType;
-        $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
+        $(".proteinType").text("Protein Type: " + uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
 
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
+        $(".proteinSequence").text("Protein Sequence: " + uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
 
 
       // Regulation Information
@@ -130,16 +130,16 @@
 
       // Gene Ontology
         var sgdSummary = gene.sgd.geneOntologySummary;
-        $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
+        $(".geneSummary").text("Gene Summary: " + sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
 
         var sgdMolecularFunction = gene.sgd.molecularFunction;
-        $(".molecularFunction").text(sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
+        $(".molecularFunction").text("Molecular Function: " + sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
 
         var sgdBiologicalProcess = gene.sgd.biologicalProcess;
-        $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
+        $(".biologicalProcess").text("Biological Process: " + sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
 
         var sgdCellularComponent = gene.sgd.cellularComponent;
-        $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+        $(".cellularComponent").text("Cellular Component: " + sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
 
     });
 })();
