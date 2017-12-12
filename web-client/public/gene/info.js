@@ -60,8 +60,6 @@
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
       // Protein Information
-        var similarUniprotProtein = gene.uniprot.similarProtein;
-        $(".similarProtein").text("Similar Protein: " + similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
 
         var uniprotProteinType = gene.uniprot.proteinType;
         $(".proteinType").text("Protein Type: " + uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
