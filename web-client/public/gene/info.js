@@ -146,10 +146,28 @@
 
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
-        $(".sequenceLogo").text("Sequence Logo: " + sequenceLogo).attr({ href: jasparHrefTemplate + sequenceLogo });
+        $(".sequenceLogo").attr({ src : sequenceLogo });
 
         var frequencyMatrix = gene.jaspar.frequencyMatrix;
-        $(".frequencyMatrix").text("Frequency Matrix: " + frequencyMatrix).attr({ href: jasparHrefTemplate + frequencyMatrix });
-
+        var a = "";
+        for (var i = 0; i < frequencyMatrix.A.length; i++) {
+            a += "<td>" + frequencyMatrix.A[i] + "</td>";
+        }
+        $(".frequencyOfA").append($(a));
+        var c = "";
+        for (var k = 0; k < frequencyMatrix.C.length; k++) {
+            c += "<td>" + frequencyMatrix.C[k] + "</td>";
+        }
+        $(".frequencyOfC").append($(c));
+        var g = "";
+        for (var j = 0; j < frequencyMatrix.G.length; j++) {
+            g += "<td>" + frequencyMatrix.G[j] + "</td>";
+        }
+        $(".frequencyOfG").append($(g));
+        var t = "";
+        for (var h = 0; h < frequencyMatrix.T.length; h++) {
+            t += "<td>" + frequencyMatrix.T[h] + "</td>";
+        }
+        $(".frequencyOfT").append($(t));
     });
 })();
