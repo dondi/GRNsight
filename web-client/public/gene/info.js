@@ -6,6 +6,7 @@
       }):{};
 
     document.title = "Information About " + obj.symbol;
+    $("#gene-name").text(obj.symbol + "Genus Species");
     // This is cite used to find the parsing:
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
@@ -68,6 +69,9 @@
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
         $(".proteinSequence").text("Protein Sequence: " + uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
 
+      // Gene mapping
+        var geneMap = gene.ensembl.geneMap;
+        $(".geneMap").text("Gene Map: " + geneMap).attr({ href: ensemblHrefTemplate + geneMap });
 
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
@@ -141,6 +145,13 @@
 
         var sgdCellularComponent = gene.sgd.cellularComponent;
         $(".cellularComponent").text("Cellular Component: " + sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+
+        // Fequency Matrix and Sequence Logo
+        var sequenceLogo = gene.jaspar.sequenceLogo;
+        $(".sequenceLogo").text("Sequence Logo: " + sequenceLogo).attr({ href: jasparHrefTemplate + sequenceLogo });
+
+        var frequencyMatrix = gene.jaspar.frequencyMatrix;
+        $(".frequencyMatrix").text("Frequency Matrix: " + frequencyMatrix).attr({ href: jasparHrefTemplate + frequencyMatrix });
 
     });
 })();
