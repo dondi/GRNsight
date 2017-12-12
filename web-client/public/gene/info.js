@@ -6,7 +6,7 @@
       }):{};
 
     document.title = "Information About " + obj.symbol;
-    $("#gene-name").text(obj.symbol + "Genus Species");
+    $("#gene-name").text(obj.symbol + " Saccharomyces cerevisiae");
     // This is cite used to find the parsing:
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
