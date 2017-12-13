@@ -879,7 +879,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     })
     .on("dblclick", nodeTextDblclick)
     .on("contextmenu", function (gene) {
-        console.log(gene);
         var tempLink = $("<a></a>")
             .attr({
                 href: "/gene/info.html?" + $.param({symbol: gene.name}),
