@@ -6,6 +6,9 @@
     window.api = {
         getGeneInformation: function (symbol) {
             var serializer = new XMLSerializer();
+            var XMLParser = function (data) {
+                return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
+            };
             var getUniProtInfo = function (geneSymbol) {
                 return $.get({
                     url: "http://www.uniprot.org/uploadlists/",
@@ -106,23 +109,25 @@
             var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 var parseUniprot = function (data) {
                     return {
-                        uniprotID: serializer.serializeToString(data.getElementsByTagName("name")[0]),
-                        proteinSequence: serializer.serializeToString(data.getElementsByTagName("sequence")[0]),
-                        similarProtein: { name: "etc.", id: "etc." },
-                        proteinType: serializer.serializeToString(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
-                        species: serializer.serializeToString(data.getElementsByTagName("organism")[0].childNodes[1]),
+                        uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
+                        proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
+                        proteinType: XMLParser(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
+                        species: XMLParser(data.getElementsByTagName("organism")[0].childNodes[1]),
                     };
                 };
 
                 var parseNCBI = function (data) {
                     var tagArray = serializer.serializeToString(data.getElementsByTagName("OtherAliases")[0]).split(",");
                     return {
-                        ncbiID: "etc.",
-                        locusTag: tagArray[0],
-                        alsoKnownAs: tagArray.slice(1),
-                        chromosomeSequence: "etc.",
-                        genomicSequence: "etc.",
-                        proteinSequence: "etc.",
+                        ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
+                        locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ''),
+                        alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ''),
+                        chromosomeSequence: XMLParser(data.getElementsByTagName("ChrAccVer")[0]),
+                        genomicSequence: XMLParser(data.getElementsByTagName("ChrLoc")[0]) + "; "
+                        + XMLParser(data.getElementsByTagName("ChrAccVer")[0]) + " ("
+                        + XMLParser(data.getElementsByTagName("ChrStart")[0])
+                         + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
+                        //proteinSequence: "etc.",
                     };
                 };
 
@@ -176,11 +181,11 @@
                     };
                 };
                 return {
-                    jaspar: parseJaspar(jasparInfo),
                     ncbi: parseNCBI(ncbiInfo),
                     ensembl: parseEnsembl(ensemblInfo),
                     uniprot: parseUniprot(uniprotInfo),
                     sgd: parseYeastmine(yeastmineInfo),
+                    jaspar: parseJaspar(jasparInfo),
                 };
             };
 

@@ -33,7 +33,6 @@
         var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
         var jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
-
         // General Information Section
 
         var ensemblInfo = gene.ensembl.description;
