@@ -108,7 +108,6 @@
                     return {
                         uniprotID: serializer.serializeToString(data.getElementsByTagName("name")[0]),
                         proteinSequence: serializer.serializeToString(data.getElementsByTagName("sequence")[0]),
-                        similarProtein: { name: "etc.", id: "etc." },
                         proteinType: serializer.serializeToString(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
                         species: serializer.serializeToString(data.getElementsByTagName("organism")[0].childNodes[1]),
                     };
@@ -122,7 +121,7 @@
                         alsoKnownAs: tagArray.slice(1),
                         chromosomeSequence: "etc.",
                         genomicSequence: "etc.",
-                        proteinSequence: "etc.",
+
                     };
                 };
 

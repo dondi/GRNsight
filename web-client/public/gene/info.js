@@ -6,6 +6,7 @@
       }):{};
 
     document.title = "Information About " + obj.symbol;
+    $("#gene-name").text(obj.symbol + " Saccharomyces cerevisiae");
     // This is cite used to find the parsing:
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
@@ -59,8 +60,6 @@
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
       // Protein Information
-        var similarUniprotProtein = gene.uniprot.similarProtein;
-        $(".similarProtein").text("Similar Protein: " + similarUniprotProtein).attr({ href: uniprotHrefTemplate + similarUniprotProtein });
 
         var uniprotProteinType = gene.uniprot.proteinType;
         $(".proteinType").text("Protein Type: " + uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
@@ -68,6 +67,9 @@
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
         $(".proteinSequence").text("Protein Sequence: " + uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
 
+      // Gene mapping
+        var geneMap = gene.ensembl.geneMap;
+        $(".geneMap").text("Gene Map: " + geneMap).attr({ href: ensemblHrefTemplate + geneMap });
 
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
@@ -142,5 +144,30 @@
         var sgdCellularComponent = gene.sgd.cellularComponent;
         $(".cellularComponent").text("Cellular Component: " + sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
 
+        // Fequency Matrix and Sequence Logo
+        var sequenceLogo = gene.jaspar.sequenceLogo;
+        $(".sequenceLogo").attr({ src : sequenceLogo });
+
+        var frequencyMatrix = gene.jaspar.frequencyMatrix;
+        var a = "";
+        for (var i = 0; i < frequencyMatrix.A.length; i++) {
+            a += "<td>" + frequencyMatrix.A[i] + "</td>";
+        }
+        $(".frequencyOfA").append($(a));
+        var c = "";
+        for (var k = 0; k < frequencyMatrix.C.length; k++) {
+            c += "<td>" + frequencyMatrix.C[k] + "</td>";
+        }
+        $(".frequencyOfC").append($(c));
+        var g = "";
+        for (var j = 0; j < frequencyMatrix.G.length; j++) {
+            g += "<td>" + frequencyMatrix.G[j] + "</td>";
+        }
+        $(".frequencyOfG").append($(g));
+        var t = "";
+        for (var h = 0; h < frequencyMatrix.T.length; h++) {
+            t += "<td>" + frequencyMatrix.T[h] + "</td>";
+        }
+        $(".frequencyOfT").append($(t));
     });
 })();

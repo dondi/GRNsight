@@ -19,10 +19,7 @@
             <a class="lead jaspar-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar" style="color:#768EFC;font-weight:700;">MA0276.1</a>
             <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
           </div>
-          <h1 class="display-4">Gene Name - Genus species</h1> <!-- Style in Italics -->
-          <p class="summary">
-            General information about your gene goes here.
-          </p> <!-- this information should be pulled from ensemble -->
+          <h1 class="display-4" id="gene-name">Gene Name -  Saccharomyces cerevisiae</h1> <!-- Style in Italics, Saccharomyces cerevisiae is the typical one but it should not be hard coded -->
         </div>
       </div>
     </div> <!-- Inspired by ACT1's formatting, the Gene Name, gene ID's and general description would go here -->
@@ -77,9 +74,8 @@
 
                 <div id="proteinInfo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="card-block">
-                    <p class = "similarProtein">Similar Protein:</p>
                     <p class = "proteinType">Protein Type/Name:</p>
-                    <div class="proteinSequence">Protein Sequence:<code>it goes here from UniProt</code></div>
+                    <div class="proteinSequence">Protein Sequence:<code></code></div> <!-- it goes here from UniProt between code tags -->
                   </div>
                 </div>
               </div>
@@ -181,84 +177,24 @@
 
                 <div id="jasparInfo" class="collapse" role="tabpanel" aria-labelledby="headingNine">
                   <div class="card-block">
-                    <!-- <img class="sequenceLogo" src="image.svg" /> This is where the image from Jaspar's matrix comes from -->
+                    <img class="sequenceLogo" src="">
                     <div class="container">
 
   <table class="frequencyMatrix">
     <thead>
-      <tr> <!-- It's not always 15, it vary's so that's just a template, also might be null, if that's the case just a p that says "no frequency matrix available" -->
+      <tr class="frequencyOfA">
         <th>A:</th>
-        <td>0</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>10</td>
-        <td>11</td>
-        <td>12</td>
-        <td>13</td>
-        <td>14</td>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="frequencyOfC">
         <th>C:</th>
-        <td>0</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>10</td>
-        <td>11</td>
-        <td>12</td>
-        <td>13</td>
-        <td>14</td>
       </tr>
-      <tr>
+      <tr class="frequencyOfG">
         <th>G:</th>
-        <td>0</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>10</td>
-        <td>11</td>
-        <td>12</td>
-        <td>13</td>
-        <td>14</td>
       </tr>
-      <tr>
+      <tr class="frequencyOfT">
         <th>T:</th>
-        <td>0</td>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
-        <td>6</td>
-        <td>7</td>
-        <td>8</td>
-        <td>9</td>
-        <td>10</td>
-        <td>11</td>
-        <td>12</td>
-        <td>13</td>
-        <td>14</td>
       </tr>
     </tbody>
   </table>
