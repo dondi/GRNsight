@@ -131,28 +131,28 @@
                         sgdID: data.primaryIdentifier, // string
                         standardName: data.symbol, // string
                         systematicName: data.secondaryIdentifier, // string
-                        regulators: 1,
-                        targets: 12,
-                        totalInteractions: "etc.",
-                        affinityCaptureMS: 11,
-                        affinityCaptureRNA: 1,
-                        affinityCaptureWestern: 4,
-                        biochemicalActivity: 11,
-                        colocalization: 3,
-                        reconstitutedComplex: 2,
-                        twoHybrid: 3,
-                        dosageRescue: 16,
-                        negativeGenetic: 8,
-                        phenotypicEnhancement: 1,
-                        phenotypicSuppression: 5,
-                        syntheticGrowthDefect: 2,
-                        syntheticHaploinsufficiency: 1,
-                        syntheticLethality: 6,
-                        syntheticRescue: 11,
+                        regulators: 1, // regulation
+                        targets: 12, // regulation
+                        totalInteractions: "etc.", // physicalInteractions
+                        affinityCaptureMS: 11, // physicalInteractions
+                        affinityCaptureRNA: 1, // physicalInteractions
+                        affinityCaptureWestern: 4, // physicalInteractions
+                        biochemicalActivity: 11, // physicalInteractions
+                        colocalization: 3, // physicalInteractions
+                        reconstitutedComplex: 2, // physicalInteractions
+                        twoHybrid: 3, // physicalInteractions
+                        dosageRescue: 16, // geneticInteractions
+                        negativeGenetic: 8, // geneticInteractions
+                        phenotypicEnhancement: 1, // geneticInteractions
+                        phenotypicSuppression: 5, // geneticInteractions
+                        syntheticGrowthDefect: 2, // geneticInteractions
+                        syntheticHaploinsufficiency: 1, // geneticInteractions
+                        syntheticLethality: 6, // geneticInteractions
+                        syntheticRescue: 11, // geneticInteractions
                         geneOntologySummary: data.functionSummary, // string
-                        molecularFunction: "etc.",
-                        biologicalProcess: "etc.",
-                        cellularComponent: "etc.",
+                        molecularFunction: "etc.", // Gene Ontology
+                        biologicalProcess: "etc.", // Gene Ontology
+                        cellularComponent: "etc.", // Gene Ontology
                     };
                 };
 
@@ -167,7 +167,8 @@
                 };
 
                 var parseJaspar = function (data) {
-                    return {
+
+                    return data && {
                         jasparID : data.matrix_id, // string
                         class: data.class, // string
                         family: data.family, // array
