@@ -48,9 +48,6 @@
         var jasparFam = gene.jaspar.family;
         $(".jasparFamily").text("Family: " + jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
 
-        var jasparMatrix = gene.jaspar.frequencyMatrix;
-        $(".matrixID").text("Matrix ID: " + jasparMatrix).attr({ href: jasparHrefTemplate + jasparMatrix });
-
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text("Chromosome Sequence: " + ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
