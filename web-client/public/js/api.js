@@ -6,6 +6,9 @@
     window.api = {
         getGeneInformation: function (symbol) {
             var serializer = new XMLSerializer();
+            var XMLParser = function (data) {
+                return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
+            };
             var getUniProtInfo = function (geneSymbol) {
                 return $.get({
                     url: "http://www.uniprot.org/uploadlists/",
@@ -106,22 +109,24 @@
             var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 var parseUniprot = function (data) {
                     return {
-                        uniprotID: serializer.serializeToString(data.getElementsByTagName("name")[0]),
-                        proteinSequence: serializer.serializeToString(data.getElementsByTagName("sequence")[0]),
-                        proteinType: serializer.serializeToString(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
-                        species: serializer.serializeToString(data.getElementsByTagName("organism")[0].childNodes[1]),
+                        uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
+                        proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
+                        proteinType: XMLParser(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
+                        species: XMLParser(data.getElementsByTagName("organism")[0].childNodes[1]),
                     };
                 };
 
                 var parseNCBI = function (data) {
                     var tagArray = serializer.serializeToString(data.getElementsByTagName("OtherAliases")[0]).split(",");
                     return {
-                        ncbiID: "etc.",
-                        locusTag: tagArray[0],
-                        alsoKnownAs: tagArray.slice(1),
-                        chromosomeSequence: "etc.",
-                        genomicSequence: "etc.",
-
+                        ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
+                        locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ''),
+                        alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ''),
+                        chromosomeSequence: XMLParser(data.getElementsByTagName("ChrAccVer")[0]),
+                        genomicSequence: XMLParser(data.getElementsByTagName("ChrLoc")[0]) + "; "
+                        + XMLParser(data.getElementsByTagName("ChrAccVer")[0]) + " ("
+                        + XMLParser(data.getElementsByTagName("ChrStart")[0])
+                         + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
                     };
                 };
 
@@ -130,28 +135,28 @@
                         sgdID: data.primaryIdentifier, // string
                         standardName: data.symbol, // string
                         systematicName: data.secondaryIdentifier, // string
-                        regulators: 1,
-                        targets: 12,
-                        totalInteractions: "etc.",
-                        affinityCaptureMS: 11,
-                        affinityCaptureRNA: 1,
-                        affinityCaptureWestern: 4,
-                        biochemicalActivity: 11,
-                        colocalization: 3,
-                        reconstitutedComplex: 2,
-                        twoHybrid: 3,
-                        dosageRescue: 16,
-                        negativeGenetic: 8,
-                        phenotypicEnhancement: 1,
-                        phenotypicSuppression: 5,
-                        syntheticGrowthDefect: 2,
-                        syntheticHaploinsufficiency: 1,
-                        syntheticLethality: 6,
-                        syntheticRescue: 11,
+                        regulators: 1, // regulation
+                        targets: 12, // regulation
+                        totalInteractions: "etc.", // physicalInteractions
+                        affinityCaptureMS: 11, // physicalInteractions
+                        affinityCaptureRNA: 1, // physicalInteractions
+                        affinityCaptureWestern: 4, // physicalInteractions
+                        biochemicalActivity: 11, // physicalInteractions
+                        colocalization: 3, // physicalInteractions
+                        reconstitutedComplex: 2, // physicalInteractions
+                        twoHybrid: 3, // physicalInteractions
+                        dosageRescue: 16, // geneticInteractions
+                        negativeGenetic: 8, // geneticInteractions
+                        phenotypicEnhancement: 1, // geneticInteractions
+                        phenotypicSuppression: 5, // geneticInteractions
+                        syntheticGrowthDefect: 2, // geneticInteractions
+                        syntheticHaploinsufficiency: 1, // geneticInteractions
+                        syntheticLethality: 6, // geneticInteractions
+                        syntheticRescue: 11, // geneticInteractions
                         geneOntologySummary: data.functionSummary, // string
-                        molecularFunction: "etc.",
-                        biologicalProcess: "etc.",
-                        cellularComponent: "etc.",
+                        molecularFunction: "etc.", // Gene Ontology
+                        biologicalProcess: "etc.", // Gene Ontology
+                        cellularComponent: "etc.", // Gene Ontology
                     };
                 };
 
@@ -166,7 +171,8 @@
                 };
 
                 var parseJaspar = function (data) {
-                    return {
+
+                    return data && {
                         jasparID : data.matrix_id, // string
                         class: data.class, // string
                         family: data.family, // array

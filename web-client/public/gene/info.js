@@ -12,7 +12,6 @@
 
     var api = window.api;
     api.getGeneInformation(obj.symbol).done(function (gene) {
-        console.log(gene);
 
         var sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
         var sgdId = gene.sgd.sgdID;
@@ -34,7 +33,6 @@
         var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
         var jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
-
         // General Information Section
 
         var ensemblInfo = gene.ensembl.description;
@@ -48,9 +46,6 @@
 
         var jasparFam = gene.jaspar.family;
         $(".jasparFamily").text("Family: " + jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
-
-        var jasparMatrix = gene.jaspar.frequencyMatrix;
-        $(".matrixID").text("Matrix ID: " + jasparMatrix).attr({ href: jasparHrefTemplate + jasparMatrix });
 
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text("Chromosome Sequence: " + ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
