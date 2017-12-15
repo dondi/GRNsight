@@ -166,3 +166,4 @@
         $(".frequencyOfT").append($(t));
     });
 })();
+// All api calls and page design elements have been linked
