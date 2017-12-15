@@ -1,12 +1,14 @@
 **Blair Hamilton and Zach Van Ysseldyk’s README File**
-#General Information
+
+# General Information
 
 The Integration and Interaction team has implemented a right-click function thats purpose is to open a new tab and produce a gene page with data
 
 brought in from multiple credible databases. The primary goal of our info.js, info.html and api.js files is to bring in the work of the gene database
 
 API team, JASPAR team and the page design team, and produce a working demo of the GRNsight right click function.
-#Right-Click Functionality
+
+# Right-Click Functionality
 
 First, the right click function bridges the original GRNSight existing gene page with the new gene page. The GRNSight gene regulatory map depicts a
 
@@ -30,7 +32,7 @@ The link itself is broken up into two parts.
 
 2.The parameter portion refers to the gene name being pulled from the selected right-click node.
 
-#Variable Links
+# Variable Links
 
 In collaboration with the Page-Design team a layout for specific data points was given to the Interaction team in order to put the correct variable
 
