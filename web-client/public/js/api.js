@@ -132,31 +132,31 @@
 
                 var parseYeastmine = function (data) {
                     return {
-                        sgdID: data.primaryIdentifier, // string
-                        standardName: data.symbol, // string
-                        systematicName: data.secondaryIdentifier, // string
-                        regulators: 1, // regulation
-                        targets: 12, // regulation
-                        totalInteractions: "etc.", // physicalInteractions
-                        affinityCaptureMS: 11, // physicalInteractions
-                        affinityCaptureRNA: 1, // physicalInteractions
-                        affinityCaptureWestern: 4, // physicalInteractions
-                        biochemicalActivity: 11, // physicalInteractions
-                        colocalization: 3, // physicalInteractions
-                        reconstitutedComplex: 2, // physicalInteractions
-                        twoHybrid: 3, // physicalInteractions
-                        dosageRescue: 16, // geneticInteractions
-                        negativeGenetic: 8, // geneticInteractions
-                        phenotypicEnhancement: 1, // geneticInteractions
-                        phenotypicSuppression: 5, // geneticInteractions
-                        syntheticGrowthDefect: 2, // geneticInteractions
-                        syntheticHaploinsufficiency: 1, // geneticInteractions
-                        syntheticLethality: 6, // geneticInteractions
-                        syntheticRescue: 11, // geneticInteractions
-                        geneOntologySummary: data.functionSummary, // string
-                        molecularFunction: "etc.", // Gene Ontology
-                        biologicalProcess: "etc.", // Gene Ontology
-                        cellularComponent: "etc.", // Gene Ontology
+                        sgdID: data.primaryIdentifier,
+                        standardName: data.symbol,
+                        systematicName: data.secondaryIdentifier,
+                        regulators: "N/A", // Information unavailable via regular API
+                        targets: "N/A", // Information unavailable via regular API
+                        totalInteractions: "N/A", // Information unavailable via regular API
+                        affinityCaptureMS: "N/A", // Information unavailable via regular API
+                        affinityCaptureRNA: "N/A", // Information unavailable via regular API
+                        affinityCaptureWestern: "N/A", // Information unavailable via regular API
+                        biochemicalActivity: "N/A", // Information unavailable via regular API
+                        colocalization: "N/A", // Information unavailable via regular API
+                        reconstitutedComplex: "N/A", // Information unavailable via regular API
+                        twoHybrid: "N/A", // Information unavailable via regular API
+                        dosageRescue: "N/A", // Information unavailable via regular API
+                        negativeGenetic: "N/A", // Information unavailable via regular API
+                        phenotypicEnhancement: "N/A", // Information unavailable via regular API
+                        phenotypicSuppression: "N/A", // Information unavailable via regular API
+                        syntheticGrowthDefect: "N/A", // Information unavailable via regular API
+                        syntheticHaploinsufficiency: "N/A", // Information unavailable via regular API
+                        syntheticLethality: "N/A", // Information unavailable via regular API
+                        syntheticRescue: "N/A", // Information unavailable via regular API
+                        geneOntologySummary: data.functionSummary,
+                        molecularFunction: "N/A", // Information unavailable via regular API
+                        biologicalProcess: "N/A", // Information unavailable via regular API
+                        cellularComponent: "N/A", // Information unavailable via regular API
                     };
                 };
 
@@ -164,21 +164,21 @@
                     return {
                         ensemblID: data.id,
                         description: data.description,
-                        dnaSequence: "etc.",
-                        geneLocation: "etc.",
-                        geneMap: "URL",
+                        dnaSequence: "N/A", // Information unavailable via regular API
+                        geneLocation: "N/A", // Information unavailable via regular API
+                        geneMap: "N/A", // Information unavailable via regular API
                     };
                 };
 
                 var parseJaspar = function (data) {
 
-                    return data && {
-                        jasparID : data.matrix_id, // string
-                        class: data.class, // string
-                        family: data.family, // array
-                        sequenceLogo: data.sequence_logo, // string: URL to image
-                        frequencyMatrix: data.pfm,  // object with keys ACIG, each key mapping to an array of ints
-                    };
+                    return data ? {
+                        jasparID : data.matrix_id,
+                        class: data.class,
+                        family: data.family,
+                        sequenceLogo: data.sequence_logo,
+                        frequencyMatrix: data.pfm,
+                    } : {};
                 };
                 return {
                     jaspar: parseJaspar(jasparInfo),
