@@ -62,10 +62,10 @@
       // Protein Information
 
         var uniprotProteinType = gene.uniprot.proteinType;
-        $(".proteinType").text("Protein Type: " + uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
+        $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
 
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text("Protein Sequence: " + uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
+        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
 
       // Gene mapping
         var geneMap = gene.ensembl.geneMap;
@@ -73,62 +73,62 @@
 
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
-        $(".regulators").text("Regulators: " + sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
+        $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
 
         var sgdTargets = gene.sgd.targets;
-        $(".targets").text("Targets: " + sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
+        $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
 
       // Interaction: Physical Reaction
 
         var sgdInteractions = gene.sgd.totalInteractions;
-        $(".totalInteractions").text("Total Interactions: " + sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
+        $(".totalInteractions").text(sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
 
         var sgdAffinityCaptureMS = gene.sgd.affinityCaptureMS;
-        $(".affinityCaptureMS").text("Affinity Capture MS: " + sgdAffinityCaptureMS).attr({ href: sgdHrefTemplate + sgdAffinityCaptureMS });
+        $(".affinityCaptureMS").text(sgdAffinityCaptureMS).attr({ href: sgdHrefTemplate + sgdAffinityCaptureMS });
 
         var sgdAffinityCaptureRNA = gene.sgd.affinityCaptureRNA;
-        $(".affinityCaptureRNA").text("Affinity Capture RNA: " + sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
+        $(".affinityCaptureRNA").text(sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
 
         var sgdAffinityCaptureWesterns = gene.sgd.affinityCaptureWestern;
-        $(".affinityCaptureWestern").text("Affinity Capture Westerns: " + sgdAffinityCaptureWesterns).attr({ href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
+        $(".affinityCaptureWestern").text(sgdAffinityCaptureWesterns).attr({ href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
 
         var sgdBiochemicalActivity = gene.sgd.biochemicalActivity;
-        $(".biochemicalActivity").text("Biochemical Activity: " + sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
+        $(".biochemicalActivity").text(sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
 
         var sgdColocalization = gene.sgd.colocalization;
-        $(".colocalization").text("Colocalization: " + sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
+        $(".colocalization").text(sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
 
         var sgdReconstitutedComplex = gene.sgd.reconstitutedComplex;
-        $(".reconstitutedComplex").text("Reconstituted Complex: " + sgdReconstitutedComplex).attr({ href: sgdHrefTemplate + sgdReconstitutedComplex });
+        $(".reconstitutedComplex").text(sgdReconstitutedComplex).attr({ href: sgdHrefTemplate + sgdReconstitutedComplex });
 
         var sgdTwoHybrid = gene.sgd.twoHybrid;
-        $(".twoHybrid").text("Two Hybrid: " + sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
+        $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
 
       // Genetic Interactions
 
         var sgdDosage = gene.sgd.dosageRescue;
-        $(".dosageRescue").text("Dosage Rescue: " + sgdDosage).attr({ href: sgdHrefTemplate + sgdDosage });
+        $(".dosageRescue").text(sgdDosage).attr({ href: sgdHrefTemplate + sgdDosage });
 
         var sgdNegGen = gene.sgd.negativeGenetic;
-        $(".negativeGenetic").text("Negative Genetic: " + sgdNegGen).attr({ href: sgdHrefTemplate + sgdNegGen });
+        $(".negativeGenetic").text(sgdNegGen).attr({ href: sgdHrefTemplate + sgdNegGen });
 
         var sgdEnhance = gene.sgd.phenotypicEnhancement;
-        $(".phenotypicEnhancement").text("Phenotypic Enhancement: " + sgdEnhance).attr({ href: sgdHrefTemplate + sgdEnhance });
+        $(".phenotypicEnhancement").text(sgdEnhance).attr({ href: sgdHrefTemplate + sgdEnhance });
 
         var sgdSuppress = gene.sgd.phenotypicSuppression;
-        $(".phenotypicSuppression").text("Phenotypic Suppression: " + sgdSuppress).attr({ href: sgdHrefTemplate + sgdSuppress });
+        $(".phenotypicSuppression").text(sgdSuppress).attr({ href: sgdHrefTemplate + sgdSuppress });
 
         var sgdGrowthDefect = gene.sgd.syntheticGrowthDefect;
-        $(".syntheticGrowthDefect").text("Synthetic Growth Defect: " + sgdGrowthDefect).attr({ href: sgdHrefTemplate + sgdGrowthDefect });
+        $(".syntheticGrowthDefect").text(sgdGrowthDefect).attr({ href: sgdHrefTemplate + sgdGrowthDefect });
 
         var sgdHaploin = gene.sgd.syntheticHaploinsufficiency;
-        $(".syntheticHaploinsufficiency").text("Synthetic Haploin Sufficiency: " + sgdHaploin).attr({ href: sgdHrefTemplate + sgdHaploin });
+        $(".syntheticHaploinsufficiency").text(sgdHaploin).attr({ href: sgdHrefTemplate + sgdHaploin });
 
         var sgdLethality = gene.sgd.syntheticLethality;
-        $(".syntheticLethality").text("Synthetic Lethality: " + sgdLethality).attr({ href: sgdHrefTemplate + sgdLethality });
+        $(".syntheticLethality").text(sgdLethality).attr({ href: sgdHrefTemplate + sgdLethality });
 
         var sgdRescue = gene.sgd.sgdRescue;
-        $(".syntheticRescue").text("Synthetic Rescue: " + sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
+        $(".syntheticRescue").text(sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
 
 
       // Gene Ontology

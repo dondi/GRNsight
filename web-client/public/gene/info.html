@@ -27,7 +27,7 @@
     <div class="card">
       <div class="card-header" role="tab" id="generalInfoHeading">
         <h5 class="mb-0">
-          <a data-toggle="collapse" data-parent="#accordion" href="#generalInfo" aria-expanded="true" aria-controls="collapseOne">
+          <a data-toggle="collapse" data-parent="#accordion" href="#generalInfo" aria-expanded="true" aria-controls="collapseOne" style="color:#CC3F0C;">
       General Information
           </a>
         </h5>
@@ -35,13 +35,20 @@
 
       <div id="generalInfo" class="collapse" role="tabpanel" aria-labelledby="headingThree">
         <div class="card-block">
-          <p class ="ensemblDescription">Description from ensemble </p>
-          <p class = "uniProtSpecies"> From uniprot </p>
-          <p class="ncbiLocusTag">Locus Tag: Locus tag from NCBI </p>
-          <p class = "jasparFamily">Family:return family Class: class here </p>
-          <p class ="matrixID"> matrix ID: it's just a string from jaspar </p>
-          <p class = "chromosomeSequence" src=""> chromosome sequence from ncbi</p>
-
+          <dl class = "row">
+           <dt class="col-sm-3 text-muted">Description From Ensemble: </dt>
+          <dd class ="ensemblDescription col-sm-9"></dd>
+          <dt class="col-sm-3 text-muted">Species From Uniprot: </dt>
+          <dd class = "uniProtSpecies col-sm-9"> </dd>
+          <dt class="col-sm-3 text-muted">Locus Tag from NCBI: </dt>
+          <dd class="ncbiLocusTag col-sm-9"></dd>
+          <dt class="col-sm-3 text-muted">Family and Class:</dt>
+          <dd class = "jasparFamily col-sm-9"></dd>
+          <dt class="col-sm-3 text-muted">Jaspar Matrix ID: </dt>
+          <dd class ="matrixID col-sm-9"> </dd>
+          <dt class="col-sm-3 text-muted">Chromosome Sequence From NCBI: </dt>
+          <dd class = "chromosomeSequence col-sm-9" src=""></dd>
+          </dl>
         </div>
       </div>
     </div>
@@ -51,7 +58,7 @@
               <div class="card">
                 <div class="card-header" role="tab" id="dnaSequenceHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne" style="color:#677DB7;">
                       DNA Sequence
                     </a>
                   </h5>
@@ -59,14 +66,15 @@
 
                 <div id="dnaSequence" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                   <div class="card-block">
-                    <code></code> <!-- DNA sequence goes there -->
+                    <h2 class = "text-muted"> DNA Sequence : </h2>
+                    <code class = "dnaSequenceCode"></code> <!-- DNA sequence goes there, -->
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header" role="tab" id="proteinInfoHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#proteinInfo" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#proteinInfo" aria-expanded="true" aria-controls="collapseOne" style="color:#33673B;">
                       Protein Information
                     </a>
                   </h5>
@@ -74,15 +82,17 @@
 
                 <div id="proteinInfo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="card-block">
-                    <p class = "proteinType">Protein Type/Name:</p>
-                    <div class="proteinSequence">Protein Sequence:<code></code></div> <!-- it goes here from UniProt between code tags -->
+                    <h2 class="text-muted">Protein Type: </h2>
+                    <p class = "proteinType"></p>
+                    <h2 class="text-muted">Protein Sequence: </h2>
+                    <code class="proteinSequence"></code> <!-- it goes here from UniProt between code tags -->
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header" role="tab" id="geneMapHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne" style="color:#F09D51;">
                       Gene Map
                     </a>
                   </h5>
@@ -98,7 +108,7 @@
               <div class="card">
                 <div class="card-header" role="tab" id="regulationHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne" style="color:#768EFC;">
                       Regulation
                     </a>
                   </h5>
@@ -106,15 +116,19 @@
 
                 <div id="regulation" class="collapse" role="tabpanel" aria-labelledby="headingFive">
                   <div class="card-block">
-                    <p class="regulators">Regulators:</p>
-                    <p class="targets">Targets:</p>
+                    <dl class = "row">
+                    <dd class = "col-sm-3 text-muted"> Regulators: </dd>
+                    <dt class="regulators col-sm-9"></dt>
+                    <dd class = "col-sm-3 text-muted"> Targets: </dd>
+                    <dt class="targets col-sm-9"></dt>
+                  </dl>
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header" role="tab" id="interactionHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne" style="color:#CC3F0C;">
                       Interaction
                     </a>
                   </h5>
@@ -122,35 +136,58 @@
 
                 <div id="interaction" class="collapse" role="tabpanel" aria-labelledby="headingSix">
                   <div class="card-block">
-                    <p class = "totalInteractions"></p>
+
                     <div class= "physicalInteractions">
-                      <h3> Physical Interactions </h3>
-                      <p class="affinityCaptureMS"></p> <!-- for all these return the name too not just the value, it'll be easier for everyone that way -->
-                      <p class="affinityCaptureRNA"></p>
-                      <p class="affinityCaptureWestern"></p>
-                      <p class="biochemicalActivity"></p>
-                      <p class="colocalization"></p>
-                      <p class="reconstitutedComplex"></p>
-                      <p class="twoHybrid"></p>
+                      <h3 class ="text-muted"> Physical Interactions </h3>
+                      <dl class = "row">
+                      <dt class = "col-sm-3">Affinity Capture MS: </dt>
+                      <dd class="affinityCaptureMS col-sm-9"></dd> <!-- Return Just the Value -->
+                      <dt class = "col-sm-3">Affinity Capture RNA: </dt>
+                      <dd class="affinityCaptureRNA col-sm-9"></dd>
+                      <dt class = "col-sm-3">Affinity Capture Western: </dt>
+                      <dd class="affinityCaptureWestern col-sm-9"></dd>
+                      <dt class = "col-sm-3">BioChemical Activity: </dt>
+                      <dd class="biochemicalActivity col-sm-9"></dd>
+                      <dt class = "col-sm-3">Colocalization: </dt>
+                      <dd class="colocalization col-sm-9"></dd>
+                      <dt class = "col-sm-3">Reconstituted Complex: </dt>
+                      <dd class="reconstitutedComplex col-sm-9"></dd>
+                      <dt class = "col-sm-3">Two Hybrid </dt>
+                      <dd class="twoHybrid col-sm-9"></dd>
+                    </dl>
                     </div>
                       <div class= "geneticInteractions">
-                        <h3> Genetic Interactions </h3>
-                          <p class="dosageRescue"> </p> <!-- for all these return the name too not just the value, it'll be easier for everyone that way -->
-                          <p class="negativeGenetic"> </p>
-                          <p class="phenotypicEnhancement"> </p>
-                          <p class="phenotypicSuppression"> </p>
-                          <p class="syntheticGrowthDefect"> </p>
-                          <p class="syntheticHaploinsufficiency"> </p>
-                          <p class="syntheticLethality"> </p>
-                          <p class="syntheticRescue"> </p>
+                        <h3 class = "text-muted"> Genetic Interactions </h3>
+                        <dl class = "row table table-dark">  <!-- Made gray for style purposes, it seperates genetic and physical interactions while staying within the same theme with Text-Muted -->
+                        <dt class = "col-sm-3">Dosage Rescue: </dt>
+                          <dd class="dosageRescue col-sm-9"> </dd> <!-- Return Just the Value-->
+                          <dt class = "col-sm-3">Negative Genetic: </dt>
+                          <dd class="negativeGenetic col-sm-9"> </dd>
+                          <dt class = "col-sm-3">Phenotypic Enhancement: </dt>
+                          <dd class="phenotypicEnhancement col-sm-9"> </dd>
+                          <dt class = "col-sm-3">Phenotypic Suppresion: </dt>
+                          <dd class="phenotypicSuppression col-sm-9"> </dd>
+                          <dt class = "col-sm-3">Synthetic Growth Defect: </dt>
+                          <dd class="syntheticGrowthDefect col-sm-9"> </dd>
+                          <dt class = "col-sm-3">Synthetic Haploin Sufficency: </dt>
+                          <dd class="syntheticHaploinsufficiency col-sm-9"> </dd>
+                          <dt class = "col-sm-3">Synthetic Lethality: </dt>
+                          <dd class="syntheticLethality col-sm-9"> </dd>
+                          <dt class = "col-sm-3">Synthetic Rescue: </dt>
+                          <dd class="syntheticRescue col-sm-9"> </dd>
+                        </dl>
                       </div>
+                      <dl class = "row">
+                      <h5 class = "col-sm-3 text-muted">Total Interactions: </h5>
+                      <dd class = "totalInteractions"></dd>
+                    </dl>
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header" role="tab" id="geneOntologyHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne" style="color:#677DB7;">
                       Gene Ontology
                     </a>
                   </h5>
@@ -158,18 +195,23 @@
 
                 <div id="geneOntology" class="collapse" role="tabpanel" aria-labelledby="headingEight">
                   <div class="card-block">
-                    <p class = "geneSummary"></p>
-                    <p class = "molecularFunction"> </p>
-                    <p class = "biologicalProcess"></p>
-                    <p class = "cellularComponent"></p>
-
+                    <dl class = "row">
+                    <dt class="col-sm-3 text-muted">Gene Summary: </dt>
+                    <dd class = "geneSummary col-sm-9"></dd>
+                    <dt class="col-sm-3 text-muted">Molecular Function</dt>
+                    <dd class = "molecularFunction col-sm-9"> </dd>
+                    <dt class="col-sm-3 text-muted">Biological Process: </dt>
+                    <dd class = "biologicalProcess col-sm-9"></dd>
+                    <dt class="col-sm-3 text-muted">Cellular Component: </dt>
+                    <dd class = "cellularComponent col-sm-9"></dd>
+                  </dl>
                   </div>
                 </div>
               </div>
               <div class="card">
                 <div class="card-header" role="tab" id="jasparInfoHeading">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#jasparInfo" aria-expanded="true" aria-controls="collapseOne">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#jasparInfo" aria-expanded="true" aria-controls="collapseOne" style="color:#33673B;">
                       Frequency Matrix and Sequence Logo
                     </a>
                   </h5>
@@ -178,9 +220,8 @@
                 <div id="jasparInfo" class="collapse" role="tabpanel" aria-labelledby="headingNine">
                   <div class="card-block">
                     <img class="sequenceLogo" src="">
-                    <div class="container">
 
-  <table class="frequencyMatrix">
+  <table class="frequencyMatrix table table-dark table-striped">
     <thead>
       <tr class="frequencyOfA">
         <th>A:</th>
@@ -198,7 +239,6 @@
       </tr>
     </tbody>
   </table>
-</div>
 
                   </div>
                 </div>
