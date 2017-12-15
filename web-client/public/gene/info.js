@@ -36,19 +36,19 @@
         // General Information Section
 
         var ensemblInfo = gene.ensembl.description;
-        $(".ensemblDescription").text("Description: " + ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
+        $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
 
         var uniSpecies = gene.uniprot.species;
-        $(".uniProtSpecies").text("Species: " + uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
+        $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
 
         var ncbiLocus = gene.ncbi.locusTag;
-        $(".ncbiLocusTag").text("Locus Tag: " + ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
+        $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
 
         var jasparFam = gene.jaspar.family;
-        $(".jasparFamily").text("Family: " + jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
+        $(".jasparFamily").text(jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
 
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
-        $(".chromosomeSequence").text("Chromosome Sequence: " + ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
+        $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
       // DNA Sequence Tab
         var ensemblDNA = gene.ensembl.dnaSequence;
@@ -64,7 +64,7 @@
 
       // Gene mapping
         var geneMap = gene.ensembl.geneMap;
-        $(".geneMap").text("Gene Map: " + geneMap).attr({ href: ensemblHrefTemplate + geneMap });
+        $(".geneMap").text(geneMap).attr({ href: ensemblHrefTemplate + geneMap });
 
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
@@ -128,16 +128,16 @@
 
       // Gene Ontology
         var sgdSummary = gene.sgd.geneOntologySummary;
-        $(".geneSummary").text("Gene Summary: " + sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
+        $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
 
         var sgdMolecularFunction = gene.sgd.molecularFunction;
-        $(".molecularFunction").text("Molecular Function: " + sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
+        $(".molecularFunction").text(sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
 
         var sgdBiologicalProcess = gene.sgd.biologicalProcess;
-        $(".biologicalProcess").text("Biological Process: " + sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
+        $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
 
         var sgdCellularComponent = gene.sgd.cellularComponent;
-        $(".cellularComponent").text("Cellular Component: " + sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+        $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
 
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
