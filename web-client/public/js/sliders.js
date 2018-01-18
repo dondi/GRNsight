@@ -14,6 +14,17 @@ var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
+var SLIDER_ADJUSTER = {
+    charge: function (sliderController, value) {
+        sliderController.simulation.force("charge").strength(value);
+        sliderController.simulation.alpha(1);
+    },
+    link: function (sliderController, value) {
+        sliderController.simulation.force("link").distance(value);
+        sliderController.simulation.alpha(1);
+    }
+};
+
 var updateSliderDisplayedValue = function (slider, element) {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
@@ -46,7 +57,7 @@ var sliderGroupController = function (sliderArray) {
     this.numberOfSliders = sliderArray.length;
     this.locked = false;
 
-    this.force = undefined;
+    this.simulation = undefined;
     this.forceParameters = undefined;
 
     this.backupValues = function () {
@@ -85,6 +96,11 @@ var sliderGroupController = function (sliderArray) {
         }
     };
 
+    this.initializeDefaultForces = function () {
+        this.modifyForceParameter("charge", -50);
+        this.modifyForceParameter("link", 500);
+    };
+
     this.configureSliderControllers = function () {
         $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.toggle();
@@ -113,17 +129,16 @@ var sliderGroupController = function (sliderArray) {
         });
     };
 
-    this.addForce = function (force) { // make forceParameters into an inputted array
-        this.force = force;
-        this.forceParameters = [force.linkDistance, force.charge, force.chargeDistance, force.gravity];
+    this.addForce = function (simulation) { // make forceParameters into an inputted array
+        this.simulation = simulation;
+        this.forceParameters = Object.keys(SLIDER_ADJUSTER);
     };
 
     this.configureForceHandlers = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
             $(this.sliders[i].sliderId).on("input", {handler: this, slider: this.sliders[i],
                 force: this.forceParameters[i]}, function (event) {
-                    event.data.force($(this).val());
-                    event.data.handler.restartForce(event.data.slider.needsAppendedZeros);
+                    event.data.handler.modifyForceParameter(event.data.force, $(this).val());
                     updateSliderDisplayedValue(event.data.slider, this);
                 });
         }
@@ -131,7 +146,6 @@ var sliderGroupController = function (sliderArray) {
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetForce();
         });
-
         $(RESET_SLIDERS_MENU_OPTION).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
@@ -149,25 +163,21 @@ var sliderGroupController = function (sliderArray) {
         });
     };
 
-    this.restartForce = function (needsRestart) {
-        if (needsRestart) {
-            this.force.stop();
-        }
-        this.force.start();
-    };
-
     this.resetForce = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            this.forceParameters[i](this.sliders[i].defaultVal);
-            this.restartForce(this.sliders[i].needsAppendedZeros);
+            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].defaultVal);
         }
     };
-    // condense this ^ v
 
     this.undoForceReset = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            this.forceParameters[i](this.sliders[i].backup);
-            this.restartForce(this.sliders[i].needsAppendedZeros);
+            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].backup);
+        }
+    };
+
+    this.modifyForceParameter = function (parameterType, value) {
+        if (SLIDER_ADJUSTER[parameterType]) {
+            SLIDER_ADJUSTER[parameterType](this, value);
         }
     };
 };
