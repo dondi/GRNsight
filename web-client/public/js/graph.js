@@ -52,7 +52,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     var minimumScale = MIN_SCALE;
-    // var maximumScale = ADAPTIVE_MAX_SCALE;
 
     var allWeights = positiveWeights.concat(negativeWeights);
 
@@ -71,9 +70,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
-    .domain([0, normalization && normMax > 0 ? normMax : d3.max(allWeights)])
-    .range([2, 14])
-    .clamp(true);
+        .domain([0, normalization && normMax > 0 ? normMax : d3.max(allWeights)])
+        .range([2, 14])
+        .clamp(true);
 
     var unweighted = false;
 
@@ -81,8 +80,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
   // if unweighted, weight is 2
     if (sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
-        .domain([d3.extent(allWeights)])
-        .range(["2"]);
+            .domain([d3.extent(allWeights)])
+            .range(["2"]);
         unweighted = true;
         $(".normalization-form").append("placeholder='unweighted'");
     } else {
@@ -94,14 +93,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     };
 
     var simulation = d3.forceSimulation()
-      .force("link", d3.forceLink())
-      .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width / 2, height / 2));
+        .force("link", d3.forceLink())
+        .force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2));
 
     var drag = d3.drag()
-      .on("start", dragstart)
-      .on("drag", dragged)
-      .on("end", dragended);
+        .on("start", dragstart)
+        .on("drag", dragged)
+        .on("end", dragended);
 
     var dragended = function () {
         d3.event.stopPropagation();
@@ -123,7 +122,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             var scale = 1;
             if (zoomContainer.attr("transform")) {
                 var string = zoomContainer.attr("transform");
-                scale = 1 / (+(string.substring(string.indexOf("scale(") + 6, string.lastIndexOf(")"))));
+                scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
             }
             zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
             zoomDragPrevX = d3.event.x;
@@ -157,8 +156,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
 
     var zoom = d3.zoom()
-      .scaleExtent([1 / 2, 4])
-      .on("zoom", zoomed);
+        .scaleExtent([1 / 2, 4])
+        .on("zoom", zoomed);
 
     svg.style("pointer-events", "all").call(zoomDrag);
 
@@ -170,13 +169,13 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   // This rectangle catches all of the mousewheel and pan events, without letting
   // them bubble up to the body.
-    var innerRect = boundingBoxContainer.append("rect") // eslint-disable-line no-unused-vars
-                    .attr("width", width)
-                    .attr("height", height)
-                    .style("fill", "none")
-                    .style("pointer-events", "all")
-                    .attr("stroke", adaptive ? "none" : "#9A9A9A")
-                    .append("g");
+    boundingBoxContainer.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .attr("stroke", adaptive ? "none" : "#9A9A9A")
+        .append("g");
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
@@ -316,7 +315,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
       // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
       // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
-          .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
+            .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
     });
@@ -338,8 +337,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             width = $container.width();
             height = $container.height();
             d3.select("rect").attr("stroke", "#9A9A9A")
-              .attr("width", width)
-              .attr("height", height);
+                .attr("width", width)
+                .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
@@ -371,236 +370,238 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var weight = boundingBoxContainer.selectAll(".weight");
 
     simulation
-      .nodes(nodes)
-      .on("tick", tick);
+        .nodes(nodes)
+        .on("tick", tick);
 
     simulation.force("link")
-      .links(links);
+        .links(links);
 
     link = link.data(links)
-             .enter().append("g")
-             .attr("class", "link")
-             .attr("strokeWidth", getEdgeThickness);
+        .enter().append("g")
+        .attr("class", "link")
+        .attr("strokeWidth", getEdgeThickness);
 
     node = node.data(nodes)
-             .enter().append("g")
-             .attr("class", "node")
-             .attr("id", function (d) {
-                 return "node" + d.index;
-             })
-             .attr("width", getNodeWidth)
-             .attr("height", nodeHeight)
-             .call(drag)
-             .on("dblclick", dblclick);
+        .enter().append("g")
+        .attr("class", "node")
+        .attr("id", function (d) {
+            return "node" + d.index;
+        })
+        .attr("width", getNodeWidth)
+        .attr("height", nodeHeight)
+        .call(drag)
+        .on("dblclick", dblclick);
 
     if (sheetType === "weighted") {
         link.append("path")
-      .attr("class", "mousezone")
-      .style("stroke-width", function (d) {
-          var baseThickness = getEdgeThickness(d);
-          return Math.max(baseThickness, 7);
-      });
+            .attr("class", "mousezone")
+            .style("stroke-width", function (d) {
+                var baseThickness = getEdgeThickness(d);
+                return Math.max(baseThickness, 7);
+            });
     }
 
     grayThreshold = +$("#grayThresholdValue").val();
 
     link.append("path")
-    .attr("class", "main")
-    .attr("id", function (d) {
-        return "path" + d.source.index + "_" + d.target.index;
-    }).style("stroke-width", function (d) {
-        return d.strokeWidth = getEdgeThickness(d);
-    }).style("stroke", function (d) {
-        if (unweighted || !colorOptimal) {
-            return "black";
-        } else if (normalize(d) <= grayThreshold) {
-            return "gray";
-        } else {
-            return d.stroke;
-        }
-    }).attr("marker-end", function (d) {
-        var x1 = d.source.x;
-        var y1 = d.source.y;
-        var x2 = d.target.x;
-        var y2 = d.target.y;
-        var minimum = "";
-        var selfRef = "";
-        var yOffsets;
-        var xOffsets;
-        var color;
-
-        if (Math.abs(d.value / (d3.max(allWeights))) <= grayThreshold) {
-            minimum = "gray";
-        }
-        if ( x1 === x2 && y1 === y2 ) {
-            selfRef = "_SelfReferential";
-        }
-        // If the same ID is created twice (usually happens in the unweighted GRNS), it causes unpredictable behavior
-        // in the markers. To prevent this, first we check to make sure the ID about to be created doesn't exist.
-        if ( $("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum).length !== 0 ) {
-            return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-        } else {
-
-          // If negative, you need one bar for horizontal and one for vertical. If the user is not coloring the weighted
-          // sheets, then we make all of the markers arrowheads.
-            if (d.value < 0 && colorOptimal) {
-                defs.append("marker")
-             .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-             .attr("refX", function () {
-                 xOffsets = {
-                     2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
-                     9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
-                 };
-                 return xOffsets[d.strokeWidth];
-             })
-             .attr("refY", function () {
-                 yOffsets = {
-                     2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
-                     9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 18, 14 : 19.25
-                 };
-                 return yOffsets[d.strokeWidth];
-             })
-             .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", function () {
-                 return d.strokeWidth;
-             })
-             .attr("markerHeight", function () {
-                 return 25 + d.strokeWidth;
-             })
-             .attr("orient", 180)
-             .append("rect")
-                .attr("width", function () {
-                    return d.strokeWidth;
-                })
-                .attr("height", function () {
-                    return 25 + d.strokeWidth;
-                })
-                .attr("rx", 10)
-                .attr("ry", 10)
-                .attr("style", function () {
-                    if ( normalize(d) <= grayThreshold) {
-                        color = "gray";
-                    } else {
-                        color = d.stroke;
-                    }
-                    return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
-                });
-
-                defs.append("marker")
-             .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-             .attr("refX", function () {
-                 if (x1 === x2 && y1 === y2) { // if self referential...
-                     xOffsets = {
-                         2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
-                         9 : 17, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 20.5
-                     };
-                 } else {
-                     xOffsets = {
-                         2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 16.5, 8 : 17,
-                         9 : 16, 10 : 17, 11 : 17, 12 : 18, 13 : 18, 14 : 19
-                     };
-                 }
-                 return xOffsets[d.strokeWidth];
-             })
-             .attr("refY", function () {
-                 yOffsets = {
-                     2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
-                     9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
-                 };
-                 return yOffsets[d.strokeWidth];
-             })
-             .attr("markerUnits", "userSpaceOnUse")
-             .attr("markerWidth", function () {
-                 return 25 + d.strokeWidth;
-             })
-             .attr("markerHeight", function () {
-                 return d.strokeWidth;
-             })
-             .attr("orient", 180)
-             .append("rect")
-                .attr("width", function () {
-                    return 25 + d.strokeWidth;
-                })
-                .attr("height", function () {
-                    return d.strokeWidth;
-                })
-                .attr("rx", 10)
-                .attr("ry", 10)
-                .attr("style", function () {
-                    if (normalize(d) <= grayThreshold) {
-                        color = "gray";
-                    } else {
-                        color = d.stroke;
-                    }
-                    return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
-                });
+        .attr("class", "main")
+        .attr("id", function (d) {
+            return "path" + d.source.index + "_" + d.target.index;
+        }).style("stroke-width", function (d) {
+            return d.strokeWidth = getEdgeThickness(d);
+        }).style("stroke", function (d) {
+            if (unweighted || !colorOptimal) {
+                return "black";
+            } else if (normalize(d) <= grayThreshold) {
+                return "gray";
             } else {
-            // Arrowheads
-                if (d.strokeWidth === 2) {
-                    d.strokeWidth = 4;
-                }
-                defs.append("marker")
-              .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-              .attr("viewBox", "0 0 15 15")
-              .attr("preserveAspectRatio", "xMinYMin meet")
-              .attr("refX", function () {
-                // Individual offsets for each possible stroke width
-                  return ((x1 === x2 && y1 === y2) ?
-                  {
-                      2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
-                      8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
-                      14: 8.3
-                  } : {
-                      2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
-                      8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
-                      14: 9
-                  }
-                )[d.strokeWidth];
-              })
-              .attr("refY", function () {
-                  return ((x1 === x2 && y1 === y2) ?
-                  {
-                      2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
-                      8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
-                      14: 6
-                  } : {
-                      2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
-                      8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
-                      13: 5, 14: 5.3
-                  }
-                )[d.strokeWidth];
-              })
-              .attr("markerUnits", "userSpaceOnUse")
-              .attr("markerWidth", function () {
-                  return 12 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
-              })
-              .attr("markerHeight", function () {
-                  return 5 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
-              })
-              .attr("orient", function () {
-                  return (x1 === x2 && y1 === y2) ?
-                  {
-                      2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
-                      8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
-                      14: 232
-                  }[d.strokeWidth] : "auto";
-              })
-              .append("path")
-                .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
-                .attr("style", function () {
-                    if (unweighted || !colorOptimal) {
-                        color = "black";
-                    } else if ( normalize(d) <= grayThreshold) {
-                        color = "gray";
-                    } else {
-                        color = d.stroke;
-                    }
-                    return "stroke: " + color + "; fill: " + color;
-                });
+                return d.stroke;
             }
-        }
-        return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-    });
+        }).attr("marker-end", function (d) {
+            var x1 = d.source.x;
+            var y1 = d.source.y;
+            var x2 = d.target.x;
+            var y2 = d.target.y;
+            var minimum = "";
+            var selfRef = "";
+            var yOffsets;
+            var xOffsets;
+            var color;
+
+            if (Math.abs(d.value / (d3.max(allWeights))) <= grayThreshold) {
+                minimum = "gray";
+            }
+            if ( x1 === x2 && y1 === y2 ) {
+                selfRef = "_SelfReferential";
+            }
+            // If the same ID is created twice (usually happens in the unweighted GRNS),
+            // it causes unpredictable behavior in the markers.
+            // To prevent this, first we check to make sure the ID about to be created doesn't exist.
+            if ( $("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum).length !== 0 ) {
+                return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+            } else {
+
+              // If negative, you need one bar for horizontal and one for vertical.
+              // If the user is not coloring the weighted
+              // sheets, then we make all of the markers arrowheads.
+                if (d.value < 0 && colorOptimal) {
+                    defs.append("marker")
+                        .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                        .attr("refX", function () {
+                            xOffsets = {
+                                2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
+                                9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
+                            };
+                            return xOffsets[d.strokeWidth];
+                        })
+                        .attr("refY", function () {
+                            yOffsets = {
+                                2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
+                                9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 18, 14 : 19.25
+                            };
+                            return yOffsets[d.strokeWidth];
+                        })
+                        .attr("markerUnits", "userSpaceOnUse")
+                        .attr("markerWidth", function () {
+                            return d.strokeWidth;
+                        })
+                        .attr("markerHeight", function () {
+                            return 25 + d.strokeWidth;
+                        })
+                        .attr("orient", 180)
+                        .append("rect")
+                            .attr("width", function () {
+                                return d.strokeWidth;
+                            })
+                            .attr("height", function () {
+                                return 25 + d.strokeWidth;
+                            })
+                            .attr("rx", 10)
+                            .attr("ry", 10)
+                            .attr("style", function () {
+                                if ( normalize(d) <= grayThreshold) {
+                                    color = "gray";
+                                } else {
+                                    color = d.stroke;
+                                }
+                                return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
+                            });
+
+                    defs.append("marker")
+                        .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                        .attr("refX", function () {
+                            if (x1 === x2 && y1 === y2) { // if self referential...
+                                xOffsets = {
+                                    2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
+                                    9 : 17, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 20.5
+                                };
+                            } else {
+                                xOffsets = {
+                                    2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 16.5, 8 : 17,
+                                    9 : 16, 10 : 17, 11 : 17, 12 : 18, 13 : 18, 14 : 19
+                                };
+                            }
+                            return xOffsets[d.strokeWidth];
+                        })
+                        .attr("refY", function () {
+                            yOffsets = {
+                                2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
+                                9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
+                            };
+                            return yOffsets[d.strokeWidth];
+                        })
+                        .attr("markerUnits", "userSpaceOnUse")
+                        .attr("markerWidth", function () {
+                            return 25 + d.strokeWidth;
+                        })
+                        .attr("markerHeight", function () {
+                            return d.strokeWidth;
+                        })
+                        .attr("orient", 180)
+                        .append("rect")
+                        .attr("width", function () {
+                            return 25 + d.strokeWidth;
+                        })
+                        .attr("height", function () {
+                            return d.strokeWidth;
+                        })
+                        .attr("rx", 10)
+                        .attr("ry", 10)
+                        .attr("style", function () {
+                            if (normalize(d) <= grayThreshold) {
+                                color = "gray";
+                            } else {
+                                color = d.stroke;
+                            }
+                            return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
+                        });
+                } else {
+                    // Arrowheads
+                    if (d.strokeWidth === 2) {
+                        d.strokeWidth = 4;
+                    }
+                    defs.append("marker")
+                        .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                        .attr("viewBox", "0 0 15 15")
+                        .attr("preserveAspectRatio", "xMinYMin meet")
+                        .attr("refX", function () {
+                        // Individual offsets for each possible stroke width
+                            return ((x1 === x2 && y1 === y2) ?
+                            {
+                                2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
+                                8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                                14: 8.3
+                            } : {
+                                2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
+                                8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
+                                14: 9
+                            }
+                            )[d.strokeWidth];
+                        })
+                        .attr("refY", function () {
+                            return ((x1 === x2 && y1 === y2) ?
+                            {
+                                2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
+                                8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
+                                14: 6
+                            } : {
+                                2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
+                                8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
+                                13: 5, 14: 5.3
+                            }
+                            )[d.strokeWidth];
+                        })
+                        .attr("markerUnits", "userSpaceOnUse")
+                        .attr("markerWidth", function () {
+                            return 12 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
+                        })
+                        .attr("markerHeight", function () {
+                            return 5 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
+                        })
+                        .attr("orient", function () {
+                            return (x1 === x2 && y1 === y2) ?
+                            {
+                                2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
+                                8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
+                                14: 232
+                            }[d.strokeWidth] : "auto";
+                        })
+                        .append("path")
+                        .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
+                        .attr("style", function () {
+                            if (unweighted || !colorOptimal) {
+                                color = "black";
+                            } else if ( normalize(d) <= grayThreshold) {
+                                color = "gray";
+                            } else {
+                                color = d.stroke;
+                            }
+                            return "stroke: " + color + "; fill: " + color;
+                        });
+                }
+            }
+            return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+        });
 
     if (sheetType === "weighted") {
         link.append("text")
@@ -674,7 +675,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
           // Check for vector direction.
         if (((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) ||
-                  ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
+            ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
             vx = -vx; vy = -vy;
         }
 
@@ -696,8 +697,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         cp2x = Math.min(Math.max(0, cp2x), width);
         cp2y = Math.min(Math.max(0, cp2y), height);
         return "C" + cp1x + " " + cp1y + ", " +
-              cp2x + " " + cp2y + ", " +
-              x2 + " " + y2;
+            cp2x + " " + cp2y + ", " +
+            x2 + " " + y2;
     };
 
     function smartPathEnd (d, w, h) {
@@ -835,7 +836,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var dblclick = function (d) {
         d.fx = null;
-        d.fx = null;
+        d.fy = null;
     };
 
     var nodeTextDblclick = function (d) {
@@ -844,40 +845,40 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     };
 
     var rect = node.append("rect")
-     .attr("width", function () {
-         return this.parentNode.getAttribute("width");
-     })
-     .attr("height", function () {
-         return this.parentNode.getAttribute("height");
-     })
-     .attr("stroke-width", "2px")
-     .on("dblclick", dblclick);
+        .attr("width", function () {
+            return this.parentNode.getAttribute("width");
+        })
+        .attr("height", function () {
+            return this.parentNode.getAttribute("height");
+        })
+        .attr("stroke-width", "2px")
+        .on("dblclick", dblclick);
 
     var text = node.append("text")
-    .attr("dy", 22)
-    .attr("text-anchor", "middle")
-    .style("font-size", "18px")
-    .style("stroke-width", "0")
-    .style("fill", "black")
-    .text(function (d) {
-        return d.name;
-    })
-    .attr("dx", function (d) {
-        var textWidth = this.getBBox().width;
-        d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
-        return d.textWidth / 2 + 3;
-    })
-    .on("dblclick", nodeTextDblclick);
+        .attr("dy", 22)
+        .attr("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("stroke-width", "0")
+        .style("fill", "black")
+        .text(function (d) {
+            return d.name;
+        })
+        .attr("dx", function (d) {
+            var textWidth = this.getBBox().width;
+            d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
+            return d.textWidth / 2 + 3;
+        })
+        .on("dblclick", nodeTextDblclick);
 
     rect
-    .attr("width", function (d) {
-        return d.textWidth + 6;
-    });
+        .attr("width", function (d) {
+            return d.textWidth + 6;
+        });
 
     node
-    .attr("width", function (d) {
-        return d.textWidth;
-    });
+        .attr("width", function (d) {
+            return d.textWidth;
+        });
 
     $(".node").css({
         "cursor": "move",
@@ -922,35 +923,35 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             var showWeight = function (d) {
                 var mouse = d3.mouse(this);
                 d.weightElement
-          .attr("x", mouse[0])
-          .attr("y", mouse[1])
-          .classed("visible", true);
+                    .attr("x", mouse[0])
+                    .attr("y", mouse[1])
+                    .classed("visible", true);
             };
 
             var hideWeight = function (d) {
                 d.weightElement
-          .attr("x", null)
-          .attr("y", null)
-          .classed("visible", false);
+                    .attr("x", null)
+                    .attr("y", null)
+                    .classed("visible", false);
             };
 
             if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
                 link.selectAll(".weight")
-          .classed("visible", false);
+                    .classed("visible", false);
 
                 link.on("mouseover", showWeight).on("mouseout", hideWeight);
                 weight.on("mouseover", showWeight).on("mouseout", hideWeight);
 
             } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
                 link.selectAll(".weight")
-          .classed("visible", false);
+                    .classed("visible", false);
 
                 link.on("mouseover", null).on("mouseout", null);
                 weight.on("mouseover", null).on("mouseout", null);
 
             } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
                 link.selectAll(".weight")
-          .classed("visible", true);
+                    .classed("visible", true);
 
                 link.on("mouseover", null).on("mouseout", null);
                 weight.on("mouseover", null).on("mouseout", null);
@@ -988,11 +989,11 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
                 var selfReferringEdge = getSelfReferringEdge(d);
 
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-              selfReferringEdge.strokeWidth + 2 : 0);
+                    selfReferringEdge.strokeWidth + 2 : 0);
                 var rightBoundary = width - d.textWidth - BOUNDARY_MARGIN - selfReferringEdgeWidth;
                 var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
                 if (adaptive && width < MAX_WIDTH &&
-             (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
+                    (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         boundingBoxContainer.attr("width", width);
