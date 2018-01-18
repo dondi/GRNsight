@@ -3,9 +3,7 @@
 - January 22, 2018
 
 ## Description
-GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). GRNsight has been in active development since 2016 (?), and is an ongoing undergraduate research project advised by Dr. Kam Dahlquist (Biology) and Dr. John Dionisio (Computer Science). The end users of GRNsight are biologists seeeking insight into thier GRN data.
-
-A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression.
+GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression.
 
 We will develop two major features for our 402 project: node coloring and block layout.
 
@@ -15,6 +13,7 @@ GRNsight was originally designed to accept Excel workbooks seamlessly from GRNma
 ### Block layout
 In addition, GRNsight v3 will allow the users to display the graph in block layout. Currently GRNsight does not have any options to organize the genes. Users have to manually move the nodes one by one which costs time and effort. There is no way of saving the current position or the layout that the users created manually. This requires the users to repeatedly do the same action even for the same datasheet that they already manually created a layout for. The block layout functionality will lay the nodes in alphabetical order, left to right first, then top to bottom and better display the genes in organized manner. Users can toggle the block layout option by using the menu item on the left. The nodes will be laid out in a grid pattern with even spaces between them. There will be no forces applied, but the nodes can be moved in the normal way afterward. 
 
+GRNsight has been in active development since 2016, and is an ongoing undergraduate research project advised by Dr. Kam Dahlquist (Biology) and Dr. John Dionisio (Computer Science). The end users of GRNsight are biologists seeeking insight into their GRN data.
 The GRNsight application http://dondi.github.io/GRNsight/ and code https://github.com/dondi/GRNsight are available under the open source BSD license.
 
 ## Justification
