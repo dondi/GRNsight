@@ -119,11 +119,7 @@
             "Decrease Link Distance": "The graph's edges should visibly decrease in length if Lock Force Graph Parameters is unchecked",
             "Increase Link Distance": "The graph's edges should visibly increase in length if Lock Force Graph Parameters is unchecked",
             "Increase Charge": "The graph's nodes should visibly increase attraction to each other if Lock Force Graph Parameters is unchecked",
-            "Decrease Charge": "The graph's nodes should visibly decrease attraction to each other if Lock Force Graph Parameters is unchecked",
-            "Increase Charge Distance" : "The graph's nodes should visibly increase attraction to each other if Lock Force Graph Parameters is unchecked",
-            "Decrease Charge Distance" : "The graph's nodes should visibly decrease attraction to each other if Lock Force Graph Parameters is unchecked",
-            "Increase Gravity": "The graph's nodes should more tightly cluster together towards the center of the graph if Lock Force Graph Parameters is unchecked",
-            "Decrease Gravity": "The graph's nodes should expand away from the center of the graph if Lock Force Graph Parameters is unchecked"
+            "Decrease Charge": "The graph's nodes should visibly decrease attraction to each other if Lock Force Graph Parameters is unchecked"
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }

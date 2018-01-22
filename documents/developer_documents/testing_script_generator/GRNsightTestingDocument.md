@@ -1,5 +1,5 @@
 ## GRNsight Client Side Testing Overview
-Last Updated: 2017-09-25
+Last Updated: 2018-01-17
 
 | Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
 | --------------- | ------ | ------- | ------ | 
@@ -34,10 +34,6 @@ Last Updated: 2017-09-25
 |NO | Force Graph Parameter Sliders|Increase Link Distance |  The graph's edges should visibly increase in length if Lock Force Graph Parameters is unchecked|
 |NO | Force Graph Parameter Sliders|Increase Charge |  The graph's nodes should visibly increase attraction to each other if Lock Force Graph Parameters is unchecked|
 |NO | Force Graph Parameter Sliders|Decrease Charge |  The graph's nodes should visibly decrease attraction to each other if Lock Force Graph Parameters is unchecked|
-|NO | Force Graph Parameter Sliders|Increase Charge Distance |  The graph's nodes should visibly increase attraction to each other if Lock Force Graph Parameters is unchecked|
-|NO | Force Graph Parameter Sliders|Decrease Charge Distance |  The graph's nodes should visibly decrease attraction to each other if Lock Force Graph Parameters is unchecked|
-|NO | Force Graph Parameter Sliders|Increase Gravity |  The graph's nodes should more tightly cluster together towards the center of the graph if Lock Force Graph Parameters is unchecked|
-|NO | Force Graph Parameter Sliders|Decrease Gravity |  The graph's nodes should expand away from the center of the graph if Lock Force Graph Parameters is unchecked|
 |NO | Lock Force Graph Parameters CheckBox|Check | The Force Graph Parameter sliders should be disabled.|
 |NO | Lock Force Graph Parameters CheckBox|Uncheck | The Force Graph Parameter sliders should be enabled.|
 |NO | Reset Force Graph Parameters Button|Click | The Force Graph Parameter sliders should revert to the default values, if Lock Force Graph Parameters is unchecked.|
@@ -98,10 +94,6 @@ Last Updated: 2017-09-25
 | Force Graph Parameter Sliders - Increase Link Distance | YES | YES | YES | 
 | Force Graph Parameter Sliders - Increase Charge | YES | YES | YES | 
 | Force Graph Parameter Sliders - Decrease Charge | YES | YES | YES | 
-| Force Graph Parameter Sliders - Increase Charge Distance | YES | YES | YES | 
-| Force Graph Parameter Sliders - Decrease Charge Distance | YES | YES | YES | 
-| Force Graph Parameter Sliders - Increase Gravity | YES | YES | YES | 
-| Force Graph Parameter Sliders - Decrease Gravity | YES | YES | YES | 
 | Lock Force Graph Parameters CheckBox - Check | YES | YES | YES | 
 | Lock Force Graph Parameters CheckBox - Uncheck | YES | YES | YES | 
 | Reset Force Graph Parameters Button - Click | YES | YES | YES | 
