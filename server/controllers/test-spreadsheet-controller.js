@@ -37,59 +37,67 @@ console.log(data);
 // console.log(JSON.stringify(data));
 
 // Example JSON extraction
-var data = {
-    // Current data structure returned from spreadsheet parsing
-    "network": {
-        genes: [],
-        links: [],
-        errors: [],
-        warnings: [],
-        negativeWeights: [],
-        positiveWeights: [],
-        sheetType: "weighted"
+var grnmap = {
+    // Meta data extracted from "optimization_parameters" sheet
+    "meta": {
+        "expression_timepoints": [15, 30, 60],
+        "simulation_timepoints": [0, 5, 10, 15, 60],
+        "strain": ["wt", "dcin5", "dgln3"]
     },
-    // Additional data from spreadsheet of type "2-column" or "expression"
-    "production_rates": { // Example JSON extraction of "2-column" type sheet
-        "ACE2": 0.2236,
-        "ASH1": 0.4332,
-        "CIN5": 0.2009,
-    },
-    "expression": { // There are 3 types: "log2_expression", "log2_optimized_expression", and "sigmas"
-        "wt_log2_expression": [ // Example JSON extraction of "log2_expression" type sheet
-            {
-                id: "ACE2",
-                data: [
-                  {"15": [0.6139, -1.0689, 0.1906, -0.398]},
-                  {"30": [0.5827, -0.3947, -0.6264]},
-                  {"60": [0.817, 0.5566, -0.4357, -1.2497]}
-                ]
-            },
-            {
-                id: "ASH1",
-                data: [
-                  {"15": [0.97, 0.3043, -0.9904, 0.2636]},
-                  {"30": [0.382, 0.4206, -0.4911, -0.1284]},
-                  {"60": [0.817, 0.5566, -0.4357, -1.2497]}
-                ]
-            },
-        ],
-        "dcln5_log2_expression": [
-            {
-                id: "ACE2",
-                data: [
-                  {"15": [0.6139, -1.0689, 0.1906, -0.398]},
-                  {"30": [0.5827, -0.3947, -0.6264]},
-                  {"60": [0.817, 0.5566, -0.4357, -1.2497]}
-                ]
-            },
-            {
-                id: "ASH1",
-                data: [
-                {"15": [0.97, 0.3043, -0.9904, 0.2636]},
-                {"30": [0.382, 0.4206, -0.4911, -0.1284]},
-                {"60": [0.817, 0.5566, -0.4357, -1.2497]}
-                ]
-            },
-        ]
+    "data": {
+        // Current data structure returned from spreadsheet parsing
+        "network": {
+            genes: [],
+            links: [],
+            errors: [],
+            warnings: [],
+            negativeWeights: [],
+            positiveWeights: [],
+            sheetType: "weighted"
+        },
+        // Additional data from spreadsheet of type "2-column" or "expression"
+        "production_rates": { // Example JSON extraction of "2-column" type sheet
+            "ACE2": 0.2236,
+            "ASH1": 0.4332,
+            "CIN5": 0.2009,
+        },
+        "expression": { // There are 3 types: "log2_expression", "log2_optimized_expression", and "sigmas"
+            "wt_log2_expression": [ // Example JSON extraction of "log2_expression" type sheet
+                {
+                    id: "ACE2",
+                    data: [
+                      {"15": [0.6139, -1.0689, 0.1906, -0.398]},
+                      {"30": [0.5827, -0.3947, -0.6264]},
+                      {"60": [0.817, 0.5566, -0.4357, -1.2497]}
+                    ]
+                },
+                {
+                    id: "ASH1",
+                    data: [
+                      {"15": [0.97, 0.3043, -0.9904, 0.2636]},
+                      {"30": [0.382, 0.4206, -0.4911, -0.1284]},
+                      {"60": [0.817, 0.5566, -0.4357, -1.2497]}
+                    ]
+                },
+            ],
+            "dcln5_log2_expression": [
+                {
+                    id: "ACE2",
+                    data: [
+                      {"15": [0.6139, -1.0689, 0.1906, -0.398]},
+                      {"30": [0.5827, -0.3947, -0.6264]},
+                      {"60": [0.817, 0.5566, -0.4357, -1.2497]}
+                    ]
+                },
+                {
+                    id: "ASH1",
+                    data: [
+                    {"15": [0.97, 0.3043, -0.9904, 0.2636]},
+                    {"30": [0.382, 0.4206, -0.4911, -0.1284]},
+                    {"60": [0.817, 0.5566, -0.4357, -1.2497]}
+                    ]
+                },
+            ]
+        }
     }
 };
