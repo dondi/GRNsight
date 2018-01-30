@@ -4,11 +4,11 @@ var express = require("express");
 var http = require("http");
 var path = require("path");
 var stylus = require("stylus");
-var morgan = require('morgan');
-var methodOverride = require('method-override');
-var serveStatic = require('serve-static');
-var bodyParser = require('body-parser');
-var errorHandler = require('errorhandler');
+var morgan = require("morgan");
+var methodOverride = require("method-override");
+var serveStatic = require("serve-static");
+var bodyParser = require("body-parser");
+var errorHandler = require("errorhandler");
 
 var env = process.env.NODE_ENV || "development";
 var config = require("./config/config")[env];

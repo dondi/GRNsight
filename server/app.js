@@ -2,8 +2,8 @@
 var express = require("express");
 var http = require("http");
 var cors = require("cors");
-var morgan = require('morgan');
-var methodOverride = require('method-override');
+var morgan = require("morgan");
+var methodOverride = require("method-override");
 
 console.log("Configuring GRNsight server");
 
