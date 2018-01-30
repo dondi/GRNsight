@@ -4,6 +4,7 @@ var http = require("http");
 var cors = require("cors");
 var morgan = require("morgan");
 var methodOverride = require("method-override");
+var bodyParser = require("body-parser");
 
 console.log("Configuring GRNsight server");
 
@@ -14,7 +15,8 @@ var app = express();
 app.set("port", process.env.PORT || config.port || 3000);
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cors());
 
