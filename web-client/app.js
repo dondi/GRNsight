@@ -4,6 +4,11 @@ var express = require("express");
 var http = require("http");
 var path = require("path");
 var stylus = require("stylus");
+var morgan = require('morgan');
+var methodOverride = require('method-override');
+var serveStatic = require('serve-static');
+var bodyParser = require('body-parser');
+var errorHandler = require('errorhandler');
 
 var env = process.env.NODE_ENV || "development";
 var config = require("./config/config")[env];
@@ -13,16 +18,15 @@ app.set("port", process.env.PORT || config.port || 3001);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(express.logger("dev"));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
+app.use(morgan("dev"));
+app.use(bodyParser());
+app.use(methodOverride());
 // app.use(express.cookieSession());
-app.use(app.router);
 app.use(stylus.middleware(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(serveStatic(path.join(__dirname, "public")));
 
 if (app.get("env") === "development") {
-    app.use(express.errorHandler());
+    app.use(errorHandler());
 }
 
 app.set("serviceRoot", config.serviceRoot);
