@@ -6,9 +6,25 @@ GRNsight is a web application and service for visualizing gene regulatory networ
 Section 5.2 contains the functional requirements GRNsight should be expected to have. Section 5.3 contains the performance requirements expected of GRNsight. Section 5.4 contains the environment requirements necessary for GRNsight to run.
 
 ## 5.2 Functional Requirements
+GRNsight will be adding two new features: Node coloring and alternate graph layout.
+
 ### 5.2.1 Node Coloring
 
 ### 5.2.2 Alternate Graph Layout
+The alternate graph layout provides the users an option to organize the nodes on the graph, thus making it easier and faster for the users to examen and analyze the data. Snap to grid would be an additional feature if time allows. Hierarcharl Layout will also be implemented if block layout is finished by time.
+
+5.2.2.1 Block Layout
+  - 5.2.2.1.1 Block layout shall allow the users to toggle between the force graph and block layouts with an option in the left menu bar.
+  - 5.2.2.1.2 Nodes shall be laid out in a grid pattern.
+  - 5.2.2.1.3 Nodes shall be equally distribute the nodes with even space to fill the area of the viewport.
+  - 5.2.2.1.4 Nodes shall not float or move like with the force graph layout once laid out.
+  - 5.2.2.1.5 Nodes shall be laid out in alphabetical order, left to right first, then top to bottom.
+  - 5.2.2.1.6 Toggling back and forth shall trigger a graph reload.
+  - 5.2.2.1.7 Nodes shall be able to move in the normal way afterward.
+  
+5.2.2.2 Hieararchal Layout
+  - 5.2.2.2.1 Hierararchal layout shall display a structured graph once triggered.
+
 
 ## 5.3 Performance Requirements
 ### 5.3.1 Processing Return Time
