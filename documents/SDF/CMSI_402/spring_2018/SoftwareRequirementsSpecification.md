@@ -6,9 +6,23 @@ GRNsight is a web application and service for visualizing gene regulatory networ
 Section 5.2 contains the functional requirements GRNsight should be expected to have. Section 5.3 contains the performance requirements expected of GRNsight. Section 5.4 contains the environment requirements necessary for GRNsight to run.
 
 ## 5.2 Functional Requirements
-GRNsight will be adding two new features: Node coloring and alternate graph layout.
+Two new features will be added to GRNsight: Node coloring and alternate graph layout.
 
 ### 5.2.1 Node Coloring
+As a first step towards node coloring, the Excel spreadsheet importer will be redesigned to parse and store data from the entire GRNmap output workbook in a standardized JavaScript Object Notation (JSON) data structure. The complete data extraction from the GRNsight output includes experimental and simulated temporal expression data for each gene in the network. A node coloring framework will be developed to visualize this expression data in the form of a stacked heat map overlay which compares the experimental and simulated gene expression levels over time. 
+
+5.2.1.1 GRNsight Data Structure Redesign.
+
+  - 5.2.1.1.1 The GRNsight Excel spreadsheet parser shall perform a JSON extraction of all sheets detected in the Microsoft Excel workbook.
+  - 5.2.1.1.2 The GRNsight Excel spreadsheet parser shall inform the user if syntactic errors are detected.
+  - 5.2.1.1.3 The GRNsight Excel spreadsheet parser shall inform the user if semantic errors are detected.
+  
+5.2.1.2 Node Coloring
+  - 5.2.1.2.1 Nodes shall be colored in the network graph in the heatmap style if expression data sheets are detected in the input.
+  - 5.2.1.2.2 Node coloring slices shall be subdivided based on the number of experimental timepoints detected.
+  - 5.2.1.2.3 Expression data shall be averaged, if multiple data points exist for a gene at a given timepoint.
+  - 5.2.1.2.4 The user shall have the option to subdivide the node coloring visualization to display optimized expression data.
+  - 5.2.1.2.5 The GRNsight user interface shall provide a node coloring legend to explain the color encoding.
 
 ### 5.2.2 Alternate Graph Layout
 The alternate graph layout provides the users an option to organize the nodes on the graph, thus making it easier and faster for the users to examen and analyze the data. Snap to grid would be an additional feature if time allows. Hierarcharl Layout will also be implemented if block layout is finished by time.
