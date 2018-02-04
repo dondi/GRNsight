@@ -47,6 +47,8 @@ The alternate graph layout provides the users an option to organize the nodes on
 
 5.3.1.2 The web client shall take no more than 10 seconds to draw the processed data.
 
+5.3.1.3 The alternate graph layouts shall take no more than 0.5 seconds to rearrange the graph.
+
 ## 5.4 Environment Requirements
 ### 5.4.1 Development
 
