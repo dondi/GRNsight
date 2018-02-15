@@ -381,6 +381,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
+    console.log(nodes);
+
     node = node.data(nodes)
         .enter().append("g")
         .attr("class", "node")

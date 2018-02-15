@@ -220,6 +220,9 @@ html
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
+        div(id="layout")
+          form
+            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):

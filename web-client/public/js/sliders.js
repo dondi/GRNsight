@@ -13,6 +13,7 @@ var RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
 var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
+var GRID_LAYOUT_BUTTON          = "#gridLayoutButton";
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
@@ -160,6 +161,10 @@ var sliderGroupController = function (sliderArray) {
             event.data.handler.undoReset();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
             $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
+        });
+
+        $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
+            event.data.handler.undoForceReset();
         });
     };
 
