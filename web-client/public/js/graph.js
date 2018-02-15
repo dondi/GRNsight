@@ -1,3 +1,9 @@
+import Grid from 'd3-v4-grid';
+// import slider from './slider.js';
+// import container from './container.js';
+// import upload from './upload.js';
+// import graphstatistics from './graph-statistics.js';
+
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -1154,6 +1160,21 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             console.warn("Detected invalid node. Moving on to next node.");
         }
     }
+
+    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
+      const grid = Grid() // create new grid layout
+        .data([ // input an array of data
+          { foo: 'bar' },
+          { foo: 'bar' },
+          { foo: 'bar' },
+          { foo: 'bar' },
+        ])
+        .bands(true) // use bands not points
+        .size([400, 200]); // set size of container
+        this.grid.layout();
+        console.log("HOY");
+    });
 
     function normalize (d) {
         return Math.abs(d.value / (d3.max(allWeights)));

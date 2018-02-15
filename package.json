@@ -8,6 +8,7 @@
   "dependencies": {
     "cors": "2.8.1",
     "cytoscape": "2.7.14",
+    "d3-v4-grid": "^2.0.1",
     "express": "3.3.8",
     "googleapis": "1.1.5",
     "jade": "1.11.0",
@@ -19,6 +20,7 @@
     "should": "11.2.0",
     "stylus": "0.54.5",
     "supertest": "3.0.0",
+    "webpack": "^3.11.0",
     "xml2js": "0.4.17",
     "xmlbuilder": "8.2.2"
   },
