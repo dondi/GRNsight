@@ -1,10 +1,6 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
-// var xlsx = require("node-xlsx");
-// var outputWorkbookPath = "../../test-files/spreadsheet-controller-test-files/" +
-  // "15-genes_28-edges_db5-MO-LK_Sigmoid_estimation_missing-values_output.xlsx";
-
 var TWO_COL_SHEET_NAMES = [
     "production_rates",
     "degradation_rates",
@@ -35,10 +31,6 @@ var fillArray = function (value, array, length) { // mutator
     }
     return array;
 };
-
-// var workbook = xlsx.parse(outputWorkbookPath);
-// var data = parseAdditionalSheets(workbook);
-// console.log(JSON.stringify(data));
 
 module.exports = function (workbook) {
 

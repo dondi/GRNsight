@@ -438,7 +438,6 @@ var processGRNmap = function (path, res, app) {
     for (var key in additionalData) {
         network[key] = additionalData[key];
     }
-    // console.log(JSON.stringify(network));
 
     return (network.errors.length === 0) ?
     // If all looks well, return the network with an all clear
