@@ -1,8 +1,9 @@
-// Spreadsheet controller for converting entire GRNmap workbook (input or output) to JSON (#241)
-var xlsx = require("node-xlsx");
+// Parses "optimization_paramters," expression data sheets, and 2-column sheets
+// from GRNmap input or output workbook
 
-var outputWorkbookPath = "../../test-files/spreadsheet-controller-test-files/" +
-  "15-genes_28-edges_db5-MO-LK_Sigmoid_estimation_missing-values_output.xlsx";
+// var xlsx = require("node-xlsx");
+// var outputWorkbookPath = "../../test-files/spreadsheet-controller-test-files/" +
+  // "15-genes_28-edges_db5-MO-LK_Sigmoid_estimation_missing-values_output.xlsx";
 
 var TWO_COL_SHEET_NAMES = [
     "production_rates",
@@ -35,15 +36,15 @@ var fillArray = function (value, array, length) { // mutator
     return array;
 };
 
-var parseSheet = function (workbook) {
+var parseAdditionalSheets = function (workbook) {
 
     var output = {};
     output["expression"] = {}; // expression data
     output["meta"] = {};
+    // TODO: Need better name to generalize 2-column data
     output["test"] = {}; // 2-column data
 
     // First, extract meta data from optimization_parameters
-    // ...
     for (var i = 0; i < workbook.length; i++) {
         var sheet = workbook[i];
         // Parse meta data in "optimization_parameters" sheet
@@ -91,7 +92,8 @@ var parseSheet = function (workbook) {
     return output;
 };
 
-var workbook = xlsx.parse(outputWorkbookPath);
-var data = parseSheet(workbook);
-// console.log(data);
-console.log(JSON.stringify(data));
+// var workbook = xlsx.parse(outputWorkbookPath);
+// var data = parseAdditionalSheets(workbook);
+// console.log(JSON.stringify(data));
+
+module.exports = parseAdditionalSheets;
