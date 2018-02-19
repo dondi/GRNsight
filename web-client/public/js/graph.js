@@ -15,8 +15,8 @@
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 
 /* eslint-disable no-unused-vars */
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
-  warnings, sliderController, normalization, grayThreshold) {
+
+var drawGraph = function (network, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -33,7 +33,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
     $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
 
-    $("#warningMessage").html(warnings.length !== 0 ? "Click here in order to view warnings." : "");
+    $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
     var getNodeWidth = function (node) {
         return node.name.length * 12 + 5;
@@ -53,7 +53,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var minimumScale = MIN_SCALE;
 
-    var allWeights = positiveWeights.concat(negativeWeights);
+    var allWeights = network.positiveWeights.concat(network.negativeWeights);
 
     if (!colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
@@ -78,7 +78,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   // normalization all weights b/w size 2 and size 14
   // if unweighted, weight is 2
-    if (sheetType === "unweighted") {
+    if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
             .range(["2"]);
@@ -370,18 +370,18 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var weight = boundingBoxContainer.selectAll(".weight");
 
     simulation
-        .nodes(nodes)
+        .nodes(network.genes)
         .on("tick", tick);
 
     simulation.force("link")
-        .links(links);
+        .links(network.links);
 
-    link = link.data(links)
+    link = link.data(network.links)
         .enter().append("g")
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
-    node = node.data(nodes)
+    node = node.data(network.genes)
         .enter().append("g")
         .attr("class", "node")
         .attr("id", function (d) {
@@ -392,7 +392,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .call(drag)
         .on("dblclick", dblclick);
 
-    if (sheetType === "weighted") {
+    if (network.sheetType === "weighted") {
         link.append("path")
             .attr("class", "mousezone")
             .style("stroke-width", function (d) {
@@ -603,7 +603,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         });
 
-    if (sheetType === "weighted") {
+    if (network.sheetType === "weighted") {
         link.append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
@@ -612,7 +612,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             return d.value.toPrecision(4);
         });
 
-        weight = weight.data(links)
+        weight = weight.data(network.links)
         .enter().append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
@@ -895,7 +895,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var currentWeightVisibilitySetting = null;
 
-    if (sheetType === "weighted") {
+    if (network.sheetType === "weighted") {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
