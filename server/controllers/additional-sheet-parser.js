@@ -36,7 +36,11 @@ var fillArray = function (value, array, length) { // mutator
     return array;
 };
 
-var parseAdditionalSheets = function (workbook) {
+// var workbook = xlsx.parse(outputWorkbookPath);
+// var data = parseAdditionalSheets(workbook);
+// console.log(JSON.stringify(data));
+
+module.exports = function (workbook) {
 
     var output = {};
     output["expression"] = {}; // expression data
@@ -91,9 +95,3 @@ var parseAdditionalSheets = function (workbook) {
     }
     return output;
 };
-
-// var workbook = xlsx.parse(outputWorkbookPath);
-// var data = parseAdditionalSheets(workbook);
-// console.log(JSON.stringify(data));
-
-module.exports = parseAdditionalSheets;
