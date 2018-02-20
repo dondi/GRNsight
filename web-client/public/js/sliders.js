@@ -33,7 +33,7 @@ var updateSliderDisplayedValue = function (slider, element) {
     slider.setCurrentVal(value);
 };
 
-var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
+export var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
     this.sliderId = sliderId;
     this.valueId = valueId;
     this.defaultVal = defaultVal;
@@ -53,7 +53,7 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
 
 };
 
-var sliderGroupController = function (sliderArray) {
+export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
     this.numberOfSliders = sliderArray.length;
     this.locked = false;

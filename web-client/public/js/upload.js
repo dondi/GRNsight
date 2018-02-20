@@ -1,5 +1,4 @@
-$(function () {
-
+export const upload = function (sliderObject, sliderGroupController, drawGraph) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -541,4 +540,4 @@ $(function () {
         }
     });
 
-});
+};

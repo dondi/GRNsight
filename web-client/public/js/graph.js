@@ -21,7 +21,7 @@ import Grid from 'd3-v4-grid';
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 
 /* eslint-disable no-unused-vars */
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
+export var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
   warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
@@ -108,7 +108,8 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .on("drag", dragged)
         .on("end", dragended);
 
-    var dragended = function () {
+    var dragended = function (d) {
+      console.log("END", JSON.stringify(d));
         d3.event.stopPropagation();
     };
 
@@ -1164,16 +1165,38 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
       const grid = Grid() // create new grid layout
-        .data([ // input an array of data
-          { foo: 'bar' },
-          { foo: 'bar' },
-          { foo: 'bar' },
-          { foo: 'bar' },
-        ])
+        // .data(nodes)
+        //   .enter().append("g")
+        //   .attr("class", "node")
+        //   .attr("id", function (d) {
+        //       return "node" + d.index;
+        //   })
+        //   .attr("width", getNodeWidth)
+        //   .attr("height", nodeHeight)
+        //   .call(drag)
+        //   .on("dblclick", dblclick)
+         .data(nodes)
+        // .data([ // input an array of data
+        //   { foo: 'bar' },
+        //   { foo: 'bar' },
+        //   { foo: 'bar' },
+        //   { foo: 'bar' },
+        // ])
+        // get xy -> for nodes -> drag
         .bands(true) // use bands not points
         .size([400, 200]); // set size of container
-        this.grid.layout();
-        console.log("HOY");
+        grid.layout();
+        console.log("grid data is ", grid.nodes());
+        console.log("node", node);
+        console.log("node_groups[0][0] is ", node._groups[0][0]);
+
+        let x = $(node._groups[0][0]).attr('x');
+        console.log("node_groups[0][0].__data__ is ", node._groups[0][0].__data__);
+        node._groups[0][0].__data__.x = 50;
+        node._groups[0][0].__data__.y = 50;
+        node._groups[0][0].__data__.fx = 50;
+        node._groups[0][0].__data__.fy = 50;
+        console.log("x is", $(node._groups[0][0]).attr('x'));
     });
 
     function normalize (d) {
@@ -1181,6 +1204,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     function dragstart (d) {
+      console.log("START", JSON.stringify(d));
         if (!d3.event.active) {
             simulation.alphaTarget(0.3).restart();
         }
