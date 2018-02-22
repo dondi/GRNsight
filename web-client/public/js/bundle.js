@@ -8338,7 +8338,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  */
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
-
 /* eslint-disable no-unused-vars */
 var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
   warnings, sliderController, normalization, grayThreshold) {
@@ -9293,6 +9292,36 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
+    const getMarginWidth = function(gridNodes) {
+        const total = $container.width();
+        let rightNode;
+        for(i in gridNodes) {
+            if (gridNodes[i].y !== 0) {
+                rightNode = gridNodes[i - 1];
+            }
+        }
+        const margin = total - rightNode.x;
+        return margin / 2;
+    }
+
+    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
+        const grid = __WEBPACK_IMPORTED_MODULE_0_d3_v4_grid___default()() // create new grid layout
+        .data(nodes)
+        .bands(true)
+        .size([$container.width(), $container.height()]) // set size of container
+        grid.layout();
+        let nodeGroup = node._groups[0];
+        let gridNodes = grid.nodes();
+        let marginWidth = getMarginWidth(gridNodes);
+        for (i in nodeGroup){
+            node._groups[0][i].__data__.fx = gridNodes[i].x;
+            node._groups[0][i].__data__.fy = gridNodes[i].y;
+        }
+        // let x = $(node._groups[0][0]).attr('x');
+        // console.log("x is", $(node._groups[0][0]).attr('x'));
+    });
+
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
@@ -9481,49 +9510,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
-    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
-      const grid = __WEBPACK_IMPORTED_MODULE_0_d3_v4_grid___default()() // create new grid layout
-        // .data(nodes)
-        //   .enter().append("g")
-        //   .attr("class", "node")
-        //   .attr("id", function (d) {
-        //       return "node" + d.index;
-        //   })
-        //   .attr("width", getNodeWidth)
-        //   .attr("height", nodeHeight)
-        //   .call(drag)
-        //   .on("dblclick", dblclick)
-         .data(nodes)
-        // .data([ // input an array of data
-        //   { foo: 'bar' },
-        //   { foo: 'bar' },
-        //   { foo: 'bar' },
-        //   { foo: 'bar' },
-        // ])
-        // get xy -> for nodes -> drag
-        .bands(true) // use bands not points
-        .size([400, 200]); // set size of container
-        grid.layout();
-        console.log("grid data is ", grid.nodes());
-        console.log("node", node);
-        console.log("node_groups[0][0] is ", node._groups[0][0]);
-
-        let x = $(node._groups[0][0]).attr('x');
-        console.log("node_groups[0][0].__data__ is ", node._groups[0][0].__data__);
-        node._groups[0][0].__data__.x = 50;
-        node._groups[0][0].__data__.y = 50;
-        node._groups[0][0].__data__.fx = 50;
-        node._groups[0][0].__data__.fy = 50;
-        console.log("x is", $(node._groups[0][0]).attr('x'));
-    });
-
     function normalize (d) {
         return Math.abs(d.value / (d3.max(allWeights)));
     }
 
     function dragstart (d) {
-      console.log("START", JSON.stringify(d));
+        console.log("START", JSON.stringify(d));
         if (!d3.event.active) {
             simulation.alphaTarget(0.3).restart();
         }
