@@ -9292,17 +9292,24 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         }
     }
 
-    const getMarginWidth = function(gridNodes) {
-        const total = $container.width();
-        let rightNode;
-        for(i in gridNodes) {
-            if (gridNodes[i].y !== 0) {
-                rightNode = gridNodes[i - 1];
-            }
-        }
-        const margin = total - rightNode.x;
-        return margin / 2;
-    }
+    const getMarginWidth = function(gridNodes, row) {
+        const containerWidth = $container.width();
+        let len = gridNodes.length;
+        let initialMargin = 10;
+        let rightNode = gridNodes[row - 1];
+        let nodeWidth = getNodeWidth(rightNode);
+        let rightNodeX = rightNode.x + nodeWidth + initialMargin;
+        const margin = (containerWidth - rightNodeX) / 2;
+        return margin;
+    };
+
+    const getMarginHeight = function(gridNodes) {
+        const containerHeight = $container.height();
+        const len = gridNodes.length;
+        const bottomNodeY = gridNodes[len - 1].y + nodeHeight;
+        const margin = (containerHeight - bottomNodeY) / 2;
+        return margin;
+    };
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
@@ -9313,10 +9320,12 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         grid.layout();
         let nodeGroup = node._groups[0];
         let gridNodes = grid.nodes();
-        let marginWidth = getMarginWidth(gridNodes);
+        let gridNumRow = grid.rows();
+        let marginWidth = getMarginWidth(gridNodes, gridNumRow);
+        let marginHeight = getMarginHeight(gridNodes);
         for (i in nodeGroup){
-            node._groups[0][i].__data__.fx = gridNodes[i].x;
-            node._groups[0][i].__data__.fy = gridNodes[i].y;
+            node._groups[0][i].__data__.fx = marginWidth + gridNodes[i].x;
+            node._groups[0][i].__data__.fy = marginHeight + gridNodes[i].y;
         }
         // let x = $(node._groups[0][0]).attr('x');
         // console.log("x is", $(node._groups[0][0]).attr('x'));
