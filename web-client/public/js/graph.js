@@ -381,6 +381,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
+    console.log("network.genes: ", network.genes);
     node = node.data(network.genes)
         .enter().append("g")
         .attr("class", "node")
@@ -852,7 +853,48 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             return this.parentNode.getAttribute("height");
         })
         .attr("stroke-width", "2px")
+        // .style("fill", "red")
         .on("dblclick", dblclick);
+
+    // NODE COLORING:
+    // console.log("EXPRESSION DATA: ");
+    // console.log(network["expression"]["dcin5_log2_expression"]);
+
+    var getExpressionData = function (gene, strain) {
+        return network["expression"][strain].data[gene];
+    }
+
+    var numTimePoints = function (strain) {
+        return network["expression"][strain].time_points.length;
+    }
+
+    node.each(function (p, j) {
+        d3.select(this)
+        .append("g")
+        .selectAll(".coloring")
+        .data(getExpressionData(p.name, "dcin5_log2_expression"))
+        .attr("class", "coloring")
+        .enter().append("rect")
+        .attr("width", function (d) {
+            var width = 74 / numTimePoints("dcin5_log2_expression");
+            return width + "px";
+        })
+        .attr("height", "30px")
+        .attr("transform", function (d, i) {
+            return "translate(" + (i * (74 / numTimePoints("dcin5_log2_expression"))) + "," + 0 + ")";
+        })
+        .attr("stroke-width", "0px")
+        .style("fill", function (d) {
+            var NORMALIZATION_FACTOR = 3;
+            var scale = d3.scaleLinear()
+                .domain([-NORMALIZATION_FACTOR, NORMALIZATION_FACTOR])
+                .range([0, 1]);
+            return d3.interpolateRdBu(scale(d));
+        })
+        .text(function (d, i) {
+            return "data " + JSON.stringify(d) + " of " + p.name;
+        });
+    });
 
     var text = node.append("text")
         .attr("dy", 22)
