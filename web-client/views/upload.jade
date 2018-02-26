@@ -274,9 +274,9 @@ html
               button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
               button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
           div(class='weightedGraphOptions hidden')
-            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Edge Threshold (0 - 1): &nbsp; &nbsp;
-            output(for='grayThresholdInput', class='forceVal', id='grayThresholdValue') 0.05
-            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate(value)')
+            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Edge Threshold (0 - 100%): &nbsp; &nbsp;
+            span(class='forceVal', id='grayThresholdValue') 0.05
+            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate()')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
