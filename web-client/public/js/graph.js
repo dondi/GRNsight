@@ -401,7 +401,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             });
     }
 
-    grayThreshold = +$("#grayThresholdValue").val();
+    grayThreshold = +$("#grayThresholdInput").val();
 
     link.append("path")
         .attr("class", "main")
