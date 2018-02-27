@@ -976,11 +976,11 @@ export var drawGraph = function (nodes, links, positiveWeights, negativeWeights,
     const getMarginWidth = function(gridNodes, row) {
         const containerWidth = $container.width();
         let len = gridNodes.length;
-        let initialMargin = 10;
+        let arrow = 80;
         let rightNode = gridNodes[row - 1];
         let nodeWidth = getNodeWidth(rightNode);
-        let rightNodeX = rightNode.x + nodeWidth + initialMargin;
-        const margin = (containerWidth - rightNodeX) / 2;
+        let rightNodeX = rightNode.x + nodeWidth;
+        const margin = (containerWidth - rightNodeX - arrow) / 2;
         return margin;
     };
 
@@ -994,10 +994,13 @@ export var drawGraph = function (nodes, links, positiveWeights, negativeWeights,
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
+        const margin = 50;
+        const padding = 10;
         const grid = Grid() // create new grid layout
         .data(nodes)
         .bands(true)
-        .size([$container.width(), $container.height()]) // set size of container
+        .padding([0.2,0])
+        .size([$container.width() - margin, $container.height() - margin]); // set size of container
         grid.layout();
         let nodeGroup = node._groups[0];
         let gridNodes = grid.nodes();
