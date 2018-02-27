@@ -8427,7 +8427,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .on("end", dragended);
 
     var dragended = function (d) {
-      console.log("END", JSON.stringify(d));
         d3.event.stopPropagation();
     };
 
@@ -9311,9 +9310,16 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         return margin;
     };
 
+    const sortNode = function(n1, n2) {
+        let name1 = n1.__data__.name;
+        let name2 = n2.__data__.name;
+        if (name1 === name2) { return 0 };
+        return name1 > name2 ? 1 : -1;
+    }
+
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
-        const margin = 50;
+        const margin = 10;
         const padding = 10;
         const grid = __WEBPACK_IMPORTED_MODULE_0_d3_v4_grid___default()() // create new grid layout
         .data(nodes)
@@ -9321,14 +9327,14 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .padding([0.2,0])
         .size([$container.width() - margin, $container.height() - margin]); // set size of container
         grid.layout();
-        let nodeGroup = node._groups[0];
+        let nodeGroup = node._groups[0].sort(sortNode);
         let gridNodes = grid.nodes();
         let gridNumRow = grid.rows();
         let marginWidth = getMarginWidth(gridNodes, gridNumRow);
         let marginHeight = getMarginHeight(gridNodes);
         for (i in nodeGroup){
-            node._groups[0][i].__data__.fx = marginWidth + gridNodes[i].x;
-            node._groups[0][i].__data__.fy = marginHeight + gridNodes[i].y;
+            nodeGroup[i].__data__.fx = margin + gridNodes[i].x;
+            nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
         }
         // let x = $(node._groups[0][0]).attr('x');
         // console.log("x is", $(node._groups[0][0]).attr('x'));
@@ -9527,7 +9533,6 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     }
 
     function dragstart (d) {
-        console.log("START", JSON.stringify(d));
         if (!d3.event.active) {
             simulation.alphaTarget(0.3).restart();
         }
