@@ -2,6 +2,7 @@ var multiparty = require("multiparty");
 var xlsx = require("node-xlsx");
 // var util = require("util");
 var path = require("path");
+var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
@@ -431,6 +432,12 @@ var processGRNmap = function (path, res, app) {
 
     helpers.attachFileHeaders(res, path);
     network = parseSheet(sheet);
+
+    // Parse expression and 2-column data, then add to network object
+    var additionalData = parseAdditionalSheets(sheet);
+    for (var key in additionalData) {
+        network[key] = additionalData[key];
+    }
 
     return (network.errors.length === 0) ?
     // If all looks well, return the network with an all clear
