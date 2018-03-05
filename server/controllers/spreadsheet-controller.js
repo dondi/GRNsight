@@ -435,9 +435,7 @@ var processGRNmap = function (path, res, app) {
 
     // Parse expression and 2-column data, then add to network object
     var additionalData = parseAdditionalSheets(sheet);
-    for (var key in additionalData) {
-        network[key] = additionalData[key];
-    }
+    Object.assign(network, additionalData);
 
     return (network.errors.length === 0) ?
     // If all looks well, return the network with an all clear
