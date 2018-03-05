@@ -205,6 +205,19 @@ $(function () {
         $("#errorModal").modal("show");
     };
 
+    var reloadNodeColoringMenu = function (network) {
+        if (network.expression) { // TODO: for now, presence of expression property => node coloring.
+            var nodeColoringOptions = [];
+            for (var property in network.expression) {
+                nodeColoringOptions.push({value: property});
+            }
+            var sel = $("#strain-selection");
+            $(nodeColoringOptions).each(function () {
+                sel.append($("<option>").attr("value", this.value).text(this.value));
+            });
+        }
+    };
+
     var reloader = function () { };
 
     var loadGrn = function (url, name, formData) {
@@ -223,6 +236,7 @@ $(function () {
     ).done(function (network, textStatus, jqXhr) {
         console.log(network); // Display the network in the console
         displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
+        reloadNodeColoringMenu(network); // TODO: also add this to importGrn function
         reloader = function () {
             loadGrn(url, name, formData);
         };

@@ -220,6 +220,13 @@ html
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
+        div(class="node-coloring hidden")
+            p(class='sideHeader') Node Coloring Menu
+            p(class='sideHeader' id="strainLabel") Select Strain
+            select(id="strain-selection")
+            p(class='sideHeader' id="nodeColoringNormalizationFactor") Normalization Factor
+            input(type='text' id='node-coloring-normalization' aria-describedby='basic-addon1')
+            
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):

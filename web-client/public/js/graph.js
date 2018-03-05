@@ -856,71 +856,94 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         // .style("fill", "red")
         .on("dblclick", dblclick);
 
-    // NODE COLORING:
-    // console.log("EXPRESSION DATA: ");
-    // console.log(network["expression"]["dcin5_log2_expression"]);
+    var renderNodeLabels = function () {
+        var text = node.append("text")
+            .attr("dy", 22)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("stroke-width", "0")
+            .style("fill", "black")
+            .text(function (d) {
+                return d.name;
+            })
+            .attr("dx", function (d) {
+                var textWidth = this.getBBox().width;
+                d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
+                return d.textWidth / 2 + 3;
+            })
+            .on("dblclick", nodeTextDblclick);
 
+        rect
+            .attr("width", function (d) {
+                return d.textWidth + 6;
+            });
+        node
+            .attr("width", function (d) {
+                return d.textWidth;
+            });
+    };
+
+    renderNodeLabels();
+
+    // NODE COLORING:
+    var DEFAULT_NORMALIZATION_FACTOR = 3;
     var getExpressionData = function (gene, strain) {
         return network["expression"][strain].data[gene];
-    }
+    };
 
     var numTimePoints = function (strain) {
         return network["expression"][strain].time_points.length;
+    };
+
+    var renderNodeColoring = function (nodeColoringSelection, normalizationFactor) {
+        console.log("node coloring selection: " + nodeColoringSelection);
+        node.each(function (p, j) {
+            d3.select(this)
+            .append("g")
+            .selectAll(".coloring")
+            .data(getExpressionData(p.name, nodeColoringSelection))
+            .attr("class", "coloring")
+            .enter().append("rect")
+            .attr("width", function () {
+                var width = rect.attr("width") / numTimePoints(nodeColoringSelection);
+                return width + "px";
+            })
+            .attr("height", rect.attr("height") + "px")
+            .attr("transform", function (d, i) {
+                return "translate(" + (i * (rect.attr("width") / numTimePoints(nodeColoringSelection))) + "," + 0 + ")";
+            })
+            .attr("stroke-width", "0px")
+            .style("fill", function (d) {
+                // TODO: deal with null
+                var scale = d3.scaleLinear()
+                    .domain([-normalizationFactor, normalizationFactor])
+                    .range([0, 1]);
+                return d3.interpolateRdBu(scale(-d));
+            })
+            .text(function (d, i) {
+                return "data " + JSON.stringify(d) + " of " + p.name;
+            });
+        });
+        renderNodeLabels();
     }
 
-    node.each(function (p, j) {
-        d3.select(this)
-        .append("g")
-        .selectAll(".coloring")
-        .data(getExpressionData(p.name, "dcin5_log2_expression"))
-        .attr("class", "coloring")
-        .enter().append("rect")
-        .attr("width", function (d) {
-            var width = 74 / numTimePoints("dcin5_log2_expression");
-            return width + "px";
-        })
-        .attr("height", "30px")
-        .attr("transform", function (d, i) {
-            return "translate(" + (i * (74 / numTimePoints("dcin5_log2_expression"))) + "," + 0 + ")";
-        })
-        .attr("stroke-width", "0px")
-        .style("fill", function (d) {
-            var NORMALIZATION_FACTOR = 3;
-            var scale = d3.scaleLinear()
-                .domain([-NORMALIZATION_FACTOR, NORMALIZATION_FACTOR])
-                .range([0, 1]);
-            return d3.interpolateRdBu(scale(d));
-        })
-        .text(function (d, i) {
-            return "data " + JSON.stringify(d) + " of " + p.name;
-        });
+    $("#strain-selection").change(function () {
+        var newStrain = this.value;
+        renderNodeColoring(newStrain, DEFAULT_NORMALIZATION_FACTOR);
     });
 
-    var text = node.append("text")
-        .attr("dy", 22)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("stroke-width", "0")
-        .style("fill", "black")
-        .text(function (d) {
-            return d.name;
-        })
-        .attr("dx", function (d) {
-            var textWidth = this.getBBox().width;
-            d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
-            return d.textWidth / 2 + 3;
-        })
-        .on("dblclick", nodeTextDblclick);
-
-    rect
-        .attr("width", function (d) {
-            return d.textWidth + 6;
-        });
-
-    node
-        .attr("width", function (d) {
-            return d.textWidth;
-        });
+    // toggle node coloring menu
+    if (network.expression) {
+        if ($(".node-coloring").hasClass("hidden")) {
+            $(".node-coloring").removeClass("hidden");
+        }
+        var defaultNodeColoringSelection = Object.getOwnPropertyNames(network.expression)[0];
+        renderNodeColoring(defaultNodeColoringSelection, DEFAULT_NORMALIZATION_FACTOR);
+    } else {
+        if (!$(".node-coloring").hasClass("hidden")) {
+            $(".node-coloring").addClass("hidden");
+        }
+    }
 
     $(".node").css({
         "cursor": "move",
