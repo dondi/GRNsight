@@ -222,10 +222,10 @@ html
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring Menu
-            p(class='sideHeader' id="strainLabel") Select Strain
             select(id="strain-selection")
             p(class='sideHeader' id="nodeColoringNormalizationFactor") Normalization Factor
             input(type='text' id='node-coloring-normalization' aria-describedby='basic-addon1')
+            div(class="node-coloring-legend")
             
         div(id="force-graph")
           form

@@ -886,7 +886,9 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     renderNodeLabels();
 
     // NODE COLORING:
-    var DEFAULT_NORMALIZATION_FACTOR = 3;
+    var DEFAULT_NODE_COLORING_NORMALIZATION_FACTOR = 3;
+    var currentNodeColoringNormalizationFactor = DEFAULT_NODE_COLORING_NORMALIZATION_FACTOR;
+    var currentNodeColoringSelection;
     var getExpressionData = function (gene, strain) {
         return network["expression"][strain].data[gene];
     };
@@ -895,50 +897,147 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         return network["expression"][strain].time_points.length;
     };
 
-    var renderNodeColoring = function (nodeColoringSelection, normalizationFactor) {
-        console.log("node coloring selection: " + nodeColoringSelection);
-        node.each(function (p, j) {
+    var renderNodeColoring = function (selection, normalization) {
+        console.log("selection: " + selection);
+        console.log("normalization: " + normalization);
+        node.each(function (p) {
             d3.select(this)
             .append("g")
             .selectAll(".coloring")
-            .data(getExpressionData(p.name, nodeColoringSelection))
+            .data(getExpressionData(p.name, selection))
             .attr("class", "coloring")
             .enter().append("rect")
             .attr("width", function () {
-                var width = rect.attr("width") / numTimePoints(nodeColoringSelection);
+                var width = rect.attr("width") / numTimePoints(selection);
                 return width + "px";
             })
             .attr("height", rect.attr("height") + "px")
             .attr("transform", function (d, i) {
-                return "translate(" + (i * (rect.attr("width") / numTimePoints(nodeColoringSelection))) + "," + 0 + ")";
+                return "translate(" + (i * (rect.attr("width") / numTimePoints(selection))) + "," + 0 + ")";
             })
             .attr("stroke-width", "0px")
             .style("fill", function (d) {
                 // TODO: deal with null
                 var scale = d3.scaleLinear()
-                    .domain([-normalizationFactor, normalizationFactor])
+                    .domain([-normalization, normalization])
                     .range([0, 1]);
                 return d3.interpolateRdBu(scale(-d));
             })
-            .text(function (d, i) {
+            .text(function (d) {
                 return "data " + JSON.stringify(d) + " of " + p.name;
             });
         });
         renderNodeLabels();
+    };
+
+    // TODO: this only works for even number of bins...
+    // var getColoringIndex = function (normalization, numberOfBins, value) {
+    //     var indexRanges = [];
+    //     var segment = normalization / (numberOfBins / 2);
+    //     for (var i = 0; i < numberOfBins / 2; i++) {
+    //         indexRanges[i] = [segment * i, segment * (i + 1)];
+    //     }
+    // }
+
+    var renderNodeColoringLegend = function (normalization) {
+        var $nodeColoringLegend = $(".node-coloring-legend");
+        d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
+        var xMargin = 15;
+        var yMargin = 30;
+        var width = 200;
+        var height = 10;
+        var numberOfBins = 10;
+        var textYOffset = 10;
+
+        var svg = d3.select($nodeColoringLegend[0])
+            .append("svg")
+            .attr("width", width + xMargin)
+            .attr("height", height + yMargin)
+            .append("g")
+            .attr("transform", "translate(" + xMargin / 2 + ", 0)");
+
+        var createNormalizedArray = function (normalization, steps) {
+            var arr = [];
+            var segment = normalization / (steps / 2);
+            for (var i = 0; i < steps / 2; i++) {
+                arr[i] = segment * i + segment / 2;
+            }
+            var negativeHalf = arr.slice().reverse().map(function (d) {
+                return -d;
+            });
+            return negativeHalf.concat(arr);
+        };
+
+        var coloring = svg.selectAll(".coloring")
+            .data(createNormalizedArray(normalization, numberOfBins))
+            .attr("class", "coloring");
+
+        coloring.enter().append("rect")
+            .attr("width", width / numberOfBins + "px")
+            .attr("height", height + "px")
+            .attr("transform", function (d, i) {
+                return "translate(" + (i * (width / numberOfBins)) + "," + 0 + ")";
+            })
+            .attr("stroke-width", "1px")
+            .attr("stroke", "black")
+            .style("fill", function (d) {
+                // TODO: deal with null
+                var scale = d3.scaleLinear()
+                    .domain([-normalization, normalization])
+                    .range([0, 1]);
+                return d3.interpolateRdBu(scale(-d));
+            });
+
+        coloring.enter().append("text")
+            .attr("x", function (d, i) {
+                return (i * (width / numberOfBins)) + ((width / numberOfBins) * 0.75) + "px";
+            })
+            .attr("y", height + textYOffset + "px")
+            .attr("font-size", "6px")
+            .text(function (d) {
+                return (+d + (normalization / (numberOfBins / 2) / 2)).toFixed(2);
+            });
+
+        coloring.append("text")
+            .attr("x", "0px")
+            .attr("y", height + 10 + "px")
+            .attr("font-size", "6px")
+            .text((-normalization / 2).toFixed(2));
+        // manually add the first tick
+        var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
+        var newElement = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        newElement.textContent = ((-normalization).toFixed(2));
+        newElement.setAttribute("font-size", "6px");
+        newElement.setAttribute("x", -((width / 10) * .25) + "px");
+        newElement.setAttribute("y", height + 10 + "px");
+        g.appendChild(newElement);
+    };
+    renderNodeColoringLegend(currentNodeColoringNormalizationFactor);
+
+    $("#node-coloring-normalization").change(function () {
+        var newNormalizatonFactor = this.value;
+        currentNodeColoringNormalizationFactor = newNormalizatonFactor;
+        renderNodeColoring(currentNodeColoringSelection, currentNodeColoringNormalizationFactor);
+        renderNodeColoringLegend(currentNodeColoringNormalizationFactor);
+    });
+
+    if (!$("#node-coloring-normalization").val()) {
+        $("#node-coloring-normalization").val(currentNodeColoringNormalizationFactor);
     }
 
     $("#strain-selection").change(function () {
-        var newStrain = this.value;
-        renderNodeColoring(newStrain, DEFAULT_NORMALIZATION_FACTOR);
+        currentNodeColoringSelection = this.value;
+        renderNodeColoring(currentNodeColoringSelection, currentNodeColoringNormalizationFactor);
     });
 
     // toggle node coloring menu
-    if (network.expression) {
+    if (!$.isEmptyObject(network.expression) && !$.isEmptyObject(network.meta)) {
+        console.log("HERE!");
         if ($(".node-coloring").hasClass("hidden")) {
             $(".node-coloring").removeClass("hidden");
         }
-        var defaultNodeColoringSelection = Object.getOwnPropertyNames(network.expression)[0];
-        renderNodeColoring(defaultNodeColoringSelection, DEFAULT_NORMALIZATION_FACTOR);
+        currentNodeColoringSelection = Object.getOwnPropertyNames(network.expression)[0];
+        renderNodeColoring(currentNodeColoringSelection, currentNodeColoringNormalizationFactor);
     } else {
         if (!$(".node-coloring").hasClass("hidden")) {
             $(".node-coloring").addClass("hidden");

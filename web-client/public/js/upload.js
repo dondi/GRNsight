@@ -206,7 +206,7 @@ $(function () {
     };
 
     var reloadNodeColoringMenu = function (network) {
-        if (network.expression) { // TODO: for now, presence of expression property => node coloring.
+        if (!$.isEmptyObject(network.expression) && !$.isEmptyObject(network.meta)) {
             var nodeColoringOptions = [];
             for (var property in network.expression) {
                 nodeColoringOptions.push({value: property});
