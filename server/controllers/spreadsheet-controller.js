@@ -438,10 +438,10 @@ var processGRNmap = function (path, res, app) {
     Object.assign(network, additionalData);
 
     return (network.errors.length === 0) ?
-    // If all looks well, return the network with an all clear
-    res.json(network) :
-    // If all does not look well, return the network with an error 400
-    res.json(400, network);
+        // If all looks well, return the network with an all clear
+        res.json(network) :
+        // If all does not look well, return the network with an error 400
+        res.json(400, network);
 };
 
 var grnSightToCytoscape = function (network) {

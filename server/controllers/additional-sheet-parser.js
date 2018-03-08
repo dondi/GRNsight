@@ -50,10 +50,10 @@ var parseExpressionSheet = function (sheet) {
     var geneData = {};
     expressionData["time_points"] = sheet.data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;
-    for (var j = 1; j < sheet.data.length; j++) {
-        var geneName = sheet.data[j][0];
+    sheet.data.forEach(function (sheet) {
+        var geneName = sheet[0];
         if (geneName) {
-            var rowData = sheet.data[j].slice(1);
+            var rowData = sheet.slice(1);
             // Sometimes, missing data is at the end of the row. In this case, pad the
             // array with nulls
             if (rowData.length < numberOfDataPoints) {
@@ -61,22 +61,18 @@ var parseExpressionSheet = function (sheet) {
             }
             geneData[geneName] = rowData;
         }
-    }
+    });
     expressionData["data"] = geneData;
     return expressionData;
 };
 
 module.exports = function (workbook) {
-
     var output = {
         expression: {}, // expression data
         meta: {},
         test: {} // 2-column data
     };
-
-    for (var i = 0; i < workbook.length; i++) {
-        var sheet = workbook[i];
-        // Parse meta data in "optimization_parameters" sheet
+    workbook.forEach(function (sheet) {
         if (sheet.name === "optimization_parameters") {
             output["meta"] = parseMetaDataSheet(sheet);
         // Parse 2-column sheets
@@ -86,6 +82,6 @@ module.exports = function (workbook) {
         } else if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
         }
-    }
+    });
     return output;
 };
