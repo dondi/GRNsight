@@ -998,24 +998,35 @@ export var drawGraph = function (nodes, links, positiveWeights, negativeWeights,
         return name1 > name2 ? 1 : -1;
     }
 
+    let layout = false;
+
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
-        const margin = 10;
-        const padding = 10;
-        const grid = Grid() // create new grid layout
-        .data(nodes)
-        .bands(true)
-        .padding([0.2,0])
-        .size([$container.width() - margin, $container.height() - margin]); // set size of container
-        grid.layout();
         let nodeGroup = node._groups[0].sort(sortNode);
-        let gridNodes = grid.nodes();
-        let gridNumRow = grid.rows();
-        let marginWidth = getMarginWidth(gridNodes, gridNumRow);
-        let marginHeight = getMarginHeight(gridNodes);
-        for (i in nodeGroup){
-            nodeGroup[i].__data__.fx = margin + gridNodes[i].x;
-            nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
+        if (!layout) {
+            layout = true;
+            const margin = 10;
+            const padding = 10;
+            const grid = Grid() // create new grid layout
+            .data(nodes)
+            .bands(true)
+            .padding([0.2,0])
+            .size([$container.width() - margin, $container.height() - margin]); // set size of container
+            grid.layout();
+            let gridNodes = grid.nodes();
+            let gridNumRow = grid.rows();
+            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
+            let marginHeight = getMarginHeight(gridNodes);
+            for (i in nodeGroup){
+                nodeGroup[i].__data__.fx = margin + gridNodes[i].x;
+                nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
+            }
+        } else {
+            layout = false;
+            for (i in nodeGroup){
+                nodeGroup[i].__data__.fx = null;
+                nodeGroup[i].__data__.fy = null;
+            }
         }
         // let x = $(node._groups[0][0]).attr('x');
         // console.log("x is", $(node._groups[0][0]).attr('x'));
