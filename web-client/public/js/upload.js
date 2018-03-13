@@ -211,9 +211,11 @@ $(function () {
             for (var property in network.expression) {
                 nodeColoringOptions.push({value: property});
             }
-            var sel = $("#strain-selection");
+            var datasetTopSelection = $("#dataset-top");
+            var datasetBottomSelection = $("#dataset-bottom");
             $(nodeColoringOptions).each(function () {
-                sel.append($("<option>").attr("value", this.value).text(this.value));
+                datasetTopSelection.append($("<option>").attr("value", this.value).text(this.value));
+                datasetBottomSelection.append($("<option>").attr("value", this.value).text(this.value));
             });
         }
     };
@@ -349,11 +351,13 @@ $(function () {
 
             if (link.value > 0) {
                 link.type = "arrowhead";
-                link.stroke = "MediumVioletRed";
+                // link.stroke = "MediumVioletRed";
+                link.stroke = "rgb(195, 61, 61)";
                 network.positiveWeights.push(link.value);
             } else {
                 link.type = "repressor";
-                link.stroke = "DarkTurquoise";
+                // link.stroke = "DarkTurquoise";
+                link.stroke = "rgb(51, 124, 183)";
                 network.negativeWeights.push(link.value);
             }
         });

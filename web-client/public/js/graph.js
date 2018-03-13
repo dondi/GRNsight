@@ -888,7 +888,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     // NODE COLORING:
     var DEFAULT_NODE_COLORING_NORMALIZATION_FACTOR = 3;
     var currentNodeColoringNormalizationFactor = DEFAULT_NODE_COLORING_NORMALIZATION_FACTOR;
-    var currentNodeColoringSelection;
+    var currentDatasetSelections = {};
     var getExpressionData = function (gene, strain) {
         return network["expression"][strain].data[gene];
     };
@@ -898,22 +898,30 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     };
 
     var renderNodeColoring = function (selection, normalization) {
-        console.log("selection: " + selection);
+        console.log("selection: " + selection["top"]);
         console.log("normalization: " + normalization);
+        colorNodes("top", selection, normalization);
+        colorNodes("bottom", selection, normalization);
+        renderNodeLabels();
+    };
+
+    var colorNodes = function (position, selection, normalization) {
         node.each(function (p) {
             d3.select(this)
             .append("g")
             .selectAll(".coloring")
-            .data(getExpressionData(p.name, selection))
+            .data(getExpressionData(p.name, selection[position]))
             .attr("class", "coloring")
             .enter().append("rect")
             .attr("width", function () {
-                var width = rect.attr("width") / numTimePoints(selection);
+                var width = rect.attr("width") / numTimePoints(selection[position]);
                 return width + "px";
             })
-            .attr("height", rect.attr("height") + "px")
+            .attr("height", rect.attr("height") / 2 + "px")
             .attr("transform", function (d, i) {
-                return "translate(" + (i * (rect.attr("width") / numTimePoints(selection))) + "," + 0 + ")";
+                var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
+                var xOffset = i * (rect.attr("width") / numTimePoints(selection[position]));
+                return "translate(" + xOffset + "," +  yOffset + ")";
             })
             .attr("stroke-width", "0px")
             .style("fill", function (d) {
@@ -927,17 +935,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
                 return "data " + JSON.stringify(d) + " of " + p.name;
             });
         });
-        renderNodeLabels();
     };
-
-    // TODO: this only works for even number of bins...
-    // var getColoringIndex = function (normalization, numberOfBins, value) {
-    //     var indexRanges = [];
-    //     var segment = normalization / (numberOfBins / 2);
-    //     for (var i = 0; i < numberOfBins / 2; i++) {
-    //         indexRanges[i] = [segment * i, segment * (i + 1)];
-    //     }
-    // }
 
     var renderNodeColoringLegend = function (normalization) {
         var $nodeColoringLegend = $(".node-coloring-legend");
@@ -1014,20 +1012,25 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     };
     renderNodeColoringLegend(currentNodeColoringNormalizationFactor);
 
-    $("#node-coloring-normalization").change(function () {
+    $("#log-fold-change-max-value").change(function () {
         var newNormalizatonFactor = this.value;
         currentNodeColoringNormalizationFactor = newNormalizatonFactor;
-        renderNodeColoring(currentNodeColoringSelection, currentNodeColoringNormalizationFactor);
+        renderNodeColoring(currentDatasetSelections, currentNodeColoringNormalizationFactor);
         renderNodeColoringLegend(currentNodeColoringNormalizationFactor);
     });
 
-    if (!$("#node-coloring-normalization").val()) {
-        $("#node-coloring-normalization").val(currentNodeColoringNormalizationFactor);
+    if (!$("#log-fold-change-max-value").val()) {
+        $("#log-fold-change-max-value").val(currentNodeColoringNormalizationFactor);
     }
 
-    $("#strain-selection").change(function () {
-        currentNodeColoringSelection = this.value;
-        renderNodeColoring(currentNodeColoringSelection, currentNodeColoringNormalizationFactor);
+    $("#dataset-top").change(function () {
+        currentDatasetSelections["top"] = this.value;
+        renderNodeColoring(currentDatasetSelections, currentNodeColoringNormalizationFactor);
+    });
+
+    $("#dataset-bottom").change(function () {
+        currentDatasetSelections["bottom"] = this.value;
+        renderNodeColoring(currentDatasetSelections, currentNodeColoringNormalizationFactor);
     });
 
     // toggle node coloring menu
@@ -1036,8 +1039,11 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         if ($(".node-coloring").hasClass("hidden")) {
             $(".node-coloring").removeClass("hidden");
         }
-        currentNodeColoringSelection = Object.getOwnPropertyNames(network.expression)[0];
-        renderNodeColoring(currentNodeColoringSelection, currentNodeColoringNormalizationFactor);
+        // default to the first expression sheet in the network.expression array
+        var defaultDatasetSelection = Object.getOwnPropertyNames(network.expression)[0];
+        currentDatasetSelections["top"] = defaultDatasetSelection;
+        currentDatasetSelections["bottom"] = defaultDatasetSelection;
+        renderNodeColoring(currentDatasetSelections, currentNodeColoringNormalizationFactor);
     } else {
         if (!$(".node-coloring").hasClass("hidden")) {
             $(".node-coloring").addClass("hidden");
