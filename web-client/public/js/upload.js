@@ -183,8 +183,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
             $(selector).off("click");
         });
         /* global drawGraph */
-        drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType,
-          network.warnings, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, normalization, grayThreshold);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -305,26 +304,20 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
     });
 
     var annotateLinks = function (network) {

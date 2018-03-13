@@ -3873,11 +3873,9 @@ var sliderGroupController = function (sliderArray) {
 };
 
 // Gray Threshold Slider Settings
-var graySlider = document.getElementById("grayThresholdInput");
-
-var outputUpdate = function (val) {
-    // val = Math.round(val * 100) + '%';
-    document.querySelector("#grayThresholdValue").value = val;
+var outputUpdate = function () {
+    var value = Math.round(($("#grayThresholdInput").val() * 100));
+    $("#grayThresholdValue").text(value + "%");
 };
 
 
@@ -8339,8 +8337,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
-var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
-  warnings, sliderController, normalization, grayThreshold) {
+
+var drawGraph = function (network, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -8357,7 +8355,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
     $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
 
-    $("#warningMessage").html(warnings.length !== 0 ? "Click here in order to view warnings." : "");
+    $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
     var getNodeWidth = function (node) {
         return node.name.length * 12 + 5;
@@ -8377,7 +8375,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var minimumScale = MIN_SCALE;
 
-    var allWeights = positiveWeights.concat(negativeWeights);
+    var allWeights = network.positiveWeights.concat(network.negativeWeights);
 
     if (!colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
@@ -8402,7 +8400,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
   // normalization all weights b/w size 2 and size 14
   // if unweighted, weight is 2
-    if (sheetType === "unweighted") {
+    if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
             .range(["2"]);
@@ -8694,20 +8692,18 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     var weight = boundingBoxContainer.selectAll(".weight");
 
     simulation
-        .nodes(nodes)
+        .nodes(network.genes)
         .on("tick", tick);
 
     simulation.force("link")
-        .links(links);
+        .links(network.links);
 
-    link = link.data(links)
+    link = link.data(network.links)
         .enter().append("g")
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
-    console.log(nodes);
-
-    node = node.data(nodes)
+    node = node.data(network.genes)
         .enter().append("g")
         .attr("class", "node")
         .attr("id", function (d) {
@@ -8718,7 +8714,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
         .call(drag)
         .on("dblclick", dblclick);
 
-    if (sheetType === "weighted") {
+    if (network.sheetType === "weighted") {
         link.append("path")
             .attr("class", "mousezone")
             .style("stroke-width", function (d) {
@@ -8727,7 +8723,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             });
     }
 
-    grayThreshold = +$("#grayThresholdValue").val();
+    grayThreshold = +$("#grayThresholdInput").val();
 
     link.append("path")
         .attr("class", "main")
@@ -8929,7 +8925,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         });
 
-    if (sheetType === "weighted") {
+    if (network.sheetType === "weighted") {
         link.append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
@@ -8938,7 +8934,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             return d.value.toPrecision(4);
         });
 
-        weight = weight.data(links)
+        weight = weight.data(network.links)
         .enter().append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
@@ -9221,7 +9217,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var currentWeightVisibilitySetting = null;
 
-    if (sheetType === "weighted") {
+    if (network.sheetType === "weighted") {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
@@ -9327,7 +9323,7 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
             const margin = 10;
             const padding = 10;
             const grid = __WEBPACK_IMPORTED_MODULE_0_d3_v4_grid___default()() // create new grid layout
-            .data(nodes)
+            .data(network.genes)
             .bands(true)
             .padding([0.2,0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
@@ -9870,8 +9866,7 @@ const upload = function (sliderObject, sliderGroupController, drawGraph) {
             $(selector).off("click");
         });
         /* global drawGraph */
-        drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType,
-          network.warnings, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, normalization, grayThreshold);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -9992,26 +9987,20 @@ const upload = function (sliderObject, sliderGroupController, drawGraph) {
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
     });
 
     var annotateLinks = function (network) {

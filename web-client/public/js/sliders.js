@@ -189,9 +189,7 @@ export var sliderGroupController = function (sliderArray) {
 };
 
 // Gray Threshold Slider Settings
-var graySlider = document.getElementById("grayThresholdInput");
-
-var outputUpdate = function (val) {
-    // val = Math.round(val * 100) + '%';
-    document.querySelector("#grayThresholdValue").value = val;
+var outputUpdate = function () {
+    var value = Math.round(($("#grayThresholdInput").val() * 100));
+    $("#grayThresholdValue").text(value + "%");
 };
