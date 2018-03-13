@@ -977,7 +977,7 @@ export var drawGraph = function (nodes, links, positiveWeights, negativeWeights,
         let len = gridNodes.length;
         let arrow = 80;
         let rightNode = gridNodes[row - 1];
-        let nodeWidth = getNodeWidth(rightNode);
+        let nodeWidth = getNodeWidth(rightNode) + 6;
         let rightNodeX = rightNode.x + nodeWidth;
         const margin = (containerWidth - rightNodeX - arrow) / 2;
         return margin;
@@ -1020,7 +1020,9 @@ export var drawGraph = function (nodes, links, positiveWeights, negativeWeights,
             for (i in nodeGroup){
                 nodeGroup[i].__data__.fx = margin + gridNodes[i].x;
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
+                console.log(nodeGroup[i].__data__.fx);
             }
+            console.log(grid.nodeSize());
         } else {
             layout = false;
             for (i in nodeGroup){
