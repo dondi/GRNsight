@@ -973,11 +973,10 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     const getMarginWidth = function(gridNodes, row) {
         const containerWidth = $container.width();
         let len = gridNodes.length;
-        let arrow = 80;
         let rightNode = gridNodes[row - 1];
-        let nodeWidth = getNodeWidth(rightNode) + 6;
+        let nodeWidth = rightNode.textWidth + 6;
         let rightNodeX = rightNode.x + nodeWidth;
-        const margin = (containerWidth - rightNodeX - arrow) / 2;
+        const margin = (containerWidth - rightNodeX) / 2;
         return margin;
     };
 
@@ -1016,7 +1015,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             let marginWidth = getMarginWidth(gridNodes, gridNumRow);
             let marginHeight = getMarginHeight(gridNodes);
             for (i in nodeGroup){
-                nodeGroup[i].__data__.fx = margin + gridNodes[i].x;
+                nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
                 console.log(nodeGroup[i].__data__.fx);
             }
