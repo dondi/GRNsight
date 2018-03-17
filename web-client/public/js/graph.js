@@ -976,6 +976,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         let rightNode = gridNodes[row - 1];
         let nodeWidth = rightNode.textWidth + 6;
         let rightNodeX = rightNode.x + nodeWidth;
+        console.log("END NODE SIZE: ", rightNodeX);
         const margin = (containerWidth - rightNodeX) / 2;
         return margin;
     };
@@ -1011,15 +1012,16 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
             grid.layout();
             let gridNodes = grid.nodes();
-            let gridNumRow = grid.rows();
+            let gridNumRow = grid.cols();
+            console.log("NUMBER OF ROWS: ", gridNumRow);
             let marginWidth = getMarginWidth(gridNodes, gridNumRow);
             let marginHeight = getMarginHeight(gridNodes);
             for (i in nodeGroup){
                 nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
-                console.log(nodeGroup[i].__data__.fx);
+                // console.log(nodeGroup[i].__data__.fx);
             }
-            console.log(grid.nodeSize());
+            // console.log(grid.nodeSize());
         } else {
             layout = false;
             for (i in nodeGroup){
