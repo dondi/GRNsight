@@ -868,7 +868,18 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
             return d.textWidth / 2 + 3;
         })
-        .on("dblclick", nodeTextDblclick);
+        .on("dblclick", nodeTextDblclick)
+        .on("contextmenu", function (gene) {
+            var tempLink = $("<a></a>")
+                .attr({
+                    href: "/gene/info.html?" + $.param({symbol: gene.name}),
+                    target: "_blank"
+                });
+            $("body").append(tempLink);
+            tempLink.get(0).click();
+            tempLink.remove();
+            d3.event.preventDefault();
+        });
 
     rect
         .attr("width", function (d) {
