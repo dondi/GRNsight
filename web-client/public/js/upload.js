@@ -205,18 +205,33 @@ $(function () {
         $("#errorModal").modal("show");
     };
 
+    var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
+
     var reloadNodeColoringMenu = function (network) {
+        console.log("here");
         if (!$.isEmptyObject(network.expression) && !$.isEmptyObject(network.meta)) {
             var nodeColoringOptions = [];
             for (var property in network.expression) {
                 nodeColoringOptions.push({value: property});
             }
-            var datasetTopSelection = $("#dataset-top");
-            var datasetBottomSelection = $("#dataset-bottom");
+            $("#dataset-bottom").append($("<option>").attr("value", "sameAsTop").text("Same as Top Dataset"));
             $(nodeColoringOptions).each(function () {
-                datasetTopSelection.append($("<option>").attr("value", this.value).text(this.value));
-                datasetBottomSelection.append($("<option>").attr("value", this.value).text(this.value));
+                $("#dataset-top").append($("<option>").attr("value", this.value).text(this.value));
+                $("#dataset-bottom").append($("<option>").attr("value", this.value).text(this.value));
             });
+            // $("#dataset-top").val($("#dataset-top option:first").val());
+            // $("#dataset-bottom").val($("#dataset-bottom option:first").val());
+
+            // remove "selected" from any options that might already be selected
+            $("#dataset-top option[selected='selected']").each(
+                function () {
+                    $(this).removeAttr("selected");
+                }
+            );
+            // mark the first option as selected
+            $("#dataset-top option:first").attr("selected", "selected");
+
+            $("#log-fold-change-max-value").val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         }
     };
 
@@ -237,8 +252,8 @@ $(function () {
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
         console.log(network); // Display the network in the console
-        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
         reloadNodeColoringMenu(network); // TODO: also add this to importGrn function
+        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
         reloader = function () {
             loadGrn(url, name, formData);
         };
