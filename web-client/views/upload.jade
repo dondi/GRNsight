@@ -226,6 +226,9 @@ html
             select(id="dataset-top")
             label(class='info', data-toggle='tooltip') Bottom Dataset
             select(id="dataset-bottom")
+            form
+              input(id='averageData', type='checkbox' checked)
+              label(for='averageData' style='font-weight:normal') Average Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
             input(type='text' id='log-fold-change-max-value' aria-describedby='basic-addon1')
             div(class="node-coloring-legend")

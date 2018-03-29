@@ -897,6 +897,12 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             }
             this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
             this.nodeColoringEnabled = true;
+            this.averageValuesAtTimePoints = true;
+        },
+        toggleAverageValueOption: function (selection) {
+            this.averageValuesAtTimePoints = selection;
+            console.log(selection);
+            // renderNodeColoring({averageValues: selection});
         },
         disableNodeColoring: function () {
             this.nodeColoringEnabled = false;
@@ -927,6 +933,11 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         },
     };
 
+    d3.select("#averageData").on("change", function () {
+        var selection = $(this).prop("checked");
+        nodeColoringSettings.toggleAverageValueOption(selection);
+    });
+
     $("#nodeColoringToggle").on("click", function () {
         if (nodeColoringSettings.nodeColoringEnabled) {
             nodeColoringSettings.disableNodeColoring();
@@ -952,7 +963,22 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         renderNodeColoring();
     });
 
+    function onlyUnique (value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
     var getExpressionData = function (gene, strain) {
+        var data = network["expression"][strain].data[gene];
+        if (nodeColoringSettings.averageValuesAtTimePoints) {
+            console.log(network["expression"][strain]);
+            var uniqueTimePoints = network["expression"][strain].time_points.filter(onlyUnique);
+            // var hi = {
+            //   "gene": [1, 2, 3 ,4]
+            // };
+            // for (var i = 0; i < data.length; i++) {
+            //     hi[network["expression"][strain].time_points[i]] = hi[network["expression"][strain].time_points[i]] + data[i]
+            // }
+        }
         return network["expression"][strain].data[gene];
     };
 
