@@ -896,6 +896,15 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
                 this.bottomDataSameAsTop = false;
             }
             this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
+            this.nodeColoringEnabled = true;
+        },
+        disableNodeColoring: function () {
+            this.nodeColoringEnabled = false;
+            node.selectAll(".coloring").remove();
+        },
+        enableNodeColoring: function () {
+            this.nodeColoringEnabled = true;
+            renderNodeColoring();
         },
         updateTopDataset: function () {
             var selection = $("#dataset-top").find(":selected").attr("value");
@@ -917,6 +926,16 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
         },
     };
+
+    $("#nodeColoringToggle").on("click", function () {
+        if (nodeColoringSettings.nodeColoringEnabled) {
+            nodeColoringSettings.disableNodeColoring();
+            $("#nodeColoringToggle").val("Enable Node Coloring");
+        } else {
+            nodeColoringSettings.enableNodeColoring();
+            $("#nodeColoringToggle").val("Disable Node Coloring");
+        }
+    });
 
     $("#log-fold-change-max-value").change(function () {
         nodeColoringSettings.updateLogFoldChangeMaxValue();
@@ -964,6 +983,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
                 var width = rect.attr("width") / numTimePoints(selection);
                 return width + "px";
             })
+            .attr("class", "coloring")
             .attr("height", rect.attr("height") / 2 + "px")
             .attr("transform", function (d, i) {
                 var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
