@@ -987,15 +987,14 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     };
 
     var renderNodeColoringLegend = function () {
-        var normalization = nodeColoringSettings.logFoldChangeMaxValue;
         var $nodeColoringLegend = $(".node-coloring-legend");
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
         var xMargin = 15;
         var yMargin = 30;
         var width = 200;
         var height = 10;
-        var numberOfBins = 10;
         var textYOffset = 10;
+        var increment = 0.1;
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
@@ -1004,61 +1003,48 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + ", 0)");
 
-        var createNormalizedArray = function (normalization, steps) {
-            var arr = [];
-            var segment = normalization / (steps / 2);
-            for (var i = 0; i < steps / 2; i++) {
-                arr[i] = segment * i + segment / 2;
-            }
-            var negativeHalf = arr.slice().reverse().map(function (d) {
-                return -d;
-            });
-            return negativeHalf.concat(arr);
-        };
-
-        var coloring = svg.selectAll(".coloring")
-            .data(createNormalizedArray(normalization, numberOfBins))
-            .attr("class", "coloring");
+        var gradientValues = d3.range(-nodeColoringSettings.logFoldChangeMaxValue,
+            nodeColoringSettings.logFoldChangeMaxValue, increment);
+        var coloring = svg.selectAll(".node-coloring-legend")
+            .data(gradientValues)
+            .attr("class", "node-coloring-legend");
 
         coloring.enter().append("rect")
-            .attr("width", width / numberOfBins + "px")
+            .attr("width", width / gradientValues.length + "px")
             .attr("height", height + "px")
             .attr("transform", function (d, i) {
-                return "translate(" + (i * (width / numberOfBins)) + "," + 0 + ")";
+                return "translate(" + (i * (width / gradientValues.length)) + "," + 0 + ")";
             })
-            .attr("stroke-width", "1px")
-            .attr("stroke", "black")
             .style("fill", function (d) {
-                // TODO: deal with null
                 var scale = d3.scaleLinear()
-                    .domain([-normalization, normalization])
+                    .domain([-nodeColoringSettings.logFoldChangeMaxValue, nodeColoringSettings.logFoldChangeMaxValue])
                     .range([0, 1]);
                 return d3.interpolateRdBu(scale(-d));
             });
 
-        coloring.enter().append("text")
-            .attr("x", function (d, i) {
-                return (i * (width / numberOfBins)) + ((width / numberOfBins) * 0.75) + "px";
-            })
-            .attr("y", height + textYOffset + "px")
-            .attr("font-size", "6px")
-            .text(function (d) {
-                return (+d + (normalization / (numberOfBins / 2) / 2)).toFixed(2);
-            });
-
-        coloring.append("text")
-            .attr("x", "0px")
-            .attr("y", height + 10 + "px")
-            .attr("font-size", "6px")
-            .text((-normalization / 2).toFixed(2));
-        // manually add the first tick
+        var legendLabels = {
+            "left": {
+                "textContent": (-nodeColoringSettings.logFoldChangeMaxValue).toFixed(2),
+                "x": - xMargin / 2
+            },
+            "center": {
+                "textContent": "0",
+                "x": width / 2
+            },
+            "right": {
+                "textContent": (+nodeColoringSettings.logFoldChangeMaxValue).toFixed(2),
+                "x": width - xMargin / 2
+            },
+        };
         var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
-        var newElement = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        newElement.textContent = ((-normalization).toFixed(2));
-        newElement.setAttribute("font-size", "6px");
-        newElement.setAttribute("x", -((width / 10) * .25) + "px");
-        newElement.setAttribute("y", height + 10 + "px");
-        g.appendChild(newElement);
+        for (var key in legendLabels) {
+            var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            label.textContent = legendLabels[key].textContent;
+            label.setAttribute("font-size", "6px");
+            label.setAttribute("x", legendLabels[key].x);
+            label.setAttribute("y", height + textYOffset + "px");
+            g.appendChild(label);
+        }
     };
 
     // Only display node coloring menu when expression and meta fields are detected in the network object

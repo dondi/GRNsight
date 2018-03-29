@@ -208,29 +208,26 @@ $(function () {
     var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
 
     var reloadNodeColoringMenu = function (network) {
-        console.log("here");
         if (!$.isEmptyObject(network.expression) && !$.isEmptyObject(network.meta)) {
             var nodeColoringOptions = [];
+            var notSigmasRegExp = /^([^s]|s(?!igmas$))*$/;
             for (var property in network.expression) {
-                nodeColoringOptions.push({value: property});
+                if (property.match(notSigmasRegExp)) {
+                    nodeColoringOptions.push({value: property});
+                }
             }
             $("#dataset-bottom").append($("<option>").attr("value", "sameAsTop").text("Same as Top Dataset"));
             $(nodeColoringOptions).each(function () {
                 $("#dataset-top").append($("<option>").attr("value", this.value).text(this.value));
                 $("#dataset-bottom").append($("<option>").attr("value", this.value).text(this.value));
             });
-            // $("#dataset-top").val($("#dataset-top option:first").val());
-            // $("#dataset-bottom").val($("#dataset-bottom option:first").val());
-
-            // remove "selected" from any options that might already be selected
+            // Mark first option as selected
             $("#dataset-top option[selected='selected']").each(
                 function () {
                     $(this).removeAttr("selected");
                 }
             );
-            // mark the first option as selected
             $("#dataset-top option:first").attr("selected", "selected");
-
             $("#log-fold-change-max-value").val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         }
     };
