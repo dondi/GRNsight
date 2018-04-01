@@ -901,8 +901,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         },
         toggleAverageValueOption: function (selection) {
             this.averageValuesAtTimePoints = selection;
-            console.log(selection);
-            // renderNodeColoring({averageValues: selection});
+            renderNodeColoring();
         },
         disableNodeColoring: function () {
             this.nodeColoringEnabled = false;
@@ -968,27 +967,34 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     }
 
     var getExpressionData = function (gene, strain) {
-        var data = network["expression"][strain].data[gene];
+        var strainData = network["expression"][strain];
         if (nodeColoringSettings.averageValuesAtTimePoints) {
-            console.log(network["expression"][strain]);
-            var uniqueTimePoints = network["expression"][strain].time_points.filter(onlyUnique);
-            // var hi = {
-            //   "gene": [1, 2, 3 ,4]
-            // };
-            // for (var i = 0; i < data.length; i++) {
-            //     hi[network["expression"][strain].time_points[i]] = hi[network["expression"][strain].time_points[i]] + data[i]
-            // }
+            var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
+            var avgMap = {};
+            uniqueTimePoints.forEach(function (key) {
+                avgMap[key] = [];
+            });
+            strainData.time_points.forEach(function (time, index) {
+                avgMap[time].push(strainData.data[gene][index]);
+            });
+            var avgs = [];
+            Object.keys(avgMap).forEach(function (key) {
+                var length = avgMap[key].length;
+                var sum = avgMap[key].reduce(function (a, b) {
+                    return a + b;
+                }, 0);
+                avgs.push(sum / length);
+            });
+            return {data: avgs, timepoints: uniqueTimePoints};
         }
-        return network["expression"][strain].data[gene];
-    };
-
-    var numTimePoints = function (strain) {
-        return network["expression"][strain].time_points.length;
+        return {data: strainData.data[gene], timepoints: strainData.time_points};
     };
 
     var renderNodeColoring = function () {
+        console.log("Node Coloring settings:");
         console.log("top: " + nodeColoringSettings.topDataset);
         console.log("bottom: " + nodeColoringSettings.bottomDataset);
+        console.log("average data: " + nodeColoringSettings.averageValuesAtTimePoints);
         console.log("normalization: " + nodeColoringSettings.logFoldChangeMaxValue);
         colorNodes("top", nodeColoringSettings);
         colorNodes("bottom", nodeColoringSettings);
@@ -998,22 +1004,27 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
 
     var colorNodes = function (position, settings) {
         var selection = (position === "top") ? settings.topDataset : settings.bottomDataset;
+        var timePoints = [];
         node.each(function (p) {
             d3.select(this)
             .append("g")
             .selectAll(".coloring")
-            .data(getExpressionData(p.name, selection))
+            .data(function () {
+                var result = getExpressionData(p.name, selection);
+                timePoints = result.timepoints;
+                return result.data;
+            })
             .attr("class", "coloring")
             .enter().append("rect")
             .attr("width", function () {
-                var width = rect.attr("width") / numTimePoints(selection);
+                var width = rect.attr("width") / timePoints.length;
                 return width + "px";
             })
             .attr("class", "coloring")
             .attr("height", rect.attr("height") / 2 + "px")
             .attr("transform", function (d, i) {
                 var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
-                var xOffset = i * (rect.attr("width") / numTimePoints(selection));
+                var xOffset = i * (rect.attr("width") / timePoints.length);
                 return "translate(" + xOffset + "," +  yOffset + ")";
             })
             .attr("stroke-width", "0px")
