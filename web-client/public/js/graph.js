@@ -1,4 +1,4 @@
-import Grid from 'd3-v4-grid';
+import Grid from "d3-v4-grid";
 // import slider from './slider.js';
 // import container from './container.js';
 // import upload from './upload.js';
@@ -107,7 +107,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         .on("drag", dragged)
         .on("end", dragended);
 
-    var dragended = function (d) {
+    var dragended = function () {
         d3.event.stopPropagation();
     };
 
@@ -970,9 +970,8 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         }
     }
 
-    const getMarginWidth = function(gridNodes, row) {
+    const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
-        let len = gridNodes.length;
         let rightNode = gridNodes[row - 1];
         let nodeWidth = rightNode.textWidth + 6;
         let rightNodeX = rightNode.x + nodeWidth;
@@ -981,7 +980,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         return margin;
     };
 
-    const getMarginHeight = function(gridNodes) {
+    const getMarginHeight = function (gridNodes) {
         const containerHeight = $container.height();
         const len = gridNodes.length;
         const bottomNodeY = gridNodes[len - 1].y + nodeHeight;
@@ -989,26 +988,27 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         return margin;
     };
 
-    const sortNode = function(n1, n2) {
+    const sortNode = function (n1, n2) {
         let name1 = n1.__data__.name;
         let name2 = n2.__data__.name;
-        if (name1 === name2) { return 0 };
+        if (name1 === name2) {
+            return 0;
+        }
         return name1 > name2 ? 1 : -1;
-    }
+    };
 
     let layout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
+    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
             layout = true;
             const margin = 10;
-            const padding = 10;
             const grid = Grid() // create new grid layout
             .data(network.genes)
             .bands(true)
-            .padding([0.2,0])
+            .padding([0.2, 0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
             grid.layout();
             let gridNodes = grid.nodes();
@@ -1016,19 +1016,19 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             console.log("NUMBER OF ROWS: ", gridNumRow);
             let marginWidth = getMarginWidth(gridNodes, gridNumRow);
             let marginHeight = getMarginHeight(gridNodes);
-            for (i in nodeGroup){
+            /* eslint-disable block-scoped-var */
+            for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
-                // console.log(nodeGroup[i].__data__.fx);
             }
-            // console.log(grid.nodeSize());
         } else {
             layout = false;
-            for (i in nodeGroup){
+            for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;
                 nodeGroup[i].__data__.fy = null;
             }
         }
+            /* eslint-enable block-scoped-var */
         // let x = $(node._groups[0][0]).attr('x');
         // console.log("x is", $(node._groups[0][0]).attr('x'));
     });
