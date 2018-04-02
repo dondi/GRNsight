@@ -1,9 +1,4 @@
 import Grid from "d3-v4-grid";
-// import slider from './slider.js';
-// import container from './container.js';
-// import upload from './upload.js';
-// import graphstatistics from './graph-statistics.js';
-
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
