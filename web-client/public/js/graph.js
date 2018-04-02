@@ -409,6 +409,14 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             return "path" + d.source.index + "_" + d.target.index;
         }).style("stroke-width", function (d) {
             return d.strokeWidth = getEdgeThickness(d);
+        }).style("stroke-dasharray", function (d) {
+            if (unweighted || !colorOptimal) {
+                return "0";
+            } else if (normalize(d) <= grayThreshold) {
+                return "6, 9";
+            } else {
+                return "0";
+            }
         }).style("stroke", function (d) {
             if (unweighted || !colorOptimal) {
                 return "black";
@@ -890,6 +898,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
     $(".link").css({
         "stroke": "#000",
         "fill": "none",
+        "stroke-dasharray": "0",
         "stroke-width": "1.5px"
     });
 
