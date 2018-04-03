@@ -1,6 +1,6 @@
 var assert = require("chai").assert;
 var xlsx = require("node-xlsx");
-var parseAdditionalSheets = require(__dirname + "../../server/controllers/additional-sheet-parser");
+var parseAdditionalSheets = require(__dirname + "/../server/controllers/additional-sheet-parser");
 var grnmapOutputWorkbookPath = __dirname + "/../test-files/spreadsheet-controller-test-files/" +
   "15-genes_28-edges_db5-MO-LK_Sigmoid_estimation_missing-values_output.xlsx";
 var grnmapInputWorkbookPath = __dirname + "/../test-files/spreadsheet-controller-test-files/" +
