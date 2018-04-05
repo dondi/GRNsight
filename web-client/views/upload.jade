@@ -220,8 +220,11 @@ html
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
+        div(id="layout")
+          form
+            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
         div(class="node-coloring hidden")
-            p(class='sideHeader') Node Coloring Menu
+            p(class='sideHeader') Node Coloring
             label(class='info', data-toggle='tooltip') Top Dataset
             select(id="dataset-top")
             label(class='info', data-toggle='tooltip') Bottom Dataset
@@ -233,7 +236,6 @@ html
             input(type='text' id='log-fold-change-max-value' aria-describedby='basic-addon1')
             div(class="node-coloring-legend")
             input(id='nodeColoringToggle' type='button' class='btn btn-default' value='Disable Node Coloring')
-            
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
@@ -288,9 +290,9 @@ html
               button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
               button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
           div(class='weightedGraphOptions hidden')
-            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Edge Threshold (0 - 1): &nbsp; &nbsp;
-            output(for='grayThresholdInput', class='forceVal', id='grayThresholdValue') 0.05
-            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate(value)')
+            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Edge Threshold (0 - 100%): &nbsp; &nbsp;
+            span(class='forceVal', id='grayThresholdValue') 0.05
+            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate()')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
@@ -360,8 +362,4 @@ html
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js')
   script(src='//d3js.org/d3-scale-chromatic.v1.min.js')
-  script(src='js/sliders.js')
-  script(src='js/container.js')
-  script(src='js/graph.js')
-  script(src='js/graph-statistics.js')
-  script(src='js/upload.js')
+  script(src='js/bundle.js')

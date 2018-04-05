@@ -1,3 +1,4 @@
+import Grid from "d3-v4-grid";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -13,10 +14,9 @@
  */
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
-
 /* eslint-disable no-unused-vars */
 
-var drawGraph = function (network, sliderController, normalization, grayThreshold) {
+export var drawGraph = function (network, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -401,7 +401,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             });
     }
 
-    grayThreshold = +$("#grayThresholdValue").val();
+    grayThreshold = +$("#grayThresholdInput").val();
 
     link.append("path")
         .attr("class", "main")
@@ -1104,8 +1104,18 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         }
     };
 
+    var hasExpressionData = function (sheets) {
+        var notSigmasRegExp = /^([^s]|s(?!igmas$))*$/;
+        for (var property in sheets) {
+            if (property.match(notSigmasRegExp)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     // Only display node coloring menu when expression and meta fields are detected in the network object
-    if (!$.isEmptyObject(network.expression) && !$.isEmptyObject(network.meta)) {
+    if (hasExpressionData(network.expression)) {
         if ($(".node-coloring").hasClass("hidden")) {
             $(".node-coloring").removeClass("hidden");
         }
@@ -1201,6 +1211,65 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             $(".weightedGraphOptions").addClass("hidden");
         }
     }
+
+    const getMarginWidth = function (gridNodes, row) {
+        const containerWidth = $container.width();
+        let rightNode = gridNodes[row - 1];
+        let nodeWidth = rightNode.textWidth + 6;
+        let rightNodeX = rightNode.x + nodeWidth;
+        const margin = (containerWidth - rightNodeX) / 2;
+        return margin;
+    };
+
+    const getMarginHeight = function (gridNodes) {
+        const containerHeight = $container.height();
+        const len = gridNodes.length;
+        const bottomNodeY = gridNodes[len - 1].y + nodeHeight;
+        const margin = (containerHeight - bottomNodeY) / 2;
+        return margin;
+    };
+
+    const sortNode = function (n1, n2) {
+        let name1 = n1.__data__.name;
+        let name2 = n2.__data__.name;
+        if (name1 === name2) {
+            return 0;
+        }
+        return name1 > name2 ? 1 : -1;
+    };
+
+    let layout = false;
+
+    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
+        let nodeGroup = node._groups[0].sort(sortNode);
+        if (!layout) {
+            layout = true;
+            const margin = 10;
+            const grid = Grid() // create new grid layout
+            .data(network.genes)
+            .bands(true)
+            .padding([0.2, 0])
+            .size([$container.width() - margin, $container.height() - margin]); // set size of container
+            grid.layout();
+            let gridNodes = grid.nodes();
+            let gridNumRow = grid.cols();
+            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
+            let marginHeight = getMarginHeight(gridNodes);
+            /* eslint-disable block-scoped-var */
+            for (i in nodeGroup) {
+                nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
+                nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
+            }
+        } else {
+            layout = false;
+            for (i in nodeGroup) {
+                nodeGroup[i].__data__.fx = null;
+                nodeGroup[i].__data__.fy = null;
+            }
+        }
+            /* eslint-enable block-scoped-var */
+    });
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)
