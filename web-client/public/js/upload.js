@@ -203,20 +203,38 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     };
 
     var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
+    var MAX_NUM_CHARACTERS_DROPDOWN = 24;
+
+    var shortenExpressionSheetName = function (name) {
+        return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
+          (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+    };
+
+    var hasExpressionData = function (sheets) {
+        var endsInExpressionRegExp = /expression$/;
+        for (var property in sheets) {
+            if (property.match(endsInExpressionRegExp)) {
+                return true;
+            }
+        }
+        return false;
+    };
 
     var reloadNodeColoringMenu = function (network) {
-        if (!$.isEmptyObject(network.expression) && !$.isEmptyObject(network.meta)) {
+        if (hasExpressionData(network.expression)) {
             var nodeColoringOptions = [];
-            var notSigmasRegExp = /^([^s]|s(?!igmas$))*$/;
+            var endsInExpressionRegExp = /expression$/;
             for (var property in network.expression) {
-                if (property.match(notSigmasRegExp)) {
+                if (property.match(endsInExpressionRegExp)) {
                     nodeColoringOptions.push({value: property});
                 }
             }
             $("#dataset-bottom").append($("<option>").attr("value", "sameAsTop").text("Same as Top Dataset"));
             $(nodeColoringOptions).each(function () {
-                $("#dataset-top").append($("<option>").attr("value", this.value).text(this.value));
-                $("#dataset-bottom").append($("<option>").attr("value", this.value).text(this.value));
+                $("#dataset-top").append($("<option>")
+                  .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+                $("#dataset-bottom").append($("<option>")
+                  .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
             });
             // Mark first option as selected
             $("#dataset-top option[selected='selected']").each(

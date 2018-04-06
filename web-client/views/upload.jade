@@ -225,17 +225,20 @@ html
             input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
+            input(id='nodeColoringToggle' type='button' class='btn btn-default' value='Disable Node Coloring')
             label(class='info', data-toggle='tooltip') Top Dataset
             select(id="dataset-top")
+            form
+              input(id='averageDataTop', type='checkbox' checked)
+              label(for='averageDataTop' style='font-weight:normal') Avg Replicate Expression Vals
             label(class='info', data-toggle='tooltip') Bottom Dataset
             select(id="dataset-bottom")
             form
-              input(id='averageData', type='checkbox' checked)
-              label(for='averageData' style='font-weight:normal') Average Values
+              input(id='averageDataBottom', type='checkbox' checked)
+              label(for='averageDataBottom' style='font-weight:normal') Avg Replicate Expression Vals
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
             input(type='text' id='log-fold-change-max-value' aria-describedby='basic-addon1')
             div(class="node-coloring-legend")
-            input(id='nodeColoringToggle' type='button' class='btn btn-default' value='Disable Node Coloring')
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
