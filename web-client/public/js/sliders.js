@@ -49,7 +49,6 @@ export var sliderObject = function (sliderId, valueId, defaultVal, needsAppended
     this.setCurrentVal = function (newVal) {
         this.currentVal = newVal;
     };
-
 };
 
 export var sliderGroupController = function (sliderArray) {

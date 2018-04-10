@@ -994,12 +994,16 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     let layout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
+        sliderController.simulation.alpha(1);
+        sliderController.simulation.force("charge").strength(sliderController.sliders[0].currentVal);
         let nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
+            this.value = "Force Graph";
             layout = true;
             const margin = 10;
-            const grid = Grid() // create new grid layout
+            const grid = Grid()
             .data(network.genes)
             .bands(true)
             .padding([0.2, 0])
@@ -1016,6 +1020,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             }
         } else {
             layout = false;
+            this.value = "Grid Layout";
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;
                 nodeGroup[i].__data__.fy = null;
