@@ -1,31 +1,31 @@
 ## GRNsight Client Side Testing Overview
-Last Updated: 2018-01-17
+Last Updated: 2018-04-11
 
 | Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
 | --------------- | ------ | ------- | ------ | 
-|YES | Load Graph|None | GRNsight should have no graph in the viewport|
-|YES | Load Graph|File Menu -> Open | GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file|
-|YES | Load Graph|File Menu -> Import SIF | GRNsight should lay out a network graph from the SIF file if there are no errors in the file|
-|YES | Load Graph|File Menu -> Import GraphML | GRNsight should lay out a network graph from the GraphML file if there are no errors in the file|
-|YES | Load Graph|Demo Menu -> Demo #1 | GRNsight should lay out an unweighted network graph from Demo #1|
-|YES | Load Graph|Demo Menu -> Demo #2 | GRNsight should lay out a weighted network graph from Demo #2|
-|YES | Load Graph|Demo Menu -> Demo #3 | GRNsight should lay out an unweighted network graph from Demo #3|
-|YES | Load Graph|Demo Menu -> Demo #4 | GRNsight should lay out a weighted network graph from Demo #4|
+|NO | Load Graph|None | GRNsight should have no graph in the viewport|
+|NO | Load Graph|File Menu -> Open | GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file|
+|NO | Load Graph|File Menu -> Import SIF | GRNsight should lay out a network graph from the SIF file if there are no errors in the file|
+|NO | Load Graph|File Menu -> Import GraphML | GRNsight should lay out a network graph from the GraphML file if there are no errors in the file|
+|NO | Load Graph|Demo Menu -> Demo #1 | GRNsight should lay out an unweighted network graph from Demo #1|
+|NO | Load Graph|Demo Menu -> Demo #2 | GRNsight should lay out a weighted network graph from Demo #2|
+|NO | Load Graph|Demo Menu -> Demo #3 | GRNsight should lay out an unweighted network graph from Demo #3|
+|NO | Load Graph|Demo Menu -> Demo #4 | GRNsight should lay out a weighted network graph from Demo #4|
 |NO | File Menu -> Reload|Select | The graph should center, zoom to 100%, and reapply the force graph parameters|
 |NO | File Menu -> Export Data|Select "To Unweighted SIF" | GRNsight should export an unweighted SIF file from the graph currently loaded|
 |NO | File Menu -> Export Data|Select "To Weighted SIF" | GRNsight should export a weighted SIF file from the graph currently loaded|
 |NO | File Menu -> Export Data|Select "To Unweighted GraphML" | GRNsight should export an unweighted GraphML file from the graph currently loaded|
 |NO | File Menu -> Export Data|Select "To Weighted GraphML" | GRNsight should export a weighted GraphML file from the graph currently loaded|
 |NO | File Menu -> Print|Select | GRNsight should open the Print Dialogue Box|
-|NO | Edit Menu -> Preferences|Select "Format edges based on optimized weight parameters" | GRNsight should format edges based on optimized weight parameters|
-|NO | Edit Menu -> Preferences|Select "Default to black edges with regular arrowheads" | GRNsight should default to black edges with regular arrowheads|
-|YES | Format Menu|Check "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be disabled.|
-|YES | Format Menu|Uncheck "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be enabled.|
+|YES | Edit Menu -> Preferences|Select "Format edges based on optimized weight parameters" | GRNsight should format edges based on optimized weight parameters|
+|YES | Edit Menu -> Preferences|Select "Default to black edges with regular arrowheads" | GRNsight should default to black edges with regular arrowheads|
+|NO | Format Menu|Check "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be disabled.|
+|NO | Format Menu|Uncheck "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be enabled.|
 |NO | Format Menu|Select "Reset Force Graph Parameters" |  revert to the default values, if Lock Force Graph Parameters is unchecked|
 |NO | Format Menu|Click "Undo Reset" | The Force Graph Parameter sliders should return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.|
-|YES | Format Menu|Select "Show With Mouse Over" | The edge weight should display when user mouses over an edge.|
-|YES | Format Menu|Select "Always Show Edge Weights" | The edge weight should always be visible.|
-|YES | Format Menu|Select "Never Show Edge Weights" | The edge weight should not be displayed.|
+|NO | Format Menu|Select "Show With Mouse Over" | The edge weight should display when user mouses over an edge.|
+|NO | Format Menu|Select "Always Show Edge Weights" | The edge weight should always be visible.|
+|NO | Format Menu|Select "Never Show Edge Weights" | The edge weight should not be displayed.|
 |NO | Help Menu|Select "Getting Started" | GRNsight should open the GRNsight documentation page|
 |NO | Help Menu|Select "GRNsight Wiki" | GRNsight should open the GRNsight wiki page|
 |NO | Help Menu|Select "About GRNsight" | GRNsight should open the About GRNsight page|
@@ -58,6 +58,8 @@ Last Updated: 2018-01-17
 |NO | D-Pad Control|Click Center Button | The graph should move to the center of the bounding box (note that it is not the same thing as the viewport if "Restrict Graph to Viewport" is Unchecked.|
 |NO | Zoom Slider|Increase Zoom Level | The graph should zoom in (get larger)|
 |NO | Zoom Slider|Decrease Zoom Level | The graph should zoom out (get smaller)|
+|YES | Grid Layout|Click Grid Layout Button | The graph should change to grid layout|
+|YES | Grid Layout|Click Force Graph Layout Button | The graph should change back to force graph layout|
 
 ## GRNsight Function Availability Table
 
@@ -118,533 +120,57 @@ Last Updated: 2018-01-17
 | D-Pad Control - Click Center Button | NO | YES | YES | 
 | Zoom Slider - Increase Zoom Level | NO | YES | YES | 
 | Zoom Slider - Decrease Zoom Level | NO | YES | YES | 
+| Grid Layout - Click Grid Layout Button | YES | YES | YES | 
+| Grid Layout - Click Force Graph Layout Button | YES | YES | YES | 
 
 ## Client Side Tests
 ### Test 1
 Instructions:
-- Load Graph - None
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Edit Menu -> Preferences - Select "Format edges based on optimized weight parameters"
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- GRNsight should format edges based on optimized weight parameters
 
 ### Test 2
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Edit Menu -> Preferences - Select "Default to black edges with regular arrowheads"
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- GRNsight should default to black edges with regular arrowheads
 
 ### Test 3
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Edit Menu -> Preferences - Select "Format edges based on optimized weight parameters"
+- Grid Layout - Click Grid Layout Button
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- GRNsight should format edges based on optimized weight parameters
+- The graph should change to grid layout
 
 ### Test 4
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Edit Menu -> Preferences - Select "Default to black edges with regular arrowheads"
+- Grid Layout - Click Grid Layout Button
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- GRNsight should default to black edges with regular arrowheads
+- The graph should change to grid layout
 
 ### Test 5
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Edit Menu -> Preferences - Select "Format edges based on optimized weight parameters"
+- Grid Layout - Click Force Graph Layout Button
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- GRNsight should format edges based on optimized weight parameters
+- The graph should change back to force graph layout
 
 ### Test 6
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Edit Menu -> Preferences - Select "Default to black edges with regular arrowheads"
+- Grid Layout - Click Force Graph Layout Button
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 7
-Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 8
-Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 9
-Instructions:
-- Load Graph - None
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 10
-Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 11
-Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 12
-Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 13
-Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 14
-Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 15
-Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 16
-Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
-
-### Test 17
-Instructions:
-- Load Graph - None
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 18
-Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 19
-Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 20
-Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 21
-Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 22
-Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 23
-Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 24
-Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
-
-### Test 25
-Instructions:
-- Load Graph - None
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 26
-Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 27
-Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 28
-Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 29
-Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 30
-Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 31
-Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 32
-Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
-
-### Test 33
-Instructions:
-- Load Graph - None
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 34
-Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 35
-Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 36
-Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 37
-Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 38
-Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 39
-Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 40
-Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
-
-### Test 41
-Instructions:
-- Load Graph - None
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 42
-Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 43
-Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 44
-Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 45
-Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 46
-Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 47
-Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
-
-### Test 48
-Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
-
-Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- GRNsight should default to black edges with regular arrowheads
+- The graph should change back to force graph layout
 
