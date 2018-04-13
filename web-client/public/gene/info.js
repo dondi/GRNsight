@@ -6,7 +6,7 @@
       }):{};
 
     document.title = "Information About " + obj.symbol;
-    $("#gene-name").text(obj.symbol + " Saccharomyces cerevisiae");
+    $("#gene-name").text(obj.symbol);
     // This is cite used to find the parsing:
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
@@ -37,6 +37,7 @@
 
         var ensemblInfo = gene.ensembl.description;
         $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
+
 
         var uniSpecies = gene.uniprot.species;
         $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
@@ -69,9 +70,11 @@
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
         $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
+                $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".regulators");
 
         var sgdTargets = gene.sgd.targets;
         $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
+                $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".targets");
 
       // Interaction: Physical Reaction
 
@@ -138,6 +141,20 @@
 
         var sgdCellularComponent = gene.sgd.cellularComponent;
         $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+
+        $("#sgdSource").text("Saccharomycese Genome Database");
+        $("<sup>1</sup>").appendTo(".sgdSource");
+        $("#uniprotSource").text("UniProt");
+        $("<sup>2</sup>").appendTo(".uniprotSource");
+        $("#ensemblSource").text("Ensembl");
+        $("<sup>3</sup>").appendTo(".ensemblSource");
+        $("#ncbiSource").text("NCBI Database");
+        $("<sup>4</sup>").appendTo(".ncbiSource");
+        $("#jasparSource").text("Jaspar Database");
+        $("<sup>5</sup>").appendTo(".jasparSource");
+
+
+
 
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
