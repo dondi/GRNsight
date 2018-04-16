@@ -16,7 +16,8 @@ import Grid from "d3-v4-grid";
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, normalization, grayThreshold) {
+
+export var drawGraph = function (network, sliderController, normalization, grayThreshold, dashedLine) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -403,12 +404,25 @@ export var drawGraph = function (network, sliderController, normalization, grayT
 
     grayThreshold = +$("#grayThresholdInput").val();
 
+    dashedLine = $("#dashedGrayLineButton").is(":checked", function () {
+        $("#dashedGrayLineButton").prop("checked", true);
+    });
+
+
     link.append("path")
         .attr("class", "main")
         .attr("id", function (d) {
             return "path" + d.source.index + "_" + d.target.index;
         }).style("stroke-width", function (d) {
             return d.strokeWidth = getEdgeThickness(d);
+        }).style("stroke-dasharray", function (d) {
+            if (unweighted || !colorOptimal) {
+                return "0";
+            } else if (normalize(d) <= grayThreshold && dashedLine === true) {
+                return "6, 9";
+            } else {
+                return "0";
+            }
         }).style("stroke", function (d) {
             if (unweighted || !colorOptimal) {
                 return "black";
@@ -890,6 +904,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     $(".link").css({
         "stroke": "#000",
         "fill": "none",
+        "stroke-dasharray": "0",
         "stroke-width": "1.5px"
     });
 
