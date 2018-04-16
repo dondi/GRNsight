@@ -1,0 +1,28 @@
+GRNSight Project SRS Evaluation
+===============================
+
+Nice job on this, a very good document.
+
+Just a couple of suggestions.
+
+When thinking of requirements, try to be even more specific about what 
+you are specifying.  For example, in requirement 5.2.2.1.7, what do you
+mean by "move in the normal way afterward"?  What is the "normal" way?
+"Afterward" meaning after what, exactly?
+
+These are "philosophy of requirements" issues that you can apply in a
+*general* way to nearly all the requirements in the document.  However,
+in the essence of time remaining, I'm assigning full credit to this
+deliverable, for both the initial and the final submissions.
+
+Be sure to check your spelling...  "examen" in the paragraph for section
+5.2.2 for example...
+
+You don't have to do anything further with this document if you don't
+feel the need to do so.
+
+Deliverable D-02: 15% out of 15% = 100% which is an A-plus
+Deliverable D-05:  5% out of  5% = 100% which is an A-plus
+
+Keep up the good work!
+
