@@ -16,7 +16,7 @@
 
 /* eslint-disable no-unused-vars */
 
-var drawGraph = function (network, sliderController, normalization, grayThreshold) {
+var drawGraph = function (network, sliderController, normalization, grayThreshold, dashedLine) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -403,6 +403,11 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
 
     grayThreshold = +$("#grayThresholdInput").val();
 
+    dashedLine = $("#dashedGrayLineButton").is(':checked', function(){
+        $("#dashedGrayLineButton").prop('checked', true);
+    });
+
+
     link.append("path")
         .attr("class", "main")
         .attr("id", function (d) {
@@ -412,7 +417,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         }).style("stroke-dasharray", function (d) {
             if (unweighted || !colorOptimal) {
                 return "0";
-            } else if (normalize(d) <= grayThreshold) {
+            } else if (normalize(d) <= grayThreshold && dashedLine == true) {
                 return "6, 9";
             } else {
                 return "0";

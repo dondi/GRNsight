@@ -184,7 +184,7 @@ $(function () {
             $(selector).off("click");
         });
         /* global drawGraph */
-        drawGraph(network, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, normalization, grayThreshold, dashedLine);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -301,24 +301,31 @@ $(function () {
     });
 
     var grayThreshold = false;
+    var dashedLine = false;
 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
+    });
+
+    $("#dashedGrayLineButton").on("change", function () {
+        dashedLine = true;
+    // displayNetwork(currentNetwork, name, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
     });
 
     var annotateLinks = function (network) {
