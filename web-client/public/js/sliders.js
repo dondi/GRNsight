@@ -32,7 +32,7 @@ var updateSliderDisplayedValue = function (slider, element) {
     slider.setCurrentVal(value);
 };
 
-export var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
+var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
     this.sliderId = sliderId;
     this.valueId = valueId;
     this.defaultVal = defaultVal;
@@ -52,7 +52,7 @@ export var sliderObject = function (sliderId, valueId, defaultVal, needsAppended
 
 };
 
-export var sliderGroupController = function (sliderArray) {
+var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
     this.numberOfSliders = sliderArray.length;
     this.locked = false;
@@ -183,7 +183,9 @@ export var sliderGroupController = function (sliderArray) {
 };
 
 // Gray Threshold Slider Settings
-var outputUpdate = function () {
-    var value = Math.round(($("#grayThresholdInput").val() * 100));
-    $("#grayThresholdValue").text(value + "%");
+var graySlider = document.getElementById("grayThresholdInput");
+
+var outputUpdate = function (val) {
+    // val = Math.round(val * 100) + '%';
+    document.querySelector("#grayThresholdValue").value = val;
 };

@@ -1,4 +1,3 @@
-import Grid from "d3-v4-grid";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -14,10 +13,10 @@ import Grid from "d3-v4-grid";
  */
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
+
 /* eslint-disable no-unused-vars */
-
-
-export var drawGraph = function (network, sliderController, normalization, grayThreshold, dashedLine) {
+var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetType,
+  warnings, sliderController, normalization, grayThreshold) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -34,7 +33,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
     $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
 
-    $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
+    $("#warningMessage").html(warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
     var getNodeWidth = function (node) {
         return node.name.length * 12 + 5;
@@ -54,7 +53,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
 
     var minimumScale = MIN_SCALE;
 
-    var allWeights = network.positiveWeights.concat(network.negativeWeights);
+    var allWeights = positiveWeights.concat(negativeWeights);
 
     if (!colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
@@ -79,7 +78,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
 
   // normalization all weights b/w size 2 and size 14
   // if unweighted, weight is 2
-    if (network.sheetType === "unweighted") {
+    if (sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
             .range(["2"]);
@@ -371,18 +370,18 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     var weight = boundingBoxContainer.selectAll(".weight");
 
     simulation
-        .nodes(network.genes)
+        .nodes(nodes)
         .on("tick", tick);
 
     simulation.force("link")
-        .links(network.links);
+        .links(links);
 
-    link = link.data(network.links)
+    link = link.data(links)
         .enter().append("g")
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
-    node = node.data(network.genes)
+    node = node.data(nodes)
         .enter().append("g")
         .attr("class", "node")
         .attr("id", function (d) {
@@ -393,7 +392,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         .call(drag)
         .on("dblclick", dblclick);
 
-    if (network.sheetType === "weighted") {
+    if (sheetType === "weighted") {
         link.append("path")
             .attr("class", "mousezone")
             .style("stroke-width", function (d) {
@@ -402,12 +401,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             });
     }
 
-    grayThreshold = +$("#grayThresholdInput").val();
-
-    dashedLine = $("#dashedGrayLineButton").is(":checked", function () {
-        $("#dashedGrayLineButton").prop("checked", true);
-    });
-
+    grayThreshold = +$("#grayThresholdValue").val();
 
     link.append("path")
         .attr("class", "main")
@@ -415,14 +409,6 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             return "path" + d.source.index + "_" + d.target.index;
         }).style("stroke-width", function (d) {
             return d.strokeWidth = getEdgeThickness(d);
-        }).style("stroke-dasharray", function (d) {
-            if (unweighted || !colorOptimal) {
-                return "0";
-            } else if (normalize(d) <= grayThreshold && dashedLine === true) {
-                return "6, 9";
-            } else {
-                return "0";
-            }
         }).style("stroke", function (d) {
             if (unweighted || !colorOptimal) {
                 return "black";
@@ -617,7 +603,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         });
 
-    if (network.sheetType === "weighted") {
+    if (sheetType === "weighted") {
         link.append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
@@ -626,7 +612,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             return d.value.toPrecision(4);
         });
 
-        weight = weight.data(network.links)
+        weight = weight.data(links)
         .enter().append("text")
         .attr("class", "weight")
         .attr("text-anchor", "middle")
@@ -904,13 +890,12 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     $(".link").css({
         "stroke": "#000",
         "fill": "none",
-        "stroke-dasharray": "0",
         "stroke-width": "1.5px"
     });
 
     var currentWeightVisibilitySetting = null;
 
-    if (network.sheetType === "weighted") {
+    if (sheetType === "weighted") {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
@@ -979,65 +964,6 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             $(".weightedGraphOptions").addClass("hidden");
         }
     }
-
-    const getMarginWidth = function (gridNodes, row) {
-        const containerWidth = $container.width();
-        let rightNode = gridNodes[row - 1];
-        let nodeWidth = rightNode.textWidth + 6;
-        let rightNodeX = rightNode.x + nodeWidth;
-        const margin = (containerWidth - rightNodeX) / 2;
-        return margin;
-    };
-
-    const getMarginHeight = function (gridNodes) {
-        const containerHeight = $container.height();
-        const len = gridNodes.length;
-        const bottomNodeY = gridNodes[len - 1].y + nodeHeight;
-        const margin = (containerHeight - bottomNodeY) / 2;
-        return margin;
-    };
-
-    const sortNode = function (n1, n2) {
-        let name1 = n1.__data__.name;
-        let name2 = n2.__data__.name;
-        if (name1 === name2) {
-            return 0;
-        }
-        return name1 > name2 ? 1 : -1;
-    };
-
-    let layout = false;
-
-    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
-        let nodeGroup = node._groups[0].sort(sortNode);
-        if (!layout) {
-            layout = true;
-            const margin = 10;
-            const grid = Grid() // create new grid layout
-            .data(network.genes)
-            .bands(true)
-            .padding([0.2, 0])
-            .size([$container.width() - margin, $container.height() - margin]); // set size of container
-            grid.layout();
-            let gridNodes = grid.nodes();
-            let gridNumRow = grid.cols();
-            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
-            let marginHeight = getMarginHeight(gridNodes);
-            /* eslint-disable block-scoped-var */
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
-                nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
-            }
-        } else {
-            layout = false;
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = null;
-                nodeGroup[i].__data__.fy = null;
-            }
-        }
-            /* eslint-enable block-scoped-var */
-    });
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)
