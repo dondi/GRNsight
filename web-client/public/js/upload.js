@@ -1,5 +1,4 @@
-$(function () {
-
+export const upload = function (sliderObject, sliderGroupController, drawGraph) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -48,7 +47,6 @@ $(function () {
 
     styleLabelTooltips();
 
-    /* global sliderObject, sliderGroupController*/
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
     var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
@@ -183,7 +181,6 @@ $(function () {
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        /* global drawGraph */
         drawGraph(network, sliders, normalization, grayThreshold, dashedLine);
     };
 
@@ -541,4 +538,4 @@ $(function () {
         }
     });
 
-});
+};
