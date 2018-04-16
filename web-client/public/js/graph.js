@@ -403,8 +403,8 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
 
     grayThreshold = +$("#grayThresholdInput").val();
 
-    dashedLine = $("#dashedGrayLineButton").is(':checked', function(){
-        $("#dashedGrayLineButton").prop('checked', true);
+    dashedLine = $("#dashedGrayLineButton").is(":checked", function () {
+        $("#dashedGrayLineButton").prop("checked", true);
     });
 
 
@@ -417,7 +417,7 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         }).style("stroke-dasharray", function (d) {
             if (unweighted || !colorOptimal) {
                 return "0";
-            } else if (normalize(d) <= grayThreshold && dashedLine == true) {
+            } else if (normalize(d) <= grayThreshold && dashedLine === true) {
                 return "6, 9";
             } else {
                 return "0";

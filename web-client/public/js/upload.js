@@ -159,7 +159,7 @@ $(function () {
 
     var normalization = false;
 
-    var displayNetwork = function (network, name, normalization, grayThreshold) {
+    var displayNetwork = function (network, name, normalization, grayThreshold, dashedLine) {
 
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
