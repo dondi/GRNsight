@@ -1,9 +1,9 @@
 (function () {
     var search = location.search.substring(1);
-    var obj = search?JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g ,'":"') + '"}',
+    var obj = search ? JSON.parse("{'" + search.replace(/&/g, "'").replace(/=/g, "':'") + "\"}",
       function ( key, value) {
           return key === "" ? value : decodeURIComponent(value);
-      }):{};
+      }) : {};
 
     document.title = "Information About " + obj.symbol;
     $("#gene-name").text(obj.symbol);
@@ -70,11 +70,11 @@
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
         $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
-                $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".regulators");
+        $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".regulators");
 
         var sgdTargets = gene.sgd.targets;
         $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
-                $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".targets");
+        $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".targets");
 
       // Interaction: Physical Reaction
 
@@ -88,7 +88,8 @@
         $(".affinityCaptureRNA").text(sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
 
         var sgdAffinityCaptureWesterns = gene.sgd.affinityCaptureWestern;
-        $(".affinityCaptureWestern").text(sgdAffinityCaptureWesterns).attr({ href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
+        $(".affinityCaptureWestern").text(sgdAffinityCaptureWesterns).attr(
+            { href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
 
         var sgdBiochemicalActivity = gene.sgd.biochemicalActivity;
         $(".biochemicalActivity").text(sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
@@ -97,7 +98,8 @@
         $(".colocalization").text(sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
 
         var sgdReconstitutedComplex = gene.sgd.reconstitutedComplex;
-        $(".reconstitutedComplex").text(sgdReconstitutedComplex).attr({ href: sgdHrefTemplate + sgdReconstitutedComplex });
+        $(".reconstitutedComplex").text(sgdReconstitutedComplex).attr(
+            { href: sgdHrefTemplate + sgdReconstitutedComplex });
 
         var sgdTwoHybrid = gene.sgd.twoHybrid;
         $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });

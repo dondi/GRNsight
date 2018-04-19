@@ -51,3 +51,5 @@ coverage/
 *.mtc1
 *.out
 *.synctex.gz
+
+_site/

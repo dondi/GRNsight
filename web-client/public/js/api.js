@@ -117,11 +117,12 @@
                 };
 
                 var parseNCBI = function (data) {
-                    var tagArray = serializer.serializeToString(data.getElementsByTagName("OtherAliases")[0]).split(",");
+                    var tagArray = serializer.serializeToString(
+                        data.getElementsByTagName("OtherAliases")[0]).split(",");
                     return {
                         ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
-                        locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ''),
-                        alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ''),
+                        locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
+                        alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ""),
                         chromosomeSequence: XMLParser(data.getElementsByTagName("ChrAccVer")[0]),
                         genomicSequence: XMLParser(data.getElementsByTagName("ChrLoc")[0]) + "; "
                         + XMLParser(data.getElementsByTagName("ChrAccVer")[0]) + " ("
