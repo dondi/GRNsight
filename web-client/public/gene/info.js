@@ -1,6 +1,6 @@
 (function () {
     var search = location.search.substring(1);
-    var obj = search ? JSON.parse("{'" + search.replace(/&/g, "'").replace(/=/g, "':'") + "\"}",
+    var obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
       function ( key, value) {
           return key === "" ? value : decodeURIComponent(value);
       }) : {};
