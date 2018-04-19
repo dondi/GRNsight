@@ -104,7 +104,6 @@ export var nodeColoringController = {
                 $(NODE_COLORING_MENU).removeClass("hidden");
             }
             if (this.lastDataset === null || this.lastDataset !== name) {
-                console.log("NEW DATASET");
                 this.initialize();
                 this.lastDataset = name;
                 var nodeColoringOptions = [];
@@ -129,8 +128,6 @@ export var nodeColoringController = {
                     }
                 );
                 $("#TOP_DATASET_SELECTION option:first").attr("selected", "selected");
-            } else {
-                console.log("SAME DATASET");
             }
             this.topDataset = $(TOP_DATASET_SELECTION).find(":selected").attr("value");
             if ($(BOTTOM_DATASET_SELECTION).find(":selected").attr("value") === "sameAsTop") {
