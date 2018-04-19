@@ -223,10 +223,8 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
         console.log(network); // Display the network in the console
-        // reloadNodeColoringMenu(network); // TODO: also add this to importGrn function
         displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
         reloader = function () {
-            // displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
             loadGrn(url, name, formData);
         };
       // displayStatistics(network);

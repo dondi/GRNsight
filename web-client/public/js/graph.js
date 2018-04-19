@@ -17,7 +17,6 @@ import Grid from "d3-v4-grid";
 /* eslint-disable no-unused-vars */
 
 export var drawGraph = function (network, sliderController, normalization, grayThreshold, nodeColoring) {
-    console.log("HEREEEEE: ", nodeColoring);
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -1017,11 +1016,6 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     };
 
     nodeColoring.renderNodeColoring = function () {
-        console.log("-------Node Coloring settings-------");
-        console.log("top: " + this.topDataset);
-        console.log("bottom: " + this.bottomDataset);
-        console.log("average data: " + this.avgTopDataset);
-        console.log("normalization: " + this.logFoldChangeMaxValue);
         colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
         colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
         renderNodeLabels();

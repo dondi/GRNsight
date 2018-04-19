@@ -10,6 +10,7 @@ lib-cov
 ~$*.xls
 
 documents/developer_documents/testing_script_generator/GRNsightTestingDocument.pdf
+web-client/public/js/bundle.js
 
 pids
 logs
