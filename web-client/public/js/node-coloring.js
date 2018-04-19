@@ -1,14 +1,20 @@
 var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
 var MAX_NUM_CHARACTERS_DROPDOWN = 24;
+
+var NODE_COLORING_MENU = ".node-coloring";
+
 var BOTTOM_DATASET_SELECTION = "#dataset-bottom";
 var TOP_DATASET_SELECTION = "#dataset-top";
 var NODE_COLORING_TOGGLE = "#nodeColoringToggle";
-
+var AVG_REPLICATE_VALS_BOTTOM = "#averageDataBottom";
+var AVG_REPLICATE_VALS_TOP = "#averageDataTop";
+var LOG_FOLD_CHANGE_MAX_VALUE = "#log-fold-change-max-value";
 
 var shortenExpressionSheetName = function (name) {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
 };
+
 var hasExpressionData = function (sheets) {
     var endsInExpressionRegExp = /expression$/;
     for (var property in sheets) {
@@ -20,25 +26,18 @@ var hasExpressionData = function (sheets) {
 };
 
 export var nodeColoringController = {
-    // nodeColoring = undefined,
-    // topDataset = undefined,
-    // this.bottomDataset = undefined;
-    // this.logFoldChangeMaxValue = undefined;
-    // this.avgTopDataset = undefined;
-    // this.avgBottomDataset = undefined;
-    // this.nodeColoringEnabled = true;
 
-    renderNodeColoring: function () { }, // defined in graph.js
-    removeNodeColoring: function () { }, // defined in graph.js
+    // renderNodeColoring: function () { }, // defined in graph.js
+    // removeNodeColoring: function () { }, // defined in graph.js
 
     configureNodeColoringHandlers: function () {
-        $("#averageDataTop").on("change", {handler: this}, function (event) {
+        $(AVG_REPLICATE_VALS_TOP).on("change", {handler: this}, function (event) {
             var selection = $(this).prop("checked");
             event.data.handler.avgTopDataset = selection;
             event.data.handler.renderNodeColoring();
         });
 
-        $("#averageDataBottom").on("change", {handler: this}, function (event) {
+        $(AVG_REPLICATE_VALS_BOTTOM).on("change", {handler: this}, function (event) {
             var selection = $(this).prop("checked");
             event.data.handler.avgBottomDataset = selection;
             event.data.handler.renderNodeColoring();
@@ -56,13 +55,13 @@ export var nodeColoringController = {
             }
         });
 
-        $("#log-fold-change-max-value").on("change", {handler: this}, function (event) {
-            event.data.handler.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
+        $(LOG_FOLD_CHANGE_MAX_VALUE).on("change", {handler: this}, function (event) {
+            event.data.handler.logFoldChangeMaxValue = $(LOG_FOLD_CHANGE_MAX_VALUE).val();
             event.data.handler.renderNodeColoring();
         });
 
-        $("#dataset-top").on("change", {handler: this}, function (event) {
-            var selection = $("#dataset-top").find(":selected").attr("value");
+        $(TOP_DATASET_SELECTION).on("change", {handler: this}, function (event) {
+            var selection = $(TOP_DATASET_SELECTION).find(":selected").attr("value");
             event.data.handler.topDataset = selection;
             if (event.data.handler.bottomDataSameAsTop) {
                 event.data.handler.bottomDataset = selection;
@@ -70,62 +69,80 @@ export var nodeColoringController = {
             event.data.handler.renderNodeColoring();
         });
 
-        $("#dataset-bottom").on("change", {handler: this}, function (event) {
-            var selection = $("#dataset-bottom").find(":selected").attr("value");
+        $(BOTTOM_DATASET_SELECTION).on("change", {handler: this}, function (event) {
+            var selection = $(BOTTOM_DATASET_SELECTION).find(":selected").attr("value");
             if (selection === "sameAsTop") {
                 event.data.handler.bottomDataset = event.data.handler.topDataset;
                 event.data.handler.bottomDataSameAsTop = true;
             } else {
+                event.data.handler.bottomDataSameAsTop = false;
                 event.data.handler.bottomDataset = selection;
             }
             event.data.handler.renderNodeColoring();
         });
     },
 
-    reload: function (network) {
+    initialize: function () {
+        $(LOG_FOLD_CHANGE_MAX_VALUE).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_TOGGLE).val("Enable Node Coloring");
+        $(AVG_REPLICATE_VALS_TOP).prop("checked", true);
+        $(AVG_REPLICATE_VALS_BOTTOM).prop("checked", true);
+
+        this.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
+        this.nodeColoringEnabled = true;
+        this.avgTopDataset = true;
+        this.avgBottomDataset = true;
+        this.topDataset = undefined;
+        this.bottomDataset = undefined;
+        this.lastDataset = null;
+        this.bottomDataSameAsTop = true;
+    },
+
+    reload: function (network, name) {
         if (hasExpressionData(network.expression)) {
-            if ($(".node-coloring").hasClass("hidden")) {
-                $(".node-coloring").removeClass("hidden");
+            if ($(NODE_COLORING_MENU).hasClass("hidden")) {
+                $(NODE_COLORING_MENU).removeClass("hidden");
             }
-            this.nodeColoring = true;
-            var nodeColoringOptions = [];
-            var endsInExpressionRegExp = /expression$/;
-            for (var property in network.expression) {
-                if (property.match(endsInExpressionRegExp)) {
-                    nodeColoringOptions.push({value: property});
+            if (this.lastDataset === null || this.lastDataset !== name) {
+                console.log("NEW DATASET");
+                this.initialize();
+                this.lastDataset = name;
+                var nodeColoringOptions = [];
+                var endsInExpressionRegExp = /expression$/;
+                for (var property in network.expression) {
+                    if (property.match(endsInExpressionRegExp)) {
+                        nodeColoringOptions.push({value: property});
+                    }
                 }
-            }
-            $(BOTTOM_DATASET_SELECTION).append($("<option>").attr("value", "sameAsTop").text("Same as Top Dataset"));
-            $(nodeColoringOptions).each(function () {
-                $(TOP_DATASET_SELECTION).append($("<option>")
-                  .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
                 $(BOTTOM_DATASET_SELECTION).append($("<option>")
-                  .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
-            });
-            // Mark first option as selected
-            $("#TOP_DATASET_SELECTION option[selected='selected']").each(
-                function () {
-                    $(this).removeAttr("selected");
-                }
-            );
-            $("#TOP_DATASET_SELECTION option:first").attr("selected", "selected");
-            $("#log-fold-change-max-value").val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-            this.nodeColoring = true;
-            this.topDataset = $("#dataset-top").find(":selected").attr("value");
-            if ($("#dataset-bottom").find(":selected").attr("value") === "sameAsTop") {
+                    .attr("value", "sameAsTop").text("Same as Top Dataset"));
+                $(nodeColoringOptions).each(function () {
+                    $(TOP_DATASET_SELECTION).append($("<option>")
+                      .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+                    $(BOTTOM_DATASET_SELECTION).append($("<option>")
+                      .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+                });
+                // Mark first option as selected
+                $("#TOP_DATASET_SELECTION option[selected='selected']").each(
+                    function () {
+                        $(this).removeAttr("selected");
+                    }
+                );
+                $("#TOP_DATASET_SELECTION option:first").attr("selected", "selected");
+            } else {
+                console.log("SAME DATASET");
+            }
+            this.topDataset = $(TOP_DATASET_SELECTION).find(":selected").attr("value");
+            if ($(BOTTOM_DATASET_SELECTION).find(":selected").attr("value") === "sameAsTop") {
                 this.bottomDataset = this.topDataset;
                 this.bottomDataSameAsTop = true;
             } else {
-                this.bottomDataset = $("#dataset-bottom").find(":selected").attr("value");
+                this.bottomDataset = $(BOTTOM_DATASET_SELECTION).find(":selected").attr("value");
                 this.bottomDataSameAsTop = false;
             }
-            this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
-            this.nodeColoringEnabled = true;
-            this.avgTopDataset = true;
-            this.avgBottomDataset = true;
         } else {
-            if (!$(".node-coloring").hasClass("hidden")) {
-                $(".node-coloring").addClass("hidden");
+            if (!$(NODE_COLORING_MENU).hasClass("hidden")) {
+                $(NODE_COLORING_MENU).addClass("hidden");
             }
         }
     },
