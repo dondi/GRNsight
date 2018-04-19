@@ -1,4 +1,3 @@
-/* eslint-disable */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -3553,7 +3552,6 @@ var RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
 var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
-// var GRID_LAYOUT_BUTTON          = "#gridLayoutButton";
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
@@ -3702,11 +3700,6 @@ var sliderGroupController = function (sliderArray) {
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
             $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         });
-
-        // $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) {
-        //     event.data.handler.undoForceReset();
-        //     console.log("HOY");
-        // });
     };
 
     this.resetForce = function () {
@@ -3759,11 +3752,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "drawGraph", function() { return drawGraph; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3_v4_grid__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_d3_v4_grid___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_d3_v4_grid__);
-
-// import slider from './slider.js';
-// import container from './container.js';
-// import upload from './upload.js';
-// import graphstatistics from './graph-statistics.js';
 
 
 /* globals d3 */
@@ -4736,7 +4724,6 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
         let rightNode = gridNodes[row - 1];
         let nodeWidth = rightNode.textWidth + 6;
         let rightNodeX = rightNode.x + nodeWidth;
-        console.log("END NODE SIZE: ", rightNodeX);
         const margin = (containerWidth - rightNodeX) / 2;
         return margin;
     };
@@ -4774,7 +4761,6 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             grid.layout();
             let gridNodes = grid.nodes();
             let gridNumRow = grid.cols();
-            console.log("NUMBER OF ROWS: ", gridNumRow);
             let marginWidth = getMarginWidth(gridNodes, gridNumRow);
             let marginHeight = getMarginHeight(gridNodes);
             /* eslint-disable block-scoped-var */
@@ -4790,8 +4776,6 @@ var drawGraph = function (network, sliderController, normalization, grayThreshol
             }
         }
             /* eslint-enable block-scoped-var */
-        // let x = $(node._groups[0][0]).attr('x');
-        // console.log("x is", $(node._groups[0][0]).attr('x'));
     });
 
   // Tick only runs while the graph physics are still running.
@@ -9944,6 +9928,12 @@ const upload = function (sliderObject, sliderGroupController, drawGraph) {
 
     var settings = new settingsController();
     settings.setupSettingsHandlers();
+
+
+    $("#gridLayout").on("click", function () {
+        console.log("actiavted");
+        $("#gridLayoutButton").trigger("click");
+    });
 
   // TODO: Make this less bad
     $("#upload-sif").on("click", function () {

@@ -265,6 +265,12 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     var settings = new settingsController();
     settings.setupSettingsHandlers();
 
+
+    $("#gridLayout").on("click", function () {
+        console.log("actiavted");
+        $("#gridLayoutButton").trigger("click");
+    });
+
   // TODO: Make this less bad
     $("#upload-sif").on("click", function () {
         // deleted event parameter

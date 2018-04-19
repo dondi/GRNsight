@@ -128,6 +128,15 @@ html
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Layout
               ul(class='dropdown-menu' role='menu')
+                span(class='menu-subheader') Graph Options
+                li
+                  a(href='#' id='gridLayout' class='layout')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Grid Layout
+                  a(href='#' id='forceGraph' class='layout active')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Force Graph
+                li(class='divider')
                 span(class='menu-subheader') Force Graph
                 li
                   a(href='#' id='lockSlidersMenu' class="lockSliders")
@@ -137,7 +146,6 @@ html
                   a(href='#' class='noGlyph')
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Nodes
-                li(class='divider')
                 li
                   a(href='#' id='resetSlidersMenu' class="resetSliders")
                     span(class='glyphicon invisible')
@@ -146,9 +154,6 @@ html
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
-
-                li(class='divider')
-                span(class='menu-subheader') Force Graph
                 li
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
@@ -158,13 +163,7 @@ html
                     span(class='glyphicon invisible')
                     | &nbsp; Charge &nbsp;
                     input(type='text' id='zoom' placeholder='-50' aria-describedby='basic-addon1')
-                li(class='divider')
-                span(class='menu-subheader') Grid
-                li
-                  a(href='#' id='grid' class='grid')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Apply Grid Layout
-      
+                
   
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Node
