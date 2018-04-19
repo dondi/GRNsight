@@ -1,4 +1,4 @@
-export const upload = function (sliderObject, sliderGroupController, drawGraph) {
+export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -46,6 +46,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     };
 
     styleLabelTooltips();
+
+    var nodeColoring = nodeColoringController;
+    nodeColoring.configureNodeColoringHandlers();
+    console.log(nodeColoring);
 
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
@@ -158,7 +162,8 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     var normalization = false;
 
     var displayNetwork = function (network, name, normalization, grayThreshold) {
-
+        nodeColoring.reload(network);
+        console.log(nodeColoring);
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
         }
@@ -181,7 +186,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, normalization, grayThreshold, nodeColoring);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -202,50 +207,54 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         $("#errorModal").modal("show");
     };
 
-    var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
-    var MAX_NUM_CHARACTERS_DROPDOWN = 24;
+    // var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
+    // var MAX_NUM_CHARACTERS_DROPDOWN = 24;
+    //
+    // var shortenExpressionSheetName = function (name) {
+    //     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
+    //       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+    // };
+    //
+    // var hasExpressionData = function (sheets) {
+    //     var endsInExpressionRegExp = /expression$/;
+    //     for (var property in sheets) {
+    //         if (property.match(endsInExpressionRegExp)) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
 
-    var shortenExpressionSheetName = function (name) {
-        return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
-          (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
-    };
-
-    var hasExpressionData = function (sheets) {
-        var endsInExpressionRegExp = /expression$/;
-        for (var property in sheets) {
-            if (property.match(endsInExpressionRegExp)) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    var reloadNodeColoringMenu = function (network) {
-        if (hasExpressionData(network.expression)) {
-            var nodeColoringOptions = [];
-            var endsInExpressionRegExp = /expression$/;
-            for (var property in network.expression) {
-                if (property.match(endsInExpressionRegExp)) {
-                    nodeColoringOptions.push({value: property});
-                }
-            }
-            $("#dataset-bottom").append($("<option>").attr("value", "sameAsTop").text("Same as Top Dataset"));
-            $(nodeColoringOptions).each(function () {
-                $("#dataset-top").append($("<option>")
-                  .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
-                $("#dataset-bottom").append($("<option>")
-                  .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
-            });
-            // Mark first option as selected
-            $("#dataset-top option[selected='selected']").each(
-                function () {
-                    $(this).removeAttr("selected");
-                }
-            );
-            $("#dataset-top option:first").attr("selected", "selected");
-            $("#log-fold-change-max-value").val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-        }
-    };
+    // var reloadNodeColoringMenu = function (network) {
+    //     console.log("HERE");
+    //     if (hasExpressionData(network.expression)) {
+    //         var nodeColoringOptions = [];
+    //         var endsInExpressionRegExp = /expression$/;
+    //         for (var property in network.expression) {
+    //             if (property.match(endsInExpressionRegExp)) {
+    //                 nodeColoringOptions.push({value: property});
+    //             }
+    //         }
+    //         $("#dataset-bottom").append($("<option>").attr("value", "sameAsTop").text("Same as Top Dataset"));
+    //         $(nodeColoringOptions).each(function () {
+    //             $("#dataset-top").append($("<option>")
+    //               .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+    //             $("#dataset-bottom").append($("<option>")
+    //               .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+    //         });
+    //         // Mark first option as selected
+    //         $("#dataset-top option[selected='selected']").each(
+    //             function () {
+    //                 $(this).removeAttr("selected");
+    //             }
+    //         );
+    //         console.log("HERE TOO");
+    //         $("#dataset-top option:first").attr("selected", "selected");
+    //         $("#averageDataTop:checked").prop("checked", true);
+    //         $("#averageDataBottom:checked").prop("checked", true);
+    //         $("#log-fold-change-max-value").val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+    //     }
+    // };
 
     var reloader = function () { };
 
@@ -264,7 +273,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
         console.log(network); // Display the network in the console
-        reloadNodeColoringMenu(network); // TODO: also add this to importGrn function
+        // reloadNodeColoringMenu(network); // TODO: also add this to importGrn function
         displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
         reloader = function () {
             loadGrn(url, name, formData);
@@ -348,20 +357,20 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     var annotateLinks = function (network) {

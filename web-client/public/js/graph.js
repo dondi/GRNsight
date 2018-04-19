@@ -16,7 +16,8 @@ import Grid from "d3-v4-grid";
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, normalization, grayThreshold) {
+export var drawGraph = function (network, sliderController, normalization, grayThreshold, nodeColoring) {
+    console.log("HEREEEEE: ", nodeColoring);
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -882,94 +883,94 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             });
     };
     renderNodeLabels();
+    //
+    // var nodeColoringController = {
+    //     initialize: function () {
+    //         this.nodeColoring = true;
+    //         this.topDataset = $("#dataset-top").find(":selected").attr("value");
+    //         if ($("#dataset-bottom").find(":selected").attr("value") === "sameAsTop") {
+    //             this.bottomDataset = this.topDataset;
+    //             this.bottomDataSameAsTop = true;
+    //         } else {
+    //             this.bottomDataset = $("#dataset-bottom").find(":selected").attr("value");
+    //             this.bottomDataSameAsTop = false;
+    //         }
+    //         this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
+    //         this.nodeColoringEnabled = true;
+    //         this.avgTopDataset = true;
+    //         this.avgBottomDataset = true;
+    //     },
+    //     toggleAvgTopDataset: function (selection) {
+    //         this.avgTopDataset = selection;
+    //         renderNodeColoring();
+    //     },
+    //     toggleAvgBottomDataset: function (selection) {
+    //         this.avgBottomDataset = selection;
+    //         renderNodeColoring();
+    //     },
+    //     disableNodeColoring: function () {
+    //         this.nodeColoringEnabled = false;
+    //         node.selectAll(".coloring").remove();
+    //     },
+    //     enableNodeColoring: function () {
+    //         this.nodeColoringEnabled = true;
+    //         renderNodeColoring();
+    //     },
+    //     updateTopDataset: function () {
+    //         var selection = $("#dataset-top").find(":selected").attr("value");
+    //         this.topDataset = selection;
+    //         if (this.bottomDataSameAsTop) {
+    //             this.bottomDataset = selection;
+    //         }
+    //     },
+    //     updateBottomDataset: function () {
+    //         var selection = $("#dataset-bottom").find(":selected").attr("value");
+    //         if (selection === "sameAsTop") {
+    //             this.bottomDataset = this.topDataset;
+    //             this.bottomDataSameAsTop = true;
+    //         } else {
+    //             this.bottomDataset = selection;
+    //         }
+    //     },
+    //     updateLogFoldChangeMaxValue: function () {
+    //         this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
+    //     },
+    // };
 
-    var nodeColoringController = {
-        initialize: function () {
-            this.nodeColoring = true;
-            this.topDataset = $("#dataset-top").find(":selected").attr("value");
-            if ($("#dataset-bottom").find(":selected").attr("value") === "sameAsTop") {
-                this.bottomDataset = this.topDataset;
-                this.bottomDataSameAsTop = true;
-            } else {
-                this.bottomDataset = $("#dataset-bottom").find(":selected").attr("value");
-                this.bottomDataSameAsTop = false;
-            }
-            this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
-            this.nodeColoringEnabled = true;
-            this.avgTopDataset = true;
-            this.avgBottomDataset = true;
-        },
-        toggleAvgTopDataset: function (selection) {
-            this.avgTopDataset = selection;
-            renderNodeColoring();
-        },
-        toggleAvgBottomDataset: function (selection) {
-            this.avgBottomDataset = selection;
-            renderNodeColoring();
-        },
-        disableNodeColoring: function () {
-            this.nodeColoringEnabled = false;
-            node.selectAll(".coloring").remove();
-        },
-        enableNodeColoring: function () {
-            this.nodeColoringEnabled = true;
-            renderNodeColoring();
-        },
-        updateTopDataset: function () {
-            var selection = $("#dataset-top").find(":selected").attr("value");
-            this.topDataset = selection;
-            if (this.bottomDataSameAsTop) {
-                this.bottomDataset = selection;
-            }
-        },
-        updateBottomDataset: function () {
-            var selection = $("#dataset-bottom").find(":selected").attr("value");
-            if (selection === "sameAsTop") {
-                this.bottomDataset = this.topDataset;
-                this.bottomDataSameAsTop = true;
-            } else {
-                this.bottomDataset = selection;
-            }
-        },
-        updateLogFoldChangeMaxValue: function () {
-            this.logFoldChangeMaxValue = $("#log-fold-change-max-value").val();
-        },
-    };
-
-    d3.select("#averageDataTop").on("change", function () {
-        var selection = $(this).prop("checked");
-        nodeColoringController.toggleAvgTopDataset(selection);
-    });
-
-    d3.select("#averageDataBottom").on("change", function () {
-        var selection = $(this).prop("checked");
-        nodeColoringController.toggleAvgBottomDataset(selection);
-    });
-
-    $("#nodeColoringToggle").on("click", function () {
-        if (nodeColoringController.nodeColoringEnabled) {
-            nodeColoringController.disableNodeColoring();
-            $("#nodeColoringToggle").val("Enable Node Coloring");
-        } else {
-            nodeColoringController.enableNodeColoring();
-            $("#nodeColoringToggle").val("Disable Node Coloring");
-        }
-    });
-
-    $("#log-fold-change-max-value").change(function () {
-        nodeColoringController.updateLogFoldChangeMaxValue();
-        renderNodeColoring();
-    });
-
-    $("#dataset-top").change(function () {
-        nodeColoringController.updateTopDataset();
-        renderNodeColoring();
-    });
-
-    $("#dataset-bottom").change(function () {
-        nodeColoringController.updateBottomDataset();
-        renderNodeColoring();
-    });
+    // d3.select("#averageDataTop").on("change", function () {
+    //     var selection = $(this).prop("checked");
+    //     nodeColoringController.toggleAvgTopDataset(selection);
+    // });
+    //
+    // d3.select("#averageDataBottom").on("change", function () {
+    //     var selection = $(this).prop("checked");
+    //     nodeColoringController.toggleAvgBottomDataset(selection);
+    // });
+    //
+    // $("#nodeColoringToggle").on("click", function () {
+    //     if (nodeColoringController.nodeColoringEnabled) {
+    //         nodeColoringController.disableNodeColoring();
+    //         $("#nodeColoringToggle").val("Enable Node Coloring");
+    //     } else {
+    //         nodeColoringController.enableNodeColoring();
+    //         $("#nodeColoringToggle").val("Disable Node Coloring");
+    //     }
+    // });
+    //
+    // $("#log-fold-change-max-value").change(function () {
+    //     nodeColoringController.updateLogFoldChangeMaxValue();
+    //     renderNodeColoring();
+    // });
+    //
+    // $("#dataset-top").change(function () {
+    //     nodeColoringController.updateTopDataset();
+    //     renderNodeColoring();
+    // });
+    //
+    // $("#dataset-bottom").change(function () {
+    //     nodeColoringController.updateBottomDataset();
+    //     renderNodeColoring();
+    // });
 
     function onlyUnique (value, index, self) {
         return self.indexOf(value) === index;
@@ -999,18 +1000,31 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         return {data: strainData.data[gene], timepoints: strainData.time_points};
     };
 
-    var renderNodeColoring = function () {
+    nodeColoring.renderNodeColoring = function () {
         console.log("Node Coloring settings:");
-        console.log("top: " + nodeColoringController.topDataset);
-        console.log("bottom: " + nodeColoringController.bottomDataset);
-        console.log("average data: " + nodeColoringController.avgTopDataset);
-        console.log("normalization: " + nodeColoringController.logFoldChangeMaxValue);
+        console.log("top: " + this.topDataset);
+        console.log("bottom: " + this.bottomDataset);
+        console.log("average data: " + this.avgTopDataset);
+        console.log("normalization: " + this.logFoldChangeMaxValue);
         colorNodes("top");
         colorNodes("bottom");
         renderNodeLabels();
         renderNodeColoringLegend();
     };
 
+    // var renderNodeColoring = function () {
+    //     console.log("Node Coloring settings:");
+    //     // console.log("top: " + nodeColoringController.topDataset);
+    //     // console.log("bottom: " + nodeColoringController.bottomDataset);
+    //     // console.log("average data: " + nodeColoringController.avgTopDataset);
+    //     // console.log("normalization: " + nodeColoringController.logFoldChangeMaxValue);
+    //     colorNodes("top");
+    //     colorNodes("bottom");
+    //     renderNodeLabels();
+    //     renderNodeColoringLegend();
+    // };
+
+    // TODO: add in from the controller
     var colorNodes = function (position) {
         var selection = (position === "top") ?
           nodeColoringController.topDataset : nodeColoringController.bottomDataset;
@@ -1118,28 +1132,28 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         }
     };
 
-    var hasExpressionData = function (sheets) {
-        var endsInExpressionRegExp = /expression$/;
-        for (var property in sheets) {
-            if (property.match(endsInExpressionRegExp)) {
-                return true;
-            }
-        }
-        return false;
-    };
+    // var hasExpressionData = function (sheets) {
+    //     var endsInExpressionRegExp = /expression$/;
+    //     for (var property in sheets) {
+    //         if (property.match(endsInExpressionRegExp)) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // };
 
     // Only display node coloring menu when expression and meta fields are detected in the network object
-    if (hasExpressionData(network.expression)) {
-        if ($(".node-coloring").hasClass("hidden")) {
-            $(".node-coloring").removeClass("hidden");
-        }
-        nodeColoringController.initialize();
-        renderNodeColoring();
-    } else {
-        if (!$(".node-coloring").hasClass("hidden")) {
-            $(".node-coloring").addClass("hidden");
-        }
-    }
+    // if (hasExpressionData(network.expression)) {
+    //     if ($(".node-coloring").hasClass("hidden")) {
+    //         $(".node-coloring").removeClass("hidden");
+    //     }
+    //     nodeColoringController.initialize();
+    //     renderNodeColoring();
+    // } else {
+    //     if (!$(".node-coloring").hasClass("hidden")) {
+    //         $(".node-coloring").addClass("hidden");
+    //     }
+    // }
 
     $(".node").css({
         "cursor": "move",
