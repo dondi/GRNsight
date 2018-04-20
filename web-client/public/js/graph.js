@@ -85,8 +85,11 @@ export var drawGraph = function (network, sliderController) {
             .range(["2"]);
         unweighted = true;
         $(".normalization-form").append("placeholder='unweighted'");
+        document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
-        document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
+        var maxWeight = d3.max(allWeights);
+        document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
+        document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }
 
     var getEdgeThickness = function (edge) {

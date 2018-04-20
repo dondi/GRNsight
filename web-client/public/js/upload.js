@@ -299,17 +299,25 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         delay: { show: 700, hide: 100 }
     });
 
+    // Normalization Controller
+    var synchronizeNormalizationValues = function (value) {
+        $("#normalization-max").val(value);
+        $("#edge-weight-normalization-factor-menu").val(value);
+    };
+
     $("#normalization-button").click(function () {
+        synchronizeNormalizationValues($("#normalization-max").val());
         drawGraph(currentNetwork, sliders);
     });
 
-    $("#resetNormalizationButton").click(function () {
-        document.getElementById("normalization-max").value = "";
+    $("#reset-normalization-factor-menu, #resetNormalizationButton").click(function () {
+        synchronizeNormalizationValues("");
         drawGraph(currentNetwork, sliders);
     });
 
     $("#edge-weight-normalization-factor-menu").on("change", function () {
-
+        synchronizeNormalizationValues($("#edge-weight-normalization-factor-menu").val());
+        drawGraph(currentNetwork, sliders);
     });
 
     // Gray Edge Controller
