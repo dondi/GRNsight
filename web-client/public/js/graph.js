@@ -16,7 +16,7 @@ import Grid from "d3-v4-grid";
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, normalization, grayThreshold) {
+export var drawGraph = function (network, sliderController, normalization) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -27,6 +27,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     var height = $container.height();
     var nodeHeight = 30;
     var colorOptimal = true;
+    var grayThreshold = +$("#grayThresholdInput").val();
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
@@ -401,7 +402,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             });
     }
 
-    grayThreshold = +$("#grayThresholdInput").val();
+    // grayThreshold = +$("#grayThresholdInput").val();
 
     link.append("path")
         .attr("class", "main")

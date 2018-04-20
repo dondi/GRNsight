@@ -6,7 +6,7 @@ module.exports = {
         filename: "bundle.js"
     },
     module: {
-        loaders: [
+        rules: [
             { test: path.join(__dirname, "es6"),
                 loader: "babel-loader" }
         ]

@@ -157,7 +157,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
 
     var normalization = false;
 
-    var displayNetwork = function (network, name, normalization, grayThreshold) {
+    var displayNetwork = function (network, name, normalization) {
 
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
@@ -165,8 +165,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
 
         currentNetwork = network;
         console.log(network); // Display the network in the console
-        console.log("normalization: " + normalization);
-        console.log("grayThreshold: " + grayThreshold);
         $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
         if (network.warnings.length > 0) {
@@ -181,7 +179,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, normalization);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -303,25 +301,25 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         delay: { show: 700, hide: 100 }
     });
 
-    var grayThreshold = false;
-
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization);
     });
 
     $("#grayThresholdInput").on("change", function () {
-        grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+    // Gray Threshold Slider Settings
+        var value = Math.round(($("#grayThresholdInput").val() * 100));
+        $("#grayThresholdValue").text(value + "%");
+        drawGraph(currentNetwork, sliders, normalization);
     });
 
     var annotateLinks = function (network) {
@@ -534,6 +532,22 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
             if ($.isFunction(reloader)) {
                 reloader();
             }
+        }
+    });
+
+    // Prevent Bootstrap dropdown from closing on clicks https://stackoverflow.com/a/27759926
+    $(".dropdown").on({
+        "click": function (event) {
+            if ($(event.target).closest(".dropdown-toggle").length) {
+                $(this).data("closable", true);
+            } else {
+                $(this).data("closable", false);
+            }
+        },
+        "hide.bs.dropdown": function () {
+            var hide = $(this).data("closable");
+            $(this).data("closable", true);
+            return hide;
         }
     });
 
