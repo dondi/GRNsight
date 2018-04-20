@@ -308,9 +308,26 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         drawGraph(currentNetwork, sliders);
     });
 
+    $("#edge-weight-normalization-factor-menu").on("change", function () {
+
+    });
+
+    // Gray Edge Controller
+    var updateGrayEdgeValues = function (value) {
+        $("#grayThresholdValue").text(value + "%");
+        $("#gray-edge-threshold-menu").val(value);
+        $("#grayThresholdInput").val(value / 100);
+    };
+
+    $("#gray-edge-threshold-menu").on("change", function () {
+        var value = Math.round(($("#gray-edge-threshold-menu").val()));
+        updateGrayEdgeValues(value);
+        drawGraph(currentNetwork, sliders);
+    });
+
     $("#grayThresholdInput").on("change", function () {
         var value = Math.round(($("#grayThresholdInput").val() * 100));
-        $("#grayThresholdValue").text(value + "%");
+        updateGrayEdgeValues(value);
         drawGraph(currentNetwork, sliders);
     });
 
