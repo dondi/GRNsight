@@ -155,9 +155,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         $("#warningsModal").modal("show");
     };
 
-    var normalization = false;
-
-    var displayNetwork = function (network, name, normalization) {
+    var displayNetwork = function (network, name) {
 
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
@@ -179,7 +177,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, normalization);
+        drawGraph(network, sliders);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -217,7 +215,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
         console.log(network); // Display the network in the console
-        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
+        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"));
         reloader = function () {
             loadGrn(url, name, formData);
         };
@@ -302,24 +300,18 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     });
 
     $("#normalization-button").click(function () {
-        normalization = true;
-    // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization);
+        drawGraph(currentNetwork, sliders);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
-    // normalization = false;
-    // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization);
+        drawGraph(currentNetwork, sliders);
     });
 
     $("#grayThresholdInput").on("change", function () {
-    // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-    // Gray Threshold Slider Settings
         var value = Math.round(($("#grayThresholdInput").val() * 100));
         $("#grayThresholdValue").text(value + "%");
-        drawGraph(currentNetwork, sliders, normalization);
+        drawGraph(currentNetwork, sliders);
     });
 
     var annotateLinks = function (network) {
@@ -363,7 +355,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
             crossDomain: true
         }).done(function (network) {
             annotateLinks(network);
-            displayNetwork(network, filename, normalization);
+            displayNetwork(network, filename);
             reloader = function () {
                 importGrn(uploadRoute, filename, formData);
             };

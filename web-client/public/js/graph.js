@@ -16,7 +16,7 @@ import Grid from "d3-v4-grid";
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, normalization) {
+export var drawGraph = function (network, sliderController) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -71,7 +71,7 @@ export var drawGraph = function (network, sliderController, normalization) {
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
-        .domain([0, normalization && normMax > 0 ? normMax : d3.max(allWeights)])
+        .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
         .range([2, 14])
         .clamp(true);
 
