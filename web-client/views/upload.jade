@@ -255,6 +255,10 @@ html
                     | &nbsp; Gray Edge Threshold (0 - 100%) &nbsp;
                     input(type='text' id='gray-edge-threshold-menu' placeholder='5' aria-describedby='basic-addon1')
                     | &nbsp; %
+                li
+                  a(href='#' id='grey-edges-dashed-menu')
+                    span(class='glyphicon')
+                    | &nbsp; Show Gray Edges as Dashed
                     
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
@@ -395,7 +399,7 @@ html
             span(class='forceVal', id='grayThresholdValue') 5%
             <br />
             input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-            label(for='dashedGrayLineButton' style='font-weight:normal')&nbsp; Show gray edges as dashed
+            label(for='dashedGrayLineButton' style='font-weight:normal')&nbsp; Show Gray Edges as Dashed
             <br />
             input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
 

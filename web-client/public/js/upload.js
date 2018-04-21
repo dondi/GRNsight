@@ -324,27 +324,55 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
+    var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
+    var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
+    var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+
     // Gray Edge Controller
     var updateGrayEdgeValues = function (value) {
-        $("#grayThresholdValue").text(value + "%");
-        $("#gray-edge-threshold-menu").val(value);
-        $("#grayThresholdInput").val(value / 100);
+        $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(value + "%");
+        $(GREY_EDGE_THRESHOLD_MENU).val(value);
+        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(value / 100);
     };
 
-    $("#gray-edge-threshold-menu").on("change", function () {
-        var value = Math.round(($("#gray-edge-threshold-menu").val()));
+    $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {
+        var value = Math.round(($(GREY_EDGE_THRESHOLD_MENU).val()));
         updateGrayEdgeValues(value);
         drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
-    $("#grayThresholdInput").on("change", function () {
-        var value = Math.round(($("#grayThresholdInput").val() * 100));
+    $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).on("change", function () {
+        var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
         updateGrayEdgeValues(value);
         drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
-    $("#dashedGrayLineButton").on("change", function () {
+    // Dashed Gray Line Controller
+
+    var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
+    var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
+
+    var syncGreyEdgesAsDashedOptions = function (showAsDashed) {
+        if (showAsDashed) {
+            $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
+            $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
+            $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
+        } else {
+            $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
+            $(GREY_EDGES_DASHED_MENU).removeProp("checked");
+            $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
+        }
         drawGraph(currentNetwork, sliders, nodeColoring);
+    };
+
+    $(GREY_EDGES_DASHED_MENU).click(function () {
+        $(GREY_EDGES_DASHED_MENU).prop("checked") ?
+            syncGreyEdgesAsDashedOptions(false) : syncGreyEdgesAsDashedOptions(true);
+    });
+
+    $(GREY_EDGES_DASHED_SIDEBAR).on("change", function () {
+        $(GREY_EDGES_DASHED_SIDEBAR).prop("checked") ?
+            syncGreyEdgesAsDashedOptions(true) : syncGreyEdgesAsDashedOptions(false);
     });
 
     var annotateLinks = function (network) {
