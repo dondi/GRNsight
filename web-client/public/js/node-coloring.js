@@ -10,13 +10,14 @@ var AVG_REPLICATE_VALS_BOTTOM = "#averageDataBottom";
 var AVG_REPLICATE_VALS_TOP = "#averageDataTop";
 var LOG_FOLD_CHANGE_MAX_VALUE = "#log-fold-change-max-value";
 
+var endsInExpressionRegExp = /expression$/;
+
 var shortenExpressionSheetName = function (name) {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
 };
 
-var hasExpressionData = function (sheets) {
-    var endsInExpressionRegExp = /expression$/;
+export var hasExpressionData = function (sheets) {
     for (var property in sheets) {
         if (property.match(endsInExpressionRegExp)) {
             return true;
@@ -87,6 +88,7 @@ export var nodeColoringController = {
         $(NODE_COLORING_TOGGLE).val("Enable Node Coloring");
         $(AVG_REPLICATE_VALS_TOP).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM).prop("checked", true);
+        $(NODE_COLORING_TOGGLE).val("Disable Node Coloring");
 
         this.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
         this.nodeColoringEnabled = true;
@@ -98,36 +100,46 @@ export var nodeColoringController = {
         this.bottomDataSameAsTop = true;
     },
 
+    resetDatasetDropdownMenus: function (network) {
+        var nodeColoringOptions = [];
+        for (var property in network.expression) {
+            if (property.match(endsInExpressionRegExp)) {
+                nodeColoringOptions.push({value: property});
+            }
+        }
+        $(BOTTOM_DATASET_SELECTION).empty();
+        $(TOP_DATASET_SELECTION).empty();
+
+        $(BOTTOM_DATASET_SELECTION).append($("<option>")
+            .attr("value", "sameAsTop").text("Same as Top Dataset"));
+        $(nodeColoringOptions).each(function () {
+            $(TOP_DATASET_SELECTION).append($("<option>")
+              .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+            $(BOTTOM_DATASET_SELECTION).append($("<option>")
+              .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+        });
+        // Mark first option as selected
+        $("#TOP_DATASET_SELECTION option[selected='selected']").each(
+            function () {
+                $(this).removeAttr("selected");
+            }
+        );
+        $("#TOP_DATASET_SELECTION option:first").attr("selected", "selected");
+    },
+
+    isNewWorkbook: function (name) {
+        return this.lastDataset === null || this.lastDataset !== name;
+    },
+
     reload: function (network, name) {
         if (hasExpressionData(network.expression)) {
             if ($(NODE_COLORING_MENU).hasClass("hidden")) {
                 $(NODE_COLORING_MENU).removeClass("hidden");
             }
-            if (this.lastDataset === null || this.lastDataset !== name) {
+            if (this.isNewWorkbook(name)) {
                 this.initialize();
                 this.lastDataset = name;
-                var nodeColoringOptions = [];
-                var endsInExpressionRegExp = /expression$/;
-                for (var property in network.expression) {
-                    if (property.match(endsInExpressionRegExp)) {
-                        nodeColoringOptions.push({value: property});
-                    }
-                }
-                $(BOTTOM_DATASET_SELECTION).append($("<option>")
-                    .attr("value", "sameAsTop").text("Same as Top Dataset"));
-                $(nodeColoringOptions).each(function () {
-                    $(TOP_DATASET_SELECTION).append($("<option>")
-                      .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
-                    $(BOTTOM_DATASET_SELECTION).append($("<option>")
-                      .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
-                });
-                // Mark first option as selected
-                $("#TOP_DATASET_SELECTION option[selected='selected']").each(
-                    function () {
-                        $(this).removeAttr("selected");
-                    }
-                );
-                $("#TOP_DATASET_SELECTION option:first").attr("selected", "selected");
+                this.resetDatasetDropdownMenus(network);
             }
             this.topDataset = $(TOP_DATASET_SELECTION).find(":selected").attr("value");
             if ($(BOTTOM_DATASET_SELECTION).find(":selected").attr("value") === "sameAsTop") {

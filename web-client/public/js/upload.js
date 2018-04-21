@@ -341,13 +341,13 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
 
             if (link.value > 0) {
                 link.type = "arrowhead";
-                // link.stroke = "MediumVioletRed";
-                link.stroke = "rgb(195, 61, 61)";
+                // link.stroke = "MediumVioletRed";   // GRNsight v1 magenta edge color
+                link.stroke = "rgb(195, 61, 61)";     // Node coloring-consistent red edge color
                 network.positiveWeights.push(link.value);
             } else {
                 link.type = "repressor";
-                // link.stroke = "DarkTurquoise";
-                link.stroke = "rgb(51, 124, 183)";
+                // link.stroke = "DarkTurquoise";     // GRNsight v1 cyan edge color
+                link.stroke = "rgb(51, 124, 183)";    // Node coloring-consistent blue edge color
                 network.negativeWeights.push(link.value);
             }
         });

@@ -1,4 +1,5 @@
 import Grid from "d3-v4-grid";
+const hasExpressionData = require("./node-coloring").hasExpressionData;
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -864,9 +865,13 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         .attr("stroke-width", "2px")
         .on("dblclick", dblclick);
 
+    var MINIMUM_NODE_WIDTH = 68.5625;
+    var NODE_MARGIN = 3;
+    var NODE_HEIGHT = 22;
+
     var renderNodeLabels = function () {
         var text = node.append("text")
-            .attr("dy", 22)
+            .attr("dy", NODE_HEIGHT)
             .attr("text-anchor", "middle")
             .style("font-size", "18px")
             .style("stroke-width", "0")
@@ -876,18 +881,18 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             })
             .attr("dx", function (d) {
                 var textWidth = this.getBBox().width;
-                d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
-                return d.textWidth / 2 + 3;
+                d.textWidth = textWidth < MINIMUM_NODE_WIDTH ? MINIMUM_NODE_WIDTH : textWidth;
+                return d.textWidth / 2 + NODE_MARGIN;
             })
             .on("dblclick", nodeTextDblclick);
 
         rect
             .attr("width", function (d) {
-                return d.textWidth + 6;
+                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
             });
         node
             .attr("width", function (d) {
-                return d.textWidth;
+                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
             });
     };
     renderNodeLabels();
@@ -910,8 +915,8 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             var avgs = [];
             Object.keys(avgMap).forEach(function (key) {
                 var length = avgMap[key].length;
-                var sum = avgMap[key].reduce(function (a, b) {
-                    return a + b;
+                var sum = avgMap[key].reduce(function (partialSum, currentValue) {
+                    return partialSum + currentValue;
                 }, 0);
                 avgs.push(sum / length);
             });
@@ -946,9 +951,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             })
             .attr("stroke-width", "0px")
             .style("fill", function (d) {
-                if (d === null) { // mising values are changed to 0
-                    d = 0;
-                }
+                d = d || 0; // missing values are changed to 0
                 var scale = d3.scaleLinear()
                     .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                     .range([0, 1]);
@@ -998,7 +1001,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         var legendLabels = {
             "left": {
                 "textContent": (-logFoldChangeMaxValue).toFixed(2),
-                "x": - xMargin / 2
+                "x": -xMargin / 2
             },
             "center": {
                 "textContent": "0",
@@ -1030,16 +1033,6 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
         renderNodeLabels();
         renderNodeColoringLegend(this.logFoldChangeMaxValue);
-    };
-
-    var hasExpressionData = function (sheets) {
-        var endsInExpressionRegExp = /expression$/;
-        for (var property in sheets) {
-            if (property.match(endsInExpressionRegExp)) {
-                return true;
-            }
-        }
-        return false;
     };
 
     if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
