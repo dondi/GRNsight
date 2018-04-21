@@ -3,12 +3,21 @@ var MAX_NUM_CHARACTERS_DROPDOWN = 24;
 
 var NODE_COLORING_MENU = ".node-coloring";
 
-var BOTTOM_DATASET_SELECTION = "#dataset-bottom";
-var TOP_DATASET_SELECTION = "#dataset-top";
-var NODE_COLORING_TOGGLE = "#nodeColoringToggle";
-var AVG_REPLICATE_VALS_BOTTOM = "#averageDataBottom";
-var AVG_REPLICATE_VALS_TOP = "#averageDataTop";
-var LOG_FOLD_CHANGE_MAX_VALUE = "#log-fold-change-max-value";
+var BOTTOM_DATASET_SELECTION_SIDEBAR = "#dataset-bottom";
+var TOP_DATASET_SELECTION_SIDEBAR = "#dataset-top";
+var NODE_COLORING_TOGGLE_SIDEBAR = "#nodeColoringToggle";
+var AVG_REPLICATE_VALS_BOTTOM_SIDEBAR = "#averageDataBottom";
+var AVG_REPLICATE_VALS_TOP_SIDEBAR = "#averageDataTop";
+
+var AVG_REPLICATE_VALS_TOP_MENU = "#averageDataTopMenu";
+var AVG_REPLICATE_VALS_BOTTOM_MENU = "#averageDataBottomMenu";
+var NODE_COLORING_TOGGLE_MENU = "#node-coloring-toggle-menu";
+var TOP_DATASET_SELECTION_MENU = "#topDatasetDropdownMenu";
+var BOTTOM_DATASET_SELECTION_MENU = "#bottomDatasetDropdownMenu";
+
+var NODE_COLORING_TOGGLE_CLASS = ".nodeColoringToggle";
+var LOG_FOLD_CHANGE_MAX_VALUE_CLASS = ".logFoldChangeMaxValue";
+
 
 var endsInExpressionRegExp = /expression$/;
 
@@ -31,38 +40,83 @@ export var nodeColoringController = {
     // renderNodeColoring: function () { }, // defined in graph.js
     // removeNodeColoring: function () { }, // defined in graph.js
 
+    updateAverageReplicateValuesTopDataset: function (averageTopDataset) {
+        if (averageTopDataset) {
+            $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
+            $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", "checked");
+            $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", "checked");
+        } else {
+            $(AVG_REPLICATE_VALS_TOP_MENU + " span").removeClass("glyphicon-ok");
+            $(AVG_REPLICATE_VALS_TOP_MENU).removeProp("checked");
+            $(AVG_REPLICATE_VALS_TOP_SIDEBAR).removeProp("checked");
+        }
+        this.avgTopDataset = averageTopDataset;
+        this.renderNodeColoring();
+    },
+
+    updateAverageReplicateValuesBottomDataset: function (averageBottomDataset) {
+        if (averageBottomDataset) {
+            $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
+            $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", "checked");
+            $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", "checked");
+        } else {
+            $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").removeClass("glyphicon-ok");
+            $(AVG_REPLICATE_VALS_BOTTOM_MENU).removeProp("checked");
+            $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).removeProp("checked");
+        }
+        this.avgBottomDataset = averageBottomDataset;
+        this.renderNodeColoring();
+    },
+
+    disableNodeColoring: function () {
+        $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        this.nodeColoringEnabled = false;
+        this.removeNodeColoring();
+    },
+
+    enableNodeColoring: function () {
+        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
+        this.nodeColoringEnabled = true;
+        this.renderNodeColoring();
+    },
+
+    updateLogFoldChangeMaxValue: function (value) {
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(value);
+        this.logFoldChangeMaxValue = value;
+        this.renderNodeColoring();
+    },
+
     configureNodeColoringHandlers: function () {
-        $(AVG_REPLICATE_VALS_TOP).on("change", {handler: this}, function (event) {
-            var selection = $(this).prop("checked");
-            event.data.handler.avgTopDataset = selection;
-            event.data.handler.renderNodeColoring();
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).on("change", {handler: this}, function (event) {
+            event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
         });
 
-        $(AVG_REPLICATE_VALS_BOTTOM).on("change", {handler: this}, function (event) {
-            var selection = $(this).prop("checked");
-            event.data.handler.avgBottomDataset = selection;
-            event.data.handler.renderNodeColoring();
+        $(AVG_REPLICATE_VALS_TOP_MENU).on("click", {handler: this}, function (event) {
+            event.data.handler.updateAverageReplicateValuesTopDataset(!$(this).prop("checked"));
         });
 
-        $(NODE_COLORING_TOGGLE).on("click", {handler: this}, function (event) {
-            if (event.data.handler.nodeColoringEnabled) {
-                event.data.handler.nodeColoringEnabled = false;
-                event.data.handler.removeNodeColoring();
-                $(NODE_COLORING_TOGGLE).val("Enable Node Coloring");
-            } else {
-                event.data.handler.nodeColoringEnabled = true;
-                event.data.handler.renderNodeColoring();
-                $(NODE_COLORING_TOGGLE).val("Disable Node Coloring");
-            }
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).on("change", {handler: this}, function (event) {
+            event.data.handler.updateAverageReplicateValuesBottomDataset($(this).prop("checked"));
         });
 
-        $(LOG_FOLD_CHANGE_MAX_VALUE).on("change", {handler: this}, function (event) {
-            event.data.handler.logFoldChangeMaxValue = $(LOG_FOLD_CHANGE_MAX_VALUE).val();
-            event.data.handler.renderNodeColoring();
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU).on("click", {handler: this}, function (event) {
+            event.data.handler
+              .updateAverageReplicateValuesBottomDataset(!$(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked"));
         });
 
-        $(TOP_DATASET_SELECTION).on("change", {handler: this}, function (event) {
-            var selection = $(TOP_DATASET_SELECTION).find(":selected").attr("value");
+        $(NODE_COLORING_TOGGLE_CLASS).on("click", {handler: this}, function (event) {
+            event.data.handler.nodeColoringEnabled ?
+                event.data.handler.disableNodeColoring() : event.data.handler.enableNodeColoring();
+        });
+
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).on("change", {handler: this}, function (event) {
+            event.data.handler.updateLogFoldChangeMaxValue($(this).val());
+        });
+
+        $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
+            var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
             event.data.handler.topDataset = selection;
             if (event.data.handler.bottomDataSameAsTop) {
                 event.data.handler.bottomDataset = selection;
@@ -70,8 +124,8 @@ export var nodeColoringController = {
             event.data.handler.renderNodeColoring();
         });
 
-        $(BOTTOM_DATASET_SELECTION).on("change", {handler: this}, function (event) {
-            var selection = $(BOTTOM_DATASET_SELECTION).find(":selected").attr("value");
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
+            var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
             if (selection === "sameAsTop") {
                 event.data.handler.bottomDataset = event.data.handler.topDataset;
                 event.data.handler.bottomDataSameAsTop = true;
@@ -84,11 +138,21 @@ export var nodeColoringController = {
     },
 
     initialize: function () {
-        $(LOG_FOLD_CHANGE_MAX_VALUE).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-        $(NODE_COLORING_TOGGLE).val("Enable Node Coloring");
-        $(AVG_REPLICATE_VALS_TOP).prop("checked", true);
-        $(AVG_REPLICATE_VALS_BOTTOM).prop("checked", true);
-        $(NODE_COLORING_TOGGLE).val("Disable Node Coloring");
+        // $(LOG_FOLD_CHANGE_MAX_VALUE).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
+        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
+
+        // Initialize Menu Bar
+        $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
+        $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", true);
+
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", true);
+
+        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
 
         this.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
         this.nodeColoringEnabled = true;
@@ -101,58 +165,89 @@ export var nodeColoringController = {
     },
 
     resetDatasetDropdownMenus: function (network) {
+
+        var createHTMLforDataset = function (name) {
+            return "<li class='dataset-option'><a><span class='glyphicon'>" + name + "</span></a></li>";
+        };
+
         var nodeColoringOptions = [];
         for (var property in network.expression) {
             if (property.match(endsInExpressionRegExp)) {
                 nodeColoringOptions.push({value: property});
             }
         }
-        $(BOTTOM_DATASET_SELECTION).empty();
-        $(TOP_DATASET_SELECTION).empty();
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).empty();
+        $(TOP_DATASET_SELECTION_SIDEBAR).empty();
 
-        $(BOTTOM_DATASET_SELECTION).append($("<option>")
+        $(".dataset-option").remove(); // clear all menu dataset options
+
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "sameAsTop").text("Same as Top Dataset"));
-        $(nodeColoringOptions).each(function () {
-            $(TOP_DATASET_SELECTION).append($("<option>")
-              .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
-            $(BOTTOM_DATASET_SELECTION).append($("<option>")
-              .attr("value", this.value).text(shortenExpressionSheetName(this.value)));
+
+        $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
+
+        nodeColoringOptions.forEach(function (option) {
+            var shortenedSheetName = shortenExpressionSheetName(option.value);
+            console.log(shortenedSheetName);
+            $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .attr("value", option.value).text(shortenedSheetName));
+            $(TOP_DATASET_SELECTION_MENU)
+              .append(createHTMLforDataset(option.value));
+            $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .attr("value", option.value).text(shortenedSheetName));
+            $(BOTTOM_DATASET_SELECTION_MENU)
+              .append(createHTMLforDataset(option.value));
         });
+
         // Mark first option as selected
-        $("#TOP_DATASET_SELECTION option[selected='selected']").each(
+        $("#TOP_DATASET_SELECTION_SIDEBAR option[selected='selected']").each(
             function () {
                 $(this).removeAttr("selected");
             }
         );
-        $("#TOP_DATASET_SELECTION option:first").attr("selected", "selected");
+        $("#TOP_DATASET_SELECTION_SIDEBAR option:first").attr("selected", "selected");
     },
 
     isNewWorkbook: function (name) {
         return this.lastDataset === null || this.lastDataset !== name;
     },
 
+    showNodeColoringMenus: function () {
+        if ($(NODE_COLORING_MENU).hasClass("hidden")) {
+            $(NODE_COLORING_MENU).removeClass("hidden");
+        }
+        if ($(".node-coloring-menu").hasClass("disabled")) {
+            $(".node-coloring-menu").removeClass("disabled");
+        }
+    },
+
+    disableNodeColoringMenus: function () {
+        if (!$(NODE_COLORING_MENU).hasClass("hidden")) {
+            $(NODE_COLORING_MENU).addClass("hidden");
+        }
+        if (!$(".node-coloring-menu").hasClass("disabled")) {
+            $(".node-coloring-menu").addClass("disabled");
+        }
+    },
+
     reload: function (network, name) {
         if (hasExpressionData(network.expression)) {
-            if ($(NODE_COLORING_MENU).hasClass("hidden")) {
-                $(NODE_COLORING_MENU).removeClass("hidden");
-            }
+            this.showNodeColoringMenus();
             if (this.isNewWorkbook(name)) {
                 this.initialize();
                 this.lastDataset = name;
                 this.resetDatasetDropdownMenus(network);
             }
-            this.topDataset = $(TOP_DATASET_SELECTION).find(":selected").attr("value");
-            if ($(BOTTOM_DATASET_SELECTION).find(":selected").attr("value") === "sameAsTop") {
+            this.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+            if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "sameAsTop") {
                 this.bottomDataset = this.topDataset;
                 this.bottomDataSameAsTop = true;
             } else {
-                this.bottomDataset = $(BOTTOM_DATASET_SELECTION).find(":selected").attr("value");
+                this.bottomDataset = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
                 this.bottomDataSameAsTop = false;
             }
         } else {
-            if (!$(NODE_COLORING_MENU).hasClass("hidden")) {
-                $(NODE_COLORING_MENU).addClass("hidden");
-            }
+            this.disableNodeColoringMenus();
         }
     },
 };

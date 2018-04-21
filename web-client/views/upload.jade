@@ -168,52 +168,36 @@ html
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Node
               ul(class='dropdown-menu' role='menu')
-                li
-                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
-                    span(class='glyphicon invisible')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' id='node-coloring-toggle-menu' class='nodeColoringToggle')
+                    span(class='glyphicon')
                     | &nbsp; Disable Node Coloring
                 li(class='divider')
-                li(class='dropdown-submenu')
+                li(class='node-coloring-menu dropdown-submenu disabled')
                   a(href='#')
                     span(class='glyphicon invisible')
                     | &nbsp; Select Top Dataset
-                  ul(class='dropdown-menu')
-                    li
-                      a()
-                        span(class='glyphicon invisible')
-                        | &nbsp; Dataset 1 &nbsp;
-                    li
-                      a()
-                        span(class='glyphicon invisible')
-                        | &nbsp; Dataset 1 &nbsp;
-                li
-                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
-                    span(class='glyphicon invisible')
+                  ul(class='dropdown-menu' id='topDatasetDropdownMenu')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' id='averageDataTopMenu' class='nodeColoring')
+                    span(class='glyphicon')
                     | &nbsp; Average Replicate Values for Top Dataset
                 li(class='divider')
-                li(class='dropdown-submenu')
+                li(class='node-coloring-menu dropdown-submenu disabled')
                   a(href='#')
                     span(class='glyphicon invisible')
                     | &nbsp; Select Bottom Dataset
-                  ul(class='dropdown-menu')
-                    li
-                      a()
-                        span(class='glyphicon invisible')
-                        | &nbsp; Dataset 1 &nbsp;
-                    li
-                      a()
-                        span(class='glyphicon invisible')
-                        | &nbsp; Dataset 1 &nbsp;
-                li
-                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
-                    span(class='glyphicon invisible')
+                  ul(class='dropdown-menu' id='bottomDatasetDropdownMenu')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' id='averageDataBottomMenu' class='viewportOption')
+                    span(class='glyphicon')
                     | &nbsp; Average Replicate Values for Bottom Dataset
                 li(class='divider')
-                li
+                li(class='node-coloring-menu disabled')
                   a(href='#' class='nodeOptions')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value &nbsp;
-                    input(type='text' id='log-fold-change-max-value-menu' placeholder='3' aria-describedby='basic-addon1')
+                    input(type='text' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
                     
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -327,7 +311,7 @@ html
             input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
-            input(id='nodeColoringToggle' type='button' class='btn btn-default' value='Disable Node Coloring')
+            input(id='nodeColoringToggle' type='button' class='btn btn-default nodeColoringToggle' value='Disable Node Coloring')
             label(class='info', data-toggle='tooltip') Top Dataset
             select(id="dataset-top")
             form
@@ -339,7 +323,7 @@ html
               input(id='averageDataBottom', type='checkbox' checked)
               label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-            input(type='text' id='log-fold-change-max-value' aria-describedby='basic-addon1')
+            input(type='text' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
             div(class="node-coloring-legend")
         div(id="force-graph")
           form
