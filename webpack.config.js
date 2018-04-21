@@ -3,7 +3,7 @@ module.exports = {
     entry: "./web-client/public/js/grnsight.js",
     output: {
         path: `${__dirname}/web-client/public/js`,
-        filename: "bundle.js"
+        filename: "grnsight.min.js"
     },
     module: {
         rules: [

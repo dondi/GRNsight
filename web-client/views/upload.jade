@@ -213,7 +213,7 @@ html
                   a(href='#' class='nodeOptions')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value &nbsp;
-                    input(type='text' id='log-fold-change-max-value' placeholder='3' aria-describedby='basic-addon1')
+                    input(type='text' id='log-fold-change-max-value-menu' placeholder='3' aria-describedby='basic-addon1')
                     
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -321,6 +321,22 @@ html
         div(id="layout")
           form
             input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
+        div(class="node-coloring hidden")
+            p(class='sideHeader') Node Coloring
+            input(id='nodeColoringToggle' type='button' class='btn btn-default' value='Disable Node Coloring')
+            label(class='info', data-toggle='tooltip') Top Dataset
+            select(id="dataset-top")
+            form
+              input(id='averageDataTop', type='checkbox' checked)
+              label(for='averageDataTop' style='font-weight:normal') Average Replicate Values
+            label(class='info', data-toggle='tooltip') Bottom Dataset
+            select(id="dataset-bottom")
+            form
+              input(id='averageDataBottom', type='checkbox' checked)
+              label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
+            p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
+            input(type='text' id='log-fold-change-max-value' aria-describedby='basic-addon1')
+            div(class="node-coloring-legend")
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
@@ -375,8 +391,12 @@ html
               button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
               button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
           div(class='weightedGraphOptions hidden')
-            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Edge Threshold (0 - 100%): &nbsp; &nbsp;
+            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0 - 100%): &nbsp; &nbsp;
             span(class='forceVal', id='grayThresholdValue') 5%
+            <br />
+            input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
+            label(for='dashedGrayLineButton' style='font-weight:normal')&nbsp; Show gray edges as dashed
+            <br />
             input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
 
     div(class='graph-statistics-container hidden')
@@ -446,4 +466,5 @@ html
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js')
-  script(src='js/bundle.js')
+  script(src='//d3js.org/d3-scale-chromatic.v1.min.js')
+  script(src='js/grnsight.min.js')
