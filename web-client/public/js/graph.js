@@ -920,9 +920,9 @@ export var drawGraph = function (network, sliderController, normalization, grayT
                 }, 0);
                 avgs.push(sum / length);
             });
-            return {data: avgs, timepoints: uniqueTimePoints};
+            return {data: avgs, timePoints: uniqueTimePoints};
         }
-        return {data: strainData.data[gene], timepoints: strainData.time_points};
+        return {data: strainData.data[gene], timePoints: strainData.time_points};
     };
 
     var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
@@ -933,7 +933,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             .selectAll(".coloring")
             .data(function () {
                 var result = getExpressionData(p.name, dataset, average);
-                timePoints = result.timepoints;
+                timePoints = result.timePoints;
                 return result.data;
             })
             .attr("class", "coloring")
@@ -1029,10 +1029,12 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     };
 
     nodeColoring.renderNodeColoring = function () {
-        colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
-        colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
-        renderNodeLabels();
-        renderNodeColoringLegend(this.logFoldChangeMaxValue);
+        if (this.nodeColoringEnabled) {
+            colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
+            colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
+            renderNodeLabels();
+            renderNodeColoringLegend(this.logFoldChangeMaxValue);
+        }
     };
 
     if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
