@@ -88,6 +88,25 @@ export var nodeColoringController = {
         this.renderNodeColoring();
     },
 
+    updateTopDataset: function (selection) {
+        this.topDataset = selection;
+        if (this.bottomDataSameAsTop) {
+            this.bottomDataset = selection;
+        }
+        this.renderNodeColoring();
+    },
+
+    updateBottomDataset: function (selection) {
+        if (selection === "Same as Top Dataset") {
+            this.bottomDataset = this.topDataset;
+            this.bottomDataSameAsTop = true;
+        } else {
+            this.bottomDataSameAsTop = false;
+            this.bottomDataset = selection;
+        }
+        this.renderNodeColoring();
+    },
+
     configureNodeColoringHandlers: function () {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).on("change", {handler: this}, function (event) {
             event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
@@ -117,28 +136,25 @@ export var nodeColoringController = {
 
         $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
             var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            event.data.handler.topDataset = selection;
-            if (event.data.handler.bottomDataSameAsTop) {
-                event.data.handler.bottomDataset = selection;
-            }
-            event.data.handler.renderNodeColoring();
+            event.data.handler.updateTopDataset(selection);
         });
 
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
             var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            if (selection === "sameAsTop") {
-                event.data.handler.bottomDataset = event.data.handler.topDataset;
-                event.data.handler.bottomDataSameAsTop = true;
-            } else {
-                event.data.handler.bottomDataSameAsTop = false;
-                event.data.handler.bottomDataset = selection;
-            }
-            event.data.handler.renderNodeColoring();
+            event.data.handler.updateBottomDataset(selection);
+        });
+
+        $("#topDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
+            console.log($(this).attr("value"));
+            event.data.handler.updateTopDataset($(this).attr("value"));
+        });
+
+        $("#bottomDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
+            event.data.handler.updateBottomDataset($(this).attr("value"));
         });
     },
 
     initialize: function () {
-        // $(LOG_FOLD_CHANGE_MAX_VALUE).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
@@ -167,7 +183,9 @@ export var nodeColoringController = {
     resetDatasetDropdownMenus: function (network) {
 
         var createHTMLforDataset = function (name) {
-            return "<li class='dataset-option'><a><span class='glyphicon'>" + name + "</span></a></li>";
+            // var liClass = "dataset-option node-coloring-menu " + (topDataset ? "top-selection" : "bottom-selection");
+            return `<li class='dataset-option node-coloring-menu' value='${name}'>
+                <a><span class='glyphicon'>${name}</span></a></li>`;
         };
 
         var nodeColoringOptions = [];
@@ -182,13 +200,12 @@ export var nodeColoringController = {
         $(".dataset-option").remove(); // clear all menu dataset options
 
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-            .attr("value", "sameAsTop").text("Same as Top Dataset"));
+            .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
 
         $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
 
         nodeColoringOptions.forEach(function (option) {
             var shortenedSheetName = shortenExpressionSheetName(option.value);
-            console.log(shortenedSheetName);
             $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
               .attr("value", option.value).text(shortenedSheetName));
             $(TOP_DATASET_SELECTION_MENU)
@@ -198,6 +215,9 @@ export var nodeColoringController = {
             $(BOTTOM_DATASET_SELECTION_MENU)
               .append(createHTMLforDataset(option.value));
         });
+
+        $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
+        $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
 
         // Mark first option as selected
         $("#TOP_DATASET_SELECTION_SIDEBAR option[selected='selected']").each(
@@ -239,7 +259,7 @@ export var nodeColoringController = {
                 this.resetDatasetDropdownMenus(network);
             }
             this.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "sameAsTop") {
+            if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
                 this.bottomDataset = this.topDataset;
                 this.bottomDataSameAsTop = true;
             } else {
