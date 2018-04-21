@@ -161,7 +161,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
 
     var normalization = false;
 
-    var displayNetwork = function (network, name, normalization, grayThreshold) {
+    var displayNetwork = function (network, name, normalization, grayThreshold, dashedLine) {
         nodeColoring.reload(network, name);
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
@@ -185,7 +185,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, normalization, grayThreshold, nodeColoring);
+        drawGraph(network, sliders, normalization, grayThreshold, dashedLine, nodeColoring);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -302,24 +302,31 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     });
 
     var grayThreshold = false;
+    var dashedLine = false;
 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine, nodeColoring);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine, nodeColoring);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine, nodeColoring);
+    });
+
+    $("#dashedGrayLineButton").on("change", function () {
+        dashedLine = true;
+    // displayNetwork(currentNetwork, name, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine, nodeColoring);
     });
 
     var annotateLinks = function (network) {

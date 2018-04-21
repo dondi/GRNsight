@@ -297,5 +297,15 @@
         "included": true,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "DashedLine",
+        "text": "The graph should",
+        "options": {
+            "NULL": "show gray lines as solid lines",
+            "Click": "show gray lines as dashed lines"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     }
 ]
