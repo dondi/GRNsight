@@ -360,11 +360,16 @@ var parseSheet = function (sheet) {
                                             if (currentLink.value > 0) {
                                                 // If it's a positive number, mark it as an activator
                                                 currentLink.type = "arrowhead";
-                                                currentLink.stroke = "MediumVioletRed";
+                                                // GRNsight v1 magenta edge color
+                                                // currentLink.stroke = "MediumVioletRed";
+                                                // Node coloring-consistent red edge color
+                                                currentLink.stroke = "rgb(195, 61, 61)";
                                                 network.positiveWeights.push(currentLink.value);
                                             } else { // if it's a negative number, mark it as a repressor
                                                 currentLink.type = "repressor";
-                                                currentLink.stroke = "DarkTurquoise";
+                                                // currentLink.stroke = "DarkTurquoise"; // GRNsight v1 cyan edge color
+                                                // Node coloring-consistent blue edge color
+                                                currentLink.stroke = "rgb(51, 124, 183)";
                                                 network.negativeWeights.push(currentLink.value);
                                             }
                                         } else if (network.sheetType === "unweighted") {

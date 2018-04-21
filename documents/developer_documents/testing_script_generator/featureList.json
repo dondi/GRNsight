@@ -12,15 +12,14 @@
             "Demo Menu -> Demo #3": "lay out an unweighted network graph from Demo #3",
             "Demo Menu -> Demo #4": "lay out a weighted network graph from Demo #4"
         },
-        "included": true,
+        "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "File Menu -> Reload",
         "text": "The graph should",
         "options": {
-            "Select": "center, zoom to 100%, and reapply the force graph parameters",
-            "NULL": "not change"
+            "Select": "center, zoom to 100%, and reapply the force graph parameters"
         },
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -29,7 +28,6 @@
         "title": "File Menu -> Export Data",
         "text": "GRNsight should",
         "options": {
-            "NULL": "do nothing",
             "Select \"To Unweighted SIF\"": "export an unweighted SIF file from the graph currently loaded",
             "Select \"To Weighted SIF\"": "export a weighted SIF file from the graph currently loaded",
             "Select \"To Unweighted GraphML\"": "export an unweighted GraphML file from the graph currently loaded",
@@ -42,8 +40,7 @@
         "title": "File Menu -> Print",
         "text": "GRNsight should",
         "options": {
-            "Select": "open the Print Dialogue Box",
-            "NULL": "do nothing"
+            "Select": "open the Print Dialogue Box"
         },
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -65,14 +62,13 @@
             "Check \"Lock Force Graph Parameters\"": "be disabled.",
             "Uncheck \"Lock Force Graph Parameters\"": "be enabled."
         },
-        "included": true,
+        "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Format Menu",
         "text": "",
         "options": {
-            "NULL": "",
             "Select \"Reset Force Graph Parameters\"": "revert to the default values, if Lock Force Graph Parameters is unchecked"
         },
         "included": false,
@@ -82,8 +78,7 @@
         "title": "Format Menu",
         "text": "The Force Graph Parameter sliders should",
         "options": {
-            "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.",
-            "NULL": "remain the same."
+            "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled."
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -96,14 +91,13 @@
             "Select \"Always Show Edge Weights\"": "always be visible.",
             "Select \"Never Show Edge Weights\"": "not be displayed."
         },
-        "included": true,
+        "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
         "title": "Help Menu",
         "text": "GRNsight should",
         "options": {
-            "NULL": "don't select any option",
             "Select \"Getting Started\"": "open the GRNsight documentation page",
             "Select \"GRNsight Wiki\"": "open the GRNsight wiki page",
             "Select \"About GRNsight\"": "open the About GRNsight page"
@@ -138,8 +132,7 @@
         "title": "Reset Force Graph Parameters Button",
         "text": "The Force Graph Parameter sliders should",
         "options": {
-            "Click": "revert to the default values, if Lock Force Graph Parameters is unchecked.",
-            "NULL": "remain at the same spot."
+            "Click": "revert to the default values, if Lock Force Graph Parameters is unchecked."
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -148,8 +141,7 @@
         "title": "Undo Reset Button",
         "text": "The Force Graph Parameter sliders should",
         "options": {
-            "Click": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.",
-            "NULL": "remain the same."
+            "Click": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled."
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -192,7 +184,6 @@
         "title": "Set Normalization Factor",
         "text": "The graph should",
         "options": {
-            "NULL": "do nothing",
             "Enter a Number in the Box and Click \"Set Normalization Factor\" button": "reload with the new normalization factor applied to its edge weight thicknesses"
         },
         "included": false,
@@ -202,7 +193,6 @@
         "title": "Reset Normalization Parameters Button",
         "text": "The graph should",
         "options": {
-            "NULL": "do nothing",
             "Click": "reset to its default normalization factor and reload the graph"
         },
         "included": false,
@@ -212,7 +202,6 @@
         "title": "Gray Threshold Slider",
         "text": "The graph should reload, with",
         "options": {
-            "NULL": "do nothing",
             "Change the Grey Threshold Value": "edges that fall below the threshold value colored gray"
         },
         "included": false,
@@ -222,7 +211,6 @@
         "title": "D-Pad Control",
         "text": "The graph should",
         "options": {
-            "NULL": "don't manipulate the d-pad control",
             "Click Right Arrow": "shift to the left",
             "Click Left Arrow": "shift to the right",
             "Click Up Arrow": "shift down",
@@ -237,11 +225,77 @@
         "title": "Zoom Slider",
         "text": "The graph should",
         "options": {
-            "NULL": "don't manipulate the slider",
             "Increase Zoom Level": "zoom in (get larger)",
             "Decrease Zoom Level": "zoom out (get smaller)"
         },
         "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Node Coloring Menu - Top Dataset",
+        "text": "The top half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the first expression dataset detected in the input workbook",
+            "Select Top Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Node Coloring Menu - Bottom Dataset",
+        "text": "The bottom half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the same dataset as the top dataset",
+            "Select Bottom Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Node Coloring Menu - Log Fold Change Max Value",
+        "text": "The node coloring visualization's color intensity should",
+        "options": {
+            "Keep Default Value": "default to having a Log Fold Change Max Value of 3",
+            "Increase Log Fold Change Max Value": "decrease",
+            "Decrease Log Fold Change Max Value": "increase"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Node Coloring Menu - Average Replicates Values (Top Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for top dataset",
+            "Uncheck": "not average replicate values for top dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Node Coloring Menu - Average Replicates Values (Bottom Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for bottom dataset",
+            "Uncheck": "not average replicate values for bottom dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Node Coloring Menu - Disable Node Coloring Button Toggle",
+        "text": "GRNsight should",
+        "options": {
+            "Disable Node Coloring": "not color nodes with expression data",
+            "Enable Node Coloring": "color nodes with expression data"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {

@@ -1,4 +1,5 @@
 import Grid from "d3-v4-grid";
+const hasExpressionData = require("./node-coloring").hasExpressionData;
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -16,8 +17,7 @@ import Grid from "d3-v4-grid";
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-
-export var drawGraph = function (network, sliderController, normalization, grayThreshold, dashedLine) {
+export var drawGraph = function (network, sliderController, normalization, grayThreshold, nodeColoring) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -28,6 +28,8 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     var height = $container.height();
     var nodeHeight = 30;
     var colorOptimal = true;
+
+    var dashedLine = $("#dashedGrayLineButton").prop("checked");
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
@@ -403,11 +405,6 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     }
 
     grayThreshold = +$("#grayThresholdInput").val();
-
-    dashedLine = $("#dashedGrayLineButton").is(":checked", function () {
-        $("#dashedGrayLineButton").prop("checked", true);
-    });
-
 
     link.append("path")
         .attr("class", "main")
@@ -868,31 +865,181 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         .attr("stroke-width", "2px")
         .on("dblclick", dblclick);
 
-    var text = node.append("text")
-        .attr("dy", 22)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("stroke-width", "0")
-        .style("fill", "black")
-        .text(function (d) {
-            return d.name;
-        })
-        .attr("dx", function (d) {
-            var textWidth = this.getBBox().width;
-            d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
-            return d.textWidth / 2 + 3;
-        })
-        .on("dblclick", nodeTextDblclick);
+    var MINIMUM_NODE_WIDTH = 68.5625;
+    var NODE_MARGIN = 3;
+    var NODE_HEIGHT = 22;
 
-    rect
-        .attr("width", function (d) {
-            return d.textWidth + 6;
-        });
+    var renderNodeLabels = function () {
+        var text = node.append("text")
+            .attr("dy", NODE_HEIGHT)
+            .attr("text-anchor", "middle")
+            .style("font-size", "18px")
+            .style("stroke-width", "0")
+            .style("fill", "black")
+            .text(function (d) {
+                return d.name;
+            })
+            .attr("dx", function (d) {
+                var textWidth = this.getBBox().width;
+                d.textWidth = textWidth < MINIMUM_NODE_WIDTH ? MINIMUM_NODE_WIDTH : textWidth;
+                return d.textWidth / 2 + NODE_MARGIN;
+            })
+            .on("dblclick", nodeTextDblclick);
 
-    node
-        .attr("width", function (d) {
-            return d.textWidth;
+        rect
+            .attr("width", function (d) {
+                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
+            });
+        node
+            .attr("width", function (d) {
+                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
+            });
+    };
+    renderNodeLabels();
+
+    function onlyUnique (value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    var getExpressionData = function (gene, strain, average) {
+        var strainData = network["expression"][strain];
+        if (average) {
+            var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
+            var avgMap = {};
+            uniqueTimePoints.forEach(function (key) {
+                avgMap[key] = [];
+            });
+            strainData.time_points.forEach(function (time, index) {
+                avgMap[time].push(strainData.data[gene][index]);
+            });
+            var avgs = [];
+            Object.keys(avgMap).forEach(function (key) {
+                var length = avgMap[key].length;
+                var sum = avgMap[key].reduce(function (partialSum, currentValue) {
+                    return partialSum + currentValue;
+                }, 0);
+                avgs.push(sum / length);
+            });
+            return {data: avgs, timePoints: uniqueTimePoints};
+        }
+        return {data: strainData.data[gene], timePoints: strainData.time_points};
+    };
+
+    var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
+        var timePoints = [];
+        node.each(function (p) {
+            d3.select(this)
+            .append("g")
+            .selectAll(".coloring")
+            .data(function () {
+                var result = getExpressionData(p.name, dataset, average);
+                timePoints = result.timePoints;
+                return result.data;
+            })
+            .attr("class", "coloring")
+            .enter().append("rect")
+            .attr("width", function () {
+                var width = rect.attr("width") / timePoints.length;
+                return width + "px";
+            })
+            .attr("class", "coloring")
+            .attr("height", rect.attr("height") / 2 + "px")
+            .attr("transform", function (d, i) {
+                var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
+                var xOffset = i * (rect.attr("width") / timePoints.length);
+                return "translate(" + xOffset + "," +  yOffset + ")";
+            })
+            .attr("stroke-width", "0px")
+            .style("fill", function (d) {
+                d = d || 0; // missing values are changed to 0
+                var scale = d3.scaleLinear()
+                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+                    .range([0, 1]);
+                return d3.interpolateRdBu(scale(-d));
+            })
+            .text(function (d) {
+                return "data " + JSON.stringify(d) + " of " + p.name;
+            });
         });
+    };
+
+    var renderNodeColoringLegend = function (logFoldChangeMaxValue) {
+        var $nodeColoringLegend = $(".node-coloring-legend");
+        d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
+        var xMargin = 15;
+        var yMargin = 30;
+        var width = 200;
+        var height = 10;
+        var textYOffset = 10;
+        var increment = 0.1;
+
+        var svg = d3.select($nodeColoringLegend[0])
+            .append("svg")
+            .attr("width", width + xMargin)
+            .attr("height", height + yMargin)
+            .append("g")
+            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
+
+        var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
+        var coloring = svg.selectAll(".node-coloring-legend")
+            .data(gradientValues)
+            .attr("class", "node-coloring-legend");
+
+        coloring.enter().append("rect")
+            .attr("width", width / gradientValues.length + "px")
+            .attr("height", height + "px")
+            .attr("transform", function (d, i) {
+                return "translate(" + (i * (width / gradientValues.length)) + "," + 0 + ")";
+            })
+            .style("fill", function (d) {
+                var scale = d3.scaleLinear()
+                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+                    .range([0, 1]);
+                return d3.interpolateRdBu(scale(-d));
+            });
+
+        var legendLabels = {
+            "left": {
+                "textContent": (-logFoldChangeMaxValue).toFixed(2),
+                "x": -xMargin / 2
+            },
+            "center": {
+                "textContent": "0",
+                "x": width / 2
+            },
+            "right": {
+                "textContent": (+logFoldChangeMaxValue).toFixed(2),
+                "x": width - xMargin / 2
+            },
+        };
+        var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
+        for (var key in legendLabels) {
+            var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            label.textContent = legendLabels[key].textContent;
+            label.setAttribute("font-size", "8px");
+            label.setAttribute("x", legendLabels[key].x);
+            label.setAttribute("y", height + textYOffset + "px");
+            g.appendChild(label);
+        }
+    };
+
+    nodeColoring.removeNodeColoring = function () {
+        this.nodeColoringEnabled = false;
+        node.selectAll(".coloring").remove();
+    };
+
+    nodeColoring.renderNodeColoring = function () {
+        if (this.nodeColoringEnabled) {
+            colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
+            colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
+            renderNodeLabels();
+            renderNodeColoringLegend(this.logFoldChangeMaxValue);
+        }
+    };
+
+    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
+        nodeColoring.renderNodeColoring();
+    }
 
     $(".node").css({
         "cursor": "move",

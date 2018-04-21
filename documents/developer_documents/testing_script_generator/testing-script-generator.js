@@ -53,7 +53,7 @@ var addChildren = function (arrayOfNodes, optionKeys, test) {
             optionKeys.forEach(function(option) {
                 var instruction = test.title + " - " + option;
                 var result = test.text + " " + test.options[option];
-                result = test.conditional ? test.conditional + ", " + result : result;
+                result = test.conditional ? result + ", " + test.conditional : result;
                 var newNode = new Node();
                 // The null option is equivalent to disabling the test.
                 if (option !== "NULL") {
@@ -91,12 +91,10 @@ grnsightOptions.forEach(function(test) {
     var unweightedGraphLoadedAvailability = test.availability['UnWeightedGraphLoaded'] ? "YES": "NO";
     var availability = `| ${noGraphLoadedAvailability} | ${weightedGraphLoadedAvailability} | ${unweightedGraphLoadedAvailability} | `
     optionKeys.forEach(function(option) {
-        if (option !== "NULL") {
-            var result = test.text + " " + test.options[option];
-            result = test.conditional ? result + " " +  test.conditional : result;
-            testDescription += entry + option +  " | " + result + "|\n";
-            availabilityDescription += `| ${test.title} - ${option} ${availability}\n`
-        }
+        var result = test.text + " " + test.options[option];
+        result = test.conditional ? result + ", " +  test.conditional : result;
+        testDescription += entry + option +  " | " + result + "|\n";
+        availabilityDescription += `| ${test.title} - ${option} ${availability}\n`
     });
 });
 

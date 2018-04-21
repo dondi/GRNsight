@@ -1,16 +1,16 @@
 ## GRNsight Client Side Testing Overview
-Last Updated: 2018-01-17
+Last Updated: 2018-04-20
 
 | Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
 | --------------- | ------ | ------- | ------ | 
-|YES | Load Graph|None | GRNsight should have no graph in the viewport|
-|YES | Load Graph|File Menu -> Open | GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file|
-|YES | Load Graph|File Menu -> Import SIF | GRNsight should lay out a network graph from the SIF file if there are no errors in the file|
-|YES | Load Graph|File Menu -> Import GraphML | GRNsight should lay out a network graph from the GraphML file if there are no errors in the file|
-|YES | Load Graph|Demo Menu -> Demo #1 | GRNsight should lay out an unweighted network graph from Demo #1|
-|YES | Load Graph|Demo Menu -> Demo #2 | GRNsight should lay out a weighted network graph from Demo #2|
-|YES | Load Graph|Demo Menu -> Demo #3 | GRNsight should lay out an unweighted network graph from Demo #3|
-|YES | Load Graph|Demo Menu -> Demo #4 | GRNsight should lay out a weighted network graph from Demo #4|
+|NO | Load Graph|None | GRNsight should have no graph in the viewport|
+|NO | Load Graph|File Menu -> Open | GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file|
+|NO | Load Graph|File Menu -> Import SIF | GRNsight should lay out a network graph from the SIF file if there are no errors in the file|
+|NO | Load Graph|File Menu -> Import GraphML | GRNsight should lay out a network graph from the GraphML file if there are no errors in the file|
+|NO | Load Graph|Demo Menu -> Demo #1 | GRNsight should lay out an unweighted network graph from Demo #1|
+|NO | Load Graph|Demo Menu -> Demo #2 | GRNsight should lay out a weighted network graph from Demo #2|
+|NO | Load Graph|Demo Menu -> Demo #3 | GRNsight should lay out an unweighted network graph from Demo #3|
+|NO | Load Graph|Demo Menu -> Demo #4 | GRNsight should lay out a weighted network graph from Demo #4|
 |NO | File Menu -> Reload|Select | The graph should center, zoom to 100%, and reapply the force graph parameters|
 |NO | File Menu -> Export Data|Select "To Unweighted SIF" | GRNsight should export an unweighted SIF file from the graph currently loaded|
 |NO | File Menu -> Export Data|Select "To Weighted SIF" | GRNsight should export a weighted SIF file from the graph currently loaded|
@@ -19,13 +19,13 @@ Last Updated: 2018-01-17
 |NO | File Menu -> Print|Select | GRNsight should open the Print Dialogue Box|
 |NO | Edit Menu -> Preferences|Select "Format edges based on optimized weight parameters" | GRNsight should format edges based on optimized weight parameters|
 |NO | Edit Menu -> Preferences|Select "Default to black edges with regular arrowheads" | GRNsight should default to black edges with regular arrowheads|
-|YES | Format Menu|Check "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be disabled.|
-|YES | Format Menu|Uncheck "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be enabled.|
+|NO | Format Menu|Check "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be disabled.|
+|NO | Format Menu|Uncheck "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be enabled.|
 |NO | Format Menu|Select "Reset Force Graph Parameters" |  revert to the default values, if Lock Force Graph Parameters is unchecked|
 |NO | Format Menu|Click "Undo Reset" | The Force Graph Parameter sliders should return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.|
-|YES | Format Menu|Select "Show With Mouse Over" | The edge weight should display when user mouses over an edge.|
-|YES | Format Menu|Select "Always Show Edge Weights" | The edge weight should always be visible.|
-|YES | Format Menu|Select "Never Show Edge Weights" | The edge weight should not be displayed.|
+|NO | Format Menu|Select "Show With Mouse Over" | The edge weight should display when user mouses over an edge.|
+|NO | Format Menu|Select "Always Show Edge Weights" | The edge weight should always be visible.|
+|NO | Format Menu|Select "Never Show Edge Weights" | The edge weight should not be displayed.|
 |NO | Help Menu|Select "Getting Started" | GRNsight should open the GRNsight documentation page|
 |NO | Help Menu|Select "GRNsight Wiki" | GRNsight should open the GRNsight wiki page|
 |NO | Help Menu|Select "About GRNsight" | GRNsight should open the About GRNsight page|
@@ -51,13 +51,26 @@ Last Updated: 2018-01-17
 |NO | Set Normalization Factor|Enter a Number in the Box and Click "Set Normalization Factor" button | The graph should reload with the new normalization factor applied to its edge weight thicknesses|
 |NO | Reset Normalization Parameters Button|Click | The graph should reset to its default normalization factor and reload the graph|
 |NO | Gray Threshold Slider|Change the Grey Threshold Value | The graph should reload, with edges that fall below the threshold value colored gray|
-|NO | D-Pad Control|Click Right Arrow | The graph should shift to the left if "Restrict Graph to Viewport" is Unchecked.|
-|NO | D-Pad Control|Click Left Arrow | The graph should shift to the right if "Restrict Graph to Viewport" is Unchecked.|
-|NO | D-Pad Control|Click Up Arrow | The graph should shift down if "Restrict Graph to Viewport" is Unchecked.|
-|NO | D-Pad Control|Click Down Arrow | The graph should shift up if "Restrict Graph to Viewport" is Unchecked.|
-|NO | D-Pad Control|Click Center Button | The graph should move to the center of the bounding box (note that it is not the same thing as the viewport if "Restrict Graph to Viewport" is Unchecked.|
+|NO | D-Pad Control|Click Right Arrow | The graph should shift to the left, if "Restrict Graph to Viewport" is Unchecked.|
+|NO | D-Pad Control|Click Left Arrow | The graph should shift to the right, if "Restrict Graph to Viewport" is Unchecked.|
+|NO | D-Pad Control|Click Up Arrow | The graph should shift down, if "Restrict Graph to Viewport" is Unchecked.|
+|NO | D-Pad Control|Click Down Arrow | The graph should shift up, if "Restrict Graph to Viewport" is Unchecked.|
+|NO | D-Pad Control|Click Center Button | The graph should move to the center of the bounding box (note that it is not the same thing as the viewport, if "Restrict Graph to Viewport" is Unchecked.|
 |NO | Zoom Slider|Increase Zoom Level | The graph should zoom in (get larger)|
 |NO | Zoom Slider|Decrease Zoom Level | The graph should zoom out (get smaller)|
+|YES | Node Coloring Menu - Top Dataset|Keep Default Selection | The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Top Dataset|Select Top Dataset from Dropdown List | The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Bottom Dataset|Keep Default Selection | The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Bottom Dataset|Select Bottom Dataset from Dropdown List | The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Log Fold Change Max Value|Keep Default Value | The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Log Fold Change Max Value|Increase Log Fold Change Max Value | The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Log Fold Change Max Value|Decrease Log Fold Change Max Value | The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Average Replicates Values (Top Dataset)|Check | GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Average Replicates Values (Top Dataset)|Uncheck | GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Average Replicates Values (Bottom Dataset)|Check | GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Disable Node Coloring Button Toggle|Disable Node Coloring | GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook|
+|YES | Node Coloring Menu - Disable Node Coloring Button Toggle|Enable Node Coloring | GRNsight should color nodes with expression data, if expression data sheets are present in input workbook|
 
 ## GRNsight Function Availability Table
 
@@ -118,533 +131,1650 @@ Last Updated: 2018-01-17
 | D-Pad Control - Click Center Button | NO | YES | YES | 
 | Zoom Slider - Increase Zoom Level | NO | YES | YES | 
 | Zoom Slider - Decrease Zoom Level | NO | YES | YES | 
+| Node Coloring Menu - Top Dataset - Keep Default Selection | NO | YES | YES | 
+| Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List | NO | YES | YES | 
+| Node Coloring Menu - Bottom Dataset - Keep Default Selection | NO | YES | YES | 
+| Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List | NO | YES | YES | 
+| Node Coloring Menu - Log Fold Change Max Value - Keep Default Value | NO | YES | YES | 
+| Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value | NO | YES | YES | 
+| Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value | NO | YES | YES | 
+| Node Coloring Menu - Average Replicates Values (Top Dataset) - Check | NO | YES | YES | 
+| Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck | NO | YES | YES | 
+| Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check | NO | YES | YES | 
+| Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck | NO | YES | YES | 
+| Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring | NO | YES | YES | 
+| Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring | NO | YES | YES | 
 
 ## Client Side Tests
 ### Test 1
 Instructions:
-- Load Graph - None
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 2
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 3
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 4
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 5
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 6
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 7
 Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 8
 Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 9
 Instructions:
-- Load Graph - None
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 10
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 11
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 12
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 13
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 14
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 15
 Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 16
 Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Show With Mouse Over"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should display when user mouses over an edge.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 17
 Instructions:
-- Load Graph - None
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 18
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 19
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 20
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 21
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 22
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 23
 Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 24
 Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 25
 Instructions:
-- Load Graph - None
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 26
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 27
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 28
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 29
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 30
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 31
 Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 32
 Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Always Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should always be visible.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 33
 Instructions:
-- Load Graph - None
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 34
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 35
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 36
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 37
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 38
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 39
 Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 40
 Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Check "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be disabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 41
 Instructions:
-- Load Graph - None
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should have no graph in the viewport
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 42
 Instructions:
-- Load Graph - File Menu -> Open
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 43
 Instructions:
-- Load Graph - File Menu -> Import SIF
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the SIF file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 44
 Instructions:
-- Load Graph - File Menu -> Import GraphML
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a network graph from the GraphML file if there are no errors in the file
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 45
 Instructions:
-- Load Graph - Demo Menu -> Demo #1
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #1
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 46
 Instructions:
-- Load Graph - Demo Menu -> Demo #2
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #2
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 47
 Instructions:
-- Load Graph - Demo Menu -> Demo #3
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out an unweighted network graph from Demo #3
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
 
 ### Test 48
 Instructions:
-- Load Graph - Demo Menu -> Demo #4
-- Format Menu - Uncheck "Lock Force Graph Parameters"
-- Format Menu - Select "Never Show Edge Weights"
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Disable Node Coloring
 
 Results:
-- GRNsight should lay out a weighted network graph from Demo #4
-- The Force Graph Parameter sliders should be enabled.
-- The edge weight should not be displayed.
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should not color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 49
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 50
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 51
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 52
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 53
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 54
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 55
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 56
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 57
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 58
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 59
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 60
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 61
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 62
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 63
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 64
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 65
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 66
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 67
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 68
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 69
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 70
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 71
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 72
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Check
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 73
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 74
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 75
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 76
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 77
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 78
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 79
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 80
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 81
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 82
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 83
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 84
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Check
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 85
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 86
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 87
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 88
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Keep Default Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 89
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 90
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 91
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 92
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Increase Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 93
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 94
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Keep Default Selection
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the same dataset as the top dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 95
+Instructions:
+- Node Coloring Menu - Top Dataset - Keep Default Selection
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
+
+### Test 96
+Instructions:
+- Node Coloring Menu - Top Dataset - Select Top Dataset from Dropdown List
+- Node Coloring Menu - Bottom Dataset - Select Bottom Dataset from Dropdown List
+- Node Coloring Menu - Log Fold Change Max Value - Decrease Log Fold Change Max Value
+- Node Coloring Menu - Average Replicates Values (Top Dataset) - Uncheck
+- Node Coloring Menu - Average Replicates Values (Bottom Dataset) - Uncheck
+- Node Coloring Menu - Disable Node Coloring Button Toggle - Enable Node Coloring
+
+Results:
+- The top half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The bottom half of each node should be colored using data from the selected dataset, if expression data sheets are present in input workbook
+- The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
+- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
+- GRNsight should color nodes with expression data, if expression data sheets are present in input workbook
 

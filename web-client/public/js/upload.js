@@ -1,4 +1,4 @@
-export const upload = function (sliderObject, sliderGroupController, drawGraph) {
+export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -46,6 +46,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     };
 
     styleLabelTooltips();
+
+    var nodeColoring = nodeColoringController;
+    nodeColoring.configureNodeColoringHandlers();
+    nodeColoring.initialize();
 
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
@@ -157,8 +161,8 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
 
     var normalization = false;
 
-    var displayNetwork = function (network, name, normalization, grayThreshold, dashedLine) {
-
+    var displayNetwork = function (network, name, normalization, grayThreshold) {
+        nodeColoring.reload(network, name);
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
         }
@@ -181,7 +185,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, normalization, grayThreshold, dashedLine);
+        drawGraph(network, sliders, normalization, grayThreshold, nodeColoring);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -298,31 +302,29 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     });
 
     var grayThreshold = false;
-    var dashedLine = false;
 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     $("#dashedGrayLineButton").on("change", function () {
-        dashedLine = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, nodeColoring);
     });
 
     var annotateLinks = function (network) {
@@ -339,11 +341,13 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
 
             if (link.value > 0) {
                 link.type = "arrowhead";
-                link.stroke = "MediumVioletRed";
+                // link.stroke = "MediumVioletRed";   // GRNsight v1 magenta edge color
+                link.stroke = "rgb(195, 61, 61)";     // Node coloring-consistent red edge color
                 network.positiveWeights.push(link.value);
             } else {
                 link.type = "repressor";
-                link.stroke = "DarkTurquoise";
+                // link.stroke = "DarkTurquoise";     // GRNsight v1 cyan edge color
+                link.stroke = "rgb(51, 124, 183)";    // Node coloring-consistent blue edge color
                 network.negativeWeights.push(link.value);
             }
         });
