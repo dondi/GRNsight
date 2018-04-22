@@ -89,6 +89,10 @@ export var nodeColoringController = {
     },
 
     updateTopDataset: function (selection) {
+        $(TOP_DATASET_SELECTION_SIDEBAR).val(selection);
+        this.removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
+        $(`${TOP_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
+
         this.topDataset = selection;
         if (this.bottomDataSameAsTop) {
             this.bottomDataset = selection;
@@ -97,6 +101,10 @@ export var nodeColoringController = {
     },
 
     updateBottomDataset: function (selection) {
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(selection);
+        this.removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
+        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
+
         if (selection === "Same as Top Dataset") {
             this.bottomDataset = this.topDataset;
             this.bottomDataSameAsTop = true;
@@ -105,6 +113,14 @@ export var nodeColoringController = {
             this.bottomDataset = selection;
         }
         this.renderNodeColoring();
+    },
+
+    removeAllChecksFromMenuDatasetOptions: function (id) {
+        $(`${id} li a span`).each(
+            function () {
+                $(this).removeClass("glyphicon-ok");
+            }
+        );
     },
 
     configureNodeColoringHandlers: function () {
@@ -145,7 +161,6 @@ export var nodeColoringController = {
         });
 
         $("#topDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
-            console.log($(this).attr("value"));
             event.data.handler.updateTopDataset($(this).attr("value"));
         });
 
@@ -183,9 +198,13 @@ export var nodeColoringController = {
     resetDatasetDropdownMenus: function (network) {
 
         var createHTMLforDataset = function (name) {
-            // var liClass = "dataset-option node-coloring-menu " + (topDataset ? "top-selection" : "bottom-selection");
-            return `<li class='dataset-option node-coloring-menu' value='${name}'>
-                <a><span class='glyphicon'>${name}</span></a></li>`;
+            return `
+            <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
+              <a>
+                <span class=\"glyphicon\"></span>
+                &nbsp;${name}
+              </a>
+            </li>`;
         };
 
         var nodeColoringOptions = [];
@@ -220,12 +239,12 @@ export var nodeColoringController = {
         $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
 
         // Mark first option as selected
-        $("#TOP_DATASET_SELECTION_SIDEBAR option[selected='selected']").each(
-            function () {
-                $(this).removeAttr("selected");
-            }
-        );
-        $("#TOP_DATASET_SELECTION_SIDEBAR option:first").attr("selected", "selected");
+        // $("#TOP_DATASET_SELECTION_SIDEBAR option[selected='selected']").each(
+        //     function () {
+        //         $(this).removeAttr("selected");
+        //     }
+        // );
+        // $("#TOP_DATASET_SELECTION_SIDEBAR option:first").attr("selected", "selected");
     },
 
     isNewWorkbook: function (name) {

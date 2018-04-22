@@ -1065,6 +1065,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
+        $(".weightedGraphOptionsMenu").removeClass("disabled");
         var setWeightsVisability = function () {
 
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
@@ -1129,6 +1130,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         if (!$(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").addClass("hidden");
         }
+        $(".weightedGraphOptionsMenu").addClass("disabled");
     }
 
     const getMarginWidth = function (gridNodes, row) {

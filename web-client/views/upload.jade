@@ -123,7 +123,7 @@ html
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
                     | &nbsp; Zoom (1 - 200%) &nbsp;
-                    input(type='text' id='zoom' placeholder='100%' aria-describedby='basic-addon1')
+                    input(type='text' id='zoom' class='keepopen' placeholder='100%' aria-describedby='basic-addon1')
   
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Layout
@@ -158,11 +158,11 @@ html
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
                     | &nbsp; Link Distance (1 - 1000) &nbsp;
-                    input(type='text' id='zoom' placeholder='500' aria-describedby='basic-addon1')
+                    input(type='number' id='zoom' class='keepopen' placeholder='500' aria-describedby='basic-addon1')
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
                     | &nbsp; Charge (-2000 - 0) &nbsp;
-                    input(type='text' id='zoom' placeholder='-50' aria-describedby='basic-addon1')
+                    input(type='number' id='zoom' class='keepopen' placeholder='-50' aria-describedby='basic-addon1')
                 
   
             li(class='dropdown')
@@ -197,7 +197,7 @@ html
                   a(href='#' class='nodeOptions')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value &nbsp;
-                    input(type='text' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+                    input(type='number' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
                     
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -224,22 +224,22 @@ html
                     span(class='glyphicon')
                     | &nbsp; Never Show Edge Weights
                 li(class='divider')
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
                     | &nbsp; Edge Weight Normalization Factor (0.0001 - 1000) &nbsp;
-                    input(type='text' id='edge-weight-normalization-factor-menu' placeholder='' aria-describedby='basic-addon1')
+                    input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' aria-describedby='basic-addon1')
                   a(href='#' id='reset-normalization-factor-menu' class='')
                     span(class='glyphicon invisible')
                     | &nbsp; Reset Normalization Factor
                 li(class='divider')
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
                     | &nbsp; Gray Edge Threshold (0 - 100%) &nbsp;
-                    input(type='text' id='gray-edge-threshold-menu' placeholder='5' aria-describedby='basic-addon1')
+                    input(type='number' id='gray-edge-threshold-menu' class='keepopen' placeholder='5' aria-describedby='basic-addon1')
                     | &nbsp; %
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='grey-edges-dashed-menu')
                     span(class='glyphicon')
                     | &nbsp; Show Gray Edges as Dashed

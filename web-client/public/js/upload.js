@@ -590,13 +590,16 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         }
     });
 
-    // Prevent Bootstrap dropdown from closing on clicks https://stackoverflow.com/a/27759926
+    // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
+    // https://stackoverflow.com/a/27759926
     $(".dropdown").on({
         "click": function (event) {
-            if ($(event.target).closest(".dropdown-toggle").length) {
-                $(this).data("closable", true);
-            } else {
-                $(this).data("closable", false);
+            if ($(event.target).hasClass("keepopen")) {
+                if ($(event.target).closest(".dropdown-toggle").length) {
+                    $(this).data("closable", true);
+                } else {
+                    $(this).data("closable", false);
+                }
             }
         },
         "hide.bs.dropdown": function () {
