@@ -125,6 +125,14 @@ export var sliderGroupController = function (sliderArray) {
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
+        if (this.locked) {
+            $("#link-distance").parent().addClass("disabled");
+            $("#charge").parent().addClass("disabled");
+        } else {
+            $("#link-distance").parent().removeClass("disabled");
+            $("#charge").parent().removeClass("disabled");
+        }
+
         $.each(this.sliders, function (key, value) {
             $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
         });
