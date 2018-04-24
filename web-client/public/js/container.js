@@ -98,11 +98,13 @@ export const container = function () {
         if ($(".viewport").prop("checked")) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $(".viewport").prop("checked", false);
+            $(".viewport").trigger("change");
         } else {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
-            $(".viewport").prop("checked", true);
+            $(".viewport").prop("checked", true).trigger("change");
         }
     });
+
 
     $(".boundBoxSize").on("click", function () {
         var currentValue = $(this).val();

@@ -258,6 +258,13 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         $("#zoomInput").val(value);
     }
 
+    $("#zoomInput").on("change", function () {
+        var value = $("#zoomInput").val() / 200 * 8;
+        $(".zoomSlider").val(value);
+        $(".zoomSlider").trigger("input");
+        $("#zoomPercent").html($("#zoomInput").val() + "%");
+    });
+
     function getMappedValue (scale) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
         var equivalentPoint;
@@ -332,10 +339,13 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         if (!fixed) {
+            $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $container.addClass("cursorGrab");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
         } else if (fixed) {
+            console.log("happen)");
+            $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (zoomSliderScale > 1) {
