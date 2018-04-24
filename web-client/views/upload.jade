@@ -137,15 +137,10 @@ html
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Force Graph
                 li(class='divider')
-                span(class='menu-subheader') Force Graph
                 li
                   a(href='#' id='lockSlidersMenu' class="lockSliders")
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Force Graph Parameters
-                li(class='disabled not-yet-implemented')
-                  a(href='#' class='noGlyph')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Lock Nodes
                 li
                   a(href='#' id='resetSlidersMenu' class="resetSliders")
                     span(class='glyphicon invisible')
@@ -155,11 +150,11 @@ html
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
                 li
-                  a(href='#' id='zoom')
+                  a(href='#' id='link-distance')
                     span(class='glyphicon invisible')
                     | &nbsp; Link Distance (1 - 1000) &nbsp;
                     input(type='number' id='link-distance-menu' class='keepopen' placeholder='500' aria-describedby='basic-addon1')
-                  a(href='#' id='zoom')
+                  a(href='#' id='charge')
                     span(class='glyphicon invisible')
                     | &nbsp; Charge (-2000 - 0) &nbsp;
                     input(type='number' id='charge-menu' class='keepopen' placeholder='-50' aria-describedby='basic-addon1')

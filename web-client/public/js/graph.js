@@ -1135,6 +1135,9 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         $(".weightedGraphOptionsMenu").addClass("disabled");
     }
 
+    // resets graph options so when new graph is loaded, initial layout is always force graph
+    $("#forceGraph").trigger("click");
+
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
         let rightNode = gridNodes[row - 1];
@@ -1167,6 +1170,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
+            $("#gridLayout").trigger("click");
             layout = true;
             const margin = 10;
             const grid = Grid() // create new grid layout
@@ -1185,6 +1189,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
             }
         } else {
+            $("#forceGraph").trigger("click");
             layout = false;
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;

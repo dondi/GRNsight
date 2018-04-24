@@ -265,7 +265,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var settings = new settingsController();
     settings.setupSettingsHandlers();
 
-
     $("#gridLayout").on("click", function () {
         if (!$("#gridLayout").prop("checked")) {
             $("#gridLayout").prop("checked", true);
@@ -273,6 +272,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
             $("#gridLayoutButton").trigger("click");
             $("#forceGraph span").removeClass("glyphicon-ok");
             $("#gridLayout span").addClass("glyphicon-ok");
+            $("#lockSlidersMenu").parent().addClass("disabled");
+            $("#resetSlidersMenu").parent().addClass("disabled");
+            $("#link-distance").parent().addClass("disabled");
+            $("#charge").parent().addClass("disabled");
         }
     });
 
@@ -283,6 +286,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
             $("#gridLayoutButton").trigger("click");
             $("#forceGraph span").addClass("glyphicon-ok");
             $("#gridLayout span").removeClass("glyphicon-ok");
+            $("#lockSlidersMenu").parent().removeClass("disabled");
+            $("#resetSlidersMenu").parent().removeClass("disabled");
+            $("#link-distance").parent().removeClass("disabled");
+            $("#charge").parent().removeClass("disabled");
         }
     });
 
@@ -340,7 +347,8 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     });
 
     var LINK_DISTANCE_MENU = "#link-distance-menu";
-    var LINK_DISTANCE_SLIDER_VALUE = "#linkDistInput";
+    var LINK_DISTANCE_INPUT = "#linkDistInput";
+    var LINK_DISTANCE_VALUE = "#linkDistVal";
 
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
