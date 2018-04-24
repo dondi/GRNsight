@@ -26,6 +26,16 @@ export const container = function () {
         container.addClass("containerL");
     }
 
+    $("#restrict-graph-to-viewport").on("click", function () {
+        if ($(".viewport").prop("checked")) {
+            $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
+            $(".viewport").prop("checked", false);
+        } else {
+            $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
+            $(".viewport").prop("checked", true);
+        }
+    });
+
     $(".boundBoxSize").on("click", function () {
         var currentValue = $(this).val();
         var grnsightContainerClass = "grnsight-container " + currentValue;

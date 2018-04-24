@@ -251,10 +251,11 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     setupZoomSlider(minimumScale);
 
-    function updateZoomPercent () {
+    function updateZoomValue () {
         var value = Math.round(($(".zoomSlider").val() / 8 * 200));
         value = value === 0 ? MIDDLE_SCALE : value;
         $("#zoomPercent").html(value + "%");
+        $("#zoomInput").val(value);
     }
 
     function getMappedValue (scale) {
@@ -288,7 +289,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
             $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
             manualZoomFunction(MIDDLE_SCALE);
-            updateZoomPercent();
+            updateZoomValue();
         }
     }).on("mousedown", function () {
         manualZoom = true;
@@ -296,13 +297,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         manualZoom = false;
     });
 
+
     var manualZoomFunction = function (zoomScale) {
         if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES);
         }
-        updateZoomPercent();
+        updateZoomValue();
         var container = zoomContainer;
         zoom.scaleTo(container, zoomScale);
     };

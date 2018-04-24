@@ -267,7 +267,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
 
 
     $("#gridLayout").on("click", function () {
-        console.log("actiavted");
         $("#gridLayoutButton").trigger("click");
     });
 
