@@ -26,6 +26,74 @@ export const container = function () {
         container.addClass("containerL");
     }
 
+    var small = function () {
+        $("#viewport-size-s span").addClass("glyphicon-ok");
+        $("#viewport-size-m span").removeClass("glyphicon-ok");
+        $("#viewport-size-l span").removeClass("glyphicon-ok");
+        $("#viewport-size-fit span").removeClass("glyphicon-ok");
+    };
+
+    var medium = function () {
+        $("#viewport-size-s span").removeClass("glyphicon-ok");
+        $("#viewport-size-m span").addClass("glyphicon-ok");
+        $("#viewport-size-l span").removeClass("glyphicon-ok");
+        $("#viewport-size-fit span").removeClass("glyphicon-ok");
+    };
+
+    var large = function () {
+        $("#viewport-size-s span").removeClass("glyphicon-ok");
+        $("#viewport-size-m span").removeClass("glyphicon-ok");
+        $("#viewport-size-l span").addClass("glyphicon-ok");
+        $("#viewport-size-fit span").removeClass("glyphicon-ok");
+    };
+
+    var fit = function () {
+        $("#viewport-size-s span").removeClass("glyphicon-ok");
+        $("#viewport-size-m span").removeClass("glyphicon-ok");
+        $("#viewport-size-l span").removeClass("glyphicon-ok");
+        $("#viewport-size-fit span").addClass("glyphicon-ok");
+    };
+
+    $("#viewport-size-s").on("click", function () {
+        $("#boundBoxS").prop("checked", true).trigger("click");
+        small();
+    });
+
+    $("#boundBoxS").on("click", function () {
+        $("#boundBoxS").prop("checked", true);
+        small();
+    });
+
+    $("#viewport-size-m").on("click", function () {
+        $("#boundBoxM").prop("checked", true).trigger("click");
+        medium();
+    });
+
+    $("#boundBoxM").on("click", function () {
+        $("#viewport-size-m").prop("checked", true);
+        medium();
+    });
+
+    $("#viewport-size-l").on("click", function () {
+        $("#boundBoxL").prop("checked", true).trigger("click");
+        large();
+    });
+
+    $("#boundBoxL").on("click", function () {
+        $("#viewport-size-l").prop("checked", true);
+        large();
+    });
+
+    $("#viewport-size-fit").on("click", function () {
+        $("#boundBoxFit").prop("checked", true).trigger("click");
+        fit();
+    });
+
+    $("#boundBoxFit").on("click", function () {
+        $("#viewport-size-fit").prop("checked", true);
+        fit();
+    });
+
     $("#restrict-graph-to-viewport").on("click", function () {
         if ($(".viewport").prop("checked")) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
