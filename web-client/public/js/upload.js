@@ -267,7 +267,23 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
 
 
     $("#gridLayout").on("click", function () {
-        $("#gridLayoutButton").trigger("click");
+        if (!$("#gridLayout").prop("checked")) {
+            $("#gridLayout").prop("checked", true);
+            $("#forceGraph").prop("checked", false);
+            $("#gridLayoutButton").trigger("click");
+            $("#forceGraph span").removeClass("glyphicon-ok");
+            $("#gridLayout span").addClass("glyphicon-ok");
+        }
+    });
+
+    $("#forceGraph").on("click", function () {
+        if (!$("#forceGraph").prop("checked")) {
+            $("#gridLayout").prop("checked", false);
+            $("#forceGraph").prop("checked", true);
+            $("#gridLayoutButton").trigger("click");
+            $("#forceGraph span").addClass("glyphicon-ok");
+            $("#gridLayout span").removeClass("glyphicon-ok");
+        }
     });
 
   // TODO: Make this less bad
@@ -322,6 +338,9 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         synchronizeNormalizationValues($("#edge-weight-normalization-factor-menu").val());
         drawGraph(currentNetwork, sliders, nodeColoring);
     });
+
+    var LINK_DISTANCE_MENU = "#link-distance-menu";
+    var LINK_DISTANCE_SLIDER_VALUE = "#linkDistInput";
 
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
