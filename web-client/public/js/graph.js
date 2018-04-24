@@ -1409,5 +1409,41 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     sliderController.configureForceHandlers();
     sliderController.initializeDefaultForces();
 
+    var LINK_DISTANCE_MENU = "#link-distance-menu";
+    var LINK_DISTANCE_INPUT = "#linkDistInput";
+    var LINK_DISTANCE_VALUE = "#linkDistVal";
+
+    $(LINK_DISTANCE_MENU).on("change", function () {
+        var value = $(LINK_DISTANCE_MENU).val();
+        sliderController.modifyForceParameter("link", value);
+        $(LINK_DISTANCE_INPUT).val(value);
+        $(LINK_DISTANCE_VALUE).text(value);
+    });
+
+    $(LINK_DISTANCE_INPUT).on("change", function () {
+        var value = $(LINK_DISTANCE_INPUT).val();
+        sliderController.modifyForceParameter("link", value);
+        $(LINK_DISTANCE_VALUE).text(value);
+        $(LINK_DISTANCE_MENU).val(value);
+    });
+
+    var CHARGE_MENU = "#charge-menu";
+    var CHARGE_INPUT = "#chargeInput";
+    var CHARGE_VALUE = "#chargeVal";
+
+    $(CHARGE_MENU).on("change", function () {
+        var value = $(CHARGE_MENU).val();
+        sliderController.modifyForceParameter("charge", value);
+        $(CHARGE_INPUT).val(value);
+        $(CHARGE_VALUE).text(value);
+    });
+
+    $(CHARGE_INPUT).on("change", function () {
+        var value = $(CHARGE_INPUT).val();
+        sliderController.modifyForceParameter("charge", value);
+        $(CHARGE_VALUE).text(value);
+        $(CHARGE_MENU).val(value);
+    });
+
     $(".startDisabled").removeClass("disabled");
 };

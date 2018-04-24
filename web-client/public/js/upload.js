@@ -346,10 +346,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
-    var LINK_DISTANCE_MENU = "#link-distance-menu";
-    var LINK_DISTANCE_INPUT = "#linkDistInput";
-    var LINK_DISTANCE_VALUE = "#linkDistVal";
-
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";

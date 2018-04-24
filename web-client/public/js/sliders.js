@@ -14,6 +14,7 @@ var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
+
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
         sliderController.simulation.force("charge").strength(value);
