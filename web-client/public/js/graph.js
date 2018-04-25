@@ -1213,10 +1213,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     let layout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
+            $("#gridLayout").addClass("called");
             $("#gridLayout").trigger("click");
+            $("#gridLayout").removeClass("called");
+            this.value = "Force Graph";
             layout = true;
             const margin = 10;
             const grid = Grid() // create new grid layout
@@ -1235,7 +1239,10 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
             }
         } else {
+            $("#forceGraph").addClass("called");
             $("#forceGraph").trigger("click");
+            $("#forceGraph").removeClass("called");
+            this.value = "Grid Layout";
             layout = false;
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;

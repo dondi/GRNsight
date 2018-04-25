@@ -269,13 +269,15 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         if (!$("#gridLayout").prop("checked")) {
             $("#gridLayout").prop("checked", true);
             $("#forceGraph").prop("checked", false);
-            $("#gridLayoutButton").trigger("click");
             $("#forceGraph span").removeClass("glyphicon-ok");
             $("#gridLayout span").addClass("glyphicon-ok");
             $("#lockSlidersMenu").parent().addClass("disabled");
             $("#resetSlidersMenu").parent().addClass("disabled");
             $("#link-distance").parent().addClass("disabled");
             $("#charge").parent().addClass("disabled");
+            if (!$("#gridLayout").hasClass("called")) {
+                $("#gridLayoutButton").trigger("click");
+            }
         }
     });
 
@@ -283,13 +285,15 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         if (!$("#forceGraph").prop("checked")) {
             $("#gridLayout").prop("checked", false);
             $("#forceGraph").prop("checked", true);
-            $("#gridLayoutButton").trigger("click");
             $("#forceGraph span").addClass("glyphicon-ok");
             $("#gridLayout span").removeClass("glyphicon-ok");
             $("#lockSlidersMenu").parent().removeClass("disabled");
             $("#resetSlidersMenu").parent().removeClass("disabled");
             $("#link-distance").parent().removeClass("disabled");
             $("#charge").parent().removeClass("disabled");
+            if (!$("#forceGraph").hasClass("called")) {
+                $("#gridLayoutButton").trigger("click");
+            }
         }
     });
 
