@@ -1,5 +1,5 @@
  /* eslint no-unused-vars: [2, {"varsIgnorePattern": "grnTest|enableScroll|manualZoom"}] */
-export const container = function () {
+$(function () {
     var grnTest = $(".grnTest");
     var container = $(".grnsight-container");
     var enableScroll = $("#enableScroll");
@@ -46,4 +46,4 @@ export const container = function () {
         }
     });
 
-};
+});
