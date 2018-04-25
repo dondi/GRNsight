@@ -4,19 +4,19 @@
         "text": "GRNsight should",
         "options": {
             "None": "have no graph in the viewport",
-            "File Menu -> Open": "lay out a network graph from the Excel workbook if there are no errors in the file",
-            "File Menu -> Import SIF": "lay out a network graph from the SIF file if there are no errors in the file",
-            "File Menu -> Import GraphML": "lay out a network graph from the GraphML file if there are no errors in the file",
-            "Demo Menu -> Demo #1": "lay out an unweighted network graph from Demo #1",
-            "Demo Menu -> Demo #2": "lay out a weighted network graph from Demo #2",
-            "Demo Menu -> Demo #3": "lay out an unweighted network graph from Demo #3",
-            "Demo Menu -> Demo #4": "lay out a weighted network graph from Demo #4"
+            "Dropdown Menu: File -> Open": "lay out a network graph from the Excel workbook if there are no errors in the file",
+            "Dropdown Menu: File -> Import SIF": "lay out a network graph from the SIF file if there are no errors in the file",
+            "Dropdown Menu: File -> Import GraphML": "lay out a network graph from the GraphML file if there are no errors in the file",
+            "Dropdown Menu: Demo -> Demo #1": "lay out an unweighted network graph from Demo #1",
+            "Dropdown Menu: Demo -> Demo #2": "lay out a weighted network graph from Demo #2",
+            "Dropdown Menu: Demo -> Demo #3": "lay out an unweighted network graph from Demo #3",
+            "Dropdown Menu: Demo -> Demo #4": "lay out a weighted network graph from Demo #4"
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "File Menu -> Reload",
+        "title": "Dropdown Menu: File -> Reload",
         "text": "The graph should",
         "options": {
             "Select": "center, zoom to 100%, and reapply the force graph parameters"
@@ -25,7 +25,7 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "File Menu -> Export Data",
+        "title": "Dropdown Menu: File -> Export Data",
         "text": "GRNsight should",
         "options": {
             "Select \"To Unweighted SIF\"": "export an unweighted SIF file from the graph currently loaded",
@@ -37,7 +37,7 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "File Menu -> Print",
+        "title": "Dropdown Menu: File -> Print",
         "text": "GRNsight should",
         "options": {
             "Select": "open the Print Dialogue Box"
@@ -46,56 +46,7 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Edit Menu -> Preferences",
-        "text": "GRNsight should",
-        "options": {
-            "Select \"Format edges based on optimized weight parameters\"": "format edges based on optimized weight parameters",
-            "Select \"Default to black edges with regular arrowheads\"": "default to black edges with regular arrowheads"
-        },
-        "included": false,
-        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
-    },
-    {
-        "title": "Format Menu",
-        "text": "The Force Graph Parameter sliders should",
-        "options": {
-            "Check \"Lock Force Graph Parameters\"": "be disabled.",
-            "Uncheck \"Lock Force Graph Parameters\"": "be enabled."
-        },
-        "included": false,
-        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
-    },
-    {
-        "title": "Format Menu",
-        "text": "",
-        "options": {
-            "Select \"Reset Force Graph Parameters\"": "revert to the default values, if Lock Force Graph Parameters is unchecked"
-        },
-        "included": false,
-        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
-    },
-    {
-        "title": "Format Menu",
-        "text": "The Force Graph Parameter sliders should",
-        "options": {
-            "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled."
-        },
-        "included": false,
-        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
-    },
-    {
-        "title": "Format Menu",
-        "text": "The edge weight should",
-        "options": {
-            "Select \"Show With Mouse Over\"": "display when user mouses over an edge.",
-            "Select \"Always Show Edge Weights\"": "always be visible.",
-            "Select \"Never Show Edge Weights\"": "not be displayed."
-        },
-        "included": false,
-        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
-    },
-    {
-        "title": "Help Menu",
+        "title": "Dropdown Menu: Help",
         "text": "GRNsight should",
         "options": {
             "Select \"Getting Started\"": "open the GRNsight documentation page",
@@ -106,7 +57,7 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Force Graph Parameter Sliders",
+        "title": "Sidebar Menu: Force Graph Parameter Sliders",
         "text": "",
         "options": {
             "Keep at Default Values": "The graph should be laid out according to the default values of the force graph parameter sliders",
@@ -119,7 +70,7 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Lock Force Graph Parameters CheckBox",
+        "title": "Sidebar Menu: Lock Force Graph Parameters Checkbox",
         "text": "The Force Graph Parameter sliders should",
         "options": {
             "Check": "be disabled.",
@@ -129,7 +80,7 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Reset Force Graph Parameters Button",
+        "title": "Sidebar Menu: Reset Force Graph Parameters Button",
         "text": "The Force Graph Parameter sliders should",
         "options": {
             "Click": "revert to the default values, if Lock Force Graph Parameters is unchecked."
@@ -138,7 +89,7 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Undo Reset Button",
+        "title": "Sidebar Menu: Undo Reset Button",
         "text": "The Force Graph Parameter sliders should",
         "options": {
             "Click": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled."
@@ -147,7 +98,7 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title" : "Restrict Graph to Viewport",
+        "title" : "Sidebar Menu: Restrict Graph to Viewport Checkbox",
         "text": "The graph bounding box should",
         "options" : {
             "Check": "always be contained within the viewport.",
@@ -157,7 +108,7 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Viewport Size",
+        "title": "Sidebar Menu: Viewport Size",
         "text": "",
         "options": {
             "Keep as Detected": "Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.",
@@ -170,7 +121,17 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Hide/Show Edge Weights",
+        "title": "Dropdown Menu: Edge",
+        "text": "GRNsight should",
+        "options": {
+            "Select \"Format edges based on optimized weight parameters\"": "format edges based on optimized weight parameters",
+            "Select \"Default to black edges with regular arrowheads\"": "default to black edges with regular arrowheads"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Hide/Show Edge Weights",
         "text": "",
         "options": {
             "Select \"Show With Mouse Over\"": "A single edge weight should display when user mouses over a single edge.",
@@ -181,16 +142,36 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
-        "title": "Set Normalization Factor",
-        "text": "The graph should",
+        "title": "Dropdown Menu: Edge -> Hide/Show Edge Weights",
+        "text": "",
         "options": {
-            "Enter a Number in the Box and Click \"Set Normalization Factor\" button": "reload with the new normalization factor applied to its edge weight thicknesses"
+            "Check \"Show With Mouse Over\"": "A single edge weight should display when user mouses over a single edge.",
+            "Check \"Always Show Edge Weights\"": "All edge weights should always be visible.",
+            "Check \"Never Show Edge Weights\"": "No edge weights should be visible."
         },
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
-        "title": "Reset Normalization Parameters Button",
+        "title": "Sidebar Menu: Edge Weight Normalization Factor",
+        "text": "The graph should",
+        "options": {
+            "Enter a Number in the Box and Click \"Set Factor\" button": "reload with the new normalization factor applied to its edge weight thicknesses"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+    },
+    {
+        "title": "Dropdown Menu: Edge -> Edge Weight Normalization Factor",
+        "text": "The graph should",
+        "options": {
+            "Enter a Number in the Box and Press Enter": "reload with the new normalization factor applied to its edge weight thicknesses"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+    },
+    {
+        "title": "Sidebar Menu: Reset Factor Button",
         "text": "The graph should",
         "options": {
             "Click": "reset to its default normalization factor and reload the graph"
@@ -199,7 +180,16 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
-        "title": "Gray Threshold Slider",
+        "title": "Dropdown Menu: Edge -> Reset Edge Weight Normalization",
+        "text": "The graph should",
+        "options": {
+            "Click": "reset to its default normalization factor and reload the graph"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+    },
+    {
+        "title": "Sidebar Menu: Gray Threshold Slider",
         "text": "The graph should reload, with",
         "options": {
             "Change the Grey Threshold Value": "edges that fall below the threshold value colored gray"
@@ -208,7 +198,36 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
     },
     {
-        "title": "D-Pad Control",
+        "title": "Dropdown Menu: Edge -> Gray Threshold Input Box",
+        "text": "The graph should reload, with",
+        "options": {
+            "Change the Grey Threshold Value and Press Enter": "edges that fall below the threshold value colored gray"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+    },
+    {
+        "title": "Sidebar Menu: Show Grey Edges as Dashed Checkbox",
+        "text": "The graph should",
+        "options": {
+            "Uncheck": "show gray lines as solid lines",
+            "Check": "show gray lines as dashed lines"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+    }
+    {
+        "title": "Dropdown Menu: Edge -> Show Grey Edges as Dashed",
+        "text": "The graph should",
+        "options": {
+            "Uncheck": "show gray lines as solid lines",
+            "Check": "show gray lines as dashed lines"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+    },
+    {
+        "title": "Viewport Menu: D-Pad Control",
         "text": "The graph should",
         "options": {
             "Click Right Arrow": "shift to the left",
@@ -222,7 +241,7 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Zoom Slider",
+        "title": "Viewport Menu: Zoom Slider",
         "text": "The graph should",
         "options": {
             "Increase Zoom Level": "zoom in (get larger)",
@@ -232,7 +251,7 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Node Coloring Menu - Top Dataset",
+        "title": "Sidebar Menu: Top Dataset",
         "text": "The top half of each node should be colored using data from",
         "options": {
             "Keep Default Selection": "the first expression dataset detected in the input workbook",
@@ -243,7 +262,18 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Node Coloring Menu - Bottom Dataset",
+        "title": "Dropdown Menu: Node -> Select Top Dataset",
+        "text": "The top half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the first expression dataset detected in the input workbook",
+            "Check New Top Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Bottom Dataset",
         "text": "The bottom half of each node should be colored using data from",
         "options": {
             "Keep Default Selection": "the same dataset as the top dataset",
@@ -254,7 +284,18 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Node Coloring Menu - Log Fold Change Max Value",
+        "title": "Dropdown Menu: Node -> Select Bottom Dataset",
+        "text": "The bottom half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the same dataset as the top dataset",
+            "Check New Bottom Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Log Fold Change Max Value",
         "text": "The node coloring visualization's color intensity should",
         "options": {
             "Keep Default Value": "default to having a Log Fold Change Max Value of 3",
@@ -266,7 +307,19 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Node Coloring Menu - Average Replicates Values (Top Dataset)",
+        "title": "Dropdown Menu: Node -> Log Fold Change Max Value",
+        "text": "The node coloring visualization's color intensity should",
+        "options": {
+            "Keep Default Value": "default to having a Log Fold Change Max Value of 3",
+            "Increase Log Fold Change Max Value": "decrease",
+            "Decrease Log Fold Change Max Value": "increase"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Average Replicates Values (Top Dataset)",
         "text": "GRNsight should",
         "options": {
             "Check": "average replicate values for top dataset",
@@ -277,7 +330,18 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Node Coloring Menu - Average Replicates Values (Bottom Dataset)",
+        "title": "Dropdown Menu: Node -> Average Replicates Values (Top Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for top dataset",
+            "Uncheck": "not average replicate values for top dataset"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Average Replicates Values (Bottom Dataset)",
         "text": "GRNsight should",
         "options": {
             "Check": "average replicate values for bottom dataset",
@@ -288,24 +352,35 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Node Coloring Menu - Disable Node Coloring Button Toggle",
+        "title": "Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)",
         "text": "GRNsight should",
         "options": {
-            "Disable Node Coloring": "not color nodes with expression data",
-            "Enable Node Coloring": "color nodes with expression data"
+            "Check": "average replicate values for bottom dataset",
+            "Uncheck": "not average replicate values for bottom dataset"
         },
         "included": true,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "DashedLine",
-        "text": "The graph should",
+        "title": "Sidebar Menu: Node Coloring Toggle Button",
+        "text": "",
         "options": {
-            "NULL": "show gray lines as solid lines",
-            "Click": "show gray lines as dashed lines"
+            "Click": "Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring'",
         },
-        "included": false,
-        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": false }
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Dropdown Menu: Node -> Disable Node Coloring",
+        "text": "",
+        "options": {
+            "Check": "Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring'",
+            "Uncheck": "Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring'",
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     }
 ]
