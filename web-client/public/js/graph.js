@@ -1460,15 +1460,17 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var LINK_DISTANCE_VALUE = "#linkDistVal";
 
     $(LINK_DISTANCE_MENU).on("change", function () {
-        var value = $(LINK_DISTANCE_MENU).val();
+        var value = linkDistValidator($(LINK_DISTANCE_MENU).val());
         sliderController.modifyForceParameter("link", value);
         $(LINK_DISTANCE_INPUT).val(value);
         $(LINK_DISTANCE_VALUE).text(value);
+        $(LINK_DISTANCE_MENU).val(value);
     });
 
     $(LINK_DISTANCE_INPUT).on("change", function () {
-        var value = $(LINK_DISTANCE_INPUT).val();
+        var value = linkDistValidator($(LINK_DISTANCE_INPUT).val());
         sliderController.modifyForceParameter("link", value);
+        $(LINK_DISTANCE_INPUT).val(value);
         $(LINK_DISTANCE_VALUE).text(value);
         $(LINK_DISTANCE_MENU).val(value);
     });
@@ -1478,18 +1480,40 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var CHARGE_VALUE = "#chargeVal";
 
     $(CHARGE_MENU).on("change", function () {
-        var value = $(CHARGE_MENU).val();
+        var value = chargeValidator($(CHARGE_MENU).val());
         sliderController.modifyForceParameter("charge", value);
         $(CHARGE_INPUT).val(value);
         $(CHARGE_VALUE).text(value);
+        $(CHARGE_MENU).val(value);
     });
 
     $(CHARGE_INPUT).on("change", function () {
-        var value = $(CHARGE_INPUT).val();
+        var value = chargeValidator($(CHARGE_INPUT).val());
         sliderController.modifyForceParameter("charge", value);
         $(CHARGE_VALUE).text(value);
+        $(CHARGE_INPUT).val(value);
         $(CHARGE_MENU).val(value);
     });
+
+    var linkDistValidator = function (value) {
+        if (value < 1) {
+            return 1;
+        } else if (value > 1000) {
+            return 1000;
+        } else {
+            return value;
+        }
+    };
+
+    var chargeValidator = function (value) {
+        if (value < -2000) {
+            return -2000;
+        } else if (value > 0) {
+            return 0;
+        } else {
+            return value;
+        }
+    };
 
     $(".startDisabled").removeClass("disabled");
 };
