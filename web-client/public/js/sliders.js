@@ -49,7 +49,6 @@ var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) 
     this.setCurrentVal = function (newVal) {
         this.currentVal = newVal;
     };
-
 };
 
 var sliderGroupController = function (sliderArray) {
