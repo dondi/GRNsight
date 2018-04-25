@@ -75,37 +75,37 @@ Last Updated: 2018-04-25
 |NO | Dropdown Menu: Node -> Log Fold Change Max Value|Keep Default Value | The node coloring visualization's color intensity should default to having a Log Fold Change Max Value of 3, if expression data sheets are present in input workbook|
 |NO | Dropdown Menu: Node -> Log Fold Change Max Value|Increase Log Fold Change Max Value | The node coloring visualization's color intensity should decrease, if expression data sheets are present in input workbook|
 |NO | Dropdown Menu: Node -> Log Fold Change Max Value|Decrease Log Fold Change Max Value | The node coloring visualization's color intensity should increase, if expression data sheets are present in input workbook|
-|YES | Sidebar Menu: Average Replicates Values (Top Dataset)|Check | GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook|
-|YES | Sidebar Menu: Average Replicates Values (Top Dataset)|Uncheck | GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook|
-|YES | Dropdown Menu: Node -> Average Replicates Values (Top Dataset)|Check | GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook|
-|YES | Dropdown Menu: Node -> Average Replicates Values (Top Dataset)|Uncheck | GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook|
-|YES | Sidebar Menu: Average Replicates Values (Bottom Dataset)|Check | GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook|
-|YES | Sidebar Menu: Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
-|YES | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)|Check | GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook|
-|YES | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
-|YES | Sidebar Menu: Node Coloring Toggle Button|Click |  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook|
+|NO | Sidebar Menu: Average Replicates Values (Top Dataset)|Check | GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook|
+|NO | Sidebar Menu: Average Replicates Values (Top Dataset)|Uncheck | GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook|
+|NO | Dropdown Menu: Node -> Average Replicates Values (Top Dataset)|Check | GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook|
+|NO | Dropdown Menu: Node -> Average Replicates Values (Top Dataset)|Uncheck | GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook|
+|NO | Sidebar Menu: Average Replicates Values (Bottom Dataset)|Check | GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook|
+|NO | Sidebar Menu: Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
+|NO | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)|Check | GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook|
+|NO | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
+|NO | Sidebar Menu: Node Coloring Toggle Button|Click |  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook|
 |YES | Dropdown Menu: Node -> Disable Node Coloring|Check |  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook|
 |YES | Dropdown Menu: Node -> Disable Node Coloring|Uncheck |  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook|
-|YES | Grid Layout|NULL | The graph should default to force graph layout|
-|YES | Grid Layout|Click Grid Layout Button | The graph should change to grid layout|
-|YES | Grid Layout|Click Force Graph Layout Button | The graph should change back to force graph layout|
-|NO | Dropdown Menu - View: Viewport Size|NULL | The viewport should be medium size|
-|NO | Dropdown Menu - View: Viewport Size|Click Small | The viewport should be set to small viewport size|
-|NO | Dropdown Menu - View: Viewport Size|Click Medium | The viewport should be set to medium viewport size|
-|NO | Dropdown Menu - View: Viewport Size|Click Large | The viewport should be set to large viewport size|
-|NO | Dropdown Menu - View: Viewport Size|Click Fit To Window | The viewport should be set to size that fit to window|
-|NO | Dropdown Menu - View: Restrict Graph to Viewport|NULL | The viewport should not restrict graph to viewport|
-|NO | Dropdown Menu - View: Restrict Graph to Viewport|Click | The viewport should restrict graph to viewport|
-|NO | Dropdown Menu - View: Zoom|Input Value | The viewport should should zoom according to the value|
-|NO | Dropdown Menu - Layout: Graph Options|NULL | The graph should be in force graph layout by default|
-|NO | Dropdown Menu - Layout: Graph Options|Grid Layout | The graph should apply grid layout|
-|NO | Dropdown Menu - Layout: Graph Options|Force Graph | The graph should apply force graph layout|
-|NO | Dropdown Menu - Layout: Lock Force Graph Parameters|Check "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be disabled.|
-|NO | Dropdown Menu - Layout: Lock Force Graph Parameters|Uncheck "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be enabled.|
-|NO | Dropdown Menu - Layout: Reset Force Graph Parameters|Select "Reset Force Graph Parameters" | The Reset Force Graph Parameters should revert to the default values, if Lock Force Graph Parameters is unchecked|
-|NO | Dropdown Menu - Layout: Undo Reset|Click "Undo Reset" | The Undo Reset should return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled.|
-|NO | Dropdown Menu - Layout: Link Distance|Input Value | The Link Distance should change the link distance value for the slider accordingly and apply it to the force simulation of the graph|
-|NO | Dropdown Menu - Layout: Charge|Input Value | The Charge should change the charge value for the slider accordingly and apply it to the force simulation of the graph|
+|YES | Sidebar Menu: Grid Layout|Keep at Default | The graph should default to force graph layout|
+|YES | Sidebar Menu: Grid Layout|Click Grid Layout Button | The graph should change to grid layout|
+|YES | Sidebar Menu: Grid Layout|Click Force Graph Layout Button | The graph should change to force graph layout|
+|YES | Dropdown Menu: View -> Viewport Size|Keep as Detected |  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.|
+|YES | Dropdown Menu: View -> Viewport Size|Check "Small" |  The viewport size should be set to small|
+|YES | Dropdown Menu: View -> Viewport Size|Check "Medium" |  The viewport size should be set to medium|
+|YES | Dropdown Menu: View -> Viewport Size|Check "Large" |  The viewport size should be set to large|
+|YES | Dropdown Menu: View -> Viewport Size|Check "Fit to Window" |  The viewport size should automatically be set to the size of the browser window|
+|YES | Dropdown Menu: View -> Restrict Graph to Viewport|Check | The viewport should always be contained within the viewport.|
+|YES | Dropdown Menu: View -> Restrict Graph to Viewport|Uncheck | The viewport should be allowed to extend past the viewport|
+|NO | Dropdown Menu: View -> Zoom|Enter Zoom Value, then Press Enter | The viewport should should zoom according to the value|
+|NO | Dropdown Menu: Layout -> Graph Options|Keep at Default | The graph should be in force graph layout by default|
+|NO | Dropdown Menu: Layout -> Graph Options|Grid Layout | The graph should apply grid layout|
+|NO | Dropdown Menu: Layout -> Graph Options|Force Graph | The graph should apply force graph layout|
+|NO | Dropdown Menu: Layout -> Lock Force Graph Parameters|Check "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be disabled.|
+|NO | Dropdown Menu: Layout -> Lock Force Graph Parameters|Uncheck "Lock Force Graph Parameters" | The Force Graph Parameter sliders should be enabled.|
+|NO | Dropdown Menu: Layout -> Reset Force Graph Parameters|Click "Reset Force Graph Parameters" | The force graph parameters should revert to the default values, if Lock Force Graph Parameters is unchecked|
+|NO | Dropdown Menu: Layout -> Undo Reset|Click "Undo Reset" | The force graph parameters should return to the values they had before the Undo Reset button (or menu item) was selected, if Undo Reset is enabled.|
+|NO | Dropdown Menu: Layout -> Link Distance|Input Value, then Press Enter |  The graph's edges should visibly change in length to the value entered if Lock Force Graph Parameters is unchecked|
+|NO | Dropdown Menu: Layout -> Charge|Input Value, then Press Enter |  The graph's nodes should visibly change it's level of attraction to each other to the value entered if Lock Force Graph Parameters is unchecked|
 
 ## GRNsight Function Availability Table
 
@@ -194,1785 +194,805 @@ Last Updated: 2018-04-25
 | Sidebar Menu: Node Coloring Toggle Button - Click | NO | YES | YES | 
 | Dropdown Menu: Node -> Disable Node Coloring - Check | NO | YES | YES | 
 | Dropdown Menu: Node -> Disable Node Coloring - Uncheck | NO | YES | YES | 
-| Grid Layout - NULL | YES | YES | YES | 
-| Grid Layout - Click Grid Layout Button | YES | YES | YES | 
-| Grid Layout - Click Force Graph Layout Button | YES | YES | YES | 
-| Dropdown Menu - View: Viewport Size - NULL | YES | YES | YES | 
-| Dropdown Menu - View: Viewport Size - Click Small | YES | YES | YES | 
-| Dropdown Menu - View: Viewport Size - Click Medium | YES | YES | YES | 
-| Dropdown Menu - View: Viewport Size - Click Large | YES | YES | YES | 
-| Dropdown Menu - View: Viewport Size - Click Fit To Window | YES | YES | YES | 
-| Dropdown Menu - View: Restrict Graph to Viewport - NULL | YES | YES | YES | 
-| Dropdown Menu - View: Restrict Graph to Viewport - Click | YES | YES | YES | 
-| Dropdown Menu - View: Zoom - Input Value | NO | YES | YES | 
-| Dropdown Menu - Layout: Graph Options - NULL | NO | YES | YES | 
-| Dropdown Menu - Layout: Graph Options - Grid Layout | NO | YES | YES | 
-| Dropdown Menu - Layout: Graph Options - Force Graph | NO | YES | YES | 
-| Dropdown Menu - Layout: Lock Force Graph Parameters - Check "Lock Force Graph Parameters" | NO | YES | YES | 
-| Dropdown Menu - Layout: Lock Force Graph Parameters - Uncheck "Lock Force Graph Parameters" | NO | YES | YES | 
-| Dropdown Menu - Layout: Reset Force Graph Parameters - Select "Reset Force Graph Parameters" | YES | YES | YES | 
-| Dropdown Menu - Layout: Undo Reset - Click "Undo Reset" | YES | YES | YES | 
-| Dropdown Menu - Layout: Link Distance - Input Value | YES | YES | YES | 
-| Dropdown Menu - Layout: Charge - Input Value | YES | YES | YES | 
+| Sidebar Menu: Grid Layout - Keep at Default | YES | YES | YES | 
+| Sidebar Menu: Grid Layout - Click Grid Layout Button | YES | YES | YES | 
+| Sidebar Menu: Grid Layout - Click Force Graph Layout Button | YES | YES | YES | 
+| Dropdown Menu: View -> Viewport Size - Keep as Detected | YES | YES | YES | 
+| Dropdown Menu: View -> Viewport Size - Check "Small" | YES | YES | YES | 
+| Dropdown Menu: View -> Viewport Size - Check "Medium" | YES | YES | YES | 
+| Dropdown Menu: View -> Viewport Size - Check "Large" | YES | YES | YES | 
+| Dropdown Menu: View -> Viewport Size - Check "Fit to Window" | YES | YES | YES | 
+| Dropdown Menu: View -> Restrict Graph to Viewport - Check | YES | YES | YES | 
+| Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck | YES | YES | YES | 
+| Dropdown Menu: View -> Zoom - Enter Zoom Value, then Press Enter | NO | YES | YES | 
+| Dropdown Menu: Layout -> Graph Options - Keep at Default | NO | YES | YES | 
+| Dropdown Menu: Layout -> Graph Options - Grid Layout | NO | YES | YES | 
+| Dropdown Menu: Layout -> Graph Options - Force Graph | NO | YES | YES | 
+| Dropdown Menu: Layout -> Lock Force Graph Parameters - Check "Lock Force Graph Parameters" | NO | YES | YES | 
+| Dropdown Menu: Layout -> Lock Force Graph Parameters - Uncheck "Lock Force Graph Parameters" | NO | YES | YES | 
+| Dropdown Menu: Layout -> Reset Force Graph Parameters - Click "Reset Force Graph Parameters" | YES | YES | YES | 
+| Dropdown Menu: Layout -> Undo Reset - Click "Undo Reset" | YES | YES | YES | 
+| Dropdown Menu: Layout -> Link Distance - Input Value, then Press Enter | YES | YES | YES | 
+| Dropdown Menu: Layout -> Charge - Input Value, then Press Enter | YES | YES | YES | 
 
 ## Client Side Tests
 ### Test 1
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should always be contained within the viewport.
 
 ### Test 2
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should always be contained within the viewport.
 
 ### Test 3
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should always be contained within the viewport.
 
 ### Test 4
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should always be contained within the viewport.
 
 ### Test 5
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should always be contained within the viewport.
 
 ### Test 6
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should always be contained within the viewport.
 
 ### Test 7
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to small
+- The viewport should always be contained within the viewport.
 
 ### Test 8
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to small
+- The viewport should always be contained within the viewport.
 
 ### Test 9
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should be set to small
+- The viewport should always be contained within the viewport.
 
 ### Test 10
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should be set to small
+- The viewport should always be contained within the viewport.
 
 ### Test 11
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to small
+- The viewport should always be contained within the viewport.
 
 ### Test 12
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to small
+- The viewport should always be contained within the viewport.
 
 ### Test 13
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to medium
+- The viewport should always be contained within the viewport.
 
 ### Test 14
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to medium
+- The viewport should always be contained within the viewport.
 
 ### Test 15
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should be set to medium
+- The viewport should always be contained within the viewport.
 
 ### Test 16
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should be set to medium
+- The viewport should always be contained within the viewport.
 
 ### Test 17
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to medium
+- The viewport should always be contained within the viewport.
 
 ### Test 18
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to medium
+- The viewport should always be contained within the viewport.
 
 ### Test 19
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to large
+- The viewport should always be contained within the viewport.
 
 ### Test 20
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to large
+- The viewport should always be contained within the viewport.
 
 ### Test 21
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should be set to large
+- The viewport should always be contained within the viewport.
 
 ### Test 22
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should be set to large
+- The viewport should always be contained within the viewport.
 
 ### Test 23
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to large
+- The viewport should always be contained within the viewport.
 
 ### Test 24
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to large
+- The viewport should always be contained within the viewport.
 
 ### Test 25
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should always be contained within the viewport.
 
 ### Test 26
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should always be contained within the viewport.
 
 ### Test 27
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should always be contained within the viewport.
 
 ### Test 28
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to grid layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should always be contained within the viewport.
 
 ### Test 29
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should always be contained within the viewport.
 
 ### Test 30
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should always be contained within the viewport.
 
 ### Test 31
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should be allowed to extend past the viewport
 
 ### Test 32
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should be allowed to extend past the viewport
 
 ### Test 33
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should be allowed to extend past the viewport
 
 ### Test 34
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should be allowed to extend past the viewport
 
 ### Test 35
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should change to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should be allowed to extend past the viewport
 
 ### Test 36
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Keep as Detected
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
+- The viewport should be allowed to extend past the viewport
 
 ### Test 37
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should default to force graph layout
+-  The viewport size should be set to small
+- The viewport should be allowed to extend past the viewport
 
 ### Test 38
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to small
+- The viewport should be allowed to extend past the viewport
 
 ### Test 39
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should be set to small
+- The viewport should be allowed to extend past the viewport
 
 ### Test 40
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should be set to small
+- The viewport should be allowed to extend past the viewport
 
 ### Test 41
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should change to force graph layout
+-  The viewport size should be set to small
+- The viewport should be allowed to extend past the viewport
 
 ### Test 42
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Small"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to small
+- The viewport should be allowed to extend past the viewport
 
 ### Test 43
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should default to force graph layout
+-  The viewport size should be set to medium
+- The viewport should be allowed to extend past the viewport
 
 ### Test 44
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to medium
+- The viewport should be allowed to extend past the viewport
 
 ### Test 45
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should be set to medium
+- The viewport should be allowed to extend past the viewport
 
 ### Test 46
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should be set to medium
+- The viewport should be allowed to extend past the viewport
 
 ### Test 47
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should change to force graph layout
+-  The viewport size should be set to medium
+- The viewport should be allowed to extend past the viewport
 
 ### Test 48
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Medium"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to medium
+- The viewport should be allowed to extend past the viewport
 
 ### Test 49
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should be set to large
+- The viewport should be allowed to extend past the viewport
 
 ### Test 50
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should default to force graph layout
+-  The viewport size should be set to large
+- The viewport should be allowed to extend past the viewport
 
 ### Test 51
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should be set to large
+- The viewport should be allowed to extend past the viewport
 
 ### Test 52
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should be set to large
+- The viewport should be allowed to extend past the viewport
 
 ### Test 53
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should be set to large
+- The viewport should be allowed to extend past the viewport
 
 ### Test 54
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Large"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should change to force graph layout
+-  The viewport size should be set to large
+- The viewport should be allowed to extend past the viewport
 
 ### Test 55
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should default to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should be allowed to extend past the viewport
 
 ### Test 56
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Keep at Default
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+- The graph should default to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should be allowed to extend past the viewport
 
 ### Test 57
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should be allowed to extend past the viewport
 
 ### Test 58
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Grid Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
 - The graph should change to grid layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should be allowed to extend past the viewport
 
 ### Test 59
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+- The graph should change to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should be allowed to extend past the viewport
 
 ### Test 60
 Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
 - Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
+- Sidebar Menu: Grid Layout - Click Force Graph Layout Button
+- Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
+- Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
 -  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
-
-### Test 61
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
-
-### Test 62
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
-
-### Test 63
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
-
-### Test 64
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Grid Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change to grid layout
-
-### Test 65
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 66
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 67
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 68
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 69
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 70
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 71
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 72
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 73
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 74
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 75
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 76
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 77
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 78
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 79
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 80
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Check
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 81
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 82
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 83
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 84
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 85
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 86
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 87
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 88
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 89
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 90
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 91
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 92
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 93
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 94
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Check
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 95
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Check
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
-
-### Test 96
-Instructions:
-- Sidebar Menu: Average Replicates Values (Top Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Top Dataset) - Uncheck
-- Sidebar Menu: Average Replicates Values (Bottom Dataset) - Uncheck
-- Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck
-- Sidebar Menu: Node Coloring Toggle Button - Click
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
-- Grid Layout - Click Force Graph Layout Button
-
-Results:
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for top dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
-- GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook
--  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
-- The graph should change back to force graph layout
+- The graph should change to force graph layout
+-  The viewport size should automatically be set to the size of the browser window
+- The viewport should be allowed to extend past the viewport
 
