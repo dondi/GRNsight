@@ -543,11 +543,11 @@ module.exports = function (app) {
 
         // Load the demos
         app.get("/demo/unweighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
+            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx",
+            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
                 res, app);
         });
 
