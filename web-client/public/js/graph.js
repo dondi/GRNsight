@@ -982,7 +982,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var renderNodeColoringLegend = function (logFoldChangeMaxValue) {
         var $nodeColoringLegend = $(".node-coloring-legend");
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
-        var xMargin = 15;
+        var xMargin = 10;
         var yMargin = 30;
         var width = 200;
         var height = 10;
@@ -991,12 +991,15 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
-            .attr("width", width + xMargin)
+            .attr("width", width + xMargin * 2)
             .attr("height", height + yMargin)
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
-        var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
+        var logFoldChangeMaxValueMagnitude = Math.abs(logFoldChangeMaxValue);
+        var gradientValues = d3.range(-logFoldChangeMaxValueMagnitude, logFoldChangeMaxValueMagnitude, increment);
+        gradientValues = logFoldChangeMaxValue < 0 ? gradientValues.reverse() : gradientValues;
+
         var coloring = svg.selectAll(".node-coloring-legend")
             .data(gradientValues)
             .attr("class", "node-coloring-legend");
@@ -1016,7 +1019,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
         var legendLabels = {
             "left": {
-                "textContent": (-logFoldChangeMaxValue).toFixed(2),
+                "textContent": (-logFoldChangeMaxValue).toFixed(0),
                 "x": -xMargin / 2
             },
             "center": {
@@ -1024,7 +1027,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 "x": width / 2
             },
             "right": {
-                "textContent": (+logFoldChangeMaxValue).toFixed(2),
+                "textContent": (+logFoldChangeMaxValue).toFixed(0),
                 "x": width - xMargin / 2
             },
         };

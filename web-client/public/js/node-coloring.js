@@ -1,3 +1,5 @@
+var MINIMUM_MAX_LOG_FOLD_CHANGE = -100;
+var MAXIMUM_MAX_LOG_FOLD_CHANGE = 100;
 var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
 var MAX_NUM_CHARACTERS_DROPDOWN = 24;
 
@@ -123,6 +125,18 @@ export var nodeColoringController = {
         );
     },
 
+    logFoldChangeMaxValueInputValidation: function (value) {
+        if (value === "") {
+            return DEFAULT_MAX_LOG_FOLD_CHANGE;
+        } else if (value < MINIMUM_MAX_LOG_FOLD_CHANGE) {
+            return MINIMUM_MAX_LOG_FOLD_CHANGE;
+        } else if (value > MAXIMUM_MAX_LOG_FOLD_CHANGE) {
+            return MAXIMUM_MAX_LOG_FOLD_CHANGE;
+        } else {
+            return value;
+        }
+    },
+
     configureNodeColoringHandlers: function () {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).on("change", {handler: this}, function (event) {
             event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
@@ -147,7 +161,8 @@ export var nodeColoringController = {
         });
 
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).on("change", {handler: this}, function (event) {
-            event.data.handler.updateLogFoldChangeMaxValue($(this).val());
+            var validated = event.data.handler.logFoldChangeMaxValueInputValidation($(this).val());
+            event.data.handler.updateLogFoldChangeMaxValue(validated);
         });
 
         $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {

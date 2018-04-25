@@ -191,8 +191,8 @@ html
                 li(class='node-coloring-menu disabled')
                   a(href='#' class='nodeOptions')
                     span(class='glyphicon invisible')
-                    | &nbsp; Log Fold Change Max Value &nbsp;
-                    input(type='number' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
+                    | &nbsp; Log Fold Change Max Value (-100 - 100): &nbsp;
+                    input(type='number' min="-100" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
                     
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -306,7 +306,7 @@ html
             input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
-            input(id='nodeColoringToggle' type='button' class='btn btn-default nodeColoringToggle' value='Disable Node Coloring')
+            input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
             label(class='info', data-toggle='tooltip') Top Dataset
             select(id="dataset-top")
             form
@@ -318,7 +318,8 @@ html
               input(id='averageDataBottom', type='checkbox' checked)
               label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-            input(type='text' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+            p(class='sideHeader' id="logFoldChangeMaxValueRange") (-100 - 100): &nbsp;
+            input(type='number' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
             div(class="node-coloring-legend")
         div(id="force-graph")
           form
@@ -369,7 +370,7 @@ html
           div(class='weightedGraphOptions hidden')
             p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
             p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
-            input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+            input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
             div(id='btn-side')
               button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
               button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
