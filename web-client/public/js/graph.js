@@ -965,24 +965,24 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         }
     }
 
-    const getMarginWidth = function (gridNodes, row) {
-        const containerWidth = $container.width();
+    var getMarginWidth = function (gridNodes, row) {
+        var containerWidth = $container.width();
         let rightNode = gridNodes[row - 1];
         let nodeWidth = rightNode.textWidth + 6;
         let rightNodeX = rightNode.x + nodeWidth;
-        const margin = (containerWidth - rightNodeX) / 2;
+        var margin = (containerWidth - rightNodeX) / 2;
         return margin;
     };
 
-    const getMarginHeight = function (gridNodes) {
-        const containerHeight = $container.height();
-        const len = gridNodes.length;
-        const bottomNodeY = gridNodes[len - 1].y + nodeHeight;
-        const margin = (containerHeight - bottomNodeY) / 2;
+    var getMarginHeight = function (gridNodes) {
+        var containerHeight = $container.height();
+        var len = gridNodes.length;
+        var bottomNodeY = gridNodes[len - 1].y + nodeHeight;
+        var margin = (containerHeight - bottomNodeY) / 2;
         return margin;
     };
 
-    const sortNode = function (n1, n2) {
+    var sortNode = function (n1, n2) {
         let name1 = n1.__data__.name;
         let name2 = n2.__data__.name;
         if (name1 === name2) {
