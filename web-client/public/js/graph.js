@@ -886,9 +886,11 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var NODE_HEIGHT = 22;
 
     var renderNodeLabels = function () {
+        node.selectAll(".nodeText").remove();
         var text = node.append("text")
             .attr("dy", NODE_HEIGHT)
             .attr("text-anchor", "middle")
+            .attr("class", "nodeText")
             .style("font-size", "18px")
             .style("stroke-width", "0")
             .style("fill", "black")
