@@ -326,9 +326,24 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     });
 
     // Normalization Controller
+    var MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
+    var MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
+
+    var edgeWeightNormalizationInputValidation = function (value) {
+        if (value === "") { // sets to default value
+            return "";
+        } else if (value < MIN_EDGE_WEIGHT_NORMALIZATION) {
+            return MIN_EDGE_WEIGHT_NORMALIZATION;
+        } else if (value > MAX_EDGE_WEIGHT_NORMALIZATION) {
+            return MAX_EDGE_WEIGHT_NORMALIZATION;
+        } else {
+            return value;
+        }
+    };
     var synchronizeNormalizationValues = function (value) {
-        $("#normalization-max").val(value);
-        $("#edge-weight-normalization-factor-menu").val(value);
+        var validated = edgeWeightNormalizationInputValidation(value);
+        $("#normalization-max").val(validated);
+        $("#edge-weight-normalization-factor-menu").val(validated);
     };
 
     $("#normalization-button").click(function () {
@@ -349,12 +364,25 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+    // var DEFAULT_GRAY_EDGE_THRESHOLD = 5;
 
     // Gray Edge Controller
+
+    var grayEdgeInputValidator = function (value) {
+        if (value < 0) {
+            return 0;
+        } else if (value > 100) {
+            return 100;
+        } else {
+            return value;
+        }
+    };
+
     var updateGrayEdgeValues = function (value) {
-        $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(value + "%");
-        $(GREY_EDGE_THRESHOLD_MENU).val(value);
-        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(value / 100);
+        var validatedInput = grayEdgeInputValidator(value);
+        $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
+        $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
+        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
     };
 
     $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {

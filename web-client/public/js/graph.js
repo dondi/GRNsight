@@ -251,19 +251,15 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     setupZoomSlider(minimumScale);
 
-    function updateZoomValue () {
-        var value = Math.round(($(".zoomSlider").val() / 8 * 200));
+    var ZOOM_SLIDER_MAX_VAL = 8;
+    var ZOOM_RANGE = 200;
+
+    function updateZoomValue (input) {
+        var value = input || Math.round(($(".zoomSlider").val() / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE));
         value = value === 0 ? MIDDLE_SCALE : value;
         $("#zoomPercent").html(value + "%");
         $("#zoomInput").val(value);
     }
-
-    $("#zoomInput").on("change", function () {
-        var value = $("#zoomInput").val() / 200 * 8;
-        $(".zoomSlider").val(value);
-        $(".zoomSlider").trigger("input");
-        $("#zoomPercent").html($("#zoomInput").val() + "%");
-    });
 
     function getMappedValue (scale) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
@@ -277,8 +273,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         $(".zoomSlider").val(equivalentPoint.toFixed(2));
     }
 
-    d3.select(".zoomSlider").on("input", function () {
-        var value = $(this).val();
+    var updateViewportZoom = function (value) {
         var currentPoint = value * 100;
         var equivalentScale;
         if (adaptive || (!adaptive && value <= ADAPTIVE_MAX_SCALE)) {
@@ -298,6 +293,29 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             manualZoomFunction(MIDDLE_SCALE);
             updateZoomValue();
         }
+    };
+
+    var zoomInputValidator = function (value) {
+        if (value < 1) {
+            return 1;
+        } else if (value > 200) {
+            return 200;
+        } else {
+            return value;
+        }
+    };
+
+    $("#zoomInput").on("change", function () {
+        var value = zoomInputValidator(+$("#zoomInput").val());
+        var scaledValue = value * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        $(".zoomSlider").val(scaledValue);
+        updateViewportZoom(scaledValue);
+        updateZoomValue(value);
+    });
+
+    d3.select(".zoomSlider").on("input", function () {
+        var value = $(this).val();
+        updateViewportZoom(value);
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
@@ -336,16 +354,17 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         d3.select(".boundingBox").attr("width", width).attr("height", height);
     });
 
-    d3.selectAll("input[name=viewport]").on("change", function () {
-        var fixed = $(this).prop("checked");
+    var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
+            $("input[name=viewport]").removeProp("checked");
             $container.addClass("cursorGrab");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
+            center();
         } else if (fixed) {
-            console.log("happen)");
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
+            $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (zoomSliderScale > 1) {
@@ -361,6 +380,16 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
+    };
+
+    d3.select("#restrict-graph-to-viewport").on("click", function () {
+        var fixed = $("input[name=viewport]").prop("checked");
+        restrictGraphToViewport(fixed);
+    });
+
+    d3.selectAll("input[name=viewport]").on("change", function () {
+        var fixed = $(this).prop("checked");
+        restrictGraphToViewport(fixed);
     });
 
     $(window).on("resize", function () {
