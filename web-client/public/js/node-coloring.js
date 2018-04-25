@@ -259,14 +259,6 @@ export var nodeColoringController = {
 
         $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
         $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
-
-        // Mark first option as selected
-        // $("#TOP_DATASET_SELECTION_SIDEBAR option[selected='selected']").each(
-        //     function () {
-        //         $(this).removeAttr("selected");
-        //     }
-        // );
-        // $("#TOP_DATASET_SELECTION_SIDEBAR option:first").attr("selected", "selected");
     },
 
     isNewWorkbook: function (name) {
