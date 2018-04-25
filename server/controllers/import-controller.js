@@ -34,7 +34,7 @@ module.exports = function (app) {
                     } else {
                         helpers.attachFileHeaders(res, input);
                         var network = importer(data);
-                        return res.status((network.errors.length === 0) ? 200 : 400).json(network);
+                        return res.json((network.errors.length === 0) ? 200 : 400, network);
                     }
                 });
             });

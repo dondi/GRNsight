@@ -1,4 +1,5 @@
-export const upload = function (sliderObject, sliderGroupController, drawGraph) {
+$(function () {
+
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -47,6 +48,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
 
     styleLabelTooltips();
 
+    /* global sliderObject, sliderGroupController*/
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
     var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
@@ -181,7 +183,9 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, normalization, grayThreshold);
+        /* global drawGraph */
+        drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType,
+          network.warnings, sliders, normalization, grayThreshold);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -302,20 +306,26 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
+            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
+            sliders, normalization, grayThreshold);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
+            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
+            sliders, normalization, grayThreshold);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
+            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
+            sliders, normalization, grayThreshold);
     });
 
     var annotateLinks = function (network) {
@@ -531,4 +541,4 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph) 
         }
     });
 
-};
+});
