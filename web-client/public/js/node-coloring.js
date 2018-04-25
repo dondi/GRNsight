@@ -19,6 +19,7 @@ var BOTTOM_DATASET_SELECTION_MENU = "#bottomDatasetDropdownMenu";
 
 var NODE_COLORING_TOGGLE_CLASS = ".nodeColoringToggle";
 var LOG_FOLD_CHANGE_MAX_VALUE_CLASS = ".logFoldChangeMaxValue";
+var LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON = "#log-fold-change-button";
 
 
 var endsInExpressionRegExp = /expression$/;
@@ -126,7 +127,7 @@ export var nodeColoringController = {
     },
 
     logFoldChangeMaxValueInputValidation: function (value) {
-        if (value === "") {
+        if (value === "" || value === "0") {
             return DEFAULT_MAX_LOG_FOLD_CHANGE;
         } else if (value < MINIMUM_MAX_LOG_FOLD_CHANGE) {
             return MINIMUM_MAX_LOG_FOLD_CHANGE;
@@ -158,6 +159,12 @@ export var nodeColoringController = {
         $(NODE_COLORING_TOGGLE_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.nodeColoringEnabled ?
                 event.data.handler.disableNodeColoring() : event.data.handler.enableNodeColoring();
+        });
+
+        $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).on("click", {handler: this}, function (event) {
+            var validated = event.data.handler
+                .logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
+            event.data.handler.updateLogFoldChangeMaxValue(validated);
         });
 
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).on("change", {handler: this}, function (event) {
