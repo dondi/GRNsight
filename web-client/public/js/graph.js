@@ -967,9 +967,9 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
 
     var getMarginWidth = function (gridNodes, row) {
         var containerWidth = $container.width();
-        let rightNode = gridNodes[row - 1];
-        let nodeWidth = rightNode.textWidth + 6;
-        let rightNodeX = rightNode.x + nodeWidth;
+        var rightNode = gridNodes[row - 1];
+        var nodeWidth = rightNode.textWidth + 6;
+        var rightNodeX = rightNode.x + nodeWidth;
         var margin = (containerWidth - rightNodeX) / 2;
         return margin;
     };
@@ -983,36 +983,36 @@ var drawGraph = function (nodes, links, positiveWeights, negativeWeights, sheetT
     };
 
     var sortNode = function (n1, n2) {
-        let name1 = n1.__data__.name;
-        let name2 = n2.__data__.name;
+        var name1 = n1.__data__.name;
+        var name2 = n2.__data__.name;
         if (name1 === name2) {
             return 0;
         }
         return name1 > name2 ? 1 : -1;
     };
 
-    let layout = false;
+    var layout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         sliderController.simulation.alpha(1);
         sliderController.simulation.force("charge").strength(sliderController.sliders[0].currentVal);
-        let nodeGroup = node._groups[0].sort(sortNode);
+        var nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
             this.value = "Force Graph";
             layout = true;
-            const margin = 10;
-            const grid = Grid()
-            .data(network.genes)
+            var margin = 10;
+            var grid = Grid() // eslint-disable-line no-undef
+            .data(network.genes) // eslint-disable-line no-undef
             .bands(true)
             .padding([0.2, 0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
             grid.layout();
-            let gridNodes = grid.nodes();
-            let gridNumRow = grid.cols();
-            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
-            let marginHeight = getMarginHeight(gridNodes);
+            var gridNodes = grid.nodes();
+            var gridNumRow = grid.cols();
+            var marginWidth = getMarginWidth(gridNodes, gridNumRow);
+            var marginHeight = getMarginHeight(gridNodes);
             /* eslint-disable block-scoped-var */
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
