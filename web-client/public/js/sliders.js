@@ -72,6 +72,8 @@ export var sliderGroupController = function (sliderArray) {
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.sliders[i].currentVal = this.sliders[i].defaultVal;
         }
+        $("#charge-menu").val(this.sliders[0].defaultVal);
+        $("#link-distance-menu").val(this.sliders[1].defaultVal);
         this.updateValues();
     };
 
@@ -79,6 +81,8 @@ export var sliderGroupController = function (sliderArray) {
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.sliders[i].currentVal = this.sliders[i].backup;
         }
+        $("#charge-menu").val(this.sliders[0].backup);
+        $("#link-distance-menu").val(this.sliders[1].backup);
         this.updateValues();
     };
 
@@ -155,6 +159,7 @@ export var sliderGroupController = function (sliderArray) {
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetForce();
         });
+
         $(RESET_SLIDERS_MENU_OPTION).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
