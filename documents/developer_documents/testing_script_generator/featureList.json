@@ -325,7 +325,7 @@
             "Check": "average replicate values for top dataset",
             "Uncheck": "not average replicate values for top dataset"
         },
-        "included": true,
+        "included": false,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
@@ -336,7 +336,7 @@
             "Check": "average replicate values for top dataset",
             "Uncheck": "not average replicate values for top dataset"
         },
-        "included": true,
+        "included": false,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
@@ -347,7 +347,7 @@
             "Check": "average replicate values for bottom dataset",
             "Uncheck": "not average replicate values for bottom dataset"
         },
-        "included": true,
+        "included": false,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
@@ -358,7 +358,7 @@
             "Check": "average replicate values for bottom dataset",
             "Uncheck": "not average replicate values for bottom dataset"
         },
-        "included": true,
+        "included": false,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
@@ -368,7 +368,7 @@
         "options": {
             "Click": "Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring'"
         },
-        "included": true,
+        "included": false,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
@@ -384,53 +384,53 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Grid Layout",
+        "title": "Sidebar Menu: Grid Layout",
         "text": "The graph should",
         "options": {
-            "NULL": "default to force graph layout",
+            "Keep at Default": "default to force graph layout",
             "Click Grid Layout Button": "change to grid layout",
-            "Click Force Graph Layout Button": "change back to force graph layout"
+            "Click Force Graph Layout Button": "change to force graph layout"
         },
         "included": true,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - View: Viewport Size",
-        "text": "The viewport should",
+        "title": "Dropdown Menu: View -> Viewport Size",
+        "text": "",
         "options": {
-            "NULL": "be medium size",
-            "Click Small": "be set to small viewport size",
-            "Click Medium": "be set to medium viewport size",
-            "Click Large": "be set to large viewport size",
-            "Click Fit To Window": "be set to size that fit to window"
+            "Keep as Detected": "Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.",
+            "Check \"Small\"": "The viewport size should be set to small",
+            "Check \"Medium\"": "The viewport size should be set to medium",
+            "Check \"Large\"": "The viewport size should be set to large",
+            "Check \"Fit to Window\"": "The viewport size should automatically be set to the size of the browser window"
         },
-        "included": false,
+        "included": true,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - View: Restrict Graph to Viewport",
+        "title": "Dropdown Menu: View -> Restrict Graph to Viewport",
         "text": "The viewport should",
         "options": {
-            "NULL": "not restrict graph to viewport",
-            "Click": "restrict graph to viewport"
+            "Check": "always be contained within the viewport.",
+            "Uncheck": "be allowed to extend past the viewport"
         },
-        "included": false,
+        "included": true,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - View: Zoom",
+        "title": "Dropdown Menu: View -> Zoom",
         "text": "The viewport should",
         "options": {
-            "Input Value": "should zoom according to the value"
+            "Enter Zoom Value, then Press Enter": "should zoom according to the value"
         },
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - Layout: Graph Options",
+        "title": "Dropdown Menu: Layout -> Graph Options",
         "text": "The graph should",
         "options": {
-            "NULL": "be in force graph layout by default",
+            "Keep at Default": "be in force graph layout by default",
             "Grid Layout": "apply grid layout",
             "Force Graph": "apply force graph layout"
         },
@@ -438,7 +438,7 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - Layout: Lock Force Graph Parameters",
+        "title": "Dropdown Menu: Layout -> Lock Force Graph Parameters",
         "text": "The Force Graph Parameter sliders should",
         "options": {
           "Check \"Lock Force Graph Parameters\"": "be disabled.",
@@ -448,37 +448,37 @@
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - Layout: Reset Force Graph Parameters",
-        "text": "The Reset Force Graph Parameters should",
+        "title": "Dropdown Menu: Layout -> Reset Force Graph Parameters",
+        "text": "The force graph parameters should",
         "options": {
-            "Select \"Reset Force Graph Parameters\"": "revert to the default values, if Lock Force Graph Parameters is unchecked"
+            "Click \"Reset Force Graph Parameters\"": "revert to the default values, if Lock Force Graph Parameters is unchecked"
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - Layout: Undo Reset",
-        "text": "The Undo Reset should",
+        "title": "Dropdown Menu: Layout -> Undo Reset",
+        "text": "The force graph parameters should",
         "options": {
-            "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled."
+            "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if Undo Reset is enabled."
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - Layout: Link Distance",
-        "text": "The Link Distance should",
+        "title": "Dropdown Menu: Layout -> Link Distance",
+        "text": "",
         "options": {
-            "Input Value": "change the link distance value for the slider accordingly and apply it to the force simulation of the graph"
+            "Input Value, then Press Enter": "The graph's edges should visibly change in length to the value entered if Lock Force Graph Parameters is unchecked"
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu - Layout: Charge",
-        "text": "The Charge should",
+        "title": "Dropdown Menu: Layout -> Charge",
+        "text": "",
         "options": {
-            "Input Value": "change the charge value for the slider accordingly and apply it to the force simulation of the graph"
+            "Input Value, then Press Enter": "The graph's nodes should visibly change it's level of attraction to each other to the value entered if Lock Force Graph Parameters is unchecked"
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
