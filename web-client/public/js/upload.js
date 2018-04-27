@@ -265,36 +265,35 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var settings = new settingsController();
     settings.setupSettingsHandlers();
 
-    $("#gridLayout").on("click", function () {
-        if (!$("#gridLayout").prop("checked")) {
-            $("#gridLayout").prop("checked", true);
-            $("#forceGraph").prop("checked", false);
-            $("#forceGraph span").removeClass("glyphicon-ok");
-            $("#gridLayout span").addClass("glyphicon-ok");
-            $("#lockSlidersMenu").parent().addClass("disabled");
-            $("#resetSlidersMenu").parent().addClass("disabled");
-            $("#link-distance").parent().addClass("disabled");
-            $("#charge").parent().addClass("disabled");
-            if (!$("#gridLayout").hasClass("called")) {
+    var toggleLayout = function (on, off) {
+        if (!$(on).prop("checked")) {
+            $(on).prop("checked", true);
+            $(off).prop("checked", false);
+            $(off + " span").removeClass("glyphicon-ok");
+            $(on + " span").addClass("glyphicon-ok");
+            if (on === "#gridLayout") {
+                $("#lockSlidersMenu").parent().addClass("disabled");
+                $("#resetSlidersMenu").parent().addClass("disabled");
+                $("#link-distance").parent().addClass("disabled");
+                $("#charge").parent().addClass("disabled");
+            } else {
+                $("#lockSlidersMenu").parent().removeClass("disabled");
+                $("#resetSlidersMenu").parent().removeClass("disabled");
+                $("#link-distance").parent().removeClass("disabled");
+                $("#charge").parent().removeClass("disabled");
+            }
+            if (!$(on).hasClass("called")) {
                 $("#gridLayoutButton").trigger("click");
             }
         }
+    };
+
+    $("#gridLayout").on("click", function () {
+        toggleLayout("#gridLayout", "#forceGraph");
     });
 
     $("#forceGraph").on("click", function () {
-        if (!$("#forceGraph").prop("checked")) {
-            $("#gridLayout").prop("checked", false);
-            $("#forceGraph").prop("checked", true);
-            $("#forceGraph span").addClass("glyphicon-ok");
-            $("#gridLayout span").removeClass("glyphicon-ok");
-            $("#lockSlidersMenu").parent().removeClass("disabled");
-            $("#resetSlidersMenu").parent().removeClass("disabled");
-            $("#link-distance").parent().removeClass("disabled");
-            $("#charge").parent().removeClass("disabled");
-            if (!$("#forceGraph").hasClass("called")) {
-                $("#gridLayoutButton").trigger("click");
-            }
-        }
+        toggleLayout("#forceGraph", "#gridLayout");
     });
 
   // TODO: Make this less bad
@@ -368,7 +367,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
-    // var DEFAULT_GRAY_EDGE_THRESHOLD = 5;
 
     // Gray Edge Controller
 

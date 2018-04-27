@@ -26,32 +26,26 @@ export const container = function () {
         container.addClass("containerL");
     }
 
+    var setSizeIndicator = function (selector) {
+        $("#viewport-size-s span, #viewport-size-m span, #viewport-size-l span, #viewport-size-fit span")
+            .removeClass("glyphicon-ok");
+        $(selector).addClass("glyphicon-ok");
+    };
+
     var small = function () {
-        $("#viewport-size-s span").addClass("glyphicon-ok");
-        $("#viewport-size-m span").removeClass("glyphicon-ok");
-        $("#viewport-size-l span").removeClass("glyphicon-ok");
-        $("#viewport-size-fit span").removeClass("glyphicon-ok");
+        setSizeIndicator("#viewport-size-s span");
     };
 
     var medium = function () {
-        $("#viewport-size-s span").removeClass("glyphicon-ok");
-        $("#viewport-size-m span").addClass("glyphicon-ok");
-        $("#viewport-size-l span").removeClass("glyphicon-ok");
-        $("#viewport-size-fit span").removeClass("glyphicon-ok");
+        setSizeIndicator("#viewport-size-m span");
     };
 
     var large = function () {
-        $("#viewport-size-s span").removeClass("glyphicon-ok");
-        $("#viewport-size-m span").removeClass("glyphicon-ok");
-        $("#viewport-size-l span").addClass("glyphicon-ok");
-        $("#viewport-size-fit span").removeClass("glyphicon-ok");
+        setSizeIndicator("#viewport-size-l span");
     };
 
     var fit = function () {
-        $("#viewport-size-s span").removeClass("glyphicon-ok");
-        $("#viewport-size-m span").removeClass("glyphicon-ok");
-        $("#viewport-size-l span").removeClass("glyphicon-ok");
-        $("#viewport-size-fit span").addClass("glyphicon-ok");
+        setSizeIndicator("#viewport-size-fit span");
     };
 
     $("#viewport-size-s").on("click", function () {

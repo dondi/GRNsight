@@ -295,14 +295,12 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         }
     };
 
+    var valueValidator = function (min, max, value) {
+        return Math.min(max, Math.max(min, value));
+    };
+
     var zoomInputValidator = function (value) {
-        if (value < 1) {
-            return 1;
-        } else if (value > 200) {
-            return 200;
-        } else {
-            return value;
-        }
+        return valueValidator(1, 200, value);
     };
 
     $("#zoomInput").on("change", function () {
@@ -448,8 +446,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 return Math.max(baseThickness, 7);
             });
     }
-
-    // grayThreshold = +$("#grayThresholdInput").val();
 
     link.append("path")
         .attr("class", "main")
@@ -1217,9 +1213,10 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
-            $("#gridLayout").addClass("called");
-            $("#gridLayout").trigger("click");
-            $("#gridLayout").removeClass("called");
+            $("#gridLayout")
+                .addClass("called")
+                .trigger("click")
+                .removeClass("called");
             this.value = "Force Graph";
             layout = true;
             const margin = 10;
@@ -1239,9 +1236,10 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
             }
         } else {
-            $("#forceGraph").addClass("called");
-            $("#forceGraph").trigger("click");
-            $("#forceGraph").removeClass("called");
+            $("#forceGraph")
+                .addClass("called")
+                .trigger("click")
+                .removeClass("called");
             this.value = "Grid Layout";
             layout = false;
             for (i in nodeGroup) {
@@ -1462,24 +1460,31 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     sliderController.configureForceHandlers();
     sliderController.initializeDefaultForces();
 
+    var changeSliderValue = function (slider, item) {
+        var value = slider === "link" ? linkDistValidator($(item).val()) :
+            chargeValidator($(item).val());
+        sliderController.modifyForceParameter(slider, value);
+        if (slider === "link") {
+            $(LINK_DISTANCE_VALUE).text(value);
+            $(LINK_DISTANCE_INPUT).val(value);
+            $(LINK_DISTANCE_MENU).val(value);
+        } else {
+            $(CHARGE_VALUE).text(value);
+            $(CHARGE_INPUT).val(value);
+            $(CHARGE_MENU).val(value);
+        }
+    };
+
     var LINK_DISTANCE_MENU = "#link-distance-menu";
     var LINK_DISTANCE_INPUT = "#linkDistInput";
     var LINK_DISTANCE_VALUE = "#linkDistVal";
 
     $(LINK_DISTANCE_MENU).on("change", function () {
-        var value = linkDistValidator($(LINK_DISTANCE_MENU).val());
-        sliderController.modifyForceParameter("link", value);
-        $(LINK_DISTANCE_INPUT).val(value);
-        $(LINK_DISTANCE_VALUE).text(value);
-        $(LINK_DISTANCE_MENU).val(value);
+        changeSliderValue("link", LINK_DISTANCE_MENU);
     });
 
     $(LINK_DISTANCE_INPUT).on("change", function () {
-        var value = linkDistValidator($(LINK_DISTANCE_INPUT).val());
-        sliderController.modifyForceParameter("link", value);
-        $(LINK_DISTANCE_INPUT).val(value);
-        $(LINK_DISTANCE_VALUE).text(value);
-        $(LINK_DISTANCE_MENU).val(value);
+        changeSliderValue("link", LINK_DISTANCE_INPUT);
     });
 
     var CHARGE_MENU = "#charge-menu";
@@ -1487,39 +1492,19 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var CHARGE_VALUE = "#chargeVal";
 
     $(CHARGE_MENU).on("change", function () {
-        var value = chargeValidator($(CHARGE_MENU).val());
-        sliderController.modifyForceParameter("charge", value);
-        $(CHARGE_INPUT).val(value);
-        $(CHARGE_VALUE).text(value);
-        $(CHARGE_MENU).val(value);
+        changeSliderValue("charge", CHARGE_MENU);
     });
 
     $(CHARGE_INPUT).on("change", function () {
-        var value = chargeValidator($(CHARGE_INPUT).val());
-        sliderController.modifyForceParameter("charge", value);
-        $(CHARGE_VALUE).text(value);
-        $(CHARGE_INPUT).val(value);
-        $(CHARGE_MENU).val(value);
+        changeSliderValue("charge", CHARGE_INPUT);
     });
 
     var linkDistValidator = function (value) {
-        if (value < 1) {
-            return 1;
-        } else if (value > 1000) {
-            return 1000;
-        } else {
-            return value;
-        }
+        return valueValidator(1, 1000, value);
     };
 
     var chargeValidator = function (value) {
-        if (value < -2000) {
-            return -2000;
-        } else if (value > 0) {
-            return 0;
-        } else {
-            return value;
-        }
+        return valueValidator(-2000, 0, value);
     };
 
     $(".startDisabled").removeClass("disabled");
