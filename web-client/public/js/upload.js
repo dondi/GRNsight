@@ -1,5 +1,4 @@
-$(function () {
-
+export const upload = function (sliderObject, sliderGroupController, drawGraph) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -48,7 +47,6 @@ $(function () {
 
     styleLabelTooltips();
 
-    /* global sliderObject, sliderGroupController*/
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
     var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
@@ -159,7 +157,7 @@ $(function () {
 
     var normalization = false;
 
-    var displayNetwork = function (network, name, normalization, grayThreshold) {
+    var displayNetwork = function (network, name, normalization, grayThreshold, dashedLine) {
 
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
@@ -183,8 +181,7 @@ $(function () {
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        /* global drawGraph */
-        drawGraph(network, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, normalization, grayThreshold, dashedLine);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -301,24 +298,31 @@ $(function () {
     });
 
     var grayThreshold = false;
+    var dashedLine = false;
 
     $("#normalization-button").click(function () {
         normalization = true;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
     });
 
     $("#resetNormalizationButton").click(function () {
         document.getElementById("normalization-max").value = "";
     // normalization = false;
     // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
     });
 
     $("#grayThresholdInput").on("change", function () {
         grayThreshold = true;
     // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork, sliders, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
+    });
+
+    $("#dashedGrayLineButton").on("change", function () {
+        dashedLine = true;
+    // displayNetwork(currentNetwork, name, normalization, grayThreshold);
+        drawGraph(currentNetwork, sliders, normalization, grayThreshold, dashedLine);
     });
 
     var annotateLinks = function (network) {
@@ -534,4 +538,4 @@ $(function () {
         }
     });
 
-});
+};
