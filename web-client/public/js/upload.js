@@ -166,7 +166,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         }
 
         currentNetwork = network;
-        console.log(network); // Display the network in the console
+        console.log("Network: ", network); // Display the network in the console
         $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
         if (network.warnings.length > 0) {
@@ -332,36 +332,31 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
     var MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
 
-    var edgeWeightNormalizationInputValidation = function (value) {
-        if (value === "") { // sets to default value
-            return "";
-        } else if (value < MIN_EDGE_WEIGHT_NORMALIZATION) {
-            return MIN_EDGE_WEIGHT_NORMALIZATION;
-        } else if (value > MAX_EDGE_WEIGHT_NORMALIZATION) {
-            return MAX_EDGE_WEIGHT_NORMALIZATION;
-        } else {
-            return value;
-        }
+    var valueValidator = function (min, max, value) {
+        return Math.min(max, Math.max(min, value));
     };
+
+    var edgeWeightNormalizationInputValidation = function (value) {
+        return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+    };
+
     var synchronizeNormalizationValues = function (value) {
         var validated = edgeWeightNormalizationInputValidation(value);
         $("#normalization-max").val(validated);
         $("#edge-weight-normalization-factor-menu").val(validated);
+        drawGraph(currentNetwork, sliders, nodeColoring);
     };
 
     $("#normalization-button").click(function () {
         synchronizeNormalizationValues($("#normalization-max").val());
-        drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
     $("#reset-normalization-factor-menu, #resetNormalizationButton").click(function () {
         synchronizeNormalizationValues("");
-        drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
     $("#edge-weight-normalization-factor-menu").on("change", function () {
         synchronizeNormalizationValues($("#edge-weight-normalization-factor-menu").val());
-        drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
@@ -371,13 +366,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     // Gray Edge Controller
 
     var grayEdgeInputValidator = function (value) {
-        if (value < 0) {
-            return 0;
-        } else if (value > 100) {
-            return 100;
-        } else {
-            return value;
-        }
+        return valueValidator(0, 100, value);
     };
 
     var updateGrayEdgeValues = function (value) {
@@ -385,18 +374,17 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
         $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
         $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
+        drawGraph(currentNetwork, sliders, nodeColoring);
     };
 
     $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {
         var value = Math.round(($(GREY_EDGE_THRESHOLD_MENU).val()));
         updateGrayEdgeValues(value);
-        drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).on("change", function () {
         var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
         updateGrayEdgeValues(value);
-        drawGraph(currentNetwork, sliders, nodeColoring);
     });
 
     // Dashed Gray Line Controller
@@ -418,13 +406,11 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     };
 
     $(GREY_EDGES_DASHED_MENU).click(function () {
-        $(GREY_EDGES_DASHED_MENU).prop("checked") ?
-            syncGreyEdgesAsDashedOptions(false) : syncGreyEdgesAsDashedOptions(true);
+        syncGreyEdgesAsDashedOptions(!$(GREY_EDGES_DASHED_MENU).prop("checked"));
     });
 
     $(GREY_EDGES_DASHED_SIDEBAR).on("change", function () {
-        $(GREY_EDGES_DASHED_SIDEBAR).prop("checked") ?
-            syncGreyEdgesAsDashedOptions(true) : syncGreyEdgesAsDashedOptions(false);
+        syncGreyEdgesAsDashedOptions($(GREY_EDGES_DASHED_SIDEBAR).prop("checked"));
     });
 
     var annotateLinks = function (network) {
@@ -647,11 +633,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     $(".dropdown").on({
         "click": function (event) {
             if ($(event.target).hasClass("keepopen")) {
-                if ($(event.target).closest(".dropdown-toggle").length) {
-                    $(this).data("closable", true);
-                } else {
-                    $(this).data("closable", false);
-                }
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
             }
         },
         "hide.bs.dropdown": function () {
