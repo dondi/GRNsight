@@ -776,16 +776,48 @@ description: Learn how to format and upload files to GRNsight, a web application
                             </li>
 
                             <li>
-                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored red (magenta in GRNsight < v3.0.0). There are 10 red edges in this example. Edges with negative normalized weight values from -0.05 to -1 are colored blue (cyan in GRNsight < v3.0.0). There are 16 blue edges in this example. Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (red in GRNsight >= v3.0.0). There are 10 magenta edges in this example. Edges with negative normalized weight values from -0.05 to -1 are colored cyan (blue in GRNsight >= v3.0.0). There are 16 cyan edges in this example. Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
                             </li>
 
                             <li>
                               Because of this visualization of the weight parameters, one can make some interesting observations about the behavior of the network.  The expression of several genes is controlled by a balance of activation and repression by different regulators.  For example, the expression of MSN1 is strongly activated by CIN5, but even more strongly repressed by ABF1.  Furthermore, some transcription factors themselves act both as activators of some targets and repressors of other targets.  For example, RAP1 activates the expression of MSN4 and RPH1, but represses the expression of AFT1, HSF1, and itself.  <a href="http://www.yeastgenome.org/locus/S000005160/overview" target="blank">RAP1 is known to act as both an activator and a repressor.</a>  Thus, GRNsight enables one to interpret the weight parameters more easily than one could from the adjacency matrix alone.  For more information about the interpretation of the model results, see <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a>.
                             </li>
-                            <!-- TODO: Section on interpreting node coloring -->
-                            <!-- <li>
-                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and gray representing no significant change in expression relative to the control).  This feature has not yet been implemented in GRNsight, but is currently under development for version 2.
-                            </li> -->
+                            <li>
+                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and gray representing no significant change in expression relative to the control).  This feature is available in GRNsight >= v3.0.0, and described in the section below.
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#node_coloring_block_layout" data-toggle="collapse">
+                            4b. Node Coloring and Block Layout
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="node_coloring_block_layout" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            In GRNsight v3.0.0 ...
+                          </p>
+                          <br>
+                          <table style="width:100%">
+                            <tr>
+                              <td><img src="{{ site.baseurl }}/assets/images/v3demo2.png" alt="demo-2-auto"  width="327" /></td>
+                              <td><img src="{{ site.baseurl }}/assets/images/v3demo2-nodecoloring.png" alt="demo-2-nodecoloring"  width="327" /></td>
+                              <td><br><img src="{{ site.baseurl }}/assets/images/v3demo2-grid+nodecoloring.png" alt="demo-2-nodecoloring-grid"  width="327" /></td>
+                            </tr>
+                          </table>
+                          <br>
+                          <ul>
+                            <li>
+                              TODO: Point 1
+                            </li>
+                            <li>
+                              TODO: Point 2
+                            </li>
                           </ul>
                         </div>
                       </div>
