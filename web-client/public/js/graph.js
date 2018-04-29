@@ -1179,7 +1179,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     // resets graph options so when new graph is loaded, initial layout is always force graph
     $("#forceGraph").trigger("click");
-    $("#lockSlidersMenu").trigger("click");
 
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
