@@ -265,6 +265,13 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var settings = new settingsController();
     settings.setupSettingsHandlers();
 
+    var lockForce = function (disable) {
+        $("#linkDistInput").prop("disabled", disable);
+        $("#chargeInput").prop("disabled", disable);
+        $("#resetSlidersButton").prop("disabled", disable);
+        $("#lockSlidersButton").prop("checked", disable);
+    };
+
     var toggleLayout = function (on, off) {
         if (!$(on).prop("checked")) {
             $(on).prop("checked", true);
@@ -272,13 +279,13 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
             $(off + " span").removeClass("glyphicon-ok");
             $(on + " span").addClass("glyphicon-ok");
             if (on === "#gridLayout") {
-                $("#lockSlidersMenu").trigger("click");
+                lockForce(true);
                 $("#lockSlidersMenu").parent().addClass("disabled");
                 $("#resetSlidersMenu").parent().addClass("disabled");
                 $("#link-distance").parent().addClass("disabled");
                 $("#charge").parent().addClass("disabled");
             } else {
-                $("#lockSlidersMenu").trigger("click");
+                lockForce(false);
                 $("#lockSlidersMenu").parent().removeClass("disabled");
                 $("#resetSlidersMenu").parent().removeClass("disabled");
                 $("#link-distance").parent().removeClass("disabled");
