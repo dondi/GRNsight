@@ -1,5 +1,4 @@
-$(function () {
-
+export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
     var LINK_DIST_VALUE       = "#linkDistVal";
@@ -48,7 +47,10 @@ $(function () {
 
     styleLabelTooltips();
 
-    /* global sliderObject, sliderGroupController*/
+    var nodeColoring = nodeColoringController;
+    nodeColoring.configureNodeColoringHandlers();
+    nodeColoring.initialize();
+
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
     var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
@@ -157,18 +159,14 @@ $(function () {
         $("#warningsModal").modal("show");
     };
 
-    var normalization = false;
-
-    var displayNetwork = function (network, name, normalization, grayThreshold) {
-
+    var displayNetwork = function (network, name) {
+        nodeColoring.reload(network, name);
         if (document.getElementById("zoomSlider").disabled) {
             document.getElementById("zoomSlider").disabled = false;
         }
 
         currentNetwork = network;
-        console.log(network); // Display the network in the console
-        console.log("normalization: " + normalization);
-        console.log("grayThreshold: " + grayThreshold);
+        console.log("Network: ", network); // Display the network in the console
         $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
         if (network.warnings.length > 0) {
@@ -183,9 +181,7 @@ $(function () {
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        /* global drawGraph */
-        drawGraph(network.genes, network.links, network.positiveWeights, network.negativeWeights, network.sheetType,
-          network.warnings, sliders, normalization, grayThreshold);
+        drawGraph(network, sliders, nodeColoring);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -223,7 +219,7 @@ $(function () {
       $.getJSON(fullUrl)
     ).done(function (network, textStatus, jqXhr) {
         console.log(network); // Display the network in the console
-        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"), normalization);
+        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"));
         reloader = function () {
             loadGrn(url, name, formData);
         };
@@ -269,6 +265,39 @@ $(function () {
     var settings = new settingsController();
     settings.setupSettingsHandlers();
 
+    var toggleLayout = function (on, off) {
+        if (!$(on).prop("checked")) {
+            $(on).prop("checked", true);
+            $(off).prop("checked", false);
+            $(off + " span").removeClass("glyphicon-ok");
+            $(on + " span").addClass("glyphicon-ok");
+            if (on === "#gridLayout") {
+                $("#lockSlidersMenu").trigger("click");
+                $("#lockSlidersMenu").parent().addClass("disabled");
+                $("#resetSlidersMenu").parent().addClass("disabled");
+                $("#link-distance").parent().addClass("disabled");
+                $("#charge").parent().addClass("disabled");
+            } else {
+                $("#lockSlidersMenu").trigger("click");
+                $("#lockSlidersMenu").parent().removeClass("disabled");
+                $("#resetSlidersMenu").parent().removeClass("disabled");
+                $("#link-distance").parent().removeClass("disabled");
+                $("#charge").parent().removeClass("disabled");
+            }
+            if (!$(on).hasClass("called")) {
+                $("#gridLayoutButton").trigger("click");
+            }
+        }
+    };
+
+    $("#gridLayout").on("click", function () {
+        toggleLayout("#gridLayout", "#forceGraph");
+    });
+
+    $("#forceGraph").on("click", function () {
+        toggleLayout("#forceGraph", "#gridLayout");
+    });
+
   // TODO: Make this less bad
     $("#upload-sif").on("click", function () {
         // deleted event parameter
@@ -301,31 +330,89 @@ $(function () {
         delay: { show: 700, hide: 100 }
     });
 
-    var grayThreshold = false;
+    // Normalization Controller
+    var MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
+    var MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
+
+    var valueValidator = function (min, max, value) {
+        return Math.min(max, Math.max(min, value));
+    };
+
+    var edgeWeightNormalizationInputValidation = function (value) {
+        return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+    };
+
+    var synchronizeNormalizationValues = function (value) {
+        var validated = edgeWeightNormalizationInputValidation(value);
+        $("#normalization-max").val(validated);
+        $("#edge-weight-normalization-factor-menu").val(validated);
+        drawGraph(currentNetwork, sliders, nodeColoring);
+    };
 
     $("#normalization-button").click(function () {
-        normalization = true;
-    // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+        synchronizeNormalizationValues($("#normalization-max").val());
     });
 
-    $("#resetNormalizationButton").click(function () {
-        document.getElementById("normalization-max").value = "";
-    // normalization = false;
-    // displayNetwork(currentNetwork, name, normalization);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+    $("#reset-normalization-factor-menu, #resetNormalizationButton").click(function () {
+        synchronizeNormalizationValues("");
     });
 
-    $("#grayThresholdInput").on("change", function () {
-        grayThreshold = true;
-    // displayNetwork(currentNetwork, name, normalization, grayThreshold);
-        drawGraph(currentNetwork.genes, currentNetwork.links, currentNetwork.positiveWeights,
-            currentNetwork.negativeWeights, currentNetwork.sheetType, currentNetwork.warnings,
-            sliders, normalization, grayThreshold);
+    $("#edge-weight-normalization-factor-menu").on("change", function () {
+        synchronizeNormalizationValues($("#edge-weight-normalization-factor-menu").val());
+    });
+
+    var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
+    var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
+    var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+
+    // Gray Edge Controller
+
+    var grayEdgeInputValidator = function (value) {
+        return valueValidator(0, 100, value);
+    };
+
+    var updateGrayEdgeValues = function (value) {
+        var validatedInput = grayEdgeInputValidator(value);
+        $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
+        $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
+        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
+        drawGraph(currentNetwork, sliders, nodeColoring);
+    };
+
+    $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {
+        var value = Math.round(($(GREY_EDGE_THRESHOLD_MENU).val()));
+        updateGrayEdgeValues(value);
+    });
+
+    $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).on("change", function () {
+        var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
+        updateGrayEdgeValues(value);
+    });
+
+    // Dashed Gray Line Controller
+
+    var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
+    var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
+
+    var syncGreyEdgesAsDashedOptions = function (showAsDashed) {
+        if (showAsDashed) {
+            $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
+            $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
+            $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
+        } else {
+            $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
+            $(GREY_EDGES_DASHED_MENU).removeProp("checked");
+            $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
+        }
+        drawGraph(currentNetwork, sliders, nodeColoring);
+    };
+
+    $(GREY_EDGES_DASHED_MENU).click(function () {
+        syncGreyEdgesAsDashedOptions(!$(GREY_EDGES_DASHED_MENU).prop("checked"));
+    });
+
+    $(GREY_EDGES_DASHED_SIDEBAR).on("change", function () {
+        syncGreyEdgesAsDashedOptions($(GREY_EDGES_DASHED_SIDEBAR).prop("checked"));
     });
 
     var annotateLinks = function (network) {
@@ -342,11 +429,13 @@ $(function () {
 
             if (link.value > 0) {
                 link.type = "arrowhead";
-                link.stroke = "MediumVioletRed";
+                // link.stroke = "MediumVioletRed";   // GRNsight v1 magenta edge color
+                link.stroke = "rgb(195, 61, 61)";     // Node coloring-consistent red edge color
                 network.positiveWeights.push(link.value);
             } else {
                 link.type = "repressor";
-                link.stroke = "DarkTurquoise";
+                // link.stroke = "DarkTurquoise";     // GRNsight v1 cyan edge color
+                link.stroke = "rgb(51, 124, 183)";    // Node coloring-consistent blue edge color
                 network.negativeWeights.push(link.value);
             }
         });
@@ -369,7 +458,7 @@ $(function () {
             crossDomain: true
         }).done(function (network) {
             annotateLinks(network);
-            displayNetwork(network, filename, normalization);
+            displayNetwork(network, filename);
             reloader = function () {
                 importGrn(uploadRoute, filename, formData);
             };
@@ -541,4 +630,19 @@ $(function () {
         }
     });
 
-});
+    // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
+    // https://stackoverflow.com/a/27759926
+    $(".dropdown").on({
+        "click": function (event) {
+            if ($(event.target).hasClass("keepopen")) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+        "hide.bs.dropdown": function () {
+            var hide = $(this).data("closable");
+            $(this).data("closable", true);
+            return hide;
+        }
+    });
+
+};
