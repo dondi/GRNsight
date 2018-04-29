@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 5/31/17
+modified: 4/27/18
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small- to medium-scale gene regulatory networks.
 ---
           <p id="pageTitle">Documentation</p>
@@ -26,14 +26,14 @@ description: Learn how to format and upload files to GRNsight, a web application
                   </h5>
                 </div>
 
-                <div id="section1Content" class="panel-collapse collapse in">
+                <div id="section1Content" class="panel-collapse collapse">
                   <div class="panel-body">
                     <ul>
                       <li>
                         If you have a Microsoft Excel Workbook file (*.xlsx) that was used as an input or generated as an output by the MATLAB program <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, you do not need to perform any further modifications to use the Workbook with GRNsight.  You can move on to <a href="#section2">Section 2</a> to learn how to load your file as an input spreadsheet.
                       </li>
                       <li>
-                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. See <a href="#section3">Section 3</a> for details on how GRNsight displays the graph.
+                        If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. See <a href="#section3">Section 3</a> for details on how GRNsight displays the graph.
                       </li>
                     </ul>
 
@@ -100,6 +100,26 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </li>
                               </ul>
                             </li>
+                            <li>
+                              Starting in v3.0.0, GRNsight reads time series expression data in the form of an adjacency matrix, and displays this data as a node coloring visualization.
+                              <ul>
+                                <li>
+                                  Excel Workbook with names ending with "_expression" are processed as expression time series data. The upper-left cell (A1) should contain the text “id”.
+                                </li>
+                                <li>
+                                  The rest of the first row should contain the names of the transcription factors under test, one transcription factor name per column. Transcription factor names must be unique for each column and must be 12 characters or fewer.
+                                </li>
+                                <li>
+                                  The rest of the first column should contain numerical time points in ascending order.
+                                </li>
+                                <li>
+                                  The values withing the adjancy matrix should represent the expression value of the particular transcription factor at a given time point. Blank cells are allowed, indicating the lack of a data point for a particular transcription factor at a given time.
+                                </li>
+                                <li>
+                                  Please see <a href="#node_coloring" data-toggle="collapse"> Section 3e</a> for more information on how to interpret and manipulate the node coloring visualization.
+                                </li>
+                              </ul>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -151,7 +171,6 @@ description: Learn how to format and upload files to GRNsight, a web application
                       </div>
                       <div id="cytoscape_sif_instructions" class="panel-collapse collapse">
                         <div class="panel-body">
-
                           Simple Interaction Format (SIF or .sif) was originally created for use with <a href="http://www.cytoscape.org" target="_blank">Cytoscape</a>, an open source bioinformatics software platform for visualizing molecular interaction networks, but is now used to exchange network data between many different software packages.  Users who have data in SIF format can import these files directly into GRNsight.  However, if you are creating a new input file for use with GRNsight, we recommend using the native Excel format expected by GRNsight as described in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.  An extended description of the SIF format can be found in the <a href="http://manual.cytoscape.org/en/3.4.0/Supported_Network_File_Formats.html#sif-format" target="_blank">Cytoscape v3.4.0 User Manual</a>, from which the description below is derived.
                           <ul>
                               <li>A SIF file is a tab-delimited text file with the file extension .sif.</li>
@@ -163,15 +182,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 <li>For a network defined in SIF format, node names should be unique, as identically named nodes will be treated as identical nodes.</li>
                                 <li>Node names must be 12 characters or fewer.</li>
                               </ul>
-                              <!--Uncomment after the release of GRNsight v2-->
-                              <!--<li>Starting from GRNsight v2, the relationship type for a weighted network is required to be "pd". "pd" was chosen because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community. A strict requirement for the relationship type was specified to expand upon SIF syntactic error checking capabilities.</li>-->
-                              <!--Delete starting here after the release of GRNsight v2-->
-                              <li>The relationship type can be any text string description.  The relationship type of “pd” is used in the examples below because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community, but other types could be used.</li>
-                              <ul>
-                                        <li>If different text strings representing different relationship types are present in the SIF file, GRNsight will treat them as the same type because it does not have the ability to differentiate them in the display.</li>
-                              </ul>
-                              <!--Delete ending here after the release of GRNsight v2-->
-
+                              <li>Starting from GRNsight v2, the relationship type for a weighted network is required to be "pd". "pd" was chosen because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community. A strict requirement for the relationship type was specified to expand upon SIF syntactic error checking capabilities.</li>
                               <li>Duplicate entries are ignored (as would occur if the same source-target pair was listed twice with two different relationship types).</li>
                               <li>GRNsight automatically detects whether the SIF file represents an unweighted or weighted network through the examination of the relationship type.  The screenshots and descriptions below are four valid ways that an unweighted network can be specified as a SIF file, using the file <a href="https://github.com/dondi/GRNsight/raw/master/test-files/demo-files/21-genes_31-edges_Schade-data_input.sif">Demo #3: Unweighted GRN"</a> as an example.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)  Follow the link to download a sample SIF file.</li>
                               <ul>
@@ -224,12 +235,9 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         <li>For a weighted network, each source-to-target relationship should be on a separate line.  While it is possible that two or more source-to-target relationships would have the same exact weight value, it is not recommended to use the shorthand of listing multiple target nodes on the same row.</li>
                                         <li>GRNsight will automatically detect a SIF file representing a weighted network when it finds numerical values as the relationship type.  It will change the arrowhead type and the thickness and color of the edges as described in <a href="#unweighted_vs_weighted" data-toggle="collapse">Section 3a</a>.</li>
                                         <ul>
-                                                  <!-- Uncomment upon release of GRNsight v2-->
-                                                  <!--<li>However, if it detects a mix of numerical and "pd" string values as the relationship type, it will issue a warning to the user that this was detected, but still display the network as an unweighted network.</li>-->
-                                                  <!-- Delete line below upon release of GRNsight v2-->
-                                                  <li>However, if it detects a mix of numerical and text string values as the relationship type, it will display the network as an unweighted network.</li>
-                                                  <li>If the user has selected the menu item Edit > Preferences > Default to black edges with regular arrowheads, GRNsight will ignore the numerical weight values and display the network as an unweighted graph.</li>
-                                                  <li>Note that these “weighted” SIF files are able to be imported in to Cytoscape (tested with v3.4.0), but the weight values will not be properly stored as edge attributes by Cytoscape because it does not use the SIF format in this way.</li>
+                                            <li>However, if it detects a mix of numerical and "pd" string values as the relationship type, it will issue a warning to the user that this was detected, but still display the network as an unweighted network.</li>
+                                            <li>If the user has selected the menu item Edit > Preferences > Default to black edges with regular arrowheads, GRNsight will ignore the numerical weight values and display the network as an unweighted graph.</li>
+                                            <li>Note that these “weighted” SIF files are able to be imported in to Cytoscape (tested with v3.4.0), but the weight values will not be properly stored as edge attributes by Cytoscape because it does not use the SIF format in this way.</li>
                                         </ul>
                               </ul>
                               <li>Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism. Currently, it is recommended that you import networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.</li>
@@ -424,7 +432,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                               To reload the same file, select the menu option File > Reload. Note that the Reload menu item will be disabled until a file has been loaded.
                             </li>
                             <li>
-                              If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (21 genes, 50 edges) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. Demos #3 and 4 are based on modeling reported in the following publication: <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, which, in turn, is based on microarray data from this publication:  <a href="http://www.molbiolcell.org/content/15/12/5492" target="_blank">Schade B, Jansen G, Whiteway M, Entian KD, Thomas DY (2004) Cold adaptation in budding yeast. Mol Biol Cell 15:5492–5502. doi:10.1091/mbc.E04-03-0167.</a>  See <a href="#section3">Section 3</a> for details on how GRNsight displays the graph.
+                              If you do not have your own input spreadsheet, you can load and view demonstration gene regulatory networks. Selecting the menu item Demo > Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) or Demo #3: Unweighted GRN (21 genes, 31 edges) will load a network graph with black edges and regular (pointy) arrowheads. Selecting the menu item Demo > Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) or Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) will load a network graph with colored edges of varying thicknesses. Demos #3 and 4 are based on modeling reported in the following publication: <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist, K.D., Fitzpatrick, B.G., Camacho, E.T., Entzminger, S.D., and Wanner, N.C. (2015) Parameter Estimation for Gene Regulatory Networks from Microarray Data: Cold Shock Response in Saccharomyces cerevisiae. Bulletin of Mathematical Biology. 77: 1457-1492, published online 29 September 2015, DOI: 10.1007/s11538-015-0092-6</a>, which, in turn, is based on microarray data from this publication:  <a href="http://www.molbiolcell.org/content/15/12/5492" target="_blank">Schade B, Jansen G, Whiteway M, Entian KD, Thomas DY (2004) Cold adaptation in budding yeast. Mol Biol Cell 15:5492–5502. doi:10.1091/mbc.E04-03-0167.</a>  See <a href="#section3">Section 3</a> for details on how GRNsight displays the graph.
                             </li>
                           </ul>
                         </div>
@@ -543,8 +551,9 @@ description: Learn how to format and upload files to GRNsight, a web application
                         Edges are arcs, but when two nodes get close together, the edges become straight lines.  Self-regulatory edges are indicated by a loop on the lower-right side of a node.
                       </li>
                     </ul>
-
                     <p>
+                      GRNsight has two layouts, grid layout and force graph layout. Grid layout sorts the nodes in alphabetical order and organizes them in a grid pattern. This ultimately gives the user power to compare graphs in easier, faster, and more efficient way.<br><br>
+
                       Note that GRNsight is designed to visualize “small-scale” or “medium-scale” gene regulatory networks, not the entire gene regulatory network for an organism.  Currently, it is recommended that you upload networks with no more than 35 unique genes or 70 edges. If you upload a network with 50 nodes or 100 edges or more, you will receive a warning and the network graph will still display, although it may just look like “spaghetti”. If you attempt to upload a network of 75 or more nodes or 100 or more edges, the graph will not display.
                     </p>
 
@@ -576,7 +585,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                               The thickness of the edge will vary based on the magnitude of the absolute value of the weight.  Larger magnitudes will have thicker edges and smaller magnitudes will have thinner edges.  The way that GRNsight determines the edge thickness is as follows.  GRNsight divides all weight values by the absolute value of the maximum weight in the matrix to normalize all the values to between zero and 1.  GRNsight then adjusts the thickness of the lines to vary continuously from the minimum thickness (for normalized weights near zero) to maximum thickness (normalized weights of 1). Normalization can be set using the box in the sidebar that appears once weighted graphs are loaded. Once set, the normalization can also be reset to the defaul value.
                             </li>
                             <li>
-                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta; edges with negative normalized weight values from -0.05 to -1 are colored cyan. Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene. The threshold to show gray weights can be manipulated by using the Gray Threshold Slider. The threshold is based on 1% increments of the maximum weight.
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored red (magenta in GRNsight < v3.0.0); edges with negative normalized weight values from -0.05 to -1 are colored blue (cyan in GRNsight < v3.0.0). Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene. The threshold to show gray weights can be manipulated by using the Gray Threshold Slider. The threshold is based on 1% increments of the maximum weight. Optionally, users may specify that a gray edge be displayed as dashed, to provide additional visual indication of weak relationships.
                             </li>
                             <li>
                               For the weighted edges to display with different colors and thickness, make sure that you have selected the menu item Edit > Preferences > Format edges based on optimized weight parameters. Selecting the menu item Edit > Preferences > Default to black edges with regular arrowheads will make the graph display as an unweighted graph even if the worksheet "network_optimized_weights" has real numbers instead of 1's to indicated weighted edges.
@@ -661,6 +670,45 @@ description: Learn how to format and upload files to GRNsight, a web application
                         </div>
                       </div>
                     </div>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#node_coloring" data-toggle="collapse">
+                            3e. Node Coloring
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="node_coloring" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            By default, when a user uploads an Excel workbook which contains correctly formatted expression sheets, nodes are colored with a heat map overlay to visualize time series expression data. Expression values of a transcription factor at a given time point are mapped to corresponding vertical slices on the node, and colored according to the node coloring legend located in the sidebar. Blue slices represent negative expression values (indicating a decrease in mRNA), while red slices represent positive expression values (indicating an increase in mRNA). The greater the magnitude of the expression value, the darker the shade of red or blue.
+                          </p>
+                          <p>
+                            Users may adjust the following node coloring parameters, located in both the sidebar and dropdown menus:
+                          </p>
+                          <ul>
+                            <li>
+                              <b>Node Coloring Toggle Button</b><br>Turns node coloring on or off.
+                            </li>
+                            <li>
+                              <b>Top Dataset</b><br>Users may select the dataset used to generate the top half of the node coloring visualiztion. Options in the dropdown list are automatically populated with names of detected expression sheets.
+                            </li>
+                            <li>
+                              <b>Average Replicate Values (Top Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the top half of node coloring.
+                            </li>
+                            <li>
+                              <b>Bottom Dataset</b><br>Users may select the dataset used to generate the bottom half of the node coloring visualiztion. Options in the dropdown list are automatically populated with names of detected expression sheets.
+                            </li>
+                            <li>
+                              <b>Average Replicate Values (Bottom Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the bottom half of node coloring.
+                            </li>
+                            <li>
+                              <b>Log Fold Change Max Value</b><br>Indicates the value that will map to the darkest red/blue, and changes the node coloring legend accordingly. A negative log fold change max value will flip the red/blue scale. The default log fold change max value is 3.
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
 
                   </div>
                 </div>
@@ -728,15 +776,50 @@ description: Learn how to format and upload files to GRNsight, a web application
                             </li>
 
                             <li>
-                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (10 edges in this example); edges with negative normalized weight values from -0.05 to -1 are colored cyan (16 edges in this example). Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
+                              The color of the edge also imparts information about the regulatory relationship. Edges with positive normalized weight values from 0.05 to 1 are colored magenta (red in GRNsight >= v3.0.0). There are 10 magenta edges in this example. Edges with negative normalized weight values from -0.05 to -1 are colored cyan (blue in GRNsight >= v3.0.0). There are 16 cyan edges in this example. Edges with normalized weight values between -0.05 and 0.05 are colored gray to emphasize that their normalized magnitude is near zero and that they have a weak influence on the target gene (5 edges in this example).
                             </li>
 
                             <li>
                               Because of this visualization of the weight parameters, one can make some interesting observations about the behavior of the network.  The expression of several genes is controlled by a balance of activation and repression by different regulators.  For example, the expression of MSN1 is strongly activated by CIN5, but even more strongly repressed by ABF1.  Furthermore, some transcription factors themselves act both as activators of some targets and repressors of other targets.  For example, RAP1 activates the expression of MSN4 and RPH1, but represses the expression of AFT1, HSF1, and itself.  <a href="http://www.yeastgenome.org/locus/S000005160/overview" target="blank">RAP1 is known to act as both an activator and a repressor.</a>  Thus, GRNsight enables one to interpret the weight parameters more easily than one could from the adjacency matrix alone.  For more information about the interpretation of the model results, see <a href="http://link.springer.com/article/10.1007/s11538-015-0092-6" target="blank">Dahlquist et al. (2015)</a>.
                             </li>
-
                             <li>
-                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and gray representing no significant change in expression relative to the control).  This feature has not yet been implemented in GRNsight, but is currently under development for version 2.
+                              Note that the nodes in the bottom right panel of the figure are also colored, based on the time course of expression of that gene in the <a href="http://www.molbiolcell.org/content/15/12/5492.short" target="blank">Schade et al. (2004)</a> microarray data (stripes from left to right, 10, 30, and 120 minutes of cold shock, with magenta representing a significant increase in expression relative to the control at time 0, cyan representing a significant decrease in expression relative to the control, and gray representing no significant change in expression relative to the control).  This feature is available in GRNsight >= v3.0.0, and described in the section below.
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#node_coloring_grid_layout" data-toggle="collapse">
+                            4b. Node Coloring and Grid Layout
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="node_coloring_grid_layout" class="panel-collapse collapse">
+                        <div class="panel-body">
+                          <p>
+                            In GRNsight v3.0.0, two major features were added to GRNsight: node coloring visualization for time series expression data and a grid layout option. The following three figures were derived from Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) using GRNsight v3.0.0. The figure on the left shows an example of the automated force graph layout generated by GRNsight with the new edge coloring scheme introduced in GRNsight v3.0.0. The figure in the middle shows an example of the automated force graph layout with the node coloring feature turned on. The figure on the right shows an example of the grid layout option with the node coloring feature turned on.
+                          </p>
+                          <br>
+                          <table style="width:100%">
+                            <tr>
+                              <td><img src="{{ site.baseurl }}/assets/images/v3demo2.png" alt="demo-2-auto"  width="327" /></td>
+                              <td><img src="{{ site.baseurl }}/assets/images/v3demo2-nodecoloring.png" alt="demo-2-nodecoloring"  width="327" /></td>
+                              <td><br><img src="{{ site.baseurl }}/assets/images/v3demo2-grid+nodecoloring.png" alt="demo-2-nodecoloring-grid"  width="327" /></td>
+                            </tr>
+                          </table>
+                          <br>
+                          <ul>
+                            <li>
+                              As shown in the figure on the left, the color scheme for edges was changed in GRNsight v3.0.0 to red and blue from magenta and cyan, respectively. The color scheme was changed to provide consistency with the node coloring visualization and to provide more visual contrast over the original coloring scheme for color-blind users.
+                            </li>
+                            <li>
+                              Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) contains expression sheets formatted for node coloring. Nodes in the graph are colored in the middle and left figure to visualize the level of expression of transcription factors over time. Two different datasets are selected for the top and bottom nodes to facilitate visual comparision between the expression values in the datasets. The top half of the nodes are colored using data from the sheet "wt_log2_expression" of Demo #2 and the bottom half of the nodes are colored using data from the sheet "wt_log2_optimized_expression" of Demo #2. The number of vertical node coloring slices in each half of the node correspond to the number of data points in the data set. The color of each vertical slice correspond to the color that the expression value at that time point maps to on the node coloring color scale, located in the sidebar menu of the user interface. By default, -3 maps to the darkest blue shade, while 3 maps to the darkest red shade.
+                            </li>
+                            <li>
+                              The figure on the right shows an example of the grid layout option. Grid layout was introduced in GRNsight v3.0.0 to provide an alternative graph layout option to the force graph layout. In grid layout mode, nodes are alphabetically organized in a grid pattern.
                             </li>
                           </ul>
                         </div>
