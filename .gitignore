@@ -5,3 +5,4 @@ node_modules
 _gh_pages
 .bundle
 documents/
+Gemfile.lock
