@@ -92,12 +92,12 @@ html
                   a(href='#' id='printGraph')
                     span(class='glyphicon glyphicon-print')
                     | &nbsp; Print
-            
+
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') View
               ul(class='dropdown-menu' role='menu')
                 span(class='menu-subheader') Viewport Size
-                li            
+                li
                   a(href='#' id='viewport-size-s' class='viewportOption active')
                     span(class='glyphicon')
                     | &nbsp; Small (1104 x 648 pixels)
@@ -126,7 +126,7 @@ html
                     input(type='number' id='zoomInput' min='1' max='200' value='100' class='keepopen' aria-describedby='basic-addon1')
                     span
                     | &nbsp; %
-  
+
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Layout
               ul(class='dropdown-menu' role='menu')
@@ -160,8 +160,8 @@ html
                     span(class='glyphicon invisible')
                     | &nbsp; Charge (-2000 - 0) &nbsp;
                     input(type='number' id='charge-menu' class='keepopen' value='-50' aria-describedby='basic-addon1')
-                
-  
+
+
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Node
               ul(class='dropdown-menu' role='menu')
@@ -195,7 +195,7 @@ html
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value (-100 - 100): &nbsp;
                     input(type='number' min="-100" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
-                    
+
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
               ul(class='dropdown-menu')
@@ -240,7 +240,7 @@ html
                   a(href='#' id='grey-edges-dashed-menu')
                     span(class='glyphicon')
                     | &nbsp; Show Gray Edges as Dashed
-                    
+
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
               ul(class='dropdown-menu' role='menu')
@@ -250,7 +250,7 @@ html
                   a(href='https://github.com/dondi/GRNsight/wiki', target='_blank') GRNsight Wiki
                 li
                   a(href='http://dondi.github.io/GRNsight/about.html', target='_blank') About GRNsight
-            
+
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Demo
               ul(class='dropdown-menu' role='menu')
@@ -383,7 +383,7 @@ html
             span(class='forceVal', id='grayThresholdValue') 5%
             <br />
             input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-            label(for='dashedGrayLineButton' style='font-weight:normal')&nbsp; Show Gray Edges as Dashed
+            label(for='dashedGrayLineButton' style='font-weight:normal') &nbsp; Show Gray Edges as Dashed
             <br />
             input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
 
