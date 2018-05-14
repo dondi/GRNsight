@@ -301,7 +301,6 @@ var parseSheet = function (sheet) {
                                 network.genes.push(currentGene);
                             }
                         } catch (err) {
-                            console.log(err);
                             addError(network, errorList.corruptGeneError(row, column));
                             return network;
                         }
@@ -328,7 +327,6 @@ var parseSheet = function (sheet) {
                                 }
                             }
                         } catch (err) {
-                            console.log(err);
                             sourceGene = currentSheet.data[0][column];
                             targetGene = currentSheet.data[row][0];
                             addError(network, errorList.corruptGeneError(row, column));
