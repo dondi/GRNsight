@@ -287,21 +287,21 @@ var parseSheet = function (sheet) {
                         // These genes are the source genes
                         try {
                             currentGene = {name: currentSheet.data[0][column]};
-                            // set currentGeneName to a String so toUpperCase doesn't mess up
-                            currentGene.name = currentGene.name.toString();
-                            // Set genes to upper case so case doesn't matter in error checking;
                             // ie: Cin5 is the same as cin5
                             if (currentGene.name === undefined) {
                                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
                             } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
                                 addWarning(network, warningsList.missingSourceGeneWarning(row, column));
                             } else {
+                                // set currentGeneName to a String so toUpperCase doesn't mess up
+                                currentGene.name = currentGene.name.toString();
                                 sourceGenes.push(String(currentGene.name.toUpperCase()));
                                 genesList.push(String(currentGene.name.toUpperCase()));
                                 currentGene.name = currentGene.name;
                                 network.genes.push(currentGene);
                             }
                         } catch (err) {
+                            console.log(err);
                             addError(network, errorList.corruptGeneError(row, column));
                             return network;
                         }
@@ -309,13 +309,13 @@ var parseSheet = function (sheet) {
                         // These genes are the target genes
                         try {
                             currentGene = {name: currentSheet.data[row][0]};
-                            // set currentGeneName to a String so toUpperCase doesn't mess up
-                            currentGene.name = currentGene.name.toString();
                             if (currentGene.name === undefined) {
                                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
                             } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
                                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
                             } else {
+                                // set currentGeneName to a String so toUpperCase doesn't mess up
+                                currentGene.name = currentGene.name.toString();
                                 targetGenes.push(String(currentGene.name.toUpperCase()));
                                 // Here we check to see if we've already seen the gene name that we're about to store
                                 // Genes may or may not be present due to asymmetry or unorderedness
@@ -328,6 +328,7 @@ var parseSheet = function (sheet) {
                                 }
                             }
                         } catch (err) {
+                            console.log(err);
                             sourceGene = currentSheet.data[0][column];
                             targetGene = currentSheet.data[row][0];
                             addError(network, errorList.corruptGeneError(row, column));
