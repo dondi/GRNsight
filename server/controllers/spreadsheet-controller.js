@@ -287,6 +287,8 @@ var parseSheet = function (sheet) {
                         // These genes are the source genes
                         try {
                             currentGene = {name: currentSheet.data[0][column]};
+                            //set currentGeneName to a String so toUpperCase doesn't mess up
+                            currentGene.name = currentGene.name.toString();
                             // Set genes to upper case so case doesn't matter in error checking;
                             // ie: Cin5 is the same as cin5
                             if (currentGene.name === undefined) {
@@ -307,6 +309,8 @@ var parseSheet = function (sheet) {
                         // These genes are the target genes
                         try {
                             currentGene = {name: currentSheet.data[row][0]};
+                            //set currentGeneName to a String so toUpperCase doesn't mess up
+                            currentGene.name = currentGene.name.toString();
                             if (currentGene.name === undefined) {
                                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
                             } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
@@ -350,8 +354,8 @@ var parseSheet = function (sheet) {
                                         addWarning(network, warningsList.randomDataWarning("NaN", row, column));
                                     } else {
                                         // Grab the source and target genes' numbers
-                                        sourceGeneNumber = genesList.indexOf(sourceGene.toUpperCase());
-                                        targetGeneNumber = genesList.indexOf(targetGene.toUpperCase());
+                                        sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
+                                        targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
                                         currentLink = {source: sourceGeneNumber, target: targetGeneNumber,
                                             value: currentSheet.data[row][column]};
                                         // Here we set the properties of the current link
@@ -446,7 +450,7 @@ var processGRNmap = function (path, res, app) {
         // If all looks well, return the network with an all clear
         res.json(network) :
         // If all does not look well, return the network with an error 400
-        res.json(400, network);
+        res.status(400).json(network);
 };
 
 var grnSightToCytoscape = function (network) {
