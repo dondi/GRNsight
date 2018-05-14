@@ -14,6 +14,7 @@ var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
+
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
         sliderController.simulation.force("charge").strength(value);
@@ -71,6 +72,8 @@ export var sliderGroupController = function (sliderArray) {
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.sliders[i].currentVal = this.sliders[i].defaultVal;
         }
+        $("#charge-menu").val(this.sliders[0].defaultVal);
+        $("#link-distance-menu").val(this.sliders[1].defaultVal);
         this.updateValues();
     };
 
@@ -78,6 +81,8 @@ export var sliderGroupController = function (sliderArray) {
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.sliders[i].currentVal = this.sliders[i].backup;
         }
+        $("#charge-menu").val(this.sliders[0].backup);
+        $("#link-distance-menu").val(this.sliders[1].backup);
         this.updateValues();
     };
 
@@ -124,6 +129,14 @@ export var sliderGroupController = function (sliderArray) {
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
+        if (this.locked) {
+            $("#link-distance").parent().addClass("disabled");
+            $("#charge").parent().addClass("disabled");
+        } else {
+            $("#link-distance").parent().removeClass("disabled");
+            $("#charge").parent().removeClass("disabled");
+        }
+
         $.each(this.sliders, function (key, value) {
             $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
         });
@@ -146,6 +159,7 @@ export var sliderGroupController = function (sliderArray) {
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetForce();
         });
+
         $(RESET_SLIDERS_MENU_OPTION).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
@@ -180,10 +194,4 @@ export var sliderGroupController = function (sliderArray) {
             SLIDER_ADJUSTER[parameterType](this, value);
         }
     };
-};
-
-// Gray Threshold Slider Settings
-var outputUpdate = function () {
-    var value = Math.round(($("#grayThresholdInput").val() * 100));
-    $("#grayThresholdValue").text(value + "%");
 };

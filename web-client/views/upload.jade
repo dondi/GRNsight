@@ -92,43 +92,57 @@ html
                   a(href='#' id='printGraph')
                     span(class='glyphicon glyphicon-print')
                     | &nbsp; Print
+            
             li(class='dropdown')
-              a(href='#' class='dropdown-toggle' data-toggle='dropdown' disabled) Edit
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') View
               ul(class='dropdown-menu' role='menu')
-                li(class='disabled not-yet-implemented')
-                  a(href='#')
+                span(class='menu-subheader') Viewport Size
+                li            
+                  a(href='#' id='viewport-size-s' class='viewportOption active')
+                    span(class='glyphicon')
+                    | &nbsp; Small (1104 x 648 pixels)
+                li
+                  a(href='#' id='viewport-size-m' class='viewportOption')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Medium (1414 x 840 pixels)
+                li
+                  a(href='#' id='viewport-size-l' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Large (1920 x 1080 pixels)
+                li
+                  a(href='#' id='viewport-size-fit' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Fit To Window
+                li(class='divider')
+                li
+                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Restrict Graph to Viewport
+                li(class='divider')
+                li(class='startDisabled disabled')
+                  a(href='#' id='zoom')
                     span(class='glyphicon invisible')
-                    | &nbsp; Undo
-                li(class='disabled not-yet-implemented')
-                  a(href='#')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Redo
-                li(class='divider not-yet-implemented')
-                li(class='dropdown-submenu')
-                  a(href='#')
-                    span(class='glyphicon glyphicon-wrench')
-                    | &nbsp; Preferences
-                  ul(class='dropdown-menu')
-                    li
-                      a(href='#' id='colorEdges' class='colorPreferences active')
-                        span(class='glyphicon glyphicon-ok')
-                        | &nbsp; Format edges based on optimized weight parameters
-                    li
-                      a(href='#' id='blackEdges' class='colorPreferences')
-                        span(class='glyphicon invisible')
-                        | &nbsp; Default to black edges with regular arrowheads
+                    | &nbsp; Zoom (1 - 200%) &nbsp;
+                    input(type='number' id='zoomInput' min='1' max='200' value='100' class='keepopen' aria-describedby='basic-addon1')
+                    span
+                    | &nbsp; %
+  
             li(class='dropdown')
-              a(href='#' class='dropdown-toggle', data-toggle='dropdown') Format
+              a(href='#' class='dropdown-toggle', data-toggle='dropdown') Layout
               ul(class='dropdown-menu' role='menu')
+                span(class='menu-subheader') Graph Options
+                li
+                  a(href='#' id='gridLayout' class='layout')
+                    span(class='glyphicon')
+                    | &nbsp; Grid Layout
+                  a(href='#' id='forceGraph' class='layout' checked)
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Force Graph
+                li(class='divider')
                 li
                   a(href='#' id='lockSlidersMenu' class="lockSliders")
                     span(class='glyphicon invisible')
                     | &nbsp; Lock Force Graph Parameters
-                li(class='disabled not-yet-implemented')
-                  a(href='#' class='noGlyph')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Lock Nodes
-                li(class='divider')
                 li
                   a(href='#' id='resetSlidersMenu' class="resetSliders")
                     span(class='glyphicon invisible')
@@ -137,7 +151,62 @@ html
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
-
+                li
+                  a(href='#' id='link-distance')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Link Distance (1 - 1000) &nbsp;
+                    input(type='number' id='link-distance-menu' class='keepopen' value='500' aria-describedby='basic-addon1')
+                  a(href='#' id='charge')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Charge (-2000 - 0) &nbsp;
+                    input(type='number' id='charge-menu' class='keepopen' value='-50' aria-describedby='basic-addon1')
+                
+  
+            li(class='dropdown')
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Node
+              ul(class='dropdown-menu' role='menu')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' id='node-coloring-toggle-menu' class='nodeColoringToggle')
+                    span(class='glyphicon')
+                    | &nbsp; Disable Node Coloring
+                li(class='divider')
+                li(class='node-coloring-menu dropdown-submenu disabled')
+                  a(href='#')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Select Top Dataset
+                  ul(class='dropdown-menu' id='topDatasetDropdownMenu')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' id='averageDataTopMenu' class='nodeColoring')
+                    span(class='glyphicon')
+                    | &nbsp; Average Replicate Values for Top Dataset
+                li(class='divider')
+                li(class='node-coloring-menu dropdown-submenu disabled')
+                  a(href='#')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Select Bottom Dataset
+                  ul(class='dropdown-menu' id='bottomDatasetDropdownMenu')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' id='averageDataBottomMenu' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Average Replicate Values for Bottom Dataset
+                li(class='divider')
+                li(class='node-coloring-menu disabled')
+                  a(href='#' class='nodeOptions')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Log Fold Change Max Value (-100 - 100): &nbsp;
+                    input(type='number' min="-100" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
+                    
+            li(class='dropdown')
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
+              ul(class='dropdown-menu')
+                li
+                  a(href='#' id='colorEdges' class='colorPreferences active')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Format edges based on optimized weight parameters
+                li
+                  a(href='#' id='blackEdges' class='colorPreferences')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Default to black edges with regular arrowheads
                 li(class='divider')
                 li
                   a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
@@ -151,14 +220,27 @@ html
                   a(href='#' id='weightsNeverMenu' class='weightsNever')
                     span(class='glyphicon')
                     | &nbsp; Never Show Edge Weights
-
-            li(class='dropdown hidden')
-              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
-              ul(class='dropdown-menu' role='menu')
-                li(class='disabled')
-                  a(href='#') Node Coloring Settings
-                li(class='disabled')
-                  a(href='#') Edge Coloring Settings
+                li(class='divider')
+                li(class='weightedGraphOptionsMenu disabled')
+                  a(href='#')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Edge Weight Normalization Factor (0.0001 - 1000) &nbsp;
+                    input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' aria-describedby='basic-addon1')
+                  a(href='#' id='reset-normalization-factor-menu')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Reset Edge Weight Normalization Factor
+                li(class='divider')
+                li(class='weightedGraphOptionsMenu disabled')
+                  a(href='#')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Gray Edge Threshold (0 - 100%) &nbsp;
+                    input(type='number' id='gray-edge-threshold-menu' class='keepopen' value='5' aria-describedby='basic-addon1')
+                    | &nbsp; %
+                li(class='weightedGraphOptionsMenu disabled')
+                  a(href='#' id='grey-edges-dashed-menu')
+                    span(class='glyphicon')
+                    | &nbsp; Show Gray Edges as Dashed
+                    
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
               ul(class='dropdown-menu' role='menu')
@@ -168,13 +250,14 @@ html
                   a(href='https://github.com/dondi/GRNsight/wiki', target='_blank') GRNsight Wiki
                 li
                   a(href='http://dondi.github.io/GRNsight/about.html', target='_blank') About GRNsight
+            
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Demo
               ul(class='dropdown-menu' role='menu')
                 li
-                  a(href='#' id='unweighted') Demo #1: Unweighted GRN (21 genes, 50 edges)
+                  a(href='#' id='unweighted') Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
                 li
-                  a(href='#' id='weighted') Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)
+                  a(href='#' id='weighted') Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
                 li
                   a(href='#' id='schadeInput') Demo #3: Unweighted GRN (21 genes, 31 edges)
                 li
@@ -223,6 +306,25 @@ html
         div(id="layout")
           form
             input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
+        div(class="node-coloring hidden")
+            p(class='sideHeader') Node Coloring
+            input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
+            label(class='info', data-toggle='tooltip') Top Dataset
+            select(id="dataset-top")
+            form
+              input(id='averageDataTop', type='checkbox' checked)
+              label(for='averageDataTop' style='font-weight:normal') Average Replicate Values
+            label(class='info', data-toggle='tooltip') Bottom Dataset
+            select(id="dataset-bottom")
+            form
+              input(id='averageDataBottom', type='checkbox' checked)
+              label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
+            p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
+            p(class='sideHeader' id="logFoldChangeMaxValueRange") (-100 - 100): &nbsp;
+            input(type='number' id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+            span &nbsp;
+            button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
+            div(class="node-coloring-legend")
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
@@ -272,7 +374,7 @@ html
           div(class='weightedGraphOptions hidden')
             p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
             p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
-            input(type='text' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+            input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
             div(id='btn-side')
               button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
               button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
@@ -280,10 +382,10 @@ html
             label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0 - 100%): &nbsp; &nbsp;
             span(class='forceVal', id='grayThresholdValue') 5%
             <br />
-            input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine' class="lockSliders" onclick='dashedGrayLineUpdate(this)')
-            label(for='dashedGrayLineButton' style='font-weight:normal')&nbsp; Show gray edges as dashed
+            input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
+            label(for='dashedGrayLineButton' style='font-weight:normal')&nbsp; Show Gray Edges as Dashed
             <br />
-            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01', oninput='outputUpdate()')
+            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
@@ -352,4 +454,5 @@ html
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js')
-  script(src='js/bundle.js')
+  script(src='//d3js.org/d3-scale-chromatic.v1.min.js')
+  script(src='js/grnsight.min.js')

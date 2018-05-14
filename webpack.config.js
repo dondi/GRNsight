@@ -3,10 +3,10 @@ module.exports = {
     entry: "./web-client/public/js/grnsight.js",
     output: {
         path: `${__dirname}/web-client/public/js`,
-        filename: "bundle.js"
+        filename: "grnsight.min.js"
     },
     module: {
-        loaders: [
+        rules: [
             { test: path.join(__dirname, "es6"),
                 loader: "babel-loader" }
         ]

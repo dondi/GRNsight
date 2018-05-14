@@ -360,11 +360,16 @@ var parseSheet = function (sheet) {
                                             if (currentLink.value > 0) {
                                                 // If it's a positive number, mark it as an activator
                                                 currentLink.type = "arrowhead";
-                                                currentLink.stroke = "MediumVioletRed";
+                                                // GRNsight v1 magenta edge color
+                                                // currentLink.stroke = "MediumVioletRed";
+                                                // Node coloring-consistent red edge color
+                                                currentLink.stroke = "rgb(195, 61, 61)";
                                                 network.positiveWeights.push(currentLink.value);
                                             } else { // if it's a negative number, mark it as a repressor
                                                 currentLink.type = "repressor";
-                                                currentLink.stroke = "DarkTurquoise";
+                                                // currentLink.stroke = "DarkTurquoise"; // GRNsight v1 cyan edge color
+                                                // Node coloring-consistent blue edge color
+                                                currentLink.stroke = "rgb(51, 124, 183)";
                                                 network.negativeWeights.push(currentLink.value);
                                             }
                                         } else if (network.sheetType === "unweighted") {
@@ -538,11 +543,11 @@ module.exports = function (app) {
 
         // Load the demos
         app.get("/demo/unweighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_input.xlsx", res, app);
+            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_50-edges_Dahlquist-data_estimation_output.xlsx",
+            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
                 res, app);
         });
 

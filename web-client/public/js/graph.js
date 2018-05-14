@@ -1,4 +1,5 @@
 import Grid from "d3-v4-grid";
+const hasExpressionData = require("./node-coloring").hasExpressionData;
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -16,8 +17,7 @@ import Grid from "d3-v4-grid";
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-
-export var drawGraph = function (network, sliderController, normalization, grayThreshold, dashedLine) {
+export var drawGraph = function (network, sliderController, nodeColoring) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -28,6 +28,9 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     var height = $container.height();
     var nodeHeight = 30;
     var colorOptimal = true;
+    var grayThreshold = +$("#grayThresholdInput").val();
+
+    var dashedLine = $("#dashedGrayLineButton").prop("checked");
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
@@ -71,7 +74,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
-        .domain([0, normalization && normMax > 0 ? normMax : d3.max(allWeights)])
+        .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
         .range([2, 14])
         .clamp(true);
 
@@ -85,8 +88,11 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             .range(["2"]);
         unweighted = true;
         $(".normalization-form").append("placeholder='unweighted'");
+        document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
-        document.getElementById("normalization-max").setAttribute("placeholder", d3.max(allWeights));
+        var maxWeight = d3.max(allWeights);
+        document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
+        document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }
 
     var getEdgeThickness = function (edge) {
@@ -245,10 +251,14 @@ export var drawGraph = function (network, sliderController, normalization, grayT
 
     setupZoomSlider(minimumScale);
 
-    function updateZoomPercent () {
-        var value = Math.round(($(".zoomSlider").val() / 8 * 200));
+    var ZOOM_SLIDER_MAX_VAL = 8;
+    var ZOOM_RANGE = 200;
+
+    function updateZoomValue (input) {
+        var value = input || Math.round(($(".zoomSlider").val() / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE));
         value = value === 0 ? MIDDLE_SCALE : value;
         $("#zoomPercent").html(value + "%");
+        $("#zoomInput").val(value);
     }
 
     function getMappedValue (scale) {
@@ -263,8 +273,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         $(".zoomSlider").val(equivalentPoint.toFixed(2));
     }
 
-    d3.select(".zoomSlider").on("input", function () {
-        var value = $(this).val();
+    var updateViewportZoom = function (value) {
         var currentPoint = value * 100;
         var equivalentScale;
         if (adaptive || (!adaptive && value <= ADAPTIVE_MAX_SCALE)) {
@@ -282,13 +291,35 @@ export var drawGraph = function (network, sliderController, normalization, grayT
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
             $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
             manualZoomFunction(MIDDLE_SCALE);
-            updateZoomPercent();
+            updateZoomValue();
         }
+    };
+
+    var valueValidator = function (min, max, value) {
+        return Math.min(max, Math.max(min, value));
+    };
+
+    var zoomInputValidator = function (value) {
+        return valueValidator(1, 200, value);
+    };
+
+    $("#zoomInput").on("change", function () {
+        var value = zoomInputValidator(+$("#zoomInput").val());
+        var scaledValue = value * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        $(".zoomSlider").val(scaledValue);
+        updateViewportZoom(scaledValue);
+        updateZoomValue(value);
+    });
+
+    d3.select(".zoomSlider").on("input", function () {
+        var value = $(this).val();
+        updateViewportZoom(value);
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
         manualZoom = false;
     });
+
 
     var manualZoomFunction = function (zoomScale) {
         if (zoomScale < MIDDLE_SCALE) {
@@ -296,7 +327,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES);
         }
-        updateZoomPercent();
+        updateZoomValue();
         var container = zoomContainer;
         zoom.scaleTo(container, zoomScale);
     };
@@ -321,13 +352,17 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         d3.select(".boundingBox").attr("width", width).attr("height", height);
     });
 
-    d3.selectAll("input[name=viewport]").on("change", function () {
-        var fixed = $(this).prop("checked");
+    var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
+            $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
+            $("input[name=viewport]").removeProp("checked");
             $container.addClass("cursorGrab");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
+            center();
         } else if (fixed) {
+            $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
+            $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (zoomSliderScale > 1) {
@@ -343,6 +378,16 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
+    };
+
+    d3.select("#restrict-graph-to-viewport").on("click", function () {
+        var fixed = $("input[name=viewport]").prop("checked");
+        restrictGraphToViewport(fixed);
+    });
+
+    d3.selectAll("input[name=viewport]").on("change", function () {
+        var fixed = $(this).prop("checked");
+        restrictGraphToViewport(fixed);
     });
 
     $(window).on("resize", function () {
@@ -401,13 +446,6 @@ export var drawGraph = function (network, sliderController, normalization, grayT
                 return Math.max(baseThickness, 7);
             });
     }
-
-    grayThreshold = +$("#grayThresholdInput").val();
-
-    dashedLine = $("#dashedGrayLineButton").is(":checked", function () {
-        $("#dashedGrayLineButton").prop("checked", true);
-    });
-
 
     link.append("path")
         .attr("class", "main")
@@ -867,23 +905,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         })
         .attr("stroke-width", "2px")
         .on("dblclick", dblclick);
-
-    var text = node.append("text")
-        .attr("dy", 22)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("stroke-width", "0")
-        .style("fill", "black")
-        .text(function (d) {
-            return d.name;
-        })
-        .attr("dx", function (d) {
-            var textWidth = this.getBBox().width;
-            d.textWidth = textWidth < 68.5625 ? 68.5625 : textWidth; // minimum width
-            return d.textWidth / 2 + 3;
-        })
-        .on("dblclick", nodeTextDblclick)
-        .on("contextmenu", function (gene) {
+        /* .on("contextmenu", function (gene) {
             var tempLink = $("<a></a>")
                 .attr({
                     href: "/gene/info.html?" + $.param({symbol: gene.name}),
@@ -893,17 +915,190 @@ export var drawGraph = function (network, sliderController, normalization, grayT
             tempLink.get(0).click();
             tempLink.remove();
             d3.event.preventDefault();
-        });
+        });*/
 
-    rect
-        .attr("width", function (d) {
-            return d.textWidth + 6;
-        });
+    var MINIMUM_NODE_WIDTH = 68.5625;
+    var NODE_MARGIN = 3;
+    var NODE_HEIGHT = 22;
 
-    node
-        .attr("width", function (d) {
-            return d.textWidth;
+    var renderNodeLabels = function () {
+        node.selectAll(".nodeText").remove();
+        var text = node.append("text")
+            .attr("dy", NODE_HEIGHT)
+            .attr("text-anchor", "middle")
+            .attr("class", "nodeText")
+            .style("font-size", "18px")
+            .style("stroke-width", "0")
+            .style("fill", "black")
+            .text(function (d) {
+                return d.name;
+            })
+            .attr("dx", function (d) {
+                var textWidth = this.getBBox().width;
+                d.textWidth = textWidth < MINIMUM_NODE_WIDTH ? MINIMUM_NODE_WIDTH : textWidth;
+                return d.textWidth / 2 + NODE_MARGIN;
+            })
+            .on("dblclick", nodeTextDblclick);
+
+        rect
+            .attr("width", function (d) {
+                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
+            });
+        node
+            .attr("width", function (d) {
+                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
+            });
+    };
+    renderNodeLabels();
+
+    function onlyUnique (value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    var getExpressionData = function (gene, strain, average) {
+        var strainData = network["expression"][strain];
+        if (average) {
+            var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
+            var avgMap = {};
+            uniqueTimePoints.forEach(function (key) {
+                avgMap[key] = [];
+            });
+            strainData.time_points.forEach(function (time, index) {
+                avgMap[time].push(strainData.data[gene][index]);
+            });
+            var avgs = [];
+            Object.keys(avgMap).forEach(function (key) {
+                var length = avgMap[key].length;
+                var sum = avgMap[key].reduce(function (partialSum, currentValue) {
+                    return partialSum + currentValue;
+                }, 0);
+                avgs.push(sum / length);
+            });
+            return {data: avgs, timePoints: uniqueTimePoints};
+        }
+        return {data: strainData.data[gene], timePoints: strainData.time_points};
+    };
+
+    var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
+        var timePoints = [];
+        node.each(function (p) {
+            d3.select(this)
+            .append("g")
+            .selectAll(".coloring")
+            .data(function () {
+                var result = getExpressionData(p.name, dataset, average);
+                timePoints = result.timePoints;
+                return result.data;
+            })
+            .attr("class", "coloring")
+            .enter().append("rect")
+            .attr("width", function () {
+                var width = rect.attr("width") / timePoints.length;
+                return width + "px";
+            })
+            .attr("class", "coloring")
+            .attr("height", rect.attr("height") / 2 + "px")
+            .attr("transform", function (d, i) {
+                var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
+                var xOffset = i * (rect.attr("width") / timePoints.length);
+                return "translate(" + xOffset + "," +  yOffset + ")";
+            })
+            .attr("stroke-width", "0px")
+            .style("fill", function (d) {
+                d = d || 0; // missing values are changed to 0
+                var scale = d3.scaleLinear()
+                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+                    .range([0, 1]);
+                return d3.interpolateRdBu(scale(-d));
+            })
+            .text(function (d) {
+                return "data " + JSON.stringify(d) + " of " + p.name;
+            });
         });
+    };
+
+    var renderNodeColoringLegend = function (logFoldChangeMaxValue) {
+        var $nodeColoringLegend = $(".node-coloring-legend");
+        d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
+        var xMargin = 10;
+        var yMargin = 30;
+        var width = 200;
+        var height = 10;
+        var textYOffset = 10;
+        var increment = 0.1;
+
+        var svg = d3.select($nodeColoringLegend[0])
+            .append("svg")
+            .attr("width", width + xMargin * 2)
+            .attr("height", height + yMargin)
+            .append("g")
+            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
+
+        var logFoldChangeMaxValueMagnitude = Math.abs(logFoldChangeMaxValue);
+        var gradientValues = d3.range(-logFoldChangeMaxValueMagnitude, logFoldChangeMaxValueMagnitude, increment);
+        gradientValues = logFoldChangeMaxValue < 0 ? gradientValues.reverse() : gradientValues;
+
+        var flippedScale = logFoldChangeMaxValue < 0 ? true : false;
+
+        var coloring = svg.selectAll(".node-coloring-legend")
+            .data(gradientValues)
+            .attr("class", "node-coloring-legend");
+
+        coloring.enter().append("rect")
+            .attr("width", width / gradientValues.length + "px")
+            .attr("height", height + "px")
+            .attr("transform", function (d, i) {
+                return "translate(" + (i * (width / gradientValues.length)) + "," + 0 + ")";
+            })
+            .style("fill", function (d) {
+                var scale = d3.scaleLinear()
+                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+                    .range([0, 1]);
+                return d3.interpolateRdBu(scale(flippedScale ? d : -d));
+            });
+
+        var legendLabels = {
+            "left": {
+                "textContent": (flippedScale ? +logFoldChangeMaxValue : -logFoldChangeMaxValue).toFixed(0),
+                "x": -xMargin / 2
+            },
+            "center": {
+                "textContent": "0",
+                "x": width / 2
+            },
+            "right": {
+                "textContent": (flippedScale ? -logFoldChangeMaxValue : +logFoldChangeMaxValue).toFixed(0),
+                "x": width - xMargin / 2
+            },
+        };
+        var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
+        for (var key in legendLabels) {
+            var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            label.textContent = legendLabels[key].textContent;
+            label.setAttribute("font-size", "8px");
+            label.setAttribute("x", legendLabels[key].x);
+            label.setAttribute("y", height + textYOffset + "px");
+            g.appendChild(label);
+        }
+    };
+
+    nodeColoring.removeNodeColoring = function () {
+        this.nodeColoringEnabled = false;
+        node.selectAll(".coloring").remove();
+    };
+
+    nodeColoring.renderNodeColoring = function () {
+        if (this.nodeColoringEnabled) {
+            colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
+            colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
+            renderNodeLabels();
+            renderNodeColoringLegend(this.logFoldChangeMaxValue);
+        }
+    };
+
+    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
+        nodeColoring.renderNodeColoring();
+    }
 
     $(".node").css({
         "cursor": "move",
@@ -925,6 +1120,7 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
+        $(".weightedGraphOptionsMenu").removeClass("disabled");
         var setWeightsVisability = function () {
 
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
@@ -989,7 +1185,11 @@ export var drawGraph = function (network, sliderController, normalization, grayT
         if (!$(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").addClass("hidden");
         }
+        $(".weightedGraphOptionsMenu").addClass("disabled");
     }
+
+    // resets graph options so when new graph is loaded, initial layout is always force graph
+    $("#forceGraph").trigger("click");
 
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
@@ -1020,9 +1220,15 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     let layout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
         if (!layout) {
+            $("#gridLayout")
+                .addClass("called")
+                .trigger("click")
+                .removeClass("called");
+            this.value = "Force Graph";
             layout = true;
             const margin = 10;
             const grid = Grid() // create new grid layout
@@ -1041,6 +1247,11 @@ export var drawGraph = function (network, sliderController, normalization, grayT
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
             }
         } else {
+            $("#forceGraph")
+                .addClass("called")
+                .trigger("click")
+                .removeClass("called");
+            this.value = "Grid Layout";
             layout = false;
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;
@@ -1259,6 +1470,53 @@ export var drawGraph = function (network, sliderController, normalization, grayT
     sliderController.addForce(simulation);
     sliderController.configureForceHandlers();
     sliderController.initializeDefaultForces();
+
+    var changeSliderValue = function (slider, item) {
+        var value = slider === "link" ? linkDistValidator($(item).val()) :
+            chargeValidator($(item).val());
+        sliderController.modifyForceParameter(slider, value);
+        if (slider === "link") {
+            $(LINK_DISTANCE_VALUE).text(value);
+            $(LINK_DISTANCE_INPUT).val(value);
+            $(LINK_DISTANCE_MENU).val(value);
+        } else {
+            $(CHARGE_VALUE).text(value);
+            $(CHARGE_INPUT).val(value);
+            $(CHARGE_MENU).val(value);
+        }
+    };
+
+    var LINK_DISTANCE_MENU = "#link-distance-menu";
+    var LINK_DISTANCE_INPUT = "#linkDistInput";
+    var LINK_DISTANCE_VALUE = "#linkDistVal";
+
+    $(LINK_DISTANCE_MENU).on("change", function () {
+        changeSliderValue("link", LINK_DISTANCE_MENU);
+    });
+
+    $(LINK_DISTANCE_INPUT).on("change", function () {
+        changeSliderValue("link", LINK_DISTANCE_INPUT);
+    });
+
+    var CHARGE_MENU = "#charge-menu";
+    var CHARGE_INPUT = "#chargeInput";
+    var CHARGE_VALUE = "#chargeVal";
+
+    $(CHARGE_MENU).on("change", function () {
+        changeSliderValue("charge", CHARGE_MENU);
+    });
+
+    $(CHARGE_INPUT).on("change", function () {
+        changeSliderValue("charge", CHARGE_INPUT);
+    });
+
+    var linkDistValidator = function (value) {
+        return valueValidator(1, 1000, value);
+    };
+
+    var chargeValidator = function (value) {
+        return valueValidator(-2000, 0, value);
+    };
 
     $(".startDisabled").removeClass("disabled");
 };
