@@ -287,7 +287,7 @@ var parseSheet = function (sheet) {
                         // These genes are the source genes
                         try {
                             currentGene = {name: currentSheet.data[0][column]};
-                            //set currentGeneName to a String so toUpperCase doesn't mess up
+                            // set currentGeneName to a String so toUpperCase doesn't mess up
                             currentGene.name = currentGene.name.toString();
                             // Set genes to upper case so case doesn't matter in error checking;
                             // ie: Cin5 is the same as cin5
@@ -309,7 +309,7 @@ var parseSheet = function (sheet) {
                         // These genes are the target genes
                         try {
                             currentGene = {name: currentSheet.data[row][0]};
-                            //set currentGeneName to a String so toUpperCase doesn't mess up
+                            // set currentGeneName to a String so toUpperCase doesn't mess up
                             currentGene.name = currentGene.name.toString();
                             if (currentGene.name === undefined) {
                                 addWarning(network, warningsList.missingTargetGeneWarning(row, column));
