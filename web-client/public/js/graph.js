@@ -905,17 +905,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         })
         .attr("stroke-width", "2px")
         .on("dblclick", dblclick);
-        /* .on("contextmenu", function (gene) {
-            var tempLink = $("<a></a>")
-                .attr({
-                    href: "/gene/info.html?" + $.param({symbol: gene.name}),
-                    target: "_blank"
-                });
-            $("body").append(tempLink);
-            tempLink.get(0).click();
-            tempLink.remove();
-            d3.event.preventDefault();
-        });*/
 
     var MINIMUM_NODE_WIDTH = 68.5625;
     var NODE_MARGIN = 3;
@@ -938,7 +927,18 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 d.textWidth = textWidth < MINIMUM_NODE_WIDTH ? MINIMUM_NODE_WIDTH : textWidth;
                 return d.textWidth / 2 + NODE_MARGIN;
             })
-            .on("dblclick", nodeTextDblclick);
+            .on("dblclick", nodeTextDblclick)
+            .on("contextmenu", function (gene) {
+                var tempLink = $("<a></a>")
+                    .attr({
+                        href: "/gene/info.html?" + $.param({symbol: gene.name}),
+                        target: "_blank"
+                    });
+                $("body").append(tempLink);
+                tempLink.get(0).click();
+                tempLink.remove();
+                d3.event.preventDefault();
+            });
 
         rect
             .attr("width", function (d) {
