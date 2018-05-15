@@ -6,8 +6,10 @@
       }) : {};
 
 // The following code is for the accordion link:
-    $("#generalInfo").on("shown.bs.collapse", function () {
-        window.location = "#generalInfoHeading";
+    $("button").click(function () {
+        var anchorName = $(this).attr("data-target");
+        //$("body").animate({scrollTop: anchorName.offset().top});
+        window.location.href = anchorName + "Heading";
     });
 
 
