@@ -931,7 +931,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             .on("contextmenu", function (gene) {
                 var tempLink = $("<a></a>")
                     .attr({
-                        href: "../gene/info.html?" + $.param({symbol: gene.name}),
+                        href: "gene/info.html?" + $.param({symbol: gene.name}),
                         target: "_blank"
                     });
                 $("body").append(tempLink);
