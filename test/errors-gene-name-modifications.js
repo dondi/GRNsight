@@ -422,4 +422,13 @@ describe("errors-gene-name-modifications", function () {
             test.noErrors("test-files/gene-name-modifications/special-characters-tests/underscore-unrelated-output.xlsx");
         });
     });
+
+    describe("numbers-as-labels", function () {
+        it("should not return any errors", function () {
+            test.noErrors("test-files/gene-name-modifications/numbers-as-gene-name-related-input.xlsx");
+            test.noErrors("test-files/gene-name-modifications/numbers-as-gene-name-related-output.xlsx");
+            test.noErrors("test-files/gene-name-modifications/numbers-as-gene-name-unrelated-input.xlsx");
+            test.noErrors("test-files/gene-name-modifications/numbers-as-gene-name-unrelated-output.xlsx");
+        });
+    });
 });
