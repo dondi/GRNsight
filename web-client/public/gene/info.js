@@ -9,7 +9,7 @@
     $("button").click(function (event) {
         event.preventDefault();
         var anchorName = $(this).attr("data-target") + "Heading";
-        $("html, body").animate({scrollTop: $(anchorName).offset().top})
+        $("html, body").animate({scrollTop: $(anchorName).offset().top});
     });
 
 
