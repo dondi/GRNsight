@@ -3,7 +3,7 @@
     <title>Loading... </title> <!-- Your gene name goes here! -->
     <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <link rel="stylesheet" href="info.css"
+  <link rel="stylesheet" href="info.css">
   </head>
   <body>
     <div class= "container-fluid">
@@ -34,42 +34,18 @@
 
 
         </div>
-
-
-                <div class="row" style="text-align:center">
-                    <div class="col">
-                        <button class="btn btn-danger" data-toggle="collapse" data-target="#generalInfo">General Information</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-primary" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-success" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-warning" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-primary" data-toggle="collapse" data-target="#regulation">Regulation</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-danger" data-toggle="collapse" data-target="#interaction">Interaction</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-info" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
-                    </div>
-
-                    <div class="col">
-                        <button class="btn btn-success" data-toggle="collapse" data-target="#sources">Sources</button>
-                    </div>
-
-                </div>
+        <div class="row" style="text-align:center">
+            <div class="col">
+                <button class="btn btn-danger" data-toggle="collapse" data-target="#generalInfo">General Information</button>
+                <button class="btn btn-primary" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
+                <button class="btn btn-success" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
+                <button class="btn btn-warning" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
+                <button class="btn btn-primary" data-toggle="collapse" data-target="#regulation">Regulation</button>
+                <button class="btn btn-danger" data-toggle="collapse" data-target="#interaction">Interaction</button>
+                <button class="btn btn-info" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
+                <button class="btn btn-success" data-toggle="collapse" data-target="#sources">Sources</button>
+            </div>
+        </div>
         <div class="card">
           <div class="card-header" role="tab" id="generalInfoHeading">
             <h5 class="mb-0">
@@ -83,27 +59,27 @@
             <div class="card-block">
               <dl class = "row">
 
-              <dt class="col-sm-3 text-muted">SGD ID: </dt>
+              <dt class="col-sm-3">SGD ID: </dt>
               <dd class ="col-sm-9"> <a class="lead sgd-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database" style="color:#CC3F0C;font-weight:700;"></a>&nbsp;&nbsp;</dd>
-              <dt class="col-sm-3 text-muted">NCBI ID: </dt>
+              <dt class="col-sm-3">NCBI ID: </dt>
               <dd class ="col-sm-9"><a class="lead ncbi-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information" style="color:#677DB7;font-weight:700;"></a>&nbsp;&nbsp;</dd>
-              <dt class="col-sm-3 text-muted">Ensembl ID:</dt>
+              <dt class="col-sm-3">Ensembl ID:</dt>
               <dd class ="col-sm-9"><a class="lead ensembl-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl" style="color:#33673B;font-weight:700;"></a>&nbsp;&nbsp;</dd>
-              <dt class="col-sm-3 text-muted">Uniprot ID: </dt>
+              <dt class="col-sm-3">Uniprot ID: </dt>
               <dd class ="col-sm-9"><a class="lead uniprot-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt" style="color:#F09D51;font-weight:700;"></a></dd>
-              <dt class="col-sm-3 text-muted">JASPAR ID: </dt>
+              <dt class="col-sm-3">JASPAR ID: </dt>
               <dd class ="col-sm-9"><a class="lead jaspar-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar" style="color:#768EFC;font-weight:700;"></a></dd>
-              <dt class="col-sm-3 text-muted">Description: </dt>
+              <dt class="col-sm-3">Description: </dt>
               <dd class ="ensemblDescription col-sm-9 ensemblSource"></dd>
-              <dt class="col-sm-3 text-muted">Species: </dt>
+              <dt class="col-sm-3">Species: </dt>
               <dd class = "uniProtSpecies col-sm-9 uniprotSource"> </dd>
-              <dt class="col-sm-3 text-muted">Locus Tag: </dt>
+              <dt class="col-sm-3">Locus Tag: </dt>
               <dd class="ncbiLocusTag col-sm-9  ncbiSource"></dd>
-              <dt class="col-sm-3 text-muted">Family and Class:</dt>
+              <dt class="col-sm-3">Family and Class:</dt>
               <dd class = "jasparFamily col-sm-9 jasparSource"></dd>
-              <dt class="col-sm-3 text-muted">Jaspar Matrix ID: </dt>
+              <dt class="col-sm-3">Jaspar Matrix ID: </dt>
               <dd class ="matrixID col-sm-9  jasparSource"> </dd>
-              <dt class="col-sm-3 text-muted">Chromosome Sequence: </dt>
+              <dt class="col-sm-3">Chromosome Sequence: </dt>
               <dd class = "chromosomeSequence  ncbiSource col-sm-9" src=""></dd>
 
 
@@ -127,7 +103,7 @@
                     <div id="dnaSequence" class="collapse">
                       <div class="card-block">
                         <p class ="ensemblSource">
-                            <code class = "dnaSequenceCode"></code> <!-- DNA sequence goes there, -->
+                            <code class ="dnaSequenceCode"></code> <!-- DNA sequence goes there, -->
                         </p>
                       </div>
                     </div>
@@ -143,9 +119,9 @@
 
                     <div id="proteinInfo" class="collapse">
                       <div class="card-block">
-                        <h2 class="text-muted">Protein Type: </h2>
+                        <h2>Protein Type: </h2>
                         <p class = "proteinType uniprotSource"></p>
-                        <h2 class="text-muted">Protein Sequence: </h2>
+                        <h2>Protein Sequence: </h2>
                         <p class="uniprotSource">
                             <code class="proteinSequence"></code> <!-- it goes here from UniProt between code tags -->
                         </p>
@@ -182,13 +158,13 @@
                     <div id="regulation" class="collapse">
                       <div class="card-block">
                         <dl class = "row">
-                        <dd class = "col-sm-3 text-muted"> Regulators: </dd>
+                        <dd class = "col-sm-3"> Regulators: </dd>
                         <dt class="regulators col-sm-9 sgdSource"></dt>
-                        <dd class = "col-sm-3 text-muted"> Targets: </dd>
+                        <dd class = "col-sm-3"> Targets: </dd>
                         <dt class="targets col-sm-9 sgdSource"></dt>
-                        <dd class = "col-sm-3 text-muted jasparSource"> Frequency Matrix: </dd>
+                        <dd class = "col-sm-3 jasparSource"> Frequency Matrix: </dd>
                         <img class="sequenceLogo" src="">
-                        <dd class = "col-sm-3 text-muted jasparSource"> Sequence Info: </dd>
+                        <dd class = "col-sm-3 jasparSource"> Sequence Info: </dd>
                         <table class="frequencyMatrix table table-dark table-striped">
                           <thead>
                             <tr class="frequencyOfA">
@@ -226,7 +202,7 @@
                       <div class="card-block">
 
                         <div class= "physicalInteractions">
-                          <h3 class ="text-muted"> Physical Interactions </h3>
+                          <h3> Physical Interactions </h3>
                           <dl class = "row">
                           <dt class = "col-sm-3">Affinity Capture MS: </dt>
                           <dd class="affinityCaptureMS col-sm-9"></dd> <!-- Return Just the Value -->
@@ -245,8 +221,8 @@
                         </dl>
                         </div>
                           <div class= "geneticInteractions">
-                            <h3 class = "text-muted"> Genetic Interactions </h3>
-                            <dl class = "row table table-dark">  <!-- Made gray for style purposes, it seperates genetic and physical interactions while staying within the same theme with Text-Muted -->
+                            <h3> Genetic Interactions </h3>
+                            <dl class = "row table table-dark">
                             <dt class = "col-sm-3">Dosage Rescue: </dt>
                               <dd class="dosageRescue col-sm-9"> </dd> <!-- Return Just the Value-->
                               <dt class = "col-sm-3">Negative Genetic: </dt>
@@ -266,7 +242,7 @@
                             </dl>
                           </div>
                           <dl class = "row">
-                          <h5 class = "col-sm-3 text-muted">Total Interactions: </h5>
+                          <h5 class = "col-sm-3">Total Interactions: </h5>
                           <dd class = "totalInteractions"></dd>
                         </dl>
                       </div>
@@ -284,13 +260,13 @@
                     <div id="geneOntology" class="collapse">
                       <div class="card-block">
                         <dl class = "row">
-                        <dt class="col-sm-3 text-muted">Gene Summary: </dt>
+                        <dt class="col-sm-3">Gene Summary: </dt>
                         <dd class = "geneSummary col-sm-9"></dd>
-                        <dt class="col-sm-3 text-muted">Molecular Function</dt>
+                        <dt class="col-sm-3">Molecular Function</dt>
                         <dd class = "molecularFunction col-sm-9"> </dd>
-                        <dt class="col-sm-3 text-muted">Biological Process: </dt>
+                        <dt class="col-sm-3">Biological Process: </dt>
                         <dd class = "biologicalProcess col-sm-9"></dd>
-                        <dt class="col-sm-3 text-muted">Cellular Component: </dt>
+                        <dt class="col-sm-3">Cellular Component: </dt>
                         <dd class = "cellularComponent col-sm-9"></dd>
                       </dl>
                       </div>
