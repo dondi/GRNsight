@@ -5,6 +5,12 @@
           return key === "" ? value : decodeURIComponent(value);
       }) : {};
 
+// The following code is for the accordion link:
+    $("#generalInfo").on("shown.bs.collapse", function () {
+        window.location = "#generalInfoHeading";
+    });
+
+
     document.title = "Information About " + obj.symbol;
     $("#gene-name").text(obj.symbol);
     // This is cite used to find the parsing:
