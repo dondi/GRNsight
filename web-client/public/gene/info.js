@@ -6,10 +6,10 @@
       }) : {};
 
 // The following code is for the accordion link:
-    $("button").click(function () {
-        var anchorName = $(this).attr("data-target");
-        //$("body").animate({scrollTop: anchorName.offset().top});
-        window.location.href = anchorName + "Heading";
+    $("button").click(function (event) {
+        event.preventDefault();
+        var anchorName = $(this).attr("data-target") + "Heading";
+        $("html, body").animate({scrollTop: $(anchorName).offset().top})
     });
 
 
