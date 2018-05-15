@@ -34,6 +34,7 @@ app.set("serviceRoot", config.serviceRoot);
 console.log("Web service root: " + app.get("serviceRoot"));
 
 require("./controllers/main")(app);
+require("./controllers/jaspar-relay-controller")(app);
 
 // Don't start the server if this app is run as a child process.
 if (!module.parent) {
