@@ -564,13 +564,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $(WEIGHTS_HIDE_CLASS).addClass("selected");
     });
 
-    $("#printGraph").click(function () {
-        // Deleted event parameter
-        if (!$(this).parent().hasClass("disabled")) {
-            window.print();
-        }
-    });
-
     var flattenNetwork = function (network, sheetType) {
         var result = $.extend(true, { }, network, { sheetType: sheetType });
         result.links.forEach(function (link) {
