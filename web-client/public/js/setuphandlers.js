@@ -1,4 +1,4 @@
-import updateApp from "updateapp";
+var updateApp = require("./updateapp");
 export var setupHandlers = function (grnState) {
 
 }
