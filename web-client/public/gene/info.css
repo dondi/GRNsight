@@ -5,3 +5,55 @@ code {
   font-family: Courier;
   color:black;
 }
+
+iframe {
+  border:none;
+}
+
+.jumbotron {
+  background-color: white;
+  padding-bottom:0px !important;
+}
+
+.red {
+  color: #CC3F0C;
+}
+
+.blue {
+  color: #677DB7;
+}
+
+.green {
+  color: #33673B;
+}
+
+.orange {
+  color: #F09D51;
+}
+
+.periwinkle {
+  color:#768EFC;
+}
+
+.database-link {
+  font-weight: 700;
+}
+
+#gene-species {
+  text-align:right;
+}
+
+#iframeLogo {
+  width:100%;
+}
+
+#iframeMenu {
+  border:none;
+  width:200px;
+  height:100%;
+  margin-top: -150px;
+}
+
+#navigationButtons {
+  text-align: center;
+}
