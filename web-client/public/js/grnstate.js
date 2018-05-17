@@ -1,3 +1,3 @@
 export var grnState = {
-    dashedLine : $("#dashedGrayLineButton").prop("checked"),
+    dashedLine : false,
 };

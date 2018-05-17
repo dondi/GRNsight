@@ -181,7 +181,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
-        drawGraph(network, sliders, nodeColoring);
+        drawGraph(network, sliders, gridLayout, nodeColoring);
     };
 
     var networkErrorDisplayer = function (xhr) {
@@ -353,7 +353,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         var validated = edgeWeightNormalizationInputValidation(value);
         $("#normalization-max").val(validated);
         $("#edge-weight-normalization-factor-menu").val(validated);
-        drawGraph(currentNetwork, sliders, nodeColoring);
+        drawGraph(network, sliders, gridLayout, nodeColoring);
     };
 
     $("#normalization-button").click(function () {
@@ -372,8 +372,8 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
 
-    // Gray Edge Controller
 
+    // Gray Edge Controller
     var grayEdgeInputValidator = function (value) {
         return valueValidator(0, 100, value);
     };
@@ -383,7 +383,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
         $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
         $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
-        drawGraph(currentNetwork, sliders, nodeColoring);
+        drawGraph(network, sliders, gridLayout, nodeColoring);
     };
 
     $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {
@@ -397,7 +397,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     });
 
     // Dashed Gray Line Controller
-
     var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
     var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
@@ -411,7 +410,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
             $(GREY_EDGES_DASHED_MENU).removeProp("checked");
             $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
         }
-        drawGraph(currentNetwork, sliders, nodeColoring);
+        drawGraph(network, sliders, gridLayout, nodeColoring);
     };
 
     $(GREY_EDGES_DASHED_MENU).click(function () {
@@ -421,6 +420,22 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     $(GREY_EDGES_DASHED_SIDEBAR).on("change", function () {
         syncGreyEdgesAsDashedOptions($(GREY_EDGES_DASHED_SIDEBAR).prop("checked"));
     });
+
+    //Force Graph Layout Controller
+    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
+
+    var forceGraphLayoutOptions = function (showAsGridLayout) {
+        if (showAsGridLayout) {
+            $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
+            $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
+            $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
+        } else {
+            $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
+            $(GREY_EDGES_DASHED_MENU).removeProp("checked");
+            $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
+        }
+        drawGraph(network, sliders, gridLayout, nodeColoring);
+    }
 
     var annotateLinks = function (network) {
     // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.

@@ -17,48 +17,27 @@ const hasExpressionData = require("./node-coloring").hasExpressionData;
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, nodeColoring) {
+export var drawGraph = function (network, sliderController, gridLayout, nodeColoring) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
-    d3.selectAll("svg").remove();
-
-    $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
-
     var width = $container.width();
     var height = $container.height();
-    var nodeHeight = 30;
-    var colorOptimal = true;
-    var grayThreshold = +$("#grayThresholdInput").val();
 
-    var dashedLine = $("#dashedGrayLineButton").prop("checked");
+    //in the case of reload this removes any previous graphs
+    d3.selectAll("svg").remove();
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
-
-    var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
-    $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+    $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
 
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
-    var getNodeWidth = function (node) {
-        return node.name.length * 12 + 5;
-    };
-
   // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
+    var colorOptimal = true;
     if (!$("#colorEdges").hasClass("active")) {
         colorOptimal = false;
     }
 
-    var adaptive = !$("input[name='viewport']").prop("checked");
-
-    var MIN_SCALE = 0.25;
-    var ADAPTIVE_MAX_SCALE = 4;
-    var MIDDLE_SCALE = 1;
-    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
-
-    var minimumScale = MIN_SCALE;
-
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
-
     if (!colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
             if ( allWeights[i] !== 0 ) {
@@ -104,14 +83,34 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
 
+    var dragstart = function (d) {
+        if (!d3.event.active) {
+            simulation.alphaTarget(0.3).restart();
+        }
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    var dragged = function (d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+    }
+
+    var dragended = function () {
+        d3.event.stopPropagation();
+    };
+
     var drag = d3.drag()
         .on("start", dragstart)
         .on("drag", dragged)
         .on("end", dragended);
 
-    var dragended = function () {
-        d3.event.stopPropagation();
-    };
+
+    //ZOOM STUFF
+    //remove any scroll handlers before zoom is implemented
+    d3.selectAll(".scrollBtn").on("click", null);
+
+    var adaptive = !$("input[name='viewport']").prop("checked");
 
     var zoomDragPrevX = 0;
     var zoomDragPrevY = 0;
@@ -184,14 +183,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         .attr("stroke", adaptive ? "none" : "#9A9A9A")
         .append("g");
 
-    d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
-    var arrowMovement = [ "Up", "Left", "Right", "Down" ];
-    arrowMovement.forEach(function (direction) {
-        d3.select(".scroll" + direction).on("click", function () {
-            move(direction.toLowerCase());
-        });
-    });
-    d3.select(".center").on("click", center);
 
     var leftPoints;
     var rightPoints;
@@ -206,11 +197,18 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     maps the scale from 0 to some x, with that x being calculated based on the
     input scales.
 */
-    var setupZoomSlider = function (minScale) {
-      // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
-      // So we'll just treat it as 0.
 
-        var maxScale = ADAPTIVE_MAX_SCALE;
+    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
+    var MIN_SCALE = 0.25;
+    var ADAPTIVE_MAX_SCALE = 4;
+    var MIDDLE_SCALE = 1;
+
+    var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
+    $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+
+    var setupZoomSlider = function (minScale) {
+      // If the maximumScale is 1, we won't need to calculate any values from 1 to ADAPTIVE_MAX_SCALE.
+      // So we'll just treat it as 0.
 
       // Each integer on the zoom is equivalent to 100 steps.
         var NUMBER_POINTS_PER_INT = 100;
@@ -233,12 +231,12 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         scaleIncreasePerLeftPoint = (1 - minScale) / leftPoints;
 
       // Points representing scales greater than 1.
-        rightPoints = maxScale * NUMBER_POINTS_PER_INT;
+        rightPoints = ADAPTIVE_MAX_SCALE * NUMBER_POINTS_PER_INT;
 
       // For the same concept as above, we need to figure out what to add to 1 so
-      // so that we can end up with maxScale. Note that we start at 1 and not 0 because
+      // so that we can end up with ADAPTIVE_MAX_SCALE. Note that we start at 1 and not 0 because
       // the scale is beginning at 1.
-        scaleIncreasePerRightPoint = (maxScale - MIDDLE_SCALE) / rightPoints;
+        scaleIncreasePerRightPoint = (ADAPTIVE_MAX_SCALE - MIDDLE_SCALE) / rightPoints;
         var totalPoints = leftPoints + rightPoints;
 
       // Returns the x that we're mapping to. Now we can set up the range slider.
@@ -249,7 +247,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         $(".zoomSlider").val(0.01 * leftPoints);
     };
 
-    setupZoomSlider(minimumScale);
+    setupZoomSlider(MIN_SCALE);
 
     var ZOOM_SLIDER_MAX_VAL = 8;
     var ZOOM_RANGE = 200;
@@ -265,7 +263,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
       // Reverse the calculations from setupZoomSlider to get value from equivalentScale
         var equivalentPoint;
         if (scale <= MIDDLE_SCALE) {
-            equivalentPoint = (scale - minimumScale) / (scaleIncreasePerLeftPoint * 100);
+            equivalentPoint = (scale - MIN_SCALE) / (scaleIncreasePerLeftPoint * 100);
         } else {
             equivalentPoint = (scale - 1) / scaleIncreasePerRightPoint + leftPoints;
             equivalentPoint /= 100;
@@ -278,7 +276,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         var equivalentScale;
         if (adaptive || (!adaptive && value <= ADAPTIVE_MAX_SCALE)) {
             if (currentPoint <= leftPoints) {
-                equivalentScale = minimumScale;
+                equivalentScale = MIN_SCALE;
                 equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
             } else {
                 currentPoint = currentPoint - leftPoints;
@@ -332,26 +330,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         zoom.scaleTo(container, zoomScale);
     };
 
-    d3.selectAll(".boundBoxSize").on("click", function () {
-        var newWidth = $container.width();
-        var newHeight = $container.height();
 
-        if (adaptive) {
-            width = (width < newWidth) ? newWidth : width;
-            height = (height < newHeight) ? newHeight : height;
-        } else {
-            width = newWidth;
-            height = newHeight;
-        }
-
-      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
-      // Is inconsistent, but I'm tired of fighting with it...
-        d3.select("svg").attr("width", newWidth)
-            .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
-        d3.select("rect").attr("width", width).attr("height", height);
-        d3.select(".boundingBox").attr("width", width).attr("height", height);
-    });
-
+    //VIEWPORT STUFF
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
@@ -396,6 +376,27 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         }
     });
 
+    d3.selectAll(".boundBoxSize").on("click", function () {
+        var newWidth = $container.width();
+        var newHeight = $container.height();
+
+        if (adaptive) {
+            width = (width < newWidth) ? newWidth : width;
+            height = (height < newHeight) ? newHeight : height;
+        } else {
+            width = newWidth;
+            height = newHeight;
+        }
+
+      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+      // Is inconsistent, but I'm tired of fighting with it...
+        d3.select("svg").attr("width", newWidth)
+            .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
+        d3.select("rect").attr("width", width).attr("height", height);
+        d3.select(".boundingBox").attr("width", width).attr("height", height);
+    });
+
+    //MOVE VIEWPORT
     function center () {
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
@@ -408,6 +409,15 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         var height = direction === "up" ? 50 : (direction === "down" ? -50 : 0);
         zoom.translateBy(zoomContainer, width, height);
     }
+
+    var arrowMovement = [ "Up", "Left", "Right", "Down" ];
+    arrowMovement.forEach(function (direction) {
+        d3.select(".scroll" + direction).on("click", function () {
+            move(direction.toLowerCase());
+        });
+    });
+    d3.select(".center").on("click", center);
+
 
     var defs = boundingBoxContainer.append("defs");
 
@@ -427,6 +437,10 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
+    var nodeHeight = 30;
+    var getNodeWidth = function (node) {
+        return node.name.length * 12 + 5;
+    };
     node = node.data(network.genes)
         .enter().append("g")
         .attr("class", "node")
@@ -447,6 +461,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             });
     }
 
+    var dashedLine = $("#dashedGrayLineButton").prop("checked");
+    var grayThreshold = +$("#grayThresholdInput").val();
     link.append("path")
         .attr("class", "main")
         .attr("id", function (d) {
@@ -1117,15 +1133,16 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var currentWeightVisibilitySetting = null;
 
     if (network.sheetType === "weighted") {
+
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
         $(".weightedGraphOptionsMenu").removeClass("disabled");
-        var setWeightsVisability = function () {
 
+        var setWeightsVisibility = function () {
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
             var WEIGHTS_HIDE_CLASS            = ".weightsNever";
-            var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
+            var WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways";
 
             var WEIGHT_VISIBILITY_SETTINGS = [
                 WEIGHTS_SHOW_MOUSE_OVER_CLASS,
@@ -1140,22 +1157,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
                 return;
             }
-
             currentWeightVisibilitySetting = latestWeightVisibilitySetting;
-            var showWeight = function (d) {
-                var mouse = d3.mouse(this);
-                d.weightElement
-                    .attr("x", mouse[0])
-                    .attr("y", mouse[1])
-                    .classed("visible", true);
-            };
-
-            var hideWeight = function (d) {
-                d.weightElement
-                    .attr("x", null)
-                    .attr("y", null)
-                    .classed("visible", false);
-            };
 
             if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
                 link.selectAll(".weight")
@@ -1178,9 +1180,25 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 link.on("mouseover", null).on("mouseout", null);
                 weight.on("mouseover", null).on("mouseout", null);
             }
+
+            var showWeight = function (d) {
+                var mouse = d3.mouse(this);
+                d.weightElement
+                    .attr("x", mouse[0])
+                    .attr("y", mouse[1])
+                    .classed("visible", true);
+            };
+
+            var hideWeight = function (d) {
+                d.weightElement
+                    .attr("x", null)
+                    .attr("y", null)
+                    .classed("visible", false);
+            }
         };
 
-        setInterval(setWeightsVisability, 100);
+        setInterval(setWeightsVisibility, 100);
+
     } else {
         if (!$(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").addClass("hidden");
@@ -1188,6 +1206,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         $(".weightedGraphOptionsMenu").addClass("disabled");
     }
 
+    //GRID LAYOUT OPTIONS
     // resets graph options so when new graph is loaded, initial layout is always force graph
     $("#forceGraph").trigger("click");
 
@@ -1217,12 +1236,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         return name1 > name2 ? 1 : -1;
     };
 
-    let layout = false;
+    gridLayout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
+    $(GRID_LAYOUT_BUTTON).on("click", {handler: this},
+    function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
+
         if (!layout) {
             $("#gridLayout")
                 .addClass("called")
@@ -1230,22 +1251,29 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 .removeClass("called");
             this.value = "Force Graph";
             layout = true;
+
             const margin = 10;
+
             const grid = Grid() // create new grid layout
-            .data(network.genes)
-            .bands(true)
-            .padding([0.2, 0])
-            .size([$container.width() - margin, $container.height() - margin]); // set size of container
+                .data(network.genes)
+                .bands(true)
+                .padding([0.2, 0])
+                .size([$container.width() - margin, $container.height() - margin]); // set size of container
+
             grid.layout();
+
             let gridNodes = grid.nodes();
             let gridNumRow = grid.cols();
+
             let marginWidth = getMarginWidth(gridNodes, gridNumRow);
             let marginHeight = getMarginHeight(gridNodes);
+
             /* eslint-disable block-scoped-var */
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
             }
+
         } else {
             $("#forceGraph")
                 .addClass("called")
@@ -1451,19 +1479,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     function normalize (d) {
         return Math.abs(d.value / (d3.max(allWeights)));
-    }
-
-    function dragstart (d) {
-        if (!d3.event.active) {
-            simulation.alphaTarget(0.3).restart();
-        }
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    function dragged (d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
     }
 
     // Configures sliderController

@@ -9,8 +9,5 @@ const displayStatistics = require("./graph-statistics").displayStatistics; // es
 const upload = require("./upload").upload;
 const nodeColoringController = require("./node-coloring").nodeColoringController;
 
-setupHandlers(grnState);
-updateApp(grnState);
-
 container();
 upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);

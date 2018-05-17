@@ -1,5 +1,7 @@
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "setupHandlers|grnState"}] */
 var setupHandlers = require("./setupHandlers");
-export var updateApp = function (grnState) {
-    return grnState;
+export var dashedLineState = function (grnState) {
+    if ($("#dashedGrayLineButton").prop("checked")) {
+        return grnState.dashedLine = true;
+    }
 };
