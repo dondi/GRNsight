@@ -320,8 +320,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     });
     $("#upload").on("click", function () {
         // deleted event parameter
+        console.log("hey");
         $("#launchFileOpen").off("click").on("click", function () {
             $("#upload").click();
+            console.log("ah okay");
         });
     });
 
