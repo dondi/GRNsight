@@ -22,8 +22,10 @@
                     dataType: "text",
                     timeout: 5000,
                 }).then(function (data) {
+                    console.log(data);
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
+                    console.log("About to send request to Uniprot");
                     return $.get({
                         url: "http://www.uniprot.org/uniprot/" + id + ".xml",
                         timeout: 5000,
@@ -43,6 +45,7 @@
                 }).then(function (data) {
                     var regex = /<Id>(\d*)<\/Id>/gm;
                     var id = regex.exec(data)[1];
+                    console.log("About to send request to NCBI");
                     return $.get({
                         url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
                         dataType: "xml",
@@ -108,6 +111,7 @@
             // change if any preprocessing needs to be done on the data before being given to the application
             var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 var parseUniprot = function (data) {
+                    console.log("Parsed Uniprot successfully");
                     return {
                         uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
                         proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
@@ -119,6 +123,7 @@
                 var parseNCBI = function (data) {
                     var tagArray = serializer.serializeToString(
                         data.getElementsByTagName("OtherAliases")[0]).split(",");
+                    console.log("Parsed NCBI successfully");
                     return {
                         ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
                         locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
