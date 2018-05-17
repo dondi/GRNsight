@@ -5,6 +5,14 @@
           return key === "" ? value : decodeURIComponent(value);
       }) : {};
 
+// The following code is for the accordion link:
+    $("button").click(function (event) {
+        event.preventDefault();
+        var anchorName = $(this).attr("data-target") + "Heading";
+        $("html, body").animate({scrollTop: $(anchorName).offset().top});
+    });
+
+
     document.title = "Information About " + obj.symbol;
     $("#gene-name").text(obj.symbol);
     // This is cite used to find the parsing:

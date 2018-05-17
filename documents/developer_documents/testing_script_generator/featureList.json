@@ -482,5 +482,15 @@
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Viewport Menu: Node",
+        "text": "",
+        "options": {
+            "No Click": "",
+            "Right Click": "Gene information page should appear in a new tab within the browser.",
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     }
 ]

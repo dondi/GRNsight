@@ -320,8 +320,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     });
     $("#upload").on("click", function () {
         // deleted event parameter
+        console.log("hey");
         $("#launchFileOpen").off("click").on("click", function () {
             $("#upload").click();
+            console.log("ah okay");
         });
     });
 
@@ -562,13 +564,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
         $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
         $(WEIGHTS_HIDE_CLASS).addClass("selected");
-    });
-
-    $("#printGraph").click(function () {
-        // Deleted event parameter
-        if (!$(this).parent().hasClass("disabled")) {
-            window.print();
-        }
     });
 
     var flattenNetwork = function (network, sheetType) {
