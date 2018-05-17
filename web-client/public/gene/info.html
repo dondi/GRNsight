@@ -6,29 +6,26 @@
   </head>
   <body>
     <div class="container-fluid">
-      <div id="GrnSightLogo">
-        <iframe id="iframeLogo" src="http://dondi.github.io/GRNsight/about.html" scrolling ="no"></iframe>
-      </div>
       <div class="row">
-          <div class="col-2"> <!--iframe will go here" -->
-            <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/about.html" scrolling ="no"></iframe>
-          </div>
-          <div class="col-10">
-            <div class="row" id="pageHead">
-              <div class="jumbotron">
-                <div>
-                  <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <h1 class="display-4" id="gene-name"></h1>
-                  </div>
-                  <div class="col">
-                    <em><h1 class="display-4 uniProtSpecies" id="gene-species"></h1></em>
-                  </div>
-                </div> <!-- end of row -->
+        <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/onlysidebar.html" scrolling ="no"></iframe>
+        <div class="col-2"> <!--iframe will go here" -->
+        </div>
+        <div class="col-10" id="mainPage">
+          <div class="row" id="pageHead">
+            <div class="jumbotron">
+              <div>
+                <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
               </div>
+              <div class="row">
+                <div class="col">
+                  <h1 class="display-4" id="gene-name"></h1>
+                </div>
+                <div class="col">
+                  <em><h1 class="display-4 uniProtSpecies" id="gene-species"></h1></em>
+                </div>
+              </div> <!-- end of row -->
             </div>
+          </div>
           <div class="row" id ="navigationButtons">
             <div class="col">
               <button class="btn btn-danger" data-toggle="collapse" data-target="#generalInfo">General Information</button>

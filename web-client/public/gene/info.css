@@ -43,15 +43,16 @@ iframe {
   text-align:right;
 }
 
-#iframeLogo {
-  width:100%;
+#iframeMenu {
+  border: none;
+  height: 600px;
+  width: 100%;
+  z-index: 0;
 }
 
-#iframeMenu {
-  border:none;
-  width:200px;
-  height:100%;
-  margin-top: -150px;
+#mainPage {
+  margin-top: -450px;
+  z-index: 1;
 }
 
 #navigationButtons {
