@@ -1,13 +1,15 @@
 ---
 layout: blank
-title: just the sidebar :3
-modified: 4/12/2018
+title: just the header and sidebar :3
+modified: 5/17/2018
 version: v2.3.0
 ---
-
+<div id="header">
+  {% include titlebar.html %}
+</div>
 <div id="navBar" class=".backBox">
     <ul class="nav">
-{% include menu.html %}
+      {% include menu.html %}
     </ul>
     <p id="modText" class="modNav">
         Last modified: {{ page.modified }}
