@@ -199,7 +199,7 @@
 
 
             return $.when(
-                //getUniProtInfo(symbol),
+                getUniProtInfo(symbol),
                 getNCBIInfo(symbol),
                 getYeastMineInfo(symbol),
                 getEnsemblInfo(symbol),
