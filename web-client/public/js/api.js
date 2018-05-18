@@ -9,6 +9,9 @@
             var XMLParser = function (data) {
                 return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
             };
+            var apiErrors = [];
+            var apiCount = 5;
+
             var getUniProtInfo = function (geneSymbol) {
                 return $.get({
                     url: "http://www.uniprot.org/uploadlists/",
@@ -196,7 +199,7 @@
 
 
             return $.when(
-                getUniProtInfo(symbol),
+                //getUniProtInfo(symbol),
                 getNCBIInfo(symbol),
                 getYeastMineInfo(symbol),
                 getEnsemblInfo(symbol),
@@ -210,7 +213,15 @@
                     "jaspar", jasparInfo[0]); */
                 return filterData(uniprotInfo[0], ncbiInfo[0], yeastmineInfo[0], ensemblInfo[0], jasparInfo[0]);
             }).fail(function () {
-                alert("There was an error retrieving the data from the databases. Please try again later.");
+                var errorString = "Gene page functionality is currently down for maintenance.";
+              /*
+                var errorString = "The gene you have selected is not found in any of our databases.";
+                if (apiErrors.length < apiCount) {
+                    errorString = "We could not extract information from the following databases: " +
+                    apiErrors.join(", ");
+                } */
+                $("#error").text(errorString);
+                $("#errorModal").modal("show");
             });
         }
     };
