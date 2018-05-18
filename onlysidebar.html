@@ -1,15 +1,42 @@
 ---
 layout: blank
 title: just the header and sidebar :3
-modified: 5/17/2018
+modified: 5/18/2018
 version: v2.3.0
 ---
 <div id="header">
-  {% include titlebar.html %}
+  <div id="logo">
+      <a href="http://dondi.github.io/GRNsight"  target="_blank"><img id="GRNsightLogo" src="{{ site.baseurl }}/assets/images/GRNsight_logo_20140710_main_resized.jpg" alt="GRNsight" width="200" height="118"></a></div>
+  <div id="lmu">
+      <a href="http://www.lmu.edu" target="_blank"><img src="{{ site.baseurl }}/assets/images/LMULogoHQ2.png" alt="LMU logo" width="200" height="118" id="lmuLogo" /></a><br /><br /><br />
+      <p id="subtextLMU">A Joint Project of the<br /> LMU Bioinformatics and Biomathematics Groups</p>
+  </div>
+  <p id="title"><a href="http://dondi.github.io/GRNsight">GRNsight</a></p>
+  <p id="subtext">Web app and service for visualizing models of gene regulatory networks.</p>
+  <div class="alert alert-success hidden" id="cookie-notice" role="alert">
+      <div>This site uses Google Analytics to count pageviews and file uploads to demonstrate usage of our software to interested parties such as our employers and funding agencies. Information about your use of this site is shared with Google. By using this site, you agree to its use of cookies.</div>
+      <button class="cookie-action" data-dismiss="alert" aria-label="Got It">
+          <strong>Got It</strong>
+      </button>
+      <a target="_blank" class="cookie-action" href="https://www.google.com/policies/technologies/cookies/">
+          <strong>Learn More</strong>
+      </a>
+  </div>
 </div>
 <div id="navBar" class=".backBox">
     <ul class="nav">
-      {% include menu.html %}
+      <li><a href="{{ site.baseurl }}/" target="_blank">Home</a></li>
+      <li><a href="{{ site.baseurl }}/about.html" target="_blank">About</a></li>
+      <li><a href="{{ site.baseurl }}/news.html" target="_blank">News</a></li>
+      <li><a href="https://github.com/dondi/GRNsight" target="_blank">Developers</a></li>
+      <li><a href="{{ site.baseurl }}/documentation.html" target="_blank">Documentation</a></li>
+      <li><a href="https://github.com/dondi/GRNsight/wiki" target="_blank">Wiki</a></li>
+      <li><a href="{{ site.baseurl }}/publications.html" target="_blank">Publications</a></li>
+      <li><a href="{{ site.baseurl }}/people.html" target="_blank">People</a></li>
+      <li><a href="{{ site.baseurl }}/contact.html" target="_blank">Contact</a></li>
+      <li><a href="{{ site.baseurl }}/links.html" target="_blank">Links</a></li>
+      <li><a href="{{ site.baseurl }}/beta.html" target="_blank">Beta</a></li>
+      <li><a href="{{ site.baseurl }}/about.html#privacy" target="_blank">Privacy</a></li>
     </ul>
     <p id="modText" class="modNav">
         Last modified: {{ page.modified }}
