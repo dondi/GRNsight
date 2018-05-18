@@ -929,7 +929,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             })
             .on("dblclick", nodeTextDblclick)
             .on("contextmenu", function (gene) {
-                window.open("gene/info.html?" + $.param({symbol: gene.name}));
+                var tempLink = $("<a></a>")
+                    .attr({
+                        href: "gene/info.html?" + $.param({symbol: gene.name}),
+                        target: "_blank"
+                    });
+                $("body").append(tempLink);
+                tempLink.get(0).click();
+                tempLink.remove();
                 d3.event.preventDefault();
             });
 
@@ -1482,10 +1489,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var LINK_DISTANCE_MENU = "#link-distance-menu";
     var LINK_DISTANCE_INPUT = "#linkDistInput";
     var LINK_DISTANCE_VALUE = "#linkDistVal";
-
-    $(":input[type='number']").click(function () {
-        $("#" + $(this).attr("id")).val("");
-    });
 
     $(LINK_DISTANCE_MENU).on("change", function () {
         changeSliderValue("link", LINK_DISTANCE_MENU);

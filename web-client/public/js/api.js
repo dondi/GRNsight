@@ -22,6 +22,7 @@
                     dataType: "text",
                     timeout: 5000,
                 }).then(function (data) {
+                    console.log(this);
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
                     return $.get({
@@ -110,7 +111,6 @@
             // change if any preprocessing needs to be done on the data before being given to the application
             var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
                 var parseUniprot = function (data) {
-                    console.log("Parsed Uniprot successfully");
                     return {
                         uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
                         proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
@@ -122,7 +122,6 @@
                 var parseNCBI = function (data) {
                     var tagArray = serializer.serializeToString(
                         data.getElementsByTagName("OtherAliases")[0]).split(",");
-                    console.log("Parsed NCBI successfully");
                     return {
                         ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
                         locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
@@ -194,6 +193,8 @@
                 };
             };
 
+
+
             return $.when(
                 getUniProtInfo(symbol),
                 getNCBIInfo(symbol),
@@ -201,12 +202,12 @@
                 getEnsemblInfo(symbol),
                 getJasparInfo(symbol)
             ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
-                console.log(
+ /*                console.log(
                     "uniprot", uniprotInfo[0],
                     "ncbi", ncbiInfo[0],
                     "yeastmine", yeastmineInfo[0],
                     "ensembl", ensemblInfo[0],
-                    "jaspar", jasparInfo[0]);
+                    "jaspar", jasparInfo[0]); */
                 return filterData(uniprotInfo[0], ncbiInfo[0], yeastmineInfo[0], ensemblInfo[0], jasparInfo[0]);
             }).fail(function () {
                 alert("There was an error retrieving the data from the databases. Please try again later.");
