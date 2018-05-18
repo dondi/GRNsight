@@ -1,6 +1,6 @@
 var setupHandlers = require("./setuphandlers");
 var updateApp = require("./updateapp");
-//var grnState = require("./grnstate");
+var grnState = require("./grnstate");
 const drawGraph = require("./graph").drawGraph;
 const sliderObject = require("./sliders").sliderObject;
 const sliderGroupController = require("./sliders").sliderGroupController;

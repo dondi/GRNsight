@@ -1,3 +1,6 @@
+/* eslint no-unused-vars: [2, {"varsIgnorePattern": "updateGreyEdgesAsDashedOptions|getMappedValue|manualZoom"}] */
+const upload = require("./upload").upload;
+
 export var updateApp = function (grnState) {
 
     var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
@@ -13,7 +16,7 @@ export var updateApp = function (grnState) {
             $(GREY_EDGES_DASHED_MENU).removeProp("checked");
             $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
         }
-        drawGraph(currentNetwork, sliders, nodeColoring);
+        upload.drawGraph(currentNetwork, sliders, nodeColoring);
     };
 
 };
