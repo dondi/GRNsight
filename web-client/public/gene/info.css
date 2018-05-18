@@ -1,6 +1,7 @@
 body {
   font-family: sans-serif;
 }
+
 code {
   font-family: Courier;
   color:black;
@@ -80,4 +81,5 @@ iframe {
 #mainPage {
   margin-top: -450px;
   z-index: 1;
+  margin-left: -25px;
 }

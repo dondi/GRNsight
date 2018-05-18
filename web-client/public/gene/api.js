@@ -25,7 +25,6 @@
                     dataType: "text",
                     timeout: 5000,
                 }).then(function (data) {
-                    console.log(this);
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
                     return $.get({
