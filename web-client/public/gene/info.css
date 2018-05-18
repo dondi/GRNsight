@@ -8,6 +8,7 @@ code {
 
 iframe {
   border:none;
+  width: 100%;
 }
 
 .jumbotron {
@@ -44,9 +45,7 @@ iframe {
 }
 
 #iframeMenu {
-  border: none;
   height: 600px;
-  width: 100%;
   z-index: 0;
 }
 

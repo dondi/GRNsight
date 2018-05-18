@@ -1483,9 +1483,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var LINK_DISTANCE_INPUT = "#linkDistInput";
     var LINK_DISTANCE_VALUE = "#linkDistVal";
 
-    $("input[type='number']").click(function () {
-        $(this).attr("value", "0");
-        console.log("clicked?");
+    $(":input[type='number']").click(function () {
+        $("#" + $(this).attr("id")).val("");
     });
 
     $(LINK_DISTANCE_MENU).on("change", function () {

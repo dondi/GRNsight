@@ -22,14 +22,14 @@
                     dataType: "text",
                     timeout: 5000,
                 }).then(function (data) {
-                    console.log(data);
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
-                    console.log("About to send request to Uniprot");
                     return $.get({
                         url: "http://www.uniprot.org/uniprot/" + id + ".xml",
                         timeout: 5000,
                     });
+                }).fail(function () {
+                    return $.get(this);
                 });
             };
 
@@ -45,7 +45,6 @@
                 }).then(function (data) {
                     var regex = /<Id>(\d*)<\/Id>/gm;
                     var id = regex.exec(data)[1];
-                    console.log("About to send request to NCBI");
                     return $.get({
                         url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
                         dataType: "xml",
