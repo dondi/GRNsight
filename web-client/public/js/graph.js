@@ -17,13 +17,13 @@ const hasExpressionData = require("./node-coloring").hasExpressionData;
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, gridLayout, nodeColoring) {
+export var drawGraph = function (network, sliderController, nodeColoring) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     var width = $container.width();
     var height = $container.height();
 
-    //in the case of reload this removes any previous graphs
+    // in the case of reload this removes any previous graphs
     d3.selectAll("svg").remove();
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
@@ -89,12 +89,12 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
         }
         d.fx = d.x;
         d.fy = d.y;
-    }
+    };
 
     var dragged = function (d) {
         d.fx = d3.event.x;
         d.fy = d3.event.y;
-    }
+    };
 
     var dragended = function () {
         d3.event.stopPropagation();
@@ -106,8 +106,8 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
         .on("end", dragended);
 
 
-    //ZOOM STUFF
-    //remove any scroll handlers before zoom is implemented
+    // ZOOM STUFF
+    // remove any scroll handlers before zoom is implemented
     d3.selectAll(".scrollBtn").on("click", null);
 
     var adaptive = !$("input[name='viewport']").prop("checked");
@@ -331,7 +331,7 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
     };
 
 
-    //VIEWPORT STUFF
+    // VIEWPORT STUFF
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
@@ -396,7 +396,7 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
         d3.select(".boundingBox").attr("width", width).attr("height", height);
     });
 
-    //MOVE VIEWPORT
+    // MOVE VIEWPORT
     function center () {
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
@@ -1194,7 +1194,7 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
                     .attr("x", null)
                     .attr("y", null)
                     .classed("visible", false);
-            }
+            };
         };
 
         setInterval(setWeightsVisibility, 100);
@@ -1206,7 +1206,7 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
         $(".weightedGraphOptionsMenu").addClass("disabled");
     }
 
-    //GRID LAYOUT OPTIONS
+    // GRID LAYOUT OPTIONS
     // resets graph options so when new graph is loaded, initial layout is always force graph
     $("#forceGraph").trigger("click");
 
@@ -1236,14 +1236,12 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
         return name1 > name2 ? 1 : -1;
     };
 
-    gridLayout = false;
+    let layout = false;
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this},
-    function (event) { // eslint-disable-line no-unused-vars
+    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
         let nodeGroup = node._groups[0].sort(sortNode);
-
         if (!layout) {
             $("#gridLayout")
                 .addClass("called")
@@ -1480,6 +1478,8 @@ export var drawGraph = function (network, sliderController, gridLayout, nodeColo
     function normalize (d) {
         return Math.abs(d.value / (d3.max(allWeights)));
     }
+
+
 
     // Configures sliderController
     sliderController.addForce(simulation);
