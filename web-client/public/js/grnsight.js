@@ -1,6 +1,6 @@
-var setupHandlers = require("setupHandlers");
-var updateApp = require("updateApp");
-var grnState = require("grnState");
+var setupHandlers = require("./setuphandlers");
+var updateApp = require("./updateapp");
+//var grnState = require("./grnstate");
 const drawGraph = require("./graph").drawGraph;
 const sliderObject = require("./sliders").sliderObject;
 const sliderGroupController = require("./sliders").sliderGroupController;
@@ -11,3 +11,5 @@ const nodeColoringController = require("./node-coloring").nodeColoringController
 
 container();
 upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);
+setupHandlers(grnState);
+updateApp(grnState);
