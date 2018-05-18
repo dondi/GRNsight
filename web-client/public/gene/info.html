@@ -1,5 +1,4 @@
 <html>
-
 <head>
   <title>Loading... </title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
@@ -7,6 +6,26 @@
 </head>
 
 <body>
+  <div id="errorModal" class="modal fade" tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true'>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"> x </span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="error"></p>
+        </div>
+        <div class="modal-footer">
+          <input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="container-fluid">
     <div class="row">
       <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/onlysidebar.html" scrolling="no"></iframe>
@@ -32,20 +51,20 @@
         </div>
         <div class="row" id="navigationButtons">
           <div class="col">
-            <button class="btn btn-danger" data-toggle="collapse" data-target="#generalInfo">General Information</button>
-            <button class="btn btn-primary" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
-            <button class="btn btn-success" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
-            <button class="btn btn-warning" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
-            <button class="btn btn-primary" data-toggle="collapse" data-target="#regulation">Regulation</button>
-            <button class="btn btn-danger" data-toggle="collapse" data-target="#interaction">Interaction</button>
-            <button class="btn btn-info" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
-            <button class="btn btn-success" data-toggle="collapse" data-target="#sources">Sources</button>
+            <button class="btn btn-green" data-toggle="collapse" data-target="#generalInfo">General Information</button>
+            <button class="btn btn-purple" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
+            <button class="btn btn-brown" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
+            <button class="btn btn-turquoise" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
+            <button class="btn btn-violet" data-toggle="collapse" data-target="#regulation">Regulation</button>
+            <button class="btn btn-green" data-toggle="collapse" data-target="#interaction">Interaction</button>
+            <button class="btn btn-purple" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
+            <button class="btn btn-brown" data-toggle="collapse" data-target="#sources">Sources</button>
           </div>
         </div>
         <div class="card">
           <div class="card-header" role="tab" id="generalInfoHeading">
             <h5 class="mb-0">
-                <a class="red" data-toggle="collapse" data-parent="#accordion" href="#generalInfo" aria-expanded="true" aria-controls="collapseOne">
+                <a class="green" data-toggle="collapse" data-parent="#accordion" href="#generalInfo" aria-expanded="true" aria-controls="collapseOne">
                   General Information
                 </a>
               </h5>
@@ -54,15 +73,15 @@
             <div class="card-block">
               <dl class="row">
                 <dt class="col-sm-3">SGD ID: </dt>
-                <dd class="col-sm-9"> <a class="lead sgd-link red database-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"> <a class="lead sgd-link green database-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">NCBI ID: </dt>
-                <dd class="col-sm-9"><a class="lead ncbi-link blue database-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"><a class="lead ncbi-link purple database-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">Ensembl ID:</dt>
-                <dd class="col-sm-9"><a class="lead ensembl-link green database-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"><a class="lead ensembl-link brown database-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">Uniprot ID: </dt>
-                <dd class="col-sm-9"><a class="lead uniprot-link orange database-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt"></a></dd>
+                <dd class="col-sm-9"><a class="lead uniprot-link turquoise database-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt"></a></dd>
                 <dt class="col-sm-3">JASPAR ID: </dt>
-                <dd class="col-sm-9"><a class="lead jaspar-link periwinkle database-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar"></a></dd>
+                <dd class="col-sm-9"><a class="lead jaspar-link violet database-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar"></a></dd>
                 <dt class="col-sm-3">Description: </dt>
                 <dd class="ensemblDescription col-sm-9 ensemblSource"></dd>
                 <dt class="col-sm-3">Species: </dt>
@@ -85,7 +104,7 @@
               <div class="card">
                 <div class="card-header" role="tab" id="dnaSequenceHeading">
                   <h5 class="mb-0">
-                      <a class ="blue" data-toggle="collapse" data-parent="#accordion" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">
+                      <a class ="purple" data-toggle="collapse" data-parent="#accordion" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">
                         DNA Sequence
                       </a>
                     </h5>
@@ -102,7 +121,7 @@
               <div class="card">
                 <div class="card-header" id="proteinInfoHeading">
                   <h5 class="mb-0">
-                      <a class="green" data-toggle="collapse" data-parent="#accordion" href="#proteinInfo">
+                      <a class="brown" data-toggle="collapse" data-parent="#accordion" href="#proteinInfo">
                         Protein Information
                       </a>
                     </h5>
@@ -122,7 +141,7 @@
               <div class="card">
                 <div class="card-header" id="geneMapHeading">
                   <h5 class="mb-0">
-                      <a class="orange" data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="turquoise" data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne">
                         Gene Map
                       </a>
                     </h5>
@@ -138,7 +157,7 @@
               <div class="card">
                 <div class="card-header" id="regulationHeading">
                   <h5 class="mb-0">
-                      <a class="periwinkle" data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="violet" data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
                         Regulation
                       </a>
                     </h5>
@@ -178,7 +197,7 @@
               <div class="card">
                 <div class="card-header" id="interactionHeading">
                   <h5 class="mb-0">
-                      <a class="red" data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="green" data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
                         Interaction
                       </a>
                     </h5>
@@ -237,7 +256,7 @@
               <div class="card">
                 <div class="card-header" id="geneOntologyHeading">
                   <h5 class="mb-0">
-                      <a class="blue" data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="purple" data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
                       Gene Ontology
                       </a>
                     </h5>
@@ -260,7 +279,7 @@
               <div class="card">
                 <div class="card-header" id="sourcesHeading">
                   <h5 class="mb-0">
-                      <a class="green" data-toggle="collapse" data-parent="#accordion" href="#sources" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="brown" data-toggle="collapse" data-parent="#accordion" href="#sources" aria-expanded="true" aria-controls="collapseOne">
                         Sources
                       </a>
                     </h5>
@@ -268,19 +287,19 @@
                 <div id="sources" class="collapse">
                   <div class="card-block">
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 sgd-link sgdSource red" id="sgdSource"></a>
+                      <a class="col-6 col-md-4 sgd-link sgdSource green" id="sgdSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 uniprot-link uniprotSource orange" id="uniprotSource"></a>
+                      <a class="col-6 col-md-4 uniprot-link uniprotSource turquoise" id="uniprotSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 ensembl-link ensemblSource green" id="ensemblSource"></a>
+                      <a class="col-6 col-md-4 ensembl-link ensemblSource brown" id="ensemblSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 ncbi-link ncbiSource blue" id="ncbiSource"></a>
+                      <a class="col-6 col-md-4 ncbi-link ncbiSource purple" id="ncbiSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 jaspar-link jasparSource periwinkle" id="jasparSource"></a>
+                      <a class="col-6 col-md-4 jaspar-link jasparSource violet" id="jasparSource"></a>
                     </dl>
                   </div>
                 </div>

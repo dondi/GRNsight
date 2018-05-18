@@ -11,33 +11,61 @@ iframe {
   width: 100%;
 }
 
+.btn {
+  color: white;
+}
+
+.btn-green {
+  background-color: #16693f;
+}
+
+.btn-purple {
+  background-color: #3f1669;
+}
+
+.btn-brown {
+  background-color: #693f16;
+}
+
+.btn-turquoise {
+  background-color: #166969;
+}
+
+.btn-violet {
+  background-color: #691640;
+}
+
 .jumbotron {
   background-color: white;
   padding-bottom:0px !important;
 }
 
-.red {
-  color: #CC3F0C;
-}
-
-.blue {
-  color: #677DB7;
-}
-
 .green {
-  color: #33673B;
+  color: #16693f;
 }
 
-.orange {
-  color: #F09D51;
+.purple {
+  color: #3f1669;
 }
 
-.periwinkle {
-  color:#768EFC;
+.brown {
+  color: #693f16;
+}
+
+.turquoise {
+  color: #166969;
+}
+
+.violet {
+  color: #691640;
 }
 
 .database-link {
   font-weight: 700;
+}
+
+.close {
+  color: black;
 }
 
 #gene-species {
@@ -52,8 +80,4 @@ iframe {
 #mainPage {
   margin-top: -450px;
   z-index: 1;
-}
-
-#navigationButtons {
-  text-align: center;
 }
