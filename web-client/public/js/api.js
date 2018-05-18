@@ -22,12 +22,15 @@
                     dataType: "text",
                     timeout: 5000,
                 }).then(function (data) {
+                    console.log(this);
                     var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
                     var id = regex.exec(data)[1];
                     return $.get({
                         url: "http://www.uniprot.org/uniprot/" + id + ".xml",
                         timeout: 5000,
                     });
+                }).fail(function () {
+                    return $.get(this);
                 });
             };
 
@@ -190,6 +193,8 @@
                 };
             };
 
+
+
             return $.when(
                 getUniProtInfo(symbol),
                 getNCBIInfo(symbol),
@@ -197,12 +202,12 @@
                 getEnsemblInfo(symbol),
                 getJasparInfo(symbol)
             ).then(function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
-                console.log(
+ /*                console.log(
                     "uniprot", uniprotInfo[0],
                     "ncbi", ncbiInfo[0],
                     "yeastmine", yeastmineInfo[0],
                     "ensembl", ensemblInfo[0],
-                    "jaspar", jasparInfo[0]);
+                    "jaspar", jasparInfo[0]); */
                 return filterData(uniprotInfo[0], ncbiInfo[0], yeastmineInfo[0], ensemblInfo[0], jasparInfo[0]);
             }).fail(function () {
                 alert("There was an error retrieving the data from the databases. Please try again later.");

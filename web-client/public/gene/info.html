@@ -1,294 +1,301 @@
 <html>
-  <head>
-    <title>Loading... </title>
+
+<head>
+  <title>Loading... </title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <link rel="stylesheet" href="info.css">
-  </head>
-  <body>
-    <div class="container-fluid">
-      <div id="GrnSightLogo">
-        <iframe id="iframeLogo" src="http://dondi.github.io/GRNsight/about.html" scrolling ="no"></iframe>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/onlysidebar.html" scrolling="no"></iframe>
+      <div class="col-2">
+        <!--iframe will go here" -->
       </div>
-      <div class="row">
-          <div class="col-2"> <!--iframe will go here" -->
-            <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/about.html" scrolling ="no"></iframe>
-          </div>
-          <div class="col-10">
-            <div class="row" id="pageHead">
-              <div class="jumbotron">
-                <div>
-                  <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <h1 class="display-4" id="gene-name"></h1>
-                  </div>
-                  <div class="col">
-                    <em><h1 class="display-4 uniProtSpecies" id="gene-species"></h1></em>
-                  </div>
-                </div> <!-- end of row -->
+      <div class="col-10" id="mainPage">
+        <div class="row" id="pageHead">
+          <div class="jumbotron">
+            <div>
+              <!-- This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene  -->
+            </div>
+            <div class="row">
+              <div class="col">
+                <h1 class="display-4" id="gene-name"></h1>
+              </div>
+              <div class="col">
+                <em><h1 class="display-4 uniProtSpecies" id="gene-species"></h1></em>
               </div>
             </div>
-          <div class="row" id ="navigationButtons">
-            <div class="col">
-              <button class="btn btn-danger" data-toggle="collapse" data-target="#generalInfo">General Information</button>
-              <button class="btn btn-primary" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
-              <button class="btn btn-success" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
-              <button class="btn btn-warning" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
-              <button class="btn btn-primary" data-toggle="collapse" data-target="#regulation">Regulation</button>
-              <button class="btn btn-danger" data-toggle="collapse" data-target="#interaction">Interaction</button>
-              <button class="btn btn-info" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
-              <button class="btn btn-success" data-toggle="collapse" data-target="#sources">Sources</button>
-            </div>
+            <!-- end of row -->
           </div>
-          <div class="card">
-            <div class="card-header" role="tab" id="generalInfoHeading">
-              <h5 class="mb-0">
+        </div>
+        <div class="row" id="navigationButtons">
+          <div class="col">
+            <button class="btn btn-danger" data-toggle="collapse" data-target="#generalInfo">General Information</button>
+            <button class="btn btn-primary" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
+            <button class="btn btn-success" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
+            <button class="btn btn-warning" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
+            <button class="btn btn-primary" data-toggle="collapse" data-target="#regulation">Regulation</button>
+            <button class="btn btn-danger" data-toggle="collapse" data-target="#interaction">Interaction</button>
+            <button class="btn btn-info" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
+            <button class="btn btn-success" data-toggle="collapse" data-target="#sources">Sources</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" role="tab" id="generalInfoHeading">
+            <h5 class="mb-0">
                 <a class="red" data-toggle="collapse" data-parent="#accordion" href="#generalInfo" aria-expanded="true" aria-controls="collapseOne">
                   General Information
                 </a>
               </h5>
-            </div>
-            <div id="generalInfo" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-              <div class="card-block">
-                <dl class ="row">
+          </div>
+          <div id="generalInfo" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+            <div class="card-block">
+              <dl class="row">
                 <dt class="col-sm-3">SGD ID: </dt>
-                <dd class ="col-sm-9"> <a class="lead sgd-link red database-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"> <a class="lead sgd-link red database-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">NCBI ID: </dt>
-                <dd class ="col-sm-9"><a class="lead ncbi-link blue database-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"><a class="lead ncbi-link blue database-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">Ensembl ID:</dt>
-                <dd class ="col-sm-9"><a class="lead ensembl-link green database-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"><a class="lead ensembl-link green database-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">Uniprot ID: </dt>
-                <dd class ="col-sm-9"><a class="lead uniprot-link orange database-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt"></a></dd>
+                <dd class="col-sm-9"><a class="lead uniprot-link orange database-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt"></a></dd>
                 <dt class="col-sm-3">JASPAR ID: </dt>
-                <dd class ="col-sm-9"><a class="lead jaspar-link periwinkle database-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar"></a></dd>
+                <dd class="col-sm-9"><a class="lead jaspar-link periwinkle database-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar"></a></dd>
                 <dt class="col-sm-3">Description: </dt>
-                <dd class ="ensemblDescription col-sm-9 ensemblSource"></dd>
+                <dd class="ensemblDescription col-sm-9 ensemblSource"></dd>
                 <dt class="col-sm-3">Species: </dt>
-                <dd class ="uniProtSpecies col-sm-9 uniprotSource"> </dd>
+                <dd class="uniProtSpecies col-sm-9 uniprotSource"> </dd>
                 <dt class="col-sm-3">Locus Tag: </dt>
                 <dd class="ncbiLocusTag col-sm-9  ncbiSource"></dd>
                 <dt class="col-sm-3">Family and Class:</dt>
-                <dd class ="jasparFamily col-sm-9 jasparSource"></dd>
+                <dd class="jasparFamily col-sm-9 jasparSource"></dd>
                 <dt class="col-sm-3">Jaspar Matrix ID: </dt>
-                <dd class ="matrixID col-sm-9  jasparSource"> </dd>
+                <dd class="matrixID col-sm-9  jasparSource"> </dd>
                 <dt class="col-sm-3">Chromosome Sequence: </dt>
-                <dd class ="chromosomeSequence  ncbiSource col-sm-9" src=""></dd>
-                </dl>
-              </div>
+                <dd class="chromosomeSequence  ncbiSource col-sm-9" src=""></dd>
+              </dl>
             </div>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <div id="mainContent" id="accordion">
-                <div class="card">
-                  <div class="card-header" role="tab" id="dnaSequenceHeading">
-                    <h5 class="mb-0">
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div id="mainContent" id="accordion">
+              <div class="card">
+                <div class="card-header" role="tab" id="dnaSequenceHeading">
+                  <h5 class="mb-0">
                       <a class ="blue" data-toggle="collapse" data-parent="#accordion" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">
                         DNA Sequence
                       </a>
                     </h5>
-                  </div>
-                  <div id="dnaSequence" class="collapse">
-                    <div class="card-block">
-                      <p class ="ensemblSource">
-                        <code class ="dnaSequenceCode"></code> <!-- DNA sequence goes there, -->
-                      </p>
-                    </div>
+                </div>
+                <div id="dnaSequence" class="collapse">
+                  <div class="card-block">
+                    <p class="ensemblSource">
+                      <code class="dnaSequenceCode"></code>
+                      <!-- DNA sequence goes there, -->
+                    </p>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header" id="proteinInfoHeading">
-                    <h5 class="mb-0">
+              </div>
+              <div class="card">
+                <div class="card-header" id="proteinInfoHeading">
+                  <h5 class="mb-0">
                       <a class="green" data-toggle="collapse" data-parent="#accordion" href="#proteinInfo">
                         Protein Information
                       </a>
                     </h5>
-                  </div>
-                  <div id="proteinInfo" class="collapse">
-                    <div class="card-block">
-                      <h2>Protein Type: </h2>
-                      <p class ="proteinType uniprotSource"></p>
-                      <h2>Protein Sequence: </h2>
-                      <p class="uniprotSource">
-                        <code class="proteinSequence"></code> <!-- it goes here from UniProt between code tags -->
-                      </p>
-                    </div>
+                </div>
+                <div id="proteinInfo" class="collapse">
+                  <div class="card-block">
+                    <h2>Protein Type: </h2>
+                    <p class="proteinType uniprotSource"></p>
+                    <h2>Protein Sequence: </h2>
+                    <p class="uniprotSource">
+                      <code class="proteinSequence"></code>
+                      <!-- it goes here from UniProt between code tags -->
+                    </p>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header" id="geneMapHeading">
-                    <h5 class="mb-0">
+              </div>
+              <div class="card">
+                <div class="card-header" id="geneMapHeading">
+                  <h5 class="mb-0">
                       <a class="orange" data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne">
                         Gene Map
                       </a>
                     </h5>
-                  </div>
-                  <div id="geneMap" class="collapse">
-                    <div class="card-block">
-                      <p class="ensemblID">
-                        <img class "geneMapImg" src=""></img>
-                      </p>
-                    </div>
+                </div>
+                <div id="geneMap" class="collapse">
+                  <div class="card-block">
+                    <p class="ensemblID">
+                      <img class "geneMapImg" src=""></img>
+                    </p>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header" id="regulationHeading">
-                    <h5 class="mb-0">
+              </div>
+              <div class="card">
+                <div class="card-header" id="regulationHeading">
+                  <h5 class="mb-0">
                       <a class="periwinkle" data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
                         Regulation
                       </a>
                     </h5>
-                  </div>
-                  <div id="regulation" class="collapse">
-                    <div class="card-block">
-                      <dl class ="row">
-                        <dd class ="col-sm-3"> Regulators: </dd>
-                        <dt class="regulators col-sm-9 sgdSource"></dt>
-                        <dd class ="col-sm-3"> Targets: </dd>
-                        <dt class="targets col-sm-9 sgdSource"></dt>
-                        <dd class ="col-sm-3 jasparSource"> Frequency Matrix: </dd>
-                        <img class="sequenceLogo" src="">
-                        <dd class ="col-sm-3 jasparSource"> Sequence Info: </dd>
-                        <table class="frequencyMatrix table table-dark table-striped">
-                          <thead>
-                            <tr class="frequencyOfA">
-                              <th>A:</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr class="frequencyOfC">
-                              <th>C:</th>
-                            </tr>
-                            <tr class="frequencyOfG">
-                              <th>G:</th>
-                            </tr>
-                            <tr class="frequencyOfT">
-                              <th>T:</th>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </dl>
-                    </div>
+                </div>
+                <div id="regulation" class="collapse">
+                  <div class="card-block">
+                    <dl class="row">
+                      <dd class="col-sm-3"> Regulators: </dd>
+                      <dt class="regulators col-sm-9 sgdSource"></dt>
+                      <dd class="col-sm-3"> Targets: </dd>
+                      <dt class="targets col-sm-9 sgdSource"></dt>
+                      <dd class="col-sm-3 jasparSource"> Frequency Matrix: </dd>
+                      <img class="sequenceLogo" src="">
+                      <dd class="col-sm-3 jasparSource"> Sequence Info: </dd>
+                      <table class="frequencyMatrix table table-dark table-striped">
+                        <thead>
+                          <tr class="frequencyOfA">
+                            <th>A:</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="frequencyOfC">
+                            <th>C:</th>
+                          </tr>
+                          <tr class="frequencyOfG">
+                            <th>G:</th>
+                          </tr>
+                          <tr class="frequencyOfT">
+                            <th>T:</th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </dl>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header" id="interactionHeading">
-                    <h5 class="mb-0">
+              </div>
+              <div class="card">
+                <div class="card-header" id="interactionHeading">
+                  <h5 class="mb-0">
                       <a class="red" data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
                         Interaction
                       </a>
                     </h5>
-                  </div>
-                  <div id="interaction" class="collapse">
-                    <div class="card-block">
-                      <div class="physicalInteractions">
-                        <h3> Physical Interactions </h3>
-                        <dl class ="row">
-                          <dt class ="col-sm-3">Affinity Capture MS: </dt>
-                          <dd class="affinityCaptureMS col-sm-9"></dd> <!-- Return Just the Value -->
-                          <dt class ="col-sm-3">Affinity Capture RNA: </dt>
-                          <dd class="affinityCaptureRNA col-sm-9"></dd>
-                          <dt class ="col-sm-3">Affinity Capture Western: </dt>
-                          <dd class="affinityCaptureWestern col-sm-9"></dd>
-                          <dt class ="col-sm-3">BioChemical Activity: </dt>
-                          <dd class="biochemicalActivity col-sm-9"></dd>
-                          <dt class ="col-sm-3">Colocalization: </dt>
-                          <dd class="colocalization col-sm-9"></dd>
-                          <dt class ="col-sm-3">Reconstituted Complex: </dt>
-                          <dd class="reconstitutedComplex col-sm-9"></dd>
-                          <dt class ="col-sm-3">Two Hybrid </dt>
-                          <dd class="twoHybrid col-sm-9"></dd>
-                        </dl>
-                      </div>
-                      <div class="geneticInteractions">
-                        <h3> Genetic Interactions </h3>
-                        <dl class ="row table table-dark">
-                          <dt class ="col-sm-3">Dosage Rescue: </dt>
-                          <dd class="dosageRescue col-sm-9"> </dd> <!-- Return Just the Value-->
-                          <dt class ="col-sm-3">Negative Genetic: </dt>
-                          <dd class="negativeGenetic col-sm-9"> </dd>
-                          <dt class ="col-sm-3">Phenotypic Enhancement: </dt>
-                          <dd class="phenotypicEnhancement col-sm-9"> </dd>
-                          <dt class ="col-sm-3">Phenotypic Suppresion: </dt>
-                          <dd class="phenotypicSuppression col-sm-9"> </dd>
-                          <dt class ="col-sm-3">Synthetic Growth Defect: </dt>
-                          <dd class="syntheticGrowthDefect col-sm-9"> </dd>
-                          <dt class ="col-sm-3">Synthetic Haploin Sufficency: </dt>
-                          <dd class="syntheticHaploinsufficiency col-sm-9"> </dd>
-                          <dt class ="col-sm-3">Synthetic Lethality: </dt>
-                          <dd class="syntheticLethality col-sm-9"> </dd>
-                          <dt class ="col-sm-3">Synthetic Rescue: </dt>
-                          <dd class="syntheticRescue col-sm-9"> </dd>
-                        </dl>
-                      </div>
-                      <dl class ="row">
-                        <h5 class ="col-sm-3">Total Interactions: </h5>
-                        <dd class ="totalInteractions"></dd>
+                </div>
+                <div id="interaction" class="collapse">
+                  <div class="card-block">
+                    <div class="physicalInteractions">
+                      <h3> Physical Interactions </h3>
+                      <dl class="row">
+                        <dt class="col-sm-3">Affinity Capture MS: </dt>
+                        <dd class="affinityCaptureMS col-sm-9"></dd>
+                        <!-- Return Just the Value -->
+                        <dt class="col-sm-3">Affinity Capture RNA: </dt>
+                        <dd class="affinityCaptureRNA col-sm-9"></dd>
+                        <dt class="col-sm-3">Affinity Capture Western: </dt>
+                        <dd class="affinityCaptureWestern col-sm-9"></dd>
+                        <dt class="col-sm-3">BioChemical Activity: </dt>
+                        <dd class="biochemicalActivity col-sm-9"></dd>
+                        <dt class="col-sm-3">Colocalization: </dt>
+                        <dd class="colocalization col-sm-9"></dd>
+                        <dt class="col-sm-3">Reconstituted Complex: </dt>
+                        <dd class="reconstitutedComplex col-sm-9"></dd>
+                        <dt class="col-sm-3">Two Hybrid </dt>
+                        <dd class="twoHybrid col-sm-9"></dd>
                       </dl>
                     </div>
+                    <div class="geneticInteractions">
+                      <h3> Genetic Interactions </h3>
+                      <dl class="row table table-dark">
+                        <dt class="col-sm-3">Dosage Rescue: </dt>
+                        <dd class="dosageRescue col-sm-9"> </dd>
+                        <!-- Return Just the Value-->
+                        <dt class="col-sm-3">Negative Genetic: </dt>
+                        <dd class="negativeGenetic col-sm-9"> </dd>
+                        <dt class="col-sm-3">Phenotypic Enhancement: </dt>
+                        <dd class="phenotypicEnhancement col-sm-9"> </dd>
+                        <dt class="col-sm-3">Phenotypic Suppresion: </dt>
+                        <dd class="phenotypicSuppression col-sm-9"> </dd>
+                        <dt class="col-sm-3">Synthetic Growth Defect: </dt>
+                        <dd class="syntheticGrowthDefect col-sm-9"> </dd>
+                        <dt class="col-sm-3">Synthetic Haploin Sufficency: </dt>
+                        <dd class="syntheticHaploinsufficiency col-sm-9"> </dd>
+                        <dt class="col-sm-3">Synthetic Lethality: </dt>
+                        <dd class="syntheticLethality col-sm-9"> </dd>
+                        <dt class="col-sm-3">Synthetic Rescue: </dt>
+                        <dd class="syntheticRescue col-sm-9"> </dd>
+                      </dl>
+                    </div>
+                    <dl class="row">
+                      <h5 class="col-sm-3">Total Interactions: </h5>
+                      <dd class="totalInteractions"></dd>
+                    </dl>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header" id="geneOntologyHeading">
-                    <h5 class="mb-0">
+              </div>
+              <div class="card">
+                <div class="card-header" id="geneOntologyHeading">
+                  <h5 class="mb-0">
                       <a class="blue" data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
                       Gene Ontology
                       </a>
                     </h5>
-                  </div>
-                  <div id="geneOntology" class="collapse">
-                    <div class="card-block">
-                      <dl class ="row">
-                        <dt class="col-sm-3">Gene Summary: </dt>
-                        <dd class ="geneSummary col-sm-9"></dd>
-                        <dt class="col-sm-3">Molecular Function</dt>
-                        <dd class ="molecularFunction col-sm-9"> </dd>
-                        <dt class="col-sm-3">Biological Process: </dt>
-                        <dd class ="biologicalProcess col-sm-9"></dd>
-                        <dt class="col-sm-3">Cellular Component: </dt>
-                        <dd class ="cellularComponent col-sm-9"></dd>
-                      </dl>
-                    </div>
+                </div>
+                <div id="geneOntology" class="collapse">
+                  <div class="card-block">
+                    <dl class="row">
+                      <dt class="col-sm-3">Gene Summary: </dt>
+                      <dd class="geneSummary col-sm-9"></dd>
+                      <dt class="col-sm-3">Molecular Function</dt>
+                      <dd class="molecularFunction col-sm-9"> </dd>
+                      <dt class="col-sm-3">Biological Process: </dt>
+                      <dd class="biologicalProcess col-sm-9"></dd>
+                      <dt class="col-sm-3">Cellular Component: </dt>
+                      <dd class="cellularComponent col-sm-9"></dd>
+                    </dl>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header" id="sourcesHeading">
-                    <h5 class="mb-0">
+              </div>
+              <div class="card">
+                <div class="card-header" id="sourcesHeading">
+                  <h5 class="mb-0">
                       <a class="green" data-toggle="collapse" data-parent="#accordion" href="#sources" aria-expanded="true" aria-controls="collapseOne">
                         Sources
                       </a>
                     </h5>
-                  </div>
-                  <div id="sources" class="collapse">
-                    <div class="card-block">
-                      <dl class ="row justify-content-center">
-                        <a class="col-6 col-md-4 sgd-link sgdSource red" id="sgdSource"></a>
-                      </dl>
-                      <dl class ="row justify-content-center">
-                        <a class="col-6 col-md-4 uniprot-link uniprotSource orange" id="uniprotSource"></a>
-                      </dl>
-                      <dl class ="row justify-content-center">
-                        <a class="col-6 col-md-4 ensembl-link ensemblSource green" id="ensemblSource"></a>
-                      </dl>
-                      <dl class ="row justify-content-center">
-                        <a class="col-6 col-md-4 ncbi-link ncbiSource blue" id="ncbiSource"></a>
-                      </dl>
-                      <dl class ="row justify-content-center">
-                        <a class="col-6 col-md-4 jaspar-link jasparSource periwinkle" id="jasparSource"></a>
-                      </dl>
-                    </div>
+                </div>
+                <div id="sources" class="collapse">
+                  <div class="card-block">
+                    <dl class="row justify-content-center">
+                      <a class="col-6 col-md-4 sgd-link sgdSource red" id="sgdSource"></a>
+                    </dl>
+                    <dl class="row justify-content-center">
+                      <a class="col-6 col-md-4 uniprot-link uniprotSource orange" id="uniprotSource"></a>
+                    </dl>
+                    <dl class="row justify-content-center">
+                      <a class="col-6 col-md-4 ensembl-link ensemblSource green" id="ensemblSource"></a>
+                    </dl>
+                    <dl class="row justify-content-center">
+                      <a class="col-6 col-md-4 ncbi-link ncbiSource blue" id="ncbiSource"></a>
+                    </dl>
+                    <dl class="row justify-content-center">
+                      <a class="col-6 col-md-4 jaspar-link jasparSource periwinkle" id="jasparSource"></a>
+                    </dl>
                   </div>
                 </div>
               </div>
-           </div>
-         </div>
+            </div>
+          </div>
+        </div>
       </div>
+      <iframe id="iframeFooter" src="http://dondi.github.io/GRNsight/onlyfooter.html" scrolling="no"></iframe>
       <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
       <script src="/js/api.js"></script>
       <script src='info.js'></script>
     </div>
-  </body>
+</body>
+
 </html>
