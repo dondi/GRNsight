@@ -9,8 +9,8 @@
             var XMLParser = function (data) {
                 return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
             };
-            var apiErrors = [];
-            var apiCount = 5;
+          //  var apiErrors = [];
+          //  var apiCount = 5;
 
             var getUniProtInfo = function (geneSymbol) {
                 return $.get({
