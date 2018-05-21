@@ -1,5 +1,5 @@
-var setupHandlers = require("./setuphandlers");
-var updateApp = require("./updateapp");
+var setupHandlers = require("./setuphandlers").setupHandlers;
+var updateApp = require("./updateapp").updateApp;
 var grnState = require("./grnstate");
 const drawGraph = require("./graph").drawGraph;
 const sliderObject = require("./sliders").sliderObject;
@@ -11,7 +11,6 @@ const nodeColoringController = require("./node-coloring").nodeColoringController
 
 container();
 upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);
-console.log("HELLO WORLD");
 setupHandlers(grnState);
 console.log("HELLO WORLD");
 updateApp(grnState);

@@ -1,9 +1,8 @@
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "updateGreyEdgesAsDashedOptions|getMappedValue|manualZoom"}] */
-
+var grnstate = require("./grnstate");
 export var updateApp = function (grnState) {
     var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
     var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
-    console.log("HELLOOOOOWORLD");
 
     if (grnState.dashedLine) {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
