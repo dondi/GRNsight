@@ -3,7 +3,7 @@ var updateApp = require("./updateapp");
 var grnState = require("./grnstate");
 
 export var setupHandlers = function (grnState) {
-
+// Grey edges options
     var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
     var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 

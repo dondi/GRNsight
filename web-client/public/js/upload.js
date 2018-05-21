@@ -177,7 +177,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $("#fileName").text(name); // Set the name of the file to display in the top bar
         $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
-    // If more things need to be turned off, we'll add them to this array
+        // If more things need to be turned off, we'll add them to this array
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
