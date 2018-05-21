@@ -19,7 +19,6 @@
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
     var api = window.api;
-    console.log(obj.symbol + typeof obj.symbol);
     api.getGeneInformation(obj.symbol).done(function (gene) {
 
         var sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
@@ -71,10 +70,6 @@
 
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
         $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
-
-      // Gene mapping
-        var geneMap = gene.ensembl.geneMap;
-        $(".geneMap").text(geneMap).attr({ href: ensemblHrefTemplate + geneMap });
 
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
@@ -153,15 +148,15 @@
         var sgdCellularComponent = gene.sgd.cellularComponent;
         $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
 
-        $("#sgdSource").text("Saccharomycese Genome Database");
+        $("#sgdSource").text("1. Saccharomyces Genome Database");
         $("<sup>1</sup>").appendTo(".sgdSource");
-        $("#uniprotSource").text("UniProt");
+        $("#uniprotSource").text("2. UniProt");
         $("<sup>2</sup>").appendTo(".uniprotSource");
-        $("#ensemblSource").text("Ensembl");
+        $("#ensemblSource").text("3. Ensembl");
         $("<sup>3</sup>").appendTo(".ensemblSource");
-        $("#ncbiSource").text("NCBI Database");
+        $("#ncbiSource").text("4. NCBI Database");
         $("<sup>4</sup>").appendTo(".ncbiSource");
-        $("#jasparSource").text("Jaspar Database");
+        $("#jasparSource").text("5. Jaspar Database");
         $("<sup>5</sup>").appendTo(".jasparSource");
 
 
