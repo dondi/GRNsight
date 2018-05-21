@@ -11,5 +11,7 @@ const nodeColoringController = require("./node-coloring").nodeColoringController
 
 container();
 upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);
+console.log("HELLO WORLD");
 setupHandlers(grnState);
+console.log("HELLO WORLD");
 updateApp(grnState);
