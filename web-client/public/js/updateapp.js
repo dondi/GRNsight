@@ -10,11 +10,9 @@ export var updateApp = function (grnState) {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
         $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
-        upload.reloader();
     } else if (!grnState.dashedLine) {
         $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
-        upload.reloader();
     }
 };
