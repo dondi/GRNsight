@@ -1,7 +1,4 @@
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "updateGreyEdgesAsDashedOptions|grnState|manualZoom"}] */
-var grnState = require("./grnstate");
-const upload = require("./upload").upload;
-
 export var updateApp = function (grnState) {
     var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
     var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
