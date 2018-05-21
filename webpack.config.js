@@ -10,5 +10,8 @@ module.exports = {
             { test: path.join(__dirname, "es6"),
                 loader: "babel-loader" }
         ]
+    },
+    resolve: {
+        modules: ["js", "node_modules"],
     }
 };

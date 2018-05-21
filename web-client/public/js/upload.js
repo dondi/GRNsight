@@ -177,7 +177,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $("#fileName").text(name); // Set the name of the file to display in the top bar
         $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
-    // If more things need to be turned off, we'll add them to this array
+        // If more things need to be turned off, we'll add them to this array
         [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
             $(selector).off("click");
         });
@@ -394,32 +394,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).on("change", function () {
         var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
         updateGrayEdgeValues(value);
-    });
-
-    // Dashed Gray Line Controller
-
-    var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
-    var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
-
-    var syncGreyEdgesAsDashedOptions = function (showAsDashed) {
-        if (showAsDashed) {
-            $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
-            $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
-            $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
-        } else {
-            $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
-            $(GREY_EDGES_DASHED_MENU).removeProp("checked");
-            $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
-        }
-        drawGraph(currentNetwork, sliders, nodeColoring);
-    };
-
-    $(GREY_EDGES_DASHED_MENU).click(function () {
-        syncGreyEdgesAsDashedOptions(!$(GREY_EDGES_DASHED_MENU).prop("checked"));
-    });
-
-    $(GREY_EDGES_DASHED_SIDEBAR).on("change", function () {
-        syncGreyEdgesAsDashedOptions($(GREY_EDGES_DASHED_SIDEBAR).prop("checked"));
     });
 
     var annotateLinks = function (network) {
