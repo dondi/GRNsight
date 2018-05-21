@@ -1,7 +1,8 @@
+console.log("HELLO WORLD");
 var setupHandlers = require("./setuphandlers").setupHandlers;
 var updateApp = require("./updateapp").updateApp;
 var grnState = require("./grnstate");
-const drawGraph = require("./graph").drawGraph;
+const drawGraph = require("./updateapp").drawGraph;
 const sliderObject = require("./sliders").sliderObject;
 const sliderGroupController = require("./sliders").sliderGroupController;
 const container = require("./container").container;
