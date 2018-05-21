@@ -92,7 +92,7 @@
 
             var getJasparInfo = function (geneSymbol) {
                 return $.get({
-                    url: "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+                    url: "http://jaspar.genereg.net/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
                     dataType: "json",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
@@ -172,7 +172,6 @@
                         description: data.description,
                         dnaSequence: "N/A", // Information unavailable via regular API
                         geneLocation: "N/A", // Information unavailable via regular API
-                        geneMap: "N/A", // Information unavailable via regular API
                     };
                 };
 

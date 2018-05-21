@@ -36,6 +36,18 @@ iframe {
   background-color: #691640;
 }
 
+.card-block {
+   margin-left: 10px;
+}
+
+.close {
+  color: black;
+}
+
+.database-link {
+  font-weight: 700;
+}
+
 .jumbotron {
   background-color: white;
   padding-bottom:0px !important;
@@ -59,14 +71,6 @@ iframe {
 
 .violet {
   color: #691640;
-}
-
-.database-link {
-  font-weight: 700;
-}
-
-.close {
-  color: black;
 }
 
 #gene-species {

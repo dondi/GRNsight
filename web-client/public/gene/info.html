@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <title>Loading... </title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
@@ -43,7 +44,7 @@
                 <h1 class="display-4" id="gene-name"></h1>
               </div>
               <div class="col">
-                <em><h1 class="display-4 uniProtSpecies" id="gene-species"></h1></em>
+                <em><h2 class="uniProtSpecies" id="gene-species"></h2></em>
               </div>
             </div>
             <!-- end of row -->
@@ -54,11 +55,10 @@
             <button class="btn btn-green" data-toggle="collapse" data-target="#generalInfo">General Information</button>
             <button class="btn btn-purple" data-toggle="collapse" data-target="#dnaSequence">DNA Sequence</button>
             <button class="btn btn-brown" data-toggle="collapse" data-target="#proteinInfo">Protein Information</button>
-            <button class="btn btn-turquoise" data-toggle="collapse" data-target="#geneMap">Gene Map</button>
-            <button class="btn btn-violet" data-toggle="collapse" data-target="#regulation">Regulation</button>
-            <button class="btn btn-green" data-toggle="collapse" data-target="#interaction">Interaction</button>
-            <button class="btn btn-purple" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
-            <button class="btn btn-brown" data-toggle="collapse" data-target="#sources">Sources</button>
+            <button class="btn btn-turquoise" data-toggle="collapse" data-target="#regulation">Regulation</button>
+            <button class="btn btn-violet" data-toggle="collapse" data-target="#interaction">Interaction</button>
+            <button class="btn btn-green" data-toggle="collapse" data-target="#geneOntology">Gene Ontology</button>
+            <button class="btn btn-purple" data-toggle="collapse" data-target="#sources">Sources</button>
           </div>
         </div>
         <div class="card">
@@ -139,25 +139,9 @@
                 </div>
               </div>
               <div class="card">
-                <div class="card-header" id="geneMapHeading">
-                  <h5 class="mb-0">
-                      <a class="turquoise" data-toggle="collapse" data-parent="#accordion" href="#geneMap" aria-expanded="true" aria-controls="collapseOne">
-                        Gene Map
-                      </a>
-                    </h5>
-                </div>
-                <div id="geneMap" class="collapse">
-                  <div class="card-block">
-                    <p class="ensemblID">
-                      <img class "geneMapImg" src=""></img>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
                 <div class="card-header" id="regulationHeading">
                   <h5 class="mb-0">
-                      <a class="violet" data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="turquoise" data-toggle="collapse" data-parent="#accordion" href="#regulation" aria-expanded="true" aria-controls="collapseOne">
                         Regulation
                       </a>
                     </h5>
@@ -197,7 +181,7 @@
               <div class="card">
                 <div class="card-header" id="interactionHeading">
                   <h5 class="mb-0">
-                      <a class="green" data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="purple" data-toggle="collapse" data-parent="#accordion" href="#interaction" aria-expanded="true" aria-controls="collapseOne">
                         Interaction
                       </a>
                     </h5>
@@ -256,7 +240,7 @@
               <div class="card">
                 <div class="card-header" id="geneOntologyHeading">
                   <h5 class="mb-0">
-                      <a class="purple" data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="green" data-toggle="collapse" data-parent="#accordion" href="#geneOntology" aria-expanded="true" aria-controls="collapseOne">
                       Gene Ontology
                       </a>
                     </h5>
@@ -279,7 +263,7 @@
               <div class="card">
                 <div class="card-header" id="sourcesHeading">
                   <h5 class="mb-0">
-                      <a class="brown" data-toggle="collapse" data-parent="#accordion" href="#sources" aria-expanded="true" aria-controls="collapseOne">
+                      <a class="violet" data-toggle="collapse" data-parent="#accordion" href="#sources" aria-expanded="true" aria-controls="collapseOne">
                         Sources
                       </a>
                     </h5>
@@ -287,19 +271,20 @@
                 <div id="sources" class="collapse">
                   <div class="card-block">
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 sgd-link sgdSource green" id="sgdSource"></a>
+                      <a class="col-6 col-md-4 sgd-link green" id="sgdSource"></a>
+
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 uniprot-link uniprotSource turquoise" id="uniprotSource"></a>
+                      <a class="col-6 col-md-4 uniprot-link turquoise" id="uniprotSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 ensembl-link ensemblSource brown" id="ensemblSource"></a>
+                      <a class="col-6 col-md-4 ensembl-link brown" id="ensemblSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 ncbi-link ncbiSource purple" id="ncbiSource"></a>
+                      <a class="col-6 col-md-4 ncbi-link purple" id="ncbiSource"></a>
                     </dl>
                     <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 jaspar-link jasparSource violet" id="jasparSource"></a>
+                      <a class="col-6 col-md-4 jaspar-link violet" id="jasparSource"></a>
                     </dl>
                   </div>
                 </div>
