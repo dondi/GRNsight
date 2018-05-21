@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "updateApp|grnState"}] */
 var updateApp = require("./updateapp");
+var grnState = require("./grnState");
 export var setupHandlers = function (grnState) {
-    console.log("HELLO WORLD");
 
     var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
     var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
