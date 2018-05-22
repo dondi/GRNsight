@@ -9,8 +9,6 @@
             var XMLParser = function (data) {
                 return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
             };
-          //  var apiErrors = [];
-          //  var apiCount = 5;
 
             var getUniProtInfo = function (geneSymbol) {
                 return $.get({
@@ -92,7 +90,7 @@
 
             var getJasparInfo = function (geneSymbol) {
                 return $.get({
-                    url: "jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+                    url: "../jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
                     dataType: "json",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
@@ -100,7 +98,7 @@
                 }).then(function (data) {
                     return (data.count === 0 ? {} :
                         $.get({
-                            url: "jaspar/api/v1/matrix/" + data.results[0].matrix_id,
+                            url: "../jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                             dataType: "json",
                             beforeSend: function (xhr) {
                                 xhr.setRequestHeader("content-type", "application/json");
@@ -171,7 +169,7 @@
             };
 
             var defaultValues = {
-                jaspar: defaultJaspar,
+                jaspar:  defaultJaspar,
                 ncbi: defaultNCBI,
                 ensembl: defaultEnsembl,
                 uniprot: defaultUniprot,
@@ -280,6 +278,7 @@
            }).catch(function () {
                return defaultValues;
            }).fail(function () {
+              //check properties of default values to ensure that they are all "Not found"
                var errorString1 = "No gene information was retrieved for " + symbol + ".";
 
                var errorString2 = "This could have happened because either"
