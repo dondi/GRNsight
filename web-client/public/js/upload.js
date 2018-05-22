@@ -355,6 +355,10 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
 
+    let valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
+
     // Gray Edge Controller
 
     var grayEdgeInputValidator = function (value) {

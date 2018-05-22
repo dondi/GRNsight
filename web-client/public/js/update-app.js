@@ -26,14 +26,12 @@ export const updateApp = grnState => {
         return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
     };
 
-    var validated = edgeWeightNormalizationInputValidation(value);
+    var validated = edgeWeightNormalizationInputValidation(grnState.normalizationMax);
 
-    if ($("#normalization-max").val(validated)) {
-        refreshApp();
-    }
-    if ($("#edge-weight-normalization-factor-menu").val(validated)) {
-        refreshApp();
-    }
+    $("#normalization-max").val(validated);
+    $("#edge-weight-normalization-factor-menu").val(validated);
+
+    refreshApp();
 
 
 // Dashed Line Synchronization
