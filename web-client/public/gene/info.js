@@ -19,10 +19,15 @@
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
     var api = window.api;
+
     api.getGeneInformation(obj.symbol).done(function (gene) {
+
+
 
         var sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
         var sgdId = gene.sgd.sgdID;
+        console.log(gene);
+        console.log(gene.sgd.systematicName);
         $(".sgd-link").text(sgdId).attr({ href: sgdHrefTemplate + sgdId });
 
         var ncbiHrefTemplate = "https://www.ncbi.nlm.nih.gov/gene/";
