@@ -1,4 +1,5 @@
 import Grid from "d3-v4-grid";
+import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
 
 /* globals d3 */
