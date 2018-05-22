@@ -17,13 +17,14 @@ const refreshApp = () => {
 };
 
 export const updateApp = grnState => {
-    if (grnState.normalizationMax != null) {
+    if (grnState.normalizationMax !== null) {
         var valueValidator = (min, max, value) => {
-        return Math.min(max, Math.max(min, value));
+            return Math.min(max, Math.max(min, value));
         };
 
         var edgeWeightNormalizationInputValidation = (value) => {
-            return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+            return value ===
+            "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
         };
 
         var synchronizeNormalizationValues = (value) => {
@@ -33,7 +34,6 @@ export const updateApp = grnState => {
         };
 
         synchronizeNormalizationValues(grnState.normalizationMax);
-        console.log(grnState.normalizationMax);
         refreshApp();
     }
 
