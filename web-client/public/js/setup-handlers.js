@@ -22,7 +22,7 @@ export const setupHandlers = grnState => {
     });
 
     $("#reset-normalization-factor-menu, #resetNormalizationButton").click(function () {
-        grnState.normalizationMax = null;
+        grnState.normalizationMax = grnState.resetNormalizationMax;
         updateApp(grnState);
     });
 

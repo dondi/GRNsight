@@ -1,4 +1,5 @@
 export const grnState = {
     dashedLine: false,
-    normalizationMax : null
+    normalizationMax : null,
+    resetNormalizationMax: null
 };
