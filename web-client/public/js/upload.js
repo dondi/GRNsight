@@ -330,14 +330,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
             $("#upload-graphml").click();
         });
     });
-    $("#upload").on("click", function () {
-        // deleted event parameter
-        console.log("hey");
-        $("#launchFileOpen").off("click").on("click", function () {
-            $("#upload").click();
-            console.log("ah okay");
-        });
-    });
 
     $("#printGraph").on("click", function () {
         if (!$(".startDisabled").hasClass("disabled")) {
@@ -500,7 +492,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         };
     };
 
-    $("#upload").on("change", uploadHandler("upload", loadGrn));
     $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
     $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 

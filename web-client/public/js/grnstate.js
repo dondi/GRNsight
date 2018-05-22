@@ -1,3 +1,5 @@
 export const grnState = {
-    dashedLine: false
+    name: null,
+    network: null,
+    dashedLine: false,
 };
