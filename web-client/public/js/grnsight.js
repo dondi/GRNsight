@@ -10,10 +10,8 @@ import { grnState } from "./grnstate";
 import { updateApp } from "./update-app";
 import { setupHandlers } from "./setup-handlers";
 
-console.log("HELLO WORLD");
+container();
+upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);
 
 setupHandlers(grnState);
 updateApp(grnState);
-
-container();
-upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);

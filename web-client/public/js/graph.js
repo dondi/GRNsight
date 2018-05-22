@@ -73,8 +73,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
   // normalization all weights b/w 2-14
-    var grnState.normalizationMax = +$("#normalization-max").val();
-    var normMax = grnState.normalizationMax;
+    var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
         .range([2, 14])
@@ -93,6 +92,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
         var maxWeight = d3.max(allWeights);
+        console.log(maxWeight);
+        grnState.normalizationMax = maxWeight;
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }

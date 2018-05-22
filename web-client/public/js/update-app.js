@@ -17,22 +17,25 @@ const refreshApp = () => {
 };
 
 export const updateApp = grnState => {
-// Edge Weight Normalization
-    let valueValidator = (min, max, value) => {
+    if (grnState.normalizationMax != null) {
+        var valueValidator = (min, max, value) => {
         return Math.min(max, Math.max(min, value));
-    };
+        };
 
-    let edgeWeightNormalizationInputValidation = (value) => {
-        return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
-    };
+        var edgeWeightNormalizationInputValidation = (value) => {
+            return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+        };
 
-    var validated = edgeWeightNormalizationInputValidation(grnState.normalizationMax);
+        var synchronizeNormalizationValues = (value) => {
+            var validated = edgeWeightNormalizationInputValidation(value);
+            $("#normalization-max").val(validated);
+            $("#edge-weight-normalization-factor-menu").val(validated);
+        };
 
-    $("#normalization-max").val(validated);
-    $("#edge-weight-normalization-factor-menu").val(validated);
-
-    refreshApp();
-
+        synchronizeNormalizationValues(grnState.normalizationMax);
+        console.log(grnState.normalizationMax);
+        refreshApp();
+    }
 
 // Dashed Line Synchronization
     if (grnState.dashedLine) {
