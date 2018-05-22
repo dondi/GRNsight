@@ -252,140 +252,48 @@
                 } : {};
             };
 
-
-
-            // change if any preprocessing needs to be done on the data before being given to the application
-            var filterData = function (uniprotInfo, ncbiInfo, yeastmineInfo, ensemblInfo, jasparInfo) {
-                var parseUniprot = function (data) {
-                    return {
-                        uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
-                        proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
-                        proteinType: XMLParser(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
-                        species: XMLParser(data.getElementsByTagName("organism")[0].childNodes[1]),
-                    };
-                };
-
-                var parseNCBI = function (data) {
-                    var tagArray = serializer.serializeToString(
-                        data.getElementsByTagName("OtherAliases")[0]).split(",");
-                    return {
-                        ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
-                        locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
-                        alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ""),
-                        chromosomeSequence: XMLParser(data.getElementsByTagName("ChrAccVer")[0]),
-                        genomicSequence: XMLParser(data.getElementsByTagName("ChrLoc")[0]) + "; "
-                        + XMLParser(data.getElementsByTagName("ChrAccVer")[0]) + " ("
-                        + XMLParser(data.getElementsByTagName("ChrStart")[0])
-                         + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
-                    };
-                };
-
-                var parseYeastmine = function (data) {
-                    return {
-                        sgdID: data.primaryIdentifier,
-                        standardName: data.symbol,
-                        systematicName: data.secondaryIdentifier,
-                        regulators: "N/A", // Information unavailable via regular API
-                        targets: "N/A", // Information unavailable via regular API
-                        totalInteractions: "N/A", // Information unavailable via regular API
-                        affinityCaptureMS: "N/A", // Information unavailable via regular API
-                        affinityCaptureRNA: "N/A", // Information unavailable via regular API
-                        affinityCaptureWestern: "N/A", // Information unavailable via regular API
-                        biochemicalActivity: "N/A", // Information unavailable via regular API
-                        colocalization: "N/A", // Information unavailable via regular API
-                        reconstitutedComplex: "N/A", // Information unavailable via regular API
-                        twoHybrid: "N/A", // Information unavailable via regular API
-                        dosageRescue: "N/A", // Information unavailable via regular API
-                        negativeGenetic: "N/A", // Information unavailable via regular API
-                        phenotypicEnhancement: "N/A", // Information unavailable via regular API
-                        phenotypicSuppression: "N/A", // Information unavailable via regular API
-                        syntheticGrowthDefect: "N/A", // Information unavailable via regular API
-                        syntheticHaploinsufficiency: "N/A", // Information unavailable via regular API
-                        syntheticLethality: "N/A", // Information unavailable via regular API
-                        syntheticRescue: "N/A", // Information unavailable via regular API
-                        geneOntologySummary: data.functionSummary,
-                        molecularFunction: "N/A", // Information unavailable via regular API
-                        biologicalProcess: "N/A", // Information unavailable via regular API
-                        cellularComponent: "N/A", // Information unavailable via regular API
-                    };
-                };
-
-                var parseEnsembl = function (data) {
-                    return {
-                        ensemblID: data.id,
-                        description: data.description,
-                        dnaSequence: "N/A", // Information unavailable via regular API
-                        geneLocation: "N/A", // Information unavailable via regular API
-                    };
-                };
-
-                var parseJaspar = function (data) {
-
-                    return data ? {
-                        jasparID : data.matrix_id,
-                        class: data.class,
-                        family: data.family,
-                        sequenceLogo: data.sequence_logo,
-                        frequencyMatrix: data.pfm,
-                    } : {};
-                };
-                return {
-                    jaspar: parseJaspar(jasparInfo),
-                    ncbi: parseNCBI(ncbiInfo),
-                    ensembl: parseEnsembl(ensemblInfo),
-                    uniprot: parseUniprot(uniprotInfo),
-                    sgd: parseYeastmine(yeastmineInfo),
-                };
-            };
-
-            $.when(
-                getUniProtInfo(symbol)
-              ).then(function (info) {
-                  defaultValues.uniprot = parseUniprot(info);
-              });
-
-            $.when(
-              getYeastMineInfo(symbol)
-            ).then(function (info) {
-                defaultValues.sgd = parseYeastmine(info[0]);
-            });
-
-            $.when(
-              getEnsemblInfo(symbol)
-            ).then(function (info) {
-                defaultValues.ensembl = parseEnsembl(info);
-            });
-
-
-            $.when(
-            getJasparInfo(symbol)
-          ).then(function (info) {
-              defaultValues.jaspar = parseJaspar(info);
-          });
-
-
             return $.when(
              getNCBIInfo(symbol)
-            ).then(function (info) {
-                defaultValues.ncbi = parseNCBI(info);
-                console.log(defaultValues);
-                return defaultValues;
-            }).fail(function () {
-                var errorString1 = "No gene information was retrieved for " + symbol + ".";
+           ).then(function (info1) {
+               defaultValues.ncbi = parseNCBI(info1);
+               return getUniProtInfo(symbol);
+           }).catch(function () {
+               return getUniProtInfo(symbol);
+           }).then(function (info2) {
+               defaultValues.uniprot = parseUniprot(info2);
+               return getYeastMineInfo(symbol);
+           }).catch(function () {
+               return getYeastMineInfo(symbol);
+           }).then(function (info3) {
+               defaultValues.sgd = parseYeastmine(info3[0]);
+               return getEnsemblInfo(symbol);
+           }).catch(function () {
+               return getEnsemblInfo(symbol);
+           }).then(function (info4) {
+               defaultValues.ensembl = parseEnsembl(info4);
+               return getJasparInfo(symbol);
+           }).catch(function () {
+               return getJasparInfo(symbol);
+           }).then(function (info5) {
+               defaultValues.jaspar = parseJaspar(info5);
+               return defaultValues;
+           }).catch(function () {
+               return defaultValues;
+           }).fail(function () {
+               var errorString1 = "No gene information was retrieved for " + symbol + ".";
 
-                var errorString2 = "This could have happened because either"
+               var errorString2 = "This could have happened because either"
                 + " GRNsight could not access the gene information from one of the source databases"
                 + " or because no information exists for the gene in the source databases.";
 
-                var errorString3 = "You can check back later to see if gene information"
+               var errorString3 = "You can check back later to see if gene information"
                 + " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
 
-                $("#error1").text(errorString1);
-                $("#error2").text(errorString2);
-                $("#error3").text(errorString3);
-                $("#errorModal").modal("show");
-
-            });
+               $("#error1").text(errorString1);
+               $("#error2").text(errorString2);
+               $("#error3").text(errorString3);
+               $("#errorModal").modal("show");
+           });
         }
     };
 })($);
