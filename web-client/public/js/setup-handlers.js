@@ -15,4 +15,19 @@ export const setupHandlers = grnState => {
         grnState.dashedLine = !$(GREY_EDGES_DASHED_MENU).prop("checked");
         updateApp(grnState);
     });
+
+    $("#normalization-button").click(function () {
+        grnState.normalizationMax = $("#normalization-max").val();
+        updateApp(grnState);
+    });
+
+    $("#reset-normalization-factor-menu, #resetNormalizationButton").click(function () {
+        grnState.normalizationMax = null;
+        updateApp(grnState);
+    });
+
+    $("#edge-weight-normalization-factor-menu").on("change", function () {
+        grnState.normalizationMax = $("#edge-weight-normalization-factor-menu").val();
+        updateApp(grnState);
+    });
 };

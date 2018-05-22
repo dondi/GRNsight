@@ -351,37 +351,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         delay: { show: 700, hide: 100 }
     });
 
-    // Normalization Controller
-    var MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
-    var MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
-
-    var valueValidator = function (min, max, value) {
-        return Math.min(max, Math.max(min, value));
-    };
-
-    var edgeWeightNormalizationInputValidation = function (value) {
-        return value === "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
-    };
-
-    var synchronizeNormalizationValues = function (value) {
-        var validated = edgeWeightNormalizationInputValidation(value);
-        $("#normalization-max").val(validated);
-        $("#edge-weight-normalization-factor-menu").val(validated);
-        drawGraph(currentNetwork, sliders, nodeColoring);
-    };
-
-    $("#normalization-button").click(function () {
-        synchronizeNormalizationValues($("#normalization-max").val());
-    });
-
-    $("#reset-normalization-factor-menu, #resetNormalizationButton").click(function () {
-        synchronizeNormalizationValues("");
-    });
-
-    $("#edge-weight-normalization-factor-menu").on("change", function () {
-        synchronizeNormalizationValues($("#edge-weight-normalization-factor-menu").val());
-    });
-
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";

@@ -72,7 +72,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
   // normalization all weights b/w 2-14
-    var normMax = +$("#normalization-max").val();
+    var grnState.normalizationMax = +$("#normalization-max").val();
+    var normMax = grnState.normalizationMax;
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
         .range([2, 14])
