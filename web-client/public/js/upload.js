@@ -1,3 +1,12 @@
+// TODO Likely a temporary location, while things are being moved to their "true" homes.
+//      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
+//      controller code installed by setupHandlers can access them.
+export const uploadState = {
+    currentNetwork: null,
+    sliders: null,
+    nodeColoring: null
+}
+
 export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
   // Slider Values
     var LINK_DIST_SLIDER_ID   = "#linkDistInput";
@@ -48,12 +57,14 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     styleLabelTooltips();
 
     var nodeColoring = nodeColoringController;
+    uploadState.nodeColoring = nodeColoring;
     nodeColoring.configureNodeColoringHandlers();
     nodeColoring.initialize();
 
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
     var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
+    uploadState.sliders = sliders;
     sliders.setSliderHandlers();
     sliders.updateValues();
     sliders.configureSliderControllers();
@@ -166,6 +177,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         }
 
         currentNetwork = network;
+        uploadState.currentNetwork = network;
         console.log("Network: ", network); // Display the network in the console
         $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
@@ -396,32 +408,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).on("change", function () {
         var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
         updateGrayEdgeValues(value);
-    });
-
-    // Dashed Gray Line Controller
-
-    var GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
-    var GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
-
-    var syncGreyEdgesAsDashedOptions = function (showAsDashed) {
-        if (showAsDashed) {
-            $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
-            $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
-            $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
-        } else {
-            $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
-            $(GREY_EDGES_DASHED_MENU).removeProp("checked");
-            $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
-        }
-        drawGraph(currentNetwork, sliders, nodeColoring);
-    };
-
-    $(GREY_EDGES_DASHED_MENU).click(function () {
-        syncGreyEdgesAsDashedOptions(!$(GREY_EDGES_DASHED_MENU).prop("checked"));
-    });
-
-    $(GREY_EDGES_DASHED_SIDEBAR).on("change", function () {
-        syncGreyEdgesAsDashedOptions($(GREY_EDGES_DASHED_SIDEBAR).prop("checked"));
     });
 
     var annotateLinks = function (network) {
