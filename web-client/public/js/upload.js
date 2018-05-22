@@ -5,7 +5,7 @@ export const uploadState = {
     currentNetwork: null,
     sliders: null,
     nodeColoring: null
-}
+};
 
 export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
   // Slider Values

@@ -4,7 +4,7 @@ import { uploadState } from "./upload";
 import {
   GREY_EDGES_DASHED_MENU,
   GREY_EDGES_DASHED_SIDEBAR
-} from "./constants"
+} from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
@@ -12,7 +12,7 @@ const refreshApp = () => {
     if (uploadState && uploadState.currentNetwork && uploadState.sliders && uploadState.nodeColoring) {
         drawGraph(uploadState.currentNetwork, uploadState.sliders, uploadState.nodeColoring);
     }
-}
+};
 
 export const updateApp = grnState => {
     if (grnState.dashedLine) {

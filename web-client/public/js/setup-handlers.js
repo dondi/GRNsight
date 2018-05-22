@@ -1,9 +1,9 @@
-import { updateApp } from "./update-app"
+import { updateApp } from "./update-app";
 
 import {
     GREY_EDGES_DASHED_MENU,
     GREY_EDGES_DASHED_SIDEBAR
-} from "./constants"
+} from "./constants";
 
 export const setupHandlers = grnState => {
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
