@@ -278,7 +278,7 @@
            }).catch(function () {
                return defaultValues;
            }).fail(function () {
-              //check properties of default values to ensure that they are all "Not found"
+              // check properties of default values to ensure that they are all "Not found"
                var errorString1 = "No gene information was retrieved for " + symbol + ".";
 
                var errorString2 = "This could have happened because either"
