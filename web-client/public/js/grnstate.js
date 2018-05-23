@@ -42,9 +42,8 @@ export const grnState = {
 
     dashedLine: false,
 
-    annotateLinks: () => annotateLinks(currentNetwork)
+    annotateLinks: () => annotateLinks(currentNetwork),
 
-    dashedLine: false,
     normalizationMax : null,
     resetNormalizationMax: null
 };
