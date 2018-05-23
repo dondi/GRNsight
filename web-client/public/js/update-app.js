@@ -15,7 +15,7 @@ const refreshApp = () => {
     }
 };
 
-var displayNetwork = function (network, name) {
+const displayNetwork = (network, name) => {
     uploadState.nodeColoring.reload(network, name);
     if (document.getElementById("zoomSlider").disabled) {
         document.getElementById("zoomSlider").disabled = false;
@@ -33,9 +33,9 @@ var displayNetwork = function (network, name) {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
-        $(selector).off("click");
-    });
+    [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(
+        selector => $(selector).off("click")
+    );
 };
 
 export const updateApp = grnState => {

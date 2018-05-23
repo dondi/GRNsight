@@ -6,9 +6,9 @@ import {
     DEMO_INFORMATION
 } from "./constants";
 
-var submittedFilename = function ($upload) {
-    var path = $upload.val();
-    var fakePathCheck = path.search("\\\\") + 1;
+const submittedFilename = $upload => {
+    let path = $upload.val();
+    let fakePathCheck = path.search("\\\\") + 1;
 
     while (fakePathCheck) {
         path = path.substring(fakePathCheck);
@@ -18,13 +18,13 @@ var submittedFilename = function ($upload) {
     return path;
 };
 
-var createFileForm = function ($upload) {
-    var formData = new FormData();
+const createFileForm = $upload => {
+    const formData = new FormData();
     formData.append("file", $upload[0].files[0]);
     return formData;
 };
 
-var uploadEpilogue = function (event) {
+const uploadEpilogue = event => {
     if (window.ga) {
         window.ga("send", "pageview", {
             page: "/GRNsight/upload",
@@ -36,40 +36,43 @@ var uploadEpilogue = function (event) {
     event.preventDefault();
 };
 
-var uploadHandler = function (uploadRoute, uploader) {
-    return function (event) {
-        var $upload = $(this);
-        var filename = submittedFilename($upload);
-        var formData = createFileForm($upload);
+const uploadHandler = (uploadRoute, uploader) => {
+    return function (event) { // Must be `function` due to use of `this`.
+        const $upload = $(this);
+        const filename = submittedFilename($upload);
+        const formData = createFileForm($upload);
         uploader(uploadRoute, filename, formData);
         uploadEpilogue(event);
     };
 };
 
-var networkErrorDisplayer = function (xhr) {
+const networkErrorDisplayer = xhr => {
     // Deleted status, error for argument because it was never used
-    var err = JSON.parse(xhr.responseText);
-    var errorString = "Your graph failed to load.<br><br>";
+    const err = JSON.parse(xhr.responseText);
+    let errorString = "Your graph failed to load.<br><br>";
 
     if (!err.errors) { // will be falsy if an error was thrown before the network was generated
         errorString += err;
     } else {
         console.log(err.errors);
-        errorString = err.errors.reduce(function (currentErrorString, currentError) {
-            return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
-        }, errorString);
+        errorString = err.errors.reduce(
+            (currentErrorString, currentError) =>
+                `${currentErrorString}${currentError.possibleCause} ${currentError.suggestedFix}<br><br>`,
+
+            errorString
+        );
     }
 
     $("#error").html(errorString);
     $("#errorModal").modal("show");
 };
 
-var reloader = function () { };
+let reloader = () => { };
 
-export const setupHandlers = grnState => {
-    var loadGrn = function (url, name, formData) {
+const setupLoadAndImportHandlers = grnState => {
+    const loadGrn = (url, name, formData) => {
         // The presence of formData is taken to indicate a POST.
-        var fullUrl = [ $("#service-root").val(), url ].join("/");
+        const fullUrl = [ $("#service-root").val(), url ].join("/");
         (formData ? $.ajax({
             url: fullUrl,
             data: formData,
@@ -77,14 +80,13 @@ export const setupHandlers = grnState => {
             contentType: false,
             type: "POST",
             crossDomain: true
-        }) : $.getJSON(fullUrl)).done(function (network, textStatus, jqXhr) {
+        }) : $.getJSON(fullUrl)).done((network, textStatus, jqXhr) => {
             // Display the network in the console
             console.log(network);
             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
             grnState.network = network;
-            reloader = function () {
-                loadGrn(url, name, formData);
-            };
+
+            reloader = () => loadGrn(url, name, formData);
 
             updateApp(grnState);
             // displayStatistics(network);
@@ -97,8 +99,8 @@ export const setupHandlers = grnState => {
      */
 
     // TODO Some opportunity for unification with loadGrn?
-    var importGrn = function (uploadRoute, filename, formData) {
-        var fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+    const importGrn = (uploadRoute, filename, formData) => {
+        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
         $.ajax({
             url: fullUrl,
             data: formData,
@@ -111,54 +113,48 @@ export const setupHandlers = grnState => {
             grnState.network = network;
             grnState.annotateLinks();
 
-            reloader = function () {
-                importGrn(uploadRoute, filename, formData);
-            };
+            reloader = () => importGrn(uploadRoute, filename, formData);
 
             updateApp(grnState);
         }).error(networkErrorDisplayer);
     };
 
-    $("#upload").on("click", function () {
+    $("#upload").on("click", () =>
         // deleted event parameter
-        $("#launchFileOpen").off("click").on("click", function () {
-            $("#upload").click();
-        });
-    });
+        $("#launchFileOpen").off("click").on("click", () => $("#upload").click())
+    );
 
     $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
     $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 
     $("#upload").on("change", uploadHandler("upload", loadGrn));
 
-    var loadDemo = function (url) {
+    const loadDemo = url => {
         loadGrn(url);
-        reloader = function () {
-            loadGrn(url);
-        };
+        reloader = () => loadGrn(url);
 
         $("a.upload > input[type=file]").val("");
     };
 
-    var initializeDemoFile = function (demoId, demoPath, demoName) {
-        $(demoId).on("click", function () {
-            // Deleted parameter event
-            loadDemo(demoPath, demoName);
-        });
+    const initializeDemoFile = (demoId, demoPath, demoName) => {
+        // Deleted parameter `event`
+        $(demoId).on("click", () => loadDemo(demoPath, demoName));
     };
 
-    DEMO_INFORMATION.forEach(function (demoInfo) {
-        initializeDemoFile.apply(null, demoInfo);
-    });
+    DEMO_INFORMATION.forEach(demoInfo => initializeDemoFile.apply(null, demoInfo));
 
     $("#reload").click(function () {
-        // Deleted event parameter
+        // Deleted `event` parameter but need `function` because of `this`.
         if (!$(this).parent().hasClass("disabled")) {
             if ($.isFunction(reloader)) {
                 reloader();
             }
         }
     });
+};
+
+export const setupHandlers = grnState => {
+    setupLoadAndImportHandlers(grnState);
 
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");

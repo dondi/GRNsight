@@ -1,13 +1,13 @@
 let currentNetwork = null;
 
-var annotateLinks = function (network) {
+const annotateLinks = network => {
     // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.
     //      Think of a way to consolidate it. Having discovered this, it seems like this should
     //      be done on the client side because it rearranges data redundantly, for ease of display.
     network.positiveWeights = [];
     network.negativeWeights = [];
 
-    network.links.forEach(function (link) {
+    network.links.forEach(link => {
         if (network.sheetType === "unweighted" && !link.value) {
             link.value = 1;
         }
