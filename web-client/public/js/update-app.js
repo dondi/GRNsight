@@ -41,7 +41,7 @@ const displayNetwork = (network, name) => {
 };
 
 export const updateApp = grnState => {
-<<<<<<< Updated upstream
+
     if (grnState.newNetwork) {
         displayNetwork(grnState.network, grnState.name);
         refreshApp();
@@ -51,7 +51,6 @@ export const updateApp = grnState => {
         grnState.newNetwork = false;
     }
 
-=======
     if (grnState.normalizationMax !== null) {
         var valueValidator = (min, max, value) => {
             return Math.min(max, Math.max(min, value));
@@ -73,7 +72,6 @@ export const updateApp = grnState => {
     }
 
 // Dashed Line Synchronization
->>>>>>> Stashed changes
     if (grnState.dashedLine) {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
