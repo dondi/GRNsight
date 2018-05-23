@@ -5,7 +5,11 @@ import {
     GREY_EDGES_DASHED_SIDEBAR
 } from "./constants";
 
+import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
+
 export const setupHandlers = grnState => {
+    setupLoadAndImportHandlers(grnState);
+
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);
