@@ -6,11 +6,13 @@
       }) : {};
 
 // The following code is for the accordion link:
-    $("button").click(function (event) {
+    $("button, .sourceLink").click(function (event) {
+        alert("hey");
         event.preventDefault();
         var anchorName = $(this).attr("data-target") + "Heading";
         $("html, body").animate({scrollTop: $(anchorName).offset().top});
     });
+
 
 
     document.title = "GRNsight - " + obj.symbol;
@@ -150,15 +152,15 @@
         $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
 
         $("#sgdSource").text("1. Saccharomyces Genome Database");
-        $("<sup>1</sup>").appendTo(".sgdSource");
+        $("<a class=\"sourceLink\" data-target=\"#sources\" href=\"sources\"><sup>[1]</sup></a>").appendTo(".sgdSource");
         $("#uniprotSource").text("2. UniProt");
-        $("<sup>2</sup>").appendTo(".uniprotSource");
+        $("<sup>[2]</sup>").appendTo(".uniprotSource");
         $("#ensemblSource").text("3. Ensembl");
-        $("<sup>3</sup>").appendTo(".ensemblSource");
+        $("<sup>[3]</sup>").appendTo(".ensemblSource");
         $("#ncbiSource").text("4. NCBI Database");
-        $("<sup>4</sup>").appendTo(".ncbiSource");
+        $("<sup>[4]</sup>").appendTo(".ncbiSource");
         $("#jasparSource").text("5. Jaspar Database");
-        $("<sup>5</sup>").appendTo(".jasparSource");
+        $("<sup>[5[]</sup>").appendTo(".jasparSource");
 
 
 

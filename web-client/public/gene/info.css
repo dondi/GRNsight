@@ -2,11 +2,6 @@ body {
   font-family: sans-serif;
 }
 
-code {
-  font-family: Courier;
-  color:black;
-}
-
 iframe {
   border:none;
   width: 100%;
@@ -44,13 +39,23 @@ iframe {
   color: black;
 }
 
+.codeSequence {
+  font-family: Courier;
+  color:black;
+}
+
 .database-link {
+  color:  #16693f;
   font-weight: 700;
 }
 
 .jumbotron {
   background-color: white;
   padding-bottom:0px !important;
+}
+
+.sequenceLogo {
+  width: 50%;
 }
 
 .green {

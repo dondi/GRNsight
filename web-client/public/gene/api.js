@@ -250,6 +250,7 @@
                 } : {};
             };
 
+
             return $.when(
              getNCBIInfo(symbol)
            ).then(function (info1) {
@@ -278,20 +279,28 @@
            }).catch(function () {
                return defaultValues;
            }).fail(function () {
-              // check properties of default values to ensure that they are all "Not found"
-               var errorString1 = "No gene information was retrieved for " + symbol + ".";
 
-               var errorString2 = "This could have happened because either"
-                + " GRNsight could not access the gene information from one of the source databases"
-                + " or because no information exists for the gene in the source databases.";
+               if (
+                 defaultValues.ncbi === defaultNCBI &&
+                 defaultValues.uniprot === defaultUniprot &&
+                 defaultValues.sgd === defaultYeastmine &&
+                 defaultValues.ensembl === defaultEnsembl &&
+                 defaultValues.jaspar === defaultJaspar
+               ) {
+                   var errorString1 = "No gene information was retrieved for " + symbol + ".";
 
-               var errorString3 = "You can check back later to see if gene information"
-                + " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
+                   var errorString2 = "This could have happened because either"
+                    + " GRNsight could not access the gene information from one of the source databases"
+                    + " or because no information exists for the gene in the source databases.";
 
-               $("#error1").text(errorString1);
-               $("#error2").text(errorString2);
-               $("#error3").text(errorString3);
-               $("#errorModal").modal("show");
+                   var errorString3 = "You can check back later to see if gene information"
+                    + " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
+
+                   $("#error1").text(errorString1);
+                   $("#error2").text(errorString2);
+                   $("#error3").text(errorString3);
+                   $("#errorModal").modal("show");
+               }
            });
         }
     };
