@@ -7,6 +7,8 @@
 </head>
 
 <body>
+
+  <!-- The following code is for the error modal -->
   <div id="errorModal" class="modal fade" tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true'>
     <div class="modal-dialog">
       <div class="modal-content">
@@ -27,15 +29,16 @@
       </div>
     </div>
   </div>
+  <!-- End error modal -->
 
 
   <div class="container-fluid">
+    <iframe src="http://dondi.github.io/GRNsight/onlyheader.html" scrolling="no"></iframe>
     <div class="row">
-      <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/onlysidebar.html" scrolling="no"></iframe>
       <div class="col-2">
-        <!--iframe will go here" -->
+        <iframe id="iframeMenu" src="http://dondi.github.io/GRNsight/onlysidebar.html" scrolling="no"></iframe>
       </div>
-      <div class="col-10" id="mainPage">
+      <div class="col-10"  id="mainPage">
         <div class="row" id="pageHead">
           <div class="jumbotron">
             <div>
@@ -75,15 +78,15 @@
             <div class="card-block">
               <dl class="row">
                 <dt class="col-sm-3">SGD ID: </dt>
-                <dd class="col-sm-9"> <a class="lead sgd-link green database-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database"></a>&nbsp;&nbsp;</dd>
-                <dt class="col-sm-3">NCBI ID: </dt>
-                <dd class="col-sm-9"><a class="lead ncbi-link purple database-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"> <a class="lead sgd-link database-link" href="https://www.yeastgenome.org/locus/S000001855" data-toggle="tooltip" data-placement="top" title="Saccharomyces Genome Database"></a>&nbsp;&nbsp;</dd>
+                <dt class="col-sm-3">NCBI Gene ID: </dt>
+                <dd class="col-sm-9"><a class="lead ncbi-link database-link" href="https://www.ncbi.nlm.nih.gov/gene/850504" data-toggle="tooltip" data-placement="top" title="National Center for Biotechnology Information"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">Ensembl ID:</dt>
-                <dd class="col-sm-9"><a class="lead ensembl-link brown database-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl"></a>&nbsp;&nbsp;</dd>
+                <dd class="col-sm-9"><a class="lead ensembl-link database-link" href="https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C" data-toggle="tooltip" data-placement="top" title="Ensembl"></a>&nbsp;&nbsp;</dd>
                 <dt class="col-sm-3">Uniprot ID: </dt>
-                <dd class="col-sm-9"><a class="lead uniprot-link turquoise database-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt"></a></dd>
+                <dd class="col-sm-9"><a class="lead uniprot-link database-link" href="http://www.uniprot.org/uniprot/P60010" data-toggle="tooltip" data-placement="top" title="UniProt"></a></dd>
                 <dt class="col-sm-3">JASPAR ID: </dt>
-                <dd class="col-sm-9"><a class="lead jaspar-link violet database-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar"></a></dd>
+                <dd class="col-sm-9"><a class="lead jaspar-link database-link" href="http://jaspar.genereg.net/matrix/MA0080.1/" data-toggle="tooltip" data-placement="top" title="Jaspar"></a></dd>
                 <dt class="col-sm-3">Description: </dt>
                 <dd class="ensemblDescription col-sm-9 ensemblSource"></dd>
                 <dt class="col-sm-3">Species: </dt>
@@ -102,7 +105,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <div id="mainContent" id="accordion">
+            <div id="accordion">
               <div class="card">
                 <div class="card-header" role="tab" id="dnaSequenceHeading">
                   <h5 class="mb-0">
@@ -113,10 +116,7 @@
                 </div>
                 <div id="dnaSequence" class="collapse">
                   <div class="card-block">
-                    <p class="ensemblSource">
-                      <code class="dnaSequenceCode"></code>
-                      <!-- DNA sequence goes there, -->
-                    </p>
+                    <p class="ensemblSource dnaSequenceCode codeSequence"></p>
                   </div>
                 </div>
               </div>
@@ -130,13 +130,12 @@
                 </div>
                 <div id="proteinInfo" class="collapse">
                   <div class="card-block">
-                    <h2>Protein Type: </h2>
-                    <p class="proteinType uniprotSource"></p>
-                    <h2>Protein Sequence: </h2>
-                    <p class="uniprotSource">
-                      <code class="proteinSequence"></code>
-                      <!-- it goes here from UniProt between code tags -->
-                    </p>
+                    <dl class="row">
+                      <dt class="col-sm-3">Protein Type:</dt>
+                      <dd class="col-sm-9 proteinType uniprotSource"> </dd>
+                      <dt class="col-sm-3">Protein Source:</dt>
+                      <dd class="col-sm-9 uniprotSource proteinSequence codeSequence"></dd>
+                    </dl>
                   </div>
                 </div>
               </div>
@@ -150,32 +149,34 @@
                 </div>
                 <div id="regulation" class="collapse">
                   <div class="card-block">
-                    <dl class="row">
-                      <dd class="col-sm-3"> Regulators: </dd>
-                      <dt class="regulators col-sm-9 sgdSource"></dt>
-                      <dd class="col-sm-3"> Targets: </dd>
-                      <dt class="targets col-sm-9 sgdSource"></dt>
-                      <dd class="col-sm-3 jasparSource"> Frequency Matrix: </dd>
-                      <img class="sequenceLogo" src="">
-                      <dd class="col-sm-3 jasparSource"> Sequence Info: </dd>
-                      <table class="frequencyMatrix table table-dark table-striped">
-                        <thead>
-                          <tr class="frequencyOfA">
-                            <th>A:</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr class="frequencyOfC">
-                            <th>C:</th>
-                          </tr>
-                          <tr class="frequencyOfG">
-                            <th>G:</th>
-                          </tr>
-                          <tr class="frequencyOfT">
-                            <th>T:</th>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <dl class="row dl-horizontal">
+                      <dt class="col-sm-3"> Regulators: </dt>
+                      <dd class="regulators col-sm-9 sgdSource"></dd>
+                      <dt class="col-sm-3"> Targets: </dt>
+                      <dd class="targets col-sm-9 sgdSource"></dd>
+                      <dt class="col-sm-3"> Frequency Matrix: </dt>
+                      <dd class="col-sm-9"><img class="sequenceLogo" src=""></dd>
+                      <dt class="col-sm-3"> Sequence Info: </dt>
+                      <dd class="col-sm-9">
+                        <table class="frequencyMatrix table table-dark table-striped">
+                          <thead>
+                            <tr class="frequencyOfA">
+                              <th>A:</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="frequencyOfC">
+                              <th>C:</th>
+                            </tr>
+                            <tr class="frequencyOfG">
+                              <th>G:</th>
+                            </tr>
+                            <tr class="frequencyOfT">
+                              <th>T:</th>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </dd>
                     </dl>
                   </div>
                 </div>
@@ -272,21 +273,20 @@
                 </div>
                 <div id="sources" class="collapse">
                   <div class="card-block">
-                    <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 sgd-link green" id="sgdSource"></a>
-
+                    <dl class="row">
+                      <a class="col-6 col-md-4 sgd-link database-link" id="sgdSource"></a>
                     </dl>
-                    <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 uniprot-link turquoise" id="uniprotSource"></a>
+                    <dl class="row">
+                      <a class="col-6 col-md-4 uniprot-link database-link" id="uniprotSource"></a>
                     </dl>
-                    <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 ensembl-link brown" id="ensemblSource"></a>
+                    <dl class="row">
+                      <a class="col-6 col-md-4 ensembl-link database-link" id="ensemblSource"></a>
                     </dl>
-                    <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 ncbi-link purple" id="ncbiSource"></a>
+                    <dl class="row">
+                      <a class="col-6 col-md-4 ncbi-link database-link" id="ncbiSource"></a>
                     </dl>
-                    <dl class="row justify-content-center">
-                      <a class="col-6 col-md-4 jaspar-link violet" id="jasparSource"></a>
+                    <dl class="row">
+                      <a class="col-6 col-md-4 jaspar-link database-link" id="jasparSource"></a>
                     </dl>
                   </div>
                 </div>

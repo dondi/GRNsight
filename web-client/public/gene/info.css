@@ -2,14 +2,10 @@ body {
   font-family: sans-serif;
 }
 
-code {
-  font-family: Courier;
-  color:black;
-}
-
 iframe {
   border:none;
   width: 100%;
+  z-index: 1;
 }
 
 .btn {
@@ -44,14 +40,30 @@ iframe {
   color: black;
 }
 
+.codeSequence {
+  font-family: Courier;
+  color:black;
+}
+
 .database-link {
+  color:  #16693f;
   font-weight: 700;
 }
 
+
 .jumbotron {
   background-color: white;
-  padding-bottom:0px !important;
+  padding-bottom: 0px !important;
 }
+
+.sequenceLogo {
+  width: 100%;
+}
+
+.frequencyMatrix {
+  width: 100%;
+}
+
 
 .green {
   color: #16693f;
@@ -78,12 +90,11 @@ iframe {
 }
 
 #iframeMenu {
-  height: 600px;
-  z-index: 0;
+  height: 100%;
+  position: absolute;
 }
 
 #mainPage {
-  margin-top: -480px;
-  z-index: 1;
-  margin-left: -25px;
+  margin-top: -25px;
+  z-index: 0;
 }

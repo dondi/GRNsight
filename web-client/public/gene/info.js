@@ -5,14 +5,6 @@
           return key === "" ? value : decodeURIComponent(value);
       }) : {};
 
-// The following code is for the accordion link:
-    $("button").click(function (event) {
-        event.preventDefault();
-        var anchorName = $(this).attr("data-target") + "Heading";
-        $("html, body").animate({scrollTop: $(anchorName).offset().top});
-    });
-
-
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
     // This is cite used to find the parsing:
@@ -75,11 +67,9 @@
       // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
         $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
-        $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".regulators");
 
         var sgdTargets = gene.sgd.targets;
         $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
-        $("<a class='sgd-link'><sup>1</sup></a>").appendTo(".targets");
 
       // Interaction: Physical Reaction
 
@@ -149,20 +139,6 @@
         var sgdCellularComponent = gene.sgd.cellularComponent;
         $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
 
-        $("#sgdSource").text("1. Saccharomyces Genome Database");
-        $("<sup>1</sup>").appendTo(".sgdSource");
-        $("#uniprotSource").text("2. UniProt");
-        $("<sup>2</sup>").appendTo(".uniprotSource");
-        $("#ensemblSource").text("3. Ensembl");
-        $("<sup>3</sup>").appendTo(".ensemblSource");
-        $("#ncbiSource").text("4. NCBI Database");
-        $("<sup>4</sup>").appendTo(".ncbiSource");
-        $("#jasparSource").text("5. Jaspar Database");
-        $("<sup>5</sup>").appendTo(".jasparSource");
-
-
-
-
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
         $(".sequenceLogo").attr({ src : sequenceLogo });
@@ -188,6 +164,30 @@
             t += "<td>" + frequencyMatrix.T[h] + "</td>";
         }
         $(".frequencyOfT").append($(t));
+
+        $("#sgdSource").text("1. Saccharomyces Genome Database");
+        $("#uniprotSource").text("2. UniProt");
+        $("#ensemblSource").text("3. Ensembl");
+        $("#ncbiSource").text("4. NCBI Database");
+        $("#jasparSource").text("5. Jaspar Database");
+
+        $("<a class=\"sourceLink\"> <sup>[1]</sup></a>").appendTo(".sgdSource");
+        $("<a class=\"sourceLink\"><sup>[2]</sup></a>").appendTo(".uniprotSource");
+        $("<a class=\"sourceLink\"><sup>[3]</sup></a>").appendTo(".ensemblSource");
+        $("<a class=\"sourceLink\"><sup>[4]</sup></a>").appendTo(".ncbiSource");
+        $("<a class=\"sourceLink\"><sup>[5]</sup></a>").appendTo(".jasparSource");
+
+        $( ".sourceLink" ).attr({
+            "data-toggle": "collapse",
+            "data-target": "#sources",
+            "href": "#sources"
+        });
+
+        $(".sourceLink, button").click(function (event) {
+            event.preventDefault();
+            var anchorName = $(this).attr("data-target") + "Heading";
+            $("html, body").animate({scrollTop: $(anchorName).offset().top});
+        });
+
     });
 })();
-// All api calls and page design elements have been linked
