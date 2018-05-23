@@ -5,6 +5,7 @@ body {
 iframe {
   border:none;
   width: 100%;
+  height: 100%;
 }
 
 .btn {
@@ -49,14 +50,20 @@ iframe {
   font-weight: 700;
 }
 
+
 .jumbotron {
   background-color: white;
-  padding-bottom:0px !important;
+  padding-bottom: 0px !important;
 }
 
 .sequenceLogo {
-  width: 50%;
+  width: 100%;
 }
+
+.frequencyMatrix {
+  width: 100%;
+}
+
 
 .green {
   color: #16693f;
@@ -88,7 +95,13 @@ iframe {
 }
 
 #mainPage {
-  margin-top: -480px;
+  margin-top: 200px;
   z-index: 1;
   margin-left: -25px;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        background-color: lightblue;
+    }
 }
