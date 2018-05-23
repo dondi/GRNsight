@@ -4,7 +4,9 @@ import { displayWarnings } from "./warnings";
 
 import {
   GREY_EDGES_DASHED_MENU,
-  GREY_EDGES_DASHED_SIDEBAR
+  GREY_EDGES_DASHED_SIDEBAR,
+  MIN_EDGE_WEIGHT_NORMALIZATION,
+  MAX_EDGE_WEIGHT_NORMALIZATION
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -39,6 +41,7 @@ const displayNetwork = (network, name) => {
 };
 
 export const updateApp = grnState => {
+<<<<<<< Updated upstream
     if (grnState.newNetwork) {
         displayNetwork(grnState.network, grnState.name);
         refreshApp();
@@ -48,6 +51,29 @@ export const updateApp = grnState => {
         grnState.newNetwork = false;
     }
 
+=======
+    if (grnState.normalizationMax !== null) {
+        var valueValidator = (min, max, value) => {
+            return Math.min(max, Math.max(min, value));
+        };
+
+        var edgeWeightNormalizationInputValidation = (value) => {
+            return value ===
+            "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+        };
+
+        var synchronizeNormalizationValues = (value) => {
+            var validated = edgeWeightNormalizationInputValidation(value);
+            $("#normalization-max").val(validated);
+            $("#edge-weight-normalization-factor-menu").val(validated);
+        };
+
+        synchronizeNormalizationValues(grnState.normalizationMax);
+        refreshApp();
+    }
+
+// Dashed Line Synchronization
+>>>>>>> Stashed changes
     if (grnState.dashedLine) {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");

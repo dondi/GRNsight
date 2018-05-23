@@ -27,6 +27,7 @@ const annotateLinks = network => {
 };
 
 export const grnState = {
+<<<<<<< Updated upstream
     name: null,
 
     newNetwork: false,
@@ -43,4 +44,9 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork)
+=======
+    dashedLine: false,
+    normalizationMax : null,
+    resetNormalizationMax: null
+>>>>>>> Stashed changes
 };

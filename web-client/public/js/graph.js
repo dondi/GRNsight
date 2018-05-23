@@ -1,4 +1,5 @@
 import Grid from "d3-v4-grid";
+import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
 
 /* globals d3 */
@@ -91,6 +92,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
         var maxWeight = d3.max(allWeights);
+        grnState.resetNormalizationMax = maxWeight;
+        grnState.normalizationMax = maxWeight;
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }

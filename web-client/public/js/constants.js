@@ -1,5 +1,6 @@
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
+<<<<<<< Updated upstream
 
 // Demo Stuff
 const UNWEIGHTED_DEMO_ID   = "#unweighted";
@@ -21,3 +22,7 @@ export const DEMO_INFORMATION = [
     [ SCHADE_INPUT_ID,    SCHADE_INPUT_PATH,    SCHADE_INPUT_NAME    ],
     [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ]
 ];
+=======
+export const MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
+export const MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
+>>>>>>> Stashed changes

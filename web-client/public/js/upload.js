@@ -135,6 +135,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         delay: { show: 700, hide: 100 }
     });
 
+<<<<<<< Updated upstream
     // Normalization Controller
     var MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
     var MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
@@ -166,9 +167,15 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         synchronizeNormalizationValues($("#edge-weight-normalization-factor-menu").val());
     });
 
+=======
+>>>>>>> Stashed changes
     var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
     var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
     var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+
+    let valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
 
     // Gray Edge Controller
 
