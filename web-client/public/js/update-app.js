@@ -42,6 +42,10 @@ export const updateApp = grnState => {
     if (grnState.newNetwork) {
         displayNetwork(grnState.network, grnState.name);
         refreshApp();
+
+        // Rare exception to the MVC cycle: right now we have no way of knowing whether the network has changed
+        // (which is what necessitates displayNetwork), so we mark the model here.
+        grnState.newNetwork = false;
     }
 
     if (grnState.dashedLine) {

@@ -1,5 +1,3 @@
-import { displayWarnings } from "./warnings";
-
 // TODO Likely a temporary location, while things are being moved to their "true" homes.
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
@@ -19,20 +17,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var CHARGE_DEFAULT        = -50;
     var TOOLTIP_SHOW_DELAY    = 700;
     var TOOLTIP_HIDE_DELAY    = 100;
-
-  // Demo Stuff
-    var UNWEIGHTED_DEMO_ID   = "#unweighted";
-    var UNWEIGHTED_DEMO_PATH = "demo/unweighted";
-    var UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)";
-    var WEIGHTED_DEMO_ID     = "#weighted";
-    var WEIGHTED_DEMO_PATH   = "demo/weighted";
-    var WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)";
-    var SCHADE_INPUT_ID      = "#schadeInput";
-    var SCHADE_INPUT_PATH    = "demo/schadeInput";
-    var SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
-    var SCHADE_OUTPUT_ID     = "#schadeOutput";
-    var SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
-    var SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
   // Settings Stuff
     var COLOR_PREFERENCES_CLASS = ".colorPreferences";
@@ -70,101 +54,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     sliders.setSliderHandlers();
     sliders.updateValues();
     sliders.configureSliderControllers();
-
-    var currentNetwork = null;
-
-    var displayNetwork = function (network, name) {
-        nodeColoring.reload(network, name);
-        if (document.getElementById("zoomSlider").disabled) {
-            document.getElementById("zoomSlider").disabled = false;
-        }
-
-        currentNetwork = network;
-        uploadState.currentNetwork = network;
-        console.log("Network: ", network); // Display the network in the console
-        $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
-
-        if (network.warnings.length > 0) {
-            displayWarnings(network.warnings);
-        }
-
-
-        $("#fileName").text(name); // Set the name of the file to display in the top bar
-        $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
-
-    // If more things need to be turned off, we'll add them to this array
-        [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(function (selector) {
-            $(selector).off("click");
-        });
-        drawGraph(network, sliders, nodeColoring);
-    };
-
-    var networkErrorDisplayer = function (xhr) {
-        // Deleted status, error for argument because it was never used
-        var err = JSON.parse(xhr.responseText);
-        var errorString = "Your graph failed to load.<br><br>";
-
-        if (!err.errors) { // will be falsy if an error was thrown before the network was generated
-            errorString += err;
-        } else {
-            console.log(err.errors);
-            errorString = err.errors.reduce(function (currentErrorString, currentError) {
-                return currentErrorString + currentError.possibleCause + " " + currentError.suggestedFix + "<br><br>";
-            }, errorString);
-        }
-
-        $("#error").html(errorString);
-        $("#errorModal").modal("show");
-    };
-
-    var reloader = function () { };
-
-    var loadGrn = function (url, name, formData) {
-    // The presence of formData is taken to indicate a POST.
-        var fullUrl = [ $("#service-root").val(), url ].join("/");
-        (formData ?
-      $.ajax({
-          url: fullUrl,
-          data: formData,
-          processData: false,
-          contentType: false,
-          type: "POST",
-          crossDomain: true
-      }) :
-      $.getJSON(fullUrl)
-    ).done(function (network, textStatus, jqXhr) {
-        console.log(network); // Display the network in the console
-        displayNetwork(network, name || jqXhr.getResponseHeader("X-GRNsight-Filename"));
-        reloader = function () {
-            loadGrn(url, name, formData);
-        };
-      // displayStatistics(network);
-    }).error(networkErrorDisplayer);
-    };
-
-    var loadDemo = function (url) {
-        loadGrn(url);
-        reloader = function () {
-            loadGrn(url);
-        };
-
-        $("a.upload > input[type=file]").val("");
-    };
-
-    var initializeDemoFile = function (demoId, demoPath, demoName) {
-        $(demoId).on("click", function () {
-            // Deleted parameter event
-            loadDemo(demoPath, demoName);
-        });
-    };
-
-    var demoInformation = [ [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
-                          [ UNWEIGHTED_DEMO_ID, UNWEIGHTED_DEMO_PATH, UNWEIGHTED_DEMO_NAME ],
-                          [ SCHADE_INPUT_ID,    SCHADE_INPUT_PATH,    SCHADE_INPUT_NAME    ],
-                          [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ] ];
-    demoInformation.forEach(function (demoInfo) {
-        initializeDemoFile.apply(null, demoInfo);
-    });
 
     var settingsController = function () {
         this.color = true;
@@ -262,7 +151,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         var validated = edgeWeightNormalizationInputValidation(value);
         $("#normalization-max").val(validated);
         $("#edge-weight-normalization-factor-menu").val(validated);
-        drawGraph(currentNetwork, sliders, nodeColoring);
+        drawGraph(uploadState.currentNetwork, sliders, nodeColoring);
     };
 
     $("#normalization-button").click(function () {
@@ -292,7 +181,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
         $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
         $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
-        drawGraph(currentNetwork, sliders, nodeColoring);
+        drawGraph(uploadState.currentNetwork, sliders, nodeColoring);
     };
 
     $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {
@@ -304,99 +193,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
         updateGrayEdgeValues(value);
     });
-
-    var annotateLinks = function (network) {
-    // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.
-    //      Think of a way to consolidate it. Having discovered this, it seems like this should
-    //      be done on the client side because it rearranges data redundantly, for ease of display.
-        network.positiveWeights = [];
-        network.negativeWeights = [];
-
-        network.links.forEach(function (link) {
-            if (network.sheetType === "unweighted" && !link.value) {
-                link.value = 1;
-            }
-
-            if (link.value > 0) {
-                link.type = "arrowhead";
-                // link.stroke = "MediumVioletRed";   // GRNsight v1 magenta edge color
-                link.stroke = "rgb(195, 61, 61)";     // Node coloring-consistent red edge color
-                network.positiveWeights.push(link.value);
-            } else {
-                link.type = "repressor";
-                // link.stroke = "DarkTurquoise";     // GRNsight v1 cyan edge color
-                link.stroke = "rgb(51, 124, 183)";    // Node coloring-consistent blue edge color
-                network.negativeWeights.push(link.value);
-            }
-        });
-    };
-
-  /*
-   * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
-   * for helping to resolve this.
-   */
-
-  // TODO Some opportunity for unification with loadGrn?
-    var importGrn = function (uploadRoute, filename, formData) {
-        var fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-        $.ajax({
-            url: fullUrl,
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: "POST",
-            crossDomain: true
-        }).done(function (network) {
-            annotateLinks(network);
-            displayNetwork(network, filename);
-            reloader = function () {
-                importGrn(uploadRoute, filename, formData);
-            };
-        }).error(networkErrorDisplayer);
-    };
-
-    var submittedFilename = function ($upload) {
-        var path = $upload.val();
-        var fakePathCheck = path.search("\\\\") + 1;
-
-        while (fakePathCheck) {
-            path = path.substring(fakePathCheck);
-            fakePathCheck = path.search("\\\\") + 1;
-        }
-
-        return path;
-    };
-
-    var createFileForm = function ($upload) {
-        var formData = new FormData();
-        formData.append("file", $upload[0].files[0]);
-        return formData;
-    };
-
-    var uploadEpilogue = function (event) {
-        if (window.ga) {
-            window.ga("send", "pageview", {
-                page: "/GRNsight/upload",
-                sessionControl: "start"
-            });
-        }
-
-        $("a.upload > input[type=file]").val("");
-        event.preventDefault();
-    };
-
-    var uploadHandler = function (uploadRoute, uploader) {
-        return function (event) {
-            var $upload = $(this);
-            var filename = submittedFilename($upload);
-            var formData = createFileForm($upload);
-            uploader(uploadRoute, filename, formData);
-            uploadEpilogue(event);
-        };
-    };
-
-    $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
-    $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 
     $("#warningsModal").on("hidden.bs.modal", function () {
         if ($("#warningsInfo").hasClass("in")) {
@@ -474,8 +270,8 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         return function () {
             // Deleted event parameter
             if (!$(this).parent().hasClass("disabled")) {
-                var networkToExport = flattenNetwork(currentNetwork, sheetType);
-                var networkFilename = filenameWithExtension(sheetType !== currentNetwork.sheetType ?
+                var networkToExport = flattenNetwork(uploadState.currentNetwork, sheetType);
+                var networkFilename = filenameWithExtension(sheetType !== uploadState.currentNetwork.sheetType ?
                     sheetType : "", extension);
                 networkToExport.filename = networkFilename;
 
@@ -502,15 +298,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
     $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
-
-    $("#reload").click(function () {
-        // Deleted event parameter
-        if (!$(this).parent().hasClass("disabled")) {
-            if ($.isFunction(reloader)) {
-                reloader();
-            }
-        }
-    });
 
     // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
     // https://stackoverflow.com/a/27759926

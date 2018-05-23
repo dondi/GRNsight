@@ -2,7 +2,8 @@ import { updateApp } from "./update-app";
 
 import {
     GREY_EDGES_DASHED_MENU,
-    GREY_EDGES_DASHED_SIDEBAR
+    GREY_EDGES_DASHED_SIDEBAR,
+    DEMO_INFORMATION
 } from "./constants";
 
 var submittedFilename = function ($upload) {
@@ -90,6 +91,34 @@ export const setupHandlers = grnState => {
         }).error(networkErrorDisplayer);
     };
 
+    /*
+     * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+     * for helping to resolve this.
+     */
+
+    // TODO Some opportunity for unification with loadGrn?
+    var importGrn = function (uploadRoute, filename, formData) {
+        var fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        $.ajax({
+            url: fullUrl,
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: "POST",
+            crossDomain: true
+        }).done(function (network) {
+            grnState.name = filename;
+            grnState.network = network;
+            grnState.annotateLinks();
+
+            reloader = function () {
+                importGrn(uploadRoute, filename, formData);
+            };
+
+            updateApp(grnState);
+        }).error(networkErrorDisplayer);
+    };
+
     $("#upload").on("click", function () {
         // deleted event parameter
         $("#launchFileOpen").off("click").on("click", function () {
@@ -97,7 +126,39 @@ export const setupHandlers = grnState => {
         });
     });
 
+    $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
+    $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
+
     $("#upload").on("change", uploadHandler("upload", loadGrn));
+
+    var loadDemo = function (url) {
+        loadGrn(url);
+        reloader = function () {
+            loadGrn(url);
+        };
+
+        $("a.upload > input[type=file]").val("");
+    };
+
+    var initializeDemoFile = function (demoId, demoPath, demoName) {
+        $(demoId).on("click", function () {
+            // Deleted parameter event
+            loadDemo(demoPath, demoName);
+        });
+    };
+
+    DEMO_INFORMATION.forEach(function (demoInfo) {
+        initializeDemoFile.apply(null, demoInfo);
+    });
+
+    $("#reload").click(function () {
+        // Deleted event parameter
+        if (!$(this).parent().hasClass("disabled")) {
+            if ($.isFunction(reloader)) {
+                reloader();
+            }
+        }
+    });
 
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
