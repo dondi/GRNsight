@@ -51,6 +51,7 @@ export const updateApp = grnState => {
         grnState.newNetwork = false;
     }
 
+
     if (grnState.normalizationMax !== null) {
         var valueValidator = (min, max, value) => {
             return Math.min(max, Math.max(min, value));

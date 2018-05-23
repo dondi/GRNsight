@@ -141,6 +141,11 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
 
     // Gray Edge Controller
 
+    let valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
+
+
     var grayEdgeInputValidator = function (value) {
         return valueValidator(0, 100, value);
     };
