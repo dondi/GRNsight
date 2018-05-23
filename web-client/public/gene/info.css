@@ -5,7 +5,7 @@ body {
 iframe {
   border:none;
   width: 100%;
-  height: 100%;
+  z-index: 1;
 }
 
 .btn {
@@ -90,18 +90,11 @@ iframe {
 }
 
 #iframeMenu {
-  height: 600px;
-  z-index: 0;
+  height: 100%;
+  position: absolute;
 }
 
 #mainPage {
-  margin-top: 200px;
-  z-index: 1;
-  margin-left: -25px;
-}
-
-@media only screen and (max-width: 600px) {
-    body {
-        background-color: lightblue;
-    }
+  margin-top: -25px;
+  z-index: 0;
 }
