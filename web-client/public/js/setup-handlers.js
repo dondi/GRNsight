@@ -63,31 +63,31 @@ var networkErrorDisplayer = function (xhr) {
     $("#errorModal").modal("show");
 };
 
+var reloader = function () { };
+
 export const setupHandlers = grnState => {
     var loadGrn = function (url, name, formData) {
-    // The presence of formData is taken to indicate a POST.
+        // The presence of formData is taken to indicate a POST.
         var fullUrl = [ $("#service-root").val(), url ].join("/");
-        (formData ?
-      $.ajax({
-          url: fullUrl,
-          data: formData,
-          processData: false,
-          contentType: false,
-          type: "POST",
-          crossDomain: true
-      }) :
-      $.getJSON(fullUrl)
-    ).done(function (network, textStatus, jqXhr) {
-        // Display the network in the console
-        console.log(network);
-        grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
-        grnState.network = network;
-        displayNetwork(grnState.network, grnState.name);
-        reloader = function () {
-            loadGrn(url, name, formData);
-        };
-      // displayStatistics(network);
-    }).error(networkErrorDisplayer);
+        (formData ? $.ajax({
+            url: fullUrl,
+            data: formData,
+            processData: false,
+            contentType: false,
+            type: "POST",
+            crossDomain: true
+        }) : $.getJSON(fullUrl)).done(function (network, textStatus, jqXhr) {
+            // Display the network in the console
+            console.log(network);
+            grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
+            grnState.network = network;
+            reloader = function () {
+                loadGrn(url, name, formData);
+            };
+
+            updateApp(grnState);
+            // displayStatistics(network);
+        }).error(networkErrorDisplayer);
     };
 
     $("#upload").on("click", function () {
