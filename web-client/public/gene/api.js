@@ -89,8 +89,9 @@
             };
 
             var getJasparInfo = function (geneSymbol) {
+                var serviceRoot = $("#service-root").attr("value");
                 return $.get({
-                    url: "../jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+                    url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
                     dataType: "json",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("content-type", "application/json");
@@ -98,7 +99,7 @@
                 }).then(function (data) {
                     return (data.count === 0 ? {} :
                         $.get({
-                            url: "../jaspar/api/v1/matrix/" + data.results[0].matrix_id,
+                            url: serviceRoot + "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                             dataType: "json",
                             beforeSend: function (xhr) {
                                 xhr.setRequestHeader("content-type", "application/json");
@@ -129,7 +130,7 @@
                 uniprotID: "Not found",
                 proteinSequence: "Not found",
                 proteinType: "Not found",
-                species: "Not found"
+                species: "Species not found"
             };
 
             var defaultEnsembl = {
@@ -186,6 +187,7 @@
             };
 
             var parseNCBI = function (data) {
+                console.log(data);
                 var tagArray = serializer.serializeToString(
                     data.getElementsByTagName("OtherAliases")[0]).split(",");
                 return {
@@ -231,6 +233,7 @@
             };
 
             var parseEnsembl = function (data) {
+                console.log(data);
                 return {
                     ensemblID: data.id,
                     description: data.description,
