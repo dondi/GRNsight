@@ -92,8 +92,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
         var maxWeight = d3.max(allWeights);
-        grnState.resetNormalizationMax = maxWeight;
-        grnState.normalizationMax = maxWeight;
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }

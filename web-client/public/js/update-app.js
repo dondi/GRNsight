@@ -1,6 +1,7 @@
 import { drawGraph } from "./graph";
 import { uploadState } from "./upload";
 import { displayWarnings } from "./warnings";
+import { max } from "d3-array";
 
 import {
   GREY_EDGES_DASHED_MENU,
@@ -40,9 +41,25 @@ const displayNetwork = (network, name) => {
     );
 };
 
+const valueValidator = (min, max, value) => {
+    return Math.min(max, Math.max(min, value));
+};
+
+const edgeWeightNormalizationInputValidation = (value) => {
+    return value ===
+    "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+};
+
+const synchronizeNormalizationValues = (value) => {
+    var validated = edgeWeightNormalizationInputValidation(value);
+    $("#normalization-max").val(validated);
+    $("#edge-weight-normalization-factor-menu").val(validated);
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
+        grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
         refreshApp();
 
@@ -51,26 +68,7 @@ export const updateApp = grnState => {
         grnState.newNetwork = false;
     }
 
-
-    if (grnState.normalizationMax !== null) {
-        var valueValidator = (min, max, value) => {
-            return Math.min(max, Math.max(min, value));
-        };
-
-        var edgeWeightNormalizationInputValidation = (value) => {
-            return value ===
-            "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
-        };
-
-        var synchronizeNormalizationValues = (value) => {
-            var validated = edgeWeightNormalizationInputValidation(value);
-            $("#normalization-max").val(validated);
-            $("#edge-weight-normalization-factor-menu").val(validated);
-        };
-
-        synchronizeNormalizationValues(grnState.normalizationMax);
-        refreshApp();
-    }
+    synchronizeNormalizationValues(grnState.normalizationMax);
 
 // Dashed Line Synchronization
     if (grnState.dashedLine) {
@@ -84,4 +82,6 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
         refreshApp();
     }
+
+    refreshApp();
 };
