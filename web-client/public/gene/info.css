@@ -1,5 +1,9 @@
 body {
-  font-family: sans-serif;
+  font-family: Georgia, serif;
+}
+
+sup {
+  line-height: 2;
 }
 
 iframe {
