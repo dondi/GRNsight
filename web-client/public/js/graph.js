@@ -1,4 +1,5 @@
 import Grid from "d3-v4-grid";
+import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
 
 /* globals d3 */
@@ -27,7 +28,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     var width = $container.width();
     var height = $container.height();
     var nodeHeight = 30;
-    var colorOptimal = true;
     var grayThreshold = +$("#grayThresholdInput").val();
 
     var dashedLine = $("#dashedGrayLineButton").prop("checked");
@@ -43,11 +43,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         return node.name.length * 12 + 5;
     };
 
-  // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
-    if (!$("#colorEdges").hasClass("active")) {
-        colorOptimal = false;
-    }
-
     var adaptive = !$("input[name='viewport']").prop("checked");
 
     var MIN_SCALE = 0.25;
@@ -57,6 +52,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     var minimumScale = MIN_SCALE;
 
+    // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
     // TODO: incorporate into grnState
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
 

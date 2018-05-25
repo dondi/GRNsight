@@ -34,4 +34,9 @@ export const setupHandlers = grnState => {
         grnState.normalizationMax = $("#edge-weight-normalization-factor-menu").val();
         updateApp(grnState);
     });
+
+    if (!$("#colorEdges").hasClass("active")) {
+        grnState.colorOptimal = false;
+        updateApp(grnState)
+    }
 };

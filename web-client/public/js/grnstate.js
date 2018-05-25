@@ -32,8 +32,9 @@ export const grnState = {
 
     newNetwork: false,
 
-    normalizationMax : null,
+    normalizationMax: null,
     resetNormalizationMax: null,
+    colorOptimal: true,
 
     get network () {
         return currentNetwork;
