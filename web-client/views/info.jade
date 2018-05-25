@@ -35,7 +35,7 @@ html
                   h1#gene-name.display-4
                 .col
                   em
-                    h2#gene-species.uniProtSpecies
+                    h2#gene-species.uniProtSpecies Page is loading...
               // end of row
           #navigationButtons.row
             .col
@@ -79,8 +79,6 @@ html
                   dd.jasparFamily.col-sm-9.jasparSource
                   dt.col-sm-3 Class:
                   dd.jasparClass.col-sm-9.jasparSource
-                  dt.col-sm-3 Jaspar Matrix ID:
-                  dd.matrixID.col-sm-9.jasparSource
                   dt.col-sm-3 Chromosome Sequence:
                   dd.chromosomeSequence.ncbiSource.col-sm-9(src='')
           .row
@@ -93,7 +91,7 @@ html
                         | DNA Sequence
                   #dnaSequence.collapse
                     .card-block
-                      p.ensemblSource.dnaSequenceCode.codeSequence
+                      p.ensemblSource.dnaSequence.codeSequence
                 .card
                   #proteinInfoHeading.card-header
                     h5.mb-0
@@ -169,11 +167,11 @@ html
                           dd.negativeGenetic.col-sm-9.sgdSource
                           dt.col-sm-3 Phenotypic Enhancement:
                           dd.phenotypicEnhancement.col-sm-9.sgdSource
-                          dt.col-sm-3 Phenotypic Suppresion:
+                          dt.col-sm-3 Phenotypic Suppression:
                           dd.phenotypicSuppression.col-sm-9.sgdSource
                           dt.col-sm-3 Synthetic Growth Defect:
                           dd.syntheticGrowthDefect.col-sm-9.sgdSource
-                          dt.col-sm-3 Synthetic Haploin Sufficency:
+                          dt.col-sm-3 Synthetic Haploin Sufficiency:
                           dd.syntheticHaploinsufficiency.col-sm-9.sgdSource
                           dt.col-sm-3 Synthetic Lethality:
                           dd.syntheticLethality.col-sm-9.sgdSource

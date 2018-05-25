@@ -258,6 +258,8 @@
                     }
                 }
 
+
+
                 return yeastmineTemplate;
             };
 
@@ -325,7 +327,6 @@
                return getJasparInfo(symbol);
            }).then(function (info5) {
                defaultValues.jaspar = parseJaspar(info5);
-               console.log(defaultValues.jaspar);
                return defaultValues;
            }).catch(function () {
 

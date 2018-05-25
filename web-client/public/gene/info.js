@@ -125,7 +125,7 @@
         var sgdLethality = gene.sgd.syntheticLethality;
         $(".syntheticLethality").text(sgdLethality).attr({ href: sgdHrefTemplate + sgdLethality });
 
-        var sgdRescue = gene.sgd.sgdRescue;
+        var sgdRescue = gene.sgd.syntheticRescue;
         $(".syntheticRescue").text(sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
 
 
