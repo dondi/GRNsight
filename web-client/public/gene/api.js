@@ -187,7 +187,6 @@
             };
 
             var parseNCBI = function (data) {
-                console.log(data);
                 var tagArray = serializer.serializeToString(
                     data.getElementsByTagName("OtherAliases")[0]).split(",");
                 return {
@@ -233,7 +232,6 @@
             };
 
             var parseEnsembl = function (data) {
-                console.log(data);
                 return {
                     ensemblID: data.id,
                     description: data.description,
