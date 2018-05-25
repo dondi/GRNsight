@@ -45,12 +45,12 @@ const valueValidator = (min, max, value) => {
     return Math.min(max, Math.max(min, value));
 };
 
-const edgeWeightNormalizationInputValidation = (value) => {
+const edgeWeightNormalizationInputValidation = value => {
     return value ===
     "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
 };
 
-const synchronizeNormalizationValues = (value) => {
+const synchronizeNormalizationValues = value => {
     var validated = edgeWeightNormalizationInputValidation(value);
     $("#normalization-max").val(validated);
     $("#edge-weight-normalization-factor-menu").val(validated);

@@ -57,6 +57,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     var minimumScale = MIN_SCALE;
 
+    // TODO: incorporate into grnState
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
 
     if (!colorOptimal) {

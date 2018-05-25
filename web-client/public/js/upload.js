@@ -135,12 +135,12 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         delay: { show: 700, hide: 100 }
     });
 
-    var GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
-    var GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
-    var GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+    const GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
+    const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
+    const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
 
     // Gray Edge Controller
-
+    // TODO: Eliminate once moved to update-app
     let valueValidator = (min, max, value) => {
         return Math.min(max, Math.max(min, value));
     };
