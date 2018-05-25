@@ -34,7 +34,6 @@ export const grnState = {
 
     normalizationMax: null,
     resetNormalizationMax: null,
-    colorOptimal: true,
 
     get network () {
         return currentNetwork;
