@@ -41,6 +41,7 @@ export const grnState = {
 
     set network (network) {
         currentNetwork = network;
+        // TODO: add colorOptimal so that the rest of the normalization code can get added
         this.resetNormalizationMax = max(network.positiveWeights.concat(network.negativeWeights));
         this.newNetwork = true;
     },
