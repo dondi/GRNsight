@@ -178,18 +178,28 @@
             };
 
             var parseUniprot = function (data) {
-                return {
+                var uniprotTemplate = {
                     uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
                     proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
                     proteinType: XMLParser(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
                     species: XMLParser(data.getElementsByTagName("organism")[0].childNodes[1]),
                 };
+
+                for (var prop in uniprotTemplate) {
+                    if ((uniprotTemplate[prop] === undefined) ||
+                    (uniprotTemplate[prop] === null)) {
+                        uniprotTemplate[prop] = "Not found";
+                    }
+                }
+
+                return uniprotTemplate;
+
             };
 
             var parseNCBI = function (data) {
                 var tagArray = serializer.serializeToString(
                     data.getElementsByTagName("OtherAliases")[0]).split(",");
-                return {
+                var ncbiTemplate = {
                     ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
                     locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
                     alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ""),
@@ -199,56 +209,95 @@
                     + XMLParser(data.getElementsByTagName("ChrStart")[0])
                      + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
                 };
+
+                for (var prop in ncbiTemplate) {
+                    if ((ncbiTemplate[prop] === undefined) ||
+                    (ncbiTemplate[prop] === null)) {
+                        ncbiTemplate[prop] = "Not found";
+                    }
+                }
+
+                return ncbiTemplate;
             };
 
             var parseYeastmine = function (data) {
-                return {
+
+                var yeastmineTemplate = {
                     sgdID: data.primaryIdentifier,
                     standardName: data.symbol,
                     systematicName: data.secondaryIdentifier,
-                    regulators: "N/A", // Information unavailable via regular API
-                    targets: "N/A", // Information unavailable via regular API
-                    totalInteractions: "N/A", // Information unavailable via regular API
-                    affinityCaptureMS: "N/A", // Information unavailable via regular API
-                    affinityCaptureRNA: "N/A", // Information unavailable via regular API
-                    affinityCaptureWestern: "N/A", // Information unavailable via regular API
-                    biochemicalActivity: "N/A", // Information unavailable via regular API
-                    colocalization: "N/A", // Information unavailable via regular API
-                    reconstitutedComplex: "N/A", // Information unavailable via regular API
-                    twoHybrid: "N/A", // Information unavailable via regular API
-                    dosageRescue: "N/A", // Information unavailable via regular API
-                    negativeGenetic: "N/A", // Information unavailable via regular API
-                    phenotypicEnhancement: "N/A", // Information unavailable via regular API
-                    phenotypicSuppression: "N/A", // Information unavailable via regular API
-                    syntheticGrowthDefect: "N/A", // Information unavailable via regular API
-                    syntheticHaploinsufficiency: "N/A", // Information unavailable via regular API
-                    syntheticLethality: "N/A", // Information unavailable via regular API
-                    syntheticRescue: "N/A", // Information unavailable via regular API
+                    regulators: "Not found", // Information unavailable via regular API
+                    targets: "Not found", // Information unavailable via regular API
+                    totalInteractions: "Not found", // Information unavailable via regular API
+                    affinityCaptureMS: "Not found", // Information unavailable via regular API
+                    affinityCaptureRNA: "Not found", // Information unavailable via regular API
+                    affinityCaptureWestern: "Not found", // Information unavailable via regular API
+                    biochemicalActivity: "Not found", // Information unavailable via regular API
+                    colocalization: "Not found", // Information unavailable via regular API
+                    reconstitutedComplex: "Not found", // Information unavailable via regular API
+                    twoHybrid: "Not found", // Information unavailable via regular API
+                    dosageRescue: "Not found", // Information unavailable via regular API
+                    negativeGenetic: "Not found", // Information unavailable via regular API
+                    phenotypicEnhancement: "Not found", // Information unavailable via regular API
+                    phenotypicSuppression: "Not found", // Information unavailable via regular API
+                    syntheticGrowthDefect: "Not found", // Information unavailable via regular API
+                    syntheticHaploinsufficiency: "Not found", // Information unavailable via regular API
+                    syntheticLethality: "Not found", // Information unavailable via regular API
+                    syntheticRescue: "Not found", // Information unavailable via regular API
                     geneOntologySummary: data.functionSummary,
-                    molecularFunction: "N/A", // Information unavailable via regular API
-                    biologicalProcess: "N/A", // Information unavailable via regular API
-                    cellularComponent: "N/A", // Information unavailable via regular API
+                    molecularFunction: "Not found", // Information unavailable via regular API
+                    biologicalProcess: "Not found", // Information unavailable via regular API
+                    cellularComponent: "Not found", // Information unavailable via regular API
                 };
+
+                for (var prop in yeastmineTemplate) {
+
+                    if ((yeastmineTemplate[prop] === undefined) ||
+                    (yeastmineTemplate[prop] === null)) {
+                        yeastmineTemplate[prop] = "Not found";
+                    }
+                }
+
+                return yeastmineTemplate;
             };
 
             var parseEnsembl = function (data) {
-                return {
+
+                var ensemblTemplate = {
                     ensemblID: data.id,
                     description: data.description,
-                    dnaSequence: "N/A", // Information unavailable via regular API
-                    geneLocation: "N/A", // Information unavailable via regular API
+                    dnaSequence: "Not found", // Information unavailable via regular API
+                    geneLocation: "Not found", // Information unavailable via regular API
                 };
+
+                for (var prop in ensemblTemplate) {
+                    if ((ensemblTemplate[prop] === undefined) ||
+                    (ensemblTemplate[prop] === null)) {
+                        ensemblTemplate[prop] = "Not found";
+                    }
+                }
+                return ensemblTemplate;
+
             };
 
             var parseJaspar = function (data) {
 
-                return data ? {
+                var jasparTemplate = {
                     jasparID : data.matrix_id,
-                    class: data.class,
-                    family: data.family,
+                    class: data.class[0],
+                    family: data.family[0],
                     sequenceLogo: data.sequence_logo,
                     frequencyMatrix: data.pfm,
-                } : {};
+                };
+
+                for (var prop in jasparTemplate) {
+                    if ((jasparTemplate[prop] === undefined) ||
+                    (jasparTemplate[prop] === null)) {
+                        jasparTemplate[prop] = "Not found";
+                    }
+                }
+
+                return jasparTemplate;
             };
 
 
@@ -276,10 +325,9 @@
                return getJasparInfo(symbol);
            }).then(function (info5) {
                defaultValues.jaspar = parseJaspar(info5);
+               console.log(defaultValues.jaspar);
                return defaultValues;
            }).catch(function () {
-               return defaultValues;
-           }).fail(function () {
 
                if (
                  defaultValues.ncbi === defaultNCBI &&
@@ -302,6 +350,8 @@
                    $("#error3").text(errorString3);
                    $("#errorModal").modal("show");
                }
+
+               return defaultValues;
            });
         }
     };

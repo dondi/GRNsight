@@ -46,6 +46,9 @@
         var ncbiLocus = gene.ncbi.locusTag;
         $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
 
+        var jasparClass = gene.jaspar.class;
+        $(".jasparClass").text(jasparClass).attr({ href: jasparHrefTemplate + jasparClass });
+
         var jasparFam = gene.jaspar.family;
         $(".jasparFamily").text(jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
 
@@ -146,34 +149,43 @@
         var frequencyMatrix = gene.jaspar.frequencyMatrix;
 
         var a = "";
-        if ((typeof frequencyMatrix.A) !== "undefined") {
+        try {
             for (var i = 0; i < frequencyMatrix.A.length; i++) {
                 a += "<td>" + frequencyMatrix.A[i] + "</td>";
             }
+        } catch (e) {
+            a += "<td> Not found </td>";
         }
+
         $(".frequencyOfA").append($(a));
 
         var c = "";
-        if ((typeof frequencyMatrix.C) !== "undefined") {
+        try {
             for (var k = 0; k < frequencyMatrix.C.length; k++) {
                 c += "<td>" + frequencyMatrix.C[k] + "</td>";
             }
+        } catch (e) {
+            c += "<td> Not found </td>";
         }
         $(".frequencyOfC").append($(c));
 
         var g = "";
-        if ((typeof frequencyMatrix.G) !== "undefined") {
-            for (var j = 0; j < frequencyMatrix.G.length; j++) {
-                g += "<td>" + frequencyMatrix.G[j] + "</td>";
+        try {
+            for (var j = 0; j < frequencyMatrix.C.length; j++) {
+                g += "<td>" + frequencyMatrix.C[j] + "</td>";
             }
+        } catch (e) {
+            g += "<td> Not found </td>";
         }
         $(".frequencyOfG").append($(g));
 
         var t = "";
-        if ((typeof frequencyMatrix.T) !== "undefined") {
-            for (var h = 0; h < frequencyMatrix.T.length; h++) {
-                t += "<td>" + frequencyMatrix.T[h] + "</td>";
+        try {
+            for (var h = 0; h < frequencyMatrix.C.length; h++) {
+                t += "<td>" + frequencyMatrix.C[h] + "</td>";
             }
+        } catch (e) {
+            t += "<td> Not found </td>";
         }
         $(".frequencyOfT").append($(t));
 
