@@ -52,11 +52,11 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     var minimumScale = MIN_SCALE;
 
-    // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
+    // If grnState.colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
     // TODO: incorporate into grnState
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
 
-    if (!colorOptimal) {
+    if (!grnState.colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
             if ( allWeights[i] !== 0 ) {
                 allWeights[i] = 1;
@@ -451,7 +451,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         }).style("stroke-width", function (d) {
             return d.strokeWidth = getEdgeThickness(d);
         }).style("stroke-dasharray", function (d) {
-            if (unweighted || !colorOptimal) {
+            if (unweighted || !grnState.colorOptimal) {
                 return "0";
             } else if (normalize(d) <= grayThreshold && dashedLine === true) {
                 return "6, 9";
@@ -459,7 +459,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 return "0";
             }
         }).style("stroke", function (d) {
-            if (unweighted || !colorOptimal) {
+            if (unweighted || !grnState.colorOptimal) {
                 return "black";
             } else if (normalize(d) <= grayThreshold) {
                 return "gray";
@@ -493,7 +493,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
               // If negative, you need one bar for horizontal and one for vertical.
               // If the user is not coloring the weighted
               // sheets, then we make all of the markers arrowheads.
-                if (d.value < 0 && colorOptimal) {
+                if (d.value < 0 && grnState.colorOptimal) {
                     defs.append("marker")
                         .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
                         .attr("refX", function () {
@@ -638,7 +638,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                         .append("path")
                         .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
                         .attr("style", function () {
-                            if (unweighted || !colorOptimal) {
+                            if (unweighted || !grnState.colorOptimal) {
                                 color = "black";
                             } else if ( normalize(d) <= grayThreshold) {
                                 color = "gray";
@@ -768,7 +768,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var globalOffset = parseFloat(d.strokeWidth);
 
-        if (d.value < 0 && colorOptimal) {
+        if (d.value < 0 && grnState.colorOptimal) {
             globalOffset = Math.max(globalOffset, MINIMUM_DISTANCE);
         }
 
@@ -1392,7 +1392,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                         x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
 
-                        if (d.value < 0 && colorOptimal) {
+                        if (d.value < 0 && grnState.colorOptimal) {
                             offset = Math.max(10, parseFloat(d.strokeWidth));
                         }
                     }
@@ -1423,7 +1423,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                     selfRef = "_SelfReferential";
                 }
 
-                if (d.type === "repressor" && colorOptimal) {
+                if (d.type === "repressor" && grnState.colorOptimal) {
                     if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target === d.source)) { // if horizontal repressor
                         return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
                     } else { // otherwise vertical repressor

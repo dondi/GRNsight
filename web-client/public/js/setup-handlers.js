@@ -37,6 +37,6 @@ export const setupHandlers = grnState => {
 
     if (!$("#colorEdges").hasClass("active")) {
         grnState.colorOptimal = false;
-        updateApp(grnState)
+        updateApp(grnState);
     }
 };
