@@ -1,3 +1,4 @@
+import { max } from "d3-array";
 let currentNetwork = null;
 
 const annotateLinks = network => {
@@ -31,16 +32,21 @@ export const grnState = {
 
     newNetwork: false,
 
+    normalizationMax: null,
+    resetNormalizationMax: null,
+
     get network () {
         return currentNetwork;
     },
 
     set network (network) {
         currentNetwork = network;
+        // TODO: add colorOptimal so that the rest of the normalization code can get added
+        this.resetNormalizationMax = max(network.positiveWeights.concat(network.negativeWeights));
         this.newNetwork = true;
     },
 
     dashedLine: false,
 
-    annotateLinks: () => annotateLinks(currentNetwork)
+    annotateLinks: () => annotateLinks(currentNetwork),
 };
