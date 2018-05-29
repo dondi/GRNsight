@@ -1,5 +1,4 @@
-import chai from "chai";
-chai.should();
+import "chai/register-should";
 import { grnState } from "../web-client/public/js/grnstate";
 
 describe("The grnState model object", () => {
