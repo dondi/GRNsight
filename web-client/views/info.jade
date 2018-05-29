@@ -4,7 +4,7 @@ html
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
     link(rel='stylesheet', href='gene/info.css')
   body
-    input(type='hidden' id='service-root' value='#{serviceRoot}') 
+    input(type='hidden' id='service-root' value='#{serviceRoot}')
     // The following code is for the error modal
     #errorModal.modal.fade(tab-index='-1', role='dialog', aria-labelledby='mySmallModalLabel', aria-hidden='true')
       .modal-dialog
@@ -35,7 +35,7 @@ html
                   h1#gene-name.display-4
                 .col
                   em
-                    h2#gene-species.uniProtSpecies
+                    h2#gene-species.uniProtSpecies Page is loading...
               // end of row
           #navigationButtons.row
             .col
@@ -75,10 +75,10 @@ html
                   dd.uniProtSpecies.col-sm-9.uniprotSource
                   dt.col-sm-3 Locus Tag:
                   dd.ncbiLocusTag.col-sm-9.ncbiSource
-                  dt.col-sm-3 Family and Class:
+                  dt.col-sm-3 Family:
                   dd.jasparFamily.col-sm-9.jasparSource
-                  dt.col-sm-3 Jaspar Matrix ID:
-                  dd.matrixID.col-sm-9.jasparSource
+                  dt.col-sm-3 Class:
+                  dd.jasparClass.col-sm-9.jasparSource
                   dt.col-sm-3 Chromosome Sequence:
                   dd.chromosomeSequence.ncbiSource.col-sm-9(src='')
           .row
@@ -91,7 +91,7 @@ html
                         | DNA Sequence
                   #dnaSequence.collapse
                     .card-block
-                      p.ensemblSource.dnaSequenceCode.codeSequence
+                      p.ensemblSource.dnaSequence.codeSequence
                 .card
                   #proteinInfoHeading.card-header
                     h5.mb-0
@@ -167,11 +167,11 @@ html
                           dd.negativeGenetic.col-sm-9.sgdSource
                           dt.col-sm-3 Phenotypic Enhancement:
                           dd.phenotypicEnhancement.col-sm-9.sgdSource
-                          dt.col-sm-3 Phenotypic Suppresion:
+                          dt.col-sm-3 Phenotypic Suppression:
                           dd.phenotypicSuppression.col-sm-9.sgdSource
                           dt.col-sm-3 Synthetic Growth Defect:
                           dd.syntheticGrowthDefect.col-sm-9.sgdSource
-                          dt.col-sm-3 Synthetic Haploin Sufficency:
+                          dt.col-sm-3 Synthetic Haploin Sufficiency:
                           dd.syntheticHaploinsufficiency.col-sm-9.sgdSource
                           dt.col-sm-3 Synthetic Lethality:
                           dd.syntheticLethality.col-sm-9.sgdSource
