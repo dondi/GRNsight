@@ -1,4 +1,5 @@
-import { should } from "chai"
+import chai from "chai";
+chai.should();
 import { grnState } from "../web-client/public/js/grnstate";
 
 describe("The grnState model object", () => {
