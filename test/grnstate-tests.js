@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-var assert = require("chai").assert;
+/* eslint no-unused-vars: [2, {"varsIgnorePattern": "should"}] */
+var should = require("chai").should();
 import { grnState } from "../web-client/public/js/grnstate";
 
 describe("The grnState model object", () => {
