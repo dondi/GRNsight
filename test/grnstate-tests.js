@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
-// var assert = require("chai").assert;
-import { grnState } from "./web-client/public/js/grnstate";
+var assert = require("chai").assert;
+import { grnState } from "../web-client/public/js/grnstate";
 
 describe("The grnState model object", () => {
     it("should update the reset normalization maximum correctly", () => {
@@ -10,6 +10,7 @@ describe("The grnState model object", () => {
         };
         grnState.resetNormalizationMax.should.equal(5.212343052095555);
     });
+
     it("should update the reset normalization maximum correctly", () => {
         grnState.network = {
             positiveWeights: [1, 2, 3, 4, 5, 6, 7, 8],

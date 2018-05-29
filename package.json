@@ -30,6 +30,8 @@
     "xmlbuilder": "8.2.2"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "1.10.0",
     "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
@@ -42,7 +44,7 @@
   },
   "scripts": {
     "webpack-start": "webpack --watch",
-    "test": "mocha --reporter list",
+    "test": "mocha --reporter list --compilers js:babel-core/register",
     "start-dev": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
     "start-prod": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
     "coverage": "istanbul cover _mocha",
