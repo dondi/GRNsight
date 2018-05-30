@@ -128,7 +128,7 @@ const lockForce = function (disable) {
     $("#lockSlidersButton").prop("checked", disable);
 };
 
-var toggleForceGraphLayout = () => {
+const toggleToForceGraphLayout = () => {
     if (!$(on).prop("checked")) {
         $(on).prop("checked", true);
         $(off).prop("checked", false);
@@ -152,6 +152,32 @@ var toggleForceGraphLayout = () => {
         }
     }
 };
+
+const toggleToForceGraphLayout = () => {
+    if (!$(on).prop("checked")) {
+        $(on).prop("checked", true);
+        $(off).prop("checked", false);
+        $(off + " span").removeClass("glyphicon-ok");
+        $(on + " span").addClass("glyphicon-ok");
+        if (on === "#gridLayout") {
+            lockForce(true);
+            $("#lockSlidersMenu").parent().addClass("disabled");
+            $("#resetSlidersMenu").parent().addClass("disabled");
+            $("#link-distance").parent().addClass("disabled");
+            $("#charge").parent().addClass("disabled");
+        } else {
+            lockForce(false);
+            $("#lockSlidersMenu").parent().removeClass("disabled");
+            $("#resetSlidersMenu").parent().removeClass("disabled");
+            $("#link-distance").parent().removeClass("disabled");
+            $("#charge").parent().removeClass("disabled");
+        }
+        if (!$(on).hasClass("called")) {
+            $("#gridLayoutButton").trigger("click");
+        }
+    }
+};
+
 
 export const updateApp = grnState => {
 
@@ -191,9 +217,9 @@ export const updateApp = grnState => {
     }
 
     if (grnState.layout === "forceGraph") {
-        toggleForceGraphLayout();
+        toggleToForceGraphLayout();
     } else if (grnState.layout === "gridLayout") {
-        toggleGridLayout();
+        toggleToGridLayout();
     }
 
     refreshApp();
