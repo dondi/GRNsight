@@ -117,15 +117,19 @@ export const setupLoadAndImportHandlers = grnState => {
         }).error(networkErrorDisplayer);
     };
 
-    $("#upload").on("click", () =>
-        // deleted event parameter
+    $("#upload").click(() =>
         $("#launchFileOpen").off("click").on("click", () => $("#upload").click())
     );
-
-    $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
-    $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
+    $("#upload-sif").click(() =>
+        $("#launchFileOpen").off("click").on("click", () => $("#upload-sif").click())
+    );
+    $("#upload-graphml").click(() =>
+        $("#launchFileOpen").off("click").on("click", () => $("#upload-graphml").click())
+    );
 
     $("#upload").on("change", uploadHandler("upload", loadGrn));
+    $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
+    $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
 
     const loadDemo = url => {
         loadGrn(url);

@@ -109,20 +109,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         toggleLayout("#forceGraph", "#gridLayout");
     });
 
-  // TODO: Make this less bad
-    $("#upload-sif").on("click", function () {
-        // deleted event parameter
-        $("#launchFileOpen").off("click").on("click", function () {
-            $("#upload-sif").click();
-        });
-    });
-    $("#upload-graphml").on("click", function () {
-        // deleted event parameter
-        $("#launchFileOpen").off("click").on("click", function () {
-            $("#upload-graphml").click();
-        });
-    });
-
     $("#printGraph").on("click", function () {
         if (!$(".startDisabled").hasClass("disabled")) {
             window.print();
@@ -133,39 +119,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     $(".info").tooltip({
         placement: "top",
         delay: { show: 700, hide: 100 }
-    });
-
-    const GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
-    const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
-    const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
-
-    // Gray Edge Controller
-    // TODO: Eliminate once moved to update-app
-    let valueValidator = (min, max, value) => {
-        return Math.min(max, Math.max(min, value));
-    };
-
-
-    var grayEdgeInputValidator = function (value) {
-        return valueValidator(0, 100, value);
-    };
-
-    var updateGrayEdgeValues = function (value) {
-        var validatedInput = grayEdgeInputValidator(value);
-        $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
-        $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
-        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
-        drawGraph(uploadState.currentNetwork, sliders, nodeColoring);
-    };
-
-    $(GREY_EDGE_THRESHOLD_MENU).on("change", function () {
-        var value = Math.round(($(GREY_EDGE_THRESHOLD_MENU).val()));
-        updateGrayEdgeValues(value);
-    });
-
-    $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).on("change", function () {
-        var value = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
-        updateGrayEdgeValues(value);
     });
 
     $("#warningsModal").on("hidden.bs.modal", function () {

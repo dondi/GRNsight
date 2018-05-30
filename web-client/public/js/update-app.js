@@ -7,7 +7,10 @@ import {
   GREY_EDGES_DASHED_MENU,
   GREY_EDGES_DASHED_SIDEBAR,
   MIN_EDGE_WEIGHT_NORMALIZATION,
-  MAX_EDGE_WEIGHT_NORMALIZATION
+  MAX_EDGE_WEIGHT_NORMALIZATION,
+  GREY_EDGE_THRESHOLD_MENU,
+  GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR,
+  GREY_EDGE_THRESHOLD_TEXT_SIDEBAR
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -56,6 +59,18 @@ const synchronizeNormalizationValues = value => {
     $("#edge-weight-normalization-factor-menu").val(validated);
 };
 
+const grayEdgeInputValidator = value => {
+    return valueValidator(0, 100, value);
+};
+
+const synchronizeGrayEdgeValues = value => {
+    var validatedInput = grayEdgeInputValidator(value);
+    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
+    $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
+    $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
+};
+
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -69,6 +84,7 @@ export const updateApp = grnState => {
     }
 
     synchronizeNormalizationValues(grnState.normalizationMax);
+    synchronizeGrayEdgeValues(grnState.grayEdgeThreshold);
 
 // Dashed Line Synchronization
     if (grnState.dashedLine) {
