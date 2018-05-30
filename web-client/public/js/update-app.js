@@ -129,34 +129,32 @@ const lockForce = function (disable) {
 };
 
 const toggleToForceGraphLayout = () => {
-        $("#forceGraph").prop("checked", true);
-        $("#gridLayout").prop("checked", false);
-        $("#gridLayout" + " span").removeClass("glyphicon-ok");
-        $("#forceGraph" + " span").addClass("glyphicon-ok");
-        lockForce(false);
-        $("#lockSlidersMenu").parent().removeClass("disabled");
-        $("#resetSlidersMenu").parent().removeClass("disabled");
-        $("#link-distance").parent().removeClass("disabled");
-        $("#charge").parent().removeClass("disabled");
-        if (!$(on).hasClass("called")) {
-            $("#gridLayoutButton").trigger("click");
-        }
+    $("#forceGraph").prop("checked", true);
+    $("#gridLayout").prop("checked", false);
+    $("#gridLayout" + " span").removeClass("glyphicon-ok");
+    $("#forceGraph" + " span").addClass("glyphicon-ok");
+    lockForce(false);
+    $("#lockSlidersMenu").parent().removeClass("disabled");
+    $("#resetSlidersMenu").parent().removeClass("disabled");
+    $("#link-distance").parent().removeClass("disabled");
+    $("#charge").parent().removeClass("disabled");
+    if (!$("#forceGraph").hasClass("called")) {
+        $("#gridLayoutButton").trigger("click");
     }
 };
 
 const toggleToGridLayout = () => {
-        $("#gridLayout").prop("checked", true);
-        $("#forceGraph").prop("checked", false);
-        $("#forceGraph" + " span").removeClass("glyphicon-ok");
-        $("#gridLayout" + " span").addClass("glyphicon-ok");
-        lockForce(true);
-        $("#lockSlidersMenu").parent().addClass("disabled");
-        $("#resetSlidersMenu").parent().addClass("disabled");
-        $("#link-distance").parent().addClass("disabled");
-        $("#charge").parent().addClass("disabled");
-        if (!$(on).hasClass("called")) {
-            $("#gridLayoutButton").trigger("click");
-        }
+    $("#gridLayout").prop("checked", true);
+    $("#forceGraph").prop("checked", false);
+    $("#forceGraph" + " span").removeClass("glyphicon-ok");
+    $("#gridLayout" + " span").addClass("glyphicon-ok");
+    lockForce(true);
+    $("#lockSlidersMenu").parent().addClass("disabled");
+    $("#resetSlidersMenu").parent().addClass("disabled");
+    $("#link-distance").parent().addClass("disabled");
+    $("#charge").parent().addClass("disabled");
+    if (!$("#gridLayout").hasClass("called")) {
+        $("#gridLayoutButton").trigger("click");
     }
 };
 
