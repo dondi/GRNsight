@@ -199,49 +199,47 @@ var defaultValues = {
 
 var parseGeneOntology = function (data) {
 
-    var geneOntologyTemplate = {
+    var goTemplate = {
         molecularFunction : [],
         biologicalProcess : [],
         cellularComponent : [],
     };
 
     for (var k = 0; k < data.length; k++) {
-        console.log(data[k].go.go_aspect);
-        switch (data[k].go.go_aspect ) {
-        case "molecular function":
-            geneOntologyTemplate.molecularFunction[geneOntologyTemplate.molecularFunction.length] = {
-                id: data[k].go.go_id,
-                link: data[k].go.link,
-                displayName: data[k].go.display_name
-            };
-            break;
-        case "biological process":
-            geneOntologyTemplate.biologicalProcess[geneOntologyTemplate.biologicalProcess.length] = {
-                id: data[k].go.go_id,
-                link: data[k].go.link,
-                displayName: data[k].go.display_name
-            };
-            break;
-        case "cellular component":
-            geneOntologyTemplate.cellularComponent[geneOntologyTemplate.cellularComponent.length] = {
-                id: data[k].go.go_id,
-                link: data[k].go.link,
-                displayName: data[k].go.display_name
-            };
-            break;
+        if ((k > 0) && (data[k].go.go_id !== data[k - 1].go.go_id)) {
+            switch (data[k].go.go_aspect ) {
+            case "molecular function":
+                goTemplate.molecularFunction[goTemplate.molecularFunction.length] = {
+                    id: data[k].go.go_id,
+                    link: data[k].go.link,
+                    displayName: data[k].go.display_name
+                };
+                break;
+            case "biological process":
+                goTemplate.biologicalProcess[goTemplate.biologicalProcess.length] = {
+                    id: data[k].go.go_id,
+                    link: data[k].go.link,
+                    displayName: data[k].go.display_name
+                };
+                break;
+            case "cellular component":
+                goTemplate.cellularComponent[goTemplate.cellularComponent.length] = {
+                    id: data[k].go.go_id,
+                    link: data[k].go.link,
+                    displayName: data[k].go.display_name
+                };
+                break;
+            }
         }
     }
 
-    for (var prop in geneOntologyTemplate) {
-        if ((geneOntologyTemplate[prop] === undefined) || (geneOntologyTemplate[prop] === null)) {
-            geneOntologyTemplate[prop] = "Not found";
+    for (var prop in goTemplate) {
+        if ((goTemplate[prop] === undefined) || (goTemplate[prop] === null)) {
+            goTemplate[prop] = "Not found";
         }
     }
 
-    console.log(geneOntologyTemplate);
-
-
-    return geneOntologyTemplate;
+    return goTemplate;
 };
 
 var parseUniprot = function (data) {

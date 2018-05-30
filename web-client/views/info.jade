@@ -49,26 +49,26 @@ html
           .card
             #generalInfoHeading.card-header(role='tab')
               h5.mb-0
-                a.green(data-toggle='collapse', data-parent='#accordion', href='#generalInfo', aria-expanded='true', aria-controls='collapseOne')
+                a.green(data-toggle='collapse',  href='#generalInfo', aria-expanded='true', aria-controls='collapseOne')
                   | General Information
             #generalInfo.collapse(role='tabpanel', aria-labelledby='headingThree')
               .card-block
                 dl.row
                   dt.col-sm-3 SGD ID:
                   dd.col-sm-9
-                    a.lead.sgd-link.database-link(href='https://www.yeastgenome.org/locus/S000001855', data-toggle='tooltip', data-placement='top', title='Saccharomyces Genome Database')
+                    a.sgd-link.gene-link(data-toggle='tooltip', data-placement='top', title='Saccharomyces Genome Database')
                   dt.col-sm-3 NCBI Gene ID:
                   dd.col-sm-9
-                    a.lead.ncbi-link.database-link(href='https://www.ncbi.nlm.nih.gov/gene/850504', data-toggle='tooltip', data-placement='top', title='National Center for Biotechnology Information')
+                    a.ncbi-link.gene-link(data-toggle='tooltip', data-placement='top', title='National Center for Biotechnology Information')
                   dt.col-sm-3 Ensembl ID:
                   dd.col-sm-9
-                    a.lead.ensembl-link.database-link(href='https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=YFL039C', data-toggle='tooltip', data-placement='top', title='Ensembl')
+                    a.ensembl-link.gene-link(data-toggle='tooltip', data-placement='top', title='Ensembl')
                   dt.col-sm-3 Uniprot ID:
                   dd.col-sm-9
-                    a.lead.uniprot-link.database-link(href='http://www.uniprot.org/uniprot/P60010', data-toggle='tooltip', data-placement='top', title='UniProt')
+                    a.uniprot-link.gene-link(data-toggle='tooltip', data-placement='top', title='UniProt')
                   dt.col-sm-3 JASPAR ID:
                   dd.col-sm-9
-                    a.lead.jaspar-link.database-link(href='http://jaspar.genereg.net/matrix/MA0080.1/', data-toggle='tooltip', data-placement='top', title='Jaspar')
+                    a.jaspar-link.gene-link(data-toggle='tooltip', data-placement='top', title='Jaspar')
                   dt.col-sm-3 Description:
                   dd.geneDescription.col-sm-9.sgdSource
                   dt.col-sm-3 Species:
@@ -87,7 +87,7 @@ html
                 .card
                   #dnaSequenceHeading.card-header(role='tab')
                     h5.mb-0
-                      a.purple(data-toggle='collapse', data-parent='#accordion', href='#dnaSequence', aria-expanded='true', aria-controls='collapseOne')
+                      a.purple(data-toggle='collapse',  href='#dnaSequence', aria-expanded='true', aria-controls='collapseOne')
                         | DNA Sequence
                   #dnaSequence.collapse
                     .card-block
@@ -95,19 +95,19 @@ html
                 .card
                   #proteinInfoHeading.card-header
                     h5.mb-0
-                      a.brown(data-toggle='collapse', data-parent='#accordion', href='#proteinInfo')
+                      a.brown(data-toggle='collapse', href='#proteinInfo')
                         | Protein Information
                   #proteinInfo.collapse
                     .card-block
                       dl.row
                         dt.col-sm-3 Protein Type:
                         dd.col-sm-9.proteinType.uniprotSource
-                        dt.col-sm-3 Protein Source:
+                        dt.col-sm-3 Protein Sequence:
                         dd.col-sm-9.uniprotSource.proteinSequence.codeSequence
                 .card
                   #regulationHeading.card-header
                     h5.mb-0
-                      a.turquoise(data-toggle='collapse', data-parent='#accordion', href='#regulation', aria-expanded='true', aria-controls='collapseOne')
+                      a.turquoise(data-toggle='collapse', href='#regulation', aria-expanded='true', aria-controls='collapseOne')
                         | Regulation
                   #regulation.collapse
                     .card-block
@@ -116,10 +116,10 @@ html
                         dd.regulators.col-sm-9.sgdSource
                         dt.col-sm-3  Targets:
                         dd.targets.col-sm-9.sgdSource
-                        dt.col-sm-3  Frequency Matrix:
+                        dt.col-sm-3  Sequence Logo:
                         dd.col-sm-9
                           img.sequenceLogo(src='')
-                        dt.col-sm-3  Sequence Info:
+                        dt.col-sm-3  Frequency Matrix:
                         dd.col-sm-9
                           table.frequencyMatrix.table.table-dark.table-striped
                             thead
@@ -135,7 +135,7 @@ html
                 .card
                   #interactionHeading.card-header
                     h5.mb-0
-                      a.purple(data-toggle='collapse', data-parent='#accordion', href='#interaction', aria-expanded='true', aria-controls='collapseOne')
+                      a.purple(data-toggle='collapse', href='#interaction', aria-expanded='true', aria-controls='collapseOne')
                         | Interaction
                   #interaction.collapse
                     .card-block
@@ -183,36 +183,36 @@ html
                 .card
                   #geneOntologyHeading.card-header
                     h5.mb-0
-                      a.green(data-toggle='collapse', data-parent='#accordion', href='#geneOntology', aria-expanded='true', aria-controls='collapseOne')
+                      a.green(data-toggle='collapse', href='#geneOntology', aria-expanded='true', aria-controls='collapseOne')
                         | Gene Ontology
                   #geneOntology.collapse
                     .card-block
                       dl.row
                         dt.col-sm-3 Gene Summary:
                         dd.geneSummary.col-sm-9.sgdSource
-                        dt.col-sm-3 Molecular Function
-                        dd.molecularFunction.col-sm-9.sgdSource
+                        dt.col-sm-3 Molecular Function:
+                        dd.molecularFunction.col-sm-9
                         dt.col-sm-3 Biological Process:
-                        dd.biologicalProcess.col-sm-9.sgdSource
+                        dd.biologicalProcess.col-sm-9
                         dt.col-sm-3 Cellular Component:
-                        dd.cellularComponent.col-sm-9.sgdSource
+                        dd.cellularComponent.col-sm-9
                 .card
                   #sourcesHeading.card-header
                     h5.mb-0
-                      a.violet(data-toggle='collapse', data-parent='#accordion', href='#sources', aria-expanded='true', aria-controls='collapseOne')
+                      a.violet(data-toggle='collapse', href='#sources', aria-expanded='true', aria-controls='collapseOne')
                         | Sources
                   #sources.collapse
                     .card-block
                       dl.row
-                        a#sgdSource.col-6.col-md-4.sgd-link.database-link
+                        a#sgdSource.col.sgd-link.database-link
                       dl.row
-                        a#uniprotSource.col-6.col-md-4.uniprot-link.database-link
+                        a#uniprotSource.col.uniprot-link.database-link
                       dl.row
-                        a#ensemblSource.col-6.col-md-4.ensembl-link.database-link
+                        a#ensemblSource.col.ensembl-link.database-link
                       dl.row
-                        a#ncbiSource.col-6.col-md-4.ncbi-link.database-link
+                        a#ncbiSource.col.ncbi-link.database-link
                       dl.row
-                        a#jasparSource.col-6.col-md-4.jaspar-link.database-link
+                        a#jasparSource.col.jaspar-link.database-link
         iframe#iframeFooter(src='http://dondi.github.io/GRNsight/onlyfooter.html', scrolling='no')
         script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js', integrity='sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4', crossorigin='anonymous')

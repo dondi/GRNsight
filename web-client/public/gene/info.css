@@ -2,18 +2,19 @@ body {
   font-family: Georgia, serif;
 }
 
-sup {
-  line-height: 2;
-}
-
 iframe {
   border:none;
   width: 100%;
   z-index: 1;
 }
 
+sup {
+  line-height: 2;
+}
+
 .btn {
   color: white;
+  margin-right: 10px;
 }
 
 .btn-green {
@@ -54,6 +55,9 @@ iframe {
   font-weight: 700;
 }
 
+.gene-link {
+  color:  #16693f;
+}
 
 .jumbotron {
   background-color: white;
@@ -61,13 +65,12 @@ iframe {
 }
 
 .sequenceLogo {
-  width: 100%;
+  width: 75%;
 }
 
 .frequencyMatrix {
   width: 100%;
 }
-
 
 .green {
   color: #16693f;
