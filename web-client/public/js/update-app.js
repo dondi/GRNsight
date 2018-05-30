@@ -129,49 +129,31 @@ const lockForce = function (disable) {
 };
 
 const toggleToForceGraphLayout = () => {
-    if (!$(on).prop("checked")) {
-        $(on).prop("checked", true);
-        $(off).prop("checked", false);
-        $(off + " span").removeClass("glyphicon-ok");
-        $(on + " span").addClass("glyphicon-ok");
-        if (on === "#gridLayout") {
-            lockForce(true);
-            $("#lockSlidersMenu").parent().addClass("disabled");
-            $("#resetSlidersMenu").parent().addClass("disabled");
-            $("#link-distance").parent().addClass("disabled");
-            $("#charge").parent().addClass("disabled");
-        } else {
-            lockForce(false);
-            $("#lockSlidersMenu").parent().removeClass("disabled");
-            $("#resetSlidersMenu").parent().removeClass("disabled");
-            $("#link-distance").parent().removeClass("disabled");
-            $("#charge").parent().removeClass("disabled");
-        }
+        $("#forceGraph").prop("checked", true);
+        $("#gridLayout").prop("checked", false);
+        $("#gridLayout" + " span").removeClass("glyphicon-ok");
+        $("#forceGraph" + " span").addClass("glyphicon-ok");
+        lockForce(false);
+        $("#lockSlidersMenu").parent().removeClass("disabled");
+        $("#resetSlidersMenu").parent().removeClass("disabled");
+        $("#link-distance").parent().removeClass("disabled");
+        $("#charge").parent().removeClass("disabled");
         if (!$(on).hasClass("called")) {
             $("#gridLayoutButton").trigger("click");
         }
     }
 };
 
-const toggleToForceGraphLayout = () => {
-    if (!$(on).prop("checked")) {
-        $(on).prop("checked", true);
-        $(off).prop("checked", false);
-        $(off + " span").removeClass("glyphicon-ok");
-        $(on + " span").addClass("glyphicon-ok");
-        if (on === "#gridLayout") {
-            lockForce(true);
-            $("#lockSlidersMenu").parent().addClass("disabled");
-            $("#resetSlidersMenu").parent().addClass("disabled");
-            $("#link-distance").parent().addClass("disabled");
-            $("#charge").parent().addClass("disabled");
-        } else {
-            lockForce(false);
-            $("#lockSlidersMenu").parent().removeClass("disabled");
-            $("#resetSlidersMenu").parent().removeClass("disabled");
-            $("#link-distance").parent().removeClass("disabled");
-            $("#charge").parent().removeClass("disabled");
-        }
+const toggleToGridLayout = () => {
+        $("#gridLayout").prop("checked", true);
+        $("#forceGraph").prop("checked", false);
+        $("#forceGraph" + " span").removeClass("glyphicon-ok");
+        $("#gridLayout" + " span").addClass("glyphicon-ok");
+        lockForce(true);
+        $("#lockSlidersMenu").parent().addClass("disabled");
+        $("#resetSlidersMenu").parent().addClass("disabled");
+        $("#link-distance").parent().addClass("disabled");
+        $("#charge").parent().addClass("disabled");
         if (!$(on).hasClass("called")) {
             $("#gridLayoutButton").trigger("click");
         }
