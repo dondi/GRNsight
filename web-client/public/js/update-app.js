@@ -124,44 +124,6 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
-const lockForce = function (disable) {
-    $("#linkDistInput").prop("disabled", disable);
-    $("#chargeInput").prop("disabled", disable);
-    $("#resetSlidersButton").prop("disabled", disable);
-    $("#lockSlidersButton").prop("checked", disable);
-};
-
-const toggleToForceGraphLayout = () => {
-    $("#forceGraph").prop("checked", true);
-    $("#gridLayout").prop("checked", false);
-    $("#gridLayout" + " span").removeClass("glyphicon-ok");
-    $("#forceGraph" + " span").addClass("glyphicon-ok");
-    lockForce(false);
-    $("#lockSlidersMenu").parent().removeClass("disabled");
-    $("#resetSlidersMenu").parent().removeClass("disabled");
-    $("#link-distance").parent().removeClass("disabled");
-    $("#charge").parent().removeClass("disabled");
-    if (!$("#forceGraph").hasClass("called")) {
-        $("#gridLayoutButton").trigger("click");
-    }
-};
-
-const toggleToGridLayout = () => {
-    $("#gridLayout").prop("checked", true);
-    $("#forceGraph").prop("checked", false);
-    $("#forceGraph" + " span").removeClass("glyphicon-ok");
-    $("#gridLayout" + " span").addClass("glyphicon-ok");
-    lockForce(true);
-    $("#lockSlidersMenu").parent().addClass("disabled");
-    $("#resetSlidersMenu").parent().addClass("disabled");
-    $("#link-distance").parent().addClass("disabled");
-    $("#charge").parent().addClass("disabled");
-    if (!$("#gridLayout").hasClass("called")) {
-        $("#gridLayoutButton").trigger("click");
-    }
-};
-
-
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -197,12 +159,6 @@ export const updateApp = grnState => {
         synchronizeShowAllWeights();
     } else if (grnState.edgeWeightDisplayOption === hideAllWeights) {
         synchronizeHideAllWeights();
-    }
-
-    if (grnState.layout === "forceGraph") {
-        toggleToForceGraphLayout();
-    } else if (grnState.layout === "gridLayout") {
-        toggleToGridLayout();
     }
 
     refreshApp();

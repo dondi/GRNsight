@@ -1,6 +1,6 @@
 import { max } from "d3-array";
 import {
-  showWeightsMouseover
+  showWeightsMouseover,
 } from "./constants";
 let currentNetwork = null;
 
