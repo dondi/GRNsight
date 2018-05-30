@@ -46,7 +46,7 @@ export const grnState = {
         this.newNetwork = true;
     },
 
-    edgeWeightDisplayOption: showWeightsMouseover,
+    edgeWeightDisplayOption: "showWeightsMouseover",
 
     grayEdgeThreshold: 5,
     dashedLine: false,
