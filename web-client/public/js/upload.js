@@ -109,20 +109,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         toggleLayout("#forceGraph", "#gridLayout");
     });
 
-  // TODO: Make this less bad
-    $("#upload-sif").on("click", function () {
-        // deleted event parameter
-        $("#launchFileOpen").off("click").on("click", function () {
-            $("#upload-sif").click();
-        });
-    });
-    $("#upload-graphml").on("click", function () {
-        // deleted event parameter
-        $("#launchFileOpen").off("click").on("click", function () {
-            $("#upload-graphml").click();
-        });
-    });
-
     $("#printGraph").on("click", function () {
         if (!$(".startDisabled").hasClass("disabled")) {
             window.print();
