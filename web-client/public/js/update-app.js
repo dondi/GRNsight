@@ -150,11 +150,11 @@ export const updateApp = grnState => {
     }
 
 // Weights functions
-    if (grnState.showWeightsMouseover) {
+    if (grnState.edgeWeightDisplayOption === showWeightsMouseover) {
         synchronizeShowWeightsMouseover();
-    } else if (grnState.showAllWeights) {
+    } else if (grnState.edgeWeightDisplayOption === showAllWeights) {
         synchronizeShowAllWeights();
-    } else if (grnState.hideAllWeights) {
+    } else if (grnState.edgeWeightDisplayOption === hideAllWeights) {
         synchronizeHideAllWeights();
     }
 

@@ -51,24 +51,18 @@ export const setupHandlers = grnState => {
     });
 
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(() => {
-        grnState.showWeightsMouseover = true;
-        grnState.showAllWeights = false;
-        grnState.hideAllWeights = false;
+        grnState.edgeWeightDisplayOption = showWeightsMouseover;
         updateApp(grnState);
     });
 
 
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
-        grnState.showWeightsMouseover = false;
-        grnState.showAllWeights = true;
-        grnState.hideAllWeights = false;
+        grnState.edgeWeightDisplayOption = showAllWeights;
         updateApp(grnState);
     });
 
     $(WEIGHTS_HIDE_CLASS).click(() => {
-        grnState.showWeightsMouseover = false;
-        grnState.showAllWeights = false;
-        grnState.hideAllWeights = true;
+        grnState.edgeWeightDisplayOption = hideAllWeights;
         updateApp(grnState);
     });
 };
