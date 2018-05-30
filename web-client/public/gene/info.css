@@ -1,5 +1,6 @@
 body {
   font-family: Georgia, serif;
+  min-width: 1300px;
 }
 
 iframe {
@@ -65,7 +66,7 @@ sup {
 }
 
 .sequenceLogo {
-  width: 75%;
+  width: 50%;
 }
 
 .frequencyMatrix {
@@ -93,6 +94,7 @@ sup {
 }
 
 #gene-species {
+  font-style: italic;
   text-align:right;
 }
 
@@ -102,6 +104,9 @@ sup {
 }
 
 #mainPage {
-  margin-top: -25px;
   z-index: 0;
+}
+
+#pageHead {
+  margin: 15px;
 }

@@ -1,9 +1,9 @@
 (function () {
     var search = location.search.substring(1);
     var obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
-      function ( key, value) {
-          return key === "" ? value : decodeURIComponent(value);
-      }) : {};
+        function ( key, value) {
+            return key === "" ? value : decodeURIComponent(value);
+        }) : {};
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
@@ -54,26 +54,27 @@
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
-      // DNA Sequence Tab
+        // DNA Sequence Tab
         var ensemblDNA = gene.ensembl.dnaSequence;
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
-      // Protein Information
+        // Protein Information
 
         var uniprotProteinType = gene.uniprot.proteinType;
         $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
 
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
+        $(".proteinSequence").text(uniprotProteinSequence.replace(/\s/g, "")).attr({ href: uniprotHrefTemplate
+          + uniprotProteinSequence });
 
-      // Regulation Information
+        // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
         $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
 
         var sgdTargets = gene.sgd.targets;
         $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
 
-      // Interaction: Physical Reaction
+        // Interaction: Physical Reaction
 
         var sgdInteractions = gene.sgd.totalInteractions;
         $(".totalInteractions").text(sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
@@ -101,7 +102,7 @@
         var sgdTwoHybrid = gene.sgd.twoHybrid;
         $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
 
-      // Genetic Interactions
+        // Genetic Interactions
 
         var sgdDosage = gene.sgd.dosageRescue;
         $(".dosageRescue").text(sgdDosage).attr({ href: sgdHrefTemplate + sgdDosage });
@@ -128,33 +129,39 @@
         $(".syntheticRescue").text(sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
 
 
-      // Gene Ontology
+        // Gene Ontology
         var sgdSummary = gene.sgd.geneOntologySummary;
         $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
 
         var molecularFunction = gene.geneOntology.molecularFunction;
         var link;
         $(".molecularFunction").append("<dl class=\"row molecularFunctionTable\"></dl>");
-        for (var k = 0; k < molecularFunction.length; k++) {
+        for (let k = 0; k < molecularFunction.length; k++) {
             link = "https://www.yeastgenome.org" + molecularFunction[k].link;
-            $(".molecularFunctionTable").append("<a href=\"" + link + "\" class=\"col-xl-3\"><dt>" + molecularFunction[k].id + "</dt></a>");
-            $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">" + molecularFunction[k].displayName + "</dd>");
+            $(".molecularFunctionTable").append("<a href=\"" + link
+            + "\" class=\"col-xl-3\"><dt>" + molecularFunction[k].id + "</dt></a>");
+            $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + molecularFunction[k].displayName + "</dd>");
         }
 
         var biologicalProcess = gene.geneOntology.biologicalProcess;
         $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
-        for (k = 0; k < biologicalProcess.length; k++) {
+        for (let k = 0; k < biologicalProcess.length; k++) {
             link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
-            $(".biologicalProcessTable").append("<a href=\"" + link + "\"  class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
-            $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">" + biologicalProcess[k].displayName + "</dd>");
+            $(".biologicalProcessTable").append("<a href=\"" + link
+            + "\"  class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + biologicalProcess[k].displayName + "</dd>");
         }
 
         var cellularComponent = gene.geneOntology.cellularComponent;
         $(".cellularComponent").append("<dl class=\" row cellularComponentTable\"></dl>");
-        for (k = 0; k < cellularComponent.length; k++) {
+        for (let k = 0; k < cellularComponent.length; k++) {
             link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
-            $(".cellularComponentTable").append("<a href=\"" + link + "\" class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
-            $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">" + biologicalProcess[k].displayName + "</dd>");
+            $(".cellularComponentTable").append("<a href=\"" + link
+            + "\" class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + biologicalProcess[k].displayName + "</dd>");
         }
 
         // Fequency Matrix and Sequence Logo
@@ -224,11 +231,14 @@
 
         $(".sourceLink, button").click(function (event) {
             event.preventDefault();
-            var anchorName =$(this).attr("data-target") + "Heading";
+            var toggle = $(this).attr("data-toggle");
+            console.log(toggle);
+            if (typeof toggle === typeof undefined) {
+                $(this).attr("data-toggle", "collapse");
+            }
+
+            var anchorName = $(this).attr("data-target") + "Heading";
             $("html, body").animate({scrollTop: $(anchorName).offset().top});
-            $(anchorName).collapse( {
-                toggle: false
-            });
         });
 
         $("a").attr("target", "blank");

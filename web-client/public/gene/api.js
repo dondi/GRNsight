@@ -271,7 +271,7 @@ var parseNCBI = function (data) {
         genomicSequence: XMLParser(data.getElementsByTagName("ChrLoc")[0]) + "; "
         + XMLParser(data.getElementsByTagName("ChrAccVer")[0]) + " ("
         + XMLParser(data.getElementsByTagName("ChrStart")[0])
-         + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
+        + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
     };
 
     for (var prop in ncbiTemplate) {
