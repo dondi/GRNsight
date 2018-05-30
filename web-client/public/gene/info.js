@@ -133,14 +133,31 @@
         var sgdSummary = gene.sgd.geneOntologySummary;
         $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
 
-        var sgdMolecularFunction = gene.sgd.molecularFunction;
-        $(".molecularFunction").text(sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
+        var molecularFunction = gene.geneOntology.molecularFunction;
+        $(".molecularFunction").append("<dl class=\"molecularFunctionTable\"></dl>");
+        var k;
+        for (k = 0; k < molecularFunction.length; k++) {
+            var link = "https://www.yeastgenome.org" + molecularFunction[k].link;
+            $(".molecularFunctionTable").append("<a href=\"" + link + "\"><dt>" + molecularFunction[k].id + "</dt></a>");
+            $(".molecularFunctionTable").append("<dd>" + molecularFunction[k].displayName + "</dd>");
+        }
 
-        var sgdBiologicalProcess = gene.sgd.biologicalProcess;
-        $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
+        var biologicalProcess = gene.geneOntology.biologicalProcess;
+        $(".biologicalProcess").append("<dl class=\"biologicalProcessTable\"></dl>");
+        for (k = 0; k < biologicalProcess.length; k++) {
+            var link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
+            $(".biologicalProcessTable").append("<a href=\"" + link + "\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            $(".biologicalProcessTable").append("<dd>" + biologicalProcess[k].displayName + "</dd>");
+        }
+    //    $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
 
-        var sgdCellularComponent = gene.sgd.cellularComponent;
-        $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+        var cellularComponent = gene.geneOntology.cellularComponent;
+        $(".cellularComponent").append("<dl class=\"cellularComponentTable\"></dl>");
+        for (k = 0; k < cellularComponent.length; k++) {
+            var link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
+            $(".cellularComponentTable").append("<a href=\"" + link + "\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            $(".cellularComponentTable").append("<dd>" + biologicalProcess[k].displayName + "</dd>");
+        }
 
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
