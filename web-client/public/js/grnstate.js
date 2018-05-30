@@ -34,6 +34,7 @@ export const grnState = {
 
     normalizationMax: null,
     resetNormalizationMax: null,
+    grayEdgeThreshold: 5,
 
     get network () {
         return currentNetwork;

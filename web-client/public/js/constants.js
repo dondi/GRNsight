@@ -24,3 +24,7 @@ export const DEMO_INFORMATION = [
 
 export const MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
 export const MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
+
+export const GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
+export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
+export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
