@@ -10,7 +10,16 @@ import {
   MAX_EDGE_WEIGHT_NORMALIZATION,
   GREY_EDGE_THRESHOLD_MENU,
   GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR,
-  GREY_EDGE_THRESHOLD_TEXT_SIDEBAR
+  GREY_EDGE_THRESHOLD_TEXT_SIDEBAR,
+  WEIGHTS_SHOW_MOUSE_OVER_MENU,
+  WEIGHTS_SHOW_ALWAYS_MENU,
+  WEIGHTS_HIDE_MENU,
+  WEIGHTS_SHOW_MOUSE_OVER_SIDE,
+  WEIGHTS_SHOW_ALWAYS_SIDE,
+  WEIGHTS_HIDE_SIDE,
+  WEIGHTS_SHOW_MOUSE_OVER_CLASS,
+  WEIGHTS_SHOW_ALWAYS_CLASS,
+  WEIGHTS_HIDE_CLASS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -70,6 +79,47 @@ const synchronizeGrayEdgeValues = value => {
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
 };
 
+const synchronizeShowWeightsMouseover = () => {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).prop("checked", "checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
+    $(WEIGHTS_HIDE_SIDE).removeProp("checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).addClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
+    $(WEIGHTS_HIDE_CLASS).removeClass("selected");
+};
+
+const synchronizeShowAllWeights = () => {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").addClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).prop("checked", "checked");
+    $(WEIGHTS_HIDE_SIDE).removeProp("checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).addClass("selected");
+    $(WEIGHTS_HIDE_CLASS).removeClass("selected");
+};
+
+const synchronizeHideAllWeights = () => {
+    $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
+    $(WEIGHTS_HIDE_MENU + " span").addClass("glyphicon-ok");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
+    $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
+    $(WEIGHTS_HIDE_SIDE).prop("checked", "checked");
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
+    $(WEIGHTS_HIDE_CLASS).addClass("selected");
+};
 
 export const updateApp = grnState => {
 
@@ -97,6 +147,15 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
         refreshApp();
+    }
+
+// Weights functions
+    if (grnState.showWeightsMouseover) {
+        synchronizeShowWeightsMouseover();
+    } else if (grnState.showAllWeights) {
+        synchronizeShowAllWeights();
+    } else if (grnState.hideAllWeights) {
+        synchronizeHideAllWeights();
     }
 
     refreshApp();
