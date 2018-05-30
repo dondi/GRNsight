@@ -46,8 +46,12 @@ export const grnState = {
         this.newNetwork = true;
     },
 
+<<<<<<< HEAD
     edgeWeightDisplayOption: "showWeightsMouseover",
     layout: "forceGraph",
+=======
+    edgeWeightDisplayOption: showWeightsMouseover,
+>>>>>>> parent of 06accc1... object property -> to String
 
     grayEdgeThreshold: 5,
     dashedLine: false,

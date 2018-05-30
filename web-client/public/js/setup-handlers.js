@@ -8,6 +8,9 @@ import {
     WEIGHTS_SHOW_MOUSE_OVER_CLASS,
     WEIGHTS_SHOW_ALWAYS_CLASS,
     WEIGHTS_HIDE_CLASS,
+    showWeightsMouseover,
+    showAllWeights,
+    hideAllWeights,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -51,18 +54,18 @@ export const setupHandlers = grnState => {
     });
 
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(() => {
-        grnState.edgeWeightDisplayOption = "showWeightsMouseover";
+        grnState.edgeWeightDisplayOption = showWeightsMouseover;
         updateApp(grnState);
     });
 
 
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
-        grnState.edgeWeightDisplayOption = "showAllWeights";
+        grnState.edgeWeightDisplayOption = showAllWeights;
         updateApp(grnState);
     });
 
     $(WEIGHTS_HIDE_CLASS).click(() => {
-        grnState.edgeWeightDisplayOption = "hideAllWeights";
+        grnState.edgeWeightDisplayOption = hideAllWeights;
         updateApp(grnState);
     });
 
