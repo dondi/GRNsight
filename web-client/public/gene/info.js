@@ -22,8 +22,7 @@
         var ncbiId = gene.ncbi.ncbiID;
         $(".ncbi-link").text(ncbiId).attr({ href: ncbiHrefTemplate + ncbiId });
 
-        var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/" +
-        "/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=";
+        var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
         var ensemblId = gene.ensembl.ensemblID;
         $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
 
@@ -34,10 +33,10 @@
         var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
         var jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
-        // General Information Section
 
-        var ensemblInfo = gene.ensembl.description;
-        $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
+        // General Information Section
+        var geneDescription = gene.sgd.description;
+        $(".geneDescription").text(geneDescription).attr({ href: sgdHrefTemplate + geneDescription });
 
 
         var uniSpecies = gene.uniprot.species;

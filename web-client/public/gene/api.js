@@ -152,7 +152,6 @@ var defaultUniprot = {
 
 var defaultEnsembl = {
     ensemblID:  "Not found",
-    description: "Not found",
     dnaSequence:  "Not found",
     geneLocation:  "Not found"
 };
@@ -164,7 +163,7 @@ var defaultGeneOntology = {
 };
 
 var defaultYeastmine = {
-
+    description: "Not found",
     sgdID: "Not found",
     standardName: "Not found",
     systematicName: "Not found",
@@ -289,6 +288,7 @@ var parseNCBI = function (data) {
 var parseYeastmine = function (data) {
 
     var yeastmineTemplate = {
+        description: data.description,
         sgdID: data.primaryIdentifier,
         standardName: data.symbol,
         systematicName: data.secondaryIdentifier,
