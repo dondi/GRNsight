@@ -38,12 +38,12 @@ export const setupHandlers = grnState => {
     });
 
     $(GREY_EDGE_THRESHOLD_MENU).change(() => {
-        grnState.grayEdgeThreshold = Math.round(($(GREY_EDGE_THRESHOLD_MENU).val()));
+        grnState.grayEdgeThreshold = Math.round($(GREY_EDGE_THRESHOLD_MENU).val());
         updateApp(grnState);
     });
 
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).change(() => {
-        grnState.grayEdgeThreshold = Math.round(($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100));
+        grnState.grayEdgeThreshold = Math.round($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100);
         updateApp(grnState);
     });
 };
