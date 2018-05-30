@@ -1,7 +1,6 @@
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
-// Demo Stuff
 const UNWEIGHTED_DEMO_ID   = "#unweighted";
 const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
 const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)";
@@ -28,3 +27,13 @@ export const MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
 export const GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
 export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+
+export const WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu";
+export const WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu";
+export const WEIGHTS_HIDE_MENU             = "#weightsNeverMenu";
+export const WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide";
+export const WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide";
+export const WEIGHTS_HIDE_SIDE             = "#weightsNeverSide";
+export const WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
+export const WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways";
+export const WEIGHTS_HIDE_CLASS            = ".weightsNever";

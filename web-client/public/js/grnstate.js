@@ -34,7 +34,6 @@ export const grnState = {
 
     normalizationMax: null,
     resetNormalizationMax: null,
-    grayEdgeThreshold: 5,
 
     get network () {
         return currentNetwork;
@@ -47,6 +46,11 @@ export const grnState = {
         this.newNetwork = true;
     },
 
+    showWeightsMouseover: true,
+    showAllWeights: false,
+    hideAllWeights: false,
+
+    grayEdgeThreshold: 5,
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),

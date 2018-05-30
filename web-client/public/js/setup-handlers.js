@@ -4,7 +4,10 @@ import {
     GREY_EDGES_DASHED_MENU,
     GREY_EDGES_DASHED_SIDEBAR,
     GREY_EDGE_THRESHOLD_MENU,
-    GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR
+    GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR,
+    WEIGHTS_SHOW_MOUSE_OVER_CLASS,
+    WEIGHTS_SHOW_ALWAYS_CLASS,
+    WEIGHTS_HIDE_CLASS,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -44,6 +47,28 @@ export const setupHandlers = grnState => {
 
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).change(() => {
         grnState.grayEdgeThreshold = Math.round($(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val() * 100);
+        updateApp(grnState);
+    });
+
+    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(() => {
+        grnState.showWeightsMouseover = true;
+        grnState.showAllWeights = false;
+        grnState.hideAllWeights = false;
+        updateApp(grnState);
+    });
+
+
+    $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
+        grnState.showWeightsMouseover = false;
+        grnState.showAllWeights = true;
+        grnState.hideAllWeights = false;
+        updateApp(grnState);
+    });
+
+    $(WEIGHTS_HIDE_CLASS).click(() => {
+        grnState.showWeightsMouseover = false;
+        grnState.showAllWeights = false;
+        grnState.hideAllWeights = true;
         updateApp(grnState);
     });
 };

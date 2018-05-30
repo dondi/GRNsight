@@ -22,17 +22,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var COLOR_PREFERENCES_CLASS = ".colorPreferences";
     var ACTIVE_COLOR_OPTION     = "active";
 
-  // Weights Stuff
-    var WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu";
-    var WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu";
-    var WEIGHTS_HIDE_MENU             = "#weightsNeverMenu";
-    var WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide";
-    var WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide";
-    var WEIGHTS_HIDE_SIDE             = "#weightsNeverSide";
-    var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
-    var WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways";
-    var WEIGHTS_HIDE_CLASS            = ".weightsNever";
-
     var styleLabelTooltips = function () {
         $(".info").tooltip({
             placement: "top",
@@ -125,48 +114,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         if ($("#warningsInfo").hasClass("in")) {
             $("#warningsInfo").removeClass("in");
         }
-    });
-
-    $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(function () {
-        $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
-        $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
-        $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
-
-        $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).prop("checked", "checked");
-        $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
-        $(WEIGHTS_HIDE_SIDE).removeProp("checked");
-
-        $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).addClass("selected");
-        $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
-        $(WEIGHTS_HIDE_CLASS).removeClass("selected");
-    });
-
-    $(WEIGHTS_SHOW_ALWAYS_CLASS).click(function () {
-        $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
-        $(WEIGHTS_SHOW_ALWAYS_MENU + " span").addClass("glyphicon-ok");
-        $(WEIGHTS_HIDE_MENU + " span").removeClass("glyphicon-ok");
-
-        $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
-        $(WEIGHTS_SHOW_ALWAYS_SIDE).prop("checked", "checked");
-        $(WEIGHTS_HIDE_SIDE).removeProp("checked");
-
-        $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
-        $(WEIGHTS_SHOW_ALWAYS_CLASS).addClass("selected");
-        $(WEIGHTS_HIDE_CLASS).removeClass("selected");
-    });
-
-    $(WEIGHTS_HIDE_CLASS).click(function () {
-        $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").removeClass("glyphicon-ok");
-        $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
-        $(WEIGHTS_HIDE_MENU + " span").addClass("glyphicon-ok");
-
-        $(WEIGHTS_SHOW_MOUSE_OVER_SIDE).removeProp("checked");
-        $(WEIGHTS_SHOW_ALWAYS_SIDE).removeProp("checked");
-        $(WEIGHTS_HIDE_SIDE).prop("checked", "checked");
-
-        $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
-        $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
-        $(WEIGHTS_HIDE_CLASS).addClass("selected");
     });
 
     var flattenNetwork = function (network, sheetType) {
