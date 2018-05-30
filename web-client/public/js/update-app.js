@@ -20,6 +20,9 @@ import {
   WEIGHTS_SHOW_MOUSE_OVER_CLASS,
   WEIGHTS_SHOW_ALWAYS_CLASS,
   WEIGHTS_HIDE_CLASS,
+  showWeightsMouseover,
+  showAllWeights,
+  hideAllWeights,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
