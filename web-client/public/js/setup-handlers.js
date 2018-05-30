@@ -65,4 +65,15 @@ export const setupHandlers = grnState => {
         grnState.edgeWeightDisplayOption = "hideAllWeights";
         updateApp(grnState);
     });
+
+    $("#gridLayout").click(() => {
+        grnState.layout = "gridLayout";
+        updateApp(grnState);
+    });
+
+    $("#forceGraph").click(() => {
+        grnState.layout = "forceGraph";
+        updateApp(grnState);
+    });
+
 };

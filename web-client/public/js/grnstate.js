@@ -47,6 +47,7 @@ export const grnState = {
     },
 
     edgeWeightDisplayOption: "showWeightsMouseover",
+    layout: "forceGraph"
 
     grayEdgeThreshold: 5,
     dashedLine: false,

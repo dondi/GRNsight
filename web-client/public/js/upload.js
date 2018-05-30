@@ -58,46 +58,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var settings = new settingsController();
     settings.setupSettingsHandlers();
 
-    var lockForce = function (disable) {
-        $("#linkDistInput").prop("disabled", disable);
-        $("#chargeInput").prop("disabled", disable);
-        $("#resetSlidersButton").prop("disabled", disable);
-        $("#lockSlidersButton").prop("checked", disable);
-    };
-
-    var toggleLayout = function (on, off) {
-        if (!$(on).prop("checked")) {
-            $(on).prop("checked", true);
-            $(off).prop("checked", false);
-            $(off + " span").removeClass("glyphicon-ok");
-            $(on + " span").addClass("glyphicon-ok");
-            if (on === "#gridLayout") {
-                lockForce(true);
-                $("#lockSlidersMenu").parent().addClass("disabled");
-                $("#resetSlidersMenu").parent().addClass("disabled");
-                $("#link-distance").parent().addClass("disabled");
-                $("#charge").parent().addClass("disabled");
-            } else {
-                lockForce(false);
-                $("#lockSlidersMenu").parent().removeClass("disabled");
-                $("#resetSlidersMenu").parent().removeClass("disabled");
-                $("#link-distance").parent().removeClass("disabled");
-                $("#charge").parent().removeClass("disabled");
-            }
-            if (!$(on).hasClass("called")) {
-                $("#gridLayoutButton").trigger("click");
-            }
-        }
-    };
-
-    $("#gridLayout").on("click", function () {
-        toggleLayout("#gridLayout", "#forceGraph");
-    });
-
-    $("#forceGraph").on("click", function () {
-        toggleLayout("#forceGraph", "#gridLayout");
-    });
-
     $("#printGraph").on("click", function () {
         if (!$(".startDisabled").hasClass("disabled")) {
             window.print();
