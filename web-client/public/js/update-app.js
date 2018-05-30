@@ -121,6 +121,38 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
+const lockForce = function (disable) {
+    $("#linkDistInput").prop("disabled", disable);
+    $("#chargeInput").prop("disabled", disable);
+    $("#resetSlidersButton").prop("disabled", disable);
+    $("#lockSlidersButton").prop("checked", disable);
+};
+
+var toggleForceGraphLayout = () => {
+    if (!$(on).prop("checked")) {
+        $(on).prop("checked", true);
+        $(off).prop("checked", false);
+        $(off + " span").removeClass("glyphicon-ok");
+        $(on + " span").addClass("glyphicon-ok");
+        if (on === "#gridLayout") {
+            lockForce(true);
+            $("#lockSlidersMenu").parent().addClass("disabled");
+            $("#resetSlidersMenu").parent().addClass("disabled");
+            $("#link-distance").parent().addClass("disabled");
+            $("#charge").parent().addClass("disabled");
+        } else {
+            lockForce(false);
+            $("#lockSlidersMenu").parent().removeClass("disabled");
+            $("#resetSlidersMenu").parent().removeClass("disabled");
+            $("#link-distance").parent().removeClass("disabled");
+            $("#charge").parent().removeClass("disabled");
+        }
+        if (!$(on).hasClass("called")) {
+            $("#gridLayoutButton").trigger("click");
+        }
+    }
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -156,6 +188,12 @@ export const updateApp = grnState => {
         synchronizeShowAllWeights();
     } else if (grnState.edgeWeightDisplayOption === "hideAllWeights") {
         synchronizeHideAllWeights();
+    }
+
+    if (grnState.layout === "forceGraph") {
+        toggleForceGraphLayout();
+    } else if (grnState.layout === "gridLayout") {
+        toggleGridLayout();
     }
 
     refreshApp();
