@@ -122,10 +122,10 @@ export const setupLoadAndImportHandlers = grnState => {
         $("#launchFileOpen").off("click").on("click", () => $("#upload").click())
     );
 
+    $("#upload").on("change", uploadHandler("upload", loadGrn));
+
     $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
     $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
-
-    $("#upload").on("change", uploadHandler("upload", loadGrn));
 
     const loadDemo = url => {
         loadGrn(url);
