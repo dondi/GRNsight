@@ -1,9 +1,9 @@
 (function () {
     var search = location.search.substring(1);
     var obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
-      function ( key, value) {
-          return key === "" ? value : decodeURIComponent(value);
-      }) : {};
+        function ( key, value) {
+            return key === "" ? value : decodeURIComponent(value);
+        }) : {};
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
@@ -22,8 +22,7 @@
         var ncbiId = gene.ncbi.ncbiID;
         $(".ncbi-link").text(ncbiId).attr({ href: ncbiHrefTemplate + ncbiId });
 
-        var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/" +
-        "/Summary?db=core;g=YFL039C;r=VI:53260-54696;t=";
+        var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
         var ensemblId = gene.ensembl.ensemblID;
         $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
 
@@ -34,10 +33,10 @@
         var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
         var jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
-        // General Information Section
 
-        var ensemblInfo = gene.ensembl.description;
-        $(".ensemblDescription").text(ensemblInfo).attr({ href: ensemblHrefTemplate + ensemblInfo });
+        // General Information Section
+        var geneDescription = gene.sgd.description;
+        $(".geneDescription").text(geneDescription).attr({ href: sgdHrefTemplate + geneDescription });
 
 
         var uniSpecies = gene.uniprot.species;
@@ -55,26 +54,27 @@
         var ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
-      // DNA Sequence Tab
+        // DNA Sequence Tab
         var ensemblDNA = gene.ensembl.dnaSequence;
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
-      // Protein Information
+        // Protein Information
 
         var uniprotProteinType = gene.uniprot.proteinType;
         $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
 
         var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text(uniprotProteinSequence).attr({ href: uniprotHrefTemplate + uniprotProteinSequence });
+        $(".proteinSequence").text(uniprotProteinSequence.replace(/\s/g, "")).attr({ href: uniprotHrefTemplate
+          + uniprotProteinSequence });
 
-      // Regulation Information
+        // Regulation Information
         var sgdRequlators = gene.sgd.regulators;
         $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
 
         var sgdTargets = gene.sgd.targets;
         $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
 
-      // Interaction: Physical Reaction
+        // Interaction: Physical Reaction
 
         var sgdInteractions = gene.sgd.totalInteractions;
         $(".totalInteractions").text(sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
@@ -102,7 +102,7 @@
         var sgdTwoHybrid = gene.sgd.twoHybrid;
         $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
 
-      // Genetic Interactions
+        // Genetic Interactions
 
         var sgdDosage = gene.sgd.dosageRescue;
         $(".dosageRescue").text(sgdDosage).attr({ href: sgdHrefTemplate + sgdDosage });
@@ -129,18 +129,40 @@
         $(".syntheticRescue").text(sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
 
 
-      // Gene Ontology
+        // Gene Ontology
         var sgdSummary = gene.sgd.geneOntologySummary;
         $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
 
-        var sgdMolecularFunction = gene.sgd.molecularFunction;
-        $(".molecularFunction").text(sgdMolecularFunction).attr({ href: sgdHrefTemplate + sgdMolecularFunction });
+        var molecularFunction = gene.geneOntology.molecularFunction;
+        var link;
+        $(".molecularFunction").append("<dl class=\"row molecularFunctionTable\"></dl>");
+        for (let k = 0; k < molecularFunction.length; k++) {
+            link = "https://www.yeastgenome.org" + molecularFunction[k].link;
+            $(".molecularFunctionTable").append("<a href=\"" + link
+            + "\" class=\"col-xl-3\"><dt>" + molecularFunction[k].id + "</dt></a>");
+            $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + molecularFunction[k].displayName + "</dd>");
+        }
 
-        var sgdBiologicalProcess = gene.sgd.biologicalProcess;
-        $(".biologicalProcess").text(sgdBiologicalProcess).attr({ href: sgdHrefTemplate + sgdBiologicalProcess });
+        var biologicalProcess = gene.geneOntology.biologicalProcess;
+        $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
+        for (let k = 0; k < biologicalProcess.length; k++) {
+            link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
+            $(".biologicalProcessTable").append("<a href=\"" + link
+            + "\"  class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + biologicalProcess[k].displayName + "</dd>");
+        }
 
-        var sgdCellularComponent = gene.sgd.cellularComponent;
-        $(".cellularComponent").text(sgdCellularComponent).attr({ href: sgdHrefTemplate + sgdCellularComponent });
+        var cellularComponent = gene.geneOntology.cellularComponent;
+        $(".cellularComponent").append("<dl class=\" row cellularComponentTable\"></dl>");
+        for (let k = 0; k < cellularComponent.length; k++) {
+            link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
+            $(".cellularComponentTable").append("<a href=\"" + link
+            + "\" class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + biologicalProcess[k].displayName + "</dd>");
+        }
 
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
@@ -192,8 +214,8 @@
         $("#sgdSource").text("1. Saccharomyces Genome Database");
         $("#uniprotSource").text("2. UniProt");
         $("#ensemblSource").text("3. Ensembl");
-        $("#ncbiSource").text("4. NCBI Database");
-        $("#jasparSource").text("5. Jaspar Database");
+        $("#ncbiSource").text("4. NCBI Gene Database");
+        $("#jasparSource").text("5. JASPAR Database");
 
         $("<a class=\"sourceLink\"> <sup>[1]</sup></a>").appendTo(".sgdSource");
         $("<a class=\"sourceLink\"><sup>[2]</sup></a>").appendTo(".uniprotSource");
@@ -209,9 +231,17 @@
 
         $(".sourceLink, button").click(function (event) {
             event.preventDefault();
+            var toggle = $(this).attr("data-toggle");
+            console.log(toggle);
+            if (typeof toggle === typeof undefined) {
+                $(this).attr("data-toggle", "collapse");
+            }
+
             var anchorName = $(this).attr("data-target") + "Heading";
             $("html, body").animate({scrollTop: $(anchorName).offset().top});
         });
+
+        $("a").attr("target", "blank");
 
     });
 })();

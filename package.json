@@ -23,6 +23,7 @@
     "parallelshell": "^3.0.1",
     "serve-static": "^1.13.1",
     "should": "11.2.0",
+    "sinon": "^5.0.10",
     "stylus": "0.54.5",
     "supertest": "3.0.0",
     "webpack": "^4.0.0",
