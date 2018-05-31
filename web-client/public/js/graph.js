@@ -43,7 +43,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         return node.name.length * 12 + 5;
     };
 
-  // If colorOptimal is false, then weighting is ignored, and the lines are all drawn as if it was an unweighted sheet
+    /* If colorOptimal is false, then weighting is ignored,
+    and the lines are all drawn as if it was an unweighted sheet */
     if (!$("#colorEdges").hasClass("active")) {
         colorOptimal = false;
     }
@@ -57,6 +58,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     var minimumScale = MIN_SCALE;
 
+    // TODO: incorporate into grnState
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
 
     if (!colorOptimal) {
