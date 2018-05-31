@@ -171,7 +171,7 @@
             $(".cellularComponentTable").append("<a href=\"" + link
             + "\" class=\"col-xl-3\"><dt>" + cellularComponent[k].id + "</dt></a>");
             $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + cellularComponentg[k].displayName + "</dd>");
+            + cellularComponent[k].displayName + "</dd>");
         }
 
         // Fequency Matrix and Sequence Logo
@@ -248,7 +248,11 @@
                 $(this).removeAttr("data-toggle");
             }
 
-            var anchorName = $(this).attr("data-target") + "Heading";
+          /*  var anchorName = $(this).attr("data-target") + "Heading";
+
+            $(anchorName).find("a").addClass("show"); */
+
+
             $("html, body").animate({scrollTop: $(anchorName).offset().top});
         });
 
