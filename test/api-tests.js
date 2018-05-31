@@ -22,8 +22,9 @@ describe("Uniprot API", function () {
         //console.log(res.send);
         expect(res.send.calledOnce).to.be.true;
         expect(res.send.firstCall.args[0]).to.equal("Hey");
-    /*    expect(
+         expect(
             importController.sifToGrnsight(sifWithSemanticAndSyntacticErrors).errors.length
         ).to.equal(1);
     });
-}); */
+});
+*/

@@ -68,11 +68,21 @@
           + uniprotProteinSequence });
 
         // Regulation Information
-        var sgdRequlators = gene.sgd.regulators;
-        $(".regulators").text(sgdRequlators).attr({ href: sgdHrefTemplate + sgdRequlators });
+        var regulators = gene.regulators.regulators;
+        $(".regulators").append("<dl class=\"row regulatorsTable\"></dl>");
+        for (let k = 0; k < regulators.length; k++) {
+            $(".regulatorsTable").append("<dt class=\"col-xl-3\">" + regulators[k].regulator + "</dt>");
+            $(".regulatorsTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + regulators[k].regulationOf + "</dd>");
+        }
 
-        var sgdTargets = gene.sgd.targets;
-        $(".targets").text(sgdTargets).attr({ href: sgdHrefTemplate + sgdTargets });
+        var targets = gene.regulators.targets;
+        $(".targets").append("<dl class=\"row targetsTable\"></dl>");
+        for (let k = 0; k < targets.length; k++) {
+            $(".targetsTable").append("<dt class=\"col-xl-3\">" + targets[k].target + "</dt>");
+            $(".targetsTable").append("<dd class=\"sgdSource col-xl-9\">"
+            + targets[k].regulationOf + "</dd>");
+        }
 
         // Interaction: Physical Reaction
 
@@ -159,9 +169,9 @@
         for (let k = 0; k < cellularComponent.length; k++) {
             link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
             $(".cellularComponentTable").append("<a href=\"" + link
-            + "\" class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            + "\" class=\"col-xl-3\"><dt>" + cellularComponent[k].id + "</dt></a>");
             $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + biologicalProcess[k].displayName + "</dd>");
+            + cellularComponent[k].displayName + "</dd>");
         }
 
         // Fequency Matrix and Sequence Logo
@@ -232,12 +242,17 @@
         $(".sourceLink, button").click(function (event) {
             event.preventDefault();
             var toggle = $(this).attr("data-toggle");
-            console.log(toggle);
             if (typeof toggle === typeof undefined) {
                 $(this).attr("data-toggle", "collapse");
+            } else {
+                $(this).removeAttr("data-toggle");
             }
 
             var anchorName = $(this).attr("data-target") + "Heading";
+
+        //    $(anchorName).find("a").addClass("show");
+
+
             $("html, body").animate({scrollTop: $(anchorName).offset().top});
         });
 
