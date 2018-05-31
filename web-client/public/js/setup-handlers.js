@@ -8,6 +8,9 @@ import {
     WEIGHTS_SHOW_MOUSE_OVER_CLASS,
     WEIGHTS_SHOW_ALWAYS_CLASS,
     WEIGHTS_HIDE_CLASS,
+    SHOW_WEIGHTS_MOUSEOVER,
+    SHOW_ALL_WEIGHTS,
+    HIDE_ALL_WEIGHTS,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -51,24 +54,19 @@ export const setupHandlers = grnState => {
     });
 
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).click(() => {
-        grnState.showWeightsMouseover = true;
-        grnState.showAllWeights = false;
-        grnState.hideAllWeights = false;
+        grnState.edgeWeightDisplayOption = SHOW_WEIGHTS_MOUSEOVER;
         updateApp(grnState);
     });
 
 
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
-        grnState.showWeightsMouseover = false;
-        grnState.showAllWeights = true;
-        grnState.hideAllWeights = false;
+        grnState.edgeWeightDisplayOption = SHOW_ALL_WEIGHTS;
         updateApp(grnState);
     });
 
     $(WEIGHTS_HIDE_CLASS).click(() => {
-        grnState.showWeightsMouseover = false;
-        grnState.showAllWeights = false;
-        grnState.hideAllWeights = true;
+        grnState.edgeWeightDisplayOption = HIDE_ALL_WEIGHTS;
         updateApp(grnState);
     });
+
 };

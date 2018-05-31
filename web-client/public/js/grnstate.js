@@ -1,4 +1,7 @@
 import { max } from "d3-array";
+import {
+  SHOW_WEIGHTS_MOUSEOVER,
+} from "./constants";
 let currentNetwork = null;
 
 const annotateLinks = network => {
@@ -46,9 +49,7 @@ export const grnState = {
         this.newNetwork = true;
     },
 
-    showWeightsMouseover: true,
-    showAllWeights: false,
-    hideAllWeights: false,
+    edgeWeightDisplayOption: SHOW_WEIGHTS_MOUSEOVER,
 
     grayEdgeThreshold: 5,
     dashedLine: false,
