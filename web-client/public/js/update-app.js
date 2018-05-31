@@ -20,9 +20,9 @@ import {
   WEIGHTS_SHOW_MOUSE_OVER_CLASS,
   WEIGHTS_SHOW_ALWAYS_CLASS,
   WEIGHTS_HIDE_CLASS,
-  showWeightsMouseover,
-  showAllWeights,
-  hideAllWeights,
+  SHOW_WEIGHTS_MOUSEOVER,
+  SHOW_ALL_WEIGHTS,
+  HIDE_ALL_WEIGHTS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -153,11 +153,11 @@ export const updateApp = grnState => {
     }
 
 // Weights functions
-    if (grnState.edgeWeightDisplayOption === showWeightsMouseover) {
+    if (grnState.edgeWeightDisplayOption === SHOW_WEIGHTS_MOUSEOVER) {
         synchronizeShowWeightsMouseover();
-    } else if (grnState.edgeWeightDisplayOption === showAllWeights) {
+    } else if (grnState.edgeWeightDisplayOption === SHOW_ALL_WEIGHTS) {
         synchronizeShowAllWeights();
-    } else if (grnState.edgeWeightDisplayOption === hideAllWeights) {
+    } else if (grnState.edgeWeightDisplayOption === HIDE_ALL_WEIGHTS) {
         synchronizeHideAllWeights();
     }
 

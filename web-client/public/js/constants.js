@@ -38,6 +38,6 @@ export const WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
 export const WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways";
 export const WEIGHTS_HIDE_CLASS            = ".weightsNever";
 
-export const showWeightsMouseover = "showWeightsMouseover";
-export const showAllWeights = "showAllWeights";
-export const hideAllWeights = "hideAllWeights";
+export const SHOW_WEIGHTS_MOUSEOVER = "showWeightsMouseover";
+export const SHOW_ALL_WEIGHTS = "showAllWeights";
+export const HIDE_ALL_WEIGHTS = "hideAllWeights";
