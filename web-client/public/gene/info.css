@@ -1,8 +1,10 @@
+a {
+  color: #16693f;
+}
 body {
   font-family: Georgia, serif;
   min-width: 1300px;
 }
-
 iframe {
   border:none;
   width: 100%;
@@ -36,6 +38,18 @@ sup {
 
 .btn-violet {
   background-color: #691640;
+}
+
+.card {
+  max-width: 90%;
+}
+
+.card-header{
+  text-decoration: underline;
+}
+
+.card-header > h5 {
+  margin-left: -10px;
 }
 
 .card-block {

@@ -71,6 +71,26 @@ var getGeneOntologyInfo = function (geneSymbol) {
     });
 };
 
+var getRegulationInfo = function (geneSymbol) {
+
+    return $.get({
+        url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("content-type", "application/json");
+        },
+    }).then(function (data) {
+        var id = data.results[0].primaryIdentifier;
+        return $.get({
+            url: serviceRoot + "/yeastmine/backend/locus/" + id + "/regulation_details",
+            dataType: "json",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("content-type", "application/json");
+            }
+        });
+    });
+};
+
 var getYeastMineInfo = function (geneSymbol) {
     return $.get({
         url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
@@ -162,13 +182,16 @@ var defaultGeneOntology = {
     cellularComponent: "Not found"
 };
 
+var defaultRegulators = {
+    regulators: "Not found",
+    targets: "Not found"
+};
+
 var defaultYeastmine = {
     description: "Not found",
     sgdID: "Not found",
     standardName: "Not found",
     systematicName: "Not found",
-    regulators: "Not found",
-    targets: "Not found",
     totalInteractions: "Not found",
     affinityCaptureMS: "Not found",
     affinityCaptureRNA: "Not found",
@@ -194,7 +217,35 @@ var defaultValues = {
     ensembl: defaultEnsembl,
     uniprot: defaultUniprot,
     sgd: defaultYeastmine,
-    geneOntology: defaultGeneOntology
+    geneOntology: defaultGeneOntology,
+    regulators: defaultRegulators
+};
+
+var parseRegulators = function (data, symbol) {
+    var regulatorsTemplate = {
+        regulators: [],
+        targets: [],
+    };
+    for (var k = 0; k < data.length; k++) {
+        switch (data[k].locus1.display_name) {
+        case symbol:
+            regulatorsTemplate.targets[regulatorsTemplate.targets.length] = {
+                target: data[k].locus2.display_name,
+                regulationOf: data[k].regulation_of,
+            };
+            break;
+        default:
+            regulatorsTemplate.regulators[regulatorsTemplate.regulators.length] = {
+                regulator: data[k].locus1.display_name,
+                regulationOf: data[k].regulation_of,
+                regulationType: data[k].regulation_type,
+            };
+            break;
+        }
+    }
+
+
+    return regulatorsTemplate;
 };
 
 var parseGeneOntology = function (data) {
@@ -290,8 +341,6 @@ var parseYeastmine = function (data) {
         sgdID: data.primaryIdentifier,
         standardName: data.symbol,
         systematicName: data.secondaryIdentifier,
-        regulators: "Not found", // Information unavailable via regular API
-        targets: "Not found", // Information unavailable via regular API
         totalInteractions: "Not found", // Information unavailable via regular API
         affinityCaptureMS: "Not found", // Information unavailable via regular API
         affinityCaptureRNA: "Not found", // Information unavailable via regular API
@@ -392,11 +441,16 @@ var parseJaspar = function (data) {
                return getGeneOntologyInfo(symbol);
            }).then(function (info5) {
                defaultValues.geneOntology = parseGeneOntology(info5);
+               return getRegulationInfo(symbol);
+           }).catch(function () {
+               return getRegulationInfo(symbol);
+           }).then(function (info6) {
+               defaultValues.regulators = parseRegulators(info6, symbol);
                return getJasparInfo(symbol);
            }).catch(function () {
                return getJasparInfo(symbol);
-           }).then(function (info6) {
-               defaultValues.jaspar = parseJaspar(info6);
+           }).then(function (info7) {
+               defaultValues.jaspar = parseJaspar(info7);
                return defaultValues;
            }).catch(function () {
 
