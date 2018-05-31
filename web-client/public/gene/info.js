@@ -248,9 +248,9 @@
                 $(this).removeAttr("data-toggle");
             }
 
-          /*  var anchorName = $(this).attr("data-target") + "Heading";
+            var anchorName = $(this).attr("data-target") + "Heading";
 
-            $(anchorName).find("a").addClass("show"); */
+        //    $(anchorName).find("a").addClass("show");
 
 
             $("html, body").animate({scrollTop: $(anchorName).offset().top});
