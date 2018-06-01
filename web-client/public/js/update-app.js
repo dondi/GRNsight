@@ -162,7 +162,7 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
         $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
         refreshApp();
-    } else if (!grnState.dashedLine) {
+    } else {
         $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
@@ -181,7 +181,7 @@ export const updateApp = grnState => {
 // Enable/Disable Colored edges
     if (grnState.colorOptimal) {
         enableColorOptimal();
-    } else if (!grnState.colorOptimal) {
+    } else {
         disableColorOptimal();
     }
 
