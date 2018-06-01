@@ -24,20 +24,24 @@ export const DEMO_INFORMATION = [
 export const MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
 export const MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
 
-export const GREY_EDGE_THRESHOLD_MENU = "#gray-edge-threshold-menu";
+export const GREY_EDGE_THRESHOLD_MENU           = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
-export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR = "#grayThresholdValue";
+export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR   = "#grayThresholdValue";
 
-export const WEIGHTS_SHOW_MOUSE_OVER_MENU  = "#weightsMouseOverMenu";
-export const WEIGHTS_SHOW_ALWAYS_MENU      = "#weightsAlwaysMenu";
-export const WEIGHTS_HIDE_MENU             = "#weightsNeverMenu";
-export const WEIGHTS_SHOW_MOUSE_OVER_SIDE  = "#weightsMouseOverSide";
-export const WEIGHTS_SHOW_ALWAYS_SIDE      = "#weightsAlwaysSide";
-export const WEIGHTS_HIDE_SIDE             = "#weightsNeverSide";
-export const WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
-export const WEIGHTS_SHOW_ALWAYS_CLASS     = ".weightsAlways";
-export const WEIGHTS_HIDE_CLASS            = ".weightsNever";
+export const WEIGHTS_SHOW_MOUSE_OVER_MENU       = "#weightsMouseOverMenu";
+export const WEIGHTS_SHOW_ALWAYS_MENU           = "#weightsAlwaysMenu";
+export const WEIGHTS_HIDE_MENU                  = "#weightsNeverMenu";
+export const WEIGHTS_SHOW_MOUSE_OVER_SIDE       = "#weightsMouseOverSide";
+export const WEIGHTS_SHOW_ALWAYS_SIDE           = "#weightsAlwaysSide";
+export const WEIGHTS_HIDE_SIDE                  = "#weightsNeverSide";
+export const WEIGHTS_SHOW_MOUSE_OVER_CLASS      = ".weightsMouseOver";
+export const WEIGHTS_SHOW_ALWAYS_CLASS          = ".weightsAlways";
+export const WEIGHTS_HIDE_CLASS                 = ".weightsNever";
 
-export const SHOW_WEIGHTS_MOUSEOVER = "showWeightsMouseover";
-export const SHOW_ALL_WEIGHTS = "showAllWeights";
-export const HIDE_ALL_WEIGHTS = "hideAllWeights";
+export const SHOW_WEIGHTS_MOUSEOVER             = "showWeightsMouseover";
+export const SHOW_ALL_WEIGHTS                   = "showAllWeights";
+export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
+
+export const COLOR_EDGES                        = "#colorEdges";
+export const BLACK_EDGES                        = "blackEdges";
+export const ACTIVE_COLOR_OPTION                = "active";

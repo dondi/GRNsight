@@ -23,6 +23,9 @@ import {
   SHOW_WEIGHTS_MOUSEOVER,
   SHOW_ALL_WEIGHTS,
   HIDE_ALL_WEIGHTS,
+  COLOR_EDGES,
+  BLACK_EDGES,
+  ACTIVE_COLOR_OPTION,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -124,6 +127,20 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
+const enableColorOptimal = function () {
+    $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
+    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
+    $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
+};
+
+const disableColorOptimal = function () {
+    $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
+    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
+    $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -145,7 +162,7 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
         $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
         refreshApp();
-    } else if (!grnState.dashedLine) {
+    } else {
         $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
@@ -159,6 +176,13 @@ export const updateApp = grnState => {
         synchronizeShowAllWeights();
     } else if (grnState.edgeWeightDisplayOption === HIDE_ALL_WEIGHTS) {
         synchronizeHideAllWeights();
+    }
+
+// Enable/Disable Colored edges
+    if (grnState.colorOptimal) {
+        enableColorOptimal();
+    } else {
+        disableColorOptimal();
     }
 
     refreshApp();

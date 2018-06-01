@@ -19,8 +19,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     var TOOLTIP_HIDE_DELAY    = 100;
 
   // Settings Stuff
-    var COLOR_PREFERENCES_CLASS = ".colorPreferences";
-    var ACTIVE_COLOR_OPTION     = "active";
 
     var styleLabelTooltips = function () {
         $(".info").tooltip({
@@ -43,20 +41,6 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     sliders.setSliderHandlers();
     sliders.updateValues();
     sliders.configureSliderControllers();
-
-    var settingsController = function () {
-        this.color = true;
-
-        this.setupSettingsHandlers = function () {
-            $(COLOR_PREFERENCES_CLASS).on("click", function () {
-                $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
-                $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible");
-            });
-        };
-    };
-
-    var settings = new settingsController();
-    settings.setupSettingsHandlers();
 
     var lockForce = function (disable) {
         $("#linkDistInput").prop("disabled", disable);
