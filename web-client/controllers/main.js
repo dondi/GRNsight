@@ -7,4 +7,8 @@ module.exports = function (app) {
         res.header("Access-Control-Allow-Origin", "http://localhost:3000");
         res.render("graph", {title: "Graph"});
     });
+
+    app.get("/info", function (req, res) {
+        res.render("info", {title: "Test", serviceRoot: app.get("serviceRoot")});
+    });
 };

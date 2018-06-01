@@ -1,0 +1,135 @@
+a {
+  color: #16693f;
+}
+
+a:hover {
+  color: #3f1669;
+}
+
+body {
+  font-family: Georgia, serif;
+  width: 1400px;
+}
+
+iframe {
+  border:none;
+  width: 100%;
+  z-index: 1;
+}
+
+sup {
+  line-height: 2;
+}
+
+.btn {
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-green {
+  background-color: #16693f;
+}
+
+.btn-purple {
+  background-color: #3f1669;
+}
+
+.btn-brown {
+  background-color: #693f16;
+}
+
+.btn-turquoise {
+  background-color: #166969;
+}
+
+.btn-violet {
+  background-color: #691640;
+}
+
+.card {
+  max-width: 90%;
+  margin-bottom: 5px;
+}
+
+.card-header{
+  text-decoration: underline;
+  padding: 7px 15px;
+}
+
+.card-header > h5 {
+  margin-left: -5px;
+  font-size: 16px;
+}
+
+.card-block {
+   margin-left: 10px;
+}
+
+.close {
+  color: black;
+}
+
+.codeSequence {
+  font-family: Courier;
+  color:black;
+}
+
+.database-link {
+  color:  #16693f;
+  font-weight: 700;
+}
+
+.gene-link {
+  color:  #16693f;
+}
+
+.jumbotron {
+  background-color: white;
+  padding-bottom: 0px !important;
+}
+
+.sequenceLogo {
+  width: 50%;
+}
+
+.frequencyMatrix {
+  width: 100%;
+}
+
+.green {
+  color: #16693f;
+}
+
+.purple {
+  color: #3f1669;
+}
+
+.brown {
+  color: #693f16;
+}
+
+.turquoise {
+  color: #166969;
+}
+
+.violet {
+  color: #691640;
+}
+
+#gene-species {
+  font-style: italic;
+  text-align:right;
+}
+
+#iframeMenu {
+  height: 100%;
+  position: absolute;
+}
+
+#mainPage {
+  z-index: 0;
+}
+
+#pageHead {
+  margin: 15px;
+}
