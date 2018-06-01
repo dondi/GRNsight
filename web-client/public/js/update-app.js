@@ -23,7 +23,8 @@ import {
   SHOW_WEIGHTS_MOUSEOVER,
   SHOW_ALL_WEIGHTS,
   HIDE_ALL_WEIGHTS,
-  COLOR_PREFERENCES_CLASS,
+  COLOR_EDGES,
+  BLACK_EDGES,
   ACTIVE_COLOR_OPTION,
 } from "./constants";
 
@@ -126,9 +127,18 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
-const synchronizeColorOptimalValues = function () {
-    $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible");
+const enableColorOptimal = function () {
+    $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
+    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
+    $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
+};
+
+const disableColorOptimal = function () {
+    $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
+    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
+    $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
 export const updateApp = grnState => {
@@ -145,7 +155,6 @@ export const updateApp = grnState => {
 
     synchronizeNormalizationValues(grnState.normalizationMax);
     synchronizeGrayEdgeValues(grnState.grayEdgeThreshold);
-    synchronizeColorOptimalValues();
 
 // Dashed Line Synchronization
     if (grnState.dashedLine) {
@@ -167,6 +176,13 @@ export const updateApp = grnState => {
         synchronizeShowAllWeights();
     } else if (grnState.edgeWeightDisplayOption === HIDE_ALL_WEIGHTS) {
         synchronizeHideAllWeights();
+    }
+
+// Enable/Disable Colored edges
+    if (grnState.colorOptimal) {
+        enableColorOptimal();
+    } else if (!grnState.colorOptimal) {
+        disableColorOptimal();
     }
 
     refreshApp();
