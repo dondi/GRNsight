@@ -79,30 +79,26 @@ description: >-
                                             <div class="panel-body">
                                                 GRNsight v3.1.0 includes the following new features and bug fixes:
                                                 <ul>
-                                                    <li>Node coloring feature was added to visualize gene expression data
+                                                    <li>Added new gene information page feature
                                                       <ul>
-                                                        <li>Node coloring feature was added to visualize gene expression data</li>
-                                                        <li>GRNsight's Excel spreadsheet controller was expanded to process data from entire GRNmap input or output workbook, including expression and meta data</li>
-                                                        <li>Node coloring feature was implemented</li>
-                                                        <li>Demo Files #1 and #2 were updated to be in the correct format for node coloring</li>
+                                                        <li>A dynamic gene information webpage now opens when a user right-clicks on a node in the graph. The page sends a series of Asynchronous JavaScript and XML (AJAX) data requests, written using the jQuery JavaScript library, to the JASPAR, NCBI Gene, UniProt, Ensembl, and Saccharomyces Genome Databases. The webpage is then populated with data returned regarding the gene’s description, protein sequence, DNA binding motif frequency matrix and sequence logo, and Gene Ontology terms.</li>
                                                       </ul>
                                                     </li>
-                                                    <li>Grid Layout option was added</li>
-                                                    <li>Gray edges options were improved
+                                                    <li>Began a refactor to consolidate state management into a single controller for user selected options
                                                       <ul>
-                                                        <li>Gray edge threshold value was changed to percent scale (0 - 100%)</li>
-                                                        <li>Option to show gray edges as dashed was added to increase accessibility for color-blind users</li>
+                                                        <li>The front end has now started to follow a Model-View-Controller Architecture (MVC), and has a combination of new files to reflect that change</li>
                                                       </ul>
                                                     </li>
-                                                    <li>User Interface was updated with new features
+                                                    <li>Numbers can now be used as node labels</li>
+                                                    <li>Various bug fixes and UI enhancements
                                                       <ul>
-                                                        <li>Dropdown menu options were expanded to duplicate all functions available in the sidebar menu</li>
-                                                        <li>State variables for user selected options were consolidated</li>
-                                                        <li>New features were added to the client-side testing document</li>
+                                                        <li>The option to Default to black edges has been reworded to be consistent with node coloring, and the behavior has been changed to reload the graph upon selection</li>
+                                                        <li>The print modal does not load twice when trying to print</li>
+                                                        <li>The viewport "Fit to window" option now functions properly</li>
+                                                        <li>Weight value font now shows up properly</li>
+                                                        <li>The check box for dashed edges has been moved underneath the gray threshold slider</li>
                                                       </ul>
                                                     </li>
-                                                    <li>Security Vulnerability with "qs" package was resolved</li>
-                                                    <li>Webpack module bundler added to GRNsight</li>
                                                 </ul>
                                             </div>
                                         </div>
