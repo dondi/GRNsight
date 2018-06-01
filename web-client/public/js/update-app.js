@@ -23,6 +23,8 @@ import {
   SHOW_WEIGHTS_MOUSEOVER,
   SHOW_ALL_WEIGHTS,
   HIDE_ALL_WEIGHTS,
+  COLOR_PREFERENCES_CLASS,
+  ACTIVE_COLOR_OPTION,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -124,6 +126,11 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
+const synchronizeColorOptimalValues = function () {
+    $(COLOR_PREFERENCES_CLASS).toggleClass(ACTIVE_COLOR_OPTION);
+    $(COLOR_PREFERENCES_CLASS + ">span").toggleClass("glyphicon-ok invisible");
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -138,6 +145,7 @@ export const updateApp = grnState => {
 
     synchronizeNormalizationValues(grnState.normalizationMax);
     synchronizeGrayEdgeValues(grnState.grayEdgeThreshold);
+    synchronizeColorOptimalValues();
 
 // Dashed Line Synchronization
     if (grnState.dashedLine) {
