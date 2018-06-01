@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-    "browser-env": "^3.2.5",
     "cors": "2.8.1",
     "cytoscape": "2.7.14",
     "d3-v4-grid": "^2.0.1",
@@ -31,6 +30,7 @@
     "xmlbuilder": "8.2.2"
   },
   "devDependencies": {
+    "browser-env": "^3.2.5",
     "chai": "^4.1.2",
     "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
