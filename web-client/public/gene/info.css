@@ -1,10 +1,16 @@
 a {
   color: #16693f;
 }
+
+a:hover {
+  color: #3f1669;
+}
+
 body {
   font-family: Georgia, serif;
-  min-width: 1300px;
+  width: 1400px;
 }
+
 iframe {
   border:none;
   width: 100%;
@@ -42,14 +48,17 @@ sup {
 
 .card {
   max-width: 90%;
+  margin-bottom: 5px;
 }
 
 .card-header{
   text-decoration: underline;
+  padding: 7px 15px;
 }
 
 .card-header > h5 {
-  margin-left: -10px;
+  margin-left: -5px;
+  font-size: 16px;
 }
 
 .card-block {

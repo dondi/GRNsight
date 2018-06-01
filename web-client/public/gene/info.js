@@ -149,7 +149,7 @@
         for (let k = 0; k < molecularFunction.length; k++) {
             link = "https://www.yeastgenome.org" + molecularFunction[k].link;
             $(".molecularFunctionTable").append("<a href=\"" + link
-            + "\" class=\"col-xl-3\"><dt>" + molecularFunction[k].id + "</dt></a>");
+            + "\" class=\"col-xl-3\"><dd>" + molecularFunction[k].id + "</dd></a>");
             $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">"
             + molecularFunction[k].displayName + "</dd>");
         }
@@ -159,7 +159,7 @@
         for (let k = 0; k < biologicalProcess.length; k++) {
             link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
             $(".biologicalProcessTable").append("<a href=\"" + link
-            + "\"  class=\"col-xl-3\"><dt>" + biologicalProcess[k].id + "</dt></a>");
+            + "\"  class=\"col-xl-3\"><dd>" + biologicalProcess[k].id + "</dd></a>");
             $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
             + biologicalProcess[k].displayName + "</dd>");
         }
@@ -169,7 +169,7 @@
         for (let k = 0; k < cellularComponent.length; k++) {
             link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
             $(".cellularComponentTable").append("<a href=\"" + link
-            + "\" class=\"col-xl-3\"><dt>" + cellularComponent[k].id + "</dt></a>");
+            + "\" class=\"col-xl-3\"><dd>" + cellularComponent[k].id + "</dd></a>");
             $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
             + cellularComponent[k].displayName + "</dd>");
         }
@@ -241,18 +241,7 @@
 
         $(".sourceLink, button").click(function (event) {
             event.preventDefault();
-            var toggle = $(this).attr("data-toggle");
-            if (typeof toggle === typeof undefined) {
-                $(this).attr("data-toggle", "collapse");
-            } else {
-                $(this).removeAttr("data-toggle");
-            }
-
             var anchorName = $(this).attr("data-target") + "Heading";
-
-        //    $(anchorName).find("a").addClass("show");
-
-
             $("html, body").animate({scrollTop: $(anchorName).offset().top});
         });
 
