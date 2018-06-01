@@ -332,6 +332,7 @@ html {
     right: 2ex;
     text-shadow: none;
     top: 1ex;
+    z-index: 999;
 }
 
 .cookie-action {

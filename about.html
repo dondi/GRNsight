@@ -69,6 +69,44 @@ description: >-
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
+                                                <a href="#v3_1_0Content" data-toggle="collapse">
+                                                    GRNsight v3.1.0
+                                                </a>
+                                            </p>
+                                        </div>
+
+                                        <div id="v3_1_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v3.1.0 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>Added new gene information page feature
+                                                      <ul>
+                                                        <li>A dynamic gene information webpage now opens when a user right-clicks on a node in the graph. The page sends a series of Asynchronous JavaScript and XML (AJAX) data requests, written using the jQuery JavaScript library, to the JASPAR, NCBI Gene, UniProt, Ensembl, and Saccharomyces Genome Databases. The webpage is then populated with data returned regarding the gene’s description, protein sequence, DNA binding motif frequency matrix and sequence logo, and Gene Ontology terms.</li>
+                                                      </ul>
+                                                    </li>
+                                                    <li>Began a refactor to consolidate state management into a single controller for user selected options
+                                                      <ul>
+                                                        <li>The front end has now started to follow a Model-View-Controller Architecture (MVC), and has a combination of new files to reflect that change</li>
+                                                      </ul>
+                                                    </li>
+                                                    <li>Numbers can now be used as node labels</li>
+                                                    <li>Various bug fixes and UI enhancements
+                                                      <ul>
+                                                        <li>The option to Default to black edges has been reworded to be consistent with node coloring, and the behavior has been changed to reload the graph upon selection</li>
+                                                        <li>The print modal does not load twice when trying to print</li>
+                                                        <li>The viewport "Fit to window" option now functions properly</li>
+                                                        <li>Weight value font now shows up properly</li>
+                                                        <li>The check box for dashed edges has been moved underneath the gray threshold slider</li>
+                                                      </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
                                                 <a href="#v3_0_0Content" data-toggle="collapse">
                                                     GRNsight v3.0.0
                                                 </a>
