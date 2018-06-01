@@ -257,7 +257,14 @@ var parseGeneOntology = function (data) {
     };
 
     for (var k = 0; k < data.length; k++) {
-        if ((k > 0) && (data[k].go.go_id !== data[k - 1].go.go_id)) {
+        var isUnique = true;
+        for (var len = 0; len < k; len++) {
+            if (data[k].go.go_id === data[len].go.go_id) {
+                isUnique = false;
+            }
+        }
+
+        if (isUnique) {
             switch (data[k].go.go_aspect ) {
             case "molecular function":
                 goTemplate.molecularFunction[goTemplate.molecularFunction.length] = {
@@ -282,6 +289,7 @@ var parseGeneOntology = function (data) {
                 break;
             }
         }
+
     }
 
     for (var prop in goTemplate) {
