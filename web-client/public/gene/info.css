@@ -1,19 +1,29 @@
-body {
-  font-family: sans-serif;
+a {
+  color: #16693f;
 }
 
-code {
-  font-family: Courier;
-  color:black;
+a:hover {
+  color: #3f1669;
+}
+
+body {
+  font-family: Georgia, serif;
+  width: 1400px;
 }
 
 iframe {
   border:none;
   width: 100%;
+  z-index: 1;
+}
+
+sup {
+  line-height: 2;
 }
 
 .btn {
   color: white;
+  margin-right: 10px;
 }
 
 .btn-green {
@@ -36,6 +46,21 @@ iframe {
   background-color: #691640;
 }
 
+.card {
+  max-width: 90%;
+  margin-bottom: 5px;
+}
+
+.card-header{
+  text-decoration: underline;
+  padding: 7px 15px;
+}
+
+.card-header > h5 {
+  margin-left: -5px;
+  font-size: 16px;
+}
+
 .card-block {
    margin-left: 10px;
 }
@@ -44,13 +69,31 @@ iframe {
   color: black;
 }
 
+.codeSequence {
+  font-family: Courier;
+  color:black;
+}
+
 .database-link {
+  color:  #16693f;
   font-weight: 700;
+}
+
+.gene-link {
+  color:  #16693f;
 }
 
 .jumbotron {
   background-color: white;
-  padding-bottom:0px !important;
+  padding-bottom: 0px !important;
+}
+
+.sequenceLogo {
+  width: 50%;
+}
+
+.frequencyMatrix {
+  width: 100%;
 }
 
 .green {
@@ -74,16 +117,20 @@ iframe {
 }
 
 #gene-species {
+  font-style: italic;
   text-align:right;
 }
 
 #iframeMenu {
-  height: 600px;
-  z-index: 0;
+  height: 100%;
+  position: absolute;
 }
 
 #mainPage {
-  margin-top: -450px;
-  z-index: 1;
-  margin-left: -25px;
+  z-index: 0;
+  min-height: 500px;
+}
+
+#pageHead {
+  margin: 15px;
 }

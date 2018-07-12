@@ -50,7 +50,7 @@ export const grnState = {
     },
 
     edgeWeightDisplayOption: SHOW_WEIGHTS_MOUSEOVER,
-
+    colorOptimal: true,
     grayEdgeThreshold: 5,
     dashedLine: false,
 
