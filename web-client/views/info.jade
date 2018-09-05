@@ -48,7 +48,7 @@ html
           .card
             #generalInfoHeading.card-header(role='tab')
               h5.mb-0
-                a.green(data-toggle='collapse', href='#generalInfo', aria-expanded='true', aria-controls='collapseOne') General Information
+                a.green.accordionLink(data-toggle='collapse', href='#generalInfo', aria-expanded='true', aria-controls='collapseOne') General Information
             #generalInfo.collapse(role='tabpanel', aria-labelledby='headingThree')
               .card-block
                 dl.row
@@ -96,7 +96,7 @@ html
                 .card
                   #proteinInfoHeading.card-header
                     h5.mb-0
-                      a.purple(data-toggle='collapse', href='#proteinInfo') Protein Information
+                      a.purple.accordionLink(data-toggle='collapse', href='#proteinInfo') Protein Information
                   #proteinInfo.collapse
                     .card-block
                       dl.row
@@ -107,7 +107,7 @@ html
                 .card
                   #regulationHeading.card-header
                     h5.mb-0
-                      a.brown(data-toggle='collapse', href='#regulation', aria-expanded='true', aria-controls='collapseOne') Regulation
+                      a.brown.accordionLink(data-toggle='collapse', href='#regulation', aria-expanded='true', aria-controls='collapseOne') Regulation
                   #regulation.collapse
                     .card-block
                       dl.row.dl-horizontal
@@ -188,7 +188,7 @@ html
                 .card
                   #geneOntologyHeading.card-header
                     h5.mb-0
-                      a.turquoise(data-toggle='collapse', href='#geneOntology', aria-expanded='true', aria-controls='collapseOne') Gene Ontology
+                      a.turquoise.accordionLink(data-toggle='collapse', href='#geneOntology', aria-expanded='true', aria-controls='collapseOne') Gene Ontology
                   #geneOntology.collapse
                     .card-block
                       dl.row
@@ -203,7 +203,7 @@ html
                 .card
                   #sourcesHeading.card-header
                     h5.mb-0
-                      a.violet(data-toggle='collapse', href='#sources', aria-expanded='true', aria-controls='collapseOne') Sources
+                      a.violet.accordionLink(data-toggle='collapse', href='#sources', aria-expanded='true', aria-controls='collapseOne') Sources
                   #sources.collapse
                     .card-block
                       dl.row
