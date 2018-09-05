@@ -233,12 +233,6 @@
         $("<a class=\"sourceLink\"><sup>[4]</sup></a>").appendTo(".ncbiSource");
         $("<a class=\"sourceLink\"><sup>[5]</sup></a>").appendTo(".jasparSource");
 
-        /*$( ".sourceLink" ).attr({
-            "data-toggle": "collapse",
-            "data-target": "#sources",
-            "href": "#sources"
-        }); */
-
         $(".sourceLink, button").click(function (event) {
             event.preventDefault();
             var anchorName = $(this).attr("data-target") + "Heading";
@@ -256,29 +250,17 @@
         });
 
         $(".accordionLink").click(function () {
-          //  let currentDataTarget = $(this).attr("href");
             let currentDataTarget = "button[data-target=\'" + $(this).attr("href") + "\']";
-          //  console.log($("[data-target = " +  + "]").attr("class"));
             $(currentDataTarget).attr("data-toggle", "collapse");
 
-            let isOpen = $(currentDataTarget).attr("aria-expanded") === "true";
-            if (isOpen) {
-                $(currentDataTarget).removeAttr("data-toggle");
-            }
-
+            window.setTimeout(function () {
+                let isOpen = $(currentDataTarget).attr("aria-expanded") === "true";
+                if (isOpen) {
+                    $(currentDataTarget).removeAttr("data-toggle");
+                }
+            }, 200);
         });
 
-
-
-
-
-
-
-      /*  $('.collapse').on('shown.bs.collapse', function () {
-            console.log("#" + ($(this).attr("id")));
-            console.log(document.que)
-            $(this).collapse('show');
-        }); */
 
         $("a").attr("target", "blank");
 
