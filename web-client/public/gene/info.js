@@ -1,4 +1,33 @@
 (function () {
+
+    $(".sourceLink, button").click(function (event) {
+        event.preventDefault();
+        var anchorName = $(this).attr("data-target") + "Heading";
+        $("html, body").animate({scrollTop: $(anchorName).offset().top});
+        let currentButton = this;
+        window.setTimeout(function () {
+            /* I am exploiting Bootstrap's ARIA functionality for the
+            purposes of this application*/
+            let isOpen = $(currentButton).attr("aria-expanded") === "true";
+            if (isOpen) {
+                $(currentButton).removeAttr("data-toggle");
+            }
+        }, 200);
+
+    });
+
+    $(".accordionLink").click(function () {
+        let currentDataTarget = "button[data-target=\'" + $(this).attr("href") + "\']";
+        $(currentDataTarget).attr("data-toggle", "collapse");
+
+        window.setTimeout(function () {
+            let isOpen = $(currentDataTarget).attr("aria-expanded") === "true";
+            if (isOpen) {
+                $(currentDataTarget).removeAttr("data-toggle");
+            }
+        }, 200);
+    });
+
     var search = location.search.substring(1);
     var obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
         function ( key, value) {
@@ -233,33 +262,6 @@
         $("<a class=\"sourceLink\"><sup>[4]</sup></a>").appendTo(".ncbiSource");
         $("<a class=\"sourceLink\"><sup>[5]</sup></a>").appendTo(".jasparSource");
 
-        $(".sourceLink, button").click(function (event) {
-            event.preventDefault();
-            var anchorName = $(this).attr("data-target") + "Heading";
-            $("html, body").animate({scrollTop: $(anchorName).offset().top});
-            let currentButton = this;
-            window.setTimeout(function () {
-                /* I am exploiting Bootstrap's ARIA functionality for the
-                purposes of this application*/
-                let isOpen = $(currentButton).attr("aria-expanded") === "true";
-                if (isOpen) {
-                    $(currentButton).removeAttr("data-toggle");
-                }
-            }, 200);
-
-        });
-
-        $(".accordionLink").click(function () {
-            let currentDataTarget = "button[data-target=\'" + $(this).attr("href") + "\']";
-            $(currentDataTarget).attr("data-toggle", "collapse");
-
-            window.setTimeout(function () {
-                let isOpen = $(currentDataTarget).attr("aria-expanded") === "true";
-                if (isOpen) {
-                    $(currentDataTarget).removeAttr("data-toggle");
-                }
-            }, 200);
-        });
 
 
         $("a").attr("target", "blank");
