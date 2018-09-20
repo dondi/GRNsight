@@ -1,15 +1,15 @@
 "use strict";
 
 // Using "use strict" global
-var serviceRoot = $("#service-root").attr("value");
-var serializer = new XMLSerializer();
-var XMLParser = function (data) {
+const serviceRoot = $("#service-root").attr("value");
+const serializer = new XMLSerializer();
+const XMLParser = function (data) {
     return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
 };
 
-var getUniProtInfo = function (geneSymbol) {
+let getUniProtInfo = function (geneSymbol) {
     return $.get({
-        url: "http://www.uniprot.org/uploadlists/",
+        url: serviceRoot + "/uniprot/uploadlists/",
         data: {
             from: "GENENAME",
             to: "ACC",
@@ -20,10 +20,10 @@ var getUniProtInfo = function (geneSymbol) {
         dataType: "text",
         timeout: 5000,
     }).then(function (data) {
-        var regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
-        var id = regex.exec(data)[1];
+        const regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
+        const id = regex.exec(data)[1];
         return $.get({
-            url: "http://www.uniprot.org/uniprot/" + id + ".xml",
+            url: serviceRoot + "/uniprot/uniprot/" + id + ".xml",
             timeout: 5000,
         });
     }).fail(function () {
@@ -31,7 +31,7 @@ var getUniProtInfo = function (geneSymbol) {
     });
 };
 
-var getNCBIInfo = function (geneSymbol) {
+let getNCBIInfo = function (geneSymbol) {
     return $.get({
         url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
         data: {
@@ -41,8 +41,8 @@ var getNCBIInfo = function (geneSymbol) {
         dataType: "text",
         timeout: 5000,
     }).then(function (data) {
-        var regex = /<Id>(\d*)<\/Id>/gm;
-        var id = regex.exec(data)[1];
+        const regex = /<Id>(\d*)<\/Id>/gm;
+        const id = regex.exec(data)[1];
         return $.get({
             url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
             dataType: "xml",
@@ -51,7 +51,7 @@ var getNCBIInfo = function (geneSymbol) {
     });
 };
 
-var getGeneOntologyInfo = function (geneSymbol) {
+let getGeneOntologyInfo = function (geneSymbol) {
 
     return $.get({
         url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
@@ -60,9 +60,9 @@ var getGeneOntologyInfo = function (geneSymbol) {
             xhr.setRequestHeader("content-type", "application/json");
         },
     }).then(function (data) {
-        var id = data.results[0].primaryIdentifier;
+        const id = data.results[0].primaryIdentifier;
         return $.get({
-            url: serviceRoot + "/yeastmine/backend/locus/" + id + "/go_details",
+            url: "https://www.yeastgenome.org/webservice/locus/" + id + "/go_details",
             dataType: "json",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("content-type", "application/json");
@@ -71,7 +71,7 @@ var getGeneOntologyInfo = function (geneSymbol) {
     });
 };
 
-var getRegulationInfo = function (geneSymbol) {
+let getRegulationInfo = function (geneSymbol) {
 
     return $.get({
         url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
@@ -80,7 +80,7 @@ var getRegulationInfo = function (geneSymbol) {
             xhr.setRequestHeader("content-type", "application/json");
         },
     }).then(function (data) {
-        var id = data.results[0].primaryIdentifier;
+        const id = data.results[0].primaryIdentifier;
         return $.get({
             url: serviceRoot + "/yeastmine/backend/locus/" + id + "/regulation_details",
             dataType: "json",
@@ -91,7 +91,7 @@ var getRegulationInfo = function (geneSymbol) {
     });
 };
 
-var getYeastMineInfo = function (geneSymbol) {
+let getYeastMineInfo = function (geneSymbol) {
     return $.get({
         url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
         dataType: "json",
@@ -105,7 +105,7 @@ var getYeastMineInfo = function (geneSymbol) {
     });
 };
 
-var getEnsemblInfo = function (geneSymbol) {
+let getEnsemblInfo = function (geneSymbol) {
     return $.get({
         url: "http://rest.ensembl.org/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
         dataType: "json",
@@ -125,7 +125,7 @@ var getEnsemblInfo = function (geneSymbol) {
     });
 };
 
-var getJasparInfo = function (geneSymbol) {
+let getJasparInfo = function (geneSymbol) {
     return $.get({
         url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
         dataType: "json",
@@ -147,7 +147,7 @@ var getJasparInfo = function (geneSymbol) {
 };
 
 
-var defaultJaspar = {
+let defaultJaspar = {
     jasparID: "Not found",
     class: "Not found",
     family: "Not found",
@@ -155,7 +155,7 @@ var defaultJaspar = {
     frequencyMatrix: "Not found"
 };
 
-var defaultNCBI  = {
+let defaultNCBI  = {
     ncbiID: "Not found",
     locusTag: "Not found",
     alsoKnownAs: "Not found",
@@ -163,31 +163,31 @@ var defaultNCBI  = {
     genomicSequence: "Not found"
 };
 
-var defaultUniprot = {
+let defaultUniprot = {
     uniprotID: "Not found",
     proteinSequence: "Not found",
     proteinType: "Not found",
     species: "Species not found"
 };
 
-var defaultEnsembl = {
+let defaultEnsembl = {
     ensemblID:  "Not found",
     dnaSequence:  "Not found",
     geneLocation:  "Not found"
 };
 
-var defaultGeneOntology = {
+let defaultGeneOntology = {
     molecularFunction: "Not found",
     biologicalProcess: "Not found",
     cellularComponent: "Not found"
 };
 
-var defaultRegulators = {
+let defaultRegulators = {
     regulators: "Not found",
     targets: "Not found"
 };
 
-var defaultYeastmine = {
+let defaultYeastmine = {
     description: "Not found",
     sgdID: "Not found",
     standardName: "Not found",
@@ -211,7 +211,7 @@ var defaultYeastmine = {
     geneOntologySummary: "Not found",
 };
 
-var defaultValues = {
+let defaultValues = {
     jaspar:  defaultJaspar,
     ncbi: defaultNCBI,
     ensembl: defaultEnsembl,
@@ -221,8 +221,8 @@ var defaultValues = {
     regulators: defaultRegulators
 };
 
-var parseRegulators = function (data, symbol) {
-    var regulatorsTemplate = {
+let parseRegulators = function (data, symbol) {
+    let regulatorsTemplate = {
         regulators: [],
         targets: [],
     };
@@ -248,9 +248,9 @@ var parseRegulators = function (data, symbol) {
     return regulatorsTemplate;
 };
 
-var parseGeneOntology = function (data) {
+let parseGeneOntology = function (data) {
 
-    var goTemplate = {
+    let goTemplate = {
         molecularFunction : [],
         biologicalProcess : [],
         cellularComponent : [],
@@ -293,8 +293,8 @@ var parseGeneOntology = function (data) {
     return goTemplate;
 };
 
-var parseUniprot = function (data) {
-    var uniprotTemplate = {
+let parseUniprot = function (data) {
+    let uniprotTemplate = {
         uniprotID: XMLParser(data.getElementsByTagName("name")[0]),
         proteinSequence: XMLParser(data.getElementsByTagName("sequence")[0]),
         proteinType: XMLParser(data.getElementsByTagName("protein")[0].childNodes[1].childNodes[1]),
@@ -311,10 +311,10 @@ var parseUniprot = function (data) {
 
 };
 
-var parseNCBI = function (data) {
-    var tagArray = serializer.serializeToString(
+let parseNCBI = function (data) {
+    const tagArray = serializer.serializeToString(
         data.getElementsByTagName("OtherAliases")[0]).split(",");
-    var ncbiTemplate = {
+    const ncbiTemplate = {
         ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
         locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
         alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ""),
@@ -334,9 +334,9 @@ var parseNCBI = function (data) {
     return ncbiTemplate;
 };
 
-var parseYeastmine = function (data) {
+let parseYeastmine = function (data) {
 
-    var yeastmineTemplate = {
+    const yeastmineTemplate = {
         description: data.description,
         sgdID: data.primaryIdentifier,
         standardName: data.symbol,
@@ -375,9 +375,9 @@ var parseYeastmine = function (data) {
     return yeastmineTemplate;
 };
 
-var parseEnsembl = function (data) {
+let parseEnsembl = function (data) {
 
-    var ensemblTemplate = {
+    const ensemblTemplate = {
         ensemblID: data.id,
         description: data.description,
         dnaSequence: "Not found", // Information unavailable via regular API
@@ -393,9 +393,9 @@ var parseEnsembl = function (data) {
 
 };
 
-var parseJaspar = function (data) {
+let parseJaspar = function (data) {
 
-    var jasparTemplate = {
+    const jasparTemplate = {
         jasparID : data.matrix_id,
         class: data.class[0],
         family: data.family[0],
@@ -461,13 +461,13 @@ var parseJaspar = function (data) {
                  defaultValues.ensembl === defaultEnsembl &&
                  defaultValues.jaspar === defaultJaspar
                ) {
-                   var errorString1 = "No gene information was retrieved for " + symbol + ".";
+                   const errorString1 = "No gene information was retrieved for " + symbol + ".";
 
-                   var errorString2 = "This could have happened because either"
+                   const errorString2 = "This could have happened because either"
                     + " GRNsight could not access the gene information from one of the source databases"
                     + " or because no information exists for the gene in the source databases.";
 
-                   var errorString3 = "You can check back later to see if gene information"
+                   const errorString3 = "You can check back later to see if gene information"
                     + " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
 
                    $("#error1").text(errorString1);

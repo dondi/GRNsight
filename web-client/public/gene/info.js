@@ -43,24 +43,24 @@
 
     api.getGeneInformation(obj.symbol).done(function (gene) {
 
-        var sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
-        var sgdId = gene.sgd.sgdID;
+        const sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
+        const sgdId = gene.sgd.sgdID;
         $(".sgd-link").text(sgdId).attr({ href: sgdHrefTemplate + sgdId });
 
-        var ncbiHrefTemplate = "https://www.ncbi.nlm.nih.gov/gene/";
-        var ncbiId = gene.ncbi.ncbiID;
+        const ncbiHrefTemplate = "https://www.ncbi.nlm.nih.gov/gene/";
+        const ncbiId = gene.ncbi.ncbiID;
         $(".ncbi-link").text(ncbiId).attr({ href: ncbiHrefTemplate + ncbiId });
 
-        var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
-        var ensemblId = gene.ensembl.ensemblID;
+        const ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
+        const ensemblId = gene.ensembl.ensemblID;
         $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
 
-        var uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
-        var uniprotId = gene.uniprot.uniprotID;
+        const uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
+        const uniprotId = gene.uniprot.uniprotID;
         $(".uniprot-link").text(uniprotId).attr({ href: uniprotHrefTemplate + uniprotId });
 
-        var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
-        var jasparId = gene.jaspar.jasparID;
+        const jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
+        const jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
         // General Information Section
