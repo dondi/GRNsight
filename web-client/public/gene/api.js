@@ -33,7 +33,7 @@ let getUniProtInfo = function (geneSymbol) {
 
 let getNCBIInfo = function (geneSymbol) {
     return $.get({
-        url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+        url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
         data: {
             db: "gene",
             term: geneSymbol + "[gene]+Saccharomyces+cerevisiae[Organism]",
@@ -44,7 +44,7 @@ let getNCBIInfo = function (geneSymbol) {
         const regex = /<Id>(\d*)<\/Id>/gm;
         const id = regex.exec(data)[1];
         return $.get({
-            url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
+            url: serviceRoot + "/ncbi/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
             dataType: "xml",
             timeout: 5000,
         });
@@ -52,62 +52,38 @@ let getNCBIInfo = function (geneSymbol) {
 };
 
 let getGeneOntologyInfo = function (geneSymbol) {
-
     return $.get({
-        url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
+        url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/go_details",
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
-        },
-    }).then(function (data) {
-        const id = data.results[0].primaryIdentifier;
-        return $.get({
-            url: "https://www.yeastgenome.org/webservice/locus/" + id + "/go_details",
-            dataType: "json",
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("content-type", "application/json");
-            }
-        });
+        }
     });
 };
 
 let getRegulationInfo = function (geneSymbol) {
-
     return $.get({
-        url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
+        url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/regulation_details",
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
-        },
-    }).then(function (data) {
-        const id = data.results[0].primaryIdentifier;
-        return $.get({
-            url: serviceRoot + "/yeastmine/backend/locus/" + id + "/regulation_details",
-            dataType: "json",
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("content-type", "application/json");
-            }
-        });
+        }
     });
 };
 
 let getYeastMineInfo = function (geneSymbol) {
     return $.get({
-        url: "https://yeastmine.yeastgenome.org/yeastmine/service/data/Gene?symbol=" + geneSymbol,
+        url: serviceRoot + "/yeastmine/webservice/locus/" + geneSymbol,
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
         },
-    }).then(function (data) {
-        return (data.results.filter(function (data) {
-            return data.primaryIdentifier[0] === "S";
-        }));
     });
 };
 
 let getEnsemblInfo = function (geneSymbol) {
     return $.get({
-        url: "http://rest.ensembl.org/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
+        url: serviceRoot + "/ensembl/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
         dataType: "json",
         timeout: 5000,
         beforeSend: function (xhr) {
@@ -115,7 +91,7 @@ let getEnsemblInfo = function (geneSymbol) {
         },
     }).then(function (data) {
         return $.get({
-            url: "http://rest.ensembl.org/lookup/id/" + data.id + "?expand=1",
+            url: serviceRoot + "/ensembl/lookup/id/" + data.id + "?expand=1",
             dataType: "json",
             timeout: 5000,
             beforeSend: function (xhr) {
@@ -335,12 +311,11 @@ let parseNCBI = function (data) {
 };
 
 let parseYeastmine = function (data) {
-
     const yeastmineTemplate = {
         description: data.description,
-        sgdID: data.primaryIdentifier,
+        sgdID: data.sgdid,
         standardName: data.symbol,
-        systematicName: data.secondaryIdentifier,
+        systematicName: data.gene_name,
         totalInteractions: "Not found", // Information unavailable via regular API
         affinityCaptureMS: "Not found", // Information unavailable via regular API
         affinityCaptureRNA: "Not found", // Information unavailable via regular API
@@ -357,7 +332,7 @@ let parseYeastmine = function (data) {
         syntheticHaploinsufficiency: "Not found", // Information unavailable via regular API
         syntheticLethality: "Not found", // Information unavailable via regular API
         syntheticRescue: "Not found", // Information unavailable via regular API
-        geneOntologySummary: data.functionSummary,
+        geneOntologySummary: data.go_overview.paragraph,
         molecularFunction: "Not found", // Information unavailable via regular API
         biologicalProcess: "Not found", // Information unavailable via regular API
         cellularComponent: "Not found", // Information unavailable via regular API
@@ -430,7 +405,7 @@ let parseJaspar = function (data) {
                return getYeastMineInfo(symbol);
 
            }).then(function (info3) {
-               defaultValues.sgd = parseYeastmine(info3[0]);
+               defaultValues.sgd = parseYeastmine(info3);
                return getEnsemblInfo(symbol);
            }).catch(function () {
                return getEnsemblInfo(symbol);
