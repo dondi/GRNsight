@@ -7,8 +7,14 @@ a:hover {
 }
 
 body {
-  font-family: Georgia, serif;
-  width: 1400px;
+  font-family: 'Georgia', serif;
+	margin: 0;
+	background-color: #FFFFFF;
+	min-width: 1300px;
+
+	/* Overwrite bootstrap CSS */
+	line-height: normal;
+	font-size: medium;
 }
 
 iframe {
@@ -51,7 +57,7 @@ sup {
   margin-bottom: 5px;
 }
 
-.card-header{
+.card-header {
   text-decoration: underline;
   padding: 7px 15px;
 }
@@ -72,6 +78,10 @@ sup {
 .codeSequence {
   font-family: Courier;
   color:black;
+}
+
+.container-fluid {
+  padding-left: 0px;
 }
 
 .database-link {
@@ -121,13 +131,24 @@ sup {
   text-align:right;
 }
 
+#header {
+  right: 0;
+  left: 0;
+  height: 118px;
+}
+
 #iframeMenu {
   height: 100%;
   position: absolute;
 }
 
 #mainPage {
+  left: 0;
+  right: 0;
+  padding-top: 5px;
+  margin-top: 20px;
   z-index: 0;
+  min-height: 450px;
 }
 
 #pageHead {
