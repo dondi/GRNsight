@@ -177,8 +177,8 @@
         $(".molecularFunction").append("<dl class=\"row molecularFunctionTable\"></dl>");
         for (let k = 0; k < molecularFunction.length; k++) {
             link = "https://www.yeastgenome.org" + molecularFunction[k].link;
-            $(".molecularFunctionTable").append("<a href=\"" + link
-            + "\" class=\"col-xl-3\"><dd>" + molecularFunction[k].id + "</dd></a>");
+            $(".molecularFunctionTable").append("<dd><a href=\"" + link
+            + "\" class=\"col-xl-3\">" + molecularFunction[k].id + "</a></dd>");
             $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">"
             + molecularFunction[k].displayName + "</dd>");
         }
@@ -187,8 +187,8 @@
         $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
         for (let k = 0; k < biologicalProcess.length; k++) {
             link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
-            $(".biologicalProcessTable").append("<a href=\"" + link
-            + "\"  class=\"col-xl-3\"><dd>" + biologicalProcess[k].id + "</dd></a>");
+            $(".biologicalProcessTable").append("<dd><a href=\"" + link
+            + "\"  class=\"col-xl-3\">" + biologicalProcess[k].id + "</a></dd>");
             $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
             + biologicalProcess[k].displayName + "</dd>");
         }
@@ -197,8 +197,8 @@
         $(".cellularComponent").append("<dl class=\" row cellularComponentTable\"></dl>");
         for (let k = 0; k < cellularComponent.length; k++) {
             link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
-            $(".cellularComponentTable").append("<a href=\"" + link
-            + "\" class=\"col-xl-3\"><dd>" + cellularComponent[k].id + "</dd></a>");
+            $(".cellularComponentTable").append("<dd><a href=\"" + link
+            + "\" class=\"col-xl-3\">" + cellularComponent[k].id + "</a></dd>");
             $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
             + cellularComponent[k].displayName + "</dd>");
         }

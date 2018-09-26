@@ -69,4 +69,13 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    $("#colorEdges").click(() => {
+        grnState.colorOptimal = true;
+        updateApp(grnState);
+    });
+
+    $("#blackEdges").click(() => {
+        grnState.colorOptimal = false;
+        updateApp(grnState);
+    });
 };
