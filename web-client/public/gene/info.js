@@ -1,4 +1,33 @@
 (function () {
+
+    $(".sourceLink, button").click(function (event) {
+        event.preventDefault();
+        var anchorName = $(this).attr("data-target") + "Heading";
+        $("html, body").animate({scrollTop: $(anchorName).offset().top});
+        let currentButton = this;
+        window.setTimeout(function () {
+            /* I am exploiting Bootstrap's ARIA functionality for the
+            purposes of this application*/
+            let isOpen = $(currentButton).attr("aria-expanded") === "true";
+            if (isOpen) {
+                $(currentButton).removeAttr("data-toggle");
+            }
+        }, 200);
+
+    });
+
+    $(".accordionLink").click(function () {
+        let currentDataTarget = "button[data-target=\'" + $(this).attr("href") + "\']";
+        $(currentDataTarget).attr("data-toggle", "collapse");
+
+        window.setTimeout(function () {
+            let isOpen = $(currentDataTarget).attr("aria-expanded") === "true";
+            if (isOpen) {
+                $(currentDataTarget).removeAttr("data-toggle");
+            }
+        }, 200);
+    });
+
     var search = location.search.substring(1);
     var obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
         function ( key, value) {
@@ -14,24 +43,24 @@
 
     api.getGeneInformation(obj.symbol).done(function (gene) {
 
-        var sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
-        var sgdId = gene.sgd.sgdID;
+        const sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
+        const sgdId = gene.sgd.sgdID;
         $(".sgd-link").text(sgdId).attr({ href: sgdHrefTemplate + sgdId });
 
-        var ncbiHrefTemplate = "https://www.ncbi.nlm.nih.gov/gene/";
-        var ncbiId = gene.ncbi.ncbiID;
+        const ncbiHrefTemplate = "https://www.ncbi.nlm.nih.gov/gene/";
+        const ncbiId = gene.ncbi.ncbiID;
         $(".ncbi-link").text(ncbiId).attr({ href: ncbiHrefTemplate + ncbiId });
 
-        var ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
-        var ensemblId = gene.ensembl.ensemblID;
+        const ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
+        const ensemblId = gene.ensembl.ensemblID;
         $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
 
-        var uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
-        var uniprotId = gene.uniprot.uniprotID;
+        const uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
+        const uniprotId = gene.uniprot.uniprotID;
         $(".uniprot-link").text(uniprotId).attr({ href: uniprotHrefTemplate + uniprotId });
 
-        var jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
-        var jasparId = gene.jaspar.jasparID;
+        const jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
+        const jasparId = gene.jaspar.jasparID;
         $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
 
         // General Information Section
@@ -233,17 +262,7 @@
         $("<a class=\"sourceLink\"><sup>[4]</sup></a>").appendTo(".ncbiSource");
         $("<a class=\"sourceLink\"><sup>[5]</sup></a>").appendTo(".jasparSource");
 
-        $( ".sourceLink" ).attr({
-            "data-toggle": "collapse",
-            "data-target": "#sources",
-            "href": "#sources"
-        });
 
-        $(".sourceLink, button").click(function (event) {
-            event.preventDefault();
-            var anchorName = $(this).attr("data-target") + "Heading";
-            $("html, body").animate({scrollTop: $(anchorName).offset().top});
-        });
 
         $("a").attr("target", "blank");
 
