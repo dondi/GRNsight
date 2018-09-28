@@ -55,4 +55,6 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
+
+    slidersLocked: false,
 };

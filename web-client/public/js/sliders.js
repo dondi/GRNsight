@@ -2,18 +2,23 @@
    setting; this is the next closest thing. */
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "graySlider|outputUpdate|sliderGroupController|sliderObject"}] */
+import { grnState } from "./grnstate";
 
-var GRAVITY_LENGTH_WITHOUT_ZERO = 3;
-var LOCK_SLIDERS_CLASS          = ".lockSliders";
-var LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
-var LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu";
-var RESET_SLIDERS_CLASS         = ".resetSliders";
-var RESET_SLIDERS_BUTTON        = "#resetSlidersButton";
-var RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
-var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
-var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
-var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
+import {
+  GRAVITY_LENGTH_WITHOUT_ZERO,
+  GRAVITY_LENGTH_WITHOUT_ZERO,
+  LOCK_SLIDERS_CLASS,
+  LOCK_SLIDERS_BUTTON,
+  LOCK_SLIDERS_MENU_OPTION,
+  RESET_SLIDERS_CLASS,
+  RESET_SLIDERS_BUTTON,
+  RESET_SLIDERS_MENU_OPTION,
+  UNDO_SLIDER_RESET_CLASS,
+  UNDO_SLIDER_RESET_MENU,
+  UNDO_SLIDER_RESET_BUTTON,
+} from "./constants";
 
+import { grnState } from "./grnstate";
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
@@ -123,13 +128,13 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.toggle = function () {
-        this.locked = !this.locked;
+        grnState.slidersLocked = !grnState.slidersLocked;
         $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
         $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
-        if (this.locked) {
+        if (grnState.slidersLocked) {
             $("#link-distance").parent().addClass("disabled");
             $("#charge").parent().addClass("disabled");
         } else {
