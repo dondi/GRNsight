@@ -1,3 +1,4 @@
+
 a {
   color: #16693f;
 }
@@ -20,7 +21,8 @@ body {
 iframe {
   border:none;
   width: 100%;
-  z-index: 1;
+
+  box-sizing: content-box;
 }
 
 sup {
@@ -53,7 +55,6 @@ sup {
 }
 
 .card {
-  max-width: 90%;
   margin-bottom: 5px;
 }
 
@@ -126,14 +127,16 @@ sup {
   color: #691640;
 }
 
+#gene-name {
+  text-align: left;
+
+}
 #gene-species {
   font-style: italic;
-  text-align:right;
+  text-align: left;
 }
 
 #header {
-  right: 0;
-  left: 0;
   height: 118px;
 }
 
@@ -146,11 +149,15 @@ sup {
   left: 0;
   right: 0;
   padding-top: 5px;
+  padding-left: 10px;
   margin-top: 20px;
-  z-index: 0;
+  margin-left: 0px;
+
   min-height: 450px;
 }
 
 #pageHead {
-  margin: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 5px;
 }
