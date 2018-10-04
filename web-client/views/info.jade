@@ -20,21 +20,21 @@ html
           .modal-footer
             input.btn.btn-default(type='button', data-dismiss='modal', value='Close')
     // End error modal
-    .container-fluid
+    .page
       iframe#header(src='http://dondi.github.io/GRNsight/onlyheader.html', scrolling='no')
       .row
-        .col-2
+        .col-2#menu
           iframe#iframeMenu(src='http://dondi.github.io/GRNsight/onlysidebar.html', scrolling='no')
         #mainPage.col-10
           #pageHead.row
             div
               // This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene
-            .row
-              .col.float-left
+            .row#name-row
+              .col
                 h1#gene-name.display-4
-              .col.float-right
+              .col
                 em
-                  h2#gene-species.uniProtSpecies Page is loading...
+                  h2.text-right#gene-species.uniProtSpecies Page is loading...
             // end of row
           #navigationButtons.row
             .col
