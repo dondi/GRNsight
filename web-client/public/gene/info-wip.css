@@ -1,6 +1,4 @@
-* {
-	box-sizing: content-box;
-}
+
 a {
   color: #16693f;
 }
@@ -13,7 +11,7 @@ body {
   font-family: 'Georgia', serif;
 	margin: 0;
 	background-color: #FFFFFF;
-	min-width: 1326px;
+	min-width: 1300px;
 
 	/* Overwrite bootstrap CSS */
 	line-height: normal;
@@ -86,14 +84,6 @@ sup {
   padding-left: 0px;
 }
 
-.col {
-  padding: 0px;
-}
-
-.col-12 {
-  padding: 0px;
-}
-
 .database-link {
   color:  #16693f;
   font-weight: 700;
@@ -106,10 +96,6 @@ sup {
 .jumbotron {
   background-color: white;
   padding-bottom: 0px !important;
-}
-
-.row {
-  margin: 0px;
 }
 
 .sequenceLogo {
@@ -159,28 +145,28 @@ sup {
   min-height: 100%;
 }
 
-#navBar {
+#menu {
   margin-top: 20px;
   padding-top: 1px;
   position: absolute;
   min-height: 450px;
-  min-width: 160px;
 }
 
-#mainContent {
+#mainPage {
   left: 0;
   right: 0;
   margin: 20px 0px 0px 209px;
   padding: 5px 5px 5px 5px;
+
 }
 
-#pageContent {
-  font-size: 14px;
-  padding: 0px 5px 5px 10px;
-  margin-right: 8em
+#name-row {
+  min-width: 100%;
 }
 
 #pageHead {
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  min-height: 80px;
 }
