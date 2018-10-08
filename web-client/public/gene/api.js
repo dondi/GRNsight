@@ -7,122 +7,6 @@ const XMLParser = function (data) {
     return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
 };
 
-let getUniProtInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/uniprot/uploadlists/",
-        data: {
-            from: "GENENAME",
-            to: "ACC",
-            format: "tab",
-            taxon: "559292",
-            query: geneSymbol,
-        },
-        dataType: "text",
-        timeout: 5000,
-    }).then(function (data) {
-        const regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
-        const id = regex.exec(data)[1];
-        return $.get({
-            url: serviceRoot + "/uniprot/uniprot/" + id + ".xml",
-            timeout: 5000,
-        });
-    }).fail(function () {
-        return $.get(this);
-    });
-};
-
-let getNCBIInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
-        data: {
-            db: "gene",
-            term: geneSymbol + "[gene]+Saccharomyces+cerevisiae[Organism]",
-        },
-        dataType: "text",
-        timeout: 5000,
-    }).then(function (data) {
-        const regex = /<Id>(\d*)<\/Id>/gm;
-        const id = regex.exec(data)[1];
-        return $.get({
-            url: serviceRoot + "/ncbi/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
-            dataType: "xml",
-            timeout: 5000,
-        });
-    });
-};
-
-let getGeneOntologyInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/go_details",
-        dataType: "json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        }
-    });
-};
-
-let getRegulationInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/regulation_details",
-        dataType: "json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        }
-    });
-};
-
-let getYeastMineInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/yeastmine/webservice/locus/" + geneSymbol,
-        dataType: "json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        },
-    });
-};
-
-let getEnsemblInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/ensembl/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
-        dataType: "json",
-        timeout: 5000,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        },
-    }).then(function (data) {
-        return $.get({
-            url: serviceRoot + "/ensembl/lookup/id/" + data.id + "?expand=1",
-            dataType: "json",
-            timeout: 5000,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("content-type", "application/json");
-            },
-        });
-    });
-};
-
-let getJasparInfo = function (geneSymbol) {
-    return $.get({
-        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
-        dataType: "json",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        },
-    }).then(function (data) {
-        return (data.count === 0 ? {} :
-            $.get({
-                url: serviceRoot + "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
-                dataType: "json",
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("content-type", "application/json");
-                },
-            })
-
-        );
-    });
-};
-
-
 let defaultJaspar = {
     jasparID: "Not found",
     class: "Not found",
@@ -187,6 +71,123 @@ let defaultYeastmine = {
     geneOntologySummary: "Not found",
 };
 
+let getUniProtInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/uniprot/uploadlists/",
+        data: {
+            from: "GENENAME",
+            to: "ACC",
+            format: "tab",
+            taxon: "559292",
+            query: geneSymbol,
+        },
+        dataType: "text",
+        timeout: 5000,
+    }).then(function (data) {
+        const regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
+        const id = regex.exec(data)[1];
+        return $.get({
+            url: serviceRoot + "/uniprot/uniprot/" + id + ".xml",
+            timeout: 5000,
+        });
+    }).fail(function () {
+        return $.get(this);
+    });
+};
+
+let getNCBIInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
+        data: {
+            db: "gene",
+            term: geneSymbol + "[gene]+Saccharomyces+cerevisiae[Organism]",
+        },
+        dataType: "text",
+        timeout: 5000,
+    }).then(function (data) {
+        const regex = /<Id>(\d*)<\/Id>/gm;
+        const id = regex.exec(data)[1];
+        return $.get({
+            url: serviceRoot + "/ncbi/entrez/eutils/esummary.fcgi?db=gene&id=" + id,
+            dataType: "xml",
+            timeout: 5000,
+        });
+    });
+};
+
+let getGeneOntologyInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/yeastmne/backend/locus/" + geneSymbol + "/go_details",
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("content-type", "application/json");
+        }
+    }).catch(function () {
+        return defaultGeneOntology;
+      });
+};
+
+let getRegulationInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/regulation_details",
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("content-type", "application/json");
+        }
+    });
+};
+
+let getYeastMineInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/yeastmine/webservice/locus/" + geneSymbol,
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("content-type", "application/json");
+        },
+    });
+};
+
+let getEnsemblInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/ensembl/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
+        dataType: "json",
+        timeout: 5000,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("content-type", "application/json");
+        },
+    }).then(function (data) {
+        return $.get({
+            url: serviceRoot + "/ensembl/lookup/id/" + data.id + "?expand=1",
+            dataType: "json",
+            timeout: 5000,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("content-type", "application/json");
+            },
+        });
+    });
+};
+
+let getJasparInfo = function (geneSymbol) {
+    return $.get({
+        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+        dataType: "json",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("content-type", "application/json");
+        },
+    }).then(function (data) {
+        return (data.count === 0 ? {} :
+            $.get({
+                url: serviceRoot + "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("content-type", "application/json");
+                },
+            })
+
+        );
+    });
+};
+
 let defaultValues = {
     jaspar:  defaultJaspar,
     ncbi: defaultNCBI,
@@ -197,11 +198,13 @@ let defaultValues = {
     regulators: defaultRegulators
 };
 
+
 let parseRegulators = function (data, symbol) {
     let regulatorsTemplate = {
         regulators: [],
         targets: [],
     };
+
     for (var k = 0; k < data.length; k++) {
         switch (data[k].locus1.display_name) {
         case symbol:
@@ -226,6 +229,7 @@ let parseRegulators = function (data, symbol) {
 
 let parseGeneOntology = function (data) {
 
+
     let goTemplate = {
         molecularFunction : [],
         biologicalProcess : [],
@@ -233,7 +237,7 @@ let parseGeneOntology = function (data) {
     };
 
     for (var k = 0; k < data.length; k++) {
-        var isUnique = true;
+        let isUnique = true;
         for (var len = 0; len < k; len++) {
             if (data[k].go.go_id === data[len].go.go_id) {
                 isUnique = false;
@@ -269,7 +273,7 @@ let parseGeneOntology = function (data) {
     }
 
     for (var prop in goTemplate) {
-        if ((goTemplate[prop] === undefined) || (goTemplate[prop] === null)) {
+        if (goTemplate[prop].length === 0) {
             goTemplate[prop] = "Not found";
         }
     }
@@ -425,7 +429,7 @@ let parseJaspar = function (data) {
            }).then(function (info5) {
                defaultValues.geneOntology = parseGeneOntology(info5);
                return getRegulationInfo(symbol);
-           }).catch(function () {
+           }).catch(function (data) {
                return getRegulationInfo(symbol);
            }).then(function (info6) {
                defaultValues.regulators = parseRegulators(info6, symbol);

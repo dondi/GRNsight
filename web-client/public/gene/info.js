@@ -174,34 +174,48 @@
 
         var molecularFunction = gene.geneOntology.molecularFunction;
         var link;
-        $(".molecularFunction").append("<dl class=\"row molecularFunctionTable\"></dl>");
-        for (let k = 0; k < molecularFunction.length; k++) {
-            link = "https://www.yeastgenome.org" + molecularFunction[k].link;
-            $(".molecularFunctionTable").append("<dd><a href=\"" + link
-            + "\" class=\"col-xl-3\">" + molecularFunction[k].id + "</a></dd>");
-            $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + molecularFunction[k].displayName + "</dd>");
+        if (molecularFunction !== "Not found") {
+            $(".molecularFunction").append("<dl class=\"row molecularFunctionTable\"></dl>");
+            for (let k = 0; k < molecularFunction.length; k++) {
+                link = "https://www.yeastgenome.org" + molecularFunction[k].link;
+                $(".molecularFunctionTable").append("<dd><a href=\"" + link
+                + "\" class=\"col-xl-3\">" + molecularFunction[k].id + "</a></dd>");
+                $(".molecularFunctionTable").append("<dd class=\"sgdSource col-xl-9\">"
+                + molecularFunction[k].displayName + "</dd>");
+            }
+        } else {
+            $(".molecularFunction").text("Not found").attr({ class : "sgdSource"});
         }
 
-        var biologicalProcess = gene.geneOntology.biologicalProcess;
-        $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
-        for (let k = 0; k < biologicalProcess.length; k++) {
-            link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
-            $(".biologicalProcessTable").append("<dd><a href=\"" + link
-            + "\"  class=\"col-xl-3\">" + biologicalProcess[k].id + "</a></dd>");
-            $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + biologicalProcess[k].displayName + "</dd>");
+
+        let biologicalProcess = gene.geneOntology.biologicalProcess;
+        if (biologicalProcess !== "Not found") {
+            $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
+            for (let k = 0; k < biologicalProcess.length; k++) {
+                link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
+                $(".biologicalProcessTable").append("<dd><a href=\"" + link
+                + "\"  class=\"col-xl-3\">" + biologicalProcess[k].id + "</a></dd>");
+                $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
+                + biologicalProcess[k].displayName + "</dd>");
+            }
+        } else {
+            $(".biologicalProcess").text("Not found").attr({ class : "sgdSource"});
         }
 
-        var cellularComponent = gene.geneOntology.cellularComponent;
-        $(".cellularComponent").append("<dl class=\" row cellularComponentTable\"></dl>");
-        for (let k = 0; k < cellularComponent.length; k++) {
-            link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
-            $(".cellularComponentTable").append("<dd><a href=\"" + link
-            + "\" class=\"col-xl-3\">" + cellularComponent[k].id + "</a></dd>");
-            $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + cellularComponent[k].displayName + "</dd>");
+        let cellularComponent = gene.geneOntology.cellularComponent;
+        if (biologicalProcess !== "Not found") {
+            $(".cellularComponent").append("<dl class=\" row cellularComponentTable\"></dl>");
+            for (let k = 0; k < cellularComponent.length; k++) {
+                link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
+                $(".cellularComponentTable").append("<dd><a href=\"" + link
+                + "\" class=\"col-xl-3\">" + cellularComponent[k].id + "</a></dd>");
+                $(".cellularComponentTable").append("<dd class=\"sgdSource col-xl-9\">"
+                + cellularComponent[k].displayName + "</dd>");
+            }
+        } else {
+            $(".cellularComponent").text("Not found").attr({ class : "sgdSource"});
         }
+
 
         // Fequency Matrix and Sequence Logo
         var sequenceLogo = gene.jaspar.sequenceLogo;
