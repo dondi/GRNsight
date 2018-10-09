@@ -117,7 +117,7 @@ let getNCBIInfo = function (geneSymbol) {
 
 let getGeneOntologyInfo = function (geneSymbol) {
     return $.get({
-        url: serviceRoot + "/yeastmne/backend/locus/" + geneSymbol + "/go_details",
+        url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/go_details",
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");

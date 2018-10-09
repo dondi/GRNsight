@@ -2,7 +2,7 @@
 
     $(".sourceLink, button").click(function (event) {
         event.preventDefault();
-        var anchorName = $(this).attr("data-target") + "Heading";
+        const anchorName = $(this).attr("data-target") + "Heading";
         $("html, body").animate({scrollTop: $(anchorName).offset().top});
         let currentButton = this;
         window.setTimeout(function () {
@@ -28,8 +28,8 @@
         }, 200);
     });
 
-    var search = location.search.substring(1);
-    var obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
+    const search = location.search.substring(1);
+    const obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
         function ( key, value) {
             return key === "" ? value : decodeURIComponent(value);
         }) : {};
@@ -39,141 +39,175 @@
     // This is cite used to find the parsing:
     // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
 
-    var api = window.api;
+    const api = window.api;
 
     api.getGeneInformation(obj.symbol).done(function (gene) {
 
         const sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
         const sgdId = gene.sgd.sgdID;
-        $(".sgd-link").text(sgdId).attr({ href: sgdHrefTemplate + sgdId });
+        $(".sgd-link").text(sgdId);
+        if (sgdId !== "Not found") {
+            $(".sgd-link").attr({ href: sgdHrefTemplate + sgdId });
+        }
 
         const ncbiHrefTemplate = "https://www.ncbi.nlm.nih.gov/gene/";
         const ncbiId = gene.ncbi.ncbiID;
-        $(".ncbi-link").text(ncbiId).attr({ href: ncbiHrefTemplate + ncbiId });
+        $(".ncbi-link").text(ncbiId);
+        if (ncbiId !== "Not found") {
+            $(".ncbi-link").attr({ href: ncbiHrefTemplate + ncbiId });
+        }
 
         const ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
         const ensemblId = gene.ensembl.ensemblID;
-        $(".ensembl-link").text(ensemblId).attr({ href: ensemblHrefTemplate + ensemblId });
+        $(".ensembl-link").text(ensemblId);
+        if (ensemblId !== "Not found") {
+            $(".ensembl-link").attr({ href: ensemblHrefTemplate + ensemblId });
+        }
 
         const uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
         const uniprotId = gene.uniprot.uniprotID;
-        $(".uniprot-link").text(uniprotId).attr({ href: uniprotHrefTemplate + uniprotId });
+        $(".uniprot-link").text(uniprotId)
+        if (uniprotId !== "Not found") {
+            $(".uniprot-link").attr({ href: uniprotHrefTemplate + uniprotId });
+        }
 
         const jasparHrefTemplate = "http://jaspar.genereg.net/matrix/";
         const jasparId = gene.jaspar.jasparID;
-        $(".jaspar-link").text(jasparId).attr({ href: jasparHrefTemplate + jasparId });
+        $(".jaspar-link").text(jasparId);
+        if (jasparId !== "Not found") {
+            $(".jaspar-link").attr({ href: jasparHrefTemplate + jasparId });
+        }
 
         // General Information Section
-        var geneDescription = gene.sgd.description;
+        const geneDescription = gene.sgd.description;
         $(".geneDescription").text(geneDescription).attr({ href: sgdHrefTemplate + geneDescription });
 
 
-        var uniSpecies = gene.uniprot.species;
+        const uniSpecies = gene.uniprot.species;
         $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
 
-        var ncbiLocus = gene.ncbi.locusTag;
+        const ncbiLocus = gene.ncbi.locusTag;
         $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
 
-        var jasparClass = gene.jaspar.class;
+        const jasparClass = gene.jaspar.class;
         $(".jasparClass").text(jasparClass).attr({ href: jasparHrefTemplate + jasparClass });
 
-        var jasparFam = gene.jaspar.family;
+        const jasparFam = gene.jaspar.family;
         $(".jasparFamily").text(jasparFam).attr({ href: jasparHrefTemplate + jasparFam });
 
-        var ncbiChromosome = gene.ncbi.chromosomeSequence;
+        const ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
         // DNA Sequence Tab
-        var ensemblDNA = gene.ensembl.dnaSequence;
+        const ensemblDNA = gene.ensembl.dnaSequence;
         $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
 
         // Protein Information
 
-        var uniprotProteinType = gene.uniprot.proteinType;
+        const uniprotProteinType = gene.uniprot.proteinType;
         $(".proteinType").text(uniprotProteinType).attr({ href: uniprotHrefTemplate + uniprotProteinType });
 
-        var uniprotProteinSequence = gene.uniprot.proteinSequence;
-        $(".proteinSequence").text(uniprotProteinSequence.replace(/\s/g, "")).attr({ href: uniprotHrefTemplate
-          + uniprotProteinSequence });
+        const uniprotProteinSequence = gene.uniprot.proteinSequence;
+        if (uniprotProteinSequence !== "Not found") {
+            $(".proteinSequence").text(uniprotProteinSequence.replace(/\s/g, "")).attr({ href: uniprotHrefTemplate
+            + uniprotProteinSequence });
+        } else {
+            $(".proteinSequence").text("Not found").attr({ href: uniprotHrefTemplate
+            + uniprotProteinSequence });
+        }
+
 
         // Regulation Information
-        var regulators = gene.regulators.regulators;
-        $(".regulators").append("<dl class=\"row regulatorsTable\"></dl>");
-        for (let k = 0; k < regulators.length; k++) {
-            $(".regulatorsTable").append("<dt class=\"col-xl-3\">" + regulators[k].regulator + "</dt>");
-            $(".regulatorsTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + regulators[k].regulationOf + "</dd>");
+        const regulators = gene.regulators.regulators;
+
+        if (regulators !== "Not found") {
+            $(".regulators").append("<dl class=\"row regulatorsTable\"></dl>");
+            for (let k = 0; k < regulators.length; k++) {
+                $(".regulatorsTable").append("<dt class=\"col-xl-3\">" + regulators[k].regulator + "</dt>");
+                $(".regulatorsTable").append("<dd class=\"sgdSource col-xl-9\">"
+                + regulators[k].regulationOf + "</dd>");
+            }
+        } else {
+            $(".regulators").text("Not found").attr({ class : "sgdSource  col-sm-9"});
         }
 
-        var targets = gene.regulators.targets;
-        $(".targets").append("<dl class=\"row targetsTable\"></dl>");
-        for (let k = 0; k < targets.length; k++) {
-            $(".targetsTable").append("<dt class=\"col-xl-3\">" + targets[k].target + "</dt>");
-            $(".targetsTable").append("<dd class=\"sgdSource col-xl-9\">"
-            + targets[k].regulationOf + "</dd>");
+
+        const targets = gene.regulators.targets;
+
+        if (targets !== "Not found") {
+            $(".targets").append("<dl class=\"row targetsTable\"></dl>");
+            for (let k = 0; k < targets.length; k++) {
+                $(".targetsTable").append("<dt class=\"col-xl-3\">" + targets[k].target + "</dt>");
+                $(".targetsTable").append("<dd class=\"sgdSource col-xl-9\">"
+                + targets[k].regulationOf + "</dd>");
+            }
+        } else {
+            $(".targets").text("Not found").attr({ class : "sgdSource  col-sm-9"});
         }
+
+
 
         // Interaction: Physical Reaction
 
-        var sgdInteractions = gene.sgd.totalInteractions;
+        const sgdInteractions = gene.sgd.totalInteractions;
         $(".totalInteractions").text(sgdInteractions).attr({ href: sgdHrefTemplate + sgdInteractions });
 
-        var sgdAffinityCaptureMS = gene.sgd.affinityCaptureMS;
+        const sgdAffinityCaptureMS = gene.sgd.affinityCaptureMS;
         $(".affinityCaptureMS").text(sgdAffinityCaptureMS).attr({ href: sgdHrefTemplate + sgdAffinityCaptureMS });
 
-        var sgdAffinityCaptureRNA = gene.sgd.affinityCaptureRNA;
+        const sgdAffinityCaptureRNA = gene.sgd.affinityCaptureRNA;
         $(".affinityCaptureRNA").text(sgdAffinityCaptureRNA).attr({ href: sgdHrefTemplate + sgdAffinityCaptureRNA });
 
-        var sgdAffinityCaptureWesterns = gene.sgd.affinityCaptureWestern;
+        const sgdAffinityCaptureWesterns = gene.sgd.affinityCaptureWestern;
         $(".affinityCaptureWestern").text(sgdAffinityCaptureWesterns).attr(
             { href: sgdHrefTemplate + sgdAffinityCaptureWesterns });
 
-        var sgdBiochemicalActivity = gene.sgd.biochemicalActivity;
+        const sgdBiochemicalActivity = gene.sgd.biochemicalActivity;
         $(".biochemicalActivity").text(sgdBiochemicalActivity).attr({ href: sgdHrefTemplate + sgdBiochemicalActivity });
 
-        var sgdColocalization = gene.sgd.colocalization;
+        const sgdColocalization = gene.sgd.colocalization;
         $(".colocalization").text(sgdColocalization).attr({ href: sgdHrefTemplate + sgdColocalization });
 
-        var sgdReconstitutedComplex = gene.sgd.reconstitutedComplex;
+        const sgdReconstitutedComplex = gene.sgd.reconstitutedComplex;
         $(".reconstitutedComplex").text(sgdReconstitutedComplex).attr(
             { href: sgdHrefTemplate + sgdReconstitutedComplex });
 
-        var sgdTwoHybrid = gene.sgd.twoHybrid;
+        const sgdTwoHybrid = gene.sgd.twoHybrid;
         $(".twoHybrid").text(sgdTwoHybrid).attr({ href: sgdHrefTemplate + sgdTwoHybrid });
 
         // Genetic Interactions
 
-        var sgdDosage = gene.sgd.dosageRescue;
+        const sgdDosage = gene.sgd.dosageRescue;
         $(".dosageRescue").text(sgdDosage).attr({ href: sgdHrefTemplate + sgdDosage });
 
-        var sgdNegGen = gene.sgd.negativeGenetic;
+        const sgdNegGen = gene.sgd.negativeGenetic;
         $(".negativeGenetic").text(sgdNegGen).attr({ href: sgdHrefTemplate + sgdNegGen });
 
-        var sgdEnhance = gene.sgd.phenotypicEnhancement;
+        const sgdEnhance = gene.sgd.phenotypicEnhancement;
         $(".phenotypicEnhancement").text(sgdEnhance).attr({ href: sgdHrefTemplate + sgdEnhance });
 
-        var sgdSuppress = gene.sgd.phenotypicSuppression;
+        const sgdSuppress = gene.sgd.phenotypicSuppression;
         $(".phenotypicSuppression").text(sgdSuppress).attr({ href: sgdHrefTemplate + sgdSuppress });
 
-        var sgdGrowthDefect = gene.sgd.syntheticGrowthDefect;
+        const sgdGrowthDefect = gene.sgd.syntheticGrowthDefect;
         $(".syntheticGrowthDefect").text(sgdGrowthDefect).attr({ href: sgdHrefTemplate + sgdGrowthDefect });
 
-        var sgdHaploin = gene.sgd.syntheticHaploinsufficiency;
+        const sgdHaploin = gene.sgd.syntheticHaploinsufficiency;
         $(".syntheticHaploinsufficiency").text(sgdHaploin).attr({ href: sgdHrefTemplate + sgdHaploin });
 
-        var sgdLethality = gene.sgd.syntheticLethality;
+        const sgdLethality = gene.sgd.syntheticLethality;
         $(".syntheticLethality").text(sgdLethality).attr({ href: sgdHrefTemplate + sgdLethality });
 
-        var sgdRescue = gene.sgd.syntheticRescue;
+        const sgdRescue = gene.sgd.syntheticRescue;
         $(".syntheticRescue").text(sgdRescue).attr({ href: sgdHrefTemplate + sgdRescue });
 
 
         // Gene Ontology
-        var sgdSummary = gene.sgd.geneOntologySummary;
+        const sgdSummary = gene.sgd.geneOntologySummary;
         $(".geneSummary").text(sgdSummary).attr({ href: sgdHrefTemplate + sgdSummary });
 
-        var molecularFunction = gene.geneOntology.molecularFunction;
-        var link;
+        const molecularFunction = gene.geneOntology.molecularFunction;
+        let link;
         if (molecularFunction !== "Not found") {
             $(".molecularFunction").append("<dl class=\"row molecularFunctionTable\"></dl>");
             for (let k = 0; k < molecularFunction.length; k++) {
@@ -189,26 +223,10 @@
 
 
         let biologicalProcess = gene.geneOntology.biologicalProcess;
-
-        let getList = function (endpoint, data) {
-            if (endpoint !== "Not found") {
-                $(". " + data).append("<dl class=\"row " + data + "Table\"></dl>");
-                for (let k = 0; k < endpoint.length; k++) {
-                    link = "https://www.yeastgenome.org" + endpoint[k].link;
-                    $("." + data + "Table").append("<dd><a href=\"" + link
-                    + "\"  class=\"col-xl-3\">" + endpoint[k].id + "</a></dd>");
-                    $("." + data + "Table").append("<dd class=\"sgdSource col-xl-9\">"
-                    + endpoint[k].displayName + "</dd>");
-                }
-            } else {
-                $("." + data).text("Not found").attr({ class : "sgdSource  col-sm-9"});
-            }
-        };
-
-      /*  if (biologicalProcess !== "Not found") {
+        if (biologicalProcess !== "Not found") {
             $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
             for (let k = 0; k < biologicalProcess.length; k++) {
-                link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
+                link = "https://www.yeastgenome.org" + biologicalProcess[k].link;
                 $(".biologicalProcessTable").append("<dd><a href=\"" + link
                 + "\"  class=\"col-xl-3\">" + biologicalProcess[k].id + "</a></dd>");
                 $(".biologicalProcessTable").append("<dd class=\"sgdSource col-xl-9\">"
@@ -216,11 +234,10 @@
             }
         } else {
             $(".biologicalProcess").text("Not found").attr({ class : "sgdSource  col-sm-9"});
-        } */
-        getList(biologicalProcess, "biologicalProcess")
+        }
 
         let cellularComponent = gene.geneOntology.cellularComponent;
-        if (biologicalProcess !== "Not found") {
+        if (cellularComponent !== "Not found") {
             $(".cellularComponent").append("<dl class=\" row cellularComponentTable\"></dl>");
             for (let k = 0; k < cellularComponent.length; k++) {
                 link = "https://www.yeastgenome.org" +  cellularComponent[k].link;
@@ -235,14 +252,14 @@
 
 
         // Fequency Matrix and Sequence Logo
-        var sequenceLogo = gene.jaspar.sequenceLogo;
+        const sequenceLogo = gene.jaspar.sequenceLogo;
         $(".sequenceLogo").attr({ src : sequenceLogo });
 
-        var frequencyMatrix = gene.jaspar.frequencyMatrix;
+        const frequencyMatrix = gene.jaspar.frequencyMatrix;
 
-        var a = "";
+        let a = "";
         try {
-            for (var i = 0; i < frequencyMatrix.A.length; i++) {
+            for (let i = 0; i < frequencyMatrix.A.length; i++) {
                 a += "<td>" + frequencyMatrix.A[i] + "</td>";
             }
         } catch (e) {
@@ -251,9 +268,9 @@
 
         $(".frequencyOfA").append($(a));
 
-        var c = "";
+        let c = "";
         try {
-            for (var k = 0; k < frequencyMatrix.C.length; k++) {
+            for (let k = 0; k < frequencyMatrix.C.length; k++) {
                 c += "<td>" + frequencyMatrix.C[k] + "</td>";
             }
         } catch (e) {
@@ -261,9 +278,9 @@
         }
         $(".frequencyOfC").append($(c));
 
-        var g = "";
+        let g = "";
         try {
-            for (var j = 0; j < frequencyMatrix.C.length; j++) {
+            for (let j = 0; j < frequencyMatrix.C.length; j++) {
                 g += "<td>" + frequencyMatrix.C[j] + "</td>";
             }
         } catch (e) {
@@ -271,9 +288,9 @@
         }
         $(".frequencyOfG").append($(g));
 
-        var t = "";
+        let t = "";
         try {
-            for (var h = 0; h < frequencyMatrix.C.length; h++) {
+            for (let h = 0; h < frequencyMatrix.C.length; h++) {
                 t += "<td>" + frequencyMatrix.C[h] + "</td>";
             }
         } catch (e) {
