@@ -184,12 +184,28 @@
                 + molecularFunction[k].displayName + "</dd>");
             }
         } else {
-            $(".molecularFunction").text("Not found").attr({ class : "sgdSource"});
+            $(".molecularFunction").text("Not found").attr({ class : "sgdSource col-sm-9"});
         }
 
 
         let biologicalProcess = gene.geneOntology.biologicalProcess;
-        if (biologicalProcess !== "Not found") {
+
+        let getList = function (endpoint, data) {
+            if (endpoint !== "Not found") {
+                $(". " + data).append("<dl class=\"row " + data + "Table\"></dl>");
+                for (let k = 0; k < endpoint.length; k++) {
+                    link = "https://www.yeastgenome.org" + endpoint[k].link;
+                    $("." + data + "Table").append("<dd><a href=\"" + link
+                    + "\"  class=\"col-xl-3\">" + endpoint[k].id + "</a></dd>");
+                    $("." + data + "Table").append("<dd class=\"sgdSource col-xl-9\">"
+                    + endpoint[k].displayName + "</dd>");
+                }
+            } else {
+                $("." + data).text("Not found").attr({ class : "sgdSource  col-sm-9"});
+            }
+        };
+
+      /*  if (biologicalProcess !== "Not found") {
             $(".biologicalProcess").append("<dl class=\"row biologicalProcessTable\"></dl>");
             for (let k = 0; k < biologicalProcess.length; k++) {
                 link = "https://www.yeastgenome.org" +  biologicalProcess[k].link;
@@ -199,8 +215,9 @@
                 + biologicalProcess[k].displayName + "</dd>");
             }
         } else {
-            $(".biologicalProcess").text("Not found").attr({ class : "sgdSource"});
-        }
+            $(".biologicalProcess").text("Not found").attr({ class : "sgdSource  col-sm-9"});
+        } */
+        getList(biologicalProcess, "biologicalProcess")
 
         let cellularComponent = gene.geneOntology.cellularComponent;
         if (biologicalProcess !== "Not found") {
@@ -213,7 +230,7 @@
                 + cellularComponent[k].displayName + "</dd>");
             }
         } else {
-            $(".cellularComponent").text("Not found").attr({ class : "sgdSource"});
+            $(".cellularComponent").text("Not found").attr({ class : "sgdSource  col-sm-9"});
         }
 
 
