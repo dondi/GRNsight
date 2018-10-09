@@ -148,28 +148,22 @@ sup {
   text-align: left;
 }
 
-#header {
+#iframeHeader {
   height: 118px;
   box-sizing: content-box;
   min-width: 100%;
 }
 
 #iframeMenu {
-  height: 450px;
-  width: 100%;
+  position: absolute;
+  min-height: 450px;
+  min-width: 160px;
 }
 
 #iframeFooter {
   width: 1130px;
 }
 
-#navBar {
-  margin-top: 20px;
-  padding-top: 1px;
-  position: absolute;
-  min-height: 450px;
-  min-width: 160px;
-}
 
 #mainContent {
   left: 0;
@@ -181,10 +175,12 @@ sup {
 #pageContent {
   font-size: 14px;
   padding: 0px 5px 5px 10px;
-  margin-right: 8em
+  margin-right: 8em;
 }
 
 #pageHead {
-  margin-top: 25px;
+  margin-top: 20px;
   margin-bottom: 25px;
+  font-size: 25px;
+  min-height: 78px;
 }

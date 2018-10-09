@@ -21,17 +21,17 @@ html
             input.btn.btn-default(type='button', data-dismiss='modal', value='Close')
     // End error modal
     #header
-      iframe(src='http://dondi.github.io/GRNsight/onlyheader.html', scrolling='no')
+      iframe#iframeHeader(src='http://dondi.github.io/GRNsight/onlyheader.html', scrolling='no')
     #navBar
       iframe#iframeMenu(src='http://dondi.github.io/GRNsight/onlysidebar.html', scrolling='no')
     #mainContent
-      #pageHead.row
-        .col
-          h1#gene-name.display-4
-        .col
-          em
-            h2.text-right#gene-species.uniProtSpecies Page is loading...
       #pageContent
+        #pageHead.row
+          .col
+            h1#gene-name
+          .col
+            em
+              h2.text-right#gene-species.uniProtSpecies Page is loading...
         #navigationButtons.row
           .col
             button.btn.btn-green(data-toggle='collapse', data-target='#generalInfo') General Information
