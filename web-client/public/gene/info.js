@@ -66,7 +66,7 @@
 
         const uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
         const uniprotId = gene.uniprot.uniprotID;
-        $(".uniprot-link").text(uniprotId)
+        $(".uniprot-link").text(uniprotId);
         if (uniprotId !== "Not found") {
             $(".uniprot-link").attr({ href: uniprotHrefTemplate + uniprotId });
         }

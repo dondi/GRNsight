@@ -124,7 +124,7 @@ let getGeneOntologyInfo = function (geneSymbol) {
         }
     }).catch(function () {
         return defaultGeneOntology;
-      });
+    });
 };
 
 let getRegulationInfo = function (geneSymbol) {
@@ -429,7 +429,7 @@ let parseJaspar = function (data) {
            }).then(function (info5) {
                defaultValues.geneOntology = parseGeneOntology(info5);
                return getRegulationInfo(symbol);
-           }).catch(function (data) {
+           }).catch(function () {
                return getRegulationInfo(symbol);
            }).then(function (info6) {
                defaultValues.regulators = parseRegulators(info6, symbol);
