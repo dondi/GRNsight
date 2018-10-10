@@ -29,13 +29,6 @@ var SLIDER_ADJUSTER = {
     }
 };
 
-var updateSliderDisplayedValue = function (slider, element) {
-    var value = $("#" + $(element).attr("id")).val();
-    $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
-      (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
-    slider.setCurrentVal(value);
-};
-
 export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
     this.numberOfSliders = sliderArray.length;
@@ -83,6 +76,23 @@ export var sliderGroupController = function (sliderArray) {
             this.sliders[i].activate();
         }
     };
+
+    /* temporary code block
+    setSliderHandlers = function () {
+        sliders.activate();
+    };
+    this.activate = function () {
+        $(this.sliderId).on("input", {slider: this}, function (event) {
+            updateSliderDisplayedValue(event.data.slider, this);
+        });
+    };
+    var updateSliderDisplayedValue = function (slider, element) {
+        var value = $("#" + $(element).attr("id")).val();
+        $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
+          (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+        slider.setCurrentVal(value);
+    };
+    */
 
     this.initializeDefaultForces = function () {
         this.modifyForceParameter("charge", -50);
