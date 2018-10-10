@@ -1,5 +1,5 @@
 import { drawGraph } from "./graph";
-import { sliderObject } from "./sliders";
+import { sliderObject } from "./grnstate";
 import { sliderGroupController } from "./sliders";
 import { container } from "./container";
 import { displayStatistics } from "./graph-statistics"; // eslint-disable-line no-unused-vars

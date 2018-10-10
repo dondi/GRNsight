@@ -3,6 +3,7 @@
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "graySlider|outputUpdate|sliderGroupController|sliderObject"}] */
 import { grnState } from "./grnstate";
+import { sliderObject } from "./grnstate";
 
 import {
   GRAVITY_LENGTH_WITHOUT_ZERO,
@@ -16,8 +17,6 @@ import {
   UNDO_SLIDER_RESET_MENU,
   UNDO_SLIDER_RESET_BUTTON,
 } from "./constants";
-
-import { grnState } from "./grnstate";
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
@@ -35,26 +34,6 @@ var updateSliderDisplayedValue = function (slider, element) {
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
       (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
     slider.setCurrentVal(value);
-};
-
-export var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
-    this.sliderId = sliderId;
-    this.valueId = valueId;
-    this.defaultVal = defaultVal;
-    this.currentVal = defaultVal;
-    this.backup = defaultVal;
-    this.needsAppendedZeros = needsAppendedZeros;
-
-    this.activate = function () {
-        $(this.sliderId).on("input", {slider: this}, function (event) {
-            updateSliderDisplayedValue(event.data.slider, this);
-        });
-    };
-
-    this.setCurrentVal = function (newVal) {
-        this.currentVal = newVal;
-    };
-
 };
 
 export var sliderGroupController = function (sliderArray) {

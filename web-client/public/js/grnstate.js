@@ -30,6 +30,26 @@ const annotateLinks = network => {
     });
 };
 
+export const sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
+    this.sliderId = sliderId;
+    this.valueId = valueId;
+    this.defaultVal = defaultVal;
+    this.currentVal = defaultVal;
+    this.backup = defaultVal;
+    this.needsAppendedZeros = needsAppendedZeros;
+
+    this.activate = function () {
+        $(this.sliderId).on("input", {slider: this}, function (event) {
+            updateSliderDisplayedValue(event.data.slider, this);
+        });
+    };
+
+    this.setCurrentVal = function (newVal) {
+        this.currentVal = newVal;
+    };
+
+};
+
 export const grnState = {
     name: null,
 
@@ -55,6 +75,27 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
-
     slidersLocked: false,
+
+/*
+    sliderObject: function (sliderId, valueId, defaultVal, needsAppendedZeros) {
+        this.sliderId = sliderId;
+        this.valueId = valueId;
+        this.defaultVal = defaultVal;
+        this.currentVal = defaultVal;
+        this.backup = defaultVal;
+        this.needsAppendedZeros = needsAppendedZeros;
+
+        this.activate = function () {
+            $(this.sliderId).on("input", {slider: this}, function (event) {
+                updateSliderDisplayedValue(event.data.slider, this);
+            });
+        };
+
+        this.setCurrentVal = function (newVal) {
+            this.currentVal = newVal;
+        };
+
+    };
+*/
 };
