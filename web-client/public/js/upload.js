@@ -1,6 +1,15 @@
 // TODO Likely a temporary location, while things are being moved to their "true" homes.
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
+import {
+  LINK_DIST_SLIDER_ID,
+  LINK_DIST_VALUE,
+  LINK_DIST_DEFAULT,
+  CHARGE_SLIDER_ID,
+  CHARGE_VALUE,
+  CHARGE_DEFAULT,
+} from "./constants";
+
 export const uploadState = {
     currentNetwork: null,
     sliders: null,
@@ -8,18 +17,12 @@ export const uploadState = {
 };
 
 export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
-  // Slider Values
-    var LINK_DIST_SLIDER_ID   = "#linkDistInput";
-    var LINK_DIST_VALUE       = "#linkDistVal";
-    var LINK_DIST_DEFAULT     = 500;
-    var CHARGE_SLIDER_ID      = "#chargeInput";
-    var CHARGE_VALUE          = "#chargeVal";
-    var CHARGE_DEFAULT        = -50;
+
+  // Values
     var TOOLTIP_SHOW_DELAY    = 700;
     var TOOLTIP_HIDE_DELAY    = 100;
 
   // Settings Stuff
-
     var styleLabelTooltips = function () {
         $(".info").tooltip({
             placement: "top",
