@@ -4,6 +4,7 @@
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "graySlider|outputUpdate|sliderGroupController|sliderObject"}] */
 import { grnState } from "./grnstate";
 import { sliderObject } from "./grnstate";
+import { updateSliderDisplayedValue } from "./update-app";
 
 import {
   GRAVITY_LENGTH_WITHOUT_ZERO,
@@ -27,13 +28,6 @@ var SLIDER_ADJUSTER = {
         sliderController.simulation.force("link").distance(value);
         sliderController.simulation.alpha(1);
     }
-};
-
-var updateSliderDisplayedValue = function (slider, element) {
-    var value = $("#" + $(element).attr("id")).val();
-    $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
-      (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
-    slider.setCurrentVal(value);
 };
 
 export var sliderGroupController = function (sliderArray) {
@@ -98,6 +92,10 @@ export var sliderGroupController = function (sliderArray) {
         $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
           (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
         slider.setCurrentVal(value);
+    };
+
+    this.setCurrentVal = function (newVal) {
+        this.currentVal = newVal;
     };
     */
 
