@@ -2,18 +2,21 @@
    setting; this is the next closest thing. */
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "graySlider|outputUpdate|sliderGroupController|sliderObject"}] */
+import { grnState } from "./grnstate";
+import { updateSliderDisplayedValue } from "./update-app";
 
-var GRAVITY_LENGTH_WITHOUT_ZERO = 3;
-var LOCK_SLIDERS_CLASS          = ".lockSliders";
-var LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
-var LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu";
-var RESET_SLIDERS_CLASS         = ".resetSliders";
-var RESET_SLIDERS_BUTTON        = "#resetSlidersButton";
-var RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
-var UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
-var UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
-var UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
-
+import {
+  GRAVITY_LENGTH_WITHOUT_ZERO,
+  LOCK_SLIDERS_CLASS,
+  LOCK_SLIDERS_BUTTON,
+  LOCK_SLIDERS_MENU_OPTION,
+  RESET_SLIDERS_CLASS,
+  RESET_SLIDERS_BUTTON,
+  RESET_SLIDERS_MENU_OPTION,
+  UNDO_SLIDER_RESET_CLASS,
+  UNDO_SLIDER_RESET_MENU,
+  UNDO_SLIDER_RESET_BUTTON,
+} from "./constants";
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
@@ -24,33 +27,6 @@ var SLIDER_ADJUSTER = {
         sliderController.simulation.force("link").distance(value);
         sliderController.simulation.alpha(1);
     }
-};
-
-var updateSliderDisplayedValue = function (slider, element) {
-    var value = $("#" + $(element).attr("id")).val();
-    $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
-      (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
-    slider.setCurrentVal(value);
-};
-
-export var sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
-    this.sliderId = sliderId;
-    this.valueId = valueId;
-    this.defaultVal = defaultVal;
-    this.currentVal = defaultVal;
-    this.backup = defaultVal;
-    this.needsAppendedZeros = needsAppendedZeros;
-
-    this.activate = function () {
-        $(this.sliderId).on("input", {slider: this}, function (event) {
-            updateSliderDisplayedValue(event.data.slider, this);
-        });
-    };
-
-    this.setCurrentVal = function (newVal) {
-        this.currentVal = newVal;
-    };
-
 };
 
 export var sliderGroupController = function (sliderArray) {
@@ -101,6 +77,27 @@ export var sliderGroupController = function (sliderArray) {
         }
     };
 
+    /* temporary code block
+    setSliderHandlers = function () {
+        sliders.activate();
+    };
+    this.activate = function () {
+        $(this.sliderId).on("input", {slider: this}, function (event) {
+            updateSliderDisplayedValue(event.data.slider, this);
+        });
+    };
+    var updateSliderDisplayedValue = function (slider, element) {
+        var value = $("#" + $(element).attr("id")).val();
+        $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
+          (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+        slider.setCurrentVal(value);
+    };
+
+    this.setCurrentVal = function (newVal) {
+        this.currentVal = newVal;
+    };
+    */
+
     this.initializeDefaultForces = function () {
         this.modifyForceParameter("charge", -50);
         this.modifyForceParameter("link", 500);
@@ -123,13 +120,13 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.toggle = function () {
-        this.locked = !this.locked;
+        grnState.slidersLocked = !grnState.slidersLocked;
         $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
         $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
-        if (this.locked) {
+        if (grnState.slidersLocked) {
             $("#link-distance").parent().addClass("disabled");
             $("#charge").parent().addClass("disabled");
         } else {
