@@ -29,6 +29,13 @@ var SLIDER_ADJUSTER = {
     }
 };
 
+var updateSliderDisplayedValue = function (slider, element) {
+    var value = $("#" + $(element).attr("id")).val();
+    $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
+      (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+    slider.setCurrentVal(value);
+};
+
 export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
     this.numberOfSliders = sliderArray.length;
