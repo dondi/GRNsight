@@ -1,6 +1,4 @@
-* {
-	box-sizing: content-box;
-}
+
 a {
   color: #16693f;
 }
@@ -22,8 +20,9 @@ body {
 
 iframe {
   border:none;
-}
+  width: 100%;
 
+}
 
 sup {
   line-height: 2;
@@ -85,14 +84,6 @@ sup {
   padding-left: 0px;
 }
 
-.col {
-  padding: 0px;
-}
-
-.col-12 {
-  padding: 0px;
-}
-
 .database-link {
   color:  #16693f;
   font-weight: 700;
@@ -105,10 +96,6 @@ sup {
 .jumbotron {
   background-color: white;
   padding-bottom: 0px !important;
-}
-
-.row {
-  margin: 0px;
 }
 
 .sequenceLogo {
@@ -148,40 +135,38 @@ sup {
   text-align: left;
 }
 
-#iframeHeader {
+#header {
   height: 118px;
   box-sizing: content-box;
   min-width: 100%;
 }
 
-
 #iframeMenu {
+  min-height: 100%;
+}
+
+#menu {
+  margin-top: 20px;
+  padding-top: 1px;
   position: absolute;
   min-height: 450px;
-  min-width: 160px;
 }
 
-#iframeFooter {
-  width: 1130px;
-}
-
-
-#mainContent {
+#mainPage {
   left: 0;
   right: 0;
   margin: 20px 0px 0px 209px;
   padding: 5px 5px 5px 5px;
+
 }
 
-#pageContent {
-  font-size: 14px;
-  padding: 0px 5px 5px 10px;
-  margin-right: 8em;
+#name-row {
+  min-width: 100%;
 }
 
 #pageHead {
   margin-top: 20px;
-  margin-bottom: 25px;
-  font-size: 25px;
-  min-height: 78px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+  min-height: 80px;
 }
