@@ -1,6 +1,7 @@
 // TODO Likely a temporary location, while things are being moved to their "true" homes.
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
+/*
 import {
   LINK_DIST_SLIDER_ID,
   LINK_DIST_VALUE,
@@ -9,6 +10,9 @@ import {
   CHARGE_VALUE,
   CHARGE_DEFAULT,
 } from "./constants";
+*/
+
+import { grnState } from "./grnstate";
 
 export const uploadState = {
     currentNetwork: null,
@@ -36,10 +40,11 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     uploadState.nodeColoring = nodeColoring;
     nodeColoring.configureNodeColoringHandlers();
     nodeColoring.initialize();
-
+/*
     var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
     var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
-    var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
+*/
+    var sliders = new sliderGroupController([grnState.chargeSlider, grnState.linkDistanceSlider]);
     uploadState.sliders = sliders;
     sliders.setSliderHandlers();
     sliders.updateValues();

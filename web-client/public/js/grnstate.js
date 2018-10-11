@@ -1,6 +1,12 @@
 import { max } from "d3-array";
 import {
   SHOW_WEIGHTS_MOUSEOVER,
+  LINK_DIST_SLIDER_ID,
+  LINK_DIST_VALUE,
+  LINK_DIST_DEFAULT,
+  CHARGE_SLIDER_ID,
+  CHARGE_VALUE,
+  CHARGE_DEFAULT,
 } from "./constants";
 import { updateSliderDisplayedValue } from "./update-app";
 let currentNetwork = null;
@@ -76,22 +82,22 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentNetwork),
     slidersLocked: false,
-/*
+
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,
         valueId: LINK_DIST_VALUE,
-        defaultVal: LINK_DIST_DEFAULT
-        currentVal: LINK_DIST_DEFAULT;
-        backup: LINK_DIST_DEFAULT;
-        needsAppendedZeros: false;
+        defaultVal: LINK_DIST_DEFAULT,
+        currentVal: LINK_DIST_DEFAULT,
+        backup: LINK_DIST_DEFAULT,
+        needsAppendedZeros: false,
     },
     chargeSlider: {
         sliderId: CHARGE_SLIDER_ID,
         valueId: CHARGE_VALUE,
-        defaultVal: CHARGE_DEFAULT
-        currentVal: CHARGE_DEFAULT;
-        backup: CHARGE_DEFAULT;
-        needsAppendedZeros: false;
+        defaultVal: CHARGE_DEFAULT,
+        currentVal: CHARGE_DEFAULT,
+        backup: CHARGE_DEFAULT,
+        needsAppendedZeros: false,
     },
-*/
+
 };
