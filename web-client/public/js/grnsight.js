@@ -1,5 +1,4 @@
 import { drawGraph } from "./graph";
-import { sliderObject } from "./grnstate";
 import { sliderGroupController } from "./sliders";
 import { container } from "./container";
 import { displayStatistics } from "./graph-statistics"; // eslint-disable-line no-unused-vars
@@ -14,4 +13,4 @@ setupHandlers(grnState);
 updateApp(grnState);
 
 container();
-upload(sliderObject, sliderGroupController, drawGraph, nodeColoringController);
+upload(sliderGroupController, drawGraph, nodeColoringController);

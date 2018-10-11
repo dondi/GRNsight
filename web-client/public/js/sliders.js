@@ -3,7 +3,6 @@
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "graySlider|outputUpdate|sliderGroupController|sliderObject"}] */
 import { grnState } from "./grnstate";
-import { sliderObject } from "./grnstate";
 import { updateSliderDisplayedValue } from "./update-app";
 
 import {

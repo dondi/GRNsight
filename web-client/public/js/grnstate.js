@@ -8,7 +8,6 @@ import {
   CHARGE_VALUE,
   CHARGE_DEFAULT,
 } from "./constants";
-import { updateSliderDisplayedValue } from "./update-app";
 let currentNetwork = null;
 
 const annotateLinks = network => {
@@ -35,25 +34,6 @@ const annotateLinks = network => {
             network.negativeWeights.push(link.value);
         }
     });
-};
-
-export const sliderObject = function (sliderId, valueId, defaultVal, needsAppendedZeros) {
-    this.sliderId = sliderId;
-    this.valueId = valueId;
-    this.defaultVal = defaultVal;
-    this.currentVal = defaultVal;
-    this.backup = defaultVal;
-    this.needsAppendedZeros = needsAppendedZeros;
-
-    this.activate = function () {
-        $(this.sliderId).on("input", {slider: this}, function (event) {
-            updateSliderDisplayedValue(event.data.slider, this);
-        });
-    };
-
-    this.setCurrentVal = function (newVal) {
-        this.currentVal = newVal;
-    };
 };
 
 export const grnState = {
