@@ -253,7 +253,11 @@
 
         // Fequency Matrix and Sequence Logo
         const sequenceLogo = gene.jaspar.sequenceLogo;
-        $(".sequenceLogo").attr({ src : sequenceLogo });
+        if (sequenceLogo !== "Not found") {
+            $(".sequenceLogoImage").attr({ src : sequenceLogo });
+        } else {
+            $(".sequenceLogo").text("Not found");
+        }
 
         const frequencyMatrix = gene.jaspar.frequencyMatrix;
 
