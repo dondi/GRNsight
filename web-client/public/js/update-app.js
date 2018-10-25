@@ -150,7 +150,6 @@ export const updateSliderDisplayedValue = function (slider, element) {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
         (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
-    slider.setCurrentVal(value);
 };
 
 export const updateApp = grnState => {

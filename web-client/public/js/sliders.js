@@ -42,27 +42,24 @@ export var sliderGroupController = function (sliderArray) {
     this.forceParameters = undefined;
 
     this.backupValues = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].backup = this.sliders[i].currentVal;
-        }
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
     };
 
     this.resetValues = () => {
         this.backupValues();
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].currentVal = this.sliders[i].defaultVal;
-        }
-        $("#charge-menu").val(this.sliders[0].defaultVal);
-        $("#link-distance-menu").val(this.sliders[1].defaultVal);
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.defaultVal;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.defaultVal;
+        $("#charge-menu").val(grnState.chargeSlider.defaultVal);
+        $("#link-distance-menu").val(grnState.linkDistanceSlider.defaultVal);
         this.updateValues();
     };
 
     this.undoReset = () => {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].currentVal = this.sliders[i].backup;
-        }
-        $("#charge-menu").val(this.sliders[0].backup);
-        $("#link-distance-menu").val(this.sliders[1].backup);
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
+        $("#charge-menu").val(grnState.chargeSlider.backup);
+        $("#link-distance-menu").val(grnState.linkDistanceSlider.backup);
         this.updateValues();
     };
 
@@ -109,8 +106,8 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.initializeDefaultForces = function () {
-        this.modifyForceParameter("charge", -50);
-        this.modifyForceParameter("link", 500);
+        modifyChargeParameter(-50);
+        modifyLinkDistanceParameter(500);
     };
 
     this.configureSliderControllers = function () {
@@ -189,15 +186,13 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.resetForce = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].defaultVal);
-        }
+        modifyChargeParameter(grnState.chargeSlider.defaultVal);
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.defaultVal);
     };
 
     this.undoForceReset = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].backup);
-        }
+        modifyChargeParameter(grnState.chargeSlider.backup);
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
     };
 
     this.modifyForceParameter = function (parameterType, value) {
