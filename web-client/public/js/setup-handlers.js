@@ -11,6 +11,7 @@ import {
     SHOW_WEIGHTS_MOUSEOVER,
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
+    LOCK_SLIDERS_CLASS,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -76,6 +77,12 @@ export const setupHandlers = grnState => {
 
     $("#blackEdges").click(() => {
         grnState.colorOptimal = false;
+        updateApp(grnState);
+    });
+
+// Sliders code
+    $(LOCK_SLIDERS_CLASS).click(() => {
+        grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
 };

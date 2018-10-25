@@ -81,11 +81,20 @@ export var sliderGroupController = function (sliderArray) {
     setSliderHandlers = function () {
         sliders.activate();
     };
-    this.activate = function () {
+    sliderHandlers = function () {
         $(this.sliderId).on("input", {slider: this}, function (event) {
             updateSliderDisplayedValue(event.data.slider, this);
         });
     };
+
+    $(grnState.linkDistanceSlider.sliderId).on("input") => {
+        updateSliderDisplayedValue(event.data.slider, this);
+    });
+
+    $(grnState.chargeSlider.sliderId).on("input") => {
+        updateSliderDisplayedValue(event.data.slider, this);
+    });
+};
     var updateSliderDisplayedValue = function (slider, element) {
         var value = $("#" + $(element).attr("id")).val();
         $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
@@ -104,9 +113,11 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.configureSliderControllers = function () {
+// moved
         $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.toggle();
         });
+//
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
@@ -120,12 +131,15 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.toggle = function () {
+// moved
         grnState.slidersLocked = !grnState.slidersLocked;
         $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
-        $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
+//
+        $(LOCK_SLIDERS_BUTTON).prop("checked", (grnState.slidersLocked) ? true : false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
+// moved
         if (grnState.slidersLocked) {
             $("#link-distance").parent().addClass("disabled");
             $("#charge").parent().addClass("disabled");
@@ -133,6 +147,7 @@ export var sliderGroupController = function (sliderArray) {
             $("#link-distance").parent().removeClass("disabled");
             $("#charge").parent().removeClass("disabled");
         }
+//
 
         $.each(this.sliders, function (key, value) {
             $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));

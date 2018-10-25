@@ -27,6 +27,7 @@ import {
   BLACK_EDGES,
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
+  LOCK_SLIDERS_MENU_OPTION,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -194,6 +195,17 @@ export const updateApp = grnState => {
     }
 
 // Sliders
+    if (grnState.slidersLocked) {
+        $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
+        $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
+        $("#link-distance").parent().addClass("disabled");
+        $("#charge").parent().addClass("disabled");
+    } else {
+        $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
+        $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
+        $("#link-distance").parent().removeClass("disabled");
+        $("#charge").parent().removeClass("disabled");
+    }
 
     refreshApp();
 };
