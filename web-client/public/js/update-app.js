@@ -28,6 +28,9 @@ import {
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
   LOCK_SLIDERS_MENU_OPTION,
+  LOCK_SLIDERS_BUTTON,
+  RESET_SLIDERS_BUTTON,
+  RESET_SLIDERS_MENU_OPTION,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -198,11 +201,17 @@ export const updateApp = grnState => {
     if (grnState.slidersLocked) {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
+        $(LOCK_SLIDERS_BUTTON).prop("checked", true);
+        $(RESET_SLIDERS_BUTTON).prop("disabled", true);
+        $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $("#link-distance").parent().addClass("disabled");
         $("#charge").parent().addClass("disabled");
     } else {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
+        $(LOCK_SLIDERS_BUTTON).prop("checked", false);
+        $(RESET_SLIDERS_BUTTON).prop("disabled", false);
+        $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");
     }

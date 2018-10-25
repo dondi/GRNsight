@@ -131,15 +131,13 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.toggle = function () {
-// moved
+/* moved
         grnState.slidersLocked = !grnState.slidersLocked;
         $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
-//
         $(LOCK_SLIDERS_BUTTON).prop("checked", (grnState.slidersLocked) ? true : false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
-// moved
         if (grnState.slidersLocked) {
             $("#link-distance").parent().addClass("disabled");
             $("#charge").parent().addClass("disabled");
@@ -147,7 +145,7 @@ export var sliderGroupController = function (sliderArray) {
             $("#link-distance").parent().removeClass("disabled");
             $("#charge").parent().removeClass("disabled");
         }
-//
+*/
 
         $.each(this.sliders, function (key, value) {
             $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
