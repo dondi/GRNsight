@@ -7,11 +7,7 @@ import { updateSliderDisplayedValue } from "./update-app";
 
 import {
   GRAVITY_LENGTH_WITHOUT_ZERO,
-  LOCK_SLIDERS_CLASS,
-  LOCK_SLIDERS_BUTTON,
-  LOCK_SLIDERS_MENU_OPTION,
   RESET_SLIDERS_CLASS,
-  RESET_SLIDERS_BUTTON,
   RESET_SLIDERS_MENU_OPTION,
   UNDO_SLIDER_RESET_CLASS,
   UNDO_SLIDER_RESET_MENU,
@@ -20,21 +16,29 @@ import {
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
-        sliderController.simulation.force("charge").strength(value);
-        sliderController.simulation.alpha(1);
+        grnState.simulation.force("charge").strength(value);
+        grnState.simulation.alpha(1);
     },
     link: function (sliderController, value) {
-        sliderController.simulation.force("link").distance(value);
-        sliderController.simulation.alpha(1);
+        grnState.simulation.force("link").distance(value);
+        grnState.simulation.alpha(1);
     }
 };
+
+var modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+var modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
+}
 
 export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
     this.numberOfSliders = sliderArray.length;
     this.locked = false;
 
-    this.simulation = undefined;
     this.forceParameters = undefined;
 
     this.backupValues = function () {
@@ -43,7 +47,7 @@ export var sliderGroupController = function (sliderArray) {
         }
     };
 
-    this.resetValues = function () {
+    this.resetValues = () => {
         this.backupValues();
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.sliders[i].currentVal = this.sliders[i].defaultVal;
@@ -53,7 +57,7 @@ export var sliderGroupController = function (sliderArray) {
         this.updateValues();
     };
 
-    this.undoReset = function () {
+    this.undoReset = () => {
         for (var i = 0; i < this.numberOfSliders; i++) {
             this.sliders[i].currentVal = this.sliders[i].backup;
         }
@@ -77,35 +81,32 @@ export var sliderGroupController = function (sliderArray) {
         }
     };
 
-    /* temporary code block
-    setSliderHandlers = function () {
-        sliders.activate();
-    };
-    sliderHandlers = function () {
+    this.activate = function () {
         $(this.sliderId).on("input", {slider: this}, function (event) {
             updateSliderDisplayedValue(event.data.slider, this);
         });
     };
 
-    $(grnState.linkDistanceSlider.sliderId).on("input") => {
-        updateSliderDisplayedValue(event.data.slider, this);
-    });
-
-    $(grnState.chargeSlider.sliderId).on("input") => {
-        updateSliderDisplayedValue(event.data.slider, this);
-    });
-};
+    /* temporary code block
+    setSliderHandlers = function () {
+        sliders.activate();
+    };
+    this.activate = function () {
+        $(this.sliderId).on("input", {slider: this}, function (event) {
+            updateSliderDisplayedValue(event.data.slider, this);
+        });
+    };
     var updateSliderDisplayedValue = function (slider, element) {
         var value = $("#" + $(element).attr("id")).val();
         $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
           (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
         slider.setCurrentVal(value);
     };
+    */
 
     this.setCurrentVal = function (newVal) {
         this.currentVal = newVal;
     };
-    */
 
     this.initializeDefaultForces = function () {
         this.modifyForceParameter("charge", -50);
@@ -113,11 +114,11 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.configureSliderControllers = function () {
-// moved
+/* moved
         $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.toggle();
         });
-//
+*/
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
@@ -146,14 +147,14 @@ export var sliderGroupController = function (sliderArray) {
             $("#charge").parent().removeClass("disabled");
         }
 */
-
+// what does this function do?
         $.each(this.sliders, function (key, value) {
             $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
         });
     };
 
     this.addForce = function (simulation) { // make forceParameters into an inputted array
-        this.simulation = simulation;
+        grnState.simulation = simulation;
         this.forceParameters = Object.keys(SLIDER_ADJUSTER);
     };
 

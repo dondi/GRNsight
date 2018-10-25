@@ -62,6 +62,7 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentNetwork),
     slidersLocked: false,
+    simulation: undefined,
 
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,
