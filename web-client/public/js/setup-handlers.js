@@ -13,6 +13,7 @@ import {
     HIDE_ALL_WEIGHTS,
     LOCK_SLIDERS_CLASS,
     UNDO_SLIDER_RESET_CLASS,
+    RESET_SLIDERS_CLASS,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -88,13 +89,14 @@ export const setupHandlers = grnState => {
     });
 
     $(UNDO_SLIDER_RESET_CLASS).click(() => {
-        grnState.resetTrigger = true;
-        grnState.undoResetTrigger = false;
+        grnState.resetTriggered = true;
+        grnState.undoResetTriggered = false;
         updateApp(grnState);
     });
 
     $(RESET_SLIDERS_CLASS).click(() => {
-        grnState.resetTrigger = false;
-        grnState.undoResetTrigger = true;
+        grnState.resetTriggered = false;
+        grnState.undoResetTriggered = true;
         updateApp(grnState);
+    });
 };

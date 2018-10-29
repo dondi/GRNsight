@@ -65,7 +65,7 @@ export const grnState = {
     slidersLocked: false,
     simulation: undefined,
     resetTrigger: false,
-    undoResetTrigger: false,
+    undoResetTriggered: false,
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,
         valueId: LINK_DIST_VALUE,

@@ -6,7 +6,6 @@ import { grnState } from "./grnstate";
 import { updateSliderDisplayedValue } from "./update-app";
 
 import {
-  GRAVITY_LENGTH_WITHOUT_ZERO,
   RESET_SLIDERS_CLASS,
   RESET_SLIDERS_MENU_OPTION,
   UNDO_SLIDER_RESET_CLASS,
@@ -29,10 +28,11 @@ var modifyChargeParameter = (value) => {
     grnState.simulation.force("charge").strength(value);
     grnState.simulation.alpha(1);
 };
+
 var modifyLinkDistanceParameter = (value) => {
     grnState.simulation.force("link").distance(value);
     grnState.simulation.alpha(1);
-}
+};
 
 export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
@@ -41,6 +41,7 @@ export var sliderGroupController = function (sliderArray) {
 
     this.forceParameters = undefined;
 
+/* moved
     this.backupValues = () => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
@@ -72,17 +73,14 @@ export var sliderGroupController = function (sliderArray) {
               GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
         }
     };
+*/
 
     this.setSliderHandlers = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].activate();
+            $(this.sliders[i].sliderId).on("input", {slider: this}, function (event) {
+                updateSliderDisplayedValue(event.data.slider, this);
+            });
         }
-    };
-
-    this.activate = function () {
-        $(this.sliderId).on("input", {slider: this}, function (event) {
-            updateSliderDisplayedValue(event.data.slider, this);
-        });
     };
 
     /* temporary code block
@@ -111,27 +109,27 @@ export var sliderGroupController = function (sliderArray) {
         modifyLinkDistanceParameter(500);
     };
 
-    this.configureSliderControllers = function () {
 /* moved
+    this.configureSliderControllers = function () {
         $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.toggle();
         });
-*/
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
-            grnState.resetTrigger = false;
-            grnState.undoResetTrigger = true;
+            grnState.resetTriggered = false;
+            grnState.undoResetTriggered = true;
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
             $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
         });
         $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
-            grnState.resetTrigger = true;
-            grnState.undoResetTrigger = false;
+            grnState.resetTriggered = true;
+            grnState.undoResetTriggered = false;
             event.data.handler.undoReset();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
             $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         });
     };
+*/
 
     this.toggle = function () {
 /* moved
