@@ -215,5 +215,19 @@ export const updateApp = grnState => {
         $("#charge").parent().removeClass("disabled");
     }
 
+    if (grnState.resetTrigger == false){
+        //ADD THE resetValues() CODE TO UPDATE-APP
+        this.resetValues();
+        $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
+        $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
+    });
+    $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
+        grnState.resetTrigger = true;
+        grnState.undoResetTrigger = false;
+        event.data.handler.undoReset();
+        $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
+        $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
+    });
+
     refreshApp();
 };
