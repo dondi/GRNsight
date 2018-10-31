@@ -404,3 +404,25 @@ describe("Export to GraphML", function () {
         });
     });
 });
+const inputNetwork = {
+};
+
+describe("Export to spreadsheet", function() {
+    it("should export a network to a spreadsheet object properly", function(){
+        const expectedNetwork = {
+            network: {
+                sheet: [
+                    {
+                        sheetType: 'network',
+                        genes: [],
+                        positiveWeights: [],
+                        negativeWeights: [],
+                        links: []
+                     }
+                ]
+            }
+        };
+        const actualNetwork = exportController.grnsightToSpreadsheet(inputNetwork);
+        expect(actualNetwork).to.equal(expectedNetwork);
+    });
+});
