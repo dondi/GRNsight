@@ -419,7 +419,7 @@ const inputNetwork = {
         fix_b: 0,
         kk_max: 1,
         make_graphs: 1,
-        production_function: "test",
+        production_function: "testMM",
         simulation_timepoints: [0, 0.1, 0.2, 0.3],
         negativeWeights: [],
         positiveWeights: (6) [1, 1, 1, 1, 1, 1],
@@ -429,7 +429,6 @@ const inputNetwork = {
             production_rates: {ACE2: 0.5, AFT2: 1, CIN5: 2, FHL1: 1},
             threshold_b: {ACE2: 0, AFT2: 0, CIN5: 0, FHL1: 0}
         }
-
     }
 };
 
