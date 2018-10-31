@@ -405,6 +405,32 @@ describe("Export to GraphML", function () {
     });
 });
 const inputNetwork = {
+    meta: {
+        L_curve: 0,
+        MaxFunEval: 1000000,
+        MaxIter: 1000000,
+        Strain: ["wt", "dcin5"],
+        TolFun: 0.00001,
+        TolX: 0.00001,
+        alpha: 0.001,
+        estimate_params: 1,
+        expression_timepoints: [0.4, 0.8, 1.2, 1.6],
+        fix_P: 0,
+        fix_b: 0,
+        kk_max: 1,
+        make_graphs: 1,
+        production_function: "test",
+        simulation_timepoints: [0, 0.1, 0.2, 0.3],
+        negativeWeights: [],
+        positiveWeights: (6) [1, 1, 1, 1, 1, 1],
+        sheetType: "unweighted",
+        test: {
+            degradation_rates: {ACE2: 1, AFT2: 1, CIN5: 1, FHL1: 1},
+            production_rates: {ACE2: 0.5, AFT2: 1, CIN5: 2, FHL1: 1},
+            threshold_b: {ACE2: 0, AFT2: 0, CIN5: 0, FHL1: 0}
+        }
+
+    }
 };
 
 describe("Export to spreadsheet", function() {
