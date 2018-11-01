@@ -17,7 +17,6 @@ body {
 
 iframe {
   border:none;
-	position: sticky;
 }
 
 
@@ -52,7 +51,6 @@ sup {
   width: 100%;
 	display: block;
 }
-
 
 #mainContent {
   left: 0;
@@ -101,8 +99,6 @@ sup {
 .card {
   margin-bottom: 5px;
 }
-
-
 
 .card-header {
   text-decoration: underline;

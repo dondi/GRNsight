@@ -256,8 +256,10 @@
         if (sequenceLogo !== "Not found") {
             $(".sequenceLogoImage").attr({ src : sequenceLogo });
         } else {
-            $(".sequenceLogo").text("Not found");
+            $(".sequenceLogo").replaceWith("<p class=\"jasparSource\">Not found</p>");
+            $(".logo").removeClass("jasparSource");
         }
+
 
         const frequencyMatrix = gene.jaspar.frequencyMatrix;
 
