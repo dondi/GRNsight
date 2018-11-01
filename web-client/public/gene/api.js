@@ -175,7 +175,19 @@ let getJasparInfo = function (geneSymbol) {
             xhr.setRequestHeader("content-type", "application/json");
         },
     }).then(function (data) {
-        return (data.count !== 1 ? {} :
+        let value = undefined;
+        const nameCheck = (list) => {
+            if (list !== []) {
+                list.forEach((gene) => {
+                    if (gene.name === geneSymbol) {
+                        value = gene;
+                    }
+                });
+            }
+            return value;
+        };
+
+        return ((nameCheck(data.results) === undefined) ? {} :
             $.get({
                 url: serviceRoot + "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                 dataType: "json",

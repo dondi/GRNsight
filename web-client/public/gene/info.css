@@ -1,6 +1,4 @@
-* {
-	box-sizing: content-box;
-}
+
 a {
   color: #16693f;
 }
@@ -15,9 +13,6 @@ body {
 	background-color: #FFFFFF;
 	min-width: 1300px;
 
-	/* Overwrite bootstrap CSS */
-	line-height: normal;
-	font-size: medium;
 }
 
 iframe {
@@ -27,6 +22,53 @@ iframe {
 
 sup {
   line-height: 2;
+}
+
+
+#gene-name {
+  text-align: left;
+
+}
+#gene-species {
+  font-style: italic;
+  text-align: left;
+}
+
+#iframeHeader {
+  height: 118px;
+  box-sizing: content-box;
+  min-width: 100%;
+}
+
+
+#iframeMenu {
+  position: absolute;
+  min-height: 450px;
+  min-width: 160px;
+}
+
+#iframeFooter {
+  width: 100%;
+	display: block;
+}
+
+#mainContent {
+  left: 0;
+  right: 0;
+  margin: 20px 0px 0px 209px;
+  padding: 5px 5px 5px 5px;
+}
+
+#pageContent {
+  padding: 0px 5px 5px 10px;
+  margin-right: 8em;
+}
+
+#pageHead {
+  margin-top: 20px;
+  margin-bottom: 25px;
+  font-size: 25px;
+  min-height: 78px;
 }
 
 .btn {
@@ -137,51 +179,4 @@ sup {
 
 .violet {
   color: #691640;
-}
-
-#gene-name {
-  text-align: left;
-
-}
-#gene-species {
-  font-style: italic;
-  text-align: left;
-}
-
-#iframeHeader {
-  height: 118px;
-  box-sizing: content-box;
-  min-width: 100%;
-}
-
-
-#iframeMenu {
-  position: absolute;
-  min-height: 450px;
-  min-width: 160px;
-}
-
-#iframeFooter {
-  width: 1130px;
-}
-
-
-#mainContent {
-  left: 0;
-  right: 0;
-  margin: 20px 0px 0px 209px;
-  padding: 5px 5px 5px 5px;
-}
-
-#pageContent {
-  font-size: 14px;
-  padding: 0px 5px 5px 10px;
-  margin-right: 8em;
-}
-
-#pageHead {
-  margin-top: 20px;
-  margin-bottom: 25px;
-  font-size: 25px;
-  min-height: 78px;
 }
