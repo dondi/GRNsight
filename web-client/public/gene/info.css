@@ -40,16 +40,17 @@ sup {
   min-width: 100%;
 }
 
-
 #iframeMenu {
   position: absolute;
   min-height: 450px;
   min-width: 160px;
+  z-index: -1;
 }
 
 #iframeFooter {
   width: 100%;
 	display: block;
+  z-index: 0;
 }
 
 #mainContent {
