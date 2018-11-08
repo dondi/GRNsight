@@ -177,7 +177,7 @@ let getJasparInfo = function (geneSymbol) {
     }).then(function (data) {
         let value = undefined;
         const nameCheck = (list) => {
-            if (list !== []) {
+            if (Array.isArray(list) && list.length !== 0) {
                 list.forEach((gene) => {
                     if (gene.name === geneSymbol) {
                         value = gene;
