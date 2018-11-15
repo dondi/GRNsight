@@ -99,4 +99,16 @@ export const setupHandlers = grnState => {
         grnState.undoResetTriggered = true;
         updateApp(grnState);
     });
+
+    $(RESET_SLIDERS_MENU_OPTION).click(() => {
+        grnState.resetTriggered = false;
+        grnState.undoResetTriggered = true;
+        updateApp(grnState);
+    });
+
+    $(UNDO_SLIDER_RESET_MENU).click(() => {
+        grnState.resetTriggered = true;
+        grnState.undoResetTriggered = false;
+        updateApp(grnState);
+    });
 };
