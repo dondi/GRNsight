@@ -134,14 +134,14 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
-const enableColorOptimal = function () {
+const enableColorOptimal = () => {
     $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
     $(BLACK_EDGES + ">span").removeClass("glyphicon-ok invisible");
     $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
 };
 
-const disableColorOptimal = function () {
+const disableColorOptimal = () => {
     $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
     $(COLOR_EDGES + ">span").removeClass("glyphicon-ok invisible");
     $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
@@ -152,6 +152,26 @@ export const updateSliderDisplayedValue = (slider, element) => {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
         (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+};
+
+const modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+
+const modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
+};
+
+const resetForce = () => {
+    modifyChargeParameter(grnState.chargeSlider.defaultVal);
+    modifyLinkDistanceParameter(grnState.linkDistanceSlider.defaultVal);
+};
+
+const undoResetForce = () => {
+    modifyChargeParameter(grnState.chargeSlider.backup);
+    modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
 };
 
 export const updateApp = grnState => {
@@ -250,6 +270,7 @@ export const updateApp = grnState => {
 
     if (grnState.resetTriggered === false) {
         resetValues();
+        resetForce();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
         $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
         updateChargeSliderValues();
@@ -258,6 +279,7 @@ export const updateApp = grnState => {
 
     if (grnState.undoResetTriggered === false) {
         undoReset();
+        undoResetForce();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
         $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         updateChargeSliderValues();
