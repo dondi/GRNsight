@@ -34,8 +34,6 @@ export const upload = function (sliderGroupController, drawGraph, nodeColoringCo
     var sliders = new sliderGroupController([grnState.chargeSlider, grnState.linkDistanceSlider]);
     uploadState.sliders = sliders;
     sliders.setSliderHandlers();
-    sliders.updateValues();
-    sliders.configureSliderControllers();
 
     var lockForce = function (disable) {
         $("#linkDistInput").prop("disabled", disable);

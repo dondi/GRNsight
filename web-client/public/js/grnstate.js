@@ -61,8 +61,11 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
-    slidersLocked: false,
 
+    slidersLocked: false,
+    simulation: undefined,
+    resetTrigger: false,
+    undoResetTriggered: false,
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,
         valueId: LINK_DIST_VALUE,
@@ -70,6 +73,7 @@ export const grnState = {
         currentVal: LINK_DIST_DEFAULT,
         backup: LINK_DIST_DEFAULT,
         needsAppendedZeros: false,
+        forceParameter: undefined,
     },
     chargeSlider: {
         sliderId: CHARGE_SLIDER_ID,
@@ -78,6 +82,7 @@ export const grnState = {
         currentVal: CHARGE_DEFAULT,
         backup: CHARGE_DEFAULT,
         needsAppendedZeros: false,
+        forceParameter: undefined,
     },
 
 };

@@ -6,12 +6,7 @@ import { grnState } from "./grnstate";
 import { updateSliderDisplayedValue } from "./update-app";
 
 import {
-  GRAVITY_LENGTH_WITHOUT_ZERO,
-  LOCK_SLIDERS_CLASS,
-  LOCK_SLIDERS_BUTTON,
-  LOCK_SLIDERS_MENU_OPTION,
   RESET_SLIDERS_CLASS,
-  RESET_SLIDERS_BUTTON,
   RESET_SLIDERS_MENU_OPTION,
   UNDO_SLIDER_RESET_CLASS,
   UNDO_SLIDER_RESET_MENU,
@@ -20,13 +15,23 @@ import {
 
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
-        sliderController.simulation.force("charge").strength(value);
-        sliderController.simulation.alpha(1);
+        grnState.simulation.force("charge").strength(value);
+        grnState.simulation.alpha(1);
     },
     link: function (sliderController, value) {
-        sliderController.simulation.force("link").distance(value);
-        sliderController.simulation.alpha(1);
+        grnState.simulation.force("link").distance(value);
+        grnState.simulation.alpha(1);
     }
+};
+
+var modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+
+var modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
 };
 
 export var sliderGroupController = function (sliderArray) {
@@ -34,31 +39,29 @@ export var sliderGroupController = function (sliderArray) {
     this.numberOfSliders = sliderArray.length;
     this.locked = false;
 
-    this.simulation = undefined;
     this.forceParameters = undefined;
 
-    this.backupValues = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].backup = this.sliders[i].currentVal;
-        }
+/* moved
+    this.backupValues = () => {
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
     };
 
-    this.resetValues = function () {
-        this.backupValues();
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].currentVal = this.sliders[i].defaultVal;
-        }
-        $("#charge-menu").val(this.sliders[0].defaultVal);
-        $("#link-distance-menu").val(this.sliders[1].defaultVal);
+    this.resetValues = () => {
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.defaultVal;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.defaultVal;
+        $("#charge-menu").val(grnState.chargeSlider.defaultVal);
+        $("#link-distance-menu").val(grnState.linkDistanceSlider.defaultVal);
         this.updateValues();
     };
 
-    this.undoReset = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].currentVal = this.sliders[i].backup;
-        }
-        $("#charge-menu").val(this.sliders[0].backup);
-        $("#link-distance-menu").val(this.sliders[1].backup);
+    this.undoReset = () => {
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
+        $("#charge-menu").val(grnState.chargeSlider.backup);
+        $("#link-distance-menu").val(grnState.linkDistanceSlider.backup);
         this.updateValues();
     };
 
@@ -70,10 +73,13 @@ export var sliderGroupController = function (sliderArray) {
               GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
         }
     };
+*/
 
     this.setSliderHandlers = function () {
         for (var i = 0; i < this.numberOfSliders; i++) {
-            this.sliders[i].activate();
+            $(this.sliders[i].sliderId).on("input", {slider: this}, function (event) {
+                updateSliderDisplayedValue(event.data.slider, this);
+            });
         }
     };
 
@@ -92,37 +98,44 @@ export var sliderGroupController = function (sliderArray) {
           (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
         slider.setCurrentVal(value);
     };
+    */
 
     this.setCurrentVal = function (newVal) {
         this.currentVal = newVal;
     };
-    */
 
     this.initializeDefaultForces = function () {
-        this.modifyForceParameter("charge", -50);
-        this.modifyForceParameter("link", 500);
+        modifyChargeParameter(-50);
+        modifyLinkDistanceParameter(500);
     };
 
+/* moved
     this.configureSliderControllers = function () {
         $(LOCK_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.toggle();
         });
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
+            grnState.resetTriggered = false;
+            grnState.undoResetTriggered = true;
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
             $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
         });
         $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
+            grnState.resetTriggered = true;
+            grnState.undoResetTriggered = false;
             event.data.handler.undoReset();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
             $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         });
     };
+*/
 
     this.toggle = function () {
+/* moved
         grnState.slidersLocked = !grnState.slidersLocked;
         $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
-        $(LOCK_SLIDERS_BUTTON).prop("checked", (this.locked) ? true : false);
+        $(LOCK_SLIDERS_BUTTON).prop("checked", (grnState.slidersLocked) ? true : false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", !$(RESET_SLIDERS_BUTTON).prop("disabled"));
         $(RESET_SLIDERS_MENU_OPTION).parent().toggleClass("disabled");
 
@@ -133,14 +146,15 @@ export var sliderGroupController = function (sliderArray) {
             $("#link-distance").parent().removeClass("disabled");
             $("#charge").parent().removeClass("disabled");
         }
-
+*/
+// what does this function do?
         $.each(this.sliders, function (key, value) {
             $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
         });
     };
 
     this.addForce = function (simulation) { // make forceParameters into an inputted array
-        this.simulation = simulation;
+        grnState.simulation = simulation;
         this.forceParameters = Object.keys(SLIDER_ADJUSTER);
     };
 
@@ -175,15 +189,13 @@ export var sliderGroupController = function (sliderArray) {
     };
 
     this.resetForce = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].defaultVal);
-        }
+        modifyChargeParameter(grnState.chargeSlider.defaultVal);
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.defaultVal);
     };
 
     this.undoForceReset = function () {
-        for (var i = 0; i < this.numberOfSliders; i++) {
-            this.modifyForceParameter(this.forceParameters[i], this.sliders[i].backup);
-        }
+        modifyChargeParameter(grnState.chargeSlider.backup);
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
     };
 
     this.modifyForceParameter = function (parameterType, value) {

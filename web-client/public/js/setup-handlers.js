@@ -11,6 +11,9 @@ import {
     SHOW_WEIGHTS_MOUSEOVER,
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
+    LOCK_SLIDERS_CLASS,
+    UNDO_SLIDER_RESET_CLASS,
+    RESET_SLIDERS_CLASS,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -76,6 +79,24 @@ export const setupHandlers = grnState => {
 
     $("#blackEdges").click(() => {
         grnState.colorOptimal = false;
+        updateApp(grnState);
+    });
+
+// Sliders code
+    $(LOCK_SLIDERS_CLASS).click(() => {
+        grnState.slidersLocked = !grnState.slidersLocked;
+        updateApp(grnState);
+    });
+
+    $(UNDO_SLIDER_RESET_CLASS).click(() => {
+        grnState.resetTriggered = true;
+        grnState.undoResetTriggered = false;
+        updateApp(grnState);
+    });
+
+    $(RESET_SLIDERS_CLASS).click(() => {
+        grnState.resetTriggered = false;
+        grnState.undoResetTriggered = true;
         updateApp(grnState);
     });
 };
