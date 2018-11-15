@@ -1,4 +1,4 @@
-require("browser-env")();
+/* require("browser-env")();
 var chai = require("chai");
 var expect = chai.expect;
 var sinon = require("sinon");
@@ -30,7 +30,7 @@ describe("Uniprot API", function () {
     });
 });
 
-/*
+
 describe("Ensembl API", function () {
     it("should load", function () {
     });
