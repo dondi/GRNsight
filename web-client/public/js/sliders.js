@@ -13,6 +13,7 @@ import {
   UNDO_SLIDER_RESET_BUTTON,
 } from "./constants";
 
+/* moved
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
         grnState.simulation.force("charge").strength(value);
@@ -33,6 +34,7 @@ var modifyLinkDistanceParameter = (value) => {
     grnState.simulation.force("link").distance(value);
     grnState.simulation.alpha(1);
 };
+*/
 
 export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
@@ -167,18 +169,19 @@ export var sliderGroupController = function (sliderArray) {
                 });
         }
 
+/* moved
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
             event.data.handler.resetForce();
+        });
+
+        $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
+            event.data.handler.undoForceReset();
         });
 
         $(RESET_SLIDERS_MENU_OPTION).on("click", {handler: this}, function (event) {
             event.data.handler.resetValues();
             $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
             $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
-        });
-
-        $(UNDO_SLIDER_RESET_CLASS).on("click", {handler: this}, function (event) {
-            event.data.handler.undoForceReset();
         });
 
         $(UNDO_SLIDER_RESET_MENU).on("click", {handler: this}, function (event) {
@@ -197,6 +200,7 @@ export var sliderGroupController = function (sliderArray) {
         modifyChargeParameter(grnState.chargeSlider.backup);
         modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
     };
+*/
 
     this.modifyForceParameter = function (parameterType, value) {
         if (SLIDER_ADJUSTER[parameterType]) {
