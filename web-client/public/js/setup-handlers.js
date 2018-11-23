@@ -14,6 +14,8 @@ import {
     LOCK_SLIDERS_CLASS,
     UNDO_SLIDER_RESET_CLASS,
     RESET_SLIDERS_CLASS,
+    RESET_SLIDERS_MENU_OPTION,
+    UNDO_SLIDER_RESET_MENU,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";

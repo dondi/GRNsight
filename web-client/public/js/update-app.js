@@ -2,6 +2,7 @@ import { drawGraph } from "./graph";
 import { uploadState } from "./upload";
 import { displayWarnings } from "./warnings";
 import { max } from "d3-array";
+import { grnState } from "./grnstate";
 
 import {
   GREY_EDGES_DASHED_MENU,

@@ -6,14 +6,10 @@ import { grnState } from "./grnstate";
 import { updateSliderDisplayedValue } from "./update-app";
 
 import {
-  RESET_SLIDERS_CLASS,
-  RESET_SLIDERS_MENU_OPTION,
-  UNDO_SLIDER_RESET_CLASS,
-  UNDO_SLIDER_RESET_MENU,
-  UNDO_SLIDER_RESET_BUTTON,
+
 } from "./constants";
 
-/* moved
+// moved but need to keep temp
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
         grnState.simulation.force("charge").strength(value);
@@ -25,6 +21,7 @@ var SLIDER_ADJUSTER = {
     }
 };
 
+// moved but need to keep temp
 var modifyChargeParameter = (value) => {
     grnState.simulation.force("charge").strength(value);
     grnState.simulation.alpha(1);
@@ -34,7 +31,6 @@ var modifyLinkDistanceParameter = (value) => {
     grnState.simulation.force("link").distance(value);
     grnState.simulation.alpha(1);
 };
-*/
 
 export var sliderGroupController = function (sliderArray) {
     this.sliders = sliderArray;
@@ -168,6 +164,7 @@ export var sliderGroupController = function (sliderArray) {
                     updateSliderDisplayedValue(event.data.slider, this);
                 });
         }
+    };
 
 /* moved
         $(RESET_SLIDERS_CLASS).on("click", {handler: this}, function (event) {
