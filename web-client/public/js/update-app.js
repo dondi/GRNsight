@@ -34,6 +34,8 @@ import {
   RESET_SLIDERS_MENU_OPTION,
   UNDO_SLIDER_RESET_BUTTON,
   UNDO_SLIDER_RESET_MENU,
+  LINK_DIST_SLIDER_ID,
+  CHARGE_SLIDER_ID
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -226,8 +228,8 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
         $(LOCK_SLIDERS_BUTTON).prop("checked", true);
         $(RESET_SLIDERS_BUTTON).prop("disabled", true);
-        $(grnState.linkDistanceSlider.sliderId).prop("disabled", true);
-        $(grnState.chargeSlider.sliderId).prop("disabled", true);
+        $(LINK_DIST_SLIDER_ID).prop("disabled", true);
+        $(CHARGE_SLIDER_ID).prop("disabled", true);
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $("#link-distance").parent().addClass("disabled");
         $("#charge").parent().addClass("disabled");
@@ -236,8 +238,8 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
         $(LOCK_SLIDERS_BUTTON).prop("checked", false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", false);
-        $(grnState.linkDistanceSlider.sliderId).prop("disabled", false);
-        $(grnState.chargeSlider.sliderId).prop("disabled", false);
+        $(LINK_DIST_SLIDER_ID).prop("disabled", false);
+        $(CHARGE_SLIDER_ID).prop("disabled", false);
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");

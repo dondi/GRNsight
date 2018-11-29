@@ -114,8 +114,9 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(grnState.linkDistanceSlider.sliderId).on("input", function (event) {
-        event.data.handler.modifyForceParameter(event.data.force, $(this).val());
-        updateSliderDisplayedValue(event.data.slider, this);
-    });
+
+//    $(grnState.linkDistanceSlider.sliderId).on("input", function (event) {
+//        event.data.handler.modifyForceParameter(event.data.force, $(this).val());
+//        updateSliderDisplayedValue(event.data.slider, this);
+//    });
 };

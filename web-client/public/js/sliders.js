@@ -127,10 +127,9 @@ export var sliderGroupController = function (sliderArray) {
             $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         });
     };
-*/
 
     this.toggle = function () {
-/* moved
+
         grnState.slidersLocked = !grnState.slidersLocked;
         $(LOCK_SLIDERS_MENU_OPTION + " span").toggleClass("glyphicon-ok invisible");
         $(LOCK_SLIDERS_BUTTON).prop("checked", (grnState.slidersLocked) ? true : false);
@@ -144,12 +143,12 @@ export var sliderGroupController = function (sliderArray) {
             $("#link-distance").parent().removeClass("disabled");
             $("#charge").parent().removeClass("disabled");
         }
-*/
-// what does this function do?
+
         $.each(this.sliders, function (key, value) {
-            $(value.sliderId).prop("disabled", !$(value.sliderId).prop("disabled"));
+            $(value.sliderId).prop("disabled"), !$(value.sliderId).prop("disabled"));
         });
     };
+*/
 
     this.addForce = function (simulation) { // make forceParameters into an inputted array
         grnState.simulation = simulation;
