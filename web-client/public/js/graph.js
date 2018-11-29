@@ -1467,8 +1467,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
     // Configures sliderController
-    sliderController.addForce(simulation);
-    sliderController.configureForceHandlers();
+    grnState.simulation = simulation;
     sliderController.initializeDefaultForces();
 
     var changeSliderValue = function (slider, item) {

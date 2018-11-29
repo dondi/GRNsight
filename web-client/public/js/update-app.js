@@ -153,6 +153,7 @@ export const updateSliderDisplayedValue = (slider, element) => {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
         (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+    slider.currentVal = value;
 };
 
 const modifyChargeParameter = (value) => {
@@ -225,6 +226,8 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
         $(LOCK_SLIDERS_BUTTON).prop("checked", true);
         $(RESET_SLIDERS_BUTTON).prop("disabled", true);
+        $(grnState.linkDistanceSlider.sliderId).prop("disabled", true);
+        $(grnState.chargeSlider.sliderId).prop("disabled", true);
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $("#link-distance").parent().addClass("disabled");
         $("#charge").parent().addClass("disabled");
@@ -233,6 +236,8 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
         $(LOCK_SLIDERS_BUTTON).prop("checked", false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", false);
+        $(grnState.linkDistanceSlider.sliderId).prop("disabled", false);
+        $(grnState.chargeSlider.sliderId).prop("disabled", false);
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");
@@ -278,7 +283,7 @@ export const updateApp = grnState => {
         updateLinkDistanceSliderValues();
     }
 
-    if (grnState.undoResetTriggered === false) {
+    if (grnState.undoResetTriggered === false && grnState.simulation !== undefined) {
         undoReset();
         undoResetForce();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
