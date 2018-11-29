@@ -1470,6 +1470,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     grnState.simulation = simulation;
     sliderController.initializeDefaultForces();
 
+    // figure out this code???
     var changeSliderValue = function (slider, item) {
         var value = slider === "link" ? linkDistValidator($(item).val()) :
             chargeValidator($(item).val());

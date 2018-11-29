@@ -1,4 +1,6 @@
 import { updateApp } from "./update-app";
+import { modifyChargeParameter } from "./update-app";
+import { modifyLinkDistanceParameter } from "./update-app";
 
 import {
     GREY_EDGES_DASHED_MENU,
@@ -16,6 +18,8 @@ import {
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
+    LINK_DIST_SLIDER_ID,
+    CHARGE_SLIDER_ID,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -115,8 +119,12 @@ export const setupHandlers = grnState => {
     });
 
 
-//    $(grnState.linkDistanceSlider.sliderId).on("input", function (event) {
-//        event.data.handler.modifyForceParameter(event.data.force, $(this).val());
-//        updateSliderDisplayedValue(event.data.slider, this);
-//    });
+    $(CHARGE_SLIDER_ID).on("input", function () {
+        modifyChargeParameter($(this).val());
+    });
+
+    $(LINK_DIST_SLIDER_ID).on("input", function () {
+        modifyLinkDistanceParameter($(this).val());
+    });
+
 };

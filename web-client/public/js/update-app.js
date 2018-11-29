@@ -35,7 +35,7 @@ import {
   UNDO_SLIDER_RESET_BUTTON,
   UNDO_SLIDER_RESET_MENU,
   LINK_DIST_SLIDER_ID,
-  CHARGE_SLIDER_ID
+  CHARGE_SLIDER_ID,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
