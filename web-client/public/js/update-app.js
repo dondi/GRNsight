@@ -151,7 +151,7 @@ const disableColorOptimal = () => {
     $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
-export const updateSliderDisplayedValue = (slider, element) => {
+const updateSliderDisplayedValue = (slider, element) => {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
         (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
@@ -292,6 +292,15 @@ export const updateApp = grnState => {
         $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
+    }
+
+    if (grnState.linkDistanceSlider.forceValue !== grnState.linkDistanceSlider.currentVal) {
+        updateSliderDisplayedValue("link");
+        grnState.linkDistanceSlider.forceValue = grnState.linkDistanceSlider.currentVal;
+    }
+    if (grnState.chargeSlider.forceValue !== grnState.chargeSlider.currentVal) {
+        updateSliderDisplayedValue("charge");
+        grnState.chargeSlider.forceValue = grnState.chargeSlider.currentVal;
     }
 
     refreshApp();

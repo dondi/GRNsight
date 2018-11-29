@@ -5,11 +5,7 @@
 import { grnState } from "./grnstate";
 import { updateSliderDisplayedValue } from "./update-app";
 
-import {
-
-} from "./constants";
-
-// moved but need to keep temp
+// moved but need to keep for graph.js
 var SLIDER_ADJUSTER = {
     charge: function (sliderController, value) {
         grnState.simulation.force("charge").strength(value);
@@ -44,11 +40,13 @@ export var sliderGroupController = function (sliderArray) {
         }
     };
 
+// Object error when moving it
     this.initializeDefaultForces = function () {
         modifyChargeParameter(-50);
         modifyLinkDistanceParameter(500);
     };
 
+// needed for graph.js
     this.modifyForceParameter = function (parameterType, value) {
         if (SLIDER_ADJUSTER[parameterType]) {
             SLIDER_ADJUSTER[parameterType](this, value);
