@@ -148,7 +148,7 @@ let getYeastMineInfo = function (geneSymbol) {
 };
 
 let getEnsemblInfo = function (geneSymbol) {
-    const geneSpecies = "homo_sapiens";
+    const geneSpecies = "Saccharomyces_cerevisiae";
     return $.get({
         url: serviceRoot + "/ensembl/lookup/symbol/" + geneSpecies + "/"
         + geneSymbol + "?content-type=application/json",
