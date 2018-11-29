@@ -148,22 +148,12 @@ let getYeastMineInfo = function (geneSymbol) {
 };
 
 let getEnsemblInfo = function (geneSymbol) {
+    const geneSpecies = "homo_sapiens";
     return $.get({
-        url: serviceRoot + "/ensembl/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
+        url: serviceRoot + "/ensembl/lookup/symbol/" + geneSpecies + "/"
+        + geneSymbol + "?content-type=application/json",
         dataType: "json",
-        timeout: 5000,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        },
-    }).then(function (data) {
-        return $.get({
-            url: serviceRoot + "/ensembl/lookup/id/" + data.id + "?expand=1",
-            dataType: "json",
-            timeout: 5000,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("content-type", "application/json");
-            },
-        });
+        timeout: 5000
     });
 };
 
