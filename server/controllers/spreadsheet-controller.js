@@ -248,7 +248,6 @@ var parseSheet = function (sheet) {
     var sourceGenes = [];
     var targetGenes = [];
     
-    // TODO LOOK HERE FOR XLSX LOGIC
     // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
         if (sheet[i].name === "network") {
@@ -422,7 +421,6 @@ var parseSheet = function (sheet) {
   // } catch (err) {
   //   console.log ("Graph statistics report failed to be complete.");
   // }
-    console.log(network); // TODO remove
     return semanticChecker(network);
 };
 

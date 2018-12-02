@@ -618,6 +618,16 @@ describe("Export to spreadsheet", function() {
             },
             
             {
+                name: 'threshold_b',
+                data: [
+                    ['id', 'threshold_b'],
+                    ['ACE2', 0],
+                    ['AFT2', 0],
+                    ['CIN5', 0]
+                ]
+            },
+
+            {
                 name: 'wt_log2_expression',
                 data:
                 [
@@ -645,42 +655,31 @@ describe("Export to spreadsheet", function() {
 
             {
                 name: 'dcin5_log2_expression',
-                data: 
-                   [
-                        ['id', 0.4, 0.8, 1.2],
-                        [
-                            'ACE2',
-                            10,
-                            11,
-                            12
-                        ],
-                        [
-                            'AFT2',
-                            13,
-                            14,
-                            15
-                        ],
-                        [
-                            'CIN5',
-                            16,
-                            17,
-                            18
-                        ]
-                    ]
-            },
-
-            {
-                name: 'threshold_b',
                 data: [
-                    ['id', 'threshold_b'],
-                    ['ACE2', 0],
-                    ['AFT2', 0],
-                    ['CIN5', 0]
+                    ['id', 0.4, 0.8, 1.2],
+                    [
+                        'ACE2',
+                        10,
+                        11,
+                        12
+                    ],
+                    [
+                        'AFT2',
+                        13,
+                        14,
+                        15
+                    ],
+                    [
+                        'CIN5',
+                        16,
+                        17,
+                        18
+                    ]
                 ]
             }
         ];
 
         const actualSheet = exportController.grnsightToXlsx(inputNetwork);
-        expect(actualSheet).to.equal(expectedSheet);
+        expect(actualSheet).to.deep.equal(expectedSheet);
     });
 });

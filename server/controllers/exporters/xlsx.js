@@ -10,14 +10,12 @@ const parseNetworkSheet = function (genes, links) {
 
     // Place the gene name in the beginning of the network sheet array.
     // EX: ['CIN5', 0, 0, 1]
-    for (let index in geneNameArray) {
-        networkSheet[index][0] = geneNameArray[index];
-    }
+    Object.keys(geneNameArray).forEach(index => networkSheet[index][0] = geneNameArray[index]); 
     geneNameArray.unshift('cols regulators/rows targets');
 
-    for (let link of links){
+    links.forEach((link) => {
         networkSheet[link.source][link.target + 1] = link.value;
-    }
+    });
 
     networkSheet.unshift(geneNameArray);
     return networkSheet;
@@ -36,33 +34,39 @@ const convertToSheet = function (name, testSheet) {
 };
 
 const parseTestSheets = function (testSheet) {
-    const productionRateSheet = convertToSheet(name = 'production_rates', testSheet['production_rates']);
-    const degradationRateSheet = convertToSheet(name = 'degradation_rates', testSheet['degradation_rates']);
-    const thresholdBSheet = convertToSheet(name = 'threshold_b', testSheet['threshold_b']);
+    const productionRateSheet = convertToSheet('production_rates', testSheet['production_rates']);
+    const degradationRateSheet = convertToSheet('degradation_rates', testSheet['degradation_rates']);
+    const thresholdBSheet = convertToSheet('threshold_b', testSheet['threshold_b']);
     return [productionRateSheet, degradationRateSheet, thresholdBSheet]
 };
 
 const parseMetaSheet = function (metaDataContainer) {
-    const key = 'meta';
     const metaSheet = { name: "optimization_parameters", data: [] };
     metaSheet["data"].push(['optimization_parameter', 'value']);
-    for (parameter in metaDataContainer) {
+    Object.keys(metaDataContainer).forEach((parameter) => {
         const metaData = metaDataContainer[parameter];
-        const cleanedUpData = Array.isArray(metaData) 
-            ? [parameter, ...metaData] 
+        const cleanedUpData = Array.isArray(metaData)
+            ? [parameter, ...metaData]
             : [parameter, metaData];
         metaSheet["data"].push(cleanedUpData);
-    }
+    });
     return metaSheet;
 };
 
-const parseExpressionSheets = function (expressionData) {
-    return [];
+const parseExpressionSheets = function (expressions) {
+    const parsedExpressionSheets = [];
+    Object.keys(expressions).forEach((expression) => {
+        const parsedSheet = { name: expression, data: []};
+        Object.keys(expressions[expression]["data"]).forEach((key) => {
+            const expressionData = expressions[expression]["data"][key];
+            parsedSheet["data"].push([key, ...expressionData]);
+        });
+        parsedExpressionSheets.push(parsedSheet);
+    });
+    return parsedExpressionSheets;
 };
 
 const buildXlsxSheet = function (network) {
-    // const util = require('util')
-    // console.log(util.inspect(myObject, { showHidden: false, depth: null }))
     const resultSheet = [];
     resultSheet.push(
         {
@@ -75,9 +79,9 @@ const buildXlsxSheet = function (network) {
             "data": parseNetworkSheet(network.genes, network.links)
         },
     );
-
-    for (let key in network) {
-        switch(key) {
+        
+    Object.keys(network).forEach((key) => {
+        switch (key) {
             case "meta":
                 resultSheet.push(parseMetaSheet(network[key]));
                 break;
@@ -90,10 +94,7 @@ const buildXlsxSheet = function (network) {
             default:
                 break;
         }
-    }
-
-    // const util = require('util')
-    // console.log(util.inspect(resultSheet, { showHidden: false, depth: null }))
+    });
 
     return resultSheet;
 };
