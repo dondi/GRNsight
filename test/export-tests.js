@@ -465,16 +465,16 @@ const inputNetwork = {
     },
 
     "test": {
-        "production_rates": { 
-            "ACE2": 0.5, 
-            "AFT2": 1, 
-            "CIN5": 2 
+        "production_rates": {
+            "ACE2": 0.5,
+            "AFT2": 1,
+            "CIN5": 2
         },
 
         "degradation_rates": {
             "ACE2": 1,
             "AFT2": 1,
-            "CIN5": 1 
+            "CIN5": 1
         },
 
         "threshold_b": {
@@ -552,8 +552,8 @@ const inputNetwork = {
     }
 };
 
-describe("Export to spreadsheet", function() {
-    it("should export a network to a spreadsheet object properly", function(){
+describe("Export to spreadsheet", function () {
+    it("should export a network to a spreadsheet object properly", function () {
         const expectedSheet = [
             {
                 name: "network",
@@ -613,10 +613,10 @@ describe("Export to spreadsheet", function() {
                     ["id", "degradation_rate"],
                     ["ACE2", 1],
                     ["AFT2", 1],
-                    ["CIN5", 1],
+                    ["CIN5", 1]
                 ]
             },
-            
+
             {
                 name: "threshold_b",
                 data: [
