@@ -123,8 +123,8 @@ var EXPORT_COMMENT = "<!-- Exported by GRNsight v" + constants.VERSION + "  " +
   "https://github.com/dondi/GRNsight/releases/tag/v" + constants.VERSION + " -->";
 
 /* eslint-disable quotes */
-// We"ll allow single quotes here because graphMl has a lot of double quotes in it
-// and it"s easier to not escape them all.
+// We'll allow single quotes here because graphMl has a lot of double quotes in it
+// and it's easier to not escape them all.
 describe("Export to GraphML", function () {
     it("should export unweighted networks to GraphML correctly", function () {
         var lines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
@@ -132,42 +132,42 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            "<?xml version="1.0" encoding="UTF-8"?>",
-            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
-              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
-              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
-              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
             EXPORT_COMMENT,
-            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
-            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
-            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
-            "<graph edgedefault="directed">",
-            "<node id="A">",
-            "<data key="name">A</data>",
-            "</node>",
-            "<node id="B">",
-            "<data key="name">B</data>",
-            "</node>",
-            "<node id="C">",
-            "<data key="name">C</data>",
-            "</node>",
-            "<node id="D">",
-            "<data key="name">D</data>",
-            "</node>",
-            "<edge source="C" target="B">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">C (pd) B</data>",
-            "</edge>",
-            "<edge source="B" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) A</data>",
-            "</edge>",
-            "<edge source="B" target="C">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) C</data>",
-            "</edge>",
-            "</graph>",
-            "</graphml>"
+            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
+            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
+            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
+            '<graph edgedefault="directed">',
+            '<node id="A">',
+            '<data key="name">A</data>',
+            '</node>',
+            '<node id="B">',
+            '<data key="name">B</data>',
+            '</node>',
+            '<node id="C">',
+            '<data key="name">C</data>',
+            '</node>',
+            '<node id="D">',
+            '<data key="name">D</data>',
+            '</node>',
+            '<edge source="C" target="B">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">C (pd) B</data>',
+            '</edge>',
+            '<edge source="B" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) A</data>',
+            '</edge>',
+            '<edge source="B" target="C">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) C</data>',
+            '</edge>',
+            '</graph>',
+            '</graphml>'
         ];
 
         lines.forEach(function (line, index) {
@@ -181,46 +181,46 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            "<?xml version="1.0" encoding="UTF-8"?>",
-            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
-              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
-              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
-              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
             EXPORT_COMMENT,
-            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
-            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
-            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
-            "<key id="weight" for="edge" attr.name="weight" attr.type="double"/>",
-            "<graph edgedefault="directed">",
-            "<node id="A">",
-            "<data key="name">A</data>",
-            "</node>",
-            "<node id="B">",
-            "<data key="name">B</data>",
-            "</node>",
-            "<node id="C">",
-            "<data key="name">C</data>",
-            "</node>",
-            "<node id="D">",
-            "<data key="name">D</data>",
-            "</node>",
-            "<edge source="C" target="B">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">C (pd) B</data>",
-            "<data key="weight">0.5</data>",
-            "</edge>",
-            "<edge source="B" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) A</data>",
-            "<data key="weight">-0.75</data>",
-            "</edge>",
-            "<edge source="B" target="C">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) C</data>",
-            "<data key="weight">0.25</data>",
-            "</edge>",
-            "</graph>",
-            "</graphml>"
+            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
+            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
+            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
+            '<key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+            '<graph edgedefault="directed">',
+            '<node id="A">',
+            '<data key="name">A</data>',
+            '</node>',
+            '<node id="B">',
+            '<data key="name">B</data>',
+            '</node>',
+            '<node id="C">',
+            '<data key="name">C</data>',
+            '</node>',
+            '<node id="D">',
+            '<data key="name">D</data>',
+            '</node>',
+            '<edge source="C" target="B">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">C (pd) B</data>',
+            '<data key="weight">0.5</data>',
+            '</edge>',
+            '<edge source="B" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) A</data>',
+            '<data key="weight">-0.75</data>',
+            '</edge>',
+            '<edge source="B" target="C">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) C</data>',
+            '<data key="weight">0.25</data>',
+            '</edge>',
+            '</graph>',
+            '</graphml>'
         ];
 
         lines.forEach(function (line, index) {
@@ -234,53 +234,53 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            "<?xml version="1.0" encoding="UTF-8"?>",
-            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
-              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
-              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
-              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
             EXPORT_COMMENT,
-            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
-            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
-            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
-            "<graph edgedefault="directed">",
-            "<node id="A">",
-            "<data key="name">A</data>",
-            "</node>",
-            "<node id="B">",
-            "<data key="name">B</data>",
-            "</node>",
-            "<node id="C">",
-            "<data key="name">C</data>",
-            "</node>",
-            "<node id="D">",
-            "<data key="name">D</data>",
-            "</node>",
-            "<node id="E">",
-            "<data key="name">E</data>",
-            "</node>",
-            "<edge source="C" target="B">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">C (pd) B</data>",
-            "</edge>",
-            "<edge source="B" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) A</data>",
-            "</edge>",
-            "<edge source="B" target="C">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) C</data>",
-            "</edge>",
-            "<edge source="D" target="D">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">D (pd) D</data>",
-            "</edge>",
-            "<edge source="A" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">A (pd) A</data>",
-            "</edge>",
-            "</graph>",
-            "</graphml>"
+            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
+            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
+            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
+            '<graph edgedefault="directed">',
+            '<node id="A">',
+            '<data key="name">A</data>',
+            '</node>',
+            '<node id="B">',
+            '<data key="name">B</data>',
+            '</node>',
+            '<node id="C">',
+            '<data key="name">C</data>',
+            '</node>',
+            '<node id="D">',
+            '<data key="name">D</data>',
+            '</node>',
+            '<node id="E">',
+            '<data key="name">E</data>',
+            '</node>',
+            '<edge source="C" target="B">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">C (pd) B</data>',
+            '</edge>',
+            '<edge source="B" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) A</data>',
+            '</edge>',
+            '<edge source="B" target="C">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) C</data>',
+            '</edge>',
+            '<edge source="D" target="D">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">D (pd) D</data>',
+            '</edge>',
+            '<edge source="A" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">A (pd) A</data>',
+            '</edge>',
+            '</graph>',
+            '</graphml>'
         ];
 
         lines.forEach(function (line, index) {
@@ -294,59 +294,59 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            "<?xml version="1.0" encoding="UTF-8"?>",
-            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
-              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
-              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
-              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
             EXPORT_COMMENT,
-            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
-            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
-            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
-            "<key id="weight" for="edge" attr.name="weight" attr.type="double"/>",
-            "<graph edgedefault="directed">",
-            "<node id="A">",
-            "<data key="name">A</data>",
-            "</node>",
-            "<node id="B">",
-            "<data key="name">B</data>",
-            "</node>",
-            "<node id="C">",
-            "<data key="name">C</data>",
-            "</node>",
-            "<node id="D">",
-            "<data key="name">D</data>",
-            "</node>",
-            "<node id="E">",
-            "<data key="name">E</data>",
-            "</node>",
-            "<edge source="C" target="B">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">C (pd) B</data>",
-            "<data key="weight">0.5</data>",
-            "</edge>",
-            "<edge source="B" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) A</data>",
-            "<data key="weight">-0.75</data>",
-            "</edge>",
-            "<edge source="B" target="C">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) C</data>",
-            "<data key="weight">0.25</data>",
-            "</edge>",
-            "<edge source="D" target="D">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">D (pd) D</data>",
-            "<data key="weight">-0.375</data>",
-            "</edge>",
-            "<edge source="A" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">A (pd) A</data>",
-            "<data key="weight">0.875</data>",
-            "</edge>",
-            "</graph>",
-            "</graphml>"
+            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
+            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
+            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
+            '<key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
+            '<graph edgedefault="directed">',
+            '<node id="A">',
+            '<data key="name">A</data>',
+            '</node>',
+            '<node id="B">',
+            '<data key="name">B</data>',
+            '</node>',
+            '<node id="C">',
+            '<data key="name">C</data>',
+            '</node>',
+            '<node id="D">',
+            '<data key="name">D</data>',
+            '</node>',
+            '<node id="E">',
+            '<data key="name">E</data>',
+            '</node>',
+            '<edge source="C" target="B">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">C (pd) B</data>',
+            '<data key="weight">0.5</data>',
+            '</edge>',
+            '<edge source="B" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) A</data>',
+            '<data key="weight">-0.75</data>',
+            '</edge>',
+            '<edge source="B" target="C">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) C</data>',
+            '<data key="weight">0.25</data>',
+            '</edge>',
+            '<edge source="D" target="D">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">D (pd) D</data>',
+            '<data key="weight">-0.375</data>',
+            '</edge>',
+            '<edge source="A" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">A (pd) A</data>',
+            '<data key="weight">0.875</data>',
+            '</edge>',
+            '</graph>',
+            '</graphml>'
         ];
 
         lines.forEach(function (line, index) {
@@ -361,42 +361,42 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            "<?xml version="1.0" encoding="UTF-8"?>",
-            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
-              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
-              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
-              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
+              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
+              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
             EXPORT_COMMENT,
-            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
-            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
-            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
-            "<graph edgedefault="directed" id="hello.graphml">",
-            "<node id="A">",
-            "<data key="name">A</data>",
-            "</node>",
-            "<node id="B">",
-            "<data key="name">B</data>",
-            "</node>",
-            "<node id="C">",
-            "<data key="name">C</data>",
-            "</node>",
-            "<node id="D">",
-            "<data key="name">D</data>",
-            "</node>",
-            "<edge source="C" target="B">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">C (pd) B</data>",
-            "</edge>",
-            "<edge source="B" target="A">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) A</data>",
-            "</edge>",
-            "<edge source="B" target="C">",
-            "<data key="interaction">pd</data>",
-            "<data key="name">B (pd) C</data>",
-            "</edge>",
-            "</graph>",
-            "</graphml>"
+            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
+            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
+            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
+            '<graph edgedefault="directed" id="hello.graphml">',
+            '<node id="A">',
+            '<data key="name">A</data>',
+            '</node>',
+            '<node id="B">',
+            '<data key="name">B</data>',
+            '</node>',
+            '<node id="C">',
+            '<data key="name">C</data>',
+            '</node>',
+            '<node id="D">',
+            '<data key="name">D</data>',
+            '</node>',
+            '<edge source="C" target="B">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">C (pd) B</data>',
+            '</edge>',
+            '<edge source="B" target="A">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) A</data>',
+            '</edge>',
+            '<edge source="B" target="C">',
+            '<data key="interaction">pd</data>',
+            '<data key="name">B (pd) C</data>',
+            '</edge>',
+            '</graph>',
+            '</graphml>'
         ];
 
         lines.forEach(function (line, index) {
@@ -417,32 +417,32 @@ const inputNetwork = {
             "source": 0,
             "target": 0,
             "value": 1,
-            "type": "arrowhead",
-            "stroke": "black"
+            type: "arrowhead",
+            stroke: "black"
         },
 
         {
-            "source": 1,
-            "target": 1,
-            "value": 1,
-            "type": "arrowhead",
-            "stroke": "black"
+            source: 1,
+            target: 1,
+            value: 1,
+            type: "arrowhead",
+            stroke: "black"
         },
 
         {
-            "source": 2,
-            "target": 1,
-            "value": 1,
-            "type": "arrowhead",
-            "stroke": "black"
+            source: 2,
+            target: 1,
+            value: 1,
+            type: "arrowhead",
+            stroke: "black"
         },
 
         {
-            "source": 2,
-            "target": 2,
-            "value": 1,
-            "type": "arrowhead",
-            "stroke": "black"
+            source: 2,
+            target: 2,
+            value: 1,
+            type: "arrowhead",
+            stroke: "black"
         }
     ],
 
@@ -556,7 +556,7 @@ describe("Export to spreadsheet", function() {
     it("should export a network to a spreadsheet object properly", function(){
         const expectedSheet = [
             {
-                "name": "network",
+                name: "network",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],

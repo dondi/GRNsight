@@ -77,7 +77,7 @@ const buildXlsxSheet = function (network) {
         {
             "name": "network_weights",
             "data": parseNetworkSheet(network.genes, network.links)
-        },
+        }
     );
         
     Object.keys(network).forEach((key) => {
