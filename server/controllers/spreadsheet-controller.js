@@ -247,7 +247,7 @@ var parseSheet = function (sheet) {
     var genesList = []; // This will contain all of the genes in upper case for use in error checking
     var sourceGenes = [];
     var targetGenes = [];
-    
+
     // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
         if (sheet[i].name === "network") {

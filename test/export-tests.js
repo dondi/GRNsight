@@ -123,8 +123,8 @@ var EXPORT_COMMENT = "<!-- Exported by GRNsight v" + constants.VERSION + "  " +
   "https://github.com/dondi/GRNsight/releases/tag/v" + constants.VERSION + " -->";
 
 /* eslint-disable quotes */
-// We'll allow single quotes here because graphMl has a lot of double quotes in it
-// and it's easier to not escape them all.
+// We"ll allow single quotes here because graphMl has a lot of double quotes in it
+// and it"s easier to not escape them all.
 describe("Export to GraphML", function () {
     it("should export unweighted networks to GraphML correctly", function () {
         var lines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
@@ -132,42 +132,42 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
-              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
-              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+            "<?xml version="1.0" encoding="UTF-8"?>",
+            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
+              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
+              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
+              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
             EXPORT_COMMENT,
-            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
-            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
-            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
-            '<graph edgedefault="directed">',
-            '<node id="A">',
-            '<data key="name">A</data>',
-            '</node>',
-            '<node id="B">',
-            '<data key="name">B</data>',
-            '</node>',
-            '<node id="C">',
-            '<data key="name">C</data>',
-            '</node>',
-            '<node id="D">',
-            '<data key="name">D</data>',
-            '</node>',
-            '<edge source="C" target="B">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">C (pd) B</data>',
-            '</edge>',
-            '<edge source="B" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) A</data>',
-            '</edge>',
-            '<edge source="B" target="C">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) C</data>',
-            '</edge>',
-            '</graph>',
-            '</graphml>'
+            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
+            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
+            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
+            "<graph edgedefault="directed">",
+            "<node id="A">",
+            "<data key="name">A</data>",
+            "</node>",
+            "<node id="B">",
+            "<data key="name">B</data>",
+            "</node>",
+            "<node id="C">",
+            "<data key="name">C</data>",
+            "</node>",
+            "<node id="D">",
+            "<data key="name">D</data>",
+            "</node>",
+            "<edge source="C" target="B">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">C (pd) B</data>",
+            "</edge>",
+            "<edge source="B" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) A</data>",
+            "</edge>",
+            "<edge source="B" target="C">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) C</data>",
+            "</edge>",
+            "</graph>",
+            "</graphml>"
         ];
 
         lines.forEach(function (line, index) {
@@ -181,46 +181,46 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
-              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
-              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+            "<?xml version="1.0" encoding="UTF-8"?>",
+            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
+              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
+              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
+              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
             EXPORT_COMMENT,
-            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
-            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
-            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
-            '<key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
-            '<graph edgedefault="directed">',
-            '<node id="A">',
-            '<data key="name">A</data>',
-            '</node>',
-            '<node id="B">',
-            '<data key="name">B</data>',
-            '</node>',
-            '<node id="C">',
-            '<data key="name">C</data>',
-            '</node>',
-            '<node id="D">',
-            '<data key="name">D</data>',
-            '</node>',
-            '<edge source="C" target="B">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">C (pd) B</data>',
-            '<data key="weight">0.5</data>',
-            '</edge>',
-            '<edge source="B" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) A</data>',
-            '<data key="weight">-0.75</data>',
-            '</edge>',
-            '<edge source="B" target="C">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) C</data>',
-            '<data key="weight">0.25</data>',
-            '</edge>',
-            '</graph>',
-            '</graphml>'
+            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
+            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
+            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
+            "<key id="weight" for="edge" attr.name="weight" attr.type="double"/>",
+            "<graph edgedefault="directed">",
+            "<node id="A">",
+            "<data key="name">A</data>",
+            "</node>",
+            "<node id="B">",
+            "<data key="name">B</data>",
+            "</node>",
+            "<node id="C">",
+            "<data key="name">C</data>",
+            "</node>",
+            "<node id="D">",
+            "<data key="name">D</data>",
+            "</node>",
+            "<edge source="C" target="B">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">C (pd) B</data>",
+            "<data key="weight">0.5</data>",
+            "</edge>",
+            "<edge source="B" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) A</data>",
+            "<data key="weight">-0.75</data>",
+            "</edge>",
+            "<edge source="B" target="C">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) C</data>",
+            "<data key="weight">0.25</data>",
+            "</edge>",
+            "</graph>",
+            "</graphml>"
         ];
 
         lines.forEach(function (line, index) {
@@ -234,53 +234,53 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
-              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
-              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+            "<?xml version="1.0" encoding="UTF-8"?>",
+            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
+              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
+              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
+              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
             EXPORT_COMMENT,
-            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
-            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
-            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
-            '<graph edgedefault="directed">',
-            '<node id="A">',
-            '<data key="name">A</data>',
-            '</node>',
-            '<node id="B">',
-            '<data key="name">B</data>',
-            '</node>',
-            '<node id="C">',
-            '<data key="name">C</data>',
-            '</node>',
-            '<node id="D">',
-            '<data key="name">D</data>',
-            '</node>',
-            '<node id="E">',
-            '<data key="name">E</data>',
-            '</node>',
-            '<edge source="C" target="B">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">C (pd) B</data>',
-            '</edge>',
-            '<edge source="B" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) A</data>',
-            '</edge>',
-            '<edge source="B" target="C">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) C</data>',
-            '</edge>',
-            '<edge source="D" target="D">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">D (pd) D</data>',
-            '</edge>',
-            '<edge source="A" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">A (pd) A</data>',
-            '</edge>',
-            '</graph>',
-            '</graphml>'
+            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
+            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
+            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
+            "<graph edgedefault="directed">",
+            "<node id="A">",
+            "<data key="name">A</data>",
+            "</node>",
+            "<node id="B">",
+            "<data key="name">B</data>",
+            "</node>",
+            "<node id="C">",
+            "<data key="name">C</data>",
+            "</node>",
+            "<node id="D">",
+            "<data key="name">D</data>",
+            "</node>",
+            "<node id="E">",
+            "<data key="name">E</data>",
+            "</node>",
+            "<edge source="C" target="B">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">C (pd) B</data>",
+            "</edge>",
+            "<edge source="B" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) A</data>",
+            "</edge>",
+            "<edge source="B" target="C">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) C</data>",
+            "</edge>",
+            "<edge source="D" target="D">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">D (pd) D</data>",
+            "</edge>",
+            "<edge source="A" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">A (pd) A</data>",
+            "</edge>",
+            "</graph>",
+            "</graphml>"
         ];
 
         lines.forEach(function (line, index) {
@@ -294,59 +294,59 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
-              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
-              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+            "<?xml version="1.0" encoding="UTF-8"?>",
+            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
+              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
+              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
+              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
             EXPORT_COMMENT,
-            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
-            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
-            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
-            '<key id="weight" for="edge" attr.name="weight" attr.type="double"/>',
-            '<graph edgedefault="directed">',
-            '<node id="A">',
-            '<data key="name">A</data>',
-            '</node>',
-            '<node id="B">',
-            '<data key="name">B</data>',
-            '</node>',
-            '<node id="C">',
-            '<data key="name">C</data>',
-            '</node>',
-            '<node id="D">',
-            '<data key="name">D</data>',
-            '</node>',
-            '<node id="E">',
-            '<data key="name">E</data>',
-            '</node>',
-            '<edge source="C" target="B">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">C (pd) B</data>',
-            '<data key="weight">0.5</data>',
-            '</edge>',
-            '<edge source="B" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) A</data>',
-            '<data key="weight">-0.75</data>',
-            '</edge>',
-            '<edge source="B" target="C">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) C</data>',
-            '<data key="weight">0.25</data>',
-            '</edge>',
-            '<edge source="D" target="D">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">D (pd) D</data>',
-            '<data key="weight">-0.375</data>',
-            '</edge>',
-            '<edge source="A" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">A (pd) A</data>',
-            '<data key="weight">0.875</data>',
-            '</edge>',
-            '</graph>',
-            '</graphml>'
+            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
+            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
+            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
+            "<key id="weight" for="edge" attr.name="weight" attr.type="double"/>",
+            "<graph edgedefault="directed">",
+            "<node id="A">",
+            "<data key="name">A</data>",
+            "</node>",
+            "<node id="B">",
+            "<data key="name">B</data>",
+            "</node>",
+            "<node id="C">",
+            "<data key="name">C</data>",
+            "</node>",
+            "<node id="D">",
+            "<data key="name">D</data>",
+            "</node>",
+            "<node id="E">",
+            "<data key="name">E</data>",
+            "</node>",
+            "<edge source="C" target="B">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">C (pd) B</data>",
+            "<data key="weight">0.5</data>",
+            "</edge>",
+            "<edge source="B" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) A</data>",
+            "<data key="weight">-0.75</data>",
+            "</edge>",
+            "<edge source="B" target="C">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) C</data>",
+            "<data key="weight">0.25</data>",
+            "</edge>",
+            "<edge source="D" target="D">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">D (pd) D</data>",
+            "<data key="weight">-0.375</data>",
+            "</edge>",
+            "<edge source="A" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">A (pd) A</data>",
+            "<data key="weight">0.875</data>",
+            "</edge>",
+            "</graph>",
+            "</graphml>"
         ];
 
         lines.forEach(function (line, index) {
@@ -361,42 +361,42 @@ describe("Export to GraphML", function () {
         });
 
         var expectedGraphMlLines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
-              'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-              'xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns ' +
-              'http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
+            "<?xml version="1.0" encoding="UTF-8"?>",
+            "<graphml xmlns="http://graphml.graphdrawing.org/xmlns" " +
+              "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" " +
+              "xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns " +
+              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">",
             EXPORT_COMMENT,
-            '<key id="name" for="node" attr.name="name" attr.type="string"/>',
-            '<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>',
-            '<key id="name" for="edge" attr.name="name" attr.type="string"/>',
-            '<graph edgedefault="directed" id="hello.graphml">',
-            '<node id="A">',
-            '<data key="name">A</data>',
-            '</node>',
-            '<node id="B">',
-            '<data key="name">B</data>',
-            '</node>',
-            '<node id="C">',
-            '<data key="name">C</data>',
-            '</node>',
-            '<node id="D">',
-            '<data key="name">D</data>',
-            '</node>',
-            '<edge source="C" target="B">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">C (pd) B</data>',
-            '</edge>',
-            '<edge source="B" target="A">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) A</data>',
-            '</edge>',
-            '<edge source="B" target="C">',
-            '<data key="interaction">pd</data>',
-            '<data key="name">B (pd) C</data>',
-            '</edge>',
-            '</graph>',
-            '</graphml>'
+            "<key id="name" for="node" attr.name="name" attr.type="string"/>",
+            "<key id="interaction" for="edge" attr.name="interaction" attr.type="string"/>",
+            "<key id="name" for="edge" attr.name="name" attr.type="string"/>",
+            "<graph edgedefault="directed" id="hello.graphml">",
+            "<node id="A">",
+            "<data key="name">A</data>",
+            "</node>",
+            "<node id="B">",
+            "<data key="name">B</data>",
+            "</node>",
+            "<node id="C">",
+            "<data key="name">C</data>",
+            "</node>",
+            "<node id="D">",
+            "<data key="name">D</data>",
+            "</node>",
+            "<edge source="C" target="B">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">C (pd) B</data>",
+            "</edge>",
+            "<edge source="B" target="A">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) A</data>",
+            "</edge>",
+            "<edge source="B" target="C">",
+            "<data key="interaction">pd</data>",
+            "<data key="name">B (pd) C</data>",
+            "</edge>",
+            "</graph>",
+            "</graphml>"
         ];
 
         lines.forEach(function (line, index) {
@@ -406,78 +406,78 @@ describe("Export to GraphML", function () {
 });
 
 const inputNetwork = {
-    genes: [
-        { name: 'ACE2' },
-        { name: 'AFT2' },
-        { name: 'CIN5' },
+    "genes": [
+        { "name": "ACE2" },
+        { "name": "AFT2" },
+        { "name": "CIN5" },
     ],
 
-    links: [
+    "links": [
         {
-            source: 0,
-            target: 0,
-            value: 1,
-            type: 'arrowhead',
-            stroke: 'black'
+            "source": 0,
+            "target": 0,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black"
         },
 
         {
-            source: 1,
-            target: 1,
-            value: 1,
-            type: 'arrowhead',
-            stroke: 'black'
+            "source": 1,
+            "target": 1,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black"
         },
 
         {
-            source: 2,
-            target: 1,
-            value: 1,
-            type: 'arrowhead',
-            stroke: 'black'
+            "source": 2,
+            "target": 1,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black"
         },
 
         {
-            source: 2,
-            target: 2,
-            value: 1,
-            type: 'arrowhead',
-            stroke: 'black'
+            "source": 2,
+            "target": 2,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black"
         }
     ],
 
-    meta: {
-        L_curve: 0,
-        MaxFunEval: 1000000,
-        MaxIter: 1000000,
-        Strain: ["wt", "dcin5"],
-        TolFun: 0.00001,
-        TolX: 0.00001,
-        alpha: 0.001,
-        estimate_params: 1,
-        expression_timepoints: [0.4, 0.8, 1.2],
-        fix_P: 1,
-        fix_b: 0,
-        kk_max: 1,
-        make_graphs: 1,
-        production_function: "testMM",
-        simulation_timepoints: [0, 0.1, 0.2],
+    "meta": {
+        "L_curve": 0,
+        "MaxFunEval": 1000000,
+        "MaxIter": 1000000,
+        "Strain": ["wt", "dcin5"],
+        "TolFun": 0.00001,
+        "TolX": 0.00001,
+        "alpha": 0.001,
+        "estimate_params": 1,
+        "expression_timepoints": [0.4, 0.8, 1.2],
+        "fix_P": 1,
+        "fix_b": 0,
+        "kk_max": 1,
+        "make_graphs": 1,
+        "production_function": "testMM",
+        "simulation_timepoints": [0, 0.1, 0.2],
     },
 
-    test: {
-        production_rates: { 
+    "test": {
+        "production_rates": { 
             "ACE2": 0.5, 
             "AFT2": 1, 
             "CIN5": 2 
         },
 
-        degradation_rates: {
+        "degradation_rates": {
             "ACE2": 1,
             "AFT2": 1,
             "CIN5": 1 
         },
 
-        threshold_b: {
+        "threshold_b": {
             "ACE2": 0,
             "AFT2": 0,
             "CIN5": 0
@@ -485,32 +485,32 @@ const inputNetwork = {
     },
 
 
-    expression: {
-        wt_log2_expression: {
-            time_points: [
+    "expression": {
+        "wt_log2_expression": {
+            "time_points": [
                 0.4,
                 0.8,
                 1.2
             ],
-            data: {
-                id: [
+            "data": {
+                "id": [
                     0.4,
                     0.8,
                     1.2
                 ],
-                ACE2: [
+                "ACE2": [
                     1,
                     2,
                     3
                 ],
 
-                AFT2: [
+                "AFT2": [
                     4,
                     5,
                     6
                 ],
 
-                CIN5: [
+                "CIN5": [
                     7,
                     8,
                     9
@@ -518,31 +518,31 @@ const inputNetwork = {
             }
         },
 
-        dcin5_log2_expression: {
-            time_points: [
+        "dcin5_log2_expression": {
+            "time_points": [
                 0.4,
                 0.8,
                 1.2
             ],
-            data: {
-                id: [
+            "data": {
+                "id": [
                     0.4,
                     0.8,
                     1.2
                 ],
-                ACE2: [
+                "ACE2": [
                     10,
                     11,
                     12
                 ],
 
-                AFT2: [
+                "AFT2": [
                     13,
                     14,
                     15
                 ],
 
-                CIN5: [
+                "CIN5": [
                     16,
                     17,
                     18
@@ -556,96 +556,96 @@ describe("Export to spreadsheet", function() {
     it("should export a network to a spreadsheet object properly", function(){
         const expectedSheet = [
             {
-                name: 'network',
+                "name": "network",
                 data: [
-                    ['cols regulators/rows targets', 'ACE2', 'AFT2', 'CIN5'],
-                    ['ACE2', 1, 0, 0],
-                    ['AFT2', 0, 1, 0],
-                    ['CIN5', 0, 1, 1]
+                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    ["ACE2", 1, 0, 0],
+                    ["AFT2", 0, 1, 0],
+                    ["CIN5", 0, 1, 1]
                 ]
             },
 
             {
-                name: 'network_weights',
+                name: "network_weights",
                 data: [
-                    ['cols regulators/rows targets', 'ACE2', 'AFT2', 'CIN5'],
-                    ['ACE2', 1, 0, 0],
-                    ['AFT2', 0, 1, 0],
-                    ['CIN5', 0, 1, 1]
+                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    ["ACE2", 1, 0, 0],
+                    ["AFT2", 0, 1, 0],
+                    ["CIN5", 0, 1, 1]
                 ]
             },
 
             {
-                name: 'optimization_parameters',
+                name: "optimization_parameters",
                 data: [
-                    ['optimization_parameter', 'value'],
+                    ["optimization_parameter", "value"],
                     ["L_curve", 0],
-                    ['MaxFunEval', 1000000],
-                    ['MaxIter', 1000000],
-                    ['Strain', 'wt', 'dcin5'],
-                    ['TolFun', 0.00001],
-                    ['TolX', 0.00001],
-                    ['alpha', 0.001],
+                    ["MaxFunEval", 1000000],
+                    ["MaxIter", 1000000],
+                    ["Strain", "wt", "dcin5"],
+                    ["TolFun", 0.00001],
+                    ["TolX", 0.00001],
+                    ["alpha", 0.001],
                     ["estimate_params", 1],
-                    ['expression_timepoints', 0.4, 0.8, 1.2],
-                    ['fix_P', 1],
-                    ['fix_b', 0],
-                    ['kk_max', 1],
+                    ["expression_timepoints", 0.4, 0.8, 1.2],
+                    ["fix_P", 1],
+                    ["fix_b", 0],
+                    ["kk_max", 1],
                     ["make_graphs", 1],
-                    ['production_function', 'testMM'],
-                    ['simulation_timepoints', 0, 0.1, 0.2],
+                    ["production_function", "testMM"],
+                    ["simulation_timepoints", 0, 0.1, 0.2],
                 ]
             },
 
             {
-                name: 'production_rates',
+                name: "production_rates",
                 data: [
-                    ['id', 'production_rate'],
-                    ['ACE2', 0.5],
-                    ['AFT2', 1],
-                    ['CIN5', 2],
+                    ["id", "production_rate"],
+                    ["ACE2", 0.5],
+                    ["AFT2", 1],
+                    ["CIN5", 2],
                 ]
             },
 
             {
-                name: 'degradation_rates',
+                name: "degradation_rates",
                 data: [
-                    ['id', 'degradation_rate'],
-                    ['ACE2', 1],
-                    ['AFT2', 1],
-                    ['CIN5', 1],
+                    ["id", "degradation_rate"],
+                    ["ACE2", 1],
+                    ["AFT2", 1],
+                    ["CIN5", 1],
                 ]
             },
             
             {
-                name: 'threshold_b',
+                name: "threshold_b",
                 data: [
-                    ['id', 'threshold_b'],
-                    ['ACE2', 0],
-                    ['AFT2', 0],
-                    ['CIN5', 0]
+                    ["id", "threshold_b"],
+                    ["ACE2", 0],
+                    ["AFT2", 0],
+                    ["CIN5", 0]
                 ]
             },
 
             {
-                name: 'wt_log2_expression',
+                name: "wt_log2_expression",
                 data:
                 [
-                    [ 'id', 0.4, 0.8, 1.2],
+                    [ "id", 0.4, 0.8, 1.2],
                     [
-                        'ACE2',
+                        "ACE2",
                         1,
                         2,
                         3
                     ],
                     [
-                        'AFT2',
+                        "AFT2",
                         4,
                         5,
                         6
                     ],
                     [
-                        'CIN5',
+                        "CIN5",
                         7,
                         8,
                         9
@@ -654,23 +654,23 @@ describe("Export to spreadsheet", function() {
             },
 
             {
-                name: 'dcin5_log2_expression',
+                name: "dcin5_log2_expression",
                 data: [
-                    ['id', 0.4, 0.8, 1.2],
+                    ["id", 0.4, 0.8, 1.2],
                     [
-                        'ACE2',
+                        "ACE2",
                         10,
                         11,
                         12
                     ],
                     [
-                        'AFT2',
+                        "AFT2",
                         13,
                         14,
                         15
                     ],
                     [
-                        'CIN5',
+                        "CIN5",
                         16,
                         17,
                         18
