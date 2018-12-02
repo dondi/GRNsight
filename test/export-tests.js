@@ -1,5 +1,6 @@
 var expect = require("chai").expect;
 var extend = require("jquery-extend");
+var xlsx = require("node-xlsx");
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
@@ -680,6 +681,6 @@ describe("Export to spreadsheet", function () {
         ];
 
         const actualSheet = exportController.grnsightToXlsx(inputNetwork);
-        expect(actualSheet).to.deep.equal(expectedSheet);
+        expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
 });

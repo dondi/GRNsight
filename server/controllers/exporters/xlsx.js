@@ -1,3 +1,5 @@
+const xlsx = require("node-xlsx");
+
 const parseGeneNameArray = function (genes) {
     const geneNameArray = genes.map(gene => gene["name"]);
     return geneNameArray;
@@ -101,5 +103,5 @@ const buildXlsxSheet = function (network) {
 };
 
 module.exports = function (network) {
-    return buildXlsxSheet(network);
+    return xlsx.build(buildXlsxSheet(network));
 };
