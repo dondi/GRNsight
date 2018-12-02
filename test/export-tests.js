@@ -404,7 +404,48 @@ describe("Export to GraphML", function () {
         });
     });
 });
+
 const inputNetwork = {
+    genes: [
+        { name: 'ACE2' },
+        { name: 'AFT2' },
+        { name: 'CIN5' },
+    ],
+
+    links: [
+        {
+            source: 0,
+            target: 0,
+            value: 1,
+            type: 'arrowhead',
+            stroke: 'black'
+        },
+
+        {
+            source: 1,
+            target: 1,
+            value: 1,
+            type: 'arrowhead',
+            stroke: 'black'
+        },
+
+        {
+            source: 2,
+            target: 1,
+            value: 1,
+            type: 'arrowhead',
+            stroke: 'black'
+        },
+
+        {
+            source: 2,
+            target: 2,
+            value: 1,
+            type: 'arrowhead',
+            stroke: 'black'
+        }
+    ],
+
     meta: {
         L_curve: 0,
         MaxFunEval: 1000000,
@@ -414,40 +455,232 @@ const inputNetwork = {
         TolX: 0.00001,
         alpha: 0.001,
         estimate_params: 1,
-        expression_timepoints: [0.4, 0.8, 1.2, 1.6],
-        fix_P: 0,
+        expression_timepoints: [0.4, 0.8, 1.2],
+        fix_P: 1,
         fix_b: 0,
         kk_max: 1,
         make_graphs: 1,
         production_function: "testMM",
-        simulation_timepoints: [0, 0.1, 0.2, 0.3],
-        negativeWeights: [],
-        positiveWeights: (6) [1, 1, 1, 1, 1, 1],
-        sheetType: "unweighted",
-        test: {
-            degradation_rates: {ACE2: 1, AFT2: 1, CIN5: 1, FHL1: 1},
-            production_rates: {ACE2: 0.5, AFT2: 1, CIN5: 2, FHL1: 1},
-            threshold_b: {ACE2: 0, AFT2: 0, CIN5: 0, FHL1: 0}
+        simulation_timepoints: [0, 0.1, 0.2],
+    },
+
+    test: {
+        production_rates: { 
+            "ACE2": 0.5, 
+            "AFT2": 1, 
+            "CIN5": 2 
+        },
+
+        degradation_rates: {
+            "ACE2": 1,
+            "AFT2": 1,
+            "CIN5": 1 
+        },
+
+        threshold_b: {
+            "ACE2": 0,
+            "AFT2": 0,
+            "CIN5": 0
+        }
+    },
+
+
+    expression: {
+        wt_log2_expression: {
+            time_points: [
+                0.4,
+                0.8,
+                1.2
+            ],
+            data: {
+                id: [
+                    0.4,
+                    0.8,
+                    1.2
+                ],
+                ACE2: [
+                    1,
+                    2,
+                    3
+                ],
+
+                AFT2: [
+                    4,
+                    5,
+                    6
+                ],
+
+                CIN5: [
+                    7,
+                    8,
+                    9
+                ]
+            }
+        },
+
+        dcin5_log2_expression: {
+            time_points: [
+                0.4,
+                0.8,
+                1.2
+            ],
+            data: {
+                id: [
+                    0.4,
+                    0.8,
+                    1.2
+                ],
+                ACE2: [
+                    10,
+                    11,
+                    12
+                ],
+
+                AFT2: [
+                    13,
+                    14,
+                    15
+                ],
+
+                CIN5: [
+                    16,
+                    17,
+                    18
+                ]
+            }
         }
     }
 };
 
 describe("Export to spreadsheet", function() {
     it("should export a network to a spreadsheet object properly", function(){
-        const expectedNetwork = {
-            network: {
-                sheet: [
-                    {
-                        sheetType: 'network',
-                        genes: [],
-                        positiveWeights: [],
-                        negativeWeights: [],
-                        links: []
-                     }
+        const expectedSheet = [
+            {
+                name: 'network',
+                data: [
+                    ['cols regulators/rows targets', 'ACE2', 'AFT2', 'CIN5'],
+                    ['ACE2', 1, 0, 0],
+                    ['AFT2', 0, 1, 0],
+                    ['CIN5', 0, 1, 1]
+                ]
+            },
+
+            {
+                name: 'network_weights',
+                data: [
+                    ['cols regulators/rows targets', 'ACE2', 'AFT2', 'CIN5'],
+                    ['ACE2', 1, 0, 0],
+                    ['AFT2', 0, 1, 0],
+                    ['CIN5', 0, 1, 1]
+                ]
+            },
+
+            {
+                name: 'optimization_parameters',
+                data: [
+                    ['optimization_parameter', 'value'],
+                    ["L_curve", 0],
+                    ['MaxFunEval', 1000000],
+                    ['MaxIter', 1000000],
+                    ['Strain', 'wt', 'dcin5'],
+                    ['TolFun', 0.00001],
+                    ['TolX', 0.00001],
+                    ['alpha', 0.001],
+                    ["estimate_params", 1],
+                    ['expression_timepoints', 0.4, 0.8, 1.2],
+                    ['fix_P', 1],
+                    ['fix_b', 0],
+                    ['kk_max', 1],
+                    ["make_graphs", 1],
+                    ['production_function', 'testMM'],
+                    ['simulation_timepoints', 0, 0.1, 0.2],
+                ]
+            },
+
+            {
+                name: 'production_rates',
+                data: [
+                    ['id', 'production_rate'],
+                    ['ACE2', 0.5],
+                    ['AFT2', 1],
+                    ['CIN5', 2],
+                ]
+            },
+
+            {
+                name: 'degradation_rates',
+                data: [
+                    ['id', 'degradation_rate'],
+                    ['ACE2', 1],
+                    ['AFT2', 1],
+                    ['CIN5', 1],
+                ]
+            },
+            
+            {
+                name: 'wt_log2_expression',
+                data:
+                [
+                    [ 'id', 0.4, 0.8, 1.2],
+                    [
+                        'ACE2',
+                        1,
+                        2,
+                        3
+                    ],
+                    [
+                        'AFT2',
+                        4,
+                        5,
+                        6
+                    ],
+                    [
+                        'CIN5',
+                        7,
+                        8,
+                        9
+                    ]
+                ]
+            },
+
+            {
+                name: 'dcin5_log2_expression',
+                data: 
+                   [
+                        ['id', 0.4, 0.8, 1.2],
+                        [
+                            'ACE2',
+                            10,
+                            11,
+                            12
+                        ],
+                        [
+                            'AFT2',
+                            13,
+                            14,
+                            15
+                        ],
+                        [
+                            'CIN5',
+                            16,
+                            17,
+                            18
+                        ]
+                    ]
+            },
+
+            {
+                name: 'threshold_b',
+                data: [
+                    ['id', 'threshold_b'],
+                    ['ACE2', 0],
+                    ['AFT2', 0],
+                    ['CIN5', 0]
                 ]
             }
-        };
-        const actualNetwork = exportController.grnsightToSpreadsheet(inputNetwork);
-        expect(actualNetwork).to.equal(expectedNetwork);
+        ];
+
+        const actualSheet = exportController.grnsightToXlsx(inputNetwork);
+        expect(actualSheet).to.equal(expectedSheet);
     });
 });
