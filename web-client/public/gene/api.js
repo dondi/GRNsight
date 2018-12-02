@@ -169,22 +169,20 @@ let getEnsemblInfo = function (geneSymbol) {
 
 let getJasparInfo = function (geneSymbol) {
     return $.get({
-        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&search=" + geneSymbol,
+        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&name=" + geneSymbol.toUpperCase(),
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
         },
     }).then(function (data) {
-        return (data.count !== 1 ? {} :
+        return (data.results.length === 0 || data.results === undefined) ? {} :
             $.get({
                 url: serviceRoot + "/jaspar/api/v1/matrix/" + data.results[0].matrix_id,
                 dataType: "json",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("content-type", "application/json");
                 },
-            })
-
-        );
+            });
     });
 };
 

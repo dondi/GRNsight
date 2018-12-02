@@ -45,3 +45,21 @@ export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 export const COLOR_EDGES                        = "#colorEdges";
 export const BLACK_EDGES                        = "blackEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
+
+export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
+export const LOCK_SLIDERS_CLASS          = ".lockSliders";
+export const LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
+export const LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu";
+export const RESET_SLIDERS_CLASS         = ".resetSliders";
+export const RESET_SLIDERS_BUTTON        = "#resetSlidersButton";
+export const RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
+export const UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
+export const UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
+export const UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
+
+export const LINK_DIST_SLIDER_ID   = "#linkDistInput";
+export const LINK_DIST_VALUE       = "#linkDistVal";
+export const LINK_DIST_DEFAULT     = 500;
+export const CHARGE_SLIDER_ID      = "#chargeInput";
+export const CHARGE_VALUE          = "#chargeVal";
+export const CHARGE_DEFAULT        = -50;

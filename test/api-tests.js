@@ -1,8 +1,10 @@
-/* // require("browser-env")();
+/* require("browser-env")();
 var chai = require("chai");
 var expect = chai.expect;
 var sinon = require("sinon");
 var gene = "ACE2";
+global.window = window;
+global.$ = require("jquery");
 
 var geneFunctions = require(__dirname + "/../web-client/public/gene/api");
 
@@ -27,6 +29,7 @@ describe("Uniprot API", function () {
         });
     });
 });
+
 
 describe("Ensembl API", function () {
     it("should load", function () {
