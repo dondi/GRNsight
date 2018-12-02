@@ -1,25 +1,22 @@
 // TODO Likely a temporary location, while things are being moved to their "true" homes.
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
+
+import { grnState } from "./grnstate";
+
 export const uploadState = {
     currentNetwork: null,
     sliders: null,
     nodeColoring: null
 };
 
-export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
-  // Slider Values
-    var LINK_DIST_SLIDER_ID   = "#linkDistInput";
-    var LINK_DIST_VALUE       = "#linkDistVal";
-    var LINK_DIST_DEFAULT     = 500;
-    var CHARGE_SLIDER_ID      = "#chargeInput";
-    var CHARGE_VALUE          = "#chargeVal";
-    var CHARGE_DEFAULT        = -50;
+export const upload = function (sliderGroupController, drawGraph, nodeColoringController) {
+
+  // Values
     var TOOLTIP_SHOW_DELAY    = 700;
     var TOOLTIP_HIDE_DELAY    = 100;
 
   // Settings Stuff
-
     var styleLabelTooltips = function () {
         $(".info").tooltip({
             placement: "top",
@@ -34,13 +31,9 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
     nodeColoring.configureNodeColoringHandlers();
     nodeColoring.initialize();
 
-    var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
-    var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
-    var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
+    var sliders = new sliderGroupController([grnState.chargeSlider, grnState.linkDistanceSlider]);
     uploadState.sliders = sliders;
     sliders.setSliderHandlers();
-    sliders.updateValues();
-    sliders.configureSliderControllers();
 
     var lockForce = function (disable) {
         $("#linkDistInput").prop("disabled", disable);

@@ -26,6 +26,13 @@ import {
   COLOR_EDGES,
   BLACK_EDGES,
   ACTIVE_COLOR_OPTION,
+  GRAVITY_LENGTH_WITHOUT_ZERO,
+  LOCK_SLIDERS_MENU_OPTION,
+  LOCK_SLIDERS_BUTTON,
+  RESET_SLIDERS_BUTTON,
+  RESET_SLIDERS_MENU_OPTION,
+  UNDO_SLIDER_RESET_BUTTON,
+  UNDO_SLIDER_RESET_MENU,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -141,6 +148,12 @@ const disableColorOptimal = function () {
     $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
+export const updateSliderDisplayedValue = (slider, element) => {
+    var value = $("#" + $(element).attr("id")).val();
+    $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
+        (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -183,6 +196,72 @@ export const updateApp = grnState => {
         enableColorOptimal();
     } else {
         disableColorOptimal();
+    }
+
+// Sliders
+    if (grnState.slidersLocked === true) {
+        $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
+        $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
+        $(LOCK_SLIDERS_BUTTON).prop("checked", true);
+        $(RESET_SLIDERS_BUTTON).prop("disabled", true);
+        $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
+        $("#link-distance").parent().addClass("disabled");
+        $("#charge").parent().addClass("disabled");
+    } else {
+        $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
+        $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
+        $(LOCK_SLIDERS_BUTTON).prop("checked", false);
+        $(RESET_SLIDERS_BUTTON).prop("disabled", false);
+        $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
+        $("#link-distance").parent().removeClass("disabled");
+        $("#charge").parent().removeClass("disabled");
+    }
+
+    const resetValues = () => {
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.defaultVal;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.defaultVal;
+        $("#charge-menu").val(grnState.chargeSlider.defaultVal);
+        $("#link-distance-menu").val(grnState.linkDistanceSlider.defaultVal);
+    };
+
+    const undoReset = () => {
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
+        $("#charge-menu").val(grnState.chargeSlider.backup);
+        $("#link-distance-menu").val(grnState.linkDistanceSlider.backup);
+    };
+
+    const updateChargeSliderValues = () => {
+        $(grnState.chargeSlider.sliderId).val(grnState.chargeSlider.currentVal);
+        $(grnState.chargeSlider.valueId).html(grnState.chargeSlider.currentVal +
+          ((grnState.chargeSlider.needsAppendedZeros && grnState.chargeSlider.currentVal.toString().length ===
+          GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+    };
+
+    const updateLinkDistanceSliderValues = () => {
+        $(grnState.linkDistanceSlider.sliderId).val(grnState.linkDistanceSlider.currentVal);
+        $(grnState.linkDistanceSlider.valueId).html(grnState.linkDistanceSlider.currentVal +
+          ((grnState.linkDistanceSlider.needsAppendedZeros
+            && grnState.linkDistanceSlider.currentVal.toString().length ===
+              GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+    };
+
+    if (grnState.resetTriggered === false) {
+        resetValues();
+        $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
+        $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
+        updateChargeSliderValues();
+        updateLinkDistanceSliderValues();
+    }
+
+    if (grnState.undoResetTriggered === false) {
+        undoReset();
+        $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
+        $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
+        updateChargeSliderValues();
+        updateLinkDistanceSliderValues();
     }
 
     refreshApp();
