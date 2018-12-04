@@ -1,6 +1,6 @@
 const xlsx = require("node-xlsx");
 
-const parseGeneNameArray = function (genes) {
+const bulidGeneNameArray = function (genes) {
     const geneNameArray = genes.map(gene => gene["name"]);
     return geneNameArray;
 };
@@ -9,8 +9,8 @@ const createArrayWithZeroes = function (length) {
     return Array.apply(null, Array(length)).map(() => 0);
 };
 
-const parseNetworkSheet = function (genes, links) {
-    const geneNameArray = parseGeneNameArray(genes);
+const buildNetworkSheet = function (genes, links) {
+    const geneNameArray = bulidGeneNameArray(genes);
     // The +1 to length is because we ALSO add the gene name to each of the network sheet arrays.
     const networkSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
 
@@ -36,14 +36,14 @@ const convertToSheet = function (name, testSheet) {
     };
 };
 
-const parseTestSheets = function (testSheet) {
+const buildTestSheets = function (testSheet) {
     const productionRateSheet = convertToSheet("production_rates", testSheet["production_rates"]);
     const degradationRateSheet = convertToSheet("degradation_rates", testSheet["degradation_rates"]);
     const thresholdBSheet = convertToSheet("threshold_b", testSheet["threshold_b"]);
     return [productionRateSheet, degradationRateSheet, thresholdBSheet];
 };
 
-const parseMetaSheet = function (metaDataContainer) {
+const buildMetaSheet = function (metaDataContainer) {
     const metaSheet = { name: "optimization_parameters", data: [] };
     metaSheet["data"].push(["optimization_parameter", "value"]);
     Object.keys(metaDataContainer).forEach((parameter) => {
@@ -56,17 +56,17 @@ const parseMetaSheet = function (metaDataContainer) {
     return metaSheet;
 };
 
-const parseExpressionSheets = function (expressions) {
-    const parsedExpressionSheets = [];
+const buildExpressionSheets = function (expressions) {
+    const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
-        const parsedSheet = { name: expression, data: []};
+        const builtSheet = { name: expression, data: []};
         Object.keys(expressions[expression]["data"]).forEach((key) => {
             const expressionData = expressions[expression]["data"][key];
-            parsedSheet["data"].push([key, ...expressionData]);
+            builtSheet["data"].push([key, ...expressionData]);
         });
-        parsedExpressionSheets.push(parsedSheet);
+        builtExpressionSheets.push(builtSheet);
     });
-    return parsedExpressionSheets;
+    return builtExpressionSheets;
 };
 
 const buildXlsxSheet = function (network) {
@@ -74,25 +74,25 @@ const buildXlsxSheet = function (network) {
     resultSheet.push(
         {
             "name": "network",
-            "data": parseNetworkSheet(network.genes, network.links)
+            "data": buildNetworkSheet(network.genes, network.links)
         },
 
         {
             "name": "network_weights",
-            "data": parseNetworkSheet(network.genes, network.links)
+            "data": buildNetworkSheet(network.genes, network.links)
         }
     );
 
     Object.keys(network).forEach((key) => {
         switch (key) {
         case "meta":
-            resultSheet.push(parseMetaSheet(network[key]));
+            resultSheet.push(buildMetaSheet(network[key]));
             break;
         case "test":
-            resultSheet.push(...parseTestSheets(network[key]));
+            resultSheet.push(...buildTestSheets(network[key]));
             break;
         case "expression":
-            resultSheet.push(...parseExpressionSheets(network[key]));
+            resultSheet.push(...buildExpressionSheets(network[key]));
             break;
         default:
             break;
