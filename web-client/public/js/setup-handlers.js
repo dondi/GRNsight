@@ -1,8 +1,4 @@
 import { updateApp } from "./update-app";
-import {
-    modifyChargeParameter,
-    modifyLinkDistanceParameter,
-} from "./update-app";
 
 import {
     GREY_EDGES_DASHED_MENU,
@@ -20,8 +16,6 @@ import {
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
-    LINK_DIST_SLIDER_ID,
-    CHARGE_SLIDER_ID,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -118,14 +112,6 @@ export const setupHandlers = grnState => {
         grnState.resetTriggered = true;
         grnState.undoResetTriggered = false;
         updateApp(grnState);
-    });
-
-    $(CHARGE_SLIDER_ID).on("input", function () {
-        modifyChargeParameter($(this).val());
-    });
-
-    $(LINK_DIST_SLIDER_ID).on("input", function () {
-        modifyLinkDistanceParameter($(this).val());
     });
 
 };

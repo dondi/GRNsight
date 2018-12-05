@@ -1484,39 +1484,42 @@ export var drawGraph = function (network, nodeColoring) {
     modifyChargeParameter(-50);
     modifyLinkDistanceParameter(500);
 
-// figure out this code???
-    var changeSliderValue = function (slider, item) {
-        var value = slider === "link" ? linkDistValidator($(item).val()) :
-            chargeValidator($(item).val());
+    const changeSliderValue = function (slider) {
         if (slider === "link") {
-            grnState.linkDistanceSlider.currentVal = value;
-            modifyLinkDistanceParameter(value);
-            $(LINK_DIST_VALUE).text(value);
-            $(LINK_DIST_SLIDER_ID).val(value);
-            $(LINK_DIST_MENU).val(value);
+            modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+            $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
+            $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
+            $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
         } else {
-            grnState.chargeSlider.currentVal = value;
-            modifyChargeParameter(value);
-            $(CHARGE_VALUE).text(value);
-            $(CHARGE_SLIDER_ID).val(value);
-            $(CHARGE_MENU).val(value);
+            modifyChargeParameter(grnState.chargeSlider.currentVal);
+            $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
+            $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
+            $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
         }
     };
 
     $(LINK_DIST_MENU).on("change", function () {
-        changeSliderValue("link", LINK_DIST_MENU);
+        var value = linkDistValidator($(LINK_DIST_MENU).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        changeSliderValue("link");
     });
 
     $(LINK_DIST_SLIDER_ID).on("change", function () {
-        changeSliderValue("link", LINK_DIST_SLIDER_ID);
+        var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        changeSliderValue("link");
     });
 
     $(CHARGE_MENU).on("change", function () {
-        changeSliderValue("charge", CHARGE_MENU);
+        var value = chargeValidator($(CHARGE_MENU).val());
+        grnState.chargeSlider.currentVal = value;
+        changeSliderValue("charge");
     });
 
     $(CHARGE_SLIDER_ID).on("change", function () {
-        changeSliderValue("charge", CHARGE_SLIDER_ID);
+        var value = chargeValidator($(CHARGE_SLIDER_ID).val());
+        grnState.chargeSlider.currentVal = value;
+        changeSliderValue("charge");
     });
 
     var linkDistValidator = function (value) {
