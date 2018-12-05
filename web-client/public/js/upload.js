@@ -2,15 +2,12 @@
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
 
-import { grnState } from "./grnstate";
-
 export const uploadState = {
     currentNetwork: null,
-    sliders: null,
     nodeColoring: null
 };
 
-export const upload = function (sliderGroupController, drawGraph, nodeColoringController) {
+export const upload = function (drawGraph, nodeColoringController) {
 
   // Values
     var TOOLTIP_SHOW_DELAY    = 700;
@@ -30,10 +27,6 @@ export const upload = function (sliderGroupController, drawGraph, nodeColoringCo
     uploadState.nodeColoring = nodeColoring;
     nodeColoring.configureNodeColoringHandlers();
     nodeColoring.initialize();
-
-    var sliders = new sliderGroupController([grnState.chargeSlider, grnState.linkDistanceSlider]);
-    uploadState.sliders = sliders;
-    sliders.setSliderHandlers();
 
     var lockForce = function (disable) {
         $("#linkDistInput").prop("disabled", disable);

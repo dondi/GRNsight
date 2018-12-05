@@ -31,7 +31,7 @@ import {
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, nodeColoring) {
+export var drawGraph = function (network, nodeColoring) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -1480,7 +1480,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         d.fy = d3.event.y;
     }
 
-    // Configures sliderController
     grnState.simulation = simulation;
     modifyChargeParameter(-50);
     modifyLinkDistanceParameter(500);
@@ -1490,14 +1489,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         var value = slider === "link" ? linkDistValidator($(item).val()) :
             chargeValidator($(item).val());
         if (slider === "link") {
-            modifyLinkDistanceParameter(value);
             grnState.linkDistanceSlider.currentVal = value;
+            modifyLinkDistanceParameter(value);
             $(LINK_DIST_VALUE).text(value);
             $(LINK_DIST_SLIDER_ID).val(value);
             $(LINK_DIST_MENU).val(value);
         } else {
-            modifyChargeParameter(value);
             grnState.chargeSlider.currentVal = value;
+            modifyChargeParameter(value);
             $(CHARGE_VALUE).text(value);
             $(CHARGE_SLIDER_ID).val(value);
             $(CHARGE_MENU).val(value);
