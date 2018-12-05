@@ -1,6 +1,8 @@
 import { updateApp } from "./update-app";
-import { modifyChargeParameter } from "./update-app";
-import { modifyLinkDistanceParameter } from "./update-app";
+import {
+    modifyChargeParameter,
+    modifyLinkDistanceParameter,
+} from "./update-app";
 
 import {
     GREY_EDGES_DASHED_MENU,
@@ -117,7 +119,6 @@ export const setupHandlers = grnState => {
         grnState.undoResetTriggered = false;
         updateApp(grnState);
     });
-
 
     $(CHARGE_SLIDER_ID).on("input", function () {
         modifyChargeParameter($(this).val());

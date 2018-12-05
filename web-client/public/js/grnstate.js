@@ -73,7 +73,7 @@ export const grnState = {
         currentVal: LINK_DIST_DEFAULT,
         backup: LINK_DIST_DEFAULT,
         needsAppendedZeros: false,
-        forceValue: undefined,
+        forceChanged: false,
     },
     chargeSlider: {
         sliderId: CHARGE_SLIDER_ID,
@@ -82,7 +82,7 @@ export const grnState = {
         currentVal: CHARGE_DEFAULT,
         backup: CHARGE_DEFAULT,
         needsAppendedZeros: false,
-        forceValue: undefined,
+        forceChanged: false,
     },
 
 };

@@ -151,19 +151,18 @@ const disableColorOptimal = () => {
     $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
-const updateSliderDisplayedValue = (slider, element) => {
+export const updateSliderDisplayedValue = (slider, element) => {
     var value = $("#" + $(element).attr("id")).val();
     $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
         (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
-    slider.currentVal = value;
 };
 
-const modifyChargeParameter = (value) => {
+export const modifyChargeParameter = (value) => {
     grnState.simulation.force("charge").strength(value);
     grnState.simulation.alpha(1);
 };
 
-const modifyLinkDistanceParameter = (value) => {
+export const modifyLinkDistanceParameter = (value) => {
     grnState.simulation.force("link").distance(value);
     grnState.simulation.alpha(1);
 };
@@ -246,6 +245,8 @@ export const updateApp = grnState => {
     }
 
     const resetValues = () => {
+        console.log(grnState.chargeSlider.currentVal);
+        console.log(grnState.linkDistanceSlider.currentVal);
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
         grnState.chargeSlider.currentVal = grnState.chargeSlider.defaultVal;
@@ -277,8 +278,8 @@ export const updateApp = grnState => {
     };
 
     if (grnState.resetTriggered === false) {
-        resetValues();
         resetForce();
+        resetValues();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
         $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
         updateChargeSliderValues();
@@ -286,8 +287,8 @@ export const updateApp = grnState => {
     }
 
     if (grnState.undoResetTriggered === false && grnState.simulation !== undefined) {
-        undoReset();
         undoResetForce();
+        undoReset();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
         $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         updateChargeSliderValues();

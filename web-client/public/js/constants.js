@@ -59,9 +59,11 @@ export const UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
 export const LINK_DIST_SLIDER_ID   = "#linkDistInput";
 export const LINK_DIST_VALUE       = "#linkDistVal";
+export const LINK_DIST_MENU        = "#link-distance-menu";
 export const LINK_DIST_DEFAULT     = 500;
 export const CHARGE_SLIDER_ID      = "#chargeInput";
 export const CHARGE_VALUE          = "#chargeVal";
+export const CHARGE_MENU           = "#charge-menu";
 export const CHARGE_DEFAULT        = -50;
 
 export const MINIMUM_MAX_LOG_FOLD_CHANGE = -100;

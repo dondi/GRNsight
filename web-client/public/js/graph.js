@@ -1,6 +1,19 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
+import {
+    modifyChargeParameter,
+    modifyLinkDistanceParameter,
+} from "./update-app";
+
+import {
+    LINK_DIST_SLIDER_ID,
+    LINK_DIST_MENU,
+    LINK_DIST_VALUE,
+    CHARGE_SLIDER_ID,
+    CHARGE_MENU,
+    CHARGE_VALUE,
+} from "./constants";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -1252,6 +1265,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 .trigger("click")
                 .removeClass("called");
             this.value = "Grid Layout";
+            console.log(layout);
             layout = false;
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;
@@ -1468,46 +1482,42 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     // Configures sliderController
     grnState.simulation = simulation;
-    sliderController.initializeDefaultForces();
+    modifyChargeParameter(-50);
+    modifyLinkDistanceParameter(500);
 
-    // figure out this code???
+// figure out this code???
     var changeSliderValue = function (slider, item) {
         var value = slider === "link" ? linkDistValidator($(item).val()) :
             chargeValidator($(item).val());
-        sliderController.modifyForceParameter(slider, value);
         if (slider === "link") {
-            $(LINK_DISTANCE_VALUE).text(value);
-            $(LINK_DISTANCE_INPUT).val(value);
-            $(LINK_DISTANCE_MENU).val(value);
+            modifyLinkDistanceParameter(value);
+            grnState.linkDistanceSlider.currentVal = value;
+            $(LINK_DIST_VALUE).text(value);
+            $(LINK_DIST_SLIDER_ID).val(value);
+            $(LINK_DIST_MENU).val(value);
         } else {
+            modifyChargeParameter(value);
+            grnState.chargeSlider.currentVal = value;
             $(CHARGE_VALUE).text(value);
-            $(CHARGE_INPUT).val(value);
+            $(CHARGE_SLIDER_ID).val(value);
             $(CHARGE_MENU).val(value);
         }
     };
 
-    var LINK_DISTANCE_MENU = "#link-distance-menu";
-    var LINK_DISTANCE_INPUT = "#linkDistInput";
-    var LINK_DISTANCE_VALUE = "#linkDistVal";
-
-    $(LINK_DISTANCE_MENU).on("change", function () {
-        changeSliderValue("link", LINK_DISTANCE_MENU);
+    $(LINK_DIST_MENU).on("change", function () {
+        changeSliderValue("link", LINK_DIST_MENU);
     });
 
-    $(LINK_DISTANCE_INPUT).on("change", function () {
-        changeSliderValue("link", LINK_DISTANCE_INPUT);
+    $(LINK_DIST_SLIDER_ID).on("change", function () {
+        changeSliderValue("link", LINK_DIST_SLIDER_ID);
     });
-
-    var CHARGE_MENU = "#charge-menu";
-    var CHARGE_INPUT = "#chargeInput";
-    var CHARGE_VALUE = "#chargeVal";
 
     $(CHARGE_MENU).on("change", function () {
         changeSliderValue("charge", CHARGE_MENU);
     });
 
-    $(CHARGE_INPUT).on("change", function () {
-        changeSliderValue("charge", CHARGE_INPUT);
+    $(CHARGE_SLIDER_ID).on("change", function () {
+        changeSliderValue("charge", CHARGE_SLIDER_ID);
     });
 
     var linkDistValidator = function (value) {
