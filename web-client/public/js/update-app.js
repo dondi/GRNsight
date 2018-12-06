@@ -42,11 +42,6 @@ import {
   CHARGE_DEFAULT_VALUE,
 } from "./constants";
 
-var grnState.linkDistanceSlider.backup     = grnState.linkDistanceSlider.backup;
-var LINK_DIST_CURRENT_VALUE    = grnState.linkDistanceSlider.currentVal;
-var CHARGE_BACKUP_VALUE        = grnState.chargeSlider.backup;
-var CHARGE_CURRENT_VALUE       = grnState.chargeSlider.currentVal;
-
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
@@ -238,18 +233,18 @@ export const updateApp = grnState => {
     }
 
     const resetValues = () => {
-        CHARGE_BACKUP_VALUE = CHARGE_CURRENT_VALUE;
-        grnState.linkDistanceSlider.backup = LINK_DIST_CURRENT_VALUE;
-        CHARGE_CURRENT_VALUE = CHARGE_DEFAULT_VALUE;
-        LINK_DIST_CURRENT_VALUE = LINK_DIST_DEFAULT_VALUE;
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
+        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
         $(CHARGE_MENU).val(CHARGE_DEFAULT_VALUE);
         $(LINK_DIST_MENU).val(LINK_DIST_DEFAULT_VALUE);
     };
 
     const undoReset = () => {
-        CHARGE_CURRENT_VALUE = CHARGE_BACKUP_VALUE;
-        LINK_DIST_CURRENT_VALUE = grnState.linkDistanceSlider.backup ;
-        $(CHARGE_MENU).val(CHARGE_BACKUP_VALUE);
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        $(CHARGE_MENU).val(grnState.chargeSlider.backup);
         $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.backup );
     };
 
@@ -259,22 +254,22 @@ export const updateApp = grnState => {
     };
 
     const undoResetForce = () => {
-        modifyChargeParameter(CHARGE_BACKUP_VALUE);
+        modifyChargeParameter(grnState.chargeSlider.backup);
         modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
     };
 
     const updateChargeSliderValues = () => {
-        $(CHARGE_SLIDER_ID).val(CHARGE_CURRENT_VALUE);
-        $(CHARGE_SLIDER_ID).html(CHARGE_CURRENT_VALUE +
+        $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
+        $(CHARGE_SLIDER_ID).html(grnState.chargeSlider.currentVal +
           ((grnState.chargeSlider.needsAppendedZeros
-              && CHARGE_CURRENT_VALUE.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+              && grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
     };
 
     const updateLinkDistanceSliderValues = () => {
-        $(LINK_DIST_SLIDER_ID).val(LINK_DIST_CURRENT_VALUE);
-        $(LINK_DIST_SLIDER_ID).html(LINK_DIST_CURRENT_VALUE +
+        $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_SLIDER_ID).html(grnState.linkDistanceSlider.currentVal +
           ((grnState.linkDistanceSlider.needsAppendedZeros
-            && LINK_DIST_CURRENT_VALUE.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+            && grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
     };
 
     if (grnState.resetTriggered === false) {
