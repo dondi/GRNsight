@@ -10,9 +10,11 @@ import {
     LINK_DIST_SLIDER_ID,
     LINK_DIST_MENU,
     LINK_DIST_VALUE,
+    LINK_DIST_CURRENT_VALUE,
     CHARGE_SLIDER_ID,
     CHARGE_MENU,
     CHARGE_VALUE,
+    CHARGE_CURRENT_VALUE,
 } from "./constants";
 
 /* globals d3 */
@@ -1484,49 +1486,49 @@ export var drawGraph = function (network, nodeColoring) {
     modifyChargeParameter(-50);
     modifyLinkDistanceParameter(500);
 
-    const changeSliderValue = function (slider) {
-        if (slider === "link") {
-            modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
-            $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
-            $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
-            $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
-        } else {
-            modifyChargeParameter(grnState.chargeSlider.currentVal);
-            $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
-            $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
-            $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
-        }
+    const changeLinkDistanceSliderValue = () => {
+        modifyLinkDistanceParameter(LINK_DIST_CURRENT_VALUE);
+        $(LINK_DIST_VALUE).text(LINK_DIST_CURRENT_VALUE);
+        $(LINK_DIST_SLIDER_ID).val(LINK_DIST_CURRENT_VALUE);
+        $(LINK_DIST_MENU).val(LINK_DIST_CURRENT_VALUE);
     };
 
-    $(LINK_DIST_MENU).on("change", function () {
+    const changeChargeSliderValue = () => {
+        modifyChargeParameter(CHARGE_CURRENT_VALUE);
+        $(CHARGE_VALUE).text(CHARGE_CURRENT_VALUE);
+        $(CHARGE_SLIDER_ID).val(CHARGE_CURRENT_VALUE);
+        $(CHARGE_MENU).val(CHARGE_CURRENT_VALUE);
+    };
+
+    $(LINK_DIST_MENU).change(() => {
         var value = linkDistValidator($(LINK_DIST_MENU).val());
-        grnState.linkDistanceSlider.currentVal = value;
-        changeSliderValue("link");
+        LINK_DIST_CURRENT_VALUE = value;
+        changeLinkDistanceSliderValue();
     });
 
-    $(LINK_DIST_SLIDER_ID).on("change", function () {
+    $(LINK_DIST_SLIDER_ID).change(() => {
         var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
-        grnState.linkDistanceSlider.currentVal = value;
-        changeSliderValue("link");
+        LINK_DIST_CURRENT_VALUE = value;
+        changeLinkDistanceSliderValue();
     });
 
-    $(CHARGE_MENU).on("change", function () {
+    $(CHARGE_MENU).change(() => {
         var value = chargeValidator($(CHARGE_MENU).val());
-        grnState.chargeSlider.currentVal = value;
-        changeSliderValue("charge");
+        CHARGE_CURRENT_VALUE = value;
+        changeChargeSliderValue();
     });
 
-    $(CHARGE_SLIDER_ID).on("change", function () {
+    $(CHARGE_SLIDER_ID).change(() => {
         var value = chargeValidator($(CHARGE_SLIDER_ID).val());
-        grnState.chargeSlider.currentVal = value;
-        changeSliderValue("charge");
+        CHARGE_CURRENT_VALUE = value;
+        changeChargeSliderValue();
     });
 
-    var linkDistValidator = function (value) {
+    var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
     };
 
-    var chargeValidator = function (value) {
+    var chargeValidator = value => {
         return valueValidator(-2000, 0, value);
     };
 

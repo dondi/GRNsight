@@ -1,18 +1,20 @@
+import { grnState } from "./grnstate";
+
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
-const UNWEIGHTED_DEMO_ID   = "#unweighted";
-const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
-const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)";
-const WEIGHTED_DEMO_ID     = "#weighted";
-const WEIGHTED_DEMO_PATH   = "demo/weighted";
-const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)";
-const SCHADE_INPUT_ID      = "#schadeInput";
-const SCHADE_INPUT_PATH    = "demo/schadeInput";
-const SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
-const SCHADE_OUTPUT_ID     = "#schadeOutput";
-const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
-const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
+export const UNWEIGHTED_DEMO_ID   = "#unweighted";
+export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
+export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)";
+export const WEIGHTED_DEMO_ID     = "#weighted";
+export const WEIGHTED_DEMO_PATH   = "demo/weighted";
+export const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)";
+export const SCHADE_INPUT_ID      = "#schadeInput";
+export const SCHADE_INPUT_PATH    = "demo/schadeInput";
+export const SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
+export const SCHADE_OUTPUT_ID     = "#schadeOutput";
+export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
+export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
@@ -57,30 +59,35 @@ export const UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 export const UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 export const UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
-export const LINK_DIST_SLIDER_ID   = "#linkDistInput";
-export const LINK_DIST_VALUE       = "#linkDistVal";
-export const LINK_DIST_MENU        = "#link-distance-menu";
-export const LINK_DIST_DEFAULT     = 500;
-export const CHARGE_SLIDER_ID      = "#chargeInput";
-export const CHARGE_VALUE          = "#chargeVal";
-export const CHARGE_MENU           = "#charge-menu";
-export const CHARGE_DEFAULT        = -50;
+export const LINK_DIST_SLIDER_ID        = "#linkDistInput";
+export const LINK_DIST_VALUE            = "#linkDistVal";
+export const LINK_DIST_MENU             = "#link-distance-menu";
+export const LINK_DIST_DEFAULT_VALUE    = 500;
+export const CHARGE_SLIDER_ID           = "#chargeInput";
+export const CHARGE_VALUE               = "#chargeVal";
+export const CHARGE_MENU                = "#charge-menu";
+export const CHARGE_DEFAULT_VALUE       = -50;
+// grnState constants to shorten the long object stuff
+export const LINK_DIST_BACKUP_VALUE     = grnState.linkDistanceSlider.backup;
+export const LINK_DIST_CURRENT_VALUE    = grnState.linkDistanceSlider.currentVal;
+export const CHARGE_BACKUP_VALUE        = grnState.chargeSlider.backup;
+export const CHARGE_CURRENT_VALUE       = grnState.chargeSlider.currentVal;
 
-export const MINIMUM_MAX_LOG_FOLD_CHANGE = -100;
-export const MAXIMUM_MAX_LOG_FOLD_CHANGE = 100;
-export const DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
-export const MAX_NUM_CHARACTERS_DROPDOWN = 24;
-export const NODE_COLORING_MENU = ".node-coloring";
-export const BOTTOM_DATASET_SELECTION_SIDEBAR = "#dataset-bottom";
-export const TOP_DATASET_SELECTION_SIDEBAR = "#dataset-top";
-export const NODE_COLORING_TOGGLE_SIDEBAR = "#nodeColoringToggle";
-export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR = "#averageDataBottom";
-export const AVG_REPLICATE_VALS_TOP_SIDEBAR = "#averageDataTop";
-export const AVG_REPLICATE_VALS_TOP_MENU = "#averageDataTopMenu";
-export const AVG_REPLICATE_VALS_BOTTOM_MENU = "#averageDataBottomMenu";
-export const NODE_COLORING_TOGGLE_MENU = "#node-coloring-toggle-menu";
-export const TOP_DATASET_SELECTION_MENU = "#topDatasetDropdownMenu";
-export const BOTTOM_DATASET_SELECTION_MENU = "#bottomDatasetDropdownMenu";
-export const NODE_COLORING_TOGGLE_CLASS = ".nodeColoringToggle";
-export const LOG_FOLD_CHANGE_MAX_VALUE_CLASS = ".logFoldChangeMaxValue";
-export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON = "#log-fold-change-button";
+export const MINIMUM_MAX_LOG_FOLD_CHANGE                = -100;
+export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
+export const DEFAULT_MAX_LOG_FOLD_CHANGE                = 3;
+export const MAX_NUM_CHARACTERS_DROPDOWN                = 24;
+export const NODE_COLORING_MENU                         = ".node-coloring";
+export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
+export const TOP_DATASET_SELECTION_SIDEBAR              = "#dataset-top";
+export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggle";
+export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
+export const AVG_REPLICATE_VALS_TOP_SIDEBAR             = "#averageDataTop";
+export const AVG_REPLICATE_VALS_TOP_MENU                = "#averageDataTopMenu";
+export const AVG_REPLICATE_VALS_BOTTOM_MENU             = "#averageDataBottomMenu";
+export const NODE_COLORING_TOGGLE_MENU                  = "#node-coloring-toggle-menu";
+export const TOP_DATASET_SELECTION_MENU                 = "#topDatasetDropdownMenu";
+export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdownMenu";
+export const NODE_COLORING_TOGGLE_CLASS                 = ".nodeColoringToggle";
+export const LOG_FOLD_CHANGE_MAX_VALUE_CLASS            = ".logFoldChangeMaxValue";
+export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON   = "#log-fold-change-button";
