@@ -36,17 +36,18 @@ import {
   UNDO_SLIDER_RESET_MENU,
   LINK_DIST_SLIDER_ID,
   LINK_DIST_MENU,
-  LINK_DIST_BACKUP_VALUE,
-  LINK_DIST_CURRENT_VALUE,
   LINK_DIST_DEFAULT_VALUE,
 //  LINK_DIST_VALUE,
   CHARGE_SLIDER_ID,
   CHARGE_MENU,
-  CHARGE_BACKUP_VALUE,
-  CHARGE_CURRENT_VALUE,
   CHARGE_DEFAULT_VALUE,
 //  CHARGE_VALUE,
 } from "./constants";
+
+var LINK_DIST_BACKUP_VALUE     = grnState.linkDistanceSlider.backup;
+var LINK_DIST_CURRENT_VALUE    = grnState.linkDistanceSlider.currentVal;
+var CHARGE_BACKUP_VALUE        = grnState.chargeSlider.backup;
+var CHARGE_CURRENT_VALUE       = grnState.chargeSlider.currentVal;
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.

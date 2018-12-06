@@ -1,4 +1,4 @@
-import { grnState } from "./grnstate";
+
 
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
@@ -67,11 +67,6 @@ export const CHARGE_SLIDER_ID           = "#chargeInput";
 export const CHARGE_VALUE               = "#chargeVal";
 export const CHARGE_MENU                = "#charge-menu";
 export const CHARGE_DEFAULT_VALUE       = -50;
-// grnState constants to shorten the long object stuff
-export const LINK_DIST_BACKUP_VALUE     = grnState.linkDistanceSlider.backup;
-export const LINK_DIST_CURRENT_VALUE    = grnState.linkDistanceSlider.currentVal;
-export const CHARGE_BACKUP_VALUE        = grnState.chargeSlider.backup;
-export const CHARGE_CURRENT_VALUE       = grnState.chargeSlider.currentVal;
 
 export const MINIMUM_MAX_LOG_FOLD_CHANGE                = -100;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
