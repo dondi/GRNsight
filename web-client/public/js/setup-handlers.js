@@ -16,10 +16,6 @@ import {
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
-    /* LINK_DIST_MENU,
-    LINK_DIST_SLIDER_ID,
-    CHARGE_MENU,
-    CHARGE_SLIDER_ID, */
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";

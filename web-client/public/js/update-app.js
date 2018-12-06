@@ -37,14 +37,12 @@ import {
   LINK_DIST_SLIDER_ID,
   LINK_DIST_MENU,
   LINK_DIST_DEFAULT_VALUE,
-//  LINK_DIST_VALUE,
   CHARGE_SLIDER_ID,
   CHARGE_MENU,
   CHARGE_DEFAULT_VALUE,
-//  CHARGE_VALUE,
 } from "./constants";
 
-var LINK_DIST_BACKUP_VALUE     = grnState.linkDistanceSlider.backup;
+var grnState.linkDistanceSlider.backup     = grnState.linkDistanceSlider.backup;
 var LINK_DIST_CURRENT_VALUE    = grnState.linkDistanceSlider.currentVal;
 var CHARGE_BACKUP_VALUE        = grnState.chargeSlider.backup;
 var CHARGE_CURRENT_VALUE       = grnState.chargeSlider.currentVal;
@@ -241,7 +239,7 @@ export const updateApp = grnState => {
 
     const resetValues = () => {
         CHARGE_BACKUP_VALUE = CHARGE_CURRENT_VALUE;
-        LINK_DIST_BACKUP_VALUE = LINK_DIST_CURRENT_VALUE;
+        grnState.linkDistanceSlider.backup = LINK_DIST_CURRENT_VALUE;
         CHARGE_CURRENT_VALUE = CHARGE_DEFAULT_VALUE;
         LINK_DIST_CURRENT_VALUE = LINK_DIST_DEFAULT_VALUE;
         $(CHARGE_MENU).val(CHARGE_DEFAULT_VALUE);
@@ -250,9 +248,9 @@ export const updateApp = grnState => {
 
     const undoReset = () => {
         CHARGE_CURRENT_VALUE = CHARGE_BACKUP_VALUE;
-        LINK_DIST_CURRENT_VALUE = LINK_DIST_BACKUP_VALUE ;
+        LINK_DIST_CURRENT_VALUE = grnState.linkDistanceSlider.backup ;
         $(CHARGE_MENU).val(CHARGE_BACKUP_VALUE);
-        $(LINK_DIST_MENU).val(LINK_DIST_BACKUP_VALUE );
+        $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.backup );
     };
 
     const resetForce = () => {
@@ -262,7 +260,7 @@ export const updateApp = grnState => {
 
     const undoResetForce = () => {
         modifyChargeParameter(CHARGE_BACKUP_VALUE);
-        modifyLinkDistanceParameter(LINK_DIST_BACKUP_VALUE);
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
     };
 
     const updateChargeSliderValues = () => {
