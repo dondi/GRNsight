@@ -2,6 +2,7 @@ var helpers = require(__dirname + "/helpers");
 
 var grnsightToSif = require(__dirname + "/exporters/sif");
 var grnsightToGraphMl = require(__dirname + "/exporters/graphml");
+var grnsightToXlsx = require(__dirname + "/exporters/xlsx");
 
 var convertResponse = function (app, req, res, converter) {
     helpers.attachCorsHeader(res, app);
@@ -67,6 +68,7 @@ module.exports = function (app) {
 
     return {
         grnsightToSif: grnsightToSif,
-        grnsightToGraphMl: grnsightToGraphMl
+        grnsightToGraphMl: grnsightToGraphMl,
+        grnsightToXlsx: grnsightToXlsx
     };
 };
