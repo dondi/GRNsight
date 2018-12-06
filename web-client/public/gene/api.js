@@ -72,13 +72,14 @@ let defaultYeastmine = {
 };
 
 let getUniProtInfo = function (geneSymbol) {
+    let taxon = "559292";
     return $.get({
         url: serviceRoot + "/uniprot/uploadlists/",
         data: {
             from: "GENENAME",
             to: "ACC",
             format: "tab",
-            taxon: "559292",
+            taxon: taxon,
             query: geneSymbol,
         },
         dataType: "text",
@@ -96,11 +97,12 @@ let getUniProtInfo = function (geneSymbol) {
 };
 
 let getNCBIInfo = function (geneSymbol) {
+    let geneName = "Saccharomyces+cerevisiae";
     return $.get({
         url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
         data: {
             db: "gene",
-            term: geneSymbol + "[gene]+Saccharomyces+cerevisiae[Organism]",
+            term: geneSymbol + "[gene]+" + geneName + "[Organism]",
         },
         dataType: "text",
         timeout: 5000,
@@ -148,7 +150,7 @@ let getYeastMineInfo = function (geneSymbol) {
 };
 
 let getEnsemblInfo = function (geneSymbol) {
-    const geneSpecies = "Saccharomyces_cerevisiae";
+    let geneSpecies = "Saccharomyces_cerevisiae";
     return $.get({
         url: serviceRoot + "/ensembl/lookup/symbol/" + geneSpecies + "/"
         + geneSymbol + "?content-type=application/json",
@@ -158,8 +160,9 @@ let getEnsemblInfo = function (geneSymbol) {
 };
 
 let getJasparInfo = function (geneSymbol) {
+    let taxon = "4932";
     return $.get({
-        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&name=" + geneSymbol.toUpperCase(),
+        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=" + taxon + "&format=json&name=" + geneSymbol.toUpperCase(),
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
