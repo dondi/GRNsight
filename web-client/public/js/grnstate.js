@@ -64,6 +64,10 @@ export const grnState = {
 
     slidersLocked: false,
     simulation: undefined,
+
+    gridLayout: false,
+    forceGraphLayout: true,
+
     resetTrigger: false,
     undoResetTriggered: false,
     linkDistanceSlider: {

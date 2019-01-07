@@ -61,6 +61,7 @@ export const upload = function (drawGraph, nodeColoringController) {
     };
 
     $("#gridLayout").on("click", function () {
+        console.log("CLICK");
         toggleLayout("#gridLayout", "#forceGraph");
     });
 

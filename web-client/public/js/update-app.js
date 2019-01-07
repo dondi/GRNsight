@@ -281,7 +281,7 @@ export const updateApp = grnState => {
         updateLinkDistanceSliderValues();
     }
 
-    if (grnState.undoResetTriggered === false && grnState.simulation !== undefined) {
+    if (!grnState.undoResetTriggered && grnState.simulation !== undefined) {
         undoReset();
         undoResetForce();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
