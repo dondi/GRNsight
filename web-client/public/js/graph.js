@@ -927,11 +927,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 d.textWidth = textWidth < MINIMUM_NODE_WIDTH ? MINIMUM_NODE_WIDTH : textWidth;
                 return d.textWidth / 2 + NODE_MARGIN;
             })
+
             .on("dblclick", nodeTextDblclick)
+
+            //This function triggers the gene page
             .on("contextmenu", function (gene) {
-                var tempLink = $("<a></a>")
+                const tempLink = $("<a></a>")
                     .attr({
-                        href: "info?" + $.param({symbol: gene.name}),
+                        href: "info?" + $.param({symbol: gene.name, apple: "45" }),
                         target: "_blank"
                     });
                 $("body").append(tempLink);
