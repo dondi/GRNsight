@@ -29,13 +29,14 @@
     });
 
     const search = location.search.substring(1);
-    console.log(search)
+
 
     const obj = {
       symbol: search.match(/symbol=(.*?)(?=&)/)[1],
       species: search.match(/species=(.*?)(?=&)/)[1],
-      taxon: search.match(/taxon=(.*?)/)[1]
+      taxon: search.match(/taxon=(.*)/)[1]
     }
+
     // const obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
     //     function (key, value) {
     //         return key === "" ? value : decodeURIComponent(value);
@@ -49,7 +50,7 @@
 
     const api = window.api;
 
-    api.getGeneInformation(obj.symbol).done(function (gene) {
+    api.getGeneInformation(obj).done(function (gene) {
 
         const sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
         const sgdId = gene.sgd.sgdID;
