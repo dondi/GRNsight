@@ -1230,8 +1230,6 @@ export var drawGraph = function (network, nodeColoring) {
         return name1 > name2 ? 1 : -1;
     };
 
-    let layout = false;
-
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     $(GRID_LAYOUT_BUTTON).click(function () { // eslint-disable-line no-unused-vars
