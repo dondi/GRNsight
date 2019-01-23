@@ -65,8 +65,7 @@ export const grnState = {
     slidersLocked: false,
     simulation: undefined,
 
-    gridLayout: false,
-    forceGraphLayout: true,
+    graphLayout: "FORCE_GRAPH",
 
     resetTrigger: false,
     undoResetTriggered: false,

@@ -1234,15 +1234,16 @@ export var drawGraph = function (network, nodeColoring) {
 
     var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
     $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
+    $(GRID_LAYOUT_BUTTON).click(function () { // eslint-disable-line no-unused-vars
+        console.log("Layout status: " + grnState.graphLayout);
         let nodeGroup = node._groups[0].sort(sortNode);
-        if (!layout) {
+        if (grnState.graphLayout === "FORCE_GRAPH") {
             $("#gridLayout")
                 .addClass("called")
                 .trigger("click")
                 .removeClass("called");
             this.value = "Force Graph";
-            layout = true;
+            grnState.graphLayout = "GRID_LAYOUT";
             const margin = 10;
             const grid = Grid() // create new grid layout
             .data(network.genes)
@@ -1264,7 +1265,7 @@ export var drawGraph = function (network, nodeColoring) {
                 .addClass("called")
                 .trigger("click")
                 .removeClass("called");
-            this.value = "Grid Layout";
+            grnState.graphLayout = "FORCE_GRAPH";
             layout = false;
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;

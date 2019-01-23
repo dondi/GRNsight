@@ -60,16 +60,15 @@ export const upload = function (drawGraph, nodeColoringController) {
         }
     };
 
-    $("#gridLayout").on("click", function () {
-        console.log("CLICK");
+    $("#gridLayout").click( function () {
         toggleLayout("#gridLayout", "#forceGraph");
     });
 
-    $("#forceGraph").on("click", function () {
+    $("#forceGraph").click( function () {
         toggleLayout("#forceGraph", "#gridLayout");
     });
 
-    $("#printGraph").on("click", function () {
+    $("#printGraph").click( function () {
         if (!$(".startDisabled").hasClass("disabled")) {
             window.print();
         }
