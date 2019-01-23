@@ -1264,7 +1264,6 @@ export var drawGraph = function (network, nodeColoring) {
                 .trigger("click")
                 .removeClass("called");
             grnState.graphLayout = "FORCE_GRAPH";
-            layout = false;
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;
                 nodeGroup[i].__data__.fy = null;
