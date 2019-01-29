@@ -930,16 +930,15 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
             .on("dblclick", nodeTextDblclick)
 
-            //This function triggers the gene page
+            // This function triggers the gene page
 
             .on("contextmenu", function (gene) {
-                console.log(gene)
                 const tempLink = $("<a></a>")
                     .attr({
                         href: "info?" + $.param({
-                          symbol: gene.name,
-                          species: "Saccharomyces_cerevisiae",
-                          taxon: "559292"}),
+                            symbol: gene.name,
+                            species: "Saccharomyces_cerevisiae",
+                            taxon: "559292"}),
                         target: "_blank"
                     });
                 $("body").append(tempLink);

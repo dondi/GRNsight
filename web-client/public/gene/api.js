@@ -101,7 +101,7 @@ let getUniProtInfo = function (query) {
 let getNCBIInfo = function (query) {
     const geneSymbol = query.symbol;
 
-    //unsure if this needs to be greedy for species with >2 words in their name
+    // unsure if this needs to be greedy for species with >2 words in their name
     const geneName = query.species.replace(/_/, "+");
 
     return $.get({
@@ -172,7 +172,7 @@ let getEnsemblInfo = function (query) {
 let getJasparInfo = function (query) {
     const geneSymbol = query.symbol;
 
-    //will eventually need to decide which taxon to use for JASPAR, for now this remains hardcoded
+    // will eventually need to decide which taxon to use for JASPAR, for now this remains hardcoded
     const taxon = "4932";
 
     return $.get({

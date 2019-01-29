@@ -32,10 +32,10 @@
 
 
     const obj = {
-      symbol: search.match(/symbol=(.*?)(?=&)/)[1],
-      species: search.match(/species=(.*?)(?=&)/)[1],
-      taxon: search.match(/taxon=(.*)/)[1]
-    }
+        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
+        species: search.match(/species=(.*?)(?=&)/)[1],
+        taxon: search.match(/taxon=(.*)/)[1]
+    };
 
     // const obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
     //     function (key, value) {
