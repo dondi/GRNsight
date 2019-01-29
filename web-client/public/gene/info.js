@@ -37,12 +37,6 @@
         taxon: search.match(/taxon=(.*)/)[1]
     };
 
-    // const obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
-    //     function (key, value) {
-    //         return key === "" ? value : decodeURIComponent(value);
-    //     }) : {};
-    // console.log(obj)
-
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
     // This is cite used to find the parsing:
