@@ -8,9 +8,11 @@ lib-cov
 *.gz
 ~$*.xlsx
 ~$*.xls
+.vs/
 
 documents/developer_documents/testing_script_generator/GRNsightTestingDocument.pdf
 web-client/public/js/grnsight.min.js
+web-client/public/stylesheets/print.css
 
 pids
 logs
