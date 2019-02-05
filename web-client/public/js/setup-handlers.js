@@ -121,7 +121,6 @@ export const setupHandlers = grnState => {
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
         }
-        console.log(grnState.graphLayout);
         updateApp(grnState);
     });
 };

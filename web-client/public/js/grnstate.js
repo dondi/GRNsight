@@ -38,11 +38,8 @@ const annotateLinks = network => {
 
 export const grnState = {
     name: null,
-
+    simulation: undefined,
     newNetwork: false,
-
-    normalizationMax: null,
-    resetNormalizationMax: null,
 
     get network () {
         return currentNetwork;
@@ -55,6 +52,9 @@ export const grnState = {
         this.newNetwork = true;
     },
 
+// Edge Display Parameters
+    normalizationMax: null,
+    resetNormalizationMax: null,
     edgeWeightDisplayOption: SHOW_WEIGHTS_MOUSEOVER,
     colorOptimal: true,
     grayEdgeThreshold: 5,
@@ -62,11 +62,8 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentNetwork),
 
+// Slider Parameters
     slidersLocked: false,
-    simulation: undefined,
-
-    graphLayout: "FORCE_GRAPH",
-
     resetTrigger: false,
     undoResetTriggered: false,
     linkDistanceSlider: {
@@ -88,4 +85,6 @@ export const grnState = {
         forceChanged: false,
     },
 
+// Graph Layout Parameter
+    graphLayout: "FORCE_GRAPH",
 };

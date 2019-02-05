@@ -1205,7 +1205,6 @@ export var drawGraph = function (network, nodeColoring) {
     // resets graph options so when new graph is loaded, initial layout is always force graph
     $("#forceGraph").trigger("click");
 
-/*
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
         let rightNode = gridNodes[row - 1];
@@ -1232,34 +1231,33 @@ export var drawGraph = function (network, nodeColoring) {
         return name1 > name2 ? 1 : -1;
     };
 
-    $(GRID_LAYOUT_BUTTON).click(function () { // eslint-disable-line no-unused-vars
-        let nodeGroup = node._groups[0].sort(sortNode);
-        if (grnState.graphLayout === "FORCE_GRAPH") {
-            $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
-            const margin = 10;
-            const grid = Grid() // create new grid layout
+    let nodeGroup = node._groups[0].sort(sortNode);
+    var setNodesToGrid = () => { // eslint-disable-line no-unused-vars
+        const margin = 10;
+        const grid = Grid()  // eslint-disable-line no-undef
             .data(network.genes)
             .bands(true)
             .padding([0.2, 0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
-            grid.layout();
-            let gridNodes = grid.nodes();
-            let gridNumRow = grid.cols();
-            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
-            let marginHeight = getMarginHeight(gridNodes);
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
-                nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
-            }
-        } else {
-            $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = null;
-                nodeGroup[i].__data__.fy = null;
-            }
+        grid.layout();
+        let gridNodes = grid.nodes();
+        let gridNumRow = grid.cols();
+        let marginWidth = getMarginWidth(gridNodes, gridNumRow);
+        let marginHeight = getMarginHeight(gridNodes);
+        for (var i in nodeGroup) {
+            nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
+            nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
         }
-    });
-*/
+    };
+
+    var setNodesToForceGraph = () => { // eslint-disable-line no-unused-vars
+        for (var i in nodeGroup) {
+            nodeGroup[i].__data__.fx = null;
+            nodeGroup[i].__data__.fy = null;
+        }
+    };
+
+    setNodesToForceGraph();
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)

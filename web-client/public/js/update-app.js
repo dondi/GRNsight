@@ -293,15 +293,14 @@ export const updateApp = grnState => {
 
 // Graph Layout
 
-    const lockForce = function (disable) {
+    const lockForce = (disable) => {
         $("#linkDistInput").prop("disabled", disable);
         $("#chargeInput").prop("disabled", disable);
         $("#resetSlidersButton").prop("disabled", disable);
         $("#lockSlidersButton").prop("checked", disable);
-        console.log("lockForce called");
     };
 
-    const toggleLayout = function (on, off) {
+    const toggleLayout = (on, off) => {
         if (!$(on).prop("checked")) {
             $(on).prop("checked", true);
             $(off).prop("checked", false);
@@ -318,7 +317,6 @@ export const updateApp = grnState => {
         $("#resetSlidersMenu").parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");
-        console.log("updatetoForceGraph");
     };
 
     const updatetoGridLayout = () => {
@@ -329,7 +327,6 @@ export const updateApp = grnState => {
         $("#resetSlidersMenu").parent().addClass("disabled");
         $("#link-distance").parent().addClass("disabled");
         $("#charge").parent().addClass("disabled");
-        console.log("updatetoGridLayout");
     };
 
     if (grnState.graphLayout === "FORCE_GRAPH") {
