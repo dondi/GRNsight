@@ -40,6 +40,7 @@ import {
   CHARGE_SLIDER_ID,
   CHARGE_MENU,
   CHARGE_DEFAULT_VALUE,
+  GRID_LAYOUT_BUTTON,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -288,6 +289,53 @@ export const updateApp = grnState => {
         $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
+    }
+
+// Graph Layout
+
+    const lockForce = function (disable) {
+        $("#linkDistInput").prop("disabled", disable);
+        $("#chargeInput").prop("disabled", disable);
+        $("#resetSlidersButton").prop("disabled", disable);
+        $("#lockSlidersButton").prop("checked", disable);
+        console.log("lockForce called");
+    };
+
+    const toggleLayout = function (on, off) {
+        if (!$(on).prop("checked")) {
+            $(on).prop("checked", true);
+            $(off).prop("checked", false);
+            $(off + " span").removeClass("glyphicon-ok");
+            $(on + " span").addClass("glyphicon-ok");
+        }
+    };
+
+    const updatetoForceGraph = () => {
+        $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
+        toggleLayout("#forceGraph", "#gridLayout");
+        lockForce(false);
+        $("#lockSlidersMenu").parent().removeClass("disabled");
+        $("#resetSlidersMenu").parent().removeClass("disabled");
+        $("#link-distance").parent().removeClass("disabled");
+        $("#charge").parent().removeClass("disabled");
+        console.log("updatetoForceGraph");
+    };
+
+    const updatetoGridLayout = () => {
+        $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
+        toggleLayout("#gridLayout", "#forceGraph");
+        lockForce(true);
+        $("#lockSlidersMenu").parent().addClass("disabled");
+        $("#resetSlidersMenu").parent().addClass("disabled");
+        $("#link-distance").parent().addClass("disabled");
+        $("#charge").parent().addClass("disabled");
+        console.log("updatetoGridLayout");
+    };
+
+    if (grnState.graphLayout === "FORCE_GRAPH") {
+        updatetoForceGraph();
+    } else if (grnState.graphLayout === "GRID_LAYOUT") {
+        updatetoGridLayout();
     }
 
     refreshApp();

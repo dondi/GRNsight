@@ -68,6 +68,8 @@ export const CHARGE_VALUE               = "#chargeVal";
 export const CHARGE_MENU                = "#charge-menu";
 export const CHARGE_DEFAULT_VALUE       = -50;
 
+export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
+
 export const MINIMUM_MAX_LOG_FOLD_CHANGE                = -100;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
 export const DEFAULT_MAX_LOG_FOLD_CHANGE                = 3;

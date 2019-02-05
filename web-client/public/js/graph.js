@@ -1,4 +1,4 @@
-import Grid from "d3-v4-grid";
+// import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
 import {
@@ -13,6 +13,7 @@ import {
     CHARGE_SLIDER_ID,
     CHARGE_MENU,
     CHARGE_VALUE,
+//    GRID_LAYOUT_BUTTON,
 } from "./constants";
 
 /* globals d3 */
@@ -1204,6 +1205,7 @@ export var drawGraph = function (network, nodeColoring) {
     // resets graph options so when new graph is loaded, initial layout is always force graph
     $("#forceGraph").trigger("click");
 
+/*
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
         let rightNode = gridNodes[row - 1];
@@ -1230,18 +1232,10 @@ export var drawGraph = function (network, nodeColoring) {
         return name1 > name2 ? 1 : -1;
     };
 
-    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
-    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     $(GRID_LAYOUT_BUTTON).click(function () { // eslint-disable-line no-unused-vars
-        console.log("Layout status: " + grnState.graphLayout);
         let nodeGroup = node._groups[0].sort(sortNode);
         if (grnState.graphLayout === "FORCE_GRAPH") {
-            $("#gridLayout")
-                .addClass("called")
-                .trigger("click")
-                .removeClass("called");
-            this.value = "Force Graph";
-            grnState.graphLayout = "GRID_LAYOUT";
+            $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
             const margin = 10;
             const grid = Grid() // create new grid layout
             .data(network.genes)
@@ -1253,24 +1247,19 @@ export var drawGraph = function (network, nodeColoring) {
             let gridNumRow = grid.cols();
             let marginWidth = getMarginWidth(gridNodes, gridNumRow);
             let marginHeight = getMarginHeight(gridNodes);
-            /* eslint-disable block-scoped-var */
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
                 nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
             }
         } else {
-            $("#forceGraph")
-                .addClass("called")
-                .trigger("click")
-                .removeClass("called");
-            grnState.graphLayout = "FORCE_GRAPH";
+            $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
             for (i in nodeGroup) {
                 nodeGroup[i].__data__.fx = null;
                 nodeGroup[i].__data__.fy = null;
             }
         }
-            /* eslint-enable block-scoped-var */
     });
+*/
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)

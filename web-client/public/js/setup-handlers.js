@@ -16,6 +16,7 @@ import {
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
+    GRID_LAYOUT_BUTTON,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -111,6 +112,16 @@ export const setupHandlers = grnState => {
     $(UNDO_SLIDER_RESET_MENU).click(() => {
         grnState.resetTriggered = true;
         grnState.undoResetTriggered = false;
+        updateApp(grnState);
+    });
+
+    $(GRID_LAYOUT_BUTTON).click(function () {
+        if (grnState.graphLayout === "FORCE_GRAPH") {
+            grnState.graphLayout = "GRID_LAYOUT";
+        } else if (grnState.graphLayout === "GRID_LAYOUT") {
+            grnState.graphLayout = "FORCE_GRAPH";
+        }
+        console.log(grnState.graphLayout);
         updateApp(grnState);
     });
 };
