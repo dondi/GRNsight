@@ -115,12 +115,24 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+// Grid buttons
     $(GRID_LAYOUT_BUTTON).click(function () {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
         }
+        updateApp(grnState);
+    });
+
+    $("#forceGraph").click(function () {
+        grnState.graphLayout = "FORCE_GRAPH";
+        updateApp(grnState);
+
+    });
+
+    $("#gridLayout").click(function () {
+        grnState.graphLayout = "GRID_LAYOUT";
         updateApp(grnState);
     });
 };

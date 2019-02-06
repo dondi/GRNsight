@@ -1,4 +1,4 @@
-import { drawGraph } from "./graph";
+import { drawGraph, updaters } from "./graph";
 import { uploadState } from "./upload";
 import { displayWarnings } from "./warnings";
 import { max } from "d3-array";
@@ -317,6 +317,8 @@ export const updateApp = grnState => {
         $("#resetSlidersMenu").parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");
+        console.log(updaters);
+        updaters.setNodesToForceGraph();
     };
 
     const updatetoGridLayout = () => {
@@ -327,6 +329,7 @@ export const updateApp = grnState => {
         $("#resetSlidersMenu").parent().addClass("disabled");
         $("#link-distance").parent().addClass("disabled");
         $("#charge").parent().addClass("disabled");
+        updaters.setNodesToGrid();
     };
 
     if (grnState.graphLayout === "FORCE_GRAPH") {

@@ -1,4 +1,4 @@
-// import Grid from "d3-v4-grid";
+import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
 import {
@@ -31,6 +31,11 @@ import {
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
+
+export var updaters = {
+    setNodesToGrid: () => {},
+    setNodesToForceGraph: () => {},
+};
 
 export var drawGraph = function (network, nodeColoring) {
 /* eslint-enable no-unused-vars */
@@ -1203,7 +1208,6 @@ export var drawGraph = function (network, nodeColoring) {
     }
 
     // resets graph options so when new graph is loaded, initial layout is always force graph
-    $("#forceGraph").trigger("click");
 
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
@@ -1232,7 +1236,7 @@ export var drawGraph = function (network, nodeColoring) {
     };
 
     let nodeGroup = node._groups[0].sort(sortNode);
-    var setNodesToGrid = () => { // eslint-disable-line no-unused-vars
+    updaters.setNodesToGrid = () => { // eslint-disable-line no-unused-vars
         const margin = 10;
         const grid = Grid()  // eslint-disable-line no-undef
             .data(network.genes)
@@ -1250,14 +1254,12 @@ export var drawGraph = function (network, nodeColoring) {
         }
     };
 
-    var setNodesToForceGraph = () => { // eslint-disable-line no-unused-vars
+    updaters.setNodesToForceGraph = () => { // eslint-disable-line no-unused-vars
         for (var i in nodeGroup) {
             nodeGroup[i].__data__.fx = null;
             nodeGroup[i].__data__.fy = null;
         }
     };
-
-    setNodesToForceGraph();
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)
