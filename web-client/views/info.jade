@@ -20,53 +20,61 @@ html
           .modal-footer
             input.btn.btn-default(type='button', data-dismiss='modal', value='Close')
     // End error modal
-    .container-fluid
-      iframe(src='http://dondi.github.io/GRNsight/onlyheader.html', scrolling='no')
-      .row
-        .col-2
-          iframe#iframeMenu(src='http://dondi.github.io/GRNsight/onlysidebar.html', scrolling='no')
-        #mainPage.col-10
-          #pageHead.row
-            div
-              // This is how the gene ID's will be displayed, but the URL's provided should be altered to accodomate for each specific gene
-            .row
-              .col
-                h1#gene-name.display-4
-              .col
-                em
-                  h2#gene-species.uniProtSpecies Page is loading...
-            // end of row
-          #navigationButtons.row
-            .col
-              button.btn.btn-green(data-toggle='collapse', data-target='#generalInfo') General Information
-              // button.btn.btn-purple(data-toggle='collapse', data-target='#dnaSequence') DNA Sequence
-              button.btn.btn-purple(data-toggle='collapse', data-target='#proteinInfo') Protein Information
-              button.btn.btn-brown(data-toggle='collapse', data-target='#regulation') Regulation
-              //button.btn.btn-turquoise(data-toggle='collapse', data-target='#interaction') Interaction
-              button.btn.btn-turquoise(data-toggle='collapse', data-target='#geneOntology') Gene Ontology
-              button.btn.btn-violet(data-toggle='collapse', data-target='#sources') Sources
+    #header
+      iframe#iframeHeader(src='http://dondi.github.io/GRNsight/onlyheader.html', scrolling='no')
+    #navBar
+      iframe#iframeMenu(src='http://dondi.github.io/GRNsight/onlysidebar.html', scrolling='no')
+    #mainContent
+      #pageContent
+        #pageHead.row
+          .col
+            h1#gene-name
+          .col
+            em
+              h2.text-right#gene-species.uniProtSpecies Page is loading...
+        #navigationButtons.row
+          .col
+            button.btn.btn-green(data-toggle='collapse', data-target='#generalInfo') General Information
+            // button.btn.btn-purple(data-toggle='collapse', data-target='#dnaSequence') DNA Sequence
+            button.btn.btn-purple(data-toggle='collapse', data-target='#proteinInfo') Protein Information
+            button.btn.btn-brown(data-toggle='collapse', data-target='#regulation') Regulation
+            //button.btn.btn-turquoise(data-toggle='collapse', data-target='#interaction') Interaction
+            button.btn.btn-turquoise(data-toggle='collapse', data-target='#geneOntology') Gene Ontology
+            button.btn.btn-violet(data-toggle='collapse', data-target='#sources') Sources
+        #accordion
+          //
+            <div class="card">
+            <div class="card-header" id="dnaSequenceHeading" role="tab">
+            <h5 class="mb-0"><a class="purple" data-toggle="collapse" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">DNA Sequence</a></h5>
+            </div>
+            <div class="collapse" id="dnaSequence">
+            <div class="card-block">
+            <p class="ensemblSource dnaSequence codeSequence"></p>
+            </div>
+            </div>
+            </div>
           .card
             #generalInfoHeading.card-header(role='tab')
               h5.mb-0
-                a.green(data-toggle='collapse', href='#generalInfo', aria-expanded='true', aria-controls='collapseOne') General Information
+                a.green.accordionLink(data-toggle='collapse', href='#generalInfo', aria-expanded='true', aria-controls='collapseOne') General Information
             #generalInfo.collapse(role='tabpanel', aria-labelledby='headingThree')
               .card-block
                 dl.row
                   dt.col-sm-3 SGD ID:
                   dd.col-sm-9
-                    a.sgd-link.gene-link(data-toggle='tooltip', data-placement='top', title='Saccharomyces Genome Database')
+                    a.sgd-link.gene-link.sgdSource(data-toggle='tooltip', data-placement='top', title='Saccharomyces Genome Database')
                   dt.col-sm-3 NCBI Gene ID:
                   dd.col-sm-9
-                    a.ncbi-link.gene-link(data-toggle='tooltip', data-placement='top', title='National Center for Biotechnology Information')
+                    a.ncbi-link.gene-link.ncbiSource(data-toggle='tooltip', data-placement='top', title='National Center for Biotechnology Information')
                   dt.col-sm-3 Ensembl ID:
                   dd.col-sm-9
-                    a.ensembl-link.gene-link(data-toggle='tooltip', data-placement='top', title='Ensembl')
+                    a.ensembl-link.gene-link.ensemblSource(data-toggle='tooltip', data-placement='top', title='Ensembl')
                   dt.col-sm-3 Uniprot ID:
                   dd.col-sm-9
-                    a.uniprot-link.gene-link(data-toggle='tooltip', data-placement='top', title='UniProt')
+                    a.uniprot-link.gene-link.uniprotSource(data-toggle='tooltip', data-placement='top', title='UniProt')
                   dt.col-sm-3 JASPAR ID:
                   dd.col-sm-9
-                    a.jaspar-link.gene-link(data-toggle='tooltip', data-placement='top', title='Jaspar')
+                    a.jaspar-link.gene-link.jasparSource(data-toggle='tooltip', data-placement='top', title='Jaspar')
                   dt.col-sm-3 Description:
                   dd.geneDescription.col-sm-9.sgdSource
                   dt.col-sm-3 Species:
@@ -79,146 +87,133 @@ html
                   dd.jasparClass.col-sm-9.jasparSource
                   dt.col-sm-3 Chromosome Sequence:
                   dd.chromosomeSequence.ncbiSource.col-sm-9(src='')
-          .row
-            .col-12
-              #accordion
-                //
-                  <div class="card">
-                  <div class="card-header" id="dnaSequenceHeading" role="tab">
-                  <h5 class="mb-0"><a class="purple" data-toggle="collapse" href="#dnaSequence" aria-expanded="true" aria-controls="collapseOne">DNA Sequence</a></h5>
-                  </div>
-                  <div class="collapse" id="dnaSequence">
-                  <div class="card-block">
-                  <p class="ensemblSource dnaSequence codeSequence"></p>
-                  </div>
-                  </div>
-                  </div>
-                .card
-                  #proteinInfoHeading.card-header
-                    h5.mb-0
-                      a.purple(data-toggle='collapse', href='#proteinInfo') Protein Information
-                  #proteinInfo.collapse
-                    .card-block
-                      dl.row
-                        dt.col-sm-3 Protein:
-                        dd.col-sm-9.proteinType.uniprotSource
-                        dt.col-sm-3 Protein Sequence:
-                        dd.col-sm-9.uniprotSource.proteinSequence.codeSequence
-                .card
-                  #regulationHeading.card-header
-                    h5.mb-0
-                      a.brown(data-toggle='collapse', href='#regulation', aria-expanded='true', aria-controls='collapseOne') Regulation
-                  #regulation.collapse
-                    .card-block
-                      dl.row.dl-horizontal
-                        //dt.col-sm-3  Regulators:
-                        //dd.regulators.col-sm-9
-                        //dt.col-sm-3  Targets:
-                        //dd.targets.col-sm-9
-                        dt.col-sm-3  Sequence Logo:
-                        dd.col-sm-9.jasparSource
-                          img.sequenceLogo(src='')
-                        dt.col-sm-3  Frequency Matrix:
-                        dd.col-sm-9.jasparSource
-                          table.frequencyMatrix.table.table-dark.table-striped
-                            thead
-                              tr.frequencyOfA.jasparSource
-                                th A:
-                            tbody
-                              tr.frequencyOfC.jasparSource
-                                th C:
-                              tr.frequencyOfG.jasparSource
-                                th G:
-                              tr.frequencyOfT.jasparSource
-                                th T:
-                //
-                  <div class="card">
-                  <div class="card-header" id="interactionHeading">
-                  <h5 class="mb-0"><a class="purple" data-toggle="collapse" href="#interaction" aria-expanded="true" aria-controls="collapseOne">Interaction</a></h5>
-                  </div>
-                  <div class="collapse" id="interaction">
-                  <div class="card-block">
-                  <div class="physicalInteractions">
-                  <h3> Physical Interactions</h3>
-                  <dl class="row">
-                  <dt class="col-sm-3">Affinity Capture MS:</dt>
-                  <dd class="affinityCaptureMS col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Affinity Capture RNA:</dt>
-                  <dd class="affinityCaptureRNA col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Affinity Capture Western:</dt>
-                  <dd class="affinityCaptureWestern col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">BioChemical Activity:</dt>
-                  <dd class="biochemicalActivity col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Colocalization:</dt>
-                  <dd class="colocalization col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Reconstituted Complex:</dt>
-                  <dd class="reconstitutedComplex col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Two Hybrid</dt>
-                  <dd class="twoHybrid col-sm-9 sgdSource"></dd>
-                  </dl>
-                  </div>
-                  <div class="geneticInteractions">
-                  <h3> Genetic Interactions</h3>
-                  <dl class="row table table-dark">
-                  <dt class="col-sm-3">Dosage Rescue:</dt>
-                  <dd class="dosageRescue col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Negative Genetic:</dt>
-                  <dd class="negativeGenetic col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Phenotypic Enhancement:</dt>
-                  <dd class="phenotypicEnhancement col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Phenotypic Suppression:</dt>
-                  <dd class="phenotypicSuppression col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Synthetic Growth Defect:</dt>
-                  <dd class="syntheticGrowthDefect col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Synthetic Haploin Sufficiency:</dt>
-                  <dd class="syntheticHaploinsufficiency col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Synthetic Lethality:</dt>
-                  <dd class="syntheticLethality col-sm-9 sgdSource"></dd>
-                  <dt class="col-sm-3">Synthetic Rescue:</dt>
-                  <dd class="syntheticRescue col-sm-9 sgdSource"></dd>
-                  </dl>
-                  </div>
-                  <dl class="row">
-                  <h5 class="col-sm-3">Total Interactions:</h5>
-                  <dd class="totalInteractions sgdSource"></dd>
-                  </dl>
-                  </div>
-                  </div>
-                  </div>
-                .card
-                  #geneOntologyHeading.card-header
-                    h5.mb-0
-                      a.turquoise(data-toggle='collapse', href='#geneOntology', aria-expanded='true', aria-controls='collapseOne') Gene Ontology
-                  #geneOntology.collapse
-                    .card-block
-                      dl.row
-                        dt.col-sm-3 Gene Summary:
-                        dd.geneSummary.col-sm-9.sgdSource
-                        dt.col-sm-3 Molecular Function:
-                        dd.molecularFunction.col-sm-9
-                        dt.col-sm-3 Biological Process:
-                        dd.biologicalProcess.col-sm-9
-                        dt.col-sm-3 Cellular Component:
-                        dd.cellularComponent.col-sm-9
-                .card
-                  #sourcesHeading.card-header
-                    h5.mb-0
-                      a.violet(data-toggle='collapse', href='#sources', aria-expanded='true', aria-controls='collapseOne') Sources
-                  #sources.collapse
-                    .card-block
-                      dl.row
-                        a#sgdSource.col.sgd-link.database-link
-                      dl.row
-                        a#uniprotSource.col.uniprot-link.database-link
-                      dl.row
-                        a#ensemblSource.col.ensembl-link.database-link
-                      dl.row
-                        a#ncbiSource.col.ncbi-link.database-link
-                      dl.row
-                        a#jasparSource.col.jaspar-link.database-link
+          .card
+            #proteinInfoHeading.card-header
+              h5.mb-0
+                a.purple.accordionLink(data-toggle='collapse', href='#proteinInfo') Protein Information
+            #proteinInfo.collapse
+              .card-block
+                dl.row
+                  dt.col-sm-3 Protein:
+                  dd.col-sm-9.proteinType.uniprotSource
+                  dt.col-sm-3 Protein Sequence:
+                  dd.col-sm-9.uniprotSource.proteinSequence.codeSequence
+          .card
+            #regulationHeading.card-header
+              h5.mb-0
+                a.brown.accordionLink(data-toggle='collapse', href='#regulation', aria-expanded='true', aria-controls='collapseOne') Regulation
+            #regulation.collapse
+              .card-block
+                dl.row.dl-horizontal
+                  dt.col-sm-3  Regulators:
+                  dd.regulators.col-sm-9
+                  dt.col-sm-3  Targets:
+                  dd.targets.col-sm-9
+                  dt.col-sm-3  Sequence Logo:
+                  dd.col-sm-9.jasparSource.logo
+                    img.sequenceLogo.sequenceLogoImage(src='')
+                  dt.col-sm-3  Frequency Matrix:
+                  dd.col-sm-9
+                    table.frequencyMatrix.table.table-dark.table-striped
+                      thead
+                        tr.frequencyOfA.jasparSource
+                          th A:
+                      tbody
+                        tr.frequencyOfC.jasparSource
+                          th C:
+                        tr.frequencyOfG.jasparSource
+                          th G:
+                        tr.frequencyOfT.jasparSource
+                          th T:
+          //
+            <div class="card">
+            <div class="card-header" id="interactionHeading">
+            <h5 class="mb-0"><a class="purple" data-toggle="collapse" href="#interaction" aria-expanded="true" aria-controls="collapseOne">Interaction</a></h5>
+            </div>
+            <div class="collapse" id="interaction">
+            <div class="card-block">
+            <div class="physicalInteractions">
+            <h3> Physical Interactions</h3>
+            <dl class="row">
+            <dt class="col-sm-3">Affinity Capture MS:</dt>
+            <dd class="affinityCaptureMS col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Affinity Capture RNA:</dt>
+            <dd class="affinityCaptureRNA col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Affinity Capture Western:</dt>
+            <dd class="affinityCaptureWestern col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">BioChemical Activity:</dt>
+            <dd class="biochemicalActivity col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Colocalization:</dt>
+            <dd class="colocalization col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Reconstituted Complex:</dt>
+            <dd class="reconstitutedComplex col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Two Hybrid</dt>
+            <dd class="twoHybrid col-sm-9 sgdSource"></dd>
+            </dl>
+            </div>
+            <div class="geneticInteractions">
+            <h3> Genetic Interactions</h3>
+            <dl class="row table table-dark">
+            <dt class="col-sm-3">Dosage Rescue:</dt>
+            <dd class="dosageRescue col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Negative Genetic:</dt>
+            <dd class="negativeGenetic col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Phenotypic Enhancement:</dt>
+            <dd class="phenotypicEnhancement col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Phenotypic Suppression:</dt>
+            <dd class="phenotypicSuppression col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Synthetic Growth Defect:</dt>
+            <dd class="syntheticGrowthDefect col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Synthetic Haploin Sufficiency:</dt>
+            <dd class="syntheticHaploinsufficiency col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Synthetic Lethality:</dt>
+            <dd class="syntheticLethality col-sm-9 sgdSource"></dd>
+            <dt class="col-sm-3">Synthetic Rescue:</dt>
+            <dd class="syntheticRescue col-sm-9 sgdSource"></dd>
+            </dl>
+            </div>
+            <dl class="row">
+            <h5 class="col-sm-3">Total Interactions:</h5>
+            <dd class="totalInteractions sgdSource"></dd>
+            </dl>
+            </div>
+            </div>
+            </div>
+          .card
+            #geneOntologyHeading.card-header
+              h5.mb-0
+                a.turquoise.accordionLink(data-toggle='collapse', href='#geneOntology', aria-expanded='true', aria-controls='collapseOne') Gene Ontology
+            #geneOntology.collapse
+              .card-block
+                dl.row
+                  dt.col-sm-3 Gene Summary:
+                  dd.geneSummary.col-sm-9.sgdSource
+                  dt.col-sm-3 Molecular Function:
+                  dd.molecularFunction.col-sm-9
+                  dt.col-sm-3 Biological Process:
+                  dd.biologicalProcess.col-sm-9
+                  dt.col-sm-3 Cellular Component:
+                  dd.cellularComponent.col-sm-9
+          .card
+            #sourcesHeading.card-header
+              h5.mb-0
+                a.violet.accordionLink(data-toggle='collapse', href='#sources', aria-expanded='true', aria-controls='collapseOne') Sources
+            #sources.collapse
+              .card-block
+                dl.row
+                  a#sgdSource.col.sgd-link.database-link
+                dl.row
+                  a#uniprotSource.col.uniprot-link.database-link
+                dl.row
+                  a#ensemblSource.col.ensembl-link.database-link
+                dl.row
+                  a#ncbiSource.col.ncbi-link.database-link
+                dl.row
+                  a#jasparSource.col.jaspar-link.database-link
         iframe#iframeFooter(src='http://dondi.github.io/GRNsight/onlyfooter.html', scrolling='no')
-        script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
-        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js', integrity='sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4', crossorigin='anonymous')
-        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js', integrity='sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1', crossorigin='anonymous')
-        script(src='gene/api.js')
-        script(src='gene/info.js')
+
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js', integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=', crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js', integrity='sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4', crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js', integrity='sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1', crossorigin='anonymous')
+    script(src='gene/api.js')
+    script(src='gene/info.js')

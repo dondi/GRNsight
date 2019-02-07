@@ -52,3 +52,5 @@ coverage/
 *.mtc1
 *.out
 *.synctex.gz
+
+.vscode
