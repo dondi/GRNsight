@@ -88,7 +88,7 @@
         const uniSpecies = gene.uniprot.species;
         $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
 
-        //This has been moved to top of function
+        // This has been moved to top of function
         $(".ncbiLocusTag").text(locusTag).attr({ href: ncbiHrefTemplate + locusTag });
 
         const jasparClass = gene.jaspar.class;
