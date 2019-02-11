@@ -29,13 +29,11 @@
     });
 
     const search = location.search.substring(1);
-       console.log(search)
-
-       const obj = {
-         symbol: search.match(/symbol=(.*?)(?=&)/)[1],
-         species: search.match(/species=(.*?)(?=&)/)[1],
-         taxon: search.match(/taxon=(.*?)/)[1]
-       }
+    const obj = {
+        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
+        species: search.match(/species=(.*?)(?=&)/)[1],
+        taxon: search.match(/taxon=(.*?)/)[1]
+    };
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
