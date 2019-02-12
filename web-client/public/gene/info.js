@@ -43,6 +43,8 @@
 
     api.getGeneInformation(obj.symbol).done(function (gene) {
 
+        const locusTag = gene.ncbi.locusTag;
+
         const sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
         const sgdId = gene.sgd.sgdID;
         $(".sgd-link").text(sgdId);
@@ -58,7 +60,7 @@
         }
 
         const ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
-        const ensemblId = gene.ensembl.ensemblID;
+        const ensemblId = locusTag;
         $(".ensembl-link").text(ensemblId);
         if (ensemblId !== "Not found") {
             $(".ensembl-link").attr({ href: ensemblHrefTemplate + ensemblId });
@@ -86,8 +88,8 @@
         const uniSpecies = gene.uniprot.species;
         $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
 
-        const ncbiLocus = gene.ncbi.locusTag;
-        $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
+        // This has been moved to top of function
+        $(".ncbiLocusTag").text(locusTag).attr({ href: ncbiHrefTemplate + locusTag });
 
         const jasparClass = gene.jaspar.class;
         $(".jasparClass").text(jasparClass).attr({ href: jasparHrefTemplate + jasparClass });
