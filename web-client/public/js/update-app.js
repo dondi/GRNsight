@@ -317,7 +317,6 @@ export const updateApp = grnState => {
         $("#resetSlidersMenu").parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");
-        console.log(updaters);
         updaters.setNodesToForceGraph();
     };
 
