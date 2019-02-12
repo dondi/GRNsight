@@ -14,6 +14,9 @@ import {
     LOCK_SLIDERS_CLASS,
     UNDO_SLIDER_RESET_CLASS,
     RESET_SLIDERS_CLASS,
+    RESET_SLIDERS_MENU_OPTION,
+    UNDO_SLIDER_RESET_MENU,
+    GRID_LAYOUT_BUTTON,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -97,6 +100,39 @@ export const setupHandlers = grnState => {
     $(RESET_SLIDERS_CLASS).click(() => {
         grnState.resetTriggered = false;
         grnState.undoResetTriggered = true;
+        updateApp(grnState);
+    });
+
+    $(RESET_SLIDERS_MENU_OPTION).click(() => {
+        grnState.resetTriggered = false;
+        grnState.undoResetTriggered = true;
+        updateApp(grnState);
+    });
+
+    $(UNDO_SLIDER_RESET_MENU).click(() => {
+        grnState.resetTriggered = true;
+        grnState.undoResetTriggered = false;
+        updateApp(grnState);
+    });
+
+// Grid buttons
+    $(GRID_LAYOUT_BUTTON).click(function () {
+        if (grnState.graphLayout === "FORCE_GRAPH") {
+            grnState.graphLayout = "GRID_LAYOUT";
+        } else if (grnState.graphLayout === "GRID_LAYOUT") {
+            grnState.graphLayout = "FORCE_GRAPH";
+        }
+        updateApp(grnState);
+    });
+
+    $("#forceGraph").click(function () {
+        grnState.graphLayout = "FORCE_GRAPH";
+        updateApp(grnState);
+
+    });
+
+    $("#gridLayout").click(function () {
+        grnState.graphLayout = "GRID_LAYOUT";
         updateApp(grnState);
     });
 };

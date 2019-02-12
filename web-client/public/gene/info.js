@@ -29,10 +29,11 @@
     });
 
     const search = location.search.substring(1);
-    const obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
-        function ( key, value) {
-            return key === "" ? value : decodeURIComponent(value);
-        }) : {};
+    const obj = {
+        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
+        species: search.match(/species=(.*?)(?=&)/)[1],
+        taxon: search.match(/taxon=(.*?)/)[1]
+    };
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
@@ -41,7 +42,9 @@
 
     const api = window.api;
 
-    api.getGeneInformation(obj.symbol).done(function (gene) {
+    api.getGeneInformation(obj).done(function (gene) {
+
+        const locusTag = gene.ncbi.locusTag;
 
         const sgdHrefTemplate = "https://www.yeastgenome.org/locus/";
         const sgdId = gene.sgd.sgdID;
@@ -58,7 +61,7 @@
         }
 
         const ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
-        const ensemblId = gene.ensembl.ensemblID;
+        const ensemblId = locusTag;
         $(".ensembl-link").text(ensemblId);
         if (ensemblId !== "Not found") {
             $(".ensembl-link").attr({ href: ensemblHrefTemplate + ensemblId });
@@ -86,8 +89,8 @@
         const uniSpecies = gene.uniprot.species;
         $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
 
-        const ncbiLocus = gene.ncbi.locusTag;
-        $(".ncbiLocusTag").text(ncbiLocus).attr({ href: ncbiHrefTemplate + ncbiLocus });
+        // This has been moved to top of function
+        $(".ncbiLocusTag").text(locusTag).attr({ href: ncbiHrefTemplate + locusTag });
 
         const jasparClass = gene.jaspar.class;
         $(".jasparClass").text(jasparClass).attr({ href: jasparHrefTemplate + jasparClass });

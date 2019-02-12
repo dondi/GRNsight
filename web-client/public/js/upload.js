@@ -2,15 +2,12 @@
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
 
-import { grnState } from "./grnstate";
-
 export const uploadState = {
     currentNetwork: null,
-    sliders: null,
     nodeColoring: null
 };
 
-export const upload = function (sliderGroupController, drawGraph, nodeColoringController) {
+export const upload = function (drawGraph, nodeColoringController) {
 
   // Values
     var TOOLTIP_SHOW_DELAY    = 700;
@@ -31,51 +28,7 @@ export const upload = function (sliderGroupController, drawGraph, nodeColoringCo
     nodeColoring.configureNodeColoringHandlers();
     nodeColoring.initialize();
 
-    var sliders = new sliderGroupController([grnState.chargeSlider, grnState.linkDistanceSlider]);
-    uploadState.sliders = sliders;
-    sliders.setSliderHandlers();
-
-    var lockForce = function (disable) {
-        $("#linkDistInput").prop("disabled", disable);
-        $("#chargeInput").prop("disabled", disable);
-        $("#resetSlidersButton").prop("disabled", disable);
-        $("#lockSlidersButton").prop("checked", disable);
-    };
-
-    var toggleLayout = function (on, off) {
-        if (!$(on).prop("checked")) {
-            $(on).prop("checked", true);
-            $(off).prop("checked", false);
-            $(off + " span").removeClass("glyphicon-ok");
-            $(on + " span").addClass("glyphicon-ok");
-            if (on === "#gridLayout") {
-                lockForce(true);
-                $("#lockSlidersMenu").parent().addClass("disabled");
-                $("#resetSlidersMenu").parent().addClass("disabled");
-                $("#link-distance").parent().addClass("disabled");
-                $("#charge").parent().addClass("disabled");
-            } else {
-                lockForce(false);
-                $("#lockSlidersMenu").parent().removeClass("disabled");
-                $("#resetSlidersMenu").parent().removeClass("disabled");
-                $("#link-distance").parent().removeClass("disabled");
-                $("#charge").parent().removeClass("disabled");
-            }
-            if (!$(on).hasClass("called")) {
-                $("#gridLayoutButton").trigger("click");
-            }
-        }
-    };
-
-    $("#gridLayout").on("click", function () {
-        toggleLayout("#gridLayout", "#forceGraph");
-    });
-
-    $("#forceGraph").on("click", function () {
-        toggleLayout("#forceGraph", "#gridLayout");
-    });
-
-    $("#printGraph").on("click", function () {
+    $("#printGraph").click( function () {
         if (!$(".startDisabled").hasClass("disabled")) {
             window.print();
         }

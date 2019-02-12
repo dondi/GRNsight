@@ -1,25 +1,23 @@
-var MINIMUM_MAX_LOG_FOLD_CHANGE = -100;
-var MAXIMUM_MAX_LOG_FOLD_CHANGE = 100;
-var DEFAULT_MAX_LOG_FOLD_CHANGE = 3;
-var MAX_NUM_CHARACTERS_DROPDOWN = 24;
-
-var NODE_COLORING_MENU = ".node-coloring";
-
-var BOTTOM_DATASET_SELECTION_SIDEBAR = "#dataset-bottom";
-var TOP_DATASET_SELECTION_SIDEBAR = "#dataset-top";
-var NODE_COLORING_TOGGLE_SIDEBAR = "#nodeColoringToggle";
-var AVG_REPLICATE_VALS_BOTTOM_SIDEBAR = "#averageDataBottom";
-var AVG_REPLICATE_VALS_TOP_SIDEBAR = "#averageDataTop";
-
-var AVG_REPLICATE_VALS_TOP_MENU = "#averageDataTopMenu";
-var AVG_REPLICATE_VALS_BOTTOM_MENU = "#averageDataBottomMenu";
-var NODE_COLORING_TOGGLE_MENU = "#node-coloring-toggle-menu";
-var TOP_DATASET_SELECTION_MENU = "#topDatasetDropdownMenu";
-var BOTTOM_DATASET_SELECTION_MENU = "#bottomDatasetDropdownMenu";
-
-var NODE_COLORING_TOGGLE_CLASS = ".nodeColoringToggle";
-var LOG_FOLD_CHANGE_MAX_VALUE_CLASS = ".logFoldChangeMaxValue";
-var LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON = "#log-fold-change-button";
+import {
+  MINIMUM_MAX_LOG_FOLD_CHANGE,
+  MAXIMUM_MAX_LOG_FOLD_CHANGE,
+  DEFAULT_MAX_LOG_FOLD_CHANGE,
+  MAX_NUM_CHARACTERS_DROPDOWN,
+  NODE_COLORING_MENU,
+  BOTTOM_DATASET_SELECTION_SIDEBAR,
+  TOP_DATASET_SELECTION_SIDEBAR,
+  NODE_COLORING_TOGGLE_SIDEBAR,
+  AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
+  AVG_REPLICATE_VALS_TOP_SIDEBAR,
+  AVG_REPLICATE_VALS_TOP_MENU,
+  AVG_REPLICATE_VALS_BOTTOM_MENU,
+  NODE_COLORING_TOGGLE_MENU,
+  TOP_DATASET_SELECTION_MENU,
+  BOTTOM_DATASET_SELECTION_MENU,
+  NODE_COLORING_TOGGLE_CLASS,
+  LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+} from "./constants";
 
 
 var endsInExpressionRegExp = /expression$/;
@@ -41,7 +39,6 @@ export var hasExpressionData = function (sheets) {
 export var nodeColoringController = {
 
     // renderNodeColoring: function () { }, // defined in graph.js
-    // removeNodeColoring: function () { }, // defined in graph.js
 
     updateAverageReplicateValuesTopDataset: function (averageTopDataset) {
         if (averageTopDataset) {

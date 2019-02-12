@@ -3,10 +3,10 @@ import {
   SHOW_WEIGHTS_MOUSEOVER,
   LINK_DIST_SLIDER_ID,
   LINK_DIST_VALUE,
-  LINK_DIST_DEFAULT,
+  LINK_DIST_DEFAULT_VALUE,
   CHARGE_SLIDER_ID,
   CHARGE_VALUE,
-  CHARGE_DEFAULT,
+  CHARGE_DEFAULT_VALUE,
 } from "./constants";
 let currentNetwork = null;
 
@@ -38,11 +38,8 @@ const annotateLinks = network => {
 
 export const grnState = {
     name: null,
-
+    simulation: undefined,
     newNetwork: false,
-
-    normalizationMax: null,
-    resetNormalizationMax: null,
 
     get network () {
         return currentNetwork;
@@ -55,6 +52,9 @@ export const grnState = {
         this.newNetwork = true;
     },
 
+// Edge Display Parameters
+    normalizationMax: null,
+    resetNormalizationMax: null,
     edgeWeightDisplayOption: SHOW_WEIGHTS_MOUSEOVER,
     colorOptimal: true,
     grayEdgeThreshold: 5,
@@ -62,27 +62,29 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentNetwork),
 
+// Slider Parameters
     slidersLocked: false,
-    simulation: undefined,
     resetTrigger: false,
     undoResetTriggered: false,
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,
         valueId: LINK_DIST_VALUE,
-        defaultVal: LINK_DIST_DEFAULT,
-        currentVal: LINK_DIST_DEFAULT,
-        backup: LINK_DIST_DEFAULT,
+        defaultVal: LINK_DIST_DEFAULT_VALUE,
+        currentVal: LINK_DIST_DEFAULT_VALUE,
+        backup: LINK_DIST_DEFAULT_VALUE,
         needsAppendedZeros: false,
-        forceParameter: undefined,
+        forceChanged: false,
     },
     chargeSlider: {
         sliderId: CHARGE_SLIDER_ID,
         valueId: CHARGE_VALUE,
-        defaultVal: CHARGE_DEFAULT,
-        currentVal: CHARGE_DEFAULT,
-        backup: CHARGE_DEFAULT,
+        defaultVal: CHARGE_DEFAULT_VALUE,
+        currentVal: CHARGE_DEFAULT_VALUE,
+        backup: CHARGE_DEFAULT_VALUE,
         needsAppendedZeros: false,
-        forceParameter: undefined,
+        forceChanged: false,
     },
 
+// Graph Layout Parameter
+    graphLayout: "FORCE_GRAPH",
 };
