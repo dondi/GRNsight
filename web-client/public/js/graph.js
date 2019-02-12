@@ -937,7 +937,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                             symbol: gene.name,
                             species: "Saccharomyces_cerevisiae",
                             taxon: "559292"}),
-                      target: "_blank"
+                        target: "_blank"
                     });
                 $("body").append(tempLink);
                 tempLink.get(0).click();
