@@ -29,10 +29,11 @@
     });
 
     const search = location.search.substring(1);
-    const obj = search ? JSON.parse("{\"" + search.replace(/&/g, "','").replace(/=/g, "\":\"") + "\"}",
-        function ( key, value) {
-            return key === "" ? value : decodeURIComponent(value);
-        }) : {};
+    const obj = {
+        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
+        species: search.match(/species=(.*?)(?=&)/)[1],
+        taxon: search.match(/taxon=(.*?)/)[1]
+    };
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
@@ -41,7 +42,7 @@
 
     const api = window.api;
 
-    api.getGeneInformation(obj.symbol).done(function (gene) {
+    api.getGeneInformation(obj).done(function (gene) {
 
         const locusTag = gene.ncbi.locusTag;
 

@@ -71,14 +71,18 @@ let defaultYeastmine = {
     geneOntologySummary: "Not found",
 };
 
-let getUniProtInfo = function (geneSymbol) {
+
+
+let getUniProtInfo = function (query) {
+    const taxon = query.taxon;
+    const geneSymbol = query.symbol;
     return $.get({
         url: serviceRoot + "/uniprot/uploadlists/",
         data: {
             from: "GENENAME",
             to: "ACC",
             format: "tab",
-            taxon: "559292",
+            taxon: taxon,
             query: geneSymbol,
         },
         dataType: "text",
@@ -95,12 +99,15 @@ let getUniProtInfo = function (geneSymbol) {
     });
 };
 
-let getNCBIInfo = function (geneSymbol) {
+let getNCBIInfo = function (query) {
+    const geneSymbol = query.symbol;
+    const geneName = query.species.replace(/_/, "+");
+
     return $.get({
         url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
         data: {
             db: "gene",
-            term: geneSymbol + "[gene]+Saccharomyces+cerevisiae[Organism]",
+            term: geneSymbol + "[gene]+" + geneName + "[Organism]",
         },
         dataType: "text",
         timeout: 5000,
@@ -115,7 +122,8 @@ let getNCBIInfo = function (geneSymbol) {
     });
 };
 
-let getGeneOntologyInfo = function (geneSymbol) {
+let getGeneOntologyInfo = function (query) {
+    const geneSymbol = query.symbol;
     return $.get({
         url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/go_details",
         dataType: "json",
@@ -127,7 +135,8 @@ let getGeneOntologyInfo = function (geneSymbol) {
     });
 };
 
-let getRegulationInfo = function (geneSymbol) {
+let getRegulationInfo = function (query) {
+    const geneSymbol = query.symbol;
     return $.get({
         url: serviceRoot + "/yeastmine/backend/locus/" + geneSymbol + "/regulation_details",
         dataType: "json",
@@ -137,7 +146,8 @@ let getRegulationInfo = function (geneSymbol) {
     });
 };
 
-let getYeastMineInfo = function (geneSymbol) {
+let getYeastMineInfo = function (query) {
+    const geneSymbol = query.symbol;
     return $.get({
         url: serviceRoot + "/yeastmine/webservice/locus/" + geneSymbol,
         dataType: "json",
@@ -147,29 +157,25 @@ let getYeastMineInfo = function (geneSymbol) {
     });
 };
 
-let getEnsemblInfo = function (geneSymbol) {
+let getEnsemblInfo = function (query) {
+    const geneSymbol = query.symbol;
+    const geneSpecies = query.species;
     return $.get({
-        url: serviceRoot + "/ensembl/lookup/symbol/saccharomyces_cerevisiae/" + geneSymbol,
+        url: serviceRoot + "/ensembl/lookup/symbol/" + geneSpecies + "/"
+        + geneSymbol + "?content-type=application/json",
         dataType: "json",
-        timeout: 5000,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("content-type", "application/json");
-        },
-    }).then(function (data) {
-        return $.get({
-            url: serviceRoot + "/ensembl/lookup/id/" + data.id + "?expand=1",
-            dataType: "json",
-            timeout: 5000,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("content-type", "application/json");
-            },
-        });
+        timeout: 5000
     });
 };
 
-let getJasparInfo = function (geneSymbol) {
+let getJasparInfo = function (query) {
+    const geneSymbol = query.symbol;
+
+    // will eventually need to decide which taxon to use for JASPAR, for now this remains hardcoded
+    const taxon = "4932";
+
     return $.get({
-        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=4932&format=json&name=" + geneSymbol.toUpperCase(),
+        url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=" + taxon + "&format=json&name=" + geneSymbol.toUpperCase(),
         dataType: "json",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
