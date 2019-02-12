@@ -41,6 +41,8 @@ import {
   CHARGE_MENU,
   CHARGE_DEFAULT_VALUE,
   GRID_LAYOUT_BUTTON,
+  CHARGE_VALUE,
+  LINK_DIST_VALUE,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -260,6 +262,9 @@ export const updateApp = grnState => {
     };
 
     const updateChargeSliderValues = () => {
+        modifyChargeParameter(grnState.chargeSlider.currentVal);
+        $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
+        $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
         $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
         $(CHARGE_SLIDER_ID).html(grnState.chargeSlider.currentVal +
           ((grnState.chargeSlider.needsAppendedZeros
@@ -267,6 +272,9 @@ export const updateApp = grnState => {
     };
 
     const updateLinkDistanceSliderValues = () => {
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
         $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
         $(LINK_DIST_SLIDER_ID).html(grnState.linkDistanceSlider.currentVal +
           ((grnState.linkDistanceSlider.needsAppendedZeros
