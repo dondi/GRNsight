@@ -1,7 +1,8 @@
-import { drawGraph } from "./graph";
+import { drawGraph, updaters } from "./graph";
 import { uploadState } from "./upload";
 import { displayWarnings } from "./warnings";
 import { max } from "d3-array";
+import { grnState } from "./grnstate";
 
 import {
   GREY_EDGES_DASHED_MENU,
@@ -33,13 +34,20 @@ import {
   RESET_SLIDERS_MENU_OPTION,
   UNDO_SLIDER_RESET_BUTTON,
   UNDO_SLIDER_RESET_MENU,
+  LINK_DIST_SLIDER_ID,
+  LINK_DIST_MENU,
+  LINK_DIST_DEFAULT_VALUE,
+  CHARGE_SLIDER_ID,
+  CHARGE_MENU,
+  CHARGE_DEFAULT_VALUE,
+  GRID_LAYOUT_BUTTON,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
-    if (uploadState && uploadState.currentNetwork && uploadState.sliders && uploadState.nodeColoring) {
-        drawGraph(uploadState.currentNetwork, uploadState.sliders, uploadState.nodeColoring);
+    if (uploadState && uploadState.currentNetwork && uploadState.nodeColoring) {
+        drawGraph(uploadState.currentNetwork, uploadState.nodeColoring);
     }
 };
 
@@ -134,24 +142,28 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
-const enableColorOptimal = function () {
+const enableColorOptimal = () => {
     $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
     $(BLACK_EDGES + ">span").removeClass("glyphicon-ok invisible");
     $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
 };
 
-const disableColorOptimal = function () {
+const disableColorOptimal = () => {
     $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
     $(COLOR_EDGES + ">span").removeClass("glyphicon-ok invisible");
     $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
-export const updateSliderDisplayedValue = (slider, element) => {
-    var value = $("#" + $(element).attr("id")).val();
-    $(slider.valueId).html(value + ((slider.needsAppendedZeros &&
-        (value.length === GRAVITY_LENGTH_WITHOUT_ZERO)) ? "0" : ""));
+export const modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+
+export const modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
 };
 
 export const updateApp = grnState => {
@@ -204,6 +216,8 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
         $(LOCK_SLIDERS_BUTTON).prop("checked", true);
         $(RESET_SLIDERS_BUTTON).prop("disabled", true);
+        $(LINK_DIST_SLIDER_ID).prop("disabled", true);
+        $(CHARGE_SLIDER_ID).prop("disabled", true);
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $("#link-distance").parent().addClass("disabled");
         $("#charge").parent().addClass("disabled");
@@ -212,6 +226,8 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
         $(LOCK_SLIDERS_BUTTON).prop("checked", false);
         $(RESET_SLIDERS_BUTTON).prop("disabled", false);
+        $(LINK_DIST_SLIDER_ID).prop("disabled", false);
+        $(CHARGE_SLIDER_ID).prop("disabled", false);
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $("#link-distance").parent().removeClass("disabled");
         $("#charge").parent().removeClass("disabled");
@@ -220,48 +236,105 @@ export const updateApp = grnState => {
     const resetValues = () => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
-        grnState.chargeSlider.currentVal = grnState.chargeSlider.defaultVal;
-        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.defaultVal;
-        $("#charge-menu").val(grnState.chargeSlider.defaultVal);
-        $("#link-distance-menu").val(grnState.linkDistanceSlider.defaultVal);
+        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
+        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
+        $(CHARGE_MENU).val(CHARGE_DEFAULT_VALUE);
+        $(LINK_DIST_MENU).val(LINK_DIST_DEFAULT_VALUE);
     };
 
     const undoReset = () => {
         grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
-        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
-        $("#charge-menu").val(grnState.chargeSlider.backup);
-        $("#link-distance-menu").val(grnState.linkDistanceSlider.backup);
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        $(CHARGE_MENU).val(grnState.chargeSlider.backup);
+        $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.backup );
+    };
+
+    const resetForce = () => {
+        modifyChargeParameter(CHARGE_DEFAULT_VALUE);
+        modifyLinkDistanceParameter(LINK_DIST_DEFAULT_VALUE);
+    };
+
+    const undoResetForce = () => {
+        modifyChargeParameter(grnState.chargeSlider.backup);
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
     };
 
     const updateChargeSliderValues = () => {
-        $(grnState.chargeSlider.sliderId).val(grnState.chargeSlider.currentVal);
-        $(grnState.chargeSlider.valueId).html(grnState.chargeSlider.currentVal +
-          ((grnState.chargeSlider.needsAppendedZeros && grnState.chargeSlider.currentVal.toString().length ===
-          GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
+        $(CHARGE_SLIDER_ID).html(grnState.chargeSlider.currentVal +
+          ((grnState.chargeSlider.needsAppendedZeros
+              && grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
     };
 
     const updateLinkDistanceSliderValues = () => {
-        $(grnState.linkDistanceSlider.sliderId).val(grnState.linkDistanceSlider.currentVal);
-        $(grnState.linkDistanceSlider.valueId).html(grnState.linkDistanceSlider.currentVal +
+        $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_SLIDER_ID).html(grnState.linkDistanceSlider.currentVal +
           ((grnState.linkDistanceSlider.needsAppendedZeros
-            && grnState.linkDistanceSlider.currentVal.toString().length ===
-              GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+            && grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
     };
 
     if (grnState.resetTriggered === false) {
         resetValues();
+        resetForce();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
         $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
     }
 
-    if (grnState.undoResetTriggered === false) {
+    if (!grnState.undoResetTriggered && grnState.simulation !== undefined) {
         undoReset();
+        undoResetForce();
         $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
         $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
+    }
+
+// Graph Layout
+
+    const lockForce = (disable) => {
+        $("#linkDistInput").prop("disabled", disable);
+        $("#chargeInput").prop("disabled", disable);
+        $("#resetSlidersButton").prop("disabled", disable);
+        $("#lockSlidersButton").prop("checked", disable);
+    };
+
+    const toggleLayout = (on, off) => {
+        if (!$(on).prop("checked")) {
+            $(on).prop("checked", true);
+            $(off).prop("checked", false);
+            $(off + " span").removeClass("glyphicon-ok");
+            $(on + " span").addClass("glyphicon-ok");
+        }
+    };
+
+    const updatetoForceGraph = () => {
+        $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
+        toggleLayout("#forceGraph", "#gridLayout");
+        lockForce(false);
+        $("#lockSlidersMenu").parent().removeClass("disabled");
+        $("#resetSlidersMenu").parent().removeClass("disabled");
+        $("#link-distance").parent().removeClass("disabled");
+        $("#charge").parent().removeClass("disabled");
+        updaters.setNodesToForceGraph();
+    };
+
+    const updatetoGridLayout = () => {
+        $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
+        toggleLayout("#gridLayout", "#forceGraph");
+        lockForce(true);
+        $("#lockSlidersMenu").parent().addClass("disabled");
+        $("#resetSlidersMenu").parent().addClass("disabled");
+        $("#link-distance").parent().addClass("disabled");
+        $("#charge").parent().addClass("disabled");
+        updaters.setNodesToGrid();
+    };
+
+    if (grnState.graphLayout === "FORCE_GRAPH") {
+        updatetoForceGraph();
+    } else if (grnState.graphLayout === "GRID_LAYOUT") {
+        updatetoGridLayout();
     }
 
     refreshApp();

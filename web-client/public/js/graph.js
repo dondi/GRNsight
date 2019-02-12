@@ -1,6 +1,20 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
+import {
+    modifyChargeParameter,
+    modifyLinkDistanceParameter,
+} from "./update-app";
+
+import {
+    LINK_DIST_SLIDER_ID,
+    LINK_DIST_MENU,
+    LINK_DIST_VALUE,
+    CHARGE_SLIDER_ID,
+    CHARGE_MENU,
+    CHARGE_VALUE,
+//    GRID_LAYOUT_BUTTON,
+} from "./constants";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -18,7 +32,12 @@ const hasExpressionData = require("./node-coloring").hasExpressionData;
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, nodeColoring) {
+export var updaters = {
+    setNodesToGrid: () => {},
+    setNodesToForceGraph: () => {},
+};
+
+export var drawGraph = function (network, nodeColoring) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -1194,7 +1213,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
     // resets graph options so when new graph is loaded, initial layout is always force graph
-    $("#forceGraph").trigger("click");
 
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
@@ -1222,49 +1240,31 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         return name1 > name2 ? 1 : -1;
     };
 
-    let layout = false;
-
-    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
-    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
-        let nodeGroup = node._groups[0].sort(sortNode);
-        if (!layout) {
-            $("#gridLayout")
-                .addClass("called")
-                .trigger("click")
-                .removeClass("called");
-            this.value = "Force Graph";
-            layout = true;
-            const margin = 10;
-            const grid = Grid() // create new grid layout
+    let nodeGroup = node._groups[0].sort(sortNode);
+    updaters.setNodesToGrid = () => { // eslint-disable-line no-unused-vars
+        const margin = 10;
+        const grid = Grid()  // eslint-disable-line no-undef
             .data(network.genes)
             .bands(true)
             .padding([0.2, 0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
-            grid.layout();
-            let gridNodes = grid.nodes();
-            let gridNumRow = grid.cols();
-            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
-            let marginHeight = getMarginHeight(gridNodes);
-            /* eslint-disable block-scoped-var */
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
-                nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
-            }
-        } else {
-            $("#forceGraph")
-                .addClass("called")
-                .trigger("click")
-                .removeClass("called");
-            this.value = "Grid Layout";
-            layout = false;
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = null;
-                nodeGroup[i].__data__.fy = null;
-            }
+        grid.layout();
+        let gridNodes = grid.nodes();
+        let gridNumRow = grid.cols();
+        let marginWidth = getMarginWidth(gridNodes, gridNumRow);
+        let marginHeight = getMarginHeight(gridNodes);
+        for (var i in nodeGroup) {
+            nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
+            nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
         }
-            /* eslint-enable block-scoped-var */
-    });
+    };
+
+    updaters.setNodesToForceGraph = () => { // eslint-disable-line no-unused-vars
+        for (var i in nodeGroup) {
+            nodeGroup[i].__data__.fx = null;
+            nodeGroup[i].__data__.fy = null;
+        }
+    };
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)
@@ -1471,55 +1471,53 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         d.fy = d3.event.y;
     }
 
-    // Configures sliderController
-    sliderController.addForce(simulation);
-    sliderController.configureForceHandlers();
-    sliderController.initializeDefaultForces();
+    grnState.simulation = simulation;
+    modifyChargeParameter(-50);
+    modifyLinkDistanceParameter(500);
 
-    var changeSliderValue = function (slider, item) {
-        var value = slider === "link" ? linkDistValidator($(item).val()) :
-            chargeValidator($(item).val());
-        sliderController.modifyForceParameter(slider, value);
-        if (slider === "link") {
-            $(LINK_DISTANCE_VALUE).text(value);
-            $(LINK_DISTANCE_INPUT).val(value);
-            $(LINK_DISTANCE_MENU).val(value);
-        } else {
-            $(CHARGE_VALUE).text(value);
-            $(CHARGE_INPUT).val(value);
-            $(CHARGE_MENU).val(value);
-        }
+    const changeLinkDistanceSliderValue = () => {
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
+        $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
     };
 
-    var LINK_DISTANCE_MENU = "#link-distance-menu";
-    var LINK_DISTANCE_INPUT = "#linkDistInput";
-    var LINK_DISTANCE_VALUE = "#linkDistVal";
+    const changeChargeSliderValue = () => {
+        modifyChargeParameter(grnState.chargeSlider.currentVal);
+        $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
+        $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
+        $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
+    };
 
-    $(LINK_DISTANCE_MENU).on("change", function () {
-        changeSliderValue("link", LINK_DISTANCE_MENU);
+    $(LINK_DIST_MENU).change(() => {
+        var value = linkDistValidator($(LINK_DIST_MENU).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        changeLinkDistanceSliderValue();
     });
 
-    $(LINK_DISTANCE_INPUT).on("change", function () {
-        changeSliderValue("link", LINK_DISTANCE_INPUT);
+    $(LINK_DIST_SLIDER_ID).change(() => {
+        var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        changeLinkDistanceSliderValue();
     });
 
-    var CHARGE_MENU = "#charge-menu";
-    var CHARGE_INPUT = "#chargeInput";
-    var CHARGE_VALUE = "#chargeVal";
-
-    $(CHARGE_MENU).on("change", function () {
-        changeSliderValue("charge", CHARGE_MENU);
+    $(CHARGE_MENU).change(() => {
+        var value = chargeValidator($(CHARGE_MENU).val());
+        grnState.chargeSlider.currentVal = value;
+        changeChargeSliderValue();
     });
 
-    $(CHARGE_INPUT).on("change", function () {
-        changeSliderValue("charge", CHARGE_INPUT);
+    $(CHARGE_SLIDER_ID).change(() => {
+        var value = chargeValidator($(CHARGE_SLIDER_ID).val());
+        grnState.chargeSlider.currentVal = value;
+        changeChargeSliderValue();
     });
 
-    var linkDistValidator = function (value) {
+    var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
     };
 
-    var chargeValidator = function (value) {
+    var chargeValidator = value => {
         return valueValidator(-2000, 0, value);
     };
 
