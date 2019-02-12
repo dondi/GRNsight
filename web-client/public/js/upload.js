@@ -98,6 +98,7 @@ export const upload = function (drawGraph, nodeColoringController) {
         };
     };
 
+    $("#exportAsExcelWkbk").click(performExport("export-to-excel", "xlsx", "unweighted"));
     $("#exportAsUnweightedSif").click(performExport("export-to-sif", "sif", "unweighted"));
     $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));

@@ -64,6 +64,25 @@ module.exports = function (app) {
                 return generalExportError(res, error);
             }
         });
+
+        app.post("/convert-to-excel", function (req, res) {
+            try {
+                res.header("Content-Type", "text/xlsx");
+                return convertResponse(app, req, res, grnsightToGraphMl);
+            } catch (error) {
+                return generalExportError(res, error);
+            }
+        });
+
+        app.post("/export-to-excel", function (req, res) {
+            try {
+                res.header("Content-Type", "text/xlsx");
+                return exportResponse(app, req, res, grnsightToXlsx);
+            } catch (error) {
+                return generalExportError(res, error);
+            }
+        });
+
     }
 
     return {
