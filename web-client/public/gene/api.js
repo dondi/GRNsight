@@ -74,7 +74,7 @@ let defaultYeastmine = {
 
 
 let getUniProtInfo = function (query) {
-    const taxon = query.taxon;
+    const taxon = (query.species === "Saccharomyces_cerevisiae") ? "559292" : query.taxon;
     const geneSymbol = query.symbol;
     return $.get({
         url: serviceRoot + "/uniprot/uploadlists/",
@@ -170,9 +170,7 @@ let getEnsemblInfo = function (query) {
 
 let getJasparInfo = function (query) {
     const geneSymbol = query.symbol;
-
-    // will eventually need to decide which taxon to use for JASPAR, for now this remains hardcoded
-    const taxon = "4932";
+    const taxon = (query.species === "Saccharomyces_cerevisiae") ? "4932" : query.taxon;
 
     return $.get({
         url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=" + taxon + "&format=json&name=" + geneSymbol.toUpperCase(),
