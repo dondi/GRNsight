@@ -18,8 +18,6 @@ let defaultJaspar = {
 let defaultNCBI  = {
     ncbiID: "Not found",
     locusTag: "Not found",
-    alsoKnownAs: "Not found",
-    chromosomeSequence: "Not found",
     genomicSequence: "Not found"
 };
 
@@ -28,12 +26,6 @@ let defaultUniprot = {
     proteinSequence: "Not found",
     proteinType: "Not found",
     species: "Species not found"
-};
-
-let defaultEnsembl = {
-    ensemblID:  "Not found",
-    dnaSequence:  "Not found",
-    geneLocation:  "Not found"
 };
 
 let defaultGeneOntology = {
@@ -50,25 +42,7 @@ let defaultRegulators = {
 let defaultYeastmine = {
     description: "Not found",
     sgdID: "Not found",
-    standardName: "Not found",
-    systematicName: "Not found",
-    totalInteractions: "Not found",
-    affinityCaptureMS: "Not found",
-    affinityCaptureRNA: "Not found",
-    affinityCaptureWestern: "Not found",
-    biochemicalActivity: "Not found",
-    colocalization: "Not found",
-    reconstitutedComplex: "Not found",
-    twoHybrid: "Not found",
-    dosageRescue: "Not found",
-    negativeGenetic: "Not found",
-    phenotypicEnhancement: "Not found",
-    phenotypicSuppression: "Not found",
-    syntheticGrowthDefect: "Not found",
-    syntheticHaploinsufficiency: "Not found",
-    syntheticLethality: "Not found",
-    syntheticRescue: "Not found",
-    geneOntologySummary: "Not found",
+    geneOntologySummary: "Not found"
 };
 
 
@@ -157,17 +131,6 @@ let getYeastMineInfo = function (query) {
     });
 };
 
-let getEnsemblInfo = function (query) {
-    const geneSymbol = query.symbol;
-    const geneSpecies = query.species;
-    return $.get({
-        url: serviceRoot + "/ensembl/lookup/symbol/" + geneSpecies + "/"
-        + geneSymbol + "?content-type=application/json",
-        dataType: "json",
-        timeout: 5000
-    });
-};
-
 let getJasparInfo = function (query) {
     const geneSymbol = query.symbol;
     const taxon = (query.species === "Saccharomyces_cerevisiae") ? "4932" : query.taxon;
@@ -193,7 +156,6 @@ let getJasparInfo = function (query) {
 let defaultValues = {
     jaspar:  defaultJaspar,
     ncbi: defaultNCBI,
-    ensembl: defaultEnsembl,
     uniprot: defaultUniprot,
     sgd: defaultYeastmine,
     geneOntology: defaultGeneOntology,
@@ -202,31 +164,23 @@ let defaultValues = {
 
 
 let parseRegulators = function (data, symbol) {
-    let regulatorsTemplate = {
-        regulators: [],
-        targets: [],
+
+    let regs = [];
+    let targs = [];
+
+    data.filter(word => (word.locus1.display_name === symbol.symbol) ? targs[targs.length] = {
+        target:  word.locus2.display_name,
+        regulationOf: word.regulation_of }
+      : regs[regs.length] = {
+          regulator: word.locus1.display_name,
+          regulationOf: word.regulation_of,
+          regulationType: word.regulation_type}) ;
+
+    return {
+        regulators: regs,
+        targets: targs
     };
 
-    for (var k = 0; k < data.length; k++) {
-        switch (data[k].locus1.display_name) {
-        case symbol:
-            regulatorsTemplate.targets[regulatorsTemplate.targets.length] = {
-                target: data[k].locus2.display_name,
-                regulationOf: data[k].regulation_of,
-            };
-            break;
-        default:
-            regulatorsTemplate.regulators[regulatorsTemplate.regulators.length] = {
-                regulator: data[k].locus1.display_name,
-                regulationOf: data[k].regulation_of,
-                regulationType: data[k].regulation_type,
-            };
-            break;
-        }
-    }
-
-
-    return regulatorsTemplate;
 };
 
 let parseGeneOntology = function (data) {
@@ -307,12 +261,7 @@ let parseNCBI = function (data) {
     const ncbiTemplate = {
         ncbiID: data.getElementsByTagName("DocumentSummary")[0].getAttribute("uid"),
         locusTag: tagArray[0].replace(/\<.*?\>\s?/g, ""),
-        alsoKnownAs: tagArray.slice(1).join().replace(/\<.*?\>\s?/g, ""),
         chromosomeSequence: XMLParser(data.getElementsByTagName("ChrAccVer")[0]),
-        genomicSequence: XMLParser(data.getElementsByTagName("ChrLoc")[0]) + "; "
-        + XMLParser(data.getElementsByTagName("ChrAccVer")[0]) + " ("
-        + XMLParser(data.getElementsByTagName("ChrStart")[0])
-        + ".." + XMLParser(data.getElementsByTagName("ChrStop")[0]) + ")",
     };
 
     for (var prop in ncbiTemplate) {
@@ -328,28 +277,7 @@ let parseYeastmine = function (data) {
     const yeastmineTemplate = {
         description: data.description,
         sgdID: data.sgdid,
-        standardName: data.symbol,
-        systematicName: data.gene_name,
-        totalInteractions: "Not found", // Information unavailable via regular API
-        affinityCaptureMS: "Not found", // Information unavailable via regular API
-        affinityCaptureRNA: "Not found", // Information unavailable via regular API
-        affinityCaptureWestern: "Not found", // Information unavailable via regular API
-        biochemicalActivity: "Not found", // Information unavailable via regular API
-        colocalization: "Not found", // Information unavailable via regular API
-        reconstitutedComplex: "Not found", // Information unavailable via regular API
-        twoHybrid: "Not found", // Information unavailable via regular API
-        dosageRescue: "Not found", // Information unavailable via regular API
-        negativeGenetic: "Not found", // Information unavailable via regular API
-        phenotypicEnhancement: "Not found", // Information unavailable via regular API
-        phenotypicSuppression: "Not found", // Information unavailable via regular API
-        syntheticGrowthDefect: "Not found", // Information unavailable via regular API
-        syntheticHaploinsufficiency: "Not found", // Information unavailable via regular API
-        syntheticLethality: "Not found", // Information unavailable via regular API
-        syntheticRescue: "Not found", // Information unavailable via regular API
         geneOntologySummary: data.go_overview.paragraph,
-        molecularFunction: "Not found", // Information unavailable via regular API
-        biologicalProcess: "Not found", // Information unavailable via regular API
-        cellularComponent: "Not found", // Information unavailable via regular API
     };
 
     for (var prop in yeastmineTemplate) {
@@ -362,24 +290,6 @@ let parseYeastmine = function (data) {
 
 
     return yeastmineTemplate;
-};
-
-let parseEnsembl = function (data) {
-
-    const ensemblTemplate = {
-        ensemblID: data.id,
-        description: data.description,
-        dnaSequence: "Not found", // Information unavailable via regular API
-        geneLocation: "Not found", // Information unavailable via regular API
-    };
-
-    for (var prop in ensemblTemplate) {
-        if ((ensemblTemplate[prop] === undefined) || (ensemblTemplate[prop] === null)) {
-            ensemblTemplate[prop] = "Not found";
-        }
-    }
-    return ensemblTemplate;
-
 };
 
 let parseJaspar = function (data) {
@@ -417,29 +327,23 @@ let parseJaspar = function (data) {
                return getYeastMineInfo(symbol);
            }).catch(function () {
                return getYeastMineInfo(symbol);
-
            }).then(function (info3) {
                defaultValues.sgd = parseYeastmine(info3);
-               return getEnsemblInfo(symbol);
+               return getGeneOntologyInfo(symbol);
            }).catch(function () {
-               return getEnsemblInfo(symbol);
+               return getGeneOntologyInfo(symbol);
            }).then(function (info4) {
-               defaultValues.ensembl = parseEnsembl(info4);
-               return getGeneOntologyInfo(symbol);
+               defaultValues.geneOntology = parseGeneOntology(info4);
+               return getRegulationInfo(symbol);
            }).catch(function () {
-               return getGeneOntologyInfo(symbol);
+               return getRegulationInfo(symbol);
            }).then(function (info5) {
-               defaultValues.geneOntology = parseGeneOntology(info5);
-               return getRegulationInfo(symbol);
+               defaultValues.regulators = parseRegulators(info5, symbol);
+               return getJasparInfo(symbol);
            }).catch(function () {
-               return getRegulationInfo(symbol);
+               return getJasparInfo(symbol);
            }).then(function (info6) {
-               defaultValues.regulators = parseRegulators(info6, symbol);
-               return getJasparInfo(symbol);
-           }).catch(function () {
-               return getJasparInfo(symbol);
-           }).then(function (info7) {
-               defaultValues.jaspar = parseJaspar(info7);
+               defaultValues.jaspar = parseJaspar(info6);
                return defaultValues;
            }).catch(function () {
 
@@ -447,7 +351,6 @@ let parseJaspar = function (data) {
                  defaultValues.ncbi === defaultNCBI &&
                  defaultValues.uniprot === defaultUniprot &&
                  defaultValues.sgd === defaultYeastmine &&
-                 defaultValues.ensembl === defaultEnsembl &&
                  defaultValues.jaspar === defaultJaspar
                ) {
                    const errorString1 = "No gene information was retrieved for " + symbol + ".";
