@@ -317,43 +317,42 @@ let parseJaspar = function (data) {
         getGeneInformation: function (symbol) {
             return $.when(
              getNCBIInfo(symbol)
-           ).then(function (info1) {
-               defaultValues.ncbi = parseNCBI(info1);
+           ).then(function (ncbiInfo) {
+               defaultValues.ncbi = parseNCBI(ncbiInfo);
                return getUniProtInfo(symbol);
-           }).catch(function () {
-               return getUniProtInfo(symbol);
-           }).then(function (info2) {
-               defaultValues.uniprot = parseUniprot(info2);
+           }).then(function (uniProtInfo) {
+               defaultValues.uniprot = parseUniprot(uniProtInfo);
                return getYeastMineInfo(symbol);
-           }).catch(function () {
-               return getYeastMineInfo(symbol);
-           }).then(function (info3) {
-               defaultValues.sgd = parseYeastmine(info3);
+           }).then(function (yeastMineInfo) {
+               defaultValues.sgd = parseYeastmine(yeastMineInfo);
                return getGeneOntologyInfo(symbol);
-           }).catch(function () {
-               return getGeneOntologyInfo(symbol);
-           }).then(function (info4) {
-               defaultValues.geneOntology = parseGeneOntology(info4);
+           }).then(function (goInfo) {
+               defaultValues.geneOntology = parseGeneOntology(goInfo);
                return getRegulationInfo(symbol);
-           }).catch(function () {
-               return getRegulationInfo(symbol);
-           }).then(function (info5) {
-               defaultValues.regulators = parseRegulators(info5, symbol);
+           }).then(function (regulationInfo) {
+               // parseRegulators needs both info and symbol
+               defaultValues.regulators = parseRegulators(regulationInfo, symbol);
                return getJasparInfo(symbol);
-           }).catch(function () {
-               return getJasparInfo(symbol);
-           }).then(function (info6) {
-               defaultValues.jaspar = parseJaspar(info6);
+           }).then(function (jasparInfo) {
+               defaultValues.jaspar = parseJaspar(jasparInfo);
                return defaultValues;
            }).catch(function () {
+               getUniProtInfo(symbol);
+               getYeastMineInfo(symbol);
+               getGeneOntologyInfo(symbol);
+               getRegulationInfo(symbol);
+               getJasparInfo(symbol);
+               getNCBIInfo(symbol);
 
                if (
                  defaultValues.ncbi === defaultNCBI &&
                  defaultValues.uniprot === defaultUniprot &&
                  defaultValues.sgd === defaultYeastmine &&
+                 defaultValues.geneOntology === defaultGeneOntology &&
+                 defaultValues.regulators === defaultRegulators &&
                  defaultValues.jaspar === defaultJaspar
                ) {
-                   const errorString1 = "No gene information was retrieved for " + symbol + ".";
+                   const errorString1 = "No gene information was retrieved for " + symbol.symbol + ".";
 
                    const errorString2 = "This could have happened because either"
                     + " GRNsight could not access the gene information from one of the source databases"
