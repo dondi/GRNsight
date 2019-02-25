@@ -1,5 +1,6 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
+import { genePageData } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
 import {
     modifyChargeParameter,
@@ -954,8 +955,8 @@ export var drawGraph = function (network, nodeColoring) {
                     .attr({
                         href: "info?" + $.param({
                             symbol: gene.name,
-                            species: "Saccharomyces_cerevisiae",
-                            taxon: "559292"}),
+                            species: genePageData().species,
+                            taxon: genePageData().taxon}),
                         target: "_blank"
                     });
                 $("body").append(tempLink);

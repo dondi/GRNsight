@@ -36,6 +36,15 @@ const annotateLinks = network => {
     });
 };
 
+export const genePageData = () => {
+
+  // set to be a function for when data is read from .xml
+    return {
+        species: "Saccharomyces_cerevisiae",
+        taxon: "559292"
+    };
+};
+
 export const grnState = {
     name: null,
     simulation: undefined,
@@ -51,6 +60,10 @@ export const grnState = {
         this.resetNormalizationMax = max(network.positiveWeights.concat(network.negativeWeights));
         this.newNetwork = true;
     },
+
+// Gene Page data
+
+
 
 // Edge Display Parameters
     normalizationMax: null,
