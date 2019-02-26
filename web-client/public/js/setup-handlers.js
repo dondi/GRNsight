@@ -12,14 +12,16 @@ import {
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
     LOCK_SLIDERS_BUTTON,
+    LOCK_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_CLASS,
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
     GRID_LAYOUT_BUTTON,
-    AVG_REPLICATE_VALS_TOP_SIDEBAR,
     GRID_LAYOUT_CLASS,
     FORCE_GRAPH_CLASS,
+/*
+    AVG_REPLICATE_VALS_TOP_SIDEBAR,
     NODE_COLORING_TOGGLE_CLASS,
     AVG_REPLICATE_VALS_BOTTOM_MENU,
     AVG_REPLICATE_VALS_TOP_MENU,
@@ -28,7 +30,7 @@ import {
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
     TOP_DATASET_SELECTION_SIDEBAR,
     BOTTOM_DATASET_SELECTION_SIDEBAR,
-    LOCK_SLIDERS_MENU_OPTION,
+*/
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -154,7 +156,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Node coloring
+/* Node coloring
     $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
         grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
         updateApp(grnState);
@@ -169,4 +171,7 @@ export const setupHandlers = grnState => {
         grnState.nodeColoring.avgTopDataset = !$(this).prop("checked");
         updateApp(grnState);
     });
+
+*/
+
 };
