@@ -47,6 +47,8 @@ import {
   GRID_LAYOUT_BUTTON,
   GRID_LAYOUT_CLASS,
   FORCE_GRAPH_CLASS,
+  AVG_REPLICATE_VALS_TOP_MENU,
+  AVG_REPLICATE_VALS_TOP_SIDEBAR,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -217,26 +219,30 @@ export const updateApp = grnState => {
     }
 
 // Sliders
+    const lockForce = (disable) => {
+        $(LINK_DIST_SLIDER_ID).prop("disabled", disable);
+        $(CHARGE_SLIDER_ID).prop("disabled", disable);
+        $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
+        $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
+    };
+
     if (grnState.slidersLocked === true) {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
-        $(LOCK_SLIDERS_BUTTON).prop("checked", true);
-        $(RESET_SLIDERS_BUTTON).prop("disabled", true);
-        $(LINK_DIST_SLIDER_ID).prop("disabled", true);
-        $(CHARGE_SLIDER_ID).prop("disabled", true);
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $(LINK_DIST_CLASS).parent().addClass("disabled");
         $(CHARGE_CLASS).parent().addClass("disabled");
+        lockForce(true);
+        console.log("HELLO WORLD !!@!@@!");
     } else {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
-        $(LOCK_SLIDERS_BUTTON).prop("checked", false);
-        $(RESET_SLIDERS_BUTTON).prop("disabled", false);
-        $(LINK_DIST_SLIDER_ID).prop("disabled", false);
-        $(CHARGE_SLIDER_ID).prop("disabled", false);
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $(LINK_DIST_CLASS).parent().removeClass("disabled");
         $(CHARGE_CLASS).parent().removeClass("disabled");
+        lockForce(false);
+        console.log("HELLO WORLD");
+
     }
 
     const resetValues = () => {
@@ -305,13 +311,6 @@ export const updateApp = grnState => {
 
 // Graph Layout
 
-    const lockForce = (disable) => {
-        $(LINK_DIST_SLIDER_ID).prop("disabled", disable);
-        $(CHARGE_SLIDER_ID).prop("disabled", disable);
-        $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
-        $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
-    };
-
     const toggleLayout = (on, off) => {
         if (!$(on).prop("checked")) {
             $(on).prop("checked", true);
@@ -347,6 +346,20 @@ export const updateApp = grnState => {
         updatetoForceGraph();
     } else if (grnState.graphLayout === "GRID_LAYOUT") {
         updatetoGridLayout();
+    }
+
+// Node Coloring
+
+    if (grnState.nodeColoring.avgTopDataset) {
+        $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
+        $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", "checked");
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", "checked");
+        updaters.renderNodeColoring();
+    } else {
+        $(AVG_REPLICATE_VALS_TOP_MENU + " span").removeClass("glyphicon-ok");
+        $(AVG_REPLICATE_VALS_TOP_MENU).removeProp("checked");
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).removeProp("checked");
+        updaters.renderNodeColoring();
     }
 
     refreshApp();

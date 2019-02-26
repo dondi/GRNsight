@@ -154,15 +154,18 @@ export const setupHandlers = grnState => {
 
 // Node coloring
     $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
-        event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
+        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+        updateApp(grnState);
     });
 
-    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).on("change", {handler: this}, function (event) {
-        event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
+        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+        updateApp(grnState);
     });
 
-    $(AVG_REPLICATE_VALS_TOP_MENU).on("click", {handler: this}, function (event) {
-        event.data.handler.updateAverageReplicateValuesTopDataset(!$(this).prop("checked"));
+    $(AVG_REPLICATE_VALS_TOP_MENU).click(function () {
+        grnState.nodeColoring.avgTopDataset = !$(this).prop("checked");
+        updateApp(grnState);
     });
 
     $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).on("change", {handler: this}, function (event) {

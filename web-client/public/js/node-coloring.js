@@ -1,3 +1,5 @@
+import { updaters } from "./graph";
+
 import {
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
@@ -51,7 +53,7 @@ export var nodeColoringController = {
             $(AVG_REPLICATE_VALS_TOP_SIDEBAR).removeProp("checked");
         }
         grnState.nodeColoring.avgTopDataset = averageTopDataset;
-        this.renderNodeColoring();
+        updaters.renderNodeColoring();
     },
 
     updateAverageReplicateValuesBottomDataset: function (averageBottomDataset) {
