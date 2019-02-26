@@ -348,7 +348,7 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Node Coloring
+/* Node Coloring
 
     if (grnState.nodeColoring.avgTopDataset) {
         $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
@@ -363,4 +363,7 @@ export const updateApp = grnState => {
     }
 
     refreshApp();
+
+*/
+
 };
