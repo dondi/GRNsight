@@ -17,10 +17,8 @@ import {
   NODE_COLORING_TOGGLE_CLASS,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+  ENDS_IN_EXPRESSION_REGEXP,
 } from "./constants";
-
-
-var endsInExpressionRegExp = /expression$/;
 
 var shortenExpressionSheetName = function (name) {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
@@ -29,7 +27,7 @@ var shortenExpressionSheetName = function (name) {
 
 export var hasExpressionData = function (sheets) {
     for (var property in sheets) {
-        if (property.match(endsInExpressionRegExp)) {
+        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             return true;
         }
     }
@@ -228,7 +226,7 @@ export var nodeColoringController = {
 
         var nodeColoringOptions = [];
         for (var property in network.expression) {
-            if (property.match(endsInExpressionRegExp)) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
                 nodeColoringOptions.push({value: property});
             }
         }

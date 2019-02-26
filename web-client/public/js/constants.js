@@ -1,5 +1,3 @@
-
-
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
@@ -88,3 +86,4 @@ export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdow
 export const NODE_COLORING_TOGGLE_CLASS                 = ".nodeColoringToggle";
 export const LOG_FOLD_CHANGE_MAX_VALUE_CLASS            = ".logFoldChangeMaxValue";
 export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON   = "#log-fold-change-button";
+export const ENDS_IN_EXPRESSION_REGEXP                  = /expression$/;
