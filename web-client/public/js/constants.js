@@ -57,16 +57,20 @@ export const UNDO_SLIDER_RESET_CLASS     = ".undoSliderReset";
 export const UNDO_SLIDER_RESET_MENU      = "#undoResetMenu";
 export const UNDO_SLIDER_RESET_BUTTON    = "#undoResetButton";
 
+export const LINK_DIST_CLASS            = "#link-distance";
 export const LINK_DIST_SLIDER_ID        = "#linkDistInput";
 export const LINK_DIST_VALUE            = "#linkDistVal";
 export const LINK_DIST_MENU             = "#link-distance-menu";
 export const LINK_DIST_DEFAULT_VALUE    = 500;
+export const CHARGE_CLASS               = "#charge";
 export const CHARGE_SLIDER_ID           = "#chargeInput";
 export const CHARGE_VALUE               = "#chargeVal";
 export const CHARGE_MENU                = "#charge-menu";
 export const CHARGE_DEFAULT_VALUE       = -50;
 
 export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
+export const FORCE_GRAPH_CLASS          = "#forceGraph";
+export const GRID_LAYOUT_CLASS          = "#gridLayout";
 
 export const MINIMUM_MAX_LOG_FOLD_CHANGE                = -100;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;

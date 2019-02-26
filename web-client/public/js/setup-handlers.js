@@ -11,12 +11,23 @@ import {
     SHOW_WEIGHTS_MOUSEOVER,
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
-    LOCK_SLIDERS_CLASS,
+    LOCK_SLIDERS_BUTTON,
     UNDO_SLIDER_RESET_CLASS,
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
     GRID_LAYOUT_BUTTON,
+    AVG_REPLICATE_VALS_TOP_SIDEBAR,
+    GRID_LAYOUT_CLASS,
+    FORCE_GRAPH_CLASS,
+    NODE_COLORING_TOGGLE_CLASS,
+    AVG_REPLICATE_VALS_BOTTOM_MENU,
+    AVG_REPLICATE_VALS_TOP_MENU,
+    AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
+    LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+    LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+    TOP_DATASET_SELECTION_SIDEBAR,
+    BOTTOM_DATASET_SELECTION_SIDEBAR,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -86,8 +97,13 @@ export const setupHandlers = grnState => {
     });
 
 // Sliders code
-    $(LOCK_SLIDERS_CLASS).click(() => {
-        grnState.slidersLocked = !grnState.slidersLocked;
+    $(LOCK_SLIDERS_BUTTON).click(() => {
+        if (grnState.slidersLocked === true) {
+            grnState.slidersLocked = false;
+        } else if (grnState.slidersLocked === false) {
+            grnState.slidersLocked = true;
+        }
+        console.log(grnState.slidersLocked);
         updateApp(grnState);
     });
 
@@ -125,14 +141,70 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $("#forceGraph").click(function () {
+    $(FORCE_GRAPH_CLASS).click(function () {
         grnState.graphLayout = "FORCE_GRAPH";
         updateApp(grnState);
 
     });
 
-    $("#gridLayout").click(function () {
+    $(GRID_LAYOUT_CLASS).click(function () {
         grnState.graphLayout = "GRID_LAYOUT";
         updateApp(grnState);
+    });
+
+// Node coloring
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
+        event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
+    });
+
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).on("change", {handler: this}, function (event) {
+        event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
+    });
+
+    $(AVG_REPLICATE_VALS_TOP_MENU).on("click", {handler: this}, function (event) {
+        event.data.handler.updateAverageReplicateValuesTopDataset(!$(this).prop("checked"));
+    });
+
+    $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).on("change", {handler: this}, function (event) {
+        event.data.handler.updateAverageReplicateValuesBottomDataset($(this).prop("checked"));
+    });
+
+    $(AVG_REPLICATE_VALS_BOTTOM_MENU).on("click", {handler: this}, function (event) {
+        event.data.handler
+          .updateAverageReplicateValuesBottomDataset(!$(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked"));
+    });
+
+    $(NODE_COLORING_TOGGLE_CLASS).on("click", {handler: this}, function (event) {
+        event.data.handler.nodeColoringEnabled ?
+            event.data.handler.disableNodeColoring() : event.data.handler.enableNodeColoring();
+    });
+
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).on("click", {handler: this}, function (event) {
+        var validated = event.data.handler
+            .logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
+        event.data.handler.updateLogFoldChangeMaxValue(validated);
+    });
+
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).on("change", {handler: this}, function (event) {
+        var validated = event.data.handler.logFoldChangeMaxValueInputValidation($(this).val());
+        event.data.handler.updateLogFoldChangeMaxValue(validated);
+    });
+
+    $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
+        var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        event.data.handler.updateTopDataset(selection);
+    });
+
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
+        var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        event.data.handler.updateBottomDataset(selection);
+    });
+
+    $("#topDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
+        event.data.handler.updateTopDataset($(this).attr("value"));
+    });
+
+    $("#bottomDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
+        event.data.handler.updateBottomDataset($(this).attr("value"));
     });
 };

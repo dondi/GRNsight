@@ -34,15 +34,19 @@ import {
   RESET_SLIDERS_MENU_OPTION,
   UNDO_SLIDER_RESET_BUTTON,
   UNDO_SLIDER_RESET_MENU,
+  LINK_DIST_CLASS,
   LINK_DIST_SLIDER_ID,
   LINK_DIST_MENU,
+  LINK_DIST_VALUE,
   LINK_DIST_DEFAULT_VALUE,
+  CHARGE_CLASS,
   CHARGE_SLIDER_ID,
   CHARGE_MENU,
+  CHARGE_VALUE,
   CHARGE_DEFAULT_VALUE,
   GRID_LAYOUT_BUTTON,
-  CHARGE_VALUE,
-  LINK_DIST_VALUE,
+  GRID_LAYOUT_CLASS,
+  FORCE_GRAPH_CLASS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -71,7 +75,7 @@ const displayNetwork = (network, name) => {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ "#resetSliders", "#resetSlidersMenu", "#undoReset", "#undoResetMenu" ].forEach(
+    [ "#resetSliders", RESET_SLIDERS_MENU_OPTION, "#undoReset", UNDO_SLIDER_RESET_MENU ].forEach(
         selector => $(selector).off("click")
     );
 };
@@ -221,8 +225,8 @@ export const updateApp = grnState => {
         $(LINK_DIST_SLIDER_ID).prop("disabled", true);
         $(CHARGE_SLIDER_ID).prop("disabled", true);
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
-        $("#link-distance").parent().addClass("disabled");
-        $("#charge").parent().addClass("disabled");
+        $(LINK_DIST_CLASS).parent().addClass("disabled");
+        $(CHARGE_CLASS).parent().addClass("disabled");
     } else {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
@@ -231,8 +235,8 @@ export const updateApp = grnState => {
         $(LINK_DIST_SLIDER_ID).prop("disabled", false);
         $(CHARGE_SLIDER_ID).prop("disabled", false);
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
-        $("#link-distance").parent().removeClass("disabled");
-        $("#charge").parent().removeClass("disabled");
+        $(LINK_DIST_CLASS).parent().removeClass("disabled");
+        $(CHARGE_CLASS).parent().removeClass("disabled");
     }
 
     const resetValues = () => {
@@ -302,10 +306,10 @@ export const updateApp = grnState => {
 // Graph Layout
 
     const lockForce = (disable) => {
-        $("#linkDistInput").prop("disabled", disable);
-        $("#chargeInput").prop("disabled", disable);
-        $("#resetSlidersButton").prop("disabled", disable);
-        $("#lockSlidersButton").prop("checked", disable);
+        $(LINK_DIST_SLIDER_ID).prop("disabled", disable);
+        $(CHARGE_SLIDER_ID).prop("disabled", disable);
+        $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
+        $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
     };
 
     const toggleLayout = (on, off) => {
@@ -319,23 +323,23 @@ export const updateApp = grnState => {
 
     const updatetoForceGraph = () => {
         $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-        toggleLayout("#forceGraph", "#gridLayout");
+        toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
         lockForce(false);
-        $("#lockSlidersMenu").parent().removeClass("disabled");
-        $("#resetSlidersMenu").parent().removeClass("disabled");
-        $("#link-distance").parent().removeClass("disabled");
-        $("#charge").parent().removeClass("disabled");
+        $(LOCK_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
+        $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
+        $(LINK_DIST_CLASS).parent().removeClass("disabled");
+        $(CHARGE_CLASS).parent().removeClass("disabled");
         updaters.setNodesToForceGraph();
     };
 
     const updatetoGridLayout = () => {
         $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
-        toggleLayout("#gridLayout", "#forceGraph");
+        toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
         lockForce(true);
-        $("#lockSlidersMenu").parent().addClass("disabled");
-        $("#resetSlidersMenu").parent().addClass("disabled");
-        $("#link-distance").parent().addClass("disabled");
-        $("#charge").parent().addClass("disabled");
+        $(LOCK_SLIDERS_MENU_OPTION).parent().addClass("disabled");
+        $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
+        $(LINK_DIST_CLASS).parent().addClass("disabled");
+        $(CHARGE_CLASS).parent().addClass("disabled");
         updaters.setNodesToGrid();
     };
 
