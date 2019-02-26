@@ -220,6 +220,7 @@ export const updateApp = grnState => {
 
 // Sliders
     const lockForce = (disable) => {
+        console.log(disable);
         $(LINK_DIST_SLIDER_ID).prop("disabled", disable);
         $(CHARGE_SLIDER_ID).prop("disabled", disable);
         $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
@@ -232,17 +233,16 @@ export const updateApp = grnState => {
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $(LINK_DIST_CLASS).parent().addClass("disabled");
         $(CHARGE_CLASS).parent().addClass("disabled");
-        lockForce(true);
-        console.log("HELLO WORLD !!@!@@!");
+        lockForce(grnState.slidersLocked);
+        console.log("Sliders should now be locked");
     } else {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $(LINK_DIST_CLASS).parent().removeClass("disabled");
         $(CHARGE_CLASS).parent().removeClass("disabled");
-        lockForce(false);
-        console.log("HELLO WORLD");
-
+        lockForce(grnState.slidersLocked);
+        console.log("Sliders should now be unlocked");
     }
 
     const resetValues = () => {
@@ -323,7 +323,7 @@ export const updateApp = grnState => {
     const updatetoForceGraph = () => {
         $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
         toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
-        lockForce(false);
+        lockForce(grnState.slidersLocked);
         $(LOCK_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
         $(LINK_DIST_CLASS).parent().removeClass("disabled");
@@ -334,7 +334,7 @@ export const updateApp = grnState => {
     const updatetoGridLayout = () => {
         $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
         toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
-        lockForce(true);
+        lockForce(grnState.slidersLocked);
         $(LOCK_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
         $(LINK_DIST_CLASS).parent().addClass("disabled");

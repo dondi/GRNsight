@@ -28,6 +28,7 @@ import {
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
     TOP_DATASET_SELECTION_SIDEBAR,
     BOTTOM_DATASET_SELECTION_SIDEBAR,
+    LOCK_SLIDERS_MENU_OPTION,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -97,13 +98,12 @@ export const setupHandlers = grnState => {
     });
 
 // Sliders code
+    $(LOCK_SLIDERS_MENU_OPTION).click(() => {
+        grnState.slidersLocked = !grnState.slidersLocked;
+        updateApp(grnState);
+    });
     $(LOCK_SLIDERS_BUTTON).click(() => {
-        if (grnState.slidersLocked === true) {
-            grnState.slidersLocked = false;
-        } else if (grnState.slidersLocked === false) {
-            grnState.slidersLocked = true;
-        }
-        console.log(grnState.slidersLocked);
+        grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
 
@@ -135,8 +135,10 @@ export const setupHandlers = grnState => {
     $(GRID_LAYOUT_BUTTON).click(function () {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
+            grnState.slidersLocked === true;
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
+            grnState.slidersLocked === false;
         }
         updateApp(grnState);
     });
@@ -166,48 +168,5 @@ export const setupHandlers = grnState => {
     $(AVG_REPLICATE_VALS_TOP_MENU).click(function () {
         grnState.nodeColoring.avgTopDataset = !$(this).prop("checked");
         updateApp(grnState);
-    });
-
-    $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).on("change", {handler: this}, function (event) {
-        event.data.handler.updateAverageReplicateValuesBottomDataset($(this).prop("checked"));
-    });
-
-    $(AVG_REPLICATE_VALS_BOTTOM_MENU).on("click", {handler: this}, function (event) {
-        event.data.handler
-          .updateAverageReplicateValuesBottomDataset(!$(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked"));
-    });
-
-    $(NODE_COLORING_TOGGLE_CLASS).on("click", {handler: this}, function (event) {
-        event.data.handler.nodeColoringEnabled ?
-            event.data.handler.disableNodeColoring() : event.data.handler.enableNodeColoring();
-    });
-
-    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).on("click", {handler: this}, function (event) {
-        var validated = event.data.handler
-            .logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
-        event.data.handler.updateLogFoldChangeMaxValue(validated);
-    });
-
-    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).on("change", {handler: this}, function (event) {
-        var validated = event.data.handler.logFoldChangeMaxValueInputValidation($(this).val());
-        event.data.handler.updateLogFoldChangeMaxValue(validated);
-    });
-
-    $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
-        var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-        event.data.handler.updateTopDataset(selection);
-    });
-
-    $(BOTTOM_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
-        var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-        event.data.handler.updateBottomDataset(selection);
-    });
-
-    $("#topDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
-        event.data.handler.updateTopDataset($(this).attr("value"));
-    });
-
-    $("#bottomDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
-        event.data.handler.updateBottomDataset($(this).attr("value"));
     });
 };
