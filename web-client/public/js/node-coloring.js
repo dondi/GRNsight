@@ -1,5 +1,4 @@
 import { updaters } from "./graph";
-
 import {
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
@@ -138,14 +137,6 @@ export var nodeColoringController = {
     },
 
     configureNodeColoringHandlers: function () {
-        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).on("change", {handler: this}, function (event) {
-            event.data.handler.updateAverageReplicateValuesTopDataset($(this).prop("checked"));
-        });
-
-        $(AVG_REPLICATE_VALS_TOP_MENU).on("click", {handler: this}, function (event) {
-            event.data.handler.updateAverageReplicateValuesTopDataset(!$(this).prop("checked"));
-        });
-
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).on("change", {handler: this}, function (event) {
             event.data.handler.updateAverageReplicateValuesBottomDataset($(this).prop("checked"));
         });

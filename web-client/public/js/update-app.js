@@ -47,8 +47,8 @@ import {
   GRID_LAYOUT_BUTTON,
   GRID_LAYOUT_CLASS,
   FORCE_GRAPH_CLASS,
-  // AVG_REPLICATE_VALS_TOP_MENU,
-  // AVG_REPLICATE_VALS_TOP_SIDEBAR,
+  AVG_REPLICATE_VALS_TOP_MENU,
+  AVG_REPLICATE_VALS_TOP_SIDEBAR,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -348,7 +348,7 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-/* Node Coloring
+// Node Coloring
 
     if (grnState.nodeColoring.avgTopDataset) {
         $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
@@ -363,7 +363,5 @@ export const updateApp = grnState => {
     }
 
     refreshApp();
-
-*/
 
 };
