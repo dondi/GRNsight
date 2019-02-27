@@ -1117,9 +1117,9 @@ export var drawGraph = function (network, nodeColoring) {
 
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
-            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
+            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
                         grnState.nodeColoring.logFoldChangeMaxValue);
-            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.avgBottomDataset,
+            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
                         grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
@@ -1128,9 +1128,9 @@ export var drawGraph = function (network, nodeColoring) {
 
     nodeColoring.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
-            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
+            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
                         grnState.nodeColoring.logFoldChangeMaxValue);
-            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.avgBottomDataset,
+            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
                         grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);

@@ -20,17 +20,18 @@ import {
     GRID_LAYOUT_BUTTON,
     GRID_LAYOUT_CLASS,
     FORCE_GRAPH_CLASS,
-    // NODE_COLORING_TOGGLE_CLASS,
+    NODE_COLORING_TOGGLE_CLASS,
     AVG_REPLICATE_VALS_TOP_MENU,
     AVG_REPLICATE_VALS_TOP_SIDEBAR,
-    /*
     AVG_REPLICATE_VALS_BOTTOM_MENU,
     AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
+    MINIMUM_MAX_LOG_FOLD_CHANGE,
+    MAXIMUM_MAX_LOG_FOLD_CHANGE,
+    DEFAULT_MAX_LOG_FOLD_CHANGE,
     LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
-    TOP_DATASET_SELECTION_SIDEBAR,
-    BOTTOM_DATASET_SELECTION_SIDEBAR,
-    */
+    // TOP_DATASET_SELECTION_SIDEBAR,
+    // BOTTOM_DATASET_SELECTION_SIDEBAR,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -156,15 +157,53 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Node coloring
-    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
-        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+// Node Coloring
+    var logFoldChangeMaxValueInputValidation = (value) => {
+        if (value === "" || value === "0") {
+            return DEFAULT_MAX_LOG_FOLD_CHANGE;
+        } else if (value < MINIMUM_MAX_LOG_FOLD_CHANGE) {
+            return MINIMUM_MAX_LOG_FOLD_CHANGE;
+        } else if (value > MAXIMUM_MAX_LOG_FOLD_CHANGE) {
+            return MAXIMUM_MAX_LOG_FOLD_CHANGE;
+        } else {
+            return value;
+        }
+    };
+
+    $(NODE_COLORING_TOGGLE_CLASS).click(() => {
+        grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
         updateApp(grnState);
     });
 
-    $(AVG_REPLICATE_VALS_TOP_MENU).click(function () {
-        grnState.nodeColoring.avgTopDataset = !$(this).prop("checked");
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(() => {
+        grnState.nodeColoring.averageTopDataset = $(this).prop("checked");
         updateApp(grnState);
     });
+
+    $(AVG_REPLICATE_VALS_TOP_MENU).click(() => {
+        grnState.nodeColoring.averageTopDataset = !$(this).prop("checked");
+        updateApp(grnState);
+    });
+
+    $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).change(() => {
+        grnState.nodeColoring.averageBottomDataset = $(this).prop("checked");
+        updateApp(grnState);
+    });
+
+    $(AVG_REPLICATE_VALS_BOTTOM_MENU).click(() => {
+        grnState.nodeColoring.averageBottomDataset = !$(this).prop("checked");
+        updateApp(grnState);
+    });
+
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
+        var validated = logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
+        event.data.handler.updateLogFoldChangeMaxValue(validated);
+    });
+
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).change(() => {
+        var validated = logFoldChangeMaxValueInputValidation($(this).val());
+        event.data.handler.updateLogFoldChangeMaxValue(validated);
+    });
+
 
 };

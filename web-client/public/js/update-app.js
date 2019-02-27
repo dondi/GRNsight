@@ -47,8 +47,12 @@ import {
   GRID_LAYOUT_BUTTON,
   GRID_LAYOUT_CLASS,
   FORCE_GRAPH_CLASS,
+  NODE_COLORING_TOGGLE_MENU,
+  NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
+  AVG_REPLICATE_VALS_BOTTOM_MENU,
+  AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -349,8 +353,17 @@ export const updateApp = grnState => {
     }
 
 // Node Coloring
+    if (grnState.nodeColoring.nodeColoringEnabled) {
+        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
+        updaters.renderNodeColoring();
+    } else {
+        $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        updaters.removeNodeColoring();
+    }
 
-    if (grnState.nodeColoring.avgTopDataset) {
+    if (grnState.nodeColoring.averageTopDataset) {
         $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", "checked");
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", "checked");
@@ -359,6 +372,18 @@ export const updateApp = grnState => {
         $(AVG_REPLICATE_VALS_TOP_MENU + " span").removeClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_TOP_MENU).removeProp("checked");
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).removeProp("checked");
+        updaters.renderNodeColoring();
+    }
+
+    if (grnState.nodeColoring.averageBottomDataset) {
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", "checked");
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", "checked");
+        updaters.renderNodeColoring();
+    } else {
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").removeClass("glyphicon-ok");
+        $(AVG_REPLICATE_VALS_BOTTOM_MENU).removeProp("checked");
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).removeProp("checked");
         updaters.renderNodeColoring();
     }
 

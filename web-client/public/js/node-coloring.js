@@ -1,4 +1,3 @@
-import { updaters } from "./graph";
 import {
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
@@ -15,7 +14,6 @@ import {
   NODE_COLORING_TOGGLE_MENU,
   TOP_DATASET_SELECTION_MENU,
   BOTTOM_DATASET_SELECTION_MENU,
-  NODE_COLORING_TOGGLE_CLASS,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
   ENDS_IN_EXPRESSION_REGEXP,
@@ -40,48 +38,6 @@ export var hasExpressionData = function (sheets) {
 export var nodeColoringController = {
 
     // renderNodeColoring: function () { }, // defined in graph.js
-
-    updateAverageReplicateValuesTopDataset: function (averageTopDataset) {
-        if (averageTopDataset) {
-            $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
-            $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", "checked");
-            $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", "checked");
-        } else {
-            $(AVG_REPLICATE_VALS_TOP_MENU + " span").removeClass("glyphicon-ok");
-            $(AVG_REPLICATE_VALS_TOP_MENU).removeProp("checked");
-            $(AVG_REPLICATE_VALS_TOP_SIDEBAR).removeProp("checked");
-        }
-        grnState.nodeColoring.avgTopDataset = averageTopDataset;
-        updaters.renderNodeColoring();
-    },
-
-    updateAverageReplicateValuesBottomDataset: function (averageBottomDataset) {
-        if (averageBottomDataset) {
-            $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
-            $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", "checked");
-            $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", "checked");
-        } else {
-            $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").removeClass("glyphicon-ok");
-            $(AVG_REPLICATE_VALS_BOTTOM_MENU).removeProp("checked");
-            $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).removeProp("checked");
-        }
-        grnState.nodeColoring.avgBottomDataset = averageBottomDataset;
-        this.renderNodeColoring();
-    },
-
-    disableNodeColoring: function () {
-        $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
-        grnState.nodeColoring.nodeColoringEnabled = false;
-        this.removeNodeColoring();
-    },
-
-    enableNodeColoring: function () {
-        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
-        grnState.nodeColoring.nodeColoringEnabled = true;
-        this.renderNodeColoring();
-    },
 
     updateLogFoldChangeMaxValue: function (value) {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(value);
@@ -137,20 +93,6 @@ export var nodeColoringController = {
     },
 
     configureNodeColoringHandlers: function () {
-        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).on("change", {handler: this}, function (event) {
-            event.data.handler.updateAverageReplicateValuesBottomDataset($(this).prop("checked"));
-        });
-
-        $(AVG_REPLICATE_VALS_BOTTOM_MENU).on("click", {handler: this}, function (event) {
-            event.data.handler
-              .updateAverageReplicateValuesBottomDataset(!$(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked"));
-        });
-
-        $(NODE_COLORING_TOGGLE_CLASS).on("click", {handler: this}, function (event) {
-            event.data.handler.nodeColoringEnabled ?
-                event.data.handler.disableNodeColoring() : event.data.handler.enableNodeColoring();
-        });
-
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).on("click", {handler: this}, function (event) {
             var validated = event.data.handler
                 .logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
@@ -199,8 +141,8 @@ export var nodeColoringController = {
 
         grnState.nodeColoring.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
         grnState.nodeColoring.nodeColoringEnabled = true;
-        grnState.nodeColoring.avgTopDataset = true;
-        grnState.nodeColoring.avgBottomDataset = true;
+        grnState.nodeColoring.averageTopDataset = true;
+        grnState.nodeColoring.averageBottomDataset = true;
         grnState.nodeColoring.topDataset = undefined;
         grnState.nodeColoring.bottomDataset = undefined;
         grnState.nodeColoring.lastDataset = null;
