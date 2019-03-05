@@ -25,11 +25,9 @@ import {
     AVG_REPLICATE_VALS_TOP_SIDEBAR,
     AVG_REPLICATE_VALS_BOTTOM_MENU,
     AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
-    MINIMUM_MAX_LOG_FOLD_CHANGE,
-    MAXIMUM_MAX_LOG_FOLD_CHANGE,
-    DEFAULT_MAX_LOG_FOLD_CHANGE,
-    LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+    LOG_FOLD_CHANGE_MAX_VALUE_MENU,
+    LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
     // TOP_DATASET_SELECTION_SIDEBAR,
     // BOTTOM_DATASET_SELECTION_SIDEBAR,
 } from "./constants";
@@ -135,7 +133,7 @@ export const setupHandlers = grnState => {
     });
 
 // Grid buttons
-    $(GRID_LAYOUT_BUTTON).click(function () {
+    $(GRID_LAYOUT_BUTTON).click(() => {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
             grnState.slidersLocked === true;
@@ -146,64 +144,57 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(FORCE_GRAPH_CLASS).click(function () {
+    $(FORCE_GRAPH_CLASS).click(() => {
         grnState.graphLayout = "FORCE_GRAPH";
         updateApp(grnState);
 
     });
 
-    $(GRID_LAYOUT_CLASS).click(function () {
+    $(GRID_LAYOUT_CLASS).click(() => {
         grnState.graphLayout = "GRID_LAYOUT";
         updateApp(grnState);
     });
 
 // Node Coloring
-    var logFoldChangeMaxValueInputValidation = (value) => {
-        if (value === "" || value === "0") {
-            return DEFAULT_MAX_LOG_FOLD_CHANGE;
-        } else if (value < MINIMUM_MAX_LOG_FOLD_CHANGE) {
-            return MINIMUM_MAX_LOG_FOLD_CHANGE;
-        } else if (value > MAXIMUM_MAX_LOG_FOLD_CHANGE) {
-            return MAXIMUM_MAX_LOG_FOLD_CHANGE;
-        } else {
-            return value;
-        }
-    };
-
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
         grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
         updateApp(grnState);
     });
 
     $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(() => {
-        grnState.nodeColoring.averageTopDataset = $(this).prop("checked");
+        grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
     });
 
     $(AVG_REPLICATE_VALS_TOP_MENU).click(() => {
-        grnState.nodeColoring.averageTopDataset = !$(this).prop("checked");
+        grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
     });
 
     $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).change(() => {
-        grnState.nodeColoring.averageBottomDataset = $(this).prop("checked");
+        grnState.nodeColoring.averageBottomDataset = !grnState.nodeColoring.averageBottomDataset;
         updateApp(grnState);
     });
 
     $(AVG_REPLICATE_VALS_BOTTOM_MENU).click(() => {
-        grnState.nodeColoring.averageBottomDataset = !$(this).prop("checked");
+        grnState.nodeColoring.averageBottomDataset = !grnState.nodeColoring.averageBottomDataset;
         updateApp(grnState);
     });
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
-        var validated = logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
-        event.data.handler.updateLogFoldChangeMaxValue(validated);
+        grnState.nodeColoring.logFoldChangeUpdateTriggered = true;
+        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val();
+        grnState.nodeColoring.logFoldChangeMaxValue = value;
+        updateApp(grnState);
+        grnState.nodeColoring.logFoldChangeUpdateTriggered = false;
     });
 
-    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).change(() => {
-        var validated = logFoldChangeMaxValueInputValidation($(this).val());
-        event.data.handler.updateLogFoldChangeMaxValue(validated);
+    $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
+        grnState.nodeColoring.logFoldChangeUpdateTriggered = true;
+        var value = $(this).val();
+        grnState.nodeColoring.logFoldChangeMaxValue = value;
+        updateApp(grnState);
+        grnState.nodeColoring.logFoldChangeUpdateTriggered = false;
     });
-
 
 };

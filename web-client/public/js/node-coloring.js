@@ -1,6 +1,4 @@
 import {
-  MINIMUM_MAX_LOG_FOLD_CHANGE,
-  MAXIMUM_MAX_LOG_FOLD_CHANGE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
   MAX_NUM_CHARACTERS_DROPDOWN,
   NODE_COLORING_MENU,
@@ -15,7 +13,6 @@ import {
   TOP_DATASET_SELECTION_MENU,
   BOTTOM_DATASET_SELECTION_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
-  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
   ENDS_IN_EXPRESSION_REGEXP,
 } from "./constants";
 
@@ -80,29 +77,7 @@ export var nodeColoringController = {
         );
     },
 
-    logFoldChangeMaxValueInputValidation: function (value) {
-        if (value === "" || value === "0") {
-            return DEFAULT_MAX_LOG_FOLD_CHANGE;
-        } else if (value < MINIMUM_MAX_LOG_FOLD_CHANGE) {
-            return MINIMUM_MAX_LOG_FOLD_CHANGE;
-        } else if (value > MAXIMUM_MAX_LOG_FOLD_CHANGE) {
-            return MAXIMUM_MAX_LOG_FOLD_CHANGE;
-        } else {
-            return value;
-        }
-    },
-
     configureNodeColoringHandlers: function () {
-        $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).on("click", {handler: this}, function (event) {
-            var validated = event.data.handler
-                .logFoldChangeMaxValueInputValidation($("#log-fold-change-max-value-menu").val());
-            event.data.handler.updateLogFoldChangeMaxValue(validated);
-        });
-
-        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).on("change", {handler: this}, function (event) {
-            var validated = event.data.handler.logFoldChangeMaxValueInputValidation($(this).val());
-            event.data.handler.updateLogFoldChangeMaxValue(validated);
-        });
 
         $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
             var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
