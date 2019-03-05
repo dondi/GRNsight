@@ -28,7 +28,7 @@ import {
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
     LOG_FOLD_CHANGE_MAX_VALUE_MENU,
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
-    // TOP_DATASET_SELECTION_SIDEBAR,
+    TOP_DATASET_SELECTION_SIDEBAR,
     // BOTTOM_DATASET_SELECTION_SIDEBAR,
 } from "./constants";
 
@@ -190,6 +190,15 @@ export const setupHandlers = grnState => {
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
         var value = $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val();
         grnState.nodeColoring.logFoldChangeMaxValue = value;
+        updateApp(grnState);
+    });
+
+    $(TOP_DATASET_SELECTION_SIDEBAR).change(() => {
+        var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
+        }
         updateApp(grnState);
     });
 

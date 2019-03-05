@@ -58,6 +58,8 @@ import {
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
+  TOP_DATASET_SELECTION_SIDEBAR,
+  TOP_DATASET_SELECTION_MENU,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -293,6 +295,21 @@ const updateLogFoldChangeMaxValue = () => {
     updaters.renderNodeColoring();
 };
 
+const removeAllChecksFromMenuDatasetOptions = (id) => {
+    $(`${id} li a span`).each(
+        function () {
+            $(this).removeClass("glyphicon-ok");
+        }
+    );
+};
+
+const updateTopDataset = () => {
+    $(TOP_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.topDataset);
+    removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
+    $(`${TOP_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.topDataset}'] a span`).addClass("glyphicon-ok");
+    updaters.renderNodeColoring();
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -415,6 +432,10 @@ export const updateApp = grnState => {
     }
 
     updateLogFoldChangeMaxValue();
+
+    updateTopDataset();
+
+
 
     refreshApp();
 

@@ -36,18 +36,6 @@ export var nodeColoringController = {
 
     // renderNodeColoring: function () { }, // defined in graph.js
 
-    updateTopDataset: function (selection) {
-        $(TOP_DATASET_SELECTION_SIDEBAR).val(selection);
-        this.removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
-        $(`${TOP_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
-
-        grnState.nodeColoring.topDataset = selection;
-        if (grnState.nodeColoring.bottomDataSameAsTop) {
-            grnState.nodeColoring.bottomDataset = selection;
-        }
-        this.renderNodeColoring();
-    },
-
     updateBottomDataset: function (selection) {
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(selection);
         this.removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
@@ -72,11 +60,6 @@ export var nodeColoringController = {
     },
 
     configureNodeColoringHandlers: function () {
-
-        $(TOP_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
-            var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            event.data.handler.updateTopDataset(selection);
-        });
 
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
             var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
