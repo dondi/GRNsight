@@ -314,9 +314,10 @@ let parseJaspar = function (data) {
 
 (function ($) {
     window.api = {
+        getNCBIInfo,
         getGeneInformation: function (symbol) {
             return $.when(
-             getNCBIInfo(symbol)
+             window.api.getNCBIInfo(symbol)
            ).then(function (ncbiInfo) {
                defaultValues.ncbi = parseNCBI(ncbiInfo);
                return getUniProtInfo(symbol);
