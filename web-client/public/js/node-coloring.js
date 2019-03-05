@@ -36,12 +36,6 @@ export var nodeColoringController = {
 
     // renderNodeColoring: function () { }, // defined in graph.js
 
-    updateLogFoldChangeMaxValue: function (value) {
-        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(value);
-        grnState.nodeColoring.logFoldChangeMaxValue = value;
-        this.renderNodeColoring();
-    },
-
     updateTopDataset: function (selection) {
         $(TOP_DATASET_SELECTION_SIDEBAR).val(selection);
         this.removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);

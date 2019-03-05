@@ -182,19 +182,15 @@ export const setupHandlers = grnState => {
     });
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
-        grnState.nodeColoring.logFoldChangeUpdateTriggered = true;
         var value = $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val();
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
-        grnState.nodeColoring.logFoldChangeUpdateTriggered = false;
     });
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
-        grnState.nodeColoring.logFoldChangeUpdateTriggered = true;
-        var value = $(this).val();
+        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val();
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
-        grnState.nodeColoring.logFoldChangeUpdateTriggered = false;
     });
 
 };

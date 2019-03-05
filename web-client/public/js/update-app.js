@@ -53,7 +53,8 @@ import {
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
   AVG_REPLICATE_VALS_BOTTOM_MENU,
   AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
-  LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+  LOG_FOLD_CHANGE_MAX_VALUE_MENU,
+  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
@@ -287,7 +288,8 @@ const updatetoGridLayout = () => {
 // Node Coloring Functions
 const updateLogFoldChangeMaxValue = () => {
     var value = logFoldChangeMaxValueInputValidation(grnState.nodeColoring.logFoldChangeMaxValue);
-    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(value);
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val(value);
+    $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val(value);
     updaters.renderNodeColoring();
 };
 
@@ -412,9 +414,7 @@ export const updateApp = grnState => {
         updaters.renderNodeColoring();
     }
 
-    if (grnState.nodeColoring.logFoldChangeUpdateTriggered) {
-        updateLogFoldChangeMaxValue();
-    }
+    updateLogFoldChangeMaxValue();
 
     refreshApp();
 
