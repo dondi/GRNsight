@@ -19,6 +19,32 @@ const gene = "ACE2";
 describe("JASPAR calls", () => {
     beforeEach(() => {
       const stub = sinon.stub(global.window.api, "getNCBIInfo");
+
+      let xmlDoc = global.document.implementation.createDocument("", "", null);
+      let data = xmlDoc.createElement("eSummaryResult");
+      xmlDoc.appendChild(xmlDoc);
+
+      let docSummary = xmlDoc.createElement("DocumentSummarySet");
+      data.appendChild(docSummary);
+
+      let name = xmlDoc.createElement("name");
+      data.appendChild(name);
+
+      let nameText = xmlDoc.createTextNode("ACE2")
+      name.appendChild(nameText)
+
+      console.log(xmlDoc);
+      stub.returns(Promise.resolve({
+          class: "C2H2 zinc finger factors",
+          family: "Other factors with up to three adjacent zinc fingers",
+          frequencyMatrix: {
+              A: [45, 1, 0, 90, 0, 0, 49],
+              C: [28, 92, 100, 10, 0, 100, 20],
+              G: [21, 6, 0, 0, 100, 0, 17],
+              T: [5, 1, 0, 0, 0, 0, 14]
+          },
+          jasparID: "MA0267.1"
+      }));
       stub.callsFake(() => console.log("MOCK GETNCBIINFO"));
       /*  const stub = sinon.stub(global.window.api, "getJasparInfo");
         stub.returns(Promise.resolve({
