@@ -1,10 +1,7 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
 const hasExpressionData = require("./node-coloring").hasExpressionData;
-import {
-    modifyChargeParameter,
-    modifyLinkDistanceParameter,
-} from "./update-app";
+import { modifyChargeParameter, modifyLinkDistanceParameter } from "./update-app";
 
 import {
     LINK_DIST_SLIDER_ID,
@@ -35,6 +32,8 @@ import {
 export var updaters = {
     setNodesToGrid: () => {},
     setNodesToForceGraph: () => {},
+    renderNodeColoring: () => {},
+    removeNodeColoring: () => {},
 };
 
 export var drawGraph = function (network, nodeColoring) {
@@ -1107,16 +1106,34 @@ export var drawGraph = function (network, nodeColoring) {
     };
 
     nodeColoring.removeNodeColoring = function () {
-        this.nodeColoringEnabled = false;
+        grnState.nodeColoring.nodeColoringEnabled = false;
         node.selectAll(".coloring").remove();
     };
 
-    nodeColoring.renderNodeColoring = function () {
-        if (this.nodeColoringEnabled) {
-            colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
-            colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
+    updaters.removeNodeColoring = function () {
+        grnState.nodeColoring.nodeColoringEnabled = false;
+        node.selectAll(".coloring").remove();
+    };
+
+    updaters.renderNodeColoring = function () {
+        if (grnState.nodeColoring.nodeColoringEnabled) {
+            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
+                        grnState.nodeColoring.logFoldChangeMaxValue);
+            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.avgBottomDataset,
+                        grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
-            renderNodeColoringLegend(this.logFoldChangeMaxValue);
+            renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
+        }
+    };
+
+    nodeColoring.renderNodeColoring = function () {
+        if (grnState.nodeColoring.nodeColoringEnabled) {
+            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
+                        grnState.nodeColoring.logFoldChangeMaxValue);
+            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.avgBottomDataset,
+                        grnState.nodeColoring.logFoldChangeMaxValue);
+            renderNodeLabels();
+            renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
     };
 

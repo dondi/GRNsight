@@ -11,12 +11,26 @@ import {
     SHOW_WEIGHTS_MOUSEOVER,
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
-    LOCK_SLIDERS_CLASS,
+    LOCK_SLIDERS_BUTTON,
+    LOCK_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_CLASS,
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
     UNDO_SLIDER_RESET_MENU,
     GRID_LAYOUT_BUTTON,
+    GRID_LAYOUT_CLASS,
+    FORCE_GRAPH_CLASS,
+/*
+    AVG_REPLICATE_VALS_TOP_SIDEBAR,
+    NODE_COLORING_TOGGLE_CLASS,
+    AVG_REPLICATE_VALS_BOTTOM_MENU,
+    AVG_REPLICATE_VALS_TOP_MENU,
+    AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
+    LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+    LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+    TOP_DATASET_SELECTION_SIDEBAR,
+    BOTTOM_DATASET_SELECTION_SIDEBAR,
+*/
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -86,7 +100,11 @@ export const setupHandlers = grnState => {
     });
 
 // Sliders code
-    $(LOCK_SLIDERS_CLASS).click(() => {
+    $(LOCK_SLIDERS_MENU_OPTION).click(() => {
+        grnState.slidersLocked = !grnState.slidersLocked;
+        updateApp(grnState);
+    });
+    $(LOCK_SLIDERS_BUTTON).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
@@ -119,20 +137,41 @@ export const setupHandlers = grnState => {
     $(GRID_LAYOUT_BUTTON).click(function () {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
+            grnState.slidersLocked === true;
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
+            grnState.slidersLocked === false;
         }
         updateApp(grnState);
     });
 
-    $("#forceGraph").click(function () {
+    $(FORCE_GRAPH_CLASS).click(function () {
         grnState.graphLayout = "FORCE_GRAPH";
         updateApp(grnState);
 
     });
 
-    $("#gridLayout").click(function () {
+    $(GRID_LAYOUT_CLASS).click(function () {
         grnState.graphLayout = "GRID_LAYOUT";
         updateApp(grnState);
     });
+
+/* Node coloring
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
+        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+        updateApp(grnState);
+    });
+
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
+        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+        updateApp(grnState);
+    });
+
+    $(AVG_REPLICATE_VALS_TOP_MENU).click(function () {
+        grnState.nodeColoring.avgTopDataset = !$(this).prop("checked");
+        updateApp(grnState);
+    });
+
+*/
+
 };

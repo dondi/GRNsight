@@ -1,3 +1,5 @@
+import { updaters } from "./graph";
+
 import {
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
@@ -17,10 +19,10 @@ import {
   NODE_COLORING_TOGGLE_CLASS,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+  ENDS_IN_EXPRESSION_REGEXP,
 } from "./constants";
 
-
-var endsInExpressionRegExp = /expression$/;
+import { grnState } from "./grnstate";
 
 var shortenExpressionSheetName = function (name) {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
@@ -29,7 +31,7 @@ var shortenExpressionSheetName = function (name) {
 
 export var hasExpressionData = function (sheets) {
     for (var property in sheets) {
-        if (property.match(endsInExpressionRegExp)) {
+        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             return true;
         }
     }
@@ -50,8 +52,8 @@ export var nodeColoringController = {
             $(AVG_REPLICATE_VALS_TOP_MENU).removeProp("checked");
             $(AVG_REPLICATE_VALS_TOP_SIDEBAR).removeProp("checked");
         }
-        this.avgTopDataset = averageTopDataset;
-        this.renderNodeColoring();
+        grnState.nodeColoring.avgTopDataset = averageTopDataset;
+        updaters.renderNodeColoring();
     },
 
     updateAverageReplicateValuesBottomDataset: function (averageBottomDataset) {
@@ -64,27 +66,27 @@ export var nodeColoringController = {
             $(AVG_REPLICATE_VALS_BOTTOM_MENU).removeProp("checked");
             $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).removeProp("checked");
         }
-        this.avgBottomDataset = averageBottomDataset;
+        grnState.nodeColoring.avgBottomDataset = averageBottomDataset;
         this.renderNodeColoring();
     },
 
     disableNodeColoring: function () {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
-        this.nodeColoringEnabled = false;
+        grnState.nodeColoring.nodeColoringEnabled = false;
         this.removeNodeColoring();
     },
 
     enableNodeColoring: function () {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
-        this.nodeColoringEnabled = true;
+        grnState.nodeColoring.nodeColoringEnabled = true;
         this.renderNodeColoring();
     },
 
     updateLogFoldChangeMaxValue: function (value) {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(value);
-        this.logFoldChangeMaxValue = value;
+        grnState.nodeColoring.logFoldChangeMaxValue = value;
         this.renderNodeColoring();
     },
 
@@ -93,9 +95,9 @@ export var nodeColoringController = {
         this.removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
         $(`${TOP_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
 
-        this.topDataset = selection;
-        if (this.bottomDataSameAsTop) {
-            this.bottomDataset = selection;
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
         }
         this.renderNodeColoring();
     },
@@ -106,11 +108,11 @@ export var nodeColoringController = {
         $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
 
         if (selection === "Same as Top Dataset") {
-            this.bottomDataset = this.topDataset;
-            this.bottomDataSameAsTop = true;
+            grnState.nodeColoring.bottomDataset = this.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
         } else {
-            this.bottomDataSameAsTop = false;
-            this.bottomDataset = selection;
+            grnState.nodeColoring.bottomDataSameAsTop = false;
+            grnState.nodeColoring.bottomDataset = selection;
         }
         this.renderNodeColoring();
     },
@@ -204,14 +206,14 @@ export var nodeColoringController = {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
 
-        this.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
-        this.nodeColoringEnabled = true;
-        this.avgTopDataset = true;
-        this.avgBottomDataset = true;
-        this.topDataset = undefined;
-        this.bottomDataset = undefined;
-        this.lastDataset = null;
-        this.bottomDataSameAsTop = true;
+        grnState.nodeColoring.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
+        grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.nodeColoring.avgTopDataset = true;
+        grnState.nodeColoring.avgBottomDataset = true;
+        grnState.nodeColoring.topDataset = undefined;
+        grnState.nodeColoring.bottomDataset = undefined;
+        grnState.nodeColoring.lastDataset = null;
+        grnState.nodeColoring.bottomDataSameAsTop = true;
     },
 
     resetDatasetDropdownMenus: function (network) {
@@ -228,7 +230,7 @@ export var nodeColoringController = {
 
         var nodeColoringOptions = [];
         for (var property in network.expression) {
-            if (property.match(endsInExpressionRegExp)) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
                 nodeColoringOptions.push({value: property});
             }
         }
@@ -259,7 +261,7 @@ export var nodeColoringController = {
     },
 
     isNewWorkbook: function (name) {
-        return this.lastDataset === null || this.lastDataset !== name;
+        return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
     },
 
     showNodeColoringMenus: function () {
@@ -285,16 +287,17 @@ export var nodeColoringController = {
             this.showNodeColoringMenus();
             if (this.isNewWorkbook(name)) {
                 this.initialize();
-                this.lastDataset = name;
+                grnState.nodeColoring.lastDataset = name;
                 this.resetDatasetDropdownMenus(network);
             }
-            this.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+            grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
             if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
-                this.bottomDataset = this.topDataset;
-                this.bottomDataSameAsTop = true;
+                grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+                grnState.nodeColoring.bottomDataSameAsTop = true;
             } else {
-                this.bottomDataset = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-                this.bottomDataSameAsTop = false;
+                grnState.nodeColoring.bottomDataset =
+                        $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+                grnState.nodeColoring.bottomDataSameAsTop = false;
             }
         } else {
             this.disableNodeColoringMenus();
