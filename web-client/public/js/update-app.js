@@ -60,6 +60,8 @@ import {
   DEFAULT_MAX_LOG_FOLD_CHANGE,
   TOP_DATASET_SELECTION_SIDEBAR,
   TOP_DATASET_SELECTION_MENU,
+  BOTTOM_DATASET_SELECTION_SIDEBAR,
+  BOTTOM_DATASET_SELECTION_MENU,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -310,6 +312,15 @@ const updateTopDataset = () => {
     updaters.renderNodeColoring();
 };
 
+const updateBottomDataset = () => {
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
+    removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
+    /* eslint-disable max-len */
+    $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`).addClass("glyphicon-ok");
+    /* eslint-enable max-len */
+    updaters.renderNodeColoring();
+};
+
 export const updateApp = grnState => {
 
     if (grnState.newNetwork) {
@@ -434,8 +445,7 @@ export const updateApp = grnState => {
     updateLogFoldChangeMaxValue();
 
     updateTopDataset();
-
-
+    updateBottomDataset();
 
     refreshApp();
 

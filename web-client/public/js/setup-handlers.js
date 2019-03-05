@@ -29,7 +29,9 @@ import {
     LOG_FOLD_CHANGE_MAX_VALUE_MENU,
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
     TOP_DATASET_SELECTION_SIDEBAR,
-    // BOTTOM_DATASET_SELECTION_SIDEBAR,
+    BOTTOM_DATASET_SELECTION_SIDEBAR,
+    TOP_DATASET_SELECTION_MENU,
+    BOTTOM_DATASET_SELECTION_MENU,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -197,6 +199,41 @@ export const setupHandlers = grnState => {
         var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
         grnState.nodeColoring.topDataset = selection;
         if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    });
+
+    $(TOP_DATASET_SELECTION_MENU).click(() => {
+        var selection = $(this).attr("value");
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    });
+
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).change(() => {
+        var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        grnState.nodeColoring.bottomDataset = selection;
+        if (selection === "Same as Top Dataset") {
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
+        } else {
+            grnState.nodeColoring.bottomDataSameAsTop = false;
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    });
+
+    $(BOTTOM_DATASET_SELECTION_MENU).click(() => {
+        var selection = $(this).attr("value");
+        grnState.nodeColoring.bottomDataset = selection;
+        if (selection === "Same as Top Dataset") {
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
+        } else {
+            grnState.nodeColoring.bottomDataSameAsTop = false;
             grnState.nodeColoring.bottomDataset = selection;
         }
         updateApp(grnState);

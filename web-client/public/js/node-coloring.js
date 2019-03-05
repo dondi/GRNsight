@@ -40,14 +40,6 @@ export var nodeColoringController = {
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(selection);
         this.removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
         $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
-
-        if (selection === "Same as Top Dataset") {
-            grnState.nodeColoring.bottomDataset = this.topDataset;
-            grnState.nodeColoring.bottomDataSameAsTop = true;
-        } else {
-            grnState.nodeColoring.bottomDataSameAsTop = false;
-            grnState.nodeColoring.bottomDataset = selection;
-        }
         this.renderNodeColoring();
     },
 
@@ -57,22 +49,6 @@ export var nodeColoringController = {
                 $(this).removeClass("glyphicon-ok");
             }
         );
-    },
-
-    configureNodeColoringHandlers: function () {
-
-        $(BOTTOM_DATASET_SELECTION_SIDEBAR).on("change", {handler: this}, function (event) {
-            var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            event.data.handler.updateBottomDataset(selection);
-        });
-
-        $("#topDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
-            event.data.handler.updateTopDataset($(this).attr("value"));
-        });
-
-        $("#bottomDatasetDropdownMenu").on("click", "li", {handler: this}, function (event) {
-            event.data.handler.updateBottomDataset($(this).attr("value"));
-        });
     },
 
     initialize: function () {

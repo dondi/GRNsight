@@ -25,7 +25,6 @@ export const upload = function (drawGraph, nodeColoringController) {
 
     var nodeColoring = nodeColoringController;
     uploadState.nodeColoring = nodeColoring;
-    nodeColoring.configureNodeColoringHandlers();
     nodeColoring.initialize();
 
     $("#printGraph").click( function () {
