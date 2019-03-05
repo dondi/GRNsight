@@ -13,10 +13,10 @@ import {
     HIDE_ALL_WEIGHTS,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU_OPTION,
-    UNDO_SLIDER_RESET_CLASS,
+    UNDO_SLIDERS_RESET_CLASS,
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
-    UNDO_SLIDER_RESET_MENU,
+    UNDO_SLIDERS_RESET_MENU,
     GRID_LAYOUT_BUTTON,
     GRID_LAYOUT_CLASS,
     FORCE_GRAPH_CLASS,
@@ -110,7 +110,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDER_RESET_CLASS).click(() => {
+    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
         grnState.resetTriggered = true;
         grnState.undoResetTriggered = false;
         updateApp(grnState);
@@ -128,7 +128,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDER_RESET_MENU).click(() => {
+    $(UNDO_SLIDERS_RESET_MENU).click(() => {
         grnState.resetTriggered = true;
         grnState.undoResetTriggered = false;
         updateApp(grnState);

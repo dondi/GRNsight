@@ -30,10 +30,12 @@ import {
   GRAVITY_LENGTH_WITHOUT_ZERO,
   LOCK_SLIDERS_MENU_OPTION,
   LOCK_SLIDERS_BUTTON,
+  RESET_SLIDERS_ID,
   RESET_SLIDERS_BUTTON,
   RESET_SLIDERS_MENU_OPTION,
-  UNDO_SLIDER_RESET_BUTTON,
-  UNDO_SLIDER_RESET_MENU,
+  UNDO_SLIDERS_RESET_ID,
+  UNDO_SLIDERS_RESET_BUTTON,
+  UNDO_SLIDERS_RESET_MENU,
   LINK_DIST_CLASS,
   LINK_DIST_SLIDER_ID,
   LINK_DIST_MENU,
@@ -90,7 +92,7 @@ const displayNetwork = (network, name) => {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ "#resetSliders", RESET_SLIDERS_MENU_OPTION, "#undoReset", UNDO_SLIDER_RESET_MENU ].forEach(
+    [ RESET_SLIDERS_ID, RESET_SLIDERS_MENU_OPTION, UNDO_SLIDERS_RESET_ID, UNDO_SLIDERS_RESET_MENU ].forEach(
         selector => $(selector).off("click")
     );
 };
@@ -386,8 +388,8 @@ export const updateApp = grnState => {
     if (grnState.resetTriggered === false) {
         resetValues();
         resetForce();
-        $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", false);
-        $(UNDO_SLIDER_RESET_MENU).parent().removeClass("disabled");
+        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", false);
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
     }
@@ -395,8 +397,8 @@ export const updateApp = grnState => {
     if (!grnState.undoResetTriggered && grnState.simulation !== undefined) {
         undoReset();
         undoResetForce();
-        $(UNDO_SLIDER_RESET_BUTTON).prop("disabled", true);
-        $(UNDO_SLIDER_RESET_MENU).parent().addClass("disabled");
+        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
     }
