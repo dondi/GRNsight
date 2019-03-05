@@ -1,6 +1,6 @@
 const xlsx = require("node-xlsx");
 
-const bulidGeneNameArray = function (genes) {
+const buildGeneNameArray = function (genes) {
     const geneNameArray = genes.map(gene => gene["name"]);
     return geneNameArray;
 };
@@ -10,7 +10,7 @@ const createArrayWithZeroes = function (length) {
 };
 
 const buildNetworkSheet = function (genes, links) {
-    const geneNameArray = bulidGeneNameArray(genes);
+    const geneNameArray = buildGeneNameArray(genes);
     // The +1 to length is because we ALSO add the gene name to each of the network sheet arrays.
     const networkSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
 
@@ -83,21 +83,22 @@ const buildXlsxSheet = function (network) {
         }
     );
 
-    Object.keys(network).forEach((key) => {
-        switch (key) {
-        case "meta":
-            resultSheet.push(buildMetaSheet(network[key]));
-            break;
-        case "test":
-            resultSheet.push(...buildTestSheets(network[key]));
-            break;
-        case "expression":
-            resultSheet.push(...buildExpressionSheets(network[key]));
-            break;
-        default:
-            break;
-        }
-    });
+// This is the code that causes crash in Excel export.
+    // Object.keys(network).forEach((key) => {
+    //     switch (key) {
+    //     case "meta":
+    //         resultSheet.push(buildMetaSheet(network[key]));
+    //         break;
+    //     case "test":
+    //         resultSheet.push(...buildTestSheets(network[key]));
+    //         break;
+    //     case "expression":
+    //         resultSheet.push(...buildExpressionSheets(network[key]));
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    // });
 
     return resultSheet;
 };

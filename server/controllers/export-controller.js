@@ -68,7 +68,7 @@ module.exports = function (app) {
         app.post("/convert-to-excel", function (req, res) {
             try {
                 res.header("Content-Type", "text/xlsx");
-                return convertResponse(app, req, res, grnsightToGraphMl);
+                return convertResponse(app, req, res, grnsightToXlsx);
             } catch (error) {
                 return generalExportError(res, error);
             }
