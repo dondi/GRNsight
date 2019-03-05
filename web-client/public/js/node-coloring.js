@@ -36,21 +36,6 @@ export var nodeColoringController = {
 
     // renderNodeColoring: function () { }, // defined in graph.js
 
-    updateBottomDataset: function (selection) {
-        $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(selection);
-        this.removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
-        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${selection}'] a span`).addClass("glyphicon-ok");
-        this.renderNodeColoring();
-    },
-
-    removeAllChecksFromMenuDatasetOptions: function (id) {
-        $(`${id} li a span`).each(
-            function () {
-                $(this).removeClass("glyphicon-ok");
-            }
-        );
-    },
-
     initialize: function () {
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
@@ -66,15 +51,6 @@ export var nodeColoringController = {
 
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-
-        grnState.nodeColoring.logFoldChangeMaxValue = DEFAULT_MAX_LOG_FOLD_CHANGE;
-        grnState.nodeColoring.nodeColoringEnabled = true;
-        grnState.nodeColoring.averageTopDataset = true;
-        grnState.nodeColoring.averageBottomDataset = true;
-        grnState.nodeColoring.topDataset = undefined;
-        grnState.nodeColoring.bottomDataset = undefined;
-        grnState.nodeColoring.lastDataset = null;
-        grnState.nodeColoring.bottomDataSameAsTop = true;
     },
 
     resetDatasetDropdownMenus: function (network) {

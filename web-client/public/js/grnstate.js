@@ -65,9 +65,9 @@ export const grnState = {
 // Node Coloring
 
     nodeColoring: {
+        nodeColoringEnabled: true,
         logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
         logFoldChangeUpdateTriggered: false,
-        nodeColoringEnabled: true,
         averageTopDataset: true,
         averageBottomDataset: true,
         topDataset: undefined,

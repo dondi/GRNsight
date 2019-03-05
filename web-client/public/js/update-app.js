@@ -310,6 +310,7 @@ const updateTopDataset = () => {
     removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
     $(`${TOP_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.topDataset}'] a span`).addClass("glyphicon-ok");
     updaters.renderNodeColoring();
+    // TO DO: If bottomDataSameAsTop make bottom selction "Same As Top"
 };
 
 const updateBottomDataset = () => {
