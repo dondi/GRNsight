@@ -36,12 +36,9 @@ const convertToSheet = function (name, testSheet) {
     };
 };
 
-const buildTestSheets = function (testSheet) {
-    const productionRateSheet = convertToSheet("production_rates", testSheet["production_rates"]);
-    const degradationRateSheet = convertToSheet("degradation_rates", testSheet["degradation_rates"]);
-    const thresholdBSheet = convertToSheet("threshold_b", testSheet["threshold_b"]);
-    return [productionRateSheet, degradationRateSheet, thresholdBSheet];
-};
+const buildTestSheets = testSheet => ["production_rates", "degradation_rates", "threshold_b"]
+      .filter(name => testSheet[name])
+      .map(name => convertToSheet(name, testSheet[name]));
 
 const buildMetaSheet = function (metaDataContainer) {
     const metaSheet = { name: "optimization_parameters", data: [] };
@@ -84,21 +81,23 @@ const buildXlsxSheet = function (network) {
     );
 
 // This is the code that causes crash in Excel export.
-    // Object.keys(network).forEach((key) => {
-    //     switch (key) {
-    //     case "meta":
-    //         resultSheet.push(buildMetaSheet(network[key]));
-    //         break;
-    //     case "test":
-    //         resultSheet.push(...buildTestSheets(network[key]));
-    //         break;
-    //     case "expression":
-    //         resultSheet.push(...buildExpressionSheets(network[key]));
-    //         break;
-    //     default:
-    //         break;
-    //     }
-    // });
+    Object.keys(network).forEach((key) => {
+        switch (key) {
+        case "meta":
+            resultSheet.push(buildMetaSheet(network[key]));
+            break;
+        case "test":
+            console.log("before test")
+            resultSheet.push(...buildTestSheets(network[key]));
+            console.log("after test")
+            break;
+        case "expression":
+            resultSheet.push(...buildExpressionSheets(network[key]));
+            break;
+        default:
+            break;
+        }
+    });
 
     return resultSheet;
 };
