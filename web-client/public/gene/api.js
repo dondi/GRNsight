@@ -141,6 +141,7 @@ let getJasparInfo = function (query) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
         },
+        timeout: 5000,
     }).then(function (data) {
         return (data.results.length === 0 || data.results === undefined) ? {} :
             $.get({

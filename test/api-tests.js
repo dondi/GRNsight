@@ -15,26 +15,27 @@ global.XMLSerializer = XMLSerializer.expose.Window.XMLSerializer;
 
 const apis = require(__dirname + "/../web-client/public/gene/api.js");
 
+
+let NCBIDoc = global.document.implementation.createDocument("", "", null);
+let data = NCBIDoc.createElement("eSummaryResult");
+NCBIDoc.appendChild(data);
+
+let docSummary = NCBIDoc.createElement("DocumentSummarySet");
+data.appendChild(docSummary);
+
+let name = NCBIDoc.createElement("name");
+docSummary.appendChild(name);
+
+let nameText = NCBIDoc.createTextNode("ACE2")
+name.appendChild(nameText)
+
 const gene = "ACE2";
-describe("JASPAR calls", () => {
+describe("getNCBIInfo", () => {
+  
+    let stub;
     beforeEach(() => {
-      const stub = sinon.stub(global.window.api, "getNCBIInfo");
-
-      let xmlDoc = global.document.implementation.createDocument("", "", null);
-      let data = xmlDoc.createElement("eSummaryResult");
-      xmlDoc.appendChild(xmlDoc);
-
-      let docSummary = xmlDoc.createElement("DocumentSummarySet");
-      data.appendChild(docSummary);
-
-      let name = xmlDoc.createElement("name");
-      data.appendChild(name);
-
-      let nameText = xmlDoc.createTextNode("ACE2")
-      name.appendChild(nameText)
-
-      console.log(xmlDoc);
-      stub.returns(Promise.resolve({
+      stub = sinon.stub(global.window.api, "getNCBIInfo");
+    /*  stub.returns(Promise.resolve({
           class: "C2H2 zinc finger factors",
           family: "Other factors with up to three adjacent zinc fingers",
           frequencyMatrix: {
@@ -59,9 +60,13 @@ describe("JASPAR calls", () => {
             jasparID: "MA0267.1"
         })); */
     });
+    
+    afterEach(() => {
+      stub.restore();
+    });
 
     it("should display the correct data", done => {
-      global.window.api.getGeneInformation("ACE2").then(info => {
+      global.window.api.getGeneInformation(gene).then(info => {
         console.log(info);
         done();
       })
