@@ -7,58 +7,65 @@ const { document } = (new JSDOM('')).window;
 global.document = document;
 global.window = document;
 
-const $ = require('jquery')(document.defaultView);
-global.$ = $;
+let $ = require('jquery')(document.defaultView);
 
+global.$ = $;
 const {XMLSerializer} = require('w3c-xmlserializer');
 global.XMLSerializer = XMLSerializer.expose.Window.XMLSerializer;
 
 const apis = require(__dirname + "/../web-client/public/gene/api.js");
 
+let uniprotDoc = document.implementation.createDocument("", "", null);
 
-let NCBIDoc = global.document.implementation.createDocument("", "", null);
-let data = NCBIDoc.createElement("eSummaryResult");
-NCBIDoc.appendChild(data);
+let uniprot = uniprotDoc.createElement("uniprot");
+uniprotDoc.appendChild(uniprot);
 
-let docSummary = NCBIDoc.createElement("DocumentSummarySet");
-data.appendChild(docSummary);
+let entry = uniprotDoc.createElement("entry");
+uniprot.appendChild(entry);
 
-let name = NCBIDoc.createElement("name");
-docSummary.appendChild(name);
+let name = uniprotDoc.createElement("name");
+let sequence = uniprotDoc.createElement("sequence");
+entry.appendChild(name);
+entry.appendChild(sequence);
 
-let nameText = NCBIDoc.createTextNode("ACE2")
-name.appendChild(nameText)
+let nameText = uniprotDoc.createTextNode("YHP1_YEAST");
+let sequenceText = uniprotDoc.createTextNode("MESRNTVLPSLPNIITGTSNSPFQLHTLPNTNFPSDDQGDIRLPPLAASAHIVRPVVNIY" +
+"KSPCDEERPKRKSPQAVDFLSQRVTTSMTPLSKPKKLSSHSPFTPTVRVCSKEQPPQSMH" +
+"SYKKVNILTPLSAAKAVLTPTTRKEKKRSFAFITHSQETFPKKEPKIDNARLARRKRRRT" +
+"SSYELGILQTAFDECPTPNKAKRIELSEQCNMSEKSVQIWFQNKRQAAKKHKNSGNTSHC" +
+"KVHSNDSMSMISYSDAALEITSTPTSTKEAITAELLKTSPANTSSIFEDHHITPCKPGGQ" +
+"LKFHRKSVLVKRTLSNTGHSEIIKSPKGKENRLKFNAYERKPLGEVDLNSFKN")
+name.appendChild(nameText);
+sequence.appendChild(sequenceText);
 
-const gene = "ACE2";
-describe("getNCBIInfo", () => {
+let protein = uniprotDoc.createElement("protein");
+entry.appendChild(protein);
+
+let reccomendedName = uniprotDoc.createElement("reccomendedName");
+protein.appendChild(reccomendedName);
+
+let fullName = uniprotDoc.createElement("fullName");
+reccomendedName.appendChild(fullName);
+
+let fullNameText = uniprotDoc.createTextNode("Homeobox protein YHP1");
+fullName.appendChild(fullNameText);
+
+let organism = uniprotDoc.createElement("organism");
+entry.appendChild(organism);
+
+let organismName = uniprotDoc.createElement("name");
+organism.appendChild(organismName);
+
+let organismNameText = uniprotDoc.createTextNode("Saccharomyces cerevisiae (strain ATCC 204508 / S288c)");
+organismName.appendChild(organismNameText);
+
+
+const gene = "YHP1";
+describe("getUniProtInfo", () => {
   
     let stub;
     beforeEach(() => {
-      stub = sinon.stub(global.window.api, "getNCBIInfo");
-    /*  stub.returns(Promise.resolve({
-          class: "C2H2 zinc finger factors",
-          family: "Other factors with up to three adjacent zinc fingers",
-          frequencyMatrix: {
-              A: [45, 1, 0, 90, 0, 0, 49],
-              C: [28, 92, 100, 10, 0, 100, 20],
-              G: [21, 6, 0, 0, 100, 0, 17],
-              T: [5, 1, 0, 0, 0, 0, 14]
-          },
-          jasparID: "MA0267.1"
-      }));
-      stub.callsFake(() => console.log("MOCK GETNCBIINFO"));
-      /*  const stub = sinon.stub(global.window.api, "getJasparInfo");
-        stub.returns(Promise.resolve({
-            class: "C2H2 zinc finger factors",
-            family: "Other factors with up to three adjacent zinc fingers",
-            frequencyMatrix: {
-                A: [45, 1, 0, 90, 0, 0, 49],
-                C: [28, 92, 100, 10, 0, 100, 20],
-                G: [21, 6, 0, 0, 100, 0, 17],
-                T: [5, 1, 0, 0, 0, 0, 14]
-            },
-            jasparID: "MA0267.1"
-        })); */
+      stub = sinon.stub(global.window.api, "getUniProtInfo");  
     });
     
     afterEach(() => {
@@ -66,10 +73,21 @@ describe("getNCBIInfo", () => {
     });
 
     it("should display the correct data", done => {
-      global.window.api.getGeneInformation(gene).then(info => {
-        console.log(info);
-        done();
-      })
+
+      
+      stub.returns(Promise.resolve(uniprotDoc));
+      global.window.api.getUniProtInfo(gene).then(info => { 
+        expect(info.getElementsByTagName("name")[0].childNodes[0].nodeValue).to.equal("YHP1_YEAST");
+        expect(info.getElementsByTagName("sequence")[0].childNodes[0].nodeValue).to.equal("MESRNTVLPSLPNIITGTSNSPFQLHTLPNTNFPSDDQGDIRLPPLAASAHIVRPVVNIY" +
+        "KSPCDEERPKRKSPQAVDFLSQRVTTSMTPLSKPKKLSSHSPFTPTVRVCSKEQPPQSMH" +
+        "SYKKVNILTPLSAAKAVLTPTTRKEKKRSFAFITHSQETFPKKEPKIDNARLARRKRRRT" +
+        "SSYELGILQTAFDECPTPNKAKRIELSEQCNMSEKSVQIWFQNKRQAAKKHKNSGNTSHC" +
+        "KVHSNDSMSMISYSDAALEITSTPTSTKEAITAELLKTSPANTSSIFEDHHITPCKPGGQ" +
+        "LKFHRKSVLVKRTLSNTGHSEIIKSPKGKENRLKFNAYERKPLGEVDLNSFKN");
+        expect(info.getElementsByTagName("protein")[0].childNodes[0].childNodes[0].childNodes[0].nodeValue).to.equal("Homeobox protein YHP1");
+        expect(info.getElementsByTagName("organism")[0].childNodes[0].childNodes[0].nodeValue).to.equal("Saccharomyces cerevisiae (strain ATCC 204508 / S288c)");
+      }).finally(done)
+      //Do I need to create something like this for the remaining tests?"
       //  expect($(".jasparID").text()).to.equal("MA0267.1");
       // We can go even further by examining the resulting element(s) and expecting their content to match the
       // mock response, but we will leave this as 'further work' for now.
