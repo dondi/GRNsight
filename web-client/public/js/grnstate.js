@@ -36,7 +36,7 @@ const annotateLinks = network => {
     });
 };
 
-export const genePageData = () => {
+const genePageData = () => {
 
   // set to be a function for when data is read from .xml
     return {
@@ -62,6 +62,8 @@ export const grnState = {
     },
 
 // Gene Page data
+    species: genePageData().species,
+    taxon: genePageData().taxon,
 
 
 
