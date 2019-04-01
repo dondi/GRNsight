@@ -65,8 +65,6 @@ export const grnState = {
     species: genePageData().species,
     taxon: genePageData().taxon,
 
-
-
 // Edge Display Parameters
     normalizationMax: null,
     resetNormalizationMax: null,
