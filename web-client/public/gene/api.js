@@ -344,7 +344,7 @@ let parseJaspar = function (data) {
                defaultValues.jaspar = parseJaspar(jasparInfo);
                return defaultValues;
            }).catch(function () {
-              window.api.getNCBIInfo(symbol);
+               window.api.getNCBIInfo(symbol);
                window.api.getUniProtInfo(symbol);
                window.api.getYeastMineInfo(symbol);
                window.api.getGeneOntologyInfo(symbol);
