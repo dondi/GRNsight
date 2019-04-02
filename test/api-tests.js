@@ -1,6 +1,6 @@
-const chai = require("chai");
-const expect = chai.expect;
-const sinon = require("sinon");
+// const chai = require("chai");
+// const expect = chai.expect;
+// const sinon = require("sinon");
 
 const { JSDOM } = require("jsdom");
 const { document } = (new JSDOM("")).window;
@@ -60,8 +60,8 @@ let organismNameText = uniprotDoc.createTextNode("Saccharomyces cerevisiae (stra
 organismName.appendChild(organismNameText);
 
 
-const gene = "YHP1";
-describe("getUniProtInfo", () => {
+// const gene = "YHP1";
+/* describe("getUniProtInfo", () => {
     let stub;
     beforeEach(() => {
         stub = sinon.stub(global.window.api, "getUniProtInfo");
@@ -95,3 +95,17 @@ describe("getUniProtInfo", () => {
     });
 
 });
+
+describe("getJASPARInfo", () => {
+    let server;
+    const jasparResponse = "{}"
+    beforeEach(() => {
+      server = sinon.createFakeServer();
+    });
+    afterEach() => {
+      server.restore();
+    }
+    it("Should successfully make a fake request", done => {
+    })
+});
+*/
