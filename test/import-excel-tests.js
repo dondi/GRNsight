@@ -7,6 +7,7 @@ var expect = require("chai").expect;
 var fs = require("fs");
 var UTF8 = { encoding: "utf-8" };
 
+// Is importController necessary for excel imports?
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
 
@@ -369,6 +370,7 @@ var missingCloseTagAfterForwardSlash = [
     '</graphml>'
 ].join("\n");
 
+// Necessary?
 var missingGraphOpenTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -394,6 +396,7 @@ var missingGraphOpenTag = [
     '</graphml>'
 ].join("\n");
 
+// Necessary?
 var incompleteClosingTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -443,6 +446,7 @@ var unclosedRootTag = [
     '  </graph>',                         // Missing </graphml> closing tag
 ].join("\n");
 
+// Necessary?
 var unpairedQuote = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -468,6 +472,7 @@ var unpairedQuote = [
     '</graphml>'
 ].join("\n");
 
+// Necessary?
 var invalidCharacterInName = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -493,6 +498,7 @@ var invalidCharacterInName = [
     '</graphml>'
 ].join("\n");
 
+// Necessary?
 var unencodedTag = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -543,6 +549,7 @@ var incompleteClosingTagSecondCase = [
     '</graphml>'
 ].join("\n");
 
+// Necessary?
 var missingOpeningQuote = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<graphml xmlns="http://graphml.graphdrawing.org/xmlns"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">',
@@ -569,31 +576,32 @@ var missingOpeningQuote = [
 ].join("\n");
 
 describe("Import from Excel", function () {
-    it("should import unweighted networks from GraphML correctly", function () {
+    it("should import unweighted networks from Excel correctly", function () {
         expect(
-          importController.graphMlToGrnsight(unweightedTestGraphMl)
+          importController.graphMlToGrnsight(unweightedTestExcel)
         ).to.deep.equal(expectedUnweightedNetwork);
     });
 
-    it("should import weighted networks from GraphML correctly", function () {
+    it("should import weighted networks from Excel correctly", function () {
         expect(
           importController.graphMlToGrnsight(weightedTestGraphMl)
         ).to.deep.equal(expectedWeightedNetwork);
     });
 
-    it("should import unweighted networks with cycles from GraphML correctly", function () {
+    it("should import unweighted networks with cycles from Excel correctly", function () {
         expect(
           importController.graphMlToGrnsight(unweightedTestGraphMlWithCycle)
         ).to.deep.equal(expectedUnweightedNetworkWithCycle);
     });
 
-    it("should import weighted networks with cycles from GraphML correctly", function () {
+    it("should import weighted networks with cycles from Excel correctly", function () {
         expect(
           importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
         ).to.deep.equal(expectedWeightedNetworkWithCycle);
     });
 
-    it("should issue an general graphML syntax error because there is a missing end tag", function () {
+// Necessary?
+    it("should issue an general Excel syntax error because there is a missing end tag", function () {
         expect(
             importController.graphMlToGrnsight(missingEndTagTestGraphMl).errors.length
         ).to.equal(1);
@@ -603,6 +611,7 @@ describe("Import from Excel", function () {
         ).to.equal("GRAPHML_INVALID_ATTRIBUTE_NAME");
     });
 
+    // Necessary?
     it("should issue an general graphML syntax error because </graphml> is missing", function () {
         expect(
             importController.graphMlToGrnsight(missingGraphMlEndTagTestGraphMl).errors.length
@@ -613,6 +622,7 @@ describe("Import from Excel", function () {
         ).to.equal("GRAPHML_MISSING_GRAPHML_CLOSE_TAG");
     });
 
+    // Necessary?
     it("should issue an general graphML syntax error because the graph tag is misspelled", function () {
         expect(
             importController.graphMlToGrnsight(misspelledGraphTagTestGraphMl).errors.length
@@ -623,6 +633,7 @@ describe("Import from Excel", function () {
         ).to.equal("GRAPHML_UNMATCHED_CLOSE_TAG");
     });
 
+    // Necessary?
     it("should issue a warning if edgedefault is not set to 'directed'", function () {
         var undirected = unweightedTestGraphMl.replace('edgedefault="directed"', 'edgedefault="undirected"');
         expect(
@@ -648,6 +659,7 @@ describe("Import from Excel", function () {
         ).to.deep.equal([ constants.warnings.EDGES_WITHOUT_WEIGHTS ]);
     });
 
+    // Necessary?
     it("should ignore unsupported GraphML features", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/hyper.graphml", UTF8, function (error, data) {
             expect(
@@ -734,6 +746,7 @@ describe("Import from Excel", function () {
         });
     });
 
+    // Necessary?
     it("should read text labels from yED keys if available", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/graph-with-yed-tags.graphml", UTF8, function (error, data) {
             expect(
@@ -757,6 +770,7 @@ describe("Import from Excel", function () {
         });
     });
 
+    // Necessary?
     it("should read node label objects from yED keys if available", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-node_4-edge_manual-yED.graphml", UTF8, function (error, data) {
             expect(
