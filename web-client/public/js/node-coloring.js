@@ -1,22 +1,15 @@
 import {
-  DEFAULT_MAX_LOG_FOLD_CHANGE,
   MAX_NUM_CHARACTERS_DROPDOWN,
   NODE_COLORING_MENU,
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   TOP_DATASET_SELECTION_SIDEBAR,
-  NODE_COLORING_TOGGLE_SIDEBAR,
-  AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
-  AVG_REPLICATE_VALS_TOP_SIDEBAR,
-  AVG_REPLICATE_VALS_TOP_MENU,
-  AVG_REPLICATE_VALS_BOTTOM_MENU,
-  NODE_COLORING_TOGGLE_MENU,
   TOP_DATASET_SELECTION_MENU,
   BOTTOM_DATASET_SELECTION_MENU,
-  LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   ENDS_IN_EXPRESSION_REGEXP,
 } from "./constants";
 
 import { grnState } from "./grnstate";
+import { updateApp } from "./update-app";
 
 var shortenExpressionSheetName = function (name) {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
@@ -35,23 +28,6 @@ export var hasExpressionData = function (sheets) {
 export var nodeColoringController = {
 
     // renderNodeColoring: function () { }, // defined in graph.js
-
-    initialize: function () {
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
-        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
-        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
-
-        // Initialize Menu Bar
-        $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
-        $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", true);
-
-        $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
-        $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", true);
-
-        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
-        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-    },
 
     resetDatasetDropdownMenus: function (network) {
 
@@ -123,12 +99,16 @@ export var nodeColoringController = {
         if (hasExpressionData(network.expression)) {
             this.showNodeColoringMenus();
             if (this.isNewWorkbook(name)) {
-                this.initialize();
+                grnState.nodeColoring.nodeColoringEnabled = true;
                 grnState.nodeColoring.lastDataset = name;
                 this.resetDatasetDropdownMenus(network);
+                updateApp(grnState);
             }
+
             grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
+            grnState.nodeColoring.bottomDataset = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+
+            if ( grnState.nodeColoring.bottomDataset === "Same as Top Dataset") {
                 grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
                 grnState.nodeColoring.bottomDataSameAsTop = true;
             } else {

@@ -64,6 +64,7 @@ import {
   TOP_DATASET_SELECTION_MENU,
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   BOTTOM_DATASET_SELECTION_MENU,
+  LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -410,10 +411,15 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Node Coloring
+// Node Colorin
+
+// Initialize Menu Bar
     if (grnState.nodeColoring.nodeColoringEnabled) {
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         updaters.renderNodeColoring();
     } else {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
