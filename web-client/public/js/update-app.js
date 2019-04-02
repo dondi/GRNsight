@@ -328,71 +328,6 @@ const updateBottomDataset = () => {
     updaters.renderNodeColoring();
 };
 
-const shortenExpressionSheetName = (name) => {
-    return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
-      (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
-};
-
-const hasExpressionData = (sheets) => {
-    for (var property in sheets) {
-        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            return true;
-        }
-    }
-    return false;
-};
-
-    // renderNodeColoring: function () { }, // defined in graph.js
-
-const resetDatasetDropdownMenus = (network) => {
-
-    var createHTMLforDataset = function (name) {
-        return `
-            <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
-              <a>
-                <span class=\"glyphicon\"></span>
-                &nbsp;${name}
-              </a>
-            </li>`;
-    };
-
-    var nodeColoringOptions = [];
-    for (var property in network.expression) {
-        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            nodeColoringOptions.push({value: property});
-        }
-    }
-
-    $(BOTTOM_DATASET_SELECTION_SIDEBAR).empty();
-    $(TOP_DATASET_SELECTION_SIDEBAR).empty();
-
-    $(".dataset-option").remove(); // clear all menu dataset options
-
-    $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-            .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
-
-    $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
-
-    nodeColoringOptions.forEach(function (option) {
-        var shortenedSheetName = shortenExpressionSheetName(option.value);
-        $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
-              .attr("value", option.value).text(shortenedSheetName));
-        $(TOP_DATASET_SELECTION_MENU)
-              .append(createHTMLforDataset(option.value));
-        $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-              .attr("value", option.value).text(shortenedSheetName));
-        $(BOTTOM_DATASET_SELECTION_MENU)
-              .append(createHTMLforDataset(option.value));
-    });
-
-    $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
-    $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
-};
-
-const isNewWorkbook = (name) => {
-    return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
-};
-
 const showNodeColoringMenus = () => {
     if ($(NODE_COLORING_MENU).hasClass("hidden")) {
         $(NODE_COLORING_MENU).removeClass("hidden");
@@ -506,10 +441,12 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        showNodeColoringMenus();
         updaters.renderNodeColoring();
     } else {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        disableNodeColoringMenus();
         updaters.removeNodeColoring();
     }
 

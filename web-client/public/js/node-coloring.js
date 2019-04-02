@@ -60,7 +60,8 @@ export var nodeColoringController = {
 
         nodeColoringOptions.forEach(function (option) {
             var shortenedSheetName = shortenExpressionSheetName(option.value);
-            $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>").attr("value", option.value).text(shortenedSheetName));
+            $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .attr("value", option.value).text(shortenedSheetName));
             $(TOP_DATASET_SELECTION_MENU)
               .append(createHTMLforDataset(option.value));
             $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
@@ -118,6 +119,7 @@ export var nodeColoringController = {
             }
         } else {
             this.disableNodeColoringMenus();
+            updateApp(grnState);
         }
     },
 };

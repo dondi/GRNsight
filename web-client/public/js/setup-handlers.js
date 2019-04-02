@@ -32,6 +32,8 @@ import {
     BOTTOM_DATASET_SELECTION_SIDEBAR,
     TOP_DATASET_SELECTION_MENU,
     BOTTOM_DATASET_SELECTION_MENU,
+    ENDS_IN_EXPRESSION_REGEXP,
+    MAX_NUM_CHARACTERS_DROPDOWN,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -216,12 +218,11 @@ export const setupHandlers = grnState => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).change(() => {
         var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
         grnState.nodeColoring.bottomDataset = selection;
-        if (selection === "Same as Top Dataset") {
+        if (grnState.nodeColoring.bottomDataset === "Same as Top Dataset") {
             grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
             grnState.nodeColoring.bottomDataSameAsTop = true;
         } else {
             grnState.nodeColoring.bottomDataSameAsTop = false;
-            grnState.nodeColoring.bottomDataset = selection;
         }
         updateApp(grnState);
     });
@@ -238,5 +239,83 @@ export const setupHandlers = grnState => {
         }
         updateApp(grnState);
     });
+
+    const shortenExpressionSheetName = (name) => {
+        return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
+          (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+    };
+
+    const hasExpressionData = (sheets) => {
+        for (var property in sheets) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+        // renderNodeColoring: function () { }, // defined in graph.js
+
+    const resetDatasetDropdownMenus = (network) => {
+
+        var createHTMLforDataset = function (name) {
+            return `
+                <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
+                  <a>
+                    <span class=\"glyphicon\"></span>
+                    &nbsp;${name}
+                  </a>
+                </li>`;
+        };
+
+        var nodeColoringOptions = [];
+        for (var property in network.expression) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+                nodeColoringOptions.push({value: property});
+            }
+        }
+
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).empty();
+        $(TOP_DATASET_SELECTION_SIDEBAR).empty();
+
+        $(".dataset-option").remove(); // clear all menu dataset options
+
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
+                .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
+
+        $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
+
+        nodeColoringOptions.forEach(function (option) {
+            var shortenedSheetName = shortenExpressionSheetName(option.value);
+            $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
+                  .attr("value", option.value).text(shortenedSheetName));
+            $(TOP_DATASET_SELECTION_MENU)
+                  .append(createHTMLforDataset(option.value));
+            $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
+                  .attr("value", option.value).text(shortenedSheetName));
+            $(BOTTOM_DATASET_SELECTION_MENU)
+                  .append(createHTMLforDataset(option.value));
+        });
+
+        $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
+        $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
+    };
+
+    const isNewWorkbook = (name) => {
+        return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
+    };
+
+    if (grnState.newNetwork) {
+        if (hasExpressionData(grnState.network.expression)) {
+            if (isNewWorkbook(name)) {
+                grnState.nodeColoring.nodeColoringEnabled = true;
+                grnState.nodeColoring.lastDataset = name;
+                resetDatasetDropdownMenus(grnState.network);
+                updateApp(grnState);
+            }
+        } else {
+            updateApp(grnState);
+        }
+    }
 
 };
