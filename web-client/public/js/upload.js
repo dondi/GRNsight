@@ -25,7 +25,6 @@ export const upload = function (drawGraph, nodeColoringController) {
 
     var nodeColoring = nodeColoringController;
     uploadState.nodeColoring = nodeColoring;
-    nodeColoring.initialize();
 
     $("#printGraph").click( function () {
         if (!$(".startDisabled").hasClass("disabled")) {

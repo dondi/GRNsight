@@ -308,6 +308,7 @@ export const setupHandlers = grnState => {
     if (grnState.newNetwork) {
         if (hasExpressionData(grnState.network.expression)) {
             if (isNewWorkbook(name)) {
+                grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.nodeColoringEnabled = true;
                 grnState.nodeColoring.lastDataset = name;
                 resetDatasetDropdownMenus(grnState.network);

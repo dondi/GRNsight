@@ -58,7 +58,6 @@ import {
   AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
   LOG_FOLD_CHANGE_MAX_VALUE_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
-  MAX_NUM_CHARACTERS_DROPDOWN,
   MINIMUM_MAX_LOG_FOLD_CHANGE,
   MAXIMUM_MAX_LOG_FOLD_CHANGE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
@@ -67,13 +66,12 @@ import {
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   BOTTOM_DATASET_SELECTION_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
-  ENDS_IN_EXPRESSION_REGEXP,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
-    if (uploadState && uploadState.currentNetwork && uploadState.nodeColoring) {
+    if (uploadState && uploadState.currentNetwork) {
         drawGraph(uploadState.currentNetwork, uploadState.nodeColoring);
     }
 };
@@ -337,6 +335,7 @@ const showNodeColoringMenus = () => {
     }
 };
 
+/*
 const disableNodeColoringMenus = () => {
     if (!$(NODE_COLORING_MENU).hasClass("hidden")) {
         $(NODE_COLORING_MENU).addClass("hidden");
@@ -345,6 +344,7 @@ const disableNodeColoringMenus = () => {
         $(".node-coloring-menu").addClass("disabled");
     }
 };
+*/
 
 export const updateApp = grnState => {
 
@@ -441,12 +441,10 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-        showNodeColoringMenus();
         updaters.renderNodeColoring();
     } else {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
-        disableNodeColoringMenus();
         updaters.removeNodeColoring();
     }
 
@@ -474,6 +472,7 @@ export const updateApp = grnState => {
         updaters.renderNodeColoring();
     }
 
+    showNodeColoringMenus();
     updateLogFoldChangeMaxValue();
 
     updateTopDataset();
