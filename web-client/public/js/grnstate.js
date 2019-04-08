@@ -7,6 +7,7 @@ import {
   CHARGE_SLIDER_ID,
   CHARGE_VALUE,
   CHARGE_DEFAULT_VALUE,
+  DEFAULT_MAX_LOG_FOLD_CHANGE,
 } from "./constants";
 let currentNetwork = null;
 
@@ -38,7 +39,7 @@ const annotateLinks = network => {
 
 const genePageData = () => {
 
-  // set to be a function for when data is read from .xml
+    // set to be a function for when data is read from .xml
     return {
         species: "Saccharomyces_cerevisiae",
         taxon: "559292"
@@ -61,10 +62,6 @@ export const grnState = {
         this.newNetwork = true;
     },
 
-// Gene Page data
-    species: genePageData().species,
-    taxon: genePageData().taxon,
-
 // Edge Display Parameters
     normalizationMax: null,
     resetNormalizationMax: null,
@@ -74,6 +71,24 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
+
+
+// Gene Page data
+    species: genePageData().species,
+    taxon: genePageData().taxon,
+
+// Node Coloring
+
+    nodeColoring: {
+        logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
+        nodeColoringEnabled: true,
+        avgTopDataset: true,
+        avgBottomDataset: true,
+        topDataset: undefined,
+        bottomDataset: undefined,
+        lastDataset: null,
+        bottomDataSameAsTop: true,
+    },
 
 // Slider Parameters
     slidersLocked: false,
