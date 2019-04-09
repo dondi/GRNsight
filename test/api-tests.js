@@ -1,19 +1,22 @@
-// const chai = require("chai");
-// const expect = chai.expect;
-// const sinon = require("sinon");
-
-const { JSDOM } = require("jsdom");
-const { document } = (new JSDOM("")).window;
+/* const { document } = (new JSDOM("")).window;
 global.document = document;
 global.window = document;
 
 let $ = require("jquery")(document.defaultView);
 
-global.$ = $;
+global.$ = $;const chai = require("chai");
+
+const expect = chai.expect;
+const sinon = require("sinon");
+const serviceRoot = $("#service-root").attr("value");
+
+
+
+
 const {XMLSerializer} = require("w3c-xmlserializer");
 global.XMLSerializer = XMLSerializer.expose.Window.XMLSerializer;
 
-// const apis = require(__dirname + "/../web-client/public/gene/api.js");
+const apis = require(__dirname + "/../web-client/public/gene/api.js");
 
 let uniprotDoc = document.implementation.createDocument("", "", null);
 
@@ -60,8 +63,8 @@ let organismNameText = uniprotDoc.createTextNode("Saccharomyces cerevisiae (stra
 organismName.appendChild(organismNameText);
 
 
-// const gene = "YHP1";
-/* describe("getUniProtInfo", () => {
+ const gene = "YHP1";
+  describe("getUniProtInfo", () => {
     let stub;
     beforeEach(() => {
         stub = sinon.stub(global.window.api, "getUniProtInfo");
@@ -72,6 +75,7 @@ organismName.appendChild(organismNameText);
     it("should display the correct data", done => {
         stub.returns(Promise.resolve(uniprotDoc));
         global.window.api.getUniProtInfo(gene).then(info => {
+          console.log(info);
             expect(info.getElementsByTagName("name")[0].childNodes[0].nodeValue).to.equal("YHP1_YEAST");
             expect(info.getElementsByTagName("sequence")[0].childNodes[0].nodeValue).to.equal("MESRNTVLPSLPNIITGTSN" +
         "SPFQLHTLPNTNFPSDDQGDIRLPPLAASAHIVRPVVNIY" +
@@ -96,16 +100,39 @@ organismName.appendChild(organismNameText);
 
 });
 
-describe("getJASPARInfo", () => {
+describe("getUniProtInfo", () => {
+
+// final result is a promise
+// call this with known input
+// part of what the function needs is a network request, alongside the query -
+// tell fake server "idc who asks, make this response"
+// mocks return the data ONLY IF the correct parameters are supplied
+// set up fake server to only return happy answers with expected URLS and fail everything else
+
     let server;
     const jasparResponse = "{}"
     beforeEach(() => {
       server = sinon.createFakeServer();
     });
-    afterEach() => {
-      server.restore();
+    const query = {
+      symbol: "YHP1",
+      species: "Saccharomyces_cerevisiae",
+      taxon: 12345
     }
-    it("Should successfully make a fake request", done => {
+    const results = "{matrix_id : 69}";
+    it("Make the correct calls", done => {
+      const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1"
+      server.respondWith("GET", url, [
+      200,
+      {"content-type": "text"},
+      "Can I go to bed now?"]);
+      let callback = sinon.spy()
+      global.window.api.getUniProtInfo(query, callback);
+      server.respond();
+      server.restore();
+      console.log(callback);
+      sinon.assert.calledWith(callback, ["Can I go to bed now?"]);
+      done();
     })
 });
 */
