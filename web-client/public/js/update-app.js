@@ -72,12 +72,11 @@ import {
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
     if (uploadState && uploadState.currentNetwork) {
-        drawGraph(uploadState.currentNetwork, uploadState.nodeColoring);
+        drawGraph(uploadState.currentNetwork);
     }
 };
 
 const displayNetwork = (network, name) => {
-    uploadState.nodeColoring.reload(network, name);
     if (document.getElementById("zoomSlider").disabled) {
         document.getElementById("zoomSlider").disabled = false;
     }
@@ -335,16 +334,14 @@ const showNodeColoringMenus = () => {
     }
 };
 
-/*
 const disableNodeColoringMenus = () => {
-    if (!$(NODE_COLORING_MENU).hasClass("hidden")) {
+    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
         $(NODE_COLORING_MENU).addClass("hidden");
     }
-    if (!$(".node-coloring-menu").hasClass("disabled")) {
+    if ($(".node-coloring-menu").hasClass("disabled")) {
         $(".node-coloring-menu").addClass("disabled");
     }
 };
-*/
 
 export const updateApp = grnState => {
 
@@ -435,6 +432,7 @@ export const updateApp = grnState => {
 // Node Colorin
 
 // Initialize Menu Bar
+
     if (grnState.nodeColoring.nodeColoringEnabled) {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
@@ -472,12 +470,18 @@ export const updateApp = grnState => {
         updaters.renderNodeColoring();
     }
 
-    showNodeColoringMenus();
+    if (grnState.nodeColoring.showMenu) {
+        showNodeColoringMenus();
+    } else {
+        disableNodeColoringMenus();
+    }
+
     updateLogFoldChangeMaxValue();
 
     updateTopDataset();
     updateBottomDataset();
 
+    console.log(grnState);
     refreshApp();
 
 };

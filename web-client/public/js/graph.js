@@ -36,7 +36,7 @@ export var updaters = {
     removeNodeColoring: () => {},
 };
 
-export var drawGraph = function (network, nodeColoring) {
+export var drawGraph = function (network) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -980,6 +980,7 @@ export var drawGraph = function (network, nodeColoring) {
 
     var getExpressionData = function (gene, strain, average) {
         var strainData = network["expression"][strain];
+        console.log(network["expression"][strain]);
         if (average) {
             var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
             var avgMap = {};
@@ -1105,11 +1106,6 @@ export var drawGraph = function (network, nodeColoring) {
         }
     };
 
-    nodeColoring.removeNodeColoring = function () {
-        grnState.nodeColoring.nodeColoringEnabled = false;
-        node.selectAll(".coloring").remove();
-    };
-
     updaters.removeNodeColoring = function () {
         grnState.nodeColoring.nodeColoringEnabled = false;
         node.selectAll(".coloring").remove();
@@ -1126,19 +1122,8 @@ export var drawGraph = function (network, nodeColoring) {
         }
     };
 
-    nodeColoring.renderNodeColoring = function () {
-        if (grnState.nodeColoring.nodeColoringEnabled) {
-            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
-            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
-            renderNodeLabels();
-            renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
-        }
-    };
-
     if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
-        nodeColoring.renderNodeColoring();
+        updaters.renderNodeColoring();
     }
 
     $(".node").css({

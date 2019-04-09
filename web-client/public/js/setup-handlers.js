@@ -318,5 +318,4 @@ export const setupHandlers = grnState => {
             updateApp(grnState);
         }
     }
-
 };

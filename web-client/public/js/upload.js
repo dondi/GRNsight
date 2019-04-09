@@ -4,10 +4,9 @@
 
 export const uploadState = {
     currentNetwork: null,
-    nodeColoring: null
 };
 
-export const upload = function (drawGraph, nodeColoringController) {
+export const upload = function () {
 
   // Values
     var TOOLTIP_SHOW_DELAY    = 700;
@@ -22,9 +21,6 @@ export const upload = function (drawGraph, nodeColoringController) {
     };
 
     styleLabelTooltips();
-
-    var nodeColoring = nodeColoringController;
-    uploadState.nodeColoring = nodeColoring;
 
     $("#printGraph").click( function () {
         if (!$(".startDisabled").hasClass("disabled")) {
