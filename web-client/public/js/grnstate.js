@@ -89,19 +89,6 @@ export const grnState = {
     species: genePageData().species,
     taxon: genePageData().taxon,
 
-// Node Coloring
-
-    nodeColoring: {
-        logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
-        nodeColoringEnabled: true,
-        avgTopDataset: true,
-        avgBottomDataset: true,
-        topDataset: undefined,
-        bottomDataset: undefined,
-        lastDataset: null,
-        bottomDataSameAsTop: true,
-    },
-
 // Slider Parameters
     slidersLocked: false,
     resetTrigger: false,

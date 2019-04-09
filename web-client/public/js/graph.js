@@ -1114,7 +1114,7 @@ export var drawGraph = function (network, nodeColoring) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         node.selectAll(".coloring").remove();
     };
-  
+
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
             colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
