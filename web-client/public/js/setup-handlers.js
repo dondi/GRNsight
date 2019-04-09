@@ -173,5 +173,4 @@ export const setupHandlers = grnState => {
     });
 
 */
-
 };

@@ -71,6 +71,18 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
+// Node Coloring
+
+    nodeColoring: {
+        logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
+        nodeColoringEnabled: true,
+        avgTopDataset: true,
+        avgBottomDataset: true,
+        topDataset: undefined,
+        bottomDataset: undefined,
+        lastDataset: null,
+        bottomDataSameAsTop: true,
+    },
 
 
 // Gene Page data
