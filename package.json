@@ -53,7 +53,7 @@
   },
   "scripts": {
     "webpack-start": "webpack --watch",
-    "test": "mocha --reporter list --compilers js:babel-core/register test",
+    "test": "mocha --reporter list --compilers js:babel-core/register",
     "start-dev": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
     "start-prod": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
     "coverage": "istanbul cover _mocha",
