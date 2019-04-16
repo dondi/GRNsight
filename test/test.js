@@ -188,6 +188,33 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
+var labelError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.parseSheet(sheet);
+
+    assert.equal(frequency, network.errors.length);
+
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+      "INCORRECT_SHEET_LABELING",
+      network.errors[i].errorCode
+    );
+    }
+};
+
+var optParamsError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.parseSheet(sheet);
+
+    assert.equal(frequency, network.errors.length);
+
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+      "OPTIMIZATION_PARAMETER_ERROR",
+      network.errors[i].errorCode
+    );
+    }
+};
 // WARNING TEST FUNCTIONS:
 
 var noWarnings = function (input) {
