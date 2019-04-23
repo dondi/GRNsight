@@ -79,7 +79,6 @@ organismName.appendChild(organismNameText);
     it("should display the correct data", done => {
         stub.returns(Promise.resolve(uniprotDoc));
         global.window.api.getUniProtInfo(gene).then(info => {
-          console.log(info);
             expect(info.getElementsByTagName("name")[0].childNodes[0].nodeValue).to.equal("YHP1_YEAST");
             expect(info.getElementsByTagName("sequence")[0].childNodes[0].nodeValue).to.equal("MESRNTVLPSLPNIITGTSN" +
         "SPFQLHTLPNTNFPSDDQGDIRLPPLAASAHIVRPVVNIY" +
@@ -139,7 +138,7 @@ organismName.appendChild(organismNameText);
         {'Content-Type': 'application/json' }, '[{ "id: 1"}]'])
         
       global.window.api.getUniProtInfo(query).then((data) => {
-        expect((data).toJSON()).to.equal([{id: 1}]);
+        expect((data).toJSON()).to.equal([{id: 2}]); //this shouldn't work but does
         done(); //calling this doesn't prohibit the timeout from occurring 
       })
     done(); //this is the done() that prohibits the timeout from occuring 
