@@ -116,6 +116,8 @@ organismName.appendChild(organismNameText);
     let server;
     beforeEach(() => {
       server = sinon.createFakeServer();
+      server.autoRespond = true;
+      server.respondImmediately = true;
     });
     
     afterEach(() => {
@@ -138,8 +140,13 @@ organismName.appendChild(organismNameText);
         {'Content-Type': 'application/json' }, '[{ "id: 1"}]'])
         
       global.window.api.getUniProtInfo(query).then((data) => {
+        console.log(data);
         expect((data).toJSON()).to.equal([{id: 2}]); //this shouldn't work but does
+        expect(5).to.equal(6); //this shouldn't work but does
         done(); //calling this doesn't prohibit the timeout from occurring 
+      }).catch( (error) => {
+        console.log(error);
+        expect(5).to.equal(6); //this shouldn't work but does
       })
     done(); //this is the done() that prohibits the timeout from occuring 
 
