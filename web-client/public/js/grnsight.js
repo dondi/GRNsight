@@ -1,8 +1,6 @@
-import { drawGraph } from "./graph";
 import { container } from "./container";
 import { displayStatistics } from "./graph-statistics"; // eslint-disable-line no-unused-vars
 import { upload } from "./upload";
-import { nodeColoringController } from "./node-coloring";
 
 import { grnState } from "./grnstate";
 import { updateApp } from "./update-app";
@@ -12,4 +10,4 @@ setupHandlers(grnState);
 updateApp(grnState);
 
 container();
-upload(drawGraph, nodeColoringController);
+upload();

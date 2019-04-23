@@ -1,8 +1,6 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-const hasExpressionData = require("./node-coloring").hasExpressionData;
 import { modifyChargeParameter, modifyLinkDistanceParameter } from "./update-app";
-
 import {
     LINK_DIST_SLIDER_ID,
     LINK_DIST_MENU,
@@ -10,6 +8,7 @@ import {
     CHARGE_SLIDER_ID,
     CHARGE_MENU,
     CHARGE_VALUE,
+    ENDS_IN_EXPRESSION_REGEXP,
 //    GRID_LAYOUT_BUTTON,
 } from "./constants";
 
@@ -35,6 +34,8 @@ export var updaters = {
     renderNodeColoring: () => {},
     removeNodeColoring: () => {},
 };
+
+import { setupHandlers } from "./setup-handlers";
 
 export var drawGraph = function (network) {
 /* eslint-enable no-unused-vars */
@@ -979,9 +980,10 @@ export var drawGraph = function (network) {
     }
 
     var getExpressionData = function (gene, strain, average) {
-        var strainData = network["expression"][strain];
-        console.log(network["expression"][strain]);
+        console.log(strain);
+        var strainData = grnState.network["expression"][strain];
         if (average) {
+            console.log(network);
             var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
             var avgMap = {};
             uniqueTimePoints.forEach(function (key) {
@@ -1122,7 +1124,17 @@ export var drawGraph = function (network) {
         }
     };
 
-    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
+    const hasExpressionData = (sheets) => {
+        for (var property in sheets) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression) &&
+        grnState.nodeColoring.topDataset !== undefined) {
         updaters.renderNodeColoring();
     }
 

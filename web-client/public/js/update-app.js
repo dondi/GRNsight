@@ -429,7 +429,7 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Node Colorin
+// Node Coloring
 
 // Initialize Menu Bar
 
@@ -481,7 +481,6 @@ export const updateApp = grnState => {
     updateTopDataset();
     updateBottomDataset();
 
-    console.log(grnState);
     refreshApp();
 
 };
