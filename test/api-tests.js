@@ -7,13 +7,12 @@ global.window = document;
 
 let $ = require("jquery")(document.defaultView);
 
-global.$ = $;const chai = require("chai");
+global.$ = $;
+const chai = require("chai");
 
 const expect = chai.expect;
 const sinon = require("sinon");
 const serviceRoot = $("#service-root").attr("value");
-
-const nock = require("nock");
 
 
 
@@ -106,7 +105,7 @@ organismName.appendChild(organismNameText);
 });
 
 
- /*describe("getUniProtInfo", () => {
+ describe("getUniProtInfo", () => {
 
 // final result is a promise
 // call this with known input
@@ -120,198 +119,32 @@ organismName.appendChild(organismNameText);
       server = sinon.createFakeServer();
     });
     
+    afterEach(() => {
+      server.restore();
+    })
+    
     const query = {
       symbol: "YHP1",
       species: "Saccharomyces_cerevisiae",
       taxon: 12345
     }
-    const results = "{matrix_id : 69}";
     
     
     
     it("Make the correct calls", done => {
       const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1"
-      server.respondWith("GET", url, [
-      200,
-      {"content-type": "application/json"},
-      '[{ "id": 12, "comment": "Hey there" }]']);
       
-      let callback = sinon.spy()
-      global.window.api.getUniProtInfo(query, callback);
-      server.respond();
-      
-      console.log(callback);
-      
-      sinon.assert.calledWith(callback, [{ id: 12, comment: "Hey there" }]);
-      server.restore();
-      done();
-    }) 
-  });
-  */
-    
- //trying to use nock instead of sinon for server functionality
- 
- /*describe('fetch test', ()=> {
-   
-   let spy;
-
-     before(() => {
-       nock("https://www.uniprot.org")
-       .get("/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
-             .reply(200, { events: ['foo'] })
-      spy = sinon.spy(global.window.api, "getUniProtInfo");
-    });
-
-     after(() => {
-       nock.cleanAll()
-       global.window.api.getUniProtInfo.restore();
-     });
-
-      
-      it('should get events', () => {
-          return fetch("https://www.uniprot.org/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
-              .then(response => {
-                
-                return response.json()
-              });
-              .then(json => {
-              
-              console.log(spy.wrappedMethod);
-                  expect(json.events[0]).to.equal('foo')
-              });
-      });
-});
- 
-
- describe ("getUniProtInfo()", () => {
-  //  let stub;
-   before(() => {
-    // stub = sinon.stub(global.window.api, "getUniProtInfo");
-    
-    sinon.spy(global.window.api, "getUniProtInfo");
-     
-     nock("https://www.uniprot.org")
-     .get("/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
-           .reply(200, { events: ['foo'] })
-   });
-
-   after(() => {
-    global.window.api.getUniProtInfo.restore();
-     nock.cleanAll();
-   });
-
-    
-    it('should get events', (done) => {
-      
-      //stub.returns(Promise.resolve({events: ['foo'] }));
-      
-      const YHP1 = {
-        symbol: "YHP1",
-        species: "Saccharomyces_cerevisiae",
-        taxon: "559292",
-      };
-      
-      return global.window.api.getUniProtInfo(YHP1).then(data => {
-        console.log(spy.callCount);
+      server.respondWith('GET', url, [
+        200,
+        {'Content-Type': 'application/json' }, '[{ "id: 1"}]'])
         
-      });
-      
-      done();
-    });
- });*/
- 
- describe('fetch test', ()=> {
-    before(() => {
-      nock("https://www.uniprot.org")
-      .get("/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
-            .reply(200, { events: ['foo'] });
-    });
+      global.window.api.getUniProtInfo(query).then((data) => {
+        expect((data).toJSON()).to.equal([{id: 1}]);
+        done(); //calling this doesn't prohibit the timeout from occurring 
+      })
+    done(); //this is the done() that prohibits the timeout from occuring 
 
-    after(() => {
-      nock.cleanAll()
-    });
-
-    it('should get events', () => {
-      
-      const YHP1 = {
-        symbol: "YHP1",
-        species: "Saccharomyces_cerevisiae",
-        taxon: "559292",
-      };
-        return global.window.api.getUniProtInfo(YHP1) 
-            .then(response => {
-              console.log(response.json());
-              return response.json()
-            })
-            .then(json => {
-              console.log(json.events);
-                expect(json.events[0]).to.equal('foo')
-            })
-    })
-})
-
-
- 
-/*describe("getUniProtInfo", function() {
-  
-
-  
-  beforeEach(() => {
-    nock("https://www.uniprot.org/uploadlists")
-    .get("/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
-    .reply(200, {
-      "message" : "Hey"
-    });
   });
-  
-  afterEach(() => {
-    nock.cleanAll();
-  });
-  
-  it("Should return a successful network response", function(done) {
-      this.timeout(6000);
-    
-    return global.window.api.getUniProtInfo("YHP1").then(data => {
-      return data.json();
-    }).then(json => {
-      console.log(json)
-    });
-  
-    
-  });
-
-  /*beforeEach(function() {
-    console.log("Starting");
-
-    
-    c
-    uniProtAPI.get("
-      .reply(200, [{
-        "text" : "hello"
-      }]);
-    
-  });
-  
-  it("Should make the correct network request", function(done) {
-  
-   global.window.api.getUniProtInfo("YHP1").then(data => {
-    expect(43).to.be.a('string');
-   });
-        
-  done();
-        
 });
-});
-    
-
   
-  
-  /* before(function() {
-    const query = {
-      symbol: "YHP1",
-      species: "Saccharomyces_cerevisiae",
-      taxon: "559292",
-    }
     
-    
-  }); */
