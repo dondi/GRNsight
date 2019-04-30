@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 const jsdom = require("jsdom");
+const nock = require("nock");
 
 // Our fake document needs a #service-root element so that a fake "host" can be found by the code.
 const { document } = (new jsdom.JSDOM("<input type='hidden' id='service-root' value='http://test'>")).window;
@@ -74,42 +75,6 @@ organismName.appendChild(organismNameText);
 
 
  const gene = "YHP1";
-  describe("getUniProtInfo", () => {
-    let stub;
-    beforeEach(() => {
-        stub = sinon.stub(global.window.api, "getUniProtInfo");
-    });
-    afterEach(() => {
-        stub.restore();
-    });
-    it("should display the correct data", done => {
-        stub.returns(Promise.resolve(uniprotDoc));
-        global.window.api.getUniProtInfo(gene).then(info => {
-            expect(info.getElementsByTagName("name")[0].childNodes[0].nodeValue).to.equal("YHP1_YEAST");
-            expect(info.getElementsByTagName("sequence")[0].childNodes[0].nodeValue).to.equal("MESRNTVLPSLPNIITGTSN" +
-        "SPFQLHTLPNTNFPSDDQGDIRLPPLAASAHIVRPVVNIY" +
-        "KSPCDEERPKRKSPQAVDFLSQRVTTSMTPLSKPKKLSSHSPFTPTVRVCSKEQPPQSMH" +
-        "SYKKVNILTPLSAAKAVLTPTTRKEKKRSFAFITHSQETFPKKEPKIDNARLARRKRRRT" +
-        "SSYELGILQTAFDECPTPNKAKRIELSEQCNMSEKSVQIWFQNKRQAAKKHKNSGNTSHC" +
-        "KVHSNDSMSMISYSDAALEITSTPTSTKEAITAELLKTSPANTSSIFEDHHITPCKPGGQ" +
-        "LKFHRKSVLVKRTLSNTGHSEIIKSPKGKENRLKFNAYERKPLGEVDLNSFKN");
-            expect(info.getElementsByTagName("protein")[0].childNodes[0].childNodes[0].childNodes[0].nodeValue)
-            .to.equal("Homeobox protein YHP1");
-            expect(info.getElementsByTagName("organism")[0].childNodes[0].childNodes[0].nodeValue)
-            .to.equal("Saccharomyces cerevisiae (strain ATCC 204508 / S288c)");
-        }).finally(done);
-      // Do I need to create something like this for the remaining tests?"
-      //  expect($(".jasparID").text()).to.equal("MA0267.1");
-      // We can go even further by examining the resulting element(s) and expecting their content to match the
-      // mock response, but we will leave this as 'further work' for now.
-
-      // Since this happens asynchronously, we have to call the `done` argument to indicate that the test can
-      // be concluded.
-    });
-
-});
-
-
  describe("getUniProtInfo", () => {
 
 // final result is a promise
@@ -163,15 +128,45 @@ organismName.appendChild(organismNameText);
       
         
      global.window.api.getUniProtInfo(query).then((data) => {
-       console.log("Finally made it here");
-        console.log(data);
+       // console.log("Finally made it here");
+      //   console.log(data);
         done();
       }).catch((error) => {
-        console.log(error)
+      //  console.log(error)
         done();
       });
 
   });
 });
+
+describe("getUniProtInfo", () => {
+  
+  
+  
+  const testString = `yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL	Entry	Entry name	Status	Protein names	Gene names	Organism 
+    Length YHP1	Q04116	YHP1_YEAST	reviewed	Homeobox protein YHP1	YHP1 YDR451C D9461.36	Saccharomyces cerevisiae`;
+    
+   it('should get events', (done) => {
+     let scope = nock("http://localhost:5000")
+     .get("/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
+           .reply(200, testString);
+     console.log(scope);
+     const YHP1 = {
+       symbol: "YHP1",
+       species: "Saccharomyces_cerevisiae",
+       taxon: "559292",
+     };
+     
+     global.window.api.getUniProtInfo(YHP1) 
+           .then(response => {
+             console.log(response);
+             done();
+           }).catch(error => {
+             console.log(error);
+             done();
+           })
+      nock.cleanAll();
+   })
+})
   
     
