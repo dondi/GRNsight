@@ -1,6 +1,4 @@
-import fetch from 'isomorphic-fetch';
 const jsdom = require("jsdom");
-const nock = require("nock");
 
 // Our fake document needs a #service-root element so that a fake "host" can be found by the code.
 const { document } = (new jsdom.JSDOM("<input type='hidden' id='service-root' value='http://test'>")).window;
@@ -19,7 +17,7 @@ const chai = require("chai");
 
 const expect = chai.expect;
 const sinon = require("sinon");
-const serviceRoot = $("#service-root").attr("value");
+// const serviceRoot = $("#service-root").attr("value");
 
 
 
@@ -74,8 +72,7 @@ let organismNameText = uniprotDoc.createTextNode("Saccharomyces cerevisiae (stra
 organismName.appendChild(organismNameText);
 
 
- const gene = "YHP1";
- describe("getUniProtInfo", () => {
+describe("getUniProtInfo", () => {
 
 // final result is a promise
 // call this with known input
@@ -86,87 +83,55 @@ organismName.appendChild(organismNameText);
 
     let server;
     beforeEach(() => {
-      server = sinon.createFakeServer();
-      server.respondImmediately = true;
+        server = sinon.createFakeServer();
+        server.respondImmediately = true;
 
       // Sinon replaces global.XMLHttpRequest but not the one in document.defaultView.
       // However, that's where jQuery looks for XMLHttpRequest so we need to manually
       // "install" it there.
-      document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
+        document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
     });
-    
+
     afterEach(() => {
-      server.restore();
+        server.restore();
 
       // By the same token, Sinon’s restoration affects global.XMLHttpRequest. We then need
       // to manually restore this to document.defaultView.
-      document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
-    })
-    
-    const query = {
-      symbol: "YHP1",
-      species: "Saccharomyces_cerevisiae",
-      taxon: 12345
-    }
-    
-    
-  const testString = `yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL	Entry	Entry name	Status	Protein names	Gene names	Organism 
-  	Length YHP1	Q04116	YHP1_YEAST	reviewed	Homeobox protein YHP1	YHP1 YDR451C D9461.36	Saccharomyces cerevisiae`;
-    
-    
-    it("Make the correct calls", done => {
-      
-      let uniprotDoc = document.implementation.createDocument("", "", null);
-      let sequenceText = uniprotDoc.createTextNode(testString);
-      uniprotDoc.appendChild(sequenceText);
-      
-      const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1"
-      console.log(url);
-      server.respondWith([
-        200,
-        {'Content-Type': 'text/plain' }, testString]);
-      
-        
-     global.window.api.getUniProtInfo(query).then((data) => {
-       // console.log("Finally made it here");
-      //   console.log(data);
-        done();
-      }).catch((error) => {
-      //  console.log(error)
-        done();
-      });
+        document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
+    });
 
-  });
+    const query = {
+        symbol: "YHP1",
+        species: "Saccharomyces_cerevisiae",
+        taxon: 12345
+    };
+
+
+    const testString = `yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL	Entry	Entry name	Status`
+    + `	Protein names	Gene names	Organism  Length YHP1	Q04116	YHP1_YEAST	reviewed	Homeobox protein YHP1	`
+    + `YHP1 YDR451C D9461.36	Saccharomyces cerevisiae`;
+
+
+    it("equals the test string", done => {
+
+        let uniprotDoc = document.implementation.createDocument("", "", null);
+        let sequenceText = uniprotDoc.createTextNode(testString);
+        uniprotDoc.appendChild(sequenceText);
+
+        // const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1";
+        server.respondWith([
+            200,
+        {"Content-Type": "text/plain" }, testString]);
+
+
+        global.window.api.getUniProtInfo(query).then((data) => {
+            expect(data).to.equal(testString);
+
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
 });
 
-describe("getUniProtInfo", () => {
-  
-  
-  
-  const testString = `yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL	Entry	Entry name	Status	Protein names	Gene names	Organism 
-    Length YHP1	Q04116	YHP1_YEAST	reviewed	Homeobox protein YHP1	YHP1 YDR451C D9461.36	Saccharomyces cerevisiae`;
-    
-   it('should get events', (done) => {
-     let scope = nock("http://localhost:5000")
-     .get("/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1")
-           .reply(200, testString);
-     console.log(scope);
-     const YHP1 = {
-       symbol: "YHP1",
-       species: "Saccharomyces_cerevisiae",
-       taxon: "559292",
-     };
-     
-     global.window.api.getUniProtInfo(YHP1) 
-           .then(response => {
-             console.log(response);
-             done();
-           }).catch(error => {
-             console.log(error);
-             done();
-           })
-      nock.cleanAll();
-   })
-})
-  
-    
