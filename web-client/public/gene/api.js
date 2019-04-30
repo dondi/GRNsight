@@ -62,14 +62,13 @@ let getUniProtInfo = function (query) {
         dataType: "text",
         timeout: 5000,
     }).then(function (data) {
+        console.log(data);
         const regex = new RegExp(geneSymbol + "[ \t\r\n\v\f]*([A-Z0-9]+)", "gm");
         const id = regex.exec(data)[1];
         return $.get({
             url: serviceRoot + "/uniprot/uniprot/" + id + ".xml",
             timeout: 5000,
-        });
-    }).fail(function () {
-        return $.get(this);
+        }); 
     });
 };
 

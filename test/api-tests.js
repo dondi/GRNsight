@@ -12,7 +12,7 @@ const chai = require("chai");
 
 const expect = chai.expect;
 const sinon = require("sinon");
-const serviceRoot = $("#service-root").attr("value");
+const serviceRoot = "http://localhost:5000"
 
 
 
@@ -117,7 +117,6 @@ organismName.appendChild(organismNameText);
     beforeEach(() => {
       server = sinon.createFakeServer();
       server.autoRespond = true;
-      server.respondImmediately = true;
     });
     
     afterEach(() => {
@@ -131,24 +130,31 @@ organismName.appendChild(organismNameText);
     }
     
     
+  const testString = `yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL	Entry	Entry name	Status	Protein names	Gene names	Organism 
+  	Length YHP1	Q04116	YHP1_YEAST	reviewed	Homeobox protein YHP1	YHP1 YDR451C D9461.36	Saccharomyces cerevisiae`;
+    
     
     it("Make the correct calls", done => {
-      const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1"
       
-      server.respondWith('GET', url, [
+      let uniprotDoc = document.implementation.createDocument("", "", null);
+      let sequenceText = uniprotDoc.createTextNode(testString);
+      uniprotDoc.appendChild(sequenceText);
+      
+      const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1"
+      console.log(url);
+      server.respondWith([
         200,
-        {'Content-Type': 'application/json' }, '[{ "id: 1"}]'])
+        {'Content-Type': 'text/plain' }, testString]);
+      
         
-      global.window.api.getUniProtInfo(query).then((data) => {
+     global.window.api.getUniProtInfo(query).then((data) => {
+       console.log("Finally made it here");
         console.log(data);
-        expect((data).toJSON()).to.equal([{id: 2}]); //this shouldn't work but does
-        expect(5).to.equal(6); //this shouldn't work but does
-        done(); //calling this doesn't prohibit the timeout from occurring 
-      }).catch( (error) => {
-        console.log(error);
-        expect(5).to.equal(6); //this shouldn't work but does
-      })
-    done(); //this is the done() that prohibits the timeout from occuring 
+        done();
+      }).catch((error) => {
+        console.log(error)
+        done();
+      });
 
   });
 });
