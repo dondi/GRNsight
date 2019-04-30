@@ -1,9 +1,15 @@
 import fetch from 'isomorphic-fetch';
 const jsdom = require("jsdom");
 
-const { document } = (new jsdom.JSDOM("")).window;
+// Our fake document needs a #service-root element so that a fake "host" can be found by the code.
+const { document } = (new jsdom.JSDOM("<input type='hidden' id='service-root' value='http://test'>")).window;
 global.document = document;
 global.window = document;
+
+// 1. JSDOM puts the XMLHttpRequest in document.defaultView
+// 2. jQuery looks for it there
+// 3. But Sinon looks for it in _global_, so we have to put it there before loading Sinon
+global.XMLHttpRequest = document.defaultView.XMLHttpRequest;
 
 let $ = require("jquery")(document.defaultView);
 
@@ -12,7 +18,7 @@ const chai = require("chai");
 
 const expect = chai.expect;
 const sinon = require("sinon");
-const serviceRoot = "http://localhost:5000"
+const serviceRoot = $("#service-root").attr("value");
 
 
 
@@ -116,11 +122,20 @@ organismName.appendChild(organismNameText);
     let server;
     beforeEach(() => {
       server = sinon.createFakeServer();
-      server.autoRespond = true;
+      server.respondImmediately = true;
+
+      // Sinon replaces global.XMLHttpRequest but not the one in document.defaultView.
+      // However, that's where jQuery looks for XMLHttpRequest so we need to manually
+      // "install" it there.
+      document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
     });
     
     afterEach(() => {
       server.restore();
+
+      // By the same token, Sinon’s restoration affects global.XMLHttpRequest. We then need
+      // to manually restore this to document.defaultView.
+      document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
     })
     
     const query = {
