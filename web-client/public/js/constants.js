@@ -79,6 +79,7 @@ export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
 export const DEFAULT_MAX_LOG_FOLD_CHANGE                = 3;
 export const MAX_NUM_CHARACTERS_DROPDOWN                = 24;
 export const NODE_COLORING_MENU                         = ".node-coloring";
+export const NODE_COLORING_MENU_CLASS                   = ".node-coloring-menu";
 export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggle";
 export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
 export const AVG_REPLICATE_VALS_TOP_SIDEBAR             = "#averageDataTop";

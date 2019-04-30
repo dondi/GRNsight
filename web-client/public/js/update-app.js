@@ -51,6 +51,7 @@ import {
   FORCE_GRAPH_CLASS,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
+  NODE_COLORING_MENU_CLASS,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -326,7 +327,7 @@ const resetDatasetDropdownMenus = (network) => {
               </a>
             </li>`;
     };
-    console.log(grnState.nodeColoring.nodeColoringOptions);
+
     for (var property in network.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             grnState.nodeColoring.nodeColoringOptions.push({value: property});
@@ -395,8 +396,8 @@ const showNodeColoringMenus = () => {
     if ($(NODE_COLORING_MENU).hasClass("hidden")) {
         $(NODE_COLORING_MENU).removeClass("hidden");
     }
-    if ($(".node-coloring-menu").hasClass("disabled")) {
-        $(".node-coloring-menu").removeClass("disabled");
+    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
+        $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     }
 };
 
@@ -404,8 +405,8 @@ const disableNodeColoringMenus = () => {
     if ($(NODE_COLORING_MENU).hasClass("hidden")) {
         $(NODE_COLORING_MENU).addClass("hidden");
     }
-    if ($(".node-coloring-menu").hasClass("disabled")) {
-        $(".node-coloring-menu").addClass("disabled");
+    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
+        $(NODE_COLORING_MENU_CLASS).addClass("disabled");
     }
 };
 

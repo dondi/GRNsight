@@ -35,8 +35,6 @@ export var updaters = {
     removeNodeColoring: () => {},
 };
 
-import { setupHandlers } from "./setup-handlers";
-
 export var drawGraph = function (network) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
