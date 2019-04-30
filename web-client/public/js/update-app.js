@@ -365,5 +365,4 @@ export const updateApp = grnState => {
     refreshApp();
 
 */
-
 };

@@ -141,6 +141,7 @@ let getJasparInfo = function (query) {
         beforeSend: function (xhr) {
             xhr.setRequestHeader("content-type", "application/json");
         },
+        timeout: 5000,
     }).then(function (data) {
         return (data.results.length === 0 || data.results === undefined) ? {} :
             $.get({
@@ -314,35 +315,42 @@ let parseJaspar = function (data) {
 
 (function ($) {
     window.api = {
+        getNCBIInfo,
+        getUniProtInfo,
+        getYeastMineInfo,
+        getGeneOntologyInfo,
+        getRegulationInfo,
+        getJasparInfo,
         getGeneInformation: function (symbol) {
             return $.when(
-             getNCBIInfo(symbol)
+             window.api.getNCBIInfo(symbol)
            ).then(function (ncbiInfo) {
                defaultValues.ncbi = parseNCBI(ncbiInfo);
-               return getUniProtInfo(symbol);
+               return window.api.getUniProtInfo(symbol);
            }).then(function (uniProtInfo) {
                defaultValues.uniprot = parseUniprot(uniProtInfo);
-               return getYeastMineInfo(symbol);
+               return window.api.getYeastMineInfo(symbol);
            }).then(function (yeastMineInfo) {
                defaultValues.sgd = parseYeastmine(yeastMineInfo);
-               return getGeneOntologyInfo(symbol);
+               return window.api.getGeneOntologyInfo(symbol);
            }).then(function (goInfo) {
                defaultValues.geneOntology = parseGeneOntology(goInfo);
-               return getRegulationInfo(symbol);
+               return window.api.getRegulationInfo(symbol);
            }).then(function (regulationInfo) {
                // parseRegulators needs both info and symbol
                defaultValues.regulators = parseRegulators(regulationInfo, symbol);
-               return getJasparInfo(symbol);
+               return window.api.getJasparInfo(symbol);
            }).then(function (jasparInfo) {
                defaultValues.jaspar = parseJaspar(jasparInfo);
                return defaultValues;
            }).catch(function () {
-               getUniProtInfo(symbol);
-               getYeastMineInfo(symbol);
-               getGeneOntologyInfo(symbol);
-               getRegulationInfo(symbol);
-               getJasparInfo(symbol);
-               getNCBIInfo(symbol);
+               window.api.getNCBIInfo(symbol);
+               window.api.getUniProtInfo(symbol);
+               window.api.getYeastMineInfo(symbol);
+               window.api.getGeneOntologyInfo(symbol);
+               window.api.getRegulationInfo(symbol);
+               window.api.getJasparInfo(symbol);
+               window.api.getNCBIInfo(symbol);
 
                if (
                  defaultValues.ncbi === defaultNCBI &&

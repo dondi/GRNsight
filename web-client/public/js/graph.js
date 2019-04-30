@@ -953,8 +953,8 @@ export var drawGraph = function (network, nodeColoring) {
                     .attr({
                         href: "info?" + $.param({
                             symbol: gene.name,
-                            species: "Saccharomyces_cerevisiae",
-                            taxon: "559292"}),
+                            species: grnState.species,
+                            taxon: grnState.taxon}),
                         target: "_blank"
                     });
                 $("body").append(tempLink);
