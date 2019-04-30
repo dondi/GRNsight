@@ -980,9 +980,7 @@ export var drawGraph = function (network) {
     }
 
     var getExpressionData = function (gene, strain, average) {
-        console.log(strain);
         var strainData = grnState.network["expression"][strain];
-        console.log(grnState.network["expression"][strain]);
         if (average) {
             var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
             var avgMap = {};
