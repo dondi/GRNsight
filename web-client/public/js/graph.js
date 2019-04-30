@@ -1122,7 +1122,7 @@ export var drawGraph = function (network) {
         }
     };
 
-    const hasExpressionData = (sheets) => {
+    const hasExpressionData = sheets => {
         for (var property in sheets) {
             if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
                 return true;
