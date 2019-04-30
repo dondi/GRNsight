@@ -1131,7 +1131,7 @@ export var drawGraph = function (network) {
         return false;
     };
 
-    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression) &
+    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression) &&
       grnState.nodeColoring.topDataset !== undefined) {
         updaters.renderNodeColoring();
     }
