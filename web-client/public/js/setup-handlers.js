@@ -32,8 +32,6 @@ import {
     BOTTOM_DATASET_SELECTION_SIDEBAR,
     TOP_DATASET_SELECTION_MENU,
     BOTTOM_DATASET_SELECTION_MENU,
-    ENDS_IN_EXPRESSION_REGEXP,
-    MAX_NUM_CHARACTERS_DROPDOWN,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
