@@ -101,10 +101,6 @@
         const ncbiChromosome = gene.ncbi.chromosomeSequence;
         $(".chromosomeSequence").text(ncbiChromosome).attr({ href: ncbiHrefTemplate + ncbiChromosome });
 
-        // DNA Sequence Tab
-        const ensemblDNA = gene.ensembl.dnaSequence;
-        $(".dnaSequence").text(ensemblDNA).attr({ href: ensemblHrefTemplate + ensemblDNA });
-
         // Protein Information
 
         const uniprotProteinType = gene.uniprot.proteinType;
