@@ -420,8 +420,16 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.nodeColoringEnabled = true;
                 grnState.nodeColoring.lastDataset = name;
                 resetDatasetDropdownMenus(grnState.network);
-                grnState.topDataset = grnState.nodeColoring.nodeColoringOptions[0];
                 showNodeColoringMenus();
+            }
+            grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+            if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
+                grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+                grnState.nodeColoring.bottomDataSameAsTop = true;
+            } else {
+                grnState.nodeColoring.bottomDataset =
+                  $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+                grnState.nodeColoring.bottomDataSameAsTop = false;
             }
         }
         refreshApp();
