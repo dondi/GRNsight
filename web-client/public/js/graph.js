@@ -1,8 +1,6 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-const hasExpressionData = require("./node-coloring").hasExpressionData;
 import { modifyChargeParameter, modifyLinkDistanceParameter } from "./update-app";
-
 import {
     LINK_DIST_SLIDER_ID,
     LINK_DIST_MENU,
@@ -10,6 +8,7 @@ import {
     CHARGE_SLIDER_ID,
     CHARGE_MENU,
     CHARGE_VALUE,
+    ENDS_IN_EXPRESSION_REGEXP,
 //    GRID_LAYOUT_BUTTON,
 } from "./constants";
 
@@ -36,7 +35,7 @@ export var updaters = {
     removeNodeColoring: () => {},
 };
 
-export var drawGraph = function (network, nodeColoring) {
+export var drawGraph = function (network) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -979,7 +978,7 @@ export var drawGraph = function (network, nodeColoring) {
     }
 
     var getExpressionData = function (gene, strain, average) {
-        var strainData = network["expression"][strain];
+        var strainData = grnState.network["expression"][strain];
         if (average) {
             var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
             var avgMap = {};
@@ -1105,11 +1104,6 @@ export var drawGraph = function (network, nodeColoring) {
         }
     };
 
-    nodeColoring.removeNodeColoring = function () {
-        grnState.nodeColoring.nodeColoringEnabled = false;
-        node.selectAll(".coloring").remove();
-    };
-
     updaters.removeNodeColoring = function () {
         grnState.nodeColoring.nodeColoringEnabled = false;
         node.selectAll(".coloring").remove();
@@ -1117,28 +1111,27 @@ export var drawGraph = function (network, nodeColoring) {
 
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
-            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
+            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
                         grnState.nodeColoring.logFoldChangeMaxValue);
-            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.avgBottomDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
-            renderNodeLabels();
-            renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
-        }
-    };
-
-    nodeColoring.renderNodeColoring = function () {
-        if (grnState.nodeColoring.nodeColoringEnabled) {
-            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.avgTopDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
-            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.avgBottomDataset,
+            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
                         grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
     };
 
-    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
-        nodeColoring.renderNodeColoring();
+    const hasExpressionData = sheets => {
+        for (var property in sheets) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression) &&
+      grnState.nodeColoring.topDataset !== undefined) {
+        updaters.renderNodeColoring();
     }
 
     $(".node").css({

@@ -13,24 +13,25 @@ import {
     HIDE_ALL_WEIGHTS,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU_OPTION,
-    UNDO_SLIDER_RESET_CLASS,
+    UNDO_SLIDERS_RESET_CLASS,
     RESET_SLIDERS_CLASS,
     RESET_SLIDERS_MENU_OPTION,
-    UNDO_SLIDER_RESET_MENU,
+    UNDO_SLIDERS_RESET_MENU,
     GRID_LAYOUT_BUTTON,
     GRID_LAYOUT_CLASS,
     FORCE_GRAPH_CLASS,
-/*
-    AVG_REPLICATE_VALS_TOP_SIDEBAR,
     NODE_COLORING_TOGGLE_CLASS,
-    AVG_REPLICATE_VALS_BOTTOM_MENU,
     AVG_REPLICATE_VALS_TOP_MENU,
+    AVG_REPLICATE_VALS_TOP_SIDEBAR,
+    AVG_REPLICATE_VALS_BOTTOM_MENU,
     AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
-    LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
     LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+    LOG_FOLD_CHANGE_MAX_VALUE_MENU,
+    LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
     TOP_DATASET_SELECTION_SIDEBAR,
     BOTTOM_DATASET_SELECTION_SIDEBAR,
-*/
+    TOP_DATASET_SELECTION_MENU,
+    BOTTOM_DATASET_SELECTION_MENU,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -109,7 +110,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDER_RESET_CLASS).click(() => {
+    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
         grnState.resetTriggered = true;
         grnState.undoResetTriggered = false;
         updateApp(grnState);
@@ -127,14 +128,14 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDER_RESET_MENU).click(() => {
+    $(UNDO_SLIDERS_RESET_MENU).click(() => {
         grnState.resetTriggered = true;
         grnState.undoResetTriggered = false;
         updateApp(grnState);
     });
 
 // Grid buttons
-    $(GRID_LAYOUT_BUTTON).click(function () {
+    $(GRID_LAYOUT_BUTTON).click(() => {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
             grnState.slidersLocked === true;
@@ -145,32 +146,95 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(FORCE_GRAPH_CLASS).click(function () {
+    $(FORCE_GRAPH_CLASS).click(() => {
         grnState.graphLayout = "FORCE_GRAPH";
         updateApp(grnState);
 
     });
 
-    $(GRID_LAYOUT_CLASS).click(function () {
+    $(GRID_LAYOUT_CLASS).click(() => {
         grnState.graphLayout = "GRID_LAYOUT";
         updateApp(grnState);
     });
 
-/* Node coloring
-    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
-        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+// Node Coloring
+    $(NODE_COLORING_TOGGLE_CLASS).click(() => {
+        grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
         updateApp(grnState);
     });
 
-    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(function () {
-        grnState.nodeColoring.avgTopDataset = $(this).prop("checked");
+    $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(() => {
+        grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
     });
 
-    $(AVG_REPLICATE_VALS_TOP_MENU).click(function () {
-        grnState.nodeColoring.avgTopDataset = !$(this).prop("checked");
+    $(AVG_REPLICATE_VALS_TOP_MENU).click(() => {
+        grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
     });
 
-*/
+    $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).change(() => {
+        grnState.nodeColoring.averageBottomDataset = !grnState.nodeColoring.averageBottomDataset;
+        updateApp(grnState);
+    });
+
+    $(AVG_REPLICATE_VALS_BOTTOM_MENU).click(() => {
+        grnState.nodeColoring.averageBottomDataset = !grnState.nodeColoring.averageBottomDataset;
+        updateApp(grnState);
+    });
+
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
+        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val();
+        grnState.nodeColoring.logFoldChangeMaxValue = value;
+        updateApp(grnState);
+    });
+
+    $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
+        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val();
+        grnState.nodeColoring.logFoldChangeMaxValue = value;
+        updateApp(grnState);
+    });
+
+    $(TOP_DATASET_SELECTION_SIDEBAR).change(() => {
+        var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    });
+
+    $(TOP_DATASET_SELECTION_MENU).click(() => {
+        var selection = $(this).attr("value");
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    });
+
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).change(() => {
+        var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        grnState.nodeColoring.bottomDataset = selection;
+        if (grnState.nodeColoring.bottomDataset === "Same as Top Dataset") {
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
+        } else {
+            grnState.nodeColoring.bottomDataSameAsTop = false;
+        }
+        updateApp(grnState);
+    });
+
+    $(BOTTOM_DATASET_SELECTION_MENU).click(() => {
+        var selection = $(this).attr("value");
+        grnState.nodeColoring.bottomDataset = selection;
+        if (selection === "Same as Top Dataset") {
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
+        } else {
+            grnState.nodeColoring.bottomDataSameAsTop = false;
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    });
 };
