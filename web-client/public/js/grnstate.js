@@ -75,6 +75,7 @@ export const grnState = {
         bottomDataset: undefined,
         lastDataset: null,
         bottomDataSameAsTop: true,
+        nodeColoringOptions: [],
     },
 
 // Slider Parameters

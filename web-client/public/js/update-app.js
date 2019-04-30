@@ -66,6 +66,8 @@ import {
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   BOTTOM_DATASET_SELECTION_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+  MAX_NUM_CHARACTERS_DROPDOWN,
+  ENDS_IN_EXPRESSION_REGEXP,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -293,6 +295,70 @@ const updatetoGridLayout = () => {
 };
 
 // Node Coloring Functions
+const isNewWorkbook = (name) => {
+    return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
+};
+
+const shortenExpressionSheetName = (name) => {
+    return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
+      (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+};
+
+const hasExpressionData = (sheets) => {
+    for (var property in sheets) {
+        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+            return true;
+        }
+    }
+    return false;
+};
+
+    // renderNodeColoring: function () { }, // defined in graph.js
+
+const resetDatasetDropdownMenus = (network) => {
+
+    var createHTMLforDataset = function (name) {
+        return `
+            <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
+              <a>
+                <span class=\"glyphicon\"></span>
+                &nbsp;${name}
+              </a>
+            </li>`;
+    };
+    console.log(grnState.nodeColoring.nodeColoringOptions);
+    for (var property in network.expression) {
+        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+            grnState.nodeColoring.nodeColoringOptions.push({value: property});
+        }
+    }
+
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).empty();
+    $(TOP_DATASET_SELECTION_SIDEBAR).empty();
+
+    $(".dataset-option").remove(); // clear all menu dataset options
+
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
+            .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
+
+    $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
+
+    grnState.nodeColoring.nodeColoringOptions.forEach(function (option) {
+        var shortenedSheetName = shortenExpressionSheetName(option.value);
+        $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .attr("value", option.value).text(shortenedSheetName));
+        $(TOP_DATASET_SELECTION_MENU)
+              .append(createHTMLforDataset(option.value));
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .attr("value", option.value).text(shortenedSheetName));
+        $(BOTTOM_DATASET_SELECTION_MENU)
+              .append(createHTMLforDataset(option.value));
+    });
+
+    $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
+    $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
+};
+
 const updateLogFoldChangeMaxValue = () => {
     var value = logFoldChangeMaxValueInputValidation(grnState.nodeColoring.logFoldChangeMaxValue);
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val(value);
@@ -348,6 +414,16 @@ export const updateApp = grnState => {
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
+        if (hasExpressionData(grnState.network.expression)) {
+            if (isNewWorkbook(name)) {
+                grnState.nodeColoring.showMenu = true;
+                grnState.nodeColoring.nodeColoringEnabled = true;
+                grnState.nodeColoring.lastDataset = name;
+                resetDatasetDropdownMenus(grnState.network);
+                grnState.topDataset = grnState.nodeColoring.nodeColoringOptions[0];
+                showNodeColoringMenus();
+            }
+        }
         refreshApp();
 
         // Rare exception to the MVC cycle: right now we have no way of knowing whether the network has changed
