@@ -17,7 +17,6 @@ const chai = require("chai");
 
 const expect = chai.expect;
 const sinon = require("sinon");
-// const serviceRoot = $("#service-root").attr("value");
 
 
 
@@ -25,54 +24,9 @@ const sinon = require("sinon");
 const {XMLSerializer} = require("w3c-xmlserializer");
 global.XMLSerializer = XMLSerializer.expose.Window.XMLSerializer;
 
-const apis = require(__dirname + "/../web-client/public/gene/api.js");
+require(__dirname + "/../web-client/public/gene/api.js");
 
-let uniprotDoc = document.implementation.createDocument("", "", null);
-
-let uniprot = uniprotDoc.createElement("uniprot");
-uniprotDoc.appendChild(uniprot);
-
-let entry = uniprotDoc.createElement("entry");
-uniprot.appendChild(entry);
-
-let name = uniprotDoc.createElement("name");
-let sequence = uniprotDoc.createElement("sequence");
-entry.appendChild(name);
-entry.appendChild(sequence);
-
-let nameText = uniprotDoc.createTextNode("YHP1_YEAST");
-let sequenceText = uniprotDoc.createTextNode("MESRNTVLPSLPNIITGTSNSPFQLHTLPNTNFPSDDQGDIRLPPLAASAHIVRPVVNIY" +
-"KSPCDEERPKRKSPQAVDFLSQRVTTSMTPLSKPKKLSSHSPFTPTVRVCSKEQPPQSMH" +
-"SYKKVNILTPLSAAKAVLTPTTRKEKKRSFAFITHSQETFPKKEPKIDNARLARRKRRRT" +
-"SSYELGILQTAFDECPTPNKAKRIELSEQCNMSEKSVQIWFQNKRQAAKKHKNSGNTSHC" +
-"KVHSNDSMSMISYSDAALEITSTPTSTKEAITAELLKTSPANTSSIFEDHHITPCKPGGQ" +
-"LKFHRKSVLVKRTLSNTGHSEIIKSPKGKENRLKFNAYERKPLGEVDLNSFKN");
-name.appendChild(nameText);
-sequence.appendChild(sequenceText);
-
-let protein = uniprotDoc.createElement("protein");
-entry.appendChild(protein);
-
-let reccomendedName = uniprotDoc.createElement("reccomendedName");
-protein.appendChild(reccomendedName);
-
-let fullName = uniprotDoc.createElement("fullName");
-reccomendedName.appendChild(fullName);
-
-let fullNameText = uniprotDoc.createTextNode("Homeobox protein YHP1");
-fullName.appendChild(fullNameText);
-
-let organism = uniprotDoc.createElement("organism");
-entry.appendChild(organism);
-
-let organismName = uniprotDoc.createElement("name");
-organism.appendChild(organismName);
-
-let organismNameText = uniprotDoc.createTextNode("Saccharomyces cerevisiae (strain ATCC 204508 / S288c)");
-organismName.appendChild(organismNameText);
-
-
-describe("getUniProtInfo", () => {
+describe("The Gene Page", () => {
 
 // final result is a promise
 // call this with known input
@@ -107,18 +61,13 @@ describe("getUniProtInfo", () => {
     };
 
 
-    const testString = `yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL	Entry	Entry name	Status`
-    + `	Protein names	Gene names	Organism  Length YHP1	Q04116	YHP1_YEAST	reviewed	Homeobox protein YHP1	`
-    + `YHP1 YDR451C D9461.36	Saccharomyces cerevisiae`;
+    it("makes the correct call to Uniprot", done => {
 
+        const testString = "yourlist:M201904306746803381A1F0E0DB47453E0216320D0BAD3EL    Entry    Entry name  Status"
+        + " Protein names    Gene names Organism  Length YHP1    Q04116  "
+        + "YHP1_YEAST    reviewed    Homeobox protein YHP1 "
+        + "YHP1 YDR451C D9461.36   Saccharomyces cerevisiae";
 
-    it("equals the test string", done => {
-
-        let uniprotDoc = document.implementation.createDocument("", "", null);
-        let sequenceText = uniprotDoc.createTextNode(testString);
-        uniprotDoc.appendChild(sequenceText);
-
-        // const url = serviceRoot + "/uniprot/uploadlists/?from=GENENAME&to=ACC&format=tab&taxon=559292&query=YHP1";
         server.respondWith([
             200,
         {"Content-Type": "text/plain" }, testString]);
@@ -133,5 +82,165 @@ describe("getUniProtInfo", () => {
         });
 
     });
+
+    it("makes the correct call to NCBI", done => {
+
+        const testString = `<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN" 
+        "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd">
+        <eSearchResult><Count>1</Count><RetMax>1</RetMax><RetStart>0</RetStart><IdList>
+        <Id>852062</Id>
+        </IdList><TranslationSet><Translation>     
+        <From>+Saccharomyces+cerevisiae[Organism]</From>    
+        <To>"Saccharomyces cerevisiae"[Organism]</To>    
+        </Translation></TranslationSet><TranslationStack>   
+        <TermSet>    <Term>YHP1[gene]</Term>    <Field>gene</Field>    <Count>1</Count>    
+        <Explode>N</Explode>   </TermSet>   <TermSet>    <Term>"Saccharomyces cerevisiae"[Organism]</Term>    
+        <Field>Organism</Field>    <Count>7062</Count>    <Explode>Y</Explode>   </TermSet>   <OP>AND</OP>  
+        </TranslationStack><QueryTranslation>YHP1[gene] AND "Saccharomyces cerevisiae"[Organism]</QueryTranslation>
+        </eSearchResult>`;
+
+
+        let NCBIDoc = document.implementation.createDocument("", "", null);
+        let sequenceText = NCBIDoc.createTextNode(testString);
+        NCBIDoc.appendChild(sequenceText);
+        server.respondWith([
+            200,
+        {"Content-Type": "text/plain" }, testString]);
+
+
+        global.window.api.getNCBIInfo(query).then((data) => {
+            expect(data).to.equal(testString);
+
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
+
+    it("makes the correct call to JASPAR", done => {
+
+        const testObject = {"results":[{"matrix_id":"MA0426.1", "name":"YHP1"}]};
+
+
+        server.respondWith([
+            200,
+        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+
+
+        global.window.api.getJasparInfo(query).then((data) => {
+            expect(data.results[0].matrix_id).to.equal(testObject.results[0].matrix_id);
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
+
+    it("makes the correct call to YeastMine (general data)", done => {
+
+        const testObject = {"results":[
+            {"symbol":"YHP1", "length":1062,
+                "description":"Homeobox transcriptional repressor",
+                "geneSummary":null, "primaryIdentifier":"S000002859"}
+        ],
+            "wasSuccessful":true,
+            "error":null,
+            "statusCode":200};
+
+
+        server.respondWith([
+            200,
+        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+
+
+        global.window.api.getYeastMineInfo(query).then((data) => {
+            expect(data.results[0].description).to.equal(testObject.results[0].description);
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
+
+    it("makes the correct call to YeastMine (general data)", done => {
+
+        const testObject = {"results":[
+            {"symbol":"YHP1", "length":1062,
+                "description":"Homeobox transcriptional repressor",
+                "geneSummary":null, "primaryIdentifier":"S000002859"}
+        ],
+            "wasSuccessful":true,
+            "error":null,
+            "statusCode":200};
+
+
+        server.respondWith([
+            200,
+        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+
+
+        global.window.api.getYeastMineInfo(query).then((data) => {
+            expect(data.results[0].description).to.equal(testObject.results[0].description);
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
+
+    it("makes the correct call to YeastMine (regulation info)", done => {
+
+        const testObject = [
+            {properties:
+                {id: 6393710}},
+            {properties:
+                {id: 6393710}}
+        ];
+
+
+
+        server.respondWith([
+            200,
+        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+
+
+        global.window.api.getRegulationInfo(query).then((data) => {
+            expect(data[0].properties.id).to.equal(data[0].properties.id);
+            expect(data.length).to.equal(2);
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
+
+    it("makes the correct call to YeastMine (gene ontology info)", done => {
+
+        const testObject = [
+            {properties:
+                {id: 6393710}},
+            {properties:
+                {id: 6393710}}
+        ];
+
+
+
+        server.respondWith([
+            200,
+        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+
+
+        global.window.api.getGeneOntologyInfo(query).then((data) => {
+            expect(data[0].properties.id).to.equal(data[0].properties.id);
+            expect(data.length).to.equal(2);
+            done();
+        }).catch(() => {
+            done();
+        });
+
+    });
+
 });
 
