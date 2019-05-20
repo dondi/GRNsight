@@ -215,6 +215,9 @@ const lockForce = (disable) => {
     $(CHARGE_SLIDER_ID).prop("disabled", disable);
     $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
     $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
+    if (grnState.resetTriggered) {
+        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
+    }
 };
 
 const resetValues = () => {
@@ -477,6 +480,7 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
         $(LINK_DIST_CLASS).parent().addClass("disabled");
         $(CHARGE_CLASS).parent().addClass("disabled");
         lockForce(grnState.slidersLocked);
@@ -484,6 +488,7 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
         $(LINK_DIST_CLASS).parent().removeClass("disabled");
         $(CHARGE_CLASS).parent().removeClass("disabled");
         lockForce(grnState.slidersLocked);
