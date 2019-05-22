@@ -358,6 +358,10 @@ export var drawGraph = function (network) {
         zoom.scaleTo(container, zoomScale);
     };
 
+    if (!grnState.newNetwork) {
+        updateViewportZoom(grnState.zoomValue);
+    }
+
     d3.selectAll(".boundBoxSize").on("click", function () {
         var newWidth = $container.width();
         var newHeight = $container.height();
