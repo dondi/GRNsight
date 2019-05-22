@@ -72,6 +72,7 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentNetwork),
 
+// Zoom Parameter
     zoomValue: 4,
     scaledValue: null,
 // Node Coloring
