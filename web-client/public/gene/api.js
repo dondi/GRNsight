@@ -68,8 +68,6 @@ let getUniProtInfo = function (query) {
             url: serviceRoot + "/uniprot/uniprot/" + id + ".xml",
             timeout: 5000,
         });
-    }).fail(function () {
-        return $.get(this);
     });
 };
 
