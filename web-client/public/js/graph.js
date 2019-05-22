@@ -36,7 +36,6 @@ export var updaters = {
 };
 
 export var drawGraph = function (network) {
-    console.log(grnState.zoomValue);
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -53,7 +52,9 @@ export var drawGraph = function (network) {
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
     // Tracks the value of the zoom slider, initally at 100%
-    $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+    if (grnState.newNetwork) {
+        $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+    }
 
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
@@ -261,7 +262,6 @@ export var drawGraph = function (network) {
 
         $(".zoomSlider").attr("min", 0);
         $(".zoomSlider").attr("max", maxRangeValue);
-        console.log(grnState.newNetwork);
         if (grnState.newNetwork) {
             $(".zoomSlider").val(0.01 * leftPoints);
         } else {
