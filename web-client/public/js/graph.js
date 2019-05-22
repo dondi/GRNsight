@@ -279,12 +279,10 @@ export var drawGraph = function (network) {
     var ZOOM_RANGE = 200;
 
     function updateZoomValue (input) {
-        console.log(grnState.zoomValue);
         var value = input || Math.round(($(".zoomSlider").val() / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE));
         value = value === 0 ? MIDDLE_SCALE : value;
         $("#zoomPercent").html(value + "%");
         $("#zoomInput").val(value);
-        console.log(grnState.zoomValue);
     }
 
     function getMappedValue (scale) {

@@ -115,7 +115,6 @@ const synchronizeNormalizationValues = value => {
     var validated = edgeWeightNormalizationInputValidation(value);
     $("#normalization-max").val(validated);
     $("#edge-weight-normalization-factor-menu").val(validated);
-    console.log(grnState.zoomValue);
 };
 
 const grayEdgeInputValidator = value => {
