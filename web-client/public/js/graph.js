@@ -36,6 +36,7 @@ export var updaters = {
 };
 
 export var drawGraph = function (network) {
+    console.log(grnState.zoomValue);
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -51,7 +52,7 @@ export var drawGraph = function (network) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-    var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
+    // Tracks the value of the zoom slider, initally at 100%
     $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
 
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
@@ -219,6 +220,7 @@ export var drawGraph = function (network) {
     maps the scale from 0 to some x, with that x being calculated based on the
     input scales.
 */
+
     var setupZoomSlider = function (minScale) {
       // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
       // So we'll just treat it as 0.
@@ -259,7 +261,12 @@ export var drawGraph = function (network) {
 
         $(".zoomSlider").attr("min", 0);
         $(".zoomSlider").attr("max", maxRangeValue);
-        $(".zoomSlider").val(0.01 * leftPoints);
+        console.log(grnState.newNetwork);
+        if (grnState.newNetwork) {
+            $(".zoomSlider").val(0.01 * leftPoints);
+        } else {
+            $(".zoomSlider").val(grnState.zoomValue);
+        }
     };
 
     setupZoomSlider(minimumScale);
@@ -268,10 +275,12 @@ export var drawGraph = function (network) {
     var ZOOM_RANGE = 200;
 
     function updateZoomValue (input) {
+        console.log(grnState.zoomValue);
         var value = input || Math.round(($(".zoomSlider").val() / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE));
         value = value === 0 ? MIDDLE_SCALE : value;
         $("#zoomPercent").html(value + "%");
         $("#zoomInput").val(value);
+        console.log(grnState.zoomValue);
     }
 
     function getMappedValue (scale) {
@@ -298,7 +307,7 @@ export var drawGraph = function (network) {
                 equivalentScale = MIDDLE_SCALE;
                 equivalentScale += scaleIncreasePerRightPoint * currentPoint;
             }
-            zoomSliderScale = equivalentScale;
+            grnState.zoomSliderScale = equivalentScale;
             manualZoomFunction(equivalentScale);
         } else {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
@@ -316,17 +325,21 @@ export var drawGraph = function (network) {
         return valueValidator(1, 200, value);
     };
 
-    $("#zoomInput").on("change", function () {
-        var value = zoomInputValidator(+$("#zoomInput").val());
-        var scaledValue = value * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
-        $(".zoomSlider").val(scaledValue);
-        updateViewportZoom(scaledValue);
-        updateZoomValue(value);
+    var zoomValue = zoomInputValidator(+$("#zoomInput").val());
+
+    $("#zoomInput").change(() => {
+        grnState.scaledValue = zoomValue * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        $(".zoomSlider").val(grnState.scaledValue);
+        updateViewportZoom(grnState.scaledValue);
+        updateZoomValue(zoomValue);
     });
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        updateViewportZoom(value);
+        if (value !== 4) {
+            grnState.zoomValue = value;
+        }
+        updateViewportZoom(grnState.zoomValue);
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
@@ -378,7 +391,7 @@ export var drawGraph = function (network) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
-            if (zoomSliderScale > 1) {
+            if (grnState.zoomSliderScale > 1) {
                 $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
                 manualZoomFunction(1);
                 $container.removeClass(CURSOR_CLASSES);
