@@ -51,6 +51,7 @@ export var drawGraph = function (network) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
+    var zoomSliderScale = 1;
     // Tracks the value of the zoom slider, initally at 100%
     if (grnState.newNetwork) {
         $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
@@ -307,7 +308,7 @@ export var drawGraph = function (network) {
                 equivalentScale = MIDDLE_SCALE;
                 equivalentScale += scaleIncreasePerRightPoint * currentPoint;
             }
-            var zoomSliderScale = equivalentScale;
+            zoomSliderScale = equivalentScale;
             manualZoomFunction(equivalentScale);
         } else {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
