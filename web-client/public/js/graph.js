@@ -307,7 +307,7 @@ export var drawGraph = function (network) {
                 equivalentScale = MIDDLE_SCALE;
                 equivalentScale += scaleIncreasePerRightPoint * currentPoint;
             }
-            grnState.zoomSliderScale = equivalentScale;
+            var zoomSliderScale = equivalentScale;
             manualZoomFunction(equivalentScale);
         } else {
           // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
@@ -395,7 +395,7 @@ export var drawGraph = function (network) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
-            if (grnState.zoomSliderScale > 1) {
+            if (zoomSliderScale > 1) {
                 $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
                 manualZoomFunction(1);
                 $container.removeClass(CURSOR_CLASSES);
