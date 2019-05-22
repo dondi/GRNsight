@@ -87,10 +87,14 @@ export var drawGraph = function (network) {
         }
     }
 
+    var maxPos = Math.abs(d3.max(allWeights));
+    var maxNeg = Math.abs(d3.min(allWeights));
+    var maxWeight = maxPos > maxNeg ? maxPos : maxNeg;
+
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
-        .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
+        .domain([0, normMax > 0 ? normMax : maxWeight])
         .range([2, 14])
         .clamp(true);
 
@@ -106,7 +110,6 @@ export var drawGraph = function (network) {
         $(".normalization-form").append("placeholder='unweighted'");
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
-        var maxWeight = d3.max(allWeights);
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }
@@ -515,7 +518,7 @@ export var drawGraph = function (network) {
             var xOffsets;
             var color;
 
-            if (Math.abs(d.value / (d3.max(allWeights))) <= grayThreshold) {
+            if (Math.abs(d.value / maxWeight) <= grayThreshold) {
                 minimum = "gray";
             }
             if ( x1 === x2 && y1 === y2 ) {
@@ -1483,7 +1486,7 @@ export var drawGraph = function (network) {
     }
 
     function normalize (d) {
-        return Math.abs(d.value / (d3.max(allWeights)));
+        return Math.abs(d.value / maxWeight);
     }
 
     function dragstart (d) {
