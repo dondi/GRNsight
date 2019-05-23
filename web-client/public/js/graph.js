@@ -115,7 +115,7 @@ export var drawGraph = function (network) {
     }
 
     var getEdgeThickness = function (edge) {
-        return Math.round(totalScale(Math.abs(edge.value)));
+        return Math.floor(totalScale(Math.abs(edge.value)));
     };
 
     var simulation = d3.forceSimulation()
