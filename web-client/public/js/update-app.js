@@ -435,6 +435,8 @@ export const updateApp = grnState => {
                   $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
                 grnState.nodeColoring.bottomDataSameAsTop = false;
             }
+        } else {
+            grnState.nodeColoringEnabled = false;
         }
         refreshApp();
 
@@ -523,7 +525,8 @@ export const updateApp = grnState => {
 
 // Initialize Menu Bar
 
-    if (grnState.nodeColoring.nodeColoringEnabled) {
+    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
+      && hasExpressionData(grnState.network.expression)) {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
