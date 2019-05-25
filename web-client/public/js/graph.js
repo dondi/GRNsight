@@ -68,6 +68,7 @@ export var drawGraph = function (network) {
     var MIN_SCALE = 0.25;
     var ADAPTIVE_MAX_SCALE = 4;
     var MIDDLE_SCALE = 1;
+    var DEFAULT_ZOOM_VALUE = 4;
     // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     var minimumScale = MIN_SCALE;
@@ -89,7 +90,7 @@ export var drawGraph = function (network) {
 
     var maxPos = Math.abs(d3.max(allWeights));
     var maxNeg = Math.abs(d3.min(allWeights));
-    var maxWeight = maxPos > maxNeg ? maxPos : maxNeg;
+    var maxWeight = Math.max(maxPos, maxNeg);
 
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
@@ -338,7 +339,7 @@ export var drawGraph = function (network) {
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        if (value !== 4) {
+        if (value !== DEFAULT_ZOOM_VALUE) {
             grnState.zoomValue = value;
         }
         updateViewportZoom(grnState.zoomValue);
