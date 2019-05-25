@@ -243,4 +243,3 @@ describe("The Gene Page", () => {
     });
 
 });
-

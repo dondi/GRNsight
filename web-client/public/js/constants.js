@@ -21,8 +21,8 @@ export const DEMO_INFORMATION = [
     [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ]
 ];
 
-export const MIN_EDGE_WEIGHT_NORMALIZATION = 0.0001;
-export const MAX_EDGE_WEIGHT_NORMALIZATION = 1000;
+export const MIN_EDGE_WEIGHT_NORMALIZATION      = 0.0001;
+export const MAX_EDGE_WEIGHT_NORMALIZATION      = 1000;
 
 export const GREY_EDGE_THRESHOLD_MENU           = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";

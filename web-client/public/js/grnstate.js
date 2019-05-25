@@ -71,6 +71,10 @@ export const grnState = {
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
+
+// Zoom Parameter
+    zoomValue: 4,
+    scaledValue: null,
 // Node Coloring
 
     nodeColoring: {

@@ -215,6 +215,9 @@ const lockForce = (disable) => {
     $(CHARGE_SLIDER_ID).prop("disabled", disable);
     $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
     $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
+    if (grnState.resetTriggered) {
+        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
+    }
 };
 
 const resetValues = () => {
@@ -432,6 +435,8 @@ export const updateApp = grnState => {
                   $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
                 grnState.nodeColoring.bottomDataSameAsTop = false;
             }
+        } else {
+            grnState.nodeColoringEnabled = false;
         }
         refreshApp();
 
@@ -477,6 +482,7 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
         $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
         $(LINK_DIST_CLASS).parent().addClass("disabled");
         $(CHARGE_CLASS).parent().addClass("disabled");
         lockForce(grnState.slidersLocked);
@@ -484,6 +490,7 @@ export const updateApp = grnState => {
         $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
         $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
         $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
         $(LINK_DIST_CLASS).parent().removeClass("disabled");
         $(CHARGE_CLASS).parent().removeClass("disabled");
         lockForce(grnState.slidersLocked);
@@ -518,7 +525,8 @@ export const updateApp = grnState => {
 
 // Initialize Menu Bar
 
-    if (grnState.nodeColoring.nodeColoringEnabled) {
+    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
+      && hasExpressionData(grnState.network.expression)) {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");

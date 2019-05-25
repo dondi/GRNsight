@@ -51,8 +51,11 @@ export var drawGraph = function (network) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-    var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
-    $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+    var zoomSliderScale = 1;
+    // Tracks the value of the zoom slider, initally at 100%
+    if (grnState.newNetwork) {
+        $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+    }
 
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
@@ -65,9 +68,10 @@ export var drawGraph = function (network) {
     var MIN_SCALE = 0.25;
     var ADAPTIVE_MAX_SCALE = 4;
     var MIDDLE_SCALE = 1;
-    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
+    var DEFAULT_ZOOM_VALUE = 4;
 
     var minimumScale = MIN_SCALE;
+    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     // TODO: incorporate into grnState
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
@@ -84,10 +88,14 @@ export var drawGraph = function (network) {
         }
     }
 
+    var maxPos = Math.abs(d3.max(allWeights));
+    var maxNeg = Math.abs(d3.min(allWeights));
+    var maxWeight = Math.max(maxPos, maxNeg);
+
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
-        .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
+        .domain([0, normMax > 0 ? normMax : maxWeight])
         .range([2, 14])
         .clamp(true);
 
@@ -103,13 +111,12 @@ export var drawGraph = function (network) {
         $(".normalization-form").append("placeholder='unweighted'");
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
-        var maxWeight = d3.max(allWeights);
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }
 
     var getEdgeThickness = function (edge) {
-        return Math.round(totalScale(Math.abs(edge.value)));
+        return Math.floor(totalScale(Math.abs(edge.value)));
     };
 
     var simulation = d3.forceSimulation()
@@ -219,6 +226,7 @@ export var drawGraph = function (network) {
     maps the scale from 0 to some x, with that x being calculated based on the
     input scales.
 */
+
     var setupZoomSlider = function (minScale) {
       // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
       // So we'll just treat it as 0.
@@ -259,7 +267,11 @@ export var drawGraph = function (network) {
 
         $(".zoomSlider").attr("min", 0);
         $(".zoomSlider").attr("max", maxRangeValue);
-        $(".zoomSlider").val(0.01 * leftPoints);
+        if (grnState.newNetwork) {
+            $(".zoomSlider").val(0.01 * leftPoints);
+        } else {
+            $(".zoomSlider").val(grnState.zoomValue);
+        }
     };
 
     setupZoomSlider(minimumScale);
@@ -316,17 +328,21 @@ export var drawGraph = function (network) {
         return valueValidator(1, 200, value);
     };
 
-    $("#zoomInput").on("change", function () {
-        var value = zoomInputValidator(+$("#zoomInput").val());
-        var scaledValue = value * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
-        $(".zoomSlider").val(scaledValue);
-        updateViewportZoom(scaledValue);
-        updateZoomValue(value);
+    var zoomValue = zoomInputValidator(+$("#zoomInput").val());
+
+    $("#zoomInput").change(() => {
+        grnState.scaledValue = zoomValue * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        $(".zoomSlider").val(grnState.scaledValue);
+        updateViewportZoom(grnState.scaledValue);
+        updateZoomValue(zoomValue);
     });
 
     d3.select(".zoomSlider").on("input", function () {
         var value = $(this).val();
-        updateViewportZoom(value);
+        if (value !== DEFAULT_ZOOM_VALUE) {
+            grnState.zoomValue = value;
+        }
+        updateViewportZoom(grnState.zoomValue);
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
@@ -344,6 +360,10 @@ export var drawGraph = function (network) {
         var container = zoomContainer;
         zoom.scaleTo(container, zoomScale);
     };
+
+    if (!grnState.newNetwork) {
+        updateViewportZoom(grnState.zoomValue);
+    }
 
     d3.selectAll(".boundBoxSize").on("click", function () {
         var newWidth = $container.width();
@@ -497,7 +517,7 @@ export var drawGraph = function (network) {
             var xOffsets;
             var color;
 
-            if (Math.abs(d.value / (d3.max(allWeights))) <= grayThreshold) {
+            if (Math.abs(d.value / maxWeight) <= grayThreshold) {
                 minimum = "gray";
             }
             if ( x1 === x2 && y1 === y2 ) {
@@ -1465,7 +1485,7 @@ export var drawGraph = function (network) {
     }
 
     function normalize (d) {
-        return Math.abs(d.value / (d3.max(allWeights)));
+        return Math.abs(d.value / maxWeight);
     }
 
     function dragstart (d) {
