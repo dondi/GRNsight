@@ -69,9 +69,9 @@ export var drawGraph = function (network) {
     var ADAPTIVE_MAX_SCALE = 4;
     var MIDDLE_SCALE = 1;
     var DEFAULT_ZOOM_VALUE = 4;
-    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     var minimumScale = MIN_SCALE;
+    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
     // TODO: incorporate into grnState
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
