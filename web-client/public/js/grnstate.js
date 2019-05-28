@@ -8,6 +8,7 @@ import {
   CHARGE_VALUE,
   CHARGE_DEFAULT_VALUE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
+  DEFAULT_ZOOM_VALUE,
 } from "./constants";
 let currentNetwork = null;
 
@@ -73,7 +74,7 @@ export const grnState = {
     annotateLinks: () => annotateLinks(currentNetwork),
 
 // Zoom Parameter
-    zoomValue: 4,
+    zoomValue: DEFAULT_ZOOM_VALUE,
     scaledValue: null,
 // Node Coloring
 
