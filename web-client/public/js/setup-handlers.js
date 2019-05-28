@@ -11,6 +11,8 @@ import {
     SHOW_WEIGHTS_MOUSEOVER,
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
+    COLOR_EDGES,
+    BLACK_EDGES,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU_OPTION,
     UNDO_SLIDERS_RESET_CLASS,
@@ -90,12 +92,12 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $("#colorEdges").click(() => {
+    $(COLOR_EDGES).click(() => {
         grnState.colorOptimal = true;
         updateApp(grnState);
     });
 
-    $("#blackEdges").click(() => {
+    $(BLACK_EDGES).click(() => {
         grnState.colorOptimal = false;
         updateApp(grnState);
     });
