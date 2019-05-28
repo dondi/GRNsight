@@ -24,6 +24,8 @@ export const DEMO_INFORMATION = [
 export const MIN_EDGE_WEIGHT_NORMALIZATION      = 0.0001;
 export const MAX_EDGE_WEIGHT_NORMALIZATION      = 1000;
 
+export const DEFAULT_ZOOM_VALUE                 = 4;
+
 export const GREY_EDGE_THRESHOLD_MENU           = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
 export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR   = "#grayThresholdValue";
@@ -43,7 +45,7 @@ export const SHOW_ALL_WEIGHTS                   = "showAllWeights";
 export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 
 export const COLOR_EDGES                        = "#colorEdges";
-export const BLACK_EDGES                        = "blackEdges";
+export const BLACK_EDGES                        = "#blackEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;

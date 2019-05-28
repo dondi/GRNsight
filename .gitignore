@@ -15,6 +15,7 @@ web-client/public/js/grnsight.min.js
 pids
 logs
 results
+/.idea
 
 npm-debug.log
 node_modules
