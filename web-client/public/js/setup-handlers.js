@@ -51,7 +51,7 @@ export const setupHandlers = grnState => {
     });
 
     $(SET_NORMALIZATION_MENU).change(() => {
-        grnState.normalizationMax = $("#edge-weight-normalization-factor-menu").val();
+        grnState.normalizationMax = $(SET_NORMALIZATION_MENU).val();
         updateApp(grnState);
     });
 

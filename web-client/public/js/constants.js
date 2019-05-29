@@ -30,6 +30,11 @@ export const GREY_EDGE_THRESHOLD_MENU           = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
 export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR   = "#grayThresholdValue";
 
+export const SET_NORMALIZATION_MENU             = "#edge-weight-normalization-factor-menu";
+export const SET_NORMALIZATION_SIDEBAR          = "#normalization-button";
+export const RESET_NORMALIZATION_MENU           = "#reset-normalization-factor-menu";
+export const RESET_NORMALIZATION_SIDEBAR        = "#resetNormalizationButton";
+
 export const WEIGHTS_SHOW_MOUSE_OVER_MENU       = "#weightsMouseOverMenu";
 export const WEIGHTS_SHOW_ALWAYS_MENU           = "#weightsAlwaysMenu";
 export const WEIGHTS_HIDE_MENU                  = "#weightsNeverMenu";

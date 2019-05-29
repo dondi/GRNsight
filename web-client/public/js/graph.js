@@ -91,7 +91,8 @@ export var drawGraph = function (network) {
     var maxPos = Math.abs(d3.max(allWeights));
     var maxNeg = Math.abs(d3.min(allWeights));
     var maxWeight = Math.max(maxPos, maxNeg);
-    console.log(maxWeight);
+    grnState.normalizationMax = maxWeight;
+    grnState.resetNormalizationMax = maxWeight;
 
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
