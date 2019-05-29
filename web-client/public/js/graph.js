@@ -91,9 +91,11 @@ export var drawGraph = function (network) {
     var maxPos = Math.abs(d3.max(allWeights));
     var maxNeg = Math.abs(d3.min(allWeights));
     var maxWeight = Math.max(maxPos, maxNeg);
+    console.log(maxWeight);
 
   // normalization all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
+    console.log(normMax);
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : maxWeight])
         .range([2, 14])
@@ -1347,15 +1349,14 @@ export var drawGraph = function (network) {
             }).attr("y", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
                 var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-            selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
+                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
                 var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
                 var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
                 if (adaptive && height < MAX_HEIGHT &&
-             (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
+                  (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
-
                         link
                             .attr("y1", function (d) {
                                 return d.source.y;

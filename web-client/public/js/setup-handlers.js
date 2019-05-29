@@ -1,6 +1,10 @@
 import { updateApp } from "./update-app";
 
 import {
+    SET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_MENU,
+    RESET_NORMALIZATION_SIDEBAR,
+    RESET_NORMALIZATION_MENU,
     GREY_EDGES_DASHED_MENU,
     GREY_EDGES_DASHED_SIDEBAR,
     GREY_EDGE_THRESHOLD_MENU,
@@ -41,6 +45,26 @@ import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
 export const setupHandlers = grnState => {
     setupLoadAndImportHandlers(grnState);
 
+    $(SET_NORMALIZATION_SIDEBAR).click(() => {
+        grnState.normalizationMax = $("#normalization-max").val();
+        updateApp(grnState);
+    });
+
+    $(SET_NORMALIZATION_MENU).change(() => {
+        grnState.normalizationMax = $("#edge-weight-normalization-factor-menu").val();
+        updateApp(grnState);
+    });
+
+    $(RESET_NORMALIZATION_SIDEBAR).click(() => {
+        grnState.normalizationMax = grnState.resetNormalizationMax;
+        updateApp(grnState);
+    });
+
+    $(RESET_NORMALIZATION_MENU).click(() => {
+        grnState.normalizationMax = grnState.resetNormalizationMax;
+        updateApp(grnState);
+    });
+
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);
@@ -48,21 +72,6 @@ export const setupHandlers = grnState => {
 
     $(GREY_EDGES_DASHED_MENU).click(() => {
         grnState.dashedLine = !$(GREY_EDGES_DASHED_MENU).prop("checked");
-        updateApp(grnState);
-    });
-
-    $("#normalization-button").click(() => {
-        grnState.normalizationMax = $("#normalization-max").val();
-        updateApp(grnState);
-    });
-
-    $("#reset-normalization-factor-menu, #resetNormalizationButton").click(() => {
-        grnState.normalizationMax = grnState.resetNormalizationMax;
-        updateApp(grnState);
-    });
-
-    $("#edge-weight-normalization-factor-menu").change(() => {
-        grnState.normalizationMax = $("#edge-weight-normalization-factor-menu").val();
         updateApp(grnState);
     });
 
