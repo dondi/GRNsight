@@ -1,7 +1,8 @@
 // GRNsight web client
 
 var express = require("express");
-var http = require("http");
+var https = require("https");
+var fs = require("fs");
 var path = require("path");
 var stylus = require("stylus");
 var morgan = require("morgan");
@@ -30,6 +31,11 @@ if (app.get("env") === "development") {
     app.use(errorHandler());
 }
 
+var options = {
+    key: fs.readFileSync(path.resolve("./server.key")),
+    cert: fs.readFileSync(path.resolve("./server.cert")),
+};
+
 app.set("serviceRoot", config.serviceRoot);
 console.log("Web service root: " + app.get("serviceRoot"));
 
@@ -37,7 +43,7 @@ require("./controllers/main")(app);
 
 // Don't start the server if this app is run as a child process.
 if (!module.parent) {
-    http.createServer(app).listen(app.get("port"), function () {
+    https.createServer(options, app).listen(app.get("port"), function () {
         console.log("GRNsight web client running on port %s, environment=%s", app.get("port"), env);
     });
 } else {
