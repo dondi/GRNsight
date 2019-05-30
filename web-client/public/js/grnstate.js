@@ -76,8 +76,8 @@ export const grnState = {
 // Zoom Parameter
     zoomValue: DEFAULT_ZOOM_VALUE,
     scaledValue: null,
-// Node Coloring
 
+// Node Coloring
     nodeColoring: {
         showMenu: false,
         nodeColoringEnabled: true,
