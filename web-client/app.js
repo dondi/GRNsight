@@ -32,8 +32,8 @@ if (app.get("env") === "development") {
 }
 
 var options = {
-    key: fs.readFileSync(path.resolve("./server.key")),
-    cert: fs.readFileSync(path.resolve("./server.cert")),
+    key: fs.readFileSync(path.resolve("./web-client/encryption/server.key")),
+    cert: fs.readFileSync(path.resolve("./web-client/encryption/server.cert")),
 };
 
 app.set("serviceRoot", config.serviceRoot);

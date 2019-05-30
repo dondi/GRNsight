@@ -28,8 +28,8 @@ app.set("corsOrigin", config.corsOrigin);
 console.log("CORS host: %s", app.get("corsOrigin"));
 
 var options = {
-    key: fs.readFileSync(path.resolve("./server.key")),
-    cert: fs.readFileSync(path.resolve("./server.cert")),
+    key: fs.readFileSync(path.resolve("./server/encryption/server.key")),
+    cert: fs.readFileSync(path.resolve("./server/encryption/server.cert")),
 };
 
 // Load controllers.

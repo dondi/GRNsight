@@ -5,12 +5,12 @@ module.exports = {
     development: {
         host: "localhost",
         port: 5001,
-        url: "http://" + this.host + "/" + this.port,
+        url: "https://" + this.host + "/" + this.port,
         root: rootPath,
         app: {
             name: "GRNsight"
         },
-        serviceRoot: "http://localhost:5000"
+        serviceRoot: "https://localhost:5000"
     },
 
     production: {
