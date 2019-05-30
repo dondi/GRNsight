@@ -73,9 +73,9 @@ export var drawGraph = function (network) {
     var minimumScale = MIN_SCALE;
     // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
-    // TODO: incorporate into grnState
+    // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
-
+    // Assign the entire array weights of 1, if color edges turned off
     if (!grnState.colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
             if ( allWeights[i] !== 0 ) {
@@ -88,15 +88,13 @@ export var drawGraph = function (network) {
         }
     }
 
-    var maxPos = Math.abs(d3.max(allWeights));
-    var maxNeg = Math.abs(d3.min(allWeights));
-    var maxWeight = Math.max(maxPos, maxNeg);
+    // Get the largest magnitude weight and set that as the default normalization factor
+    var maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
     grnState.normalizationMax = maxWeight;
     grnState.resetNormalizationMax = maxWeight;
 
-  // normalization all weights b/w 2-14
+  // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
-    console.log(normMax);
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : maxWeight])
         .range([2, 14])
@@ -104,8 +102,7 @@ export var drawGraph = function (network) {
 
     var unweighted = false;
 
-  // normalization all weights b/w size 2 and size 14
-  // if unweighted, weight is 2
+  // if unweighted, all weights are 2
     if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
