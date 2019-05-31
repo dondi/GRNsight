@@ -81,7 +81,7 @@ export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
 export const FORCE_GRAPH_CLASS          = "#forceGraph";
 export const GRID_LAYOUT_CLASS          = "#gridLayout";
 
-export const MINIMUM_MAX_LOG_FOLD_CHANGE                = -100;
+export const MINIMUM_MAX_LOG_FOLD_CHANGE                = 0;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
 export const DEFAULT_MAX_LOG_FOLD_CHANGE                = 3;
 export const MAX_NUM_CHARACTERS_DROPDOWN                = 24;
