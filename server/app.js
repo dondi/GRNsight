@@ -1,6 +1,6 @@
 // Based on the server app for github.com/rtoal/chuzr
 var express = require("express");
-var https = require("http");
+var https = require("https");
 var cors = require("cors");
 var morgan = require("morgan");
 var methodOverride = require("method-override");
