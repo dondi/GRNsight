@@ -187,14 +187,14 @@ const synchronizeHideAllWeights = () => {
 // Toggle Weighted Functions
 const enableColorOptimal = () => {
     $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok");
     $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
 };
 
 const disableColorOptimal = () => {
     $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok");
     $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
