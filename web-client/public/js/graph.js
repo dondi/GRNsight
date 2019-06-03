@@ -485,11 +485,8 @@ export var drawGraph = function (network) {
         .attr("id", function (d) {
             return "path" + d.source.index + "_" + d.target.index;
         }).style("stroke-width", function (d) {
-            if (!grnState.colorOptimal) {
-                return d.strokeWidth = "2";
-            } else {
-                return d.strokeWidth = getEdgeThickness(d);
-            }
+            d.strokeWidth = grnState.colorOptimal ? getEdgeThickness(d) : 2;
+            return d.strokeWidth;
         }).style("stroke-dasharray", function (d) {
             if (unweighted || !grnState.colorOptimal) {
                 return "0";
