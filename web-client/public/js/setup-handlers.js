@@ -131,28 +131,24 @@ export const setupHandlers = grnState => {
     $(LINK_DIST_MENU).change(() => {
         var value = linkDistValidator($(LINK_DIST_MENU).val());
         grnState.linkDistanceSlider.currentVal = value;
-        console.log(grnState.linkDistanceSlider.currentVal);
         updateApp(grnState);
     });
 
     $(LINK_DIST_SLIDER_ID).change(() => {
         var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
         grnState.linkDistanceSlider.currentVal = value;
-        console.log(grnState.linkDistanceSlider.currentVal);
         updateApp(grnState);
     });
 
     $(CHARGE_MENU).change(() => {
         var value = chargeValidator($(CHARGE_MENU).val());
         grnState.chargeSlider.currentVal = value;
-        console.log(grnState.chargeSlider.currentVal);
         updateApp(grnState);
     });
 
     $(CHARGE_SLIDER_ID).change(() => {
         var value = chargeValidator($(CHARGE_SLIDER_ID).val());
         grnState.chargeSlider.currentVal = value;
-        console.log(grnState.chargeSlider.currentVal);
         updateApp(grnState);
     });
 
@@ -194,10 +190,8 @@ export const setupHandlers = grnState => {
     $(GRID_LAYOUT_BUTTON).click(() => {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
-            grnState.slidersLocked === true;
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
-            grnState.slidersLocked === false;
         }
         updateApp(grnState);
     });
