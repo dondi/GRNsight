@@ -5,7 +5,7 @@ module.exports = {
     development: {
         host: "localhost",
         port: 5001,
-        url: "http://" + this.host + "/" + this.port,
+        url: "https://" + this.host + "/" + this.port,
         root: rootPath,
         app: {
             name: "GRNsight"
@@ -16,7 +16,7 @@ module.exports = {
     production: {
         host: "grnsight.cs.lmu.edu",
         port: 3001,
-        url: "http://" + this.host + "/client",
+        url: "https://" + this.host + "/client",
         root: rootPath,
         app: {
             name: "GRNsight"
@@ -27,7 +27,7 @@ module.exports = {
     beta: {
         host: "grnsight.cs.lmu.edu",
         port: 4001,
-        url: "http://" + this.host + "/beta/client",
+        url: "https://" + this.host + "/beta/client",
         root: rootPath,
         app: {
             name: "GRNsight"
