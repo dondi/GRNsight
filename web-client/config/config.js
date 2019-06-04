@@ -27,7 +27,7 @@ module.exports = {
     beta: {
         host: "grnsight.cs.lmu.edu",
         port: 4001,
-        url: "https//" + this.host + "/beta/client",
+        url: "http://" + this.host + "/beta/client",
         root: rootPath,
         app: {
             name: "GRNsight"
