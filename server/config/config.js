@@ -5,7 +5,7 @@ module.exports = {
     development: {
         host: "localhost",
         port: 5000,
-        url: "https://" + this.host + "/" + this.port,
+        url: "http://" + this.host + "/" + this.port,
         corsOrigin: "//localhost:5001",
         root: rootPath,
         app: {
