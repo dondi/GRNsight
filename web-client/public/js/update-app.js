@@ -102,7 +102,7 @@ const displayNetwork = (network, name) => {
 };
 
 // Value Validators
-const valueValidator = (min, max, value) => {
+export const valueValidator = (min, max, value) => {
     return Math.min(max, Math.max(min, value));
 };
 
@@ -496,7 +496,7 @@ export const updateApp = grnState => {
         lockForce(grnState.slidersLocked);
     }
 
-    if (grnState.resetTriggered === false) {
+    if (grnState.resetTriggered === false && grnState.simulation !== undefined) {
         resetValues();
         resetForce();
         $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", false);
@@ -567,6 +567,11 @@ export const updateApp = grnState => {
         showNodeColoringMenus();
     } else {
         disableNodeColoringMenus();
+    }
+
+    if (!grnState.network === undefined) {
+        updateChargeSliderValues();
+        updateLinkDistanceSliderValues();
     }
 
     updateLogFoldChangeMaxValue();

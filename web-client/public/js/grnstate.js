@@ -99,7 +99,7 @@ export const grnState = {
 
 // Slider Parameters
     slidersLocked: false,
-    resetTrigger: false,
+    resetTriggered: false,
     undoResetTriggered: false,
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,

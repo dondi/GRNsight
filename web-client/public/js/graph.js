@@ -1,13 +1,7 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-import { modifyChargeParameter, modifyLinkDistanceParameter } from "./update-app";
+import { valueValidator } from "./update-app";
 import {
-    LINK_DIST_SLIDER_ID,
-    LINK_DIST_MENU,
-    LINK_DIST_VALUE,
-    CHARGE_SLIDER_ID,
-    CHARGE_MENU,
-    CHARGE_VALUE,
     ENDS_IN_EXPRESSION_REGEXP,
     DEFAULT_ZOOM_VALUE,
 //    GRID_LAYOUT_BUTTON,
@@ -318,10 +312,6 @@ export var drawGraph = function (network) {
             manualZoomFunction(MIDDLE_SCALE);
             updateZoomValue();
         }
-    };
-
-    var valueValidator = function (min, max, value) {
-        return Math.min(max, Math.max(min, value));
     };
 
     var zoomInputValidator = function (value) {
@@ -1498,54 +1488,6 @@ export var drawGraph = function (network) {
     }
 
     grnState.simulation = simulation;
-    modifyChargeParameter(-50);
-    modifyLinkDistanceParameter(500);
-
-    const changeLinkDistanceSliderValue = () => {
-        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
-        $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
-        $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
-        $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
-    };
-
-    const changeChargeSliderValue = () => {
-        modifyChargeParameter(grnState.chargeSlider.currentVal);
-        $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
-        $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
-        $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
-    };
-
-    $(LINK_DIST_MENU).change(() => {
-        var value = linkDistValidator($(LINK_DIST_MENU).val());
-        grnState.linkDistanceSlider.currentVal = value;
-        changeLinkDistanceSliderValue();
-    });
-
-    $(LINK_DIST_SLIDER_ID).change(() => {
-        var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
-        grnState.linkDistanceSlider.currentVal = value;
-        changeLinkDistanceSliderValue();
-    });
-
-    $(CHARGE_MENU).change(() => {
-        var value = chargeValidator($(CHARGE_MENU).val());
-        grnState.chargeSlider.currentVal = value;
-        changeChargeSliderValue();
-    });
-
-    $(CHARGE_SLIDER_ID).change(() => {
-        var value = chargeValidator($(CHARGE_SLIDER_ID).val());
-        grnState.chargeSlider.currentVal = value;
-        changeChargeSliderValue();
-    });
-
-    var linkDistValidator = value => {
-        return valueValidator(1, 1000, value);
-    };
-
-    var chargeValidator = value => {
-        return valueValidator(-2000, 0, value);
-    };
 
     $(".startDisabled").removeClass("disabled");
 };

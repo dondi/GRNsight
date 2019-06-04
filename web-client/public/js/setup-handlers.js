@@ -17,6 +17,10 @@ import {
     HIDE_ALL_WEIGHTS,
     COLOR_EDGES,
     BLACK_EDGES,
+    LINK_DIST_SLIDER_ID,
+    LINK_DIST_MENU,
+    CHARGE_SLIDER_ID,
+    CHARGE_MENU,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU_OPTION,
     UNDO_SLIDERS_RESET_CLASS,
@@ -111,11 +115,52 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Sliders code
+// Sliders Code
+    var valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
+
+    var linkDistValidator = value => {
+        return valueValidator(1, 1000, value);
+    };
+
+    var chargeValidator = value => {
+        return valueValidator(-2000, 0, value);
+    };
+
+    $(LINK_DIST_MENU).change(() => {
+        var value = linkDistValidator($(LINK_DIST_MENU).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        console.log(grnState.linkDistanceSlider.currentVal);
+        updateApp(grnState);
+    });
+
+    $(LINK_DIST_SLIDER_ID).change(() => {
+        var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        console.log(grnState.linkDistanceSlider.currentVal);
+        updateApp(grnState);
+    });
+
+    $(CHARGE_MENU).change(() => {
+        var value = chargeValidator($(CHARGE_MENU).val());
+        grnState.chargeSlider.currentVal = value;
+        console.log(grnState.chargeSlider.currentVal);
+        updateApp(grnState);
+    });
+
+    $(CHARGE_SLIDER_ID).change(() => {
+        var value = chargeValidator($(CHARGE_SLIDER_ID).val());
+        grnState.chargeSlider.currentVal = value;
+        console.log(grnState.chargeSlider.currentVal);
+        updateApp(grnState);
+    });
+
     $(LOCK_SLIDERS_MENU_OPTION).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
+
     $(LOCK_SLIDERS_BUTTON).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
