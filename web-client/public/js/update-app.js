@@ -65,7 +65,6 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
-  UNDO_SLIDERS_RESET_CLASS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -93,8 +92,7 @@ const displayNetwork = (network, name) => {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR,
-        UNDO_SLIDERS_RESET_MENU, UNDO_SLIDERS_RESET_CLASS].forEach(
+    [ RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR, UNDO_SLIDERS_RESET_MENU].forEach(
         selector => $(selector).off("click")
     );
 };
