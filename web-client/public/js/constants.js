@@ -61,6 +61,7 @@ export const RESET_SLIDERS_SIDEBAR        = "#resetSlidersButton";
 export const RESET_SLIDERS_MENU          = "#resetSlidersMenu";
 export const UNDO_SLIDERS_RESET_MENU     = "#undoResetMenu";
 export const UNDO_SLIDERS_RESET_SIDEBAR   = "#undoResetButton";
+export const UNDO_SLIDERS_RESET_CLASS    = ".undoSliderReset";
 
 export const LINK_DIST_CLASS            = "#link-distance";
 export const LINK_DIST_SLIDER_SIDEBAR   = "#linkDistInput";

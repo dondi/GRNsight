@@ -30,10 +30,8 @@ import {
   GRAVITY_LENGTH_WITHOUT_ZERO,
   LOCK_SLIDERS_MENU,
   LOCK_SLIDERS_BUTTON,
-  RESET_SLIDERS_ID,
   RESET_SLIDERS_SIDEBAR,
   RESET_SLIDERS_MENU,
-  UNDO_SLIDERS_RESET_ID,
   UNDO_SLIDERS_RESET_SIDEBAR,
   UNDO_SLIDERS_RESET_MENU,
   LINK_DIST_CLASS,
@@ -95,7 +93,7 @@ const displayNetwork = (network, name) => {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ RESET_SLIDERS_ID, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_ID,
+    [ RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR,
         UNDO_SLIDERS_RESET_MENU, UNDO_SLIDERS_RESET_CLASS].forEach(
         selector => $(selector).off("click")
     );

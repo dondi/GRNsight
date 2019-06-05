@@ -1,10 +1,10 @@
 import { max } from "d3-array";
 import {
   SHOW_WEIGHTS_MOUSEOVER,
-  LINK_DIST_SLIDER_ID,
+  LINK_DIST_SLIDER_SIDEBAR,
   LINK_DIST_VALUE,
   LINK_DIST_DEFAULT_VALUE,
-  CHARGE_SLIDER_ID,
+  CHARGE_SLIDER_SIDEBAR,
   CHARGE_VALUE,
   CHARGE_DEFAULT_VALUE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
@@ -101,7 +101,7 @@ export const grnState = {
     slidersLocked: false,
     showUndoReset: false,
     linkDistanceSlider: {
-        sliderId: LINK_DIST_SLIDER_ID,
+        sliderId: LINK_DIST_SLIDER_SIDEBAR,
         valueId: LINK_DIST_VALUE,
         defaultVal: LINK_DIST_DEFAULT_VALUE,
         currentVal: LINK_DIST_DEFAULT_VALUE,
@@ -110,7 +110,7 @@ export const grnState = {
         forceChanged: false,
     },
     chargeSlider: {
-        sliderId: CHARGE_SLIDER_ID,
+        sliderId: CHARGE_SLIDER_SIDEBAR,
         valueId: CHARGE_VALUE,
         defaultVal: CHARGE_DEFAULT_VALUE,
         currentVal: CHARGE_DEFAULT_VALUE,
