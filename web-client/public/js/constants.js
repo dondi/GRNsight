@@ -32,6 +32,7 @@ export const GREY_EDGE_THRESHOLD_TEXT_SIDEBAR   = "#grayThresholdValue";
 
 export const SET_NORMALIZATION_MENU             = "#edge-weight-normalization-factor-menu";
 export const SET_NORMALIZATION_SIDEBAR          = "#normalization-button";
+export const SET_NORMALIZATION_SIDEBAR_VALUE    = "#normalization-max";
 export const RESET_NORMALIZATION_MENU           = "#reset-normalization-factor-menu";
 export const RESET_NORMALIZATION_SIDEBAR        = "#resetNormalizationButton";
 
@@ -54,25 +55,20 @@ export const BLACK_EDGES                        = "#blackEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
-export const LOCK_SLIDERS_CLASS          = ".lockSliders";
 export const LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
-export const LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu";
-export const RESET_SLIDERS_CLASS         = ".resetSliders";
-export const RESET_SLIDERS_ID            = "#resetSliders";
-export const RESET_SLIDERS_BUTTON        = "#resetSlidersButton";
-export const RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
-export const UNDO_SLIDERS_RESET_CLASS    = ".undoSliderReset";
-export const UNDO_SLIDERS_RESET_ID       = "#undoReset";
+export const LOCK_SLIDERS_MENU           = "#lockSlidersMenu";
+export const RESET_SLIDERS_SIDEBAR        = "#resetSlidersButton";
+export const RESET_SLIDERS_MENU          = "#resetSlidersMenu";
 export const UNDO_SLIDERS_RESET_MENU     = "#undoResetMenu";
-export const UNDO_SLIDERS_RESET_BUTTON   = "#undoResetButton";
+export const UNDO_SLIDERS_RESET_SIDEBAR   = "#undoResetButton";
 
 export const LINK_DIST_CLASS            = "#link-distance";
-export const LINK_DIST_SLIDER_ID        = "#linkDistInput";
+export const LINK_DIST_SLIDER_SIDEBAR   = "#linkDistInput";
 export const LINK_DIST_VALUE            = "#linkDistVal";
 export const LINK_DIST_MENU             = "#link-distance-menu";
 export const LINK_DIST_DEFAULT_VALUE    = 500;
 export const CHARGE_CLASS               = "#charge";
-export const CHARGE_SLIDER_ID           = "#chargeInput";
+export const CHARGE_SLIDER_SIDEBAR      = "#chargeInput";
 export const CHARGE_VALUE               = "#chargeVal";
 export const CHARGE_MENU                = "#charge-menu";
 export const CHARGE_DEFAULT_VALUE       = -50;

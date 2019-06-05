@@ -28,20 +28,20 @@ import {
   BLACK_EDGES,
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
-  LOCK_SLIDERS_MENU_OPTION,
+  LOCK_SLIDERS_MENU,
   LOCK_SLIDERS_BUTTON,
   RESET_SLIDERS_ID,
-  RESET_SLIDERS_BUTTON,
-  RESET_SLIDERS_MENU_OPTION,
+  RESET_SLIDERS_SIDEBAR,
+  RESET_SLIDERS_MENU,
   UNDO_SLIDERS_RESET_ID,
-  UNDO_SLIDERS_RESET_BUTTON,
+  UNDO_SLIDERS_RESET_SIDEBAR,
   UNDO_SLIDERS_RESET_MENU,
   LINK_DIST_CLASS,
-  LINK_DIST_SLIDER_ID,
+  LINK_DIST_SLIDER_SIDEBAR,
   LINK_DIST_MENU,
   LINK_DIST_VALUE,
   CHARGE_CLASS,
-  CHARGE_SLIDER_ID,
+  CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
   GRID_LAYOUT_BUTTON,
@@ -67,6 +67,7 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
+  UNDO_SLIDERS_RESET_CLASS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -94,7 +95,8 @@ const displayNetwork = (network, name) => {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ RESET_SLIDERS_ID, RESET_SLIDERS_MENU_OPTION, UNDO_SLIDERS_RESET_ID, UNDO_SLIDERS_RESET_MENU ].forEach(
+    [ RESET_SLIDERS_ID, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_ID,
+        UNDO_SLIDERS_RESET_MENU, UNDO_SLIDERS_RESET_CLASS].forEach(
         selector => $(selector).off("click")
     );
 };
@@ -209,12 +211,12 @@ export const modifyLinkDistanceParameter = (value) => {
 };
 
 const lockForce = (disable) => {
-    $(LINK_DIST_SLIDER_ID).prop("disabled", disable);
-    $(CHARGE_SLIDER_ID).prop("disabled", disable);
-    $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
+    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", disable);
+    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", disable);
+    $(RESET_SLIDERS_SIDEBAR).prop("disabled", disable);
     $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
     if (!grnState.showUndoReset) {
-        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
+        $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", true);
     }
 };
 
@@ -222,8 +224,8 @@ const updateChargeSliderValues = () => {
     modifyChargeParameter(grnState.chargeSlider.currentVal);
     $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
     $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
-    $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
-    $(CHARGE_SLIDER_ID).html(grnState.chargeSlider.currentVal +
+    $(CHARGE_SLIDER_SIDEBAR).val(grnState.chargeSlider.currentVal);
+    $(CHARGE_SLIDER_SIDEBAR).html(grnState.chargeSlider.currentVal +
       ((grnState.chargeSlider.needsAppendedZeros
           && grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
@@ -232,8 +234,8 @@ const updateLinkDistanceSliderValues = () => {
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
-    $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
-    $(LINK_DIST_SLIDER_ID).html(grnState.linkDistanceSlider.currentVal +
+    $(LINK_DIST_SLIDER_SIDEBAR).val(grnState.linkDistanceSlider.currentVal);
+    $(LINK_DIST_SLIDER_SIDEBAR).html(grnState.linkDistanceSlider.currentVal +
       ((grnState.linkDistanceSlider.needsAppendedZeros
         && grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
@@ -251,22 +253,12 @@ const toggleLayout = (on, off) => {
 const updatetoForceGraph = () => {
     $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
     toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
-    lockForce(grnState.slidersLocked);
-    $(LOCK_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
-    $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
-    $(LINK_DIST_CLASS).parent().removeClass("disabled");
-    $(CHARGE_CLASS).parent().removeClass("disabled");
     updaters.setNodesToForceGraph();
 };
 
 const updatetoGridLayout = () => {
     $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
     toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
-    lockForce(grnState.slidersLocked);
-    $(LOCK_SLIDERS_MENU_OPTION).parent().addClass("disabled");
-    $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
-    $(LINK_DIST_CLASS).parent().addClass("disabled");
-    $(CHARGE_CLASS).parent().addClass("disabled");
     updaters.setNodesToGrid();
 };
 
@@ -449,33 +441,6 @@ export const updateApp = grnState => {
         disableColorOptimal();
     }
 
-// Sliders
-    if (grnState.slidersLocked === true) {
-        $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("invisible");
-        $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("glyphicon-ok");
-        $(RESET_SLIDERS_MENU_OPTION).parent().addClass("disabled");
-        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
-        $(LINK_DIST_CLASS).parent().addClass("disabled");
-        $(CHARGE_CLASS).parent().addClass("disabled");
-        lockForce(grnState.slidersLocked);
-    } else {
-        $(LOCK_SLIDERS_MENU_OPTION + " span").removeClass("glyphicon-ok");
-        $(LOCK_SLIDERS_MENU_OPTION + " span").addClass("invisible");
-        $(RESET_SLIDERS_MENU_OPTION).parent().removeClass("disabled");
-        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
-        $(LINK_DIST_CLASS).parent().removeClass("disabled");
-        $(CHARGE_CLASS).parent().removeClass("disabled");
-        lockForce(grnState.slidersLocked);
-    }
-
-    if (grnState.showUndoReset) {
-        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", false);
-        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
-    } else {
-        $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
-        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
-    }
-
 // Graph Layout
     if (grnState.graphLayout === "FORCE_GRAPH") {
         $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
@@ -486,9 +451,6 @@ export const updateApp = grnState => {
     }
 
 // Node Coloring
-
-// Initialize Menu Bar
-
     if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
       && hasExpressionData(grnState.network.expression)) {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
@@ -533,15 +495,43 @@ export const updateApp = grnState => {
         disableNodeColoringMenus();
     }
 
+    updateLogFoldChangeMaxValue();
+    updateTopDataset();
+    updateBottomDataset();
+
+// Update Sliders
+    if (grnState.slidersLocked === true) {
+        $(LOCK_SLIDERS_MENU + " span").removeClass("invisible");
+        $(LOCK_SLIDERS_MENU + " span").addClass("glyphicon-ok");
+        $(RESET_SLIDERS_MENU).parent().addClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
+        $(LINK_DIST_CLASS).parent().addClass("disabled");
+        $(CHARGE_CLASS).parent().addClass("disabled");
+        lockForce(grnState.slidersLocked);
+    } else {
+        $(LOCK_SLIDERS_MENU + " span").removeClass("glyphicon-ok");
+        $(LOCK_SLIDERS_MENU + " span").addClass("invisible");
+        $(RESET_SLIDERS_MENU).parent().removeClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
+        $(LINK_DIST_CLASS).parent().removeClass("disabled");
+        $(CHARGE_CLASS).parent().removeClass("disabled");
+        lockForce(grnState.slidersLocked);
+    }
+
+    if (grnState.showUndoReset) {
+        $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", false);
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
+    } else {
+        $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", true);
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
+    }
+
     if (grnState.network !== null) {
         updateChargeSliderValues();
         updateLinkDistanceSliderValues();
     }
 
-    updateLogFoldChangeMaxValue();
-    updateTopDataset();
-    updateBottomDataset();
-
+// Refresh graph
     refreshApp();
 
 };
