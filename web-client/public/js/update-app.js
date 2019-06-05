@@ -478,8 +478,10 @@ export const updateApp = grnState => {
 
 // Graph Layout
     if (grnState.graphLayout === "FORCE_GRAPH") {
+        $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
         updatetoForceGraph();
     } else if (grnState.graphLayout === "GRID_LAYOUT") {
+        $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
         updatetoGridLayout();
     }
 
@@ -537,7 +539,6 @@ export const updateApp = grnState => {
     }
 
     updateLogFoldChangeMaxValue();
-
     updateTopDataset();
     updateBottomDataset();
 

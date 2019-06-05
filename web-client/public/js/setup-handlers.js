@@ -198,24 +198,26 @@ export const setupHandlers = grnState => {
 
 // Grid buttons
     $(GRID_LAYOUT_BUTTON).click(() => {
-        console.log(grnState.undoResetTriggered);
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
+            grnState.slidersLocked = true;
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
+            grnState.slidersLocked = false;
         }
-        console.log(grnState.undoResetTriggered);
         updateApp(grnState);
     });
 
     $(FORCE_GRAPH_CLASS).click(() => {
         grnState.graphLayout = "FORCE_GRAPH";
+        grnState.slidersLocked = false;
         updateApp(grnState);
 
     });
 
     $(GRID_LAYOUT_CLASS).click(() => {
         grnState.graphLayout = "GRID_LAYOUT";
+        grnState.slidersLocked = true;
         updateApp(grnState);
     });
 
