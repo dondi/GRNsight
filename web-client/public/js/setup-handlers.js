@@ -21,6 +21,8 @@ import {
     LINK_DIST_MENU,
     CHARGE_SLIDER_ID,
     CHARGE_MENU,
+    CHARGE_DEFAULT_VALUE,
+    LINK_DIST_DEFAULT_VALUE,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU_OPTION,
     UNDO_SLIDERS_RESET_CLASS,
@@ -162,37 +164,47 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
-        grnState.resetTriggered = true;
-        grnState.undoResetTriggered = false;
-        updateApp(grnState);
-    });
-
     $(RESET_SLIDERS_CLASS).click(() => {
-        grnState.resetTriggered = false;
-        grnState.undoResetTriggered = true;
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
+        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
+        grnState.showUndoReset = true;
         updateApp(grnState);
     });
 
     $(RESET_SLIDERS_MENU_OPTION).click(() => {
-        grnState.resetTriggered = false;
-        grnState.undoResetTriggered = true;
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
+        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
+        grnState.showUndoReset = true;
+        updateApp(grnState);
+    });
+
+    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        grnState.showUndoReset = false;
         updateApp(grnState);
     });
 
     $(UNDO_SLIDERS_RESET_MENU).click(() => {
-        grnState.resetTriggered = true;
-        grnState.undoResetTriggered = false;
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        grnState.showUndoReset = false;
         updateApp(grnState);
     });
 
 // Grid buttons
     $(GRID_LAYOUT_BUTTON).click(() => {
+        console.log(grnState.undoResetTriggered);
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
         }
+        console.log(grnState.undoResetTriggered);
         updateApp(grnState);
     });
 
