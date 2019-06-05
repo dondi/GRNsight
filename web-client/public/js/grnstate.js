@@ -76,8 +76,8 @@ export const grnState = {
 // Zoom Parameter
     zoomValue: DEFAULT_ZOOM_VALUE,
     scaledValue: null,
-// Node Coloring
 
+// Node Coloring
     nodeColoring: {
         showMenu: false,
         nodeColoringEnabled: true,
@@ -99,8 +99,7 @@ export const grnState = {
 
 // Slider Parameters
     slidersLocked: false,
-    resetTrigger: false,
-    undoResetTriggered: false,
+    showUndoReset: false,
     linkDistanceSlider: {
         sliderId: LINK_DIST_SLIDER_ID,
         valueId: LINK_DIST_VALUE,

@@ -1,6 +1,10 @@
 import { updateApp } from "./update-app";
 
 import {
+    SET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_MENU,
+    RESET_NORMALIZATION_SIDEBAR,
+    RESET_NORMALIZATION_MENU,
     GREY_EDGES_DASHED_MENU,
     GREY_EDGES_DASHED_SIDEBAR,
     GREY_EDGE_THRESHOLD_MENU,
@@ -11,6 +15,14 @@ import {
     SHOW_WEIGHTS_MOUSEOVER,
     SHOW_ALL_WEIGHTS,
     HIDE_ALL_WEIGHTS,
+    COLOR_EDGES,
+    BLACK_EDGES,
+    LINK_DIST_SLIDER_ID,
+    LINK_DIST_MENU,
+    CHARGE_SLIDER_ID,
+    CHARGE_MENU,
+    CHARGE_DEFAULT_VALUE,
+    LINK_DIST_DEFAULT_VALUE,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU_OPTION,
     UNDO_SLIDERS_RESET_CLASS,
@@ -39,6 +51,26 @@ import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
 export const setupHandlers = grnState => {
     setupLoadAndImportHandlers(grnState);
 
+    $(SET_NORMALIZATION_SIDEBAR).click(() => {
+        grnState.normalizationMax = $("#normalization-max").val();
+        updateApp(grnState);
+    });
+
+    $(SET_NORMALIZATION_MENU).change(() => {
+        grnState.normalizationMax = $(SET_NORMALIZATION_MENU).val();
+        updateApp(grnState);
+    });
+
+    $(RESET_NORMALIZATION_SIDEBAR).click(() => {
+        grnState.normalizationMax = grnState.resetNormalizationMax;
+        updateApp(grnState);
+    });
+
+    $(RESET_NORMALIZATION_MENU).click(() => {
+        grnState.normalizationMax = grnState.resetNormalizationMax;
+        updateApp(grnState);
+    });
+
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);
@@ -46,21 +78,6 @@ export const setupHandlers = grnState => {
 
     $(GREY_EDGES_DASHED_MENU).click(() => {
         grnState.dashedLine = !$(GREY_EDGES_DASHED_MENU).prop("checked");
-        updateApp(grnState);
-    });
-
-    $("#normalization-button").click(() => {
-        grnState.normalizationMax = $("#normalization-max").val();
-        updateApp(grnState);
-    });
-
-    $("#reset-normalization-factor-menu, #resetNormalizationButton").click(() => {
-        grnState.normalizationMax = grnState.resetNormalizationMax;
-        updateApp(grnState);
-    });
-
-    $("#edge-weight-normalization-factor-menu").change(() => {
-        grnState.normalizationMax = $("#edge-weight-normalization-factor-menu").val();
         updateApp(grnState);
     });
 
@@ -90,47 +107,92 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $("#colorEdges").click(() => {
+    $(COLOR_EDGES).click(() => {
         grnState.colorOptimal = true;
         updateApp(grnState);
     });
 
-    $("#blackEdges").click(() => {
+    $(BLACK_EDGES).click(() => {
         grnState.colorOptimal = false;
         updateApp(grnState);
     });
 
-// Sliders code
+// Sliders Code
+    var valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
+
+    var linkDistValidator = value => {
+        return valueValidator(1, 1000, value);
+    };
+
+    var chargeValidator = value => {
+        return valueValidator(-2000, 0, value);
+    };
+
+    $(LINK_DIST_MENU).change(() => {
+        var value = linkDistValidator($(LINK_DIST_MENU).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        updateApp(grnState);
+    });
+
+    $(LINK_DIST_SLIDER_ID).change(() => {
+        var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
+        grnState.linkDistanceSlider.currentVal = value;
+        updateApp(grnState);
+    });
+
+    $(CHARGE_MENU).change(() => {
+        var value = chargeValidator($(CHARGE_MENU).val());
+        grnState.chargeSlider.currentVal = value;
+        updateApp(grnState);
+    });
+
+    $(CHARGE_SLIDER_ID).change(() => {
+        var value = chargeValidator($(CHARGE_SLIDER_ID).val());
+        grnState.chargeSlider.currentVal = value;
+        updateApp(grnState);
+    });
+
     $(LOCK_SLIDERS_MENU_OPTION).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
+
     $(LOCK_SLIDERS_BUTTON).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
-        grnState.resetTriggered = true;
-        grnState.undoResetTriggered = false;
-        updateApp(grnState);
-    });
-
     $(RESET_SLIDERS_CLASS).click(() => {
-        grnState.resetTriggered = false;
-        grnState.undoResetTriggered = true;
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
+        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
+        grnState.showUndoReset = true;
         updateApp(grnState);
     });
 
     $(RESET_SLIDERS_MENU_OPTION).click(() => {
-        grnState.resetTriggered = false;
-        grnState.undoResetTriggered = true;
+        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
+        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
+        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
+        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
+        grnState.showUndoReset = true;
+        updateApp(grnState);
+    });
+
+    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        grnState.showUndoReset = false;
         updateApp(grnState);
     });
 
     $(UNDO_SLIDERS_RESET_MENU).click(() => {
-        grnState.resetTriggered = true;
-        grnState.undoResetTriggered = false;
+        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        grnState.showUndoReset = false;
         updateApp(grnState);
     });
 
@@ -138,22 +200,24 @@ export const setupHandlers = grnState => {
     $(GRID_LAYOUT_BUTTON).click(() => {
         if (grnState.graphLayout === "FORCE_GRAPH") {
             grnState.graphLayout = "GRID_LAYOUT";
-            grnState.slidersLocked === true;
+            grnState.slidersLocked = true;
         } else if (grnState.graphLayout === "GRID_LAYOUT") {
             grnState.graphLayout = "FORCE_GRAPH";
-            grnState.slidersLocked === false;
+            grnState.slidersLocked = false;
         }
         updateApp(grnState);
     });
 
     $(FORCE_GRAPH_CLASS).click(() => {
         grnState.graphLayout = "FORCE_GRAPH";
+        grnState.slidersLocked = false;
         updateApp(grnState);
 
     });
 
     $(GRID_LAYOUT_CLASS).click(() => {
         grnState.graphLayout = "GRID_LAYOUT";
+        grnState.slidersLocked = true;
         updateApp(grnState);
     });
 

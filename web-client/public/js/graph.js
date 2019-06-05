@@ -1,13 +1,7 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-import { modifyChargeParameter, modifyLinkDistanceParameter } from "./update-app";
+import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
 import {
-    LINK_DIST_SLIDER_ID,
-    LINK_DIST_MENU,
-    LINK_DIST_VALUE,
-    CHARGE_SLIDER_ID,
-    CHARGE_MENU,
-    CHARGE_VALUE,
     ENDS_IN_EXPRESSION_REGEXP,
     DEFAULT_ZOOM_VALUE,
 //    GRID_LAYOUT_BUTTON,
@@ -73,9 +67,9 @@ export var drawGraph = function (network) {
     var minimumScale = MIN_SCALE;
     // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
 
-    // TODO: incorporate into grnState
+    // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
-
+    // Assign the entire array weights of 1, if color edges turned off
     if (!grnState.colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
             if ( allWeights[i] !== 0 ) {
@@ -88,11 +82,12 @@ export var drawGraph = function (network) {
         }
     }
 
-    var maxPos = Math.abs(d3.max(allWeights));
-    var maxNeg = Math.abs(d3.min(allWeights));
-    var maxWeight = Math.max(maxPos, maxNeg);
+    // Get the largest magnitude weight and set that as the default normalization factor
+    var maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
+    grnState.normalizationMax = maxWeight;
+    grnState.resetNormalizationMax = maxWeight;
 
-  // normalization all weights b/w 2-14
+  // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : maxWeight])
@@ -101,8 +96,7 @@ export var drawGraph = function (network) {
 
     var unweighted = false;
 
-  // normalization all weights b/w size 2 and size 14
-  // if unweighted, weight is 2
+  // if unweighted, all weights are 2
     if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
@@ -320,10 +314,6 @@ export var drawGraph = function (network) {
         }
     };
 
-    var valueValidator = function (min, max, value) {
-        return Math.min(max, Math.max(min, value));
-    };
-
     var zoomInputValidator = function (value) {
         return valueValidator(1, 200, value);
     };
@@ -485,11 +475,8 @@ export var drawGraph = function (network) {
         .attr("id", function (d) {
             return "path" + d.source.index + "_" + d.target.index;
         }).style("stroke-width", function (d) {
-            if (!grnState.colorOptimal) {
-                return d.strokeWidth = "2";
-            } else {
-                return d.strokeWidth = getEdgeThickness(d);
-            }
+            d.strokeWidth = grnState.colorOptimal ? getEdgeThickness(d) : 2;
+            return d.strokeWidth;
         }).style("stroke-dasharray", function (d) {
             if (unweighted || !grnState.colorOptimal) {
                 return "0";
@@ -1347,15 +1334,14 @@ export var drawGraph = function (network) {
             }).attr("y", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
                 var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-            selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
+                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
                 var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
                 var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
                 if (adaptive && height < MAX_HEIGHT &&
-             (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
+                  (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
-
                         link
                             .attr("y1", function (d) {
                                 return d.source.y;
@@ -1478,6 +1464,9 @@ export var drawGraph = function (network) {
                 return d.label.y;
             });
 
+            modifyChargeParameter(grnState.chargeSlider.currentVal);
+            modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+
         } catch (e) {
             console.log(e);
             console.warn("Detected invalid node. Moving on to next node.");
@@ -1502,54 +1491,6 @@ export var drawGraph = function (network) {
     }
 
     grnState.simulation = simulation;
-    modifyChargeParameter(-50);
-    modifyLinkDistanceParameter(500);
-
-    const changeLinkDistanceSliderValue = () => {
-        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
-        $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
-        $(LINK_DIST_SLIDER_ID).val(grnState.linkDistanceSlider.currentVal);
-        $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
-    };
-
-    const changeChargeSliderValue = () => {
-        modifyChargeParameter(grnState.chargeSlider.currentVal);
-        $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
-        $(CHARGE_SLIDER_ID).val(grnState.chargeSlider.currentVal);
-        $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
-    };
-
-    $(LINK_DIST_MENU).change(() => {
-        var value = linkDistValidator($(LINK_DIST_MENU).val());
-        grnState.linkDistanceSlider.currentVal = value;
-        changeLinkDistanceSliderValue();
-    });
-
-    $(LINK_DIST_SLIDER_ID).change(() => {
-        var value = linkDistValidator($(LINK_DIST_SLIDER_ID).val());
-        grnState.linkDistanceSlider.currentVal = value;
-        changeLinkDistanceSliderValue();
-    });
-
-    $(CHARGE_MENU).change(() => {
-        var value = chargeValidator($(CHARGE_MENU).val());
-        grnState.chargeSlider.currentVal = value;
-        changeChargeSliderValue();
-    });
-
-    $(CHARGE_SLIDER_ID).change(() => {
-        var value = chargeValidator($(CHARGE_SLIDER_ID).val());
-        grnState.chargeSlider.currentVal = value;
-        changeChargeSliderValue();
-    });
-
-    var linkDistValidator = value => {
-        return valueValidator(1, 1000, value);
-    };
-
-    var chargeValidator = value => {
-        return valueValidator(-2000, 0, value);
-    };
 
     $(".startDisabled").removeClass("disabled");
 };

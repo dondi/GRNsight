@@ -24,6 +24,8 @@ package-lock.json
 .DS_Store
 *.pem
 *.p12
+*.key
+*.cert
 
 _gh_pages
 

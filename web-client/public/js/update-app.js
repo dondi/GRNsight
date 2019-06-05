@@ -40,12 +40,10 @@ import {
   LINK_DIST_SLIDER_ID,
   LINK_DIST_MENU,
   LINK_DIST_VALUE,
-  LINK_DIST_DEFAULT_VALUE,
   CHARGE_CLASS,
   CHARGE_SLIDER_ID,
   CHARGE_MENU,
   CHARGE_VALUE,
-  CHARGE_DEFAULT_VALUE,
   GRID_LAYOUT_BUTTON,
   GRID_LAYOUT_CLASS,
   FORCE_GRAPH_CLASS,
@@ -102,7 +100,7 @@ const displayNetwork = (network, name) => {
 };
 
 // Value Validators
-const valueValidator = (min, max, value) => {
+export const valueValidator = (min, max, value) => {
     return Math.min(max, Math.max(min, value));
 };
 
@@ -187,14 +185,14 @@ const synchronizeHideAllWeights = () => {
 // Toggle Weighted Functions
 const enableColorOptimal = () => {
     $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok");
     $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
 };
 
 const disableColorOptimal = () => {
     $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok invisible");
+    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok");
     $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
     $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
@@ -215,35 +213,9 @@ const lockForce = (disable) => {
     $(CHARGE_SLIDER_ID).prop("disabled", disable);
     $(RESET_SLIDERS_BUTTON).prop("disabled", disable);
     $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
-    if (grnState.resetTriggered) {
+    if (!grnState.showUndoReset) {
         $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
     }
-};
-
-const resetValues = () => {
-    grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
-    grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
-    grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
-    grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
-    $(CHARGE_MENU).val(CHARGE_DEFAULT_VALUE);
-    $(LINK_DIST_MENU).val(LINK_DIST_DEFAULT_VALUE);
-};
-
-const undoReset = () => {
-    grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
-    grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
-    $(CHARGE_MENU).val(grnState.chargeSlider.backup);
-    $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.backup );
-};
-
-const resetForce = () => {
-    modifyChargeParameter(CHARGE_DEFAULT_VALUE);
-    modifyLinkDistanceParameter(LINK_DIST_DEFAULT_VALUE);
-};
-
-const undoResetForce = () => {
-    modifyChargeParameter(grnState.chargeSlider.backup);
-    modifyLinkDistanceParameter(grnState.linkDistanceSlider.backup);
 };
 
 const updateChargeSliderValues = () => {
@@ -496,28 +468,20 @@ export const updateApp = grnState => {
         lockForce(grnState.slidersLocked);
     }
 
-    if (grnState.resetTriggered === false) {
-        resetValues();
-        resetForce();
+    if (grnState.showUndoReset) {
         $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", false);
         $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
-        updateChargeSliderValues();
-        updateLinkDistanceSliderValues();
-    }
-
-    if (!grnState.undoResetTriggered && grnState.simulation !== undefined) {
-        undoReset();
-        undoResetForce();
+    } else {
         $(UNDO_SLIDERS_RESET_BUTTON).prop("disabled", true);
         $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
-        updateChargeSliderValues();
-        updateLinkDistanceSliderValues();
     }
 
 // Graph Layout
     if (grnState.graphLayout === "FORCE_GRAPH") {
+        $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
         updatetoForceGraph();
     } else if (grnState.graphLayout === "GRID_LAYOUT") {
+        $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
         updatetoGridLayout();
     }
 
@@ -569,8 +533,12 @@ export const updateApp = grnState => {
         disableNodeColoringMenus();
     }
 
-    updateLogFoldChangeMaxValue();
+    if (grnState.network !== null) {
+        updateChargeSliderValues();
+        updateLinkDistanceSliderValues();
+    }
 
+    updateLogFoldChangeMaxValue();
     updateTopDataset();
     updateBottomDataset();
 

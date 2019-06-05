@@ -196,8 +196,8 @@ html
                 li(class='node-coloring-menu disabled')
                   a(href='#' class='nodeOptions')
                     span(class='glyphicon invisible')
-                    | &nbsp; Log Fold Change Max Value (-100 - 100): &nbsp;
-                    input(type='number' min="-100" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
+                    | &nbsp; Log Fold Change Max Value (0 - 100): &nbsp;
+                    input(type='number' min="0" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -208,7 +208,7 @@ html
                     | &nbsp; Enable Formatting of Edges Based on Weight Values
                 li
                   a(href='#' id='blackEdges' class='blackEdges')
-                    span(class='glyphicon invisible')
+                    span(class='glyphicon')
                     | &nbsp; Disable Formatting of Edges Based on Weight Values
                 li(class='divider')
                 li
@@ -323,8 +323,8 @@ html
               input(id='averageDataBottom', type='checkbox' checked)
               label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-            p(class='sideHeader' id="logFoldChangeMaxValueRange") (-100 - 100): &nbsp;
-            input(type='number' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+            p(class='sideHeader' id="logFoldChangeMaxValueRange") (0 - 100): &nbsp;
+            input(type='number' min='0' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
             span &nbsp;
             button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
             div(class="node-coloring-legend")
@@ -334,8 +334,8 @@ html
             span(id='linkDistVal' class='forceVal') 500
             input(class='form-control', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
             label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (-2000 - 0):
-            span(id='chargeVal' class='forceVal') -1000
-            input(class='form-control', type='range', min='-2000', max='0', value='-1000', step='1', id='chargeInput', name='chargeInput')
+            span(id='chargeVal' class='forceVal') -50
+            input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
           form
             input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
             label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
