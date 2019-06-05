@@ -57,12 +57,8 @@ export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
 export const LOCK_SLIDERS_CLASS          = ".lockSliders";
 export const LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
 export const LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu";
-export const RESET_SLIDERS_CLASS         = ".resetSliders";
-export const RESET_SLIDERS_ID            = "#resetSliders";
 export const RESET_SLIDERS_BUTTON        = "#resetSlidersButton";
 export const RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
-export const UNDO_SLIDERS_RESET_CLASS    = ".undoSliderReset";
-export const UNDO_SLIDERS_RESET_ID       = "#undoReset";
 export const UNDO_SLIDERS_RESET_MENU     = "#undoResetMenu";
 export const UNDO_SLIDERS_RESET_BUTTON   = "#undoResetButton";
 

@@ -224,7 +224,7 @@ export const setupHandlers = grnState => {
 
     $(UNDO_SLIDERS_RESET_CLASS).click(() => {
         grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
-        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
+        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
         grnState.showUndoReset = false;
         updateApp(grnState);
     });
@@ -235,6 +235,7 @@ export const setupHandlers = grnState => {
         grnState.showUndoReset = false;
         updateApp(grnState);
     });
+
 
 // Weights Visualization Handlers
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
