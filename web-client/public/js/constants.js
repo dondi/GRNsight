@@ -67,12 +67,12 @@ export const UNDO_SLIDERS_RESET_MENU     = "#undoResetMenu";
 export const UNDO_SLIDERS_RESET_BUTTON   = "#undoResetButton";
 
 export const LINK_DIST_CLASS            = "#link-distance";
-export const LINK_DIST_SLIDER_ID        = "#linkDistInput";
+export const LINK_DIST_SLIDER_SIDEBAR   = "#linkDistInput";
 export const LINK_DIST_VALUE            = "#linkDistVal";
 export const LINK_DIST_MENU             = "#link-distance-menu";
 export const LINK_DIST_DEFAULT_VALUE    = 500;
 export const CHARGE_CLASS               = "#charge";
-export const CHARGE_SLIDER_ID           = "#chargeInput";
+export const CHARGE_SLIDER_SIDEBAR      = "#chargeInput";
 export const CHARGE_VALUE               = "#chargeVal";
 export const CHARGE_MENU                = "#charge-menu";
 export const CHARGE_DEFAULT_VALUE       = -50;
