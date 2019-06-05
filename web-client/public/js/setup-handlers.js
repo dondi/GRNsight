@@ -2,6 +2,7 @@ import { updateApp } from "./update-app";
 
 import {
     SET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_SIDEBAR_VALUE,
     SET_NORMALIZATION_MENU,
     RESET_NORMALIZATION_SIDEBAR,
     RESET_NORMALIZATION_MENU,
@@ -24,10 +25,10 @@ import {
     CHARGE_DEFAULT_VALUE,
     LINK_DIST_DEFAULT_VALUE,
     LOCK_SLIDERS_BUTTON,
-    LOCK_SLIDERS_MENU_OPTION,
-    UNDO_SLIDERS_RESET_CLASS,
-    RESET_SLIDERS_CLASS,
-    RESET_SLIDERS_MENU_OPTION,
+    LOCK_SLIDERS_MENU,
+    UNDO_SLIDERS_RESET_SIDEBAR,
+    RESET_SLIDERS_SIDEBAR,
+    RESET_SLIDERS_MENU,
     UNDO_SLIDERS_RESET_MENU,
     GRID_LAYOUT_BUTTON,
     GRID_LAYOUT_CLASS,
@@ -194,7 +195,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(LOCK_SLIDERS_MENU_OPTION).click(() => {
+    $(LOCK_SLIDERS_MENU).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
@@ -204,7 +205,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(RESET_SLIDERS_CLASS).click(() => {
+    $(RESET_SLIDERS_SIDEBAR).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
         grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
@@ -213,7 +214,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(RESET_SLIDERS_MENU_OPTION).click(() => {
+    $(RESET_SLIDERS_MENU).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
         grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
@@ -222,7 +223,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
+    $(UNDO_SLIDERS_RESET_SIDEBAR).click(() => {
         grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
         grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
         grnState.showUndoReset = false;
@@ -250,7 +251,7 @@ export const setupHandlers = grnState => {
 
     // Normalization Options
     $(SET_NORMALIZATION_SIDEBAR).click(() => {
-        grnState.normalizationMax = $("#normalization-max").val();
+        grnState.normalizationMax = $(SET_NORMALIZATION_SIDEBAR_VALUE).val();
         updateApp(grnState);
     });
 
