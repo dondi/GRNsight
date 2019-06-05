@@ -1,6 +1,6 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-import { valueValidator } from "./update-app";
+import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
     DEFAULT_ZOOM_VALUE,
@@ -1463,6 +1463,9 @@ export var drawGraph = function (network) {
             }).attr("y", function (d) {
                 return d.label.y;
             });
+
+            modifyChargeParameter(grnState.chargeSlider.currentVal);
+            modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
         } catch (e) {
             console.log(e);
