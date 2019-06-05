@@ -5,8 +5,8 @@ module.exports = {
     development: {
         host: "localhost",
         port: 5000,
-        url: "http://" + this.host + "/" + this.port,
-        corsOrigin: "//localhost:5001",
+        url: "https://" + this.host + "/" + this.port,
+        corsOrigin: "http://localhost:5001",
         root: rootPath,
         app: {
             name: "GRNsight"
