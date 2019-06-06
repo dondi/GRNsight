@@ -52,6 +52,10 @@ import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
 export const setupHandlers = grnState => {
     setupLoadAndImportHandlers(grnState);
 
+    var valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
+
     // Grid buttons
     $(GRID_LAYOUT_BUTTON).click(() => {
         if (grnState.graphLayout === "FORCE_GRAPH") {
@@ -146,22 +150,23 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    var logFoldChangeMaxValueValidator = value => {
+        return valueValidator(1, 100, value);
+    };
+
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
-        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val();
+        var value = logFoldChangeMaxValueValidator($(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val());
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
     });
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
-        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val();
+        var value = logFoldChangeMaxValueValidator($(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val());
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
     });
 
 // Sliders Code
-    var valueValidator = (min, max, value) => {
-        return Math.min(max, Math.max(min, value));
-    };
 
     var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
