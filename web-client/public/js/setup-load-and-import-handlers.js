@@ -38,9 +38,15 @@ const uploadHandler = (uploadRoute, uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
         const filename = submittedFilename($upload);
-        const formData = createFileForm($upload);
-        uploader(uploadRoute, filename, formData);
-        uploadEpilogue(event);
+        if ($upload[0].files[0].size < 100000) {
+            const formData = createFileForm($upload);
+            uploader(uploadRoute, filename, formData);
+            uploadEpilogue(event);
+        } else {
+            let errorString = "The file size is too large. Please try again with a smaller file.";
+            $("#error").html(errorString);
+            $("#errorModal").modal("show");
+        }
     };
 };
 
