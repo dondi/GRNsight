@@ -1464,9 +1464,6 @@ export var drawGraph = function (network) {
                 return d.label.y;
             });
 
-            modifyChargeParameter(grnState.chargeSlider.currentVal);
-            modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
-
         } catch (e) {
             console.log(e);
             console.warn("Detected invalid node. Moving on to next node.");
@@ -1491,6 +1488,9 @@ export var drawGraph = function (network) {
     }
 
     grnState.simulation = simulation;
+
+    modifyChargeParameter(grnState.chargeSlider.currentVal);
+    modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
     $(".startDisabled").removeClass("disabled");
 };
