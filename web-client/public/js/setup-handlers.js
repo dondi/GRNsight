@@ -151,7 +151,7 @@ export const setupHandlers = grnState => {
     });
 
     var logFoldChangeMaxValueValidator = value => {
-        return valueValidator(1, 100, value);
+        return valueValidator(0.01, 100, value);
     };
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {

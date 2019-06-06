@@ -347,11 +347,17 @@ const updateTopDataset = () => {
 };
 
 const updateBottomDataset = () => {
-    $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
-    removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
-    /* eslint-disable max-len */
-    $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`).addClass("glyphicon-ok");
-    /* eslint-enable max-len */
+    if (grnState.nodeColoring.bottomDataSameAsTop) {
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).val("Same as Top Dataset");
+        removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
+        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${"Same as Top Dataset"}'] a span`).addClass("glyphicon-ok");
+    } else {
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
+        removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
+        /* eslint-disable max-len */
+        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`).addClass("glyphicon-ok");
+        /* eslint-enable max-len */
+    }
     updaters.renderNodeColoring();
 };
 
