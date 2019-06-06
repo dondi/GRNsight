@@ -26,8 +26,7 @@ import {
     LINK_DIST_DEFAULT_VALUE,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU,
-    UNDO_SLIDERS_RESET_SIDEBAR,
-    RESET_SLIDERS_SIDEBAR,
+
     RESET_SLIDERS_MENU,
     UNDO_SLIDERS_RESET_MENU,
     GRID_LAYOUT_BUTTON,
@@ -195,17 +194,17 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    // Sliders code
     $(LOCK_SLIDERS_MENU).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
-
     $(LOCK_SLIDERS_BUTTON).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
 
-    $(RESET_SLIDERS_SIDEBAR).click(() => {
+    $(RESET_SLIDERS_CLASS).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
         grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
@@ -223,7 +222,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDERS_RESET_SIDEBAR).click(() => {
+    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
         grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
         grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
         grnState.showUndoReset = false;
