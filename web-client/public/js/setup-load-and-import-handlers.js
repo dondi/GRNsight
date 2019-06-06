@@ -38,7 +38,7 @@ const uploadHandler = (uploadRoute, uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
         const filename = submittedFilename($upload);
-        if ($upload[0].files[0].size < 1000000) {
+        if ($upload[0].files[0].size < 2000000) {
             const formData = createFileForm($upload);
             uploader(uploadRoute, filename, formData);
             uploadEpilogue(event);
