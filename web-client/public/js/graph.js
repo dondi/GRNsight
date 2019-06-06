@@ -1063,11 +1063,7 @@ export var drawGraph = function (network) {
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
-        var logFoldChangeMaxValueMagnitude = Math.abs(logFoldChangeMaxValue);
-        var gradientValues = d3.range(-logFoldChangeMaxValueMagnitude, logFoldChangeMaxValueMagnitude, increment);
-        gradientValues = logFoldChangeMaxValue < 0 ? gradientValues.reverse() : gradientValues;
-
-        var flippedScale = logFoldChangeMaxValue < 0 ? true : false;
+        var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
 
         var coloring = svg.selectAll(".node-coloring-legend")
             .data(gradientValues)
@@ -1083,12 +1079,12 @@ export var drawGraph = function (network) {
                 var scale = d3.scaleLinear()
                     .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                     .range([0, 1]);
-                return d3.interpolateRdBu(scale(flippedScale ? d : -d));
+                return d3.interpolateRdBu(scale(d));
             });
 
         var legendLabels = {
             "left": {
-                "textContent": (flippedScale ? +logFoldChangeMaxValue : -logFoldChangeMaxValue).toFixed(0),
+                "textContent": (-logFoldChangeMaxValue).toFixed(2),
                 "x": -xMargin / 2
             },
             "center": {
@@ -1096,7 +1092,7 @@ export var drawGraph = function (network) {
                 "x": width / 2
             },
             "right": {
-                "textContent": (flippedScale ? -logFoldChangeMaxValue : +logFoldChangeMaxValue).toFixed(0),
+                "textContent": (logFoldChangeMaxValue).toFixed(2),
                 "x": width - xMargin / 2
             },
         };
@@ -1464,9 +1460,6 @@ export var drawGraph = function (network) {
                 return d.label.y;
             });
 
-            modifyChargeParameter(grnState.chargeSlider.currentVal);
-            modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
-
         } catch (e) {
             console.log(e);
             console.warn("Detected invalid node. Moving on to next node.");
@@ -1491,6 +1484,9 @@ export var drawGraph = function (network) {
     }
 
     grnState.simulation = simulation;
+
+    modifyChargeParameter(grnState.chargeSlider.currentVal);
+    modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
     $(".startDisabled").removeClass("disabled");
 };

@@ -26,8 +26,8 @@ import {
     LINK_DIST_DEFAULT_VALUE,
     LOCK_SLIDERS_BUTTON,
     LOCK_SLIDERS_MENU,
-    UNDO_SLIDERS_RESET_SIDEBAR,
-    RESET_SLIDERS_SIDEBAR,
+    RESET_SLIDERS_CLASS,
+    UNDO_SLIDERS_RESET_CLASS,
     RESET_SLIDERS_MENU,
     UNDO_SLIDERS_RESET_MENU,
     GRID_LAYOUT_BUTTON,
@@ -51,6 +51,10 @@ import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
 
 export const setupHandlers = grnState => {
     setupLoadAndImportHandlers(grnState);
+
+    var valueValidator = (min, max, value) => {
+        return Math.min(max, Math.max(min, value));
+    };
 
     // Grid buttons
     $(GRID_LAYOUT_BUTTON).click(() => {
@@ -146,22 +150,23 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    var logFoldChangeMaxValueValidator = value => {
+        return valueValidator(0.01, 100, value);
+    };
+
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
-        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val();
+        var value = logFoldChangeMaxValueValidator($(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val());
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
     });
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
-        var value = $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val();
+        var value = logFoldChangeMaxValueValidator($(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val());
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
     });
 
 // Sliders Code
-    var valueValidator = (min, max, value) => {
-        return Math.min(max, Math.max(min, value));
-    };
 
     var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
@@ -195,17 +200,17 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    // Sliders code
     $(LOCK_SLIDERS_MENU).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
-
     $(LOCK_SLIDERS_BUTTON).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
 
-    $(RESET_SLIDERS_SIDEBAR).click(() => {
+    $(RESET_SLIDERS_CLASS).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
         grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
@@ -223,7 +228,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(UNDO_SLIDERS_RESET_SIDEBAR).click(() => {
+    $(UNDO_SLIDERS_RESET_CLASS).click(() => {
         grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
         grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup;
         grnState.showUndoReset = false;

@@ -196,8 +196,8 @@ html
                 li(class='node-coloring-menu disabled')
                   a(href='#' class='nodeOptions')
                     span(class='glyphicon invisible')
-                    | &nbsp; Log Fold Change Max Value (0 - 100): &nbsp;
-                    input(type='number' min="0" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
+                    | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
+                    input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -308,7 +308,7 @@ html
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(id="layout")
           form
-            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Grid Layout')
+            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar' value='Grid Layout')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
             input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
@@ -323,8 +323,8 @@ html
               input(id='averageDataBottom', type='checkbox' checked)
               label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-            p(class='sideHeader' id="logFoldChangeMaxValueRange") (0 - 100): &nbsp;
-            input(type='number' min='0' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+            p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
+            input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
             span &nbsp;
             button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
             div(class="node-coloring-legend")
