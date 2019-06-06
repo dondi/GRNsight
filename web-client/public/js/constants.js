@@ -55,13 +55,17 @@ export const BLACK_EDGES                        = "#blackEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
+export const LOCK_SLIDERS_CLASS          = ".lockSliders";
 export const LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
-export const LOCK_SLIDERS_MENU           = "#lockSlidersMenu";
-export const RESET_SLIDERS_SIDEBAR        = "#resetSlidersButton";
-export const RESET_SLIDERS_MENU          = "#resetSlidersMenu";
-export const UNDO_SLIDERS_RESET_MENU     = "#undoResetMenu";
-export const UNDO_SLIDERS_RESET_SIDEBAR   = "#undoResetButton";
+export const LOCK_SLIDERS_MENU_OPTION    = "#lockSlidersMenu";
+export const RESET_SLIDERS_CLASS         = ".resetSliders";
+export const RESET_SLIDERS_ID            = "#resetSliders";
+export const RESET_SLIDERS_BUTTON        = "#resetSlidersButton";
+export const RESET_SLIDERS_MENU_OPTION   = "#resetSlidersMenu";
 export const UNDO_SLIDERS_RESET_CLASS    = ".undoSliderReset";
+export const UNDO_SLIDERS_RESET_ID       = "#undoReset";
+export const UNDO_SLIDERS_RESET_MENU     = "#undoResetMenu";
+export const UNDO_SLIDERS_RESET_BUTTON   = "#undoResetButton";
 
 export const LINK_DIST_CLASS            = "#link-distance";
 export const LINK_DIST_SLIDER_SIDEBAR   = "#linkDistInput";
