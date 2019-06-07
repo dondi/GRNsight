@@ -62,9 +62,11 @@ html
                     span(class='glyphicon glyphicon-export')
                     | &nbsp; Export Data
                   ul(class='dropdown-menu')
-                    li(class='startDisabled disabled unweighted export')
+                    //- Temporary hardcoded display: none pending further testing of the Excel export feature.
+                    li(class='startDisabled disabled unweighted export' style='display: none')
                       a(href='#' id='exportAsExcelWkbk') To Excel Workbook
-                    li(class='divider')
+                    //- Need to omit the divider too.
+                    li(class='divider' style='display: none')
                     li(class='startDisabled disabled unweighted export')
                       a(href='#' id='exportAsUnweightedSif') To Unweighted SIF
                     li(class='startDisabled disabled weighted export')
