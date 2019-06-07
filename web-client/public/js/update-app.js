@@ -501,7 +501,6 @@ export const updateApp = grnState => {
         updaters.renderNodeColoring();
     }
 
-    console.log(grnState.nodeColoring.showMenu);
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
     } else {
