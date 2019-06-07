@@ -309,7 +309,14 @@ const hasExpressionData = (sheets) => {
 
     // renderNodeColoring: function () { }, // defined in graph.js
 
+const clearDropdownMenus = () => {
+    $(TOP_DATASET_SELECTION_SIDEBAR).html("");
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
+};
+
 const resetDatasetDropdownMenus = (network) => {
+    clearDropdownMenus();
+    $(".dataset-option").remove(); // clear all menu dataset options
 
     var createHTMLforDataset = function (name) {
         return `
@@ -327,11 +334,6 @@ const resetDatasetDropdownMenus = (network) => {
         }
     }
 
-    $(BOTTOM_DATASET_SELECTION_SIDEBAR).empty();
-    $(TOP_DATASET_SELECTION_SIDEBAR).empty();
-
-    $(".dataset-option").remove(); // clear all menu dataset options
-
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
 
@@ -340,10 +342,12 @@ const resetDatasetDropdownMenus = (network) => {
     grnState.nodeColoring.nodeColoringOptions.forEach(function (option) {
         var shortenedSheetName = shortenExpressionSheetName(option.value);
         $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .addClass("dataset-option")
               .attr("value", option.value).text(shortenedSheetName));
         $(TOP_DATASET_SELECTION_MENU)
               .append(createHTMLforDataset(option.value));
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
+              .addClass("dataset-option")
               .attr("value", option.value).text(shortenedSheetName));
         $(BOTTOM_DATASET_SELECTION_MENU)
               .append(createHTMLforDataset(option.value));
@@ -393,15 +397,17 @@ const updateBottomDataset = () => {
 
 export const updateApp = grnState => {
 
+    console.log(grnState.newNetwork);
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
+        clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
+            resetDatasetDropdownMenus(grnState.network);
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.lastDataset = name;
-                resetDatasetDropdownMenus(grnState.network);
                 showNodeColoringMenus();
             }
             grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
