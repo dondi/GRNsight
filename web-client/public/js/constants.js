@@ -105,3 +105,8 @@ export const TOP_DATASET_SELECTION_MENU                 = "#topDatasetDropdownMe
 export const TOP_DATASET_SELECTION_SIDEBAR              = "#dataset-top";
 export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdownMenu";
 export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
+
+export const ZOOM_CONTROL = ".zoom";
+export const ZOOM_SLIDER = "#zoomSlider";
+export const ZOOM_INPUT = "#zoomInput";
+export const ZOOM_PERCENT = "#zoomPercent";

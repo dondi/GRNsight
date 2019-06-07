@@ -67,6 +67,7 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
+  ZOOM_CONTROL
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -78,7 +79,7 @@ const refreshApp = () => {
 };
 
 const displayNetwork = (network, name) => {
-    $(".zoom").prop({ disabled: false });
+    $(ZOOM_CONTROL).prop({ disabled: false });
 
     uploadState.currentNetwork = network;
     console.log("Network: ", network); // Display the network in the console

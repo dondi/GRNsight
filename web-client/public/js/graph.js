@@ -3,7 +3,10 @@ import { grnState } from "./grnstate";
 import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
-    DEFAULT_ZOOM_VALUE,
+    ZOOM_CONTROL,
+    ZOOM_INPUT,
+    ZOOM_PERCENT,
+    ZOOM_SLIDER
 } from "./constants";
 
 /* globals d3 */
@@ -198,11 +201,6 @@ export var drawGraph = function (network) {
         });
     });
     d3.select(".center").on("click", center);
-
-    const ZOOM_CONTROL = ".zoom";
-    const ZOOM_SLIDER = "#zoomSlider";
-    const ZOOM_INPUT = "#zoomInput";
-    const ZOOM_PERCENT = "#zoomPercent";
 
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
