@@ -18,7 +18,6 @@ description: GRNsight is an open source web application and service for visualiz
 url: http://dondi.github.io
 # author is not set, because it turns out to be Twitter-specific
 logo: /assets/images/GRNsight_logo_20140710_main_resized.jpg
-
-gems:
+plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
