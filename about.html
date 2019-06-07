@@ -1,8 +1,8 @@
 ---
 layout: default
 title: About
-modified: 6/1/18
-description: >-
+modified: 6/7/19
+description: -
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
             <p id="pageTitle">About GRNsight</p>
@@ -65,6 +65,44 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v4_0_0Content" data-toggle="collapse">
+                                                    GRNsight v4.0.0
+                                                </a>
+                                            </p>
+                                        </div>
+
+                                        <div id="v4_0_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v4.0.0 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>GRNsight now follows a strict Model-View-Controller paradigm for its basic architecture. Except for the graphs, all elements displayed in the iframe (the main GRNsight functionality) now follow this architecture. These changes have occurred "under the hood" and will not be noticeable to users, except that it has made GRNsight more robust and has facilitated fixing many bugs caused by the interactions of new features introduced in previous versions </li>
+                                                      <ul>
+                                                        <li>Force Graph Parameter slider values are saved when a graph is uploaded</li>
+                                                        <li>The File -> Reload menu option reloads the graph in the layout configuration it was previously in </li>
+                                                        <li>Reset and Undo Reset Buttons are now grayed out when the Force Graph Parameter sliders are locked </li>
+                                                        <li>Various bugs that arose from the refactor are now fixed.</li>
+                                                      </ul>
+                                                    </li>
+                                                    <li>The Gene Page feature was improved both in its layout and "under the hood" to make database API calls and queries more robust. Changes were made to eventually enable the retrieval of gene information for genes from species other than Saccharomyces cerevisiae</li>
+                                                    <ul>
+                                                      <li>Gene page variables are also now a part of GRNstate in the Model-View-Controller paradigm</li>
+                                                    </ul>
+                                                    <li> Zoom levels remain consistent despite any user-defined parameter changes </li>
+                                                    <li> A bug was fixed in the automatic selection of the edge weight normalization factor. GRNsight now correctly uses the highest magnitude weight value for the default normalization factor, disregarding the sign of the weight </li>
+                                                    <li> Gray edges now only have one thickness </li>
+                                                    <li> GRNsight now returns an error when a file is too large </li>
+                                                    <li> The dropdown menu and sidebar menu viewport sizes now initialize to the same values </li>
+                                                    <li> The Log Fold Change Max Value field will only accept positive values, and the allowable range has been set to 0.01 - 100 </li>
+                                                    <li> GRNsight is now wholly served over HTTPS </li>
+                                                    <li> GRNsight libraries and documentation were updated </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
