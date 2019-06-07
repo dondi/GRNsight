@@ -43,7 +43,7 @@ module.exports = function (app) {
         gaQuery(req, res, {
             serviceEmail: process.env.SERVICE_EMAIL,
             pemFilename: "grnsight.pem",
-            origin: "http://dondi.github.io",
+            origin: "https://dondi.github.io",
             accountId: "ga:91279024",
             pathRoot: "GRNsight"
         });
