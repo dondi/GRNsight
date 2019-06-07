@@ -273,6 +273,20 @@ const updatetoGridLayout = () => {
 };
 
 // Node Coloring Functions
+const showNodeColoringMenus = () => {
+    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
+        $(NODE_COLORING_MENU).removeClass("hidden");
+    }
+    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
+        $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
+    }
+};
+
+const disableNodeColoringMenus = () => {
+    $(NODE_COLORING_MENU).addClass("hidden");
+    $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+};
+
 const isNewWorkbook = (name) => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
 };
@@ -285,9 +299,13 @@ const shortenExpressionSheetName = (name) => {
 const hasExpressionData = (sheets) => {
     for (var property in sheets) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+            showNodeColoringMenus();
+            grnState.nodeColoring.showMenu = true;
             return true;
         }
     }
+    grnState.nodeColoring.showMenu = false;
+    disableNodeColoringMenus();
     return false;
 };
 
@@ -373,24 +391,6 @@ const updateBottomDataset = () => {
         /* eslint-enable max-len */
     }
     updaters.renderNodeColoring();
-};
-
-const showNodeColoringMenus = () => {
-    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
-        $(NODE_COLORING_MENU).removeClass("hidden");
-    }
-    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
-        $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
-    }
-};
-
-const disableNodeColoringMenus = () => {
-    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
-        $(NODE_COLORING_MENU).addClass("hidden");
-    }
-    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
-        $(NODE_COLORING_MENU_CLASS).addClass("disabled");
-    }
 };
 
 export const updateApp = grnState => {
