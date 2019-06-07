@@ -9,6 +9,7 @@ import {
   CHARGE_DEFAULT_VALUE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
   DEFAULT_ZOOM_VALUE,
+  FORCE_GRAPH
 } from "./constants";
 let currentNetwork = null;
 
@@ -75,7 +76,6 @@ export const grnState = {
 
 // Zoom Parameter
     zoomValue: DEFAULT_ZOOM_VALUE,
-    scaledValue: null,
 
 // Node Coloring
     nodeColoring: {
@@ -120,5 +120,5 @@ export const grnState = {
     },
 
 // Graph Layout Parameter
-    graphLayout: "FORCE_GRAPH",
+    graphLayout: FORCE_GRAPH
 };

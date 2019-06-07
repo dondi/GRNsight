@@ -86,7 +86,6 @@ export const setupLoadAndImportHandlers = grnState => {
             crossDomain: true
         }) : $.getJSON(fullUrl)).done((network, textStatus, jqXhr) => {
             // Display the network in the console
-            console.log(network);
             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
             grnState.network = network;
 
