@@ -92,11 +92,6 @@ const displayNetwork = (network, name) => {
 
     $("#fileName").text(name); // Set the name of the file to display in the top bar
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
-
-    // If more things need to be turned off, we'll add them to this array
-    [RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR, UNDO_SLIDERS_RESET_MENU].forEach(
-        selector => $(selector).off("click")
-    );
 };
 
 // Value Validators
@@ -208,11 +203,26 @@ export const modifyLinkDistanceParameter = (value) => {
     grnState.simulation.alpha(1);
 };
 
-const lockForce = (disable) => {
-    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", disable);
-    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", disable);
-    $(RESET_SLIDERS_SIDEBAR).prop("disabled", disable);
-    $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
+const updateSliderState = slidersLocked => {
+    if (slidersLocked) {
+        $(`${LOCK_SLIDERS_MENU} span`).removeClass("invisible").addClass("glyphicon-ok");
+        $(RESET_SLIDERS_MENU).parent().addClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
+        $(LINK_DIST_CLASS).parent().addClass("disabled");
+        $(CHARGE_CLASS).parent().addClass("disabled");
+    } else {
+        $(`${LOCK_SLIDERS_MENU} span`).removeClass("glyphicon-ok").addClass("invisible");
+        $(RESET_SLIDERS_MENU).parent().removeClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
+        $(LINK_DIST_CLASS).parent().removeClass("disabled");
+        $(CHARGE_CLASS).parent().removeClass("disabled");
+    }
+
+    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", slidersLocked);
+    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", slidersLocked);
+    $(RESET_SLIDERS_SIDEBAR).prop("disabled", slidersLocked);
+    $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
+
     if (!grnState.showUndoReset) {
         $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", true);
     }
@@ -502,25 +512,7 @@ export const updateApp = grnState => {
     updateLogFoldChangeMaxValue();
     updateTopDataset();
     updateBottomDataset();
-
-// Update Sliders
-    if (grnState.slidersLocked === true) {
-        $(LOCK_SLIDERS_MENU + " span").removeClass("invisible");
-        $(LOCK_SLIDERS_MENU + " span").addClass("glyphicon-ok");
-        $(RESET_SLIDERS_MENU).parent().addClass("disabled");
-        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
-        $(LINK_DIST_CLASS).parent().addClass("disabled");
-        $(CHARGE_CLASS).parent().addClass("disabled");
-        lockForce(grnState.slidersLocked);
-    } else {
-        $(LOCK_SLIDERS_MENU + " span").removeClass("glyphicon-ok");
-        $(LOCK_SLIDERS_MENU + " span").addClass("invisible");
-        $(RESET_SLIDERS_MENU).parent().removeClass("disabled");
-        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
-        $(LINK_DIST_CLASS).parent().removeClass("disabled");
-        $(CHARGE_CLASS).parent().removeClass("disabled");
-        lockForce(grnState.slidersLocked);
-    }
+    updateSliderState(grnState.slidersLocked);
 
     if (grnState.showUndoReset) {
         $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", false);
@@ -537,5 +529,4 @@ export const updateApp = grnState => {
 
 // Refresh graph
     refreshApp();
-
 };
