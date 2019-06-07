@@ -78,9 +78,7 @@ const refreshApp = () => {
 };
 
 const displayNetwork = (network, name) => {
-    if (document.getElementById("zoomSlider").disabled) {
-        document.getElementById("zoomSlider").disabled = false;
-    }
+    $(".zoom").prop({ disabled: false });
 
     uploadState.currentNetwork = network;
     console.log("Network: ", network); // Display the network in the console

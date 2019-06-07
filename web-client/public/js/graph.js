@@ -46,10 +46,6 @@ export var drawGraph = function (network) {
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
     var zoomSliderScale = 1;
-    // Tracks the value of the zoom slider, initally at 100%
-    if (grnState.newNetwork) {
-        $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
-    }
 
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
@@ -59,12 +55,9 @@ export var drawGraph = function (network) {
 
     var adaptive = !$("input[name='viewport']").prop("checked");
 
-    var MIN_SCALE = 0.25;
-    var ADAPTIVE_MAX_SCALE = 4;
-    var MIDDLE_SCALE = 1;
-
-    var minimumScale = MIN_SCALE;
-    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
+    const MIN_SCALE = 0.25;
+    const ADAPTIVE_MAX_SCALE = 4;
+    const MIDDLE_SCALE = 1;
 
     // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
@@ -206,6 +199,52 @@ export var drawGraph = function (network) {
     });
     d3.select(".center").on("click", center);
 
+    const ZOOM_CONTROL = ".zoom";
+    const ZOOM_SLIDER = "#zoomSlider";
+    const ZOOM_INPUT = "#zoomInput";
+    const ZOOM_PERCENT = "#zoomPercent";
+
+    const setGraphZoom = zoomScale => {
+        if (zoomScale < MIDDLE_SCALE) {
+            $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
+            $container.removeClass(CURSOR_CLASSES);
+        }
+        var container = zoomContainer;
+        zoom.scaleTo(container, zoomScale);
+    };
+
+    const updateAppBasedOnZoomValue = () => {
+        var currentPoint = grnState.zoomValue * 100;
+        var equivalentScale;
+        if (adaptive || (!adaptive && grnState.zoomValue <= ADAPTIVE_MAX_SCALE)) {
+            if (currentPoint <= leftPoints) {
+                equivalentScale = MIN_SCALE;
+                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+            } else {
+                currentPoint = currentPoint - leftPoints;
+                equivalentScale = MIDDLE_SCALE;
+                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            }
+            zoomSliderScale = equivalentScale;
+            setGraphZoom(equivalentScale);
+        } else {
+          // Prohibits zooming past 100% if (!adaptive && grnState.zoomValue >= ADAPTIVE_MAX_SCALE)
+            grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+            setGraphZoom(MIDDLE_SCALE);
+        }
+
+        $(ZOOM_CONTROL).val(grnState.zoomValue);
+
+        let zoomAsPercent = Math.round(grnState.zoomValue / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE);
+        if (zoomAsPercent === 0) {
+            zoomAsPercent = MIDDLE_SCALE;
+        }
+
+        $(ZOOM_PERCENT).text(`${zoomAsPercent}%`);
+        $(ZOOM_INPUT).val(zoomAsPercent);
+    };
+
     var leftPoints;
     var rightPoints;
     var scaleIncreasePerLeftPoint;
@@ -219,7 +258,6 @@ export var drawGraph = function (network) {
     maps the scale from 0 to some x, with that x being calculated based on the
     input scales.
 */
-
     var setupZoomSlider = function (minScale) {
       // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
       // So we'll just treat it as 0.
@@ -258,99 +296,41 @@ export var drawGraph = function (network) {
       // Returns the x that we're mapping to. Now we can set up the range slider.
         var maxRangeValue = totalPoints / 100;
 
-        $(".zoomSlider").attr("min", 0);
-        $(".zoomSlider").attr("max", maxRangeValue);
+        $(ZOOM_SLIDER).attr("min", 0);
+        $(ZOOM_SLIDER).attr("max", maxRangeValue);
         if (grnState.newNetwork) {
-            $(".zoomSlider").val(0.01 * leftPoints);
-        } else {
-            $(".zoomSlider").val(grnState.zoomValue);
+            grnState.zoomValue = 0.01 * leftPoints;
         }
+
+        updateAppBasedOnZoomValue();
     };
 
-    setupZoomSlider(minimumScale);
+    setupZoomSlider(MIN_SCALE);
 
     var ZOOM_SLIDER_MAX_VAL = 8;
     var ZOOM_RANGE = 200;
-
-    function updateZoomValue (input) {
-        var value = input || Math.round(($(".zoomSlider").val() / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE));
-        value = value === 0 ? MIDDLE_SCALE : value;
-        $("#zoomPercent").html(value + "%");
-        $("#zoomInput").val(value);
-    }
-
-    function getMappedValue (scale) {
-      // Reverse the calculations from setupZoomSlider to get value from equivalentScale
-        var equivalentPoint;
-        if (scale <= MIDDLE_SCALE) {
-            equivalentPoint = (scale - minimumScale) / (scaleIncreasePerLeftPoint * 100);
-        } else {
-            equivalentPoint = (scale - 1) / scaleIncreasePerRightPoint + leftPoints;
-            equivalentPoint /= 100;
-        }
-        $(".zoomSlider").val(equivalentPoint.toFixed(2));
-    }
-
-    var updateViewportZoom = function (value) {
-        var currentPoint = value * 100;
-        var equivalentScale;
-        if (adaptive || (!adaptive && value <= ADAPTIVE_MAX_SCALE)) {
-            if (currentPoint <= leftPoints) {
-                equivalentScale = minimumScale;
-                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
-            } else {
-                currentPoint = currentPoint - leftPoints;
-                equivalentScale = MIDDLE_SCALE;
-                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
-            }
-            zoomSliderScale = equivalentScale;
-            manualZoomFunction(equivalentScale);
-        } else {
-          // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
-            $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
-            manualZoomFunction(MIDDLE_SCALE);
-            updateZoomValue();
-        }
-    };
 
     var zoomInputValidator = function (value) {
         return valueValidator(1, 200, value);
     };
 
-    $("#zoomInput").change(() => {
-        var zoomValue = zoomInputValidator(+$("#zoomInput").val());
-        grnState.zoomValue = zoomValue * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
-        $(".zoomSlider").val(grnState.zoomValue);
-        updateViewportZoom(grnState.zoomValue);
-        updateZoomValue(zoomValue);
+    $(ZOOM_INPUT).on("input", () => {
+        const zoomAsPercent = zoomInputValidator(+$(ZOOM_INPUT).val());
+        grnState.zoomValue = zoomAsPercent * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        updateAppBasedOnZoomValue();
     });
 
-    d3.select(".zoomSlider").on("input", function () {
-        var value = $(this).val();
-        if (value !== DEFAULT_ZOOM_VALUE) {
-            grnState.zoomValue = value;
-        }
-        updateViewportZoom(grnState.zoomValue);
+    d3.select(ZOOM_SLIDER).on("input", function () {
+        grnState.zoomValue = +$(this).val();
+        updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
         manualZoom = false;
     });
 
-
-    var manualZoomFunction = function (zoomScale) {
-        if (zoomScale < MIDDLE_SCALE) {
-            $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
-        updateZoomValue();
-        var container = zoomContainer;
-        zoom.scaleTo(container, zoomScale);
-    };
-
     if (!grnState.newNetwork) {
-        updateViewportZoom(grnState.zoomValue);
+        updateAppBasedOnZoomValue();
     }
 
     d3.selectAll(".boundBoxSize").on("click", function () {
@@ -387,8 +367,8 @@ export var drawGraph = function (network) {
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (zoomSliderScale > 1) {
-                $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
-                manualZoomFunction(1);
+                grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+                updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
             }
             width = $container.width();
