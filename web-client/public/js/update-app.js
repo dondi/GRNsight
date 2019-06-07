@@ -397,7 +397,6 @@ const updateBottomDataset = () => {
 
 export const updateApp = grnState => {
 
-    console.log(grnState.newNetwork);
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
