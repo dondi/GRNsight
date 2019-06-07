@@ -1079,7 +1079,9 @@ export var drawGraph = function (network) {
                 var scale = d3.scaleLinear()
                     .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                     .range([0, 1]);
-                return d3.interpolateRdBu(scale(d));
+
+                // We negate d because we actually want red to be on the right.
+                return d3.interpolateRdBu(scale(-d));
             });
 
         var legendLabels = {
