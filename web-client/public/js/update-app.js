@@ -397,9 +397,9 @@ export const updateApp = grnState => {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
         if (hasExpressionData(grnState.network.expression)) {
+            grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;
-                grnState.nodeColoring.nodeColoringEnabled = true;
                 grnState.nodeColoring.lastDataset = name;
                 resetDatasetDropdownMenus(grnState.network);
                 showNodeColoringMenus();
