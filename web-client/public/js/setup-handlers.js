@@ -59,7 +59,7 @@ export const setupHandlers = grnState => {
     const setGraphLayout = layout => {
         grnState.graphLayout = layout;
         updateApp(grnState);
-    }
+    };
 
     $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
     $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));

@@ -203,7 +203,7 @@ export const modifyLinkDistanceParameter = (value) => {
 };
 
 const updateSliderState = slidersLocked => {
-    const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked
+    const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
     if (forceGraphDisabled) {
         $(`${LOCK_SLIDERS_MENU} span`).removeClass("invisible").addClass("glyphicon-ok");
         $(RESET_SLIDERS_MENU).parent().addClass("disabled");
