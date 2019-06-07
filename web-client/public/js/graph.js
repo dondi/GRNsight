@@ -4,7 +4,6 @@ import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } fr
 import {
     ENDS_IN_EXPRESSION_REGEXP,
     DEFAULT_ZOOM_VALUE,
-//    GRID_LAYOUT_BUTTON,
 } from "./constants";
 
 /* globals d3 */

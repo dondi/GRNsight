@@ -59,7 +59,6 @@ export const LOCK_SLIDERS_CLASS          = ".lockSliders";
 export const LOCK_SLIDERS_BUTTON         = "#lockSlidersButton";
 export const LOCK_SLIDERS_MENU           = "#lockSlidersMenu";
 export const RESET_SLIDERS_CLASS         = ".resetSliders";
-export const RESET_SLIDERS_ID            = "#resetSliders";
 export const RESET_SLIDERS_SIDEBAR       = "#resetSlidersButton";
 export const RESET_SLIDERS_MENU          = "#resetSlidersMenu";
 export const UNDO_SLIDERS_RESET_CLASS    = ".undoSliderReset";
@@ -78,6 +77,8 @@ export const CHARGE_VALUE               = "#chargeVal";
 export const CHARGE_MENU                = "#charge-menu";
 export const CHARGE_DEFAULT_VALUE       = -50;
 
+export const GRID_LAYOUT                = "GRID_LAYOUT";
+export const FORCE_GRAPH                = "FORCE_GRAPH";
 export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
 export const FORCE_GRAPH_CLASS          = "#forceGraph";
 export const GRID_LAYOUT_CLASS          = "#gridLayout";

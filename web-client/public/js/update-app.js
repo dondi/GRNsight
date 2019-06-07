@@ -5,6 +5,8 @@ import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
 import {
+  FORCE_GRAPH,
+  GRID_LAYOUT,
   GREY_EDGES_DASHED_MENU,
   GREY_EDGES_DASHED_SIDEBAR,
   MIN_EDGE_WEIGHT_NORMALIZATION,
@@ -92,7 +94,7 @@ const displayNetwork = (network, name) => {
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 
     // If more things need to be turned off, we'll add them to this array
-    [ RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR, UNDO_SLIDERS_RESET_MENU].forEach(
+    [RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR, UNDO_SLIDERS_RESET_MENU].forEach(
         selector => $(selector).off("click")
     );
 };
@@ -247,13 +249,15 @@ const toggleLayout = (on, off) => {
 };
 
 const updatetoForceGraph = () => {
-    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
+    $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
+    $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
     toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
     updaters.setNodesToForceGraph();
 };
 
 const updatetoGridLayout = () => {
-    $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
+    $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
+    $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
     toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
     updaters.setNodesToGrid();
 };
@@ -444,11 +448,9 @@ export const updateApp = grnState => {
     }
 
 // Graph Layout
-    if (grnState.graphLayout === "FORCE_GRAPH") {
-        $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
+    if (grnState.graphLayout === FORCE_GRAPH) {
         updatetoForceGraph();
-    } else if (grnState.graphLayout === "GRID_LAYOUT") {
-        $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
+    } else if (grnState.graphLayout === GRID_LAYOUT) {
         updatetoGridLayout();
     }
 

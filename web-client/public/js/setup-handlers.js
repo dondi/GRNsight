@@ -1,6 +1,8 @@
 import { updateApp } from "./update-app";
 
 import {
+    FORCE_GRAPH,
+    GRID_LAYOUT,
     SET_NORMALIZATION_SIDEBAR,
     SET_NORMALIZATION_SIDEBAR_VALUE,
     SET_NORMALIZATION_MENU,
@@ -57,29 +59,21 @@ export const setupHandlers = grnState => {
     };
 
     // Grid buttons
-    $(GRID_LAYOUT_BUTTON).click(() => {
-        if (grnState.graphLayout === "FORCE_GRAPH") {
-            grnState.graphLayout = "GRID_LAYOUT";
-            grnState.slidersLocked = true;
-        } else if (grnState.graphLayout === "GRID_LAYOUT") {
-            grnState.graphLayout = "FORCE_GRAPH";
+    const setGraphLayout = layout => {
+        if (layout === FORCE_GRAPH) {
+            grnState.graphLayout = FORCE_GRAPH;
             grnState.slidersLocked = false;
+        } else if (layout === GRID_LAYOUT) {
+            grnState.graphLayout = GRID_LAYOUT;
+            grnState.slidersLocked = true;
         }
-        updateApp(grnState);
-    });
 
-    $(FORCE_GRAPH_CLASS).click(() => {
-        grnState.graphLayout = "FORCE_GRAPH";
-        grnState.slidersLocked = false;
         updateApp(grnState);
+    }
 
-    });
-
-    $(GRID_LAYOUT_CLASS).click(() => {
-        grnState.graphLayout = "GRID_LAYOUT";
-        grnState.slidersLocked = true;
-        updateApp(grnState);
-    });
+    $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
+    $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
+    $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
 
 // Node Coloring
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
