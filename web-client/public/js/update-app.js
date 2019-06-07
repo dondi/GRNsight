@@ -203,7 +203,8 @@ export const modifyLinkDistanceParameter = (value) => {
 };
 
 const updateSliderState = slidersLocked => {
-    if (slidersLocked) {
+    const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked
+    if (forceGraphDisabled) {
         $(`${LOCK_SLIDERS_MENU} span`).removeClass("invisible").addClass("glyphicon-ok");
         $(RESET_SLIDERS_MENU).parent().addClass("disabled");
         $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
@@ -217,9 +218,9 @@ const updateSliderState = slidersLocked => {
         $(CHARGE_CLASS).parent().removeClass("disabled");
     }
 
-    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", slidersLocked);
-    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", slidersLocked);
-    $(RESET_SLIDERS_SIDEBAR).prop("disabled", slidersLocked);
+    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", forceGraphDisabled);
+    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", forceGraphDisabled);
+    $(RESET_SLIDERS_SIDEBAR).prop("disabled", forceGraphDisabled);
     $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
 
     if (!grnState.showUndoReset) {
@@ -252,8 +253,8 @@ const toggleLayout = (on, off) => {
     if (!$(on).prop("checked")) {
         $(on).prop("checked", true);
         $(off).prop("checked", false);
-        $(off + " span").removeClass("glyphicon-ok");
-        $(on + " span").addClass("glyphicon-ok");
+        $(`${off} span`).removeClass("glyphicon-ok");
+        $(`${on} span`).addClass("glyphicon-ok");
     }
 };
 

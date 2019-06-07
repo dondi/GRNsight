@@ -57,14 +57,7 @@ export const setupHandlers = grnState => {
 
     // Grid buttons
     const setGraphLayout = layout => {
-        if (layout === FORCE_GRAPH) {
-            grnState.graphLayout = FORCE_GRAPH;
-            grnState.slidersLocked = false;
-        } else if (layout === GRID_LAYOUT) {
-            grnState.graphLayout = GRID_LAYOUT;
-            grnState.slidersLocked = true;
-        }
-
+        grnState.graphLayout = layout;
         updateApp(grnState);
     }
 
