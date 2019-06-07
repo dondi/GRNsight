@@ -62,9 +62,11 @@ html
                     span(class='glyphicon glyphicon-export')
                     | &nbsp; Export Data
                   ul(class='dropdown-menu')
-                    li(class='startDisabled disabled unweighted export')
+                    //- Temporary hardcoded display: none pending further testing of the Excel export feature.
+                    li(class='startDisabled disabled unweighted export' style='display: none')
                       a(href='#' id='exportAsExcelWkbk') To Excel Workbook
-                    li(class='divider')
+                    //- Need to omit the divider too.
+                    li(class='divider' style='display: none')
                     li(class='startDisabled disabled unweighted export')
                       a(href='#' id='exportAsUnweightedSif') To Unweighted SIF
                     li(class='startDisabled disabled weighted export')
@@ -126,7 +128,7 @@ html
                   a(href='#' id='zoom')
                     span(class='glyphicon invisible')
                     | &nbsp; Zoom (1 - 200%) &nbsp;
-                    input(type='number' id='zoomInput' min='1' max='200' value='100' class='keepopen' aria-describedby='basic-addon1')
+                    input(type='number' id='zoomInput' min='1' max='200' value='100' class='zoom keepopen' aria-describedby='basic-addon1' disabled="true")
                     span
                     | &nbsp; %
 
@@ -302,13 +304,14 @@ html
             tr
               td
                 div(class="zoomCenter")
-                input(id="zoomSlider" class="zoomSlider" type="range" min="0" max="8" value="4" step="0.25" disabled="true")
+                input(id="zoomSlider" class="zoom" type="range" min="0" max="8" value="4" step="0.25" disabled="true")
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(id="layout")
           form
-            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar' value='Grid Layout')
+            //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
+            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar' value='')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
             input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')

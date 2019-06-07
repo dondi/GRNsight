@@ -5,6 +5,8 @@ import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
 import {
+  FORCE_GRAPH,
+  GRID_LAYOUT,
   GREY_EDGES_DASHED_MENU,
   GREY_EDGES_DASHED_SIDEBAR,
   MIN_EDGE_WEIGHT_NORMALIZATION,
@@ -65,6 +67,7 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
+  ZOOM_CONTROL
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -76,9 +79,7 @@ const refreshApp = () => {
 };
 
 const displayNetwork = (network, name) => {
-    if (document.getElementById("zoomSlider").disabled) {
-        document.getElementById("zoomSlider").disabled = false;
-    }
+    $(ZOOM_CONTROL).prop({ disabled: false });
 
     uploadState.currentNetwork = network;
     console.log("Network: ", network); // Display the network in the console
@@ -90,11 +91,6 @@ const displayNetwork = (network, name) => {
 
     $("#fileName").text(name); // Set the name of the file to display in the top bar
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
-
-    // If more things need to be turned off, we'll add them to this array
-    [ RESET_SLIDERS_SIDEBAR, RESET_SLIDERS_MENU, UNDO_SLIDERS_RESET_SIDEBAR, UNDO_SLIDERS_RESET_MENU].forEach(
-        selector => $(selector).off("click")
-    );
 };
 
 // Value Validators
@@ -206,11 +202,27 @@ export const modifyLinkDistanceParameter = (value) => {
     grnState.simulation.alpha(1);
 };
 
-const lockForce = (disable) => {
-    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", disable);
-    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", disable);
-    $(RESET_SLIDERS_SIDEBAR).prop("disabled", disable);
-    $(LOCK_SLIDERS_BUTTON).prop("checked", disable);
+const updateSliderState = slidersLocked => {
+    const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
+    if (forceGraphDisabled) {
+        $(`${LOCK_SLIDERS_MENU} span`).removeClass("invisible").addClass("glyphicon-ok");
+        $(RESET_SLIDERS_MENU).parent().addClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
+        $(LINK_DIST_CLASS).parent().addClass("disabled");
+        $(CHARGE_CLASS).parent().addClass("disabled");
+    } else {
+        $(`${LOCK_SLIDERS_MENU} span`).removeClass("glyphicon-ok").addClass("invisible");
+        $(RESET_SLIDERS_MENU).parent().removeClass("disabled");
+        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
+        $(LINK_DIST_CLASS).parent().removeClass("disabled");
+        $(CHARGE_CLASS).parent().removeClass("disabled");
+    }
+
+    $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", forceGraphDisabled);
+    $(CHARGE_SLIDER_SIDEBAR).prop("disabled", forceGraphDisabled);
+    $(RESET_SLIDERS_SIDEBAR).prop("disabled", forceGraphDisabled);
+    $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
+
     if (!grnState.showUndoReset) {
         $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", true);
     }
@@ -241,19 +253,21 @@ const toggleLayout = (on, off) => {
     if (!$(on).prop("checked")) {
         $(on).prop("checked", true);
         $(off).prop("checked", false);
-        $(off + " span").removeClass("glyphicon-ok");
-        $(on + " span").addClass("glyphicon-ok");
+        $(`${off} span`).removeClass("glyphicon-ok");
+        $(`${on} span`).addClass("glyphicon-ok");
     }
 };
 
 const updatetoForceGraph = () => {
-    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
+    $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
+    $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
     toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
     updaters.setNodesToForceGraph();
 };
 
 const updatetoGridLayout = () => {
-    $(GRID_LAYOUT_BUTTON)[0].value = "Force Graph";
+    $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
+    $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
     toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
     updaters.setNodesToGrid();
 };
@@ -444,11 +458,9 @@ export const updateApp = grnState => {
     }
 
 // Graph Layout
-    if (grnState.graphLayout === "FORCE_GRAPH") {
-        $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
+    if (grnState.graphLayout === FORCE_GRAPH) {
         updatetoForceGraph();
-    } else if (grnState.graphLayout === "GRID_LAYOUT") {
-        $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
+    } else if (grnState.graphLayout === GRID_LAYOUT) {
         updatetoGridLayout();
     }
 
@@ -500,25 +512,7 @@ export const updateApp = grnState => {
     updateLogFoldChangeMaxValue();
     updateTopDataset();
     updateBottomDataset();
-
-// Update Sliders
-    if (grnState.slidersLocked === true) {
-        $(LOCK_SLIDERS_MENU + " span").removeClass("invisible");
-        $(LOCK_SLIDERS_MENU + " span").addClass("glyphicon-ok");
-        $(RESET_SLIDERS_MENU).parent().addClass("disabled");
-        $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
-        $(LINK_DIST_CLASS).parent().addClass("disabled");
-        $(CHARGE_CLASS).parent().addClass("disabled");
-        lockForce(grnState.slidersLocked);
-    } else {
-        $(LOCK_SLIDERS_MENU + " span").removeClass("glyphicon-ok");
-        $(LOCK_SLIDERS_MENU + " span").addClass("invisible");
-        $(RESET_SLIDERS_MENU).parent().removeClass("disabled");
-        $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
-        $(LINK_DIST_CLASS).parent().removeClass("disabled");
-        $(CHARGE_CLASS).parent().removeClass("disabled");
-        lockForce(grnState.slidersLocked);
-    }
+    updateSliderState(grnState.slidersLocked);
 
     if (grnState.showUndoReset) {
         $(UNDO_SLIDERS_RESET_SIDEBAR).prop("disabled", false);
@@ -535,5 +529,4 @@ export const updateApp = grnState => {
 
 // Refresh graph
     refreshApp();
-
 };

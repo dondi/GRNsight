@@ -1,6 +1,8 @@
 import { updateApp } from "./update-app";
 
 import {
+    FORCE_GRAPH,
+    GRID_LAYOUT,
     SET_NORMALIZATION_SIDEBAR,
     SET_NORMALIZATION_SIDEBAR_VALUE,
     SET_NORMALIZATION_MENU,
@@ -24,12 +26,9 @@ import {
     CHARGE_MENU,
     CHARGE_DEFAULT_VALUE,
     LINK_DIST_DEFAULT_VALUE,
-    LOCK_SLIDERS_BUTTON,
-    LOCK_SLIDERS_MENU,
+    LOCK_SLIDERS_CLASS,
     RESET_SLIDERS_CLASS,
     UNDO_SLIDERS_RESET_CLASS,
-    RESET_SLIDERS_MENU,
-    UNDO_SLIDERS_RESET_MENU,
     GRID_LAYOUT_BUTTON,
     GRID_LAYOUT_CLASS,
     FORCE_GRAPH_CLASS,
@@ -57,29 +56,14 @@ export const setupHandlers = grnState => {
     };
 
     // Grid buttons
-    $(GRID_LAYOUT_BUTTON).click(() => {
-        if (grnState.graphLayout === "FORCE_GRAPH") {
-            grnState.graphLayout = "GRID_LAYOUT";
-            grnState.slidersLocked = true;
-        } else if (grnState.graphLayout === "GRID_LAYOUT") {
-            grnState.graphLayout = "FORCE_GRAPH";
-            grnState.slidersLocked = false;
-        }
+    const setGraphLayout = layout => {
+        grnState.graphLayout = layout;
         updateApp(grnState);
-    });
+    };
 
-    $(FORCE_GRAPH_CLASS).click(() => {
-        grnState.graphLayout = "FORCE_GRAPH";
-        grnState.slidersLocked = false;
-        updateApp(grnState);
-
-    });
-
-    $(GRID_LAYOUT_CLASS).click(() => {
-        grnState.graphLayout = "GRID_LAYOUT";
-        grnState.slidersLocked = true;
-        updateApp(grnState);
-    });
+    $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
+    $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
+    $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
 
 // Node Coloring
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
@@ -201,25 +185,12 @@ export const setupHandlers = grnState => {
     });
 
     // Sliders code
-    $(LOCK_SLIDERS_MENU).click(() => {
-        grnState.slidersLocked = !grnState.slidersLocked;
-        updateApp(grnState);
-    });
-    $(LOCK_SLIDERS_BUTTON).click(() => {
+    $(LOCK_SLIDERS_CLASS).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
     });
 
     $(RESET_SLIDERS_CLASS).click(() => {
-        grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
-        grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
-        grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
-        grnState.linkDistanceSlider.currentVal = LINK_DIST_DEFAULT_VALUE;
-        grnState.showUndoReset = true;
-        updateApp(grnState);
-    });
-
-    $(RESET_SLIDERS_MENU).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;
         grnState.linkDistanceSlider.backup = grnState.linkDistanceSlider.currentVal;
         grnState.chargeSlider.currentVal = CHARGE_DEFAULT_VALUE;
@@ -234,14 +205,6 @@ export const setupHandlers = grnState => {
         grnState.showUndoReset = false;
         updateApp(grnState);
     });
-
-    $(UNDO_SLIDERS_RESET_MENU).click(() => {
-        grnState.chargeSlider.currentVal = grnState.chargeSlider.backup;
-        grnState.linkDistanceSlider.currentVal = grnState.linkDistanceSlider.backup ;
-        grnState.showUndoReset = false;
-        updateApp(grnState);
-    });
-
 
 // Weights Visualization Handlers
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
