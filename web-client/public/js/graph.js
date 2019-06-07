@@ -317,12 +317,11 @@ export var drawGraph = function (network) {
         return valueValidator(1, 200, value);
     };
 
-    var zoomValue = zoomInputValidator(+$("#zoomInput").val());
-
     $("#zoomInput").change(() => {
-        grnState.scaledValue = zoomValue * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
-        $(".zoomSlider").val(grnState.scaledValue);
-        updateViewportZoom(grnState.scaledValue);
+        var zoomValue = zoomInputValidator(+$("#zoomInput").val());
+        grnState.zoomValue = zoomValue * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        $(".zoomSlider").val(grnState.zoomValue);
+        updateViewportZoom(grnState.zoomValue);
         updateZoomValue(zoomValue);
     });
 
