@@ -299,13 +299,11 @@ const shortenExpressionSheetName = (name) => {
 const hasExpressionData = (sheets) => {
     for (var property in sheets) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            showNodeColoringMenus();
             grnState.nodeColoring.showMenu = true;
             return true;
         }
     }
     grnState.nodeColoring.showMenu = false;
-    disableNodeColoringMenus();
     return false;
 };
 
@@ -503,6 +501,7 @@ export const updateApp = grnState => {
         updaters.renderNodeColoring();
     }
 
+    console.log(grnState.nodeColoring.showMenu);
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
     } else {
