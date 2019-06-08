@@ -1,6 +1,13 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-const hasExpressionData = require("./node-coloring").hasExpressionData;
+import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
+import {
+    ENDS_IN_EXPRESSION_REGEXP,
+    ZOOM_CONTROL,
+    ZOOM_INPUT,
+    ZOOM_PERCENT,
+    ZOOM_SLIDER
+} from "./constants";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -18,7 +25,14 @@ const hasExpressionData = require("./node-coloring").hasExpressionData;
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
-export var drawGraph = function (network, sliderController, nodeColoring) {
+export var updaters = {
+    setNodesToGrid: () => {},
+    setNodesToForceGraph: () => {},
+    renderNodeColoring: () => {},
+    removeNodeColoring: () => {},
+};
+
+export var drawGraph = function (network) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -34,8 +48,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-    var zoomSliderScale = 1; // Tracks the value of the zoom slider, initally at 100%
-    $("#zoomPercent").html(100 + "%"); // initalize zoom percentage value
+    var zoomSliderScale = 1;
 
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
@@ -45,16 +58,13 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
 
     var adaptive = !$("input[name='viewport']").prop("checked");
 
-    var MIN_SCALE = 0.25;
-    var ADAPTIVE_MAX_SCALE = 4;
-    var MIDDLE_SCALE = 1;
-    // regardless of whether the viewport is fixed or adaptive, the zoom slider now operates on the same scale
+    const MIN_SCALE = 0.25;
+    const ADAPTIVE_MAX_SCALE = 4;
+    const MIDDLE_SCALE = 1;
 
-    var minimumScale = MIN_SCALE;
-
-    // TODO: incorporate into grnState
+    // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
-
+    // Assign the entire array weights of 1, if color edges turned off
     if (!grnState.colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
             if ( allWeights[i] !== 0 ) {
@@ -67,17 +77,21 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         }
     }
 
-  // normalization all weights b/w 2-14
+    // Get the largest magnitude weight and set that as the default normalization factor
+    var maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
+    grnState.normalizationMax = maxWeight;
+    grnState.resetNormalizationMax = maxWeight;
+
+  // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
-        .domain([0, normMax > 0 ? normMax : d3.max(allWeights)])
+        .domain([0, normMax > 0 ? normMax : maxWeight])
         .range([2, 14])
         .clamp(true);
 
     var unweighted = false;
 
-  // normalization all weights b/w size 2 and size 14
-  // if unweighted, weight is 2
+  // if unweighted, all weights are 2
     if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
@@ -86,13 +100,12 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         $(".normalization-form").append("placeholder='unweighted'");
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
     } else {
-        var maxWeight = d3.max(allWeights);
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
         document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
     }
 
     var getEdgeThickness = function (edge) {
-        return Math.round(totalScale(Math.abs(edge.value)));
+        return Math.floor(totalScale(Math.abs(edge.value)));
     };
 
     var simulation = d3.forceSimulation()
@@ -189,6 +202,47 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     });
     d3.select(".center").on("click", center);
 
+    const setGraphZoom = zoomScale => {
+        if (zoomScale < MIDDLE_SCALE) {
+            $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
+            $container.removeClass(CURSOR_CLASSES);
+        }
+        var container = zoomContainer;
+        zoom.scaleTo(container, zoomScale);
+    };
+
+    const updateAppBasedOnZoomValue = () => {
+        var currentPoint = grnState.zoomValue * 100;
+        var equivalentScale;
+        if (adaptive || (!adaptive && grnState.zoomValue <= ADAPTIVE_MAX_SCALE)) {
+            if (currentPoint <= leftPoints) {
+                equivalentScale = MIN_SCALE;
+                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
+            } else {
+                currentPoint = currentPoint - leftPoints;
+                equivalentScale = MIDDLE_SCALE;
+                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
+            }
+            zoomSliderScale = equivalentScale;
+            setGraphZoom(equivalentScale);
+        } else {
+          // Prohibits zooming past 100% if (!adaptive && grnState.zoomValue >= ADAPTIVE_MAX_SCALE)
+            grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+            setGraphZoom(MIDDLE_SCALE);
+        }
+
+        $(ZOOM_CONTROL).val(grnState.zoomValue);
+
+        let zoomAsPercent = Math.round(grnState.zoomValue / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE);
+        if (zoomAsPercent === 0) {
+            zoomAsPercent = MIDDLE_SCALE;
+        }
+
+        $(ZOOM_PERCENT).text(`${zoomAsPercent}%`);
+        $(ZOOM_INPUT).val(zoomAsPercent);
+    };
+
     var leftPoints;
     var rightPoints;
     var scaleIncreasePerLeftPoint;
@@ -240,93 +294,42 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
       // Returns the x that we're mapping to. Now we can set up the range slider.
         var maxRangeValue = totalPoints / 100;
 
-        $(".zoomSlider").attr("min", 0);
-        $(".zoomSlider").attr("max", maxRangeValue);
-        $(".zoomSlider").val(0.01 * leftPoints);
+        $(ZOOM_SLIDER).attr("min", 0);
+        $(ZOOM_SLIDER).attr("max", maxRangeValue);
+        if (grnState.newNetwork) {
+            grnState.zoomValue = 0.01 * leftPoints;
+        }
+
+        updateAppBasedOnZoomValue();
     };
 
-    setupZoomSlider(minimumScale);
+    setupZoomSlider(MIN_SCALE);
 
     var ZOOM_SLIDER_MAX_VAL = 8;
     var ZOOM_RANGE = 200;
-
-    function updateZoomValue (input) {
-        var value = input || Math.round(($(".zoomSlider").val() / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE));
-        value = value === 0 ? MIDDLE_SCALE : value;
-        $("#zoomPercent").html(value + "%");
-        $("#zoomInput").val(value);
-    }
-
-    function getMappedValue (scale) {
-      // Reverse the calculations from setupZoomSlider to get value from equivalentScale
-        var equivalentPoint;
-        if (scale <= MIDDLE_SCALE) {
-            equivalentPoint = (scale - minimumScale) / (scaleIncreasePerLeftPoint * 100);
-        } else {
-            equivalentPoint = (scale - 1) / scaleIncreasePerRightPoint + leftPoints;
-            equivalentPoint /= 100;
-        }
-        $(".zoomSlider").val(equivalentPoint.toFixed(2));
-    }
-
-    var updateViewportZoom = function (value) {
-        var currentPoint = value * 100;
-        var equivalentScale;
-        if (adaptive || (!adaptive && value <= ADAPTIVE_MAX_SCALE)) {
-            if (currentPoint <= leftPoints) {
-                equivalentScale = minimumScale;
-                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
-            } else {
-                currentPoint = currentPoint - leftPoints;
-                equivalentScale = MIDDLE_SCALE;
-                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
-            }
-            zoomSliderScale = equivalentScale;
-            manualZoomFunction(equivalentScale);
-        } else {
-          // Prohibits zooming past 100% if (!adaptive && value >= ADAPTIVE_MAX_SCALE)
-            $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
-            manualZoomFunction(MIDDLE_SCALE);
-            updateZoomValue();
-        }
-    };
-
-    var valueValidator = function (min, max, value) {
-        return Math.min(max, Math.max(min, value));
-    };
 
     var zoomInputValidator = function (value) {
         return valueValidator(1, 200, value);
     };
 
-    $("#zoomInput").on("change", function () {
-        var value = zoomInputValidator(+$("#zoomInput").val());
-        var scaledValue = value * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
-        $(".zoomSlider").val(scaledValue);
-        updateViewportZoom(scaledValue);
-        updateZoomValue(value);
+    $(ZOOM_INPUT).on("input", () => {
+        const zoomAsPercent = zoomInputValidator(+$(ZOOM_INPUT).val());
+        grnState.zoomValue = zoomAsPercent * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        updateAppBasedOnZoomValue();
     });
 
-    d3.select(".zoomSlider").on("input", function () {
-        var value = $(this).val();
-        updateViewportZoom(value);
+    d3.select(ZOOM_SLIDER).on("input", function () {
+        grnState.zoomValue = +$(this).val();
+        updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
         manualZoom = true;
     }).on("mouseup", function () {
         manualZoom = false;
     });
 
-
-    var manualZoomFunction = function (zoomScale) {
-        if (zoomScale < MIDDLE_SCALE) {
-            $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
-        updateZoomValue();
-        var container = zoomContainer;
-        zoom.scaleTo(container, zoomScale);
-    };
+    if (!grnState.newNetwork) {
+        updateAppBasedOnZoomValue();
+    }
 
     d3.selectAll(".boundBoxSize").on("click", function () {
         var newWidth = $container.width();
@@ -362,8 +365,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (zoomSliderScale > 1) {
-                $(".zoomSlider").val(ADAPTIVE_MAX_SCALE);
-                manualZoomFunction(1);
+                grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+                updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
             }
             width = $container.width();
@@ -448,11 +451,8 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         .attr("id", function (d) {
             return "path" + d.source.index + "_" + d.target.index;
         }).style("stroke-width", function (d) {
-            if (!grnState.colorOptimal) {
-                return d.strokeWidth = "2";
-            } else {
-                return d.strokeWidth = getEdgeThickness(d);
-            }
+            d.strokeWidth = grnState.colorOptimal ? getEdgeThickness(d) : 2;
+            return d.strokeWidth;
         }).style("stroke-dasharray", function (d) {
             if (unweighted || !grnState.colorOptimal) {
                 return "0";
@@ -480,7 +480,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             var xOffsets;
             var color;
 
-            if (Math.abs(d.value / (d3.max(allWeights))) <= grayThreshold) {
+            if (Math.abs(d.value / maxWeight) <= grayThreshold) {
                 minimum = "gray";
             }
             if ( x1 === x2 && y1 === y2 ) {
@@ -928,10 +928,15 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 return d.textWidth / 2 + NODE_MARGIN;
             })
             .on("dblclick", nodeTextDblclick)
+
+            // this function triggers the gene page
             .on("contextmenu", function (gene) {
-                var tempLink = $("<a></a>")
+                const tempLink = $("<a></a>")
                     .attr({
-                        href: "info?" + $.param({symbol: gene.name}),
+                        href: "info?" + $.param({
+                            symbol: gene.name,
+                            species: grnState.species,
+                            taxon: grnState.taxon}),
                         target: "_blank"
                     });
                 $("body").append(tempLink);
@@ -956,7 +961,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
     var getExpressionData = function (gene, strain, average) {
-        var strainData = network["expression"][strain];
+        var strainData = grnState.network["expression"][strain];
         if (average) {
             var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
             var avgMap = {};
@@ -1034,11 +1039,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
-        var logFoldChangeMaxValueMagnitude = Math.abs(logFoldChangeMaxValue);
-        var gradientValues = d3.range(-logFoldChangeMaxValueMagnitude, logFoldChangeMaxValueMagnitude, increment);
-        gradientValues = logFoldChangeMaxValue < 0 ? gradientValues.reverse() : gradientValues;
-
-        var flippedScale = logFoldChangeMaxValue < 0 ? true : false;
+        var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
 
         var coloring = svg.selectAll(".node-coloring-legend")
             .data(gradientValues)
@@ -1054,12 +1055,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 var scale = d3.scaleLinear()
                     .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                     .range([0, 1]);
-                return d3.interpolateRdBu(scale(flippedScale ? d : -d));
+
+                // We negate d because we actually want red to be on the right.
+                return d3.interpolateRdBu(scale(-d));
             });
 
         var legendLabels = {
             "left": {
-                "textContent": (flippedScale ? +logFoldChangeMaxValue : -logFoldChangeMaxValue).toFixed(0),
+                "textContent": (-logFoldChangeMaxValue).toFixed(2),
                 "x": -xMargin / 2
             },
             "center": {
@@ -1067,7 +1070,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
                 "x": width / 2
             },
             "right": {
-                "textContent": (flippedScale ? -logFoldChangeMaxValue : +logFoldChangeMaxValue).toFixed(0),
+                "textContent": (logFoldChangeMaxValue).toFixed(2),
                 "x": width - xMargin / 2
             },
         };
@@ -1082,22 +1085,34 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         }
     };
 
-    nodeColoring.removeNodeColoring = function () {
-        this.nodeColoringEnabled = false;
+    updaters.removeNodeColoring = function () {
+        grnState.nodeColoring.nodeColoringEnabled = false;
         node.selectAll(".coloring").remove();
     };
 
-    nodeColoring.renderNodeColoring = function () {
-        if (this.nodeColoringEnabled) {
-            colorNodes("top", this.topDataset, this.avgTopDataset, this.logFoldChangeMaxValue);
-            colorNodes("bottom", this.bottomDataset, this.avgBottomDataset, this.logFoldChangeMaxValue);
+    updaters.renderNodeColoring = function () {
+        if (grnState.nodeColoring.nodeColoringEnabled) {
+            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
+                        grnState.nodeColoring.logFoldChangeMaxValue);
+            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
+                        grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
-            renderNodeColoringLegend(this.logFoldChangeMaxValue);
+            renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
     };
 
-    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression)) {
-        nodeColoring.renderNodeColoring();
+    const hasExpressionData = sheets => {
+        for (var property in sheets) {
+            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression) &&
+      grnState.nodeColoring.topDataset !== undefined) {
+        updaters.renderNodeColoring();
     }
 
     $(".node").css({
@@ -1189,7 +1204,6 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
     // resets graph options so when new graph is loaded, initial layout is always force graph
-    $("#forceGraph").trigger("click");
 
     const getMarginWidth = function (gridNodes, row) {
         const containerWidth = $container.width();
@@ -1217,49 +1231,31 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         return name1 > name2 ? 1 : -1;
     };
 
-    let layout = false;
-
-    var GRID_LAYOUT_BUTTON = "#gridLayoutButton";
-    $(GRID_LAYOUT_BUTTON)[0].value = "Grid Layout";
-    $(GRID_LAYOUT_BUTTON).on("click", {handler: this}, function (event) { // eslint-disable-line no-unused-vars
-        let nodeGroup = node._groups[0].sort(sortNode);
-        if (!layout) {
-            $("#gridLayout")
-                .addClass("called")
-                .trigger("click")
-                .removeClass("called");
-            this.value = "Force Graph";
-            layout = true;
-            const margin = 10;
-            const grid = Grid() // create new grid layout
+    let nodeGroup = node._groups[0].sort(sortNode);
+    updaters.setNodesToGrid = () => { // eslint-disable-line no-unused-vars
+        const margin = 10;
+        const grid = Grid()  // eslint-disable-line no-undef
             .data(network.genes)
             .bands(true)
             .padding([0.2, 0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container
-            grid.layout();
-            let gridNodes = grid.nodes();
-            let gridNumRow = grid.cols();
-            let marginWidth = getMarginWidth(gridNodes, gridNumRow);
-            let marginHeight = getMarginHeight(gridNodes);
-            /* eslint-disable block-scoped-var */
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
-                nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
-            }
-        } else {
-            $("#forceGraph")
-                .addClass("called")
-                .trigger("click")
-                .removeClass("called");
-            this.value = "Grid Layout";
-            layout = false;
-            for (i in nodeGroup) {
-                nodeGroup[i].__data__.fx = null;
-                nodeGroup[i].__data__.fy = null;
-            }
+        grid.layout();
+        let gridNodes = grid.nodes();
+        let gridNumRow = grid.cols();
+        let marginWidth = getMarginWidth(gridNodes, gridNumRow);
+        let marginHeight = getMarginHeight(gridNodes);
+        for (var i in nodeGroup) {
+            nodeGroup[i].__data__.fx = marginWidth + gridNodes[i].x;
+            nodeGroup[i].__data__.fy = marginHeight + gridNodes[i].y;
         }
-            /* eslint-enable block-scoped-var */
-    });
+    };
+
+    updaters.setNodesToForceGraph = () => { // eslint-disable-line no-unused-vars
+        for (var i in nodeGroup) {
+            nodeGroup[i].__data__.fx = null;
+            nodeGroup[i].__data__.fy = null;
+        }
+    };
 
   // Tick only runs while the graph physics are still running.
   // (I.e. when the graph is completely relaxed, tick stops running.)
@@ -1312,15 +1308,14 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
             }).attr("y", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
                 var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-            selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
+                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
                 var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
                 var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
                 if (adaptive && height < MAX_HEIGHT &&
-             (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
+                  (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
-
                         link
                             .attr("y1", function (d) {
                                 return d.source.y;
@@ -1450,7 +1445,7 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
     }
 
     function normalize (d) {
-        return Math.abs(d.value / (d3.max(allWeights)));
+        return Math.abs(d.value / maxWeight);
     }
 
     function dragstart (d) {
@@ -1466,57 +1461,10 @@ export var drawGraph = function (network, sliderController, nodeColoring) {
         d.fy = d3.event.y;
     }
 
-    // Configures sliderController
-    sliderController.addForce(simulation);
-    sliderController.configureForceHandlers();
-    sliderController.initializeDefaultForces();
+    grnState.simulation = simulation;
 
-    var changeSliderValue = function (slider, item) {
-        var value = slider === "link" ? linkDistValidator($(item).val()) :
-            chargeValidator($(item).val());
-        sliderController.modifyForceParameter(slider, value);
-        if (slider === "link") {
-            $(LINK_DISTANCE_VALUE).text(value);
-            $(LINK_DISTANCE_INPUT).val(value);
-            $(LINK_DISTANCE_MENU).val(value);
-        } else {
-            $(CHARGE_VALUE).text(value);
-            $(CHARGE_INPUT).val(value);
-            $(CHARGE_MENU).val(value);
-        }
-    };
-
-    var LINK_DISTANCE_MENU = "#link-distance-menu";
-    var LINK_DISTANCE_INPUT = "#linkDistInput";
-    var LINK_DISTANCE_VALUE = "#linkDistVal";
-
-    $(LINK_DISTANCE_MENU).on("change", function () {
-        changeSliderValue("link", LINK_DISTANCE_MENU);
-    });
-
-    $(LINK_DISTANCE_INPUT).on("change", function () {
-        changeSliderValue("link", LINK_DISTANCE_INPUT);
-    });
-
-    var CHARGE_MENU = "#charge-menu";
-    var CHARGE_INPUT = "#chargeInput";
-    var CHARGE_VALUE = "#chargeVal";
-
-    $(CHARGE_MENU).on("change", function () {
-        changeSliderValue("charge", CHARGE_MENU);
-    });
-
-    $(CHARGE_INPUT).on("change", function () {
-        changeSliderValue("charge", CHARGE_INPUT);
-    });
-
-    var linkDistValidator = function (value) {
-        return valueValidator(1, 1000, value);
-    };
-
-    var chargeValidator = function (value) {
-        return valueValidator(-2000, 0, value);
-    };
+    modifyChargeParameter(grnState.chargeSlider.currentVal);
+    modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
     $(".startDisabled").removeClass("disabled");
 };

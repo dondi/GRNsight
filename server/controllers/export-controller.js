@@ -2,6 +2,7 @@ var helpers = require(__dirname + "/helpers");
 
 var grnsightToSif = require(__dirname + "/exporters/sif");
 var grnsightToGraphMl = require(__dirname + "/exporters/graphml");
+var grnsightToXlsx = require(__dirname + "/exporters/xlsx");
 
 var convertResponse = function (app, req, res, converter) {
     helpers.attachCorsHeader(res, app);
@@ -63,10 +64,30 @@ module.exports = function (app) {
                 return generalExportError(res, error);
             }
         });
+
+        app.post("/convert-to-excel", function (req, res) {
+            try {
+                res.header("Content-Type", "text/xlsx");
+                return convertResponse(app, req, res, grnsightToGraphMl);
+            } catch (error) {
+                return generalExportError(res, error);
+            }
+        });
+
+        app.post("/export-to-excel", function (req, res) {
+            try {
+                res.header("Content-Type", "text/xlsx");
+                return exportResponse(app, req, res, grnsightToXlsx);
+            } catch (error) {
+                return generalExportError(res, error);
+            }
+        });
+
     }
 
     return {
         grnsightToSif: grnsightToSif,
-        grnsightToGraphMl: grnsightToGraphMl
+        grnsightToGraphMl: grnsightToGraphMl,
+        grnsightToXlsx: grnsightToXlsx
     };
 };

@@ -1,25 +1,18 @@
 // TODO Likely a temporary location, while things are being moved to their "true" homes.
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
+
 export const uploadState = {
     currentNetwork: null,
-    sliders: null,
-    nodeColoring: null
 };
 
-export const upload = function (sliderObject, sliderGroupController, drawGraph, nodeColoringController) {
-  // Slider Values
-    var LINK_DIST_SLIDER_ID   = "#linkDistInput";
-    var LINK_DIST_VALUE       = "#linkDistVal";
-    var LINK_DIST_DEFAULT     = 500;
-    var CHARGE_SLIDER_ID      = "#chargeInput";
-    var CHARGE_VALUE          = "#chargeVal";
-    var CHARGE_DEFAULT        = -50;
+export const upload = function () {
+
+  // Values
     var TOOLTIP_SHOW_DELAY    = 700;
     var TOOLTIP_HIDE_DELAY    = 100;
 
   // Settings Stuff
-
     var styleLabelTooltips = function () {
         $(".info").tooltip({
             placement: "top",
@@ -29,60 +22,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
 
     styleLabelTooltips();
 
-    var nodeColoring = nodeColoringController;
-    uploadState.nodeColoring = nodeColoring;
-    nodeColoring.configureNodeColoringHandlers();
-    nodeColoring.initialize();
-
-    var linkDistanceSlider = new sliderObject(LINK_DIST_SLIDER_ID, LINK_DIST_VALUE, LINK_DIST_DEFAULT, false);
-    var chargeSlider = new sliderObject(CHARGE_SLIDER_ID, CHARGE_VALUE, CHARGE_DEFAULT, false);
-    var sliders = new sliderGroupController([chargeSlider, linkDistanceSlider]);
-    uploadState.sliders = sliders;
-    sliders.setSliderHandlers();
-    sliders.updateValues();
-    sliders.configureSliderControllers();
-
-    var lockForce = function (disable) {
-        $("#linkDistInput").prop("disabled", disable);
-        $("#chargeInput").prop("disabled", disable);
-        $("#resetSlidersButton").prop("disabled", disable);
-        $("#lockSlidersButton").prop("checked", disable);
-    };
-
-    var toggleLayout = function (on, off) {
-        if (!$(on).prop("checked")) {
-            $(on).prop("checked", true);
-            $(off).prop("checked", false);
-            $(off + " span").removeClass("glyphicon-ok");
-            $(on + " span").addClass("glyphicon-ok");
-            if (on === "#gridLayout") {
-                lockForce(true);
-                $("#lockSlidersMenu").parent().addClass("disabled");
-                $("#resetSlidersMenu").parent().addClass("disabled");
-                $("#link-distance").parent().addClass("disabled");
-                $("#charge").parent().addClass("disabled");
-            } else {
-                lockForce(false);
-                $("#lockSlidersMenu").parent().removeClass("disabled");
-                $("#resetSlidersMenu").parent().removeClass("disabled");
-                $("#link-distance").parent().removeClass("disabled");
-                $("#charge").parent().removeClass("disabled");
-            }
-            if (!$(on).hasClass("called")) {
-                $("#gridLayoutButton").trigger("click");
-            }
-        }
-    };
-
-    $("#gridLayout").on("click", function () {
-        toggleLayout("#gridLayout", "#forceGraph");
-    });
-
-    $("#forceGraph").on("click", function () {
-        toggleLayout("#forceGraph", "#gridLayout");
-    });
-
-    $("#printGraph").on("click", function () {
+    $("#printGraph").click( function () {
         if (!$(".startDisabled").hasClass("disabled")) {
             window.print();
         }
@@ -152,6 +92,7 @@ export const upload = function (sliderObject, sliderGroupController, drawGraph, 
         };
     };
 
+    $("#exportAsExcelWkbk").click(performExport("export-to-excel", "xlsx", "unweighted"));
     $("#exportAsUnweightedSif").click(performExport("export-to-sif", "sif", "unweighted"));
     $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));

@@ -1,3 +1,4 @@
+
 a {
   color: #16693f;
 }
@@ -7,18 +8,66 @@ a:hover {
 }
 
 body {
-  font-family: Georgia, serif;
-  width: 1400px;
+  font-family: 'Georgia', serif;
+	margin: 0;
+	background-color: #FFFFFF;
+	min-width: 1300px;
+
 }
 
 iframe {
   border:none;
-  width: 100%;
-  z-index: 1;
 }
+
 
 sup {
   line-height: 2;
+}
+
+
+#gene-name {
+  text-align: left;
+
+}
+#gene-species {
+  font-style: italic;
+  text-align: left;
+}
+
+#iframeHeader {
+  height: 118px;
+  box-sizing: content-box;
+  min-width: 100%;
+}
+
+#iframeMenu {
+  position: absolute;
+  min-height: 450px;
+  min-width: 160px;
+}
+
+#iframeFooter {
+  width: 100%;
+	display: block;
+}
+
+#mainContent {
+  left: 0;
+  right: 0;
+  margin: 20px 0px 0px 209px;
+  padding: 5px 5px 5px 5px;
+}
+
+#pageContent {
+  padding: 0px 5px 5px 10px;
+  margin-right: 8em;
+}
+
+#pageHead {
+  margin-top: 20px;
+  margin-bottom: 25px;
+  font-size: 25px;
+  min-height: 78px;
 }
 
 .btn {
@@ -47,11 +96,10 @@ sup {
 }
 
 .card {
-  max-width: 90%;
   margin-bottom: 5px;
 }
 
-.card-header{
+.card-header {
   text-decoration: underline;
   padding: 7px 15px;
 }
@@ -74,6 +122,18 @@ sup {
   color:black;
 }
 
+.container-fluid {
+  padding-left: 0px;
+}
+
+.col {
+  padding: 0px;
+}
+
+.col-12 {
+  padding: 0px;
+}
+
 .database-link {
   color:  #16693f;
   font-weight: 700;
@@ -86,6 +146,10 @@ sup {
 .jumbotron {
   background-color: white;
   padding-bottom: 0px !important;
+}
+
+.row {
+  margin: 0px;
 }
 
 .sequenceLogo {
@@ -114,23 +178,4 @@ sup {
 
 .violet {
   color: #691640;
-}
-
-#gene-species {
-  font-style: italic;
-  text-align:right;
-}
-
-#iframeMenu {
-  height: 100%;
-  position: absolute;
-}
-
-#mainPage {
-  z-index: 0;
-  min-height: 500px;
-}
-
-#pageHead {
-  margin: 15px;
 }

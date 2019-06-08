@@ -38,9 +38,15 @@ const uploadHandler = (uploadRoute, uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
         const filename = submittedFilename($upload);
-        const formData = createFileForm($upload);
-        uploader(uploadRoute, filename, formData);
-        uploadEpilogue(event);
+        if ($upload[0].files[0].size < 2000000) {
+            const formData = createFileForm($upload);
+            uploader(uploadRoute, filename, formData);
+            uploadEpilogue(event);
+        } else {
+            let errorString = "The file uploaded is too large. Please try again with a file smaller than 1 MB.";
+            $("#error").html(errorString);
+            $("#errorModal").modal("show");
+        }
     };
 };
 
@@ -80,7 +86,6 @@ export const setupLoadAndImportHandlers = grnState => {
             crossDomain: true
         }) : $.getJSON(fullUrl)).done((network, textStatus, jqXhr) => {
             // Display the network in the console
-            console.log(network);
             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
             grnState.network = network;
 

@@ -1,6 +1,15 @@
 import { max } from "d3-array";
 import {
   SHOW_WEIGHTS_MOUSEOVER,
+  LINK_DIST_SLIDER_SIDEBAR,
+  LINK_DIST_VALUE,
+  LINK_DIST_DEFAULT_VALUE,
+  CHARGE_SLIDER_SIDEBAR,
+  CHARGE_VALUE,
+  CHARGE_DEFAULT_VALUE,
+  DEFAULT_MAX_LOG_FOLD_CHANGE,
+  DEFAULT_ZOOM_VALUE,
+  FORCE_GRAPH
 } from "./constants";
 let currentNetwork = null;
 
@@ -30,13 +39,19 @@ const annotateLinks = network => {
     });
 };
 
+const genePageData = () => {
+
+    // set to be a function for when data is read from .xml
+    return {
+        species: "Saccharomyces_cerevisiae",
+        taxon: "559292"
+    };
+};
+
 export const grnState = {
     name: null,
-
+    simulation: undefined,
     newNetwork: false,
-
-    normalizationMax: null,
-    resetNormalizationMax: null,
 
     get network () {
         return currentNetwork;
@@ -49,10 +64,61 @@ export const grnState = {
         this.newNetwork = true;
     },
 
+// Edge Display Parameters
+    normalizationMax: null,
+    resetNormalizationMax: null,
     edgeWeightDisplayOption: SHOW_WEIGHTS_MOUSEOVER,
     colorOptimal: true,
     grayEdgeThreshold: 5,
     dashedLine: false,
 
     annotateLinks: () => annotateLinks(currentNetwork),
+
+// Zoom Parameter
+    zoomValue: DEFAULT_ZOOM_VALUE,
+
+// Node Coloring
+    nodeColoring: {
+        showMenu: false,
+        nodeColoringEnabled: true,
+        logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
+        logFoldChangeUpdateTriggered: false,
+        averageTopDataset: true,
+        averageBottomDataset: true,
+        topDataset: undefined,
+        bottomDataset: undefined,
+        lastDataset: null,
+        bottomDataSameAsTop: true,
+        nodeColoringOptions: [],
+    },
+
+
+// Gene Page data
+    species: genePageData().species,
+    taxon: genePageData().taxon,
+
+// Slider Parameters
+    slidersLocked: false,
+    showUndoReset: false,
+    linkDistanceSlider: {
+        sliderId: LINK_DIST_SLIDER_SIDEBAR,
+        valueId: LINK_DIST_VALUE,
+        defaultVal: LINK_DIST_DEFAULT_VALUE,
+        currentVal: LINK_DIST_DEFAULT_VALUE,
+        backup: LINK_DIST_DEFAULT_VALUE,
+        needsAppendedZeros: false,
+        forceChanged: false,
+    },
+    chargeSlider: {
+        sliderId: CHARGE_SLIDER_SIDEBAR,
+        valueId: CHARGE_VALUE,
+        defaultVal: CHARGE_DEFAULT_VALUE,
+        currentVal: CHARGE_DEFAULT_VALUE,
+        backup: CHARGE_DEFAULT_VALUE,
+        needsAppendedZeros: false,
+        forceChanged: false,
+    },
+
+// Graph Layout Parameter
+    graphLayout: FORCE_GRAPH
 };
