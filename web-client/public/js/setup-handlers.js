@@ -274,4 +274,38 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    // Allow text-selection for input elements embedded within menu items.
+    //
+    // Partial thank you:
+    //   https://stackoverflow.com/questions/6848140/how-do-i-prevent-drag-on-a-child-but-allow-drag-on-the-parent
+    //
+    // We use function syntax so that internal `this` can be used.
+    $(".dropdown input.keepopen").parent().css({
+        // Because this rule affects _parents_, it can’t be applied via static CSS.
+        'user-select': "none"
+    }).attr({
+        draggable: false
+    });
+
+    // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
+    // https://stackoverflow.com/a/27759926
+    $(".dropdown").on({
+        "click": function (event) {
+            if ($(event.target).hasClass("keepopen")) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+
+        "mouseup": function (event) {
+            if ($(event.target).find(".keepopen").length > 0) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+
+        "hide.bs.dropdown": function () {
+            var hide = $(this).data("closable");
+            $(this).data("closable", true);
+            return hide;
+        }
+    });
 };
