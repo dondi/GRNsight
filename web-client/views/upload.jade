@@ -125,7 +125,7 @@ html
                     | &nbsp; Restrict Graph to Viewport
                 li(class='divider')
                 li(class='startDisabled disabled')
-                  a(href='#' id='zoom')
+                  a(href='#' id='zoom' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Zoom (1 - 200%) &nbsp;
                     input(type='number' id='zoomInput' min='1' max='200' value='100' class='zoom keepopen' aria-describedby='basic-addon1' disabled="true")
@@ -156,12 +156,14 @@ html
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
+                li(class='divider')
                 li
-                  a(href='#' id='link-distance')
+                  a(href='#' id='link-distance' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Link Distance (1 - 1000) &nbsp;
                     input(type='number' id='link-distance-menu' class='keepopen' value='500' aria-describedby='basic-addon1')
-                  a(href='#' id='charge')
+                li
+                  a(href='#' id='charge' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Charge (-2000 - 0) &nbsp;
                     input(type='number' id='charge-menu' class='keepopen' value='-50' aria-describedby='basic-addon1')
@@ -196,7 +198,7 @@ html
                     | &nbsp; Average Replicate Values for Bottom Dataset
                 li(class='divider')
                 li(class='node-coloring-menu disabled')
-                  a(href='#' class='nodeOptions')
+                  a(href='#' class='nodeOptions with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
                     input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
@@ -227,20 +229,21 @@ html
                     | &nbsp; Never Show Edge Weights
                 li(class='divider')
                 li(class='weightedGraphOptionsMenu disabled')
-                  a(href='#')
+                  a(href='#' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Edge Weight Normalization Factor (0.0001 - 1000) &nbsp;
                     input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' aria-describedby='basic-addon1')
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='reset-normalization-factor-menu')
                     span(class='glyphicon invisible')
                     | &nbsp; Reset Edge Weight Normalization Factor
                 li(class='divider')
                 li(class='weightedGraphOptionsMenu disabled')
-                  a(href='#')
+                  a(href='#' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Gray Edge Threshold (0 - 100%) &nbsp;
                     input(type='number' id='gray-edge-threshold-menu' class='keepopen' value='5' aria-describedby='basic-addon1')
-                    | &nbsp; %
+                    | %
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='grey-edges-dashed-menu')
                     span(class='glyphicon')

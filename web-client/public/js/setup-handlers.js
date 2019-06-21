@@ -280,10 +280,7 @@ export const setupHandlers = grnState => {
     //   https://stackoverflow.com/questions/6848140/how-do-i-prevent-drag-on-a-child-but-allow-drag-on-the-parent
     //
     // We use function syntax so that internal `this` can be used.
-    $(".dropdown input.keepopen").parent().css({
-        // Because this rule affects _parents_, it can’t be applied via static CSS.
-        userSelect: "none"
-    }).attr({
+    $(".dropdown input.keepopen").parent().attr({
         draggable: false
     });
 

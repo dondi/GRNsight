@@ -203,6 +203,14 @@ nav.navbar.navbar-default
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
 
+.dropdown a.with-input
+    display:flex
+    align-items:center
+    user-select:none
+
+.dropdown a.with-input>*:last-child
+    margin-left:auto
+
 .panel-body
   overflow: scroll;
 
@@ -243,7 +251,6 @@ path.mousezone
 
 .logFoldChangeMaxValue
     width: 50px;
-    margin-bottom: 8px;
 
 .normalization-form
     width: 80px;
@@ -274,6 +281,9 @@ path.mousezone
 #logFoldChangeMaxValueRange
     margin-bottom: 10px;
     display: inline-block;
+
+#gray-edge-threshold-menu
+    margin-right:0.5ex
 
 .menu-subheader
     padding-left: 12px;
