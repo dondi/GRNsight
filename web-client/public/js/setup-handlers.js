@@ -282,7 +282,7 @@ export const setupHandlers = grnState => {
     // We use function syntax so that internal `this` can be used.
     $(".dropdown input.keepopen").parent().css({
         // Because this rule affects _parents_, it can’t be applied via static CSS.
-        'user-select': "none"
+        userSelect: "none"
     }).attr({
         draggable: false
     });
