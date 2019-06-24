@@ -3,6 +3,7 @@ import { grnState } from "./grnstate";
 import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
+    VIEWPORT_FIT,
     ZOOM_CONTROL,
     ZOOM_INPUT,
     ZOOM_PERCENT,
@@ -346,7 +347,7 @@ export var drawGraph = function (network) {
       // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
       // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
-            .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
+            .attr("height", $(".grnsight-container").hasClass(VIEWPORT_FIT) ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
     });
@@ -389,8 +390,8 @@ export var drawGraph = function (network) {
         restrictGraphToViewport(fixed);
     });
 
-    $(window).on("resize", function () {
-        if ($container.hasClass("containerFit")) {
+    $(window.top).on("resize", function () {
+        if ($container.hasClass(VIEWPORT_FIT)) {
             $(".boundBoxSize").trigger("click");
         }
     });

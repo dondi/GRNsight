@@ -1,19 +1,18 @@
-/* eslint no-unused-vars: [2, {"varsIgnorePattern": "grnTest|enableScroll|manualZoom"}] */
+import { VIEWPORT_FIT } from "./constants";
+
 export const container = function () {
-    var grnTest = $(".grnTest");
     var container = $(".grnsight-container");
-    var enableScroll = $("#enableScroll");
-    var pageWidth = $(window).width();
+    var pageWidth = $(window.top).width();
 
-    var WIDTH_OFFSET = 250;
-    var HEIGHT_OFFSET = 53;
+    // These values are bound to the layout dimensions of the GRNsight website.
+    const WIDTH_OFFSET = 250;
+    const HEIGHT_OFFSET = 53;
 
-    var MEDIUM_PAGE_WIDTH = 1500;
-    var LARGE_PAGE_WIDTH = 2200;
+    const MEDIUM_PAGE_WIDTH = 1500;
+    const LARGE_PAGE_WIDTH = 2200;
 
-
-    var windowWidth = $(window).width() - WIDTH_OFFSET;
-    var windowHeight = $(window).height() - HEIGHT_OFFSET;
+    const fitWindowWidth = () => $(window.top).width() - WIDTH_OFFSET;
+    const fitWindowHeight = () => $(window.top).height() - HEIGHT_OFFSET;
 
     if (pageWidth < MEDIUM_PAGE_WIDTH) {
         $("#boundBoxS").prop("checked", true);
@@ -105,17 +104,19 @@ export const container = function () {
         var grnsightContainerClass = "grnsight-container " + currentValue;
         if (!container.hasClass(currentValue)) {
             container.attr("class", grnsightContainerClass);
-            container.css(currentValue === "containerFit" ? {width: windowWidth, height: windowHeight} :
-            {width: "", height: ""});
+            container.css({
+                width: currentValue === VIEWPORT_FIT ? fitWindowWidth() : "",
+                height: currentValue === VIEWPORT_FIT ? fitWindowHeight() : ""
+            })
         }
     });
 
-    $(window).on("resize", function () {
-        windowWidth = $(window).width() - WIDTH_OFFSET;
-        windowHeight = $(window).height() - HEIGHT_OFFSET;
-        if (container.hasClass("containerFit")) {
-            container.css({width: windowWidth, height: windowHeight});
+    $(window.top).on("resize", function () {
+        if (container.hasClass(VIEWPORT_FIT)) {
+            container.css({
+                width: fitWindowWidth(),
+                height: fitWindowHeight()
+            });
         }
     });
-
 };

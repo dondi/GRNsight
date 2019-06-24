@@ -110,3 +110,5 @@ export const ZOOM_CONTROL = ".zoom";
 export const ZOOM_SLIDER = "#zoomSlider";
 export const ZOOM_INPUT = "#zoomInput";
 export const ZOOM_PERCENT = "#zoomPercent";
+
+export const VIEWPORT_FIT = "containerFit";
