@@ -30,5 +30,5 @@ document.querySelector("iframe.embedded-demo").addEventListener("message", event
 });
 
 window.addEventListener("resize", () => sendDimensions(
-  document.querySelector("iframe.embedded-demo"), "https://grnsight.cs.lmu.edu"
+  document.querySelector("iframe.embedded-demo").contentWindow, "https://grnsight.cs.lmu.edu"
 ));
