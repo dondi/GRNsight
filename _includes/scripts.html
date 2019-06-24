@@ -39,6 +39,9 @@
     {% if page.title == 'Beta' %}
         <script src="{{ site.baseurl }}/assets/js/iframeResizer.min.js"></script>
         <script>
-            iFrameResize({ log: true }, ".embedded-demo");
+            iFrameResize({
+                log: true,
+                checkOrigin: ["https://dondi.github.io", "https://grnsight.cs.lmu.edu"]
+            }, ".embedded-demo");
         </script>
     {% endif %}
