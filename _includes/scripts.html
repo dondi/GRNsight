@@ -12,6 +12,9 @@
         <script src="{{ site.baseurl }}/assets/js/main.js"></script>
         <script src="{{ site.baseurl }}/assets/js/ga-report.js"></script>
     {% if page.title == 'Beta' or page.title == 'Home' %}
+        <!-- Placeholder for whatever the final iframe management solution will be. -->
+    {% endif %}
+    {% if page.title == 'Home' %}
         <script>
             var $window = $(window);
             // https://stackoverflow.com/questions/20125340/can-i-use-jquery-to-resize-an-iframe-to-fill-the-remaining-window-space
@@ -31,5 +34,11 @@
                     return display + HEIGHT_PADDING;
                 });
             });
+        </script>
+    {% endif %}
+    {% if page.title == 'Beta' %}
+        <script src="{{ site.baseurl }}/assets/js/iframeResizer.min.js"></script>
+        <script>
+            iFrameResize({ log: true }, ".embedded-demo");
         </script>
     {% endif %}
