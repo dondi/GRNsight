@@ -145,7 +145,7 @@ export const container = function () {
             if (currentValue === VIEWPORT_FIT) {
                 requestWindowDimensions();
             } else {
-                container.css({ width: "", height: "" })
+                container.css({ width: "", height: "" });
             }
         }
     });
