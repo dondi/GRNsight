@@ -11,8 +11,46 @@ export const container = function () {
     const MEDIUM_PAGE_WIDTH = 1500;
     const LARGE_PAGE_WIDTH = 2200;
 
-    const fitWindowWidth = () => $(window.top).width() - WIDTH_OFFSET;
-    const fitWindowHeight = () => $(window.top).height() - HEIGHT_OFFSET;
+    const HOST_SITE = "https://dondi.github.io";
+
+    const fitContainer = dimensions => {
+        if (container.hasClass(VIEWPORT_FIT)) {
+            container.css({
+                width: dimensions.width - WIDTH_OFFSET,
+                height: dimensions.height - HEIGHT_OFFSET
+            });
+        }
+    };
+
+    const fitContainerToWindow = () => {
+        fitContainer({
+            width: $(window).width(),
+            height: $(window).height()
+        });
+    };
+
+    const requestWindowDimensions = () => {
+        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
+        if (window === window.top) {
+            fitContainerToWindow();
+        } else {
+            window.top.postMessage("dimensions", HOST_SITE);
+        }
+    };
+
+    if (window === window.top) {
+        $(window).on("resize", fitContainerToWindow);
+    } else {
+        window.addEventListener("message", event => {
+            if (event.origin.indexOf(HOST_SITE) !== 0) {
+                return;
+            }
+
+            fitContainer(event.data);
+        });
+    }
+
+    requestWindowDimensions();
 
     if (pageWidth < MEDIUM_PAGE_WIDTH) {
         $("#boundBoxS").prop("checked", true);
@@ -101,22 +139,14 @@ export const container = function () {
 
     $(".boundBoxSize").on("click", function () {
         var currentValue = $(this).val();
-        var grnsightContainerClass = "grnsight-container " + currentValue;
+        var grnsightContainerClass = `grnsight-container ${currentValue}`;
         if (!container.hasClass(currentValue)) {
             container.attr("class", grnsightContainerClass);
-            container.css({
-                width: currentValue === VIEWPORT_FIT ? fitWindowWidth() : "",
-                height: currentValue === VIEWPORT_FIT ? fitWindowHeight() : ""
-            })
-        }
-    });
-
-    $(window.top).on("resize", function () {
-        if (container.hasClass(VIEWPORT_FIT)) {
-            container.css({
-                width: fitWindowWidth(),
-                height: fitWindowHeight()
-            });
+            if (currentValue === VIEWPORT_FIT) {
+                requestWindowDimensions();
+            } else {
+                container.css({ width: "", height: "" })
+            }
         }
     });
 };

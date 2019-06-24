@@ -14,6 +14,10 @@ iFrameResize({
   minWidth: 1081  // Based on minimum width page body and title elements.
 }, "iframe.embedded-demo");
 
+const sendDimensions = (destination, origin) => destination.postMessage(
+  { width: window.innerWidth, height: window.innerHeight }, origin
+);
+
 document.querySelector("iframe.embedded-demo").addEventListener("message", event => {
   if (event.origin.indexOf("https://grnsight.cs.lmu.edu") !== 0) {
     // Ignore any message that did not originate from the GRNsight web client server.
@@ -21,9 +25,10 @@ document.querySelector("iframe.embedded-demo").addEventListener("message", event
   }
 
   if (event.data === "dimensions") {
-    event.source.postMessage({
-      width: window.innerWidth,
-      height: window.innerHeight
-    }, event.origin)
+    sendDimensions(event.source, event.origin);
   }
 });
+
+window.addEventListener("resize", () => sendDimensions(
+  document.querySelector("iframe.embedded-demo"), "https://grnsight.cs.lmu.edu"
+));
