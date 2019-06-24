@@ -38,13 +38,5 @@
     {% endif %}
     {% if page.title == 'Beta' %}
         <script src="{{ site.baseurl }}/assets/js/iframeResizer.min.js"></script>
-        <script>
-            iFrameResize({
-                checkOrigin: ["https://dondi.github.io", "https://grnsight.cs.lmu.edu"],
-                widthCalculationMethod: "taggedElement",
-                heightCalculationMethod: "taggedElement",
-                sizeWidth: true,
-                minWidth: 1081  // Based on minimum width page body and title elements.
-            }, ".embedded-demo");
-        </script>
+        <script src="https://grnsight.cs.lmu.edu/beta/client/js/iframe-coordination.js"></script>
     {% endif %}
