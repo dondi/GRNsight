@@ -14,7 +14,7 @@
     {% if page.title == 'Beta' or page.title == 'Home' %}
         <!-- Placeholder for whatever the final iframe management solution will be. -->
     {% endif %}
-    {% if page.title == 'Home' %}
+    {% if page.title == 'Home' or page.title == 'Beta' %}
         <script>
             var $window = $(window);
             // https://stackoverflow.com/questions/20125340/can-i-use-jquery-to-resize-an-iframe-to-fill-the-remaining-window-space
@@ -37,6 +37,8 @@
         </script>
     {% endif %}
     {% if page.title == 'Beta' %}
+        <!-- Work in progress.
         <script src="{{ site.baseurl }}/assets/js/iframeResizer.min.js"></script>
         <script src="https://grnsight.cs.lmu.edu/beta/client/js/iframe-coordination.js"></script>
+        -->
     {% endif %}
