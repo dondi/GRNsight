@@ -40,9 +40,10 @@
         <script src="{{ site.baseurl }}/assets/js/iframeResizer.min.js"></script>
         <script>
             iFrameResize({
-                log: true,
                 checkOrigin: ["https://dondi.github.io", "https://grnsight.cs.lmu.edu"],
-                heightCalculationMethod: "taggedElement"
+                heightCalculationMethod: "taggedElement",
+                sizeWidth: true,
+                minWidth: 1081  // Based on minimum width page body and title elements.
             }, ".embedded-demo");
         </script>
     {% endif %}
