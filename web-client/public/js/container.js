@@ -2,7 +2,7 @@ import { VIEWPORT_FIT } from "./constants";
 
 export const container = function () {
     var container = $(".grnsight-container");
-    var pageWidth = $(window.top).width();
+    var pageWidth = $(window).width();
 
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;

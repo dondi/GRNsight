@@ -390,7 +390,7 @@ export var drawGraph = function (network) {
         restrictGraphToViewport(fixed);
     });
 
-    $(window.top).on("resize", function () {
+    $(window).on("resize", function () {
         if ($container.hasClass(VIEWPORT_FIT)) {
             $(".boundBoxSize").trigger("click");
         }
