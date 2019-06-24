@@ -23,19 +23,10 @@ const LARGE_HEIGHT = 1080 + HEIGHT_OFFSET;
 
 const sendDimensions = (destination, origin) => {
     const iframeOffset = $("iframe.embedded-demo").offset();
-    const displayWidth = $(window).width() - iframeOffset.left;
-
-    let displayHeight = $(window).height() - iframeOffset.top;
-    if (displayHeight < SMALL_HEIGHT) {
-        displayHeight = SMALL_HEIGHT;
-    } else if (displayHeight > SMALL_HEIGHT && displayHeight < LARGE_HEIGHT) {
-        displayHeight = MEDIUM_HEIGHT;
-    }
-
     destination.postMessage(
         {
-            width: displayWidth,
-            height: displayHeight + HEIGHT_PADDING
+            width: $(window).width() - iframeOffset.left,
+            height: $(window).height() - iframeOffset.top
         },
 
         origin
