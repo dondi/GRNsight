@@ -41,7 +41,8 @@
         <script>
             iFrameResize({
                 log: true,
-                checkOrigin: ["https://dondi.github.io", "https://grnsight.cs.lmu.edu"]
+                checkOrigin: ["https://dondi.github.io", "https://grnsight.cs.lmu.edu"],
+                heightCalculationMethod: "taggedElement"
             }, ".embedded-demo");
         </script>
     {% endif %}
