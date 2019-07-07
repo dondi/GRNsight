@@ -37,7 +37,7 @@ const sendDimensions = (destination, origin) => {
   );
 };
 
-document.querySelector("iframe.embedded-demo").addEventListener("message", event => {
+window.addEventListener("message", event => {
   if (event.origin.indexOf("https://grnsight.cs.lmu.edu") !== 0) {
     // Ignore any message that did not originate from the GRNsight web client server.
     return;
