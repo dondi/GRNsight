@@ -27,12 +27,12 @@ import {
 /* eslint-disable no-unused-vars */
 
 /**
- * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable updateFunction
- * being set when needed.
+ * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable
+ * updateFunction being set when needed.
  */
 let mutationCallback = null;
 const resizeObserver = new MutationObserver((mutationsList, observer) => {
-    if (typeof(mutationCallback) === 'function') {
+    if (typeof(mutationCallback) === "function") {
         mutationCallback(mutationsList, observer);
     }
 });
@@ -343,7 +343,7 @@ export var drawGraph = function (network) {
         updateAppBasedOnZoomValue();
     }
 
-    const adjustGraphSize = (mutationsList, observer) => {
+    const adjustGraphSize = () => {
         var newWidth = $container.width();
         var newHeight = $container.height();
 
