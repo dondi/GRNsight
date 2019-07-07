@@ -322,12 +322,12 @@ html
             select(id="dataset-top")
             form
               input(id='averageDataTop', type='checkbox' checked)
-              label(for='averageDataTop' style='font-weight:normal') Average Replicate Values
+              label(for='averageDataTop' class='sideLabel') Average Replicate Values
             label(class='info', data-toggle='tooltip') Bottom Dataset
             select(id="dataset-bottom")
             form
               input(id='averageDataBottom', type='checkbox' checked)
-              label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
+              label(for='averageDataBottom' class='sideLabel') Average Replicate Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
             p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
             input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
@@ -344,7 +344,7 @@ html
             input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
           form
             input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
-            label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
+            label(for='lockSlidersButton' class='sideLabel') Lock Force Graph Parameters
           form
             input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
             input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
@@ -352,34 +352,34 @@ html
         div(class='input-group')
           form
             input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
-            label(for='viewport' style='font-weight:normal' class='sideLabel') Restrict graph to viewport
+            label(for='viewport' class='sideLabel') Restrict graph to viewport
             br
             p(class='sideHeader') Viewport Size
             input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
-            label(for='boundBoxS' style='font-weight:normal' class='sideLabel')
+            label(for='boundBoxS' class='sideLabel')
               | Small #[small (1104 X 648 pixels)]
             br
             input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
-            label(for='boundBoxM' style='font-weight:normal' class='sideLabel')
+            label(for='boundBoxM' class='sideLabel')
               | Medium #[small (1414 X 840 pixels)]
             br
             input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
-            label(for='boundBoxL' style='font-weight:normal' class='sideLabel')
+            label(for='boundBoxL' class='sideLabel')
               | Large #[small (1920 X 1080 pixels)]
             br
             input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
-            label(for='boundBoxFit' style='font-weight:normal' class='sideLabel') Fit to window
+            label(for='boundBoxFit' class='sideLabel') Fit to window
             br
           form(class='weightedGraphOptions hidden')
             p(class='sideHeader') Hide/Show Edge Weights
             input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-            label(for='weightsMouseOverSide' style='font-weight:normal' class='sideLabel') Show With Mouse Over
+            label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
             <br>
             input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-            label(for='weightsAlwaysSide' style='font-weight:normal' class='sideLabel') Always Show Edge Weights
+            label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
             <br>
             input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-            label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
+            label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
           div(class='weightedGraphOptions hidden')
             p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
             p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
@@ -394,7 +394,7 @@ html
             input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
             <br />
             input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-            label(for='dashedGrayLineButton' style='font-weight:normal') &nbsp; Show Gray Edges as Dashed
+            label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
