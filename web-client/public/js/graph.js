@@ -26,6 +26,17 @@ import {
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
 
+/**
+ * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable updateFunction
+ * being set when needed.
+ */
+let mutationCallback = null;
+const resizeObserver = new MutationObserver((mutationsList, observer) => {
+    if (typeof(mutationCallback) === 'function') {
+        mutationCallback(mutationsList, observer);
+    }
+});
+
 export var updaters = {
     setNodesToGrid: () => {},
     setNodesToForceGraph: () => {},
@@ -332,7 +343,7 @@ export var drawGraph = function (network) {
         updateAppBasedOnZoomValue();
     }
 
-    d3.selectAll(".boundBoxSize").on("click", function () {
+    const adjustGraphSize = (mutationsList, observer) => {
         var newWidth = $container.width();
         var newHeight = $container.height();
 
@@ -344,13 +355,17 @@ export var drawGraph = function (network) {
             height = newHeight;
         }
 
-      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
-      // Is inconsistent, but I'm tired of fighting with it...
+        // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+        // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
             .attr("height", $(".grnsight-container").hasClass(VIEWPORT_FIT) ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
-    });
+    };
+
+    mutationCallback = adjustGraphSize;
+    resizeObserver.disconnect();
+    resizeObserver.observe($container.get(0), { attributes: true });
 
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
@@ -388,12 +403,6 @@ export var drawGraph = function (network) {
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
-    });
-
-    $(window).on("resize", function () {
-        if ($container.hasClass(VIEWPORT_FIT)) {
-            $(".boundBoxSize").trigger("click");
-        }
     });
 
     function center () {
