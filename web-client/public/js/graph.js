@@ -1040,7 +1040,6 @@ export var drawGraph = function (network) {
         var width = 200;
         var height = 10;
         var textYOffset = 10;
-        var increment = 0.1;
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
@@ -1049,6 +1048,7 @@ export var drawGraph = function (network) {
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
+        const increment = Math.abs(logFoldChangeMaxValue) / 1000;  // Guarantee 1000 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
 
         var coloring = svg.selectAll(".node-coloring-legend")
