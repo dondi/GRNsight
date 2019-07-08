@@ -1,3 +1,4 @@
+import { updaters } from "./graph";
 import { updateApp } from "./update-app";
 
 import {
@@ -57,7 +58,16 @@ export const setupHandlers = grnState => {
 
     // Grid buttons
     const setGraphLayout = layout => {
+        const different = grnState.graphLayout !== layout;
         grnState.graphLayout = layout;
+        if (different) {
+            if (grnState.graphLayout === FORCE_GRAPH) {
+                updaters.setNodesToForceGraph();
+            } else if (grnState.graphLayout === GRID_LAYOUT) {
+                updaters.setNodesToGrid();
+            }
+        }
+
         updateApp(grnState);
     };
 
