@@ -326,6 +326,7 @@ const resetDatasetDropdownMenus = (network) => {
             </li>`;
     };
 
+    grnState.nodeColoring.nodeColoringOptions = [];
     for (var property in network.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             grnState.nodeColoring.nodeColoringOptions.push({value: property});
