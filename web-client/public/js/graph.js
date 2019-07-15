@@ -3,10 +3,12 @@ import { grnState } from "./grnstate";
 import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
-    ZOOM_CONTROL,
+    VIEWPORT_FIT,
     ZOOM_INPUT,
     ZOOM_PERCENT,
-    ZOOM_SLIDER
+    ZOOM_SLIDER,
+    ZOOM_DISPLAY_MINIMUM_VALUE,
+    ZOOM_DISPLAY_MAXIMUM_VALUE
 } from "./constants";
 
 /* globals d3 */
@@ -24,6 +26,17 @@ import {
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
+
+/**
+ * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable
+ * updateFunction being set when needed.
+ */
+let mutationCallback = null;
+const resizeObserver = new MutationObserver((mutationsList, observer) => {
+    if (typeof(mutationCallback) === "function") {
+        mutationCallback(mutationsList, observer);
+    }
+});
 
 export var updaters = {
     setNodesToGrid: () => {},
@@ -48,8 +61,6 @@ export var drawGraph = function (network) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-    var zoomSliderScale = 1;
-
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
     var getNodeWidth = function (node) {
@@ -58,9 +69,29 @@ export var drawGraph = function (network) {
 
     var adaptive = !$("input[name='viewport']").prop("checked");
 
+    /**
+     * The *_SCALE values represent the actual zoom values used to transform the graph.
+     * The *_DISPLAY values represent the value that is shown in the user interface.
+     *
+     * Separating these values allows for flexible configuration of what the user sees vs. the actual scale factor
+     * used in transformations. This "distortion" is done so that "actual size" or 100% can be shown as the midpoint
+     * on the zoom slider, even if the numeric ranges to the left and right of the midpoint are asymmetric (as they
+     * are here).
+     */
+    const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) => d3.scaleLinear()
+        .domain([domainMin, domainMax])
+        .range([rangeMin, rangeMax])
+        .clamp(true);
+
+    const MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM_VALUE;
+    const ADAPTIVE_MAX_DISPLAY = ZOOM_DISPLAY_MAXIMUM_VALUE;
+    const MIDDLE_DISPLAY = 100;
     const MIN_SCALE = 0.25;
     const ADAPTIVE_MAX_SCALE = 4;
     const MIDDLE_SCALE = 1;
+
+    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, MIDDLE_DISPLAY, MIN_SCALE, MIDDLE_SCALE);
+    const zoomScaleRight = createZoomScale(MIDDLE_DISPLAY, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ADAPTIVE_MAX_SCALE);
 
     // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
@@ -172,7 +203,7 @@ export var drawGraph = function (network) {
     var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
 
     var zoom = d3.zoom()
-        .scaleExtent([1 / 2, 4])
+        .scaleExtent([MIN_SCALE, ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
     svg.style("pointer-events", "all").call(zoomDrag);
@@ -212,114 +243,78 @@ export var drawGraph = function (network) {
         zoom.scaleTo(container, zoomScale);
     };
 
+    // See setupZoomElements below to see how these are initialized. They are declared here because
+    // updateAppBasedOnZoomValue uses them (lexical positioning is chosen here for better context).
+    let sliderMidpoint;
+    let zoomScaleSliderLeft;
+    let zoomScaleSliderRight;
+
     const updateAppBasedOnZoomValue = () => {
-        var currentPoint = grnState.zoomValue * 100;
-        var equivalentScale;
-        if (adaptive || (!adaptive && grnState.zoomValue <= ADAPTIVE_MAX_SCALE)) {
-            if (currentPoint <= leftPoints) {
-                equivalentScale = MIN_SCALE;
-                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
-            } else {
-                currentPoint = currentPoint - leftPoints;
-                equivalentScale = MIDDLE_SCALE;
-                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
-            }
-            zoomSliderScale = equivalentScale;
-            setGraphZoom(equivalentScale);
+        const zoomDisplay = grnState.zoomValue;
+        if (adaptive || (!adaptive && grnState.zoomValue < MIDDLE_DISPLAY)) {
+            setGraphZoom((zoomDisplay <= MIDDLE_DISPLAY ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
         } else {
-          // Prohibits zooming past 100% if (!adaptive && grnState.zoomValue >= ADAPTIVE_MAX_SCALE)
-            grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= MIDDLE_DISPLAY)
+            grnState.zoomValue = MIDDLE_DISPLAY;
             setGraphZoom(MIDDLE_SCALE);
         }
 
-        $(ZOOM_CONTROL).val(grnState.zoomValue);
+        const finalDisplay = grnState.zoomValue;
+        $(ZOOM_PERCENT).text(`${finalDisplay}%`);
 
-        let zoomAsPercent = Math.round(grnState.zoomValue / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE);
-        if (zoomAsPercent === 0) {
-            zoomAsPercent = MIDDLE_SCALE;
+        // Special handling for zoom input field: the user might be in the middle of typing a value that is
+        // _temporarily_ out of range (e.g., "1" while typing "100") and we don’t want to overwrite that.
+        // The special case can be detected if the input element currently has focus.
+        if (document.activeElement !== document.querySelector(ZOOM_INPUT)) {
+            $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        $(ZOOM_PERCENT).text(`${zoomAsPercent}%`);
-        $(ZOOM_INPUT).val(zoomAsPercent);
+        $(ZOOM_SLIDER).val((finalDisplay <= MIDDLE_DISPLAY ? zoomScaleSliderLeft : zoomScaleSliderRight)
+            .invert(finalDisplay));
     };
 
-    var leftPoints;
-    var rightPoints;
-    var scaleIncreasePerLeftPoint;
-    var scaleIncreasePerRightPoint;
-/*
-    We have to do some mapping so that the zoom slider appears as it should.
-    Zooming out sets the scale to a value between 0 and 1. Zooming in sets it
-    to a value between 1 and infinity. A scale of 0.25 to 5 on a zoom slider
-    without transformations will have 1 at the very far left. However, that's
-    an inaccurate way to represent what's actually happening. So this function
-    maps the scale from 0 to some x, with that x being calculated based on the
-    input scales.
-*/
-    var setupZoomSlider = function (minScale) {
-      // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
-      // So we'll just treat it as 0.
+    /**
+     * To eliminate coupling between how the zoom slider element is defined in markup and how zoom values are
+     * calculated and displayed, we define this function to read the zoom slider for its minimum, maximum, and
+     * midpoint. The slider’s minimum will be shown as MIN_DISPLAY, the slider’s maximum will be shown as
+     * ADAPTIVE_MAX_DISPLAY, and the slider’s midpoint will be shown as MIDDLE_DISPLAY.
+     *
+     * Elements showing minimum and maximum display values are also updated here so that they are consistent
+     * with these constants. This way, all zoom calculations are based on these constants, and changing these
+     * constants should be all that is needed to adjust displayed and actual zoom values.
+     */
+    var setupZoomSlider = () => {
+        const sliderMin = +$(ZOOM_SLIDER).attr("min");
+        const sliderMax = +$(ZOOM_SLIDER).attr("max");
+        sliderMidpoint = (sliderMin + sliderMax) / 2;
 
-        var maxScale = ADAPTIVE_MAX_SCALE;
+        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, MIDDLE_DISPLAY);
+        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, MIDDLE_DISPLAY, ADAPTIVE_MAX_DISPLAY);
 
-      // Each integer on the zoom is equivalent to 100 steps.
-        var NUMBER_POINTS_PER_INT = 100;
-
-      // Get the value that, if multiplied by the minScale value, would return 1. (ex: 0.25 * 4 = 1)
-      // This gives us the equivalent value of this minimum scale, should it be treated
-      // as a scale increase. This mostly allows us to treat this minimum scale as a non-decimal value,
-      // but it also provides a way to compare the total effect this minimum scale would have
-      // in a way that is easier to understand.
-        var minScaleReversed = 100 / (minScale * 100);
-
-      // Number of points required to display the minimum scale, now that's it's been transformed. These
-      // are the points that represent everything on the scale less than one.
-        leftPoints = minScaleReversed * NUMBER_POINTS_PER_INT;
-
-      // We want to end up with a total increase that, once we've gone through all the
-      // left points, produces 1 when added to minscale. So for scale 0.25 with 400
-      // left points, we need to know what we could add to 0.25 400 times to produce 1.
-      // We divide 0.75 by 400  to get that result.
-        scaleIncreasePerLeftPoint = (1 - minScale) / leftPoints;
-
-      // Points representing scales greater than 1.
-        rightPoints = maxScale * NUMBER_POINTS_PER_INT;
-
-      // For the same concept as above, we need to figure out what to add to 1 so
-      // so that we can end up with maxScale. Note that we start at 1 and not 0 because
-      // the scale is beginning at 1.
-        scaleIncreasePerRightPoint = (maxScale - MIDDLE_SCALE) / rightPoints;
-        var totalPoints = leftPoints + rightPoints;
-
-      // Returns the x that we're mapping to. Now we can set up the range slider.
-        var maxRangeValue = totalPoints / 100;
-
-        $(ZOOM_SLIDER).attr("min", 0);
-        $(ZOOM_SLIDER).attr("max", maxRangeValue);
+        // Reset the zoom value to the midpoint whenever we load a new network.
         if (grnState.newNetwork) {
-            grnState.zoomValue = 0.01 * leftPoints;
+            grnState.zoomValue = MIDDLE_DISPLAY;
         }
 
         updateAppBasedOnZoomValue();
     };
 
-    setupZoomSlider(MIN_SCALE);
-
-    var ZOOM_SLIDER_MAX_VAL = 8;
-    var ZOOM_RANGE = 200;
+    setupZoomSlider();
 
     var zoomInputValidator = function (value) {
-        return valueValidator(1, 200, value);
+        return valueValidator(MIN_DISPLAY, ADAPTIVE_MAX_DISPLAY, value);
     };
 
     $(ZOOM_INPUT).on("input", () => {
-        const zoomAsPercent = zoomInputValidator(+$(ZOOM_INPUT).val());
-        grnState.zoomValue = zoomAsPercent * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
         updateAppBasedOnZoomValue();
     });
 
     d3.select(ZOOM_SLIDER).on("input", function () {
-        grnState.zoomValue = +$(this).val();
+        const sliderValue = +$(this).val();
+        grnState.zoomValue = Math.floor(
+            (sliderValue <= sliderMidpoint ? zoomScaleSliderLeft : zoomScaleSliderRight)(sliderValue)
+        );
         updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
         manualZoom = true;
@@ -331,7 +326,7 @@ export var drawGraph = function (network) {
         updateAppBasedOnZoomValue();
     }
 
-    d3.selectAll(".boundBoxSize").on("click", function () {
+    const adjustGraphSize = () => {
         var newWidth = $container.width();
         var newHeight = $container.height();
 
@@ -343,13 +338,17 @@ export var drawGraph = function (network) {
             height = newHeight;
         }
 
-      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
-      // Is inconsistent, but I'm tired of fighting with it...
+        // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+        // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
-            .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
+            .attr("height", $(".grnsight-container").hasClass(VIEWPORT_FIT) ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
-    });
+    };
+
+    mutationCallback = adjustGraphSize;
+    resizeObserver.disconnect();
+    resizeObserver.observe($container.get(0), { attributes: true });
 
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
@@ -364,8 +363,8 @@ export var drawGraph = function (network) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
-            if (zoomSliderScale > 1) {
-                grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+            if (grnState.zoomValue > MIDDLE_DISPLAY) {
+                grnState.zoomValue = MIDDLE_DISPLAY;
                 updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
             }
@@ -387,12 +386,6 @@ export var drawGraph = function (network) {
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
-    });
-
-    $(window).on("resize", function () {
-        if ($container.hasClass("containerFit")) {
-            $(".boundBoxSize").trigger("click");
-        }
     });
 
     function center () {
@@ -1030,7 +1023,6 @@ export var drawGraph = function (network) {
         var width = 200;
         var height = 10;
         var textYOffset = 10;
-        var increment = 0.1;
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
@@ -1039,6 +1031,7 @@ export var drawGraph = function (network) {
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
+        const increment = Math.abs(logFoldChangeMaxValue) / 1000;  // Guarantee 1000 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
 
         var coloring = svg.selectAll(".node-coloring-legend")

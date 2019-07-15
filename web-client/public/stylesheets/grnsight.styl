@@ -1,8 +1,4 @@
 //CHANGE ME IF YOU WANT TO CHANGE CSS
-
-body
-  min-width: 1326px
-
 p
   margin: 0
 
@@ -137,6 +133,8 @@ nav.navbar.navbar-default
 
 .info
   font-size: 13px
+  margin-top: 8px
+  margin-bottom: 4px
 
 .forceVal
   font-size: 12px
@@ -203,6 +201,14 @@ nav.navbar.navbar-default
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
 
+.dropdown a.with-input
+    display:flex
+    align-items:center
+    user-select:none
+
+.dropdown a.with-input>*:last-child
+    margin-left:auto
+
 .panel-body
   overflow: scroll;
 
@@ -232,18 +238,22 @@ text.weight.visible
   font-size: 13px;
 
 .sideHeader
-  line-height: 5px;
-  font-weight: bold;
-  font-size: 13px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+    font-weight: bold
+    font-size: 13px
+    margin-bottom: 4px
+    margin-top: 12px
+
+.node-coloring select
+    width: 100%
+
+label.sideLabel
+  font-weight: normal;
 
 path.mousezone
     opacity: 0.0
 
 .logFoldChangeMaxValue
     width: 50px;
-    margin-bottom: 8px;
 
 .normalization-form
     width: 80px;
@@ -275,5 +285,18 @@ path.mousezone
     margin-bottom: 10px;
     display: inline-block;
 
+#gray-edge-threshold-menu
+    margin-right:0.5ex
+
 .menu-subheader
     padding-left: 12px;
+
+#force-graph input[type=range]
+    box-shadow: none
+    margin-top: -12px
+
+.minimum-zoom-display
+    margin-right: 0.25rem
+
+.maximum-zoom-display
+    margin-left: 0.25rem
