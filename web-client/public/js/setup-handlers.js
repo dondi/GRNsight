@@ -45,6 +45,10 @@ import {
     BOTTOM_DATASET_SELECTION_SIDEBAR,
     TOP_DATASET_SELECTION_MENU,
     BOTTOM_DATASET_SELECTION_MENU,
+    ZOOM_DISPLAY_MAXIMUM_SELECTOR,
+    ZOOM_DISPLAY_MAXIMUM_VALUE,
+    ZOOM_DISPLAY_MINIMUM_SELECTOR,
+    ZOOM_DISPLAY_MINIMUM_VALUE
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -315,4 +319,7 @@ export const setupHandlers = grnState => {
             return hide;
         }
     });
+
+    $(ZOOM_DISPLAY_MAXIMUM_SELECTOR).text(ZOOM_DISPLAY_MAXIMUM_VALUE);
+    $(ZOOM_DISPLAY_MINIMUM_SELECTOR).text(ZOOM_DISPLAY_MINIMUM_VALUE);
 };
