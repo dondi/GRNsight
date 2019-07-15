@@ -261,7 +261,14 @@ export var drawGraph = function (network) {
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
-        $(ZOOM_INPUT).val(finalDisplay);
+
+        // Special handling for zoom input field: the user might be in the middle of typing a value that is
+        // _temporarily_ out of range (e.g., "1" while typing "100") and we don’t want to overwrite that.
+        // The special case can be detected if the input element currently has focus.
+        if (document.activeElement !== document.querySelector(ZOOM_INPUT)) {
+            $(ZOOM_INPUT).val(finalDisplay);
+        }
+
         $(ZOOM_SLIDER).val((finalDisplay <= MIDDLE_DISPLAY ? zoomScaleSliderLeft : zoomScaleSliderRight)
             .invert(finalDisplay));
     };
