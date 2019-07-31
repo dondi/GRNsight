@@ -262,14 +262,12 @@ const updatetoForceGraph = () => {
     $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
     toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
-    updaters.setNodesToForceGraph();
 };
 
 const updatetoGridLayout = () => {
     $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
     $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
     toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
-    updaters.setNodesToGrid();
 };
 
 // Node Coloring Functions
@@ -328,6 +326,7 @@ const resetDatasetDropdownMenus = (network) => {
             </li>`;
     };
 
+    grnState.nodeColoring.nodeColoringOptions = [];
     for (var property in network.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             grnState.nodeColoring.nodeColoringOptions.push({value: property});
@@ -437,12 +436,10 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
         $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
-        refreshApp();
     } else {
         $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
-        refreshApp();
     }
 
 // Weights functions

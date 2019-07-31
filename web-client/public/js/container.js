@@ -1,19 +1,56 @@
-/* eslint no-unused-vars: [2, {"varsIgnorePattern": "grnTest|enableScroll|manualZoom"}] */
+import { VIEWPORT_FIT } from "./constants";
+
 export const container = function () {
-    var grnTest = $(".grnTest");
     var container = $(".grnsight-container");
-    var enableScroll = $("#enableScroll");
     var pageWidth = $(window).width();
 
-    var WIDTH_OFFSET = 250;
-    var HEIGHT_OFFSET = 53;
+    // These values are bound to the layout dimensions of the GRNsight website.
+    const WIDTH_OFFSET = 250;
+    const HEIGHT_OFFSET = 53;
 
-    var MEDIUM_PAGE_WIDTH = 1500;
-    var LARGE_PAGE_WIDTH = 2200;
+    const MEDIUM_PAGE_WIDTH = 1500;
+    const LARGE_PAGE_WIDTH = 2200;
 
+    const HOST_SITE = "https://dondi.github.io";
 
-    var windowWidth = $(window).width() - WIDTH_OFFSET;
-    var windowHeight = $(window).height() - HEIGHT_OFFSET;
+    const fitContainer = dimensions => {
+        if (container.hasClass(VIEWPORT_FIT)) {
+            container.css({
+                width: dimensions.width - WIDTH_OFFSET,
+                height: dimensions.height - HEIGHT_OFFSET
+            });
+        }
+    };
+
+    const fitContainerToWindow = () => {
+        fitContainer({
+            width: $(window).width(),
+            height: $(window).height()
+        });
+    };
+
+    const requestWindowDimensions = () => {
+        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
+        if (window === window.top) {
+            fitContainerToWindow();
+        } else {
+            window.top.postMessage("dimensions", HOST_SITE);
+        }
+    };
+
+    if (window === window.top) {
+        $(window).on("resize", fitContainerToWindow);
+    } else {
+        window.addEventListener("message", event => {
+            if (event.origin.indexOf(HOST_SITE) !== 0) {
+                return;
+            }
+
+            fitContainer(event.data);
+        });
+    }
+
+    requestWindowDimensions();
 
     if (pageWidth < MEDIUM_PAGE_WIDTH) {
         $("#boundBoxS").prop("checked", true);
@@ -102,20 +139,14 @@ export const container = function () {
 
     $(".boundBoxSize").on("click", function () {
         var currentValue = $(this).val();
-        var grnsightContainerClass = "grnsight-container " + currentValue;
+        var grnsightContainerClass = `grnsight-container ${currentValue}`;
         if (!container.hasClass(currentValue)) {
             container.attr("class", grnsightContainerClass);
-            container.css(currentValue === "containerFit" ? {width: windowWidth, height: windowHeight} :
-            {width: "", height: ""});
+            if (currentValue === VIEWPORT_FIT) {
+                requestWindowDimensions();
+            } else {
+                container.css({ width: "", height: "" });
+            }
         }
     });
-
-    $(window).on("resize", function () {
-        windowWidth = $(window).width() - WIDTH_OFFSET;
-        windowHeight = $(window).height() - HEIGHT_OFFSET;
-        if (container.hasClass("containerFit")) {
-            container.css({width: windowWidth, height: windowHeight});
-        }
-    });
-
 };

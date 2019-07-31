@@ -97,20 +97,4 @@ export const upload = function () {
     $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
     $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
-
-    // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
-    // https://stackoverflow.com/a/27759926
-    $(".dropdown").on({
-        "click": function (event) {
-            if ($(event.target).hasClass("keepopen")) {
-                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
-            }
-        },
-        "hide.bs.dropdown": function () {
-            var hide = $(this).data("closable");
-            $(this).data("closable", true);
-            return hide;
-        }
-    });
-
 };

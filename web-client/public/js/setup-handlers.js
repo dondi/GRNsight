@@ -1,3 +1,4 @@
+import { updaters } from "./graph";
 import { updateApp } from "./update-app";
 
 import {
@@ -44,6 +45,10 @@ import {
     BOTTOM_DATASET_SELECTION_SIDEBAR,
     TOP_DATASET_SELECTION_MENU,
     BOTTOM_DATASET_SELECTION_MENU,
+    ZOOM_DISPLAY_MAXIMUM_SELECTOR,
+    ZOOM_DISPLAY_MAXIMUM_VALUE,
+    ZOOM_DISPLAY_MINIMUM_SELECTOR,
+    ZOOM_DISPLAY_MINIMUM_VALUE
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -57,7 +62,16 @@ export const setupHandlers = grnState => {
 
     // Grid buttons
     const setGraphLayout = layout => {
+        const different = grnState.graphLayout !== layout;
         grnState.graphLayout = layout;
+        if (different) {
+            if (grnState.graphLayout === FORCE_GRAPH) {
+                updaters.setNodesToForceGraph();
+            } else if (grnState.graphLayout === GRID_LAYOUT) {
+                updaters.setNodesToGrid();
+            }
+        }
+
         updateApp(grnState);
     };
 
@@ -274,4 +288,38 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    // Allow text-selection for input elements embedded within menu items.
+    //
+    // Partial thank you:
+    //   https://stackoverflow.com/questions/6848140/how-do-i-prevent-drag-on-a-child-but-allow-drag-on-the-parent
+    //
+    // We use function syntax so that internal `this` can be used.
+    $(".dropdown input.keepopen").parent().attr({
+        draggable: false
+    });
+
+    // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
+    // https://stackoverflow.com/a/27759926
+    $(".dropdown").on({
+        "click": function (event) {
+            if ($(event.target).hasClass("keepopen")) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+
+        "mouseup": function (event) {
+            if ($(event.target).find(".keepopen").length > 0) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+
+        "hide.bs.dropdown": function () {
+            var hide = $(this).data("closable");
+            $(this).data("closable", true);
+            return hide;
+        }
+    });
+
+    $(ZOOM_DISPLAY_MAXIMUM_SELECTOR).text(ZOOM_DISPLAY_MAXIMUM_VALUE);
+    $(ZOOM_DISPLAY_MINIMUM_SELECTOR).text(ZOOM_DISPLAY_MINIMUM_VALUE);
 };
