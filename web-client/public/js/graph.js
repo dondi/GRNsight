@@ -12,7 +12,7 @@ import {
     SAVE_IMAGE
 } from "./constants";
 
-import { saveSvgAsPng } from "save-svg-as-png"
+import { saveSvgAsPng } from "save-svg-as-png";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
