@@ -57,3 +57,13 @@ coverage/
 *.synctex.gz
 
 .vscode
+
+*.tmp
+
+# Microsoft Office temporary files
+~$*.doc*
+Backup of *.doc*
+~$*.xls*
+*.xlk
+~$*.ppt*
+*.~vsd*

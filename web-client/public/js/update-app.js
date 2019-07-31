@@ -389,7 +389,8 @@ const updateBottomDataset = () => {
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
         removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
         /* eslint-disable max-len */
-        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`).addClass("glyphicon-ok");
+        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`)
+            .addClass("glyphicon-ok");
         /* eslint-enable max-len */
     }
     updaters.renderNodeColoring();

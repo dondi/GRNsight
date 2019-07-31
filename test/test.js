@@ -1,6 +1,6 @@
 var assert = require("chai").assert;
 var xlsx = require("node-xlsx");
-var cytoscape = require("cytoscape");
+// var cytoscape = require("cytoscape");
 
 var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
@@ -278,7 +278,7 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
 };
 
 // GRAPH STATISTICS
-
+/*
 var shortestPath = function (input, directed, source, target, length) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
@@ -306,6 +306,7 @@ var betweennessCentrality = function (input, directed, node, centrality) {
     var bc = cy.$().bc();
     assert.equal(bc.betweenness("#" + node, null, directed), centrality);
 };
+*/
 
 exports.noErrors = noErrors;
 exports.duplicateGeneError = duplicateGeneError;
@@ -332,5 +333,5 @@ exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
 
-exports.shortestPath = shortestPath;
-exports.betweennessCentrality = betweennessCentrality;
+// exports.shortestPath = shortestPath;
+// exports.betweennessCentrality = betweennessCentrality;
