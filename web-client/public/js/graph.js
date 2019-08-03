@@ -308,7 +308,7 @@ export var drawGraph = function (network) {
     $(ZOOM_INPUT).on("input", () => {
         grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
         updateAppBasedOnZoomValue();
-    });
+    }).blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
 
     d3.select(ZOOM_SLIDER).on("input", function () {
         const sliderValue = +$(this).val();
