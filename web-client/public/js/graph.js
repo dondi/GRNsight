@@ -9,7 +9,7 @@ import {
     ZOOM_SLIDER,
     ZOOM_DISPLAY_MINIMUM_VALUE,
     ZOOM_DISPLAY_MAXIMUM_VALUE,
-    SAVE_IMAGE
+    EXPORT_AS_PNG
 } from "./constants";
 
 import { saveSvgAsPng } from "save-svg-as-png";
@@ -1465,7 +1465,7 @@ export var drawGraph = function (network) {
 
     $(".startDisabled").removeClass("disabled");
 
-    $(SAVE_IMAGE).click(() => {
+    $(EXPORT_AS_PNG).click(() => {
         saveSvgAsPng(document.getElementById("exportContainer"),  grnState.name + ".png");
     });
 };
