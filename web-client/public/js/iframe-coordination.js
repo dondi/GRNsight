@@ -24,13 +24,15 @@ const HEIGHT_PADDING = 20;
 const SMALL_HEIGHT = 648 + HEIGHT_OFFSET;
 const MEDIUM_HEIGHT = 840 + HEIGHT_OFFSET;
 const LARGE_HEIGHT = 1080 + HEIGHT_OFFSET;
+const FIT_MARGIN = 4;  // A little space so that "fit" isn’t totally flush with window bounds.
 
 const sendDimensions = (destination, origin) => {
   const iframeOffset = $("iframe.embedded-demo").offset();
   destination.postMessage(
     {
       width: $(window).width() - iframeOffset.left,
-      height: $(window).height() - iframeOffset.top
+      height: $(window).height() - FIT_MARGIN,
+      top: iframeOffset.top
     },
 
     origin
