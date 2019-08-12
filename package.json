@@ -23,6 +23,7 @@
     "node-xlsx": "0.7.2",
     "nodemon": "1.11.0",
     "parallelshell": "3.0.1",
+    "save-svg-as-png": "^1.4.14",
     "serve-static": "1.13.1",
     "should": "11.2.0",
     "stylus": "0.54.5",

@@ -8,8 +8,11 @@ import {
     ZOOM_PERCENT,
     ZOOM_SLIDER,
     ZOOM_DISPLAY_MINIMUM_VALUE,
-    ZOOM_DISPLAY_MAXIMUM_VALUE
+    ZOOM_DISPLAY_MAXIMUM_VALUE,
+    SAVE_IMAGE
 } from "./constants";
+
+import { saveSvgAsPng } from "save-svg-as-png";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -193,7 +196,8 @@ export var drawGraph = function (network) {
 
     var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .attr("id", "exportContainer");
 
     var zoomContainer = svg.append("g") // required for zoom to work
         .attr("class", "boundingBox")
@@ -1460,4 +1464,8 @@ export var drawGraph = function (network) {
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
     $(".startDisabled").removeClass("disabled");
+
+    $(SAVE_IMAGE).click(() => {
+        saveSvgAsPng(document.getElementById("exportContainer"),  grnState.name + ".png");
+    });
 };
