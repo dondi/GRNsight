@@ -92,7 +92,6 @@ export const setupHandlers = grnState => {
     };
 
 // Grid and Force Graph Layout
-
     $(GRID_LAYOUT_BUTTON).click(() => {
         setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH);
     });
@@ -106,7 +105,6 @@ export const setupHandlers = grnState => {
     });
 
 // Image Export
-
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         saveSvgAsPng(svgContainer,  grnState.name + ".png");
@@ -118,7 +116,6 @@ export const setupHandlers = grnState => {
     });
 
 // Node Coloring
-
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
         grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
         updateApp(grnState);
@@ -204,7 +201,6 @@ export const setupHandlers = grnState => {
     });
 
 // Sliders Code
-
     var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
     };
@@ -259,7 +255,6 @@ export const setupHandlers = grnState => {
     });
 
 // Weights Visualization
-
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
         grnState.edgeWeightDisplayOption = SHOW_ALL_WEIGHTS;
         updateApp(grnState);
@@ -292,7 +287,6 @@ export const setupHandlers = grnState => {
     });
 
 // Grey Edges
-
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);
