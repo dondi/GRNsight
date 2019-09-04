@@ -77,7 +77,6 @@ export const setupHandlers = grnState => {
         document.body.removeChild(downloadLink);
     };
 
-// Grid and Force Graph Layout
     const setGraphLayout = layout => {
         const different = grnState.graphLayout !== layout;
         grnState.graphLayout = layout;
@@ -92,11 +91,14 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     };
 
+// Grid and Force Graph Layout
+
     $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
     $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
     $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
 
 // Image Export
+
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         saveSvgAsPng(svgContainer,  grnState.name + ".png");
@@ -108,6 +110,7 @@ export const setupHandlers = grnState => {
     });
 
 // Node Coloring
+
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
         grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
         updateApp(grnState);
