@@ -211,7 +211,9 @@ export var drawGraph = function (network) {
         .scaleExtent([MIN_SCALE, ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
-    svg.style("pointer-events", "all").call(zoomDrag);
+    svg.style("pointer-events", "all").call(zoomDrag)
+        .style("font-family", "Helvetica Neue");
+
 
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
@@ -914,6 +916,7 @@ export var drawGraph = function (network) {
             .attr("dy", NODE_HEIGHT)
             .attr("text-anchor", "middle")
             .attr("class", "nodeText")
+            .style("font-family", "Helvetica Neue")
             .style("font-size", "18px")
             .style("stroke-width", "0")
             .style("fill", "black")
@@ -1035,6 +1038,7 @@ export var drawGraph = function (network) {
             .attr("height", height + yMargin)
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
+
 
         const increment = Math.abs(logFoldChangeMaxValue) / 1000;  // Guarantee 1000 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
@@ -1469,7 +1473,7 @@ export var drawGraph = function (network) {
     var svgContainer = document.getElementById("exportContainer");
 
     $(EXPORT_TO_PNG).click(() => {
-        saveSvgAsPng(svgContainer,  grnState.name + ".png");
+        saveSvgAsPng(svgContainer,  grnState.name + ".png").allSettled();
     });
 
     $(EXPORT_TO_SVG).click(() => {
@@ -1477,12 +1481,10 @@ export var drawGraph = function (network) {
     });
 
     function saveSvgToFile (svgEl, name) {
-        console.log(grnState.name);
         svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
         var svgData = svgEl;
         var preface = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n";
         var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
-        console.log(svgBlob);
         var svgUrl = URL.createObjectURL(svgBlob);
         var downloadLink = document.createElement("a");
         downloadLink.href = svgUrl;
