@@ -14,7 +14,8 @@ export const SCHADE_OUTPUT_ID     = "#schadeOutput";
 export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
-export const SAVE_IMAGE           = "#saveImage";
+export const EXPORT_TO_PNG           = "#exportAsPng";
+export const EXPORT_TO_SVG           = "#exportAsSvg";
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
