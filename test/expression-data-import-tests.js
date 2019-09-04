@@ -8,8 +8,6 @@
 var test = require("./test");
 // var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
-
-// Add extraneousDataWarning
 describe("expression-data-import-tests", function () {
 
     describe("missing-expression-data-sheet", function () {

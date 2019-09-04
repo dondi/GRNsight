@@ -3,6 +3,7 @@ var xlsx = require("node-xlsx");
 // var util = require("util");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
+var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
@@ -440,8 +441,8 @@ var processGRNmap = function (path, res, app) {
     network = parseSheet(sheet);
 
     // Parse expression and 2-column data, then add to network object
-    // var additionalData = parseAdditionalSheets(sheet);
-    var additionalData = parseExpressionSheets(sheet);
+    var additionalData = parseAdditionalSheets(sheet);
+    // var additionalData = parseExpressionSheets(sheet);
     Object.assign(network, additionalData);
 
     return (network.errors.length === 0) ?
