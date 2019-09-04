@@ -1,5 +1,6 @@
 import { updaters } from "./graph";
 import { updateApp } from "./update-app";
+import { saveSvgAsPng } from "save-svg-as-png";
 
 import {
     FORCE_GRAPH,
@@ -48,7 +49,9 @@ import {
     ZOOM_DISPLAY_MAXIMUM_SELECTOR,
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MINIMUM_SELECTOR,
-    ZOOM_DISPLAY_MINIMUM_VALUE
+    ZOOM_DISPLAY_MINIMUM_VALUE,
+    EXPORT_TO_PNG,
+    EXPORT_TO_SVG
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -60,7 +63,21 @@ export const setupHandlers = grnState => {
         return Math.min(max, Math.max(min, value));
     };
 
-    // Grid buttons
+    const saveSvgToFile  = (svgEl, name) => {
+        svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        var svgData = svgEl;
+        var preface = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n";
+        var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = name;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    };
+
+// Grid and Force Graph Layout
     const setGraphLayout = layout => {
         const different = grnState.graphLayout !== layout;
         grnState.graphLayout = layout;
@@ -78,6 +95,17 @@ export const setupHandlers = grnState => {
     $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
     $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
     $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
+
+// Image Export
+    $(EXPORT_TO_PNG).click(() => {
+        var svgContainer = document.getElementById("exportContainer");
+        saveSvgAsPng(svgContainer,  grnState.name + ".png");
+    });
+
+    $(EXPORT_TO_SVG).click(() => {
+        var svgContainer = document.getElementById("exportContainer");
+        saveSvgToFile(svgContainer, grnState.name + ".svg");
+    });
 
 // Node Coloring
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
@@ -198,7 +226,6 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    // Sliders code
     $(LOCK_SLIDERS_CLASS).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
@@ -220,7 +247,8 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Weights Visualization Handlers
+// Weights Visualization
+
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
         grnState.edgeWeightDisplayOption = SHOW_ALL_WEIGHTS;
         updateApp(grnState);
@@ -252,7 +280,8 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Grey Edges Handlers
+// Grey Edges
+
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);

@@ -8,12 +8,8 @@ import {
     ZOOM_PERCENT,
     ZOOM_SLIDER,
     ZOOM_DISPLAY_MINIMUM_VALUE,
-    ZOOM_DISPLAY_MAXIMUM_VALUE,
-    EXPORT_TO_PNG,
-    EXPORT_TO_SVG,
+    ZOOM_DISPLAY_MAXIMUM_VALUE
 } from "./constants";
-
-import { saveSvgAsPng } from "save-svg-as-png";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -1469,29 +1465,4 @@ export var drawGraph = function (network) {
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
     $(".startDisabled").removeClass("disabled");
-
-    var svgContainer = document.getElementById("exportContainer");
-
-    $(EXPORT_TO_PNG).click(() => {
-        saveSvgAsPng(svgContainer,  grnState.name + ".png").allSettled();
-    });
-
-    $(EXPORT_TO_SVG).click(() => {
-        saveSvgToFile(svgContainer, grnState.name + ".svg");
-    });
-
-    function saveSvgToFile (svgEl, name) {
-        svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        var svgData = svgEl;
-        var preface = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n";
-        var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = name;
-        console.log(downloadLink);
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    }
 };
