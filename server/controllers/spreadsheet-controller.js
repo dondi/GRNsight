@@ -3,7 +3,6 @@ var xlsx = require("node-xlsx");
 // var util = require("util");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
-var parseExpressionSheets = require(__dirname + "/expression-data-controller");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");

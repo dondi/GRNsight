@@ -1,12 +1,15 @@
 import { max } from "d3-array";
 import {
   SHOW_WEIGHTS_MOUSEOVER,
-  LINK_DIST_SLIDER_ID,
+  LINK_DIST_SLIDER_SIDEBAR,
   LINK_DIST_VALUE,
   LINK_DIST_DEFAULT_VALUE,
-  CHARGE_SLIDER_ID,
+  CHARGE_SLIDER_SIDEBAR,
   CHARGE_VALUE,
   CHARGE_DEFAULT_VALUE,
+  DEFAULT_MAX_LOG_FOLD_CHANGE,
+  DEFAULT_ZOOM_VALUE,
+  FORCE_GRAPH
 } from "./constants";
 let currentNetwork = null;
 
@@ -36,6 +39,15 @@ const annotateLinks = network => {
     });
 };
 
+const genePageData = () => {
+
+    // set to be a function for when data is read from .xml
+    return {
+        species: "Saccharomyces_cerevisiae",
+        taxon: "559292"
+    };
+};
+
 export const grnState = {
     name: null,
     simulation: undefined,
@@ -62,12 +74,34 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentNetwork),
 
+// Zoom Parameter
+    zoomValue: DEFAULT_ZOOM_VALUE,
+
+// Node Coloring
+    nodeColoring: {
+        showMenu: false,
+        nodeColoringEnabled: true,
+        logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
+        logFoldChangeUpdateTriggered: false,
+        averageTopDataset: true,
+        averageBottomDataset: true,
+        topDataset: undefined,
+        bottomDataset: undefined,
+        lastDataset: null,
+        bottomDataSameAsTop: true,
+        nodeColoringOptions: [],
+    },
+
+
+// Gene Page data
+    species: genePageData().species,
+    taxon: genePageData().taxon,
+
 // Slider Parameters
     slidersLocked: false,
-    resetTrigger: false,
-    undoResetTriggered: false,
+    showUndoReset: false,
     linkDistanceSlider: {
-        sliderId: LINK_DIST_SLIDER_ID,
+        sliderId: LINK_DIST_SLIDER_SIDEBAR,
         valueId: LINK_DIST_VALUE,
         defaultVal: LINK_DIST_DEFAULT_VALUE,
         currentVal: LINK_DIST_DEFAULT_VALUE,
@@ -76,7 +110,7 @@ export const grnState = {
         forceChanged: false,
     },
     chargeSlider: {
-        sliderId: CHARGE_SLIDER_ID,
+        sliderId: CHARGE_SLIDER_SIDEBAR,
         valueId: CHARGE_VALUE,
         defaultVal: CHARGE_DEFAULT_VALUE,
         currentVal: CHARGE_DEFAULT_VALUE,
@@ -86,5 +120,5 @@ export const grnState = {
     },
 
 // Graph Layout Parameter
-    graphLayout: "FORCE_GRAPH",
+    graphLayout: FORCE_GRAPH
 };

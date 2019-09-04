@@ -15,6 +15,7 @@ web-client/public/js/grnsight.min.js
 pids
 logs
 results
+/.idea
 
 npm-debug.log
 node_modules
@@ -23,6 +24,8 @@ package-lock.json
 .DS_Store
 *.pem
 *.p12
+*.key
+*.cert
 
 _gh_pages
 
@@ -54,3 +57,13 @@ coverage/
 *.synctex.gz
 
 .vscode
+
+*.tmp
+
+# Microsoft Office temporary files
+~$*.doc*
+Backup of *.doc*
+~$*.xls*
+*.xlk
+~$*.ppt*
+*.~vsd*

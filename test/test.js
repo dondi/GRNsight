@@ -202,19 +202,20 @@ var labelError = function (input, frequency) {
     }
 };
 
-var optParamsError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+var missingExpressionError = function (input, frequency) {
+  var sheet = xlsx.parse(input);
+  var network = spreadsheetController.parseSheet(sheet);
 
-    assert.equal(frequency, network.errors.length);
+  assert.equal(frequency, network.errors.length);
 
-    for (var i = 0; i < frequency; i++) {
-        assert.equal(
-      "OPTIMIZATION_PARAMETER_ERROR",
-      network.errors[i].errorCode
-    );
-    }
+  for (var i = 0; i < frequency; i++) {
+      assert.equal(
+    "MISSING_EXPRESSION_SHEET",
+    network.errors[i].errorCode
+  );
+  }
 };
+
 // WARNING TEST FUNCTIONS:
 
 var noWarnings = function (input) {
@@ -304,6 +305,16 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
     assert.equal(frequency, incorrectlyNamedSheetWarning.length);
 };
 
+var extraneousDataWarning = function (input, frequency) {
+  var sheet = xlsx.parse(input);
+  var network = spreadsheetController.parseSheet(sheet);
+  var extraneousDataWarning = network.warnings.filter(function (x) {
+      return x.warningCode === "EXTRANEOUS_DATA";
+  });
+
+  assert.equal(frequency, extraneousDataWarning.length);
+};
+
 // GRAPH STATISTICS
 
 var shortestPath = function (input, directed, source, target, length) {
@@ -345,6 +356,8 @@ exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
 exports.emptyRowError = emptyRowError;
+exports.labelError = labelError;
+exports.missingExpressionError = missingExpressionError;
 exports.errorsCountError = errorsCountError;
 exports.specialCharacterError = specialCharacterError;
 
@@ -358,6 +371,7 @@ exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
 exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
+exports.extraneousDataWarning = extraneousDataWarning;
 
 exports.shortestPath = shortestPath;
 exports.betweennessCentrality = betweennessCentrality;
