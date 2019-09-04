@@ -93,9 +93,17 @@ export const setupHandlers = grnState => {
 
 // Grid and Force Graph Layout
 
-    $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
-    $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
-    $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
+    $(GRID_LAYOUT_BUTTON).click(() => {
+        setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH);
+    });
+
+    $(FORCE_GRAPH_CLASS).click(() => {
+        setGraphLayout(FORCE_GRAPH);
+    });
+
+    $(GRID_LAYOUT_CLASS).click(() =>  {
+        setGraphLayout(GRID_LAYOUT);
+    });
 
 // Image Export
 
