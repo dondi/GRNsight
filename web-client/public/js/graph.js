@@ -1040,7 +1040,7 @@ export var drawGraph = function (network) {
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
         const increment = Math.abs(logFoldChangeMaxValue) / 50;  // Guarantee 50 steps regardless of the range
-      
+
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
 
         var coloring = svg.selectAll(".node-coloring-legend")
