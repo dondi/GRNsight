@@ -91,7 +91,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     };
 
-// Grid and Force Graph Layout
+    // Grid and Force Graph Layout
     $(GRID_LAYOUT_BUTTON).click(() => {
         setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH);
     });
