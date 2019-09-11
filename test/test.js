@@ -274,41 +274,41 @@ var invalidNetworkSizeWarning = function (input, frequency) {
 var extraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var extraneousDataWarning = network.warnings.filter(function (x) {
+    var extraneousDataCount = network.warnings.filter(function (x) {
         return x.warningCode === "EXTRANEOUS_DATA";
     });
 
-    assert.equal(frequency, extraneousDataWarning.length);
+    assert.equal(frequency, extraneousDataCount.length);
 };
 
 var incorrectlyNamedSheetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var incorrectlyNamedSheetWarning = network.warnings.filter(function (x) {
+    var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
 
-    assert.equal(frequency, incorrectlyNamedSheetWarning.length);
+    assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
 var extraneousDataWarning = function (input, frequency) {
   var sheet = xlsx.parse(input);
   var network = spreadsheetController.parseSheet(sheet);
-  var extraneousDataWarning = network.warnings.filter(function (x) {
+  var extraneousDataCount = network.warnings.filter(function (x) {
       return x.warningCode === "EXTRANEOUS_DATA";
   });
 
-  assert.equal(frequency, extraneousDataWarning.length);
+  assert.equal(frequency, extraneousDataCount.length);
 };
 
 var missingExpressionWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-    var missingExpressionWarning = network.warnings.filter(function (x) {
+    var missingExpressionCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 
-    assert.equal(frequency, missingExpressionWarning.length);
+    assert.equal(frequency, missingExpressionCount.length);
   };
 
 // GRAPH STATISTICS
