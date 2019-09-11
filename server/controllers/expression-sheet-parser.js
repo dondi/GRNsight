@@ -9,9 +9,18 @@ var isExpressionSheet = function (sheetName) {
     });
 };
 
+// Going to continue basing this section off of the parseSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
-    var expressionData = {};
     var geneData = {};
+    var expressionData = {
+        genes: [],
+        links: [],
+        errors: [],
+        warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
+        sheetType: "unweighted",
+    };
     expressionData["time_points"] = sheet.data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;
     sheet.data.forEach(function (sheet) {
@@ -39,5 +48,11 @@ module.exports = function (workbook) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
         }
     });
+
+    // First try adding in a warning message. Is this a good place to do warning/error checks?
+    if(output["expression"].length == 0) {
+        addWarning(expressionData, warningsList.missingExpressionWarning);
+    }
     return output;
 };
+

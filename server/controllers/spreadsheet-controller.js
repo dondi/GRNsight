@@ -184,7 +184,16 @@ var warningsList = {
              'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
         };
+    },
+
+    missingNetworkWarning: function () {
+        return {
+            warningCode: "MISSING_EXPRESSION_SHEET",
+            errorDescription: "The file you uploaded contains no expression data sheet. This is not required, \
+             but there may be errors in the way the nodes are colored without this data present."
+        };
     }
+
 };
 
 var addMessageToArray = function (messageArray, message) {
@@ -426,30 +435,35 @@ var parseSheet = function (sheet) {
 };
 
 var processGRNmap = function (path, res, app) {
-    var sheet;
-    var network;
+    var parsedXLSX;
+    var parsedWorkbook;
 
     helpers.attachCorsHeader(res, app);
 
     try {
-        sheet = xlsx.parse(path);
+        parsedXLSX = xlsx.parse(path);
     } catch (err) {
         return res.json(400, "Unable to read input. The file may be corrupt.");
     }
 
     helpers.attachFileHeaders(res, path);
-    network = parseSheet(sheet);
+    parsedWorkbook = parseSheet(parsedXLSX);
 
     // Parse expression and 2-column data, then add to network object
-    var additionalData = parseAdditionalSheets(sheet);
-    // var additionalData = parseExpressionSheets(sheet);
-    Object.assign(network, additionalData);
+    // Eventually, will split this up into parsing for each type of sheet.
+    var additionalData = parseAdditionalSheets(parsedXLSX);
+    // This will replace the above line, along with parsed data from other non-network sheets:
+    // var expressionSheetData = parseExpressionSheets(sheet);
+    // Everything that network does not already contain or that is repeated in additionalData
+    // is put into network.
+    // But this might be buggy...
+    Object.assign(parsedWorkbook, additionalData);
 
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
-        res.json(network) :
+        res.json(parsedWorkbook) :
         // If all does not look well, return the network with an error 400
-        res.status(400).json(network);
+        res.status(400).json(parsedWorkbook);
 };
 
 var grnSightToCytoscape = function (network) {
@@ -519,7 +533,7 @@ module.exports = function (app) {
 
     // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
         app.post("/upload", function (req, res) {
-      // TODO: Add file validation
+      // TODO: Add file validation (make sure that file is an Excel file)
             (new multiparty.Form()).parse(req, function (err, fields, files) {
                 if (err) {
                     return res.json(400, "There was a problem uploading your file. Please try again.");

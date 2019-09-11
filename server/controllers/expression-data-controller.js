@@ -3,6 +3,7 @@ var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 // var additionalSheetParser = require(__dirname + "/additional-sheet-parser.js");
 
 var errorList = spreadsheetController.errorList;
+var warningsList = spreadsheetController.warningsList;
 
 var warningsList = {
     missingExpressionWarning: function () {

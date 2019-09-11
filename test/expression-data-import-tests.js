@@ -12,7 +12,7 @@ describe("expression-data-import-tests", function () {
 
     describe("missing-expression-data-sheet", function () {
         it("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
-            test.missingExpressionError("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx");
+            test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx");
         });
     });
 
