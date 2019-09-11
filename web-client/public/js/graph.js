@@ -673,7 +673,7 @@ export var drawGraph = function (network) {
 
     }
 
-    /* Big thanks to the following for the smart edges
+  /* Big thanks to the following for the smart edges
    * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e
    /visualize/conn-net-svg.js#L119
    */
@@ -1333,7 +1333,7 @@ export var drawGraph = function (network) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
 
-            /* Allows for looping edges.
+      /* Allows for looping edges.
        * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
        */
 
