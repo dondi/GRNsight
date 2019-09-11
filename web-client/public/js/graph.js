@@ -1333,7 +1333,7 @@ export var drawGraph = function (network) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
 
-            /* Allows for looping edges.
+      /* Allows for looping edges.
        * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
        */
 
