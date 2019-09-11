@@ -1024,13 +1024,13 @@ export var drawGraph = function (network) {
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
         var xMargin = 10;
         var yMargin = 30;
-        var width = 200;
+        var width = 220;
         var height = 10;
         var textYOffset = 10;
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
-            .attr("width", width + xMargin * 2)
+            .attr("width", "100%")
             .attr("height", height + yMargin)
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
@@ -1058,24 +1058,28 @@ export var drawGraph = function (network) {
             });
 
         var legendLabels = {
-            "left": {
-                "textContent": (-logFoldChangeMaxValue).toFixed(2),
-                "x": -xMargin / 2
+            left: {
+                textAnchor: "start",
+                textContent: (-logFoldChangeMaxValue).toFixed(2),
+                x: 0
             },
-            "center": {
-                "textContent": "0",
-                "x": width / 2
+            center: {
+                textAnchor: "middle",
+                textContent: "0",
+                x: width / 2
             },
-            "right": {
-                "textContent": (logFoldChangeMaxValue).toFixed(2),
-                "x": width - xMargin / 2
-            },
+            right: {
+                textAnchor: "end",
+                textContent: (logFoldChangeMaxValue).toFixed(2),
+                x: width
+            }
         };
         var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
         for (var key in legendLabels) {
             var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             label.textContent = legendLabels[key].textContent;
             label.setAttribute("font-size", "8px");
+            label.setAttribute("text-anchor", legendLabels[key].textAnchor);
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
             g.appendChild(label);
