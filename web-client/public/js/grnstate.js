@@ -52,6 +52,7 @@ export const grnState = {
     name: null,
     simulation: undefined,
     newNetwork: false,
+    fileType: null,
 
     get network () {
         return currentNetwork;

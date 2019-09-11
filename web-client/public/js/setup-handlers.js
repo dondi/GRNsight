@@ -64,7 +64,7 @@ export const setupHandlers = grnState => {
     };
 
     const exportSVG = (svgElement, name) => {
-        var removedFileTypeName = name.replace(".xlsx", "");
+        var editedName = name.replace(grnState.fileType, "");
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svgElement);
 
@@ -79,7 +79,7 @@ export const setupHandlers = grnState => {
         var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
         $("#exportAsSvg").attr("href", svgUrl);
-        $("#exportAsSvg").attr("download", removedFileTypeName);
+        $("#exportAsSvg").attr("download", editedName);
     };
 
     const setGraphLayout = layout => {
@@ -112,8 +112,8 @@ export const setupHandlers = grnState => {
 // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var removedFileTypeName = name.replace(".xlsx", "");
-        saveSvgAsPng(svgContainer,  removedFileTypeName + ".png");
+        var editedName = grnState.name.replace(grnState.fileType, "");
+        saveSvgAsPng(svgContainer, editedName + ".png");
     });
 
     $(EXPORT_TO_SVG).click(() => {
