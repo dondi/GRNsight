@@ -271,16 +271,6 @@ var invalidNetworkSizeWarning = function (input, frequency) {
     assert.equal(frequency, invalidNetworkSizeCount.length);
 };
 
-var extraneousDataWarning = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
-    var extraneousDataCount = network.warnings.filter(function (x) {
-        return x.warningCode === "EXTRANEOUS_DATA";
-    });
-
-    assert.equal(frequency, extraneousDataCount.length);
-};
-
 var incorrectlyNamedSheetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = expressionSheetParser.parseExpressionSheet(sheet);
@@ -292,11 +282,11 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
 };
 
 var extraneousDataWarning = function (input, frequency) {
-  var sheet = xlsx.parse(input);
-  var network = expressionSheetParser.parseExpressionSheet(sheet);
-  var extraneousDataCount = network.warnings.filter(function (x) {
-      return x.warningCode === "EXTRANEOUS_DATA";
-  });
+    var sheet = xlsx.parse(input);
+    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var extraneousDataCount = network.warnings.filter(function (x) {
+        return x.warningCode === "EXTRANEOUS_DATA";
+    });
 
   assert.equal(frequency, extraneousDataCount.length);
 };

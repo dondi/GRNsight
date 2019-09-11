@@ -51,7 +51,7 @@ describe("expression-data-import-tests", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_missing_column_header.xlsx", 1);
         });
     });
-    
+
     describe("empty_column", function () {
         it("Column in expression sheet contains no data.", function () {
             test.missingValueError("test-files/expression-data-test-sheets/expression_sheet_empty_column.xlsx", 1);

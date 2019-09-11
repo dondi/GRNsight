@@ -87,9 +87,7 @@ const buildXlsxSheet = function (network) {
             resultSheet.push(buildMetaSheet(network[key]));
             break;
         case "test":
-            console.log("before test")
             resultSheet.push(...buildTestSheets(network[key]));
-            console.log("after test")
             break;
         case "expression":
             resultSheet.push(...buildExpressionSheets(network[key]));

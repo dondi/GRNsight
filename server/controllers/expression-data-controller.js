@@ -5,17 +5,7 @@ var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 var errorList = spreadsheetController.errorList;
 var warningsList = spreadsheetController.warningsList;
 
-var warningsList = {
-    missingExpressionWarning: function () {
-        return {
-            warningCode: "MISSING_EXPRESSION_SHEET",
-            errorDescription: "Your worbook does not include any expression data" +
-             "sheets. This will prevent node coloring."
-        };
-    }
-};
-
-// var addMessageToArray = spreadsheetController.addMessageToArray;
+var addMessageToArray = spreadsheetController.addMessageToArray;
 
 var addWarning = spreadsheetController.addWarning;
 
