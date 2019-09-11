@@ -81,16 +81,18 @@ html
                       a(href='#' id='exportAsUnweightedGml') To Unweighted GML
                     li(class='startDisabled disabled not-yet-implemented weighted export')
                       a(href='#' id='exportAsWeightedGml') To Weighted GML
-                li(class='dropdown-submenu disabled not-yet-implemented')
+                li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-picture')
                     | &nbsp; Export Image
                   ul(class='dropdown-menu')
-                    li(class='disabled')
+                    li(class='startDisabled disabled')
+                      a(href='#' id='exportAsPng') To PNG
+                    li(class='disabled not-yet-implemented')
                       a(href='#' id='exportAsJpg') To JPEG
-                    li(class='disabled')
+                    li(class='disabled not-yet-implemented')
                       a(href='#' id='exportAsPdf') To PDF
-                    li(class='disabled')
+                    li(class='disabled not-yet-implemented')
                       a(href='#' id='exportAsSvg') To SVG
                 li(class='divider')
                 li(class=' startDisabled disabled')
@@ -125,9 +127,13 @@ html
                     | &nbsp; Restrict Graph to Viewport
                 li(class='divider')
                 li(class='startDisabled disabled')
-                  a(href='#' id='zoom')
+                  a(href='#' id='zoom' class='with-input')
                     span(class='glyphicon invisible')
-                    | &nbsp; Zoom (1 - 200%) &nbsp;
+                    | &nbsp; Zoom (
+                    span(class='minimum-zoom-display')
+                    | &ndash;
+                    span(class='maximum-zoom-display')
+                    | %) &nbsp;
                     input(type='number' id='zoomInput' min='1' max='200' value='100' class='zoom keepopen' aria-describedby='basic-addon1' disabled="true")
                     span
                     | &nbsp; %
@@ -156,12 +162,14 @@ html
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
                     | &nbsp; Undo Reset
+                li(class='divider')
                 li
-                  a(href='#' id='link-distance')
+                  a(href='#' id='link-distance' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Link Distance (1 - 1000) &nbsp;
                     input(type='number' id='link-distance-menu' class='keepopen' value='500' aria-describedby='basic-addon1')
-                  a(href='#' id='charge')
+                li
+                  a(href='#' id='charge' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Charge (-2000 - 0) &nbsp;
                     input(type='number' id='charge-menu' class='keepopen' value='-50' aria-describedby='basic-addon1')
@@ -196,7 +204,7 @@ html
                     | &nbsp; Average Replicate Values for Bottom Dataset
                 li(class='divider')
                 li(class='node-coloring-menu disabled')
-                  a(href='#' class='nodeOptions')
+                  a(href='#' class='nodeOptions with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
                     input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
@@ -227,20 +235,21 @@ html
                     | &nbsp; Never Show Edge Weights
                 li(class='divider')
                 li(class='weightedGraphOptionsMenu disabled')
-                  a(href='#')
+                  a(href='#' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Edge Weight Normalization Factor (0.0001 - 1000) &nbsp;
                     input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' aria-describedby='basic-addon1')
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='reset-normalization-factor-menu')
                     span(class='glyphicon invisible')
                     | &nbsp; Reset Edge Weight Normalization Factor
                 li(class='divider')
                 li(class='weightedGraphOptionsMenu disabled')
-                  a(href='#')
+                  a(href='#' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Gray Edge Threshold (0 - 100%) &nbsp;
                     input(type='number' id='gray-edge-threshold-menu' class='keepopen' value='5' aria-describedby='basic-addon1')
-                    | &nbsp; %
+                    | %
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='grey-edges-dashed-menu')
                     span(class='glyphicon')
@@ -274,7 +283,7 @@ html
               small(id='graph-metadata')
 
     div(class='container')
-      div(class='grnsight-container')
+      div(class='grnsight-container' data-iframe-width data-iframe-height)
         div(class='scale-and-scroll')
           table(class='scrollTable')
             tr
@@ -297,7 +306,11 @@ html
 
           span(class="pull-left zoomLabel")
             b
-              | Zoom (1 - 200%):&nbsp;
+              | Zoom (
+              span(class='minimum-zoom-display')
+              | &ndash;
+              span(class='maximum-zoom-display')
+              | %):&nbsp;
           span(class="pull-right zoomLabel" id="zoomPercent") 100%
           br
           table(class='zoomTable')
@@ -306,7 +319,7 @@ html
                 div(class="zoomCenter")
                 input(id="zoomSlider" class="zoom" type="range" min="0" max="8" value="4" step="0.25" disabled="true")
 
-    div(class='sidebar')
+    div(class='sidebar' data-iframe-height)
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(id="layout")
           form
@@ -319,12 +332,12 @@ html
             select(id="dataset-top")
             form
               input(id='averageDataTop', type='checkbox' checked)
-              label(for='averageDataTop' style='font-weight:normal') Average Replicate Values
+              label(for='averageDataTop' class='sideLabel') Average Replicate Values
             label(class='info', data-toggle='tooltip') Bottom Dataset
             select(id="dataset-bottom")
             form
               input(id='averageDataBottom', type='checkbox' checked)
-              label(for='averageDataBottom' style='font-weight:normal') Average Replicate Values
+              label(for='averageDataBottom' class='sideLabel') Average Replicate Values
             p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
             p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
             input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
@@ -341,7 +354,7 @@ html
             input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
           form
             input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
-            label(for='lockSlidersButton' style='font-weight:normal') Lock Force Graph Parameters
+            label(for='lockSlidersButton' class='sideLabel') Lock Force Graph Parameters
           form
             input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
             input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
@@ -349,34 +362,34 @@ html
         div(class='input-group')
           form
             input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
-            label(for='viewport' style='font-weight:normal' class='sideLabel') Restrict graph to viewport
+            label(for='viewport' class='sideLabel') Restrict graph to viewport
             br
             p(class='sideHeader') Viewport Size
             input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
-            label(for='boundBoxS' style='font-weight:normal' class='sideLabel') Small
-            small (1104 X 648 pixels)
+            label(for='boundBoxS' class='sideLabel')
+              | Small #[small (1104 X 648 pixels)]
             br
             input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
-            label(for='boundBoxM' style='font-weight:normal' class='sideLabel') Medium
-            small (1414 X 840 pixels)
+            label(for='boundBoxM' class='sideLabel')
+              | Medium #[small (1414 X 840 pixels)]
             br
             input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
-            label(for='boundBoxL' style='font-weight:normal' class='sideLabel') Large
-            small (1920 X 1080 pixels)
+            label(for='boundBoxL' class='sideLabel')
+              | Large #[small (1920 X 1080 pixels)]
             br
             input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
-            label(for='boundBoxFit' style='font-weight:normal' class='sideLabel') Fit to window
+            label(for='boundBoxFit' class='sideLabel') Fit to window
             br
           form(class='weightedGraphOptions hidden')
             p(class='sideHeader') Hide/Show Edge Weights
             input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-            label(for='weightsMouseOverSide' style='font-weight:normal' class='sideLabel') Show With Mouse Over
+            label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
             <br>
             input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-            label(for='weightsAlwaysSide' style='font-weight:normal' class='sideLabel') Always Show Edge Weights
+            label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
             <br>
             input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-            label(for='weightsNeverSide' style='font-weight:normal' class='sideLabel') Never Show Edge Weights
+            label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
           div(class='weightedGraphOptions hidden')
             p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
             p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
@@ -391,7 +404,7 @@ html
             input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
             <br />
             input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-            label(for='dashedGrayLineButton' style='font-weight:normal') &nbsp; Show Gray Edges as Dashed
+            label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
@@ -459,6 +472,7 @@ html
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
   script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
   script(src='lib/bootstrap.file-input/bootstrap.file-input.js')
+  script(src='lib/iframeSizer.contentWindow.min.js')
   script(src='//cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.min.js')
   script(src='//d3js.org/d3-scale-chromatic.v1.min.js')
   script(src='js/grnsight.min.js')

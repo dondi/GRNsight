@@ -14,6 +14,8 @@ export const SCHADE_OUTPUT_ID     = "#schadeOutput";
 export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
+export const EXPORT_AS_PNG        = "#exportAsPng";
+
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
     [ UNWEIGHTED_DEMO_ID, UNWEIGHTED_DEMO_PATH, UNWEIGHTED_DEMO_NAME ],
@@ -24,7 +26,7 @@ export const DEMO_INFORMATION = [
 export const MIN_EDGE_WEIGHT_NORMALIZATION      = 0.0001;
 export const MAX_EDGE_WEIGHT_NORMALIZATION      = 1000;
 
-export const DEFAULT_ZOOM_VALUE                 = 4;
+export const DEFAULT_ZOOM_VALUE                 = 100;
 
 export const GREY_EDGE_THRESHOLD_MENU           = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
@@ -107,6 +109,12 @@ export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdow
 export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
 
 export const ZOOM_CONTROL = ".zoom";
+export const ZOOM_DISPLAY_MAXIMUM_SELECTOR = ".maximum-zoom-display";
+export const ZOOM_DISPLAY_MAXIMUM_VALUE = 200;
+export const ZOOM_DISPLAY_MINIMUM_SELECTOR = ".minimum-zoom-display";
+export const ZOOM_DISPLAY_MINIMUM_VALUE = 25;
 export const ZOOM_SLIDER = "#zoomSlider";
 export const ZOOM_INPUT = "#zoomInput";
 export const ZOOM_PERCENT = "#zoomPercent";
+
+export const VIEWPORT_FIT = "containerFit";
