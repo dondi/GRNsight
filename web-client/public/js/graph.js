@@ -673,7 +673,7 @@ export var drawGraph = function (network) {
 
     }
 
-    /* Big thanks to the following for the smart edges
+  /* Big thanks to the following for the smart edges
    * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e
    /visualize/conn-net-svg.js#L119
    */
