@@ -89,14 +89,6 @@ export const setupLoadAndImportHandlers = grnState => {
             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
             grnState.network = network;
 
-            if (grnState.name.includes(".xlsx")) {
-                grnState.fileType = ".xlsx";
-            } else if (grnState.name.includes(".sif")) {
-                grnState.fileType = ".sif";
-            } else if (grnState.name.includes(".graphml")) {
-                grnState.fileType = ".graphml";
-            }
-
             reloader = () => loadGrn(url, name, formData);
 
             updateApp(grnState);

@@ -63,8 +63,18 @@ export const setupHandlers = grnState => {
         return Math.min(max, Math.max(min, value));
     };
 
+    const determineFileType = filename => {
+        if (filename.includes(".xlsx")) {
+            return ".xlsx";
+        } else if (filename.includes(".sif")) {
+            return ".sif";
+        } else if (filename.includes(".graphml")) {
+            return ".graphml";
+        }
+    };
+
     const exportSVG = (svgElement, name) => {
-        var editedName = name.replace(grnState.fileType, "");
+        var editedName = name.replace(determineFileType(name), "");
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svgElement);
 
@@ -112,7 +122,7 @@ export const setupHandlers = grnState => {
 // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(grnState.fileType, "");
+        var editedName = grnState.name.replace(determineFileType(name), "");
         saveSvgAsPng(svgContainer, editedName + ".png");
     });
 
