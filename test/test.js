@@ -288,7 +288,7 @@ var extraneousDataWarning = function (input, frequency) {
         return x.warningCode === "EXTRANEOUS_DATA";
     });
 
-  assert.equal(frequency, extraneousDataCount.length);
+    assert.equal(frequency, extraneousDataCount.length);
 };
 
 var missingExpressionWarning = function (input, frequency) {
@@ -299,7 +299,7 @@ var missingExpressionWarning = function (input, frequency) {
     });
 
     assert.equal(frequency, missingExpressionCount.length);
-  };
+};
 
 // GRAPH STATISTICS
 /*

@@ -6,14 +6,14 @@ var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 
 // var additionalSheetParser = require(__dirname + "/additional-sheet-parser.js");
 
-var errorList = spreadsheetController.errorList;
+// var errorList = spreadsheetController.errorList;
 var warningsList = spreadsheetController.warningsList;
 
-var addMessageToArray = spreadsheetController.addMessageToArray;
+// var addMessageToArray = spreadsheetController.addMessageToArray;
 
 var addWarning = spreadsheetController.addWarning;
 
-var addError = spreadsheetController.addError;
+// var addError = spreadsheetController.addError;
 
 var isExpressionSheet = function (sheetName) {
     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
@@ -39,9 +39,6 @@ var parseExpressionSheet = function (sheet) {
         positiveWeights: [],
         negativeWeights: [],
         sheetType: "unweighted",
-    };
-    var output = {
-        expression: {} // expression data
     };
     expressionData["time_points"] = sheet.data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;
@@ -72,7 +69,7 @@ module.exports = function (workbook) {
     });
     // First try adding in a warning message. Is this a good place to do warning/error checks?
     if (output["expression"].length === 0) {
-        addWarning(output["expression"][sheet.name], warningsList.missingExpressionWarning);
+        addWarning(output["expression"], warningsList.missingExpressionWarning);
     }
     return output;
 };

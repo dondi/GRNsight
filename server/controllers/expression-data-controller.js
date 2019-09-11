@@ -5,7 +5,7 @@ var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 var errorList = spreadsheetController.errorList;
 var warningsList = spreadsheetController.warningsList;
 
-var addMessageToArray = spreadsheetController.addMessageToArray;
+// var addMessageToArray = spreadsheetController.addMessageToArray;
 
 var addWarning = spreadsheetController.addWarning;
 

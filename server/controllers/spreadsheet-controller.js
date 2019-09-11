@@ -435,35 +435,35 @@ var parseSheet = function (sheet) {
 };
 
 var processGRNmap = function (path, res, app) {
-    var parsedXLSX;
-    var parsedWorkbook;
+    var sheet;
+    var network;
 
     helpers.attachCorsHeader(res, app);
 
     try {
-        parsedXLSX = xlsx.parse(path);
+        sheet = xlsx.parse(path);
     } catch (err) {
         return res.json(400, "Unable to read input. The file may be corrupt.");
     }
 
     helpers.attachFileHeaders(res, path);
-    parsedWorkbook = parseSheet(parsedXLSX);
+    network = parseSheet(sheet);
 
     // Parse expression and 2-column data, then add to network object
     // Eventually, will split this up into parsing for each type of sheet.
-    var additionalData = parseAdditionalSheets(parsedXLSX);
+    var additionalData = parseAdditionalSheets(sheet);
     // This will replace the above line, along with parsed data from other non-network sheets:
     // var expressionSheetData = parseExpressionSheets(sheet);
     // Everything that network does not already contain or that is repeated in additionalData
     // is put into network.
     // But this might be buggy...
-    Object.assign(parsedWorkbook, additionalData);
+    Object.assign(network, additionalData);
 
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
-        res.json(parsedWorkbook) :
+        res.json(network) :
         // If all does not look well, return the network with an error 400
-        res.status(400).json(parsedWorkbook);
+        res.status(400).json(network);
 };
 
 var grnSightToCytoscape = function (network) {
