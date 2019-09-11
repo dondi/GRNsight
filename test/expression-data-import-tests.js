@@ -78,7 +78,7 @@ describe("expression-data-import-tests", function () {
 
     describe("resolvable-missing-data", function () {
         it("should return no error", function () {
-            test.noError("test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx", 1);
+            test.noErrors("test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx", 1);
         });
     });
 
