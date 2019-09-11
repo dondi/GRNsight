@@ -63,18 +63,23 @@ export const setupHandlers = grnState => {
         return Math.min(max, Math.max(min, value));
     };
 
-    const saveSvgToFile  = (svgEl, name) => {
-        svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        var svgData = svgEl;
-        var preface = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n";
-        var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
-        var svgUrl = URL.createObjectURL(svgBlob);
-        var downloadLink = document.createElement("a");
-        downloadLink.href = svgUrl;
-        downloadLink.download = name;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+    const exportSVG = (svgElement, name) => {
+        var removedFileTypeName = name.replace(".xlsx", "");
+        var serializer = new XMLSerializer();
+        var source = serializer.serializeToString(svgElement);
+
+        if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+            source = source.replace(/^<svg/, "<svg xmlns=\"http://www.w3.org/2000/svg\"");
+        }
+        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+            source = source.replace(/^<svg/, "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
+        }
+
+        source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
+        var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+        $("#exportAsSvg").attr("href", svgUrl);
+        $("#exportAsSvg").attr("download", removedFileTypeName);
     };
 
     const setGraphLayout = layout => {
@@ -107,12 +112,13 @@ export const setupHandlers = grnState => {
 // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        saveSvgAsPng(svgContainer,  grnState.name + ".png");
+        var removedFileTypeName = name.replace(".xlsx", "");
+        saveSvgAsPng(svgContainer,  removedFileTypeName + ".png");
     });
 
     $(EXPORT_TO_SVG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        saveSvgToFile(svgContainer, grnState.name + ".svg");
+        exportSVG(svgContainer, grnState.name + ".svg");
     });
 
 // Node Coloring
