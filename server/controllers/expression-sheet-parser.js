@@ -39,10 +39,11 @@ var parseExpressionSheet = function (sheet) {
         positiveWeights: [],
         negativeWeights: [],
         sheetType: "unweighted",
+        time_points: []
     };
-    expressionData["time_points"] = sheet.data[0].slice(1);
+    expressionData["time_points"] = sheet[0].data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;
-    sheet.data.forEach(function (sheet) {
+    sheet[0].data.forEach(function (sheet) {
         var geneName = sheet[0];
         if (geneName) {
             var rowData = sheet.slice(1);
@@ -58,19 +59,59 @@ var parseExpressionSheet = function (sheet) {
     return expressionData;
 };
 
-module.exports = function (workbook) {
-    var output = {
-        expression: {} // expression data
-    };
-    workbook.forEach(function (sheet) {
-        if (isExpressionSheet(sheet.name)) {
-            output["expression"][sheet.name] = parseExpressionSheet(sheet);
-        }
-    });
-    // First try adding in a warning message. Is this a good place to do warning/error checks?
-    if (output["expression"].length === 0) {
-        addWarning(output["expression"], warningsList.missingExpressionWarning);
-    }
-    return output;
-};
+// This should return an object that has this function in it
+// module.exports = function (sheet) {
+//     var output = {
+//         expression: {} // expression data
+//     };
+//     sheet.forEach(function (sheet) {
+//         if (isExpressionSheet(sheet.name)) {
+//             output["expression"][sheet.name] = parseExpressionSheet(sheet);
+//         }
+//     });
+//     // First try adding in a warning message. Is this a good place to do warning/error checks?
+//     if (output["expression"] === null) {
+//         addWarning(output["expression"], warningsList.missingExpressionWarning);
+//     }
+//     // return output;
+//     return {
+//         parseExpressionSheet: parseExpressionSheet
+//     };
+// };
 
+module.exports = function (app) {
+    if (app) {
+
+    // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+        app.post("/upload", function (req, res) {
+      // TODO: Add file validation (make sure that file is an Excel file)
+            (new multiparty.Form()).parse(req, function (err, fields, files) {
+                if (err) {
+                    return res.json(400, "There was a problem uploading your file. Please try again.");
+                }
+                var input;
+                try {
+                    input = files.file[0].path;
+                } catch (err) {
+                    return res.json(400, "No upload file selected.");
+                }
+
+                if (path.extname(input) !== ".xlsx") {
+                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
+                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
+                        (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
+                        using the importer under File > Import." + " Additional information about file \
+                        types that GRNsight supports is in the Documentation.");
+                }
+
+                return processGRNmap(input, res, app);
+            });
+        });
+    }
+
+    // exporting parseSheet for use in testing. Do not remove!
+    return {
+        parseExpressionSheet: parseExpressionSheet,
+    };
+};

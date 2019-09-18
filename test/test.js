@@ -1,15 +1,16 @@
 var assert = require("chai").assert;
 var xlsx = require("node-xlsx");
 // var cytoscape = require("cytoscape");
-
 var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
+
 var expressionSheetParser = require(__dirname + "/../server/controllers" + "/expression-sheet-parser")();
+
+console.log(xlsx.parse("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx")[0].data[0]);
 // ERROR TEST FUNCTIONS:
 
 var noErrors = function (input) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.parseSheet(sheet);
-
     assert.equal(0, network.errors.length);
 };
 
@@ -191,12 +192,37 @@ var emptyRowError = function (input, frequency) {
 var labelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = expressionSheetParser.parseExpressionSheet(sheet);
-
     assert.equal(frequency, network.errors.length);
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
       "INCORRECT_SHEET_LABELING",
+      network.errors[i].errorCode
+    );
+    }
+};
+
+var emptyExpressionColumnError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    assert.equal(frequency, network.errors.length);
+
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+      "EMPTY_COLUMN",
+      network.errors[i].errorCode
+    );
+    }
+};
+
+var emptyExpressionRowError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    assert.equal(frequency, network.errors.length);
+
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+      "EMPTY_ROW",
       network.errors[i].errorCode
     );
     }
@@ -263,7 +289,7 @@ var emptyRowWarning = function (input, frequency) {
 
 var invalidNetworkSizeWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var network = spreadsheetController.parseSheet(sheet);
     var invalidNetworkSizeCount = network.warnings.filter(function (x) {
         return x.warningCode === "INVALID_NETWORK_SIZE";
     });
@@ -292,8 +318,11 @@ var extraneousDataWarning = function (input, frequency) {
 };
 
 var missingExpressionWarning = function (input, frequency) {
+    console.log("1");
     var sheet = xlsx.parse(input);
+    console.log("2");
     var network = expressionSheetParser.parseExpressionSheet(sheet);
+    console.log("3");
     var missingExpressionCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
@@ -346,6 +375,8 @@ exports.emptyRowError = emptyRowError;
 exports.labelError = labelError;
 exports.errorsCountError = errorsCountError;
 exports.specialCharacterError = specialCharacterError;
+exports.emptyExpressionColumnError = emptyExpressionColumnError;
+exports.emptyExpressionRowError = emptyExpressionRowError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

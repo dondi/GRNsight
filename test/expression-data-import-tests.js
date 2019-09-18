@@ -54,13 +54,13 @@ describe("expression-data-import-tests", function () {
 
     describe("empty_column", function () {
         it("Column in expression sheet contains no data.", function () {
-            test.missingValueError("test-files/expression-data-test-sheets/expression_sheet_empty_column.xlsx", 1);
+            test.emptyExpressionColumnError("test-files/expression-data-test-sheets/expression_sheet_empty_column.xlsx", 1);
         });
     });
 
     describe("empty_row", function () {
         it("Row in expression sheet contains no data.", function () {
-            test.emptyRowError("test-files/expression-data-test-sheets/expression_sheet_empty_row.xlsx", 1);
+            test.emptyExpressionRowError("test-files/expression-data-test-sheets/expression_sheet_empty_row.xlsx", 1);
         });
     });
 
