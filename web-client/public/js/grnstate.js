@@ -39,15 +39,6 @@ const annotateLinks = network => {
     });
 };
 
-const genePageData = () => {
-
-    // set to be a function for when data is read from .xml
-    return {
-        species: "Saccharomyces_cerevisiae",
-        taxon: "559292"
-    };
-};
-
 export const grnState = {
     name: null,
     simulation: undefined,
@@ -62,6 +53,8 @@ export const grnState = {
         // TODO: add colorOptimal so that the rest of the normalization code can get added
         this.resetNormalizationMax = max(network.positiveWeights.concat(network.negativeWeights));
         this.newNetwork = true;
+        this.species = network.meta.species;
+        this.taxon = network.meta.taxon_id;
     },
 
 // Edge Display Parameters
@@ -92,10 +85,9 @@ export const grnState = {
         nodeColoringOptions: [],
     },
 
-
-// Gene Page data
-    species: genePageData().species,
-    taxon: genePageData().taxon,
+// Gene Page data w/ default parameters (assume yeast)
+    species: "Saccharomyces_cerevisiae",
+    taxon: "559292",
 
 // Slider Parameters
     slidersLocked: false,
