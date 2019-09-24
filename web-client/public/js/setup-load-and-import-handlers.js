@@ -33,12 +33,19 @@ const uploadEpilogue = event => {
     $("a.upload > input[type=file]").val("");
     event.preventDefault();
 };
+const disableUpload = state => {
+    $("#upload").attr("disabled", state);
+    $("#upload-sif").attr("disabled", state);
+    $("#upload-graphml").attr("disabled", state);
+};
 
 const uploadHandler = (uploadRoute, uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
         const filename = submittedFilename($upload);
         if ($upload[0].files[0].size < 2000000) {
+            // disable upload button to prevent multiple uploads
+            disableUpload(true);
             const formData = createFileForm($upload);
             uploader(uploadRoute, filename, formData);
             uploadEpilogue(event);
@@ -51,6 +58,8 @@ const uploadHandler = (uploadRoute, uploader) => {
 };
 
 const networkErrorDisplayer = xhr => {
+    // re-enable upload button
+    disableUpload(false);
     // Deleted status, error for argument because it was never used
     const err = JSON.parse(xhr.responseText);
     let errorString = "Your graph failed to load.<br><br>";
@@ -88,9 +97,9 @@ export const setupLoadAndImportHandlers = grnState => {
             // Display the network in the console
             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
             grnState.network = network;
-
             reloader = () => loadGrn(url, name, formData);
-
+            // re-enable upload button
+            disableUpload(false);
             updateApp(grnState);
             // displayStatistics(network);
         }).error(networkErrorDisplayer);
@@ -115,26 +124,26 @@ export const setupLoadAndImportHandlers = grnState => {
             grnState.name = filename;
             grnState.network = network;
             grnState.annotateLinks();
-
             reloader = () => importGrn(uploadRoute, filename, formData);
-
+            // re-enable upload button
+            disableUpload(false);
             updateApp(grnState);
         }).error(networkErrorDisplayer);
     };
 
-    $("#upload").click(() =>
-        $("#launchFileOpen").off("click").on("click", () => $("#upload").click())
-    );
-    $("#upload-sif").click(() =>
-        $("#launchFileOpen").off("click").on("click", () => $("#upload-sif").click())
-    );
-    $("#upload-graphml").click(() =>
-        $("#launchFileOpen").off("click").on("click", () => $("#upload-graphml").click())
-    );
+    $("#upload").click(() => {
+        $("#launchFileOpen").off("click").on("click", () => $("#upload").click());
+    });
+    $("#upload-sif").click(() => {
+        $("#launchFileOpen").off("click").on("click", () => $("#upload-sif").click());
+    });
+    $("#upload-graphml").click(() => {
+        $("#launchFileOpen").off("click").on("click", () => $("#upload-graphml").click());
+    });
 
-    $("#upload").on("change", uploadHandler("upload", loadGrn));
-    $("#upload-sif").on("change", uploadHandler("upload-sif", importGrn));
-    $("#upload-graphml").on("change", uploadHandler("upload-graphml", importGrn));
+    $("#upload").change(uploadHandler("upload", loadGrn));
+    $("#upload-sif").change(uploadHandler("upload-sif", importGrn));
+    $("#upload-graphml").change(uploadHandler("upload-graphml", importGrn));
 
     const loadDemo = url => {
         loadGrn(url);
