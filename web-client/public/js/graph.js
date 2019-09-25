@@ -11,7 +11,6 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
-    EXPORT_AS_PNG
 } from "./constants";
 
 /* globals d3 */
