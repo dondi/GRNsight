@@ -1060,7 +1060,7 @@ export var drawGraph = function (network) {
             })
             .attr("stop-color", function (d) {
                 return d3.interpolateRdBu(scale(-d));
-            })
+            });
 
         svg.append("rect")
             .attr("width", `${width}px`)
