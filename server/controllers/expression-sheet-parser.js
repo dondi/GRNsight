@@ -7,18 +7,94 @@ var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 // var additionalSheetParser = require(__dirname + "/additional-sheet-parser.js");
 
 // var errorList = spreadsheetController.errorList;
-var warningsList = spreadsheetController.warningsList;
 
 // var addMessageToArray = spreadsheetController.addMessageToArray;
 
-var addWarning = spreadsheetController.addWarning;
-
+var addWarning = function (network, message) {
+    console.log("!!!!!" + Object.keys(network));
+    // ^ this returns !!!!!O <-- WHY
+    var warningsCount = network.warnings.length;
+    // Because ^ gives "cannot read property 'length' of undefined"
+    var MAX_WARNINGS = 75;
+    if (warningsCount < MAX_WARNINGS) {
+        addMessageToArray(network.warnings, message);
+    } else {
+        addMessageToArray(network.errors, errorList.warningsCountError);
+        return false;
+    }
+};
 // var addError = spreadsheetController.addError;
 
-var isExpressionSheet = function (sheetName) {
-    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
-        return sheetName.includes(suffix);
-    });
+var warningsList = {
+    missingExpressionWarning: function () {
+        return {
+            warningCode: "missing-expression-data-sheet",
+            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
+        };
+    },
+
+    // missingTargetGeneWarning: function (row, column) {
+    //     var colLetter = numbersToLetters[column];
+    //     var rowNum = row + 1;
+    //     return {
+    //         warningCode: "MISSING_TARGET",
+    //         errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
+    //     };
+    // },
+
+    // invalidMatrixDataWarning: function (row, column) {
+    //     var colLetter = numbersToLetters[column];
+    //     var rowNum = row + 1;
+    //     return {
+    //         warningCode: "INVALID_DATA",
+    //         errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
+    //     };
+    // },
+
+    // randomDataWarning: function (type, row, column) {
+    //     var colLetter = numbersToLetters[column];
+    //     var rowNum = row + 1;
+    //     return {
+    //         warningCode: "RANDOM_DATA",
+    //         errorDescription: "The value in cell " + colLetter + rowNum +
+    //         ", has a corresponding source and/or target gene that is detected as " + type + "."
+    //     };
+    // },
+
+    // emptyRowWarning: function (row) {
+    //     var rowNum = row + 1;
+    //     return {
+    //         warningCode: "EMPTY_ROW",
+    //         errorDescription: "Row " + rowNum + " was found to contain no data."
+    //     };
+    // },
+
+    // networkSizeWarning: function (genesLength, edgesLength) {
+    //     return {
+    //         warningCode: "INVALID_NETWORK_SIZE",
+    //         errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength +
+    //         " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+    //     };
+    // },
+
+    // incorrectlyNamedSheetWarning: function () {
+    //     return {
+    //         warningCode: "INCORRECTLY_NAMED_SHEET",
+    //         errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
+    //          'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
+    //          'network_optimized_weights' in order to be drawn as a weighted graph. \
+    //          Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
+    //     };
+    // },
+
+    // missingNetworkWarning: function () {
+    //     return {
+    //         warningCode: "MISSING_EXPRESSION_SHEET",
+    //         errorDescription: "The file you uploaded contains no expression data sheet. This is not required, \
+    //          but there may be errors in the way the nodes are colored without this data present."
+    //     };
+    // }
+
 };
 
 var fillArray = function (value, array, length) { // mutator
@@ -26,6 +102,12 @@ var fillArray = function (value, array, length) { // mutator
         array.push(value);
     }
     return array;
+};
+
+var isExpressionSheet = function (sheetName) {
+    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+        return sheetName.name.includes(suffix);
+    });
 };
 
 // Going to continue basing this section off of the parseSheet function in spreadsheet-controller.js
@@ -56,6 +138,17 @@ var parseExpressionSheet = function (sheet) {
         }
     });
     expressionData["data"] = geneData;
+
+    // TRY PUTTING WARNING STUFF HERE
+    var expCount = 0;
+    sheet.forEach(function (innerSheet) {
+        if (isExpressionSheet(innerSheet)) {
+            expCount++;
+        }
+    })
+    if (expCount <= 0) {
+        addWarning(sheet, warningsList.missingExpressionWarning());
+    }
     return expressionData;
 };
 
@@ -94,6 +187,19 @@ module.exports = function (app) {
                     input = files.file[0].path;
                 } catch (err) {
                     return res.json(400, "No upload file selected.");
+                }
+
+                var isExp = 0;
+                console.log("!!!!!");
+                // files.file.forEach(f => {
+                //     console.log("derpderpderp");
+                //     if (isExpressionSheet(f)) {
+                //         console.log("inside ze loop");
+                //         isExp++;
+                //     }
+                // })
+                if (isExp <= 0) {
+                    throw new missingExpressionWarning("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.");
                 }
 
                 if (path.extname(input) !== ".xlsx") {
