@@ -1035,27 +1035,36 @@ export var drawGraph = function (network) {
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
+        // Thank you https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
+        const linearGradientId = "node-coloring-color-scale";
+        var defs = svg.append("defs");
+        var linearGradient = defs.append("linearGradient")
+            .attr("id", linearGradientId)
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%");
+
         const increment = Math.abs(logFoldChangeMaxValue) / 50;  // Guarantee 50 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
+        var scale = d3.scaleLinear()
+            .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+            .range([0, 1]);
 
-        var coloring = svg.selectAll(".node-coloring-legend")
+        linearGradient.selectAll("stop")
             .data(gradientValues)
-            .attr("class", "node-coloring-legend");
-
-        coloring.enter().append("rect")
-            .attr("width", width / gradientValues.length + "px")
-            .attr("height", height + "px")
-            .attr("transform", function (d, i) {
-                return "translate(" + (i * (width / gradientValues.length)) + "," + 0 + ")";
+            .enter().append("stop")
+            .attr("offset", function (d, i) {
+                return i / (gradientValues.length - 1);
             })
-            .style("fill", function (d) {
-                var scale = d3.scaleLinear()
-                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
-                    .range([0, 1]);
-
-                // We negate d because we actually want red to be on the right.
+            .attr("stop-color", function (d) {
                 return d3.interpolateRdBu(scale(-d));
-            });
+            })
+
+        svg.append("rect")
+            .attr("width", `${width}px`)
+            .attr("height", `${height}px`)
+            .style("fill", `url(#${linearGradientId})`);
 
         var legendLabels = {
             left: {
