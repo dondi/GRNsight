@@ -11,10 +11,7 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
-    EXPORT_AS_PNG
 } from "./constants";
-
-import { saveSvgAsPng } from "save-svg-as-png";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -117,7 +114,7 @@ export var drawGraph = function (network) {
     grnState.normalizationMax = maxWeight;
     grnState.resetNormalizationMax = maxWeight;
 
-  // Normalize all weights b/w 2-14
+    // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : maxWeight])
@@ -126,7 +123,7 @@ export var drawGraph = function (network) {
 
     var unweighted = false;
 
-  // if unweighted, all weights are 2
+    // if unweighted, all weights are 2
     if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
@@ -211,7 +208,9 @@ export var drawGraph = function (network) {
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
-    svg.style("pointer-events", "all").call(zoomDrag);
+    svg.style("pointer-events", "all").call(zoomDrag)
+        .style("font-family", "Helvetica Neue");
+
 
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
@@ -219,8 +218,8 @@ export var drawGraph = function (network) {
 
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
-  // This rectangle catches all of the mousewheel and pan events, without letting
-  // them bubble up to the body.
+    // This rectangle catches all of the mousewheel and pan events, without letting
+    // them bubble up to the body.
     boundingBoxContainer.append("rect")
         .attr("width", width)
         .attr("height", height)
@@ -491,9 +490,9 @@ export var drawGraph = function (network) {
                 return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
             } else {
 
-              // If negative, you need one bar for horizontal and one for vertical.
-              // If the user is not coloring the weighted
-              // sheets, then we make all of the markers arrowheads.
+                // If negative, you need one bar for horizontal and one for vertical.
+                // If the user is not coloring the weighted
+                // sheets, then we make all of the markers arrowheads.
                 if (d.value < 0 && grnState.colorOptimal) {
                     defs.append("marker")
                         .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
@@ -520,22 +519,22 @@ export var drawGraph = function (network) {
                         })
                         .attr("orient", 180)
                         .append("rect")
-                            .attr("width", function () {
-                                return d.strokeWidth;
-                            })
-                            .attr("height", function () {
-                                return 25 + d.strokeWidth;
-                            })
-                            .attr("rx", 10)
-                            .attr("ry", 10)
-                            .attr("style", function () {
-                                if ( normalize(d) <= grayThreshold) {
-                                    color = "gray";
-                                } else {
-                                    color = d.stroke;
-                                }
-                                return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
-                            });
+                        .attr("width", function () {
+                            return d.strokeWidth;
+                        })
+                        .attr("height", function () {
+                            return 25 + d.strokeWidth;
+                        })
+                        .attr("rx", 10)
+                        .attr("ry", 10)
+                        .attr("style", function () {
+                            if ( normalize(d) <= grayThreshold) {
+                                color = "gray";
+                            } else {
+                                color = d.stroke;
+                            }
+                            return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
+                        });
 
                     defs.append("marker")
                         .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
@@ -630,11 +629,11 @@ export var drawGraph = function (network) {
                         })
                         .attr("orient", function () {
                             return (x1 === x2 && y1 === y2) ?
-                            {
-                                2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
-                                8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
-                                14: 232
-                            }[d.strokeWidth] : "auto";
+                                {
+                                    2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
+                                    8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
+                                    14: 232
+                                }[d.strokeWidth] : "auto";
                         })
                         .append("path")
                         .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
@@ -655,23 +654,23 @@ export var drawGraph = function (network) {
 
     if (network.sheetType === "weighted") {
         link.append("text")
-        .attr("class", "weight")
-        .attr("text-anchor", "middle")
-        .attr("text-anchor", "middle")
-        .text(function (d) {
-            return d.value.toPrecision(4);
-        });
+            .attr("class", "weight")
+            .attr("text-anchor", "middle")
+            .attr("text-anchor", "middle")
+            .text(function (d) {
+                return d.value.toPrecision(4);
+            });
 
         weight = weight.data(network.links)
-        .enter().append("text")
-        .attr("class", "weight")
-        .attr("text-anchor", "middle")
-        .text(function (d) {
-            return d.value.toPrecision(4);
-        })
-        .each(function (d) {
-            d.weightElement = d3.select(this);
-        });
+            .enter().append("text")
+            .attr("class", "weight")
+            .attr("text-anchor", "middle")
+            .text(function (d) {
+                return d.value.toPrecision(4);
+            })
+            .each(function (d) {
+                d.weightElement = d3.select(this);
+            });
 
     }
 
@@ -703,14 +702,14 @@ export var drawGraph = function (network) {
         d.target.centerX = d.target.x + (w / 2);
         d.target.centerY = d.target.y + (h / 2);
 
-          // This function calculates the newX and newY.
+        // This function calculates the newX and newY.
         smartPathEnd(d, w, h);
         x1 = d.source.newX;
         y1 = d.source.newY;
         x2 = d.target.newX;
         y2 = d.target.newY;
 
-          // Unit vectors.
+        // Unit vectors.
         var ux = x2 - x1;
         var uy = y2 - y1;
         var umagnitude = Math.sqrt(ux * ux + uy * uy);
@@ -723,7 +722,7 @@ export var drawGraph = function (network) {
         vx /= vmagnitude;
         vy /= vmagnitude;
 
-          // Check for vector direction.
+        // Check for vector direction.
         if (((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) ||
             ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
             vx = -vx; vy = -vy;
@@ -766,7 +765,7 @@ export var drawGraph = function (network) {
             MINIMUM_DISTANCE = d.strokeWidth > 11 ? 16.5 : 15;
         }
 
-    // Set an offset if the edge is a repressor to make room for the flat arrowhead
+        // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var globalOffset = parseFloat(d.strokeWidth);
 
         if (d.value < 0 && grnState.colorOptimal) {
@@ -775,62 +774,62 @@ export var drawGraph = function (network) {
 
         var thicknessAdjustment = globalOffset > MINIMUM_DISTANCE ? 1 : 0;
 
-    // We need to work out the (tan of the) angle between the
-    // imaginary horizontal line running through the center of the
-    // target node and the imaginary line connecting the center of
-    // the target node with the top-left corner of the same
-    // node. Of course, this angle is fixed.
+        // We need to work out the (tan of the) angle between the
+        // imaginary horizontal line running through the center of the
+        // target node and the imaginary line connecting the center of
+        // the target node with the top-left corner of the same
+        // node. Of course, this angle is fixed.
         d.tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
 
-    // We also need to work out the (tan of the) angle between the
-    // imaginary horizontal line running through the center of the
-    // target node and the imaginary line connecting the center of
-    // the target node with the center of the source node. This
-    // angle changes as the nodes move around the screen.
+        // We also need to work out the (tan of the) angle between the
+        // imaginary horizontal line running through the center of the
+        // target node and the imaginary line connecting the center of
+        // the target node with the center of the source node. This
+        // angle changes as the nodes move around the screen.
         d.tanRatioMoveable = Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
         // Note, JavaScript handles division-by-zero by returning
         // Infinity, which in this case is useful, especially
         // since it handles the subsequent Infinity arithmetic
         // correctly.
 
-    // Now work out the intersection point
+        // Now work out the intersection point
         if (d.tanRatioMoveable === d.tanRatioFixed) {
-      // Then path is intersecting at corner of textbox so draw
-      // path to that point
+            // Then path is intersecting at corner of textbox so draw
+            // path to that point
 
-      // By default assume path intersects a left-side corner
+            // By default assume path intersects a left-side corner
             d.target.newX = d.target.x - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerX < d.source.newX) {
-          // i.e. if target node is to left of the source node
-          // then path intersects a right-side corner
+                // i.e. if target node is to left of the source node
+                // then path intersects a right-side corner
                 d.target.newX = d.target.x + w + globalOffset;
             }
 
-      // By default assume path intersects a top corner
+            // By default assume path intersects a top corner
             d.target.newY = d.target.y - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerY < d.source.newY) {
-          // i.e. if target node is above the source node
-          // then path intersects a bottom corner
+                // i.e. if target node is above the source node
+                // then path intersects a bottom corner
                 d.target.newY = d.target.y + h + globalOffset;
             }
         }
 
         if (d.tanRatioMoveable < d.tanRatioFixed) {
-      // Then path is intersecting on a vertical side of the
-      // textbox, which means we know the x-coordinate of the
-      // path endpoint but we need to work out the y-coordinate
+            // Then path is intersecting on a vertical side of the
+            // textbox, which means we know the x-coordinate of the
+            // path endpoint but we need to work out the y-coordinate
 
-      // By default assume path intersects left vertical side
+            // By default assume path intersects left vertical side
             d.target.newX = d.target.x - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerX < d.source.newX) {
-        // i.e. if target node is to left of the source node
-        // then path intersects right vertical side
+                // i.e. if target node is to left of the source node
+                // then path intersects right vertical side
                 if (d.type !== "arrowhead") {
                     d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
@@ -838,31 +837,31 @@ export var drawGraph = function (network) {
                 }
             }
 
-      // Now use a bit of trigonometry to work out the y-coord.
+            // Now use a bit of trigonometry to work out the y-coord.
 
-      // By default assume path intersects towards top of node
+            // By default assume path intersects towards top of node
             d.target.newY = d.target.centerY - ((d.target.centerX - d.target.x) * d.tanRatioMoveable);
 
-      // But...
+            // But...
             if (d.target.centerY < d.source.newY) {
-        // i.e. if target node is above the source node
-        // then path intersects towards bottom of the node
+                // i.e. if target node is above the source node
+                // then path intersects towards bottom of the node
                 d.target.newY = (2 * d.target.y) - d.target.newY + h;
             }
         }
 
         if (d.tanRatioMoveable > d.tanRatioFixed) {
-      // Then path is intersecting on a horizontal side of the
-      // textbox, which means we know the y-coordinate of the
-      // path endpoint but we need to work out the x-coordinate
+            // Then path is intersecting on a horizontal side of the
+            // textbox, which means we know the y-coordinate of the
+            // path endpoint but we need to work out the x-coordinate
 
-      // By default assume path intersects top horizontal side
+            // By default assume path intersects top horizontal side
             d.target.newY = d.target.y - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerY < d.source.newY) {
-        // i.e. if target node is above the source node
-        // then path intersects bottom horizontal side
+                // i.e. if target node is above the source node
+                // then path intersects bottom horizontal side
                 if (d.type !== "arrowhead") {
                     d.target.newY = d.target.y + h + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
@@ -870,15 +869,15 @@ export var drawGraph = function (network) {
                 }
             }
 
-      // Now use a bit of trigonometry to work out the x-coord.
+            // Now use a bit of trigonometry to work out the x-coord.
 
-      // By default assume path intersects towards lefthand side
+            // By default assume path intersects towards lefthand side
             d.target.newX = d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable);
 
-      // But...
+            // But...
             if (d.target.centerX < d.source.newX) {
-        // i.e. if target node is to left of the source node
-        // then path intersects towards the righthand side
+                // i.e. if target node is to left of the source node
+                // then path intersects towards the righthand side
                 d.target.newX = (2 * d.target.x) - d.target.newX + w;
             }
         }
@@ -914,6 +913,7 @@ export var drawGraph = function (network) {
             .attr("dy", NODE_HEIGHT)
             .attr("text-anchor", "middle")
             .attr("class", "nodeText")
+            .style("font-family", "Helvetica Neue")
             .style("font-size", "18px")
             .style("stroke-width", "0")
             .style("fill", "black")
@@ -986,37 +986,37 @@ export var drawGraph = function (network) {
         var timePoints = [];
         node.each(function (p) {
             d3.select(this)
-            .append("g")
-            .selectAll(".coloring")
-            .data(function () {
-                var result = getExpressionData(p.name, dataset, average);
-                timePoints = result.timePoints;
-                return result.data;
-            })
-            .attr("class", "coloring")
-            .enter().append("rect")
-            .attr("width", function () {
-                var width = rect.attr("width") / timePoints.length;
-                return width + "px";
-            })
-            .attr("class", "coloring")
-            .attr("height", rect.attr("height") / 2 + "px")
-            .attr("transform", function (d, i) {
-                var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
-                var xOffset = i * (rect.attr("width") / timePoints.length);
-                return "translate(" + xOffset + "," +  yOffset + ")";
-            })
-            .attr("stroke-width", "0px")
-            .style("fill", function (d) {
-                d = d || 0; // missing values are changed to 0
-                var scale = d3.scaleLinear()
-                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
-                    .range([0, 1]);
-                return d3.interpolateRdBu(scale(-d));
-            })
-            .text(function (d) {
-                return "data " + JSON.stringify(d) + " of " + p.name;
-            });
+                .append("g")
+                .selectAll(".coloring")
+                .data(function () {
+                    var result = getExpressionData(p.name, dataset, average);
+                    timePoints = result.timePoints;
+                    return result.data;
+                })
+                .attr("class", "coloring")
+                .enter().append("rect")
+                .attr("width", function () {
+                    var width = rect.attr("width") / timePoints.length;
+                    return width + "px";
+                })
+                .attr("class", "coloring")
+                .attr("height", rect.attr("height") / 2 + "px")
+                .attr("transform", function (d, i) {
+                    var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
+                    var xOffset = i * (rect.attr("width") / timePoints.length);
+                    return "translate(" + xOffset + "," +  yOffset + ")";
+                })
+                .attr("stroke-width", "0px")
+                .style("fill", function (d) {
+                    d = d || 0; // missing values are changed to 0
+                    var scale = d3.scaleLinear()
+                        .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+                        .range([0, 1]);
+                    return d3.interpolateRdBu(scale(-d));
+                })
+                .text(function (d) {
+                    return "data " + JSON.stringify(d) + " of " + p.name;
+                });
         });
     };
 
@@ -1104,9 +1104,9 @@ export var drawGraph = function (network) {
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
             colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
+                grnState.nodeColoring.logFoldChangeMaxValue);
             colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
+                grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
@@ -1268,8 +1268,8 @@ export var drawGraph = function (network) {
         }
     };
 
-  // Tick only runs while the graph physics are still running.
-  // (I.e. when the graph is completely relaxed, tick stops running.)
+    // Tick only runs while the graph physics are still running.
+    // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
         var getSelfReferringEdge = function (node) {
             return link.select("path")["_groups"][0].map(function (path) {
@@ -1360,7 +1360,7 @@ export var drawGraph = function (network) {
                     var dy = y2 - y1;
                     var dr = Math.sqrt(dx * dx + dy * dy);
 
-              // Defaults for normal edge.
+                    // Defaults for normal edge.
                     var drx = dr;
                     var dry = dr;
                     var xRotation = 0; // degrees
@@ -1368,33 +1368,33 @@ export var drawGraph = function (network) {
                     var sweep = 1;     // 1 or 0
                     var offset = parseFloat(d.strokeWidth);
 
-              // Edge adjustment values when long self-node edges get hidden behind the node.
+                    // Edge adjustment values when long self-node edges get hidden behind the node.
                     var DEFAULT_NODE_SHIFT = 1.033;
                     var SHORT_NODE_LIMIT = 135;
                     var ADDITIONAL_SHIFT = 0.07;
                     var END_POINT_ADJUSTMENT = 1.2;
 
 
-            // Self edge.
+                    // Self edge.
                     if (x1 === x2 && y1 === y2) {
-            // Move the position of the loop.
+                        // Move the position of the loop.
                         x1 = d.source.x + (d.source.textWidth) * DEFAULT_NODE_SHIFT;
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
-            // Fiddle with this angle to get loop oriented.
+                        // Fiddle with this angle to get loop oriented.
                         xRotation = 45;
 
-            // Needs to be 1.
+                        // Needs to be 1.
                         largeArc = 1;
 
-            // Change sweep to change orientation of loop.
+                        // Change sweep to change orientation of loop.
                         sweep = 1;
 
                         drx = getSelfReferringRadius(d);
                         dry = getSelfReferringRadius(d);
 
-            // For whatever reason the arc collapses to a point if the beginning
-            // and ending points of the arc are the same, so kludge it.
+                        // For whatever reason the arc collapses to a point if the beginning
+                        // and ending points of the arc are the same, so kludge it.
                         if (d.source.textWidth > SHORT_NODE_LIMIT) {
                             DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
                         }
@@ -1478,8 +1478,4 @@ export var drawGraph = function (network) {
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
     $(".startDisabled").removeClass("disabled");
-
-    $(EXPORT_AS_PNG).click(() => {
-        saveSvgAsPng(document.getElementById("exportContainer"),  grnState.name + ".png");
-    });
 };

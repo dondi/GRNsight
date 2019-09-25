@@ -41,7 +41,7 @@ const annotateLinks = network => {
 
 const genePageData = () => {
 
-    // set to be a function for when data is read from .xml
+      // set to be a function for when data is read from .xml
     return {
         species: "Saccharomyces_cerevisiae",
         taxon: "559292"
@@ -92,8 +92,7 @@ export const grnState = {
         nodeColoringOptions: [],
     },
 
-
-// Gene Page data
+// Gene Page data w/ default parameters (assume yeast)
     species: genePageData().species,
     taxon: genePageData().taxon,
 

@@ -14,7 +14,8 @@ export const SCHADE_OUTPUT_ID     = "#schadeOutput";
 export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
-export const EXPORT_AS_PNG        = "#exportAsPng";
+export const EXPORT_TO_PNG           = "#exportAsPng";
+export const EXPORT_TO_SVG           = "#exportAsSvg";
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
@@ -108,16 +109,14 @@ export const TOP_DATASET_SELECTION_SIDEBAR              = "#dataset-top";
 export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdownMenu";
 export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
 
-export const ZOOM_CONTROL = ".zoom";
-export const ZOOM_DISPLAY_MAXIMUM_SELECTOR = ".maximum-zoom-display";
-export const ZOOM_DISPLAY_MAXIMUM_VALUE = 200;
-export const ZOOM_DISPLAY_MINIMUM_SELECTOR = ".minimum-zoom-display";
-export const ZOOM_DISPLAY_MINIMUM_VALUE = 25;
-export const ZOOM_DISPLAY_MIDDLE = 100;
-export const ZOOM_ADAPTIVE_MAX_SCALE = 4;
-
-export const ZOOM_SLIDER = "#zoomSlider";
-export const ZOOM_INPUT = "#zoomInput";
-export const ZOOM_PERCENT = "#zoomPercent";
-
-export const VIEWPORT_FIT = "containerFit";
+export const ZOOM_CONTROL                               = ".zoom";
+export const ZOOM_DISPLAY_MAXIMUM_SELECTOR              = ".maximum-zoom-display";
+export const ZOOM_DISPLAY_MAXIMUM_VALUE                 = 200;
+export const ZOOM_DISPLAY_MINIMUM_SELECTOR              = ".minimum-zoom-display";
+export const ZOOM_DISPLAY_MINIMUM_VALUE                 = 25;
+export const ZOOM_DISPLAY_MIDDLE                        = 100;
+export const ZOOM_ADAPTIVE_MAX_SCALE                    = 4;
+export const ZOOM_SLIDER                                = "#zoomSlider";
+export const ZOOM_INPUT                                 = "#zoomInput";
+export const ZOOM_PERCENT                               = "#zoomPercent";
+export const VIEWPORT_FIT                               = "containerFit";

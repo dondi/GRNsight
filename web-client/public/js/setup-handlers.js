@@ -1,5 +1,6 @@
 import { updaters } from "./graph";
 import { updateApp } from "./update-app";
+import { saveSvgAsPng } from "save-svg-as-png";
 
 import {
     FORCE_GRAPH,
@@ -48,7 +49,9 @@ import {
     ZOOM_DISPLAY_MAXIMUM_SELECTOR,
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MINIMUM_SELECTOR,
-    ZOOM_DISPLAY_MINIMUM_VALUE
+    ZOOM_DISPLAY_MINIMUM_VALUE,
+    EXPORT_TO_PNG,
+    EXPORT_TO_SVG
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -60,7 +63,35 @@ export const setupHandlers = grnState => {
         return Math.min(max, Math.max(min, value));
     };
 
-    // Grid buttons
+    const determineFileType = filename => {
+        if (filename.includes(".xlsx")) {
+            return ".xlsx";
+        } else if (filename.includes(".sif")) {
+            return ".sif";
+        } else if (filename.includes(".graphml")) {
+            return ".graphml";
+        }
+    };
+
+    const exportSVG = (svgElement, name) => {
+        var editedName = name.replace(determineFileType(name), "");
+        var serializer = new XMLSerializer();
+        var source = serializer.serializeToString(svgElement);
+
+        if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+            source = source.replace(/^<svg/, "<svg xmlns=\"http://www.w3.org/2000/svg\"");
+        }
+        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+            source = source.replace(/^<svg/, "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
+        }
+
+        source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
+        var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+
+        $("#exportAsSvg").attr("href", svgUrl);
+        $("#exportAsSvg").attr("download", editedName);
+    };
+
     const setGraphLayout = layout => {
         const different = grnState.graphLayout !== layout;
         grnState.graphLayout = layout;
@@ -75,9 +106,30 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     };
 
-    $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
-    $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
-    $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
+    // Grid and Force Graph Layout
+    $(GRID_LAYOUT_BUTTON).click(() => {
+        setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH);
+    });
+
+    $(FORCE_GRAPH_CLASS).click(() => {
+        setGraphLayout(FORCE_GRAPH);
+    });
+
+    $(GRID_LAYOUT_CLASS).click(() =>  {
+        setGraphLayout(GRID_LAYOUT);
+    });
+
+// Image Export
+    $(EXPORT_TO_PNG).click(() => {
+        var svgContainer = document.getElementById("exportContainer");
+        var editedName = grnState.name.replace(determineFileType(name), "");
+        saveSvgAsPng(svgContainer, editedName + ".png");
+    });
+
+    $(EXPORT_TO_SVG).click(() => {
+        var svgContainer = document.getElementById("exportContainer");
+        exportSVG(svgContainer, grnState.name + ".svg");
+    });
 
 // Node Coloring
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
@@ -165,7 +217,6 @@ export const setupHandlers = grnState => {
     });
 
 // Sliders Code
-
     var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
     };
@@ -198,7 +249,6 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    // Sliders code
     $(LOCK_SLIDERS_CLASS).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
@@ -220,7 +270,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Weights Visualization Handlers
+// Weights Visualization
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
         grnState.edgeWeightDisplayOption = SHOW_ALL_WEIGHTS;
         updateApp(grnState);
@@ -252,7 +302,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Grey Edges Handlers
+// Grey Edges
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);

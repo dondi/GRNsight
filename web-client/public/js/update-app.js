@@ -194,16 +194,6 @@ const disableColorOptimal = () => {
 };
 
 // Sliders Functions
-export const modifyChargeParameter = (value) => {
-    grnState.simulation.force("charge").strength(value);
-    grnState.simulation.alpha(1);
-};
-
-export const modifyLinkDistanceParameter = (value) => {
-    grnState.simulation.force("link").distance(value);
-    grnState.simulation.alpha(1);
-};
-
 const updateSliderState = slidersLocked => {
     const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
     if (forceGraphDisabled) {
@@ -230,24 +220,38 @@ const updateSliderState = slidersLocked => {
     }
 };
 
+export const modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+
+export const modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
+};
+
 const updateChargeSliderValues = () => {
-    modifyChargeParameter(grnState.chargeSlider.currentVal);
+    if (grnState.network !== null) {
+        modifyChargeParameter(grnState.chargeSlider.currentVal);
+    }
     $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
     $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).html(grnState.chargeSlider.currentVal +
-      ((grnState.chargeSlider.needsAppendedZeros
-          && grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        ((grnState.chargeSlider.needsAppendedZeros &&
+            grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
 const updateLinkDistanceSliderValues = () => {
-    modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+    if (grnState.network !== null) {
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+    }
     $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).html(grnState.linkDistanceSlider.currentVal +
-      ((grnState.linkDistanceSlider.needsAppendedZeros
-        && grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        ((grnState.linkDistanceSlider.needsAppendedZeros &&
+            grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
 // Grid Layout Functions
@@ -525,10 +529,8 @@ export const updateApp = grnState => {
         $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
     }
 
-    if (grnState.network !== null) {
-        updateChargeSliderValues();
-        updateLinkDistanceSliderValues();
-    }
+    updateChargeSliderValues();
+    updateLinkDistanceSliderValues();
 
     $(ZOOM_CONTROL).prop({ disabled: !grnState.network });
     if (!grnState.network) {
