@@ -9,6 +9,8 @@ import {
     ZOOM_SLIDER,
     ZOOM_DISPLAY_MINIMUM_VALUE,
     ZOOM_DISPLAY_MAXIMUM_VALUE,
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_ADAPTIVE_MAX_SCALE,
     EXPORT_AS_PNG
 } from "./constants";
 
@@ -88,13 +90,12 @@ export var drawGraph = function (network) {
 
     const MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM_VALUE;
     const ADAPTIVE_MAX_DISPLAY = ZOOM_DISPLAY_MAXIMUM_VALUE;
-    const MIDDLE_DISPLAY = 100;
     const MIN_SCALE = 0.25;
-    const ADAPTIVE_MAX_SCALE = 4;
     const MIDDLE_SCALE = 1;
 
-    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, MIDDLE_DISPLAY, MIN_SCALE, MIDDLE_SCALE);
-    const zoomScaleRight = createZoomScale(MIDDLE_DISPLAY, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ADAPTIVE_MAX_SCALE);
+    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE, MIN_SCALE, MIDDLE_SCALE);
+    const zoomScaleRight = createZoomScale(
+        ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ZOOM_ADAPTIVE_MAX_SCALE);
 
     // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
@@ -207,7 +208,7 @@ export var drawGraph = function (network) {
     var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
 
     var zoom = d3.zoom()
-        .scaleExtent([MIN_SCALE, ADAPTIVE_MAX_SCALE])
+        .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
     svg.style("pointer-events", "all").call(zoomDrag);
@@ -255,11 +256,11 @@ export var drawGraph = function (network) {
 
     const updateAppBasedOnZoomValue = () => {
         const zoomDisplay = grnState.zoomValue;
-        if (adaptive || (!adaptive && grnState.zoomValue < MIDDLE_DISPLAY)) {
-            setGraphZoom((zoomDisplay <= MIDDLE_DISPLAY ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
+        if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
+            setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
         } else {
-            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= MIDDLE_DISPLAY)
-            grnState.zoomValue = MIDDLE_DISPLAY;
+            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
             setGraphZoom(MIDDLE_SCALE);
         }
 
@@ -273,7 +274,7 @@ export var drawGraph = function (network) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        $(ZOOM_SLIDER).val((finalDisplay <= MIDDLE_DISPLAY ? zoomScaleSliderLeft : zoomScaleSliderRight)
+        $(ZOOM_SLIDER).val((finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)
             .invert(finalDisplay));
     };
 
@@ -281,7 +282,7 @@ export var drawGraph = function (network) {
      * To eliminate coupling between how the zoom slider element is defined in markup and how zoom values are
      * calculated and displayed, we define this function to read the zoom slider for its minimum, maximum, and
      * midpoint. The slider’s minimum will be shown as MIN_DISPLAY, the slider’s maximum will be shown as
-     * ADAPTIVE_MAX_DISPLAY, and the slider’s midpoint will be shown as MIDDLE_DISPLAY.
+     * ADAPTIVE_MAX_DISPLAY, and the slider’s midpoint will be shown as ZOOM_DISPLAY_MIDDLE.
      *
      * Elements showing minimum and maximum display values are also updated here so that they are consistent
      * with these constants. This way, all zoom calculations are based on these constants, and changing these
@@ -292,12 +293,12 @@ export var drawGraph = function (network) {
         const sliderMax = +$(ZOOM_SLIDER).attr("max");
         sliderMidpoint = (sliderMin + sliderMax) / 2;
 
-        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, MIDDLE_DISPLAY);
-        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, MIDDLE_DISPLAY, ADAPTIVE_MAX_DISPLAY);
+        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE);
+        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY);
 
         // Reset the zoom value to the midpoint whenever we load a new network.
         if (grnState.newNetwork) {
-            grnState.zoomValue = MIDDLE_DISPLAY;
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
         }
 
         updateAppBasedOnZoomValue();
@@ -367,8 +368,8 @@ export var drawGraph = function (network) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
-            if (grnState.zoomValue > MIDDLE_DISPLAY) {
-                grnState.zoomValue = MIDDLE_DISPLAY;
+            if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
+                grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
                 updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
             }

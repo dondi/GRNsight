@@ -68,6 +68,8 @@ import {
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
   ZOOM_CONTROL,
+  ZOOM_DISPLAY_MIDDLE,
+  ZOOM_ADAPTIVE_MAX_SCALE,
   ZOOM_INPUT,
   ZOOM_SLIDER
 } from "./constants";
@@ -532,8 +534,8 @@ export const updateApp = grnState => {
     if (!grnState.network) {
         // Set initial values when there is no network: this is necessarily explicit because Firefox
         // preserves these values even upon a browser reload.
-        $(ZOOM_INPUT).val(100);
-        $(ZOOM_SLIDER).val(4);
+        $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
+        $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
 
     refreshApp();
