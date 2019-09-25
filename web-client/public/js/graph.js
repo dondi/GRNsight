@@ -9,6 +9,8 @@ import {
     ZOOM_SLIDER,
     ZOOM_DISPLAY_MINIMUM_VALUE,
     ZOOM_DISPLAY_MAXIMUM_VALUE,
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_ADAPTIVE_MAX_SCALE,
     EXPORT_AS_PNG
 } from "./constants";
 
@@ -88,13 +90,12 @@ export var drawGraph = function (network) {
 
     const MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM_VALUE;
     const ADAPTIVE_MAX_DISPLAY = ZOOM_DISPLAY_MAXIMUM_VALUE;
-    const MIDDLE_DISPLAY = 100;
     const MIN_SCALE = 0.25;
-    const ADAPTIVE_MAX_SCALE = 4;
     const MIDDLE_SCALE = 1;
 
-    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, MIDDLE_DISPLAY, MIN_SCALE, MIDDLE_SCALE);
-    const zoomScaleRight = createZoomScale(MIDDLE_DISPLAY, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ADAPTIVE_MAX_SCALE);
+    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE, MIN_SCALE, MIDDLE_SCALE);
+    const zoomScaleRight = createZoomScale(
+        ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ZOOM_ADAPTIVE_MAX_SCALE);
 
     // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
@@ -207,7 +208,7 @@ export var drawGraph = function (network) {
     var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
 
     var zoom = d3.zoom()
-        .scaleExtent([MIN_SCALE, ADAPTIVE_MAX_SCALE])
+        .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
     svg.style("pointer-events", "all").call(zoomDrag);
@@ -255,11 +256,11 @@ export var drawGraph = function (network) {
 
     const updateAppBasedOnZoomValue = () => {
         const zoomDisplay = grnState.zoomValue;
-        if (adaptive || (!adaptive && grnState.zoomValue < MIDDLE_DISPLAY)) {
-            setGraphZoom((zoomDisplay <= MIDDLE_DISPLAY ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
+        if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
+            setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
         } else {
-            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= MIDDLE_DISPLAY)
-            grnState.zoomValue = MIDDLE_DISPLAY;
+            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
             setGraphZoom(MIDDLE_SCALE);
         }
 
@@ -273,7 +274,7 @@ export var drawGraph = function (network) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        $(ZOOM_SLIDER).val((finalDisplay <= MIDDLE_DISPLAY ? zoomScaleSliderLeft : zoomScaleSliderRight)
+        $(ZOOM_SLIDER).val((finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)
             .invert(finalDisplay));
     };
 
@@ -281,7 +282,7 @@ export var drawGraph = function (network) {
      * To eliminate coupling between how the zoom slider element is defined in markup and how zoom values are
      * calculated and displayed, we define this function to read the zoom slider for its minimum, maximum, and
      * midpoint. The slider’s minimum will be shown as MIN_DISPLAY, the slider’s maximum will be shown as
-     * ADAPTIVE_MAX_DISPLAY, and the slider’s midpoint will be shown as MIDDLE_DISPLAY.
+     * ADAPTIVE_MAX_DISPLAY, and the slider’s midpoint will be shown as ZOOM_DISPLAY_MIDDLE.
      *
      * Elements showing minimum and maximum display values are also updated here so that they are consistent
      * with these constants. This way, all zoom calculations are based on these constants, and changing these
@@ -292,12 +293,12 @@ export var drawGraph = function (network) {
         const sliderMax = +$(ZOOM_SLIDER).attr("max");
         sliderMidpoint = (sliderMin + sliderMax) / 2;
 
-        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, MIDDLE_DISPLAY);
-        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, MIDDLE_DISPLAY, ADAPTIVE_MAX_DISPLAY);
+        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE);
+        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY);
 
         // Reset the zoom value to the midpoint whenever we load a new network.
         if (grnState.newNetwork) {
-            grnState.zoomValue = MIDDLE_DISPLAY;
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
         }
 
         updateAppBasedOnZoomValue();
@@ -367,8 +368,8 @@ export var drawGraph = function (network) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
-            if (grnState.zoomValue > MIDDLE_DISPLAY) {
-                grnState.zoomValue = MIDDLE_DISPLAY;
+            if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
+                grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
                 updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
             }
@@ -1024,58 +1025,71 @@ export var drawGraph = function (network) {
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
         var xMargin = 10;
         var yMargin = 30;
-        var width = 200;
+        var width = 220;
         var height = 10;
         var textYOffset = 10;
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
-            .attr("width", width + xMargin * 2)
+            .attr("width", "100%")
             .attr("height", height + yMargin)
             .append("g")
             .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
 
+        // Thank you https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
+        const linearGradientId = "node-coloring-color-scale";
+        var defs = svg.append("defs");
+        var linearGradient = defs.append("linearGradient")
+            .attr("id", linearGradientId)
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%");
+
         const increment = Math.abs(logFoldChangeMaxValue) / 50;  // Guarantee 50 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
+        var scale = d3.scaleLinear()
+            .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+            .range([0, 1]);
 
-        var coloring = svg.selectAll(".node-coloring-legend")
+        linearGradient.selectAll("stop")
             .data(gradientValues)
-            .attr("class", "node-coloring-legend");
-
-        coloring.enter().append("rect")
-            .attr("width", width / gradientValues.length + "px")
-            .attr("height", height + "px")
-            .attr("transform", function (d, i) {
-                return "translate(" + (i * (width / gradientValues.length)) + "," + 0 + ")";
+            .enter().append("stop")
+            .attr("offset", function (d, i) {
+                return i / (gradientValues.length - 1);
             })
-            .style("fill", function (d) {
-                var scale = d3.scaleLinear()
-                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
-                    .range([0, 1]);
-
-                // We negate d because we actually want red to be on the right.
+            .attr("stop-color", function (d) {
                 return d3.interpolateRdBu(scale(-d));
             });
 
+        svg.append("rect")
+            .attr("width", `${width}px`)
+            .attr("height", `${height}px`)
+            .style("fill", `url(#${linearGradientId})`);
+
         var legendLabels = {
-            "left": {
-                "textContent": (-logFoldChangeMaxValue).toFixed(2),
-                "x": -xMargin / 2
+            left: {
+                textAnchor: "start",
+                textContent: (-logFoldChangeMaxValue).toFixed(2),
+                x: 0
             },
-            "center": {
-                "textContent": "0",
-                "x": width / 2
+            center: {
+                textAnchor: "middle",
+                textContent: "0",
+                x: width / 2
             },
-            "right": {
-                "textContent": (logFoldChangeMaxValue).toFixed(2),
-                "x": width - xMargin / 2
-            },
+            right: {
+                textAnchor: "end",
+                textContent: (logFoldChangeMaxValue).toFixed(2),
+                x: width
+            }
         };
         var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
         for (var key in legendLabels) {
             var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             label.textContent = legendLabels[key].textContent;
             label.setAttribute("font-size", "8px");
+            label.setAttribute("text-anchor", legendLabels[key].textAnchor);
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
             g.appendChild(label);

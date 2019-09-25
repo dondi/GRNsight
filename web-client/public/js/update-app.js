@@ -67,7 +67,11 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
-  ZOOM_CONTROL
+  ZOOM_CONTROL,
+  ZOOM_DISPLAY_MIDDLE,
+  ZOOM_ADAPTIVE_MAX_SCALE,
+  ZOOM_INPUT,
+  ZOOM_SLIDER
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -79,8 +83,6 @@ const refreshApp = () => {
 };
 
 const displayNetwork = (network, name) => {
-    $(ZOOM_CONTROL).prop({ disabled: false });
-
     uploadState.currentNetwork = network;
     console.log("Network: ", network); // Display the network in the console
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
@@ -528,6 +530,13 @@ export const updateApp = grnState => {
         updateLinkDistanceSliderValues();
     }
 
-// Refresh graph
+    $(ZOOM_CONTROL).prop({ disabled: !grnState.network });
+    if (!grnState.network) {
+        // Set initial values when there is no network: this is necessarily explicit because Firefox
+        // preserves these values even upon a browser reload.
+        $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
+        $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
+    }
+
     refreshApp();
 };
