@@ -44,7 +44,6 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  GRID_LAYOUT_BUTTON,
   GRID_LAYOUT_CLASS,
   FORCE_GRAPH_CLASS,
   NODE_COLORING_MENU,
@@ -263,13 +262,11 @@ const toggleLayout = (on, off) => {
 };
 
 const updatetoForceGraph = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
     toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
 };
 
 const updatetoGridLayout = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
     $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
     toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
 };

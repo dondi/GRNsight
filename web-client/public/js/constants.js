@@ -82,6 +82,7 @@ export const CHARGE_DEFAULT_VALUE       = -50;
 
 export const GRID_LAYOUT                = "GRID_LAYOUT";
 export const FORCE_GRAPH                = "FORCE_GRAPH";
+export const FORCE_GRAPH_BUTTON         = "#forceGraphButton";
 export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
 export const FORCE_GRAPH_CLASS          = "#forceGraph";
 export const GRID_LAYOUT_CLASS          = "#gridLayout";

@@ -318,9 +318,10 @@ html
     div(class='sidebar' data-iframe-height)
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(id="layout")
-          form
+          form(class='layoutButtons')
             //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
-            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar' value='')
+            input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
+            input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
             input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
