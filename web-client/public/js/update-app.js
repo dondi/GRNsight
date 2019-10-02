@@ -491,6 +491,9 @@ export const updateApp = grnState => {
     } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
         $(EXPORT_TO_WEIGHTED_SIF).parent().removeClass("startDisabled").addClass("disabled");
         $(EXPORT_TO_WEIGHTED_GML).parent().removeClass("startDisabled").addClass("disabled");
+    } else {
+        $(EXPORT_TO_WEIGHTED_SIF).parent().addClass("startDisabled").addClass("disabled");
+        $(EXPORT_TO_WEIGHTED_GML).parent().addClass("startDisabled").addClass("disabled");
     }
 
     if (grnState.nodeColoring.averageTopDataset) {
