@@ -297,16 +297,6 @@ var invalidNetworkSizeWarning = function (input, frequency) {
     assert.equal(frequency, invalidNetworkSizeCount.length);
 };
 
-var incorrectlyNamedSheetWarning = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
-    var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
-        return x.warningCode === "INCORRECTLY_NAMED_SHEET";
-    });
-
-    assert.equal(frequency, incorrectlyNamedSheetCount.length);
-};
-
 var extraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = expressionSheetParser.parseExpressionSheet(sheet);
@@ -318,16 +308,23 @@ var extraneousDataWarning = function (input, frequency) {
 };
 
 var missingExpressionWarning = function (input, frequency) {
-    console.log("1");
     var sheet = xlsx.parse(input);
-    console.log("2");
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
-    console.log("3");
-    var missingExpressionCount = network.warnings.filter(function (x) {
+    var exp = expressionSheetParser.parseExpressionSheet(sheet);
+    var missingExpressionCount = exp.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 
     assert.equal(frequency, missingExpressionCount.length);
+};
+
+var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
+        return x.warningCode === "INCORRECTLY_NAMED_EXPRESSION_SHEET";
+    });
+
+    assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
 // GRAPH STATISTICS
@@ -387,7 +384,7 @@ exports.emptyRowWarning = emptyRowWarning;
 exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
 exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
-exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
+exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.extraneousDataWarning = extraneousDataWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 

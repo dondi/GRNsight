@@ -10,7 +10,7 @@ var test = require("./test");
 
 describe("expression-data-import-tests", function () {
 
-    describe("missing-expression-data-sheet", function () {
+    describe("MISSING_EXPRESSION_SHEET", function () {
         it("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);
         });
@@ -72,7 +72,7 @@ describe("expression-data-import-tests", function () {
 
     describe("wrong-exp-sheet-name-due-to-convention", function () {
         it("Incorrect expression sheet naming convention", function () {
-            test.incorrectlyNamedSheetWarning("test-files/expression-data-test-sheets/expression_sheet_wrong_sheet_name_convention.xlsx", 1);
+            test.incorrectlyNamedExpressionSheetWarning("test-files/expression-data-test-sheets/expression_sheet_wrong_sheet_name_convention.xlsx", 1);
         });
     });
 

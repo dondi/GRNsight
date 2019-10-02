@@ -49,6 +49,9 @@ export var displayWarnings = function (warnings) {
     var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
+    var missingExpressionSheetWarning = warnings.filter(function (x) {
+        return x.warningCode === "MISSING_EXPRESSION_SHEET";
+    });
 
     var appendWarning = function (warning) {
         warningsString += warning.errorDescription + "<br><br>";
@@ -80,6 +83,7 @@ export var displayWarnings = function (warnings) {
     createWarningsString(edgeDefaultNotDirectedCount, 8);
     createWarningsString(sifFormatWarningCount, 9);
     createWarningsString(incorrectlyNamedSheetWarningCount, 10);
+    createWarningsString(missingExpressionSheetWarning, 11);
 
     $("#warningsList").html(warningsString);
 

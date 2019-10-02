@@ -186,13 +186,13 @@ var warningsList = {
         };
     },
 
-    missingNetworkWarning: function () {
-        return {
-            warningCode: "MISSING_EXPRESSION_SHEET",
-            errorDescription: "The file you uploaded contains no expression data sheet. This is not required, \
-             but there may be errors in the way the nodes are colored without this data present."
-        };
-    }
+    // missingNetworkWarning: function () {
+    //     return {
+    //         warningCode: "MISSING_NETWORK",
+    //         errorDescription: "The file you uploaded contains no  data sheet. This is not required, \
+    //          but there may be errors in the way the nodes are colored without this data present."
+    //     };
+    // }
 
 };
 

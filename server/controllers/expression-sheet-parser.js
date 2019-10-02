@@ -4,31 +4,24 @@
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 
-// var additionalSheetParser = require(__dirname + "/additional-sheet-parser.js");
-
-// var errorList = spreadsheetController.errorList;
-
-// var addMessageToArray = spreadsheetController.addMessageToArray;
-
-var addWarning = function (network, message) {
-    console.log("!!!!!" + Object.keys(network));
-    // ^ this returns !!!!!O <-- WHY
+var addExpWarning = function (network, message) {
+    if (typeof network.warnings === 'undefined') {
+        network["warnings"] = []
+    }
     var warningsCount = network.warnings.length;
-    // Because ^ gives "cannot read property 'length' of undefined"
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        addMessageToArray(network.warnings, message);
+        network.warnings.push(message);
     } else {
-        addMessageToArray(network.errors, errorList.warningsCountError);
+        network.errors.push(errorList.warningsCountError);
         return false;
     }
 };
-// var addError = spreadsheetController.addError;
 
 var warningsList = {
     missingExpressionWarning: function () {
         return {
-            warningCode: "missing-expression-data-sheet",
+            warningCode: "MISSING_EXPRESSION_SHEET",
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
         };
     },
@@ -112,6 +105,7 @@ var isExpressionSheet = function (sheetName) {
 
 // Going to continue basing this section off of the parseSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
+    // TRY PUTTING WARNING STUFF HERE
     var geneData = {};
     var expressionData = {
         genes: [],
@@ -123,6 +117,15 @@ var parseExpressionSheet = function (sheet) {
         sheetType: "unweighted",
         time_points: []
     };
+    var expCount = 0;
+    sheet.forEach(function (innerSheet) {
+        if (isExpressionSheet(innerSheet)) {
+            expCount++;
+        }
+    })
+    if (expCount <= 0) {
+        addExpWarning(expressionData, warningsList.missingExpressionWarning());
+    }
     expressionData["time_points"] = sheet[0].data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;
     sheet[0].data.forEach(function (sheet) {
@@ -139,16 +142,7 @@ var parseExpressionSheet = function (sheet) {
     });
     expressionData["data"] = geneData;
 
-    // TRY PUTTING WARNING STUFF HERE
-    var expCount = 0;
-    sheet.forEach(function (innerSheet) {
-        if (isExpressionSheet(innerSheet)) {
-            expCount++;
-        }
-    })
-    if (expCount <= 0) {
-        addWarning(sheet, warningsList.missingExpressionWarning());
-    }
+
     return expressionData;
 };
 
@@ -187,19 +181,6 @@ module.exports = function (app) {
                     input = files.file[0].path;
                 } catch (err) {
                     return res.json(400, "No upload file selected.");
-                }
-
-                var isExp = 0;
-                console.log("!!!!!");
-                // files.file.forEach(f => {
-                //     console.log("derpderpderp");
-                //     if (isExpressionSheet(f)) {
-                //         console.log("inside ze loop");
-                //         isExp++;
-                //     }
-                // })
-                if (isExp <= 0) {
-                    throw new missingExpressionWarning("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.");
                 }
 
                 if (path.extname(input) !== ".xlsx") {
