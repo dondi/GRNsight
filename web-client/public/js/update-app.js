@@ -70,7 +70,9 @@ import {
   ZOOM_DISPLAY_MIDDLE,
   ZOOM_ADAPTIVE_MAX_SCALE,
   ZOOM_INPUT,
-  ZOOM_SLIDER
+  ZOOM_SLIDER,
+  EXPORT_TO_WEIGHTED_SIF,
+  EXPORT_TO_WEIGHTED_GML
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -481,6 +483,14 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
         updaters.removeNodeColoring();
+    }
+
+    if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
+        $(EXPORT_TO_WEIGHTED_SIF).parent().removeClass("startDisabled").removeClass("disabled");
+        $(EXPORT_TO_WEIGHTED_GML).parent().removeClass("startDisabled").removeClass("disabled");
+    } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
+        $(EXPORT_TO_WEIGHTED_SIF).parent().removeClass("startDisabled").addClass("disabled");
+        $(EXPORT_TO_WEIGHTED_GML).parent().removeClass("startDisabled").addClass("disabled");
     }
 
     if (grnState.nodeColoring.averageTopDataset) {
