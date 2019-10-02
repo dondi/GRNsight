@@ -32,9 +32,9 @@ import {
     RESET_SLIDERS_CLASS,
     UNDO_SLIDERS_RESET_CLASS,
     FORCE_GRAPH_BUTTON,
-    FORCE_GRAPH_CLASS,
+    FORCE_GRAPH_MENU,
     GRID_LAYOUT_BUTTON,
-    GRID_LAYOUT_CLASS,
+    GRID_LAYOUT_MENU,
     NODE_COLORING_TOGGLE_CLASS,
     AVG_REPLICATE_VALS_TOP_MENU,
     AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -94,13 +94,13 @@ export const setupHandlers = grnState => {
     };
 
     // Grid and Force Graph Layout
-    $(`${FORCE_GRAPH_CLASS}, ${FORCE_GRAPH_BUTTON}`).click(() => {
+    $(`${FORCE_GRAPH_MENU}, ${FORCE_GRAPH_BUTTON}`).click(() => {
         updaters.setNodesToForceGraph();
         grnState.graphLayout = FORCE_GRAPH;
         updateApp(grnState);
     });
 
-    $(`${GRID_LAYOUT_CLASS}, ${GRID_LAYOUT_BUTTON}`).click(() => {
+    $(`${GRID_LAYOUT_MENU}, ${GRID_LAYOUT_BUTTON}`).click(() => {
         updaters.setNodesToGrid();
         grnState.graphLayout = GRID_LAYOUT;
         updateApp(grnState);

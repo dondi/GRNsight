@@ -84,8 +84,8 @@ export const GRID_LAYOUT                = "GRID_LAYOUT";
 export const FORCE_GRAPH                = "FORCE_GRAPH";
 export const FORCE_GRAPH_BUTTON         = "#forceGraphButton";
 export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
-export const FORCE_GRAPH_CLASS          = "#forceGraph";
-export const GRID_LAYOUT_CLASS          = "#gridLayout";
+export const FORCE_GRAPH_MENU          = "#forceGraph";
+export const GRID_LAYOUT_MENU          = "#gridLayout";
 
 export const MINIMUM_MAX_LOG_FOLD_CHANGE                = 0;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
