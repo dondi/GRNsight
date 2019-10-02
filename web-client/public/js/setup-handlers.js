@@ -100,7 +100,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(`${GRID_LAYOUT_BUTTON}, ${GRID_LAYOUT_BUTTON}`).click(() => {
+    $(`${GRID_LAYOUT_CLASS}, ${GRID_LAYOUT_BUTTON}`).click(() => {
         updaters.setNodesToGrid();
         grnState.graphLayout = GRID_LAYOUT;
         updateApp(grnState);
