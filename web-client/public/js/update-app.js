@@ -44,8 +44,8 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  GRID_LAYOUT_CLASS,
-  FORCE_GRAPH_CLASS,
+  GRID_LAYOUT_MENU,
+  FORCE_GRAPH_MENU,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
@@ -265,12 +265,12 @@ const toggleLayout = (on, off) => {
 
 const updatetoForceGraph = () => {
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
+    toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
 };
 
 const updatetoGridLayout = () => {
     $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
+    toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
 };
 
 // Node Coloring Functions
