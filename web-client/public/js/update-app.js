@@ -44,9 +44,8 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  GRID_LAYOUT_BUTTON,
-  GRID_LAYOUT_CLASS,
-  FORCE_GRAPH_CLASS,
+  GRID_LAYOUT_MENU,
+  FORCE_GRAPH_MENU,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
@@ -71,7 +70,8 @@ import {
   ZOOM_DISPLAY_MIDDLE,
   ZOOM_ADAPTIVE_MAX_SCALE,
   ZOOM_INPUT,
-  ZOOM_SLIDER
+  ZOOM_SLIDER,
+  EXPORT_WEIGHTED_CLASS
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -265,15 +265,13 @@ const toggleLayout = (on, off) => {
 };
 
 const updatetoForceGraph = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
+    toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
 };
 
 const updatetoGridLayout = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
     $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
+    toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
 };
 
 // Node Coloring Functions
@@ -484,6 +482,14 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
         updaters.removeNodeColoring();
+    }
+
+    if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
+        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
+    } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
+        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
+    } else {
+        $(EXPORT_WEIGHTED_CLASS).addClass("startDisabled").addClass("disabled");
     }
 
     if (grnState.nodeColoring.averageTopDataset) {

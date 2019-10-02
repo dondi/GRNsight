@@ -31,9 +31,10 @@ import {
     LOCK_SLIDERS_CLASS,
     RESET_SLIDERS_CLASS,
     UNDO_SLIDERS_RESET_CLASS,
+    FORCE_GRAPH_BUTTON,
+    FORCE_GRAPH_MENU,
     GRID_LAYOUT_BUTTON,
-    GRID_LAYOUT_CLASS,
-    FORCE_GRAPH_CLASS,
+    GRID_LAYOUT_MENU,
     NODE_COLORING_TOGGLE_CLASS,
     AVG_REPLICATE_VALS_TOP_MENU,
     AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -92,31 +93,17 @@ export const setupHandlers = grnState => {
         $("#exportAsSvg").attr("download", editedName);
     };
 
-    const setGraphLayout = layout => {
-        const different = grnState.graphLayout !== layout;
-        grnState.graphLayout = layout;
-        if (different) {
-            if (grnState.graphLayout === FORCE_GRAPH) {
-                updaters.setNodesToForceGraph();
-            } else if (grnState.graphLayout === GRID_LAYOUT) {
-                updaters.setNodesToGrid();
-            }
-        }
-
-        updateApp(grnState);
-    };
-
     // Grid and Force Graph Layout
-    $(GRID_LAYOUT_BUTTON).click(() => {
-        setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH);
+    $(`${FORCE_GRAPH_MENU}, ${FORCE_GRAPH_BUTTON}`).click(() => {
+        updaters.setNodesToForceGraph();
+        grnState.graphLayout = FORCE_GRAPH;
+        updateApp(grnState);
     });
 
-    $(FORCE_GRAPH_CLASS).click(() => {
-        setGraphLayout(FORCE_GRAPH);
-    });
-
-    $(GRID_LAYOUT_CLASS).click(() =>  {
-        setGraphLayout(GRID_LAYOUT);
+    $(`${GRID_LAYOUT_MENU}, ${GRID_LAYOUT_BUTTON}`).click(() => {
+        updaters.setNodesToGrid();
+        grnState.graphLayout = GRID_LAYOUT;
+        updateApp(grnState);
     });
 
 // Image Export

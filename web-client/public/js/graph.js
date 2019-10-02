@@ -913,10 +913,10 @@ export var drawGraph = function (network) {
             .attr("dy", NODE_HEIGHT)
             .attr("text-anchor", "middle")
             .attr("class", "nodeText")
-            .style("font-family", "Helvetica Neue")
             .style("font-size", "18px")
             .style("stroke-width", "0")
             .style("fill", "black")
+            .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.name;
             })

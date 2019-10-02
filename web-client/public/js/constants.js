@@ -14,8 +14,14 @@ export const SCHADE_OUTPUT_ID     = "#schadeOutput";
 export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
-export const EXPORT_TO_PNG           = "#exportAsPng";
-export const EXPORT_TO_SVG           = "#exportAsSvg";
+export const EXPORT_TO_EXCEL            = "#exportAsExcelWkbk";
+export const EXPORT_TO_UNWEIGHTED_SIF   = "#exportAsUnweightedSif";
+export const EXPORT_TO_WEIGHTED_SIF     = "#exportAsWeightedSif";
+export const EXPORT_TO_UNWEIGHTED_GML   = "#exportAsUnweightedGraphMl";
+export const EXPORT_TO_WEIGHTED_GML     = "#exportAsWeightedGraphMl";
+export const EXPORT_TO_PNG              = "#exportAsPng";
+export const EXPORT_TO_SVG              = "#exportAsSvg";
+export const EXPORT_WEIGHTED_CLASS      = ".weighted.export";
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
@@ -82,9 +88,10 @@ export const CHARGE_DEFAULT_VALUE       = -50;
 
 export const GRID_LAYOUT                = "GRID_LAYOUT";
 export const FORCE_GRAPH                = "FORCE_GRAPH";
+export const FORCE_GRAPH_BUTTON         = "#forceGraphButton";
 export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
-export const FORCE_GRAPH_CLASS          = "#forceGraph";
-export const GRID_LAYOUT_CLASS          = "#gridLayout";
+export const FORCE_GRAPH_MENU          = "#forceGraph";
+export const GRID_LAYOUT_MENU          = "#gridLayout";
 
 export const MINIMUM_MAX_LOG_FOLD_CHANGE                = 0;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;

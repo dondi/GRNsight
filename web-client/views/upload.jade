@@ -54,9 +54,6 @@ html
                       a(class='upload' href='#' id='importGraphMl')
                         label(for='upload-graphml' id='import-graphml') GraphML…
                         input(type='file' name='upload-graphml' id='upload-graphml' accept='.graphml')
-                    li(class='disabled not-yet-implemented')
-                      a(class='upload' href='#' id='importGml')
-                        label(for='upload-gml' id='import-gml') GML…
                 li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-export')
@@ -76,11 +73,7 @@ html
                       a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
                     li(class='startDisabled disabled weighted export')
                       a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
-                    li(class='divider not-yet-implemented')
-                    li(class='startDisabled disabled not-yet-implemented unweighted export')
-                      a(href='#' id='exportAsUnweightedGml') To Unweighted GML
-                    li(class='startDisabled disabled not-yet-implemented weighted export')
-                      a(href='#' id='exportAsWeightedGml') To Weighted GML
+
                 li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-picture')
@@ -318,9 +311,10 @@ html
     div(class='sidebar' data-iframe-height)
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(id="layout")
-          form
+          form(class='layoutButtons')
             //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
-            input(id='gridLayoutButton' type='button' class='btn btn-default btnSidebar' value='')
+            input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
+            input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
         div(class="node-coloring hidden")
             p(class='sideHeader') Node Coloring
             input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
