@@ -5,9 +5,6 @@ var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigma
 var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 
 var addExpWarning = function (network, message) {
-    if (typeof network.warnings === 'undefined') {
-        network["warnings"] = []
-    }
     var warningsCount = network.warnings.length;
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
@@ -105,7 +102,6 @@ var isExpressionSheet = function (sheetName) {
 
 // Going to continue basing this section off of the parseSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
-    // TRY PUTTING WARNING STUFF HERE
     var geneData = {};
     var expressionData = {
         genes: [],
@@ -117,6 +113,8 @@ var parseExpressionSheet = function (sheet) {
         sheetType: "unweighted",
         time_points: []
     };
+
+    // CHECK FOR MISSING EXPRESSION SHEET
     var expCount = 0;
     sheet.forEach(function (innerSheet) {
         if (isExpressionSheet(innerSheet)) {
