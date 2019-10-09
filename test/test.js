@@ -189,14 +189,14 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
-var labelError = function (input, frequency) {
+var idLabelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = expressionSheetParser.parseExpressionSheet(sheet);
     assert.equal(frequency, network.errors.length);
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "INCORRECT_SHEET_LABELING",
+      "MISLABELED_ID_CELL",
       network.errors[i].errorCode
     );
     }
@@ -369,7 +369,7 @@ exports.networkSizeError = networkSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
 exports.emptyRowError = emptyRowError;
-exports.labelError = labelError;
+exports.idLabelError = idLabelError;
 exports.errorsCountError = errorsCountError;
 exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;

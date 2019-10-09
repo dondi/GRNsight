@@ -15,6 +15,26 @@ var addExpWarning = function (network, message) {
     }
 };
 
+var addExpError = function (network, message) {
+    var errorsCount = network.errors.length;
+    var MAX_ERRORS = 20;
+    if (errorsCount < MAX_ERRORS) {
+        network.errors.push(message);
+    } else {
+        network.errors.push(errorList.errorsCountError);
+        return false;
+    }
+};
+
+var errorsList = {
+    idLabelError: function () {
+        return {
+            errorCode: "MISLABELED_ID_CELL",
+            errorDescription: "The top left cell of the expression sheet must contain \'id\' exactly."
+        };
+    }
+};
+
 var warningsList = {
     missingExpressionWarning: function () {
         return {
@@ -123,6 +143,10 @@ var parseExpressionSheet = function (sheet) {
     })
     if (expCount <= 0) {
         addExpWarning(expressionData, warningsList.missingExpressionWarning());
+    }
+    var idLabel = sheet[0].data[0][0];
+    if(idLabel !== 'id') {
+        addExpError(expressionData, errorsList.idLabelError());
     }
     expressionData["time_points"] = sheet[0].data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;

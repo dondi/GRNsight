@@ -18,7 +18,7 @@ describe("expression-data-import-tests", function () {
 
     describe("misnamed-id-label", function () {
         it("Top left cell must contain /'id/'.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_wrong_id_label.xlsx", 1);
+            test.idLabelError("test-files/expression-data-test-sheets/expression_sheet_wrong_id_label.xlsx", 1);
         });
     });
 
