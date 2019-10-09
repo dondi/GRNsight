@@ -44,9 +44,8 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  GRID_LAYOUT_BUTTON,
-  GRID_LAYOUT_CLASS,
-  FORCE_GRAPH_CLASS,
+  GRID_LAYOUT_MENU,
+  FORCE_GRAPH_MENU,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
@@ -67,7 +66,12 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
-  ZOOM_CONTROL
+  ZOOM_CONTROL,
+  ZOOM_DISPLAY_MIDDLE,
+  ZOOM_ADAPTIVE_MAX_SCALE,
+  ZOOM_INPUT,
+  ZOOM_SLIDER,
+  EXPORT_WEIGHTED_CLASS
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -79,8 +83,6 @@ const refreshApp = () => {
 };
 
 const displayNetwork = (network, name) => {
-    $(ZOOM_CONTROL).prop({ disabled: false });
-
     uploadState.currentNetwork = network;
     console.log("Network: ", network); // Display the network in the console
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
@@ -192,16 +194,6 @@ const disableColorOptimal = () => {
 };
 
 // Sliders Functions
-export const modifyChargeParameter = (value) => {
-    grnState.simulation.force("charge").strength(value);
-    grnState.simulation.alpha(1);
-};
-
-export const modifyLinkDistanceParameter = (value) => {
-    grnState.simulation.force("link").distance(value);
-    grnState.simulation.alpha(1);
-};
-
 const updateSliderState = slidersLocked => {
     const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
     if (forceGraphDisabled) {
@@ -228,24 +220,38 @@ const updateSliderState = slidersLocked => {
     }
 };
 
+export const modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+
+export const modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
+};
+
 const updateChargeSliderValues = () => {
-    modifyChargeParameter(grnState.chargeSlider.currentVal);
+    if (grnState.network !== null) {
+        modifyChargeParameter(grnState.chargeSlider.currentVal);
+    }
     $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
     $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).html(grnState.chargeSlider.currentVal +
-      ((grnState.chargeSlider.needsAppendedZeros
-          && grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        ((grnState.chargeSlider.needsAppendedZeros &&
+            grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
 const updateLinkDistanceSliderValues = () => {
-    modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+    if (grnState.network !== null) {
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+    }
     $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).html(grnState.linkDistanceSlider.currentVal +
-      ((grnState.linkDistanceSlider.needsAppendedZeros
-        && grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        ((grnState.linkDistanceSlider.needsAppendedZeros &&
+            grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
 // Grid Layout Functions
@@ -259,15 +265,13 @@ const toggleLayout = (on, off) => {
 };
 
 const updatetoForceGraph = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
+    toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
 };
 
 const updatetoGridLayout = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
     $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
+    toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
 };
 
 // Node Coloring Functions
@@ -480,6 +484,14 @@ export const updateApp = grnState => {
         updaters.removeNodeColoring();
     }
 
+    if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
+        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
+    } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
+        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
+    } else {
+        $(EXPORT_WEIGHTED_CLASS).addClass("startDisabled").addClass("disabled");
+    }
+
     if (grnState.nodeColoring.averageTopDataset) {
         $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_TOP_MENU).prop("checked", "checked");
@@ -523,11 +535,16 @@ export const updateApp = grnState => {
         $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
     }
 
-    if (grnState.network !== null) {
-        updateChargeSliderValues();
-        updateLinkDistanceSliderValues();
+    updateChargeSliderValues();
+    updateLinkDistanceSliderValues();
+
+    $(ZOOM_CONTROL).prop({ disabled: !grnState.network });
+    if (!grnState.network) {
+        // Set initial values when there is no network: this is necessarily explicit because Firefox
+        // preserves these values even upon a browser reload.
+        $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
+        $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
 
-// Refresh graph
     refreshApp();
 };
