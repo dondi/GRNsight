@@ -75,7 +75,6 @@ export const setupHandlers = grnState => {
     };
 
     const exportSVG = (svgElement, name) => {
-        var editedName = name.replace(determineFileType(name), "");
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svgElement);
 
@@ -90,7 +89,7 @@ export const setupHandlers = grnState => {
         var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
         $("#exportAsSvg").attr("href", svgUrl);
-        $("#exportAsSvg").attr("download", editedName);
+        $("#exportAsSvg").attr("download", name);
     };
 
     // Grid and Force Graph Layout
@@ -109,13 +108,14 @@ export const setupHandlers = grnState => {
 // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(determineFileType(name), "");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "");
         saveSvgAsPng(svgContainer, editedName + ".png");
     });
 
     $(EXPORT_TO_SVG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        exportSVG(svgContainer, grnState.name + ".svg");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "");
+        exportSVG(svgContainer, editedName + ".svg");
     });
 
 // Node Coloring
