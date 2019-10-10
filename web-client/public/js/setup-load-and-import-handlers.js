@@ -1,7 +1,11 @@
 import { updateApp } from "./update-app";
 
 import {
-    DEMO_INFORMATION
+    DEMO_INFORMATION,
+    UNWEIGHTED_DEMO_PATH,
+    WEIGHTED_DEMO_PATH,
+    SCHADE_INPUT_PATH,
+    SCHADE_OUTPUT_PATH
 } from "./constants";
 
 const submittedFilename = $upload => {
@@ -84,7 +88,10 @@ const networkErrorDisplayer = xhr => {
 let reloader = () => { };
 
 const returnUploadRoute = filename => {
-    if (filename.includes(".xlsx")) {
+    var demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
+    if (demoFiles.indexOf(filename) !== -1) {
+        return filename;
+    } else if (filename.includes(".xlsx")) {
         return "upload";
     } else if (filename.includes(".sif")) {
         return "upload-sif";
