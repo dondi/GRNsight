@@ -39,15 +39,16 @@ const disableUpload = state => {
     $("#upload-graphml").attr("disabled", state);
 };
 
-const uploadHandler = (uploadRoute, uploader) => {
+const uploadHandler = (uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
         const filename = submittedFilename($upload);
+        console.log(submittedFilename($upload));
         if ($upload[0].files[0].size < 2000000) {
             // disable upload button to prevent multiple uploads
             disableUpload(true);
             const formData = createFileForm($upload);
-            uploader(uploadRoute, filename, formData);
+            uploader(filename, formData);
             uploadEpilogue(event);
         } else {
             let errorString = "The file uploaded is too large. Please try again with a file smaller than 1 MB.";
@@ -82,8 +83,19 @@ const networkErrorDisplayer = xhr => {
 
 let reloader = () => { };
 
+const returnUploadRoute = filename => {
+    if (filename.includes(".xlsx")) {
+        return "upload";
+    } else if (filename.includes(".sif")) {
+        return "upload-sif";
+    } else if (filename.includes(".graphml")) {
+        return "upload-graphml";
+    }
+};
+
 export const setupLoadAndImportHandlers = grnState => {
-    const loadGrn = (uploadRoute, name, formData) => {
+    const loadGrn = (name, formData) => {
+        const uploadRoute = returnUploadRoute(name);
         const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
         (formData ?
@@ -110,25 +122,14 @@ export const setupLoadAndImportHandlers = grnState => {
 
             }).error(networkErrorDisplayer);
     };
-
     /*
      * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
      * for helping to resolve this.
      */
 
-    $("#upload").click(() => {
-        $("#launchFileOpen").off("click").on("click", () => $("#upload").click());
-    });
-    $("#upload-sif").click(() => {
-        $("#launchFileOpen").off("click").on("click", () => $("#upload-sif").click());
-    });
-    $("#upload-graphml").click(() => {
-        $("#launchFileOpen").off("click").on("click", () => $("#upload-graphml").click());
-    });
-
-    $("#upload").change(uploadHandler("upload", loadGrn));
-    $("#upload-sif").change(uploadHandler("upload-sif", loadGrn));
-    $("#upload-graphml").change(uploadHandler("upload-graphml", loadGrn));
+    $("#upload").change(uploadHandler(loadGrn));
+    $("#upload-sif").change(uploadHandler(loadGrn));
+    $("#upload-graphml").change(uploadHandler(loadGrn));
 
     const loadDemo = url => {
         loadGrn(url);
