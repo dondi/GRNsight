@@ -128,8 +128,6 @@ export const setupLoadAndImportHandlers = grnState => {
      */
 
     $("#upload").change(uploadHandler(loadGrn));
-    $("#upload-sif").change(uploadHandler(loadGrn));
-    $("#upload-graphml").change(uploadHandler(loadGrn));
 
     const loadDemo = url => {
         loadGrn(url);
