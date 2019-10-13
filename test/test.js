@@ -299,8 +299,8 @@ var invalidNetworkSizeWarning = function (input, frequency) {
 
 var extraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
-    var extraneousDataCount = network.warnings.filter(function (x) {
+    var exp = expressionSheetParser.parseExpressionSheet(sheet);
+    var extraneousDataCount = exp.warnings.filter(function (x) {
         return x.warningCode === "EXTRANEOUS_DATA";
     });
 
@@ -385,7 +385,6 @@ exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
 exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
-exports.extraneousDataWarning = extraneousDataWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 
 // exports.shortestPath = shortestPath;

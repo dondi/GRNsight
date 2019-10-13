@@ -16,8 +16,8 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("misnamed-id-label", function () {
-        it("Top left cell must contain /'id/'.", function () {
+    describe("MISLABELED_ID_CELL", function () {
+        it("Top left cell must contain \'id\' exactly.", function () {
             test.idLabelError("test-files/expression-data-test-sheets/expression_sheet_wrong_id_label.xlsx", 1);
         });
     });
@@ -64,7 +64,7 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("extraneous-data", function () {
+    describe("EXTRANEOUS_DATA", function () {
         it("There is erroneous data in the expression sheet.", function () {
             test.extraneousDataWarning("test-files/expression-data-test-sheets/expression_sheet_erroneous_data.xlsx", 1);
         });
@@ -84,7 +84,7 @@ describe("expression-data-import-tests", function () {
 
     describe("different-number-of-columns", function () {
         it("should not return any errors", function () {
-            test.noErrors("test-files/expression-data-test-sheets/expression_sheet_different_number_of_columns.xlsx", 1);
+            test.noErrors("test-files/expression-data-test-sheets/expression_sheet_different_number_of_columns.xlsx", 0);
         });
     });
 
