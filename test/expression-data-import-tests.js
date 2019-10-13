@@ -46,7 +46,7 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("missing_column_header", function () {
+    describe("MISSING_COLUMN_HEADER", function () {
         it("All columns in expression sheet must have a header or label.", function () {
             test.missingColumnHeaderError("test-files/expression-data-test-sheets/expression_sheet_missing_column_header.xlsx", 1);
         });
@@ -58,7 +58,7 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("empty_row", function () {
+    describe("EMPTY_ROW", function () {
         it("Row in expression sheet contains no data.", function () {
             test.emptyExpressionRowError("test-files/expression-data-test-sheets/expression_sheet_empty_row.xlsx", 1);
         });

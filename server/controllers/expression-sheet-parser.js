@@ -39,6 +39,12 @@ var errorsList = {
             errorDescription: "All columns in expression sheet must have a header or label."
         };
     },
+    emptyExpressionRowError: function () {
+        return {
+            errorCode: "EMPTY_ROW",
+            errorDescription: "There is an empty row in the input sheet."
+        };
+    },
 };
 
 var warningsList = {
@@ -127,16 +133,32 @@ var parseExpressionSheet = function (sheet) {
             if (row.length !== rowLength) {
                 addExpWarning(expressionData, warningsList.extraneousDataWarning());
             }
+
+            // Throw error in case of empty row
+            var nonnullCount = 0;
+            for(var i = 0; i <= rowLength; i++) {
+                if(i === rowLength) {
+                    if (nonnullCount === 0) {
+                        addExpError(expressionData, errorsList.emptyExpressionRowError());
+                        break;
+                    }
+                } else {
+                    if(row[i]) {
+                        nonnullCount++;
+                    }
+                }
+            }
         });
 
         // Throw error in case of missing column header
         var nonemptyValues = 0;
-        expressionData["data"]["id"].forEach(function(value){
+        expressionData["data"]["id"].forEach(function(){
             nonemptyValues++;
         })
         if(rowLength !== nonemptyValues) {
             addExpError(expressionData, errorsList.missingColumnHeaderError());
         }
+
     }
 
     return expressionData;
