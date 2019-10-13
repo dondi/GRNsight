@@ -202,6 +202,19 @@ var idLabelError = function (input, frequency) {
     }
 };
 
+var missingColumnHeaderError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    assert.equal(frequency, network.errors.length);
+
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+      "MISSING_COLUMN_HEADER",
+      network.errors[i].errorCode
+    );
+    }
+};
+
 var emptyExpressionColumnError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = expressionSheetParser.parseExpressionSheet(sheet);
@@ -374,6 +387,7 @@ exports.errorsCountError = errorsCountError;
 exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
+exports.missingColumnHeaderError = missingColumnHeaderError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

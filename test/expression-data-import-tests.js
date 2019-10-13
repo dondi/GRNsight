@@ -47,8 +47,8 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("missing_column_header", function () {
-        it("Expression sheet is missing a column header.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_missing_column_header.xlsx", 1);
+        it("All columns in expression sheet must have a header or label.", function () {
+            test.missingColumnHeaderError("test-files/expression-data-test-sheets/expression_sheet_missing_column_header.xlsx", 1);
         });
     });
 

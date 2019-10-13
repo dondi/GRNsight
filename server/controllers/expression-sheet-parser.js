@@ -32,7 +32,13 @@ var errorsList = {
             errorCode: "MISLABELED_ID_CELL",
             errorDescription: "The top left cell of the expression sheet must contain \'id\' exactly."
         };
-    }
+    },
+    missingColumnHeaderError: function () {
+        return {
+            errorCode: "MISSING_COLUMN_HEADER",
+            errorDescription: "All columns in expression sheet must have a header or label."
+        };
+    },
 };
 
 var warningsList = {
@@ -112,13 +118,25 @@ var parseExpressionSheet = function (sheet) {
     });
     geneNames = geneNames.slice(1);
     expressionData["data"] = geneData;
+    // May need to be updated...b/c we still want to populate the warnings/errors lists
+    // if the 'id' cell is mislabeled.
     if (expressionData["data"]["id"]) {
+        // Throw warning in case of extraneous data
         var rowLength = expressionData["data"]["id"].length;
         Object.values(expressionData["data"]).forEach(function(row) {
             if (row.length !== rowLength) {
                 addExpWarning(expressionData, warningsList.extraneousDataWarning());
             }
         });
+
+        // Throw error in case of missing column header
+        var nonemptyValues = 0;
+        expressionData["data"]["id"].forEach(function(value){
+            nonemptyValues++;
+        })
+        if(rowLength !== nonemptyValues) {
+            addExpError(expressionData, errorsList.missingColumnHeaderError());
+        }
     }
 
     return expressionData;
