@@ -1085,7 +1085,10 @@ export var drawGraph = function (network) {
                 x: width
             }
         };
-        var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
+        /* eslint-enable max-len */
+        var g = document.querySelector("body > div.sidebar > div.node-coloring > div.panel > div.panel-collapse > div.panel-body > div > svg > g");
+        /* eslint-enable max-len */
+
         for (var key in legendLabels) {
             var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             label.textContent = legendLabels[key].textContent;
