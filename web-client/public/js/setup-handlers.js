@@ -99,13 +99,13 @@ export const setupHandlers = grnState => {
         if (svgElement) {
             svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
         }
-        var canvas = document.createElement("canvas");
+        let canvas = document.createElement("canvas");
         canvg(canvas, svgElement);
-        var imgData = canvas.toDataURL("image/png");
+        const imgData = canvas.toDataURL("image/png");
 
         const pdf = new jsPDF("l", "mm", "a4");
-        var width = pdf.internal.pageSize.getWidth();
-        var height = pdf.internal.pageSize.getHeight();
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
         pdf.addImage(imgData, "PNG", 0, 0, width, height);
         pdf.save(name);
     };
