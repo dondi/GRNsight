@@ -99,6 +99,7 @@ export const setupHandlers = grnState => {
         if (svgElement) {
             svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
         }
+
         let canvas = document.createElement("canvas");
         canvg(canvas, svgElement);
         const imgData = canvas.toDataURL("image/png");
@@ -106,6 +107,7 @@ export const setupHandlers = grnState => {
         const pdf = new jsPDF("l", "mm", "a4");
         const width = pdf.internal.pageSize.getWidth();
         const height = pdf.internal.pageSize.getHeight();
+
         pdf.addImage(imgData, "PNG", 0, 0, width, height);
         pdf.save(name);
     };
