@@ -209,7 +209,7 @@ export var drawGraph = function (network) {
         .on("zoom", zoomed);
 
     svg.style("pointer-events", "all").call(zoomDrag)
-        .style("font-family", "Helvetica Neue");
+        .style("font-family", "sans-serif");
 
 
     function zoomed () {
@@ -658,6 +658,7 @@ export var drawGraph = function (network) {
             .attr("class", "weight")
             .attr("text-anchor", "middle")
             .attr("text-anchor", "middle")
+            .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
             });
@@ -666,6 +667,7 @@ export var drawGraph = function (network) {
             .enter().append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
+            .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
             })
