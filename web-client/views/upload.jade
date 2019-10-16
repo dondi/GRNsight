@@ -307,9 +307,10 @@ html
         div(class="node-coloring hidden")
           div(class="panel panel-default")
             p(class='panel-title sideHeader')
-                input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring' data-toggle='collapse' data-target='#nodeColoringSidebarBody')
+              a(data-toggle='collapse' data-target='#nodeColoringSidebarBody') Node Coloring
             div(id="nodeColoringSidebarBody" class="panel-collapse collapse in")
               div(class="panel-body")
+                input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
                 label(class='info', data-toggle='tooltip') Top Dataset
                 select(id="dataset-top")
                 form
