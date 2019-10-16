@@ -46,8 +46,7 @@ const disableUpload = state => {
 const uploadHandler = (uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
-        const filename = submittedFilename($upload);
-        console.log(submittedFilename($upload));
+        const filename = submittedFilename($upload); // TODO: remove before master release (beta@4.0.6)
         if ($upload[0].files[0].size < 2000000) {
             // disable upload button to prevent multiple uploads
             disableUpload(true);
