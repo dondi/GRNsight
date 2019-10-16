@@ -104,7 +104,7 @@ export const setupHandlers = grnState => {
         canvg(canvas, svgElement);
         const imgData = canvas.toDataURL("image/png");
 
-        const pdf = new jsPDF("l", "mm", "a4");
+        const pdf = new jsPDF("l", "mm", "letter");
         const width = pdf.internal.pageSize.getWidth();
         const height = pdf.internal.pageSize.getHeight();
 
