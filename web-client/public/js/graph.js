@@ -440,7 +440,8 @@ export var drawGraph = function (network) {
             .style("stroke-width", function (d) {
                 var baseThickness = getEdgeThickness(d);
                 return Math.max(baseThickness, 7);
-            });
+            })
+            .attr("stroke-opacity", "0");
     }
 
     link.append("path")
