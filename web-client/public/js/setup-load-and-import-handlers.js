@@ -1,7 +1,11 @@
 import { updateApp } from "./update-app";
 
 import {
-    DEMO_INFORMATION
+    DEMO_INFORMATION,
+    UNWEIGHTED_DEMO_PATH,
+    WEIGHTED_DEMO_PATH,
+    SCHADE_INPUT_PATH,
+    SCHADE_OUTPUT_PATH
 } from "./constants";
 
 const submittedFilename = $upload => {
@@ -39,15 +43,15 @@ const disableUpload = state => {
     $("#upload-graphml").attr("disabled", state);
 };
 
-const uploadHandler = (uploadRoute, uploader) => {
+const uploadHandler = (uploader) => {
     return function (event) { // Must be `function` due to use of `this`.
         const $upload = $(this);
-        const filename = submittedFilename($upload);
+        const filename = submittedFilename($upload); // TODO: remove before master release (beta@4.0.6)
         if ($upload[0].files[0].size < 2000000) {
             // disable upload button to prevent multiple uploads
             disableUpload(true);
             const formData = createFileForm($upload);
-            uploader(uploadRoute, filename, formData);
+            uploader(filename, formData);
             uploadEpilogue(event);
         } else {
             let errorString = "The file uploaded is too large. Please try again with a file smaller than 1 MB.";
@@ -82,68 +86,54 @@ const networkErrorDisplayer = xhr => {
 
 let reloader = () => { };
 
-export const setupLoadAndImportHandlers = grnState => {
-    const loadGrn = (url, name, formData) => {
-        // The presence of formData is taken to indicate a POST.
-        const fullUrl = [ $("#service-root").val(), url ].join("/");
-        (formData ? $.ajax({
-            url: fullUrl,
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: "POST",
-            crossDomain: true
-        }) : $.getJSON(fullUrl)).done((network, textStatus, jqXhr) => {
-            // Display the network in the console
-            grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
-            grnState.network = network;
-            reloader = () => loadGrn(url, name, formData);
-            // re-enable upload button
-            disableUpload(false);
-            updateApp(grnState);
-            // displayStatistics(network);
-        }).error(networkErrorDisplayer);
-    };
+const returnUploadRoute = filename => {
+    var demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
+    if (demoFiles.indexOf(filename) !== -1) {
+        return filename;
+    } else if (filename.includes(".xlsx")) {
+        return "upload";
+    } else if (filename.includes(".sif")) {
+        return "upload-sif";
+    } else if (filename.includes(".graphml")) {
+        return "upload-graphml";
+    }
+};
 
+export const setupLoadAndImportHandlers = grnState => {
+    const loadGrn = (name, formData) => {
+        const uploadRoute = returnUploadRoute(name);
+        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        // The presence of formData is taken to indicate a POST.
+        (formData ?
+            $.ajax({
+                url: fullUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                crossDomain: true
+            }) :
+            $.getJSON(fullUrl)
+            ).done((network, textStatus, jqXhr) => {
+                grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
+                grnState.network = network;
+                if (uploadRoute !== "upload") {
+                    grnState.annotateLinks();
+                }
+                reloader = () => loadGrn(uploadRoute, name, formData);
+                // re-enable upload button
+                disableUpload(false);
+                updateApp(grnState);
+                // displayStatistics(network);
+
+            }).error(networkErrorDisplayer);
+    };
     /*
      * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
      * for helping to resolve this.
      */
 
-    // TODO Some opportunity for unification with loadGrn?
-    const importGrn = (uploadRoute, filename, formData) => {
-        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-        $.ajax({
-            url: fullUrl,
-            data: formData,
-            processData: false,
-            contentType: false,
-            type: "POST",
-            crossDomain: true
-        }).done(function (network) {
-            grnState.name = filename;
-            grnState.network = network;
-            grnState.annotateLinks();
-            reloader = () => importGrn(uploadRoute, filename, formData);
-            // re-enable upload button
-            disableUpload(false);
-            updateApp(grnState);
-        }).error(networkErrorDisplayer);
-    };
-
-    $("#upload").click(() => {
-        $("#launchFileOpen").off("click").on("click", () => $("#upload").click());
-    });
-    $("#upload-sif").click(() => {
-        $("#launchFileOpen").off("click").on("click", () => $("#upload-sif").click());
-    });
-    $("#upload-graphml").click(() => {
-        $("#launchFileOpen").off("click").on("click", () => $("#upload-graphml").click());
-    });
-
-    $("#upload").change(uploadHandler("upload", loadGrn));
-    $("#upload-sif").change(uploadHandler("upload-sif", importGrn));
-    $("#upload-graphml").change(uploadHandler("upload-graphml", importGrn));
+    $("#upload").change(uploadHandler(loadGrn));
 
     const loadDemo = url => {
         loadGrn(url);

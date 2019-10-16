@@ -1,6 +1,8 @@
 import { updaters } from "./graph";
 import { updateApp } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
+import * as jsPDF from "jspdf";
+import canvg from "canvg";
 
 import {
     FORCE_GRAPH,
@@ -52,7 +54,8 @@ import {
     ZOOM_DISPLAY_MINIMUM_SELECTOR,
     ZOOM_DISPLAY_MINIMUM_VALUE,
     EXPORT_TO_PNG,
-    EXPORT_TO_SVG
+    EXPORT_TO_SVG,
+    EXPORT_TO_PDF
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -75,7 +78,6 @@ export const setupHandlers = grnState => {
     };
 
     const exportSVG = (svgElement, name) => {
-        var editedName = name.replace(determineFileType(name), "");
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svgElement);
 
@@ -90,7 +92,24 @@ export const setupHandlers = grnState => {
         var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
         $("#exportAsSvg").attr("href", svgUrl);
-        $("#exportAsSvg").attr("download", editedName);
+        $("#exportAsSvg").attr("download", name);
+    };
+
+    const exportPDF = (svgElement, name) => {
+        if (svgElement) {
+            svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
+        }
+
+        let canvas = document.createElement("canvas");
+        canvg(canvas, svgElement);
+        const imgData = canvas.toDataURL("image/png");
+
+        const pdf = new jsPDF("l", "mm", "letter");
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+
+        pdf.addImage(imgData, "PNG", 0, 0, width, height);
+        pdf.save(name);
     };
 
     // Grid and Force Graph Layout
@@ -109,13 +128,20 @@ export const setupHandlers = grnState => {
 // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(determineFileType(name), "");
-        saveSvgAsPng(svgContainer, editedName + ".png");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
+        saveSvgAsPng(svgContainer, editedName);
     });
 
     $(EXPORT_TO_SVG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        exportSVG(svgContainer, grnState.name + ".svg");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".svg";
+        exportSVG(svgContainer, editedName );
+    });
+
+    $(EXPORT_TO_PDF).click(() => {
+        var svgContainer = document.getElementById("exportContainer").innerHTML;
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".pdf";
+        exportPDF(svgContainer, editedName);
     });
 
 // Node Coloring

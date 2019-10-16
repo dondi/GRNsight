@@ -21,6 +21,7 @@ export const EXPORT_TO_UNWEIGHTED_GML   = "#exportAsUnweightedGraphMl";
 export const EXPORT_TO_WEIGHTED_GML     = "#exportAsWeightedGraphMl";
 export const EXPORT_TO_PNG              = "#exportAsPng";
 export const EXPORT_TO_SVG              = "#exportAsSvg";
+export const EXPORT_TO_PDF              = "#exportAsPdf";
 export const EXPORT_WEIGHTED_CLASS      = ".weighted.export";
 
 export const DEMO_INFORMATION = [

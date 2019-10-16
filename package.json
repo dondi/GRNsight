@@ -1,12 +1,13 @@
 {
   "name": "grnsight",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "Web app and service for visualizing models of gene regulatory networks",
   "directories": {
     "test": "test"
   },
   "dependencies": {
     "body-parser": "1.18.2",
+    "canvg": "^2.0.0",
     "cors": "2.8.1",
     "cytoscape": "2.7.14",
     "d3-v4-grid": "2.0.1",
@@ -16,6 +17,7 @@
     "googleapis": "1.1.5",
     "http": "0.0.0",
     "jade": "1.11.0",
+    "jspdf": "^1.5.3",
     "method-override": "2.3.10",
     "moment": "2.24.0",
     "morgan": "1.9.1",
