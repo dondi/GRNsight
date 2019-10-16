@@ -1,6 +1,8 @@
 import { updaters } from "./graph";
 import { updateApp } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
+import * as jsPDF from "jspdf";
+import canvg from "canvg";
 
 import {
     FORCE_GRAPH,
@@ -52,7 +54,8 @@ import {
     ZOOM_DISPLAY_MINIMUM_SELECTOR,
     ZOOM_DISPLAY_MINIMUM_VALUE,
     EXPORT_TO_PNG,
-    EXPORT_TO_SVG
+    EXPORT_TO_SVG,
+    EXPORT_TO_PDF
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -116,6 +119,21 @@ export const setupHandlers = grnState => {
         var svgContainer = document.getElementById("exportContainer");
         var editedName = grnState.name.replace(determineFileType(grnState.name), "");
         exportSVG(svgContainer, editedName + ".svg");
+    });
+
+    $(EXPORT_TO_PDF).click(() => {
+        var svgContainer = document.getElementById("exportContainer").innerHTML;
+        if (svgContainer) {
+            svgContainer = svgContainer.replace(/\r?\n|\r/g, "").trim();
+        }
+        var canvas = document.createElement("canvas");
+        canvg(canvas, svgContainer);
+        var imgData = canvas.toDataURL("image/png");
+
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 40, 40, 75, 75);
+        pdf.save(editedName + ".pdf");
     });
 
 // Node Coloring
