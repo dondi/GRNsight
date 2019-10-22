@@ -33,27 +33,14 @@ html
                   a(class='upload' href='#' id='open-item')
                     label(for='upload' id='open')
                       span(class='glyphicon glyphicon-folder-open')
-                      | &nbsp; Open
-                    input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                      | &nbsp; Open File
+                    input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
                     input(type='hidden' id='service-root' value='#{serviceRoot}')
                 li(class='startDisabled disabled')
                   a(href='#' id='reload')
                     span(class='glyphicon glyphicon-repeat')
                     | &nbsp; Reload
                 li(class='divider')
-                li(class='dropdown-submenu')
-                  a(href='#')
-                    span(class='glyphicon glyphicon-import')
-                    | &nbsp; Import
-                  ul(class='dropdown-menu')
-                    li
-                      a(class='upload' href='#' id='importSif')
-                        label(for='upload-sif' id='import-sif') SIF…
-                        input(type='file' name='upload-sif' id='upload-sif' accept='.sif')
-                    li
-                      a(class='upload' href='#' id='importGraphMl')
-                        label(for='upload-graphml' id='import-graphml') GraphML…
-                        input(type='file' name='upload-graphml' id='upload-graphml' accept='.graphml')
                 li(class='dropdown-submenu')
                   a(href='#')
                     span(class='glyphicon glyphicon-export')
@@ -83,6 +70,8 @@ html
                       a(href='#' id='exportAsPng') To PNG
                     li(class='startDisabled disabled')
                       a(href='#' id='exportAsSvg') To SVG
+                    li(class='startDisabled disabled')
+                      a(href='#' id='exportAsPdf') To PDF
                 li(class='divider')
                 li(class='startDisabled disabled')
                   a(href='#' id='printGraph')
