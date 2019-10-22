@@ -128,6 +128,7 @@ var parseExpressionSheet = function (sheet) {
     // if the 'id' cell is mislabeled.
     if (expressionData["data"]["id"]) {
         // Throw warning in case of extraneous data
+        // Need to add a case where it checks the depth of the columns, as well.
         var rowLength = expressionData["data"]["id"].length;
         Object.values(expressionData["data"]).forEach(function(row) {
             if (row.length !== rowLength) {
@@ -163,6 +164,18 @@ var parseExpressionSheet = function (sheet) {
 
     return expressionData;
 };
+
+// var transposeData = function(dataObject) {
+    // var transposed = {}
+    // transposed["id"] = []
+    // // console.log("item at id: " +JSON.stringify(dataObject["id"]));
+    // var dataObjectLength = dataObject["id"].length;
+    // for(var i = 0; i < dataObjectLength; i++) {
+    //     transposed[dataObject["id"][i]] = [];
+    // }
+    // console.log(JSON.stringify(transposed));
+
+// }
 
 // This should return an object that has this function in it
 // module.exports = function (sheet) {
