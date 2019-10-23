@@ -80,10 +80,10 @@ export const setupHandlers = grnState => {
 // thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
     const setInlineStyles = (svg, emptySvgDeclarationComputed) => {
         const traverse = svg => {
+            console.log(svg);
             var tree = [];
             tree.push(svg);
             const visit = (node) => {
-                console.log(node.childNodes);
                 if (node && node.hasChildNodes()) {
                     var child = node.firstChild;
                     while (child) {
@@ -140,13 +140,13 @@ export const setupHandlers = grnState => {
             source = source.replace(/^<svg/, "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
         }
 
-        source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
-
         var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
         window.document.body.appendChild(emptySvg);
         var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
 
         setInlineStyles(source, emptySvgDeclarationComputed);
+
+        source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
 
         var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
