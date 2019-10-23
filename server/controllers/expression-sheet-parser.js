@@ -5,10 +5,17 @@ var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigma
 var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 
 var addExpWarning = function (network, message) {
-    var warningsCount = network.warnings.length;
+    var warningsCount
+    if(!Object.keys(network).includes('warnings')) {
+        warningsCount = 0;
+        network['warnings'] = [];
+    } else {
+        warningsCount = network.warnings.length;
+    }
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
         network.warnings.push(message);
+        console.log(message);
     } else {
         network.errors.push(errorList.warningsCountError);
         return false;
@@ -71,7 +78,7 @@ var fillArray = function (value, array, length) { // mutator
 
 var isExpressionSheet = function (sheetName) {
     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
-        return sheetName.name.includes(suffix);
+        return sheetName.includes(suffix);
     });
 };
 
@@ -88,17 +95,6 @@ var parseExpressionSheet = function (sheet) {
         sheetType: "unweighted",
         time_points: []
     };
-
-    // CHECK FOR MISSING EXPRESSION SHEET
-    var expCount = 0;
-    sheet.forEach(function (innerSheet) {
-        if (isExpressionSheet(innerSheet)) {
-            expCount++;
-        }
-    })
-    if (expCount <= 0) {
-        addExpWarning(expressionData, warningsList.missingExpressionWarning());
-    }
 
     // Check that id label is correct
     var idLabel = sheet[0].data[0][0];
@@ -183,6 +179,7 @@ var parseExpressionSheet = function (sheet) {
 //         expression: {} // expression data
 //     };
 //     sheet.forEach(function (sheet) {
+//         console.log("!!!!!!!!!!!!!!!!!!!!!" + sheet.name);
 //         if (isExpressionSheet(sheet.name)) {
 //             output["expression"][sheet.name] = parseExpressionSheet(sheet);
 //         }
@@ -197,39 +194,57 @@ var parseExpressionSheet = function (sheet) {
 //     };
 // };
 
-module.exports = function (app) {
-    if (app) {
+module.exports = function (workbook) {
+    var output = {
+        expression: {}
+    };
+    var expCount = 0;
+    workbook.forEach(function (sheet) {
+        // CHECK FOR MISSING EXPRESSION SHEET
+        if (isExpressionSheet(sheet.name)) {
+            expCount++;
+            console.log("gets to the end");
+            output["expression"][sheet.name] = parseExpressionSheet(sheet);
+        }
+    })
+    if (expCount <= 0) {
+        addExpWarning(workbook, warningsList.missingExpressionWarning());
+    }        
+    return output;
+};
+// module.exports = function (app) {
+//     if (app) {
 
-    // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
-        app.post("/upload", function (req, res) {
-      // TODO: Add file validation (make sure that file is an Excel file)
-            (new multiparty.Form()).parse(req, function (err, fields, files) {
-                if (err) {
-                    return res.json(400, "There was a problem uploading your file. Please try again.");
-                }
-                var input;
-                try {
-                    input = files.file[0].path;
-                } catch (err) {
-                    return res.json(400, "No upload file selected.");
-                }
+//     // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+//         app.post("/upload", function (req, res) {
+//       // TODO: Add file validation (make sure that file is an Excel file)
+//             (new multiparty.Form()).parse(req, function (err, fields, files) {
+//                 if (err) {
+//                     return res.json(400, "There was a problem uploading your file. Please try again.");
+//                 }
+//                 var input;
+//                 try {
+//                     input = files.file[0].path;
+//                 } catch (err) {
+//                     return res.json(400, "No upload file selected.");
+//                 }
 
-                if (path.extname(input) !== ".xlsx") {
-                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
-                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
-                        (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
-                        using the importer under File > Import." + " Additional information about file \
-                        types that GRNsight supports is in the Documentation.");
-                }
+//                 if (path.extname(input) !== ".xlsx") {
+//                     return res.json(400, "This file cannot be loaded because:<br><br> The file is \
+//                         not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
+//                         (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
+//                         " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
+//                         using the importer under File > Import." + " Additional information about file \
+//                         types that GRNsight supports is in the Documentation.");
+//                 }
 
-                return processGRNmap(input, res, app);
-            });
-        });
-    }
+//                 return processGRNmap(input, res, app);
+//             });
+//         });
+//     }
 
     // exporting parseSheet for use in testing. Do not remove!
-    return {
-        parseExpressionSheet: parseExpressionSheet,
-    };
-};
+//     return {
+//         parseExpressionSheet: parseExpressionSheet,
+//     };
+// };

@@ -80,7 +80,7 @@ module.exports = function (workbook) {
             output["test"][sheet.name] = parseTwoColumnSheet(sheet);
         // Parse expression sheets
         } else if (isExpressionSheet(sheet.name)) {
-            output["expression"][sheet.name] = parseExpressionSheet(sheet);
+            // output["expression"][sheet.name] = parseExpressionSheet(sheet);
         }
     });
     return output;

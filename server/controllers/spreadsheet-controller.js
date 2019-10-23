@@ -458,7 +458,7 @@ var processGRNmap = function (path, res, app) {
     // is put into network.
     // But this might be buggy...
     Object.assign(network, additionalData);
-    // Object.assign(network, expressionData);
+    Object.assign(network, expressionData);
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
         res.json(network) :
