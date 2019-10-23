@@ -77,13 +77,8 @@ export const setupHandlers = grnState => {
         }
     };
 
-// thank you for the help https://github.com/edeno/d3-save-svg/blob/develop/src/setInlineStyles.js
-    const setInlineStyles = (svg) => {
-        // add empty svg element
-        var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        window.document.body.appendChild(emptySvg);
-        var emptySvgDeclarationComputed = window.getComputedStyle(emptySvg);
-
+// thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
+    const setInlineStyles = (svg, emptySvgDeclarationComputed) => {
         const traverse = obj => {
             var tree = [];
             tree.push(obj);
@@ -123,7 +118,6 @@ export const setupHandlers = grnState => {
 
                 }
             }
-
             element.setAttribute("style", computedStyleStr);
         };
 
@@ -133,8 +127,6 @@ export const setupHandlers = grnState => {
         while (i--) {
             explicitlySetStyle(allElements[i]);
         }
-
-        emptySvg.parentNode.removeChild(emptySvg);
     };
 
     const exportSVG = (svgElement, name) => {
@@ -149,7 +141,13 @@ export const setupHandlers = grnState => {
         }
 
         source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
-        setInlineStyles(source);
+
+        var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        window.document.body.appendChild(emptySvg);
+        var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
+
+        setInlineStyles(source, emptySvgDeclarationComputed);
+
         var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
 
         $("#exportAsSvg").attr("href", svgUrl);
