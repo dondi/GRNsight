@@ -1087,7 +1087,7 @@ export var drawGraph = function (network) {
                 x: width
             }
         };
-        /* eslint-enable max-len */
+        /* eslint-disable max-len */
         var g = document.querySelector("body > div.sidebar > div.node-coloring > div.panel > div.panel-collapse > div.panel-body > div > svg > g");
         /* eslint-enable max-len */
 
