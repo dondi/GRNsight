@@ -914,8 +914,8 @@ export var drawGraph = function (network) {
         node.selectAll(".nodeText").remove();
         var text = node.append("text")
             .attr("dy", NODE_HEIGHT)
-            .attr("text-anchor", "middle")
             .attr("class", "nodeText")
+            .style("text-anchor", "middle")
             .style("font-size", "18px")
             .style("stroke-width", "0")
             .style("fill", "black")
