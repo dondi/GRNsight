@@ -79,11 +79,11 @@ export const setupHandlers = grnState => {
 
 // thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
     const setInlineStyles = (svg, emptySvgDeclarationComputed) => {
-        const traverse = obj => {
+        const traverse = svg => {
             var tree = [];
-            tree.push(obj);
+            tree.push(svg);
             const visit = (node) => {
-                console.log(node);
+                console.log(node.childNodes);
                 if (node && node.hasChildNodes()) {
                     var child = node.firstChild;
                     while (child) {
@@ -95,7 +95,7 @@ export const setupHandlers = grnState => {
                     }
                 }
             };
-            visit(obj);
+            visit(svg);
             return tree;
         };
 
