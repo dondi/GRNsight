@@ -83,6 +83,7 @@ export const setupHandlers = grnState => {
             console.log(svg);
             var tree = [];
             tree.push(svg);
+            // implement DFS
             const visit = (node) => {
                 if (node && node.hasChildNodes()) {
                     var child = node.firstChild;
