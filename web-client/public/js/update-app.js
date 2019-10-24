@@ -49,6 +49,7 @@ import {
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
+  NODE_COLORING_SIDEBAR_BODY,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -276,12 +277,8 @@ const updatetoGridLayout = () => {
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
-        $(NODE_COLORING_MENU).removeClass("hidden");
-    }
-    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
-        $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
-    }
+    $(NODE_COLORING_MENU).removeClass("hidden");
+    $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
 };
 
 const disableNodeColoringMenus = () => {
@@ -477,10 +474,12 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
     } else {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
     }
 

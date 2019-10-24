@@ -304,29 +304,29 @@ html
             //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
             input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
             input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
-        div(class="node-coloring hidden")
-          div(class="panel panel-default")
+        div(class="node-coloring hidden panel panel-default")
             p(class='panel-title sideHeader')
-              a(data-toggle='collapse' data-target='#nodeColoringSidebarBody') Node Coloring
-            div(id="nodeColoringSidebarBody" class="panel-collapse collapse in")
+              a(data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node Coloring
+            div(id="nodeColoringSidebarPanel" class="panel-collapse collapse in")
               div(class="panel-body")
                 input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
-                label(class='info', data-toggle='tooltip') Top Dataset
-                select(id="dataset-top")
-                form
-                  input(id='averageDataTop', type='checkbox' checked)
-                  label(for='averageDataTop' class='sideLabel') Average Replicate Values
-                label(class='info', data-toggle='tooltip') Bottom Dataset
-                select(id="dataset-bottom")
-                form
-                  input(id='averageDataBottom', type='checkbox' checked)
-                  label(for='averageDataBottom' class='sideLabel') Average Replicate Values
-                p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-                p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
-                input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
-                span &nbsp;
-                button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
-                div(class="node-coloring-legend")
+                div(class="nodeColoringSidebarBody")
+                  label(class='info', data-toggle='tooltip') Top Dataset
+                  select(id="dataset-top")
+                  form
+                    input(id='averageDataTop', type='checkbox' checked)
+                    label(for='averageDataTop' class='sideLabel') Average Replicate Values
+                  label(class='info', data-toggle='tooltip') Bottom Dataset
+                  select(id="dataset-bottom")
+                  form
+                    input(id='averageDataBottom', type='checkbox' checked)
+                    label(for='averageDataBottom' class='sideLabel') Average Replicate Values
+                  p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
+                  p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
+                  input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+                  span &nbsp;
+                  button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
+                  div(class="node-coloring-legend")
         div(id="force-graph")
           form
             label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
