@@ -72,7 +72,8 @@ import {
   ZOOM_ADAPTIVE_MAX_SCALE,
   ZOOM_INPUT,
   ZOOM_SLIDER,
-  EXPORT_WEIGHTED_CLASS
+  EXPORT_WEIGHTED_CLASS,
+  EDGE_WEIGHT_SIDEBAR
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -129,6 +130,10 @@ const logFoldChangeMaxValueInputValidation = value => {
 };
 
 //
+const showEdgeWeightMenu = () => {
+    $(EDGE_WEIGHT_SIDEBAR).removeClass("hidden");
+};
+
 const synchronizeGrayEdgeValues = value => {
     var validatedInput = grayEdgeInputValidator(value);
     $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
@@ -397,10 +402,10 @@ const updateBottomDataset = () => {
 };
 
 export const updateApp = grnState => {
-
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
+        showEdgeWeightMenu();
         clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);

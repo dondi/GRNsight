@@ -98,6 +98,7 @@ export const MINIMUM_MAX_LOG_FOLD_CHANGE                = 0;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
 export const DEFAULT_MAX_LOG_FOLD_CHANGE                = 3;
 export const MAX_NUM_CHARACTERS_DROPDOWN                = 24;
+export const EDGE_WEIGHT_SIDEBAR                        = ".edge-weight-sidebar";
 export const NODE_COLORING_MENU                         = ".node-coloring";
 export const NODE_COLORING_MENU_CLASS                   = ".node-coloring-menu";
 export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
