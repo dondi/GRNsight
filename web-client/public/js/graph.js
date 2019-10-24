@@ -658,7 +658,7 @@ export var drawGraph = function (network) {
             .attr("class", "weight")
             .attr("text-anchor", "middle")
             .attr("text-anchor", "middle")
-            .attr("font-family", "sans-serif")
+            .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
             });
@@ -667,7 +667,7 @@ export var drawGraph = function (network) {
             .enter().append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
-            .attr("font-family", "sans-serif")
+            .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
             })

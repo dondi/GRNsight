@@ -95,6 +95,23 @@ export const setupHandlers = grnState => {
         $("#exportAsSvg").attr("download", name);
     };
 
+    const exportPDF = (svgElement, name) => {
+        if (svgElement) {
+            svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
+        }
+
+        let canvas = document.createElement("canvas");
+        canvg(canvas, svgElement);
+        const imgData = canvas.toDataURL("image/png");
+
+        const pdf = new jsPDF("l", "mm", "letter");
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+
+        pdf.addImage(imgData, "PNG", 0, 0, width, height);
+        pdf.save(name);
+    };
+
     // Grid and Force Graph Layout
     $(`${FORCE_GRAPH_MENU}, ${FORCE_GRAPH_BUTTON}`).click(() => {
         updaters.setNodesToForceGraph();
@@ -111,29 +128,20 @@ export const setupHandlers = grnState => {
 // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(determineFileType(grnState.name), "");
-        saveSvgAsPng(svgContainer, editedName + ".png");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
+        saveSvgAsPng(svgContainer, editedName);
     });
 
     $(EXPORT_TO_SVG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
-        var editedName = grnState.name.replace(determineFileType(grnState.name), "");
-        exportSVG(svgContainer, editedName + ".svg");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".svg";
+        exportSVG(svgContainer, editedName );
     });
 
     $(EXPORT_TO_PDF).click(() => {
         var svgContainer = document.getElementById("exportContainer").innerHTML;
-        if (svgContainer) {
-            svgContainer = svgContainer.replace(/\r?\n|\r/g, "").trim();
-        }
-        var canvas = document.createElement("canvas");
-        canvg(canvas, svgContainer);
-        var imgData = canvas.toDataURL("image/png");
-
-        var editedName = grnState.name.replace(determineFileType(grnState.name), "");
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 40, 40, 75, 75);
-        pdf.save(editedName + ".pdf");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".pdf";
+        exportPDF(svgContainer, editedName);
     });
 
 // Node Coloring
