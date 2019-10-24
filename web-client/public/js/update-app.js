@@ -129,7 +129,7 @@ const logFoldChangeMaxValueInputValidation = value => {
     }
 };
 
-//
+// Weight Visualization Function
 const showEdgeWeightMenu = () => {
     $(EDGE_WEIGHT_SIDEBAR).removeClass("hidden");
 };
@@ -141,7 +141,6 @@ const synchronizeGrayEdgeValues = value => {
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
 };
 
-// Weight Visualization Functions
 const synchronizeShowWeightsMouseover = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
     $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
