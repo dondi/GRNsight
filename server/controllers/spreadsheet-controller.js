@@ -457,8 +457,20 @@ var processGRNmap = function (path, res, app) {
     // Everything that network does not already contain or that is repeated in additionalData
     // is put into network.
     // But this might be buggy...
-    Object.assign(network, additionalData);
-    Object.assign(network, expressionData);
+    for(var i = 0; i < additionalData['errors'].length; i++) {
+        network['errors'].push(additionalData['errors'][i]);
+    }
+    for(var i = 0; i < additionalData['warnings'].length; i++) {
+        network['warnings'].push(additionalData['warnings'][i]);
+    }
+    // Object.assign(network, additionalData);
+    for(var i = 0; i < expressionData['errors'].length; i++) {
+        network['errors'].push(expressionData['errors'][i]);
+    }
+    for(var i = 0; i < expressionData['warnings'].length; i++) {
+        network['warnings'].push(expressionData['warnings'][i]);
+    }    
+    // Object.assign(network, expressionData);
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
         res.json(network) :
