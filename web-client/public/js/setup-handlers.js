@@ -133,28 +133,32 @@ export const setupHandlers = grnState => {
         }
     };
 
+    const sourceAttributeSetter = (svg) => {
+        svg.setAttribute("version", "1.1");
+
+        svg.removeAttribute("xmlns");
+        svg.removeAttribute("xlink");
+
+        if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns")) {
+            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
+        }
+
+        if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink")) {
+            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+        }
+    };
+
     const exportSVG = (svgElement, name) => {
         let source = svgElement;
 
-        source.setAttribute("version", "1.1");
-
-        source.removeAttribute("xmlns");
-        source.removeAttribute("xlink");
-
-        if (!source.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns")) {
-            source.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
-        }
-
-        if (!source.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink")) {
-            source.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
-        }
-
+        sourceAttributeSetter(source);
         setInlineStyles(source);
 
         var doctype = "<?xml version=\"1.0\" standalone=\"no\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"; // eslint-disable-line
         var sourceString = (new XMLSerializer()).serializeToString(source);
-        source = [doctype + sourceString];
-        var svgUrl = window.URL.createObjectURL(new Blob(source, { "type" : "text\/xml" }));
+        const finalSvgString = [doctype + sourceString];
+
+        var svgUrl = window.URL.createObjectURL(new Blob(finalSvgString, { "type" : "text\/xml" }));
 
         $("#exportAsSvg").attr("href", svgUrl);
         $("#exportAsSvg").attr("download", name);

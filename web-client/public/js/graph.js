@@ -658,6 +658,7 @@ export var drawGraph = function (network) {
             .attr("class", "weight")
             .attr("text-anchor", "middle")
             .attr("text-anchor", "middle")
+            .attr("fill", "rgb(0,0,0)")
             .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
@@ -667,6 +668,7 @@ export var drawGraph = function (network) {
             .enter().append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
+            .attr("fill", "rgb(0,0,0)")
             .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
@@ -915,10 +917,10 @@ export var drawGraph = function (network) {
         var text = node.append("text")
             .attr("dy", NODE_HEIGHT)
             .attr("class", "nodeText")
+            .attr("fill", "rgb(0, 0, 0)")
             .style("text-anchor", "middle")
             .style("font-size", "18px")
             .style("stroke-width", "0")
-            .style("fill", "black")
             .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.name;
@@ -1095,6 +1097,7 @@ export var drawGraph = function (network) {
             label.setAttribute("text-anchor", legendLabels[key].textAnchor);
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
+            label.setAttribute("fill", "rgb(0,0,0)");
             g.appendChild(label);
         }
     };
