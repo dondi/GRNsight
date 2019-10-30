@@ -78,9 +78,12 @@ export const setupHandlers = grnState => {
     };
 
 // thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
-    const setInlineStyles = (svg, emptySvgDeclarationComputed) => {
+    const setInlineStyles = (svg) => {
+        var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        window.document.body.appendChild(emptySvg);
+        var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
+
         const traverse = svg => {
-            console.log(svg);
             var tree = [];
             tree.push(svg);
             // implement DFS
@@ -131,25 +134,27 @@ export const setupHandlers = grnState => {
     };
 
     const exportSVG = (svgElement, name) => {
-        var serializer = new XMLSerializer();
-        var source = serializer.serializeToString(svgElement);
+        let source = svgElement;
 
-        if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
-            source = source.replace(/^<svg/, "<svg xmlns=\"http://www.w3.org/2000/svg\"");
+        source.setAttribute("version", "1.1");
+
+        source.removeAttribute("xmlns");
+        source.removeAttribute("xlink");
+
+        if (!source.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns")) {
+            source.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
         }
-        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
-            source = source.replace(/^<svg/, "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
+
+        if (!source.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink")) {
+            source.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
         }
 
-        var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        window.document.body.appendChild(emptySvg);
-        var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
+        setInlineStyles(source);
 
-        setInlineStyles(source, emptySvgDeclarationComputed);
-
-        source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
-
-        var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+        var doctype = "<?xml version=\"1.0\" standalone=\"no\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"; // eslint-disable-line
+        var sourceString = (new XMLSerializer()).serializeToString(source);
+        source = [doctype + sourceString];
+        var svgUrl = window.URL.createObjectURL(new Blob(source, { "type" : "text\/xml" }));
 
         $("#exportAsSvg").attr("href", svgUrl);
         $("#exportAsSvg").attr("download", name);
