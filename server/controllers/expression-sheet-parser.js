@@ -15,7 +15,6 @@ var addExpWarning = function (network, message) {
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
         network.warnings.push(message);
-        console.log(message);
     } else {
         network.errors.push(errorList.warningsCountError);
         return false;
@@ -96,27 +95,27 @@ var parseExpressionSheet = function (sheet) {
         time_points: []
     };
 
-    var expCount = 0;
-    sheet.forEach(function (sheet) {
-        // CHECK FOR MISSING EXPRESSION SHEET
-        if (isExpressionSheet(sheet.name)) {
-            expCount++;
-        }
-    })
+    // var expCount = 0;
+    // sheet.forEach(function (sheet) {
+    //     // CHECK FOR MISSING EXPRESSION SHEET
+    //     if (isExpressionSheet(sheet.name)) {
+    //         expCount++;
+    //     }
+    // })
 
-    if (expCount <= 0) {
-        addExpWarning(expressionData, warningsList.missingExpressionWarning());
-    } 
+    // if (expCount <= 0) {
+    //     addExpWarning(expressionData, warningsList.missingExpressionWarning());
+    // } 
     // Check that id label is correct
-    var idLabel = sheet[0].data[0][0];
+    var idLabel = sheet['data'][0][0];
     if(idLabel !== 'id') {
         addExpError(expressionData, errorsList.idLabelError());
     }
 
-    expressionData["time_points"] = sheet[0].data[0].slice(1);
+    expressionData["time_points"] = sheet.data[0].slice(1);
     var numberOfDataPoints = expressionData["time_points"].length;
     var geneNames = [];
-    sheet[0].data.forEach(function (sheet) {
+    sheet.data.forEach(function (sheet) {
         var geneName = sheet[0];
         if (geneName) {
             geneNames.push(geneName)
@@ -197,35 +196,14 @@ var parseExpressionSheet = function (sheet) {
 //     return output;
 // };
 
-module.exports = function (app) {
-    if (app) {
-    // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
-        app.post("/upload", function (req, res) {
-      // TODO: Add file validation (make sure that file is an Excel file)
-            (new multiparty.Form()).parse(req, function (err, fields, files) {
-                if (err) {
-                    return res.json(400, "There was a problem uploading your file. Please try again.");
-                }
-                var input;
-                try {
-                    input = files.file[0].path;
-                } catch (err) {
-                    return res.json(400, "No upload file selected.");
-                }
-                if (path.extname(input) !== ".xlsx") {
-                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
-                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
-                        (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
-                        using the importer under File > Import." + " Additional information about file \
-                        types that GRNsight supports is in the Documentation.");
-                }
-                return processGRNmap(input, res, app);
-            });
-        });
-    }
-    // exporting parseSheet for use in testing. Do not remove!
-    return {
-        parseExpressionSheet: parseExpressionSheet,
+module.exports = function (workbook) {
+    var output = {
+        expression: {}
     };
+    workbook.forEach(function (sheet) {
+        if (isExpressionSheet(sheet.name)) {
+            output["expression"][sheet.name] = parseExpressionSheet(sheet);
+        }
+    });
+    return output;
 };

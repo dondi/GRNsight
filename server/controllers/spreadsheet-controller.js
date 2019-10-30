@@ -19,6 +19,14 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
     62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
     74:"BV", 75:"BW", 76:"BX"};
 
+    var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+  
+    var isExpressionSheet = function (sheetName) {
+        return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+            return sheetName.includes(suffix);
+        });
+    };
+
 // TODO: Put this and the warnings list into helpers.
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
@@ -186,6 +194,12 @@ var warningsList = {
         };
     },
 
+    missingExpressionWarning: function () {
+        return {
+            warningCode: "MISSING_EXPRESSION_SHEET",
+            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
+        };
+    },
     // missingNetworkWarning: function () {
     //     return {
     //         warningCode: "MISSING_NETWORK",
@@ -207,6 +221,23 @@ var addWarning = function (network, message) {
         addMessageToArray(network.warnings, message);
     } else {
         addMessageToArray(network.errors, errorList.warningsCountError);
+        return false;
+    }
+};
+
+var addExpWarning = function (network, message) {
+    var warningsCount
+    if(!Object.keys(network).includes('warnings')) {
+        warningsCount = 0;
+        network['warnings'] = [];
+    } else {
+        warningsCount = network.warnings.length;
+    }
+    var MAX_WARNINGS = 75;
+    if (warningsCount < MAX_WARNINGS) {
+        network.warnings.push(message);
+    } else {
+        network.errors.push(errorList.warningsCountError);
         return false;
     }
 };
@@ -452,25 +483,46 @@ var processGRNmap = function (path, res, app) {
     // Parse expression and 2-column data, then add to network object
     // Eventually, will split this up into parsing for each type of sheet.
     var additionalData = parseAdditionalSheets(sheet);
+    var expCount = 0;
+    sheet.forEach(function (sheet) {
+        // CHECK FOR MISSING EXPRESSION SHEET
+        if (isExpressionSheet(sheet.name)) {
+            expCount++;
+        }
+    })
+    if (expCount <= 0) {
+        addExpWarning(expressionData, warningsList.missingExpressionWarning());
+    } 
     var expressionData = parseExpressionSheets(sheet);
-    // This will replace the above line, along with parsed data from other non-network sheets:
-    // Everything that network does not already contain or that is repeated in additionalData
-    // is put into network.
-    // But this might be buggy...
-    for(var i = 0; i < additionalData['errors'].length; i++) {
-        network['errors'].push(additionalData['errors'][i]);
+
+    // Add errors and warnings from meta sheets
+    if(additionalData['meta']['errors'] !== undefined) {
+        for(var i = 0; i < additionalData['meta']['errors'].length; i++) {
+            network['errors'].push(additionalData['meta']['errors'][i]);
+        }
+        for(var i = 0; i < additionalData['meta']['warnings'].length; i++) {
+            network['errors'].push(additionalData['meta']['warnings'][i]);
+        }
     }
-    for(var i = 0; i < additionalData['warnings'].length; i++) {
-        network['warnings'].push(additionalData['warnings'][i]);
+
+    if(additionalData['test']['errors'] !== undefined) {
+        // Add errors and warnings from test sheets
+        for(var i = 0; i < additionalData['test']['errors'].length; i++) {
+            network['warnings'].push(additionalData['test']['errors'][i]);
+        }
+        for(var i = 0; i < additionalData['warnings'].length; i++) {
+            network['warnings'].push(additionalData['warnings'][i]);
+        }
     }
-    // Object.assign(network, additionalData);
-    for(var i = 0; i < expressionData['errors'].length; i++) {
-        network['errors'].push(expressionData['errors'][i]);
+
+    // Add errors and warnings from expression sheets
+    for(var i = 0; i < expressionData['expression']['wt_log2_expression']['errors'].length; i++) {
+        network['errors'].push(expressionData['expression']['wt_log2_expression']['errors'][i]);
     }
-    for(var i = 0; i < expressionData['warnings'].length; i++) {
-        network['warnings'].push(expressionData['warnings'][i]);
+    for(var i = 0; i < expressionData['expression']['wt_log2_expression']['warnings'].length; i++) {
+        network['warnings'].push(expressionData['expression']['wt_log2_expression']['warnings'][i]);
     }    
-    // Object.assign(network, expressionData);
+
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
         res.json(network) :

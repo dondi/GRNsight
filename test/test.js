@@ -5,7 +5,6 @@ var spreadsheetController = require(__dirname + "/../server/controllers" + "/spr
 
 var expressionSheetParser = require(__dirname + "/../server/controllers" + "/expression-sheet-parser")();
 
-console.log(xlsx.parse("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx")[0].data[0]);
 // ERROR TEST FUNCTIONS:
 
 var noErrors = function (input) {

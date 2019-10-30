@@ -8,20 +8,20 @@ var TWO_COL_SHEET_NAMES = [
     "optimized_production_rates",
     "optimized_threshold_b"];
 
-var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+// var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-var isExpressionSheet = function (sheetName) {
-    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
-        return sheetName.includes(suffix);
-    });
-};
+// var isExpressionSheet = function (sheetName) {
+//     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+//         return sheetName.includes(suffix);
+//     });
+// };
 
-var fillArray = function (value, array, length) { // mutator
-    while (array.length < length) {
-        array.push(value);
-    }
-    return array;
-};
+// var fillArray = function (value, array, length) { // mutator
+//     while (array.length < length) {
+//         array.push(value);
+//     }
+//     return array;
+// };
 
 var parseMetaDataSheet = function (sheet) {
     var meta = {};
@@ -45,30 +45,30 @@ var parseTwoColumnSheet = function (sheet) {
     return data;
 };
 
-var parseExpressionSheet = function (sheet) {
-    var expressionData = {};
-    var geneData = {};
-    expressionData["time_points"] = sheet.data[0].slice(1);
-    var numberOfDataPoints = expressionData["time_points"].length;
-    sheet.data.forEach(function (sheet) {
-        var geneName = sheet[0];
-        if (geneName) {
-            var rowData = sheet.slice(1);
-            // Sometimes, missing data is at the end of the row. In this case, pad the
-            // array with nulls
-            if (rowData.length < numberOfDataPoints) {
-                fillArray(null, rowData, numberOfDataPoints);
-            }
-            geneData[geneName] = rowData;
-        }
-    });
-    expressionData["data"] = geneData;
-    return expressionData;
-};
+// var parseExpressionSheet = function (sheet) {
+//     var expressionData = {};
+//     var geneData = {};
+//     expressionData["time_points"] = sheet.data[0].slice(1);
+//     var numberOfDataPoints = expressionData["time_points"].length;
+//     sheet.data.forEach(function (sheet) {
+//         var geneName = sheet[0];
+//         if (geneName) {
+//             var rowData = sheet.slice(1);
+//             // Sometimes, missing data is at the end of the row. In this case, pad the
+//             // array with nulls
+//             if (rowData.length < numberOfDataPoints) {
+//                 fillArray(null, rowData, numberOfDataPoints);
+//             }
+//             geneData[geneName] = rowData;
+//         }
+//     });
+//     expressionData["data"] = geneData;
+//     return expressionData;
+// };
 
 module.exports = function (workbook) {
     var output = {
-        expression: {}, // expression data
+        // expression: {}, // expression data
         meta: {},
         test: {} // 2-column data
     };
@@ -79,9 +79,10 @@ module.exports = function (workbook) {
         } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
             output["test"][sheet.name] = parseTwoColumnSheet(sheet);
         // Parse expression sheets
-        } else if (isExpressionSheet(sheet.name)) {
+        } 
+        // else if (isExpressionSheet(sheet.name)) {
             // output["expression"][sheet.name] = parseExpressionSheet(sheet);
-        }
+        // }
     });
     return output;
 };
