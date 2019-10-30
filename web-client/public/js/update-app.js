@@ -46,10 +46,12 @@ import {
   CHARGE_VALUE,
   GRID_LAYOUT_MENU,
   FORCE_GRAPH_MENU,
+  LAYOUT_SIDEBAR_PANEL,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_SIDEBAR_BODY,
+  NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -132,6 +134,10 @@ const logFoldChangeMaxValueInputValidation = value => {
 // Weight Visualization Function
 const showEdgeWeightMenu = () => {
     $(EDGE_WEIGHT_SIDEBAR).removeClass("hidden");
+};
+
+const hideEdgeWeightMenu = () => {
+    $(EDGE_WEIGHT_SIDEBAR).addClass("hidden");
 };
 
 const synchronizeGrayEdgeValues = value => {
@@ -260,6 +266,10 @@ const updateLinkDistanceSliderValues = () => {
 };
 
 // Grid Layout Functions
+const expandLayoutSidebar = () => {
+    $(LAYOUT_SIDEBAR_PANEL).addClass("in");
+};
+
 const toggleLayout = (on, off) => {
     if (!$(on).prop("checked")) {
         $(on).prop("checked", true);
@@ -281,11 +291,14 @@ const updatetoGridLayout = () => {
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("hidden");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
 };
 
 const disableNodeColoringMenus = () => {
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("hidden");
     $(NODE_COLORING_MENU).addClass("hidden");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
 };
@@ -404,6 +417,7 @@ export const updateApp = grnState => {
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
+        expandLayoutSidebar();
         showEdgeWeightMenu();
         clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
@@ -445,12 +459,6 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
-    }
-
-    if ((grnState.network !== null && grnState.network.sheetType === "unweighted") || grnState.network === null) {
-        $(EDGE_WEIGHT_SIDEBAR).addClass("hidden");
-    } else {
-        $(EDGE_WEIGHT_SIDEBAR).removeClass("hidden");
     }
 
 // Weights functions
@@ -495,10 +503,13 @@ export const updateApp = grnState => {
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
         $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
+        showEdgeWeightMenu();
     } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
         $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
+        hideEdgeWeightMenu();
     } else {
         $(EXPORT_WEIGHTED_CLASS).addClass("startDisabled").addClass("disabled");
+        hideEdgeWeightMenu();
     }
 
     if (grnState.nodeColoring.averageTopDataset) {
