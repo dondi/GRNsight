@@ -12,7 +12,8 @@ export var displayWarnings = function (warnings) {
 
     // Fill printed with 0s programatically
     var printed = [];
-    for (var i = 0; i < NUM_POSSIBLE_WARNINGS; i++) {
+    for (var i = 0; i <= NUM_POSSIBLE_WARNINGS; i++) {
+        console.log(printed);
         printed.push(0);
     }
 
@@ -35,6 +36,7 @@ export var displayWarnings = function (warnings) {
         return x.warningCode === "INVALID_NETWORK_SIZE";
     });
     var extraneousDataCount = warnings.filter(function (x) {
+        console.log(JSON.stringify(x));
         return x.warningCode === "EXTRANEOUS_DATA";
     });
     var edgesWithoutWeightsCount = warnings.filter(function (x) {
@@ -49,22 +51,28 @@ export var displayWarnings = function (warnings) {
     var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
-    var missingExpressionSheetWarning = warnings.filter(function (x) {
+    var missingExpressionSheetWarningCount = warnings.filter(function (x) {
+        console.log(JSON.stringify(x));
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 
     var appendWarning = function (warning) {
         warningsString += warning.errorDescription + "<br><br>";
+        console.log(warning);
+        console.log(warningsString);
     };
 
     var createWarningsString = function (warningCount, index) {
         for (var i = 0; i < warningCount.length; i++) {
             if (warningCount.length <= 3) {
+                console.log("less than 3");
                 appendWarning(warningCount[i]);
             } else if (printed[index] < 3) {
+                console.log("elseif");
                 appendWarning(warningCount[i]);
                 printed[index]++;
             } else {
+                console.log("dang");
                 warningsString += "<i> " + (+warningCount.length - 3) +
                 " more warning(s) like this exist. </i> <br><br>";
                 break;
@@ -83,7 +91,7 @@ export var displayWarnings = function (warnings) {
     createWarningsString(edgeDefaultNotDirectedCount, 8);
     createWarningsString(sifFormatWarningCount, 9);
     createWarningsString(incorrectlyNamedSheetWarningCount, 10);
-    createWarningsString(missingExpressionSheetWarning, 11);
+    createWarningsString(missingExpressionSheetWarningCount, 11);
 
     $("#warningsList").html(warningsString);
 

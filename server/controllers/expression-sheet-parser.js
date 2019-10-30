@@ -36,19 +36,22 @@ var errorsList = {
     idLabelError: function () {
         return {
             errorCode: "MISLABELED_ID_CELL",
-            errorDescription: "The top left cell of the expression sheet must contain \'id\' exactly."
+            possibleCause: "The top left cell of the expression sheet is mislabeled.",
+            suggestedFix: "Replace the incorrect label with \'id\' exactly."
         };
     },
     missingColumnHeaderError: function () {
         return {
             errorCode: "MISSING_COLUMN_HEADER",
-            errorDescription: "All columns in expression sheet must have a header or label."
+            possibleCause: "A column in the expression sheet is missing a header.",
+            suggestedFix: "Add headers to all columns."
         };
     },
     emptyExpressionRowError: function () {
         return {
             errorCode: "EMPTY_ROW",
-            errorDescription: "There is an empty row in the input sheet."
+            possibleCause: "There is an empty row in the input sheet.",
+            suggestedFix: "Delete empty row, or populate with data."
         };
     },
 };

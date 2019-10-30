@@ -184,21 +184,17 @@ var warningsList = {
         };
     },
 
-    incorrectlyNamedSheetWarning: function () {
-        return {
+    incorrectlyNamedSheetWarning: {
             warningCode: "INCORRECTLY_NAMED_SHEET",
             errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
              'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
              'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
-        };
     },
 
-    missingExpressionWarning: function () {
-        return {
+    missingExpressionSheetWarning: {
             warningCode: "MISSING_EXPRESSION_SHEET",
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
-        };
     },
     // missingNetworkWarning: function () {
     //     return {
@@ -221,23 +217,6 @@ var addWarning = function (network, message) {
         addMessageToArray(network.warnings, message);
     } else {
         addMessageToArray(network.errors, errorList.warningsCountError);
-        return false;
-    }
-};
-
-var addExpWarning = function (network, message) {
-    var warningsCount
-    if(!Object.keys(network).includes('warnings')) {
-        warningsCount = 0;
-        network['warnings'] = [];
-    } else {
-        warningsCount = network.warnings.length;
-    }
-    var MAX_WARNINGS = 75;
-    if (warningsCount < MAX_WARNINGS) {
-        network.warnings.push(message);
-    } else {
-        network.errors.push(errorList.warningsCountError);
         return false;
     }
 };
@@ -491,8 +470,9 @@ var processGRNmap = function (path, res, app) {
         }
     })
     if (expCount <= 0) {
-        addExpWarning(expressionData, warningsList.missingExpressionWarning());
-    } 
+        addWarning(network, warningsList.missingExpressionSheetWarning);
+    }
+
     var expressionData = parseExpressionSheets(sheet);
 
     // Add errors and warnings from meta sheets
@@ -515,13 +495,15 @@ var processGRNmap = function (path, res, app) {
         }
     }
 
-    // Add errors and warnings from expression sheets
-    for(var i = 0; i < expressionData['expression']['wt_log2_expression']['errors'].length; i++) {
-        network['errors'].push(expressionData['expression']['wt_log2_expression']['errors'][i]);
+    if(expressionData['expression']['wt_log2_expression'] !== undefined) {
+        // Add errors and warnings from expression sheets
+        for(var i = 0; i < expressionData['expression']['wt_log2_expression']['errors'].length; i++) {
+            network['errors'].push(expressionData['expression']['wt_log2_expression']['errors'][i]);
+        }
+        for(var i = 0; i < expressionData['expression']['wt_log2_expression']['warnings'].length; i++) {
+            network['warnings'].push(expressionData['expression']['wt_log2_expression']['warnings'][i]);
+        }    
     }
-    for(var i = 0; i < expressionData['expression']['wt_log2_expression']['warnings'].length; i++) {
-        network['warnings'].push(expressionData['expression']['wt_log2_expression']['warnings'][i]);
-    }    
 
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
