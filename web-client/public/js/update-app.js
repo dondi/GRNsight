@@ -447,6 +447,12 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
     }
 
+    if ((grnState.network !== null && grnState.network.sheetType === "unweighted") || grnState.network === null) {
+        $(EDGE_WEIGHT_SIDEBAR).addClass("hidden");
+    } else {
+        $(EDGE_WEIGHT_SIDEBAR).removeClass("hidden");
+    }
+
 // Weights functions
     if (grnState.edgeWeightDisplayOption === SHOW_WEIGHTS_MOUSEOVER) {
         synchronizeShowWeightsMouseover();
