@@ -250,11 +250,11 @@ var parseSheet = function (sheet) {
 
     // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
-        if (sheet[i].name === "network") {
+        if (sheet[i].name.toLowerCase === "network") {
             // Here we have found a sheet containing simple data. We keep looking
             // in case there is also a sheet with optimized weights
             currentSheet = sheet[i];
-        } else if (sheet[i].name === "network_optimized_weights") {
+        } else if (sheet[i].name.toLowerCase === "network_optimized_weights") {
             // We found a sheet with optimized weights, which is the ideal data source.
             // So we stop looking.
             currentSheet = sheet[i];

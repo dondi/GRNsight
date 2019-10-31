@@ -319,9 +319,9 @@ html
                     input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
                   form
                     input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
-                    label(for='lockSlidersButton' class='sideLabel') Lock Physics Parameters
+                    label(for='lockSlidersButton' class='sideLabel') Lock Force Parameters
                   form
-                    input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Physics Parameters')
+                    input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Parameters')
                     input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
                   p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 
@@ -348,32 +348,6 @@ html
                   span &nbsp;
                   button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
                   div(class="node-coloring-legend")
-
-        div(class='view-sidebar panel panel-default')
-            p(class='panel-title sidebarPanelHeader')
-              a(data-toggle='collapse' data-target='#viewportSidebarPanel') Viewport
-            div(id="viewportSidebarPanel" class="panel-collapse collapse")
-              div(class="panel-body")
-                label(class='sideHeader') Size
-                form
-                  input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
-                  label(for='boundBoxS' class='sideLabel')
-                    | Small #[small (1104 X 648 pixels)]
-                  br
-                  input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
-                  label(for='boundBoxM' class='sideLabel')
-                    | Medium #[small (1414 X 840 pixels)]
-                  br
-                  input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
-                  label(for='boundBoxL' class='sideLabel')
-                    | Large #[small (1920 X 1080 pixels)]
-                  br
-                  input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
-                  label(for='boundBoxFit' class='sideLabel') Fit to window
-                  br
-                  input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
-                  label(for='viewport' class='sideLabel') Restrict graph to viewport
-
 
         div(class='edge-weight-sidebar hidden panel panel-default')
           p(class='panel-title sidebarPanelHeader')
@@ -405,6 +379,31 @@ html
                 br
                 input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
                 label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
+
+        div(class='view-sidebar panel panel-default')
+          p(class='panel-title sidebarPanelHeader')
+            a(data-toggle='collapse' data-target='#viewportSidebarPanel') Viewport
+          div(id="viewportSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              label(class='sideHeader') Size
+              form
+                input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
+                label(for='boundBoxS' class='sideLabel')
+                  | Small #[small (1104 X 648 pixels)]
+                br
+                input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
+                label(for='boundBoxM' class='sideLabel')
+                  | Medium #[small (1414 X 840 pixels)]
+                br
+                input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
+                label(for='boundBoxL' class='sideLabel')
+                  | Large #[small (1920 X 1080 pixels)]
+                br
+                input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
+                label(for='boundBoxFit' class='sideLabel') Fit to window
+                br
+                input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
+                label(for='viewport' class='sideLabel') Restrict graph to viewport
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
