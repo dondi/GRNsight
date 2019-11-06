@@ -52,6 +52,7 @@ import {
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_SIDEBAR_BODY,
   NODE_COLORING_SIDEBAR_PANEL,
+  NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -75,7 +76,8 @@ import {
   ZOOM_INPUT,
   ZOOM_SLIDER,
   EXPORT_WEIGHTED_CLASS,
-  EDGE_WEIGHT_SIDEBAR
+  EDGE_WEIGHT_SIDEBAR,
+  EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -135,13 +137,13 @@ const logFoldChangeMaxValueInputValidation = value => {
 const showEdgeWeightOptions = () => {
     $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR).removeClass("disabled");
-    $(".disabledOnLaunch a").attr("data-toggle", "collapse");
+    $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
 const hideEdgeWeightOptions = () => {
     $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR).addClass("disabled");
-    $(".disabledOnLaunch a").attr("data-toggle", "");
+    $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
 const synchronizeGrayEdgeValues = value => {
@@ -299,14 +301,15 @@ const showNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
-    $(".disabledOnLaunch a").attr("data-toggle", "collapse");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
 const disableNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
     $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
-    $(".disabledOnLaunch a").attr("data-toggle", "");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
 const isNewWorkbook = (name) => {

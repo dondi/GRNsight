@@ -327,7 +327,7 @@ html
 
         div(class="node-coloring disabled panel panel-default")
             p(class='panel-title sidebarPanelHeader disabledOnLaunch')
-              a(data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node Coloring
+              a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node Coloring
             div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
               div(class="panel-body")
                 input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
@@ -351,7 +351,7 @@ html
 
         div(class='edge-weight-sidebar disabled panel panel-default disabled')
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
-            a(data-toggle='collapse' data-target='#edgeSidebarPanel') Edge
+            a(id="edgeWeightHeaderLink" data-toggle='collapse' data-target='#edgeSidebarPanel') Edge
           div(id="edgeSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
               form(class='weightedGraphOptions hidden')
