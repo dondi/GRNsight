@@ -28,6 +28,7 @@ import {
   HIDE_ALL_WEIGHTS,
   COLOR_EDGES,
   BLACK_EDGES,
+  COLOR_EDGES_SIDEBAR,
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
   LOCK_SLIDERS_MENU,
@@ -76,6 +77,7 @@ import {
   ZOOM_INPUT,
   ZOOM_SLIDER,
   EXPORT_WEIGHTED_CLASS,
+  EDGE_WEIGHT_MENU_CLASS,
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
 } from "./constants";
@@ -135,12 +137,14 @@ const logFoldChangeMaxValueInputValidation = value => {
 
 // Weight Visualization Function
 const showEdgeWeightOptions = () => {
+    $(EDGE_WEIGHT_MENU_CLASS).removeClass("disabled");
     $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR).removeClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
 const hideEdgeWeightOptions = () => {
+    $(EDGE_WEIGHT_MENU_CLASS).addClass("disabled");
     $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR).addClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "");

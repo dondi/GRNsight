@@ -63,6 +63,7 @@ export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 export const COLOR_EDGES                        = "#colorEdges";
 export const BLACK_EDGES                        = "#blackEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
+export const COLOR_EDGES_SIDEBAR                = "#colorEdgesSidebar";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
 export const LOCK_SLIDERS_CLASS          = ".lockSliders";

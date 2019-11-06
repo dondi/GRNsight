@@ -24,6 +24,7 @@ import {
     HIDE_ALL_WEIGHTS,
     COLOR_EDGES,
     BLACK_EDGES,
+    COLOR_EDGES_SIDEBAR,
     LINK_DIST_SLIDER_SIDEBAR,
     LINK_DIST_MENU,
     CHARGE_SLIDER_SIDEBAR,
@@ -348,6 +349,11 @@ export const setupHandlers = grnState => {
 
     $(BLACK_EDGES).click(() => {
         grnState.colorOptimal = false;
+        updateApp(grnState);
+    });
+
+    $(COLOR_EDGES_SIDEBAR).click(() => {
+        grnState.colorOptimal = !grnState.colorOptimal;
         updateApp(grnState);
     });
 
