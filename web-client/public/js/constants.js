@@ -104,6 +104,7 @@ export const NODE_COLORING_MENU                         = ".node-coloring";
 export const NODE_COLORING_MENU_CLASS                   = ".node-coloring-menu";
 export const NODE_COLORING_SIDEBAR_PANEL                = "#nodeColoringSidebarPanel";
 export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
+export const NODE_COLORING_SIDEBAR_HEADER               = "#sidebarPanelHeader";
 export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggle";
 export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
 export const AVG_REPLICATE_VALS_TOP_SIDEBAR             = "#averageDataTop";

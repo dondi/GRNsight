@@ -133,11 +133,11 @@ const logFoldChangeMaxValueInputValidation = value => {
 
 // Weight Visualization Function
 const showEdgeWeightMenu = () => {
-    $(EDGE_WEIGHT_SIDEBAR).removeClass("hidden");
+    $(EDGE_WEIGHT_SIDEBAR).removeClass("disabled");
 };
 
 const hideEdgeWeightMenu = () => {
-    $(EDGE_WEIGHT_SIDEBAR).addClass("hidden");
+    $(EDGE_WEIGHT_SIDEBAR).addClass("disabled");
 };
 
 const synchronizeGrayEdgeValues = value => {
@@ -291,16 +291,18 @@ const updatetoGridLayout = () => {
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
-    $(NODE_COLORING_MENU).removeClass("hidden");
+    $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
+    $(".disabledOnLaunch a").attr("data-toggle", "collapse");
 };
 
 const disableNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_PANEL).addClass("hidden");
-    $(NODE_COLORING_MENU).addClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
+    $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+    $(".disabledOnLaunch a").attr("data-toggle", "");
 };
 
 const isNewWorkbook = (name) => {
