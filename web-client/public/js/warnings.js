@@ -3,7 +3,7 @@ export var displayWarnings = function (warnings) {
       "The graph will be loaded, but may not be displayed accurately. " +
       "We recommend you review your file and ensure that it is formatted correctly. " +
       "To view the details of the warning(s), please click on the \"Warnings List\" below.");
-
+    console.log(JSON.stringify("BIG WARNINGS VAR" +warnings));
     var warningsString = "";
     // printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,
     // EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
@@ -52,7 +52,7 @@ export var displayWarnings = function (warnings) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
     var missingExpressionSheetWarningCount = warnings.filter(function (x) {
-        console.log(JSON.stringify(x));
+        console.log("Warning added");
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 

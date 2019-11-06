@@ -88,6 +88,7 @@ const displayNetwork = (network, name) => {
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
     if (network.warnings.length > 0) {
+        console.log("HEY!"  JSON.stringify(network.warnings));
         displayWarnings(network.warnings);
     }
 
