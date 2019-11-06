@@ -132,18 +132,22 @@ const logFoldChangeMaxValueInputValidation = value => {
 };
 
 // Weight Visualization Function
-const showEdgeWeightMenu = () => {
+const showEdgeWeightOptions = () => {
+    $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR).removeClass("disabled");
+    $(".disabledOnLaunch a").attr("data-toggle", "collapse");
 };
 
-const hideEdgeWeightMenu = () => {
+const hideEdgeWeightOptions = () => {
+    $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
     $(EDGE_WEIGHT_SIDEBAR).addClass("disabled");
+    $(".disabledOnLaunch a").attr("data-toggle", "");
 };
 
 const synchronizeGrayEdgeValues = value => {
     var validatedInput = grayEdgeInputValidator(value);
-    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
     $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
+    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
 };
 
@@ -420,7 +424,6 @@ export const updateApp = grnState => {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
         expandLayoutSidebar();
-        showEdgeWeightMenu();
         clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
@@ -504,14 +507,11 @@ export const updateApp = grnState => {
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
-        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
-        showEdgeWeightMenu();
+        showEdgeWeightOptions();
     } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
-        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
-        hideEdgeWeightMenu();
+        hideEdgeWeightOptions();
     } else {
-        $(EXPORT_WEIGHTED_CLASS).addClass("startDisabled").addClass("disabled");
-        hideEdgeWeightMenu();
+        hideEdgeWeightOptions();
     }
 
     if (grnState.nodeColoring.averageTopDataset) {
