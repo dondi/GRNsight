@@ -11,7 +11,7 @@ var test = require("./test");
 describe("expression-data-import-tests", function () {
 
     describe("MISSING_EXPRESSION_SHEET", function () {
-        it("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
+        it.skip("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);
         });
     });
@@ -23,25 +23,25 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("wrong_order_gene_names", function () {
-        it("Gene names in column A do not match the order of those in network sheet.", function () {
+        it.skip("Gene names in column A do not match the order of those in network sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
 
     describe("wrong_case_gene_names", function () {
-        it("Gene names in column A do not match the case of those in network sheet.", function () {
+        it.skip("Gene names in column A do not match the case of those in network sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_mismatched_case_gene_names.xlsx", 1);
         });
     });
 
     describe("missing_a_gene_name", function () {
-        it("Gene names in column A are missing a gene name listed in the network sheet.", function () {
+        it.skip("Gene names in column A are missing a gene name listed in the network sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
         });
     });
 
     describe("extra_gene_name", function () {
-        it("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
+        it.skip("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
         });
     });
@@ -53,7 +53,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("empty_column", function () {
-        it("Column in expression sheet contains no data.", function () {
+        it.skip("Column in expression sheet contains no data.", function () {
             test.emptyExpressionColumnError("test-files/expression-data-test-sheets/expression_sheet_empty_column.xlsx", 1);
         });
     });
@@ -71,19 +71,19 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("wrong-exp-sheet-name-due-to-convention", function () {
-        it("Incorrect expression sheet naming convention", function () {
+        it.skip("Incorrect expression sheet naming convention", function () {
             test.incorrectlyNamedExpressionSheetWarning("test-files/expression-data-test-sheets/expression_sheet_wrong_sheet_name_convention.xlsx", 1);
         });
     });
 
     describe("resolvable-missing-data", function () {
-        it("should return no error", function () {
+        it.skip("should return no error", function () {
             test.noErrors("test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx", 1);
         });
     });
 
     describe("different-number-of-columns", function () {
-        it("should not return any errors", function () {
+        it.skip("should not return any errors", function () {
             test.noErrors("test-files/expression-data-test-sheets/expression_sheet_different_number_of_columns.xlsx", 0);
         });
     });

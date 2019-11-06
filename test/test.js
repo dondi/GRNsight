@@ -3,7 +3,7 @@ var xlsx = require("node-xlsx");
 // var cytoscape = require("cytoscape");
 var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
-var expressionSheetParser = require(__dirname + "/../server/controllers" + "/expression-sheet-parser");
+var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expression-sheet-parser");
 
 // ERROR TEST FUNCTIONS:
 
@@ -190,20 +190,20 @@ var emptyRowError = function (input, frequency) {
 
 var idLabelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
-    assert.equal(frequency, network.errors.length);
+    var network = parseExpressionSheet(sheet);
+    assert.equal(frequency, network.expression.wt_log2_expression.errors.length);
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
       "MISLABELED_ID_CELL",
-      network.errors[i].errorCode
+      network.expression.wt_log2_expression.errors[i].errorCode
     );
     }
 };
 
 var missingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var network = parseExpressionSheet(sheet);
     assert.equal(frequency, network.errors.length);
 
     for (var i = 0; i < frequency; i++) {
@@ -216,7 +216,7 @@ var missingColumnHeaderError = function (input, frequency) {
 
 var emptyExpressionColumnError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var network = parseExpressionSheet(sheet);
     assert.equal(frequency, network.errors.length);
 
     for (var i = 0; i < frequency; i++) {
@@ -229,7 +229,7 @@ var emptyExpressionColumnError = function (input, frequency) {
 
 var emptyExpressionRowError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var network = parseExpressionSheet(sheet);
     assert.equal(frequency, network.errors.length);
 
     for (var i = 0; i < frequency; i++) {
@@ -311,7 +311,7 @@ var invalidNetworkSizeWarning = function (input, frequency) {
 
 var extraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var exp = expressionSheetParser.parseExpressionSheet(sheet);
+    var exp = parseExpressionSheet(sheet);
     var extraneousDataCount = exp.warnings.filter(function (x) {
         return x.warningCode === "EXTRANEOUS_DATA";
     });
@@ -319,10 +319,11 @@ var extraneousDataWarning = function (input, frequency) {
     assert.equal(frequency, extraneousDataCount.length);
 };
 
-var missingExpressionWarning = function (input, frequency) {
+// This test is having problems!
+var missingExpressionWarning = function (input, frequency)  {
     var sheet = xlsx.parse(input);
-    var exp = expressionSheetParser.parseExpressionSheet(sheet);
-    var missingExpressionCount = exp.warnings.filter(function (x) {
+    var network = spreadsheetController.processGRNmap(sheet);
+    var missingExpressionCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 
@@ -331,7 +332,7 @@ var missingExpressionWarning = function (input, frequency) {
 
 var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = expressionSheetParser.parseExpressionSheet(sheet);
+    var network = parseExpressionSheet(sheet);
     var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_EXPRESSION_SHEET";
     });

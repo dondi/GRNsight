@@ -192,7 +192,6 @@ module.exports = function (workbook) {
     var output = {
         expression: {}
     };
-    console.log("WKBK: " + JSON.stringify(workbook));
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);

@@ -630,6 +630,7 @@ module.exports = function (app) {
     // exporting parseSheet for use in testing. Do not remove!
     return {
         parseSheet: parseSheet,
-        grnSightToCytoscape: grnSightToCytoscape
+        grnSightToCytoscape: grnSightToCytoscape,
+        processGRNmap : processGRNmap
     };
 };
