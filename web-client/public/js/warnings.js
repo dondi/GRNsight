@@ -3,7 +3,6 @@ export var displayWarnings = function (warnings) {
       "The graph will be loaded, but may not be displayed accurately. " +
       "We recommend you review your file and ensure that it is formatted correctly. " +
       "To view the details of the warning(s), please click on the \"Warnings List\" below.");
-    console.log(JSON.stringify("BIG WARNINGS VAR" +warnings));
     var warningsString = "";
     // printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,
     // EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
@@ -13,7 +12,6 @@ export var displayWarnings = function (warnings) {
     // Fill printed with 0s programatically
     var printed = [];
     for (var i = 0; i <= NUM_POSSIBLE_WARNINGS; i++) {
-        console.log(printed);
         printed.push(0);
     }
 
@@ -36,7 +34,6 @@ export var displayWarnings = function (warnings) {
         return x.warningCode === "INVALID_NETWORK_SIZE";
     });
     var extraneousDataCount = warnings.filter(function (x) {
-        console.log(JSON.stringify(x));
         return x.warningCode === "EXTRANEOUS_DATA";
     });
     var edgesWithoutWeightsCount = warnings.filter(function (x) {
@@ -52,27 +49,21 @@ export var displayWarnings = function (warnings) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
     var missingExpressionSheetWarningCount = warnings.filter(function (x) {
-        console.log("Warning added");
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
 
     var appendWarning = function (warning) {
         warningsString += warning.errorDescription + "<br><br>";
-        console.log(warning);
-        console.log(warningsString);
     };
 
     var createWarningsString = function (warningCount, index) {
         for (var i = 0; i < warningCount.length; i++) {
             if (warningCount.length <= 3) {
-                console.log("less than 3");
                 appendWarning(warningCount[i]);
             } else if (printed[index] < 3) {
-                console.log("elseif");
                 appendWarning(warningCount[i]);
                 printed[index]++;
             } else {
-                console.log("dang");
                 warningsString += "<i> " + (+warningCount.length - 3) +
                 " more warning(s) like this exist. </i> <br><br>";
                 break;

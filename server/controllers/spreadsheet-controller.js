@@ -196,6 +196,7 @@ var warningsList = {
             warningCode: "MISSING_EXPRESSION_SHEET",
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
     },
+
     // missingNetworkWarning: function () {
     //     return {
     //         warningCode: "MISSING_NETWORK",
@@ -485,6 +486,7 @@ var processGRNmap = function (path, res, app) {
         }
     }
 
+    // Add errors and warnings from additionalData sheets
     if(additionalData['test']['errors'] !== undefined) {
         // Add errors and warnings from test sheets
         for(var i = 0; i < additionalData['test']['errors'].length; i++) {
@@ -495,6 +497,7 @@ var processGRNmap = function (path, res, app) {
         }
     }
 
+    // Add errors and warnings from expression sheets
     if(expressionData['expression']['wt_log2_expression'] !== undefined) {
         // Add errors and warnings from expression sheets
         for(var i = 0; i < expressionData['expression']['wt_log2_expression']['errors'].length; i++) {

@@ -98,18 +98,7 @@ var parseExpressionSheet = function (sheet) {
         time_points: []
     };
 
-    // var expCount = 0;
-    // sheet.forEach(function (sheet) {
-    //     // CHECK FOR MISSING EXPRESSION SHEET
-    //     if (isExpressionSheet(sheet.name)) {
-    //         expCount++;
-    //     }
-    // })
-
-    // if (expCount <= 0) {
-    //     addExpWarning(expressionData, warningsList.missingExpressionWarning());
-    // } 
-    // Check that id label is correct
+    // Check that id label is correct. Throw error if not.
     var idLabel = sheet['data'][0][0];
     if(idLabel !== 'id') {
         addExpError(expressionData, errorsList.idLabelError());
@@ -203,6 +192,7 @@ module.exports = function (workbook) {
     var output = {
         expression: {}
     };
+    console.log("WKBK: " + JSON.stringify(workbook));
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
