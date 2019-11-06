@@ -6,6 +6,7 @@ html
     link(href="stylesheets/grnsight.css", rel="stylesheet")
     link(href="stylesheets/print.css", rel="stylesheet", media="print")
     link(href="//code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css", rel="stylesheet")
+    script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
     script(src="//code.jquery.com/jquery-1.9.1.js")
     script(src="//code.jquery.com/ui/1.10.1/jquery-ui.js")
     script.
@@ -77,44 +78,6 @@ html
                   a(href='#' id='printGraph')
                     span(class='glyphicon glyphicon-print')
                     | &nbsp; Print
-
-            li(class='dropdown')
-              a(href='#' class='dropdown-toggle' data-toggle='dropdown') View
-              ul(class='dropdown-menu' role='menu')
-                span(class='menu-subheader') Viewport Size
-                li
-                  a(href='#' id='viewport-size-s' class='viewportOption active')
-                    span(class='glyphicon')
-                    | &nbsp; Small (1104 x 648 pixels)
-                li
-                  a(href='#' id='viewport-size-m' class='viewportOption')
-                    span(class='glyphicon glyphicon-ok')
-                    | &nbsp; Medium (1414 x 840 pixels)
-                li
-                  a(href='#' id='viewport-size-l' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Large (1920 x 1080 pixels)
-                li
-                  a(href='#' id='viewport-size-fit' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Fit To Window
-                li(class='divider')
-                li
-                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Restrict Graph to Viewport
-                li(class='divider')
-                li(class='startDisabled disabled')
-                  a(href='#' id='zoom' class='with-input')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Zoom (
-                    span(class='minimum-zoom-display')
-                    | &ndash;
-                    span(class='maximum-zoom-display')
-                    | %) &nbsp;
-                    input(type='number' id='zoomInput' min='1' max='200' value='100' class='zoom keepopen' aria-describedby='basic-addon1' disabled="true")
-                    span
-                    | &nbsp; %
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Layout
@@ -190,24 +153,24 @@ html
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
               ul(class='dropdown-menu')
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='colorEdges' class='colorEdges active')
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Enable Formatting of Edges Based on Weight Values
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='blackEdges' class='blackEdges')
                     span(class='glyphicon')
                     | &nbsp; Disable Formatting of Edges Based on Weight Values
                 li(class='divider')
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Only Show Edge Weights With Mouse Over
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='weightsAlwaysMenu' class='weightsAlways')
                     span(class='glyphicon')
                     | &nbsp; Always Show Edge Weights
-                li
+                li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='weightsNeverMenu' class='weightsNever')
                     span(class='glyphicon')
                     | &nbsp; Never Show Edge Weights
@@ -232,6 +195,44 @@ html
                   a(href='#' id='grey-edges-dashed-menu')
                     span(class='glyphicon')
                     | &nbsp; Show Gray Edges as Dashed
+
+            li(class='dropdown')
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') View
+              ul(class='dropdown-menu' role='menu')
+                span(class='menu-subheader') Viewport Size
+                li
+                  a(href='#' id='viewport-size-s' class='viewportOption active')
+                    span(class='glyphicon')
+                    | &nbsp; Small (1104 x 648 pixels)
+                li
+                  a(href='#' id='viewport-size-m' class='viewportOption')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Medium (1414 x 840 pixels)
+                li
+                  a(href='#' id='viewport-size-l' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Large (1920 x 1080 pixels)
+                li
+                  a(href='#' id='viewport-size-fit' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Fit To Window
+                li(class='divider')
+                li
+                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Restrict Graph to Viewport
+                li(class='divider')
+                li(class='startDisabled disabled')
+                  a(href='#' id='zoom' class='with-input')
+                    span(class='glyphicon invisible')
+                    | &nbsp; Zoom (
+                    span(class='minimum-zoom-display')
+                    | &ndash;
+                    span(class='maximum-zoom-display')
+                    | %) &nbsp;
+                    input(type='number' id='zoomInput' min='1' max='200' value='100' class='zoom keepopen' aria-describedby='basic-addon1' disabled="true")
+                    span
+                    | &nbsp; %
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
@@ -298,92 +299,111 @@ html
                 input(id="zoomSlider" class="zoom" type="range" min="0" max="8" value="4" step="0.25" disabled="true")
 
     div(class='sidebar' data-iframe-height)
+      div(class='panel-group')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
-        div(id="layout")
-          form(class='layoutButtons')
-            //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
-            input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
-            input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
-        div(class="node-coloring hidden")
-            p(class='sideHeader') Node Coloring
-            input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
-            label(class='info', data-toggle='tooltip') Top Dataset
-            select(id="dataset-top")
-            form
-              input(id='averageDataTop', type='checkbox' checked)
-              label(for='averageDataTop' class='sideLabel') Average Replicate Values
-            label(class='info', data-toggle='tooltip') Bottom Dataset
-            select(id="dataset-bottom")
-            form
-              input(id='averageDataBottom', type='checkbox' checked)
-              label(for='averageDataBottom' class='sideLabel') Average Replicate Values
-            p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-            p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
-            input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
-            span &nbsp;
-            button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
-            div(class="node-coloring-legend")
-        div(id="force-graph")
-          form
-            label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
-            span(id='linkDistVal' class='forceVal') 500
-            input(class='form-control', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
-            label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (-2000 - 0):
-            span(id='chargeVal' class='forceVal') -50
-            input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
-          form
-            input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
-            label(for='lockSlidersButton' class='sideLabel') Lock Force Graph Parameters
-          form
-            input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Graph Parameters')
-            input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
-          p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
-        div(class='input-group')
-          form
-            input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
-            label(for='viewport' class='sideLabel') Restrict graph to viewport
-            br
-            p(class='sideHeader') Viewport Size
-            input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
-            label(for='boundBoxS' class='sideLabel')
-              | Small #[small (1104 X 648 pixels)]
-            br
-            input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
-            label(for='boundBoxM' class='sideLabel')
-              | Medium #[small (1414 X 840 pixels)]
-            br
-            input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
-            label(for='boundBoxL' class='sideLabel')
-              | Large #[small (1920 X 1080 pixels)]
-            br
-            input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
-            label(for='boundBoxFit' class='sideLabel') Fit to window
-            br
-          form(class='weightedGraphOptions hidden')
-            p(class='sideHeader') Hide/Show Edge Weights
-            input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-            label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
-            <br>
-            input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-            label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
-            <br>
-            input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-            label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
-          div(class='weightedGraphOptions hidden')
-            p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
-            p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
-            input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
-            div(id='btn-side')
-              button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
-              button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
-          div(class='weightedGraphOptions hidden')
-            label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0 - 100%): &nbsp; &nbsp;
-            span(class='forceVal', id='grayThresholdValue') 5%
-            <br />
-            input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
-            <br />
-            input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-            label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
+        div(class="force-graph panel panel-default")
+            p(class='panel-title sidebarPanelHeader')
+              a(data-toggle='collapse' data-target='#layoutSidebarPanel') Layout
+            div(id="layoutSidebarPanel" class="panel-collapse collapse")
+              div(class="panel-body")
+                  form(class='layoutButtons')
+                    //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
+                    input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
+                    input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
+                  form
+                    label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
+                    span(id='linkDistVal' class='forceVal') 500
+                    input(class='form-control', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
+                    label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (-2000 - 0):
+                    span(id='chargeVal' class='forceVal') -50
+                    input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
+                  form
+                    input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
+                    label(for='lockSlidersButton' class='sideLabel') Lock Force Parameters
+                  form
+                    input(id='resetSlidersButton' type='button' class='btn btn-default btnSidebar resetSliders' value='Reset Force Parameters')
+                    input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
+                  p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
+
+        div(class="node-coloring disabled panel panel-default")
+            p(class='panel-title sidebarPanelHeader disabledOnLaunch')
+              a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node Coloring
+            div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
+              div(class="panel-body")
+                input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
+                div(class="nodeColoringSidebarBody")
+                  label(class='info', data-toggle='tooltip') Top Dataset
+                  select(id="dataset-top")
+                  form
+                    input(id='averageDataTop', type='checkbox' checked)
+                    label(for='averageDataTop' class='sideLabel') Average Replicate Values
+                  label(class='info', data-toggle='tooltip') Bottom Dataset
+                  select(id="dataset-bottom")
+                  form
+                    input(id='averageDataBottom', type='checkbox' checked)
+                    label(for='averageDataBottom' class='sideLabel') Average Replicate Values
+                  p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
+                  p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
+                  input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+                  span &nbsp;
+                  button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
+                  div(class="node-coloring-legend")
+
+        div(class='edge-weight-sidebar disabled panel panel-default disabled')
+          p(class='panel-title sidebarPanelHeader disabledOnLaunch')
+            a(id="edgeWeightHeaderLink" data-toggle='collapse' data-target='#edgeSidebarPanel') Edge
+          div(id="edgeSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              form(class='weightedGraphOptions hidden')
+                input(id='colorEdgesSidebar', type='checkbox')
+                label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
+                p(class='sideHeader') Hide/Show Edge Weights
+                input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+                label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
+                br
+                input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+                label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
+                br
+                input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+                label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
+              div(class='weightedGraphOptions hidden')
+                p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
+                p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
+                input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
+                div(id='btn-side')
+                  button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
+                  button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
+              div(class='weightedGraphOptions hidden')
+                label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0 - 100%): &nbsp; &nbsp;
+                span(class='forceVal', id='grayThresholdValue') 5%
+                input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
+                input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
+                label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
+
+        div(class='view-sidebar panel panel-default')
+          p(class='panel-title sidebarPanelHeader')
+            a(data-toggle='collapse' data-target='#viewportSidebarPanel') View
+          div(id="viewportSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              label(class='sideHeader') Size
+              form
+                input(type='radio' id='boundBoxS' class='boundBoxSize' name='size' value='containerS')
+                label(for='boundBoxS' class='sideLabel')
+                  | Small #[small (1104 X 648 pixels)]
+                br
+                input(type='radio' id='boundBoxM' class='boundBoxSize' name='size' value='containerM')
+                label(for='boundBoxM' class='sideLabel')
+                  | Medium #[small (1414 X 840 pixels)]
+                br
+                input(type='radio' id='boundBoxL' class='boundBoxSize' name='size' value='containerL')
+                label(for='boundBoxL' class='sideLabel')
+                  | Large #[small (1920 X 1080 pixels)]
+                br
+                input(type='radio' id='boundBoxFit' class='boundBoxSize' name='size' value='containerFit')
+                label(for='boundBoxFit' class='sideLabel') Fit to window
+                br
+                input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
+                label(for='viewport' class='sideLabel') Restrict graph to viewport
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
