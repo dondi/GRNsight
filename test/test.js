@@ -203,13 +203,13 @@ var idLabelError = function (input, frequency) {
 
 var missingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseExpressionSheet(sheet);
-    assert.equal(frequency, network.errors.length);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
       "MISSING_COLUMN_HEADER",
-      network.errors[i].errorCode
+      exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
     );
     }
 };
@@ -229,13 +229,13 @@ var emptyExpressionColumnError = function (input, frequency) {
 
 var emptyExpressionRowError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseExpressionSheet(sheet);
-    assert.equal(frequency, network.errors.length);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
       "EMPTY_ROW",
-      network.errors[i].errorCode
+      exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
     );
     }
 };
@@ -312,7 +312,7 @@ var invalidNetworkSizeWarning = function (input, frequency) {
 var extraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    var extraneousDataCount = exp.warnings.filter(function (x) {
+    var extraneousDataCount = exp["expression"]["wt_log2_expression"]["warnings"].filter(function (x) {
         return x.warningCode === "EXTRANEOUS_DATA";
     });
 
@@ -335,6 +335,16 @@ var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
     var network = parseExpressionSheet(sheet);
     var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_EXPRESSION_SHEET";
+    });
+    
+    assert.equal(frequency, incorrectlyNamedSheetCount.length);
+};
+
+var incorrectlyNamedSheetWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.parseSheet(sheet);
+    var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
+        return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
 
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
@@ -400,6 +410,7 @@ exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
+exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
 
 // exports.shortestPath = shortestPath;
 // exports.betweennessCentrality = betweennessCentrality;

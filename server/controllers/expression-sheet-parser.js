@@ -163,31 +163,6 @@ var parseExpressionSheet = function (sheet) {
     return expressionData;
 };
 
-// var transposeData = function(dataObject) {
-    // var transposed = {}
-    // transposed["id"] = []
-    // // console.log("item at id: " +JSON.stringify(dataObject["id"]));
-    // var dataObjectLength = dataObject["id"].length;
-    // for(var i = 0; i < dataObjectLength; i++) {
-    //     transposed[dataObject["id"][i]] = [];
-    // }
-    // console.log(JSON.stringify(transposed));
-
-// }
-
-// This should return an object that has this function in it
-// module.exports = function (workbook) {
-//     var output = {
-//         expression: {}
-//     };
-//     workbook.forEach(function (sheet) {
-//         if (isExpressionSheet(sheet.name)) {
-//             output["expression"][sheet.name] = parseExpressionSheet(sheet);
-//         }
-//     });
-//     return output;
-// };
-
 module.exports = function (workbook) {
     var output = {
         expression: {}
