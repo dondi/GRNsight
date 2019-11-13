@@ -46,9 +46,13 @@ import {
   CHARGE_VALUE,
   GRID_LAYOUT_MENU,
   FORCE_GRAPH_MENU,
+  LAYOUT_SIDEBAR_PANEL,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
+  NODE_COLORING_SIDEBAR_BODY,
+  NODE_COLORING_SIDEBAR_PANEL,
+  NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -71,7 +75,10 @@ import {
   ZOOM_ADAPTIVE_MAX_SCALE,
   ZOOM_INPUT,
   ZOOM_SLIDER,
-  EXPORT_WEIGHTED_CLASS
+  EXPORT_WEIGHTED_CLASS,
+  EDGE_WEIGHT_MENU_CLASS,
+  EDGE_WEIGHT_SIDEBAR,
+  EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -127,15 +134,28 @@ const logFoldChangeMaxValueInputValidation = value => {
     }
 };
 
-//
+// Weight Visualization Function
+const showEdgeWeightOptions = () => {
+    $(EDGE_WEIGHT_MENU_CLASS).removeClass("disabled");
+    $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR).removeClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
+};
+
+const hideEdgeWeightOptions = () => {
+    $(EDGE_WEIGHT_MENU_CLASS).addClass("disabled");
+    $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR).addClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
+};
+
 const synchronizeGrayEdgeValues = value => {
     var validatedInput = grayEdgeInputValidator(value);
-    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
     $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
+    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
 };
 
-// Weight Visualization Functions
 const synchronizeShowWeightsMouseover = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
     $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
@@ -255,6 +275,10 @@ const updateLinkDistanceSliderValues = () => {
 };
 
 // Grid Layout Functions
+const expandLayoutSidebar = () => {
+    $(LAYOUT_SIDEBAR_PANEL).addClass("in");
+};
+
 const toggleLayout = (on, off) => {
     if (!$(on).prop("checked")) {
         $(on).prop("checked", true);
@@ -276,17 +300,19 @@ const updatetoGridLayout = () => {
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
-        $(NODE_COLORING_MENU).removeClass("hidden");
-    }
-    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
-        $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
-    }
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
+    $(NODE_COLORING_MENU).removeClass("disabled");
+    $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
 const disableNodeColoringMenus = () => {
-    $(NODE_COLORING_MENU).addClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
+    $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
 const isNewWorkbook = (name) => {
@@ -400,10 +426,10 @@ const updateBottomDataset = () => {
 };
 
 export const updateApp = grnState => {
-
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
+        expandLayoutSidebar();
         clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
@@ -477,19 +503,21 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
     } else {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
-        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
+        showEdgeWeightOptions();
     } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
-        $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
+        hideEdgeWeightOptions();
     } else {
-        $(EXPORT_WEIGHTED_CLASS).addClass("startDisabled").addClass("disabled");
+        hideEdgeWeightOptions();
     }
 
     if (grnState.nodeColoring.averageTopDataset) {

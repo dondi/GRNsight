@@ -1030,7 +1030,7 @@ export var drawGraph = function (network) {
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
         var xMargin = 10;
         var yMargin = 30;
-        var width = 220;
+        var width = 195;
         var height = 10;
         var textYOffset = 10;
 
@@ -1039,7 +1039,8 @@ export var drawGraph = function (network) {
             .attr("width", "100%")
             .attr("height", height + yMargin)
             .append("g")
-            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
+            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")")
+            .attr("id", "nodeColoringLegendId");
 
         // Thank you https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
         const linearGradientId = "node-coloring-color-scale";
@@ -1089,7 +1090,10 @@ export var drawGraph = function (network) {
                 x: width
             }
         };
-        var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
+        /* eslint-disable max-len */
+        var g = document.getElementById("nodeColoringLegendId");
+        /* eslint-enable max-len */
+
         for (var key in legendLabels) {
             var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             label.textContent = legendLabels[key].textContent;
