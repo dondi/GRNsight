@@ -34,7 +34,7 @@ html
                   a(class='upload' href='#' id='open-item')
                     label(for='upload' id='open')
                       span(class='glyphicon glyphicon-folder-open')
-                      | &nbsp; Open File 
+                      | &nbsp; Open File
                       i (.xlsx .sif, .graphml)
                     input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
                     input(type='hidden' id='service-root' value='#{serviceRoot}')
@@ -356,7 +356,7 @@ html
           div(id="edgeSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
               form(class='weightedGraphOptions hidden')
-                input(id='colorEdgesSidebar', type='checkbox')
+                input(id='colorEdgesSidebar', type='checkbox' checked)
                 label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
                 p(class='sideHeader') Hide/Show Edge Weights
                 input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
