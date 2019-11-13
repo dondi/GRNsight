@@ -109,10 +109,13 @@ export var drawGraph = function (network) {
         }
     }
 
+    const maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
+
     // Get the largest magnitude weight and set that as the default normalization factor
-    var maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
-    grnState.normalizationMax = maxWeight;
-    grnState.resetNormalizationMax = maxWeight;
+    if (grnState.newNetwork) {
+        grnState.normalizationMax = maxWeight;
+        grnState.resetNormalizationMax = maxWeight;
+    }
 
     // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
@@ -658,6 +661,7 @@ export var drawGraph = function (network) {
             .attr("class", "weight")
             .attr("text-anchor", "middle")
             .attr("text-anchor", "middle")
+            .attr("fill", "rgb(0,0,0)")
             .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
@@ -667,6 +671,7 @@ export var drawGraph = function (network) {
             .enter().append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
+            .attr("fill", "rgb(0,0,0)")
             .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.value.toPrecision(4);
@@ -914,11 +919,11 @@ export var drawGraph = function (network) {
         node.selectAll(".nodeText").remove();
         var text = node.append("text")
             .attr("dy", NODE_HEIGHT)
-            .attr("text-anchor", "middle")
             .attr("class", "nodeText")
+            .attr("fill", "rgb(0, 0, 0)")
+            .style("text-anchor", "middle")
             .style("font-size", "18px")
             .style("stroke-width", "0")
-            .style("fill", "black")
             .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.name;
@@ -1099,6 +1104,7 @@ export var drawGraph = function (network) {
             label.setAttribute("text-anchor", legendLabels[key].textAnchor);
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
+            label.setAttribute("fill", "rgb(0,0,0)");
             g.appendChild(label);
         }
     };
