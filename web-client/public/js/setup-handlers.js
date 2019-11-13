@@ -413,19 +413,16 @@ export const setupHandlers = grnState => {
 
     $(COLOR_EDGES).click(() => {
         grnState.colorOptimal = true;
-        grnState.normalizationMax = grnState.resetNormalizationMax;
         updateApp(grnState);
     });
 
     $(BLACK_EDGES).click(() => {
         grnState.colorOptimal = false;
-        grnState.normalizationMax = grnState.resetNormalizationMax;
         updateApp(grnState);
     });
 
     $(COLOR_EDGES_SIDEBAR).click(() => {
         grnState.colorOptimal = !grnState.colorOptimal;
-        grnState.normalizationMax = grnState.resetNormalizationMax;
         updateApp(grnState);
     });
 

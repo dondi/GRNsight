@@ -109,9 +109,10 @@ export var drawGraph = function (network) {
         }
     }
 
+    const maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
+
     // Get the largest magnitude weight and set that as the default normalization factor
     if (grnState.newNetwork) {
-        var maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
         grnState.normalizationMax = maxWeight;
         grnState.resetNormalizationMax = maxWeight;
     }
