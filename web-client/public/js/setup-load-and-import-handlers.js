@@ -5,8 +5,14 @@ import {
     UNWEIGHTED_DEMO_PATH,
     WEIGHTED_DEMO_PATH,
     SCHADE_INPUT_PATH,
-    SCHADE_OUTPUT_PATH
+    SCHADE_OUTPUT_PATH,
+    WEIGHTED_DEMO_NAME,
+    UNWEIGHTED_DEMO_NAME,
+    SCHADE_INPUT_NAME,
+    SCHADE_OUTPUT_NAME,
 } from "./constants";
+
+const demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
 
 const submittedFilename = $upload => {
     let path = $upload.val();
@@ -87,7 +93,6 @@ const networkErrorDisplayer = xhr => {
 let reloader = () => { };
 
 const returnUploadRoute = filename => {
-    var demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
     if (demoFiles.indexOf(filename) !== -1) {
         return filename;
     } else if (filename.includes(".xlsx")) {
@@ -116,6 +121,22 @@ export const setupLoadAndImportHandlers = grnState => {
             $.getJSON(fullUrl)
             ).done((network, textStatus, jqXhr) => {
                 grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
+                if (demoFiles.indexOf(name) > -1) {
+                    switch (name) {
+                    case WEIGHTED_DEMO_PATH:
+                        grnState.name = WEIGHTED_DEMO_NAME;
+                        break;
+                    case UNWEIGHTED_DEMO_PATH:
+                        grnState.name = UNWEIGHTED_DEMO_NAME;
+                        break;
+                    case SCHADE_INPUT_PATH:
+                        grnState.name = SCHADE_INPUT_NAME;
+                        break;
+                    case SCHADE_OUTPUT_PATH:
+                        grnState.name = SCHADE_OUTPUT_NAME;
+                        break;
+                    }
+                }
                 grnState.network = network;
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
