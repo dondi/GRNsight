@@ -159,7 +159,7 @@ export const setupHandlers = grnState => {
         var sourceString = (new XMLSerializer()).serializeToString(source);
         const finalSvgString = [doctype + sourceString];
 
-        var svgUrl = window.URL.createObjectURL(new Blob(finalSvgString, { "type" : "text\/xml" }));
+        var svgUrl = window.URL.createObjectURL(new Blob(finalSvgString, { "type" : "image\/svg+xml" }));
 
         $("#exportAsSvg").attr("href", svgUrl);
         $("#exportAsSvg").attr("download", name);
