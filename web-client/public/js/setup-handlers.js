@@ -24,6 +24,7 @@ import {
     HIDE_ALL_WEIGHTS,
     COLOR_EDGES,
     BLACK_EDGES,
+    COLOR_EDGES_SIDEBAR,
     LINK_DIST_SLIDER_SIDEBAR,
     LINK_DIST_MENU,
     CHARGE_SLIDER_SIDEBAR,
@@ -77,19 +78,88 @@ export const setupHandlers = grnState => {
         }
     };
 
+// thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
+    const setInlineStyles = (svg) => {
+        var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        window.document.body.appendChild(emptySvg);
+        var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
+
+        const traverse = svg => {
+            var tree = [];
+            tree.push(svg);
+            // implement DFS
+            const visit = (node) => {
+                if (node && node.hasChildNodes()) {
+                    var child = node.firstChild;
+                    while (child) {
+                        if (child.nodeType === 1 && child.nodeName !== "SCRIPT") {
+                            tree.push(child);
+                            visit(child);
+                        }
+                        child = child.nextSibling;
+                    }
+                }
+            };
+            visit(svg);
+            return tree;
+        };
+
+        const explicitlySetStyle = element => {
+            const cSSStyleDeclarationComputed = window.getComputedStyle(element);
+            let i;
+            let len;
+            let key;
+            let value;
+            let computedStyleStr = "";
+
+            for (i = 0, len = cSSStyleDeclarationComputed.length; i < len; i++) {
+                key = cSSStyleDeclarationComputed[i];
+                value = cSSStyleDeclarationComputed.getPropertyValue(key);
+                if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
+                    // Don't set computed style of width and height. Makes SVG elmements disappear.
+                    if ((key !== "height") && (key !== "width")) {
+                        computedStyleStr += key + ":" + value + ";";
+                    }
+
+                }
+            }
+            element.setAttribute("style", computedStyleStr);
+        };
+
+        // hardcode computed css styles inside svg
+        var allElements = traverse(svg);
+        var i = allElements.length;
+        while (i--) {
+            explicitlySetStyle(allElements[i]);
+        }
+    };
+
+    const sourceAttributeSetter = (svg) => {
+        svg.setAttribute("version", "1.1");
+
+        svg.removeAttribute("xmlns");
+        svg.removeAttribute("xlink");
+
+        if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns")) {
+            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
+        }
+
+        if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink")) {
+            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+        }
+    };
+
     const exportSVG = (svgElement, name) => {
-        var serializer = new XMLSerializer();
-        var source = serializer.serializeToString(svgElement);
+        let source = svgElement;
 
-        if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
-            source = source.replace(/^<svg/, "<svg xmlns=\"http://www.w3.org/2000/svg\"");
-        }
-        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
-            source = source.replace(/^<svg/, "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"");
-        }
+        sourceAttributeSetter(source);
+        setInlineStyles(source);
 
-        source = "<?xml version=\"1.0\" standalone=\"no\"?>\r\n" + source;
-        var svgUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
+        var doctype = "<?xml version=\"1.0\" standalone=\"no\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"; // eslint-disable-line
+        var sourceString = (new XMLSerializer()).serializeToString(source);
+        const finalSvgString = [doctype + sourceString];
+
+        var svgUrl = window.URL.createObjectURL(new Blob(finalSvgString, { "type" : "image\/svg+xml" }));
 
         $("#exportAsSvg").attr("href", svgUrl);
         $("#exportAsSvg").attr("download", name);
@@ -348,6 +418,11 @@ export const setupHandlers = grnState => {
 
     $(BLACK_EDGES).click(() => {
         grnState.colorOptimal = false;
+        updateApp(grnState);
+    });
+
+    $(COLOR_EDGES_SIDEBAR).click(() => {
+        grnState.colorOptimal = !grnState.colorOptimal;
         updateApp(grnState);
     });
 

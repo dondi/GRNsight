@@ -35,6 +35,13 @@ describe("errors-sheet-modifications", function () {
         });
     });
 
+    describe("sheet-name-capitalized", function () {
+        it("should return no errors", function () {
+            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-network-optimized-weights.xlsx");
+            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-network.xlsx", 1);
+        });
+    });
+
     // Sheet Modifications - Cell A1 Modifications
 
     describe("and-symbol", function () {
