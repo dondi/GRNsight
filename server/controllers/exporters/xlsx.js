@@ -1,6 +1,6 @@
 const xlsx = require("node-xlsx");
 
-const bulidGeneNameArray = function (genes) {
+const buildGeneNameArray = function (genes) {
     const geneNameArray = genes.map(gene => gene["name"]);
     return geneNameArray;
 };
@@ -10,7 +10,7 @@ const createArrayWithZeroes = function (length) {
 };
 
 const buildNetworkSheet = function (genes, links) {
-    const geneNameArray = bulidGeneNameArray(genes);
+    const geneNameArray = buildGeneNameArray(genes);
     // The +1 to length is because we ALSO add the gene name to each of the network sheet arrays.
     const networkSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
 
@@ -36,12 +36,9 @@ const convertToSheet = function (name, testSheet) {
     };
 };
 
-const buildTestSheets = function (testSheet) {
-    const productionRateSheet = convertToSheet("production_rates", testSheet["production_rates"]);
-    const degradationRateSheet = convertToSheet("degradation_rates", testSheet["degradation_rates"]);
-    const thresholdBSheet = convertToSheet("threshold_b", testSheet["threshold_b"]);
-    return [productionRateSheet, degradationRateSheet, thresholdBSheet];
-};
+const buildTestSheets = testSheet => ["production_rates", "degradation_rates", "threshold_b"]
+      .filter(name => testSheet[name])
+      .map(name => convertToSheet(name, testSheet[name]));
 
 const buildMetaSheet = function (metaDataContainer) {
     const metaSheet = { name: "optimization_parameters", data: [] };
