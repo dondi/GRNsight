@@ -80,7 +80,6 @@ const buildXlsxSheet = function (network) {
         }
     );
 
-// This is the code that causes crash in Excel export.
     Object.keys(network).forEach((key) => {
         switch (key) {
         case "meta":

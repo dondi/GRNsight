@@ -4,14 +4,10 @@ export var displayWarnings = function (warnings) {
       "We recommend you review your file and ensure that it is formatted correctly. " +
       "To view the details of the warning(s), please click on the \"Warnings List\" below.");
     var warningsString = "";
-    // printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,
-    // EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
-
     var NUM_POSSIBLE_WARNINGS = 11;
-
     // Fill printed with 0s programatically
     var printed = [];
-    for (var i = 0; i <= NUM_POSSIBLE_WARNINGS; i++) {
+    for (var i = 0; i < NUM_POSSIBLE_WARNINGS; i++) {
         printed.push(0);
     }
 

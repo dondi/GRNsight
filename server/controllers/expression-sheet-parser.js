@@ -2,7 +2,6 @@
 // from GRNmap input or output workbook
 
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
-var spreadsheetController = require(__dirname + "/spreadsheet-controller");
 
 var addExpWarning = function (network, message) {
     var warningsCount
@@ -122,11 +121,9 @@ var parseExpressionSheet = function (sheet) {
     });
     geneNames = geneNames.slice(1);
     expressionData["data"] = geneData;
-    // May need to be updated...b/c we still want to populate the warnings/errors lists
-    // if the 'id' cell is mislabeled.
     if (expressionData["data"]["id"]) {
         // Throw warning in case of extraneous data
-        // Need to add a case where it checks the depth of the columns, as well.
+        // Need to add a case where it checks the depth of the columns, as well
         var rowLength = expressionData["data"]["id"].length;
         Object.values(expressionData["data"]).forEach(function(row) {
             if (row.length !== rowLength) {

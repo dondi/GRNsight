@@ -1,6 +1,5 @@
 var multiparty = require("multiparty");
 var xlsx = require("node-xlsx");
-// var util = require("util");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
@@ -196,15 +195,6 @@ var warningsList = {
             warningCode: "MISSING_EXPRESSION_SHEET",
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
     },
-
-    // missingNetworkWarning: function () {
-    //     return {
-    //         warningCode: "MISSING_NETWORK",
-    //         errorDescription: "The file you uploaded contains no  data sheet. This is not required, \
-    //          but there may be errors in the way the nodes are colored without this data present."
-    //     };
-    // }
-
 };
 
 var addMessageToArray = function (messageArray, message) {
@@ -478,34 +468,30 @@ var processGRNmap = function (path, res, app) {
 
     // Add errors and warnings from meta sheets
     if(additionalData['meta']['errors'] !== undefined) {
-        for(var i = 0; i < additionalData['meta']['errors'].length; i++) {
-            network['errors'].push(additionalData['meta']['errors'][i]);
-        }
-        for(var i = 0; i < additionalData['meta']['warnings'].length; i++) {
-            network['errors'].push(additionalData['meta']['warnings'][i]);
-        }
+        additionalData['meta']['errors'].forEach(data => network['errors'].push(data));
+    }
+    if(additionalData['meta']['warnings'] !== undefined) {
+        additionalData['meta']['warnings'].forEach(data => network['warnings'].push(data));
     }
 
-    // Add errors and warnings from additionalData sheets
+    // Add errors and warnings from test sheets
     if(additionalData['test']['errors'] !== undefined) {
-        // Add errors and warnings from test sheets
-        for(var i = 0; i < additionalData['test']['errors'].length; i++) {
-            network['warnings'].push(additionalData['test']['errors'][i]);
-        }
-        for(var i = 0; i < additionalData['warnings'].length; i++) {
-            network['warnings'].push(additionalData['warnings'][i]);
-        }
+        additionalData['test']['errors'].forEach(data => network['errors'].push(data));
+    }
+    if(additionalData['test']['warnings'] !== undefined) {
+        additionalData['test']['warnings'].forEach(data => network['warnings'].push(data));
     }
 
     // Add errors and warnings from expression sheets
-    if(expressionData['expression']['wt_log2_expression'] !== undefined) {
-        // Add errors and warnings from expression sheets
-        for(var i = 0; i < expressionData['expression']['wt_log2_expression']['errors'].length; i++) {
-            network['errors'].push(expressionData['expression']['wt_log2_expression']['errors'][i]);
-        }
-        for(var i = 0; i < expressionData['expression']['wt_log2_expression']['warnings'].length; i++) {
-            network['warnings'].push(expressionData['expression']['wt_log2_expression']['warnings'][i]);
-        }    
+    // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
+    // We need to account for all the different possible expression sheet names.
+    if(expressionData['expression']['wt_log2_expression']['errors'] !== undefined) {
+        expressionData['expression']['wt_log2_expression']['errors']
+        .forEach(data => network['errors'].push(data))
+    }
+    if(expressionData['expression']['wt_log2_expression']['errors'] !== undefined) {
+        expressionData['expression']['wt_log2_expression']['warnings']
+        .forEach(data => network['warnings'].push(data))  
     }
 
     return (network.errors.length === 0) ?

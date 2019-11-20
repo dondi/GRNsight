@@ -1,12 +1,6 @@
-// Rough draft of tests for expression data sheet errors and warnings.
-// Will return to this next semester.
-
-
 /* eslint-disable max-len */
-// var assert = require("chai").assert;
-// var xlsx = require("node-xlsx");
+
 var test = require("./test");
-// var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
 describe("expression-data-import-tests", function () {
 

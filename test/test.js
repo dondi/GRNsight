@@ -21,9 +21,9 @@ var duplicateGeneError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "DUPLICATE_GENE",
-      network.errors[i].errorCode
-    );
+            "DUPLICATE_GENE",
+            network.errors[i].errorCode
+        );
     }
 
   /* TO DO:
@@ -41,9 +41,9 @@ var invalidGeneLengthError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "INVALID_GENE_LENGTH",
-      network.errors[i].errorCode
-    );
+            "INVALID_GENE_LENGTH",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -55,9 +55,9 @@ var corruptGeneError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "CORRUPT_GENE",
-      network.errors[i].errorCode
-    );
+            "CORRUPT_GENE",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -69,9 +69,9 @@ var unknownError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "UNKNOWN_ERROR",
-      network.errors[i].errorCode
-    );
+            "UNKNOWN_ERROR",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -83,9 +83,9 @@ var missingValueError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "MISSING_VALUE",
-      network.errors[i].errorCode
-    );
+            "MISSING_VALUE",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -97,9 +97,9 @@ var missingNetworkError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "MISSING_NETWORK",
-      network.errors[i].errorCode
-    );
+            "MISSING_NETWORK",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -111,9 +111,9 @@ var specialCharacterError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "INVALID_CHARACTER",
-      network.errors[i].errorCode
-    );
+            "INVALID_CHARACTER",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -125,9 +125,9 @@ var invalidDataTypeError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "INVALID_CELL_DATA_TYPE",
-      network.errors[i].errorCode
-    );
+            "INVALID_CELL_DATA_TYPE",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -139,9 +139,9 @@ var networkSizeError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "INVALID_NETWORK_SIZE",
-      network.errors[i].errorCode
-    );
+            "INVALID_NETWORK_SIZE",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -182,9 +182,9 @@ var emptyRowError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "EMPTY_ROW",
-      network.errors[i].errorCode
-    );
+            "EMPTY_ROW",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -195,9 +195,9 @@ var idLabelError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "MISLABELED_ID_CELL",
-      network.expression.wt_log2_expression.errors[i].errorCode
-    );
+            "MISLABELED_ID_CELL",
+            network.expression.wt_log2_expression.errors[i].errorCode
+        );
     }
 };
 
@@ -208,9 +208,9 @@ var missingColumnHeaderError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "MISSING_COLUMN_HEADER",
-      exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
-    );
+            "MISSING_COLUMN_HEADER",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
     }
 };
 
@@ -221,9 +221,9 @@ var emptyExpressionColumnError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "EMPTY_COLUMN",
-      network.errors[i].errorCode
-    );
+            "EMPTY_COLUMN",
+            network.errors[i].errorCode
+        );
     }
 };
 
@@ -234,9 +234,9 @@ var emptyExpressionRowError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-      "EMPTY_ROW",
-      exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
-    );
+            "EMPTY_ROW",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
     }
 };
 
@@ -411,6 +411,3 @@ exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
-
-// exports.shortestPath = shortestPath;
-// exports.betweennessCentrality = betweennessCentrality;

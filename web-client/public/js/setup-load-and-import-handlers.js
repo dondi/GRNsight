@@ -70,10 +70,7 @@ const networkErrorDisplayer = xhr => {
 
     if (!err.errors) { // will be falsy if an error was thrown before the network was generated
         errorString += err;
-        console.log("First if");
     } else {
-        console.log("Second if");
-        console.log(err.errors);
         errorString = err.errors.reduce(
             (currentErrorString, currentError) =>
                 `${currentErrorString}${currentError.possibleCause} ${currentError.suggestedFix}<br><br>`,
