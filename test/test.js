@@ -216,13 +216,12 @@ var missingColumnHeaderError = function (input, frequency) {
 
 var emptyExpressionColumnError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseExpressionSheet(sheet);
-    assert.equal(frequency, network.errors.length);
-
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
             "EMPTY_COLUMN",
-            network.errors[i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
         );
     }
 };

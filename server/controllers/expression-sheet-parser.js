@@ -53,6 +53,13 @@ var errorsList = {
             suggestedFix: "Delete empty row, or populate with data."
         };
     },
+    emptyExpressionColumnError: function () {
+        return {
+            errorCode: "EMPTY_COLUMN",
+            possibleCause: "There is an empty column in the input sheet.",
+            suggestedFix: "Delete empty column, or populate with data."
+        };
+    },
 };
 
 var warningsList = {
@@ -122,6 +129,31 @@ var parseExpressionSheet = function (sheet) {
     geneNames = geneNames.slice(1);
     expressionData["data"] = geneData;
     if (expressionData["data"]["id"]) {
+        // Throw error in case of empty column
+        let columnNulls = [];
+        let emptyColumnFlag = false;
+        Object.values(expressionData.data).forEach(rowData => {
+            for(let i = 0; i < rowData.length; i++) {
+                // Counting number of nulls per column
+                if(rowData[i] === undefined) {
+                    if(columnNulls[i] === undefined) {
+                        columnNulls[i] = 1;
+                    } else {
+                        columnNulls[i]++;
+                    }
+                }
+            }    
+        });
+        columnNulls.forEach(numNulls => {
+            // If number of nulls in a column equals number of rows,
+            // there's an empty column.
+            if(numNulls === Object.keys(expressionData.data).length - 1) {
+                emptyColumnFlag = true;
+            }
+        });
+        if(emptyColumnFlag) {
+            addExpError(expressionData, errorsList.emptyExpressionColumnError());
+        }
         // Throw warning in case of extraneous data
         // Need to add a case where it checks the depth of the columns, as well
         var rowLength = expressionData["data"]["id"].length;
