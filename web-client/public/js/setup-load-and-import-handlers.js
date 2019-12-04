@@ -141,7 +141,7 @@ export const setupLoadAndImportHandlers = grnState => {
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
-                reloader = () => loadGrn(uploadRoute, name, formData);
+                reloader = () => loadGrn(name, formData);
                 // re-enable upload button
                 disableUpload(false);
                 updateApp(grnState);
