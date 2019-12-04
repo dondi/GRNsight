@@ -188,6 +188,20 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
+var geneMistmatchError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.parseSheet(sheet);
+
+    assert.equal(frequency, network.errors.length);
+
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "GENE_MISMATCH",
+            network.errors[i].errorCode
+        );
+    }
+};
+
 var idLabelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = parseExpressionSheet(sheet);
@@ -397,6 +411,7 @@ exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
+exports.geneMistmatchError = geneMistmatchError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

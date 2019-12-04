@@ -17,9 +17,9 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("wrong_order_gene_names", function () {
-        it.skip("Gene names in column A do not match the order of those in network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
+    describe("GENE_MISMATCH", function () {
+        it("Gene names in column A do not match the order of those in network sheet.", function () {
+            test.geneMistmatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
 

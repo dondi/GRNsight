@@ -122,6 +122,12 @@ var errorList = {
         possibleCause: "An unexpected error occurred.",
         suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, \
         and attach the spreadsheet you attempted to upload."
+    },
+
+    geneMistmatchError: {
+        errorCode: "GENE_MISTMATCH",
+        possibleCause: "The genes in your network and expression sheets do not match.",
+        suggestedFix: "Check that the genes in your network and expression sheets are of the same case and in the same order."
     }
 
 };
@@ -258,7 +264,6 @@ var parseSheet = function (sheet) {
     var genesList = []; // This will contain all of the genes in upper case for use in error checking
     var sourceGenes = [];
     var targetGenes = [];
-
     // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
         if (sheet[i].name.toLowerCase() === "network") {
@@ -493,6 +498,22 @@ var processGRNmap = function (path, res, app) {
         expressionData['expression']['wt_log2_expression']['warnings']
         .forEach(data => network['warnings'].push(data))  
     }
+
+    let networkGenes = [];
+    network.genes.forEach(gene => networkGenes.push(Object.values(gene)[0]));
+    let expressionGenes = Object.keys(expressionData.expression.wt_log2_expression.data);
+    expressionGenes.shift();
+    if(networkGenes.length != expressionGenes.length) {
+        addError(network, errorList.geneMistmatchError);
+    } else {
+        for(let i = 0; i < networkGenes.length; i++) {
+            if(networkGenes[i] !== expressionGenes[i]) {
+                addError(network, errorList.geneMistmatchError);
+                break;
+            }
+        } 
+    }
+
 
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear

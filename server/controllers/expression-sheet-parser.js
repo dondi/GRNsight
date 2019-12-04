@@ -188,7 +188,6 @@ var parseExpressionSheet = function (sheet) {
         }
 
     }
-
     return expressionData;
 };
 
