@@ -45,12 +45,14 @@ describe("additional-sheet-parser", function () {
             });
     });
 
-    it("correctly identifies expression sheets by suffix", function () {
-        var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
-        "expression_sheet_names_test.xlsx");
-        var data = parseAdditionalSheets(workbook);
-        assert(Object.keys(data.expression).length, 3);
-    });
+    // Commenting out bc we are restructuring how sheets are parsed.
+    // Expression sheets will be parsed separately.
+    // it("correctly identifies expression sheets by suffix", function () {
+    //     var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
+    //     "expression_sheet_names_test.xlsx");
+    //     var data = parseAdditionalSheets(workbook);
+    //     assert(Object.keys(data.expression).length, 3);
+    // });
 
     it("correctly parses optimization_parameters sheet", function () {
         var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
