@@ -47,7 +47,7 @@ const addExpWarning = (network, message) => {
     let warningsCount;
     if (!Object.keys(network).includes("warnings")) {
         warningsCount = 0;
-        network["warnings"] = [];
+        network.warnings = [];
     } else {
         warningsCount = network.warnings.length;
     }
@@ -99,7 +99,7 @@ const parseExpressionSheet = (sheet) => {
     };
 
     // Check that id label is correct. Throw error if not.
-    const idLabel = sheet["data"][0][0];
+    const idLabel = sheet.data[0][0];
     if (idLabel !== "id") {
         addExpError(expressionData, errorsList.idLabelError());
     }
