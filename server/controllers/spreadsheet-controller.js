@@ -489,7 +489,7 @@ var processGRNmap = function (path, res, app) {
     if (expressionData["expression"]["wt_log2_expression"]["errors"] !== undefined) {
         expressionData["expression"]["wt_log2_expression"]["errors"]
             .forEach(data => network["errors"].push(data));
-        Object.assign(expressionData["expression"]);
+        Object.assign(network, expressionData);
     }
 
     if (expressionData["expression"]["wt_log2_expression"]["errors"] !== undefined) {
