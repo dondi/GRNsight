@@ -4,10 +4,10 @@
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
 var addExpWarning = function (network, message) {
-    var warningsCount
-    if(!Object.keys(network).includes('warnings')) {
+    var warningsCount;
+    if (!Object.keys(network).includes("warnings")) {
         warningsCount = 0;
-        network['warnings'] = [];
+        network["warnings"] = [];
     } else {
         warningsCount = network.warnings.length;
     }
@@ -66,7 +66,7 @@ var warningsList = {
         return {
             warningCode: "EXTRANEOUS_DATA",
             errorDescription: "There is extraneous data outside of the set rows and columns of the expression sheet."
-        };        
+        };
     }
 };
 
@@ -98,8 +98,8 @@ var parseExpressionSheet = function (sheet) {
     };
 
     // Check that id label is correct. Throw error if not.
-    var idLabel = sheet['data'][0][0];
-    if(idLabel !== 'id') {
+    var idLabel = sheet["data"][0][0];
+    if (idLabel !== "id") {
         addExpError(expressionData, errorsList.idLabelError());
     }
 
@@ -109,7 +109,7 @@ var parseExpressionSheet = function (sheet) {
     sheet.data.forEach(function (sheet) {
         var geneName = sheet[0];
         if (geneName) {
-            geneNames.push(geneName)
+            geneNames.push(geneName);
             var rowData = sheet.slice(1);
             // Sometimes, missing data is at the end of the row. In this case, pad the
             // array with nulls
@@ -125,21 +125,21 @@ var parseExpressionSheet = function (sheet) {
         // Throw warning in case of extraneous data
         // Need to add a case where it checks the depth of the columns, as well
         var rowLength = expressionData["data"]["id"].length;
-        Object.values(expressionData["data"]).forEach(function(row) {
+        Object.values(expressionData["data"]).forEach(function (row) {
             if (row.length !== rowLength) {
                 addExpWarning(expressionData, warningsList.extraneousDataWarning());
             }
 
             // Throw error in case of empty row
             var nonnullCount = 0;
-            for(var i = 0; i <= rowLength; i++) {
-                if(i === rowLength) {
+            for (var i = 0; i <= rowLength; i++) {
+                if (i === rowLength) {
                     if (nonnullCount === 0) {
                         addExpError(expressionData, errorsList.emptyExpressionRowError());
                         break;
                     }
                 } else {
-                    if(row[i]) {
+                    if (row[i]) {
                         nonnullCount++;
                     }
                 }
@@ -148,10 +148,10 @@ var parseExpressionSheet = function (sheet) {
 
         // Throw error in case of missing column header
         var nonemptyValues = 0;
-        expressionData["data"]["id"].forEach(function(){
+        expressionData["data"]["id"].forEach(function () {
             nonemptyValues++;
-        })
-        if(rowLength !== nonemptyValues) {
+        });
+        if (rowLength !== nonemptyValues) {
             addExpError(expressionData, errorsList.missingColumnHeaderError());
         }
 
