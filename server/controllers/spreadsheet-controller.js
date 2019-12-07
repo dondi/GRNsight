@@ -488,11 +488,13 @@ var processGRNmap = function (path, res, app) {
     // We need to account for all the different possible expression sheet names.
     if (expressionData["expression"]["wt_log2_expression"]["errors"] !== undefined) {
         expressionData["expression"]["wt_log2_expression"]["errors"]
-        .forEach(data => network["errors"].push(data));
+            .forEach(data => network["errors"].push(data));
+        Object.assign(expressionData["expression"]);
     }
+
     if (expressionData["expression"]["wt_log2_expression"]["errors"] !== undefined) {
         expressionData["expression"]["wt_log2_expression"]["warnings"]
-        .forEach(data => network["warnings"].push(data));
+            .forEach(data => network["warnings"].push(data));
     }
 
     return (network.errors.length === 0) ?
