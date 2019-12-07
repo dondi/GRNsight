@@ -969,18 +969,18 @@ export var drawGraph = function (network) {
     const getExpressionData = (gene, strain, average) => {
         const strainData = grnState.network.expression[strain];
         if (average) {
-            var uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
-            var avgMap = {};
+            const uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
+            let avgMap = {};
             uniqueTimePoints.forEach(function (key) {
                 avgMap[key] = [];
             });
             strainData.timePoints.forEach(function (time, index) {
                 avgMap[time].push(strainData.data[gene][index]);
             });
-            var avgs = [];
+            let avgs = [];
             Object.keys(avgMap).forEach(function (key) {
-                var length = avgMap[key].length;
-                var sum = avgMap[key].reduce(function (partialSum, currentValue) {
+                const length = avgMap[key].length;
+                const sum = avgMap[key].reduce(function (partialSum, currentValue) {
                     return partialSum + currentValue;
                 }, 0);
                 avgs.push(sum / length);
