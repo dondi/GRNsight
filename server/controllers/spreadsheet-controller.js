@@ -468,19 +468,20 @@ var processGRNmap = function (path, res, app) {
     var expressionData = parseExpressionSheets(sheet);
 
     // Add errors and warnings from meta sheets
-    if (additionalData["meta"]["errors"] !== undefined) {
-        additionalData["meta"]["errors"].forEach(data => network["errors"].push(data));
+    if (additionalData.meta.errors !== undefined) {
+        additionalData.meta.errors.forEach(data => network.errors.push(data));
     }
-    if (additionalData["meta"]["warnings"] !== undefined) {
-        additionalData["meta"]["warnings"].forEach(data => network["warnings"].push(data));
+
+    if (additionalData.meta.warnings !== undefined) {
+        additionalData.meta.warnings.forEach(data => network.warnings.push(data));
     }
 
     // Add errors and warnings from test sheets
-    if (additionalData["test"]["errors"] !== undefined) {
-        additionalData["test"]["errors"].forEach(data => network["errors"].push(data));
+    if (additionalData.test.errors !== undefined) {
+        additionalData.test.errors.forEach(data => network.errors.push(data));
     }
-    if (additionalData["test"]["warnings"] !== undefined) {
-        additionalData["test"]["warnings"].forEach(data => network["warnings"].push(data));
+    if (additionalData.test.warnings !== undefined) {
+        additionalData.test.warnings.forEach(data => network.warnings.push(data));
     }
 
     // Add errors and warnings from expression sheets
