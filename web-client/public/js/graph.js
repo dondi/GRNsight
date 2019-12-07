@@ -966,8 +966,8 @@ export var drawGraph = function (network) {
         return self.indexOf(value) === index;
     }
 
-    var getExpressionData = function (gene, strain, average) {
-        var strainData = grnState.network["expression"][strain];
+    const getExpressionData = (gene, strain, average) => {
+        const strainData = grnState.network.expression[strain];
         if (average) {
             var uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
             var avgMap = {};
@@ -997,9 +997,13 @@ export var drawGraph = function (network) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    var result = getExpressionData(p.name, dataset, average);
-                    timePoints = result.timePoints;
-                    return result.data;
+                    if (grnState.network.expression[dataset].data[p.name]) {
+                        const result = getExpressionData(p.name, dataset, average);
+                        timePoints = result.timePoints;
+                        return result.data;
+                    } else {
+                        return 0;
+                    }
                 })
                 .attr("class", "coloring")
                 .enter().append("rect")
