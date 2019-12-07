@@ -15,7 +15,7 @@ const parseMetaDataSheet = (sheet) => {
         if (index !== 0) {
             const value = element.slice(1);
             // Extract element from array if array contains only 1 value
-            meta.element[0] = value.length > 1 ? value : value[0];
+            meta[element[0]] = value.length > 1 ? value : value[0];
         }
     });
     return meta;
