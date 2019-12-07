@@ -486,15 +486,17 @@ var processGRNmap = function (path, res, app) {
     // Add errors and warnings from expression sheets
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
     // We need to account for all the different possible expression sheet names.
-    if (expressionData["expression"]["wt_log2_expression"]["errors"] !== undefined) {
-        expressionData["expression"]["wt_log2_expression"]["errors"]
-            .forEach(data => network["errors"].push(data));
+
+    if (Object.entries(expressionData.expression).forEach(gene => gene.errors !== undefined)) {
+        expressionData.expression.forEach(gene => gene.errors
+            .forEach(data => network.errors.push(data)));
+    } else {
         Object.assign(network, expressionData);
     }
 
-    if (expressionData["expression"]["wt_log2_expression"]["errors"] !== undefined) {
-        expressionData["expression"]["wt_log2_expression"]["warnings"]
-            .forEach(data => network["warnings"].push(data));
+    if (Object.entries(expressionData.expression).forEach(gene => gene.warnings !== undefined)) {
+        expressionData.expression.forEach(gene => gene.warnings
+            .forEach(data => network.warnings.push(data)));
     }
 
     return (network.errors.length === 0) ?
