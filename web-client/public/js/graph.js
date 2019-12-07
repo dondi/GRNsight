@@ -969,12 +969,12 @@ export var drawGraph = function (network) {
     var getExpressionData = function (gene, strain, average) {
         var strainData = grnState.network["expression"][strain];
         if (average) {
-            var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
+            var uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
             var avgMap = {};
             uniqueTimePoints.forEach(function (key) {
                 avgMap[key] = [];
             });
-            strainData.time_points.forEach(function (time, index) {
+            strainData.timePoints.forEach(function (time, index) {
                 avgMap[time].push(strainData.data[gene][index]);
             });
             var avgs = [];
@@ -987,7 +987,7 @@ export var drawGraph = function (network) {
             });
             return {data: avgs, timePoints: uniqueTimePoints};
         }
-        return {data: strainData.data[gene], timePoints: strainData.time_points};
+        return {data: strainData.data[gene], timePoints: strainData.timePoints};
     };
 
     var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {

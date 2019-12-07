@@ -59,7 +59,8 @@ var warningsList = {
     missingExpressionWarning: function () {
         return {
             warningCode: "MISSING_EXPRESSION_SHEET",
-            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
+            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
+            The network graph will display without node coloring."
         };
     },
     extraneousDataWarning: function () {
@@ -94,7 +95,7 @@ var parseExpressionSheet = function (sheet) {
         positiveWeights: [],
         negativeWeights: [],
         sheetType: "unweighted",
-        time_points: []
+        timePoints: []
     };
 
     // Check that id label is correct. Throw error if not.
@@ -103,8 +104,8 @@ var parseExpressionSheet = function (sheet) {
         addExpError(expressionData, errorsList.idLabelError());
     }
 
-    expressionData["time_points"] = sheet.data[0].slice(1);
-    var numberOfDataPoints = expressionData["time_points"].length;
+    expressionData["timePoints"] = sheet.data[0].slice(1);
+    var numberOfDataPoints = expressionData["timePoints"].length;
     var geneNames = [];
     sheet.data.forEach(function (sheet) {
         var geneName = sheet[0];
