@@ -311,13 +311,15 @@ html
                     //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
                     input(id='forceGraphButton' type='button' class='btn btn-default' value='Force Graph')
                     input(id='gridLayoutButton' type='button' class='btn btn-default' value='Grid Layout')
-                  form
-                    label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
-                    span(id='linkDistVal' class='forceVal') 500
-                    input(class='form-control', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
-                    label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (-2000 - 0):
-                    span(id='chargeVal' class='forceVal') -50
-                    input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
+                  form(class='forceParameterContainer')
+                    div(class='forceParameterLabel')
+                      label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1-1000):
+                      span(id='linkDistVal' class='forceVal') 500
+                    input(class='forceParameterSlider', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
+                    div(class='forceParameterLabel')
+                      label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (–2000-0):
+                      span(id='chargeVal' class='forceVal') -50
+                    input(class='forceParameterSlider', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
                   form
                     input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
                     label(for='lockSlidersButton' class='sideLabel') Lock Force Parameters
