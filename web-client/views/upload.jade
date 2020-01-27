@@ -180,7 +180,7 @@ html
                   a(href='#' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Edge Weight Normalization Factor (0.0001 - 1000) &nbsp;
-                    input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' aria-describedby='basic-addon1')
+                    input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' step='0.0001' aria-describedby='basic-addon1')
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='reset-normalization-factor-menu')
                     span(class='glyphicon invisible')
@@ -307,19 +307,19 @@ html
               a(data-toggle='collapse' data-target='#layoutSidebarPanel') Layout
             div(id="layoutSidebarPanel" class="panel-collapse collapse")
               div(class="panel-body")
-                  form(class='graphViewContainer')
+                  form(class='buttonPairContainer')
                     //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
                     input(id='forceGraphButton' type='button' class='btn btn-default' value='Force Graph')
                     input(id='gridLayoutButton' type='button' class='btn btn-default' value='Grid Layout')
                   form(class='forceParameterContainer')
-                    div(class='forceParameterLabel')
+                    div(class='labelWithValueContainer')
                       label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1-1000):
                       span(id='linkDistVal' class='forceVal') 500
-                    input(class='forceParameterSlider', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
-                    div(class='forceParameterLabel')
+                    input(class='sidebarSlider', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
+                    div(class='labelWithValueContainer')
                       label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (–2000-0):
                       span(id='chargeVal' class='forceVal') -50
-                    input(class='forceParameterSlider', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
+                    input(class='sidebarSlider', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
                   form
                     input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
                     label(for='lockSlidersButton' class='sideLabel') Lock Force Parameters
@@ -330,7 +330,7 @@ html
 
         div(class="node-coloring disabled panel panel-default")
             p(class='panel-title sidebarPanelHeader disabledOnLaunch')
-              a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node Coloring
+              a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node
             div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
               div(class="panel-body")
                 input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
@@ -358,30 +358,33 @@ html
           div(id="edgeSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
               form(class='weightedGraphOptions hidden')
-                input(id='colorEdgesSidebar', type='checkbox' checked)
-                label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
+                div(class='edgeControl')
+                  input(id='colorEdgesSidebar', type='checkbox' checked)
+                  label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
                 p(class='sideHeader') Hide/Show Edge Weights
-                input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-                label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
-                br
-                input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-                label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
-                br
-                input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-                label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
+                div(class='edgeControl')
+                  input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+                  label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
+                div(class='edgeControl')
+                  input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+                  label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
+                div(class='edgeControl')
+                  input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+                  label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
               div(class='weightedGraphOptions hidden')
-                p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
-                p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
-                input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
-                div(id='btn-side')
+                p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor (0.0001-1000):
+                input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' step='0.0001' aria-describedby='basic-addon1')
+                div(class='buttonPairContainer')
                   button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
                   button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
               div(class='weightedGraphOptions hidden')
-                label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0 - 100%): &nbsp; &nbsp;
-                span(class='forceVal', id='grayThresholdValue') 5%
-                input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
-                input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-                label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
+                div(class='labelWithValueContainer')
+                  label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0-100%): &nbsp; &nbsp;
+                  span(class='forceVal', id='grayThresholdValue') 5%
+                input(id='grayThresholdInput', class='sidebarSlider', type='range', min='0', max='1', value='0.05', step='0.01')
+                div(class='edgeControl')
+                  input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
+                  label(for='dashedGrayLineButton' class='sideLabel') Show Gray Edges as Dashed
 
         div(class='view-sidebar panel panel-default')
           p(class='panel-title sidebarPanelHeader')

@@ -151,17 +151,16 @@ nav.navbar.navbar-default
 .btnSidebar
   width: 100%
 
-.graphViewContainer
+.buttonPairContainer
   display: flex
   justify-content: space-between
-  margin-bottom: 5px
   margin-top: 0px
 
-.graphViewContainer > input[type=button]
+.buttonPairContainer > input[type=button], .buttonPairContainer > button
   padding: 6px 10px
   width: calc(50% - 2px)
 
-.graphViewContainer > input[type=button]:last-child
+.buttonPairContainer > input[type=button]:last-child, .buttonPairContainer > button:last-child
   margin-left: 5px
 
 .panel-body
@@ -172,11 +171,26 @@ nav.navbar.navbar-default
   flex-direction: column
   margin-bottom: 5px
 
-.forceParameterLabel
+.labelWithValueContainer
   align-items: baseline
   display: flex
   justify-content: flex-start
   margin-top: 10px
+
+.edgeControl
+  align-items: center
+  display: flex
+  justify-content: flex-start
+
+.edgeControl > input[type=radio], .edgeControl > input[type=checkbox]
+  margin: 0
+
+.edgeControl > label
+  font-size: 13px
+  margin: 5px
+
+#grayThresholdInput
+  margin-bottom: 5px
 
 #warningsModal #accordion
   margin-bottom: 0
@@ -285,8 +299,8 @@ path.mousezone
     width: 50px;
 
 .normalization-form
-    width: 80px;
-    margin-bottom: 8px;
+  width: 100%
+  margin-bottom: 5px
 
 .cursorGrab
     cursor: -webkit-grab;
@@ -300,15 +314,12 @@ path.mousezone
     display: inline-block;
     width: 100px;
 
-#normalization-button
-    margin-right: 5px;
-
 #grayLabel
     margin-top: 10px;
 
 #normLabel
-    margin-bottom: 10px;
-    display: inline-block;
+  margin-bottom: 5px
+  margin-top: 10px
 
 #logFoldChangeMaxValueRange
     margin-bottom: 10px;
