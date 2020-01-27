@@ -153,21 +153,21 @@ nav.navbar.navbar-default
 .btnSidebar
   width: 100%
 
-.layoutButtons
-  display: inline
-  width: 49%
-  margin-top: 0px
+.graphViewContainer
+  display: flex
+  justify-content: space-between
   margin-bottom: 5px
-  text-align: center
+  margin-top: 0px
 
- .panel-body
+.graphViewContainer > input[type=button]
+  padding: 6px 10px
+  width: calc(50% - 2px)
+
+.graphViewContainer > input[type=button]:last-child
+  margin-left: 5px
+
+.panel-body
   padding: 0px 10px 10px
-
-.layoutBtnLeft
-  float: left
-
-.layoutBtnRight
-  float: right
 
 #warningsModal #accordion
   margin-bottom: 0
@@ -223,9 +223,6 @@ nav.navbar.navbar-default
 
 .dropdown a.with-input>*:last-child
     margin-left:auto
-
-.panel-body
-  overflow: scroll;
 
 // Graph statistics styling is due to absolute position and size of grnsight-container
 .graph-statistics-container

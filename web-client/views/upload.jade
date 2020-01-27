@@ -307,10 +307,10 @@ html
               a(data-toggle='collapse' data-target='#layoutSidebarPanel') Layout
             div(id="layoutSidebarPanel" class="panel-collapse collapse")
               div(class="panel-body")
-                  form(class='layoutButtons')
+                  form(class='graphViewContainer')
                     //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
-                    input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
-                    input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
+                    input(id='forceGraphButton' type='button' class='btn btn-default' value='Force Graph')
+                    input(id='gridLayoutButton' type='button' class='btn btn-default' value='Grid Layout')
                   form
                     label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
                     span(id='linkDistVal' class='forceVal') 500
