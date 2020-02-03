@@ -66,7 +66,7 @@ var warningsList = {
         return {
             warningCode: "EXTRANEOUS_DATA",
             errorDescription: "There is extraneous data outside of the set rows and columns of the expression sheet."
-        };        
+        };
     }
 };
 
@@ -83,7 +83,7 @@ var isExpressionSheet = function (sheetName) {
     });
 };
 
-// Going to continue basing this section off of the parseSheet function in spreadsheet-controller.js
+// Going to continue basing this section off of the parseNetworkSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
     var geneData = {};
     var expressionData = {

@@ -19,7 +19,7 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
     74:"BV", 75:"BW", 76:"BX"};
 
     var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
-  
+
     var isExpressionSheet = function (sheetName) {
         return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
             return sheetName.includes(suffix);
@@ -238,7 +238,7 @@ var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
     }
 };
 
-var parseSheet = function (sheet) {
+var parseNetworkSheet = function (sheet) {
     var currentSheet;
     var network = {
         genes: [],
@@ -448,7 +448,7 @@ var processGRNmap = function (path, res, app) {
     }
 
     helpers.attachFileHeaders(res, path);
-    network = parseSheet(sheet);
+    network = parseNetworkSheet(sheet);
 
     // Parse expression and 2-column data, then add to network object
     // Eventually, will split this up into parsing for each type of sheet.
@@ -465,6 +465,8 @@ var processGRNmap = function (path, res, app) {
     }
 
     var expressionData = parseExpressionSheets(sheet);
+
+    // Preserve network errors and warnings before merging the results.
 
     // Add errors and warnings from meta sheets
     if(additionalData['meta']['errors'] !== undefined) {
@@ -491,7 +493,7 @@ var processGRNmap = function (path, res, app) {
     }
     if(expressionData['expression']['wt_log2_expression']['errors'] !== undefined) {
         expressionData['expression']['wt_log2_expression']['warnings']
-        .forEach(data => network['warnings'].push(data))  
+        .forEach(data => network['warnings'].push(data))
     }
 
     return (network.errors.length === 0) ?
@@ -613,9 +615,9 @@ module.exports = function (app) {
         });
     }
 
-    // exporting parseSheet for use in testing. Do not remove!
+    // exporting parseNetworkSheet for use in testing. Do not remove!
     return {
-        parseSheet: parseSheet,
+        parseNetworkSheet: parseNetworkSheet,
         grnSightToCytoscape: grnSightToCytoscape,
         processGRNmap : processGRNmap
     };

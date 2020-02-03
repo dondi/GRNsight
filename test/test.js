@@ -9,13 +9,13 @@ var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expr
 
 var noErrors = function (input) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     assert.equal(0, network.errors.length);
 };
 
 var duplicateGeneError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -35,7 +35,7 @@ var duplicateGeneError = function (input, frequency) {
 
 var invalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -49,7 +49,7 @@ var invalidGeneLengthError = function (input, frequency) {
 
 var corruptGeneError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -63,7 +63,7 @@ var corruptGeneError = function (input, frequency) {
 
 var unknownError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -77,7 +77,7 @@ var unknownError = function (input, frequency) {
 
 var missingValueError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -91,7 +91,7 @@ var missingValueError = function (input, frequency) {
 
 var missingNetworkError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -105,7 +105,7 @@ var missingNetworkError = function (input, frequency) {
 
 var specialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -119,7 +119,7 @@ var specialCharacterError = function (input, frequency) {
 
 var invalidDataTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -133,7 +133,7 @@ var invalidDataTypeError = function (input, frequency) {
 
 var networkSizeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -147,7 +147,7 @@ var networkSizeError = function (input, frequency) {
 
 var checkForGene = function (test, frequency, input) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.genes.filter(function (gene) {
         return gene.name === test;
@@ -156,7 +156,7 @@ var checkForGene = function (test, frequency, input) {
 
 var warningsCountError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var warningsCountErrorArray = network.errors.filter(function (x) {
         return x.errorCode === "WARNINGS_OVERLOAD";
     });
@@ -166,7 +166,7 @@ var warningsCountError = function (input, frequency) {
 
 var errorsCountError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var errorsCountErrorArray = network.errors.filter(function (x) {
         return x.errorCode === "ERRORS_OVERLOAD";
     });
@@ -176,7 +176,7 @@ var errorsCountError = function (input, frequency) {
 
 var emptyRowError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -244,14 +244,14 @@ var emptyExpressionRowError = function (input, frequency) {
 
 var noWarnings = function (input) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(0, network.warnings.length);
 };
 
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var missingSourceCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_SOURCE";
     });
@@ -261,7 +261,7 @@ var missingSourceWarning = function (input, frequency) {
 
 var invalidMatrixDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var invalidDataCount = network.warnings.filter(function (x) {
         return x.warningCode === "INVALID_DATA";
     });
@@ -271,7 +271,7 @@ var invalidMatrixDataWarning = function (input, frequency) {
 
 var missingTargetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var missingTargetCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_TARGET";
     });
@@ -281,7 +281,7 @@ var missingTargetWarning = function (input, frequency) {
 
 var randomDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var randomDataCount = network.warnings.filter(function (x) {
         return x.warningCode === "RANDOM_DATA";
     });
@@ -291,7 +291,7 @@ var randomDataWarning = function (input, frequency) {
 
 var emptyRowWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var emptyRowCount = network.warnings.filter(function (x) {
         return x.warningCode === "EMPTY_ROW";
     });
@@ -301,7 +301,7 @@ var emptyRowWarning = function (input, frequency) {
 
 var invalidNetworkSizeWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var invalidNetworkSizeCount = network.warnings.filter(function (x) {
         return x.warningCode === "INVALID_NETWORK_SIZE";
     });
@@ -336,13 +336,13 @@ var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
     var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_EXPRESSION_SHEET";
     });
-    
+
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
 var incorrectlyNamedSheetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var incorrectlyNamedSheetCount = network.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
@@ -354,7 +354,7 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
 /*
 var shortestPath = function (input, directed, source, target, length) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 
     var cy = cytoscape({
@@ -368,7 +368,7 @@ var shortestPath = function (input, directed, source, target, length) {
 
 var betweennessCentrality = function (input, directed, node, centrality) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
     var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
 
     var cy = cytoscape({
