@@ -966,28 +966,28 @@ export var drawGraph = function (network) {
         return self.indexOf(value) === index;
     }
 
-    var getExpressionData = function (gene, strain, average) {
-        var strainData = grnState.network["expression"][strain];
+    const getExpressionData = (gene, strain, average) => {
+        const strainData = grnState.network.expression[strain];
         if (average) {
-            var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
-            var avgMap = {};
+            const uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
+            let avgMap = {};
             uniqueTimePoints.forEach(function (key) {
                 avgMap[key] = [];
             });
-            strainData.time_points.forEach(function (time, index) {
+            strainData.timePoints.forEach(function (time, index) {
                 avgMap[time].push(strainData.data[gene][index]);
             });
-            var avgs = [];
+            let avgs = [];
             Object.keys(avgMap).forEach(function (key) {
-                var length = avgMap[key].length;
-                var sum = avgMap[key].reduce(function (partialSum, currentValue) {
+                const length = avgMap[key].length;
+                const sum = avgMap[key].reduce(function (partialSum, currentValue) {
                     return partialSum + currentValue;
                 }, 0);
                 avgs.push(sum / length);
             });
             return {data: avgs, timePoints: uniqueTimePoints};
         }
-        return {data: strainData.data[gene], timePoints: strainData.time_points};
+        return {data: strainData.data[gene], timePoints: strainData.timePoints};
     };
 
     var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
@@ -997,9 +997,13 @@ export var drawGraph = function (network) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    var result = getExpressionData(p.name, dataset, average);
-                    timePoints = result.timePoints;
-                    return result.data;
+                    if (grnState.network.expression[dataset].data[p.name]) {
+                        const result = getExpressionData(p.name, dataset, average);
+                        timePoints = result.timePoints;
+                        return result.data;
+                    } else {
+                        return 0;
+                    }
                 })
                 .attr("class", "coloring")
                 .enter().append("rect")

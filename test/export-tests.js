@@ -488,7 +488,7 @@ const inputNetwork = {
 
     "expression": {
         "wt_log2_expression": {
-            "time_points": [
+            "timePoints": [
                 0.4,
                 0.8,
                 1.2
@@ -520,7 +520,7 @@ const inputNetwork = {
         },
 
         "dcin5_log2_expression": {
-            "time_points": [
+            "timePoints": [
                 0.4,
                 0.8,
                 1.2
