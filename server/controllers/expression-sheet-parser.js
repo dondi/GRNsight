@@ -87,13 +87,8 @@ var isExpressionSheet = function (sheetName) {
 var parseExpressionSheet = function (sheet) {
     var geneData = {};
     var expressionData = {
-        genes: [],
-        links: [],
         errors: [],
         warnings: [],
-        positiveWeights: [],
-        negativeWeights: [],
-        sheetType: "unweighted",
         time_points: []
     };
 

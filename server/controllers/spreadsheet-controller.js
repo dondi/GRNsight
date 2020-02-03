@@ -466,36 +466,56 @@ var processGRNmap = function (path, res, app) {
 
     var expressionData = parseExpressionSheets(sheet);
 
-    // Preserve network errors and warnings before merging the results.
-
     // Add errors and warnings from meta sheets
-    if(additionalData['meta']['errors'] !== undefined) {
-        additionalData['meta']['errors'].forEach(data => network['errors'].push(data));
-    }
-    if(additionalData['meta']['warnings'] !== undefined) {
-        additionalData['meta']['warnings'].forEach(data => network['warnings'].push(data));
+    if (additionalData && additionalData.meta) {
+        if (additionalData.meta.errors !== undefined) {
+            additionalData.meta.errors.forEach(data => network.errors.push(data));
+        }
+
+        if (additionalData.meta.warnings !== undefined) {
+            additionalData.meta.warnings.forEach(data => network.warnings.push(data));
+        }
     }
 
-    // Add errors and warnings from test sheets
-    if(additionalData['test']['errors'] !== undefined) {
-        additionalData['test']['errors'].forEach(data => network['errors'].push(data));
-    }
-    if(additionalData['test']['warnings'] !== undefined) {
-        additionalData['test']['warnings'].forEach(data => network['warnings'].push(data));
+    if (additionalData && additionalData.test) {
+        // Add errors and warnings from test sheets
+        if (additionalData.test.errors !== undefined) {
+            additionalData.test.errors.forEach(data => network.errors.push(data));
+        }
+
+        if (additionalData.test.warnings !== undefined) {
+            additionalData.test.warnings.forEach(data => network.warnings.push(data));
+        }
     }
 
     // Add errors and warnings from expression sheets
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
     // We need to account for all the different possible expression sheet names.
-    if(expressionData['expression']['wt_log2_expression']['errors'] !== undefined) {
-        expressionData['expression']['wt_log2_expression']['errors']
-        .forEach(data => network['errors'].push(data))
-    }
-    if(expressionData['expression']['wt_log2_expression']['errors'] !== undefined) {
-        expressionData['expression']['wt_log2_expression']['warnings']
-        .forEach(data => network['warnings'].push(data))
+    if (expressionData && expressionData.expression) {
+        if (expressionData.expression.errors !== undefined) {
+            expressionData.expression.errors
+            .forEach(data => network.errors.push(data));
+        }
+
+        if (expressionData.expression.warnings !== undefined) {
+            expressionData.expression.warnings
+            .forEach(data => network.warnings.push(data));
+        }
     }
 
+    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
+        if (expressionData.expression.wt_log2_expression.errors !== undefined) {
+            expressionData.expression.wt_log2_expression.errors
+            .forEach(data => network.errors.push(data));
+        }
+
+        if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
+            expressionData.expression.wt_log2_expression.warnings
+            .forEach(data => network.warnings.push(data));
+        }
+    }
+
+    Object.assign(network, additionalData, expressionData);
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
         res.json(network) :
