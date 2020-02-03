@@ -18,13 +18,13 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
     62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
     74:"BV", 75:"BW", 76:"BX"};
 
-    var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-    var isExpressionSheet = function (sheetName) {
-        return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
-            return sheetName.includes(suffix);
-        });
-    };
+var isExpressionSheet = function (sheetName) {
+    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+        return sheetName.includes(suffix);
+    });
+};
 
 // TODO: Put this and the warnings list into helpers.
 // This is the massive list of errors. Yay!
@@ -184,16 +184,17 @@ var warningsList = {
     },
 
     incorrectlyNamedSheetWarning: {
-            warningCode: "INCORRECTLY_NAMED_SHEET",
-            errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
+        warningCode: "INCORRECTLY_NAMED_SHEET",
+        errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
              'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
              'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     },
 
     missingExpressionSheetWarning: {
-            warningCode: "MISSING_EXPRESSION_SHEET",
-            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring."
+        warningCode: "MISSING_EXPRESSION_SHEET",
+        errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
+        The network graph will display without node coloring."
     },
 };
 
@@ -459,7 +460,7 @@ var processGRNmap = function (path, res, app) {
         if (isExpressionSheet(sheet.name)) {
             expCount++;
         }
-    })
+    });
     if (expCount <= 0) {
         addWarning(network, warningsList.missingExpressionSheetWarning);
     }
