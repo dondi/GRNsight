@@ -283,6 +283,9 @@ text.weight.visible
     margin-bottom: 4px
     margin-top: 6px
 
+.nodeColoringSidebarBody
+  margin-top: 6px
+
 .node-coloring select
     width: 100%
 
@@ -295,8 +298,18 @@ label.sideLabel
 path.mousezone
     opacity: 0.0
 
+.logFoldChangeControlContainer
+  display: flex
+  justify-content: space-between
+  margin-top: 0px
+
+.logFoldChangeControlContainer > button:last-child
+  margin-left: 5px
+  padding-bottom: 0
+  padding-top: 0
+
 .logFoldChangeMaxValue
-    width: 50px;
+  flex-grow: 1
 
 .normalization-form
   width: 100%
@@ -320,10 +333,6 @@ path.mousezone
 #normLabel
   margin-bottom: 5px
   margin-top: 10px
-
-#logFoldChangeMaxValueRange
-    margin-bottom: 10px;
-    display: inline-block;
 
 #gray-edge-threshold-menu
     margin-right:0.5ex

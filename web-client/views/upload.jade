@@ -84,12 +84,12 @@ html
               ul(class='dropdown-menu' role='menu')
                 span(class='menu-subheader') Graph Options
                 li
-                  a(href='#' id='gridLayout' class='layout')
-                    span(class='glyphicon')
-                    | &nbsp; Grid Layout
                   a(href='#' id='forceGraph' class='layout' checked)
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Force Graph
+                  a(href='#' id='gridLayout' class='layout')
+                    span(class='glyphicon')
+                    | &nbsp; Grid Layout
                 li(class='divider')
                 li
                   a(href='#' id='lockSlidersMenu' class="lockSliders")
@@ -122,7 +122,7 @@ html
                 li(class='node-coloring-menu disabled')
                   a(href='#' id='node-coloring-toggle-menu' class='nodeColoringToggle')
                     span(class='glyphicon')
-                    | &nbsp; Disable Node Coloring
+                    | &nbsp; Enable Node Coloring
                 li(class='divider')
                 li(class='node-coloring-menu dropdown-submenu disabled')
                   a(href='#')
@@ -156,11 +156,7 @@ html
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='colorEdges' class='colorEdges active')
                     span(class='glyphicon glyphicon-ok')
-                    | &nbsp; Enable Formatting of Edges Based on Weight Values
-                li(class='weightedGraphOptionsMenu disabled')
-                  a(href='#' id='blackEdges' class='blackEdges')
-                    span(class='glyphicon')
-                    | &nbsp; Disable Formatting of Edges Based on Weight Values
+                    | &nbsp; Enable Edge Coloring Based on Weight Values
                 li(class='divider')
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
@@ -328,28 +324,29 @@ html
                   p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 
         div(class="node-coloring disabled panel panel-default")
-            p(class='panel-title sidebarPanelHeader disabledOnLaunch')
-              a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node
-            div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
-              div(class="panel-body")
-                input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
-                div(class="nodeColoringSidebarBody")
-                  label(class='info', data-toggle='tooltip') Top Dataset
-                  select(id="dataset-top")
-                  form
-                    input(id='averageDataTop', type='checkbox' checked)
-                    label(for='averageDataTop' class='sideLabel') Average Replicate Values
-                  label(class='info', data-toggle='tooltip') Bottom Dataset
-                  select(id="dataset-bottom")
-                  form
-                    input(id='averageDataBottom', type='checkbox' checked)
-                    label(for='averageDataBottom' class='sideLabel') Average Replicate Values
-                  p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-                  p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
+          p(class='panel-title sidebarPanelHeader disabledOnLaunch')
+            a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node
+          div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              div(class='edgeControl')
+                input(id='nodeColoringToggleSidebar' class='nodeColoringToggle' type='checkbox' checked)
+                label(for='nodeColoringToggleSidebar' class='sideLabel') Enable Node Coloring
+              div(class="nodeColoringSidebarBody")
+                p(class='sideHeader info' data-toggle='tooltip') Top Dataset
+                select(id="dataset-top")
+                form
+                  input(id='averageDataTop', type='checkbox' checked)
+                  label(for='averageDataTop' class='sideLabel') Average Replicate Values
+                p(class='sideHeader info' data-toggle='tooltip') Bottom Dataset
+                select(id="dataset-bottom")
+                form
+                  input(id='averageDataBottom', type='checkbox' checked)
+                  label(for='averageDataBottom' class='sideLabel') Average Replicate Values
+                p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value (0.01-100):
+                div(class='logFoldChangeControlContainer')
                   input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
-                  span &nbsp;
                   button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
-                  div(class="node-coloring-legend")
+                div(class="node-coloring-legend")
 
         div(class='edge-weight-sidebar disabled panel panel-default disabled')
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
@@ -358,7 +355,7 @@ html
             div(class="panel-body")
               form(class='weightedGraphOptions hidden')
                 div(class='edgeControl')
-                  input(id='colorEdgesSidebar', type='checkbox' checked)
+                  input(id='colorEdgesSidebar' class='colorEdges' type='checkbox' checked)
                   label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
                 p(class='sideHeader') Hide/Show Edge Weights
                 div(class='edgeControl')

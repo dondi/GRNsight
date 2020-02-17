@@ -1035,9 +1035,8 @@ export var drawGraph = function (network) {
     var renderNodeColoringLegend = function (logFoldChangeMaxValue) {
         var $nodeColoringLegend = $(".node-coloring-legend");
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
-        var xMargin = 10;
-        var yMargin = 30;
-        var width = 195;
+        var yMargin = 20;
+        var width = 203;
         var height = 10;
         var textYOffset = 10;
 
@@ -1046,7 +1045,7 @@ export var drawGraph = function (network) {
             .attr("width", "100%")
             .attr("height", height + yMargin)
             .append("g")
-            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")")
+            .attr("transform", "translate(0, 5)")
             .attr("id", "nodeColoringLegendId");
 
         // Thank you https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
