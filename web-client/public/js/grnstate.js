@@ -39,6 +39,17 @@ const annotateLinks = network => {
     });
 };
 
+const nameToTaxon = {
+    //Treating like a dictionary with keys being the english name
+    //and values being a tuple of (latin name, taxon ID)
+    human: ("homo_sapiens", "9606"),
+    yeast: ("Saccharomyces_cerevisiae", "559292"),
+    fruit_fly: ("drosophila_melanogaster", "7272"),
+    nematode_worm: ("caenorhabditis_elegans", "6293"),
+    house_mouse: ("mus_musculus", "10090"),
+    thale_cress: ("arabidopsis_thaliana", "3702")
+}
+
 const genePageData = () => {
 
     // set to be a function for when data is read from .xml

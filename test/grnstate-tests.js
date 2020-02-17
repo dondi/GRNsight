@@ -20,4 +20,9 @@ describe("The grnState model object", () => {
         };
         grnState.resetNormalizationMax.should.equal(8);
     });
+    
+    it("should update, store, and return the species and taxon ID", () => {
+        grnState.species.should.equal("Saccharomyces_cerevisiae");
+        grnState.taxon.should.equal("559292");
+    });
 });
