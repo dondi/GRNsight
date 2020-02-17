@@ -485,14 +485,14 @@ export const updateApp = grnState => {
       && hasExpressionData(grnState.network.expression)) {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
-        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
     } else {
-        $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
     }
