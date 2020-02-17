@@ -27,7 +27,8 @@ import {
   SHOW_ALL_WEIGHTS,
   HIDE_ALL_WEIGHTS,
   COLOR_EDGES,
-  BLACK_EDGES,
+  COLOR_EDGES_MENU,
+  COLOR_EDGES_SIDEBAR,
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
   LOCK_SLIDERS_MENU,
@@ -196,21 +197,6 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
-};
-
-// Toggle Weighted Functions
-const enableColorOptimal = () => {
-    $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok");
-    $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
-};
-
-const disableColorOptimal = () => {
-    $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok");
-    $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
 // Sliders Functions
@@ -482,11 +468,10 @@ export const updateApp = grnState => {
     }
 
 // Enable/Disable Colored edges
-    if (grnState.colorOptimal) {
-        enableColorOptimal();
-    } else {
-        disableColorOptimal();
-    }
+    $(COLOR_EDGES_SIDEBAR).prop("checked", grnState.colorOptimal);
+    const classFunction = `${grnState.colorOptimal ? "add" : "remove"}Class`;
+    $(COLOR_EDGES_MENU)[classFunction](ACTIVE_COLOR_OPTION);
+    $(`${COLOR_EDGES_MENU}>span`)[classFunction]("glyphicon-ok");
 
 // Graph Layout
     if (grnState.graphLayout === FORCE_GRAPH) {

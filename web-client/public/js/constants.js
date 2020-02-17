@@ -60,9 +60,9 @@ export const SHOW_WEIGHTS_MOUSEOVER             = "showWeightsMouseover";
 export const SHOW_ALL_WEIGHTS                   = "showAllWeights";
 export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 
-export const COLOR_EDGES                        = "#colorEdges";
-export const BLACK_EDGES                        = "#blackEdges";
+export const COLOR_EDGES                        = ".colorEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
+export const COLOR_EDGES_MENU                   = "#colorEdges";
 export const COLOR_EDGES_SIDEBAR                = "#colorEdgesSidebar";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
