@@ -4,6 +4,7 @@ var test = require("./test");
 
 describe("expression-data-import-tests", function () {
 
+    // I don't understand the issue associated with this test
     describe("MISSING_EXPRESSION_SHEET", function () {
         it.skip("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);
@@ -16,9 +17,9 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("wrong_order_gene_names", function () {
-        it.skip("Gene names in column A do not match the order of those in network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
+    describe("GENE_MISMATCH", function () {
+        it("Gene names in column A do not match the order of those in network sheet.", function () {
+            test.geneMistmatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
 
@@ -47,7 +48,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("empty_column", function () {
-        it.skip("Column in expression sheet contains no data.", function () {
+        it("Column in expression sheet contains no data.", function () {
             test.emptyExpressionColumnError("test-files/expression-data-test-sheets/expression_sheet_empty_column.xlsx", 1);
         });
     });
