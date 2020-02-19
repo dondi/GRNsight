@@ -133,8 +133,6 @@ nav.navbar.navbar-default
 
 .info
   font-size: 13px
-  margin-top: 8px
-  margin-bottom: 4px
 
 .forceVal
   font-size: 12px
@@ -153,21 +151,46 @@ nav.navbar.navbar-default
 .btnSidebar
   width: 100%
 
-.layoutButtons
-  display: inline
-  width: 49%
+.buttonPairContainer
+  display: flex
+  justify-content: space-between
   margin-top: 0px
-  margin-bottom: 5px
-  text-align: center
 
- .panel-body
+.buttonPairContainer > input[type=button], .buttonPairContainer > button
+  padding: 6px 10px
+  width: calc(50% - 2px)
+
+.buttonPairContainer > input[type=button]:last-child, .buttonPairContainer > button:last-child
+  margin-left: 5px
+
+.panel-body
   padding: 0px 10px 10px
 
-.layoutBtnLeft
-  float: left
+.forceParameterContainer
+  display: flex
+  flex-direction: column
+  margin-bottom: 5px
 
-.layoutBtnRight
-  float: right
+.labelWithValueContainer
+  align-items: baseline
+  display: flex
+  justify-content: flex-start
+  margin-top: 10px
+
+.edgeControl
+  align-items: center
+  display: flex
+  justify-content: flex-start
+
+.edgeControl > input[type=radio], .edgeControl > input[type=checkbox]
+  margin: 0
+
+.edgeControl > label
+  font-size: 13px
+  margin: 5px
+
+#grayThresholdInput
+  margin-bottom: 5px
 
 #warningsModal #accordion
   margin-bottom: 0
@@ -224,9 +247,6 @@ nav.navbar.navbar-default
 .dropdown a.with-input>*:last-child
     margin-left:auto
 
-.panel-body
-  overflow: scroll;
-
 // Graph statistics styling is due to absolute position and size of grnsight-container
 .graph-statistics-container
   margin-top: 256px
@@ -263,6 +283,9 @@ text.weight.visible
     margin-bottom: 4px
     margin-top: 6px
 
+.nodeColoringSidebarBody
+  margin-top: 6px
+
 .node-coloring select
     width: 100%
 
@@ -275,12 +298,22 @@ label.sideLabel
 path.mousezone
     opacity: 0.0
 
+.logFoldChangeControlContainer
+  display: flex
+  justify-content: space-between
+  margin-top: 0px
+
+.logFoldChangeControlContainer > button:last-child
+  margin-left: 5px
+  padding-bottom: 0
+  padding-top: 0
+
 .logFoldChangeMaxValue
-    width: 50px;
+  flex-grow: 1
 
 .normalization-form
-    width: 80px;
-    margin-bottom: 8px;
+  width: 100%
+  margin-bottom: 5px
 
 .cursorGrab
     cursor: -webkit-grab;
@@ -294,19 +327,12 @@ path.mousezone
     display: inline-block;
     width: 100px;
 
-#normalization-button
-    margin-right: 5px;
-
 #grayLabel
     margin-top: 10px;
 
 #normLabel
-    margin-bottom: 10px;
-    display: inline-block;
-
-#logFoldChangeMaxValueRange
-    margin-bottom: 10px;
-    display: inline-block;
+  margin-bottom: 5px
+  margin-top: 10px
 
 #gray-edge-threshold-menu
     margin-right:0.5ex

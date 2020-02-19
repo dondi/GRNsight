@@ -27,7 +27,8 @@ import {
   SHOW_ALL_WEIGHTS,
   HIDE_ALL_WEIGHTS,
   COLOR_EDGES,
-  BLACK_EDGES,
+  COLOR_EDGES_MENU,
+  COLOR_EDGES_SIDEBAR,
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
   LOCK_SLIDERS_MENU,
@@ -196,21 +197,6 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
-};
-
-// Toggle Weighted Functions
-const enableColorOptimal = () => {
-    $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok");
-    $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
-};
-
-const disableColorOptimal = () => {
-    $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok");
-    $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
 // Sliders Functions
@@ -482,11 +468,10 @@ export const updateApp = grnState => {
     }
 
 // Enable/Disable Colored edges
-    if (grnState.colorOptimal) {
-        enableColorOptimal();
-    } else {
-        disableColorOptimal();
-    }
+    $(COLOR_EDGES_SIDEBAR).prop("checked", grnState.colorOptimal);
+    const classFunction = `${grnState.colorOptimal ? "add" : "remove"}Class`;
+    $(COLOR_EDGES_MENU)[classFunction](ACTIVE_COLOR_OPTION);
+    $(`${COLOR_EDGES_MENU}>span`)[classFunction]("glyphicon-ok");
 
 // Graph Layout
     if (grnState.graphLayout === FORCE_GRAPH) {
@@ -500,14 +485,14 @@ export const updateApp = grnState => {
       && hasExpressionData(grnState.network.expression)) {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
-        $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
     } else {
-        $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
     }

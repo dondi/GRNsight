@@ -3,10 +3,10 @@ export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
 export const UNWEIGHTED_DEMO_ID   = "#unweighted";
 export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
-export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)";
+export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (15 genes, 28 edges)";
 export const WEIGHTED_DEMO_ID     = "#weighted";
 export const WEIGHTED_DEMO_PATH   = "demo/weighted";
-export const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)";
+export const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
 export const SCHADE_INPUT_ID      = "#schadeInput";
 export const SCHADE_INPUT_PATH    = "demo/schadeInput";
 export const SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
@@ -60,9 +60,9 @@ export const SHOW_WEIGHTS_MOUSEOVER             = "showWeightsMouseover";
 export const SHOW_ALL_WEIGHTS                   = "showAllWeights";
 export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 
-export const COLOR_EDGES                        = "#colorEdges";
-export const BLACK_EDGES                        = "#blackEdges";
+export const COLOR_EDGES                        = ".colorEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
+export const COLOR_EDGES_MENU                   = "#colorEdges";
 export const COLOR_EDGES_SIDEBAR                = "#colorEdgesSidebar";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
@@ -109,7 +109,7 @@ export const NODE_COLORING_SIDEBAR_PANEL                = "#nodeColoringSidebarP
 export const NODE_COLORING_SIDEBAR_HEADER_LINK          = "#nodeColoringHeaderLink";
 export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
 export const NODE_COLORING_SIDEBAR_HEADER               = "#sidebarPanelHeader";
-export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggle";
+export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggleSidebar";
 export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
 export const AVG_REPLICATE_VALS_TOP_SIDEBAR             = "#averageDataTop";
 export const AVG_REPLICATE_VALS_TOP_MENU                = "#averageDataTopMenu";

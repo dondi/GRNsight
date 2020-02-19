@@ -6,7 +6,6 @@ html
     link(href="stylesheets/grnsight.css", rel="stylesheet")
     link(href="stylesheets/print.css", rel="stylesheet", media="print")
     link(href="//code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css", rel="stylesheet")
-    script(src='//netdna.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js')
     script(src="//code.jquery.com/jquery-1.9.1.js")
     script(src="//code.jquery.com/ui/1.10.1/jquery-ui.js")
     script.
@@ -35,7 +34,7 @@ html
                     label(for='upload' id='open')
                       span(class='glyphicon glyphicon-folder-open')
                       | &nbsp; Open File
-                      i (.xlsx .sif, .graphml)
+                      i  (.xlsx, .sif, .graphml)
                     input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
                     input(type='hidden' id='service-root' value='#{serviceRoot}')
                 li(class='startDisabled disabled')
@@ -85,12 +84,12 @@ html
               ul(class='dropdown-menu' role='menu')
                 span(class='menu-subheader') Graph Options
                 li
-                  a(href='#' id='gridLayout' class='layout')
-                    span(class='glyphicon')
-                    | &nbsp; Grid Layout
                   a(href='#' id='forceGraph' class='layout' checked)
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Force Graph
+                  a(href='#' id='gridLayout' class='layout')
+                    span(class='glyphicon')
+                    | &nbsp; Grid Layout
                 li(class='divider')
                 li
                   a(href='#' id='lockSlidersMenu' class="lockSliders")
@@ -123,7 +122,7 @@ html
                 li(class='node-coloring-menu disabled')
                   a(href='#' id='node-coloring-toggle-menu' class='nodeColoringToggle')
                     span(class='glyphicon')
-                    | &nbsp; Disable Node Coloring
+                    | &nbsp; Enable Node Coloring
                 li(class='divider')
                 li(class='node-coloring-menu dropdown-submenu disabled')
                   a(href='#')
@@ -157,11 +156,7 @@ html
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='colorEdges' class='colorEdges active')
                     span(class='glyphicon glyphicon-ok')
-                    | &nbsp; Enable Formatting of Edges Based on Weight Values
-                li(class='weightedGraphOptionsMenu disabled')
-                  a(href='#' id='blackEdges' class='blackEdges')
-                    span(class='glyphicon')
-                    | &nbsp; Disable Formatting of Edges Based on Weight Values
+                    | &nbsp; Enable Edge Coloring Based on Weight Values
                 li(class='divider')
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='weightsMouseOverMenu' class='weightsMouseOver' class='selected')
@@ -180,7 +175,7 @@ html
                   a(href='#' class='with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Edge Weight Normalization Factor (0.0001 - 1000) &nbsp;
-                    input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' aria-describedby='basic-addon1')
+                    input(type='number' id='edge-weight-normalization-factor-menu' class='keepopen' placeholder='' step='0.0001' aria-describedby='basic-addon1')
                 li(class='weightedGraphOptionsMenu disabled')
                   a(href='#' id='reset-normalization-factor-menu')
                     span(class='glyphicon invisible')
@@ -307,17 +302,19 @@ html
               a(data-toggle='collapse' data-target='#layoutSidebarPanel') Layout
             div(id="layoutSidebarPanel" class="panel-collapse collapse")
               div(class="panel-body")
-                  form(class='layoutButtons')
+                  form(class='buttonPairContainer')
                     //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
-                    input(id='forceGraphButton' type='button' class='btn btn-default layoutButtons layoutBtnLeft' value='Force Graph')
-                    input(id='gridLayoutButton' type='button' class='btn btn-default layoutButtons layoutBtnRight' value='Grid Layout')
-                  form
-                    label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1 - 1000):
-                    span(id='linkDistVal' class='forceVal') 500
-                    input(class='form-control', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
-                    label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (-2000 - 0):
-                    span(id='chargeVal' class='forceVal') -50
-                    input(class='form-control', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
+                    input(id='forceGraphButton' type='button' class='btn btn-default' value='Force Graph')
+                    input(id='gridLayoutButton' type='button' class='btn btn-default' value='Grid Layout')
+                  form(class='forceParameterContainer')
+                    div(class='labelWithValueContainer')
+                      label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1-1000):
+                      span(id='linkDistVal' class='forceVal') 500
+                    input(class='sidebarSlider', type='range', min='1', max='1000', value='500', step='1', id='linkDistInput', name='linkDistInput')
+                    div(class='labelWithValueContainer')
+                      label(for='chargeInput', class='info', data-toggle='tooltip', title='Increases/decreases the strength of the force that causes the nodes to repel each other.') Charge (–2000-0):
+                      span(id='chargeVal' class='forceVal') -50
+                    input(class='sidebarSlider', type='range', min='-2000', max='0', value='-50', step='1', id='chargeInput', name='chargeInput')
                   form
                     input(id='lockSlidersButton', type='checkbox', value='lockSliders' class="lockSliders")
                     label(for='lockSlidersButton' class='sideLabel') Lock Force Parameters
@@ -327,28 +324,29 @@ html
                   p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 
         div(class="node-coloring disabled panel panel-default")
-            p(class='panel-title sidebarPanelHeader disabledOnLaunch')
-              a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node Coloring
-            div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
-              div(class="panel-body")
-                input(id='nodeColoringToggle' type='button' class='btn btn-default btnSidebar nodeColoringToggle' value='Disable Node Coloring')
-                div(class="nodeColoringSidebarBody")
-                  label(class='info', data-toggle='tooltip') Top Dataset
-                  select(id="dataset-top")
-                  form
-                    input(id='averageDataTop', type='checkbox' checked)
-                    label(for='averageDataTop' class='sideLabel') Average Replicate Values
-                  label(class='info', data-toggle='tooltip') Bottom Dataset
-                  select(id="dataset-bottom")
-                  form
-                    input(id='averageDataBottom', type='checkbox' checked)
-                    label(for='averageDataBottom' class='sideLabel') Average Replicate Values
-                  p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value
-                  p(class='sideHeader' id="logFoldChangeMaxValueRange") (0.01 - 100): &nbsp;
+          p(class='panel-title sidebarPanelHeader disabledOnLaunch')
+            a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node
+          div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              div(class='edgeControl')
+                input(id='nodeColoringToggleSidebar' class='nodeColoringToggle' type='checkbox' checked)
+                label(for='nodeColoringToggleSidebar' class='sideLabel') Enable Node Coloring
+              div(class="nodeColoringSidebarBody")
+                p(class='sideHeader info' data-toggle='tooltip') Top Dataset
+                select(id="dataset-top")
+                form
+                  input(id='averageDataTop', type='checkbox' checked)
+                  label(for='averageDataTop' class='sideLabel') Average Replicate Values
+                p(class='sideHeader info' data-toggle='tooltip') Bottom Dataset
+                select(id="dataset-bottom")
+                form
+                  input(id='averageDataBottom', type='checkbox' checked)
+                  label(for='averageDataBottom' class='sideLabel') Average Replicate Values
+                p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value (0.01-100):
+                div(class='logFoldChangeControlContainer')
                   input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
-                  span &nbsp;
                   button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
-                  div(class="node-coloring-legend")
+                div(class="node-coloring-legend")
 
         div(class='edge-weight-sidebar disabled panel panel-default disabled')
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
@@ -356,30 +354,33 @@ html
           div(id="edgeSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
               form(class='weightedGraphOptions hidden')
-                input(id='colorEdgesSidebar', type='checkbox' checked)
-                label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
+                div(class='edgeControl')
+                  input(id='colorEdgesSidebar' class='colorEdges' type='checkbox' checked)
+                  label(for='colorEdgesSidebar' class='sideLabel') Enable Edge Coloring
                 p(class='sideHeader') Hide/Show Edge Weights
-                input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
-                label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
-                br
-                input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
-                label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
-                br
-                input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
-                label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
+                div(class='edgeControl')
+                  input(type='radio' id='weightsMouseOverSide' class='weightsMouseOver' name='size' class='selected' checked)
+                  label(for='weightsMouseOverSide' class='sideLabel') Show With Mouse Over
+                div(class='edgeControl')
+                  input(type='radio' id='weightsAlwaysSide' class='weightsAlways' name='size')
+                  label(for='weightsAlwaysSide' class='sideLabel') Always Show Edge Weights
+                div(class='edgeControl')
+                  input(type='radio' id='weightsNeverSide' class='weightsNever' name='size')
+                  label(for='weightsNeverSide' class='sideLabel') Never Show Edge Weights
               div(class='weightedGraphOptions hidden')
-                p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor
-                p(class='sideHeader' id="normLabel") (0.0001 - 1000): &nbsp;
-                input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' aria-describedby='basic-addon1')
-                div(id='btn-side')
+                p(class='sideHeader' id="normLabel") Edge Weight Normalization Factor (0.0001-1000):
+                input(type='number' class='normalization-form' id='normalization-max' placeholder='maximum' step='0.0001' aria-describedby='basic-addon1')
+                div(class='buttonPairContainer')
                   button(type="button" class='btn btn-default s' id="normalization-button") Set Factor
                   button(type='button' class='btn btn-default btn-norm' id='resetNormalizationButton') Reset Factor
               div(class='weightedGraphOptions hidden')
-                label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0 - 100%): &nbsp; &nbsp;
-                span(class='forceVal', id='grayThresholdValue') 5%
-                input(id='grayThresholdInput', class='form-control', type='range', min='0', max='1', value='0.05', step='0.01')
-                input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
-                label(for='dashedGrayLineButton' class='sideLabel') &nbsp; Show Gray Edges as Dashed
+                div(class='labelWithValueContainer')
+                  label(id='grayLabel' for='grayThresholdInput', class='info', data-toggle='tooltip', title='Increases/decreases the threshold at which edges appear gray. Edges with normalized weight values below this percentage are shown as gray.') Gray Threshold (0-100%): &nbsp; &nbsp;
+                  span(class='forceVal', id='grayThresholdValue') 5%
+                input(id='grayThresholdInput', class='sidebarSlider', type='range', min='0', max='1', value='0.05', step='0.01')
+                div(class='edgeControl')
+                  input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
+                  label(for='dashedGrayLineButton' class='sideLabel') Show Gray Edges as Dashed
 
         div(class='view-sidebar panel panel-default')
           p(class='panel-title sidebarPanelHeader')
