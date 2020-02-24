@@ -442,6 +442,7 @@ var processGRNmap = function (path, res, app) {
     // Parse expression and 2-column data, then add to network object
     var additionalData = parseAdditionalSheets(sheet);
     Object.assign(network, additionalData);
+    //assigning additional data to "network" key now
 
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
@@ -538,6 +539,7 @@ module.exports = function (app) {
                         types that GRNsight supports is in the Documentation.");
                 }
 
+                //input.meta holds the species and taxon data
                 return processGRNmap(input, res, app);
             });
         });

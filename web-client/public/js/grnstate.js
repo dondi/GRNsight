@@ -39,25 +39,19 @@ const annotateLinks = network => {
     });
 };
 
-const nameToTaxon = {
-    //Treating like a dictionary with keys being the english name
-    //and values being a tuple of (latin name, taxon ID)
-    human: ("homo_sapiens", "9606"),
-    yeast: ("Saccharomyces_cerevisiae", "559292"),
-    fruit_fly: ("drosophila_melanogaster", "7272"),
-    nematode_worm: ("caenorhabditis_elegans", "6293"),
-    house_mouse: ("mus_musculus", "10090"),
-    thale_cress: ("arabidopsis_thaliana", "3702")
-}
-
-const genePageData = () => {
-
-    // set to be a function for when data is read from .xml
-    return {
-        species: "Saccharomyces_cerevisiae",
-        taxon: "559292"
-    };
-};
+//function which takes the given input, and returns the correct data
+//from the nameToTaxon table, which will let us query the APIs properly
+// const identifySpecies = (data) => {
+//     if(grnState.genePageData.identified === true){
+//         return grnState.genePageData
+//     }
+//     for(const name in nameToTaxon){
+//         if(nameToTaxon[name].values().includes(data)){
+//             grnState.genePageData.identified = true;
+//             return (name, nameToTaxon[name]);
+//         }
+//     }
+// };
 
 export const grnState = {
     name: null,
@@ -105,8 +99,26 @@ export const grnState = {
 
 
 // Gene Page data
-    species: genePageData().species,
-    taxon: genePageData().taxon,
+// left defaulting to yeast for tests, until a better solution is found
+    genePageData: {
+        common_name: undefined,
+        species: undefined,
+        taxon_jaspar: undefined,
+        taxon_uniprot: undefined,
+        identified: false,
+    },
+
+    nameToTaxon: {
+        //Treating like a dictionary with keys being the english name
+        //and values being a tuple of (latin name, Uniprot, Jaspar)
+        //some taxon ids are different between the two
+        human: { spec: "homo_sapiens", jaspar: "9606", uniprot: "9606" },
+        yeast: { spec: "Saccharomyces_cerevisiae", jaspar: "559292", uniprot: "4932" },
+        fruit_fly: { spec: "drosophila_melanogaster", jaspar: "7227", uniprot: "7227" },
+        nematode_worm: { spec: "caenorhabditis_elegans", jaspar: "6293", uniprot: "6293" },
+        house_mouse: { spec: "mus_musculus", jaspar: "10090", uniprot: "10090" },
+        thale_cress: { spec: "arabidopsis_thaliana", jaspar: "3702", uniprot: "3702" }
+    },
 
 // Slider Parameters
     slidersLocked: false,

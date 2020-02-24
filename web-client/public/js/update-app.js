@@ -307,6 +307,26 @@ const hasExpressionData = (sheets) => {
     return false;
 };
 
+//helper method to check if the given data, a taxon id or a species name
+//is contained within the identified species, if it exists at all.
+const identifySpeciesOrTaxon = (data) => {
+    if (grnState.genePageData.identified === true) {
+        return true;
+    }
+    var nameTax = grnState.nameToTaxon
+    for (var n in nameTax) {
+        if (Object.values(nameTax[n]).includes(data.toString())) {
+            grnState.genePageData.common_name = n;
+            grnState.genePageData.species = nameTax[n].spec;
+            grnState.genePageData.taxon_jaspar = nameTax[n].jaspar;
+            grnState.genePageData.taxon_uniprot = nameTax[n].uniprot;
+            grnState.genePageData.identified = true;
+            return grnState.genePageData.identified;
+        }
+    }
+    return false;
+};
+
     // renderNodeColoring: function () { }, // defined in graph.js
 
 const clearDropdownMenus = () => {
@@ -404,6 +424,19 @@ export const updateApp = grnState => {
         clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
+
+            //check if the species has been identified yet, if not try to identify it
+            //also checks if the areas have been populated at all
+            if(grnState.genePageData.identified === false){
+                if(grnState.network.meta.species !== undefined){
+                    identifySpeciesOrTaxon(grnState.network.meta.species)
+                }
+                if (grnState.network.meta.taxon_id !== undefined){
+                    identifySpeciesOrTaxon(grnState.network.meta.taxon_id)
+                }
+            }
+            console.log(grnState.genePageData)
+
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;

@@ -75,6 +75,10 @@ module.exports = function (workbook) {
     workbook.forEach(function (sheet) {
         if (sheet.name === "optimization_parameters") {
             output["meta"] = parseMetaDataSheet(sheet);
+            //above line creates an object w/ species and taxon read in
+            //they are stored under species and taxon_id 
+            //these are part of the "meta" property
+            
         // Parse 2-column sheets
         } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
             output["test"][sheet.name] = parseTwoColumnSheet(sheet);
