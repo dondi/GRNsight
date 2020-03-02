@@ -308,6 +308,25 @@ html
 
     div(class='sidebar')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
+        di(id="speciesMenu")
+          span(id='speciesIdentified' href='#' ) Species Identified : 
+            |  &nbsp;
+            span(id='speciesIdentifiedIcon' href='#' class='glyphicon glyphicon-remove')
+            li(class='dropdown')
+              input(id='speciesDisplay' href='#' class="btn btn-default btnSidebar dropdown-toggle" type="button" data-toggle='dropdown' value='Saccharomyces Cerevisiae')
+              ul(class='dropdown-menu' role='menu')
+                li
+                  button(href='#' id='yeastDisplay' class='btn btnSidebar') Saccharomyces Cerevisiae
+                li
+                 button(href='#' id='humanDisplay' class='btn btnSidebar') Homo Sapien
+                li
+                  button(href='#' id='fruitflyDisplay' class='btn btnSidebar') Drosophila Melanogaster
+                li
+                  button(href='#' id='nematodeDisplay' class='btn btnSidebar') Caenorhabditis Elegans
+                li
+                  button(href='#' id='mouseDisplay' class='btn btnSidebar') Mus Musculus
+                li
+                  button(href='#' id='cressDisplay' class='btn btnSidebar') Arabidopsis Thaliana
         div(id="layout")
           form
             //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
