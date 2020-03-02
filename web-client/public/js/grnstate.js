@@ -39,20 +39,6 @@ const annotateLinks = network => {
     });
 };
 
-//function which takes the given input, and returns the correct data
-//from the nameToTaxon table, which will let us query the APIs properly
-// const identifySpecies = (data) => {
-//     if(grnState.genePageData.identified === true){
-//         return grnState.genePageData
-//     }
-//     for(const name in nameToTaxon){
-//         if(nameToTaxon[name].values().includes(data)){
-//             grnState.genePageData.identified = true;
-//             return (name, nameToTaxon[name]);
-//         }
-//     }
-// };
-
 export const grnState = {
     name: null,
     simulation: undefined,

@@ -1,8 +1,4 @@
 //CHANGE ME IF YOU WANT TO CHANGE CSS
-
-body
-  min-width: 1326px
-
 p
   margin: 0
 
@@ -146,7 +142,6 @@ nav.navbar.navbar-default
   background-color: #dfebe5
 
 #undoResetButton
-  width: 225px
   margin-top: 5px
 
 #mouseOver
@@ -154,7 +149,48 @@ nav.navbar.navbar-default
   text-align: center
 
 .btnSidebar
-  width: 225px
+  width: 100%
+
+.buttonPairContainer
+  display: flex
+  justify-content: space-between
+  margin-top: 0px
+
+.buttonPairContainer > input[type=button], .buttonPairContainer > button
+  padding: 6px 10px
+  width: calc(50% - 2px)
+
+.buttonPairContainer > input[type=button]:last-child, .buttonPairContainer > button:last-child
+  margin-left: 5px
+
+.panel-body
+  padding: 0px 10px 10px
+
+.forceParameterContainer
+  display: flex
+  flex-direction: column
+  margin-bottom: 5px
+
+.labelWithValueContainer
+  align-items: baseline
+  display: flex
+  justify-content: flex-start
+  margin-top: 10px
+
+.edgeControl
+  align-items: center
+  display: flex
+  justify-content: flex-start
+
+.edgeControl > input[type=radio], .edgeControl > input[type=checkbox]
+  margin: 0
+
+.edgeControl > label
+  font-size: 13px
+  margin: 5px
+
+#grayThresholdInput
+  margin-bottom: 5px
 
 #warningsModal #accordion
   margin-bottom: 0
@@ -203,8 +239,13 @@ nav.navbar.navbar-default
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
 
-.panel-body
-  overflow: scroll;
+.dropdown a.with-input
+    display:flex
+    align-items:center
+    user-select:none
+
+.dropdown a.with-input>*:last-child
+    margin-left:auto
 
 // Graph statistics styling is due to absolute position and size of grnsight-container
 .graph-statistics-container
@@ -231,23 +272,35 @@ text.weight.visible
   line-height: 3px;
   font-size: 13px;
 
+.sidebarPanelHeader
+  margin: 10px 10px 10px
+  font-weight: bold
+  font-size: 18px
+
 .sideHeader
-  line-height: 5px;
-  font-weight: bold;
-  font-size: 13px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+    font-weight: bold
+    font-size: 13px
+    margin-bottom: 4px
+    margin-top: 6px
+
+.node-coloring select
+    width: 100%
+
+.node-coloring.disabled
+    color: #AAA
+
+label.sideLabel
+  font-weight: normal;
 
 path.mousezone
     opacity: 0.0
 
 .logFoldChangeMaxValue
     width: 50px;
-    margin-bottom: 8px;
 
 .normalization-form
-    width: 80px;
-    margin-bottom: 8px;
+  width: 100%
+  margin-bottom: 5px
 
 .cursorGrab
     cursor: -webkit-grab;
@@ -261,19 +314,32 @@ path.mousezone
     display: inline-block;
     width: 100px;
 
-#normalization-button
-    margin-right: 5px;
-
 #grayLabel
     margin-top: 10px;
 
 #normLabel
-    margin-bottom: 10px;
-    display: inline-block;
+  margin-bottom: 5px
+  margin-top: 10px
 
 #logFoldChangeMaxValueRange
     margin-bottom: 10px;
     display: inline-block;
 
+#gray-edge-threshold-menu
+    margin-right:0.5ex
+
 .menu-subheader
     padding-left: 12px;
+
+#force-graph input[type=range]
+    box-shadow: none
+    margin-top: -12px
+
+.minimum-zoom-display
+    margin-right: 0.25rem
+
+.maximum-zoom-display
+    margin-left: 0.25rem
+
+.edge-weight-sidebar.disabled
+    color: #AAA

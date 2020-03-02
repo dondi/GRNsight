@@ -1,4 +1,8 @@
+import { updaters } from "./graph";
 import { updateApp } from "./update-app";
+import { saveSvgAsPng } from "save-svg-as-png";
+import * as jsPDF from "jspdf";
+import canvg from "canvg";
 
 import {
     FORCE_GRAPH,
@@ -20,6 +24,7 @@ import {
     HIDE_ALL_WEIGHTS,
     COLOR_EDGES,
     BLACK_EDGES,
+    COLOR_EDGES_SIDEBAR,
     LINK_DIST_SLIDER_SIDEBAR,
     LINK_DIST_MENU,
     CHARGE_SLIDER_SIDEBAR,
@@ -29,9 +34,10 @@ import {
     LOCK_SLIDERS_CLASS,
     RESET_SLIDERS_CLASS,
     UNDO_SLIDERS_RESET_CLASS,
+    FORCE_GRAPH_BUTTON,
+    FORCE_GRAPH_MENU,
     GRID_LAYOUT_BUTTON,
-    GRID_LAYOUT_CLASS,
-    FORCE_GRAPH_CLASS,
+    GRID_LAYOUT_MENU,
     NODE_COLORING_TOGGLE_CLASS,
     AVG_REPLICATE_VALS_TOP_MENU,
     AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -44,6 +50,13 @@ import {
     BOTTOM_DATASET_SELECTION_SIDEBAR,
     TOP_DATASET_SELECTION_MENU,
     BOTTOM_DATASET_SELECTION_MENU,
+    ZOOM_DISPLAY_MAXIMUM_SELECTOR,
+    ZOOM_DISPLAY_MAXIMUM_VALUE,
+    ZOOM_DISPLAY_MINIMUM_SELECTOR,
+    ZOOM_DISPLAY_MINIMUM_VALUE,
+    EXPORT_TO_PNG,
+    EXPORT_TO_SVG,
+    EXPORT_TO_PDF
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -55,15 +68,151 @@ export const setupHandlers = grnState => {
         return Math.min(max, Math.max(min, value));
     };
 
-    // Grid buttons
-    const setGraphLayout = layout => {
-        grnState.graphLayout = layout;
-        updateApp(grnState);
+    const determineFileType = filename => {
+        if (filename.includes(".xlsx")) {
+            return ".xlsx";
+        } else if (filename.includes(".sif")) {
+            return ".sif";
+        } else if (filename.includes(".graphml")) {
+            return ".graphml";
+        }
     };
 
-    $(GRID_LAYOUT_BUTTON).click(() => setGraphLayout(grnState.graphLayout === FORCE_GRAPH ? GRID_LAYOUT : FORCE_GRAPH));
-    $(FORCE_GRAPH_CLASS).click(() => setGraphLayout(FORCE_GRAPH));
-    $(GRID_LAYOUT_CLASS).click(() => setGraphLayout(GRID_LAYOUT));
+// thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
+    const setInlineStyles = (svg) => {
+        var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        window.document.body.appendChild(emptySvg);
+        var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
+
+        const traverse = svg => {
+            var tree = [];
+            tree.push(svg);
+            // implement DFS
+            const visit = (node) => {
+                if (node && node.hasChildNodes()) {
+                    var child = node.firstChild;
+                    while (child) {
+                        if (child.nodeType === 1 && child.nodeName !== "SCRIPT") {
+                            tree.push(child);
+                            visit(child);
+                        }
+                        child = child.nextSibling;
+                    }
+                }
+            };
+            visit(svg);
+            return tree;
+        };
+
+        const explicitlySetStyle = element => {
+            const cSSStyleDeclarationComputed = window.getComputedStyle(element);
+            let i;
+            let len;
+            let key;
+            let value;
+            let computedStyleStr = "";
+
+            for (i = 0, len = cSSStyleDeclarationComputed.length; i < len; i++) {
+                key = cSSStyleDeclarationComputed[i];
+                value = cSSStyleDeclarationComputed.getPropertyValue(key);
+                if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
+                    // Don't set computed style of width and height. Makes SVG elmements disappear.
+                    if ((key !== "height") && (key !== "width")) {
+                        computedStyleStr += key + ":" + value + ";";
+                    }
+
+                }
+            }
+            element.setAttribute("style", computedStyleStr);
+        };
+
+        // hardcode computed css styles inside svg
+        var allElements = traverse(svg);
+        var i = allElements.length;
+        while (i--) {
+            explicitlySetStyle(allElements[i]);
+        }
+    };
+
+    const sourceAttributeSetter = (svg) => {
+        svg.setAttribute("version", "1.1");
+
+        svg.removeAttribute("xmlns");
+        svg.removeAttribute("xlink");
+
+        if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns")) {
+            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
+        }
+
+        if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink")) {
+            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+        }
+    };
+
+    const exportSVG = (svgElement, name) => {
+        let source = svgElement;
+
+        sourceAttributeSetter(source);
+        setInlineStyles(source);
+
+        var doctype = "<?xml version=\"1.0\" standalone=\"no\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"; // eslint-disable-line
+        var sourceString = (new XMLSerializer()).serializeToString(source);
+        const finalSvgString = [doctype + sourceString];
+
+        var svgUrl = window.URL.createObjectURL(new Blob(finalSvgString, { "type" : "image\/svg+xml" }));
+
+        $("#exportAsSvg").attr("href", svgUrl);
+        $("#exportAsSvg").attr("download", name);
+    };
+
+    const exportPDF = (svgElement, name) => {
+        if (svgElement) {
+            svgElement = svgElement.replace(/\r?\n|\r/g, "").trim();
+        }
+
+        let canvas = document.createElement("canvas");
+        canvg(canvas, svgElement);
+        const imgData = canvas.toDataURL("image/png");
+
+        const pdf = new jsPDF("l", "mm", "letter");
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
+
+        pdf.addImage(imgData, "PNG", 0, 0, width, height);
+        pdf.save(name);
+    };
+
+    // Grid and Force Graph Layout
+    $(`${FORCE_GRAPH_MENU}, ${FORCE_GRAPH_BUTTON}`).click(() => {
+        updaters.setNodesToForceGraph();
+        grnState.graphLayout = FORCE_GRAPH;
+        updateApp(grnState);
+    });
+
+    $(`${GRID_LAYOUT_MENU}, ${GRID_LAYOUT_BUTTON}`).click(() => {
+        updaters.setNodesToGrid();
+        grnState.graphLayout = GRID_LAYOUT;
+        updateApp(grnState);
+    });
+
+// Image Export
+    $(EXPORT_TO_PNG).click(() => {
+        var svgContainer = document.getElementById("exportContainer");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
+        saveSvgAsPng(svgContainer, editedName);
+    });
+
+    $(EXPORT_TO_SVG).click(() => {
+        var svgContainer = document.getElementById("exportContainer");
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".svg";
+        exportSVG(svgContainer, editedName );
+    });
+
+    $(EXPORT_TO_PDF).click(() => {
+        var svgContainer = document.getElementById("exportContainer").innerHTML;
+        var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".pdf";
+        exportPDF(svgContainer, editedName);
+    });
 
 // Node Coloring
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
@@ -151,7 +300,6 @@ export const setupHandlers = grnState => {
     });
 
 // Sliders Code
-
     var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
     };
@@ -184,7 +332,6 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    // Sliders code
     $(LOCK_SLIDERS_CLASS).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
         updateApp(grnState);
@@ -206,7 +353,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Weights Visualization Handlers
+// Weights Visualization
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
         grnState.edgeWeightDisplayOption = SHOW_ALL_WEIGHTS;
         updateApp(grnState);
@@ -238,7 +385,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Grey Edges Handlers
+// Grey Edges
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);
@@ -274,4 +421,43 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
+    $(COLOR_EDGES_SIDEBAR).click(() => {
+        grnState.colorOptimal = !grnState.colorOptimal;
+        updateApp(grnState);
+    });
+
+    // Allow text-selection for input elements embedded within menu items.
+    //
+    // Partial thank you:
+    //   https://stackoverflow.com/questions/6848140/how-do-i-prevent-drag-on-a-child-but-allow-drag-on-the-parent
+    //
+    // We use function syntax so that internal `this` can be used.
+    $(".dropdown input.keepopen").parent().attr({
+        draggable: false
+    });
+
+    // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
+    // https://stackoverflow.com/a/27759926
+    $(".dropdown").on({
+        "click": function (event) {
+            if ($(event.target).hasClass("keepopen")) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+
+        "mouseup": function (event) {
+            if ($(event.target).find(".keepopen").length > 0) {
+                $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
+            }
+        },
+
+        "hide.bs.dropdown": function () {
+            var hide = $(this).data("closable");
+            $(this).data("closable", true);
+            return hide;
+        }
+    });
+
+    $(ZOOM_DISPLAY_MAXIMUM_SELECTOR).text(ZOOM_DISPLAY_MAXIMUM_VALUE);
+    $(ZOOM_DISPLAY_MINIMUM_SELECTOR).text(ZOOM_DISPLAY_MINIMUM_VALUE);
 };

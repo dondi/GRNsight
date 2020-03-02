@@ -44,12 +44,15 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  GRID_LAYOUT_BUTTON,
-  GRID_LAYOUT_CLASS,
-  FORCE_GRAPH_CLASS,
+  GRID_LAYOUT_MENU,
+  FORCE_GRAPH_MENU,
+  LAYOUT_SIDEBAR_PANEL,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
+  NODE_COLORING_SIDEBAR_BODY,
+  NODE_COLORING_SIDEBAR_PANEL,
+  NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
   AVG_REPLICATE_VALS_TOP_SIDEBAR,
@@ -67,7 +70,15 @@ import {
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
-  ZOOM_CONTROL
+  ZOOM_CONTROL,
+  ZOOM_DISPLAY_MIDDLE,
+  ZOOM_ADAPTIVE_MAX_SCALE,
+  ZOOM_INPUT,
+  ZOOM_SLIDER,
+  EXPORT_WEIGHTED_CLASS,
+  EDGE_WEIGHT_MENU_CLASS,
+  EDGE_WEIGHT_SIDEBAR,
+  EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -79,8 +90,6 @@ const refreshApp = () => {
 };
 
 const displayNetwork = (network, name) => {
-    $(ZOOM_CONTROL).prop({ disabled: false });
-
     uploadState.currentNetwork = network;
     console.log("Network: ", network); // Display the network in the console
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
@@ -125,15 +134,28 @@ const logFoldChangeMaxValueInputValidation = value => {
     }
 };
 
-//
+// Weight Visualization Function
+const showEdgeWeightOptions = () => {
+    $(EDGE_WEIGHT_MENU_CLASS).removeClass("disabled");
+    $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").removeClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR).removeClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
+};
+
+const hideEdgeWeightOptions = () => {
+    $(EDGE_WEIGHT_MENU_CLASS).addClass("disabled");
+    $(EXPORT_WEIGHTED_CLASS).removeClass("startDisabled").addClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR).addClass("disabled");
+    $(EDGE_WEIGHT_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
+};
+
 const synchronizeGrayEdgeValues = value => {
     var validatedInput = grayEdgeInputValidator(value);
-    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
     $(GREY_EDGE_THRESHOLD_MENU).val(validatedInput);
+    $(GREY_EDGE_THRESHOLD_TEXT_SIDEBAR).text(validatedInput + "%");
     $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).val(validatedInput / 100);
 };
 
-// Weight Visualization Functions
 const synchronizeShowWeightsMouseover = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_MENU + " span").addClass("glyphicon-ok");
     $(WEIGHTS_SHOW_ALWAYS_MENU + " span").removeClass("glyphicon-ok");
@@ -192,16 +214,6 @@ const disableColorOptimal = () => {
 };
 
 // Sliders Functions
-export const modifyChargeParameter = (value) => {
-    grnState.simulation.force("charge").strength(value);
-    grnState.simulation.alpha(1);
-};
-
-export const modifyLinkDistanceParameter = (value) => {
-    grnState.simulation.force("link").distance(value);
-    grnState.simulation.alpha(1);
-};
-
 const updateSliderState = slidersLocked => {
     const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
     if (forceGraphDisabled) {
@@ -228,24 +240,38 @@ const updateSliderState = slidersLocked => {
     }
 };
 
+export const modifyChargeParameter = (value) => {
+    grnState.simulation.force("charge").strength(value);
+    grnState.simulation.alpha(1);
+};
+
+export const modifyLinkDistanceParameter = (value) => {
+    grnState.simulation.force("link").distance(value);
+    grnState.simulation.alpha(1);
+};
+
 const updateChargeSliderValues = () => {
-    modifyChargeParameter(grnState.chargeSlider.currentVal);
+    if (grnState.network !== null) {
+        modifyChargeParameter(grnState.chargeSlider.currentVal);
+    }
     $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
     $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).html(grnState.chargeSlider.currentVal +
-      ((grnState.chargeSlider.needsAppendedZeros
-          && grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        ((grnState.chargeSlider.needsAppendedZeros &&
+            grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
 const updateLinkDistanceSliderValues = () => {
-    modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+    if (grnState.network !== null) {
+        modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
+    }
     $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).html(grnState.linkDistanceSlider.currentVal +
-      ((grnState.linkDistanceSlider.needsAppendedZeros
-        && grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+        ((grnState.linkDistanceSlider.needsAppendedZeros &&
+            grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
 const speciesIdenified = () => {
@@ -256,6 +282,10 @@ const speciesIdenified = () => {
 };
 
 // Grid Layout Functions
+const expandLayoutSidebar = () => {
+    $(LAYOUT_SIDEBAR_PANEL).addClass("in");
+};
+
 const toggleLayout = (on, off) => {
     if (!$(on).prop("checked")) {
         $(on).prop("checked", true);
@@ -266,32 +296,30 @@ const toggleLayout = (on, off) => {
 };
 
 const updatetoForceGraph = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Grid Layout");
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    toggleLayout(FORCE_GRAPH_CLASS, GRID_LAYOUT_CLASS);
-    updaters.setNodesToForceGraph();
+    toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
 };
 
 const updatetoGridLayout = () => {
-    $(GRID_LAYOUT_BUTTON).val("Use Force Graph");
     $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    toggleLayout(GRID_LAYOUT_CLASS, FORCE_GRAPH_CLASS);
-    updaters.setNodesToGrid();
+    toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
 };
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    if ($(NODE_COLORING_MENU).hasClass("hidden")) {
-        $(NODE_COLORING_MENU).removeClass("hidden");
-    }
-    if ($(NODE_COLORING_MENU_CLASS).hasClass("disabled")) {
-        $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
-    }
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
+    $(NODE_COLORING_MENU).removeClass("disabled");
+    $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
 const disableNodeColoringMenus = () => {
-    $(NODE_COLORING_MENU).addClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
+    $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
 const isNewWorkbook = (name) => {
@@ -356,6 +384,7 @@ const resetDatasetDropdownMenus = (network) => {
             </li>`;
     };
 
+    grnState.nodeColoring.nodeColoringOptions = [];
     for (var property in network.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             grnState.nodeColoring.nodeColoringOptions.push({value: property});
@@ -425,10 +454,10 @@ const updateBottomDataset = () => {
 };
 
 export const updateApp = grnState => {
-
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
+        expandLayoutSidebar();
         clearDropdownMenus();
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
@@ -480,12 +509,10 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
         $(GREY_EDGES_DASHED_SIDEBAR).prop("checked", "checked");
-        refreshApp();
     } else {
         $(GREY_EDGES_DASHED_MENU + " span").removeClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).removeProp("checked");
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
-        refreshApp();
     }
 
 // Weights functions
@@ -551,11 +578,21 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_MENU + " span").removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Disable Node Coloring");
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
     } else {
         $(NODE_COLORING_TOGGLE_MENU + " span").addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).val("Enable Node Coloring");
+        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
+    }
+
+    if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
+        showEdgeWeightOptions();
+    } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
+        hideEdgeWeightOptions();
+    } else {
+        hideEdgeWeightOptions();
     }
 
     if (grnState.nodeColoring.averageTopDataset) {
@@ -601,11 +638,16 @@ export const updateApp = grnState => {
         $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
     }
 
-    if (grnState.network !== null) {
-        updateChargeSliderValues();
-        updateLinkDistanceSliderValues();
+    updateChargeSliderValues();
+    updateLinkDistanceSliderValues();
+
+    $(ZOOM_CONTROL).prop({ disabled: !grnState.network });
+    if (!grnState.network) {
+        // Set initial values when there is no network: this is necessarily explicit because Firefox
+        // preserves these values even upon a browser reload.
+        $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
+        $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
 
-// Refresh graph
     refreshApp();
 };

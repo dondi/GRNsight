@@ -3,16 +3,26 @@ export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
 export const UNWEIGHTED_DEMO_ID   = "#unweighted";
 export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
-export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (21 genes, 50 edges)";
+export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (15 genes, 28 edges)";
 export const WEIGHTED_DEMO_ID     = "#weighted";
 export const WEIGHTED_DEMO_PATH   = "demo/weighted";
-export const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (21 genes, 50 edges, Dahlquist Lab unpublished data)";
+export const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
 export const SCHADE_INPUT_ID      = "#schadeInput";
 export const SCHADE_INPUT_PATH    = "demo/schadeInput";
 export const SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
 export const SCHADE_OUTPUT_ID     = "#schadeOutput";
 export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
+
+export const EXPORT_TO_EXCEL            = "#exportAsExcelWkbk";
+export const EXPORT_TO_UNWEIGHTED_SIF   = "#exportAsUnweightedSif";
+export const EXPORT_TO_WEIGHTED_SIF     = "#exportAsWeightedSif";
+export const EXPORT_TO_UNWEIGHTED_GML   = "#exportAsUnweightedGraphMl";
+export const EXPORT_TO_WEIGHTED_GML     = "#exportAsWeightedGraphMl";
+export const EXPORT_TO_PNG              = "#exportAsPng";
+export const EXPORT_TO_SVG              = "#exportAsSvg";
+export const EXPORT_TO_PDF              = "#exportAsPdf";
+export const EXPORT_WEIGHTED_CLASS      = ".weighted.export";
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
@@ -24,7 +34,7 @@ export const DEMO_INFORMATION = [
 export const MIN_EDGE_WEIGHT_NORMALIZATION      = 0.0001;
 export const MAX_EDGE_WEIGHT_NORMALIZATION      = 1000;
 
-export const DEFAULT_ZOOM_VALUE                 = 4;
+export const DEFAULT_ZOOM_VALUE                 = 100;
 
 export const GREY_EDGE_THRESHOLD_MENU           = "#gray-edge-threshold-menu";
 export const GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR = "#grayThresholdInput";
@@ -53,6 +63,7 @@ export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 export const COLOR_EDGES                        = "#colorEdges";
 export const BLACK_EDGES                        = "#blackEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
+export const COLOR_EDGES_SIDEBAR                = "#colorEdgesSidebar";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
 export const LOCK_SLIDERS_CLASS          = ".lockSliders";
@@ -79,16 +90,25 @@ export const CHARGE_DEFAULT_VALUE       = -50;
 
 export const GRID_LAYOUT                = "GRID_LAYOUT";
 export const FORCE_GRAPH                = "FORCE_GRAPH";
+export const FORCE_GRAPH_BUTTON         = "#forceGraphButton";
 export const GRID_LAYOUT_BUTTON         = "#gridLayoutButton";
-export const FORCE_GRAPH_CLASS          = "#forceGraph";
-export const GRID_LAYOUT_CLASS          = "#gridLayout";
+export const FORCE_GRAPH_MENU          = "#forceGraph";
+export const GRID_LAYOUT_MENU          = "#gridLayout";
 
 export const MINIMUM_MAX_LOG_FOLD_CHANGE                = 0;
 export const MAXIMUM_MAX_LOG_FOLD_CHANGE                = 100;
 export const DEFAULT_MAX_LOG_FOLD_CHANGE                = 3;
 export const MAX_NUM_CHARACTERS_DROPDOWN                = 24;
+export const LAYOUT_SIDEBAR_PANEL                       = "#layoutSidebarPanel";
+export const EDGE_WEIGHT_MENU_CLASS                     = ".weightedGraphOptionsMenu";
+export const EDGE_WEIGHT_SIDEBAR                        = ".edge-weight-sidebar";
+export const EDGE_WEIGHT_SIDEBAR_HEADER_LINK            = "#edgeWeightHeaderLink";
 export const NODE_COLORING_MENU                         = ".node-coloring";
 export const NODE_COLORING_MENU_CLASS                   = ".node-coloring-menu";
+export const NODE_COLORING_SIDEBAR_PANEL                = "#nodeColoringSidebarPanel";
+export const NODE_COLORING_SIDEBAR_HEADER_LINK          = "#nodeColoringHeaderLink";
+export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
+export const NODE_COLORING_SIDEBAR_HEADER               = "#sidebarPanelHeader";
 export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggle";
 export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
 export const AVG_REPLICATE_VALS_TOP_SIDEBAR             = "#averageDataTop";
@@ -106,7 +126,14 @@ export const TOP_DATASET_SELECTION_SIDEBAR              = "#dataset-top";
 export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdownMenu";
 export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
 
-export const ZOOM_CONTROL = ".zoom";
-export const ZOOM_SLIDER = "#zoomSlider";
-export const ZOOM_INPUT = "#zoomInput";
-export const ZOOM_PERCENT = "#zoomPercent";
+export const ZOOM_CONTROL                               = ".zoom";
+export const ZOOM_DISPLAY_MAXIMUM_SELECTOR              = ".maximum-zoom-display";
+export const ZOOM_DISPLAY_MAXIMUM_VALUE                 = 200;
+export const ZOOM_DISPLAY_MINIMUM_SELECTOR              = ".minimum-zoom-display";
+export const ZOOM_DISPLAY_MINIMUM_VALUE                 = 25;
+export const ZOOM_DISPLAY_MIDDLE                        = 100;
+export const ZOOM_ADAPTIVE_MAX_SCALE                    = 4;
+export const ZOOM_SLIDER                                = "#zoomSlider";
+export const ZOOM_INPUT                                 = "#zoomInput";
+export const ZOOM_PERCENT                               = "#zoomPercent";
+export const VIEWPORT_FIT                               = "containerFit";

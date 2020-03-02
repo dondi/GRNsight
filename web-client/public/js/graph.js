@@ -3,10 +3,14 @@ import { grnState } from "./grnstate";
 import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
-    ZOOM_CONTROL,
+    VIEWPORT_FIT,
     ZOOM_INPUT,
     ZOOM_PERCENT,
-    ZOOM_SLIDER
+    ZOOM_SLIDER,
+    ZOOM_DISPLAY_MINIMUM_VALUE,
+    ZOOM_DISPLAY_MAXIMUM_VALUE,
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_ADAPTIVE_MAX_SCALE,
 } from "./constants";
 
 /* globals d3 */
@@ -24,6 +28,17 @@ import {
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
 /* eslint-disable no-unused-vars */
+
+/**
+ * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable
+ * updateFunction being set when needed.
+ */
+let mutationCallback = null;
+const resizeObserver = new MutationObserver((mutationsList, observer) => {
+    if (typeof(mutationCallback) === "function") {
+        mutationCallback(mutationsList, observer);
+    }
+});
 
 export var updaters = {
     setNodesToGrid: () => {},
@@ -48,8 +63,6 @@ export var drawGraph = function (network) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-    var zoomSliderScale = 1;
-
     $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
     var getNodeWidth = function (node) {
@@ -58,9 +71,28 @@ export var drawGraph = function (network) {
 
     var adaptive = !$("input[name='viewport']").prop("checked");
 
+    /**
+     * The *_SCALE values represent the actual zoom values used to transform the graph.
+     * The *_DISPLAY values represent the value that is shown in the user interface.
+     *
+     * Separating these values allows for flexible configuration of what the user sees vs. the actual scale factor
+     * used in transformations. This "distortion" is done so that "actual size" or 100% can be shown as the midpoint
+     * on the zoom slider, even if the numeric ranges to the left and right of the midpoint are asymmetric (as they
+     * are here).
+     */
+    const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) => d3.scaleLinear()
+        .domain([domainMin, domainMax])
+        .range([rangeMin, rangeMax])
+        .clamp(true);
+
+    const MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM_VALUE;
+    const ADAPTIVE_MAX_DISPLAY = ZOOM_DISPLAY_MAXIMUM_VALUE;
     const MIN_SCALE = 0.25;
-    const ADAPTIVE_MAX_SCALE = 4;
     const MIDDLE_SCALE = 1;
+
+    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE, MIN_SCALE, MIDDLE_SCALE);
+    const zoomScaleRight = createZoomScale(
+        ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ZOOM_ADAPTIVE_MAX_SCALE);
 
     // Create an array of all the network weights
     var allWeights = network.positiveWeights.concat(network.negativeWeights);
@@ -77,12 +109,15 @@ export var drawGraph = function (network) {
         }
     }
 
-    // Get the largest magnitude weight and set that as the default normalization factor
-    var maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
-    grnState.normalizationMax = maxWeight;
-    grnState.resetNormalizationMax = maxWeight;
+    const maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 
-  // Normalize all weights b/w 2-14
+    // Get the largest magnitude weight and set that as the default normalization factor
+    if (grnState.newNetwork) {
+        grnState.normalizationMax = maxWeight;
+        grnState.resetNormalizationMax = maxWeight;
+    }
+
+    // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
     var totalScale = d3.scaleLinear()
         .domain([0, normMax > 0 ? normMax : maxWeight])
@@ -91,7 +126,7 @@ export var drawGraph = function (network) {
 
     var unweighted = false;
 
-  // if unweighted, all weights are 2
+    // if unweighted, all weights are 2
     if (network.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
@@ -162,7 +197,8 @@ export var drawGraph = function (network) {
 
     var svg = d3.select($container[0]).append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .attr("id", "exportContainer");
 
     var zoomContainer = svg.append("g") // required for zoom to work
         .attr("class", "boundingBox")
@@ -172,10 +208,12 @@ export var drawGraph = function (network) {
     var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
 
     var zoom = d3.zoom()
-        .scaleExtent([1 / 2, 4])
+        .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
-    svg.style("pointer-events", "all").call(zoomDrag);
+    svg.style("pointer-events", "all").call(zoomDrag)
+        .style("font-family", "sans-serif");
+
 
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
@@ -183,8 +221,8 @@ export var drawGraph = function (network) {
 
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
-  // This rectangle catches all of the mousewheel and pan events, without letting
-  // them bubble up to the body.
+    // This rectangle catches all of the mousewheel and pan events, without letting
+    // them bubble up to the body.
     boundingBoxContainer.append("rect")
         .attr("width", width)
         .attr("height", height)
@@ -212,114 +250,78 @@ export var drawGraph = function (network) {
         zoom.scaleTo(container, zoomScale);
     };
 
+    // See setupZoomElements below to see how these are initialized. They are declared here because
+    // updateAppBasedOnZoomValue uses them (lexical positioning is chosen here for better context).
+    let sliderMidpoint;
+    let zoomScaleSliderLeft;
+    let zoomScaleSliderRight;
+
     const updateAppBasedOnZoomValue = () => {
-        var currentPoint = grnState.zoomValue * 100;
-        var equivalentScale;
-        if (adaptive || (!adaptive && grnState.zoomValue <= ADAPTIVE_MAX_SCALE)) {
-            if (currentPoint <= leftPoints) {
-                equivalentScale = MIN_SCALE;
-                equivalentScale += scaleIncreasePerLeftPoint * currentPoint;
-            } else {
-                currentPoint = currentPoint - leftPoints;
-                equivalentScale = MIDDLE_SCALE;
-                equivalentScale += scaleIncreasePerRightPoint * currentPoint;
-            }
-            zoomSliderScale = equivalentScale;
-            setGraphZoom(equivalentScale);
+        const zoomDisplay = grnState.zoomValue;
+        if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
+            setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
         } else {
-          // Prohibits zooming past 100% if (!adaptive && grnState.zoomValue >= ADAPTIVE_MAX_SCALE)
-            grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
             setGraphZoom(MIDDLE_SCALE);
         }
 
-        $(ZOOM_CONTROL).val(grnState.zoomValue);
+        const finalDisplay = grnState.zoomValue;
+        $(ZOOM_PERCENT).text(`${finalDisplay}%`);
 
-        let zoomAsPercent = Math.round(grnState.zoomValue / ZOOM_SLIDER_MAX_VAL * ZOOM_RANGE);
-        if (zoomAsPercent === 0) {
-            zoomAsPercent = MIDDLE_SCALE;
+        // Special handling for zoom input field: the user might be in the middle of typing a value that is
+        // _temporarily_ out of range (e.g., "1" while typing "100") and we don’t want to overwrite that.
+        // The special case can be detected if the input element currently has focus.
+        if (document.activeElement !== document.querySelector(ZOOM_INPUT)) {
+            $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        $(ZOOM_PERCENT).text(`${zoomAsPercent}%`);
-        $(ZOOM_INPUT).val(zoomAsPercent);
+        $(ZOOM_SLIDER).val((finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)
+            .invert(finalDisplay));
     };
 
-    var leftPoints;
-    var rightPoints;
-    var scaleIncreasePerLeftPoint;
-    var scaleIncreasePerRightPoint;
-/*
-    We have to do some mapping so that the zoom slider appears as it should.
-    Zooming out sets the scale to a value between 0 and 1. Zooming in sets it
-    to a value between 1 and infinity. A scale of 0.25 to 5 on a zoom slider
-    without transformations will have 1 at the very far left. However, that's
-    an inaccurate way to represent what's actually happening. So this function
-    maps the scale from 0 to some x, with that x being calculated based on the
-    input scales.
-*/
-    var setupZoomSlider = function (minScale) {
-      // If the maximumScale is 1, we won't need to calculate any values from 1 to maxScale.
-      // So we'll just treat it as 0.
+    /**
+     * To eliminate coupling between how the zoom slider element is defined in markup and how zoom values are
+     * calculated and displayed, we define this function to read the zoom slider for its minimum, maximum, and
+     * midpoint. The slider’s minimum will be shown as MIN_DISPLAY, the slider’s maximum will be shown as
+     * ADAPTIVE_MAX_DISPLAY, and the slider’s midpoint will be shown as ZOOM_DISPLAY_MIDDLE.
+     *
+     * Elements showing minimum and maximum display values are also updated here so that they are consistent
+     * with these constants. This way, all zoom calculations are based on these constants, and changing these
+     * constants should be all that is needed to adjust displayed and actual zoom values.
+     */
+    var setupZoomSlider = () => {
+        const sliderMin = +$(ZOOM_SLIDER).attr("min");
+        const sliderMax = +$(ZOOM_SLIDER).attr("max");
+        sliderMidpoint = (sliderMin + sliderMax) / 2;
 
-        var maxScale = ADAPTIVE_MAX_SCALE;
+        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE);
+        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY);
 
-      // Each integer on the zoom is equivalent to 100 steps.
-        var NUMBER_POINTS_PER_INT = 100;
-
-      // Get the value that, if multiplied by the minScale value, would return 1. (ex: 0.25 * 4 = 1)
-      // This gives us the equivalent value of this minimum scale, should it be treated
-      // as a scale increase. This mostly allows us to treat this minimum scale as a non-decimal value,
-      // but it also provides a way to compare the total effect this minimum scale would have
-      // in a way that is easier to understand.
-        var minScaleReversed = 100 / (minScale * 100);
-
-      // Number of points required to display the minimum scale, now that's it's been transformed. These
-      // are the points that represent everything on the scale less than one.
-        leftPoints = minScaleReversed * NUMBER_POINTS_PER_INT;
-
-      // We want to end up with a total increase that, once we've gone through all the
-      // left points, produces 1 when added to minscale. So for scale 0.25 with 400
-      // left points, we need to know what we could add to 0.25 400 times to produce 1.
-      // We divide 0.75 by 400  to get that result.
-        scaleIncreasePerLeftPoint = (1 - minScale) / leftPoints;
-
-      // Points representing scales greater than 1.
-        rightPoints = maxScale * NUMBER_POINTS_PER_INT;
-
-      // For the same concept as above, we need to figure out what to add to 1 so
-      // so that we can end up with maxScale. Note that we start at 1 and not 0 because
-      // the scale is beginning at 1.
-        scaleIncreasePerRightPoint = (maxScale - MIDDLE_SCALE) / rightPoints;
-        var totalPoints = leftPoints + rightPoints;
-
-      // Returns the x that we're mapping to. Now we can set up the range slider.
-        var maxRangeValue = totalPoints / 100;
-
-        $(ZOOM_SLIDER).attr("min", 0);
-        $(ZOOM_SLIDER).attr("max", maxRangeValue);
+        // Reset the zoom value to the midpoint whenever we load a new network.
         if (grnState.newNetwork) {
-            grnState.zoomValue = 0.01 * leftPoints;
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
         }
 
         updateAppBasedOnZoomValue();
     };
 
-    setupZoomSlider(MIN_SCALE);
-
-    var ZOOM_SLIDER_MAX_VAL = 8;
-    var ZOOM_RANGE = 200;
+    setupZoomSlider();
 
     var zoomInputValidator = function (value) {
-        return valueValidator(1, 200, value);
+        return valueValidator(MIN_DISPLAY, ADAPTIVE_MAX_DISPLAY, value);
     };
 
     $(ZOOM_INPUT).on("input", () => {
-        const zoomAsPercent = zoomInputValidator(+$(ZOOM_INPUT).val());
-        grnState.zoomValue = zoomAsPercent * (ZOOM_SLIDER_MAX_VAL / ZOOM_RANGE);
+        grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
         updateAppBasedOnZoomValue();
-    });
+    }).blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
 
     d3.select(ZOOM_SLIDER).on("input", function () {
-        grnState.zoomValue = +$(this).val();
+        const sliderValue = +$(this).val();
+        grnState.zoomValue = Math.floor(
+            (sliderValue <= sliderMidpoint ? zoomScaleSliderLeft : zoomScaleSliderRight)(sliderValue)
+        );
         updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
         manualZoom = true;
@@ -331,7 +333,7 @@ export var drawGraph = function (network) {
         updateAppBasedOnZoomValue();
     }
 
-    d3.selectAll(".boundBoxSize").on("click", function () {
+    const adjustGraphSize = () => {
         var newWidth = $container.width();
         var newHeight = $container.height();
 
@@ -343,13 +345,17 @@ export var drawGraph = function (network) {
             height = newHeight;
         }
 
-      // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
-      // Is inconsistent, but I'm tired of fighting with it...
+        // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
+        // Is inconsistent, but I'm tired of fighting with it...
         d3.select("svg").attr("width", newWidth)
-            .attr("height", $(".grnsight-container").hasClass("containerFit") ? newHeight : newHeight);
+            .attr("height", $(".grnsight-container").hasClass(VIEWPORT_FIT) ? newHeight : newHeight);
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
-    });
+    };
+
+    mutationCallback = adjustGraphSize;
+    resizeObserver.disconnect();
+    resizeObserver.observe($container.get(0), { attributes: true });
 
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
@@ -364,8 +370,8 @@ export var drawGraph = function (network) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
-            if (zoomSliderScale > 1) {
-                grnState.zoomValue = ADAPTIVE_MAX_SCALE;
+            if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
+                grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
                 updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
             }
@@ -387,12 +393,6 @@ export var drawGraph = function (network) {
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
-    });
-
-    $(window).on("resize", function () {
-        if ($container.hasClass("containerFit")) {
-            $(".boundBoxSize").trigger("click");
-        }
     });
 
     function center () {
@@ -443,7 +443,8 @@ export var drawGraph = function (network) {
             .style("stroke-width", function (d) {
                 var baseThickness = getEdgeThickness(d);
                 return Math.max(baseThickness, 7);
-            });
+            })
+            .attr("stroke-opacity", "0");
     }
 
     link.append("path")
@@ -493,9 +494,9 @@ export var drawGraph = function (network) {
                 return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
             } else {
 
-              // If negative, you need one bar for horizontal and one for vertical.
-              // If the user is not coloring the weighted
-              // sheets, then we make all of the markers arrowheads.
+                // If negative, you need one bar for horizontal and one for vertical.
+                // If the user is not coloring the weighted
+                // sheets, then we make all of the markers arrowheads.
                 if (d.value < 0 && grnState.colorOptimal) {
                     defs.append("marker")
                         .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
@@ -522,22 +523,22 @@ export var drawGraph = function (network) {
                         })
                         .attr("orient", 180)
                         .append("rect")
-                            .attr("width", function () {
-                                return d.strokeWidth;
-                            })
-                            .attr("height", function () {
-                                return 25 + d.strokeWidth;
-                            })
-                            .attr("rx", 10)
-                            .attr("ry", 10)
-                            .attr("style", function () {
-                                if ( normalize(d) <= grayThreshold) {
-                                    color = "gray";
-                                } else {
-                                    color = d.stroke;
-                                }
-                                return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
-                            });
+                        .attr("width", function () {
+                            return d.strokeWidth;
+                        })
+                        .attr("height", function () {
+                            return 25 + d.strokeWidth;
+                        })
+                        .attr("rx", 10)
+                        .attr("ry", 10)
+                        .attr("style", function () {
+                            if ( normalize(d) <= grayThreshold) {
+                                color = "gray";
+                            } else {
+                                color = d.stroke;
+                            }
+                            return "stroke:" + color + "; fill: " + color + "; stroke-width: 0";
+                        });
 
                     defs.append("marker")
                         .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
@@ -632,11 +633,11 @@ export var drawGraph = function (network) {
                         })
                         .attr("orient", function () {
                             return (x1 === x2 && y1 === y2) ?
-                            {
-                                2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
-                                8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
-                                14: 232
-                            }[d.strokeWidth] : "auto";
+                                {
+                                    2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
+                                    8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
+                                    14: 232
+                                }[d.strokeWidth] : "auto";
                         })
                         .append("path")
                         .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
@@ -657,23 +658,27 @@ export var drawGraph = function (network) {
 
     if (network.sheetType === "weighted") {
         link.append("text")
-        .attr("class", "weight")
-        .attr("text-anchor", "middle")
-        .attr("text-anchor", "middle")
-        .text(function (d) {
-            return d.value.toPrecision(4);
-        });
+            .attr("class", "weight")
+            .attr("text-anchor", "middle")
+            .attr("text-anchor", "middle")
+            .attr("fill", "rgb(0,0,0)")
+            .style("font-family", "sans-serif")
+            .text(function (d) {
+                return d.value.toPrecision(4);
+            });
 
         weight = weight.data(network.links)
-        .enter().append("text")
-        .attr("class", "weight")
-        .attr("text-anchor", "middle")
-        .text(function (d) {
-            return d.value.toPrecision(4);
-        })
-        .each(function (d) {
-            d.weightElement = d3.select(this);
-        });
+            .enter().append("text")
+            .attr("class", "weight")
+            .attr("text-anchor", "middle")
+            .attr("fill", "rgb(0,0,0)")
+            .style("font-family", "sans-serif")
+            .text(function (d) {
+                return d.value.toPrecision(4);
+            })
+            .each(function (d) {
+                d.weightElement = d3.select(this);
+            });
 
     }
 
@@ -705,14 +710,14 @@ export var drawGraph = function (network) {
         d.target.centerX = d.target.x + (w / 2);
         d.target.centerY = d.target.y + (h / 2);
 
-          // This function calculates the newX and newY.
+        // This function calculates the newX and newY.
         smartPathEnd(d, w, h);
         x1 = d.source.newX;
         y1 = d.source.newY;
         x2 = d.target.newX;
         y2 = d.target.newY;
 
-          // Unit vectors.
+        // Unit vectors.
         var ux = x2 - x1;
         var uy = y2 - y1;
         var umagnitude = Math.sqrt(ux * ux + uy * uy);
@@ -725,7 +730,7 @@ export var drawGraph = function (network) {
         vx /= vmagnitude;
         vy /= vmagnitude;
 
-          // Check for vector direction.
+        // Check for vector direction.
         if (((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) ||
             ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
             vx = -vx; vy = -vy;
@@ -768,7 +773,7 @@ export var drawGraph = function (network) {
             MINIMUM_DISTANCE = d.strokeWidth > 11 ? 16.5 : 15;
         }
 
-    // Set an offset if the edge is a repressor to make room for the flat arrowhead
+        // Set an offset if the edge is a repressor to make room for the flat arrowhead
         var globalOffset = parseFloat(d.strokeWidth);
 
         if (d.value < 0 && grnState.colorOptimal) {
@@ -777,62 +782,62 @@ export var drawGraph = function (network) {
 
         var thicknessAdjustment = globalOffset > MINIMUM_DISTANCE ? 1 : 0;
 
-    // We need to work out the (tan of the) angle between the
-    // imaginary horizontal line running through the center of the
-    // target node and the imaginary line connecting the center of
-    // the target node with the top-left corner of the same
-    // node. Of course, this angle is fixed.
+        // We need to work out the (tan of the) angle between the
+        // imaginary horizontal line running through the center of the
+        // target node and the imaginary line connecting the center of
+        // the target node with the top-left corner of the same
+        // node. Of course, this angle is fixed.
         d.tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
 
-    // We also need to work out the (tan of the) angle between the
-    // imaginary horizontal line running through the center of the
-    // target node and the imaginary line connecting the center of
-    // the target node with the center of the source node. This
-    // angle changes as the nodes move around the screen.
+        // We also need to work out the (tan of the) angle between the
+        // imaginary horizontal line running through the center of the
+        // target node and the imaginary line connecting the center of
+        // the target node with the center of the source node. This
+        // angle changes as the nodes move around the screen.
         d.tanRatioMoveable = Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
         // Note, JavaScript handles division-by-zero by returning
         // Infinity, which in this case is useful, especially
         // since it handles the subsequent Infinity arithmetic
         // correctly.
 
-    // Now work out the intersection point
+        // Now work out the intersection point
         if (d.tanRatioMoveable === d.tanRatioFixed) {
-      // Then path is intersecting at corner of textbox so draw
-      // path to that point
+            // Then path is intersecting at corner of textbox so draw
+            // path to that point
 
-      // By default assume path intersects a left-side corner
+            // By default assume path intersects a left-side corner
             d.target.newX = d.target.x - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerX < d.source.newX) {
-          // i.e. if target node is to left of the source node
-          // then path intersects a right-side corner
+                // i.e. if target node is to left of the source node
+                // then path intersects a right-side corner
                 d.target.newX = d.target.x + w + globalOffset;
             }
 
-      // By default assume path intersects a top corner
+            // By default assume path intersects a top corner
             d.target.newY = d.target.y - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerY < d.source.newY) {
-          // i.e. if target node is above the source node
-          // then path intersects a bottom corner
+                // i.e. if target node is above the source node
+                // then path intersects a bottom corner
                 d.target.newY = d.target.y + h + globalOffset;
             }
         }
 
         if (d.tanRatioMoveable < d.tanRatioFixed) {
-      // Then path is intersecting on a vertical side of the
-      // textbox, which means we know the x-coordinate of the
-      // path endpoint but we need to work out the y-coordinate
+            // Then path is intersecting on a vertical side of the
+            // textbox, which means we know the x-coordinate of the
+            // path endpoint but we need to work out the y-coordinate
 
-      // By default assume path intersects left vertical side
+            // By default assume path intersects left vertical side
             d.target.newX = d.target.x - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerX < d.source.newX) {
-        // i.e. if target node is to left of the source node
-        // then path intersects right vertical side
+                // i.e. if target node is to left of the source node
+                // then path intersects right vertical side
                 if (d.type !== "arrowhead") {
                     d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
@@ -840,31 +845,31 @@ export var drawGraph = function (network) {
                 }
             }
 
-      // Now use a bit of trigonometry to work out the y-coord.
+            // Now use a bit of trigonometry to work out the y-coord.
 
-      // By default assume path intersects towards top of node
+            // By default assume path intersects towards top of node
             d.target.newY = d.target.centerY - ((d.target.centerX - d.target.x) * d.tanRatioMoveable);
 
-      // But...
+            // But...
             if (d.target.centerY < d.source.newY) {
-        // i.e. if target node is above the source node
-        // then path intersects towards bottom of the node
+                // i.e. if target node is above the source node
+                // then path intersects towards bottom of the node
                 d.target.newY = (2 * d.target.y) - d.target.newY + h;
             }
         }
 
         if (d.tanRatioMoveable > d.tanRatioFixed) {
-      // Then path is intersecting on a horizontal side of the
-      // textbox, which means we know the y-coordinate of the
-      // path endpoint but we need to work out the x-coordinate
+            // Then path is intersecting on a horizontal side of the
+            // textbox, which means we know the y-coordinate of the
+            // path endpoint but we need to work out the x-coordinate
 
-      // By default assume path intersects top horizontal side
+            // By default assume path intersects top horizontal side
             d.target.newY = d.target.y - globalOffset;
 
-      // But...
+            // But...
             if (d.target.centerY < d.source.newY) {
-        // i.e. if target node is above the source node
-        // then path intersects bottom horizontal side
+                // i.e. if target node is above the source node
+                // then path intersects bottom horizontal side
                 if (d.type !== "arrowhead") {
                     d.target.newY = d.target.y + h + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
@@ -872,15 +877,15 @@ export var drawGraph = function (network) {
                 }
             }
 
-      // Now use a bit of trigonometry to work out the x-coord.
+            // Now use a bit of trigonometry to work out the x-coord.
 
-      // By default assume path intersects towards lefthand side
+            // By default assume path intersects towards lefthand side
             d.target.newX = d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable);
 
-      // But...
+            // But...
             if (d.target.centerX < d.source.newX) {
-        // i.e. if target node is to left of the source node
-        // then path intersects towards the righthand side
+                // i.e. if target node is to left of the source node
+                // then path intersects towards the righthand side
                 d.target.newX = (2 * d.target.x) - d.target.newX + w;
             }
         }
@@ -914,11 +919,12 @@ export var drawGraph = function (network) {
         node.selectAll(".nodeText").remove();
         var text = node.append("text")
             .attr("dy", NODE_HEIGHT)
-            .attr("text-anchor", "middle")
             .attr("class", "nodeText")
+            .attr("fill", "rgb(0, 0, 0)")
+            .style("text-anchor", "middle")
             .style("font-size", "18px")
             .style("stroke-width", "0")
-            .style("fill", "black")
+            .style("font-family", "sans-serif")
             .text(function (d) {
                 return d.name;
             })
@@ -960,65 +966,69 @@ export var drawGraph = function (network) {
         return self.indexOf(value) === index;
     }
 
-    var getExpressionData = function (gene, strain, average) {
-        var strainData = grnState.network["expression"][strain];
+    const getExpressionData = (gene, strain, average) => {
+        const strainData = grnState.network.expression[strain];
         if (average) {
-            var uniqueTimePoints = strainData.time_points.filter(onlyUnique);
-            var avgMap = {};
+            const uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
+            let avgMap = {};
             uniqueTimePoints.forEach(function (key) {
                 avgMap[key] = [];
             });
-            strainData.time_points.forEach(function (time, index) {
+            strainData.timePoints.forEach(function (time, index) {
                 avgMap[time].push(strainData.data[gene][index]);
             });
-            var avgs = [];
+            let avgs = [];
             Object.keys(avgMap).forEach(function (key) {
-                var length = avgMap[key].length;
-                var sum = avgMap[key].reduce(function (partialSum, currentValue) {
+                const length = avgMap[key].length;
+                const sum = avgMap[key].reduce(function (partialSum, currentValue) {
                     return partialSum + currentValue;
                 }, 0);
                 avgs.push(sum / length);
             });
             return {data: avgs, timePoints: uniqueTimePoints};
         }
-        return {data: strainData.data[gene], timePoints: strainData.time_points};
+        return {data: strainData.data[gene], timePoints: strainData.timePoints};
     };
 
     var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
         var timePoints = [];
         node.each(function (p) {
             d3.select(this)
-            .append("g")
-            .selectAll(".coloring")
-            .data(function () {
-                var result = getExpressionData(p.name, dataset, average);
-                timePoints = result.timePoints;
-                return result.data;
-            })
-            .attr("class", "coloring")
-            .enter().append("rect")
-            .attr("width", function () {
-                var width = rect.attr("width") / timePoints.length;
-                return width + "px";
-            })
-            .attr("class", "coloring")
-            .attr("height", rect.attr("height") / 2 + "px")
-            .attr("transform", function (d, i) {
-                var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
-                var xOffset = i * (rect.attr("width") / timePoints.length);
-                return "translate(" + xOffset + "," +  yOffset + ")";
-            })
-            .attr("stroke-width", "0px")
-            .style("fill", function (d) {
-                d = d || 0; // missing values are changed to 0
-                var scale = d3.scaleLinear()
-                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
-                    .range([0, 1]);
-                return d3.interpolateRdBu(scale(-d));
-            })
-            .text(function (d) {
-                return "data " + JSON.stringify(d) + " of " + p.name;
-            });
+                .append("g")
+                .selectAll(".coloring")
+                .data(function () {
+                    if (grnState.network.expression[dataset].data[p.name]) {
+                        const result = getExpressionData(p.name, dataset, average);
+                        timePoints = result.timePoints;
+                        return result.data;
+                    } else {
+                        return 0;
+                    }
+                })
+                .attr("class", "coloring")
+                .enter().append("rect")
+                .attr("width", function () {
+                    var width = rect.attr("width") / timePoints.length;
+                    return width + "px";
+                })
+                .attr("class", "coloring")
+                .attr("height", rect.attr("height") / 2 + "px")
+                .attr("transform", function (d, i) {
+                    var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
+                    var xOffset = i * (rect.attr("width") / timePoints.length);
+                    return "translate(" + xOffset + "," +  yOffset + ")";
+                })
+                .attr("stroke-width", "0px")
+                .style("fill", function (d) {
+                    d = d || 0; // missing values are changed to 0
+                    var scale = d3.scaleLinear()
+                        .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+                        .range([0, 1]);
+                    return d3.interpolateRdBu(scale(-d));
+                })
+                .text(function (d) {
+                    return "data " + JSON.stringify(d) + " of " + p.name;
+                });
         });
     };
 
@@ -1027,60 +1037,78 @@ export var drawGraph = function (network) {
         d3.select($nodeColoringLegend[0]).selectAll("svg").remove();
         var xMargin = 10;
         var yMargin = 30;
-        var width = 200;
+        var width = 195;
         var height = 10;
         var textYOffset = 10;
-        var increment = 0.1;
 
         var svg = d3.select($nodeColoringLegend[0])
             .append("svg")
-            .attr("width", width + xMargin * 2)
+            .attr("width", "100%")
             .attr("height", height + yMargin)
             .append("g")
-            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")");
+            .attr("transform", "translate(" + xMargin / 2 + "," + yMargin / 2 + ")")
+            .attr("id", "nodeColoringLegendId");
 
+        // Thank you https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
+        const linearGradientId = "node-coloring-color-scale";
+        var defs = svg.append("defs");
+        var linearGradient = defs.append("linearGradient")
+            .attr("id", linearGradientId)
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%");
+
+        const increment = Math.abs(logFoldChangeMaxValue) / 50;  // Guarantee 50 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
+        var scale = d3.scaleLinear()
+            .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
+            .range([0, 1]);
 
-        var coloring = svg.selectAll(".node-coloring-legend")
+        linearGradient.selectAll("stop")
             .data(gradientValues)
-            .attr("class", "node-coloring-legend");
-
-        coloring.enter().append("rect")
-            .attr("width", width / gradientValues.length + "px")
-            .attr("height", height + "px")
-            .attr("transform", function (d, i) {
-                return "translate(" + (i * (width / gradientValues.length)) + "," + 0 + ")";
+            .enter().append("stop")
+            .attr("offset", function (d, i) {
+                return i / (gradientValues.length - 1);
             })
-            .style("fill", function (d) {
-                var scale = d3.scaleLinear()
-                    .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
-                    .range([0, 1]);
-
-                // We negate d because we actually want red to be on the right.
+            .attr("stop-color", function (d) {
                 return d3.interpolateRdBu(scale(-d));
             });
 
+        svg.append("rect")
+            .attr("width", `${width}px`)
+            .attr("height", `${height}px`)
+            .style("fill", `url(#${linearGradientId})`);
+
         var legendLabels = {
-            "left": {
-                "textContent": (-logFoldChangeMaxValue).toFixed(2),
-                "x": -xMargin / 2
+            left: {
+                textAnchor: "start",
+                textContent: (-logFoldChangeMaxValue).toFixed(2),
+                x: 0
             },
-            "center": {
-                "textContent": "0",
-                "x": width / 2
+            center: {
+                textAnchor: "middle",
+                textContent: "0",
+                x: width / 2
             },
-            "right": {
-                "textContent": (logFoldChangeMaxValue).toFixed(2),
-                "x": width - xMargin / 2
-            },
+            right: {
+                textAnchor: "end",
+                textContent: (logFoldChangeMaxValue).toFixed(2),
+                x: width
+            }
         };
-        var g = document.querySelector("body > div.sidebar > div.node-coloring > div > svg > g");
+        /* eslint-disable max-len */
+        var g = document.getElementById("nodeColoringLegendId");
+        /* eslint-enable max-len */
+
         for (var key in legendLabels) {
             var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
             label.textContent = legendLabels[key].textContent;
             label.setAttribute("font-size", "8px");
+            label.setAttribute("text-anchor", legendLabels[key].textAnchor);
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
+            label.setAttribute("fill", "rgb(0,0,0)");
             g.appendChild(label);
         }
     };
@@ -1093,9 +1121,9 @@ export var drawGraph = function (network) {
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
             colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
+                grnState.nodeColoring.logFoldChangeMaxValue);
             colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
-                        grnState.nodeColoring.logFoldChangeMaxValue);
+                grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
@@ -1257,8 +1285,8 @@ export var drawGraph = function (network) {
         }
     };
 
-  // Tick only runs while the graph physics are still running.
-  // (I.e. when the graph is completely relaxed, tick stops running.)
+    // Tick only runs while the graph physics are still running.
+    // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
         var getSelfReferringEdge = function (node) {
             return link.select("path")["_groups"][0].map(function (path) {
@@ -1349,7 +1377,7 @@ export var drawGraph = function (network) {
                     var dy = y2 - y1;
                     var dr = Math.sqrt(dx * dx + dy * dy);
 
-              // Defaults for normal edge.
+                    // Defaults for normal edge.
                     var drx = dr;
                     var dry = dr;
                     var xRotation = 0; // degrees
@@ -1357,33 +1385,33 @@ export var drawGraph = function (network) {
                     var sweep = 1;     // 1 or 0
                     var offset = parseFloat(d.strokeWidth);
 
-              // Edge adjustment values when long self-node edges get hidden behind the node.
+                    // Edge adjustment values when long self-node edges get hidden behind the node.
                     var DEFAULT_NODE_SHIFT = 1.033;
                     var SHORT_NODE_LIMIT = 135;
                     var ADDITIONAL_SHIFT = 0.07;
                     var END_POINT_ADJUSTMENT = 1.2;
 
 
-            // Self edge.
+                    // Self edge.
                     if (x1 === x2 && y1 === y2) {
-            // Move the position of the loop.
+                        // Move the position of the loop.
                         x1 = d.source.x + (d.source.textWidth) * DEFAULT_NODE_SHIFT;
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
-            // Fiddle with this angle to get loop oriented.
+                        // Fiddle with this angle to get loop oriented.
                         xRotation = 45;
 
-            // Needs to be 1.
+                        // Needs to be 1.
                         largeArc = 1;
 
-            // Change sweep to change orientation of loop.
+                        // Change sweep to change orientation of loop.
                         sweep = 1;
 
                         drx = getSelfReferringRadius(d);
                         dry = getSelfReferringRadius(d);
 
-            // For whatever reason the arc collapses to a point if the beginning
-            // and ending points of the arc are the same, so kludge it.
+                        // For whatever reason the arc collapses to a point if the beginning
+                        // and ending points of the arc are the same, so kludge it.
                         if (d.source.textWidth > SHORT_NODE_LIMIT) {
                             DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
                         }

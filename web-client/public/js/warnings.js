@@ -3,13 +3,8 @@ export var displayWarnings = function (warnings) {
       "The graph will be loaded, but may not be displayed accurately. " +
       "We recommend you review your file and ensure that it is formatted correctly. " +
       "To view the details of the warning(s), please click on the \"Warnings List\" below.");
-
     var warningsString = "";
-    // printed = [MISSING_SOURCE,MISSING_TARGET,INVALID_DATA,RANDOM_DATA,
-    // EMPTY_ROW,INVALID_NETWORK_SIZE,INVALID_CELL_DATA_TYPE]
-
     var NUM_POSSIBLE_WARNINGS = 11;
-
     // Fill printed with 0s programatically
     var printed = [];
     for (var i = 0; i < NUM_POSSIBLE_WARNINGS; i++) {
@@ -49,6 +44,9 @@ export var displayWarnings = function (warnings) {
     var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
+    var missingExpressionSheetWarningCount = warnings.filter(function (x) {
+        return x.warningCode === "MISSING_EXPRESSION_SHEET";
+    });
 
     var appendWarning = function (warning) {
         warningsString += warning.errorDescription + "<br><br>";
@@ -80,6 +78,7 @@ export var displayWarnings = function (warnings) {
     createWarningsString(edgeDefaultNotDirectedCount, 8);
     createWarningsString(sifFormatWarningCount, 9);
     createWarningsString(incorrectlyNamedSheetWarningCount, 10);
+    createWarningsString(missingExpressionSheetWarningCount, 11);
 
     $("#warningsList").html(warningsString);
 
