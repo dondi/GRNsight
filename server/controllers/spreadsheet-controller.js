@@ -454,10 +454,6 @@ var processGRNmap = function (path, res, app) {
     // Parse expression and 2-column data, then add to network object
     // Eventually, will split this up into parsing for each type of sheet.
     var additionalData = parseAdditionalSheets(sheet);
-<<<<<<< HEAD
-    Object.assign(network, additionalData);
-    //assigning additional data to "network" key now
-=======
     var expCount = 0;
     sheet.forEach(function (sheet) {
         // CHECK FOR MISSING EXPRESSION SHEET
@@ -519,7 +515,6 @@ var processGRNmap = function (path, res, app) {
             .forEach(data => network.warnings.push(data));
         }
     }
->>>>>>> origin/beta
 
     Object.assign(network, additionalData, expressionData);
     return (network.errors.length === 0) ?

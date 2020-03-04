@@ -301,12 +301,9 @@ html
     div(class='sidebar' data-iframe-height)
       div(class='panel-group')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
-        di(id="speciesMenu")
-          span(id='speciesIdentified' href='#' ) Species Identified : 
-            |  &nbsp;
-            span(id='speciesIdentifiedIcon' href='#' class='glyphicon glyphicon-remove')
-            li(class='dropdown')
-              input(id='speciesDisplay' href='#' class="btn btn-default btnSidebar dropdown-toggle" type="button" data-toggle='dropdown' value='Saccharomyces Cerevisiae')
+        div(id="speciesMenu" class='layoutSidebarPanelSpecies force-graph')
+            li(class='dropdown show')
+              input(id='speciesDisplay' href='#' class="btn btn-default sidebarPanelHeaderSpecies dropdown-toggle" type="button" data-toggle='dropdown' value='Saccharomyces Cerevisiae')
               ul(class='dropdown-menu' role='menu')
                 li
                   button(href='#' id='yeastDisplay' class='btn btnSidebar') Saccharomyces Cerevisiae
@@ -320,6 +317,8 @@ html
                   button(href='#' id='mouseDisplay' class='btn btnSidebar') Mus Musculus
                 li
                   button(href='#' id='cressDisplay' class='btn btnSidebar') Arabidopsis Thaliana
+             p(id='speciesIdentified' href='#' class='panel-title sidebarPanelHeaderID') Species Identified : 
+                span(id='speciesIdentifiedIcon' href='#' class='glyphicon glyphicon-remove')
         div(class="force-graph panel panel-default")
             p(class='panel-title sidebarPanelHeader')
               a(data-toggle='collapse' data-target='#layoutSidebarPanel') Layout
