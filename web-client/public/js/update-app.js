@@ -276,11 +276,12 @@ const updateLinkDistanceSliderValues = () => {
 
 
 const speciesIdenified = () => {
-    if (grnState.genePageData.identified === true) {
+    if (grnState.genePageData.identified) {
         $(speciesIdentifiedIcon).removeClass("glyphicon-remove");
         $(speciesIdentifiedIcon).addClass("glyphicon-ok");
     }
-
+    $(speciesIdentifiedIcon).removeClass("glyphicon-remove");
+    $(speciesIdentifiedIcon).addClass("glyphicon-ok");
 };
 
 
@@ -475,9 +476,8 @@ export const updateApp = grnState => {
                     identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
                 }
             }
-            //delete! console.log(grnState.genePageData) // printline to check data
-
-            //delete! speciesIdenified()
+            
+            speciesIdenified();
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
@@ -539,32 +539,32 @@ export const updateApp = grnState => {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Saccharomyces Cerevisiae");
         speciesIdenified();
-    })
+    });
     $(humanDisplay).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Homo Sapien");
         speciesIdenified();
-    })
+    });
     $(fruitflyDisplay).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Drosophila Melanogaster");
         speciesIdenified();
-    })
+    });
     $(nematodeDisplay).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Caenorhabditis Elegans");
-        speciesIdenified();;
-    })
+        speciesIdenified();
+    });
     $(mouseDisplay).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Mus Musculus");
         speciesIdenified();
-    })
+    });
     $(cressDisplay).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Arabidopsis Thaliana");
         speciesIdenified();
-    })
+    });
 
 // Graph Layout
     if (grnState.graphLayout === FORCE_GRAPH) {
