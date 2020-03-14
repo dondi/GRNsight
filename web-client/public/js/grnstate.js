@@ -88,25 +88,24 @@ export const grnState = {
 // left defaulting to yeast for tests, until a better solution is found
 // Setting base case to yeast
     genePageData: {
-        common_name: "Yeast",
-        species: "saccaromyces cerevisiae",
-        taxon_jaspar: "559292",
-        taxon_uniprot: "4932",
+        commonName: "Yeast",
+        species: "Saccharomyces Cerevisiae",
+        taxonJaspar: "559292",
+        taxonUniprot: "4932",
         identified: false,
-        button: undefined,
     },
 
     nameToTaxon: {
-        //Treating like a dictionary with keys being the english name
-        //and values being a tuple of (latin name, Uniprot, Jaspar)
-        //some taxon ids are different between the two
-        //changed spec names for common english and will have them formatted before calling an api
+        // Treating like a dictionary with keys being the english name
+        // and values being a tuple of (latin name, Uniprot, Jaspar)
+        // some taxon ids are different between the two
+        // changed spec names for common english and will have them formatted before calling an api
         human: { spec: "Homo Sapien", jaspar: "9606", uniprot: "9606" },
         yeast: { spec: "Saccharomyces Cerevisiae", jaspar: "559292", uniprot: "4932" },
-        fruit_fly: { spec: "Drosophila Melanogaster", jaspar: "7227", uniprot: "7227" },
-        nematode_worm: { spec: "Caenorhabditis Elegans", jaspar: "6293", uniprot: "6293" },
-        house_mouse: { spec: "Mus Musculus", jaspar: "10090", uniprot: "10090" },
-        thale_cress: { spec: "Arabidopsis Thaliana", jaspar: "3702", uniprot: "3702" }
+        fruitFly: { spec: "Drosophila Melanogaster", jaspar: "7227", uniprot: "7227" },
+        nematodeWorm: { spec: "Caenorhabditis Elegans", jaspar: "6293", uniprot: "6293" },
+        houseMouse: { spec: "Mus Musculus", jaspar: "10090", uniprot: "10090" },
+        thaleCress: { spec: "Arabidopsis Thaliana", jaspar: "3702", uniprot: "3702" }
     },
 
 // Slider Parameters

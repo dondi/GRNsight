@@ -274,13 +274,6 @@ const updateLinkDistanceSliderValues = () => {
             grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
-const speciesIdenified = () => {
-    if(grnState.genePageData.identified === true){
-        $(speciesIdentifiedIcon).removeClass("glyphicon-remove");
-        $(speciesIdentifiedIcon).addClass("glyphicon-ok");
-    }
-};
-
 // Grid Layout Functions
 const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
@@ -342,8 +335,8 @@ const hasExpressionData = (sheets) => {
     return false;
 };
 
-//helper method to check if the given data, a taxon id or a species name
-//is contained within the identified species, if it exists at all.
+// helper method to check if the given data, a taxon id or a species name
+// is contained within the identified species, if it exists at all.
 const identifySpeciesOrTaxon = (data) => {
     if (grnState.genePageData.identified === true) {
         return true;

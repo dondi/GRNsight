@@ -20,11 +20,11 @@ describe("The grnState model object", () => {
         };
         grnState.resetNormalizationMax.should.equal(8);
     });
-    
+
     it("should update, store, and return the species and taxon ID", () => {
-        grnState.species.should.equal("Saccharomyces_cerevisiae");
-        grnState.taxon_jaspar.should.equal("559292");
-        grnState.taxon_uniprot.should.equal("4932");
-        grnState.common_name.should.equal("yeast");
+        grnState.genePageData.species.should.equal("Saccharomyces Cerevisiae");
+        grnState.genePageData.taxon_jaspar.should.equal("559292");
+        grnState.genePageData.taxon_uniprot.should.equal("4932");
+        grnState.genePageData.common_name.should.equal("Yeast");
     });
 });
