@@ -476,7 +476,7 @@ export const updateApp = grnState => {
                     identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
                 }
             }
-            
+
             speciesIdenified();
 
             grnState.nodeColoring.nodeColoringEnabled = true;
