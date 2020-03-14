@@ -23,8 +23,8 @@ describe("The grnState model object", () => {
 
     it("should update, store, and return the species and taxon ID", () => {
         grnState.genePageData.species.should.equal("Saccharomyces Cerevisiae");
-        grnState.genePageData.taxon_jaspar.should.equal("559292");
-        grnState.genePageData.taxon_uniprot.should.equal("4932");
-        grnState.genePageData.common_name.should.equal("Yeast");
+        grnState.genePageData.taxonJaspar.should.equal("559292");
+        grnState.genePageData.taxonuniprot.should.equal("4932");
+        grnState.genePageData.commonName.should.equal("Yeast");
     });
 });

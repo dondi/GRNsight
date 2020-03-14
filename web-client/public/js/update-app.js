@@ -274,6 +274,16 @@ const updateLinkDistanceSliderValues = () => {
             grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
+
+const speciesIdenified = () => {
+    if (grnState.genePageData.identified === true) {
+        $(speciesIdentifiedIcon).removeClass("glyphicon-remove");
+        $(speciesIdentifiedIcon).addClass("glyphicon-ok");
+    }
+
+};
+
+
 // Grid Layout Functions
 const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
@@ -341,15 +351,15 @@ const identifySpeciesOrTaxon = (data) => {
     if (grnState.genePageData.identified === true) {
         return true;
     }
-    var nameTax = grnState.nameToTaxon
+    var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
         if (Object.values(nameTax[n]).includes(data.toString())) {
-            grnState.genePageData.common_name = n;
+            grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
-            grnState.genePageData.taxon_jaspar = nameTax[n].jaspar;
-            grnState.genePageData.taxon_uniprot = nameTax[n].uniprot;
+            grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
+            grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
             grnState.genePageData.identified = true;
-            $(speciesDisplay).val(grnState.genePageData.species)
+            $(speciesDisplay).val(grnState.genePageData.species);
             return grnState.genePageData.identified;
         }
     }
@@ -455,19 +465,19 @@ export const updateApp = grnState => {
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
 
-            //check if the species has been identified yet, if not try to identify it
-            //also checks if the areas have been populated at all
-            if(grnState.genePageData.identified === false){
-                if(grnState.network.meta.species !== undefined){
-                    identifySpeciesOrTaxon(grnState.network.meta.species)
+            // check if the species has been identified yet, if not try to identify it
+            // also checks if the areas have been populated at all
+            if (grnState.genePageData.identified === false) {
+                if (grnState.network.meta.species !== undefined) {
+                    identifySpeciesOrTaxon(grnState.network.meta.species);
                 }
-                if (grnState.network.meta.taxon_id !== undefined){
-                    identifySpeciesOrTaxon(grnState.network.meta.taxon_id)
+                if (grnState.network.meta.taxon_id !== undefined) {
+                    identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
                 }
             }
-            // console.log(grnState.genePageData) // printline to check data
+            //delete! console.log(grnState.genePageData) // printline to check data
 
-            speciesIdenified()
+            //delete! speciesIdenified()
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
@@ -527,33 +537,33 @@ export const updateApp = grnState => {
 // Species Menu
     $(yeastDisplay).click(function(){
         grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Saccharomyces Cerevisiae")
-        speciesIdenified()
+        identifySpeciesOrTaxon("Saccharomyces Cerevisiae");
+        speciesIdenified();
     })
     $(humanDisplay).click(function () {
         grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Homo Sapien")
-        speciesIdenified()
+        identifySpeciesOrTaxon("Homo Sapien");
+        speciesIdenified();
     })
     $(fruitflyDisplay).click(function () {
         grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Drosophila Melanogaster")
-        speciesIdenified()
+        identifySpeciesOrTaxon("Drosophila Melanogaster");
+        speciesIdenified();
     })
     $(nematodeDisplay).click(function () {
         grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Caenorhabditis Elegans")
-        speciesIdenified()
+        identifySpeciesOrTaxon("Caenorhabditis Elegans");
+        speciesIdenified();;
     })
     $(mouseDisplay).click(function () {
         grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Mus Musculus")
-        speciesIdenified()
+        identifySpeciesOrTaxon("Mus Musculus");
+        speciesIdenified();
     })
     $(cressDisplay).click(function () {
         grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Arabidopsis Thaliana")
-        speciesIdenified()
+        identifySpeciesOrTaxon("Arabidopsis Thaliana");
+        speciesIdenified();
     })
 
 // Graph Layout
