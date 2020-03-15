@@ -59,6 +59,7 @@ var errorList = {
         };
     },
 
+
     duplicateGeneError: function (geneType, geneName) {
         return {
             errorCode: "DUPLICATE_GENE",
@@ -75,6 +76,15 @@ var errorList = {
             possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
             suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
         };
+    },
+
+    geneMistmatchError: function (col) {
+        return {
+            errorCode: "GENE_MISMATCH",
+            possibleCause: "Gene names in column " + col + "do not match the order of those in the network sheet",
+            suggestedFix: "Please ensure that the gene names are the same in both the 'network' sheet and the " +
+                        "'network_optimized_weights' sheet."
+      };
     },
 
     emptyRowError: function (row) {
@@ -282,7 +292,6 @@ var parseNetworkSheet = function (sheet) {
         addError(network, errorList.missingNetworkError);
         return network;
     }
-
     for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
         if (currentSheet.data[row].length === 0) { // if the current row is empty
             if (addError(network, errorList.emptyRowError(row)) === false) {
@@ -454,16 +463,6 @@ var processGRNmap = function (path, res, app) {
     // Parse expression and 2-column data, then add to network object
     // Eventually, will split this up into parsing for each type of sheet.
     var additionalData = parseAdditionalSheets(sheet);
-    var expCount = 0;
-    sheet.forEach(function (sheet) {
-        // CHECK FOR MISSING EXPRESSION SHEET
-        if (isExpressionSheet(sheet.name)) {
-            expCount++;
-        }
-    });
-    if (expCount <= 0) {
-        addWarning(network, warningsList.missingExpressionSheetWarning);
-    }
 
     var expressionData = parseExpressionSheets(sheet);
 

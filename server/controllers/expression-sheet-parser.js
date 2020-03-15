@@ -1,6 +1,8 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
+
+
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
 const errorsList = {
@@ -23,6 +25,13 @@ const errorsList = {
             errorCode: "EMPTY_ROW",
             possibleCause: "There is an empty row in the input sheet.",
             suggestedFix: "Delete empty row, or populate with data."
+        };
+    },
+    emptyExpressionColumnError: function () {
+        return {
+            errorCode: "EMPTY_COLUMN",
+            possibleCause: "There is an empty column in the input sheet.",
+            suggestedFix: "Delete empty column, or populate with data."
         };
     },
 };
@@ -121,6 +130,8 @@ var parseExpressionSheet = function (sheet) {
         // Throw warning in case of extraneous data
         // Need to add a case where it checks the depth of the columns, as well
         const rowLength = expressionData.data.id.length;
+        let columnChecker = [];
+        let rowCounter = 0;
         Object.values(expressionData.data).forEach(function (row) {
             if (row.length !== rowLength) {
                 addExpWarning(expressionData, warningsList.extraneousDataWarning());
@@ -129,6 +140,9 @@ var parseExpressionSheet = function (sheet) {
             // Throw error in case of empty row
             let nonnullCount = 0;
             for (let i = 0; i <= rowLength; i++) {
+                if (rowCounter !== 0)  {
+                    columnChecker[i] = columnChecker + 1;
+                }
                 if (i === rowLength) {
                     if (nonnullCount === 0) {
                         addExpError(expressionData, errorsList.emptyExpressionRowError());
@@ -140,7 +154,8 @@ var parseExpressionSheet = function (sheet) {
                     }
                 }
             }
-        });
+            rowCounter++;
+        })
 
         // Throw error in case of missing column header
         let nonemptyValues = 0;
@@ -150,6 +165,12 @@ var parseExpressionSheet = function (sheet) {
         if (rowLength !== nonemptyValues) {
             addExpError(expressionData, errorsList.missingColumnHeaderError());
         }
+        // Throw error in case of empty column
+        for (let i = 0; i <= columnChecker.length; i++) {
+            if (columnChecker[i] === undefined) {
+                addExpError(expressionData, errorsList.emptyExpressionColumnError());
+            }
+        }
 
     }
 
@@ -158,12 +179,20 @@ var parseExpressionSheet = function (sheet) {
 
 module.exports = function (workbook) {
     const output = {
-        expression: {}
+        expression: {},
+        warnings: [],
+        errors: []
     };
+    var expCount = 0;
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
+            expCount++;
         }
     });
+    if (expCount <= 0) {
+        addExpWarning(output, warningsList.missingExpressionWarning());
+    }
     return output;
 };
+

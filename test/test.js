@@ -188,9 +188,12 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
+// not completed. is it checking that the genes listed in the network optimized weights
+// sheet are the same as those in the network sheet, or is it asking that all of the sheets
+// with thee genes as a header have the same order of genes listed for their headers
 var geneMistmatchError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseSheet(sheet);
+    var network = spreadsheetController.parseNetworkSheet(sheet);
 
     assert.equal(frequency, network.errors.length);
 
@@ -332,10 +335,10 @@ var extraneousDataWarning = function (input, frequency) {
     assert.equal(frequency, extraneousDataCount.length);
 };
 
-// This test is having problems!
+
 var missingExpressionWarning = function (input, frequency)  {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.processGRNmap(sheet);
+    var network = parseExpressionSheet(sheet);
     var missingExpressionCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
@@ -425,3 +428,4 @@ exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
+exports.missingExpressionWarning = missingExpressionWarning;

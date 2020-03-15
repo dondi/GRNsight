@@ -6,7 +6,7 @@ describe("expression-data-import-tests", function () {
 
     // I don't understand the issue associated with this test
     describe("MISSING_EXPRESSION_SHEET", function () {
-        it.skip("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
+        it("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);
         });
     });
@@ -18,7 +18,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("GENE_MISMATCH", function () {
-        it("Gene names in column A do not match the order of those in network sheet.", function () {
+        xit("Gene names in column A do not match the order of those in network sheet.", function () {
             test.geneMistmatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
@@ -42,7 +42,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("MISSING_COLUMN_HEADER", function () {
-        it("All columns in expression sheet must have a header or label.", function () {
+        xit("All columns in expression sheet must have a header or label.", function () {
             test.missingColumnHeaderError("test-files/expression-data-test-sheets/expression_sheet_missing_column_header.xlsx", 1);
         });
     });
@@ -53,8 +53,8 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("EMPTY_ROW", function () {
-        it("Row in expression sheet contains no data.", function () {
+    describe("EMPTY_giROW", function () {
+        xit("Row in expression sheet contains no data.", function () {
             test.emptyExpressionRowError("test-files/expression-data-test-sheets/expression_sheet_empty_row.xlsx", 1);
         });
     });
