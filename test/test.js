@@ -191,18 +191,14 @@ var emptyRowError = function (input, frequency) {
 // not completed. is it checking that the genes listed in the network optimized weights
 // sheet are the same as those in the network sheet, or is it asking that all of the sheets
 // with thee genes as a header have the same order of genes listed for their headers
-var geneMistmatchError = function (input, frequency) {
+var geneMismatchError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.parseNetworkSheet(sheet);
+    var network = parseExpressionSheet(sheet);
+    var geneMismatchCount = network.warnings.filter(function (x) {
+        return x.errorCode === "GENE_MISMATCH";
+    });
 
-    assert.equal(frequency, network.errors.length);
-
-    for (var i = 0; i < frequency; i++) {
-        assert.equal(
-            "GENE_MISMATCH",
-            network.errors[i].errorCode
-        );
-    }
+    assert.equal(frequency, geneMismatchCount.length);
 };
 
 var idLabelError = function (input, frequency) {
@@ -414,7 +410,7 @@ exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
-exports.geneMistmatchError = geneMistmatchError;
+exports.geneMismatchError = geneMismatchError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

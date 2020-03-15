@@ -78,15 +78,6 @@ var errorList = {
         };
     },
 
-    geneMistmatchError: function (col) {
-        return {
-            errorCode: "GENE_MISMATCH",
-            possibleCause: "Gene names in column " + col + "do not match the order of those in the network sheet",
-            suggestedFix: "Please ensure that the gene names are the same in both the 'network' sheet and the " +
-                        "'network_optimized_weights' sheet."
-      };
-    },
-
     emptyRowError: function (row) {
         var rowNum = row + 1;
         return {

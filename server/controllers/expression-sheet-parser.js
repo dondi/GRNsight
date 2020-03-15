@@ -1,6 +1,8 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
+//var spreadsheetController = require(__dirname + "/../controllers/spreadsheet-controller")();
+
 
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
@@ -32,6 +34,15 @@ const errorsList = {
             errorCode: "EMPTY_COLUMN",
             possibleCause: "There is an empty column in the input sheet.",
             suggestedFix: "Delete empty column, or populate with data."
+        };
+    },
+
+    geneMismatchError: function (col) {
+        return {
+            errorCode: "GENE_MISMATCH",
+            possibleCause: "Gene names in column " + col + "do not match the order of those in the network sheet",
+            suggestedFix: "Please ensure that the gene names are the same in both the 'network' sheet and the " +
+                "'network_optimized_weights' sheet."
         };
     },
 };
@@ -95,11 +106,13 @@ const isExpressionSheet = (sheetName) => {
 
 // Going to continue basing this section off of the parseNetworkSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
+
     var geneData = {};
     var expressionData = {
         errors: [],
         warnings: [],
-        timePoints: []
+        timePoints: [],
+        columnGeneNames: []
     };
 
     // Check that id label is correct. Throw error if not.
@@ -140,6 +153,9 @@ var parseExpressionSheet = function (sheet) {
             // Throw error in case of empty row
             let nonnullCount = 0;
             for (let i = 0; i <= rowLength; i++) {
+                if (rowCounter === 0) {
+                    expressionData.columnGeneNames.push(row[0]);
+                }
                 if (rowCounter !== 0)  {
                     columnChecker[i] = columnChecker + 1;
                 }
@@ -184,12 +200,24 @@ module.exports = function (workbook) {
         errors: []
     };
     var expCount = 0;
+    // var network = spreadsheetController.parseNetworkSheet(workbook);
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
             expCount++;
+            // if(output.expression[sheet.name].columnGeneNames.length === network.genes.length){
+            //     addExpError(output, errorsList.geneMismatchError());
+            // } else {
+            //     for (var i = 0; i <network.genes.length; i++){
+            //         if(output.expression[sheet.name].columnGeneNames[i].toUpperCase() !== network.genes[i].toUpperCase()){
+            //             addExpError(output, errorsList.geneMismatchError());
+            //             break;
+            //         }
+            //     }
+            // }
         }
     });
+
     if (expCount <= 0) {
         addExpWarning(output, warningsList.missingExpressionWarning());
     }
