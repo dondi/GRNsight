@@ -53,7 +53,7 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("EMPTY_giROW", function () {
+    describe("EMPTY_ROW", function () {
         xit("Row in expression sheet contains no data.", function () {
             test.emptyExpressionRowError("test-files/expression-data-test-sheets/expression_sheet_empty_row.xlsx", 1);
         });
