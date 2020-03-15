@@ -217,8 +217,8 @@ var idLabelError = function (input, frequency) {
 var missingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
+    console.log(exp["expression"]["wt_log2_expression"]["errors"]);
     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
-
     for (var i = 0; i < frequency; i++) {
         assert.equal(
             "MISSING_COLUMN_HEADER",

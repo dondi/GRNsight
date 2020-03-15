@@ -149,7 +149,6 @@ var parseExpressionSheet = function (sheet) {
             if (row.length !== rowLength) {
                 addExpWarning(expressionData, warningsList.extraneousDataWarning());
             }
-
             // Throw error in case of empty row
             let nonnullCount = 0;
             for (let i = 0; i <= rowLength; i++) {
@@ -174,20 +173,20 @@ var parseExpressionSheet = function (sheet) {
         })
 
         // Throw error in case of missing column header
-        let nonemptyValues = 0;
-        expressionData.data.id.forEach(function () {
-            nonemptyValues++;
-        });
-        if (rowLength !== nonemptyValues) {
-            addExpError(expressionData, errorsList.missingColumnHeaderError());
-        }
-        // Throw error in case of empty column
-        for (let i = 0; i <= columnChecker.length; i++) {
-            if (columnChecker[i] === undefined) {
-                addExpError(expressionData, errorsList.emptyExpressionColumnError());
+
+        for (var column = 0; column < sheet.data[0].length; column++){
+            if(sheet.data[0][column] === undefined){
+                addExpError(expressionData, errorsList.missingColumnHeaderError());
+            }
+            // Throw error in case of empty column
+            for (var row = 1; row <= rowCounter; row++) {
+                if (row === rowCounter){
+                    addExpError(expressionData, errorsList.emptyExpressionColumnError());
+                } else if(sheet.data[row][column] !== undefined) {
+                    break;
+                }
             }
         }
-
     }
 
     return expressionData;

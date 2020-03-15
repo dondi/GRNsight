@@ -19,7 +19,7 @@ describe("expression-data-import-tests", function () {
 
     describe("GENE_MISMATCH", function () {
         xit("Gene names in column A do not match the order of those in network sheet.", function () {
-            test.geneMistmatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
+            test.geneMismatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
 
@@ -42,7 +42,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("MISSING_COLUMN_HEADER", function () {
-        xit("All columns in expression sheet must have a header or label.", function () {
+        it("All columns in expression sheet must have a header or label.", function () {
             test.missingColumnHeaderError("test-files/expression-data-test-sheets/expression_sheet_missing_column_header.xlsx", 1);
         });
     });
