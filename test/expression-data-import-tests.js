@@ -30,13 +30,13 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("missing_a_gene_name", function () {
-        it.skip("Gene names in column A are missing a gene name listed in the network sheet.", function () {
+        xit("Gene names in column A are missing a gene name listed in the network sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
         });
     });
 
     describe("extra_gene_name", function () {
-        it.skip("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
+        xit("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
         });
     });
@@ -54,7 +54,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("EMPTY_ROW", function () {
-        xit("Row in expression sheet contains no data.", function () {
+        it("Row in expression sheet contains no data.", function () {
             test.emptyExpressionRowError("test-files/expression-data-test-sheets/expression_sheet_empty_row.xlsx", 1);
         });
     });

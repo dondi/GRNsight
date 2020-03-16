@@ -252,6 +252,20 @@ var emptyExpressionRowError = function (input, frequency) {
     }
 };
 
+// should extra_gene_name and missing_gene_name be split into two different functions?
+var labelError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "extra_gene_name"|| "missing_a_gene_name",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
+    }
+};
+
+
 // WARNING TEST FUNCTIONS:
 
 var noWarnings = function (input) {
@@ -411,6 +425,7 @@ exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
 exports.geneMismatchError = geneMismatchError;
+exports.labelError = labelError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

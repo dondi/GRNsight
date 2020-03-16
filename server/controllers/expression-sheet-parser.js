@@ -45,6 +45,16 @@ const errorsList = {
                 "'network_optimized_weights' sheet."
         };
     },
+    // shiftDirection is a boolean type that is true if there is an extra
+    // gene name and false if there is a missing gene name
+    labelError: function (shiftDirection) {
+        return {
+            errorCode: shiftDirection? "extra_gene_name": "missing_a_gene_name",
+            possibleCause: "Gene names in column A"+ (shiftDirection? "have an extra gene name than those":
+                "are missing a gene name") + " listed in the network sheet.",
+
+        }
+    }
 };
 
 const warningsList = {
@@ -204,13 +214,31 @@ module.exports = function (workbook) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
             expCount++;
-            // if(output.expression[sheet.name].columnGeneNames.length === network.genes.length){
+
+            // //Gene Mismatch error code
+
+            // if(output.expression[sheet.name].columnGeneNames.length !== network.genes.length){
             //     addExpError(output, errorsList.geneMismatchError());
             // } else {
             //     for (var i = 0; i <network.genes.length; i++){
             //         if(output.expression[sheet.name].columnGeneNames[i].toUpperCase() !== network.genes[i].toUpperCase()){
             //             addExpError(output, errorsList.geneMismatchError());
             //             break;
+            //         }
+            //     }
+            // }
+
+            // // Label Error code
+            // if(output.expression[sheet.name].columnGeneNames.length !== network.genes.length){
+            // var shift = 0;
+            // var shiftDirection = (output.expression[sheet.name].columnGeneNames.length > network.genes.length)? true: false;
+            //     for (var i = 0; i <output.expression[sheet.name].columnGeneNames.length && i <network.genes.length ; i++){
+            //         if(output.expression[sheet.name].columnGeneNames[i+shift].toUpperCase() !== network.genes[i].toUpperCase()){
+            //             shift = shiftDirection? shift++: shift--;
+            // // Was not sure if an error should be added at every shift, or if it was fine to add the error if
+            // // the gene lists lengths are not the same. Also, must the genes be in the same order, or can I sort them?
+            // // Also what if the genes listed are entirely different? Is that a mismatch error and not a label error
+            //             addExpError(output, errorsList.labelError());
             //         }
             //     }
             // }
