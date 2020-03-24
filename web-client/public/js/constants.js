@@ -133,7 +133,7 @@ export const SPECIES_BUTTON_HUMAN                       = "#humanDisplay";
 export const SPECIES_BUTTON_FLY                         = "#fruitflyDisplay";
 export const SPECIES_BUTTON_NEMATODE                    = "#nematodeDisplay";
 export const SPECIES_BUTTON_MOUSE                       = "#mouseDisplay";
-export const SPECIES_BUTTON_CRESS                       = "#cressDisplay"
+export const SPECIES_BUTTON_CRESS                       = "#cressDisplay";
 
 export const ZOOM_CONTROL                               = ".zoom";
 export const ZOOM_DISPLAY_MAXIMUM_SELECTOR              = ".maximum-zoom-display";
