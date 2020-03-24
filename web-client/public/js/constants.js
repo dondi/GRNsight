@@ -60,9 +60,9 @@ export const SHOW_WEIGHTS_MOUSEOVER             = "showWeightsMouseover";
 export const SHOW_ALL_WEIGHTS                   = "showAllWeights";
 export const HIDE_ALL_WEIGHTS                   = "hideAllWeights";
 
-export const COLOR_EDGES                        = "#colorEdges";
-export const BLACK_EDGES                        = "#blackEdges";
+export const COLOR_EDGES                        = ".colorEdges";
 export const ACTIVE_COLOR_OPTION                = "active";
+export const COLOR_EDGES_MENU                   = "#colorEdges";
 export const COLOR_EDGES_SIDEBAR                = "#colorEdgesSidebar";
 
 export const GRAVITY_LENGTH_WITHOUT_ZERO = 3;
@@ -109,7 +109,7 @@ export const NODE_COLORING_SIDEBAR_PANEL                = "#nodeColoringSidebarP
 export const NODE_COLORING_SIDEBAR_HEADER_LINK          = "#nodeColoringHeaderLink";
 export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
 export const NODE_COLORING_SIDEBAR_HEADER               = "#sidebarPanelHeader";
-export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggle";
+export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggleSidebar";
 export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
 export const AVG_REPLICATE_VALS_TOP_SIDEBAR             = "#averageDataTop";
 export const AVG_REPLICATE_VALS_TOP_MENU                = "#averageDataTopMenu";
