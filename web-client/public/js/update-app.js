@@ -79,6 +79,14 @@ import {
   EDGE_WEIGHT_MENU_CLASS,
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
+  SPECIES_IDENTIFIED_ICON_DISPLAY,
+  SPECIES_DISPLAY,
+  SPECIES_BUTTON_YEAST,
+  SPECIES_BUTTON_HUMAN,
+  SPECIES_BUTTON_FLY,
+  SPECIES_BUTTON_NEMATODE,
+  SPECIES_BUTTON_MOUSE,
+  SPECIES_BUTTON_CRESS,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -277,11 +285,11 @@ const updateLinkDistanceSliderValues = () => {
 
 const speciesIdenified = () => {
     if (grnState.genePageData.identified) {
-        $(speciesIdentifiedIcon).removeClass("glyphicon-remove");
-        $(speciesIdentifiedIcon).addClass("glyphicon-ok");
+        $(SPECIES_IDENTIFIED_ICON_DISPLAY).removeClass("glyphicon-remove");
+        $(SPECIES_IDENTIFIED_ICON_DISPLAY).addClass("glyphicon-ok");
     }
-    $(speciesIdentifiedIcon).removeClass("glyphicon-remove");
-    $(speciesIdentifiedIcon).addClass("glyphicon-ok");
+    $(SPECIES_IDENTIFIED_ICON_DISPLAY).removeClass("glyphicon-remove");
+    $(SPECIES_IDENTIFIED_ICON_DISPLAY).addClass("glyphicon-ok");
 };
 
 
@@ -360,7 +368,7 @@ const identifySpeciesOrTaxon = (data) => {
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
             grnState.genePageData.identified = true;
-            $(speciesDisplay).val(grnState.genePageData.species);
+            $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             return grnState.genePageData.identified;
         }
     }
@@ -535,32 +543,32 @@ export const updateApp = grnState => {
     }
 
 // Species Menu
-    $(yeastDisplay).click(function(){
+    $(SPECIES_BUTTON_YEAST).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Saccharomyces Cerevisiae");
         speciesIdenified();
     });
-    $(humanDisplay).click(function () {
+    $(SPECIES_BUTTON_HUMAN).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Homo Sapien");
         speciesIdenified();
     });
-    $(fruitflyDisplay).click(function () {
+    $(SPECIES_BUTTON_FLY).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Drosophila Melanogaster");
         speciesIdenified();
     });
-    $(nematodeDisplay).click(function () {
+    $(SPECIES_BUTTON_NEMATODE).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Caenorhabditis Elegans");
         speciesIdenified();
     });
-    $(mouseDisplay).click(function () {
+    $(SPECIES_BUTTON_MOUSE).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Mus Musculus");
         speciesIdenified();
     });
-    $(cressDisplay).click(function () {
+    $(SPECIES_BUTTON_CRESS).click(function () {
         grnState.genePageData.identified = false;
         identifySpeciesOrTaxon("Arabidopsis Thaliana");
         speciesIdenified();
