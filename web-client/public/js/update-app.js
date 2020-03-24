@@ -519,13 +519,6 @@ export const updateApp = grnState => {
         synchronizeHideAllWeights();
     }
 
-// // Enable/Disable Colored edges
-//     if (grnState.colorOptimal) {
-//         enableColorOptimal();
-//     } else {
-//         disableColorOptimal();
-//     }
-
 // Species Menu
     $(SPECIES_BUTTON_YEAST).click(function () {
         grnState.genePageData.identified = false;
