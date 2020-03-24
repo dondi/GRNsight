@@ -26,7 +26,6 @@ import {
   SHOW_WEIGHTS_MOUSEOVER,
   SHOW_ALL_WEIGHTS,
   HIDE_ALL_WEIGHTS,
-  COLOR_EDGES,
   BLACK_EDGES,
   ACTIVE_COLOR_OPTION,
   GRAVITY_LENGTH_WITHOUT_ZERO,
@@ -99,7 +98,7 @@ const refreshApp = () => {
 
 const displayNetwork = (network, name) => {
     uploadState.currentNetwork = network;
-    console.log("Network: ", network); // Display the network in the console
+    // console.log("Network: ", network); // Display the network in the console
     $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
 
     if (network.warnings.length > 0) {
@@ -204,21 +203,6 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
-};
-
-// Toggle Weighted Functions
-const enableColorOptimal = () => {
-    $(BLACK_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").removeClass("glyphicon-ok");
-    $(COLOR_EDGES).addClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").addClass("glyphicon-ok");
-};
-
-const disableColorOptimal = () => {
-    $(COLOR_EDGES).removeClass(ACTIVE_COLOR_OPTION);
-    $(COLOR_EDGES + ">span").removeClass("glyphicon-ok");
-    $(BLACK_EDGES).addClass(ACTIVE_COLOR_OPTION);
-    $(BLACK_EDGES + ">span").addClass("glyphicon-ok");
 };
 
 // Sliders Functions
@@ -535,12 +519,12 @@ export const updateApp = grnState => {
         synchronizeHideAllWeights();
     }
 
-// Enable/Disable Colored edges
-    if (grnState.colorOptimal) {
-        enableColorOptimal();
-    } else {
-        disableColorOptimal();
-    }
+// // Enable/Disable Colored edges
+//     if (grnState.colorOptimal) {
+//         enableColorOptimal();
+//     } else {
+//         disableColorOptimal();
+//     }
 
 // Species Menu
     $(SPECIES_BUTTON_YEAST).click(function () {
