@@ -18,7 +18,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("GENE_MISMATCH", function () {
-        xit("Gene names in column A do not match the order of those in network sheet.", function () {
+        it("Gene names in column A do not match the order of those in network sheet.", function () {
             test.geneMismatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
@@ -29,15 +29,15 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("missing_a_gene_name", function () {
-        xit("Gene names in column A are missing a gene name listed in the network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
+    describe("MISSING_GENE_NAME", function () {
+        it("Gene names in column A are missing a gene name listed in the network sheet.", function () {
+            test.missingGeneNameError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
         });
     });
 
-    describe("extra_gene_name", function () {
-        xit("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
+    describe("EXTRA_GENE_NAME", function () {
+        it("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
+            test.extraGeneNameError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
         });
     });
 

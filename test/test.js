@@ -193,8 +193,8 @@ var emptyRowError = function (input, frequency) {
 // with thee genes as a header have the same order of genes listed for their headers
 var geneMismatchError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseExpressionSheet(sheet);
-    var geneMismatchCount = network.warnings.filter(function (x) {
+    var network = spreadsheetController.crossSheetInteractions(sheet);
+    var geneMismatchCount = network.network.errors.filter(function (x) {
         return x.errorCode === "GENE_MISMATCH";
     });
 
@@ -217,7 +217,6 @@ var idLabelError = function (input, frequency) {
 var missingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
-    console.log(exp["expression"]["wt_log2_expression"]["errors"]);
     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
@@ -263,6 +262,26 @@ var labelError = function (input, frequency) {
             exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
         );
     }
+};
+
+var missingGeneNameError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.crossSheetInteractions(sheet);
+    var missingGeneCount = network.network.errors.filter(function (x) {
+        return x.errorCode === "MISSING_GENE_NAME";
+    });
+
+    assert.equal(frequency, missingGeneCount.length);
+};
+
+var extraGeneNameError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.crossSheetInteractions(sheet);
+    var extraGeneCount = network.network.errors.filter(function (x) {
+        return x.errorCode === "EXTRA_GENE_NAME";
+    });
+
+    assert.equal(frequency, extraGeneCount.length);
 };
 
 
@@ -426,6 +445,8 @@ exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
 exports.geneMismatchError = geneMismatchError;
 exports.labelError = labelError;
+exports.missingGeneNameError = missingGeneNameError;
+exports.extraGeneNameError = extraGeneNameError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

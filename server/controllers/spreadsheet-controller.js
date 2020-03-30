@@ -123,7 +123,42 @@ var errorList = {
         possibleCause: "An unexpected error occurred.",
         suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, \
         and attach the spreadsheet you attempted to upload."
-    }
+    },
+
+    geneMismatchError: function(sheetName) {
+        return {
+            errorCode: "GENE_MISMATCH",
+            possibleCause: "Gene names in column A of the '" + sheetName + "' sheet do not match the order of those in the network sheet",
+            suggestedFix: "Please ensure that the gene names are in the same order as those in both the 'network' sheet and the " +
+                "'network_optimized_weights' sheet."
+        }
+    },
+
+    extraGeneNamesError: function(sheetName, extraGenes) {
+        var stringOfGenes = "";
+        for (var i = 0; i < extraGenes.length; i++) {
+            stringOfGenes = stringOfGenes + extraGenes[i] + ", ";
+        }
+            stringOfGenes = stringOfGenes.slice(0,-2);
+        return {
+            errorCode: "EXTRA_GENE_NAME",
+            possibleCause: "Gene names in column A of the '" + sheetName + "' sheet have one or more extra genes than those listed in the network sheet",
+            SuggestedFix: "Please remove Genes: "+ stringOfGenes + "from Column A of the '" + sheetName + "' sheet."
+        }
+    },
+
+    missingGeneNamesError: function(sheetName, missingGenes) {
+        var stringOfGenes = "";
+        for (var i = 0; i < missingGenes.length; i++) {
+            stringOfGenes = stringOfGenes + missingGenes[i] + ", ";
+        }
+        stringOfGenes = stringOfGenes.slice(0,-2);
+        return {
+            errorCode: "MISSING_GENE_NAME",
+            possibleCause: "Gene names in column A of the '" + sheetName + "' sheet are missing one or more genes from the network sheet",
+            SuggestedFix: "Please add Genes: "+ stringOfGenes + "to Column A of the '" + sheetName + "' sheet in the proper order."
+        }
+    },
 
 };
 
@@ -436,26 +471,14 @@ var parseNetworkSheet = function (sheet) {
     return semanticChecker(network);
 };
 
-var processGRNmap = function (path, res, app) {
-    var sheet;
-    var network;
-
-    helpers.attachCorsHeader(res, app);
-
-    try {
-        sheet = xlsx.parse(path);
-    } catch (err) {
-        return res.json(400, "Unable to read input. The file may be corrupt.");
-    }
-
-    helpers.attachFileHeaders(res, path);
-    network = parseNetworkSheet(sheet);
+var crossSheetInteractions = function (workbook) {
+    var network = parseNetworkSheet(workbook);
 
     // Parse expression and 2-column data, then add to network object
     // Eventually, will split this up into parsing for each type of sheet.
-    var additionalData = parseAdditionalSheets(sheet);
+    var additionalData = parseAdditionalSheets(workbook);
 
-    var expressionData = parseExpressionSheets(sheet);
+    var expressionData = parseExpressionSheets(workbook);
 
     // Add errors and warnings from meta sheets
     if (additionalData && additionalData.meta) {
@@ -506,12 +529,97 @@ var processGRNmap = function (path, res, app) {
         }
     }
 
-    Object.assign(network, additionalData, expressionData);
-    return (network.errors.length === 0) ?
+    // Gene Mismatch and Label Error Tests
+
+    // NOTE: After you fix the quadrupling of the expression-sheet-parser data be sure to change the "===" comparing
+    // the network genes and the expression sheet genes to "==" because the network genes are of the type object
+    // while the expression sheet genes are of the type strings.
+
+    workbook.forEach(function (sheet) {
+        if (isExpressionSheet(sheet.name)) {
+            var tempNetworkGenes = [];
+            for (var i = 0; i < network.genes.length; i++) {
+                tempNetworkGenes.push(network.genes[i].name);
+            }
+            var tempExpressionGenes = expressionData.expression[sheet.name].columnGeneNames;
+            console.log("expression sheet genes: " + expressionData.expression[sheet.name].columnGeneNames);
+            console.log("network sheet genes: " + tempNetworkGenes);
+
+
+            var sortedNetworkGenes = tempNetworkGenes.sort();
+            var sortedExpressionGenes = tempExpressionGenes.sort();
+            var incorrectGeneCounter = 0;
+            var incorrectOrderCounter = 0;
+            var missingGenesCounter = 0;
+            var missingGenes = [];
+            var extraGenes = []
+            var extraGeneCounter = 0;
+
+            // NOTE: Sort mutates the original array, so I put it back to the original just in case the genes arrays
+            // are used after this in the future.
+
+            for (var i = 0; i < network.genes.length-extraGeneCounter, i < sortedExpressionGenes.length-missingGenesCounter; i++) {
+                if(sortedExpressionGenes[i-missingGenesCounter] !== sortedNetworkGenes[i-extraGeneCounter]) {
+                    incorrectGeneCounter++;
+                    if(sortedNetworkGenes.includes(sortedExpressionGenes[i-missingGenesCounter])) {
+                        console.log("missing");
+                        missingGenesCounter++;
+                        missingGenes.push(sortedNetworkGenes[i-extraGeneCounter])
+                    } else {
+                        console.log("extra");
+                        extraGeneCounter++;
+                        extraGenes.push(sortedExpressionGenes[i-missingGenesCounter])
+                    }
+                }
+                if(incorrectGeneCounter === 0 && network.genes[i] !== expressionData.expression[sheet.name].columnGeneNames) {
+                    incorrectOrderCounter++;
+                }
+            }
+            if (incorrectOrderCounter > 0) {
+                addError(network, errorList.geneMismatchError(sheet.name));
+            } else {
+                if(missingGenesCounter > 0) {
+                    addError(network, errorList.missingGeneNamesError(sheet.name, missingGenes));
+                }
+                if(extraGeneCounter > 0) {
+                    addError(network, errorList.extraGeneNamesError(sheet.name, extraGenes));
+                }
+            }
+        }
+    });
+
+
+    const output = {
+        network: network,
+        expressionData: expressionData,
+        additionalData: additionalData,
+    };
+
+    return output
+
+}
+
+var processGRNmap = function (path, res, app) {
+    var sheet;
+
+    helpers.attachCorsHeader(res, app);
+
+    try {
+        sheet = xlsx.parse(path);
+    } catch (err) {
+        return res.json(400, "Unable to read input. The file may be corrupt.");
+    }
+
+    helpers.attachFileHeaders(res, path);
+
+    var result = crossSheetInteractions(sheet);
+
+    Object.assign(result.network, result.additionalData, result.expressionData);
+    return (result.network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
-        res.json(network) :
+        res.json(result.network) :
         // If all does not look well, return the network with an error 400
-        res.status(400).json(network);
+        res.status(400).json(result.network);
 };
 
 var grnSightToCytoscape = function (network) {
@@ -626,6 +734,7 @@ module.exports = function (app) {
     return {
         parseNetworkSheet: parseNetworkSheet,
         grnSightToCytoscape: grnSightToCytoscape,
-        processGRNmap : processGRNmap
+        processGRNmap : processGRNmap,
+        crossSheetInteractions: crossSheetInteractions
     };
 };

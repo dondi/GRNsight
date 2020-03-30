@@ -1,10 +1,6 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
-//var spreadsheetController = require(__dirname + "/../controllers/spreadsheet-controller")();
-
-
-
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
 const errorsList = {
@@ -36,25 +32,6 @@ const errorsList = {
             suggestedFix: "Delete empty column, or populate with data."
         };
     },
-
-    geneMismatchError: function (col) {
-        return {
-            errorCode: "GENE_MISMATCH",
-            possibleCause: "Gene names in column " + col + "do not match the order of those in the network sheet",
-            suggestedFix: "Please ensure that the gene names are the same in both the 'network' sheet and the " +
-                "'network_optimized_weights' sheet."
-        };
-    },
-    // shiftDirection is a boolean type that is true if there is an extra
-    // gene name and false if there is a missing gene name
-    labelError: function (shiftDirection) {
-        return {
-            errorCode: shiftDirection? "extra_gene_name": "missing_a_gene_name",
-            possibleCause: "Gene names in column A"+ (shiftDirection? "have an extra gene name than those":
-                "are missing a gene name") + " listed in the network sheet.",
-
-        }
-    }
 };
 
 const warningsList = {
@@ -162,9 +139,6 @@ var parseExpressionSheet = function (sheet) {
             // Throw error in case of empty row
             let nonnullCount = 0;
             for (let i = 0; i <= rowLength; i++) {
-                if (rowCounter === 0) {
-                    expressionData.columnGeneNames.push(row[0]);
-                }
                 if (rowCounter !== 0)  {
                     columnChecker[i] = columnChecker + 1;
                 }
@@ -196,6 +170,9 @@ var parseExpressionSheet = function (sheet) {
                     break;
                 }
             }
+            if (sheet.data[column][0] !== "id") {
+                expressionData.columnGeneNames.push(sheet.data[column][0]);
+            }
         }
     }
 
@@ -209,39 +186,10 @@ module.exports = function (workbook) {
         errors: []
     };
     var expCount = 0;
-    // var network = spreadsheetController.parseNetworkSheet(workbook);
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
             expCount++;
-
-            // //Gene Mismatch error code
-
-            // if(output.expression[sheet.name].columnGeneNames.length !== network.genes.length){
-            //     addExpError(output, errorsList.geneMismatchError());
-            // } else {
-            //     for (var i = 0; i <network.genes.length; i++){
-            //         if(output.expression[sheet.name].columnGeneNames[i].toUpperCase() !== network.genes[i].toUpperCase()){
-            //             addExpError(output, errorsList.geneMismatchError());
-            //             break;
-            //         }
-            //     }
-            // }
-
-            // // Label Error code
-            // if(output.expression[sheet.name].columnGeneNames.length !== network.genes.length){
-            // var shift = 0;
-            // var shiftDirection = (output.expression[sheet.name].columnGeneNames.length > network.genes.length)? true: false;
-            //     for (var i = 0; i <output.expression[sheet.name].columnGeneNames.length && i <network.genes.length ; i++){
-            //         if(output.expression[sheet.name].columnGeneNames[i+shift].toUpperCase() !== network.genes[i].toUpperCase()){
-            //             shift = shiftDirection? shift++: shift--;
-            // // Was not sure if an error should be added at every shift, or if it was fine to add the error if
-            // // the gene lists lengths are not the same. Also, must the genes be in the same order, or can I sort them?
-            // // Also what if the genes listed are entirely different? Is that a mismatch error and not a label error
-            //             addExpError(output, errorsList.labelError());
-            //         }
-            //     }
-            // }
         }
     });
 
