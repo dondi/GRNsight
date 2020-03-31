@@ -193,6 +193,14 @@ html
                     | &nbsp; Show Gray Edges as Dashed
 
             li(class='dropdown')
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
+              ul(class='dropdown-menu' role='menu')
+                li
+                  a(href='#' id='expressionDB' class='layout' checked)
+                    span(class='glyphicon')
+                    | &nbsp; Node Color Using Expression Database
+
+            li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') View
               ul(class='dropdown-menu' role='menu')
                 span(class='menu-subheader') Viewport Size
@@ -399,6 +407,31 @@ html
                 div(class='edgeControl')
                   input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
                   label(for='dashedGrayLineButton' class='sideLabel') Show Gray Edges as Dashed
+
+        div(class="node-coloring disabled panel panel-default")
+          p(class='panel-title sidebarPanelHeader disabledOnLaunch')
+            a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Data
+          div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              div(class='edgeControl')
+                input(id='nodeColoringToggleSidebar' class='nodeColoringToggle' type='checkbox' checked)
+                label(for='nodeColoringToggleSidebar' class='sideLabel') Enable Node Coloring
+              div(class="nodeColoringSidebarBody")
+                p(class='sideHeader info' data-toggle='tooltip') Top Dataset
+                select(id="dataset-top")
+                form
+                  input(id='averageDataTop', type='checkbox' checked)
+                  label(for='averageDataTop' class='sideLabel') Average Replicate Values
+                p(class='sideHeader info' data-toggle='tooltip') Bottom Dataset
+                select(id="dataset-bottom")
+                form
+                  input(id='averageDataBottom', type='checkbox' checked)
+                  label(for='averageDataBottom' class='sideLabel') Average Replicate Values
+                p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value (0.01-100):
+                div(class='logFoldChangeControlContainer')
+                  input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
+                  button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
+                div(class="node-coloring-legend")
 
         div(class='view-sidebar panel panel-default')
           p(class='panel-title sidebarPanelHeader')

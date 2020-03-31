@@ -79,6 +79,7 @@ import {
   EDGE_WEIGHT_MENU_CLASS,
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
+  NODE_COLORING_USING_EXPRESSION_DATA,
   SPECIES_IDENTIFIED_ICON_DISPLAY,
   SPECIES_DISPLAY,
   SPECIES_BUTTON_YEAST,
@@ -489,6 +490,10 @@ export const updateApp = grnState => {
             }
         } else {
             grnState.nodeColoringEnabled = false;
+
+            // $(NODE_COLORING_USING_EXPRESSION_DATA).addClass("glyphicon-ok");
+            // Enable clickability of Coloring with Expression Database tab
+            // If that's clicked, pop out the stuff below it (which I will write in upload.jade and then enable once this option is selected)
         }
         refreshApp();
 
