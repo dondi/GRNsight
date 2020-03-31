@@ -536,12 +536,25 @@ var crossSheetInteractions = function (workbook) {
     // while the expression sheet genes are of the type strings.
 
 
-    function difference(setA, setB) {
-        let _difference = new Set(setA)
+
+    function union(setA, setB) {
+        let _union = new Set(setA)
         for (let elem of setB) {
-            _difference.delete(elem)
+            _union.add(elem)
         }
-        return _difference
+        return _union
+    }
+
+    function differenceBetweenTwoSets(setA, setB) {
+        let _difference1 = new Set(setA);
+        let _difference2 = new Set(setB)
+        for (let elemB of setB) {
+            _difference1.delete(elemB)
+        }
+        for (let elemA of setA) {
+            _difference2.delete(elemA)
+        }
+        return union (_difference1, _difference2);
     }
 
     workbook.forEach(function (sheet) {
@@ -550,67 +563,28 @@ var crossSheetInteractions = function (workbook) {
             for (var i = 0; i < network.genes.length; i++) {
                 tempNetworkGenes.add(network.genes[i].name);
             }
-            var tempExpressionGenes = new Set();
-            for (var i = 0; i < expressionData.expression[sheet.name].columnGeneNames.length; i++) {
-                tempExpressionGenes.add(expressionData.expression[sheet.name][i]);
-            }
-            // var sortedNetworkGenes = tempNetworkGenes.sort();
-            // var sortedExpressionGenes = tempExpressionGenes.sort();
-            // var incorrectGeneCounter = 0;
-            // var incorrectOrderCounter = 0;
-            // var missingGenesCounter = 0;
-            // var missingGenes = [];
-            // var extraGenes = []
-            // var extraGeneCounter = 0;
-            var geneSetsDifference = difference(tempExpressionGenes,tempNetworkGenes);
-            var differenceOfDifferenceNetwork = difference(geneSetsDifference,tempNetworkGenes);
-            var differenceOfDifferenceExpression = difference(geneSetsDifference, tempExpressionGenes);
+            var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
 
-            // NOTE: Sort mutates the original array, so I put it back to the original just in case the genes arrays
-            // are used after this in the future.
-            //Gene Mismatch
+            var geneSetsDifference = differenceBetweenTwoSets(tempExpressionGenes,tempNetworkGenes);
+            var differenceOfDifferenceAndNetwork = differenceBetweenTwoSets(geneSetsDifference,tempNetworkGenes);
+            var differenceOfDifferenceAndExpression = differenceBetweenTwoSets(geneSetsDifference, tempExpressionGenes);
+
+            //
             if(geneSetsDifference.size === 0 ) {
                 for (var i = 0; i < network.genes.length; i++) {
                     if(network.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]){
                         addError(network, errorList.geneMismatchError(sheet.name));
+                        break;
                     }
                 }
             } else {
-                if(differenceOfDifferenceExpression.size !== 0) {
-                    addError(network, errorList.missingGeneNamesError(sheet.name, differenceOfDifferenceExpression));
+                if(differenceOfDifferenceAndExpression.size !== 0) {
+                    addError(network, errorList.missingGeneNamesError(sheet.name, differenceOfDifferenceAndExpression));
                 }
-                if(differenceOfDifferenceNetwork.size !== 0) {
-                    addError(network, errorList.extraGeneNamesError(sheet.name, differenceOfDifferenceNetwork));
+                if(differenceOfDifferenceAndNetwork.size !== 0) {
+                    addError(network, errorList.extraGeneNamesError(sheet.name, differenceOfDifferenceAndNetwork));
                 }
             }
-
-    //         for (var i = 0; i < network.genes.length-extraGeneCounter, i < sortedExpressionGenes.length-missingGenesCounter; i++) {
-    //             if(sortedExpressionGenes[i-missingGenesCounter] !== sortedNetworkGenes[i-extraGeneCounter]) {
-    //                 incorrectGeneCounter++;
-    //                 if(sortedNetworkGenes.includes(sortedExpressionGenes[i-missingGenesCounter])) {
-    //                     console.log("missing");
-    //                     missingGenesCounter++;
-    //                     missingGenes.push(sortedNetworkGenes[i-extraGeneCounter])
-    //                 } else {
-    //                     console.log("extra");
-    //                     extraGeneCounter++;
-    //                     extraGenes.push(sortedExpressionGenes[i-missingGenesCounter])
-    //                 }
-    //             }
-    //             if(incorrectGeneCounter === 0 && network.genes[i] !== expressionData.expression[sheet.name].columnGeneNames) {
-    //                 incorrectOrderCounter++;
-    //             }
-    //         }
-    //         if (incorrectOrderCounter > 0) {
-    //             addError(network, errorList.geneMismatchError(sheet.name));
-    //         } else {
-    //             if(missingGenesCounter > 0) {
-    //                 addError(network, errorList.missingGeneNamesError(sheet.name, missingGenes));
-    //             }
-    //             if(extraGeneCounter > 0) {
-    //                 addError(network, errorList.extraGeneNamesError(sheet.name, extraGenes));
-    //             }
-    //         }
         }
     });
 
