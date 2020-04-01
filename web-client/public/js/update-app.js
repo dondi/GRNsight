@@ -44,6 +44,7 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
+  EXPRESSION_DB_MENU,
   GRID_LAYOUT_MENU,
   FORCE_GRAPH_MENU,
   LAYOUT_SIDEBAR_PANEL,
@@ -51,6 +52,7 @@ import {
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_SIDEBAR_BODY,
+  DATA_SIDEBAR_BODY,
   NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
@@ -80,6 +82,8 @@ import {
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
   NODE_COLORING_USING_EXPRESSION_DATA,
+  EXPRESSION_DB_MENU_HEADER_LINK,
+  EXPRESSION_DB_SIDEBAR_PANEL,
   SPECIES_IDENTIFIED_ICON_DISPLAY,
   SPECIES_DISPLAY,
   SPECIES_BUTTON_YEAST,
@@ -312,6 +316,13 @@ const showNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
+const showDataMenu = () => {
+    $(EXPRESSION_DB_SIDEBAR_PANEL).removeClass("disabled");
+    $(EXPRESSION_DB_SIDEBAR_PANEL).addClass("in");
+    $(EXPRESSION_DB_MENU).removeClass("disabled");
+    $(EXPRESSION_DB_MENU_HEADER_LINK).attr("data-toggle", "collapse");
+}
+
 const disableNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
@@ -319,6 +330,13 @@ const disableNodeColoringMenus = () => {
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
+
+const disableDataMenu = () => {
+    $(EXPRESSION_DB_SIDEBAR_PANEL).addClass("disabled");
+    $(EXPRESSION_DB_SIDEBAR_PANEL).removeClass("in");
+    $(EXPRESSION_DB_MENU).addClass("disabled");
+    $(EXPRESSION_DB_MENU_HEADER_LINK).attr("data-toggle", "collapse");
+}
 
 const isNewWorkbook = (name) => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
@@ -393,6 +411,8 @@ const resetDatasetDropdownMenus = (network) => {
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
 
     $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
+
+    // $(DATA_SET_SELECT).append($("<option>").attr("value", "Dahlquist").text("Dahlquist"));
 
     grnState.nodeColoring.nodeColoringOptions.forEach(function (option) {
         var shortenedSheetName = shortenExpressionSheetName(option.value);
@@ -584,6 +604,15 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
+    }
+
+    if(grnState.network !== null) {
+        showDataMenu();
+        $(DATA_SIDEBAR_BODY).removeClass("hidden");
+        // Render some node coloring with the expression database data
+    } else {
+        disableDataMenu();
+        $(DATA_SIDEBAR_BODY).addClass("hidden");
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {

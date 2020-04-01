@@ -192,13 +192,13 @@ html
                     span(class='glyphicon')
                     | &nbsp; Show Gray Edges as Dashed
 
-            li(class='dropdown')
-              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
-              ul(class='dropdown-menu' role='menu')
-                li
-                  a(href='#' id='expressionDB' class='layout' checked)
-                    span(class='glyphicon')
-                    | &nbsp; Node Color Using Expression Database
+            //- li(class='dropdown')
+            //-   a(href='#' class='dropdown-toggle' data-toggle='dropdown') Data
+            //-   ul(class='dropdown-menu' role='menu')
+            //-     li
+            //-       a(href='#' id='expressionDB' class='layout' checked)
+            //-         span(class='glyphicon')
+            //-         | &nbsp; Node Color Using Expression Database
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') View
@@ -408,30 +408,42 @@ html
                   input(id='dashedGrayLineButton', type='checkbox', value='dashedGrayLine')
                   label(for='dashedGrayLineButton' class='sideLabel') Show Gray Edges as Dashed
 
-        div(class="node-coloring disabled panel panel-default")
+        //- Need to make this work.
+        div(class="data-sidebar disabled panel panel-default")
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
-            a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Data
-          div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
+            a(id='data-sidebar' data-toggle='collapse' data-target='#dataSidebarPanel') Data
+          div(id="dataSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
-              div(class='edgeControl')
-                input(id='nodeColoringToggleSidebar' class='nodeColoringToggle' type='checkbox' checked)
-                label(for='nodeColoringToggleSidebar' class='sideLabel') Enable Node Coloring
-              div(class="nodeColoringSidebarBody")
-                p(class='sideHeader info' data-toggle='tooltip') Top Dataset
-                select(id="dataset-top")
+              div(class="dataSidebarBody")
+                p(class='sideHeader info' data-toggle='tooltip') Dataset
+                select(multiple id="data-set-select")
+                    //- Checkboxes instead of ctrl click ?
+                    //- Eventually want it to be so that the possible available ones can be detected from the network sheet
+                    //- Refresh selection upon new upload
+                    //- Add "onclick" functionality for checkbox
+                    option(value="data-set-select-barreto") Barreto 2018 wt
+                    option(value="data-set-select-dahlquistdcin5") Dahlquist 2018 dcin5
+                    option(value="data-set-select-dahlquistdgln3") Dahlquist 2018 dgln3
+                    option(value="data-set-select-dahlquistdhap4") Dahlquist 2018 dhap4
+                    option(value="data-set-select-dahlquistdzap1") Dahlquist 2018 dzap1
+                    option(value="data-set-select-dahlquistwt") Dahlquist 2018 wt
+                    option(value="data-set-select-kitagawa") Kitagawa 2002 wt
+                    option(value="data-set-select-thorsen") Thorsen 2007 wt
+                p(class='sideHeader info' data-toggle='tooltip') Timepoints
+                select(multiple id="timepoints-select")
+                    option(value="timepoint-select-10") 10
+                    option(value="timepoint-select-15") 15
+                    option(value="timepoint-select-20") 20
+                    option(value="timepoint-select-30") 30
+                    option(value="timepoint-select-40") 40
+                    option(value="timepoint-select-60") 60
+                    option(value="timepoint-select-90") 90
+                    option(value="timepoint-select-120") 120
+                    option(value="timepoint-select-1080") 1080
                 form
-                  input(id='averageDataTop', type='checkbox' checked)
-                  label(for='averageDataTop' class='sideLabel') Average Replicate Values
-                p(class='sideHeader info' data-toggle='tooltip') Bottom Dataset
-                select(id="dataset-bottom")
-                form
-                  input(id='averageDataBottom', type='checkbox' checked)
-                  label(for='averageDataBottom' class='sideLabel') Average Replicate Values
-                p(class='sideHeader' id="logFoldChangeMaxValue") Log Fold Change Max Value (0.01-100):
-                div(class='logFoldChangeControlContainer')
-                  input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
-                  button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
-                div(class="node-coloring-legend")
+                  label(for='activateExpressionDB' id="activateExpressionDBLabel" class='sideLabel') Activate Expression Database Node Coloring
+                  div(id='expressionDBcheckbox')
+                    input(id='activateExpressionDB', type='checkbox')
 
         div(class='view-sidebar panel panel-default')
           p(class='panel-title sidebarPanelHeader')
