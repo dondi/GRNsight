@@ -10,7 +10,9 @@ module.exports = {
         root: rootPath,
         app: {
             name: "GRNsight"
-        }
+        },
+        databaseHost: "localhost"
+        // Need to figure out what to do for password
     },
 
     production: {

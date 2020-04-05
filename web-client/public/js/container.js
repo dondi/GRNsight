@@ -146,7 +146,6 @@ export const container = function () {
         }
     });
 
-
     $(".boundBoxSize").on("click", function () {
         var currentValue = $(this).val();
         var grnsightContainerClass = `grnsight-container ${currentValue}`;
