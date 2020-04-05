@@ -158,7 +158,7 @@ var parseExpressionSheet = function (sheet) {
 
         // Throw error in case of missing column header
 
-        for (var column = 0; column < sheet.data[0].length; column++){
+        for (var column = 0; column < rowCounter; column++){
             if(sheet.data[0][column] === undefined){
                 addExpError(expressionData, errorsList.missingColumnHeaderError());
             }

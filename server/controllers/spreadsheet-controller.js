@@ -536,25 +536,14 @@ var crossSheetInteractions = function (workbook) {
     // while the expression sheet genes are of the type strings.
 
 
-
-    function union(setA, setB) {
-        let _union = new Set(setA)
-        for (let elem of setB) {
-            _union.add(elem)
-        }
-        return _union
-    }
-
-    function differenceBetweenTwoSets(setA, setB) {
-        let _difference1 = new Set(setA);
-        let _difference2 = new Set(setB)
+    function difference(setA, setB) {
+        let _difference = new Set(setA);
         for (let elemB of setB) {
-            _difference1.delete(elemB)
+            if (_difference.has(elemB)) {
+                _difference.delete(elemB)
+            }
         }
-        for (let elemA of setA) {
-            _difference2.delete(elemA)
-        }
-        return union (_difference1, _difference2);
+        return _difference;
     }
 
     workbook.forEach(function (sheet) {
@@ -565,12 +554,15 @@ var crossSheetInteractions = function (workbook) {
             }
             var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
 
-            var geneSetsDifference = differenceBetweenTwoSets(tempExpressionGenes,tempNetworkGenes);
-            var differenceOfDifferenceAndNetwork = differenceBetweenTwoSets(geneSetsDifference,tempNetworkGenes);
-            var differenceOfDifferenceAndExpression = differenceBetweenTwoSets(geneSetsDifference, tempExpressionGenes);
+            var extraExpressionGenes = difference(tempExpressionGenes,tempNetworkGenes);
+            var extraNetworkGenes = difference(tempNetworkGenes, tempExpressionGenes);
+
+            console.log("Extra Genes in Expression Sheet", extraExpressionGenes);
+            console.log("Network Genes", tempNetworkGenes);
+            console.log("Expression Genes", expressionData.expression[sheet.name].columnGeneNames);
 
             //
-            if(geneSetsDifference.size === 0 ) {
+            if(extraExpressionGenes.size === 0 && extraNetworkGenes.size === 0) {
                 for (var i = 0; i < network.genes.length; i++) {
                     if(network.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]){
                         addError(network, errorList.geneMismatchError(sheet.name));
@@ -578,11 +570,11 @@ var crossSheetInteractions = function (workbook) {
                     }
                 }
             } else {
-                if(differenceOfDifferenceAndExpression.size !== 0) {
-                    addError(network, errorList.missingGeneNamesError(sheet.name, differenceOfDifferenceAndExpression));
+                if(extraNetworkGenes.size > 0) {
+                    addError(network, errorList.missingGeneNamesError(sheet.name, extraNetworkGenes));
                 }
-                if(differenceOfDifferenceAndNetwork.size !== 0) {
-                    addError(network, errorList.extraGeneNamesError(sheet.name, differenceOfDifferenceAndNetwork));
+                if(extraExpressionGenes.size >0) {
+                    addError(network, errorList.extraGeneNamesError(sheet.name, extraExpressionGenes));
                 }
             }
         }
