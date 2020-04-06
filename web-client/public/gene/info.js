@@ -32,9 +32,10 @@
     const obj = {
         symbol: search.match(/symbol=(.*?)(?=&)/)[1],
         species: search.match(/species=(.*?)(?=&)/)[1],
-        taxonJaspar: search.match(/taxon=(.*?)/),
-        taxonUniprot: search.match(/taxon=(.*?)/)
+        jaspar: search.match(/jaspar=(.*?)(?=&)/)[1],
+        uniprot: search.match(/uniprot=(.*?)/)[1],
     };
+    console.log("this is the obj : " + obj.uniprot)
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);
