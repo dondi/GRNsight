@@ -940,10 +940,10 @@ export var drawGraph = function (network) {
                 const tempLink = $("<a></a>")
                     .attr({
                         href: "info?" + $.param({
+                            symbol: gene.name,
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
-                            symbol: gene.name,
                         }),
                         target: "_blank"
                     });
