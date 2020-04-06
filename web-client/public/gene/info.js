@@ -28,12 +28,13 @@
         }, 200);
     });
 
+    //object for gene page API calls
     const search = location.search.substring(1);
     const obj = {
-        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
         species: search.match(/species=(.*?)(?=&)/)[1],
         jaspar: search.match(/jaspar=(.*?)(?=&)/)[1],
-        uniprot: search.match(/uniprot=(.*?)/)[1],
+        uniprot: search.match(/uniprot=(.*?)(?=&)/)[1],
+        symbol: search.match(/symbol=(.*?)()/)[1]
     };
     console.log("this is the obj : " + obj.uniprot)
 

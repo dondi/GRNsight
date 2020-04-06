@@ -346,13 +346,10 @@ export const identifySpeciesMenu = (data) => {
 };
 
 const identifySpeciesOrTaxon = (data) => {
-    if (grnState.genePageData.identified === true) {
-        return true;
-    }
-
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        if (Object.values(nameTax[n]).includes(data.toString())) {
+        // if (Object.values(nameTax[n]).includes(data.toString())) {
+        if (n === data.toString()) { // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
@@ -467,13 +464,11 @@ export const updateApp = grnState => {
 
             // check if the species has been identified yet, if not try to identify it
             // also checks if the areas have been populated at all
-            if (grnState.genePageData.identified === false) {
-                if (grnState.network.meta.species !== undefined) {
-                    identifySpeciesOrTaxon(grnState.network.meta.species);
-                }
-                else if (grnState.network.meta.taxon_id !== undefined) {
-                    identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
-                }
+            if (grnState.network.meta.species !== undefined) {
+                identifySpeciesOrTaxon(grnState.network.meta.species);
+            }
+            else if (grnState.network.meta.taxon_id !== undefined) {
+                identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
             }
 
             grnState.nodeColoring.nodeColoringEnabled = true;
