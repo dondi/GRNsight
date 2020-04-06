@@ -79,14 +79,8 @@ import {
   EDGE_WEIGHT_MENU_CLASS,
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
-  SPECIES_IDENTIFIED_NAME,
   SPECIES_DISPLAY,
-  SPECIES_BUTTON_YEAST,
-  SPECIES_BUTTON_HUMAN,
-  SPECIES_BUTTON_FLY,
-  SPECIES_BUTTON_NEMATODE,
-  SPECIES_BUTTON_MOUSE,
-  SPECIES_BUTTON_CRESS,
+
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -466,8 +460,7 @@ export const updateApp = grnState => {
             // also checks if the areas have been populated at all
             if (grnState.network.meta.species !== undefined) {
                 identifySpeciesOrTaxon(grnState.network.meta.species);
-            }
-            else if (grnState.network.meta.taxon_id !== undefined) {
+            } else if (grnState.network.meta.taxon_id !== undefined) {
                 identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
             }
 
@@ -476,7 +469,7 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.lastDataset = name;
                 showNodeColoringMenus();
-            }
+            } 
             grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
             if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
                 grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
@@ -518,7 +511,7 @@ export const updateApp = grnState => {
     } else if (grnState.edgeWeightDisplayOption === HIDE_ALL_WEIGHTS) {
         synchronizeHideAllWeights();
     }
- 
+
 // Enable/Disable Colored edges
     $(COLOR_EDGES_SIDEBAR).prop("checked", grnState.colorOptimal);
     const classFunction = `${grnState.colorOptimal ? "add" : "remove"}Class`;

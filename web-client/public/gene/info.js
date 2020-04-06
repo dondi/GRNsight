@@ -28,7 +28,7 @@
         }, 200);
     });
 
-    //object for gene page API calls
+    // object for gene page API calls
     const search = location.search.substring(1);
     const obj = {
         symbol: search.match(/symbol=(.*?)(?=&)/)[1],
@@ -36,7 +36,6 @@
         jaspar: search.match(/jaspar=(.*?)(?=&)/)[1],
         uniprot: search.match(/uniprot=(.*?)/)[1]
     };
-    console.log("this is the obj : " + obj.uniprot)
 
     document.title = "GRNsight - " + obj.symbol;
     $("#gene-name").text(obj.symbol);

@@ -415,7 +415,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    //Species Selection
+    // Species Selection
     $(SPECIES_DISPLAY).change(() => {
         var selection = $(SPECIES_DISPLAY).find(":selected").attr("value");
         grnState.genePageData.identified = false;
