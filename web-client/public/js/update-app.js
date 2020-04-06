@@ -469,7 +469,7 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.lastDataset = name;
                 showNodeColoringMenus();
-            } 
+            }
             grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
             if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
                 grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
