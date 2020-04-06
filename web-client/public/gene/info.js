@@ -32,7 +32,8 @@
     const obj = {
         symbol: search.match(/symbol=(.*?)(?=&)/)[1],
         species: search.match(/species=(.*?)(?=&)/)[1],
-        taxon: search.match(/taxon=(.*?)/)[1]
+        taxonJaspar: search.match(/taxon=(.*?)/),
+        taxonUniprot: search.match(/taxon=(.*?)/)
     };
 
     document.title = "GRNsight - " + obj.symbol;
