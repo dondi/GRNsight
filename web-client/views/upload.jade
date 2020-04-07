@@ -297,24 +297,6 @@ html
     div(class='sidebar' data-iframe-height)
       div(class='panel-group')
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
-        div(id="speciesMenu" class='layoutSidebarPanelSpecies force-graph')
-            li(class='dropdown show')
-              input(id='speciesDisplay' href='#' class="btn btn-default sidebarPanelHeaderSpecies dropdown-toggle" type="button" data-toggle='dropdown' value='Saccharomyces Cerevisiae')
-              ul(class='dropdown-menu' role='menu')
-                li
-                  button(href='#' id='yeastDisplay' class='btn btnSidebar') Saccharomyces Cerevisiae
-                li
-                 button(href='#' id='humanDisplay' class='btn btnSidebar') Homo Sapien
-                li
-                  button(href='#' id='fruitflyDisplay' class='btn btnSidebar') Drosophila Melanogaster
-                li
-                  button(href='#' id='nematodeDisplay' class='btn btnSidebar') Caenorhabditis Elegans
-                li
-                  button(href='#' id='mouseDisplay' class='btn btnSidebar') Mus Musculus
-                li
-                  button(href='#' id='cressDisplay' class='btn btnSidebar') Arabidopsis Thaliana
-             p(id='speciesIdentified' href='#' class='panel-title sidebarPanelHeaderID') Species Identified : 
-                span(id='speciesIdentifiedIcon' href='#' class='glyphicon glyphicon-remove')
         div(class="force-graph panel panel-default")
             p(class='panel-title sidebarPanelHeader')
               a(data-toggle='collapse' data-target='#layoutSidebarPanel') Layout
@@ -341,7 +323,7 @@ html
                     input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
                   p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 
-        div(class="node-coloring disabled panel panel-default")
+        div(class="node-coloring disabled panel panel-default disabled")
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
             a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node
           div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
@@ -424,6 +406,22 @@ html
                 br
                 input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
                 label(for='viewport' class='sideLabel') Restrict graph to viewport
+        
+        div(class="species-display panel panel-default")
+          p(class='panel-title sidebarPanelHeader')
+            a(id='speciesHeaderLink' data-toggle='collapse' data-target='#speciesSidebarPanel') Species
+          div(id="speciesSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              div(class="speciesIdentifiedDropdown") Identified Species:
+                //- p(class="speciesIdentifiedDisplay" id="speciesName" href="#") Saccharomyces cerevisiae
+                select(id='speciesDropdown' href='#')
+                  option(href='#' id='cressOption' value='Arabidopsis_thaliana') Arabidopsis thaliana
+                  option(href='#' id='nematodeOption' value='Caenorhabditis_elegans') Caenorhabditis elegans
+                  option(href='#' id='fruitflyOption' value='Drosophila_melanogaster') Drosophila melanogaster
+                  option(href='#' id='humanOption' value='Homo_sapiens') Homo sapiens
+                  option(href='#' id='mouseOption' value='Mus_musculus') Mus musculus
+                  option(href='#' id='yeastOption' value='Saccharomyces_cerevisiae') Saccharomyces cerevisiae
+
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')

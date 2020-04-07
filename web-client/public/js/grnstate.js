@@ -89,23 +89,23 @@ export const grnState = {
 // Setting base case to yeast
     genePageData: {
         commonName: "Yeast",
-        species: "Saccharomyces Cerevisiae",
+        species: "Saccharomyces_cerevisiae",
         taxonJaspar: "559292",
         taxonUniprot: "4932",
-        identified: false,
+        identified: false
     },
 
     nameToTaxon: {
         // Treating like a dictionary with keys being the english name
-        // and values being a tuple of (latin name, Uniprot, Jaspar)
+        // and values being a dictionary of (latin name, Uniprot, Jaspar)
         // some taxon ids are different between the two
         // changed spec names for common english and will have them formatted before calling an api
-        human: { spec: "Homo Sapien", jaspar: "9606", uniprot: "9606" },
-        yeast: { spec: "Saccharomyces Cerevisiae", jaspar: "559292", uniprot: "4932" },
-        fruitFly: { spec: "Drosophila Melanogaster", jaspar: "7227", uniprot: "7227" },
-        nematodeWorm: { spec: "Caenorhabditis Elegans", jaspar: "6293", uniprot: "6293" },
-        houseMouse: { spec: "Mus Musculus", jaspar: "10090", uniprot: "10090" },
-        thaleCress: { spec: "Arabidopsis Thaliana", jaspar: "3702", uniprot: "3702" }
+        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: "3702", uniprot: "3702" },
+        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: "6293", uniprot: "6293" },
+        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: "7227", uniprot: "7227" },
+        "Homo sapiens": { spec: "Homo_sapiens", jaspar: "9606", uniprot: "9606" },
+        "Mus musculus": { spec: "Mus_musculus", jaspar: "10090", uniprot: "10090" },
+        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: "559292", uniprot: "4932" }
     },
 
 // Slider Parameters

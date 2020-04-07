@@ -941,8 +941,10 @@ export var drawGraph = function (network) {
                     .attr({
                         href: "info?" + $.param({
                             symbol: gene.name,
-                            species: grnState.species,
-                            taxon: grnState.taxon}),
+                            species: grnState.genePageData.species,
+                            jaspar: grnState.genePageData.taxonJaspar,
+                            uniprot: grnState.genePageData.taxonUniprot,
+                        }),
                         target: "_blank"
                     });
                 $("body").append(tempLink);

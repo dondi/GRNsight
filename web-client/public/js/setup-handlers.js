@@ -1,5 +1,5 @@
 import { updaters } from "./graph";
-import { updateApp } from "./update-app";
+import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
 import * as jsPDF from "jspdf";
 import canvg from "canvg";
@@ -54,7 +54,8 @@ import {
     ZOOM_DISPLAY_MINIMUM_VALUE,
     EXPORT_TO_PNG,
     EXPORT_TO_SVG,
-    EXPORT_TO_PDF
+    EXPORT_TO_PDF,
+    SPECIES_DISPLAY
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -411,6 +412,14 @@ export const setupHandlers = grnState => {
 
     $(COLOR_EDGES).click(() => {
         grnState.colorOptimal = !grnState.colorOptimal;
+        updateApp(grnState);
+    });
+
+    // Species Selection
+    $(SPECIES_DISPLAY).change(() => {
+        var selection = $(SPECIES_DISPLAY).find(":selected").attr("value");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
         updateApp(grnState);
     });
 
