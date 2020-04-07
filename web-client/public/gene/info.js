@@ -29,12 +29,13 @@
     });
 
     // object for gene page API calls
-    const search = location.search.substring(1);
+    // Thank you https://gist.github.com/pirate/9298155edda679510723
+    const query = new URLSearchParams(location.search);
     const obj = {
-        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
-        species: search.match(/species=(.*?)(?=&)/)[1],
-        jaspar: search.match(/jaspar=(.*?)(?=&)/)[1],
-        uniprot: search.match(/uniprot=(.*?)/)[1]
+        symbol: query.get('symbol'),
+        species: query.get('species'),
+        jaspar: query.get('jaspar'),
+        uniprot: query.get('uniprot')
     };
 
     document.title = "GRNsight - " + obj.symbol;
