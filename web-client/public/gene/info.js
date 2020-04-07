@@ -32,10 +32,10 @@
     // Thank you https://gist.github.com/pirate/9298155edda679510723
     const query = new URLSearchParams(location.search);
     const obj = {
-        symbol: query.get('symbol'),
-        species: query.get('species'),
-        jaspar: query.get('jaspar'),
-        uniprot: query.get('uniprot')
+        symbol: query.get("symbol"),
+        species: query.get("species"),
+        jaspar: query.get("jaspar"),
+        uniprot: query.get("uniprot")
     };
 
     document.title = "GRNsight - " + obj.symbol;
