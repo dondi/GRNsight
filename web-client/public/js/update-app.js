@@ -348,13 +348,14 @@ const shortenExpressionSheetName = (name) => {
 };
 
 const hasExpressionData = (sheets) => {
+    // grnState.nodeColoring.showMenu = true;
     for (var property in sheets) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            grnState.nodeColoring.showMenu = true;
+            // grnState.nodeColoring.showMenu = true;
             return true;
         }
     }
-    grnState.nodeColoring.showMenu = false;
+    // grnState.nodeColoring.showMenu = false;
     return false;
 };
 
@@ -406,6 +407,16 @@ const resetDatasetDropdownMenus = (network) => {
             grnState.nodeColoring.nodeColoringOptions.push({value: property});
         }
     }
+
+    // Add expression database options
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Barreto 2012 wt'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dCIN5'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dGLN3'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dHAP4'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dZAP1'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 wt'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Kitagawa 2002 wt'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Thorsen 2007 wt'});
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -472,6 +483,7 @@ const updateBottomDataset = () => {
 };
 
 export const updateApp = grnState => {
+    console.log($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked"));
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
@@ -589,9 +601,10 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
+
 // Node Coloring
-    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
-      && hasExpressionData(grnState.network.expression)) {
+    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled && hasExpressionData(grnState.network.expression)) {
+        grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
@@ -606,13 +619,74 @@ export const updateApp = grnState => {
         updaters.removeNodeColoring();
     }
 
-    if(grnState.network !== null) {
-        showDataMenu();
-        $(DATA_SIDEBAR_BODY).removeClass("hidden");
+    if(grnState.network !== null && !hasExpressionData(grnState.network.expression)) {
+        console.log("No existing expression data.");
+        grnState.nodeColoring.showMenu = true;
+        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
+        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        resetDatasetDropdownMenus(grnState.network);
+        grnState.nodeColoring.nodeColoringOptions.unshift({value: 'Select Dataset from Expression Database'});
+
+
+        if($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+            console.log("Node coloring suddenly and mysteriously enabled.")
+            // const responseData = (name, formData) => {
+            //     const uploadRoute = 'expression';
+            //     const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+            //     // The presence of formData is taken to indicate a POST.
+            //     (formData ?
+            //         $.ajax({
+            //             url: fullUrl,
+            //             data: formData,
+            //             processData: false,
+            //             contentType: false,
+            //             type: "POST",
+            //             crossDomain: true
+            //         }) :
+            //         $.getJSON(fullUrl)
+            //         ).done((network, textStatus, jqXhr) => {
+            //             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
+            //             // if (demoFiles.indexOf(name) > -1) {
+            //             //     switch (name) {
+            //             //     case WEIGHTED_DEMO_PATH:
+            //             //         grnState.name = WEIGHTED_DEMO_NAME;
+            //             //         break;
+            //             //     case UNWEIGHTED_DEMO_PATH:
+            //             //         grnState.name = UNWEIGHTED_DEMO_NAME;
+            //             //         break;
+            //             //     case SCHADE_INPUT_PATH:
+            //             //         grnState.name = SCHADE_INPUT_NAME;
+            //             //         break;
+            //             //     case SCHADE_OUTPUT_PATH:
+            //             //         grnState.name = SCHADE_OUTPUT_NAME;
+            //             //         break;
+            //             //     }
+            //             // }
+            //             grnState.network = network;
+            //             if (uploadRoute !== "upload") {
+            //                 grnState.annotateLinks();
+            //             }
+            //             reloader = () => responseData(name, formData);
+            //             // re-enable upload button
+            //             disableUpload(false);
+            //             updateApp(grnState);
+            //             // displayStatistics(network);
+        
+            //         }).error(networkErrorDisplayer);
+            // };
+
+            // grnState.network.expression = responseData;
+            // grnState.nodeColoring.nodeColoringEnabled = true;
+            // updaters.renderNodeColoring();
+        }
         // Render some node coloring with the expression database data
-    } else {
-        disableDataMenu();
-        $(DATA_SIDEBAR_BODY).addClass("hidden");
+                // PUT NEW EXPRESSION DATA INTO THIS
+        //     grnState.network.expression = 
+        // }
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
