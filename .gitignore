@@ -67,3 +67,6 @@ Backup of *.doc*
 *.xlk
 ~$*.ppt*
 *.~vsd*
+
+# Misc
+.env
