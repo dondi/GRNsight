@@ -409,7 +409,7 @@ const resetDatasetDropdownMenus = (network) => {
     }
 
     // Add expression database options
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Barreto 2012 wt'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: 'Barreto_2018_wt'});
     grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dCIN5'});
     grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dGLN3'});
     grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dHAP4'});
@@ -483,7 +483,6 @@ const updateBottomDataset = () => {
 };
 
 export const updateApp = grnState => {
-    // console.log($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked"));
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
@@ -627,7 +626,7 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         resetDatasetDropdownMenus(grnState.network);
-        grnState.nodeColoring.nodeColoringOptions.unshift({value: 'Select Dataset from Expression Database'});
+        // grnState.nodeColoring.nodeColoringOptions.unshift({value: 'Select Dataset from Expression Database'});
         const responseData = (name, formData) => {
             return new Promise(function(resolve, reject) {
                 const uploadRoute = 'expression';
@@ -650,18 +649,15 @@ export const updateApp = grnState => {
             })
 
         };
-        console.log(JSON.stringify(grnState));
 
         async function addExpressionData() {
             try {
                 let expressionData = await responseData('expression', '././controllers/database-controller.js');
                 grnState.network.expression = expressionData;
-                console.log("THE FULL NETWORK: " + JSON.stringify(grnState.network));
-                console.log("TOP DATASET: " + JSON.stringify(grnState.nodeColoring));
+                grnState.nodeColoring.topDataset = 'Barreto_2018_wt';
+                grnState.nodeColoring.bottomDataset = 'Barreto_2018_wt';
                 grnState.nodeColoring.nodeColoringEnabled = true;
                 updaters.renderNodeColoring();
-                // Currently having an error where there's no 'data' attribute of grnState.nodeColoring.topDataset
-                // What is grnState.nodeColoring.topDataset supposed to look like? How do I fix this so node coloring can happen?
             } catch (error) {
                 console.log(error.stack);
                 console.log(error.name);
@@ -734,6 +730,5 @@ export const updateApp = grnState => {
         $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
         $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
-
     refreshApp();
 };
