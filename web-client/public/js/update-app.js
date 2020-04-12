@@ -483,7 +483,7 @@ const updateBottomDataset = () => {
 };
 
 export const updateApp = grnState => {
-    console.log($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked"));
+    // console.log($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked"));
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
         displayNetwork(grnState.network, grnState.name);
@@ -612,15 +612,13 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
-    } else {
+    } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression) && grnState.nodeColoring.nodeColoringEnabled){
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
-    }
 
-    if(grnState.network !== null && !hasExpressionData(grnState.network.expression)) {
-        console.log("No existing expression data.");
+        console.log("No existing expression data, but we're gonna make it work.");
         grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
@@ -630,63 +628,49 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         resetDatasetDropdownMenus(grnState.network);
         grnState.nodeColoring.nodeColoringOptions.unshift({value: 'Select Dataset from Expression Database'});
-
-
-        if($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-            console.log("Node coloring suddenly and mysteriously enabled.")
-            // const responseData = (name, formData) => {
-            //     const uploadRoute = 'expression';
-            //     const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-            //     // The presence of formData is taken to indicate a POST.
-            //     (formData ?
-            //         $.ajax({
-            //             url: fullUrl,
-            //             data: formData,
-            //             processData: false,
-            //             contentType: false,
-            //             type: "POST",
-            //             crossDomain: true
-            //         }) :
-            //         $.getJSON(fullUrl)
-            //         ).done((network, textStatus, jqXhr) => {
-            //             grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
-            //             // if (demoFiles.indexOf(name) > -1) {
-            //             //     switch (name) {
-            //             //     case WEIGHTED_DEMO_PATH:
-            //             //         grnState.name = WEIGHTED_DEMO_NAME;
-            //             //         break;
-            //             //     case UNWEIGHTED_DEMO_PATH:
-            //             //         grnState.name = UNWEIGHTED_DEMO_NAME;
-            //             //         break;
-            //             //     case SCHADE_INPUT_PATH:
-            //             //         grnState.name = SCHADE_INPUT_NAME;
-            //             //         break;
-            //             //     case SCHADE_OUTPUT_PATH:
-            //             //         grnState.name = SCHADE_OUTPUT_NAME;
-            //             //         break;
-            //             //     }
-            //             // }
-            //             grnState.network = network;
-            //             if (uploadRoute !== "upload") {
-            //                 grnState.annotateLinks();
-            //             }
-            //             reloader = () => responseData(name, formData);
-            //             // re-enable upload button
-            //             disableUpload(false);
-            //             updateApp(grnState);
-            //             // displayStatistics(network);
+        const responseData = (name, formData) => {
+            return new Promise(function(resolve, reject) {
+                const uploadRoute = 'expression';
+                const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+                (formData ?
+                    $.ajax({
+                        url: fullUrl,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "GET",
+                        crossDomain: true
+                    }) :
+                    $.getJSON(fullUrl)
+                    ).done((expressionData, textStatus, jqXhr) => {
+                        resolve(expressionData);
+                        updateApp(grnState);
         
-            //         }).error(networkErrorDisplayer);
-            // };
+                    }).error(console.log(error));
+            })
 
-            // grnState.network.expression = responseData;
-            // grnState.nodeColoring.nodeColoringEnabled = true;
-            // updaters.renderNodeColoring();
+        };
+        console.log(JSON.stringify(grnState));
+
+        async function addExpressionData() {
+            try {
+                let expressionData = await responseData('expression', '././controllers/database-controller.js');
+                grnState.network.expression = expressionData;
+                console.log("THE FULL NETWORK: " + JSON.stringify(grnState.network));
+                console.log("TOP DATASET: " + JSON.stringify(grnState.nodeColoring));
+                grnState.nodeColoring.nodeColoringEnabled = true;
+                updaters.renderNodeColoring();
+                // Currently having an error where there's no 'data' attribute of grnState.nodeColoring.topDataset
+                // What is grnState.nodeColoring.topDataset supposed to look like? How do I fix this so node coloring can happen?
+            } catch (error) {
+                console.log(error.stack);
+                console.log(error.name);
+                console.log(error.message);
+            }
         }
-        // Render some node coloring with the expression database data
-                // PUT NEW EXPRESSION DATA INTO THIS
-        //     grnState.network.expression = 
-        // }
+
+        addExpressionData();
+        
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {

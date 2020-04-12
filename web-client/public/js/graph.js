@@ -991,6 +991,7 @@ export var drawGraph = function (network) {
     };
 
     var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
+        console.log(dataset);
         var timePoints = [];
         node.each(function (p) {
             d3.select(this)

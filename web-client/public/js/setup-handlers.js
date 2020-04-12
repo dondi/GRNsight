@@ -37,6 +37,7 @@ import {
     GRID_LAYOUT_BUTTON,
     GRID_LAYOUT_MENU,
     NODE_COLORING_TOGGLE_CLASS,
+    NODE_COLORING_TOGGLE_SIDEBAR,
     AVG_REPLICATE_VALS_TOP_MENU,
     AVG_REPLICATE_VALS_TOP_SIDEBAR,
     AVG_REPLICATE_VALS_BOTTOM_MENU,
@@ -215,11 +216,15 @@ export const setupHandlers = grnState => {
 // Node Coloring
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
         grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
+        console.log("nodecoloringenabled: " + grnState.nodeColoring.nodeColoringEnabled);
+        // $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", !$(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked"));
+        console.log("node coloring checked:" + $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked"));
         updateApp(grnState);
     });
 
     $(TOP_DATASET_SELECTION_SIDEBAR).change(() => {
         var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        console.log("TOP DS VALUE: " + selection);
         grnState.nodeColoring.topDataset = selection;
         if (grnState.nodeColoring.bottomDataSameAsTop) {
             grnState.nodeColoring.bottomDataset = selection;
