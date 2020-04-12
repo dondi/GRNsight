@@ -430,9 +430,7 @@ export const setupHandlers = grnState => {
     });
 
     $(SPECIES_BUTTON_YEAST).click(function () {
-        console.log("click")
         var selection = $(SPECIES_BUTTON_YEAST).attr("id");
-        console.log(selection)
         grnState.genePageData.identified = false;
         identifySpeciesMenu(selection);
         updateApp(grnState);
