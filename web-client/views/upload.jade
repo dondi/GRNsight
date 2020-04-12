@@ -412,9 +412,9 @@ html
             a(id='speciesHeaderLink' data-toggle='collapse' data-target='#speciesSidebarPanel') Species
           div(id="speciesSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
-              div(class="speciesIdentifiedDropdown") Identified Species:
+              div(class="currentSpecies") Current Species
                 //- p(class="speciesIdentifiedDisplay" id="speciesName" href="#") Saccharomyces cerevisiae
-                select(id='speciesDropdown' href='#')
+                select(class="speciesIdentifiedDropdown" id='speciesDropdown' href='#')
                   option(href='#' id='cressOption' value='Arabidopsis_thaliana') Arabidopsis thaliana
                   option(href='#' id='nematodeOption' value='Caenorhabditis_elegans') Caenorhabditis elegans
                   option(href='#' id='fruitflyOption' value='Drosophila_melanogaster') Drosophila melanogaster

@@ -447,6 +447,10 @@ const updateBottomDataset = () => {
     updaters.renderNodeColoring();
 };
 
+if (grnState.genePageData.identified === false) {
+    $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+}
+
 export const updateApp = grnState => {
     if (grnState.newNetwork) {
         grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
