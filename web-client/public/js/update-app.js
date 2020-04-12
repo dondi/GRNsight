@@ -86,12 +86,7 @@ import {
   EXPRESSION_DB_SIDEBAR_PANEL,
   SPECIES_IDENTIFIED_ICON_DISPLAY,
   SPECIES_DISPLAY,
-  SPECIES_BUTTON_YEAST,
-  SPECIES_BUTTON_HUMAN,
-  SPECIES_BUTTON_FLY,
-  SPECIES_BUTTON_NEMATODE,
-  SPECIES_BUTTON_MOUSE,
-  SPECIES_BUTTON_CRESS,
+
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -272,17 +267,6 @@ const updateLinkDistanceSliderValues = () => {
             grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
 };
 
-
-const speciesIdenified = () => {
-    if (grnState.genePageData.identified) {
-        $(SPECIES_IDENTIFIED_ICON_DISPLAY).removeClass("glyphicon-remove");
-        $(SPECIES_IDENTIFIED_ICON_DISPLAY).addClass("glyphicon-ok");
-    }
-    $(SPECIES_IDENTIFIED_ICON_DISPLAY).removeClass("glyphicon-remove");
-    $(SPECIES_IDENTIFIED_ICON_DISPLAY).addClass("glyphicon-ok");
-};
-
-
 // Grid Layout Functions
 const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
@@ -361,10 +345,7 @@ const hasExpressionData = (sheets) => {
 
 // helper method to check if the given data, a taxon id or a species name
 // is contained within the identified species, if it exists at all.
-const identifySpeciesOrTaxon = (data) => {
-    if (grnState.genePageData.identified === true) {
-        return true;
-    }
+export const identifySpeciesMenu = (data) => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
         if (Object.values(nameTax[n]).includes(data.toString())) {
@@ -372,7 +353,24 @@ const identifySpeciesOrTaxon = (data) => {
             grnState.genePageData.species = nameTax[n].spec;
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+            return grnState.genePageData.identified;
+        }
+    }
+    return false;
+};
+
+const identifySpeciesOrTaxon = (data) => {
+    var nameTax = grnState.nameToTaxon;
+    for (var n in nameTax) {
+        // if (Object.values(nameTax[n]).includes(data.toString())) {
+        if (n === data.toString()) { // <-- change if to work
+            grnState.genePageData.commonName = n;
+            grnState.genePageData.species = nameTax[n].spec;
+            grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
+            grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
             grnState.genePageData.identified = true;
+            grnState.genePageData.readFromNetwork = true;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             return grnState.genePageData.identified;
         }
@@ -493,16 +491,11 @@ export const updateApp = grnState => {
 
             // check if the species has been identified yet, if not try to identify it
             // also checks if the areas have been populated at all
-            if (grnState.genePageData.identified === false) {
-                if (grnState.network.meta.species !== undefined) {
-                    identifySpeciesOrTaxon(grnState.network.meta.species);
-                }
-                if (grnState.network.meta.taxon_id !== undefined) {
-                    identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
-                }
+            if (grnState.network.meta.species !== undefined) {
+                identifySpeciesOrTaxon(grnState.network.meta.species);
+            } else if (grnState.network.meta.taxon_id !== undefined) {
+                identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
             }
-
-            speciesIdenified();
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
@@ -556,37 +549,6 @@ export const updateApp = grnState => {
         synchronizeHideAllWeights();
     }
 
-// Species Menu
-    $(SPECIES_BUTTON_YEAST).click(function () {
-        grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Saccharomyces Cerevisiae");
-        speciesIdenified();
-    });
-    $(SPECIES_BUTTON_HUMAN).click(function () {
-        grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Homo Sapien");
-        speciesIdenified();
-    });
-    $(SPECIES_BUTTON_FLY).click(function () {
-        grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Drosophila Melanogaster");
-        speciesIdenified();
-    });
-    $(SPECIES_BUTTON_NEMATODE).click(function () {
-        grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Caenorhabditis Elegans");
-        speciesIdenified();
-    });
-    $(SPECIES_BUTTON_MOUSE).click(function () {
-        grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Mus Musculus");
-        speciesIdenified();
-    });
-    $(SPECIES_BUTTON_CRESS).click(function () {
-        grnState.genePageData.identified = false;
-        identifySpeciesOrTaxon("Arabidopsis Thaliana");
-        speciesIdenified();
-    });
 // Enable/Disable Colored edges
     $(COLOR_EDGES_SIDEBAR).prop("checked", grnState.colorOptimal);
     const classFunction = `${grnState.colorOptimal ? "add" : "remove"}Class`;

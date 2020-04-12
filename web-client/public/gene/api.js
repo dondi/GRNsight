@@ -48,8 +48,9 @@ let defaultYeastmine = {
 
 
 let getUniProtInfo = function (query) {
-    const taxon = (query.species === "Saccharomyces_cerevisiae") ? "559292" : query.taxon;
+    const taxon = query.uniprot;
     const geneSymbol = query.symbol;
+    console.log("this is uniprot: " + taxon);
     return $.get({
         url: serviceRoot + "/uniprot/uploadlists/",
         data: {
@@ -131,7 +132,8 @@ let getYeastMineInfo = function (query) {
 
 let getJasparInfo = function (query) {
     const geneSymbol = query.symbol;
-    const taxon = (query.species === "Saccharomyces_cerevisiae") ? "4932" : query.taxon;
+    const taxon = query.jaspar;
+    console.log("this is jaspar: " + taxon);
 
     return $.get({
         url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=" + taxon + "&format=json&name=" + geneSymbol.toUpperCase(),
@@ -292,7 +294,6 @@ let parseYeastmine = function (data) {
 };
 
 let parseJaspar = function (data) {
-
     const jasparTemplate = {
         jasparID : data.matrix_id,
         class: data.class[0],
