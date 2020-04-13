@@ -339,19 +339,19 @@ const updateSpeciesMenu = () => {
     if ($(SPECIES_DISPLAY).val() === "Arabidopsis_thaliana") {
         $(SPECIES_BUTTON_CRESS + " span").addClass("glyphicon-ok");
     }
-    if ($(SPECIES_DISPLAY).val() === 'Drosophila_melanogaster') {
+    if ($(SPECIES_DISPLAY).val() === "Drosophila_melanogaster") {
         $(SPECIES_BUTTON_FLY + " span").addClass("glyphicon-ok");
     }
-    if ($(SPECIES_DISPLAY).val() === 'Caenorhabditis_elegans') {
+    if ($(SPECIES_DISPLAY).val() === "Caenorhabditis_elegans") {
         $(SPECIES_BUTTON_NEMATODE + " span").addClass("glyphicon-ok");
     }
-    if ($(SPECIES_DISPLAY).val() === 'Homo_sapiens') {
+    if ($(SPECIES_DISPLAY).val() === "Homo_sapiens") {
         $(SPECIES_BUTTON_HUMAN + " span").addClass("glyphicon-ok");
     }
-    if ($(SPECIES_DISPLAY).val() === 'Mus_musculus') {
+    if ($(SPECIES_DISPLAY).val() === "Mus_musculus") {
         $(SPECIES_BUTTON_MOUSE + " span").addClass("glyphicon-ok");
     }
-    if ($(SPECIES_DISPLAY).val() === 'Saccharomyces_cerevisiae') {
+    if ($(SPECIES_DISPLAY).val() === "Saccharomyces_cerevisiae") {
         $(SPECIES_BUTTON_YEAST + " span").addClass("glyphicon-ok");
     }
 };
