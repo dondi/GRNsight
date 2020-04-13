@@ -80,6 +80,12 @@ import {
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
   SPECIES_DISPLAY,
+  SPECIES_BUTTON_CRESS,
+  SPECIES_BUTTON_FLY,
+  SPECIES_BUTTON_HUMAN,
+  SPECIES_BUTTON_MOUSE,
+  SPECIES_BUTTON_NEMATODE,
+  SPECIES_BUTTON_YEAST
 
 } from "./constants";
 
@@ -322,6 +328,34 @@ const hasExpressionData = (sheets) => {
     return false;
 };
 
+const updateSpeciesMenu = () => {
+    $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+    $(SPECIES_BUTTON_CRESS + " span").removeClass("glyphicon-ok");
+    $(SPECIES_BUTTON_FLY + " span").removeClass("glyphicon-ok");
+    $(SPECIES_BUTTON_HUMAN + " span").removeClass("glyphicon-ok");
+    $(SPECIES_BUTTON_YEAST + " span").removeClass("glyphicon-ok");
+    $(SPECIES_BUTTON_NEMATODE + " span").removeClass("glyphicon-ok");
+    $(SPECIES_BUTTON_MOUSE + " span").removeClass("glyphicon-ok");
+    if ($(SPECIES_DISPLAY).val() === "Arabidopsis_thaliana") {
+        $(SPECIES_BUTTON_CRESS + " span").addClass("glyphicon-ok");
+    }
+    if ($(SPECIES_DISPLAY).val() === "Drosophila_melanogaster") {
+        $(SPECIES_BUTTON_FLY + " span").addClass("glyphicon-ok");
+    }
+    if ($(SPECIES_DISPLAY).val() === "Caenorhabditis_elegans") {
+        $(SPECIES_BUTTON_NEMATODE + " span").addClass("glyphicon-ok");
+    }
+    if ($(SPECIES_DISPLAY).val() === "Homo_sapiens") {
+        $(SPECIES_BUTTON_HUMAN + " span").addClass("glyphicon-ok");
+    }
+    if ($(SPECIES_DISPLAY).val() === "Mus_musculus") {
+        $(SPECIES_BUTTON_MOUSE + " span").addClass("glyphicon-ok");
+    }
+    if ($(SPECIES_DISPLAY).val() === "Saccharomyces_cerevisiae") {
+        $(SPECIES_BUTTON_YEAST + " span").addClass("glyphicon-ok");
+    }
+};
+
 // helper method to check if the given data, a taxon id or a species name
 // is contained within the identified species, if it exists at all.
 export const identifySpeciesMenu = (data) => {
@@ -333,6 +367,7 @@ export const identifySpeciesMenu = (data) => {
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+            updateSpeciesMenu();
             return grnState.genePageData.identified;
         }
     }
@@ -342,7 +377,6 @@ export const identifySpeciesMenu = (data) => {
 const identifySpeciesOrTaxon = (data) => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        // if (Object.values(nameTax[n]).includes(data.toString())) {
         if (n === data.toString()) { // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
@@ -351,6 +385,7 @@ const identifySpeciesOrTaxon = (data) => {
             grnState.genePageData.identified = true;
             grnState.genePageData.readFromNetwork = true;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+            updateSpeciesMenu();
             return grnState.genePageData.identified;
         }
     }
@@ -446,6 +481,10 @@ const updateBottomDataset = () => {
     }
     updaters.renderNodeColoring();
 };
+
+if (grnState.genePageData.identified === false) {
+    $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+}
 
 export const updateApp = grnState => {
     if (grnState.newNetwork) {
