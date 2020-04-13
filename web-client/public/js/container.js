@@ -136,7 +136,7 @@ export const container = function () {
         }
     });
 
-    $("#expressionDB").on("click", function() {
+    $("#expressionDB").on("click", function () {
         if (!$("#expressionDB span").hasClass("glyphicon-ok")) {
             $("#expressionDB span").addClass("glyphicon-ok");
             $("#expressionDB").trigger("change");
