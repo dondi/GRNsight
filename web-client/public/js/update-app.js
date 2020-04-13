@@ -482,7 +482,7 @@ const updateBottomDataset = () => {
     updaters.renderNodeColoring();
 };
 
-if (grnState.genePageData.identified === false) {
+if (!grnState.genePageData.identified) {
     $(SPECIES_DISPLAY).val(grnState.genePageData.species);
 }
 
