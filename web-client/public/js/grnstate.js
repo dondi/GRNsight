@@ -90,8 +90,8 @@ export const grnState = {
     genePageData: {
         commonName: "Yeast",
         species: "Saccharomyces_cerevisiae",
-        taxonJaspar: "559292",
-        taxonUniprot: "4932",
+        taxonUniprot: "559292",
+        taxonJaspar: "4932",
         identified: false
     },
 
@@ -105,7 +105,7 @@ export const grnState = {
         "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: "7227", uniprot: "7227" },
         "Homo sapiens": { spec: "Homo_sapiens", jaspar: "9606", uniprot: "9606" },
         "Mus musculus": { spec: "Mus_musculus", jaspar: "10090", uniprot: "10090" },
-        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: "559292", uniprot: "4932" }
+        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: "4932", uniprot: "559292" }
     },
 
 // Slider Parameters
