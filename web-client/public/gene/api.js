@@ -296,7 +296,6 @@ let parseYeastmine = function (data) {
 };
 
 let parseJaspar = function (data) {
-    console.log(data.class)
     const jasparTemplate = {
         jasparID : data.matrix_id,
         class: data.class[0],
