@@ -1,8 +1,8 @@
 var multiparty = require("multiparty");
 var xlsx = require("node-xlsx");
-// var util = require("util");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
+var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
@@ -17,6 +17,14 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
     49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
     62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
     74:"BV", 75:"BW", 76:"BX"};
+
+var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+
+var isExpressionSheet = function (sheetName) {
+    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+        return sheetName.includes(suffix);
+    });
+};
 
 // TODO: Put this and the warnings list into helpers.
 // This is the massive list of errors. Yay!
@@ -175,15 +183,19 @@ var warningsList = {
         };
     },
 
-    incorrectlyNamedSheetWarning: function () {
-        return {
-            warningCode: "INCORRECTLY_NAMED_SHEET",
-            errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
+    incorrectlyNamedSheetWarning: {
+        warningCode: "INCORRECTLY_NAMED_SHEET",
+        errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
              'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
              'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
-        };
-    }
+    },
+
+    missingExpressionSheetWarning: {
+        warningCode: "MISSING_EXPRESSION_SHEET",
+        errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
+        The network graph will display without node coloring."
+    },
 };
 
 var addMessageToArray = function (messageArray, message) {
@@ -227,7 +239,7 @@ var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
     }
 };
 
-var parseSheet = function (sheet) {
+var parseNetworkSheet = function (sheet) {
     var currentSheet;
     var network = {
         genes: [],
@@ -250,11 +262,11 @@ var parseSheet = function (sheet) {
 
     // Look for the worksheet containing the network data
     for (var i = 0; i < sheet.length; i++) {
-        if (sheet[i].name === "network") {
+        if (sheet[i].name.toLowerCase() === "network") {
             // Here we have found a sheet containing simple data. We keep looking
             // in case there is also a sheet with optimized weights
             currentSheet = sheet[i];
-        } else if (sheet[i].name === "network_optimized_weights") {
+        } else if (sheet[i].name.toLowerCase() === "network_optimized_weights") {
             // We found a sheet with optimized weights, which is the ideal data source.
             // So we stop looking.
             currentSheet = sheet[i];
@@ -437,12 +449,74 @@ var processGRNmap = function (path, res, app) {
     }
 
     helpers.attachFileHeaders(res, path);
-    network = parseSheet(sheet);
+    network = parseNetworkSheet(sheet);
 
     // Parse expression and 2-column data, then add to network object
+    // Eventually, will split this up into parsing for each type of sheet.
     var additionalData = parseAdditionalSheets(sheet);
-    Object.assign(network, additionalData);
+    var expCount = 0;
+    sheet.forEach(function (sheet) {
+        // CHECK FOR MISSING EXPRESSION SHEET
+        if (isExpressionSheet(sheet.name)) {
+            expCount++;
+        }
+    });
+    if (expCount <= 0) {
+        addWarning(network, warningsList.missingExpressionSheetWarning);
+    }
 
+    var expressionData = parseExpressionSheets(sheet);
+
+    // Add errors and warnings from meta sheets
+    if (additionalData && additionalData.meta) {
+        if (additionalData.meta.errors !== undefined) {
+            additionalData.meta.errors.forEach(data => network.errors.push(data));
+        }
+
+        if (additionalData.meta.warnings !== undefined) {
+            additionalData.meta.warnings.forEach(data => network.warnings.push(data));
+        }
+    }
+
+    if (additionalData && additionalData.test) {
+        // Add errors and warnings from test sheets
+        if (additionalData.test.errors !== undefined) {
+            additionalData.test.errors.forEach(data => network.errors.push(data));
+        }
+
+        if (additionalData.test.warnings !== undefined) {
+            additionalData.test.warnings.forEach(data => network.warnings.push(data));
+        }
+    }
+
+    // Add errors and warnings from expression sheets
+    // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
+    // We need to account for all the different possible expression sheet names.
+    if (expressionData && expressionData.expression) {
+        if (expressionData.expression.errors !== undefined) {
+            expressionData.expression.errors
+            .forEach(data => network.errors.push(data));
+        }
+
+        if (expressionData.expression.warnings !== undefined) {
+            expressionData.expression.warnings
+            .forEach(data => network.warnings.push(data));
+        }
+    }
+
+    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
+        if (expressionData.expression.wt_log2_expression.errors !== undefined) {
+            expressionData.expression.wt_log2_expression.errors
+            .forEach(data => network.errors.push(data));
+        }
+
+        if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
+            expressionData.expression.wt_log2_expression.warnings
+            .forEach(data => network.warnings.push(data));
+        }
+    }
+
+    Object.assign(network, additionalData, expressionData);
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
         res.json(network) :
@@ -517,7 +591,7 @@ module.exports = function (app) {
 
     // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
         app.post("/upload", function (req, res) {
-      // TODO: Add file validation
+      // TODO: Add file validation (make sure that file is an Excel file)
             (new multiparty.Form()).parse(req, function (err, fields, files) {
                 if (err) {
                     return res.json(400, "There was a problem uploading your file. Please try again.");
@@ -538,6 +612,7 @@ module.exports = function (app) {
                         types that GRNsight supports is in the Documentation.");
                 }
 
+                // input.meta holds the species and taxon data
                 return processGRNmap(input, res, app);
             });
         });
@@ -562,9 +637,10 @@ module.exports = function (app) {
         });
     }
 
-    // exporting parseSheet for use in testing. Do not remove!
+    // exporting parseNetworkSheet for use in testing. Do not remove!
     return {
-        parseSheet: parseSheet,
-        grnSightToCytoscape: grnSightToCytoscape
+        parseNetworkSheet: parseNetworkSheet,
+        grnSightToCytoscape: grnSightToCytoscape,
+        processGRNmap : processGRNmap
     };
 };

@@ -29,7 +29,7 @@ describe("additional-sheet-parser", function () {
         assert(data,
             {"expression": {
                 "wt_log2_expression": {
-                    "time_points": [15, 15, 15, 15, 30, 30, 30, 30, 30, 60, 60, 60, 60],
+                    "timePoints": [15, 15, 15, 15, 30, 30, 30, 30, 30, 60, 60, 60, 60],
                     "data": {
                         "ACE2":[0.6139, -1.0689, 0.1906, -0.398, 0.5827, null,
                             -0.3947, -0.6264, 0.3377, 0.817, 0.5566, -0.4357, -1.2497],
@@ -45,12 +45,14 @@ describe("additional-sheet-parser", function () {
             });
     });
 
-    it("correctly identifies expression sheets by suffix", function () {
-        var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
-        "expression_sheet_names_test.xlsx");
-        var data = parseAdditionalSheets(workbook);
-        assert(Object.keys(data.expression).length, 3);
-    });
+    // Commenting out bc we are restructuring how sheets are parsed.
+    // Expression sheets will be parsed separately.
+    // it("correctly identifies expression sheets by suffix", function () {
+    //     var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
+    //     "expression_sheet_names_test.xlsx");
+    //     var data = parseAdditionalSheets(workbook);
+    //     assert(Object.keys(data.expression).length, 3);
+    // });
 
     it("correctly parses optimization_parameters sheet", function () {
         var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +

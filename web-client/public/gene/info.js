@@ -28,11 +28,14 @@
         }, 200);
     });
 
-    const search = location.search.substring(1);
+    // object for gene page API calls
+    // Thank you https://gist.github.com/pirate/9298155edda679510723
+    const query = new URLSearchParams(location.search);
     const obj = {
-        symbol: search.match(/symbol=(.*?)(?=&)/)[1],
-        species: search.match(/species=(.*?)(?=&)/)[1],
-        taxon: search.match(/taxon=(.*?)/)[1]
+        symbol: query.get("symbol"),
+        species: query.get("species"),
+        jaspar: query.get("jaspar"),
+        uniprot: query.get("uniprot")
     };
 
     document.title = "GRNsight - " + obj.symbol;

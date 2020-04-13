@@ -39,15 +39,6 @@ const annotateLinks = network => {
     });
 };
 
-const genePageData = () => {
-
-    // set to be a function for when data is read from .xml
-    return {
-        species: "Saccharomyces_cerevisiae",
-        taxon: "559292"
-    };
-};
-
 export const grnState = {
     name: null,
     simulation: undefined,
@@ -94,8 +85,28 @@ export const grnState = {
 
 
 // Gene Page data
-    species: genePageData().species,
-    taxon: genePageData().taxon,
+// left defaulting to yeast for tests, until a better solution is found
+// Setting base case to yeast
+    genePageData: {
+        commonName: "Yeast",
+        species: "Saccharomyces_cerevisiae",
+        taxonUniprot: "559292",
+        taxonJaspar: "4932",
+        identified: false
+    },
+
+    nameToTaxon: {
+        // Treating like a dictionary with keys being the english name
+        // and values being a dictionary of (latin name, Uniprot, Jaspar)
+        // some taxon ids are different between the two
+        // changed spec names for common english and will have them formatted before calling an api
+        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: "3702", uniprot: "3702" },
+        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: "6293", uniprot: "6293" },
+        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: "7227", uniprot: "7227" },
+        "Homo sapiens": { spec: "Homo_sapiens", jaspar: "9606", uniprot: "9606" },
+        "Mus musculus": { spec: "Mus_musculus", jaspar: "10090", uniprot: "10090" },
+        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: "4932", uniprot: "559292" }
+    },
 
 // Slider Parameters
     slidersLocked: false,
