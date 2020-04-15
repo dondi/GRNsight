@@ -44,7 +44,6 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  EXPRESSION_DB_MENU,
   GRID_LAYOUT_MENU,
   FORCE_GRAPH_MENU,
   LAYOUT_SIDEBAR_PANEL,
@@ -52,7 +51,6 @@ import {
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_SIDEBAR_BODY,
-  DATA_SIDEBAR_BODY,
   NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
@@ -81,10 +79,6 @@ import {
   EDGE_WEIGHT_MENU_CLASS,
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
-  NODE_COLORING_USING_EXPRESSION_DATA,
-  EXPRESSION_DB_MENU_HEADER_LINK,
-  EXPRESSION_DB_SIDEBAR_PANEL,
-  SPECIES_IDENTIFIED_ICON_DISPLAY,
   SPECIES_DISPLAY,
 
 } from "./constants";
@@ -300,13 +294,6 @@ const showNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
-const showDataMenu = () => {
-    $(EXPRESSION_DB_SIDEBAR_PANEL).removeClass("disabled");
-    $(EXPRESSION_DB_SIDEBAR_PANEL).addClass("in");
-    $(EXPRESSION_DB_MENU).removeClass("disabled");
-    $(EXPRESSION_DB_MENU_HEADER_LINK).attr("data-toggle", "collapse");
-}
-
 const disableNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
@@ -314,13 +301,6 @@ const disableNodeColoringMenus = () => {
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
-
-const disableDataMenu = () => {
-    $(EXPRESSION_DB_SIDEBAR_PANEL).addClass("disabled");
-    $(EXPRESSION_DB_SIDEBAR_PANEL).removeClass("in");
-    $(EXPRESSION_DB_MENU).addClass("disabled");
-    $(EXPRESSION_DB_MENU_HEADER_LINK).attr("data-toggle", "collapse");
-}
 
 const isNewWorkbook = (name) => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
@@ -407,14 +387,14 @@ const resetDatasetDropdownMenus = (network) => {
     }
 
     // Add expression database options
-    grnState.nodeColoring.nodeColoringOptions.push({value: 'Barreto_2018_wt'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dCIN5'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dGLN3'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dHAP4'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 dZAP1'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Dahlquist 2018 wt'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Kitagawa 2002 wt'});
-    grnState.nodeColoring.nodeColoringOptions.push({value: '(DB) Thorsen 2007 wt'});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Barreto_2018_wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dCIN5"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dGLN3"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dHAP4"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dZAP1"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Kitagawa 2002 wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Thorsen 2007 wt"});
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -514,10 +494,6 @@ export const updateApp = grnState => {
             }
         } else {
             grnState.nodeColoringEnabled = false;
-
-            // $(NODE_COLORING_USING_EXPRESSION_DATA).addClass("glyphicon-ok");
-            // Enable clickability of Coloring with Expression Database tab
-            // If that's clicked, pop out the stuff below it (which I will write in upload.jade and then enable once this option is selected)
         }
         refreshApp();
 
@@ -564,7 +540,8 @@ export const updateApp = grnState => {
 
 
 // Node Coloring
-    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled && hasExpressionData(grnState.network.expression)) {
+    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
+    && hasExpressionData(grnState.network.expression)) {
         grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
@@ -573,13 +550,14 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
-    } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression) && grnState.nodeColoring.nodeColoringEnabled){
+    } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
+    && grnState.nodeColoring.nodeColoringEnabled) {
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
 
-        console.log("No existing expression data, but we're gonna make it work.");
+        console.log("Expression data loading from database.");
         grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
@@ -590,8 +568,8 @@ export const updateApp = grnState => {
         resetDatasetDropdownMenus(grnState.network);
         // grnState.nodeColoring.nodeColoringOptions.unshift({value: 'Select Dataset from Expression Database'});
         const responseData = (name, formData) => {
-            return new Promise(function(resolve, reject) {
-                const uploadRoute = 'expression';
+            return new Promise(function (resolve) {
+                const uploadRoute = "expression";
                 const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
                 (formData ?
                     $.ajax({
@@ -603,32 +581,26 @@ export const updateApp = grnState => {
                         crossDomain: true
                     }) :
                     $.getJSON(fullUrl)
-                    ).done((expressionData, textStatus, jqXhr) => {
+                    ).done((expressionData) => {
                         resolve(expressionData);
                         updateApp(grnState);
-        
-                    }).error(console.log(error));
-            })
+                    }).error(console.log("Error in accessing expression database. Result may just be loading."));
+            });
 
         };
 
-        async function addExpressionData() {
-            try {
-                let expressionData = await responseData('expression', '././controllers/database-controller.js');
-                grnState.network.expression = expressionData;
-                grnState.nodeColoring.topDataset = 'Barreto_2018_wt';
-                grnState.nodeColoring.bottomDataset = 'Barreto_2018_wt';
-                grnState.nodeColoring.nodeColoringEnabled = true;
-                updaters.renderNodeColoring();
-            } catch (error) {
-                console.log(error.stack);
-                console.log(error.name);
-                console.log(error.message);
-            }
-        }
+        responseData("expression", "././controllers/database-controller.js").then(function (response) {
+            grnState.network.expression = response;
+            grnState.nodeColoring.topDataset = "Barreto_2018_wt";
+            grnState.nodeColoring.bottomDataset = "Barreto_2018_wt";
+            grnState.nodeColoring.nodeColoringEnabled = true;
+            updaters.renderNodeColoring();
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
 
-        addExpressionData();
-        
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
