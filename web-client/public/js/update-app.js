@@ -331,14 +331,11 @@ const shortenExpressionSheetName = (name) => {
 };
 
 const hasExpressionData = (sheets) => {
-    // grnState.nodeColoring.showMenu = true;
     for (var property in sheets) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            // grnState.nodeColoring.showMenu = true;
             return true;
         }
     }
-    // grnState.nodeColoring.showMenu = false;
     return false;
 };
 
@@ -612,8 +609,6 @@ export const updateApp = grnState => {
 
         responseData("expression", "././controllers/database-controller.js").then(function (response) {
             grnState.network.expression = response;
-            // grnState.nodeColoring.topDataset = "Barreto_2018_wt";
-            // grnState.nodeColoring.bottomDataset = "Barreto_2018_wt";
             grnState.nodeColoring.nodeColoringEnabled = true;
             updaters.renderNodeColoring();
         }).catch(function (error) {
