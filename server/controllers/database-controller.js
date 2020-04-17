@@ -80,7 +80,8 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
-            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints), { type: sequelize.QueryTypes.SELECT })
+            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints),
+            { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
                     let possibleExpressionSheet = req.query.dataset;
                     // probably need to make an "if" statement based on which data set it is. Seems easier that way.

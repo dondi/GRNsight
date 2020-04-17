@@ -201,22 +201,17 @@ const synchronizeHideAllWeights = () => {
 };
 
 // Expression DB Access Functions
-const buildQuery = function (selection) {
-    return selection.timepoints ? ("SELECT * FROM expressiondata WHERE dataset=\'" + selection.dataset
-    + "\' AND (" + buildTimepointsQuery(selection.timepoints) + ") ORDER BY sortindex;")
-    : "SELECT * FROM expressiondata WHERE dataset=\'" + selection.dataset + "\' ORDER BY sortindex;";
-};
-
 const buildTimepointsString = function (selection) {
     let timepoints = "";
     selection.timepoints.forEach(x => timepoints += (x + ","));
     return timepoints.substring(0, timepoints.length - 1);
-}
+};
 
 const buildURL = function (selection) {
-    return selection.timepoints ? "expressiondb?dataset=" + selection.dataset + "&timepoints=" + buildTimepointsString(selection)
-    : 'expressiondb?dataset=' + selection.dataset;
-}
+    return selection.timepoints ?
+    "expressiondb?dataset=" + selection.dataset + "&timepoints=" + buildTimepointsString(selection)
+    : "expressiondb?dataset=" + selection.dataset;
+};
 
 
 // Sliders Functions
@@ -582,8 +577,10 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         resetDatasetDropdownMenus(grnState.network);
-        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ? grnState.nodeColoring.topDataset : "Barreto_2018_wt";
-        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ? grnState.nodeColoring.bottomDataset : "Barreto_2018_wt";
+        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
+        grnState.nodeColoring.topDataset : "Barreto_2018_wt";
+        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
+        grnState.nodeColoring.bottomDataset : "Barreto_2018_wt";
         let queryURL = buildURL({dataset: grnState.nodeColoring.topDataset});
         const responseData = (name, formData) => {
             return new Promise(function (resolve) {
