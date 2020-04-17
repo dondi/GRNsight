@@ -1,4 +1,4 @@
-var Sequelize = require("sequelize");
+const Sequelize = require("sequelize");
 require("dotenv").config();
 
 var sequelize = new Sequelize("grnsight_database", process.env.EXPRESSION_DB_USERNAME,
@@ -14,31 +14,16 @@ process.env.EXPRESSION_DB_PASSWORD, {
 
 });
 
-// Example; need to connect to actual user selection
-const userSelection = {dataset: "Barreto_2018_wt", timepoints: ["10", "60"]};
-// URL should be expressiondb?dataset=Dahlquist_2018_dcin5&timepoints=15,30,60
-
-// function buildTimepointsString (selection) {
-//     let timepoints = "";
-//     selection.timepoints.forEach(x => timepoints += (x + ","));
-//     return timepoints.substring(0, timepoints.length - 1);
-// }
-
-// function buildURL (selection) {
-//     const timepoints = buildTimepointsString(selection);
-//     return '/expressiondb?dataset=' + selection.dataset + '&timepoints=' + timepoints;
-// }
-
 let buildTimepointsQuery = function (selection) {
     let timepoints = "";
-    console.log(selection.timepoints);
     selection.forEach(x => timepoints += ("timepoints=\'" + x + "\' OR "));
     return timepoints.substring(0, timepoints.length - 4);
 };
 
-let buildQuery = function (selection) {
-    return "SELECT * FROM expressiondata WHERE dataset=\'" + selection.dataset
-    + "\' AND (" + buildTimepointsQuery(selection.timepoints) + ") ORDER BY sortindex;";
+let buildQuery = function (dataset, timepoints) {
+    return timepoints ? ("SELECT * FROM expressiondata WHERE dataset=\'" + dataset
+    + "\' AND (" + buildTimepointsQuery(timepoints) + ") ORDER BY sortindex;")
+    : "SELECT * FROM expressiondata WHERE dataset=\'" + dataset + "\' ORDER BY sortindex;";
 };
 
 let listUniqueGenes = function (arrayOfObjects) {
@@ -93,11 +78,11 @@ module.exports = function (app) {
         }
     });
 
-    app.get("/expression", function (req, res) {
+    app.get("/expressiondb", function (req, res) {
         try {
-            return sequelize.query(buildQuery(userSelection), { type: sequelize.QueryTypes.SELECT })
+            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints), { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
-                    let possibleExpressionSheet = userSelection.dataset;
+                    let possibleExpressionSheet = req.query.dataset;
                     // probably need to make an "if" statement based on which data set it is. Seems easier that way.
                     // let possibleTimePoints = [10, 10, 60, 60, 60, 60]
                     // In this case,

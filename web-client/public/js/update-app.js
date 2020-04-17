@@ -200,6 +200,25 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
+// Expression DB Access Functions
+const buildQuery = function (selection) {
+    return selection.timepoints ? ("SELECT * FROM expressiondata WHERE dataset=\'" + selection.dataset
+    + "\' AND (" + buildTimepointsQuery(selection.timepoints) + ") ORDER BY sortindex;")
+    : "SELECT * FROM expressiondata WHERE dataset=\'" + selection.dataset + "\' ORDER BY sortindex;";
+};
+
+const buildTimepointsString = function (selection) {
+    let timepoints = "";
+    selection.timepoints.forEach(x => timepoints += (x + ","));
+    return timepoints.substring(0, timepoints.length - 1);
+}
+
+const buildURL = function (selection) {
+    return selection.timepoints ? "expressiondb?dataset=" + selection.dataset + "&timepoints=" + buildTimepointsString(selection)
+    : 'expressiondb?dataset=' + selection.dataset;
+}
+
+
 // Sliders Functions
 const updateSliderState = slidersLocked => {
     const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
@@ -388,13 +407,13 @@ const resetDatasetDropdownMenus = (network) => {
 
     // Add expression database options
     grnState.nodeColoring.nodeColoringOptions.push({value: "Barreto_2018_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dCIN5"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dGLN3"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dHAP4"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 dZAP1"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Dahlquist 2018 wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Kitagawa 2002 wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "(DB) Thorsen 2007 wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dcin5"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dgln3"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dhap4"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dzap1"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Kitagawa_2002_wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Thorsen_2007_wt"});
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -566,10 +585,12 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         resetDatasetDropdownMenus(grnState.network);
-        // grnState.nodeColoring.nodeColoringOptions.unshift({value: 'Select Dataset from Expression Database'});
+        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ? grnState.nodeColoring.topDataset : "Barreto_2018_wt";
+        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ? grnState.nodeColoring.bottomDataset : "Barreto_2018_wt";
+        let queryURL = buildURL({dataset: grnState.nodeColoring.topDataset});
         const responseData = (name, formData) => {
             return new Promise(function (resolve) {
-                const uploadRoute = "expression";
+                const uploadRoute = queryURL;
                 const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
                 (formData ?
                     $.ajax({
@@ -591,8 +612,8 @@ export const updateApp = grnState => {
 
         responseData("expression", "././controllers/database-controller.js").then(function (response) {
             grnState.network.expression = response;
-            grnState.nodeColoring.topDataset = "Barreto_2018_wt";
-            grnState.nodeColoring.bottomDataset = "Barreto_2018_wt";
+            // grnState.nodeColoring.topDataset = "Barreto_2018_wt";
+            // grnState.nodeColoring.bottomDataset = "Barreto_2018_wt";
             grnState.nodeColoring.nodeColoringEnabled = true;
             updaters.renderNodeColoring();
         }).catch(function (error) {
