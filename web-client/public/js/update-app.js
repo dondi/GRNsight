@@ -80,6 +80,8 @@ import {
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
   SPECIES_DISPLAY,
+  EXPRESSION_DB_LOADER,
+  EXPRESSION_DB_LOADER_TEXT,
 
 } from "./constants";
 
@@ -211,6 +213,18 @@ const buildURL = function (selection) {
     return selection.timepoints ?
     "expressiondb?dataset=" + selection.dataset + "&timepoints=" + buildTimepointsString(selection)
     : "expressiondb?dataset=" + selection.dataset;
+};
+
+const startLoadingIcon = function () {
+    $(EXPRESSION_DB_LOADER).css("display", "block");
+    $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
+    console.log("loading started");
+};
+
+const stopLoadingIcon = function () {
+    $(EXPRESSION_DB_LOADER).css("display", "none");
+    $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
+    console.log("loading stopped");
 };
 
 
@@ -586,6 +600,7 @@ export const updateApp = grnState => {
             return new Promise(function (resolve) {
                 const uploadRoute = queryURL;
                 const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+                startLoadingIcon();
                 (formData ?
                     $.ajax({
                         url: fullUrl,
@@ -597,6 +612,7 @@ export const updateApp = grnState => {
                     }) :
                     $.getJSON(fullUrl)
                     ).done((expressionData) => {
+                        stopLoadingIcon();
                         resolve(expressionData);
                         updateApp(grnState);
                     }).error(console.log("Error in accessing expression database. Result may just be loading."));
