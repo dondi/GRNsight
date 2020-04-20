@@ -17,6 +17,18 @@ var sequelize = new Sequelize(
     }
 );
 
+const timepointsByDataset = {
+    Barreto_2018_wt: [10, 10, 20, 20, 20, 20, 40, 40, 40, 40, 60, 60, 60, 60, 120, 120, 120, 120],
+    Dahlquist_2018_dcin5: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 120, 120, 120, 120],
+    Dahlquist_2018_dgln3: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 120, 120, 120, 120],
+    Dahlquist_2018_dhap4: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 120, 120, 120],
+    Dahlquist_2018_dzap1: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 120, 120, 120, 120],
+    Dahlquist_2018_wt: [15, 15, 15, 15, 30, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 90, 120, 120, 120,
+        120, 120],
+    Kitagawa_2002_wt: [15, 15, 15, 30, 30, 30, 120, 120, 120],
+    Thorsen_2007_wt: [15, 15, 15, 30, 30, 30, 60, 60, 60, 60, 60, 60, 1080, 1080, 1080]
+};
+
 let buildTimepointsQuery = function (selection) {
     let timepoints = "";
     selection.forEach(x => timepoints += ("timepoints=\'" + x + "\' OR "));
@@ -70,13 +82,9 @@ module.exports = function (app) {
             return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
-                    let possibleExpressionSheet = req.query.dataset;
-                    // probably need to make an "if" statement based on which data set it is. Seems easier that way.
-                    // let possibleTimePoints = [10, 10, 60, 60, 60, 60]
-                    // In this case,
-                    let possibleTimePoints = [10, 10, 60, 60, 60, 60];
+                    let dataset = req.query.dataset;
                     let genes = listUniqueGenes(stdname);
-                    let response = convertToJSON(stdname, possibleExpressionSheet, possibleTimePoints, genes);
+                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], genes);
                     return res.send(response);
                 });
         } catch (e) {
