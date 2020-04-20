@@ -4,7 +4,6 @@ var test = require("./test");
 
 describe("expression-data-import-tests", function () {
 
-    // I don't understand the issue associated with this test
     describe("MISSING_EXPRESSION_SHEET", function () {
         it("_log2_expression or _log2_optimized_expression worksheet was not detected. The network graph will display without node coloring.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);

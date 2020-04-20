@@ -143,7 +143,8 @@ var errorList = {
         return {
             errorCode: "EXTRA_GENE_NAME",
             possibleCause: "Gene names in column A of the '" + sheetName + "' sheet have one or more extra genes than those listed in the network sheet",
-            SuggestedFix: "Please remove Genes: "+ stringOfGenes + "from Column A of the '" + sheetName + "' sheet."
+            SuggestedFix: "Please ensure that the genes in the '" + sheetName + "' are the same as the genes in the 'network' sheet and the " +
+                "'network_optimized_weights' sheet."
         }
     },
 
@@ -156,7 +157,8 @@ var errorList = {
         return {
             errorCode: "MISSING_GENE_NAME",
             possibleCause: "Gene names in column A of the '" + sheetName + "' sheet are missing one or more genes from the network sheet",
-            SuggestedFix: "Please add Genes: "+ stringOfGenes + "to Column A of the '" + sheetName + "' sheet in the proper order."
+            SuggestedFix: "Please ensure that the genes in the '" + sheetName + "' are the same as the genes in the 'network' sheet and the " +
+                "'network_optimized_weights' sheet."
         }
     },
 
@@ -471,6 +473,16 @@ var parseNetworkSheet = function (sheet) {
     return semanticChecker(network);
 };
 
+function difference(setA, setB) {
+    let _difference = new Set(setA);
+    for (let elemB of setB) {
+        if (_difference.has(elemB)) {
+            _difference.delete(elemB)
+        }
+    }
+    return _difference;
+}
+
 var crossSheetInteractions = function (workbook) {
     var network = parseNetworkSheet(workbook);
 
@@ -505,6 +517,17 @@ var crossSheetInteractions = function (workbook) {
     // Add errors and warnings from expression sheets
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
     // We need to account for all the different possible expression sheet names.
+    if (expressionData) {
+        if(expressionData.errors !== undefined) {
+            expressionData.errors
+                .forEach( data => network.errors.push(data));
+        }
+        if(expressionData.warnings !== undefined) {
+            expressionData.warnings
+                .forEach( data => network.warnings.push(data));
+        }
+    }
+
     if (expressionData && expressionData.expression) {
         if (expressionData.expression.errors !== undefined) {
             expressionData.expression.errors
@@ -517,7 +540,7 @@ var crossSheetInteractions = function (workbook) {
         }
     }
 
-    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
+    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression && expressionData.expression.wt_log2_expression) {
         if (expressionData.expression.wt_log2_expression.errors !== undefined) {
             expressionData.expression.wt_log2_expression.errors
                 .forEach(data => network.errors.push(data));
@@ -531,21 +554,6 @@ var crossSheetInteractions = function (workbook) {
 
     // Gene Mismatch and Label Error Tests
 
-    // NOTE: After you fix the quadrupling of the expression-sheet-parser data be sure to change the "===" comparing
-    // the network genes and the expression sheet genes to "==" because the network genes are of the type object
-    // while the expression sheet genes are of the type strings.
-
-
-    function difference(setA, setB) {
-        let _difference = new Set(setA);
-        for (let elemB of setB) {
-            if (_difference.has(elemB)) {
-                _difference.delete(elemB)
-            }
-        }
-        return _difference;
-    }
-
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             var tempNetworkGenes = new Set();
@@ -553,15 +561,9 @@ var crossSheetInteractions = function (workbook) {
                 tempNetworkGenes.add(network.genes[i].name);
             }
             var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
-
             var extraExpressionGenes = difference(tempExpressionGenes,tempNetworkGenes);
             var extraNetworkGenes = difference(tempNetworkGenes, tempExpressionGenes);
 
-            console.log("Extra Genes in Expression Sheet", extraExpressionGenes);
-            console.log("Network Genes", tempNetworkGenes);
-            console.log("Expression Genes", expressionData.expression[sheet.name].columnGeneNames);
-
-            //
             if(extraExpressionGenes.size === 0 && extraNetworkGenes.size === 0) {
                 for (var i = 0; i < network.genes.length; i++) {
                     if(network.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]){
@@ -573,21 +575,16 @@ var crossSheetInteractions = function (workbook) {
                 if(extraNetworkGenes.size > 0) {
                     addError(network, errorList.missingGeneNamesError(sheet.name, extraNetworkGenes));
                 }
-                if(extraExpressionGenes.size >0) {
+                if(extraExpressionGenes.size > 0) {
                     addError(network, errorList.extraGeneNamesError(sheet.name, extraExpressionGenes));
                 }
             }
         }
     });
 
+    //returning only the Network now instead of the network, expressionData, and additionalData object
 
-    const output = {
-        network: network,
-        expressionData: expressionData,
-        additionalData: additionalData,
-    };
-
-    return output
+    return network
 
 }
 
@@ -604,14 +601,19 @@ var processGRNmap = function (path, res, app) {
 
     helpers.attachFileHeaders(res, path);
 
-    var result = crossSheetInteractions(sheet);
+    var network = crossSheetInteractions(sheet);
 
-    Object.assign(result.network, result.additionalData, result.expressionData);
-    return (result.network.errors.length === 0) ?
+    //Removing Object.assign fixed the issue entirely, while assigning it before copying the expressionSheet
+    //and Additional warnings and errors made some tests pass and others fail again
+    //Not sure if you still want to create a conglomerate object, or not so it is commented out
+
+    //Object.assign(newResult, result.network, result.additionalData, result.expressionData);
+
+    return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
-        res.json(result.network) :
+        res.json(network) :
         // If all does not look well, return the network with an error 400
-        res.status(400).json(result.network);
+        res.status(400).json(network);
 };
 
 var grnSightToCytoscape = function (network) {

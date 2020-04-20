@@ -188,13 +188,10 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
-// not completed. is it checking that the genes listed in the network optimized weights
-// sheet are the same as those in the network sheet, or is it asking that all of the sheets
-// with thee genes as a header have the same order of genes listed for their headers
 var geneMismatchError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.crossSheetInteractions(sheet);
-    var geneMismatchCount = network.network.errors.filter(function (x) {
+    var geneMismatchCount = network.errors.filter(function (x) {
         return x.errorCode === "GENE_MISMATCH";
     });
 
@@ -267,7 +264,7 @@ var labelError = function (input, frequency) {
 var missingGeneNameError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.crossSheetInteractions(sheet);
-    var missingGeneCount = network.network.errors.filter(function (x) {
+    var missingGeneCount = network.errors.filter(function (x) {
         return x.errorCode === "MISSING_GENE_NAME";
     });
 
@@ -277,7 +274,7 @@ var missingGeneNameError = function (input, frequency) {
 var extraGeneNameError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = spreadsheetController.crossSheetInteractions(sheet);
-    var extraGeneCount = network.network.errors.filter(function (x) {
+    var extraGeneCount = network.errors.filter(function (x) {
         return x.errorCode === "EXTRA_GENE_NAME";
     });
 
