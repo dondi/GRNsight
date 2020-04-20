@@ -11,8 +11,9 @@ module.exports = {
         app: {
             name: "GRNsight"
         },
-        databaseHost: "localhost"
-        // Need to figure out what to do for password
+        databaseHost: "localhost",  // This will most likely stay as localhost due to tunneling.
+        databaseName: "grnsight_database",
+        databaseDialect: "postgres"
     },
 
     production: {
@@ -23,7 +24,10 @@ module.exports = {
         root: rootPath,
         app: {
             name: "GRNsight"
-        }
+        },
+        databaseHost: "<database host for production database>",
+        databaseName: "grnsight_database",
+        databaseDialect: "postgres"
     },
 
     beta: {
@@ -34,6 +38,9 @@ module.exports = {
         root: rootPath,
         app: {
             name: "GRNsight"
-        }
+        },
+        databaseHost: "<database host for beta database>",
+        databaseName: "grnsight_database",
+        databaseDialect: "postgres"
     }
 };

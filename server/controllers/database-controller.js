@@ -1,18 +1,21 @@
 const Sequelize = require("sequelize");
 require("dotenv").config();
-
-var sequelize = new Sequelize("grnsight_database", process.env.EXPRESSION_DB_USERNAME,
-process.env.EXPRESSION_DB_PASSWORD, {
-    host: "localhost",
-    dialect: "postgres",
-
-    pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-    },
-
-});
+var env = process.env.NODE_ENV || "development";
+var config = require("../config/config")[env];
+var sequelize = new Sequelize(
+    config.databaseName,
+    process.env.EXPRESSION_DB_USERNAME,
+    process.env.EXPRESSION_DB_PASSWORD,
+    {
+        host: config.databaseHost,
+        dialect: config.databaseDialect,
+        pool: {
+            max: 5,
+            min: 0,
+            idle: 10000
+        }
+    }
+);
 
 let buildTimepointsQuery = function (selection) {
     let timepoints = "";
@@ -48,11 +51,14 @@ let listGeneData = function (gene, totalOutput) {
 };
 
 let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
-    let JSONOutput = {};
-    JSONOutput[dataset] = {};
-    JSONOutput[dataset].timePoints = timePoints;
-    JSONOutput[dataset].data = {};
-    JSONOutput[dataset].data.id = timePoints;
+    let JSONOutput = {
+        [dataset]: {
+            timePoints,
+            data: {
+                id: timePoints
+            }
+        }
+    };
     allGenes.forEach(x => JSONOutput[dataset].data[x.toString()] = listGeneData(x, totalOutput));
     return JSONOutput;
 };
