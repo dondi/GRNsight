@@ -21,9 +21,10 @@ let buildTimepointsQuery = function (selection) {
 };
 
 let buildQuery = function (dataset, timepoints) {
-    return timepoints ? ("SELECT * FROM expressiondata WHERE dataset=\'" + dataset
-    + "\' AND (" + buildTimepointsQuery(timepoints) + ") ORDER BY sortindex;")
-    : "SELECT * FROM expressiondata WHERE dataset=\'" + dataset + "\' ORDER BY sortindex;";
+    return timepoints ?
+    `SELECT * FROM expressiondata WHERE dataset='${dataset}'
+    AND (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex;` :
+    `SELECT * FROM expressiondata WHERE dataset='${dataset}' ORDER BY sortindex;`;
 };
 
 let listUniqueGenes = function (arrayOfObjects) {
@@ -57,26 +58,6 @@ let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
 };
 
 module.exports = function (app) {
-    app.get("/hello-world", function (req, res) {
-        try {
-            return res.send("hello world");
-        } catch (e) {
-            res.json({error: e.message});
-        }
-
-
-    });
-
-    app.get("/first-query", function (req, res) {
-        try {
-            return sequelize.query("SELECT standardname FROM expressiondata", { type: sequelize.QueryTypes.SELECT })
-            .then(function (stdname) {
-                return res.send(stdname);
-            });
-        } catch (e) {
-            res.json({error: e.message});
-        }
-    });
 
     app.get("/expressiondb", function (req, res) {
         try {
