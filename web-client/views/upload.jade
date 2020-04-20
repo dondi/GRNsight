@@ -231,6 +231,35 @@ html
                     | &nbsp; %
 
             li(class='dropdown')
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Species
+              ul(class='dropdown-menu' role='menu')
+                span(class='menu-subheader') Current Species
+                li
+                  a(href='#' id='Arabidopsis_thaliana' class='viewportOption active')
+                    span(class='glyphicon')
+                    | &nbsp; Arabidopsis thaliana
+                li
+                  a(href='#' id='Caenorhabditis_elegans' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Caenorhabditis elegans
+                li
+                  a(href='#' id='Drosophila_melanogaster' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Drosophilia melanogaster
+                li
+                  a(href='#' id='Homo_sapiens' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Homo sapiens
+                li
+                  a(href='#' id='Mus_musculus' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Mus musculus
+                li
+                  a(href='#' id='Saccharomyces_cerevisiae' class='viewportOption')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Saccharomyces cerevisiae
+
+            li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
               ul(class='dropdown-menu' role='menu')
                 li
@@ -323,7 +352,7 @@ html
                     input(id='undoResetButton' type='button' class='btn btn-default btnSidebar undoSliderReset' value='Undo Reset' disabled)
                   p(id='warningMessage' data-toggle='modal' data-target='#warningsModal')
 
-        div(class="node-coloring disabled panel panel-default")
+        div(class="node-coloring disabled panel panel-default disabled")
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
             a(id='nodeColoringHeaderLink' data-toggle='collapse' data-target='#nodeColoringSidebarPanel') Node
           div(id="nodeColoringSidebarPanel" class="panel-collapse collapse")
@@ -406,6 +435,22 @@ html
                 br
                 input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
                 label(for='viewport' class='sideLabel') Restrict graph to viewport
+        
+        div(class="species-display panel panel-default")
+          p(class='panel-title sidebarPanelHeader')
+            a(id='speciesHeaderLink' data-toggle='collapse' data-target='#speciesSidebarPanel') Species
+          div(id="speciesSidebarPanel" class="panel-collapse collapse")
+            div(class="panel-body")
+              div(class="currentSpecies") Current Species
+                //- p(class="speciesIdentifiedDisplay" id="speciesName" href="#") Saccharomyces cerevisiae
+                select(class="speciesIdentifiedDropdown" id='speciesDropdown' href='#')
+                  option(href='#' id='cressOption' value='Arabidopsis_thaliana') Arabidopsis thaliana
+                  option(href='#' id='nematodeOption' value='Caenorhabditis_elegans') Caenorhabditis elegans
+                  option(href='#' id='fruitflyOption' value='Drosophila_melanogaster') Drosophila melanogaster
+                  option(href='#' id='humanOption' value='Homo_sapiens') Homo sapiens
+                  option(href='#' id='mouseOption' value='Mus_musculus') Mus musculus
+                  option(href='#' id='yeastOption' value='Saccharomyces_cerevisiae') Saccharomyces cerevisiae
+
 
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')

@@ -1,5 +1,5 @@
 import { updaters } from "./graph";
-import { updateApp } from "./update-app";
+import { updateApp, identifySpeciesMenu } from "./update-app";
 import { saveSvgAsPng } from "save-svg-as-png";
 import * as jsPDF from "jspdf";
 import canvg from "canvg";
@@ -54,7 +54,14 @@ import {
     ZOOM_DISPLAY_MINIMUM_VALUE,
     EXPORT_TO_PNG,
     EXPORT_TO_SVG,
-    EXPORT_TO_PDF
+    EXPORT_TO_PDF,
+    SPECIES_DISPLAY,
+    SPECIES_BUTTON_CRESS,
+    SPECIES_BUTTON_FLY,
+    SPECIES_BUTTON_HUMAN,
+    SPECIES_BUTTON_MOUSE,
+    SPECIES_BUTTON_NEMATODE,
+    SPECIES_BUTTON_YEAST
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -411,6 +418,56 @@ export const setupHandlers = grnState => {
 
     $(COLOR_EDGES).click(() => {
         grnState.colorOptimal = !grnState.colorOptimal;
+        updateApp(grnState);
+    });
+
+    // Species Selection
+    $(SPECIES_DISPLAY).change(() => {
+        var selection = $(SPECIES_DISPLAY).find(":selected").attr("value");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
+        updateApp(grnState);
+    });
+
+    $(SPECIES_BUTTON_YEAST).click(function () {
+        var selection = $(SPECIES_BUTTON_YEAST).attr("id");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
+        updateApp(grnState);
+    });
+
+    $(SPECIES_BUTTON_MOUSE).click(function () {
+        var selection = $(SPECIES_BUTTON_MOUSE).attr("id");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
+        updateApp(grnState);
+    });
+
+    $(SPECIES_BUTTON_HUMAN).click(function () {
+        var selection = $(SPECIES_BUTTON_HUMAN).attr("id");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
+        updateApp(grnState);
+    });
+
+    $(SPECIES_BUTTON_NEMATODE).click(function () {
+        var selection = $(SPECIES_BUTTON_NEMATODE).attr("id");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
+        updateApp(grnState);
+    });
+
+    $(SPECIES_BUTTON_CRESS).click(function () {
+        var selection = $(SPECIES_BUTTON_CRESS).attr("id");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
+        updateApp(grnState);
+    });
+
+    $(SPECIES_BUTTON_FLY).click(function () {
+        var selection = $(SPECIES_BUTTON_FLY).attr("id");
+        grnState.genePageData.identified = false;
+        identifySpeciesMenu(selection);
         updateApp(grnState);
     });
 

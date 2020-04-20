@@ -700,6 +700,7 @@ module.exports = function (app) {
                         types that GRNsight supports is in the Documentation.");
                 }
 
+                // input.meta holds the species and taxon data
                 return processGRNmap(input, res, app);
             });
         });

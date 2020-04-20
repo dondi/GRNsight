@@ -126,6 +126,15 @@ export const TOP_DATASET_SELECTION_SIDEBAR              = "#dataset-top";
 export const BOTTOM_DATASET_SELECTION_MENU              = "#bottomDatasetDropdownMenu";
 export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
 
+export const SPECIES_IDENTIFIED_NAME                    = "#speciesName";
+export const SPECIES_DISPLAY                            = "#speciesDropdown";
+export const SPECIES_BUTTON_YEAST                       = "#Saccharomyces_cerevisiae";
+export const SPECIES_BUTTON_HUMAN                       = "#Homo_sapiens";
+export const SPECIES_BUTTON_FLY                         = "#Drosophila_melanogaster";
+export const SPECIES_BUTTON_NEMATODE                    = "#Caenorhabditis_elegans";
+export const SPECIES_BUTTON_MOUSE                       = "#Mus_musculus";
+export const SPECIES_BUTTON_CRESS                       = "#Arabidopsis_thaliana";
+
 export const ZOOM_CONTROL                               = ".zoom";
 export const ZOOM_DISPLAY_MAXIMUM_SELECTOR              = ".maximum-zoom-display";
 export const ZOOM_DISPLAY_MAXIMUM_VALUE                 = 200;
