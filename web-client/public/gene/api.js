@@ -361,16 +361,15 @@ let parseJaspar = function (data) {
                ) {
                    const errorString1 = "No gene information was retrieved for " + symbol.symbol + ".";
 
-                  
-                   const errorString2 = "This could have happened because:" 
-                   const errorString3 = "You can check back later to see if gene information"
-                   + " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
+                   const errorString2 = "This could have happened because:";
+                   const errorString3 = "You can check back later to see if gene information" +
+                   " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
 
                    $("#error2").text(errorString2);
-                   var errorString4 = $('<ul/>').appendTo('#error2');
+                   var errorString4 = $("<ul/>").appendTo("#error2");
                    errorString4.append("<li>The wrong species is selected </li>");
                    errorString4.append("<li>GRNsight could not access the gene information"
-                   +" from one of the source databases</li>");
+                   + " from one of the source databases</li>");
                    errorString4.append("<li>No information exists for the gene in the source databases.</li>");
 
                    $("#error1").text(errorString1);

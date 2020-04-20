@@ -502,7 +502,6 @@ export const updateApp = grnState => {
             } else if (grnState.network.meta.taxon_id !== undefined) {
                 identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
             }
-            console.log("species is: " + grnState.genePageData.species)
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
