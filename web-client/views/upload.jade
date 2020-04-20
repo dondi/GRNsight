@@ -231,6 +231,35 @@ html
                     | &nbsp; %
 
             li(class='dropdown')
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Species
+              ul(class='dropdown-menu' role='menu')
+                span(class='menu-subheader') Current Species
+                li
+                  a(href='#' id='Arabidopsis_thaliana' class='viewportOption active')
+                    span(class='glyphicon')
+                    | &nbsp; Arabidopsis thaliana
+                li
+                  a(href='#' id='Caenorhabditis_elegans' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Caenorhabditis elegans
+                li
+                  a(href='#' id='Drosophila_melanogaster' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Drosophilia melanogaster
+                li
+                  a(href='#' id='Homo_sapiens' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Homo sapiens
+                li
+                  a(href='#' id='Mus_musculus' class='viewportOption')
+                    span(class='glyphicon')
+                    | &nbsp; Mus musculus
+                li
+                  a(href='#' id='Saccharomyces_cerevisiae' class='viewportOption')
+                    span(class='glyphicon glyphicon-ok')
+                    | &nbsp; Saccharomyces cerevisiae
+
+            li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
               ul(class='dropdown-menu' role='menu')
                 li
@@ -415,9 +444,9 @@ html
             a(id='speciesHeaderLink' data-toggle='collapse' data-target='#speciesSidebarPanel') Species
           div(id="speciesSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
-              div(class="speciesIdentifiedDropdown") Identified Species:
+              div(class="currentSpecies") Current Species
                 //- p(class="speciesIdentifiedDisplay" id="speciesName" href="#") Saccharomyces cerevisiae
-                select(id='speciesDropdown' href='#')
+                select(class="speciesIdentifiedDropdown" id='speciesDropdown' href='#')
                   option(href='#' id='cressOption' value='Arabidopsis_thaliana') Arabidopsis thaliana
                   option(href='#' id='nematodeOption' value='Caenorhabditis_elegans') Caenorhabditis elegans
                   option(href='#' id='fruitflyOption' value='Drosophila_melanogaster') Drosophila melanogaster

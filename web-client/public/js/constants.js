@@ -135,12 +135,12 @@ export const BOTTOM_DATASET_SELECTION_SIDEBAR           = "#dataset-bottom";
 
 export const SPECIES_IDENTIFIED_NAME                    = "#speciesName";
 export const SPECIES_DISPLAY                            = "#speciesDropdown";
-// export const SPECIES_BUTTON_YEAST                       = "#yeastDisplay";
-// export const SPECIES_BUTTON_HUMAN                       = "#humanDisplay";
-// export const SPECIES_BUTTON_FLY                         = "#fruitflyDisplay";
-// export const SPECIES_BUTTON_NEMATODE                    = "#nematodeDisplay";
-// export const SPECIES_BUTTON_MOUSE                       = "#mouseDisplay";
-// export const SPECIES_BUTTON_CRESS                       = "#cressDisplay";
+export const SPECIES_BUTTON_YEAST                       = "#Saccharomyces_cerevisiae";
+export const SPECIES_BUTTON_HUMAN                       = "#Homo_sapiens";
+export const SPECIES_BUTTON_FLY                         = "#Drosophila_melanogaster";
+export const SPECIES_BUTTON_NEMATODE                    = "#Caenorhabditis_elegans";
+export const SPECIES_BUTTON_MOUSE                       = "#Mus_musculus";
+export const SPECIES_BUTTON_CRESS                       = "#Arabidopsis_thaliana";
 
 export const NODE_COLORING_USING_EXPRESSION_DATA        = "#expressionDB";
 
