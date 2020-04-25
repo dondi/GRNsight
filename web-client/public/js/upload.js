@@ -97,4 +97,7 @@ export const upload = function () {
     $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
     $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
+    $("#exportAsUnweightedExcel").click(performExport("export-to-excel", "xlsx", "unweighted"));
+    $("#exportAsWeightedExcel").click(performExport("export-to-excel", "xlsx", "weighted"));
+
 };
