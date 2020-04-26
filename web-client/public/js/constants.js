@@ -124,6 +124,7 @@ export const AVG_REPLICATE_VALS_BOTTOM_MENU             = "#averageDataBottomMen
 export const NODE_COLORING_TOGGLE_MENU                  = "#node-coloring-toggle-menu";
 export const NODE_COLORING_TOGGLE_CLASS                 = ".nodeColoringToggle";
 export const LOG_FOLD_CHANGE_MAX_VALUE_CLASS            = ".logFoldChangeMaxValue";
+export const LOG_FOLD_CHANGE_MAX_VALUE_HEADER           = "#logFoldChangeMaxValue";
 export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT    = "#log-fold-change-max-value-sidebar";
 export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON   = "#log-fold-change-button";
 export const LOG_FOLD_CHANGE_MAX_VALUE_MENU             = "#log-fold-change-max-value-menu";

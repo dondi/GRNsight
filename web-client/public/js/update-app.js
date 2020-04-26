@@ -68,6 +68,8 @@ import {
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   BOTTOM_DATASET_SELECTION_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+  LOG_FOLD_CHANGE_MAX_VALUE_HEADER,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
   ZOOM_CONTROL,
@@ -82,7 +84,6 @@ import {
   SPECIES_DISPLAY,
   EXPRESSION_DB_LOADER,
   EXPRESSION_DB_LOADER_TEXT,
-  NODE_COLORING_TOGGLE_CLASS,
   SPECIES_BUTTON_CRESS,
   SPECIES_BUTTON_FLY,
   SPECIES_BUTTON_HUMAN,
@@ -627,6 +628,9 @@ export const updateApp = grnState => {
         grnState.nodeColoring.topDataset : "Barreto_2012_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
         grnState.nodeColoring.bottomDataset : "Barreto_2012_wt";
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             let queryURL = buildURL({dataset: grnState.nodeColoring.topDataset});
             const responseData = (name, formData) => {
@@ -655,6 +659,11 @@ export const updateApp = grnState => {
             responseData("expression", "././controllers/database-controller.js").then(function (response) {
                 grnState.network.expression = response;
                 grnState.nodeColoring.nodeColoringEnabled = true;
+                $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+                $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+                $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+
+                
                 // updateApp(grnState);
                 updaters.renderNodeColoring();
             }).catch(function (error) {
