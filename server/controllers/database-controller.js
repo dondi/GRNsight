@@ -19,7 +19,7 @@ var sequelize = new Sequelize(
 
 const timepointsSources = [
     {
-        key: "Barreto_2018_wt",
+        key: "Barreto_2012_wt",
         value: [10, 10, 20, 20, 20, 20, 40, 40, 40, 40, 60, 60, 60, 60, 120, 120, 120, 120]
     },
 

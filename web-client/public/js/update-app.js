@@ -82,6 +82,7 @@ import {
   SPECIES_DISPLAY,
   EXPRESSION_DB_LOADER,
   EXPRESSION_DB_LOADER_TEXT,
+  NODE_COLORING_TOGGLE_CLASS,
   SPECIES_BUTTON_CRESS,
   SPECIES_BUTTON_FLY,
   SPECIES_BUTTON_HUMAN,
@@ -447,7 +448,7 @@ const resetDatasetDropdownMenus = (network) => {
     }
 
     // Add expression database options
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Barreto_2018_wt"});
+    grnState.nodeColoring.nodeColoringOptions.push({value: "Barreto_2012_wt"});
     grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dcin5"});
     grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dgln3"});
     grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dhap4"});
@@ -602,8 +603,17 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-
-// Node Coloring
+    // Node Coloring
+    // if (grnState.network !== null) {
+    //     if (!hasExpressionData(grnState.network.expression)) {
+    //         $(NODE_COLORING_TOGGLE_CLASS).click();
+    //     }
+    // }
+    // if (grnState.network !== null && !hasExpressionData(grnState.network.expression)) {
+    //     $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+    //     $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+    //     // grnState.nodeColoring.nodeColoringEnabled = false;
+    // }
     if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
     && hasExpressionData(grnState.network.expression)) {
         grnState.nodeColoring.showMenu = true;
@@ -615,25 +625,27 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         updaters.renderNodeColoring();
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
-    && grnState.nodeColoring.nodeColoringEnabled) {
-        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
-        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+    && grnState.nodeColoring.nodeColoringEnabled /*&& $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")*/) {
+        // $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
+        // $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        // $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         updaters.removeNodeColoring();
 
         console.log("Expression data loading from database.");
+
         grnState.nodeColoring.showMenu = true;
-        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
-        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
-        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
-        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        // $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
+        // $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
+        // $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        // $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        // $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        // $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        // $(NODE_COLORING_TOGGLE_CLASS).click();
         resetDatasetDropdownMenus(grnState.network);
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-        grnState.nodeColoring.topDataset : "Barreto_2018_wt";
+        grnState.nodeColoring.topDataset : "Barreto_2012_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-        grnState.nodeColoring.bottomDataset : "Barreto_2018_wt";
+        grnState.nodeColoring.bottomDataset : "Barreto_2012_wt";
         let queryURL = buildURL({dataset: grnState.nodeColoring.topDataset});
         const responseData = (name, formData) => {
             return new Promise(function (resolve) {
