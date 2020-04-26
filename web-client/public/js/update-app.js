@@ -656,7 +656,7 @@ export const updateApp = grnState => {
     
             };
     
-            responseData("expression", "././controllers/database-controller.js").then(function (response) {
+            responseData("expression").then(function (response) {
                 grnState.network.expression = response;
                 grnState.nodeColoring.nodeColoringEnabled = true;
                 $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
