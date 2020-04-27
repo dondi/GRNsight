@@ -3,6 +3,7 @@ var xlsx = require("node-xlsx");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
+var demoNetworks = require(__dirname + "/demo-networks");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
@@ -603,12 +604,6 @@ var processGRNmap = function (path, res, app) {
 
     var network = crossSheetInteractions(sheet);
 
-    //Removing Object.assign fixed the issue entirely, while assigning it before copying the expressionSheet
-    //and Additional warnings and errors made some tests pass and others fail again
-    //Not sure if you still want to create a conglomerate object, or not so it is commented out
-
-    //Object.assign(newResult, result.network, result.additionalData, result.expressionData);
-
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
         res.json(network) :
@@ -707,20 +702,20 @@ module.exports = function (app) {
 
         // Load the demos
         app.get("/demo/unweighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
+            return demoNetworks.demoNetwork1("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
+            return demoNetworks.demoNetwork2("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
                 res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+            return demoNetworks.demoNetwork3("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
+            return demoNetworks.demoNetwork4("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
                 res, app);
         });
     }
