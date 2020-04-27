@@ -97,14 +97,12 @@ let listGeneData = function (gene, totalOutput) {
 
 let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
     let JSONOutput = {
-        [dataset]: {
-            timePoints,
-            data: {
-                id: timePoints
-            }
+        timePoints,
+        data: {
+            id: timePoints
         }
     };
-    allGenes.forEach(x => JSONOutput[dataset].data[x.toString()] = listGeneData(x, totalOutput));
+    allGenes.forEach(x => JSONOutput.data[x.toString()] = listGeneData(x, totalOutput));
     return JSONOutput;
 };
 

@@ -632,10 +632,10 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-            let queryURL = buildURL({dataset: grnState.nodeColoring.topDataset});
-            const responseData = (name, formData) => {
+            let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+            const responseDataTop = (name, formData) => {
                 return new Promise(function (resolve) {
-                    const uploadRoute = queryURL;
+                    const uploadRoute = queryURLTop;
                     const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
                     startLoadingIcon();
                     (formData ?
@@ -649,28 +649,68 @@ export const updateApp = grnState => {
                         }) :
                         $.getJSON(fullUrl)
                         ).done((expressionData) => {
-                            stopLoadingIcon();
+                            resolve(expressionData);
+                        }).error(console.log("Error in accessing expression database. Result may just be loading."));
+                });
+    
+            };
+
+            let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+            const responseDataBottom = (name, formData) => {
+                return new Promise(function (resolve) {
+                    const uploadRoute = queryURLBottom;
+                    const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+                    startLoadingIcon();
+                    (formData ?
+                        $.ajax({
+                            url: fullUrl,
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            type: "GET",
+                            crossDomain: true
+                        }) :
+                        $.getJSON(fullUrl)
+                        ).done((expressionData) => {
                             resolve(expressionData);
                         }).error(console.log("Error in accessing expression database. Result may just be loading."));
                 });
     
             };
     
-            responseData("expression").then(function (response) {
-                grnState.network.expression = response;
+            responseDataTop("expression").then(function (response) {
+                grnState.network.expression[grnState.nodeColoring.topDataset] = response;
                 grnState.nodeColoring.nodeColoringEnabled = true;
                 $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
                 $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
                 $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 
-                
-                // updateApp(grnState);
-                updaters.renderNodeColoring();
+                if (grnState.nodeColoring.bottomDataSameAsTop) {
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                }
             }).catch(function (error) {
                 console.log(error.stack);
                 console.log(error.name);
                 console.log(error.message);
             });
+
+            if (!grnState.nodeColoring.bottomDataSameAsTop) {
+                responseDataBottom("expression").then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
+                    grnState.nodeColoring.nodeColoringEnabled = true;
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
         }
 
 
@@ -738,4 +778,5 @@ export const updateApp = grnState => {
         $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
     refreshApp();
+
 };
