@@ -68,11 +68,21 @@ let buildTimepointsQuery = function (selection) {
     return timepoints.substring(0, timepoints.length - 4);
 };
 
-let buildQuery = function (dataset, timepoints) {
+let buildGenesQuery = function (geneString) {
+    let genes = "";
+    let geneList = geneString.split(",");
+    geneList.forEach(x => genes += ("standardname=\'" + x + "\' OR "));
+    return genes.substring(0, genes.length - 4);
+}
+
+let buildQuery = function (dataset, timepoints, genes) {
     return timepoints ?
-    `SELECT * FROM expressiondata WHERE dataset='${dataset}'
-    AND (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex;` :
-    `SELECT * FROM expressiondata WHERE dataset='${dataset}' ORDER BY sortindex;`;
+    `SELECT * FROM expressiondata WHERE dataset='${dataset}' AND
+    (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
+    (${buildGenesQuery(genes)}) ORDER BY sortindex;`
+    : `SELECT * FROM expressiondata WHERE dataset='${dataset}'
+    AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`
+
 };
 
 let listUniqueGenes = function (arrayOfObjects) {
@@ -110,12 +120,12 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
-            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints),
+            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
                     let dataset = req.query.dataset;
-                    let genes = listUniqueGenes(stdname);
-                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], genes);
+                    let geneList = req.query.genes.split(",");
+                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
                     return res.send(response);
                 });
         } catch (e) {

@@ -1121,12 +1121,18 @@ export var drawGraph = function (network) {
 
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
+            // console.log("NODE COLORING BEING RENDERED");
             colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
                 grnState.nodeColoring.logFoldChangeMaxValue);
             colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
                 grnState.nodeColoring.logFoldChangeMaxValue);
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
+            // console.log("top: " + JSON.stringify(grnState.nodeColoring.topDataset));
+            // console.log("bottom: " + JSON.stringify(colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
+            // grnState.nodeColoring.logFoldChangeMaxValue)));
+            // console.log("node labels: " + renderNodeLabels());
+            // console.log("legend: " + renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue));
         }
     };
 
