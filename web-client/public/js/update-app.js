@@ -228,8 +228,14 @@ const buildGeneQuery = function () {
 
 const buildURL = function (selection) {
     return selection.timepoints ?
-    "expressiondb?dataset=" + selection.dataset + "&genes=" + buildGeneQuery() + "&timepoints=" + buildTimepointsString(selection)
+    "expressiondb?dataset=" + selection.dataset + "&genes=" +
+    buildGeneQuery() + "&timepoints=" + buildTimepointsString(selection)
     : "expressiondb?dataset=" + selection.dataset + "&genes=" + buildGeneQuery();
+};
+
+const startLoadingIcon = function () {
+    $(EXPRESSION_DB_LOADER).css("display", "block");
+    $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
 };
 
 const responseData = (formData, queryURL) => {
@@ -252,11 +258,6 @@ const responseData = (formData, queryURL) => {
             }).error(console.log("Error in accessing expression database. Result may just be loading."));
     });
 
-};
-
-const startLoadingIcon = function () {
-    $(EXPRESSION_DB_LOADER).css("display", "block");
-    $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
 };
 
 const stopLoadingIcon = function () {
@@ -457,8 +458,8 @@ const clearDropdownMenus = () => {
 };
 
 const expressionDBDatasets = ["Barreto_2012_wt", "Dahlquist_2018_dcin5",
-"Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
-"Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
+    "Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
+    "Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
 
 const resetDatasetDropdownMenus = (network) => {
     clearDropdownMenus();
@@ -644,18 +645,20 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) && grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
+        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
+        grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
                 let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-        
+
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
                     grnState.nodeColoring.nodeColoringEnabled = true;
                     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
                     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
                     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
-    
-                    if (grnState.nodeColoring.bottomDataSameAsTop || !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop ||
+                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
                     }
@@ -665,7 +668,9 @@ export const updateApp = grnState => {
                     console.log(error.message);
                 });
             }
-        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) && !grnState.nodeColoring.bottomDataSameAsTop && grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+        !grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
             if (!grnState.nodeColoring.bottomDataSameAsTop) {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
@@ -689,7 +694,8 @@ export const updateApp = grnState => {
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
     && grnState.nodeColoring.nodeColoringEnabled) {
         if ((grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) ||
-        (!grnState.nodeColoring.bottomDataSameAsTop && grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
+        (!grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
         }
         grnState.nodeColoring.showMenu = true;
@@ -704,14 +710,14 @@ export const updateApp = grnState => {
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             if (grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
                 let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-    
+
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
                     grnState.nodeColoring.nodeColoringEnabled = true;
                     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
                     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
                     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
-    
+
                     if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
@@ -721,7 +727,8 @@ export const updateApp = grnState => {
                     console.log(error.name);
                     console.log(error.message);
                 });
-            } else if (!grnState.nodeColoring.bottomDataSameAsTop && grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
+            grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;

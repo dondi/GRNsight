@@ -73,7 +73,7 @@ let buildGenesQuery = function (geneString) {
     let geneList = geneString.split(",");
     geneList.forEach(x => genes += ("standardname=\'" + x + "\' OR "));
     return genes.substring(0, genes.length - 4);
-}
+};
 
 let buildQuery = function (dataset, timepoints, genes) {
     return timepoints ?
@@ -81,18 +81,8 @@ let buildQuery = function (dataset, timepoints, genes) {
     (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
     (${buildGenesQuery(genes)}) ORDER BY sortindex;`
     : `SELECT * FROM expressiondata WHERE dataset='${dataset}'
-    AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`
+    AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
 
-};
-
-let listUniqueGenes = function (arrayOfObjects) {
-    let uniqueGenes = [];
-    arrayOfObjects.forEach(function (x) {
-        if (!uniqueGenes.includes(x.standardname)) {
-            uniqueGenes.push(x.standardname);
-        }
-    });
-    return uniqueGenes;
 };
 
 let listGeneData = function (gene, totalOutput) {
