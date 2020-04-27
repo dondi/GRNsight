@@ -51,7 +51,6 @@ let getUniProtInfo = function (query) {
     const taxon = query.uniprot;
     const geneSymbol = query.symbol;
     console.log("this is uniprot: " + taxon);
-    console.log(typeof taxon);
     return $.get({
         url: serviceRoot + "/uniprot/uploadlists/",
         data: {
@@ -135,7 +134,6 @@ let getJasparInfo = function (query) {
     const geneSymbol = query.symbol;
     const taxon = query.jaspar;
     console.log("this is jaspar: " + taxon);
-    console.log(typeof taxon);
 
     return $.get({
         url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=" + taxon + "&format=json&name=" + geneSymbol.toUpperCase(),
@@ -363,15 +361,18 @@ let parseJaspar = function (data) {
                ) {
                    const errorString1 = "No gene information was retrieved for " + symbol.symbol + ".";
 
-                   const errorString2 = "This could have happened because either"
-                    + " GRNsight could not access the gene information from one of the source databases"
-                    + " or because no information exists for the gene in the source databases.";
+                   const errorString2 = "This could have happened because:";
+                   const errorString3 = "You can check back later to see if gene information" +
+                   " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
 
-                   const errorString3 = "You can check back later to see if gene information"
-                    + " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
+                   $("#error2").text(errorString2);
+                   var errorString4 = $("<ul/>").appendTo("#error2");
+                   errorString4.append("<li>The wrong species is selected </li>");
+                   errorString4.append("<li>GRNsight could not access the gene information"
+                   + " from one of the source databases</li>");
+                   errorString4.append("<li>No information exists for the gene in the source databases.</li>");
 
                    $("#error1").text(errorString1);
-                   $("#error2").text(errorString2);
                    $("#error3").text(errorString3);
                    $("#errorModal").modal("show");
                }
