@@ -225,6 +225,28 @@ const buildURL = function (selection) {
     : "expressiondb?dataset=" + selection.dataset;
 };
 
+const responseData = (formData, queryURL) => {
+    return new Promise(function (resolve) {
+        const uploadRoute = queryURL;
+        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        startLoadingIcon();
+        (formData ?
+            $.ajax({
+                url: fullUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "GET",
+                crossDomain: true
+            }) :
+            $.getJSON(fullUrl)
+            ).done((expressionData) => {
+                resolve(expressionData);
+            }).error(console.log("Error in accessing expression database. Result may just be loading."));
+    });
+
+};
+
 const startLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER).css("display", "block");
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
@@ -427,6 +449,10 @@ const clearDropdownMenus = () => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
 };
 
+const expressionDBDatasets = ["Barreto_2012_wt", "Dahlquist_2018_dcin5",
+"Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
+"Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
+
 const resetDatasetDropdownMenus = (network) => {
     clearDropdownMenus();
     $(".dataset-option").remove(); // clear all menu dataset options
@@ -449,14 +475,7 @@ const resetDatasetDropdownMenus = (network) => {
     }
 
     // Add expression database options
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Barreto_2012_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dcin5"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dgln3"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dhap4"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dzap1"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Kitagawa_2002_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Thorsen_2007_wt"});
+    expressionDBDatasets.forEach(option => grnState.nodeColoring.nodeColoringOptions.push({value: [option]}));
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -618,7 +637,48 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        updaters.renderNodeColoring();
+        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) && grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
+            if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+        
+                responseData("expression", queryURLTop).then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.topDataset] = response;
+                    grnState.nodeColoring.nodeColoringEnabled = true;
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+    
+                    if (grnState.nodeColoring.bottomDataSameAsTop || !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
+        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) && !grnState.nodeColoring.bottomDataSameAsTop && grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            if (!grnState.nodeColoring.bottomDataSameAsTop) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("expression", queryURLBottom).then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
+                    grnState.nodeColoring.nodeColoringEnabled = true;
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
+        } else {
+            updaters.renderNodeColoring();
+        }
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
     && grnState.nodeColoring.nodeColoringEnabled) {
         updaters.removeNodeColoring();
@@ -633,52 +693,8 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-            const responseDataTop = (name, formData) => {
-                return new Promise(function (resolve) {
-                    const uploadRoute = queryURLTop;
-                    const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-                    startLoadingIcon();
-                    (formData ?
-                        $.ajax({
-                            url: fullUrl,
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            type: "GET",
-                            crossDomain: true
-                        }) :
-                        $.getJSON(fullUrl)
-                        ).done((expressionData) => {
-                            resolve(expressionData);
-                        }).error(console.log("Error in accessing expression database. Result may just be loading."));
-                });
     
-            };
-
-            let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
-            const responseDataBottom = (name, formData) => {
-                return new Promise(function (resolve) {
-                    const uploadRoute = queryURLBottom;
-                    const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-                    startLoadingIcon();
-                    (formData ?
-                        $.ajax({
-                            url: fullUrl,
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            type: "GET",
-                            crossDomain: true
-                        }) :
-                        $.getJSON(fullUrl)
-                        ).done((expressionData) => {
-                            resolve(expressionData);
-                        }).error(console.log("Error in accessing expression database. Result may just be loading."));
-                });
-    
-            };
-    
-            responseDataTop("expression").then(function (response) {
+            responseData("expression", queryURLTop).then(function (response) {
                 grnState.network.expression[grnState.nodeColoring.topDataset] = response;
                 grnState.nodeColoring.nodeColoringEnabled = true;
                 $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
@@ -696,7 +712,8 @@ export const updateApp = grnState => {
             });
 
             if (!grnState.nodeColoring.bottomDataSameAsTop) {
-                responseDataBottom("expression").then(function (response) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("expression", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
                     grnState.nodeColoring.nodeColoringEnabled = true;
                     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
@@ -779,4 +796,5 @@ export const updateApp = grnState => {
     }
     refreshApp();
 
+    console.log(grnState.network);
 };
