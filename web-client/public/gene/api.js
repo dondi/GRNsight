@@ -119,6 +119,17 @@ let getRegulationInfo = function (query) {
     });
 };
 
+// let getFlyMineInfo = function (query) {
+//     const geneSymbol = query.symbol;
+//     return $.get({
+//         url: serviceRoot + "/flymine/webservice/locus/" + geneSymbol,
+//         dataType: "json",
+//         beforeSend: function (xhr) {
+//             xhr.setRequestHeader("content-type", "application/json");
+//         },
+//     });
+// };
+
 let getYeastMineInfo = function (query) {
     const geneSymbol = query.symbol;
     return $.get({
@@ -293,6 +304,25 @@ let parseYeastmine = function (data) {
     return yeastmineTemplate;
 };
 
+// let parseFlymine = function (data) {
+//     const flymineTemplate = {
+//         description: data.description,
+//         sgdID: data.sgdid,
+//         geneOntologySummary: data.go_overview.paragraph,
+//     };
+
+//     for (var prop in flymineTemplate) {
+
+//         if ((flymineTemplate[prop] === undefined) || (flymineTemplate[prop] === null)) {
+//             flymineTemplate[prop] = "Not found";
+//         }
+//     }
+
+
+
+//     return flymineTemplate;
+// };
+
 let parseJaspar = function (data) {
     const jasparTemplate = {
         jasparID : data.matrix_id,
@@ -317,6 +347,7 @@ let parseJaspar = function (data) {
         getNCBIInfo,
         getUniProtInfo,
         getYeastMineInfo,
+        // getFlyMineInfo,
         getGeneOntologyInfo,
         getRegulationInfo,
         getJasparInfo,
@@ -331,6 +362,9 @@ let parseJaspar = function (data) {
                return window.api.getYeastMineInfo(symbol);
            }).then(function (yeastMineInfo) {
                defaultValues.sgd = parseYeastmine(yeastMineInfo);
+            //    return window.api.getFlyMineInfo(symbol);
+        //    }).then(function (flyMineInfo) {
+            //    defaultValues.sgd = parseFlymine(flyMineInfo);
                return window.api.getGeneOntologyInfo(symbol);
            }).then(function (goInfo) {
                defaultValues.geneOntology = parseGeneOntology(goInfo);
@@ -346,6 +380,7 @@ let parseJaspar = function (data) {
                window.api.getNCBIInfo(symbol);
                window.api.getUniProtInfo(symbol);
                window.api.getYeastMineInfo(symbol);
+            //    window.api.getFlyMineInfo(symbol);
                window.api.getGeneOntologyInfo(symbol);
                window.api.getRegulationInfo(symbol);
                window.api.getJasparInfo(symbol);

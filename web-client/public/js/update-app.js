@@ -414,6 +414,19 @@ const identifySpeciesOrTaxon = (data) => {
             updateSpeciesMenu();
             return grnState.genePageData.identified;
         }
+        for (var t in Object.values(nameTax[n])) {
+            if (Object.values(nameTax[n])[t] === data.toString()) {
+                grnState.genePageData.commonName = n;
+                grnState.genePageData.species = nameTax[n].spec;
+                grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
+                grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+                grnState.genePageData.identified = true;
+                grnState.genePageData.readFromNetwork = true;
+                $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+                updateSpeciesMenu();
+                return grnState.genePageData.identified;
+            }
+        }
     }
     return false;
 };
@@ -535,10 +548,22 @@ export const updateApp = grnState => {
 
             // check if the species has been identified yet, if not try to identify it
             // also checks if the areas have been populated at all
-            if (grnState.network.meta.species !== undefined) {
-                identifySpeciesOrTaxon(grnState.network.meta.species);
-            } else if (grnState.network.meta.taxon_id !== undefined) {
-                identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
+            var networkSpecies = grnState.network.meta.species;
+            var networkTaxon = grnState.network.meta.taxon_id;
+            if (networkSpecies === undefined && networkTaxon === undefined) {
+                $("#warningIntroSpecies").html("No species information was detected in your input file." +
+                " GRNsight defaults to Saccharomyces cerevisiae. You can change the species" +
+                " selection in the Species menu or panel.");
+                $("#warningsModalSpecies").modal("show");
+            } else if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
+                identifySpeciesOrTaxon(networkSpecies);
+                identifySpeciesOrTaxon(networkTaxon);
+            } else {
+                $("#warningIntroSpecies").html("GRNsight detected the species " + networkSpecies +
+                " and the taxon " + networkTaxon + " in your input file." +
+                " This is not one of the supported species, or was formatted incorrectly" +
+                " You can change the species selection in the Species menu or panel.");
+                $("#warningsModalSpecies").modal("show");
             }
 
             grnState.nodeColoring.nodeColoringEnabled = true;
