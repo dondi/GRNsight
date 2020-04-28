@@ -265,6 +265,13 @@ const stopLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
 };
 
+const enableNodeColoringUI = function () {
+    console.log("NODE COLORING UI TURNING ON!");
+    grnState.nodeColoring.nodeColoringEnabled = true;
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+}
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
@@ -677,10 +684,7 @@ export const updateApp = grnState => {
 
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop ||
                     !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
@@ -700,11 +704,7 @@ export const updateApp = grnState => {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
-
+                    enableNodeColoringUI();
                     stopLoadingIcon();
                     updaters.renderNodeColoring();
                 }).catch(function (error) {
@@ -714,6 +714,7 @@ export const updateApp = grnState => {
                 });
             }
         } else {
+            console.log("issue may be here?");
             updaters.renderNodeColoring();
         }
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
@@ -722,9 +723,11 @@ export const updateApp = grnState => {
         (!grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
+            resetDatasetDropdownMenus(grnState.network);
+            console.log("something is undefined, remove node coloring and reset dropdown");
         }
+        console.log("doesn't have expression data! turning menu stuff off");
         grnState.nodeColoring.showMenu = true;
-        resetDatasetDropdownMenus(grnState.network);
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
         grnState.nodeColoring.topDataset : "Barreto_2012_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
@@ -733,19 +736,19 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+            console.log("node coloring toggle is checked");
             if (grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
+                console.log("top dataset is undefined");
                 let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
 
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
+                        console.log("this is where it works: " + JSON.stringify(grnState.network));
                     }
                 }).catch(function (error) {
                     console.log(error.stack);
@@ -754,13 +757,11 @@ export const updateApp = grnState => {
                 });
             } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
             grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+                console.log("bottom dataset is undefined");
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     stopLoadingIcon();
 
@@ -770,18 +771,17 @@ export const updateApp = grnState => {
                     console.log(error.name);
                     console.log(error.message);
                 });
-            } else {
+            } else /* if (grnState.network.expression[grnState.nodeColoring.bottomDataset] != undefined
+                && grnState.network.expression[grnState.nodeColoring.topDataset] != undefined)*/ {
+                console.log("this is the else");
                 // Code makes it here, but node coloring fails to occur. Why???
-                grnState.nodeColoring.nodeColoringEnabled = true;
+                // grnState.nodeColoring.nodeColoringEnabled = true;
+                enableNodeColoringUI();
+                console.log("this is where it doesn't work: " + JSON.stringify(grnState.network));
                 updaters.renderNodeColoring();
-                grnState.nodeColoring.nodeColoringEnabled = true;
-                $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+
             }
         }
-
-
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
