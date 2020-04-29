@@ -193,9 +193,11 @@ var warningsList = {
 
     missingExpressionSheetWarning: {
         warningCode: "MISSING_EXPRESSION_SHEET",
-        errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
-        The network graph will display without node coloring. If you wish for the network to be colored, \
-        you can upload your own expression data, or use options from our Expression Database."
+        errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
+        not detected. The network graph will display without node coloring. If you want \
+        the nodes to be colored with expression data, you can upload your own expression \
+        data by adding one or more of those worksheets to your Excel workbook or select \
+        from data in GRNsight's Expression Database, found in the Node menu or panel."
     },
 };
 
