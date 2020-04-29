@@ -532,6 +532,7 @@ const resetDatasetDropdownMenus = (network) => {
 
 const updateLogFoldChangeMaxValue = () => {
     var value = logFoldChangeMaxValueInputValidation(grnState.nodeColoring.logFoldChangeMaxValue);
+    console.log("VALUE: " + JSON.stringify(value));
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val(value);
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val(value);
     updaters.renderNodeColoring();

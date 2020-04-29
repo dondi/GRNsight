@@ -1073,6 +1073,7 @@ export var drawGraph = function (network) {
                 return i / (gradientValues.length - 1);
             })
             .attr("stop-color", function (d) {
+                console.log("ddddddddddd: " + d);
                 return d3.interpolateRdBu(scale(-d));
             });
 
@@ -1110,8 +1111,14 @@ export var drawGraph = function (network) {
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
             label.setAttribute("fill", "rgb(0,0,0)");
+            console.log("label: " + JSON.stringify(label));
+
             g.appendChild(label);
         }
+
+        console.log("Svg: " + JSON.stringify(svg) + "\n" + 
+            "legendLabels: " + JSON.stringify(legendLabels) + "\n"
+        );
     };
 
     updaters.removeNodeColoring = function () {
@@ -1120,6 +1127,14 @@ export var drawGraph = function (network) {
     };
 
     updaters.renderNodeColoring = function () {
+        // console.log(
+        //     "nodecoloringenabled: " + JSON.stringify(grnState.nodeColoring.nodeColoringEnabled) + "\n" +
+        //     "topdataset: " + JSON.stringify(grnState.nodeColoring.topDataset) + "\n" +
+        //     "avgtopdataset: " + JSON.stringify(grnState.nodeColoring.averageTopDataset) + "\n" +
+        //     "logfoldchangemaxvalue: " + JSON.stringify(grnState.nodeColoring.logFoldChangeMaxValue) + "\n" +
+        //     "bottomdataset: " + JSON.stringify(grnState.nodeColoring.bottomDataset) + "\n" +
+        //     "avgbottomdataset: " + JSON.stringify(grnState.nodeColoring.averageBottomDataset) + "\n"
+        // )
         if (grnState.nodeColoring.nodeColoringEnabled) {
             colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
                 grnState.nodeColoring.logFoldChangeMaxValue);
