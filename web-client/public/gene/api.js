@@ -75,6 +75,7 @@ let getUniProtInfo = function (query) {
 let getNCBIInfo = function (query) {
     const geneSymbol = query.symbol;
     const geneName = query.species.replace(/_/, "+");
+    console.log("calling ncbi")
 
     return $.get({
         url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
@@ -179,6 +180,7 @@ let parseRegulators = function (data, symbol) {
 
     let regs = [];
     let targs = [];
+    console.log("in parseRegulators")
 
     data.filter(word => (word.locus1.display_name === symbol.symbol) ? targs[targs.length] = {
         target:  word.locus2.display_name,
@@ -188,7 +190,7 @@ let parseRegulators = function (data, symbol) {
           regulationOf: word.regulation_of,
           regulationType: word.regulation_type}) ;
 
-    return {
+    return console.log("returning parseRegulators"), {
         regulators: regs,
         targets: targs
     };
@@ -324,6 +326,7 @@ let parseYeastmine = function (data) {
 // };
 
 let parseJaspar = function (data) {
+    // console.log(data)
     const jasparTemplate = {
         jasparID : data.matrix_id,
         class: data.class[0],
@@ -358,15 +361,18 @@ let parseJaspar = function (data) {
                defaultValues.ncbi = parseNCBI(ncbiInfo);
                return window.api.getUniProtInfo(symbol);
            }).then(function (uniProtInfo) {
+               console.log("in uniprot")
                defaultValues.uniprot = parseUniprot(uniProtInfo);
                return window.api.getYeastMineInfo(symbol);
            }).then(function (yeastMineInfo) {
+               console.log("in yeastmine")
                defaultValues.sgd = parseYeastmine(yeastMineInfo);
             //    return window.api.getFlyMineInfo(symbol);
         //    }).then(function (flyMineInfo) {
             //    defaultValues.sgd = parseFlymine(flyMineInfo);
                return window.api.getGeneOntologyInfo(symbol);
            }).then(function (goInfo) {
+               console.log("inside GO call")
                defaultValues.geneOntology = parseGeneOntology(goInfo);
                return window.api.getRegulationInfo(symbol);
            }).then(function (regulationInfo) {
@@ -374,10 +380,12 @@ let parseJaspar = function (data) {
                defaultValues.regulators = parseRegulators(regulationInfo, symbol);
                return window.api.getJasparInfo(symbol);
            }).then(function (jasparInfo) {
+               console.log("this is jasparInfo: ")
+               console.log(jasparInfo)
                defaultValues.jaspar = parseJaspar(jasparInfo);
                return defaultValues;
            }).catch(function () {
-               window.api.getNCBIInfo(symbol);
+            //    window.api.getNCBIInfo(symbol);
                window.api.getUniProtInfo(symbol);
                window.api.getYeastMineInfo(symbol);
             //    window.api.getFlyMineInfo(symbol);
@@ -409,6 +417,21 @@ let parseJaspar = function (data) {
 
                    $("#error1").text(errorString1);
                    $("#error3").text(errorString3);
+
+                   var screenHeight = $(window).height();
+                   var MIN_SCREEN_HEIGHT = 600;
+                   var BORDER = 425;
+                   var setPanel = (screenHeight - BORDER) + "px";
+                   var minPanel = (MIN_SCREEN_HEIGHT - BORDER) + "px";
+                   if (screenHeight > MIN_SCREEN_HEIGHT) {
+                       $("#list-frame").css({ height: setPanel });
+                   } else {
+                       $("#list-frame").css({ height: minPanel });
+                   }
+
+                   $("#errorModal").css({ "font-family": "arial",
+                       "font-size": "14px",
+                       "color": "#333"});
                    $("#errorModal").modal("show");
                }
 
