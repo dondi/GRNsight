@@ -12,6 +12,10 @@ var processDemo = function (path, res, app, network) {
 
 var demoNetwork1 = function (path, res, app) {
     let network1 = {
+
+        //grnState.genePageData.species.should.equal("Saccharomyces_cerevisiae")
+
+
         genes: [
             {name: "ACE2"},
             {name: "ASH1"},
@@ -276,7 +280,9 @@ var demoNetwork1 = function (path, res, app) {
             fix_b: 0,
             expression_timepoints: [15, 30, 60],
             Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
-            simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+            simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+            species: "Saccharomyces cerevisiae",
+            taxon_id: 559292
         },
         test: {
             production_rates: {
@@ -1927,7 +1933,9 @@ var demoNetwork2 = function (path, res, app) {
             fix_b: 0,
             expression_timepoints: [15, 30, 60],
             Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
-            simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+            simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+            species: "Saccharomyces cerevisiae",
+            taxon_id: 559292
         },
         test: {
             production_rates: {
@@ -3596,7 +3604,9 @@ var demoNetwork3 = function (path, res, app) {
             MaxIter: 1000000,
             TolFun: 0.00001,
             MaxFunEval: 1000000,
-            TolX: 0.00001
+            TolX: 0.00001,
+            species: "Saccharomyces cerevisiae",
+            taxon_id: 559292
         },
         test: {
             production_rates: {
@@ -4193,7 +4203,9 @@ var demoNetwork4 = function (path, res, app) {
             MaxIter: 1000000,
             TolFun: 0.00001,
             MaxFunEval: 1000000,
-            TolX: 0.00001
+            TolX: 0.00001,
+            species: "Saccharomyces cerevisiae",
+            taxon_id: 559292
         },
         test: {
             production_rates: {
