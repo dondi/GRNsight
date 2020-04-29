@@ -6,6 +6,7 @@ const serializer = new XMLSerializer();
 const XMLParser = function (data) {
     return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
 };
+console.log("service root: " + serviceRoot)
 
 let defaultJaspar = {
     jasparID: "Not found",
@@ -363,6 +364,11 @@ let parseJaspar = function (data) {
            }).then(function (uniProtInfo) {
                console.log("in uniprot")
                defaultValues.uniprot = parseUniprot(uniProtInfo);
+               return window.api.getJasparInfo(symbol);
+           }).then(function (jasparInfo) {
+               console.log("this is jasparInfo: ")
+               console.log(jasparInfo)
+               defaultValues.jaspar = parseJaspar(jasparInfo);
                return window.api.getYeastMineInfo(symbol);
            }).then(function (yeastMineInfo) {
                console.log("in yeastmine")
@@ -378,11 +384,6 @@ let parseJaspar = function (data) {
            }).then(function (regulationInfo) {
                // parseRegulators needs both info and symbol
                defaultValues.regulators = parseRegulators(regulationInfo, symbol);
-               return window.api.getJasparInfo(symbol);
-           }).then(function (jasparInfo) {
-               console.log("this is jasparInfo: ")
-               console.log(jasparInfo)
-               defaultValues.jaspar = parseJaspar(jasparInfo);
                return defaultValues;
            }).catch(function () {
             //    window.api.getNCBIInfo(symbol);
