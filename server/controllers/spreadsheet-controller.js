@@ -233,7 +233,8 @@ var warningsList = {
     missingExpressionSheetWarning: {
         warningCode: "MISSING_EXPRESSION_SHEET",
         errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
-        The network graph will display without node coloring."
+        The network graph will display without node coloring. If you wish for the network to be colored, \
+        you can upload your own expression data, or use options from our Expression Database."
     },
 };
 
