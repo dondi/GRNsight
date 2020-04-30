@@ -25,7 +25,7 @@ module.exports = {
         app: {
             name: "GRNsight"
         },
-        databaseHost: "<database host for production database>",
+        databaseHost: "grnsight2.cfimp3lu6uob.us-west-1.rds.amazonaws.com",
         databaseName: "postgres",
         databaseDialect: "postgres"
     },
@@ -39,7 +39,7 @@ module.exports = {
         app: {
             name: "GRNsight"
         },
-        databaseHost: "<database host for beta database>",
+        databaseHost: "grnsight2.cfimp3lu6uob.us-west-1.rds.amazonaws.com",
         databaseName: "postgres",
         databaseDialect: "postgres"
     }
