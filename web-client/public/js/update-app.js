@@ -772,13 +772,13 @@ export const updateApp = grnState => {
                     console.log(error.name);
                     console.log(error.message);
                 });
-            } else /* if (grnState.network.expression[grnState.nodeColoring.bottomDataset] != undefined
-                && grnState.network.expression[grnState.nodeColoring.topDataset] != undefined)*/ {
+            } else {
                 console.log("this is the else");
-                // Code makes it here, but node coloring fails to occur. Why???
-                // grnState.nodeColoring.nodeColoringEnabled = true;
                 enableNodeColoringUI();
                 console.log("this is where it doesn't work: " + JSON.stringify(grnState.network));
+                // There is as problem here! When a dataset from the database is used to do node coloring,
+                // but then the layout of the graph is changed (force graph to grid layout, for instance),
+                // node coloring goes away, seemingly inexplicably.
                 // !!!!! TEMPORARY WORKAROUND:
                 //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
                 //   has to take place, done here via `setTimeout`.
