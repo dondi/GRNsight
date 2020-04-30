@@ -779,7 +779,18 @@ export const updateApp = grnState => {
                 // grnState.nodeColoring.nodeColoringEnabled = true;
                 enableNodeColoringUI();
                 console.log("this is where it doesn't work: " + JSON.stringify(grnState.network));
-                updaters.renderNodeColoring();
+                // !!!!! TEMPORARY WORKAROUND:
+                //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
+                //   has to take place, done here via `setTimeout`.
+                //
+                //   The delay is built-in to the cases where a query has to happen first.
+                //
+                //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
+                //   actually perform the node coloring.
+                //
+                //   Investigate why a timeout is required in order for node coloring to take place
+                //   successfully in this case.
+                setTimeout(() => updaters.renderNodeColoring(), 250);
 
             }
         }
