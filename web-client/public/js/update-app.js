@@ -266,7 +266,6 @@ const stopLoadingIcon = function () {
 };
 
 const enableNodeColoringUI = function () {
-    console.log("NODE COLORING UI TURNING ON!");
     grnState.nodeColoring.nodeColoringEnabled = true;
     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
@@ -532,7 +531,6 @@ const resetDatasetDropdownMenus = (network) => {
 
 const updateLogFoldChangeMaxValue = () => {
     var value = logFoldChangeMaxValueInputValidation(grnState.nodeColoring.logFoldChangeMaxValue);
-    console.log("VALUE: " + JSON.stringify(value));
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val(value);
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val(value);
     updaters.renderNodeColoring();
@@ -715,7 +713,6 @@ export const updateApp = grnState => {
                 });
             }
         } else {
-            console.log("issue may be here?");
             updaters.renderNodeColoring();
         }
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
@@ -725,9 +722,7 @@ export const updateApp = grnState => {
         grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
             resetDatasetDropdownMenus(grnState.network);
-            console.log("something is undefined, remove node coloring and reset dropdown");
         }
-        console.log("doesn't have expression data! turning menu stuff off");
         grnState.nodeColoring.showMenu = true;
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
         grnState.nodeColoring.topDataset : "Barreto_2012_wt";
@@ -737,9 +732,7 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-            console.log("node coloring toggle is checked");
             if (grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
-                console.log("top dataset is undefined");
                 let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
 
                 responseData("", queryURLTop).then(function (response) {
@@ -749,7 +742,6 @@ export const updateApp = grnState => {
                     if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
-                        console.log("this is where it works: " + JSON.stringify(grnState.network));
                     }
                 }).catch(function (error) {
                     console.log(error.stack);
@@ -758,7 +750,6 @@ export const updateApp = grnState => {
                 });
             } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
             grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
-                console.log("bottom dataset is undefined");
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
@@ -773,9 +764,7 @@ export const updateApp = grnState => {
                     console.log(error.message);
                 });
             } else {
-                console.log("this is the else");
                 enableNodeColoringUI();
-                console.log("this is where it doesn't work: " + JSON.stringify(grnState.network));
                 // There is as problem here! When a dataset from the database is used to do node coloring,
                 // but then the layout of the graph is changed (force graph to grid layout, for instance),
                 // node coloring goes away, seemingly inexplicably.
