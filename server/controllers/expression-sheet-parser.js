@@ -3,6 +3,15 @@
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
+var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
+    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
+    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
+    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
+    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
+    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
+    74:"BV", 75:"BW", 76:"BX"};
+
+
 const errorsList = {
     idLabelError: function (sheetName) {
         return {
@@ -21,7 +30,7 @@ const errorsList = {
     emptyExpressionRowError: function (row, sheetName) {
         return {
             errorCode: "EMPTY_ROW",
-            possibleCause: "There is an empty row in the " + sheetName + " sheet. It is located at row " +row+ ".",
+            possibleCause: "There is an empty row in the " + sheetName + " sheet. It is located at row " + row + ".",
             suggestedFix: "Delete empty row, or populate with data."
         };
     },
@@ -29,7 +38,8 @@ const errorsList = {
         var columnLetter = numbersToLetters[column];
         return {
             errorCode: "EMPTY_COLUMN",
-            possibleCause: "There is an empty column in the " + sheetName + " sheet. It is located at column " +columnLetter+ ".",
+            possibleCause: "There is an empty column in the " + sheetName + " sheet. It is located at column " +
+            columnLetter + ".",
             suggestedFix: "Delete empty column, or populate with data."
         };
     },
@@ -47,18 +57,11 @@ const warningsList = {
     extraneousDataWarning: function (sheetName) {
         return {
             warningCode: "EXTRANEOUS_DATA",
-            errorDescription: "There is extraneous data outside of the set rows and columns of the " + sheetName + " sheet."
+            errorDescription: "There is extraneous data outside of the set rows and columns of the " +
+            sheetName + " sheet."
         };
     }
 };
-
-var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
-    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
-    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
-    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
-    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
-    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
-    74:"BV", 75:"BW", 76:"BX"};
 
 const addExpWarning = (network, message) => {
     let warningsCount;
@@ -147,23 +150,23 @@ var parseExpressionSheet = function (sheet) {
             if (row.length !== rowLength) {
                 addExpWarning(expressionData, warningsList.extraneousDataWarning(sheet.name));
             }
-            //Check for missing Column Headers
+            // Check for missing Column Headers
             if (rowCounter === 0) {
-                for(var i = 0; i < rowLength; i++) {
-                    if(sheet.data[0][i] === undefined){
+                for (let i = 0; i < rowLength; i++) {
+                    if (sheet.data[0][i] === undefined) {
                         addExpError(expressionData, errorsList.missingColumnHeaderError(sheet.name));
                     }
                 }
             } else {
-                for(var i = 0; i < rowLength; i++) {
-                    if(sheet.data[rowCounter][i] !== undefined){
+                for (var i = 0; i < rowLength; i++) {
+                    if (sheet.data[rowCounter][i] !== undefined) {
                         columnChecker[i]++;
                     }
                 }
             }
 
             let nonnullCount = 0;
-            //check for empty rows
+            // check for empty rows
             for (let i = 0; i <= rowLength; i++) {
                 if (i === rowLength) {
                     if (nonnullCount === 0) {
@@ -180,7 +183,7 @@ var parseExpressionSheet = function (sheet) {
         });
         // check for empty columns
         for (var i = 0; i < columnChecker.length; i++) {
-            if(columnChecker[i] === 0){
+            if (columnChecker[i] === 0) {
                 addExpError(expressionData, errorsList.emptyExpressionColumnError(i, sheet.name));
             }
         }

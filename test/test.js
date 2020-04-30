@@ -255,7 +255,7 @@ var labelError = function (input, frequency) {
     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "extra_gene_name"|| "missing_a_gene_name",
+            "extra_gene_name" || "missing_a_gene_name",
             exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
         );
     }

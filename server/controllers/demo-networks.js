@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 var helpers = require(__dirname + "/helpers");
 
 var processDemo = function (path, res, app, network) {
@@ -12,10 +13,6 @@ var processDemo = function (path, res, app, network) {
 
 var demoNetwork1 = function (path, res, app) {
     let network1 = {
-
-        //grnState.genePageData.species.should.equal("Saccharomyces_cerevisiae")
-
-
         genes: [
             {name: "ACE2"},
             {name: "ASH1"},
@@ -4534,7 +4531,7 @@ var demoNetwork4 = function (path, res, app) {
 module.exports = function (path, res, app, network) {
     if (path === "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx") {
         return demoNetwork1(path, res, app, network);
-    } else if (path === "test-files/demo-files/15-gen(path, res, app, network)es_28-edges_db5_Dahlquist-data_estimation_output.xlsx") {
+    } else if (path === "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx") {
         return demoNetwork2(path, res, app, network);
     } else if (path === "test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx") {
         return demoNetwork3(path, res, app, network);

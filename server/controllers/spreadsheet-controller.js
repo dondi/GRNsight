@@ -126,31 +126,37 @@ var errorList = {
         and attach the spreadsheet you attempted to upload."
     },
 
-    geneMismatchError: function(sheetName) {
+    geneMismatchError: function (sheetName) {
         return {
             errorCode: "GENE_MISMATCH",
-            possibleCause: "Gene names in column A of the '" + sheetName + "' sheet do not match the order of those in the network sheet",
-            suggestedFix: "Please ensure that the gene names are in the same order as those in both the 'network' sheet and the " +
+            possibleCause: "Gene names in column A of the '" + sheetName
+            + "' sheet do not match the order of those in the network sheet",
+            suggestedFix: "Please ensure that the gene names are in the same order"
+            + " as those in both the 'network' sheet and the " +
                 "'network_optimized_weights' sheet."
-        }
+        };
     },
 
-    extraGeneNamesError: function(sheetName) {
+    extraGeneNamesError: function (sheetName) {
         return {
             errorCode: "EXTRA_GENE_NAME",
-            possibleCause: "Gene names in column A of the '" + sheetName + "' sheet have one or more extra genes than those listed in the network sheet",
-            SuggestedFix: "Please ensure that the genes in the '" + sheetName + "' are the same as the genes in the 'network' sheet and the " +
+            possibleCause: "Gene names in column A of the '" + sheetName
+            + "' sheet have one or more extra genes than those listed in the network sheet",
+            SuggestedFix: "Please ensure that the genes in the '" + sheetName +
+                "' are the same as the genes in the 'network' sheet and the " +
                 "'network_optimized_weights' sheet."
-        }
+        };
     },
 
-    missingGeneNamesError: function(sheetName) {
+    missingGeneNamesError: function (sheetName) {
         return {
             errorCode: "MISSING_GENE_NAME",
-            possibleCause: "Gene names in column A of the '" + sheetName + "' sheet are missing one or more genes from the network sheet",
-            SuggestedFix: "Please ensure that the genes in the '" + sheetName + "' are the same as the genes in the 'network' sheet and the " +
+            possibleCause: "Gene names in column A of the '" + sheetName +
+                "' sheet are missing one or more genes from the network sheet",
+            SuggestedFix: "Please ensure that the genes in the '" + sheetName +
+                "' are the same as the genes in the 'network' sheet and the " +
                 "'network_optimized_weights' sheet."
-        }
+        };
     },
 
 };
@@ -465,15 +471,15 @@ var parseNetworkSheet = function (sheet) {
     return semanticChecker(network);
 };
 
-function difference(setA, setB) {
+var difference = function (setA, setB) {
     let _difference = new Set(setA);
     for (let elemB of setB) {
         if (_difference.has(elemB)) {
-            _difference.delete(elemB)
+            _difference.delete(elemB);
         }
     }
     return _difference;
-}
+};
 
 var crossSheetInteractions = function (workbook) {
     var network = parseNetworkSheet(workbook);
@@ -510,11 +516,11 @@ var crossSheetInteractions = function (workbook) {
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
     // We need to account for all the different possible expression sheet names.
     if (expressionData) {
-        if(expressionData.errors !== undefined) {
+        if (expressionData.errors !== undefined) {
             expressionData.errors
                 .forEach( data => network.errors.push(data));
         }
-        if(expressionData.warnings !== undefined) {
+        if (expressionData.warnings !== undefined) {
             expressionData.warnings
                 .forEach( data => network.warnings.push(data));
         }
@@ -532,7 +538,7 @@ var crossSheetInteractions = function (workbook) {
         }
     }
 
-    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression && expressionData.expression.wt_log2_expression) {
+    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
         if (expressionData.expression.wt_log2_expression.errors !== undefined) {
             expressionData.expression.wt_log2_expression.errors
                 .forEach(data => network.errors.push(data));
@@ -548,39 +554,37 @@ var crossSheetInteractions = function (workbook) {
 
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
-            console.log("SHEET: ")
-            console.log(sheet.name)
             var tempNetworkGenes = new Set();
-            for (var i = 0; i < network.genes.length; i++) {
+            for (let i = 0; i < network.genes.length; i++) {
                 tempNetworkGenes.add(network.genes[i].name);
             }
             var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
-            var extraExpressionGenes = difference(tempExpressionGenes,tempNetworkGenes);
+            var extraExpressionGenes = difference(tempExpressionGenes, tempNetworkGenes);
             var extraNetworkGenes = difference(tempNetworkGenes, tempExpressionGenes);
 
-            if(extraExpressionGenes.size === 0 && extraNetworkGenes.size === 0) {
+            if (extraExpressionGenes.size === 0 && extraNetworkGenes.size === 0) {
                 for (var i = 0; i < network.genes.length; i++) {
-                    if(network.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]){
+                    if (network.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]) {
                         addError(network, errorList.geneMismatchError(sheet.name));
                         break;
                     }
                 }
             } else {
-                if(extraNetworkGenes.size > 0) {
+                if (extraNetworkGenes.size > 0) {
                     addError(network, errorList.missingGeneNamesError(sheet.name));
                 }
-                if(extraExpressionGenes.size > 0) {
+                if (extraExpressionGenes.size > 0) {
                     addError(network, errorList.extraGeneNamesError(sheet.name));
                 }
             }
         }
     });
 
-    //returning only the Network now instead of the network, expressionData, and additionalData object
+    // returning only the Network now instead of the network, expressionData, and additionalData object
 
-    return network
+    return network;
 
-}
+};
 
 var processGRNmap = function (path, res, app) {
     var sheet;
@@ -596,8 +600,6 @@ var processGRNmap = function (path, res, app) {
     helpers.attachFileHeaders(res, path);
 
     var network = crossSheetInteractions(sheet);
-
-    console.log(network)
 
     return (network.errors.length === 0) ?
         // If all looks well, return the network with an all clear
@@ -701,7 +703,8 @@ module.exports = function (app) {
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return demoNetworks("test-files/demo-files/15-gen(path, res, app, network)es_28-edges_db5_Dahlquist-data_estimation_output.xlsx",res, app);
+            return demoNetworks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
+             res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
