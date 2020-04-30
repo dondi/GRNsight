@@ -92,7 +92,6 @@ import {
   SPECIES_BUTTON_YEAST
 
 } from "./constants";
-// import { json } from "sequelize/types";
 
 let expressionDBdesired = false;
 
@@ -227,10 +226,10 @@ const buildGeneQuery = function () {
 };
 
 const buildURL = function (selection) {
+    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildGeneQuery()}`;
     return selection.timepoints ?
-    "expressiondb?dataset=" + selection.dataset + "&genes=" +
-    buildGeneQuery() + "&timepoints=" + buildTimepointsString(selection)
-    : "expressiondb?dataset=" + selection.dataset + "&genes=" + buildGeneQuery();
+    `${baseQuery}&timepoints=${buildTimepointsString(selection)}` :
+    baseQuery;
 };
 
 const startLoadingIcon = function () {
@@ -270,7 +269,7 @@ const enableNodeColoringUI = function () {
     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
-}
+};
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
