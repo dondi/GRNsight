@@ -582,10 +582,11 @@ var crossSheetInteractions = function (workbook) {
         }
     });
 
-    // returning only the Network now instead of the network, expressionData, and additionalData object
-
+    // Integrate the desired properties from the other objects.
+    network.meta = additionalData.meta;
+    network.test = additionalData.test;
+    network.expression = expressionData.expression;
     return network;
-
 };
 
 var processGRNmap = function (path, res, app) {
