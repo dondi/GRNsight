@@ -20,9 +20,9 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("wrong_order_gene_names", function () {
-        it.skip("Gene names in column A do not match the order of those in network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
+    describe("GENE_MISMATCH", function () {
+        it("Gene names in column A do not match the order of those in network sheet.", function () {
+            test.geneMismatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
 
@@ -32,15 +32,15 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("missing_a_gene_name", function () {
-        it.skip("Gene names in column A are missing a gene name listed in the network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
+    describe("MISSING_GENE_NAME", function () {
+        it("Gene names in column A are missing a gene name listed in the network sheet.", function () {
+            test.missingGeneNameError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
         });
     });
 
-    describe("extra_gene_name", function () {
-        it.skip("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
-            test.labelError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
+    describe("EXTRA_GENE_NAME", function () {
+        it("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
+            test.extraGeneNameError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
         });
     });
 
@@ -51,7 +51,7 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("empty_column", function () {
-        it.skip("Column in expression sheet contains no data.", function () {
+        it("Column in expression sheet contains no data.", function () {
             test.emptyExpressionColumnError("test-files/expression-data-test-sheets/expression_sheet_empty_column.xlsx", 1);
         });
     });
