@@ -92,7 +92,6 @@ import {
   SPECIES_BUTTON_YEAST
 
 } from "./constants";
-// import { json } from "sequelize/types";
 
 let expressionDBdesired = false;
 
@@ -227,10 +226,10 @@ const buildGeneQuery = function () {
 };
 
 const buildURL = function (selection) {
+    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildGeneQuery()}`;
     return selection.timepoints ?
-    "expressiondb?dataset=" + selection.dataset + "&genes=" +
-    buildGeneQuery() + "&timepoints=" + buildTimepointsString(selection)
-    : "expressiondb?dataset=" + selection.dataset + "&genes=" + buildGeneQuery();
+    `${baseQuery}&timepoints=${buildTimepointsString(selection)}` :
+    baseQuery;
 };
 
 const startLoadingIcon = function () {
@@ -265,6 +264,12 @@ const stopLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
 };
 
+const enableNodeColoringUI = function () {
+    grnState.nodeColoring.nodeColoringEnabled = true;
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+};
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
@@ -677,10 +682,7 @@ export const updateApp = grnState => {
 
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop ||
                     !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
@@ -700,11 +702,7 @@ export const updateApp = grnState => {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
-
+                    enableNodeColoringUI();
                     stopLoadingIcon();
                     updaters.renderNodeColoring();
                 }).catch(function (error) {
@@ -722,9 +720,9 @@ export const updateApp = grnState => {
         (!grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
+            resetDatasetDropdownMenus(grnState.network);
         }
         grnState.nodeColoring.showMenu = true;
-        resetDatasetDropdownMenus(grnState.network);
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
         grnState.nodeColoring.topDataset : "Barreto_2012_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
@@ -738,10 +736,7 @@ export const updateApp = grnState => {
 
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
@@ -757,10 +752,7 @@ export const updateApp = grnState => {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     stopLoadingIcon();
 
@@ -771,17 +763,25 @@ export const updateApp = grnState => {
                     console.log(error.message);
                 });
             } else {
-                // Code makes it here, but node coloring fails to occur. Why???
-                grnState.nodeColoring.nodeColoringEnabled = true;
-                updaters.renderNodeColoring();
-                grnState.nodeColoring.nodeColoringEnabled = true;
-                $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                enableNodeColoringUI();
+                // There is as problem here! When a dataset from the database is used to do node coloring,
+                // but then the layout of the graph is changed (force graph to grid layout, for instance),
+                // node coloring goes away, seemingly inexplicably.
+                // !!!!! TEMPORARY WORKAROUND:
+                //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
+                //   has to take place, done here via `setTimeout`.
+                //
+                //   The delay is built-in to the cases where a query has to happen first.
+                //
+                //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
+                //   actually perform the node coloring.
+                //
+                //   Investigate why a timeout is required in order for node coloring to take place
+                //   successfully in this case.
+                setTimeout(() => updaters.renderNodeColoring(), 250);
+
             }
         }
-
-
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {

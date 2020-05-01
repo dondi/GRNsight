@@ -1110,8 +1110,10 @@ export var drawGraph = function (network) {
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
             label.setAttribute("fill", "rgb(0,0,0)");
+
             g.appendChild(label);
         }
+
     };
 
     updaters.removeNodeColoring = function () {
