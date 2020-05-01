@@ -295,6 +295,13 @@ text.weight.visible
     margin-bottom: 4px
     margin-top: 6px
 
+.centered-sideHeader
+    font-weight: normal
+    font-size: 13px
+    margin-bottom: 4px
+    margin-top: 6px
+    text-align: center
+
 .nodeColoringSidebarBody
   margin-top: 6px
 
@@ -304,6 +311,10 @@ text.weight.visible
 .node-coloring.disabled
     color: #AAA
 
+.data-sidebar select
+    width: 100%
+
+.data-sidebar.disabled
 .species-display select
     width: 100%
 
@@ -373,3 +384,30 @@ path.mousezone
 
 .edge-weight-sidebar.disabled
     color: #AAA
+
+#activateExpressionDBLabel
+    text-align: center
+
+#expressionDBcheckbox
+    text-align: center
+
+.expression-db-loader
+    border: 12px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #aeaeae;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite
+    margin: auto
+    display: none
+
+@keyframes spin 
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+
+.expression-db-loader-text
+    font-weight: bolder
+    text-align: center
+    margin-top: 15 px
+    display: none
+

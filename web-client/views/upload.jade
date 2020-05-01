@@ -148,7 +148,7 @@ html
                   a(href='#' class='nodeOptions with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
-                    input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
+                    input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')                  
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -361,6 +361,7 @@ html
                 input(id='nodeColoringToggleSidebar' class='nodeColoringToggle' type='checkbox' checked)
                 label(for='nodeColoringToggleSidebar' class='sideLabel') Enable Node Coloring
               div(class="nodeColoringSidebarBody")
+                p(class='centered-sideHeader info' data-toggle='tooltip') Select from uploaded expression data, or use data from the Expression Database
                 p(class='sideHeader info' data-toggle='tooltip') Top Dataset
                 select(id="dataset-top")
                 form
@@ -376,6 +377,8 @@ html
                   input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
                   button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
                 div(class="node-coloring-legend")
+                div(class="expression-db-loader-text") Node Coloring is Loading
+                div(class="expression-db-loader")
 
         div(class='edge-weight-sidebar disabled panel panel-default disabled')
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')

@@ -136,6 +136,15 @@ export const container = function () {
         }
     });
 
+    $("#expressionDB").on("click", function () {
+        if (!$("#expressionDB span").hasClass("glyphicon-ok")) {
+            $("#expressionDB span").addClass("glyphicon-ok");
+            $("#expressionDB").trigger("change");
+        } else {
+            $("#expressionDB span").removeClass("glyphicon-ok");
+            $("#expressionDB").trigger("change");
+        }
+    });
 
     $(".boundBoxSize").on("click", function () {
         var currentValue = $(this).val();
