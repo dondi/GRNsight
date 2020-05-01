@@ -92,7 +92,9 @@ export const grnState = {
         species: "Saccharomyces_cerevisiae",
         taxonUniprot: "559292",
         taxonJaspar: "4932",
-        identified: false
+        identified: false,
+        ensembl: "reg",
+        mine: "yeast"
     },
 
     nameToTaxon: {
@@ -100,12 +102,18 @@ export const grnState = {
         // and values being a dictionary of (latin name, Uniprot, Jaspar)
         // some taxon ids are different between the two
         // changed spec names for common english and will have them formatted before calling an api
-        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: "3702", uniprot: "3702" },
-        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: "6293", uniprot: "6293" },
-        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: "7227", uniprot: "7227" },
-        "Homo sapiens": { spec: "Homo_sapiens", jaspar: "9606", uniprot: "9606" },
-        "Mus musculus": { spec: "Mus_musculus", jaspar: "10090", uniprot: "10090" },
-        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: "4932", uniprot: "559292" }
+        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: 3702, uniprot: 3702,
+            ensembl: "plant", mine: "thale"},
+        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: 6293, uniprot: 6293,
+            ensembl: "reg", mine: "worm"},
+        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: 7227, uniprot: 7227,
+            ensembl: "reg", mine: "fly"},
+        "Homo sapiens": { spec: "Homo_sapiens", jaspar: 9606, uniprot: 9606, ensembl: "reg",
+            mine: "fly"},
+        "Mus musculus": { spec: "Mus_musculus", jaspar: 10090, uniprot: 10090, ensembl: "reg",
+            mine: "mouse"},
+        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: 4932, uniprot: 559292,
+            ensembl: "reg", mine: "yeast"}
     },
 
 // Slider Parameters

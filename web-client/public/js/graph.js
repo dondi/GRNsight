@@ -944,6 +944,8 @@ export var drawGraph = function (network) {
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
+                            ensembl: grnState.genePageData.ensembl,
+                            mine: grnState.genePageData.mine
                         }),
                         target: "_blank"
                     });
