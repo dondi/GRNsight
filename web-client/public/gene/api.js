@@ -6,7 +6,7 @@ const serializer = new XMLSerializer();
 const XMLParser = function (data) {
     return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");
 };
-console.log("service root: " + serviceRoot)
+// console.log("service root: " + serviceRoot)
 
 let defaultJaspar = {
     jasparID: "Not found",
@@ -51,7 +51,7 @@ let defaultYeastmine = {
 let getUniProtInfo = function (query) {
     const taxon = query.uniprot;
     const geneSymbol = query.symbol;
-    console.log("this is uniprot: " + taxon);
+    // console.log("this is uniprot: " + taxon);
     return $.get({
         url: serviceRoot + "/uniprot/uploadlists/",
         data: {
@@ -76,7 +76,7 @@ let getUniProtInfo = function (query) {
 let getNCBIInfo = function (query) {
     const geneSymbol = query.symbol;
     const geneName = query.species.replace(/_/, "+");
-    console.log("calling ncbi")
+    // console.log("calling ncbi")
 
     return $.get({
         url: serviceRoot + "/ncbi/entrez/eutils/esearch.fcgi",
@@ -146,7 +146,7 @@ let getYeastMineInfo = function (query) {
 let getJasparInfo = function (query) {
     const geneSymbol = query.symbol;
     const taxon = query.jaspar;
-    console.log("this is jaspar: " + taxon);
+    // console.log("this is jaspar: " + taxon);
 
     return $.get({
         url: serviceRoot + "/jaspar/api/v1/matrix/?tax_id=" + taxon + "&format=json&name=" + geneSymbol.toUpperCase(),
@@ -181,7 +181,6 @@ let parseRegulators = function (data, symbol) {
 
     let regs = [];
     let targs = [];
-    console.log("in parseRegulators")
 
     data.filter(word => (word.locus1.display_name === symbol.symbol) ? targs[targs.length] = {
         target:  word.locus2.display_name,
@@ -191,7 +190,7 @@ let parseRegulators = function (data, symbol) {
           regulationOf: word.regulation_of,
           regulationType: word.regulation_type}) ;
 
-    return console.log("returning parseRegulators"), {
+    return {
         regulators: regs,
         targets: targs
     };
@@ -362,23 +361,23 @@ let parseJaspar = function (data) {
                defaultValues.ncbi = parseNCBI(ncbiInfo);
                return window.api.getUniProtInfo(symbol);
            }).then(function (uniProtInfo) {
-               console.log("in uniprot")
+            //    console.log("in uniprot")
                defaultValues.uniprot = parseUniprot(uniProtInfo);
                return window.api.getJasparInfo(symbol);
            }).then(function (jasparInfo) {
-               console.log("this is jasparInfo: ")
-               console.log(jasparInfo)
+            //    console.log("this is jasparInfo: ")
+            //    console.log(jasparInfo)
                defaultValues.jaspar = parseJaspar(jasparInfo);
                return window.api.getYeastMineInfo(symbol);
            }).then(function (yeastMineInfo) {
-               console.log("in yeastmine")
+            //    console.log("in yeastmine")
                defaultValues.sgd = parseYeastmine(yeastMineInfo);
             //    return window.api.getFlyMineInfo(symbol);
         //    }).then(function (flyMineInfo) {
             //    defaultValues.sgd = parseFlymine(flyMineInfo);
                return window.api.getGeneOntologyInfo(symbol);
            }).then(function (goInfo) {
-               console.log("inside GO call")
+            //    console.log("inside GO call")
                defaultValues.geneOntology = parseGeneOntology(goInfo);
                return window.api.getRegulationInfo(symbol);
            }).then(function (regulationInfo) {

@@ -392,6 +392,8 @@ export const identifySpeciesMenu = (data) => {
             grnState.genePageData.species = nameTax[n].spec;
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            grnState.genePageData.ensembl = nameTax[n].ensembl;
+            grnState.genePageData.mine = nameTax[n].mine;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             updateSpeciesMenu();
             return grnState.genePageData.identified;
@@ -409,7 +411,8 @@ const identifySpeciesOrTaxon = (data) => {
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
             grnState.genePageData.identified = true;
-            grnState.genePageData.readFromNetwork = true;
+            grnState.genePageData.ensembl = nameTax[n].ensembl;
+            grnState.genePageData.mine = nameTax[n].mine;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             updateSpeciesMenu();
             return grnState.genePageData.identified;
@@ -421,7 +424,8 @@ const identifySpeciesOrTaxon = (data) => {
                 grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
                 grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
                 grnState.genePageData.identified = true;
-                grnState.genePageData.readFromNetwork = true;
+                grnState.genePageData.ensembl = nameTax[n].ensembl;
+                grnState.genePageData.mine = nameTax[n].mine;
                 $(SPECIES_DISPLAY).val(grnState.genePageData.species);
                 updateSpeciesMenu();
                 return grnState.genePageData.identified;
@@ -553,7 +557,7 @@ export const updateApp = grnState => {
             if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
                 identifySpeciesOrTaxon(networkSpecies);
                 identifySpeciesOrTaxon(networkTaxon);
-            } 
+            }
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {

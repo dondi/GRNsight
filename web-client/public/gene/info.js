@@ -35,7 +35,9 @@
         symbol: query.get("symbol"),
         species: query.get("species"),
         jaspar: query.get("jaspar"),
-        uniprot: query.get("uniprot")
+        uniprot: query.get("uniprot"),
+        ensembl: query.get("ensembl"),
+        mine: query.get("mine")
     };
 
     document.title = "GRNsight - " + obj.symbol;
@@ -63,11 +65,17 @@
             $(".ncbi-link").attr({ href: ncbiHrefTemplate + ncbiId });
         }
 
-        const ensemblHrefTemplate = "https://www.ensembl.org/Saccharomyces_cerevisiae/Gene/Summary?g=";
+        const ensemblHrefTemplate = "https://www.ensembl.org/" + obj.species + "/Gene/Summary?g=";
+        const ensemblPlantHrefTemplate = "https://www.plants.ensembl.org/ " + obj.species + "/Gene/Summary?g=";
         const ensemblId = locusTag;
+        // console.log("ensembl id: " + ensemblId)
         $(".ensembl-link").text(ensemblId);
         if (ensemblId !== "Not found") {
-            $(".ensembl-link").attr({ href: ensemblHrefTemplate + ensemblId });
+            if ( obj.ensembl === "plant") {
+                $(".ensembl-link").attr({ href: ensemblPlantHrefTemplate + ensemblId });
+            } else {
+                $(".ensembl-link").attr({ href: ensemblHrefTemplate + ensemblId });
+            }
         }
 
         const uniprotHrefTemplate = "http://www.uniprot.org/uniprot/";
@@ -89,8 +97,8 @@
         $(".geneDescription").text(geneDescription).attr({ href: sgdHrefTemplate + geneDescription });
 
 
-        const uniSpecies = gene.uniprot.species;
-        $(".uniProtSpecies").text(uniSpecies).attr({ href: uniprotHrefTemplate + uniSpecies });
+        const GRNSightSpecies = obj.species.replace("_", " "); // change to make species display work
+        $(".uniProtSpecies").text(GRNSightSpecies).attr({ href: uniprotHrefTemplate + GRNSightSpecies });
 
         // This has been moved to top of function
         $(".ncbiLocusTag").text(locusTag).attr({ href: ncbiHrefTemplate + locusTag });

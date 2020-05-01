@@ -32,14 +32,13 @@ var isExpressionSheet = function (sheetName) {
 };
 
 var doesSpeciesExist = function (speciesInfo) {
-    console.log("in does exist")
     for (var s in SPECIES) {
         if (SPECIES[s] === speciesInfo) {
             return true;
         }
     }
     for (var t in TAXON_ID) {
-        if( TAXON_ID[t] === speciesInfo) {
+        if ( TAXON_ID[t] === speciesInfo) {
             return true;
         }
     }
@@ -231,7 +230,7 @@ var warningsList = {
                 " and the taxon " + networkTaxon + " in your input file." +
                 " This is not one of the supported species, or was formatted incorrectly" +
                 " You can change the species selection in the Species menu or panel."
-        }
+        };
     }
 };
 
@@ -526,7 +525,7 @@ var processGRNmap = function (path, res, app) {
         }
     }
 
-    if (additionalData.meta.species === undefined 
+    if (additionalData.meta.species === undefined
     && additionalData.meta.taxon_id === undefined) {
         addWarning(network, warningsList.noSpeciesInformationDetected);
     } else if (!doesSpeciesExist(additionalData.meta.species) &&
