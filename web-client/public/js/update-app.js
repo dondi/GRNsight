@@ -403,9 +403,6 @@ export const identifySpeciesMenu = (data) => {
 const identifySpeciesOrTaxon = (data) => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        console.log("this is the data: " + data)
-        console.log("this is data type: " + typeof(data))
-        console.log("this is type of n: " + typeof(n))
         if (n === data) { // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
