@@ -188,6 +188,16 @@ var emptyRowError = function (input, frequency) {
     }
 };
 
+var geneMismatchError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.crossSheetInteractions(sheet);
+    var geneMismatchCount = network.errors.filter(function (x) {
+        return x.errorCode === "GENE_MISMATCH";
+    });
+
+    assert.equal(frequency, geneMismatchCount.length);
+};
+
 var idLabelError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var network = parseExpressionSheet(sheet);
@@ -205,7 +215,6 @@ var missingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
-
     for (var i = 0; i < frequency; i++) {
         assert.equal(
             "MISSING_COLUMN_HEADER",
@@ -216,13 +225,12 @@ var missingColumnHeaderError = function (input, frequency) {
 
 var emptyExpressionColumnError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseExpressionSheet(sheet);
-    assert.equal(frequency, network.errors.length);
-
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
             "EMPTY_COLUMN",
-            network.errors[i].errorCode
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
         );
     }
 };
@@ -239,6 +247,40 @@ var emptyExpressionRowError = function (input, frequency) {
         );
     }
 };
+
+// should extra_gene_name and missing_gene_name be split into two different functions?
+var labelError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "extra_gene_name" || "missing_a_gene_name",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
+    }
+};
+
+var missingGeneNameError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.crossSheetInteractions(sheet);
+    var missingGeneCount = network.errors.filter(function (x) {
+        return x.errorCode === "MISSING_GENE_NAME";
+    });
+
+    assert.equal(frequency, missingGeneCount.length);
+};
+
+var extraGeneNameError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = spreadsheetController.crossSheetInteractions(sheet);
+    var extraGeneCount = network.errors.filter(function (x) {
+        return x.errorCode === "EXTRA_GENE_NAME";
+    });
+
+    assert.equal(frequency, extraGeneCount.length);
+};
+
 
 // WARNING TEST FUNCTIONS:
 
@@ -319,10 +361,10 @@ var extraneousDataWarning = function (input, frequency) {
     assert.equal(frequency, extraneousDataCount.length);
 };
 
-// This test is having problems!
+
 var missingExpressionWarning = function (input, frequency)  {
     var sheet = xlsx.parse(input);
-    var network = spreadsheetController.processGRNmap(sheet);
+    var network = parseExpressionSheet(sheet);
     var missingExpressionCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
@@ -398,6 +440,10 @@ exports.specialCharacterError = specialCharacterError;
 exports.emptyExpressionColumnError = emptyExpressionColumnError;
 exports.emptyExpressionRowError = emptyExpressionRowError;
 exports.missingColumnHeaderError = missingColumnHeaderError;
+exports.geneMismatchError = geneMismatchError;
+exports.labelError = labelError;
+exports.missingGeneNameError = missingGeneNameError;
+exports.extraGeneNameError = extraGeneNameError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
@@ -411,3 +457,4 @@ exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
+exports.missingExpressionWarning = missingExpressionWarning;

@@ -19,7 +19,7 @@ var sequelize = new Sequelize(
 
 const timepointsSources = [
     {
-        key: "Barreto_2018_wt",
+        key: "Barreto_2012_wt",
         value: [10, 10, 20, 20, 20, 20, 40, 40, 40, 40, 60, 60, 60, 60, 120, 120, 120, 120]
     },
 
@@ -68,21 +68,20 @@ let buildTimepointsQuery = function (selection) {
     return timepoints.substring(0, timepoints.length - 4);
 };
 
-let buildQuery = function (dataset, timepoints) {
-    return timepoints ?
-    `SELECT * FROM expressiondata WHERE dataset='${dataset}'
-    AND (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex;` :
-    `SELECT * FROM expressiondata WHERE dataset='${dataset}' ORDER BY sortindex;`;
+let buildGenesQuery = function (geneString) {
+    let genes = "";
+    let geneList = geneString.split(",");
+    geneList.forEach(x => genes += ("standardname=\'" + x + "\' OR "));
+    return genes.substring(0, genes.length - 4);
 };
 
-let listUniqueGenes = function (arrayOfObjects) {
-    let uniqueGenes = [];
-    arrayOfObjects.forEach(function (x) {
-        if (!uniqueGenes.includes(x.standardname)) {
-            uniqueGenes.push(x.standardname);
-        }
-    });
-    return uniqueGenes;
+let buildQuery = function (dataset, timepoints, genes) {
+    return timepoints ?
+    `SELECT * FROM expressiondata WHERE dataset='${dataset}' AND
+    (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
+    (${buildGenesQuery(genes)}) ORDER BY sortindex;`
+    : `SELECT * FROM expressiondata WHERE dataset='${dataset}'
+    AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
 };
 
 let listGeneData = function (gene, totalOutput) {
@@ -97,14 +96,12 @@ let listGeneData = function (gene, totalOutput) {
 
 let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
     let JSONOutput = {
-        [dataset]: {
-            timePoints,
-            data: {
-                id: timePoints
-            }
+        timePoints,
+        data: {
+            id: timePoints
         }
     };
-    allGenes.forEach(x => JSONOutput[dataset].data[x.toString()] = listGeneData(x, totalOutput));
+    allGenes.forEach(x => JSONOutput.data[x.toString()] = listGeneData(x, totalOutput));
     return JSONOutput;
 };
 
@@ -112,12 +109,12 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
-            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints),
+            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
                     let dataset = req.query.dataset;
-                    let genes = listUniqueGenes(stdname);
-                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], genes);
+                    let geneList = req.query.genes.split(",");
+                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
                     return res.send(response);
                 });
         } catch (e) {

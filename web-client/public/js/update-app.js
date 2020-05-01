@@ -68,6 +68,8 @@ import {
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   BOTTOM_DATASET_SELECTION_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+  LOG_FOLD_CHANGE_MAX_VALUE_HEADER,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
   ZOOM_CONTROL,
@@ -90,6 +92,8 @@ import {
   SPECIES_BUTTON_YEAST
 
 } from "./constants";
+
+let expressionDBdesired = false;
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
@@ -214,25 +218,56 @@ const buildTimepointsString = function (selection) {
     selection.timepoints.forEach(x => timepoints += (x + ","));
     return timepoints.substring(0, timepoints.length - 1);
 };
+const buildGeneQuery = function () {
+    let genes = "";
+    grnState.network.genes.forEach(x => genes += (x.name + ","));
+    return genes.substring(0, genes.length - 1);
+};
 
 const buildURL = function (selection) {
+    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildGeneQuery()}`;
     return selection.timepoints ?
-    "expressiondb?dataset=" + selection.dataset + "&timepoints=" + buildTimepointsString(selection)
-    : "expressiondb?dataset=" + selection.dataset;
+    `${baseQuery}&timepoints=${buildTimepointsString(selection)}` :
+    baseQuery;
 };
 
 const startLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER).css("display", "block");
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
-    console.log("loading started");
+};
+
+const responseData = (formData, queryURL) => {
+    return new Promise(function (resolve) {
+        const uploadRoute = queryURL;
+        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        startLoadingIcon();
+        (formData ?
+            $.ajax({
+                url: fullUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "GET",
+                crossDomain: true
+            }) :
+            $.getJSON(fullUrl)
+            ).done((expressionData) => {
+                resolve(expressionData);
+            }).error(console.log("Error in accessing expression database. Result may just be loading."));
+    });
 };
 
 const stopLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER).css("display", "none");
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
-    console.log("loading stopped");
 };
 
+const enableNodeColoringUI = function () {
+    grnState.nodeColoring.nodeColoringEnabled = true;
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+};
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
@@ -442,6 +477,10 @@ const clearDropdownMenus = () => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
 };
 
+const expressionDBDatasets = ["Barreto_2012_wt", "Dahlquist_2018_dcin5",
+    "Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
+    "Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
+
 const resetDatasetDropdownMenus = (network) => {
     clearDropdownMenus();
     $(".dataset-option").remove(); // clear all menu dataset options
@@ -464,14 +503,7 @@ const resetDatasetDropdownMenus = (network) => {
     }
 
     // Add expression database options
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Barreto_2018_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dcin5"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dgln3"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dhap4"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_dzap1"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Dahlquist_2018_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Kitagawa_2002_wt"});
-    grnState.nodeColoring.nodeColoringOptions.push({value: "Thorsen_2007_wt"});
+    expressionDBDatasets.forEach(option => grnState.nodeColoring.nodeColoringOptions.push({value: [option]}));
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -518,7 +550,6 @@ const updateTopDataset = () => {
     removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
     $(`${TOP_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.topDataset}'] a span`).addClass("glyphicon-ok");
     updaters.renderNodeColoring();
-    // TO DO: If bottomDataSameAsTop make bottom selction "Same As Top"
 };
 
 const updateBottomDataset = () => {
@@ -534,6 +565,7 @@ const updateBottomDataset = () => {
             .addClass("glyphicon-ok");
         /* eslint-enable max-len */
     }
+
     updaters.renderNodeColoring();
 };
 
@@ -620,8 +652,11 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-
-// Node Coloring
+    // Node Coloring
+    if (grnState.network !== null && !hasExpressionData(grnState.network.expression) && !expressionDBdesired) {
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        expressionDBdesired = true;
+    }
     if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
     && hasExpressionData(grnState.network.expression)) {
         grnState.nodeColoring.showMenu = true;
@@ -631,62 +666,113 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        updaters.renderNodeColoring();
+        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
+        grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
+            if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+
+                responseData("", queryURLTop).then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.topDataset] = response;
+                    enableNodeColoringUI();
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop ||
+                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
+        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+        !grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            if (!grnState.nodeColoring.bottomDataSameAsTop) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("", queryURLBottom).then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
+                    enableNodeColoringUI();
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
+        } else {
+            updaters.renderNodeColoring();
+        }
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
     && grnState.nodeColoring.nodeColoringEnabled) {
-        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
-        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
-        updaters.removeNodeColoring();
-
-        console.log("Expression data loading from database.");
+        if ((grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) ||
+        (!grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
+            updaters.removeNodeColoring();
+            resetDatasetDropdownMenus(grnState.network);
+        }
         grnState.nodeColoring.showMenu = true;
-        $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
-        $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
-        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
-        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        resetDatasetDropdownMenus(grnState.network);
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-        grnState.nodeColoring.topDataset : "Barreto_2018_wt";
+        grnState.nodeColoring.topDataset : "Barreto_2012_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-        grnState.nodeColoring.bottomDataset : "Barreto_2018_wt";
-        let queryURL = buildURL({dataset: grnState.nodeColoring.topDataset});
-        const responseData = (name, formData) => {
-            return new Promise(function (resolve) {
-                const uploadRoute = queryURL;
-                const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-                startLoadingIcon();
-                (formData ?
-                    $.ajax({
-                        url: fullUrl,
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        type: "GET",
-                        crossDomain: true
-                    }) :
-                    $.getJSON(fullUrl)
-                    ).done((expressionData) => {
+        grnState.nodeColoring.bottomDataset : "Barreto_2012_wt";
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
+        if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+            if (grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) {
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+
+                responseData("", queryURLTop).then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.topDataset] = response;
+                    enableNodeColoringUI();
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
-                        resolve(expressionData);
-                        updateApp(grnState);
-                    }).error(console.log("Error in accessing expression database. Result may just be loading."));
-            });
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
+            grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("", queryURLBottom).then(function (response) {
+                    grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
+                    enableNodeColoringUI();
 
-        };
+                    stopLoadingIcon();
 
-        responseData("expression", "././controllers/database-controller.js").then(function (response) {
-            grnState.network.expression = response;
-            grnState.nodeColoring.nodeColoringEnabled = true;
-            updaters.renderNodeColoring();
-        }).catch(function (error) {
-            console.log(error.stack);
-            console.log(error.name);
-            console.log(error.message);
-        });
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else {
+                enableNodeColoringUI();
+                // There is as problem here! When a dataset from the database is used to do node coloring,
+                // but then the layout of the graph is changed (force graph to grid layout, for instance),
+                // node coloring goes away, seemingly inexplicably.
+                // !!!!! TEMPORARY WORKAROUND:
+                //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
+                //   has to take place, done here via `setTimeout`.
+                //
+                //   The delay is built-in to the cases where a query has to happen first.
+                //
+                //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
+                //   actually perform the node coloring.
+                //
+                //   Investigate why a timeout is required in order for node coloring to take place
+                //   successfully in this case.
+                setTimeout(() => updaters.renderNodeColoring(), 250);
 
+            }
+        }
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
@@ -713,11 +799,13 @@ export const updateApp = grnState => {
         $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", "checked");
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", "checked");
+
         updaters.renderNodeColoring();
     } else {
         $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").removeClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_BOTTOM_MENU).removeProp("checked");
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).removeProp("checked");
+
         updaters.renderNodeColoring();
     }
 
@@ -751,4 +839,5 @@ export const updateApp = grnState => {
         $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
     refreshApp();
+
 };
