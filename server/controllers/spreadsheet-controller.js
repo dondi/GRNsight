@@ -20,10 +20,30 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
 
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
+var SPECIES = ["Arabidopsis thaliana", "Caenorhabditis elegans", "Drosophila melanogaster",
+    "Homo sapiens", "Mus musculus", "Saccharomyces cerevisiae"];
+
+var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
+
 var isExpressionSheet = function (sheetName) {
     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
         return sheetName.includes(suffix);
     });
+};
+
+var doesSpeciesExist = function (speciesInfo) {
+    console.log("in does exist")
+    for (var s in SPECIES) {
+        if (SPECIES[s] === speciesInfo) {
+            return true;
+        }
+    }
+    for (var t in TAXON_ID) {
+        if( TAXON_ID[t] === speciesInfo) {
+            return true;
+        }
+    }
+    return false;
 };
 
 // TODO: Put this and the warnings list into helpers.
@@ -196,6 +216,23 @@ var warningsList = {
         errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
         The network graph will display without node coloring."
     },
+
+    noSpeciesInformationDetected: {
+        warningCode: "MISSING_SPECIES_INFORMATION",
+        errorDescription: "No species information was detected in your input file." +
+            " GRNsight defaults to Saccharomyces cerevisiae. You can change the species" +
+            " selection in the Species menu or panel."
+    },
+
+    unknownSpeciesDetected: function (networkSpecies, networkTaxon) {
+        return {
+            warningCode: "UNKNOWN_SPECIES_DETECTED",
+            errorDescription: "GRNsight detected the species " + networkSpecies +
+                " and the taxon " + networkTaxon + " in your input file." +
+                " This is not one of the supported species, or was formatted incorrectly" +
+                " You can change the species selection in the Species menu or panel."
+        }
+    }
 };
 
 var addMessageToArray = function (messageArray, message) {
@@ -487,6 +524,15 @@ var processGRNmap = function (path, res, app) {
         if (additionalData.test.warnings !== undefined) {
             additionalData.test.warnings.forEach(data => network.warnings.push(data));
         }
+    }
+
+    if (additionalData.meta.species === undefined 
+    && additionalData.meta.taxon_id === undefined) {
+        addWarning(network, warningsList.noSpeciesInformationDetected);
+    } else if (!doesSpeciesExist(additionalData.meta.species) &&
+    !doesSpeciesExist(additionalData.meta.taxon_id)) {
+        addWarning(network, warningsList.unknownSpeciesDetected(additionalData.meta.species,
+            additionalData.meta.taxon_id));
     }
 
     // Add errors and warnings from expression sheets

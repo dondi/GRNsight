@@ -403,11 +403,14 @@ export const identifySpeciesMenu = (data) => {
 const identifySpeciesOrTaxon = (data) => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        if (n === data.toString()) { // <-- change if to work
+        console.log("this is the data: " + data)
+        console.log("this is data type: " + typeof(data))
+        console.log("this is type of n: " + typeof(n))
+        if (n === data) { // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
-            grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
-            grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
+            grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
             grnState.genePageData.identified = true;
             grnState.genePageData.readFromNetwork = true;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
@@ -415,11 +418,11 @@ const identifySpeciesOrTaxon = (data) => {
             return grnState.genePageData.identified;
         }
         for (var t in Object.values(nameTax[n])) {
-            if (Object.values(nameTax[n])[t] === data.toString()) {
+            if (Object.values(nameTax[n])[t] === data) {
                 grnState.genePageData.commonName = n;
                 grnState.genePageData.species = nameTax[n].spec;
-                grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
-                grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+                grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
+                grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
                 grnState.genePageData.identified = true;
                 grnState.genePageData.readFromNetwork = true;
                 $(SPECIES_DISPLAY).val(grnState.genePageData.species);
@@ -550,21 +553,10 @@ export const updateApp = grnState => {
             // also checks if the areas have been populated at all
             var networkSpecies = grnState.network.meta.species;
             var networkTaxon = grnState.network.meta.taxon_id;
-            if (networkSpecies === undefined && networkTaxon === undefined) {
-                $("#warningIntroSpecies").html("No species information was detected in your input file." +
-                " GRNsight defaults to Saccharomyces cerevisiae. You can change the species" +
-                " selection in the Species menu or panel.");
-                $("#warningsModalSpecies").modal("show");
-            } else if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
+            if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
                 identifySpeciesOrTaxon(networkSpecies);
                 identifySpeciesOrTaxon(networkTaxon);
-            } else {
-                $("#warningIntroSpecies").html("GRNsight detected the species " + networkSpecies +
-                " and the taxon " + networkTaxon + " in your input file." +
-                " This is not one of the supported species, or was formatted incorrectly" +
-                " You can change the species selection in the Species menu or panel.");
-                $("#warningsModalSpecies").modal("show");
-            }
+            } 
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {

@@ -47,6 +47,12 @@ export var displayWarnings = function (warnings) {
     var missingExpressionSheetWarningCount = warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
+    var noSpeciesFound = warnings.filter(function (x) {
+        return x.warningCode === "MISSING_SPECIES_INFORMATION";
+    });
+    var unidentifiedSpecies = warnings.filter(function (x) {
+        return x.warningCode === "UNKNOWN_SPECIES_DETECTED";
+    });
 
     var appendWarning = function (warning) {
         warningsString += warning.errorDescription + "<br><br>";
@@ -79,6 +85,8 @@ export var displayWarnings = function (warnings) {
     createWarningsString(sifFormatWarningCount, 9);
     createWarningsString(incorrectlyNamedSheetWarningCount, 10);
     createWarningsString(missingExpressionSheetWarningCount, 11);
+    createWarningsString(noSpeciesFound, 12);
+    createWarningsString(unidentifiedSpecies, 13);
 
     $("#warningsList").html(warningsString);
 
