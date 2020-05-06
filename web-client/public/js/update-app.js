@@ -583,7 +583,6 @@ export const updateApp = grnState => {
         // also checks if the areas have been populated at all
         var networkSpecies = grnState.network.meta.species;
         var networkTaxon = grnState.network.meta.taxon_id;
-        console.log(networkSpecies)
         if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
             identifySpeciesOrTaxon(networkSpecies);
             identifySpeciesOrTaxon(networkTaxon);
