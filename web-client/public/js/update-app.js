@@ -579,17 +579,18 @@ export const updateApp = grnState => {
         displayNetwork(grnState.network, grnState.name);
         expandLayoutSidebar();
         clearDropdownMenus();
+        // check if the species has been identified yet, if not try to identify it
+        // also checks if the areas have been populated at all
+        var networkSpecies = grnState.network.meta.species;
+        var networkTaxon = grnState.network.meta.taxon_id;
+        console.log(networkSpecies)
+        if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
+            console.log("in identify loop")
+            identifySpeciesOrTaxon(networkSpecies);
+            identifySpeciesOrTaxon(networkTaxon);
+        }
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
-
-            // check if the species has been identified yet, if not try to identify it
-            // also checks if the areas have been populated at all
-            var networkSpecies = grnState.network.meta.species;
-            var networkTaxon = grnState.network.meta.taxon_id;
-            if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
-                identifySpeciesOrTaxon(networkSpecies);
-                identifySpeciesOrTaxon(networkTaxon);
-            }
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
