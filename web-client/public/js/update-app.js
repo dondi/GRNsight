@@ -585,7 +585,6 @@ export const updateApp = grnState => {
         var networkTaxon = grnState.network.meta.taxon_id;
         console.log(networkSpecies)
         if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
-            console.log("in identify loop")
             identifySpeciesOrTaxon(networkSpecies);
             identifySpeciesOrTaxon(networkTaxon);
         }
