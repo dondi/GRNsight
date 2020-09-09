@@ -16,21 +16,21 @@ const errorsList = {
     idLabelError: function (sheetName) {
         return {
             errorCode: "MISLABELED_ID_CELL",
-            possibleCause: "The top left cell of the " + sheetName + " sheet is mislabeled.",
+            possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
             suggestedFix: "Replace the incorrect label with \'id\' exactly."
         };
     },
     missingColumnHeaderError: function (sheetName) {
         return {
             errorCode: "MISSING_COLUMN_HEADER",
-            possibleCause: "A column in the " + sheetName + " sheet is missing a header.",
+            possibleCause: `A column in the ${sheetName} sheet is missing a header.`,
             suggestedFix: "Add headers to all columns."
         };
     },
     emptyExpressionRowError: function (row, sheetName) {
         return {
             errorCode: "EMPTY_ROW",
-            possibleCause: "There is an empty row in the " + sheetName + " sheet. It is located at row " + row + ".",
+            possibleCause: `There is an empty row in the ${sheetName} sheet. It is located at row ${row}.`,
             suggestedFix: "Delete empty row, or populate with data."
         };
     },
@@ -38,8 +38,8 @@ const errorsList = {
         var columnLetter = numbersToLetters[column];
         return {
             errorCode: "EMPTY_COLUMN",
-            possibleCause: "There is an empty column in the " + sheetName + " sheet. It is located at column " +
-            columnLetter + ".",
+            possibleCause: `There is an empty column in the ${sheetName} sheet. It is located at column
+            ${columnLetter}.`,
             suggestedFix: "Delete empty column, or populate with data."
         };
     },
@@ -57,8 +57,8 @@ const warningsList = {
     extraneousDataWarning: function (sheetName) {
         return {
             warningCode: "EXTRANEOUS_DATA",
-            errorDescription: "There is extraneous data outside of the set rows and columns of the " +
-            sheetName + " sheet."
+            errorDescription: `There is extraneous data outside of the set rows and columns of the 
+            ${sheetName} sheet.`
         };
     }
 };
@@ -212,4 +212,3 @@ module.exports = function (workbook) {
     }
     return output;
 };
-
