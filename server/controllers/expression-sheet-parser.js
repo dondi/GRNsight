@@ -43,6 +43,18 @@ const errorsList = {
             suggestedFix: "Delete empty column, or populate with data."
         };
     },
+    duplicateExpressionPeriodsError: function(times, sheetName) {
+        var timesString = "";
+        for (let i = 0; i < times.length; i++) {
+            timesString = (times.length === 1)? timesString + times[i]: ((i === times.length -1)?
+            timesString + `and ${times[i]}`: timesString + `${times[i]}, `);
+        };
+        return {
+            errorCode: "DUPLICATE_TIMES",
+            possibleCause: `There are duplicates of time period(s) ${timesString} in the ${sheetName} sheet.`,
+            suggestedFix: `Delete extra time periods, and ensure expression data is correct.`
+        };
+    },
 };
 
 const warningsList = {
@@ -122,9 +134,22 @@ var parseExpressionSheet = function (sheet) {
     if (idLabel !== "id") {
         addExpError(expressionData, errorsList.idLabelError(sheet.name));
     }
-
     expressionData.timePoints = sheet.data[0].slice(1);
     const numberOfDataPoints = expressionData.timePoints.length;
+    var frequencyOfTimePoints = {};
+    for (let i = 0; i < numberOfDataPoints; i++) {
+
+        frequencyOfTimePoints[expressionData.timePoints[i]] =
+            (frequencyOfTimePoints[expressionData.timePoints[i]] === undefined)?
+                1:  frequencyOfTimePoints[expressionData.timePoints[i]] + 1;
+    }
+    var duplicateTimePoints = Object.keys(frequencyOfTimePoints).reduce(function(r, e) {
+        if (frequencyOfTimePoints[e] > 1) r[e] = frequencyOfTimePoints[e];
+        return r;
+    }, {})
+    if (duplicateTimePoints.length > 0) {
+        addExpError(expressionData, errorsList.duplicateExpressionPeriodsError(duplicateTimePoints.keys(), sheeta.name));
+    }
     let geneNames = [];
     sheet.data.forEach(function (sheet) {
         const geneName = sheet[0];

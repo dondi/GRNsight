@@ -281,6 +281,16 @@ var extraGeneNameError = function (input, frequency) {
     assert.equal(frequency, extraGeneCount.length);
 };
 
+var duplicateExpressionPeriodsError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    var duplicateExpressionPeriodCount = exp.errors.filter(function (x) {
+        return x.errorCode === "DUPLICATE_TIMES";
+    });
+
+    assert.equal(frequency, duplicateExpressionPeriodCount.length);
+};
+
 
 // WARNING TEST FUNCTIONS:
 
@@ -444,6 +454,7 @@ exports.geneMismatchError = geneMismatchError;
 exports.labelError = labelError;
 exports.missingGeneNameError = missingGeneNameError;
 exports.extraGeneNameError = extraGeneNameError;
+exports.duplicateExpressionPeriods = duplicateExpressionPeriodsError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

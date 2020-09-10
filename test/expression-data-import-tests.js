@@ -67,6 +67,12 @@ describe("expression-data-import-tests", function () {
         });
     });
 
+    describe("DUPLICATE_TIMES", function(){
+        it("There are duplicate times in the expression sheet.", function(){
+            test.duplicateExpressionPeriods("test-files/expression-data-test-sheets/expression_sheet_incorrect_numbering.xlsx", 1);
+        });
+    });
+
     describe("wrong-exp-sheet-name-due-to-convention", function () {
         it.skip("Incorrect expression sheet naming convention", function () {
             test.incorrectlyNamedExpressionSheetWarning("test-files/expression-data-test-sheets/expression_sheet_wrong_sheet_name_convention.xlsx", 1);
