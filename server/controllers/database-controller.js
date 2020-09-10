@@ -82,7 +82,6 @@ let buildQuery = function (dataset, timepoints, genes) {
     (${buildGenesQuery(genes)}) ORDER BY sortindex;`
     : `SELECT * FROM expressiondata WHERE dataset='${dataset}'
     AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
-
 };
 
 let listGeneData = function (gene, totalOutput) {

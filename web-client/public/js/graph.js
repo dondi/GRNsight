@@ -944,6 +944,8 @@ export var drawGraph = function (network) {
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
+                            ensembl: grnState.genePageData.ensembl,
+                            mine: grnState.genePageData.mine
                         }),
                         target: "_blank"
                     });
@@ -1110,8 +1112,10 @@ export var drawGraph = function (network) {
             label.setAttribute("x", legendLabels[key].x);
             label.setAttribute("y", height + textYOffset + "px");
             label.setAttribute("fill", "rgb(0,0,0)");
+
             g.appendChild(label);
         }
+
     };
 
     updaters.removeNodeColoring = function () {

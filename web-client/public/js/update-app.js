@@ -92,7 +92,6 @@ import {
   SPECIES_BUTTON_YEAST
 
 } from "./constants";
-// import { json } from "sequelize/types";
 
 let expressionDBdesired = false;
 
@@ -219,7 +218,6 @@ const buildTimepointsString = function (selection) {
     selection.timepoints.forEach(x => timepoints += (x + ","));
     return timepoints.substring(0, timepoints.length - 1);
 };
-
 const buildGeneQuery = function () {
     let genes = "";
     grnState.network.genes.forEach(x => genes += (x.name + ","));
@@ -227,10 +225,10 @@ const buildGeneQuery = function () {
 };
 
 const buildURL = function (selection) {
+    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildGeneQuery()}`;
     return selection.timepoints ?
-    "expressiondb?dataset=" + selection.dataset + "&genes=" +
-    buildGeneQuery() + "&timepoints=" + buildTimepointsString(selection)
-    : "expressiondb?dataset=" + selection.dataset + "&genes=" + buildGeneQuery();
+    `${baseQuery}&timepoints=${buildTimepointsString(selection)}` :
+    baseQuery;
 };
 
 const startLoadingIcon = function () {
@@ -257,7 +255,6 @@ const responseData = (formData, queryURL) => {
                 resolve(expressionData);
             }).error(console.log("Error in accessing expression database. Result may just be loading."));
     });
-
 };
 
 const stopLoadingIcon = function () {
@@ -265,6 +262,12 @@ const stopLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
 };
 
+const enableNodeColoringUI = function () {
+    grnState.nodeColoring.nodeColoringEnabled = true;
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+};
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
@@ -424,6 +427,8 @@ export const identifySpeciesMenu = (data) => {
             grnState.genePageData.species = nameTax[n].spec;
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            grnState.genePageData.ensembl = nameTax[n].ensembl;
+            grnState.genePageData.mine = nameTax[n].mine;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             updateSpeciesMenu();
             return grnState.genePageData.identified;
@@ -435,25 +440,27 @@ export const identifySpeciesMenu = (data) => {
 const identifySpeciesOrTaxon = (data) => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        if (n === data.toString()) { // <-- change if to work
+        if (n === data) { // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
-            grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
-            grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
+            grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
             grnState.genePageData.identified = true;
-            grnState.genePageData.readFromNetwork = true;
+            grnState.genePageData.ensembl = nameTax[n].ensembl;
+            grnState.genePageData.mine = nameTax[n].mine;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             updateSpeciesMenu();
             return grnState.genePageData.identified;
         }
         for (var t in Object.values(nameTax[n])) {
-            if (Object.values(nameTax[n])[t] === data.toString()) {
+            if (Object.values(nameTax[n])[t] === data) {
                 grnState.genePageData.commonName = n;
                 grnState.genePageData.species = nameTax[n].spec;
-                grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
-                grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+                grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
+                grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
                 grnState.genePageData.identified = true;
-                grnState.genePageData.readFromNetwork = true;
+                grnState.genePageData.ensembl = nameTax[n].ensembl;
+                grnState.genePageData.mine = nameTax[n].mine;
                 $(SPECIES_DISPLAY).val(grnState.genePageData.species);
                 updateSpeciesMenu();
                 return grnState.genePageData.identified;
@@ -579,20 +586,9 @@ export const updateApp = grnState => {
             // also checks if the areas have been populated at all
             var networkSpecies = grnState.network.meta.species;
             var networkTaxon = grnState.network.meta.taxon_id;
-            if (networkSpecies === undefined && networkTaxon === undefined) {
-                $("#warningIntroSpecies").html("No species information was detected in your input file." +
-                " GRNsight defaults to Saccharomyces cerevisiae. You can change the species" +
-                " selection in the Species menu or panel.");
-                $("#warningsModalSpecies").modal("show");
-            } else if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
+            if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
                 identifySpeciesOrTaxon(networkSpecies);
                 identifySpeciesOrTaxon(networkTaxon);
-            } else {
-                $("#warningIntroSpecies").html("GRNsight detected the species " + networkSpecies +
-                " and the taxon " + networkTaxon + " in your input file." +
-                " This is not one of the supported species, or was formatted incorrectly" +
-                " You can change the species selection in the Species menu or panel.");
-                $("#warningsModalSpecies").modal("show");
             }
 
             grnState.nodeColoring.nodeColoringEnabled = true;
@@ -677,10 +673,7 @@ export const updateApp = grnState => {
 
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop ||
                     !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
@@ -700,11 +693,7 @@ export const updateApp = grnState => {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
-
+                    enableNodeColoringUI();
                     stopLoadingIcon();
                     updaters.renderNodeColoring();
                 }).catch(function (error) {
@@ -722,9 +711,9 @@ export const updateApp = grnState => {
         (!grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
+            resetDatasetDropdownMenus(grnState.network);
         }
         grnState.nodeColoring.showMenu = true;
-        resetDatasetDropdownMenus(grnState.network);
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
         grnState.nodeColoring.topDataset : "Barreto_2012_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
@@ -738,10 +727,7 @@ export const updateApp = grnState => {
 
                 responseData("", queryURLTop).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.topDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
@@ -757,10 +743,7 @@ export const updateApp = grnState => {
                 let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
                 responseData("", queryURLBottom).then(function (response) {
                     grnState.network.expression[grnState.nodeColoring.bottomDataset] = response;
-                    grnState.nodeColoring.nodeColoringEnabled = true;
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                    enableNodeColoringUI();
 
                     stopLoadingIcon();
 
@@ -771,17 +754,25 @@ export const updateApp = grnState => {
                     console.log(error.message);
                 });
             } else {
-                // Code makes it here, but node coloring fails to occur. Why???
-                grnState.nodeColoring.nodeColoringEnabled = true;
-                updaters.renderNodeColoring();
-                grnState.nodeColoring.nodeColoringEnabled = true;
-                $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
-                $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
-                $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+                enableNodeColoringUI();
+                // There is as problem here! When a dataset from the database is used to do node coloring,
+                // but then the layout of the graph is changed (force graph to grid layout, for instance),
+                // node coloring goes away, seemingly inexplicably.
+                // !!!!! TEMPORARY WORKAROUND:
+                //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
+                //   has to take place, done here via `setTimeout`.
+                //
+                //   The delay is built-in to the cases where a query has to happen first.
+                //
+                //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
+                //   actually perform the node coloring.
+                //
+                //   Investigate why a timeout is required in order for node coloring to take place
+                //   successfully in this case.
+                setTimeout(() => updaters.renderNodeColoring(), 250);
+
             }
         }
-
-
     }
 
     if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
