@@ -5,7 +5,7 @@ var test = require("./test");
 describe("expression-data-import-tests", function () {
 
     describe("MISSING_EXPRESSION_SHEET", function () {
-        it("_log2_expression or _log2_optimized_expression worksheet was not detected.",
+        it.skip("_log2_expression or _log2_optimized_expression worksheet was not detected.",
         "The network graph will display without node coloring. If you wish for the network to be colored",
         "you can upload your own expression data by adding one or more of those worksheets to your Excel",
         "workbook or select, or select from data in GRNsight's Expression Database, found in the Node menu or panel.", function () {
@@ -67,9 +67,21 @@ describe("expression-data-import-tests", function () {
         });
     });
 
-    describe("DUPLICATE_TIMES", function(){
+    describe("NEGATIVE_TIME_POINT", function(){
+        it("There are one or more negative time points in the expression sheet.", function(){
+            test.negativeTimePointError("test-files/expression-data-test-sheets/expression_sheet_negative_time_points.xlsx", 2);
+        });
+    });
+
+    describe("NON_MONOTONIC_TIME_POINTS", function(){
         it("There are duplicate times in the expression sheet.", function(){
-            test.duplicateExpressionPeriods("test-files/expression-data-test-sheets/expression_sheet_incorrect_numbering.xlsx", 1);
+            test.nonMonotonicTimePointsError(
+                "test-files/expression-data-test-sheets/expression_sheet_incorrectly_ordered_time_points.xlsx", 1);
+        });
+    });
+    describe("DUPLICATE_TIME_POINTS", function(){
+        it("should return no error", function(){
+            test.noErrors("test-files/expression-data-test-sheets/expression_sheet_correct_numbering.xlsx", 1);
         });
     });
 
