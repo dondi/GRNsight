@@ -292,6 +292,7 @@ var negativeTimePointError = function (input, frequency) {
         );
     }
 };
+
 var nonMonotonicTimePointsError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var exp = parseExpressionSheet(sheet);
@@ -299,6 +300,18 @@ var nonMonotonicTimePointsError = function (input, frequency) {
     for (var i = 0; i < frequency; i++) {
         assert.equal(
             "NON_MONOTONIC_TIME_POINTS",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
+    }
+};
+
+var nonNumericalTimePointError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "NON_NUMERICAL_TIME_POINT",
             exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
         );
     }
@@ -470,6 +483,7 @@ exports.missingGeneNameError = missingGeneNameError;
 exports.extraGeneNameError = extraGeneNameError;
 exports.negativeTimePointError = negativeTimePointError;
 exports.nonMonotonicTimePointsError = nonMonotonicTimePointsError;
+exports.nonNumericalTimePointError = nonNumericalTimePointError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

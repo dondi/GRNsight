@@ -74,11 +74,18 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("NON_MONOTONIC_TIME_POINTS", function(){
-        it("There are duplicate times in the expression sheet.", function(){
+        it("There are duplicate time points in the expression sheet.", function(){
             test.nonMonotonicTimePointsError(
                 "test-files/expression-data-test-sheets/expression_sheet_incorrectly_ordered_time_points.xlsx", 1);
         });
     });
+    describe("NON_NUMERICAL_TIME_POINT", function(){
+        it("There are non-numerical time points in the expression sheet.", function(){
+            test.nonNumericalTimePointError(
+                "test-files/expression-data-test-sheets/expression_sheet_non_numerical_time_points.xlsx", 1);
+        });
+    });
+
     describe("DUPLICATE_TIME_POINTS", function(){
         it("should return no error", function(){
             test.noErrors("test-files/expression-data-test-sheets/expression_sheet_correct_numbering.xlsx", 1);

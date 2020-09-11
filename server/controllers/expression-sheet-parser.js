@@ -52,12 +52,23 @@ const errorsList = {
             suggestedFix: `Change the negative time point to a positive and ensure expression data is correct.`
         };
     },
-    nonMonotonicTimePointsError: function(sheetName) {
+    nonMonotonicTimePointsError: function(column, sheetName) {
+        var columnLetter = numbersToLetters[column];
         return {
             errorCode: "NON_MONOTONIC_TIME_POINTS",
-            possibleCause: `There is a negative time point in the ${sheetName} sheet. It is located at
-            column.`,
-            suggestedFix: `Change the negative time point to a positive and ensure expression data is correct.`
+            possibleCause: `The time points located in the ${sheetName} sheet are not sequenced in an increasing fashion. 
+            The first instance of this is at column ${columnLetter}.`,
+            suggestedFix: `Please ensure that the time points are ordered in an increasing fashion, and ensure expression
+             data is correct.`
+        };
+    },
+    nonNumericalTimePointsError: function(column, sheetName) {
+        var columnLetter = numbersToLetters[column];
+        return {
+            errorCode: "NON_NUMERICAL_TIME_POINT",
+            possibleCause: `There is a non-numerical time point in the ${sheetName} sheet. It is located at
+            column ${columnLetter}.`,
+            suggestedFix: `Change the non-numerical time point to a positive number and ensure expression data is correct.`
         };
     },
 };
@@ -143,13 +154,13 @@ var parseExpressionSheet = function (sheet) {
     expressionData.timePoints = sheet.data[0].slice(1);
     const numberOfDataPoints = expressionData.timePoints.length;
     let compareTimePoint = 0;
-    let currentTimePoint = 0;
     for (let i = 0; i < numberOfDataPoints; i++) {
-        currentTimePoint = expressionData.timePoints[i];
-        if (expressionData.timePoints[i] < 0) {
+        if (isNaN(expressionData.timePoints[i]) && expressionData.timePoints[i] !== undefined) {
+            addExpError(expressionData, errorsList.nonNumericalTimePointsError(i+1, sheet.name));
+        } else if (expressionData.timePoints[i] < 0) {
             addExpError(expressionData, errorsList.negativeTimePointError(i+1, sheet.name));
         } else if (expressionData.timePoints[i] < compareTimePoint) {
-            addExpError(expressionData, errorsList.nonMonotonicTimePointsError(sheet.name));
+            addExpError(expressionData, errorsList.nonMonotonicTimePointsError(i+1, sheet.name));
             break;
         } else {
             compareTimePoint = expressionData.timePoints[i];
