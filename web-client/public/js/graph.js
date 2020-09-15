@@ -465,7 +465,7 @@ export var drawGraph = function (network) {
         }).style("stroke", function (d) {
             if (unweighted || !grnState.colorOptimal) {
                 return "black";
-            } else if (normalize(d) <= grayThreshold) {
+            } else if (normalize(d).toPrecision(4) <= grayThreshold) {
                 return "gray";
             } else {
                 return d.stroke;
@@ -481,7 +481,7 @@ export var drawGraph = function (network) {
             var xOffsets;
             var color;
 
-            if (Math.abs(d.value / maxWeight) <= grayThreshold) {
+            if (normalize(d).toPrecision(4) <= grayThreshold) {
                 minimum = "gray";
             }
             if ( x1 === x2 && y1 === y2 ) {
@@ -532,7 +532,7 @@ export var drawGraph = function (network) {
                         .attr("rx", 10)
                         .attr("ry", 10)
                         .attr("style", function () {
-                            if ( normalize(d) <= grayThreshold) {
+                            if ( normalize(d).toPrecision(4) <= grayThreshold) {
                                 color = "gray";
                             } else {
                                 color = d.stroke;
@@ -581,7 +581,7 @@ export var drawGraph = function (network) {
                         .attr("rx", 10)
                         .attr("ry", 10)
                         .attr("style", function () {
-                            if (normalize(d) <= grayThreshold) {
+                            if (normalize(d).toPrecision(4) <= grayThreshold) {
                                 color = "gray";
                             } else {
                                 color = d.stroke;
@@ -644,7 +644,7 @@ export var drawGraph = function (network) {
                         .attr("style", function () {
                             if (unweighted || !grnState.colorOptimal) {
                                 color = "black";
-                            } else if ( normalize(d) <= grayThreshold) {
+                            } else if ( normalize(d).toPrecision(4) <= grayThreshold) {
                                 color = "gray";
                             } else {
                                 color = d.stroke;
@@ -1446,7 +1446,7 @@ export var drawGraph = function (network) {
                 var minimum = "";
                 var selfRef = "";
 
-                if (normalize(d) <= grayThreshold) {
+                if (normalize(d).toPrecision(4) <= grayThreshold) {
                     minimum = "gray";
                 }
 
