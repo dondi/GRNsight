@@ -130,6 +130,13 @@ a:active {
 
 .people-columns {
   display: flex;
+  flex-wrap: wrap;
+  margin: -5px;
+}
+
+.people-columns > section {
+  flex-grow: 1;
+  margin: 5px;
 }
 
 #pageTitle {
