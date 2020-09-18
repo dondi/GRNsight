@@ -481,7 +481,7 @@ export var drawGraph = function (network) {
             var xOffsets;
             var color;
 
-            if (Math.abs(d.value / maxWeight) <= grayThreshold) {
+            if (normalize(d) <= grayThreshold) {
                 minimum = "gray";
             }
             if ( x1 === x2 && y1 === y2 ) {
@@ -1478,7 +1478,7 @@ export var drawGraph = function (network) {
     }
 
     function normalize (d) {
-        return Math.abs(d.value / maxWeight);
+        return Math.abs(d.value / maxWeight).toPrecision(4);
     }
 
     function dragstart (d) {
