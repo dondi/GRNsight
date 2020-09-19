@@ -1303,7 +1303,7 @@ export var drawGraph = function (network) {
         var getSelfReferringRadius = function (edge) {
             return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
         };
-        var BOUNDARY_MARGIN = 5;
+        var BOUNDARY_MARGIN = 8;
         var SELF_REFERRING_Y_OFFSET = 6;
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
