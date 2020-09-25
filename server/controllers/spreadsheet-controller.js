@@ -115,7 +115,7 @@ var errorList = {
         return {
             errorCode: "EMPTY_CELL",
             possibleCause: `The cell at ${colLetter} ${rowNum} contains data that is outside the matrix.`,
-            suggestedFix: `Please remove all extraneous data from outside the matrix and ensure matrix is correct`
+            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure matrix is correct"
         };
     },
 
