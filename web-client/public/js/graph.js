@@ -1317,7 +1317,7 @@ export var drawGraph = function (network) {
 
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
-                var rightBoundary = width - (d.textWidth + 5) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+                var rightBoundary = width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
                 var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
                 if (adaptive && width < MAX_WIDTH &&
                     (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
