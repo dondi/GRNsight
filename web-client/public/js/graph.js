@@ -1012,14 +1012,14 @@ export var drawGraph = function (network) {
                 .attr("class", "coloring")
                 .enter().append("rect")
                 .attr("width", function () {
-                    var width = rect.attr("width") / timePoints.length;
+                    var width = (p.textWidth + (2 * NODE_MARGIN)) / timePoints.length;
                     return width + "px";
                 })
                 .attr("class", "coloring")
                 .attr("height", rect.attr("height") / 2 + "px")
                 .attr("transform", function (d, i) {
                     var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
-                    var xOffset = i * (rect.attr("width") / timePoints.length);
+                    var xOffset = i * ((p.textWidth + (2 * NODE_MARGIN)) / timePoints.length);
                     return "translate(" + xOffset + "," +  yOffset + ")";
                 })
                 .attr("stroke-width", "0px")
