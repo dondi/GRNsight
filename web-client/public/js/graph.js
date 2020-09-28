@@ -1406,6 +1406,7 @@ export var drawGraph = function (network) {
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
                         // Fiddle with this angle to get loop oriented.
+                        // (Future: This doesn't appear to change anything?)
                         xRotation = 45;
 
                         // Needs to be 1.
@@ -1430,11 +1431,11 @@ export var drawGraph = function (network) {
                         }
                     }
 
-                    d.label = { x: x1, y: y1 + dry * 3 };
+                    d.label = { x: Math.min(width, x1), y: Math.min(height, y1 + dry * 3) };
 
                     return "M" + x1 + "," + y1 +
-                 "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
-                       x2  + "," + (y2 + offset);
+                        "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
+                        x2  + "," + (y2 + offset);
                 } else {
                     return moveTo(d) + lineTo(d);
                 }
