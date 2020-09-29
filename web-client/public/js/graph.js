@@ -698,6 +698,7 @@ export var drawGraph = function (network) {
     };
 
     var CURVE_THRESHOLD = 200;
+    var EDGE_OFFSET = 50; // Forces edge to curve inwards when at an edge
     var lineTo = function (d) {
         var node = d3.select("#node" + d.target.index);
         var w = +node.attr("width");
@@ -744,15 +745,16 @@ export var drawGraph = function (network) {
         var cp2x = x2 - inlineOffset * ux + vx * orthoOffset;
         var cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
 
+        cp1x = Math.min(Math.max(0, cp1x), width - EDGE_OFFSET);
+        cp1y = Math.min(Math.max(EDGE_OFFSET, cp1y), height - EDGE_OFFSET);
+        cp2x = Math.min(Math.max(0, cp2x), width - EDGE_OFFSET);
+        cp2y = Math.min(Math.max(EDGE_OFFSET, cp2y), height - EDGE_OFFSET);
+
         d.label = {
             x: (x1 + cp1x + cp2x + x2) / 4,
             y: (y1 + cp1y + cp2y + y2) / 4
         };
 
-        cp1x = Math.min(Math.max(0, cp1x), width);
-        cp1y = Math.min(Math.max(0, cp1y), height);
-        cp2x = Math.min(Math.max(0, cp2x), width);
-        cp2y = Math.min(Math.max(0, cp2y), height);
         return "C" + cp1x + " " + cp1y + ", " +
             cp2x + " " + cp2y + ", " +
             x2 + " " + y2;
@@ -1315,7 +1317,7 @@ export var drawGraph = function (network) {
 
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
-                var rightBoundary = width - d.textWidth - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+                var rightBoundary = width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
                 var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
                 if (adaptive && width < MAX_WIDTH &&
                     (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
@@ -1404,6 +1406,7 @@ export var drawGraph = function (network) {
                         y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
 
                         // Fiddle with this angle to get loop oriented.
+                        // (Future: This doesn't appear to change anything?)
                         xRotation = 45;
 
                         // Needs to be 1.
@@ -1428,11 +1431,11 @@ export var drawGraph = function (network) {
                         }
                     }
 
-                    d.label = { x: x1, y: y1 + dry * 3 };
+                    d.label = { x: Math.min(width, x1), y: Math.min(height, y1 + dry * 3) };
 
                     return "M" + x1 + "," + y1 +
-                 "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
-                       x2  + "," + (y2 + offset);
+                        "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
+                        x2  + "," + (y2 + offset);
                 } else {
                     return moveTo(d) + lineTo(d);
                 }
