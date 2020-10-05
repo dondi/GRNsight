@@ -339,6 +339,9 @@ export const setupHandlers = grnState => {
 
     $(LOCK_SLIDERS_CLASS).click(() => {
         grnState.slidersLocked = !grnState.slidersLocked;
+        if (grnState.slidersLocked) {
+            grnState.showUndoReset = false;
+        }
         updateApp(grnState);
     });
 
