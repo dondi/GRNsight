@@ -93,6 +93,9 @@ iframe.embedded-demo {
 	list-style-type: none;
 	line-height: 2;
 	font-size: 15px;
+	flex-direction: column;
+	margin: 15px 0;
+	padding-left: 40px;
 	border-right: 1px solid #828282;
 	width:159px;
 }
