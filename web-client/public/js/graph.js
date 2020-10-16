@@ -698,7 +698,7 @@ export var drawGraph = function (network) {
     };
 
     var CURVE_THRESHOLD = 200;
-    var EDGE_OFFSET = 20;
+    var EDGE_OFFSET = 30;
     var lineTo = function (d) {
         var node = d3.select("#node" + d.target.index);
         var w = +node.attr("width");
