@@ -3,6 +3,7 @@ var xlsx = require("node-xlsx");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
+var parseNetworkSheet = require(__dirname + "/network-sheet-parser");
 var demoNetworks = require(__dirname + "/demo-networks");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
@@ -311,202 +312,6 @@ var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
     }
 };
 
-var parseNetworkSheet = function (sheet) {
-    var currentSheet;
-    var network = {
-        genes: [],
-        links: [],
-        errors: [],
-        warnings: [],
-        positiveWeights: [],
-        negativeWeights: [],
-        sheetType: "unweighted",
-    };
-    var currentLink;
-    var currentGene;
-    var sourceGene;
-    var targetGene;
-    var sourceGeneNumber;
-    var targetGeneNumber;
-    var genesList = []; // This will contain all of the genes in upper case for use in error checking
-    var sourceGenes = [];
-    var targetGenes = [];
-
-    // Look for the worksheet containing the network data
-    for (var i = 0; i < sheet.length; i++) {
-        if (sheet[i].name.toLowerCase() === "network") {
-            // Here we have found a sheet containing simple data. We keep looking
-            // in case there is also a sheet with optimized weights
-            currentSheet = sheet[i];
-        } else if (sheet[i].name.toLowerCase() === "network_optimized_weights") {
-            // We found a sheet with optimized weights, which is the ideal data source.
-            // So we stop looking.
-            currentSheet = sheet[i];
-            network.sheetType = "weighted";
-            break;
-        }
-    }
-
-    // If it didn't find a network/network_optimized_weights sheet
-    // TODO For expediency, we are wrapping every `return network` statement in `semanticChecker`.
-    //      Some refactoring may be desirable to prevent excessive repetition.
-    if (currentSheet === undefined) {
-        addError(network, errorList.missingNetworkError);
-        return network;
-    }
-    for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-        if (currentSheet.data[row].length === 0) { // if the current row is empty
-            if (addError(network, errorList.emptyRowError(row)) === false) {
-                return network;
-            }
-        } else { // if the row has data...
-            // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
-            // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
-            // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
-            try { // This prevents the server from crashing if something goes wrong anywhere in here
-                while (column < currentSheet.data[row].length) {
-                    // While we haven't gone through all of the columns in this row...
-                    if (row === 0) { // If we are at the top of a new column...
-                        // These genes are the source genes
-                        try {
-                            currentGene = {name: currentSheet.data[0][column]};
-                            // ie: Cin5 is the same as cin5
-                            if (currentGene.name === undefined) {
-                                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-                            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-                            } else {
-                                // set currentGeneName to a String so toUpperCase doesn't mess up
-                                currentGene.name = currentGene.name.toString();
-                                sourceGenes.push(String(currentGene.name.toUpperCase()));
-                                genesList.push(String(currentGene.name.toUpperCase()));
-                                network.genes.push(currentGene);
-                            }
-                        } catch (err) {
-                            addError(network, errorList.corruptGeneError(row, column));
-                            return network;
-                        }
-                    } else if (column === 0) { // If we are at the far left of a new row...
-                        // These genes are the target genes
-                        try {
-                            currentGene = {name: currentSheet.data[row][0]};
-                            if (currentGene.name === undefined) {
-                                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-                            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-                            } else {
-                                // set currentGeneName to a String so toUpperCase doesn't mess up
-                                currentGene.name = currentGene.name.toString();
-                                targetGenes.push(String(currentGene.name.toUpperCase()));
-                                // Here we check to see if we've already seen the gene name that we're about to store
-                                // Genes may or may not be present due to asymmetry or unorderedness
-                                // If it's in the genesList, it will return a number > 0, so we won't store it
-                                // If it's not there, it will return -1, so we add it.
-                                if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
-                                    genesList.push(String(currentGene.name.toUpperCase()));
-                                    network.genes.push(currentGene);
-                                }
-                            }
-                        } catch (err) {
-                            sourceGene = currentSheet.data[0][column];
-                            targetGene = currentSheet.data[row][0];
-                            addError(network, errorList.corruptGeneError(row, column));
-                            return network;
-                        }
-                    } else { // If we're within the matrix and lookin' at the data...
-                        try {
-                            if (currentSheet.data[row][column] === undefined) {
-                                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
-                                addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-                            } else if (isNaN(+("" + currentSheet.data[row][column])) ||
-                                typeof currentSheet.data[row][column] !== "number") {
-                                addError(network, errorList.dataTypeError(row, column));
-                                return network;
-                            } else {
-                                if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
-                                    // Grab the source and target genes' names
-                                    sourceGene = currentSheet.data[0][column];
-                                    targetGene = currentSheet.data[row][0];
-                                    if (sourceGene === undefined || targetGene === undefined) {
-                                        addWarning(network, warningsList.randomDataWarning("undefined", row, column));
-                                    } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
-                                        (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                        addWarning(network, warningsList.randomDataWarning("NaN", row, column));
-                                    } else {
-                                        // Grab the source and target genes' numbers
-                                        sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
-                                        targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
-                                        currentLink = {source: sourceGeneNumber, target: targetGeneNumber,
-                                            value: currentSheet.data[row][column]};
-                                        // Here we set the properties of the current link
-                                        // before we push them to the network
-                                        if (network.sheetType === "weighted") {
-                                            if (currentLink.value > 0) {
-                                                // If it's a positive number, mark it as an activator
-                                                currentLink.type = "arrowhead";
-                                                // GRNsight v1 magenta edge color
-                                                // currentLink.stroke = "MediumVioletRed";
-                                                // Node coloring-consistent red edge color
-                                                currentLink.stroke = "rgb(195, 61, 61)";
-                                                network.positiveWeights.push(currentLink.value);
-                                            } else { // if it's a negative number, mark it as a repressor
-                                                currentLink.type = "repressor";
-                                                // currentLink.stroke = "DarkTurquoise"; // GRNsight v1 cyan edge color
-                                                // Node coloring-consistent blue edge color
-                                                currentLink.stroke = "rgb(51, 124, 183)";
-                                                network.negativeWeights.push(currentLink.value);
-                                            }
-                                        } else if (network.sheetType === "unweighted") {
-                                            currentLink.type = "arrowhead";
-                                            currentLink.stroke = "black";
-                                            if (currentLink.value !== 1) {
-                                                addWarning(network, warningsList.incorrectlyNamedSheetWarning());
-                                                currentLink.value = 1;
-                                            }
-                                            network.positiveWeights.push(currentLink.value);
-                                        }
-                                        network.links.push(currentLink);
-                                    }
-                                }
-                            }
-
-                        } catch (err) {
-                            addError(network, errorList.missingValueError(row, column));
-                            // SHOULD BE: addError(network, errorList.unknownFileError);
-                            return network;
-                        }
-                    }
-                    column++; // Let's move on to the next column!
-                } // Once we finish with the current row...
-                column = 0; // let's go back to column 0 on the next row!
-            } catch (err) {
-                // We only get here if something goes drastically wrong. We don't want to get here.
-                addError(network, errorList.unknownError);
-                return network;
-            }
-        }
-    }
-
-    // Move on to semanticChecker.
-
-
-    // We sort them here because gene order is not relevant before this point
-    // Sorting them now means duplicates will be right next to each other
-    sourceGenes.sort();
-    targetGenes.sort();
-
-    // syntactic duplicate checker for both columns and rows
-    checkDuplicates(network.errors, sourceGenes, targetGenes);
-
-    // NOTE: Temporarily commented out pending resolution of #474, and other related issues
-    // try {
-    //   network.graphStatisticsReport = graphStatisticsReport(network);
-    // } catch (err) {
-    //   console.log ("Graph statistics report failed to be complete.");
-    // }
-    return semanticChecker(network);
-};
-
 var difference = function (setA, setB) {
     let _difference = new Set(setA);
     for (let elemB of setB) {
@@ -764,7 +569,6 @@ module.exports = function (app) {
 
     // exporting parseNetworkSheet for use in testing. Do not remove!
     return {
-        parseNetworkSheet: parseNetworkSheet,
         grnSightToCytoscape: grnSightToCytoscape,
         processGRNmap : processGRNmap,
         crossSheetInteractions: crossSheetInteractions
