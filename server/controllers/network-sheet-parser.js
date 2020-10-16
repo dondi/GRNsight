@@ -288,22 +288,18 @@ var parseNetworkSheet = function (sheet, network) {
 
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {
-            currentGene = { name: sheet.data[0][i] }
-            if (currentGene.name === undefined) {
-                addWarning(network, warningsList.missingSourceGeneWarning(0, i));
-            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                addWarning(network, warningsList.missingSourceGeneWarning(0, i));
-            } else {
-                // set currentGeneName to a String so toUpperCase doesn't mess up
-                currentGene.name = currentGene.name.toString();
-                sourceGenes.push(String(currentGene.name.toUpperCase()));
-                genesList.push(String(currentGene.name.toUpperCase()));
-                network.genes.push(currentGene);
+        currentGene = { name: sheet.data[0][i] }
+        if (currentGene.name === undefined) {
+            addWarning(network, warningsList.missingSourceGeneWarning(0, i));
+        } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
+            addWarning(network, warningsList.missingSourceGeneWarning(0, i));
+        } else {
+            // set currentGeneName to a String so toUpperCase doesn't mess up
+            currentGene.name = currentGene.name.toString();
+            sourceGenes.push(String(currentGene.name.toUpperCase()));
+            genesList.push(String(currentGene.name.toUpperCase()));
+            network.genes.push(currentGene);
             }
-        
-            // addError(network, errorList.corruptGeneError(row, column));
-            // return network;
-        
     }
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
