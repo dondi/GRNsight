@@ -9,8 +9,6 @@ var demoNetworks = require(__dirname + "/demo-networks");
 
 var helpers = require(__dirname + "/helpers");
 
-var semanticChecker = require(__dirname + "/semantic-checker");
-
 // Currently only going to number 76 because currently the network errors out at 75+ genes.
 var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
     12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
@@ -294,21 +292,6 @@ var addError = function (network, message) {
     } else {
         addMessageToArray(network.errors, errorList.errorsCountError);
         return false;
-    }
-};
-
-var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
-    // Run through the source genes and check if the gene in slot i is the same as the one next to it
-    for (var i = 0; i < sourceGenes.length - 1; i++) {
-        if (sourceGenes[i] === sourceGenes[i + 1]) {
-            errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
-        }
-    }
-    // Run through the target genes and check if the gene in slot j is the same as the one next to it
-    for (var j = 0; j < targetGenes.length - 1; j++) {
-        if (targetGenes[j] === targetGenes[j + 1]) {
-            errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
-        }
     }
 };
 
