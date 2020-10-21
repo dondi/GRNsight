@@ -361,7 +361,7 @@ export var drawGraph = function (network) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $("input[name=viewport]").removeProp("checked");
-            $container.addClass("cursorGrab");
+            $container.addClass("cursorGrabbing");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
             center();
@@ -403,8 +403,8 @@ export var drawGraph = function (network) {
     }
 
     function move (direction) {
-        var width = direction === "left" ? 50 : (direction === "right" ? -50 : 0);
-        var height = direction === "up" ? 50 : (direction === "down" ? -50 : 0);
+        var width = direction === "left" ? -50 : (direction === "right" ? 50 : 0);
+        var height = direction === "up" ? -50 : (direction === "down" ? 50 : 0);
         zoom.translateBy(zoomContainer, width, height);
     }
 
