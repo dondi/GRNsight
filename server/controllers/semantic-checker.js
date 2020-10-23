@@ -26,6 +26,14 @@ var warningsList = {
         };
     },
 
+    incorrectCellA1NetworkWarning: function (sheetName) {
+        return {
+            warningCode: "MISLABELED_NETWORK_CELL_A1",
+            errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
+            Replace the incorrect label with \'cols regulators/rows targets\' exactly.`
+        };
+    },
+
     missingTargetGeneWarning: function (row, column) {
         var colLetter = numbersToLetters[column];
         var rowNum = row + 1;

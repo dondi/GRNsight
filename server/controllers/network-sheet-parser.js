@@ -25,13 +25,6 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
 var errorList = {
-    cellA1NetworkError: function (sheetName) {
-        return {
-            errorCode: "MISLABELED_NETWORK_CELL_A1",
-            possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
-            suggestedFix: "Replace the incorrect label with \'cols regulators/rows targets\' exactly."
-        };
-    },
     missingNetworkError: {
         errorCode: "MISSING_NETWORK",
         possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
@@ -132,6 +125,13 @@ var errorList = {
 // This is the list of warnings.
 // The graph will still load if warnings are detected, but these will be reported to the user.
 var warningsList = {
+    incorrectCellA1NetworkWarning: function (sheetName) {
+        return {
+            warningCode: "MISSING_SOURCE",
+            errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
+            Replace the incorrect label with \'cols regulators/rows targets\' exactly.`
+        };
+    },
     missingSourceGeneWarning: function (row, column) {
         var colLetter = numbersToLetters[column];
         var rowNum = row + 1;
@@ -271,19 +271,14 @@ var parseNetworkSheet = function (sheet, network) {
     var genesList = []; // This will contain all of the genes in upper case for use in error checking
     var sourceGenes = [];
     var targetGenes = [];
-
-    // if (idLabel !== "id") {
-    //     addExpError(expressionData, errorsList.idLabelError(sheet.name));
-    // }
-    // expressionData.timePoints = sheet.data[0].slice(1);
-    // const numberOfDataPoints = expressionData.timePoints.length;
-    // let compareTimePoint = 0;
+    let columnChecker;
+    let rowCount;
 
     // check for “cols regulators/rows targets” in cell A1
     const cellA1 = sheet.data[0][0];
     if (cellA1 !== 'cols regulators/rows targets') {
         // not sure which one, but we have both
-        // addError(network, errorList.cellA1NetworkError(sheet.name));
+        addWarning(network, warningsList.incorrectCellA1NetworkWarning(sheet.name));
     }
 
     // Get Source Genes
@@ -301,13 +296,16 @@ var parseNetworkSheet = function (sheet, network) {
             network.genes.push(currentGene);
             }
     }
+    columnChecker = new Array(sheet.data[0].slice(1).length).fill(0);
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
         if (sheet.data[row].length === 0) { // if the current row is empty
             if (addError(network, errorList.emptyRowError(row)) === false) {
                 return network;
             }
-        } else { // if the row has data...
+        } else {
+            rowCount = [];
+            // if the row has data...
             // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
             // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
             // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
@@ -350,8 +348,9 @@ var parseNetworkSheet = function (sheet, network) {
                                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
                             } else if (isNaN(+("" + sheet.data[row][column])) ||
                                 typeof sheet.data[row][column] !== "number") {
+                                // rowCount++;
+                                // columnChecker[column] += 1;
                                 addError(network, errorList.dataTypeError(row, column));
-                                return network;
                             } else {
                                 if (sheet.data[row][column] !== 0) { // We only care about non-zero values
                                     // Grab the source and target genes' names
@@ -361,8 +360,14 @@ var parseNetworkSheet = function (sheet, network) {
                                         addWarning(network, warningsList.randomDataWarning("undefined", row, column));
                                     } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
                                         (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                        addWarning(network, warningsList.randomDataWarning("NaN", row, column));
-                                    } else {
+                                        addWarning(network, warn(ingsList.randomDataWarning("NaN", row, column)));
+                                    } else if (isNaN(sheet.data[row][column]) || sheet.data[row][column] === null) {
+                                        // the value of the data is not a number
+                                        // add 1 to the row counter and 1 to the column counter
+                                        columnChecker[column] += 1;
+                                        rowCount.append([row,column]);
+
+                                    }else {
                                         // Grab the source and target genes' numbers
                                         sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
                                         targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
@@ -407,12 +412,16 @@ var parseNetworkSheet = function (sheet, network) {
                         }
                     }
                     column++; // Let's move on to the next column!
+
                 } // Once we finish with the current row...
                 column = 0; // let's go back to column 0 on the next row!
             } catch (err) {
                 // We only get here if something goes drastically wrong. We don't want to get here.
                 addError(network, errorList.unknownError);
                 return network;
+            }
+            if (rowCount > 0 && rowCount < sourceGenes.length) {
+                // 
             }
         }
     }

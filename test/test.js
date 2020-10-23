@@ -326,6 +326,11 @@ var nonNumericalTimePointError = function (input, frequency) {
 var noWarnings = function (input) {
     var sheet = xlsx.parse(input);
     var network = parseNetworkSheet(sheet);
+    if (network.warnings.length > 0) {
+        network.warnings.forEach(element => {
+            console.log(element.warningCode)
+        });
+    }
 
     assert.equal(0, network.warnings.length);
 };
