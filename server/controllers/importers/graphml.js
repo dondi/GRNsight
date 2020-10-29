@@ -17,6 +17,17 @@ module.exports = function (graphml) {
         sheetType: constants.UNWEIGHTED
     };
 
+    // These warnings don't exist. They are a TODO
+    // network.warnings.push(constants.warnings.noSpeciesInformationDetected);
+    // network.warnings.push(constants.warnings.missingExpressionData); Doesn't exist
+
+    // Backwards compatibility is ugly
+    // Now, it will automatically change species I think
+    network.meta = {species: undefined, taxon_id: undefined};
+    // Now, network.expression.[something] will return undef, not error
+    network.expression = {};
+
+
     var parseErr = function (err) {
         err = err.toString().split("\n").join(" ");
         var error = err.slice(err.indexOf("Error: ") + 7, err.indexOf(" Line: "));
