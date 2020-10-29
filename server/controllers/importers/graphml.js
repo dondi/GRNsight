@@ -23,8 +23,6 @@ module.exports = function (graphml) {
     // network.warnings.push(constants.warnings.noSpeciesInformationDetected);
     // network.warnings.push(constants.warnings.missingExpressionData); Doesn't exist
 
-
-
     var parseErr = function (err) {
         err = err.toString().split("\n").join(" ");
         var error = err.slice(err.indexOf("Error: ") + 7, err.indexOf(" Line: "));
