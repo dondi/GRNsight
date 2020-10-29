@@ -1,6 +1,5 @@
 var constants = require(__dirname + "/../constants");
-var xml2js = require("xml2js");
-var libxml = require("libxmljs");
+var parseString = require("xml2js").parseString;
 var semanticChecker = require(__dirname + "/../semantic-checker");
 var graphmlConstants = require(__dirname + "/../graphml-constants");
 
@@ -32,10 +31,7 @@ module.exports = function (graphml) {
         network.errors.push(graphmlConstants.pairError(parseErr(err)));
     };
 
-    var valid = libxml.parseXml("http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd").validate;
-    var parser = new xml2js.Parser({validator:valid});
-
-    parser.parseString(graphml, function (err, result) {
+    parseString(graphml, function (err, result) {
         if (err) {
             pushRelevantError(err);
         } else {
