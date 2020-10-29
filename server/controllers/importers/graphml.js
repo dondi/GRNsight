@@ -14,18 +14,15 @@ module.exports = function (graphml) {
         warnings: [],
         positiveWeights: [],
         negativeWeights: [],
-        sheetType: constants.UNWEIGHTED
+        sheetType: constants.UNWEIGHTED,
+        meta: [],
+        expression:[]
     };
 
     // These warnings don't exist. They are a TODO
     // network.warnings.push(constants.warnings.noSpeciesInformationDetected);
     // network.warnings.push(constants.warnings.missingExpressionData); Doesn't exist
 
-    // Backwards compatibility is ugly
-    // Now, it will automatically change species I think
-    network.meta = {};
-    // Now, network.expression.[something] will return undef, not error
-    network.expression = {};
 
 
     var parseErr = function (err) {
