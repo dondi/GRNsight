@@ -579,14 +579,6 @@ export const updateApp = grnState => {
         displayNetwork(grnState.network, grnState.name);
         expandLayoutSidebar();
         clearDropdownMenus();
-        // check if the species has been identified yet, if not try to identify it
-        // also checks if the areas have been populated at all
-        /*
-        if (!grnState.network.meta){
-            grnState.network.meta = {species:undefined, taxon_id:undefined};
-        }
-        var networkSpecies = grnState.network.meta.species;
-        var networkTaxon = grnState.network.meta.taxon_id;*/
         if (grnState.network.meta && grnState.network.meta.species && grnState.network.meta.taxon_id &&
             (identifySpeciesOrTaxon(grnState.network.meta.species) || identifySpeciesOrTaxon(grnState.network.meta.taxon_id))) {
             identifySpeciesOrTaxon(grnState.network.meta.species);
