@@ -23,7 +23,7 @@ module.exports = function (graphml) {
 
     // Backwards compatibility is ugly
     // Now, it will automatically change species I think
-    network.meta = {species: undefined, taxon_id: undefined};
+    network.meta = {};
     // Now, network.expression.[something] will return undef, not error
     network.expression = {};
 
