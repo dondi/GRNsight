@@ -581,11 +581,16 @@ export const updateApp = grnState => {
         clearDropdownMenus();
         // check if the species has been identified yet, if not try to identify it
         // also checks if the areas have been populated at all
+        /*
+        if (!grnState.network.meta){
+            grnState.network.meta = {species:undefined, taxon_id:undefined};
+        }
         var networkSpecies = grnState.network.meta.species;
-        var networkTaxon = grnState.network.meta.taxon_id;
-        if (identifySpeciesOrTaxon(networkSpecies) || identifySpeciesOrTaxon(networkTaxon)) {
-            identifySpeciesOrTaxon(networkSpecies);
-            identifySpeciesOrTaxon(networkTaxon);
+        var networkTaxon = grnState.network.meta.taxon_id;*/
+        if (grnState.network.meta && grnState.network.meta.species && grnState.network.meta.taxon_id &&
+            (identifySpeciesOrTaxon(grnState.network.meta.species) || identifySpeciesOrTaxon(grnState.network.meta.taxon_id))) {
+            identifySpeciesOrTaxon(grnState.network.meta.species);
+            identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
         }
         if (hasExpressionData(grnState.network.expression)) {
             resetDatasetDropdownMenus(grnState.network);
@@ -706,7 +711,8 @@ export const updateApp = grnState => {
         }
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
     && grnState.nodeColoring.nodeColoringEnabled) {
-        if ((grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) ||
+
+        if ( !grnState.network.expression || (grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) ||
         (!grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
