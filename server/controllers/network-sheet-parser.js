@@ -1,17 +1,17 @@
-var multiparty = require("multiparty");
-var path = require("path");
-var demoNetworks = require(__dirname + "/demo-networks");
+// var multiparty = require("multiparty");
+// var path = require("path");
+// var demoNetworks = require(__dirname + "/demo-networks");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
 
-const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights"];
+// const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights"];
 
-const isNetworkSheet = (sheetName) => {
-    return NETWORK_SHEET_NAMES.some(function (network) {
-        return (sheetName.toLowerCase() === network);
-    });
-};
+// const isNetworkSheet = (sheetName) => {
+//     return NETWORK_SHEET_NAMES.some(function (network) {
+//         return (sheetName.toLowerCase() === network);
+//     });
+// };
 // Currently only going to number 76 because currently the network errors out at 75+ genes.
 var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
     12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
@@ -274,25 +274,24 @@ var parseNetworkSheet = function (sheet, network) {
 
     // check for “cols regulators/rows targets” in cell A1
     const cellA1 = sheet.data[0][0];
-    if (cellA1 !== 'cols regulators/rows targets') {
+    if (cellA1 !== "cols regulators/rows targets") {
         addWarning(network, warningsList.incorrectCellA1NetworkWarning(sheet.name));
     }
 
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {
-            currentGene = { name: sheet.data[0][i] }
-            if (currentGene.name === undefined) {
-                addWarning(network, warningsList.missingSourceGeneWarning(0, i));
-            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                addWarning(network, warningsList.missingSourceGeneWarning(0, i));
-            } else {
-                // set currentGeneName to a String so toUpperCase doesn't mess up
-                currentGene.name = currentGene.name.toString();
-                sourceGenes.push(String(currentGene.name.toUpperCase()));
-                genesList.push(String(currentGene.name.toUpperCase()));
-                network.genes.push(currentGene);
-            }
-        
+        currentGene = { name: sheet.data[0][i] };
+        if (currentGene.name === undefined) {
+            addWarning(network, warningsList.missingSourceGeneWarning(0, i));
+        } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
+            addWarning(network, warningsList.missingSourceGeneWarning(0, i));
+        } else {
+            // set currentGeneName to a String so toUpperCase doesn't mess up
+            currentGene.name = currentGene.name.toString();
+            sourceGenes.push(String(currentGene.name.toUpperCase()));
+            genesList.push(String(currentGene.name.toUpperCase()));
+            network.genes.push(currentGene);
+        }
     }
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
@@ -308,7 +307,7 @@ var parseNetworkSheet = function (sheet, network) {
                 while (column < sheet.data[row].length) {
                     // While we haven't gone through all of the columns in this row...
                     if (row === 0) { // If we are at the top of a new column...
-                        
+                        // restructure in progress
                     } else if (column === 0) { // If we are at the far left of a new row...
                         // These genes are the target genes
                         try {
@@ -458,7 +457,7 @@ module.exports = function (workbook) {
     }
 
     if (networkSheet) {
-        return parseNetworkSheet(networkSheet, network)
+        return parseNetworkSheet(networkSheet, network);
     } else {
         addError(network, errorList.missingNetworkError);
         return network;
