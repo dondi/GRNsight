@@ -84,6 +84,44 @@ var errorList = {
         };
     },
 
+    // Start Here
+
+    emptyColumnError: function (column, sheetName) {
+        var columnLetter = numbersToLetters[column];
+        return {
+            errorCode: "EMPTY_COLUMN",
+            possibleCause: `There is an empty column in the ${sheetName} sheet. It is located at column
+            ${columnLetter}.`,
+            suggestedFix: "Delete empty column, or populate with data."
+        };
+    },
+
+    emptyRowDataError: function (row, sheetName) {
+        var rowNum = row + 1;
+        return {
+            errorCode: "EMPTY_ROW_DATA",
+            errorDescription: `Row ${rowNum}, in the ${sheetName} sheet, was found to contain no data.`,
+            suggestedFix: "Populate empty row with data."
+        };
+    },
+    emptyColumnDataError: function (column, sheetName) {
+        var columnLetter = numbersToLetters[column];
+        return {
+            errorCode: "EMPTY_COLUMN_DATA",
+            errorDescription: `Column ${columnLetter}, in the ${sheetName} sheet, was found to contain no data.`,
+            suggestedFix: "Populate empty column with data."
+        };
+    },
+    emptyMatrixDataError: function (sheetName) {
+        return {
+            errorCode: "EMPTY_COLUMN_DATA",
+            errorDescription: `The ${sheetName} sheet was found to contain no data in the adjacency matrix.`,
+            suggestedFix: "Populate empty matrix with data."
+        };
+    },
+
+    // End Here
+
     outsideCellError: function (row, column) {
         var colLetter = numbersToLetters[column];
         var rowNum = row + 1;
@@ -166,14 +204,6 @@ var warningsList = {
             warningCode: "RANDOM_DATA",
             errorDescription: `The value in cell ${colLetter}${rowNum}, 
             has a corresponding source and/or target gene that is detected as ${type}.`
-        };
-    },
-
-    emptyRowWarning: function (row) {
-        var rowNum = row + 1;
-        return {
-            warningCode: "EMPTY_ROW",
-            errorDescription: `Row ${rowNum} was found to contain no data.`
         };
     },
 
@@ -271,6 +301,7 @@ var parseNetworkSheet = function (sheet, network) {
     var genesList = []; // This will contain all of the genes in upper case for use in error checking
     var sourceGenes = [];
     var targetGenes = [];
+    var columnChecker = [];
 
     // check for “cols regulators/rows targets” in cell A1
     const cellA1 = sheet.data[0][0];
@@ -293,6 +324,8 @@ var parseNetworkSheet = function (sheet, network) {
             network.genes.push(currentGene);
         }
     }
+    // Set columnCount to undefineds in each column equal to the length of the gene names
+    columnChecker = new Array(sourceGenes.length).fill(0);
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
         if (sheet.data[row].length === 0) { // if the current row is empty
@@ -339,12 +372,14 @@ var parseNetworkSheet = function (sheet, network) {
                         try {
                             if (sheet.data[row][column] === undefined) {
                                 // SHOULD BE: addError(network, errorList.missingValueError(row, column));
+                                columnChecker[column - 1] = columnChecker[column - 1]++;
                                 addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
                             } else if (isNaN(+("" + sheet.data[row][column])) ||
                                 typeof sheet.data[row][column] !== "number") {
                                 addError(network, errorList.dataTypeError(row, column));
                                 return network;
                             } else {
+                                // columnChecker[column - 1] = columnChecker[column - 1]++;
                                 if (sheet.data[row][column] !== 0) { // We only care about non-zero values
                                     // Grab the source and target genes' names
                                     sourceGene = sheet.data[0][column];
@@ -408,6 +443,13 @@ var parseNetworkSheet = function (sheet, network) {
             }
         }
     }
+
+    // for (var i = 0; i < columnChecker.length; i++) {
+    //     if (columnChecker[i] === targetGenes.length) {
+    //         addError(network, errorList.emptyColumnError(i + 1, sheet.name));
+    //         return network;
+    //     }
+    // }
 
     // Move on to semanticChecker.
 
