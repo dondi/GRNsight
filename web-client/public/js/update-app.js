@@ -579,8 +579,7 @@ export const updateApp = grnState => {
         displayNetwork(grnState.network, grnState.name);
         expandLayoutSidebar();
         clearDropdownMenus();
-        if (grnState.network.meta && grnState.network.meta.species && grnState.network.meta.taxon_id &&
-            (identifySpeciesOrTaxon(grnState.network.meta.species) || identifySpeciesOrTaxon(grnState.network.meta.taxon_id))) {
+        if ((identifySpeciesOrTaxon(grnState.network.meta.species) || identifySpeciesOrTaxon(grnState.network.meta.taxon_id))) {
             identifySpeciesOrTaxon(grnState.network.meta.species);
             identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
         }
@@ -704,7 +703,7 @@ export const updateApp = grnState => {
     } else if (grnState.network !== null && !hasExpressionData(grnState.network.expression)
     && grnState.nodeColoring.nodeColoringEnabled) {
 
-        if ( !grnState.network.expression || (grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) ||
+        if ((grnState.network.expression[grnState.nodeColoring.topDataset] === undefined) ||
         (!grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.network.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
             updaters.removeNodeColoring();
