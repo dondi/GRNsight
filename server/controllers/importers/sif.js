@@ -133,7 +133,9 @@ module.exports = function (sif) {
         warnings: warnings,
         sheetType: networkType.sheetType,
         positiveWeights: [],
-        negativeWeights: []
+        negativeWeights: [],
+        meta: [],
+        expression: []
     };
 
     return (network.errors.length === 0) ? semanticChecker(network) : network;
