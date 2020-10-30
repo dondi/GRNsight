@@ -33,9 +33,10 @@ export var displayWarnings = function (warnings) {
     };
 
     for (let warning of warnings) {
-        warningCounts[warning.warningCode] = (warningCounts[warning.warningCode]) ? warningCounts[warning.warningCode].append(warning) : [warning];
+        warningCounts[warning.warningCode] = (warningCounts[warning.warningCode]) ?
+            [...warningCounts[warning.warningCode], warning] : [warning];
     }
-    
+
     for (let warning in warningCounts) {
         createWarningsString(warningCounts[warning], index);
         index++;
