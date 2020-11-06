@@ -119,23 +119,23 @@ describe("errors-adjacency-matrix-modifications", function () {
     });
 
     describe("missing-row-top", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx");
+        it("should return empty row data error", function () {
+            test.emptyRowDataError("test-files/adjacency-matrix-modifications/missing-row-top-input.xlsx", 1);
+            test.emptyRowDataError("test-files/adjacency-matrix-modifications/missing-row-top-output.xlsx", 1);
         });
     });
 
     describe("missing-row-middle", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-row-middle-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-row-middle-output.xlsx");
+        it("should return empty row data error", function () {
+            test.emptyRowDataError("test-files/adjacency-matrix-modifications/missing-row-middle-input.xlsx", 1);
+            test.emptyRowDataError("test-files/adjacency-matrix-modifications/missing-row-middle-output.xlsx", 1);
         });
     });
 
     describe("missing-row-end", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-row-end-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-row-end-output.xlsx");
+        it("should return empty row data error", function () {
+            test.emptyRowDataError("test-files/adjacency-matrix-modifications/missing-row-end-input.xlsx", 1);
+            test.emptyRowDataError("test-files/adjacency-matrix-modifications/missing-row-end-output.xlsx", 1);
         });
     });
 
@@ -161,9 +161,9 @@ describe("errors-adjacency-matrix-modifications", function () {
     });
 
     describe("missing-data", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-data-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-data-output.xlsx");
+        it("should return empty matrix data error", function () {
+            test.emptyMatrixDataError("test-files/adjacency-matrix-modifications/missing-data-input.xlsx", 1);
+            test.emptyMatrixDataError("test-files/adjacency-matrix-modifications/missing-data-output.xlsx", 1);
         });
     });
 

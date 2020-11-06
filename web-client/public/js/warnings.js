@@ -5,54 +5,13 @@ export var displayWarnings = function (warnings) {
       "To view the details of the warning(s), please click on the \"Warnings List\" below.");
     var warningsString = "";
     var NUM_POSSIBLE_WARNINGS = 11;
+    var warningCounts = {};
+    var index = 0;
     // Fill printed with 0s programatically
     var printed = [];
     for (var i = 0; i < NUM_POSSIBLE_WARNINGS; i++) {
         printed.push(0);
     }
-
-    var missingSourceCount = warnings.filter(function (x) {
-        return x.warningCode === "MISSING_SOURCE";
-    });
-    var missingTargetCount = warnings.filter(function (x) {
-        return x.warningCode === "MISSING_TARGET";
-    });
-    var invalidDataCount = warnings.filter(function (x) {
-        return x.warningCode === "INVALID_DATA";
-    });
-    var randomDataCount = warnings.filter(function (x) {
-        return x.warningCode === "RANDOM_DATA";
-    });
-    var emptyRowCount = warnings.filter(function (x) {
-        return x.warningCode === "EMPTY_ROW";
-    });
-    var invalidNetworkSizeCount = warnings.filter(function (x) {
-        return x.warningCode === "INVALID_NETWORK_SIZE";
-    });
-    var extraneousDataCount = warnings.filter(function (x) {
-        return x.warningCode === "EXTRANEOUS_DATA";
-    });
-    var edgesWithoutWeightsCount = warnings.filter(function (x) {
-        return x.warningCode === "EDGES_WITHOUT_WEIGHTS";
-    });
-    var edgeDefaultNotDirectedCount = warnings.filter(function (x) {
-        return x.warningCode === "EDGE_DEFAULT_NOT_DIRECTED";
-    });
-    var sifFormatWarningCount = warnings.filter(function (x) {
-        return x.warningCode === "SIF_FORMAT_WARNING";
-    });
-    var incorrectlyNamedSheetWarningCount = warnings.filter(function (x) {
-        return x.warningCode === "INCORRECTLY_NAMED_SHEET";
-    });
-    var missingExpressionSheetWarningCount = warnings.filter(function (x) {
-        return x.warningCode === "MISSING_EXPRESSION_SHEET";
-    });
-    var noSpeciesFound = warnings.filter(function (x) {
-        return x.warningCode === "MISSING_SPECIES_INFORMATION";
-    });
-    var unidentifiedSpecies = warnings.filter(function (x) {
-        return x.warningCode === "UNKNOWN_SPECIES_DETECTED";
-    });
 
     var appendWarning = function (warning) {
         warningsString += warning.errorDescription + "<br><br>";
@@ -73,20 +32,15 @@ export var displayWarnings = function (warnings) {
         }
     };
 
-    createWarningsString(missingSourceCount, 0);
-    createWarningsString(missingTargetCount, 1);
-    createWarningsString(invalidDataCount, 2);
-    createWarningsString(randomDataCount, 3);
-    createWarningsString(emptyRowCount, 4);
-    createWarningsString(invalidNetworkSizeCount, 5);
-    createWarningsString(extraneousDataCount, 6);
-    createWarningsString(edgesWithoutWeightsCount, 7);
-    createWarningsString(edgeDefaultNotDirectedCount, 8);
-    createWarningsString(sifFormatWarningCount, 9);
-    createWarningsString(incorrectlyNamedSheetWarningCount, 10);
-    createWarningsString(missingExpressionSheetWarningCount, 11);
-    createWarningsString(noSpeciesFound, 12);
-    createWarningsString(unidentifiedSpecies, 13);
+    for (let warning of warnings) {
+        warningCounts[warning.warningCode] = (warningCounts[warning.warningCode]) ?
+            [...warningCounts[warning.warningCode], warning] : [warning];
+    }
+
+    for (let warning in warningCounts) {
+        createWarningsString(warningCounts[warning], index);
+        index++;
+    }
 
     $("#warningsList").html(warningsString);
 
