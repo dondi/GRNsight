@@ -100,7 +100,7 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "EMPTY_ROW_DATA",
-            errorDescription: `Row ${rowNum}, in the ${sheetName} sheet, was found to contain no data.`,
+            possibleCause: `Row ${rowNum}, in the ${sheetName} sheet, was found to contain no data.`,
             suggestedFix: "Populate empty row with data."
         };
     },
@@ -108,14 +108,14 @@ var errorList = {
         var columnLetter = numbersToLetters[column];
         return {
             errorCode: "EMPTY_COLUMN_DATA",
-            errorDescription: `Column ${columnLetter}, in the ${sheetName} sheet, was found to contain no data.`,
+            possibleCause: `Column ${columnLetter}, in the ${sheetName} sheet, was found to contain no data.`,
             suggestedFix: "Populate empty column with data."
         };
     },
     emptyMatrixDataError: function (sheetName) {
         return {
-            errorCode: "EMPTY_COLUMN_DATA",
-            errorDescription: `The ${sheetName} sheet was found to contain no data in the adjacency matrix.`,
+            errorCode: "EMPTY_MATRIX_DATA",
+            possibleCause: `The ${sheetName} sheet was found to contain no data in the adjacency matrix.`,
             suggestedFix: "Populate empty matrix with data."
         };
     },
@@ -167,7 +167,7 @@ var warningsList = {
         return {
             warningCode: "MISLABELED_NETWORK_CELL_A1",
             errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-            Replace the incorrect label with \'cols regulators/rows targets\' exactly.`
+            Replace the incorrect label with 'cols regulators/rows targets' exactly.`
         };
     },
     missingSourceGeneWarning: function (row, column) {
@@ -291,6 +291,27 @@ var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
     }
 };
 
+var addTargetGene = function (network, sheet, row, targetGenes, genesList) {
+    let currentGene = { name: sheet.data[row][0] };
+    if (currentGene.name === undefined) {
+        addWarning(network, warningsList.missingTargetGeneWarning(row, 0));
+    } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
+        addWarning(network, warningsList.missingTargetGeneWarning(row, 0));
+    } else {
+        // set currentGeneName to a String so toUpperCase doesn't mess up
+        currentGene.name = currentGene.name.toString();
+        targetGenes.push(String(currentGene.name.toUpperCase()));
+        // Here we check to see if we've already seen the gene name that we're about to store
+        // Genes may or may not be present due to asymmetry or unorderedness
+        // If it's in the genesList, it will return a number > 0, so we won't store it
+        // If it's not there, it will return -1, so we add it.
+        if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
+            genesList.push(String(currentGene.name.toUpperCase()));
+            network.genes.push(currentGene);
+        }
+    }
+};
+
 var parseNetworkSheet = function (sheet, network) {
     var currentLink;
     var currentGene;
@@ -326,12 +347,16 @@ var parseNetworkSheet = function (sheet, network) {
     }
     // Set columnCount to undefineds in each column equal to the length of the gene names
     columnChecker = new Array(sourceGenes.length).fill(0);
+    let rowData = [];
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
         if (sheet.data[row].length === 0) { // if the current row is empty
             if (addError(network, errorList.emptyRowError(row)) === false) {
                 return network;
             }
+        } else if (sheet.data[row].length === 1) {
+            addTargetGene(network, sheet, row, targetGenes, genesList);
+            rowData.push(row);
         } else { // if the row has data...
             // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
             // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
@@ -339,98 +364,85 @@ var parseNetworkSheet = function (sheet, network) {
             try { // This prevents the server from crashing if something goes wrong anywhere in here
                 while (column < sheet.data[row].length) {
                     // While we haven't gone through all of the columns in this row...
-                    if (row === 0) { // If we are at the top of a new column...
-                        // restructure in progress
-                    } else if (column === 0) { // If we are at the far left of a new row...
-                        // These genes are the target genes
-                        try {
-                            currentGene = {name: sheet.data[row][0]};
-                            if (currentGene.name === undefined) {
-                                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-                            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-                            } else {
-                                // set currentGeneName to a String so toUpperCase doesn't mess up
-                                currentGene.name = currentGene.name.toString();
-                                targetGenes.push(String(currentGene.name.toUpperCase()));
-                                // Here we check to see if we've already seen the gene name that we're about to store
-                                // Genes may or may not be present due to asymmetry or unorderedness
-                                // If it's in the genesList, it will return a number > 0, so we won't store it
-                                // If it's not there, it will return -1, so we add it.
-                                if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
-                                    genesList.push(String(currentGene.name.toUpperCase()));
-                                    network.genes.push(currentGene);
-                                }
-                            }
-                        } catch (err) {
-                            sourceGene = sheet.data[0][column];
-                            targetGene = sheet.data[row][0];
-                            addError(network, errorList.corruptGeneError(row, column));
-                            return network;
-                        }
-                    } else { // If we're within the matrix and lookin' at the data...
-                        try {
-                            if (sheet.data[row][column] === undefined) {
-                                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
-                                columnChecker[column - 1] = columnChecker[column - 1]++;
-                                addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-                            } else if (isNaN(+("" + sheet.data[row][column])) ||
-                                typeof sheet.data[row][column] !== "number") {
-                                addError(network, errorList.dataTypeError(row, column));
+                    if (row !== 0) { // skip the source genes
+                        if (column === 0) {
+                            // These genes are the target genes
+                            try {
+                                addTargetGene(network, sheet, row, targetGenes, genesList);
+                            } catch (err) {
+                                sourceGene = sheet.data[0][column];
+                                targetGene = sheet.data[row][0];
+                                addError(network, errorList.corruptGeneError(row, column));
                                 return network;
-                            } else {
-                                // columnChecker[column - 1] = columnChecker[column - 1]++;
-                                if (sheet.data[row][column] !== 0) { // We only care about non-zero values
-                                    // Grab the source and target genes' names
-                                    sourceGene = sheet.data[0][column];
-                                    targetGene = sheet.data[row][0];
-                                    if (sourceGene === undefined || targetGene === undefined) {
-                                        addWarning(network, warningsList.randomDataWarning("undefined", row, column));
-                                    } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
-                                        (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                        addWarning(network, warningsList.randomDataWarning("NaN", row, column));
-                                    } else {
-                                        // Grab the source and target genes' numbers
-                                        sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
-                                        targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
-                                        currentLink = {source: sourceGeneNumber, target: targetGeneNumber,
-                                            value: sheet.data[row][column]};
-                                        // Here we set the properties of the current link
-                                        // before we push them to the network
-                                        if (network.sheetType === "weighted") {
-                                            if (currentLink.value > 0) {
-                                                // If it's a positive number, mark it as an activator
+                            }
+                        } else { // If we're within the matrix and lookin' at the data...
+                            try {
+                                if (sheet.data[row][column] === undefined) {
+                                    // SHOULD BE: addError(network, errorList.missingValueError(row, column));
+                                    columnChecker[column - 1] = columnChecker[column - 1]++;
+                                    addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
+                                } else if (isNaN(+("" + sheet.data[row][column])) ||
+                                    typeof sheet.data[row][column] !== "number") {
+                                    addError(network, errorList.dataTypeError(row, column));
+                                    return network;
+                                } else {
+                                    // columnChecker[column - 1] = columnChecker[column - 1]++;
+                                    if (sheet.data[row][column] !== 0) { // We only care about non-zero values
+                                        // Grab the source and target genes' names
+                                        sourceGene = sheet.data[0][column];
+                                        targetGene = sheet.data[row][0];
+                                        if (sourceGene === undefined || targetGene === undefined) {
+                                            addWarning(network, warningsList.randomDataWarning("undefined",
+                                                row, column));
+                                        } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
+                                            (isNaN(targetGene) && typeof targetGene !== "string")) {
+                                            addWarning(network, warningsList.randomDataWarning("NaN", row, column));
+                                        } else {
+                                            // Grab the source and target genes' numbers
+                                            sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
+                                            targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
+                                            currentLink = {
+                                                source: sourceGeneNumber, target: targetGeneNumber,
+                                                value: sheet.data[row][column]
+                                            };
+                                            // Here we set the properties of the current link
+                                            // before we push them to the network
+                                            if (network.sheetType === "weighted") {
+                                                if (currentLink.value > 0) {
+                                                    // If it's a positive number, mark it as an activator
+                                                    currentLink.type = "arrowhead";
+                                                    // GRNsight v1 magenta edge color
+                                                    // currentLink.stroke = "MediumVioletRed";
+                                                    // Node coloring-consistent red edge color
+                                                    currentLink.stroke = "rgb(195, 61, 61)";
+                                                    network.positiveWeights.push(currentLink.value);
+                                                } else { // if it's a negative number, mark it as a repressor
+                                                    currentLink.type = "repressor";
+                                                    // currentLink.stroke = "DarkTurquoise";
+                                                    // GRNsight v1 cyan edge color
+                                                    // Node coloring-consistent blue edge color
+                                                    currentLink.stroke = "rgb(51, 124, 183)";
+                                                    network.negativeWeights.push(currentLink.value);
+                                                }
+                                            } else if (network.sheetType === "unweighted") {
                                                 currentLink.type = "arrowhead";
-                                                // GRNsight v1 magenta edge color
-                                                // currentLink.stroke = "MediumVioletRed";
-                                                // Node coloring-consistent red edge color
-                                                currentLink.stroke = "rgb(195, 61, 61)";
+                                                currentLink.stroke = "black";
+                                                if (currentLink.value !== 1) {
+                                                    addWarning(network, warningsList.incorrectlyNamedSheetWarning());
+                                                    currentLink.value = 1;
+                                                }
                                                 network.positiveWeights.push(currentLink.value);
-                                            } else { // if it's a negative number, mark it as a repressor
-                                                currentLink.type = "repressor";
-                                                // currentLink.stroke = "DarkTurquoise"; // GRNsight v1 cyan edge color
-                                                // Node coloring-consistent blue edge color
-                                                currentLink.stroke = "rgb(51, 124, 183)";
-                                                network.negativeWeights.push(currentLink.value);
                                             }
-                                        } else if (network.sheetType === "unweighted") {
-                                            currentLink.type = "arrowhead";
-                                            currentLink.stroke = "black";
-                                            if (currentLink.value !== 1) {
-                                                addWarning(network, warningsList.incorrectlyNamedSheetWarning());
-                                                currentLink.value = 1;
-                                            }
-                                            network.positiveWeights.push(currentLink.value);
+                                            network.links.push(currentLink);
                                         }
-                                        network.links.push(currentLink);
                                     }
                                 }
-                            }
 
-                        } catch (err) {
-                            addError(network, errorList.missingValueError(row, column));
-                            // SHOULD BE: addError(network, errorList.unknownFileError);
-                            return network;
+                            } catch (err) {
+                                addError(network, errorList.missingValueError(row, column));
+                                // SHOULD BE: addError(network, errorList.unknownFileError);
+                                return network;
+                            }
                         }
                     }
                     column++; // Let's move on to the next column!
@@ -444,12 +456,20 @@ var parseNetworkSheet = function (sheet, network) {
         }
     }
 
-    // for (var i = 0; i < columnChecker.length; i++) {
-    //     if (columnChecker[i] === targetGenes.length) {
-    //         addError(network, errorList.emptyColumnError(i + 1, sheet.name));
-    //         return network;
-    //     }
-    // }
+    if (rowData.length === sheet.data.length - 1) {
+        addError(network, errorList.emptyMatrixDataError(sheet.name));
+    } else {
+        for (let x of rowData) {
+            addError(network, errorList.emptyRowDataError(x, sheet.name));
+        }
+    }
+
+    for (var i = 0; i < columnChecker.length; i++) {
+        if (columnChecker[i] === targetGenes.length) {
+            addError(network, errorList.emptyColumnError(i + 1, sheet.name));
+            return network;
+        }
+    }
 
     // Move on to semanticChecker.
 
