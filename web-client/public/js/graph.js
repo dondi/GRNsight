@@ -698,7 +698,7 @@ export var drawGraph = function (network) {
     };
 
     var CURVE_THRESHOLD = 200;
-    var EDGE_OFFSET = 30;
+    var EDGE_OFFSET = 20;
     var lineTo = function (d) {
         var node = d3.select("#node" + d.target.index);
         var w = +node.attr("width");
@@ -1431,8 +1431,8 @@ export var drawGraph = function (network) {
                         }
                     }
 
-                    d.label = { x: Math.min(width - Math.max(5, parseFloat(d.strokeWidth)), x1),
-                        y: Math.min(height - Math.max(5, parseFloat(d.strokeWidth)), y1 + dry * 3)};
+                    d.label = { x: Math.min(width - (13 * offset), x1), // For 4 decimal places
+                        y: Math.min(height - offset, y1 + dry * 3)};
 
                     return "M" + x1 + "," + y1 +
                         "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
