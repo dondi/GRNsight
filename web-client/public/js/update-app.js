@@ -579,7 +579,7 @@ export const updateApp = grnState => {
         displayNetwork(grnState.network, grnState.name);
         expandLayoutSidebar();
         clearDropdownMenus();
-        if ((identifySpeciesOrTaxon(grnState.network.meta.species) || 
+        if ((identifySpeciesOrTaxon(grnState.network.meta.species) ||
                 identifySpeciesOrTaxon(grnState.network.meta.taxon_id))) {
             identifySpeciesOrTaxon(grnState.network.meta.species);
             identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
