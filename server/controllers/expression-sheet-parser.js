@@ -16,21 +16,21 @@ const errorsList = {
     idLabelError: function (sheetName) {
         return {
             errorCode: "MISLABELED_ID_CELL",
-            possibleCause: "The top left cell of the " + sheetName + " sheet is mislabeled.",
+            possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
             suggestedFix: "Replace the incorrect label with \'id\' exactly."
         };
     },
     missingColumnHeaderError: function (sheetName) {
         return {
             errorCode: "MISSING_COLUMN_HEADER",
-            possibleCause: "A column in the " + sheetName + " sheet is missing a header.",
+            possibleCause: `A column in the ${sheetName} sheet is missing a header.`,
             suggestedFix: "Add headers to all columns."
         };
     },
     emptyExpressionRowError: function (row, sheetName) {
         return {
             errorCode: "EMPTY_ROW",
-            possibleCause: "There is an empty row in the " + sheetName + " sheet. It is located at row " + row + ".",
+            possibleCause: `There is an empty row in the ${sheetName} sheet. It is located at row ${row}.`,
             suggestedFix: "Delete empty row, or populate with data."
         };
     },
@@ -38,12 +38,42 @@ const errorsList = {
         var columnLetter = numbersToLetters[column];
         return {
             errorCode: "EMPTY_COLUMN",
-            possibleCause: "There is an empty column in the " + sheetName + " sheet. It is located at column " +
-            columnLetter + ".",
+            possibleCause: `There is an empty column in the ${sheetName} sheet. It is located at column
+            ${columnLetter}.`,
             suggestedFix: "Delete empty column, or populate with data."
         };
     },
+    negativeTimePointError: function (column, sheetName) {
+        var columnLetter = numbersToLetters[column];
+        return {
+            errorCode: "NEGATIVE_TIME_POINT",
+            possibleCause: `There is a negative time point in the ${sheetName} sheet. It is located at
+            column ${columnLetter}.`,
+            suggestedFix: "Change the negative time point to a positive and ensure expression data is correct."
+        };
+    },
+    nonMonotonicTimePointsError: function (column, sheetName) {
+        var columnLetter = numbersToLetters[column];
+        return {
+            errorCode: "NON_MONOTONIC_TIME_POINTS",
+            possibleCause: `The time points located in the ${sheetName} sheet are not sequenced in an increasing 
+            fashion. The first instance of this is at column ${columnLetter}.`,
+            suggestedFix: `Please ensure that the time points are ordered in an increasing fashion, and ensure 
+            expression data is correct.`
+        };
+    },
+    nonNumericalTimePointsError: function (column, sheetName) {
+        var columnLetter = numbersToLetters[column];
+        return {
+            errorCode: "NON_NUMERICAL_TIME_POINT",
+            possibleCause: `There is a non-numerical time point in the ${sheetName} sheet. It is located at
+            column ${columnLetter}.`,
+            suggestedFix: "Change the non-numerical time point to a positive number and ensure expression data \
+            is correct."
+        };
+    },
 };
+
 
 const warningsList = {
     missingExpressionWarning: function () {
@@ -59,8 +89,8 @@ const warningsList = {
     extraneousDataWarning: function (sheetName) {
         return {
             warningCode: "EXTRANEOUS_DATA",
-            errorDescription: "There is extraneous data outside of the set rows and columns of the " +
-            sheetName + " sheet."
+            errorDescription: `There is extraneous data outside of the set rows and columns of the 
+            ${sheetName} sheet.`
         };
     }
 };
@@ -122,11 +152,25 @@ var parseExpressionSheet = function (sheet) {
     if (idLabel !== "id") {
         addExpError(expressionData, errorsList.idLabelError(sheet.name));
     }
-
     expressionData.timePoints = sheet.data[0].slice(1);
     const numberOfDataPoints = expressionData.timePoints.length;
+    let compareTimePoint = 0;
+    for (let i = 0; i < numberOfDataPoints; i++) {
+        if (isNaN(expressionData.timePoints[i]) && expressionData.timePoints[i] !== undefined) {
+            addExpError(expressionData, errorsList.nonNumericalTimePointsError(i + 1, sheet.name));
+        } else if (expressionData.timePoints[i] < 0) {
+            addExpError(expressionData, errorsList.negativeTimePointError(i + 1, sheet.name));
+        } else if (expressionData.timePoints[i] < compareTimePoint) {
+            addExpError(expressionData, errorsList.nonMonotonicTimePointsError(i + 1, sheet.name));
+            break;
+        } else {
+            compareTimePoint = expressionData.timePoints[i];
+        }
+
+    }
     let geneNames = [];
     sheet.data.forEach(function (sheet) {
+
         const geneName = sheet[0];
         if (geneName) {
             geneNames.push(geneName);
@@ -214,4 +258,3 @@ module.exports = function (workbook) {
     }
     return output;
 };
-

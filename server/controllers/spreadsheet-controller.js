@@ -63,7 +63,7 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "CORRUPT_GENE",
-            possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.",
+            possibleCause: `The gene name in cell ${colLetter} ${rowNum} appears to be invalid.`,
             suggestedFix: "Please fix the error and try uploading again."
         };
     },
@@ -73,8 +73,8 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "MISSING_VALUE",
-            possibleCause: "The value in the cell " + colLetter + rowNum +
-                " in the adjacency matrix appears to have a missing value.",
+            possibleCause: `The value in the cell ${colLetter} ${rowNum} 
+            in the adjacency matrix appears to have a missing value.`,
             suggestedFix: "Please ensure that all cells have a value, then upload the file again."
         };
     },
@@ -83,7 +83,7 @@ var errorList = {
     duplicateGeneError: function (geneType, geneName) {
         return {
             errorCode: "DUPLICATE_GENE",
-            possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
+            possibleCause: `There exists a duplicate for ${geneType} gene ${geneName}.`,
             suggestedFix: "Please remove the duplicate gene and submit again."
         };
     },
@@ -93,7 +93,7 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "INVALID_CELL_DATA_TYPE",
-            possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
+            possibleCause: `The value in cell ${colLetter} ${rowNum} is not a number.`,
             suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
         };
     },
@@ -102,10 +102,10 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "EMPTY_ROW",
-            possibleCause: "Row " + rowNum + " does not contain any data.",
-            suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " +
-                "Also, please ensure that no extraneous data is outside of the matrix, " +
-                "as this may cause this error."
+            possibleCause: `Row ${rowNum} does not contain any data.`,
+            suggestedFix: `Please ensure all rows contain data and all empty rows are removed. 
+            Also, please ensure that no extraneous data is outside of the matrix, 
+            as this may cause this error.`
         };
     },
 
@@ -114,16 +114,15 @@ var errorList = {
         var rowNum = row + 1;
         return {
             errorCode: "EMPTY_CELL",
-            possibleCause: "The cell at " + colLetter + rowNum + " contains data that is outside the matrix.",
-            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" +
-                " the matrix is "
+            possibleCause: `The cell at ${colLetter} ${rowNum} contains data that is outside the matrix.`,
+            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure matrix is correct"
         };
     },
 
     errorsCountError: {
         errorCode: "ERRORS_OVERLOAD",
         possibleCause: "This network has over 20 errors.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+        suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
             "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
             "further errors detected. As a general approach for fixing the errors, consider copying and " +
             "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
@@ -132,7 +131,7 @@ var errorList = {
     warningsCountError: {
         errorCode: "WARNINGS_OVERLOAD",
         possibleCause: "This network has over 75 warnings.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
+        suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
             " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
             " further errors detected. As a general approach for fixing the errors, consider copying and " +
             " pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
@@ -148,33 +147,32 @@ var errorList = {
     geneMismatchError: function (sheetName) {
         return {
             errorCode: "GENE_MISMATCH",
-            possibleCause: "Gene names in column A of the '" + sheetName
-            + "' sheet do not match the order of those in the network sheet",
-            suggestedFix: "Please ensure that the gene names are in the same order"
-            + " as those in both the 'network' sheet and the " +
-                "'network_optimized_weights' sheet."
+            possibleCause: `Gene names in column A of the "${sheetName}" sheet do not 
+            match the order of those in the network sheet`,
+            suggestedFix: `Please ensure that the gene names are in the same order 
+            as those in both the "network" sheet and the 
+            "network_optimized_weights" sheet.`
         };
     },
 
     extraGeneNamesError: function (sheetName) {
         return {
             errorCode: "EXTRA_GENE_NAME",
-            possibleCause: "Gene names in column A of the '" + sheetName
-            + "' sheet have one or more extra genes than those listed in the network sheet",
-            SuggestedFix: "Please ensure that the genes in the '" + sheetName +
-                "' are the same as the genes in the 'network' sheet and the " +
-                "'network_optimized_weights' sheet."
+            possibleCause: `Gene names in column A of the "${sheetName}" sheet have 
+            one or more extra genes than those listed in the network sheet`,
+            SuggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
+            the same as the genes in the "network" sheet and the "network_optimized_weights" sheet.`
         };
     },
 
     missingGeneNamesError: function (sheetName) {
         return {
             errorCode: "MISSING_GENE_NAME",
-            possibleCause: "Gene names in column A of the '" + sheetName +
-                "' sheet are missing one or more genes from the network sheet",
-            SuggestedFix: "Please ensure that the genes in the '" + sheetName +
-                "' are the same as the genes in the 'network' sheet and the " +
-                "'network_optimized_weights' sheet."
+            possibleCause: `Gene names in column A of the "${sheetName}"
+                sheet are missing one or more genes from the network sheet`,
+            SuggestedFix: `Please ensure that the genes in the "${sheetName}"
+                 are the same as the genes in the "network" sheet and the 
+                "network_optimized_weights" sheet.`
         };
     },
 
@@ -189,7 +187,7 @@ var warningsList = {
         var rowNum = row + 1;
         return {
             warningCode: "MISSING_SOURCE",
-            errorDescription: "A source gene name is missing in cell " + colLetter + rowNum + "."
+            errorDescription: `A source gene name is missing in cell ${colLetter}${rowNum}.`
         };
     },
 
@@ -198,7 +196,7 @@ var warningsList = {
         var rowNum = row + 1;
         return {
             warningCode: "MISSING_TARGET",
-            errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
+            errorDescription: `A target gene name is missing in cell ${colLetter}${rowNum}.`
         };
     },
 
@@ -207,7 +205,7 @@ var warningsList = {
         var rowNum = row + 1;
         return {
             warningCode: "INVALID_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
+            errorDescription: `The value in cell ${colLetter}${rowNum}, is undefined.`
         };
     },
 
@@ -216,8 +214,8 @@ var warningsList = {
         var rowNum = row + 1;
         return {
             warningCode: "RANDOM_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum +
-                ", has a corresponding source and/or target gene that is detected as " + type + "."
+            errorDescription: `The value in cell ${colLetter}${rowNum}, 
+            has a corresponding source and/or target gene that is detected as ${type}.`
         };
     },
 
@@ -225,15 +223,15 @@ var warningsList = {
         var rowNum = row + 1;
         return {
             warningCode: "EMPTY_ROW",
-            errorDescription: "Row " + rowNum + " was found to contain no data."
+            errorDescription: `Row ${rowNum} was found to contain no data.`
         };
     },
 
     networkSizeWarning: function (genesLength, edgesLength) {
         return {
             warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength +
-                " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+            errorDescription: `Your network has ${genesLength} genes, and ${edgesLength} 
+                edges. Please note that networks are recommended to have less than 50 genes and 100 edges.`
         };
     },
 

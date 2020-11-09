@@ -281,6 +281,43 @@ var extraGeneNameError = function (input, frequency) {
     assert.equal(frequency, extraGeneCount.length);
 };
 
+var negativeTimePointError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "NEGATIVE_TIME_POINT",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
+    }
+};
+
+var nonMonotonicTimePointsError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "NON_MONOTONIC_TIME_POINTS",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
+    }
+};
+
+var nonNumericalTimePointError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var exp = parseExpressionSheet(sheet);
+    assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
+    for (var i = 0; i < frequency; i++) {
+        assert.equal(
+            "NON_NUMERICAL_TIME_POINT",
+            exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
+        );
+    }
+};
+
+
 
 // WARNING TEST FUNCTIONS:
 
@@ -364,7 +401,7 @@ var extraneousDataWarning = function (input, frequency) {
 
 var missingExpressionWarning = function (input, frequency)  {
     var sheet = xlsx.parse(input);
-    var network = parseExpressionSheet(sheet);
+    var network = spreadsheetController.crossSheetInteractions(sheet);
     var missingExpressionCount = network.warnings.filter(function (x) {
         return x.warningCode === "MISSING_EXPRESSION_SHEET";
     });
@@ -444,6 +481,9 @@ exports.geneMismatchError = geneMismatchError;
 exports.labelError = labelError;
 exports.missingGeneNameError = missingGeneNameError;
 exports.extraGeneNameError = extraGeneNameError;
+exports.negativeTimePointError = negativeTimePointError;
+exports.nonMonotonicTimePointsError = nonMonotonicTimePointsError;
+exports.nonNumericalTimePointError = nonNumericalTimePointError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
@@ -457,4 +497,3 @@ exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
-exports.missingExpressionWarning = missingExpressionWarning;
