@@ -698,7 +698,9 @@ describe("Import from GraphML", function () {
                 warnings: [],
                 positiveWeights: [],
                 negativeWeights: [],
-                sheetType: "unweighted"
+                sheetType: "unweighted",
+                meta: {},
+                expression:{}
             }); // Look ma, no nested graphs (nor edges that refer to them).
         });
     });
@@ -726,7 +728,9 @@ describe("Import from GraphML", function () {
                 warnings: [],
                 positiveWeights: [],
                 negativeWeights: [],
-                sheetType: "unweighted"
+                sheetType: "unweighted",
+                meta: {},
+                expression:{}
             });
         });
     });
@@ -749,7 +753,9 @@ describe("Import from GraphML", function () {
                 warnings: [],
                 positiveWeights: [],
                 negativeWeights: [],
-                sheetType: "unweighted"
+                sheetType: "unweighted",
+                meta: {},
+                expression:{}
             });
         });
     });
@@ -775,7 +781,9 @@ describe("Import from GraphML", function () {
 
                 errors: [],
                 warnings: [],
-                sheetType: "unweighted"
+                sheetType: "unweighted",
+                meta: {},
+                expression:{}
             });
         });
     });

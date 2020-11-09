@@ -24,7 +24,9 @@ var expectedUnweightedNetwork = {
     warnings: [],
     positiveWeights: [],
     negativeWeights: [],
-    sheetType: "unweighted"
+    sheetType: "unweighted",
+    meta: {},
+    expression:{}
 };
 
 var expectedWeightedNetwork = {
@@ -45,7 +47,9 @@ var expectedWeightedNetwork = {
     warnings: [],
     positiveWeights: [],
     negativeWeights: [],
-    sheetType: "weighted"
+    sheetType: "weighted",
+    meta: {},
+    expression:{}
 };
 
 var expectedUnweightedNetworkWithCycle = {
@@ -69,7 +73,9 @@ var expectedUnweightedNetworkWithCycle = {
     warnings: [],
     positiveWeights: [],
     negativeWeights: [],
-    sheetType: "unweighted"
+    sheetType: "unweighted",
+    meta: {},
+    expression:{}
 };
 
 var expectedWeightedNetworkWithCycle = {
@@ -93,7 +99,9 @@ var expectedWeightedNetworkWithCycle = {
     warnings: [],
     positiveWeights: [],
     negativeWeights: [],
-    sheetType: "weighted"
+    sheetType: "weighted",
+    meta: {},
+    expression:{}
 };
 
 // Unweighted SIF
@@ -339,7 +347,9 @@ describe("Import from SIF", function () {
             warnings: [],
             positiveWeights: [],
             negativeWeights: [],
-            sheetType: "unweighted"
+            sheetType: "unweighted",
+            meta: {},
+            expression:{}
         });
     });
 
@@ -355,7 +365,9 @@ describe("Import from SIF", function () {
             warnings: [],
             positiveWeights: [],
             negativeWeights: [],
-            sheetType: "weighted"
+            sheetType: "weighted",
+            meta: {},
+            expression:{}
         });
     });
 

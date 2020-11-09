@@ -15,8 +15,8 @@ module.exports = function (graphml) {
         positiveWeights: [],
         negativeWeights: [],
         sheetType: constants.UNWEIGHTED,
-        meta: [],
-        expression:[]
+        meta: {},
+        expression:{}
     };
 
     // These warnings don't exist. They are a TODO
