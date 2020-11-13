@@ -1431,7 +1431,8 @@ export var drawGraph = function (network) {
                         }
                     }
 
-                    d.label = { x: Math.min(width, x1), y: Math.min(height, y1 + dry * 3) };
+                    d.label = { x: Math.min(width - (13 * offset), x1), // For 4 decimal places
+                        y: Math.min(height - offset, y1 + dry * 3)};
 
                     return "M" + x1 + "," + y1 +
                         "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +

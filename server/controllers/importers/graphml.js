@@ -14,8 +14,14 @@ module.exports = function (graphml) {
         warnings: [],
         positiveWeights: [],
         negativeWeights: [],
-        sheetType: constants.UNWEIGHTED
+        sheetType: constants.UNWEIGHTED,
+        meta: {},
+        expression:{}
     };
+
+    // These warnings don't exist. They are a TODO
+    // network.warnings.push(constants.warnings.noSpeciesInformationDetected);
+    // network.warnings.push(constants.warnings.missingExpressionData); Doesn't exist
 
     var parseErr = function (err) {
         err = err.toString().split("\n").join(" ");
