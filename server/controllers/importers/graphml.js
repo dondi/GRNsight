@@ -2,14 +2,13 @@ var constants = require(__dirname + "/../constants");
 var parseString = require("xml2js").parseString;
 var semanticChecker = require(__dirname + "/../semantic-checker");
 var graphmlConstants = require(__dirname + "/../graphml-constants");
-var createEmptyNetwork = require(__dirname + "/../helpers.js").createEmptyNetwork;
+var initNetwork = require(__dirname + "/../helpers.js").initNetwork;
 
 module.exports = function (graphml) {
     var graph;
     var key;
 
-    var network = createEmptyNetwork();
-    network.sheetType = constants.UNWEIGHTED;
+    var network = initNetwork({sheetType: constants.UNWEIGHTED});
 
     // These warnings don't exist. They are a TODO
     // network.warnings.push(constants.warnings.noSpeciesInformationDetected);
