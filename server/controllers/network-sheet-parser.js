@@ -2,6 +2,8 @@
 // var path = require("path");
 // var demoNetworks = require(__dirname + "/demo-networks");
 
+const { initNetwork } = require("./helpers");
+
 var semanticChecker = require(__dirname + "/semantic-checker");
 
 
@@ -493,15 +495,7 @@ var parseNetworkSheet = function (sheet, network) {
 
 
 module.exports = function (workbook) {
-    const network = {
-        genes: [],
-        links: [],
-        errors: [],
-        warnings: [],
-        positiveWeights: [],
-        negativeWeights: [],
-        sheetType: "unweighted",
-    };
+    const network = initNetwork({sheetType: "unweighted"});
     var networkSheet;
 
     for (let i = 0; i < workbook.length; i++) {

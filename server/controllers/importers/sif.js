@@ -1,5 +1,6 @@
 var constants = require(__dirname + "/../constants");
 var semanticChecker = require(__dirname + "/../semantic-checker");
+var initNetwork = require(__dirname + "/../helpers.js").initNetwork;
 
 var GENE_NAME = 0;
 var RELATIONSHIP = 1;
@@ -124,7 +125,7 @@ module.exports = function (sif) {
         });
     }
 
-    var network = {
+    var network = initNetwork({
         genes: emptySifFile ? [] : genes.map(function (geneName) {
             return { name: geneName };
         }),
@@ -136,7 +137,7 @@ module.exports = function (sif) {
         negativeWeights: [],
         meta: {},
         expression: {}
-    };
+    });
 
     return (network.errors.length === 0) ? semanticChecker(network) : network;
 

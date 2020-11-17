@@ -1,5 +1,26 @@
 var constants = require(__dirname + "/constants");
 
+var createEmptyNetwork = function () {
+    return {
+        genes: [],
+        links: [],
+        errors: [],
+        warnings: [],
+        positiveWeights: [],
+        negativeWeights: [],
+        sheetType: "",
+        meta: {},
+        expression:{}
+    };
+};
+
+// Outside of module.exports because needs too access createEmptyNetwork
+var initNetwork = function (net) {
+    const network = createEmptyNetwork();
+    Object.assign(network, net);    // copies fields without overriding empty ones :)
+    return network;
+};
+
 module.exports = {
 
     attachCorsHeader: function (res, app) {
@@ -12,17 +33,7 @@ module.exports = {
         res.header(constants.GRNSIGHT_FILENAME_HEADER, path.split("/").pop());
     },
 
-    createEmptyNetwork: function () {
-        return {
-            genes: [],
-            links: [],
-            errors: [],
-            warnings: [],
-            positiveWeights: [],
-            negativeWeights: [],
-            sheetType: "",
-            meta: {},
-            expression:{}
-        };
-    }
+    createEmptyNetwork: createEmptyNetwork,
+    initNetwork: initNetwork
+
 };
