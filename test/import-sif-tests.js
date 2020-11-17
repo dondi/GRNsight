@@ -5,8 +5,9 @@ var extend = require("jquery-extend");
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
+var initNetwork = require(__dirname + "/../server/controllers" + "/helpers.js").initNetwork;
 
-var expectedUnweightedNetwork = {
+var expectedUnweightedNetwork = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -27,9 +28,9 @@ var expectedUnweightedNetwork = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetwork = {
+var expectedWeightedNetwork = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -50,9 +51,9 @@ var expectedWeightedNetwork = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedUnweightedNetworkWithCycle = {
+var expectedUnweightedNetworkWithCycle = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -76,9 +77,9 @@ var expectedUnweightedNetworkWithCycle = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetworkWithCycle = {
+var expectedWeightedNetworkWithCycle = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -102,7 +103,7 @@ var expectedWeightedNetworkWithCycle = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
 // Unweighted SIF
 
@@ -327,7 +328,7 @@ describe("Import from SIF", function () {
     it("should import nodes mentioned only in edges (i.e., targeted but targetless)", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithUntargeted)
-        ).to.deep.equal({
+        ).to.deep.equal(initNetwork({
             genes: [
                 { name: "A" },
                 { name: "B" },
@@ -350,13 +351,13 @@ describe("Import from SIF", function () {
             sheetType: "unweighted",
             meta: {},
             expression:{}
-        });
+        }));
     });
 
     it("should import a network with a single node correctly", function () {
         expect(
             importController.sifToGrnsight(sifWithOneNode)
-        ).to.deep.equal({
+        ).to.deep.equal(initNetwork({
             genes: [
                 { name: "A" }
             ],
@@ -368,7 +369,7 @@ describe("Import from SIF", function () {
             sheetType: "weighted",
             meta: {},
             expression:{}
-        });
+        }));
     });
 
 });

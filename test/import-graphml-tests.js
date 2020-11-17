@@ -5,8 +5,9 @@ var UTF8 = { encoding: "utf-8" };
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
+var initNetwork = require(__dirname + "/../server/controllers" + "/helpers.js").initNetwork;
 
-var expectedUnweightedNetwork = {
+var expectedUnweightedNetwork = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -27,9 +28,9 @@ var expectedUnweightedNetwork = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetwork = {
+var expectedWeightedNetwork = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -50,9 +51,9 @@ var expectedWeightedNetwork = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedUnweightedNetworkWithCycle = {
+var expectedUnweightedNetworkWithCycle = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -76,9 +77,9 @@ var expectedUnweightedNetworkWithCycle = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetworkWithCycle = {
+var expectedWeightedNetworkWithCycle = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -102,7 +103,7 @@ var expectedWeightedNetworkWithCycle = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
 /* eslint-disable quotes */
 // Temporarily disabling double-quote rule because graphML has a lot of double quotes.
@@ -277,7 +278,7 @@ var misspelledGraphTagTestGraphMl = [
 
 
 // Added networks and GraphML documents
-var newExpectedWeightedNetwork = {
+var newExpectedWeightedNetwork = initNetwork({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -299,7 +300,7 @@ var newExpectedWeightedNetwork = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
 var templateGraphmlFileForNewTests = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -659,7 +660,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/hyper.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initNetwork({
                 genes: [
                     { name: "n0" },
                     { name: "n1" },
@@ -679,13 +680,13 @@ describe("Import from GraphML", function () {
                 positiveWeights: [],
                 negativeWeights: [],
                 sheetType: "unweighted"
-            }); // Look ma, no hyperedges.
+            })); // Look ma, no hyperedges.
         });
 
         fs.readFile(__dirname + "/../test-files/import-samples/nested.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initNetwork({
                 genes: [
                     { name: "n0" },
                     { name: "n1" },
@@ -711,7 +712,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            }); // Look ma, no nested graphs (nor edges that refer to them).
+            })); // Look ma, no nested graphs (nor edges that refer to them).
         });
     });
 
@@ -719,7 +720,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-gene_4-edge_Manual-Cytoscape_test-naming.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initNetwork({
                 genes: [
                     { name: "Gene4_name" },
                     { name: "Gene3_name" },
@@ -741,7 +742,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            });
+            }));
         });
     });
 
@@ -749,7 +750,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/graph-with-yed-tags.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initNetwork({
                 genes: [
                     { name: "January" },
                     { name: "n1" }
@@ -766,7 +767,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            });
+            }));
         });
     });
 
@@ -774,7 +775,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-node_4-edge_manual-yED.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initNetwork({
                 genes: [
                     { name: "A" },
                     { name: "B" },
@@ -794,7 +795,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            });
+            }));
         });
     });
 
