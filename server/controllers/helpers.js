@@ -10,6 +10,19 @@ module.exports = {
         res.header("Access-Control-Allow-Methods", "POST, GET");
         res.header("Access-Control-Expose-Headers", constants.GRNSIGHT_FILENAME_HEADER);
         res.header(constants.GRNSIGHT_FILENAME_HEADER, path.split("/").pop());
-    }
+    },
 
+    createEmptyNetwork: function () {
+        return {
+            genes: [],
+            links: [],
+            errors: [],
+            warnings: [],
+            positiveWeights: [],
+            negativeWeights: [],
+            sheetType: "",
+            meta: {},
+            expression:{}
+        };
+    }
 };
