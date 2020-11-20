@@ -101,8 +101,6 @@ var errorList = {
         };
     },
 
-    // Start Here
-
     emptyColumnError: function (column, sheetName) {
         var columnLetter = numbersToLetters[column];
         return {
@@ -119,8 +117,6 @@ var errorList = {
             suggestedFix: "Populate empty column with data."
         };
     },
-
-    // End Here
 
     outsideCellError: function (row, column) {
         var colLetter = numbersToLetters[column];
@@ -362,12 +358,15 @@ var parseNetworkSheet = function (sheet, network) {
             // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
             // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
             try { // This prevents the server from crashing if something goes wrong anywhere in here
+                if (sheet.data[row].length < sheet.data[0].length) {
+                    for (let i = sheet.data[row].length - 1; i < sheet.data[0].length  - 1; i++) {
+                        columnChecker[i]++;
+                        addWarning(network, warningsList.invalidMatrixDataWarning(row, i));
+                    }
+                }
                 while (column < sheet.data[row].length) {
                     // While we haven't gone through all of the columns in this row...
                     if (row !== 0) { // skip the source genes
-                        if (sheet.data[row][column] === undefined && column !== 0) {
-                            columnChecker[column]++;
-                        }
                         if (column === 0) {
                             // These genes are the target genes
                             try {
@@ -382,7 +381,7 @@ var parseNetworkSheet = function (sheet, network) {
                             try {
                                 if (sheet.data[row][column] === undefined) {
                                     // SHOULD BE: addError(network, errorList.missingValueError(row, column));
-                                    columnChecker[column - 1] = columnChecker[column - 1]++;
+                                    columnChecker[column - 1]++;
                                     addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
                                 } else if (isNaN(+("" + sheet.data[row][column])) ||
                                     typeof sheet.data[row][column] !== "number") {
@@ -450,6 +449,11 @@ var parseNetworkSheet = function (sheet, network) {
                     }
                     column++; // Let's move on to the next column!
                 } // Once we finish with the current row...
+                if (column < sourceGenes.length) {
+                    for (let x = column; x < sourceGenes.length - 1; x++) {
+                        columnChecker[column] = columnChecker[column]++;
+                    }
+                }
                 column = 0; // let's go back to column 0 on the next row!
             } catch (err) {
                 // We only get here if something goes drastically wrong. We don't want to get here.
@@ -469,10 +473,10 @@ var parseNetworkSheet = function (sheet, network) {
 
     for (var i = 0; i < columnChecker.length; i++) {
         if (columnChecker[i] >= sheet.data.length - 1) {
-            if (sheet.data[0][i] === undefined) {
-                addError(network, errorList.emptyColumnError(i, sheet.name));
+            if (sheet.data[0][i + 1] === undefined) {
+                addError(network, errorList.emptyColumnError(i + 1, sheet.name));
             } else {
-                addError(network, errorList.emptyColumnDataError(i, sheet.name));
+                addError(network, errorList.emptyColumnDataError(i + 1, sheet.name));
             }
         }
     }
