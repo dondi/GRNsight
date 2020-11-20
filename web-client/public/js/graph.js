@@ -361,7 +361,7 @@ export var drawGraph = function (network) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $("input[name=viewport]").removeProp("checked");
-            $container.addClass("cursorGrab");
+            $container.addClass("cursorGrabbing");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
             center();
@@ -403,8 +403,8 @@ export var drawGraph = function (network) {
     }
 
     function move (direction) {
-        var width = direction === "left" ? 50 : (direction === "right" ? -50 : 0);
-        var height = direction === "up" ? 50 : (direction === "down" ? -50 : 0);
+        var width = direction === "left" ? -50 : (direction === "right" ? 50 : 0);
+        var height = direction === "up" ? -50 : (direction === "down" ? 50 : 0);
         zoom.translateBy(zoomContainer, width, height);
     }
 
@@ -698,7 +698,7 @@ export var drawGraph = function (network) {
     };
 
     var CURVE_THRESHOLD = 200;
-    var EDGE_OFFSET = 50; // Forces edge to curve inwards when at an edge
+    var EDGE_OFFSET = 20;
     var lineTo = function (d) {
         var node = d3.select("#node" + d.target.index);
         var w = +node.attr("width");
@@ -745,14 +745,14 @@ export var drawGraph = function (network) {
         var cp2x = x2 - inlineOffset * ux + vx * orthoOffset;
         var cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
 
-        cp1x = Math.min(Math.max(0, cp1x), width - EDGE_OFFSET);
-        cp1y = Math.min(Math.max(EDGE_OFFSET, cp1y), height - EDGE_OFFSET);
-        cp2x = Math.min(Math.max(0, cp2x), width - EDGE_OFFSET);
-        cp2y = Math.min(Math.max(EDGE_OFFSET, cp2y), height - EDGE_OFFSET);
+        cp1x = Math.min(Math.max(0, cp1x), width);
+        cp1y = Math.min(Math.max(0, cp1y), height);
+        cp2x = Math.min(Math.max(0, cp2x), width);
+        cp2y = Math.min(Math.max(0, cp2y), height);
 
         d.label = {
-            x: (x1 + cp1x + cp2x + x2) / 4,
-            y: (y1 + cp1y + cp2y + y2) / 4
+            x: Math.min(Math.max((x1 + cp1x + cp2x + x2) / 4, EDGE_OFFSET), width - 2 * EDGE_OFFSET),
+            y: Math.min(Math.max((y1 + cp1y + cp2y + y2) / 4, EDGE_OFFSET), height - EDGE_OFFSET)
         };
 
         return "C" + cp1x + " " + cp1y + ", " +
@@ -1431,7 +1431,8 @@ export var drawGraph = function (network) {
                         }
                     }
 
-                    d.label = { x: Math.min(width, x1), y: Math.min(height, y1 + dry * 3) };
+                    d.label = { x: Math.min(width - (13 * offset), x1), // For 4 decimal places
+                        y: Math.min(height - offset, y1 + dry * 3)};
 
                     return "M" + x1 + "," + y1 +
                         "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
