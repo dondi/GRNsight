@@ -139,7 +139,7 @@ const addError = (output, message) => {
         output.errors.push(errorsList.errorsCountError);
         return false;
     }
-}
+};
 
 
 const TWO_COL_SHEET_NAMES = [
@@ -213,7 +213,7 @@ const parseTwoColumnSheet = (sheet) => {
                 if (typeof currentValue === Number) {
                     output.data[currentGene] = currentValue;
                 } else {
-                    addError(output, errorsList.invalidValueError(sheet.name, currentValue, row + 1))
+                    addError(output, errorsList.invalidValueError(sheet.name, currentValue, row + 1));
                 }
             }
         }
