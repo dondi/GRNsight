@@ -71,9 +71,9 @@ describe("warnings-adjacency-matrix-modifications", function () {
 
     // here...
     describe("missing-column-end", function () {
-        it("no warnings", function () {
-            test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
-            test.noWarnings("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx");
+        it("5 invalid matrix data warnings", function () {
+            test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx", 5);
+            test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx", 5);
         });
     });
 
@@ -106,7 +106,7 @@ describe("warnings-adjacency-matrix-modifications", function () {
     });
 
     describe("missing-row-middle", function () {
-        it("noWarnings", function () {
+        it("1 invalid matrix data warning", function () {
             test.noWarnings("test-files/adjacency-matrix-modifications/missing-row-middle-input.xlsx");
             test.noWarnings("test-files/adjacency-matrix-modifications/missing-row-middle-output.xlsx");
         });
@@ -114,8 +114,8 @@ describe("warnings-adjacency-matrix-modifications", function () {
 
     describe("missing-value-bottom-corner", function () {
         it("no warnings", function () {
-            test.noWarnings("test-files/adjacency-matrix-modifications/missing-value-bottom-corner-input.xlsx");
-            test.noWarnings("test-files/adjacency-matrix-modifications/missing-value-bottom-corner-output.xlsx");
+            test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/missing-value-bottom-corner-input.xlsx", 1);
+            test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/missing-value-bottom-corner-output.xlsx", 1);
         });
     });
 

@@ -339,6 +339,26 @@ var emptyMatrixDataError = function (input, frequency) {
     assert.equal(frequency, emptyMatrixDataCount.length);
 };
 
+var emptyColumnDataError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseNetworkSheet(sheet);
+    var emptyRowDataCount = network.errors.filter(function (x) {
+        return x.errorCode === "EMPTY_COLUMN_DATA";
+    });
+
+    assert.equal(frequency, emptyRowDataCount.length);
+};
+
+var emptyColumnError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseNetworkSheet(sheet);
+    var emptyRowDataCount = network.errors.filter(function (x) {
+        return x.errorCode === "EMPTY_COLUMN";
+    });
+
+    assert.equal(frequency, emptyRowDataCount.length);
+};
+
 
 
 // WARNING TEST FUNCTIONS:
@@ -508,6 +528,8 @@ exports.nonMonotonicTimePointsError = nonMonotonicTimePointsError;
 exports.nonNumericalTimePointError = nonNumericalTimePointError;
 exports.emptyRowDataError = emptyRowDataError;
 exports.emptyMatrixDataError = emptyMatrixDataError;
+exports.emptyColumnDataError = emptyColumnDataError;
+exports.emptyColumnError = emptyColumnError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
