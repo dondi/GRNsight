@@ -5,8 +5,8 @@ var INTERACTION_ID = "interaction";
 var NAME_ID = "name";
 var WEIGHT_ID = "weight";
 
-var grnsightToGraphMlJson = function (network) {
-    var convertedNetwork = {
+var grnsightToGraphMlJson = function (workbook) {
+    var convertedworkbook = {
         graphml: {
             "@xmlns": "http://graphml.graphdrawing.org/xmlns",
             "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
@@ -42,8 +42,8 @@ var grnsightToGraphMlJson = function (network) {
         }
     };
 
-    if (network.sheetType === constants.WEIGHTED) {
-        convertedNetwork.graphml.key.push({
+    if (workbook.sheetType === constants.WEIGHTED) {
+        convertedworkbook.graphml.key.push({
             "@id": WEIGHT_ID,
             "@for": "edge",
             "@attr.name": "weight",
@@ -51,10 +51,10 @@ var grnsightToGraphMlJson = function (network) {
         });
     }
 
-    convertedNetwork.graphml.graph = {
+    convertedworkbook.graphml.graph = {
         "@edgedefault": "directed",
 
-        node: network.genes.map(function (gene) {
+        node: workbook.genes.map(function (gene) {
             return {
                 "@id": gene.name,
                 data: {
@@ -64,9 +64,9 @@ var grnsightToGraphMlJson = function (network) {
             };
         }),
 
-        edge: network.links.map(function (link) {
-            var sourceGeneId = network.genes[link.source].name;
-            var targetGeneId = network.genes[link.target].name;
+        edge: workbook.links.map(function (link) {
+            var sourceGeneId = workbook.genes[link.source].name;
+            var targetGeneId = workbook.genes[link.target].name;
 
             var edge = {
                 "@source": sourceGeneId,
@@ -84,7 +84,7 @@ var grnsightToGraphMlJson = function (network) {
                 ]
             };
 
-            if (network.sheetType === constants.WEIGHTED) {
+            if (workbook.sheetType === constants.WEIGHTED) {
                 edge.data.push({
                     "@key": WEIGHT_ID,
                     "#text": link.value
@@ -95,15 +95,15 @@ var grnsightToGraphMlJson = function (network) {
         })
     };
 
-    if (network.filename) {
-        convertedNetwork.graphml.graph["@id"] = network.filename;
+    if (workbook.filename) {
+        convertedworkbook.graphml.graph["@id"] = workbook.filename;
     }
 
-    return convertedNetwork;
+    return convertedworkbook;
 };
 
-module.exports = function (network) {
-    return xmlbuilder.create(grnsightToGraphMlJson(network), {
+module.exports = function (workbook) {
+    return xmlbuilder.create(grnsightToGraphMlJson(workbook), {
         version: "1.0",
         encoding: "UTF-8"
     }).end({

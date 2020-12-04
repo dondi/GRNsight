@@ -1,6 +1,6 @@
 var constants = require(__dirname + "/../constants");
 var semanticChecker = require(__dirname + "/../semantic-checker");
-var initNetwork = require(__dirname + "/../helpers.js").initNetwork;
+var initworkbook = require(__dirname + "/../helpers.js").initworkbook;
 
 var GENE_NAME = 0;
 var RELATIONSHIP = 1;
@@ -34,7 +34,7 @@ module.exports = function (sif) {
         return !isNaN(+relationship);
     };
 
-    var sifNetworkType = function (sifEntries) {
+    var sifworkbookType = function (sifEntries) {
         var errors = [];
         var relationships = [];
         var numRowsWithTwoColumns = 0;
@@ -76,7 +76,7 @@ module.exports = function (sif) {
 
     var genes = [];
     var links = [];
-    var networkType = "unweighted";
+    var workbookType = "unweighted";
 
     var nullEntries = entries.filter(function (entry) {
         return entry === null;
@@ -91,13 +91,13 @@ module.exports = function (sif) {
             }
         });
 
-        networkType = sifNetworkType(entries);
-        if (networkType.warnings) {
-            warnings.push(networkType.warnings);
+        workbookType = sifworkbookType(entries);
+        if (workbookType.warnings) {
+            warnings.push(workbookType.warnings);
         }
 
-        if (networkType.errors) {
-            networkType.errors.forEach(function (error) {
+        if (workbookType.errors) {
+            workbookType.errors.forEach(function (error) {
                 errors.push(error);
             });
         }
@@ -116,7 +116,7 @@ module.exports = function (sif) {
                         source: sourceIndex,
                         target: targetIndex
                     };
-                    if (networkType.sheetType === constants.WEIGHTED) {
+                    if (workbookType.sheetType === constants.WEIGHTED) {
                         link.value = +entry[RELATIONSHIP];
                     }
                     links.push(link);
@@ -125,20 +125,20 @@ module.exports = function (sif) {
         });
     }
 
-    var network = initNetwork({
+    var workbook = initworkbook({
         genes: emptySifFile ? [] : genes.map(function (geneName) {
             return { name: geneName };
         }),
         links: links,
         errors: errors,
         warnings: warnings,
-        sheetType: networkType.sheetType,
+        sheetType: workbookType.sheetType,
         positiveWeights: [],
         negativeWeights: [],
         meta: {},
         expression: {}
     });
 
-    return (network.errors.length === 0) ? semanticChecker(network) : network;
+    return (workbook.errors.length === 0) ? semanticChecker(workbook) : workbook;
 
 };

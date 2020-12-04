@@ -9,22 +9,22 @@ const createArrayWithZeroes = function (length) {
     return Array.apply(null, Array(length)).map(() => 0);
 };
 
-const buildNetworkSheet = function (genes, links) {
+const buildworkbookSheet = function (genes, links) {
     const geneNameArray = buildGeneNameArray(genes);
-    // The +1 to length is because we ALSO add the gene name to each of the network sheet arrays.
-    const networkSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
+    // The +1 to length is because we ALSO add the gene name to each of the workbook sheet arrays.
+    const workbookSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
 
-    // Place the gene name in the beginning of the network sheet array.
+    // Place the gene name in the beginning of the workbook sheet array.
     // EX: ["CIN5", 0, 0, 1]
-    Object.keys(geneNameArray).forEach(index => networkSheet[index][0] = geneNameArray[index]);
+    Object.keys(geneNameArray).forEach(index => workbookSheet[index][0] = geneNameArray[index]);
     geneNameArray.unshift("cols regulators/rows targets");
 
     links.forEach((link) => {
-        networkSheet[link.source][link.target + 1] = link.value;
+        workbookSheet[link.source][link.target + 1] = link.value;
     });
 
-    networkSheet.unshift(geneNameArray);
-    return networkSheet;
+    workbookSheet.unshift(geneNameArray);
+    return workbookSheet;
 };
 
 
@@ -66,30 +66,30 @@ const buildExpressionSheets = function (expressions) {
     return builtExpressionSheets;
 };
 
-const buildXlsxSheet = function (network) {
+const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
     resultSheet.push(
         {
-            "name": "network",
-            "data": buildNetworkSheet(network.genes, network.links)
+            "name": "workbook",
+            "data": buildworkbookSheet(workbook.genes, workbook.links)
         },
 
         {
-            "name": "network_weights",
-            "data": buildNetworkSheet(network.genes, network.links)
+            "name": "workbook_weights",
+            "data": buildworkbookSheet(workbook.genes, workbook.links)
         }
     );
 
-    Object.keys(network).forEach((key) => {
+    Object.keys(workbook).forEach((key) => {
         switch (key) {
         case "meta":
-            resultSheet.push(buildMetaSheet(network[key]));
+            resultSheet.push(buildMetaSheet(workbook[key]));
             break;
         case "test":
-            resultSheet.push(...buildTestSheets(network[key]));
+            resultSheet.push(...buildTestSheets(workbook[key]));
             break;
         case "expression":
-            resultSheet.push(...buildExpressionSheets(network[key]));
+            resultSheet.push(...buildExpressionSheets(workbook[key]));
             break;
         default:
             break;
@@ -99,6 +99,6 @@ const buildXlsxSheet = function (network) {
     return resultSheet;
 };
 
-module.exports = function (network) {
-    return xlsx.build(buildXlsxSheet(network));
+module.exports = function (workbook) {
+    return xlsx.build(buildXlsxSheet(workbook));
 };

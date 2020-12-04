@@ -1,6 +1,6 @@
 var constants = require(__dirname + "/constants");
 
-var createEmptyNetwork = function () {
+var createEmptyworkbook = function () {
     return {
         genes: [],
         links: [],
@@ -14,11 +14,11 @@ var createEmptyNetwork = function () {
     };
 };
 
-// Outside of module.exports because needs too access createEmptyNetwork
-var initNetwork = function (net) {
-    const network = createEmptyNetwork();
-    Object.assign(network, net);    // copies fields without overriding empty ones :)
-    return network;
+// Outside of module.exports because needs too access createEmptyworkbook
+var initworkbook = function (net) {
+    const workbook = createEmptyworkbook();
+    Object.assign(workbook, net);    // copies fields without overriding empty ones :)
+    return workbook;
 };
 
 module.exports = {
@@ -33,7 +33,7 @@ module.exports = {
         res.header(constants.GRNSIGHT_FILENAME_HEADER, path.split("/").pop());
     },
 
-    createEmptyNetwork: createEmptyNetwork,
-    initNetwork: initNetwork
+    createEmptyworkbook: createEmptyworkbook,
+    initworkbook: initworkbook
 
 };

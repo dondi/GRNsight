@@ -12,7 +12,7 @@ var convertResponse = function (app, req, res, converter) {
 var exportResponse = function (app, req, res, converter) {
     helpers.attachCorsHeader(res, app);
     res.header("Content-Disposition", "attachment;filename=\"" + req.body.filename + "\"");
-    return res.status(200).send(converter(JSON.parse(req.body.network)));
+    return res.status(200).send(converter(JSON.parse(req.body.workbook)));
 };
 
 var generalExportError = function (res, error) {

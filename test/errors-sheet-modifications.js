@@ -14,8 +14,8 @@ describe("errors-sheet-modifications", function () {
     });
 
     describe("missing-sheet", function () {
-        it("should return missing network error code on input sheet", function () {
-            test.missingNetworkError("test-files/sheet-modifications/missing-sheet-input.xlsx", 1);
+        it("should return missing workbook error code on input sheet", function () {
+            test.missingworkbookError("test-files/sheet-modifications/missing-sheet-input.xlsx", 1);
             test.noErrors("test-files/sheet-modifications/missing-sheet-output.xlsx");
         });
     });
@@ -29,16 +29,16 @@ describe("errors-sheet-modifications", function () {
     });
 
     describe("wrong-sheet-name", function () {
-        it("should return missing network error code on output sheet", function () {
+        it("should return missing workbook error code on output sheet", function () {
             test.noErrors("test-files/sheet-modifications/wrong-sheet-name-input.xlsx");
-            test.missingNetworkError("test-files/sheet-modifications/wrong-sheet-name-output.xlsx", 1);
+            test.missingworkbookError("test-files/sheet-modifications/wrong-sheet-name-output.xlsx", 1);
         });
     });
 
     describe("sheet-name-capitalized", function () {
         it("should return no errors", function () {
-            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-network-optimized-weights.xlsx");
-            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-network.xlsx", 1);
+            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-workbook-optimized-weights.xlsx");
+            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-workbook.xlsx", 1);
         });
     });
 

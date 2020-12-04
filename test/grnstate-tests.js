@@ -3,7 +3,7 @@ import { grnState } from "../web-client/public/js/grnstate";
 
 describe("The grnState model object", () => {
     it("should update the reset normalization maximum correctly", () => {
-        grnState.network = {
+        grnState.workbook = {
             positiveWeights: [0.7715106466403678, 5.212343052095555, 0.826365326790911, 1.5180198066137216,
                 0.27964603867183396, 2.9870960868914778, 0.7743557796125339, 0.6701684007311992, 0.22069064019031245,
                 0.2841810246722045, 0.08852330457981578, 0.5563132195423768],
@@ -14,7 +14,7 @@ describe("The grnState model object", () => {
         };
         grnState.resetNormalizationMax.should.equal(5.212343052095555);
 
-        grnState.network = {
+        grnState.workbook = {
             positiveWeights: [1, 2, 3, 4, 5, 6, 7, 8],
             negativeWeights: [-1, -2, -3, -4, -5, -6, -7, -8],
         };

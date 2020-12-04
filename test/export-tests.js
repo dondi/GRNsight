@@ -5,7 +5,7 @@ var xlsx = require("node-xlsx");
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
 
-var unweightedTestNetwork = {
+var unweightedTestworkbook = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -22,7 +22,7 @@ var unweightedTestNetwork = {
     sheetType: "unweighted"
 };
 
-var weightedTestNetwork = {
+var weightedTestworkbook = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -39,7 +39,7 @@ var weightedTestNetwork = {
     sheetType: "weighted"
 };
 
-var unweightedTestNetworkWithCycle = {
+var unweightedTestworkbookWithCycle = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -59,7 +59,7 @@ var unweightedTestNetworkWithCycle = {
     sheetType: "unweighted"
 };
 
-var weightedTestNetworkWithCycle = {
+var weightedTestworkbookWithCycle = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -80,8 +80,8 @@ var weightedTestNetworkWithCycle = {
 };
 
 describe("Export to SIF", function () {
-    it("should export unweighted networks to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(unweightedTestNetwork).split("\n");
+    it("should export unweighted workbooks to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(unweightedTestworkbook).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "", "" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "pd", "C" ]);
@@ -89,8 +89,8 @@ describe("Export to SIF", function () {
         expect(lines[4].split("\t")).to.deep.equal([ "D", "", "" ]);
     });
 
-    it("should export weighted networks to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(weightedTestNetwork).split("\n");
+    it("should export weighted workbooks to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(weightedTestworkbook).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "", "" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
@@ -98,8 +98,8 @@ describe("Export to SIF", function () {
         expect(lines[4].split("\t")).to.deep.equal([ "D", "", "" ]);
     });
 
-    it("should export unweighted networks with cycles to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(unweightedTestNetworkWithCycle).split("\n");
+    it("should export unweighted workbooks with cycles to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(unweightedTestworkbookWithCycle).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "pd", "A" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "pd", "C" ]);
@@ -108,8 +108,8 @@ describe("Export to SIF", function () {
         expect(lines[5].split("\t")).to.deep.equal([ "E", "", "" ]);
     });
 
-    it("should export weighted networks with cycles to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(weightedTestNetworkWithCycle).split("\n");
+    it("should export weighted workbooks with cycles to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(weightedTestworkbookWithCycle).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "0.875", "A" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
@@ -127,8 +127,8 @@ var EXPORT_COMMENT = "<!-- Exported by GRNsight v" + constants.VERSION + "  " +
 // We'll allow single quotes here because graphMl has a lot of double quotes in it
 // and it's easier to not escape them all.
 describe("Export to GraphML", function () {
-    it("should export unweighted networks to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
+    it("should export unweighted workbooks to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(unweightedTestworkbook).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -176,8 +176,8 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export weighted networks to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(weightedTestNetwork).split("\n").map(function (line) {
+    it("should export weighted workbooks to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(weightedTestworkbook).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -229,8 +229,8 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export unweighted networks with cycles to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(unweightedTestNetworkWithCycle).split("\n").map(function (line) {
+    it("should export unweighted workbooks with cycles to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(unweightedTestworkbookWithCycle).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -289,8 +289,8 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export weighted networks with cycles to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(weightedTestNetworkWithCycle).split("\n").map(function (line) {
+    it("should export weighted workbooks with cycles to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(weightedTestworkbookWithCycle).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -355,9 +355,9 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export networks with a filename as the graph element id", function () {
-        var networkWithFilename = extend(true, unweightedTestNetwork, { filename: "hello.graphml" });
-        var lines = exportController.grnsightToGraphMl(networkWithFilename).split("\n").map(function (line) {
+    it("should export workbooks with a filename as the graph element id", function () {
+        var workbookWithFilename = extend(true, unweightedTestworkbook, { filename: "hello.graphml" });
+        var lines = exportController.grnsightToGraphMl(workbookWithFilename).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -406,7 +406,7 @@ describe("Export to GraphML", function () {
     });
 });
 
-const inputNetwork = {
+const inputworkbook = {
     "genes": [
         { "name": "ACE2" },
         { "name": "AFT2" },
@@ -554,10 +554,10 @@ const inputNetwork = {
 };
 
 describe("Export to spreadsheet", function () {
-    it("should export a network to a spreadsheet object properly", function () {
+    it("should export a workbook to a spreadsheet object properly", function () {
         const expectedSheet = [
             {
-                name: "network",
+                name: "workbook",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
@@ -567,7 +567,7 @@ describe("Export to spreadsheet", function () {
             },
 
             {
-                name: "network_weights",
+                name: "workbook_weights",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
@@ -680,7 +680,7 @@ describe("Export to spreadsheet", function () {
             }
         ];
 
-        const actualSheet = exportController.grnsightToXlsx(inputNetwork);
+        const actualSheet = exportController.grnsightToXlsx(inputworkbook);
         expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
 });

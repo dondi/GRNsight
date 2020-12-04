@@ -6,7 +6,7 @@ describe("expression-data-import-tests", function () {
 
     describe("MISSING_EXPRESSION_SHEET", function () {
         it.skip("_log2_expression or _log2_optimized_expression worksheet was not detected.",
-        "The network graph will display without node coloring. If you wish for the network to be colored",
+        "The workbook graph will display without node coloring. If you wish for the workbook to be colored",
         "you can upload your own expression data by adding one or more of those worksheets to your Excel",
         "workbook or select, or select from data in GRNsight's Expression Database, found in the Node menu or panel.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);
@@ -20,25 +20,25 @@ describe("expression-data-import-tests", function () {
     });
 
     describe("GENE_MISMATCH", function () {
-        it("Gene names in column A do not match the order of those in network sheet.", function () {
+        it("Gene names in column A do not match the order of those in workbook sheet.", function () {
             test.geneMismatchError("test-files/expression-data-test-sheets/expression_sheet_wrong_order_gene_names.xlsx", 1);
         });
     });
 
     describe("wrong_case_gene_names", function () {
-        it.skip("Gene names in column A do not match the case of those in network sheet.", function () {
+        it.skip("Gene names in column A do not match the case of those in workbook sheet.", function () {
             test.labelError("test-files/expression-data-test-sheets/expression_sheet_mismatched_case_gene_names.xlsx", 1);
         });
     });
 
     describe("MISSING_GENE_NAME", function () {
-        it("Gene names in column A are missing a gene name listed in the network sheet.", function () {
+        it("Gene names in column A are missing a gene name listed in the workbook sheet.", function () {
             test.missingGeneNameError("test-files/expression-data-test-sheets/expression_sheet_missing_gene_name.xlsx", 1);
         });
     });
 
     describe("EXTRA_GENE_NAME", function () {
-        it("Gene names in column A have an extra gene name than those listed in the network sheet.", function () {
+        it("Gene names in column A have an extra gene name than those listed in the workbook sheet.", function () {
             test.extraGeneNameError("test-files/expression-data-test-sheets/expression_sheet_extra_gene_name.xlsx", 1);
         });
     });

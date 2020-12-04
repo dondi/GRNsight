@@ -49,7 +49,7 @@ const errorsList = {
 
     errorsCountError: {
         errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This network has over 20 errors.",
+        possibleCause: "This workbook has over 20 errors.",
         suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
             "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
             "further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -97,7 +97,7 @@ const warningsList = {
         return {
             warningCode: "MISSING_EXPRESSION_SHEET",
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
-            not detected. The network graph will display without node coloring. If you want \
+            not detected. The workbook graph will display without node coloring. If you want \
             the nodes to be colored with expression data, you can upload your own expression \
             data by adding one or more of those worksheets to your Excel workbook or select \
             from data in GRNsight's Expression Database, found in the Node menu or panel."
@@ -113,19 +113,19 @@ const warningsList = {
 };
 
 
-const addWarning = (network, message) => {
+const addWarning = (workbook, message) => {
     let warningsCount;
-    if (!Object.keys(network).includes("warnings")) {
+    if (!Object.keys(workbook).includes("warnings")) {
         warningsCount = 0;
-        network.warnings = [];
+        workbook.warnings = [];
     } else {
-        warningsCount = network.warnings.length;
+        warningsCount = workbook.warnings.length;
     }
     const MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        network.warnings.push(message);
+        workbook.warnings.push(message);
     } else {
-        network.errors.push(errorsList.warningsCountError);
+        workbook.errors.push(errorsList.warningsCountError);
         return false;
     }
 };
@@ -239,12 +239,12 @@ const parseTwoColumnSheet = (sheet) => {
     return output.data;
 };
 
-module.exports = function (workbook) {
+module.exports = function (workbookFile) {
     let output = {
         meta: {},
         test: {} // 2-column data
     };
-    workbook.forEach(function (sheet) {
+    workbookFile.forEach(function (sheet) {
         if (sheet.name === "optimization_parameters") {
             output.meta = parseMetaDataSheet(sheet);
             // above line creates an object from the optimization paramerters sheet

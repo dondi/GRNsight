@@ -1,18 +1,18 @@
 /* eslint-disable camelcase */
 var helpers = require(__dirname + "/helpers");
 
-var processDemo = function (path, res, app, network) {
+var processDemo = function (path, res, app, workbook) {
     helpers.attachCorsHeader(res, app);
     helpers.attachFileHeaders(res, path);
-    return network.errors.length === 0
-        ? // If all looks well, return the network with an all clear
-        res.json(network)
-        : // If all does not look well, return the network with an error 400
-        res.status(400).json(network);
+    return workbook.errors.length === 0
+        ? // If all looks well, return the workbook with an all clear
+        res.json(workbook)
+        : // If all does not look well, return the workbook with an error 400
+        res.status(400).json(workbook);
 };
 
-var demoNetwork1 = function (path, res, app) {
-    let network1 = {
+var demoworkbook1 = function (path, res, app) {
+    let workbook1 = {
         genes: [
             {name: "ACE2"},
             {name: "ASH1"},
@@ -1660,11 +1660,11 @@ var demoNetwork1 = function (path, res, app) {
             }
         }
     };
-    return processDemo(path, res, app, network1);
+    return processDemo(path, res, app, workbook1);
 };
 
-var demoNetwork2 = function (path, res, app) {
-    let network2 = {
+var demoworkbook2 = function (path, res, app) {
+    let workbook2 = {
         genes: [
             {name: "ACE2"},
             {name: "ASH1"},
@@ -3347,11 +3347,11 @@ var demoNetwork2 = function (path, res, app) {
             }
         }
     };
-    return processDemo(path, res, app, network2);
+    return processDemo(path, res, app, workbook2);
 };
 
-var demoNetwork3 = function (path, res, app) {
-    let network3 = {
+var demoworkbook3 = function (path, res, app) {
+    let workbook3 = {
         genes: [
             {name: "ABF1"}, {name: "ACE2"},
             {name: "AFT1"}, {name: "CIN5"},
@@ -3927,11 +3927,11 @@ var demoNetwork3 = function (path, res, app) {
         }
 
     };
-    return processDemo(path, res, app, network3);
+    return processDemo(path, res, app, workbook3);
 };
 
-var demoNetwork4 = function (path, res, app) {
-    let network4 = {
+var demoworkbook4 = function (path, res, app) {
+    let workbook4 = {
         genes: [
             {name: "ABF1"}, {name: "ACE2"},
             {name: "AFT1"}, {name: "CIN5"},
@@ -4525,17 +4525,17 @@ var demoNetwork4 = function (path, res, app) {
 
         }
     };
-    return processDemo(path, res, app, network4);
+    return processDemo(path, res, app, workbook4);
 };
 
-module.exports = function (path, res, app, network) {
+module.exports = function (path, res, app, workbook) {
     if (path === "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx") {
-        return demoNetwork1(path, res, app, network);
+        return demoworkbook1(path, res, app, workbook);
     } else if (path === "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx") {
-        return demoNetwork2(path, res, app, network);
+        return demoworkbook2(path, res, app, workbook);
     } else if (path === "test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx") {
-        return demoNetwork3(path, res, app, network);
+        return demoworkbook3(path, res, app, workbook);
     } else if (path === "test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx") {
-        return demoNetwork4(path, res, app, network);
+        return demoworkbook4(path, res, app, workbook);
     }
 };
