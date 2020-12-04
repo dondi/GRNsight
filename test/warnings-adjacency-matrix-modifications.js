@@ -48,9 +48,9 @@ describe("warnings-adjacency-matrix-modifications", function () {
 
     describe("extra-data-random-cell-other", function () {
         it("5 invalid data", function () {
-            test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-only-input.xlsx", 5);
-            test.noWarnings("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-only-output.xlsx");
-            test.missingTargetWarning("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-optimized-only-output.xlsx", 1);
+            test.invalidMatrixDataWarning("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx", 5);
+            test.noWarnings("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-output.xlsx");
+            test.missingTargetWarning("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx", 1);
         });
     });
 
@@ -145,7 +145,7 @@ describe("warnings-adjacency-matrix-modifications", function () {
     // TEST NEEDS TO BE LOOKED AT
     describe("sheet-named-incorrectly", function () {
         xit("should return a wrong name warning", function () {
-            test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-workbook.xlsx", 25);
+            test.incorrectlyNamedSheetWarning("test-files/sheet-tests/incorrecly-named-sheet-network.xlsx", 25);
         });
     });
 

@@ -25,9 +25,9 @@ describe("errors-adjacency-matrix-modifications", function () {
     describe("extra-data", function () {
         it("should return empty row errors", function () {
             test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-both-output.xlsx", 6);
-            test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-only-input.xlsx", 14);
-            test.noErrors("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-only-output.xlsx");
-            test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-optimized-only-output.xlsx", 9);
+            test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx", 14);
+            test.noErrors("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-output.xlsx");
+            test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-optimized-only-output.xlsx", 9);
         });
     });
 
@@ -54,8 +54,8 @@ describe("errors-adjacency-matrix-modifications", function () {
 
     describe("extra-data-random-cell-other", function () {
         it("should return empty row error", function () {
-            test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-only-input.xlsx", 14);
-            test.noErrors("test-files/adjacency-matrix-modifications/extra-data-random-cell-workbook-only-output.xlsx");
+            test.emptyRowError("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-input.xlsx", 14);
+            test.noErrors("test-files/adjacency-matrix-modifications/extra-data-random-cell-network-only-output.xlsx");
         });
     });
 

@@ -3,7 +3,7 @@ var xlsx = require("node-xlsx");
 // var cytoscape = require("cytoscape");
 var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
-var parseWorkbookSheet = require(__dirname + "/../server/controllers" + "/workbookFile-sheet-parser");
+var parseWorkbookSheet = require(__dirname + "/../server/controllers" + "/workbook-sheet-parser");
 
 var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expression-sheet-parser");
 

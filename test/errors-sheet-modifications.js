@@ -37,8 +37,8 @@ describe("errors-sheet-modifications", function () {
 
     describe("sheet-name-capitalized", function () {
         it("should return no errors", function () {
-            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-workbook-optimized-weights.xlsx");
-            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-workbook.xlsx", 1);
+            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-network-optimized-weights.xlsx");
+            test.noErrors("test-files/spreadsheet-controller-test-files/sheet-name-capitalized-network.xlsx", 1);
         });
     });
 
