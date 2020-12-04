@@ -327,12 +327,14 @@ var crossSheetInteractions = function (workbook) {
 
     if (additionalData && additionalData.test) {
         // Add errors and warnings from test sheets
-        if (additionalData.test.errors !== undefined) {
-            additionalData.test.errors.forEach(data => network.errors.push(data));
-        }
+        for (let sheet in additionalData.test) {
+            if (additionalData.test[sheet].errors !== undefined) {
+                additionalData.test[sheet].errors.forEach(data => network.errors.push(data));
+            }
 
-        if (additionalData.test.warnings !== undefined) {
-            additionalData.test.warnings.forEach(data => network.warnings.push(data));
+            if (additionalData.test[sheet].warnings !== undefined) {
+                additionalData.test[sheet].warnings.forEach(data => network.warnings.push(data));
+            }
         }
     }
 
