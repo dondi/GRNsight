@@ -11,7 +11,7 @@ describe.skip("graph-library-tests", function () {
         it("convert to cytoscape correctly", function () {
             var input = "test-files/graph-statistics-tests/graph-stats-demo.xlsx";
             var sheet = xlsx.parse(input);
-            var workbook = spreadsheetController.parseworkbookSheet(sheet);
+            var workbook = spreadsheetController.parseWorkbookSheet(sheet);
             // var cytoscapeElements = grnSightToCytoscape(workbook);
             var cytoscapeElements = spreadsheetController.grnSightToCytoscape(workbook);
 

@@ -136,7 +136,7 @@ const isExpressionSheet = (sheetName) => {
     });
 };
 
-// Going to continue basing this section off of the parseworkbookSheet function in spreadsheet-controller.js
+// Going to continue basing this section off of the parseWorkbookSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
 
     var geneData = {};

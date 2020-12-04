@@ -3,7 +3,7 @@ var xlsx = require("node-xlsx");
 // var cytoscape = require("cytoscape");
 var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
-var parseworkbookSheet = require(__dirname + "/../server/controllers" + "/workbook-sheet-parser");
+var parseWorkbookSheet = require(__dirname + "/../server/controllers" + "/workbookFile-sheet-parser");
 
 var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expression-sheet-parser");
 
@@ -11,13 +11,13 @@ var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expr
 
 var noErrors = function (input) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     assert.equal(0, workbook.errors.length);
 };
 
 var duplicateGeneError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -37,7 +37,7 @@ var duplicateGeneError = function (input, frequency) {
 
 var invalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -51,7 +51,7 @@ var invalidGeneLengthError = function (input, frequency) {
 
 var corruptGeneError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -65,7 +65,7 @@ var corruptGeneError = function (input, frequency) {
 
 var unknownError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -79,7 +79,7 @@ var unknownError = function (input, frequency) {
 
 var missingValueError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -93,7 +93,7 @@ var missingValueError = function (input, frequency) {
 
 var missingworkbookError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -107,7 +107,7 @@ var missingworkbookError = function (input, frequency) {
 
 var specialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -121,7 +121,7 @@ var specialCharacterError = function (input, frequency) {
 
 var invalidDataTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -135,7 +135,7 @@ var invalidDataTypeError = function (input, frequency) {
 
 var workbookSizeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -149,7 +149,7 @@ var workbookSizeError = function (input, frequency) {
 
 var checkForGene = function (test, frequency, input) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.genes.filter(function (gene) {
         return gene.name === test;
@@ -158,7 +158,7 @@ var checkForGene = function (test, frequency, input) {
 
 var warningsCountError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var warningsCountErrorArray = workbook.errors.filter(function (x) {
         return x.errorCode === "WARNINGS_OVERLOAD";
     });
@@ -168,7 +168,7 @@ var warningsCountError = function (input, frequency) {
 
 var errorsCountError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var errorsCountErrorArray = workbook.errors.filter(function (x) {
         return x.errorCode === "ERRORS_OVERLOAD";
     });
@@ -178,7 +178,7 @@ var errorsCountError = function (input, frequency) {
 
 var emptyRowError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(frequency, workbook.errors.length);
 
@@ -321,7 +321,7 @@ var nonNumericalTimePointError = function (input, frequency) {
 
 var emptyRowDataError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var emptyRowDataCount = workbook.errors.filter(function (x) {
         return x.errorCode === "EMPTY_ROW_DATA";
     });
@@ -331,7 +331,7 @@ var emptyRowDataError = function (input, frequency) {
 
 var emptyMatrixDataError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var emptyMatrixDataCount = workbook.errors.filter(function (x) {
         return x.errorCode === "EMPTY_MATRIX_DATA";
     });
@@ -341,7 +341,7 @@ var emptyMatrixDataError = function (input, frequency) {
 
 var emptyColumnDataError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var emptyRowDataCount = workbook.errors.filter(function (x) {
         return x.errorCode === "EMPTY_COLUMN_DATA";
     });
@@ -351,7 +351,7 @@ var emptyColumnDataError = function (input, frequency) {
 
 var emptyColumnError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var emptyRowDataCount = workbook.errors.filter(function (x) {
         return x.errorCode === "EMPTY_COLUMN";
     });
@@ -365,14 +365,14 @@ var emptyColumnError = function (input, frequency) {
 
 var noWarnings = function (input) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
 
     assert.equal(0, workbook.warnings.length);
 };
 
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var missingSourceCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "MISSING_SOURCE";
     });
@@ -382,7 +382,7 @@ var missingSourceWarning = function (input, frequency) {
 
 var invalidMatrixDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var invalidDataCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "INVALID_DATA";
     });
@@ -392,7 +392,7 @@ var invalidMatrixDataWarning = function (input, frequency) {
 
 var missingTargetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var missingTargetCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "MISSING_TARGET";
     });
@@ -402,7 +402,7 @@ var missingTargetWarning = function (input, frequency) {
 
 var randomDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var randomDataCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "RANDOM_DATA";
     });
@@ -412,7 +412,7 @@ var randomDataWarning = function (input, frequency) {
 
 var emptyRowWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var emptyRowCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "EMPTY_ROW";
     });
@@ -422,7 +422,7 @@ var emptyRowWarning = function (input, frequency) {
 
 var invalidworkbookSizeWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var invalidworkbookSizeCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "INVALID_workbook_SIZE";
     });
@@ -463,7 +463,7 @@ var incorrectlyNamedExpressionSheetWarning = function (input, frequency) {
 
 var incorrectlyNamedSheetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var incorrectlyNamedSheetCount = workbook.warnings.filter(function (x) {
         return x.warningCode === "INCORRECTLY_NAMED_SHEET";
     });
@@ -475,7 +475,7 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
 /*
 var shortestPath = function (input, directed, source, target, length) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var cytoscapeElements = spreadsheetController.grnSightToCytoscape(workbook);
 
     var cy = cytoscape({
@@ -489,7 +489,7 @@ var shortestPath = function (input, directed, source, target, length) {
 
 var betweennessCentrality = function (input, directed, node, centrality) {
     var sheet = xlsx.parse(input);
-    var workbook = parseworkbookSheet(sheet);
+    var workbook = parseWorkbookSheet(sheet);
     var cytoscapeElements = spreadsheetController.grnSightToCytoscape(workbook);
 
     var cy = cytoscape({

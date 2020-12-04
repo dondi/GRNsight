@@ -3,8 +3,8 @@ var xlsx = require("node-xlsx");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
-var parseworkbookSheet = require(__dirname + "/workbookFIle-sheet-parser");
-var demoworkbooks = require(__dirname + "/demo-workbookss");
+var parseWorkbookSheet = require(__dirname + "/workbookFile-sheet-parser");
+var demoworkbooks = require(__dirname + "/demo-workbooks");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
@@ -306,7 +306,7 @@ var difference = function (setA, setB) {
 };
 
 var crossSheetInteractions = function (workbookFile) {
-    var workbook = parseworkbookSheet(workbookFile);
+    var workbook = parseWorkbookSheet(workbookFile);
 
     // Parse expression and 2-column data, then add to workbook object
     // Eventually, will split this up into parsing for each type of sheet.
@@ -550,7 +550,7 @@ module.exports = function (app) {
         });
     }
 
-    // exporting parseworkbookSheet for use in testing. Do not remove!
+    // exporting parseWorkbookSheet for use in testing. Do not remove!
     return {
         grnSightToCytoscape: grnSightToCytoscape,
         processGRNmap : processGRNmap,

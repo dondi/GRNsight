@@ -310,7 +310,7 @@ var addTargetGene = function (workbook, sheet, row, targetGenes, genesList) {
     }
 };
 
-var parseworkbookSheet = function (sheet, workbook) {
+var parseWorkbookSheet = function (sheet, workbook) {
     var currentLink;
     var currentGene;
     var sourceGene;
@@ -523,7 +523,7 @@ module.exports = function (workbookFile) {
     }
 
     if (workbookSheet) {
-        return parseworkbookSheet(workbookSheet, workbook);
+        return parseWorkbookSheet(workbookSheet, workbook);
     } else {
         addError(workbook, errorList.missingworkbookError);
         return workbook;
