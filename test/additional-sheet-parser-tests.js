@@ -1,5 +1,6 @@
 var assert = require("chai").assert;
 var xlsx = require("node-xlsx");
+var test = require("./test");
 var parseAdditionalSheets = require(__dirname + "/../server/controllers/additional-sheet-parser");
 var grnmapOutputWorkbookPath = __dirname + "/../test-files/spreadsheet-controller-test-files/" +
   "15-genes_28-edges_db5-MO-LK_Sigmoid_estimation_missing-values_output.xlsx";
@@ -79,15 +80,61 @@ describe("additional-sheet-parser", function () {
         /* eslint-enable */
     });
 
-    it("correctly parses data in a 2-column format", function () {
-        var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
-        "2_column_data_format_test.xlsx");
-        var data = parseAdditionalSheets(workbook);
-        assert(data["test"]["degradation_rates"], {
-            "ACE2": 0.1118,
-            "ASH1": 0.2166,
-            "CIN5": 0.1005,
-            "GCR2": 0.0963
+    describe("two column sheets", function () {
+        it("correctly parses data in a 2-column format", function () {
+            var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
+            "2_column_data_format_test.xlsx");
+            var data = parseAdditionalSheets(workbook);
+            assert(data["test"]["degradation_rates"], {
+                "ACE2": 0.1118,
+                "ASH1": 0.2166,
+                "CIN5": 0.1005,
+                "GCR2": 0.0963
+            });
+        });
+
+        it("should return twoColumnIdError", function () {
+            test.twoColumnIdError("test-files/additional-sheet-test-files/two-column-sheets-incorrect-cell-A1.xlsx", 5);
+        });
+
+        it("should return additionalSheetIncorrectColumnHeaderError", function () {
+            test.additionalSheetIncorrectColumnHeaderError(
+                "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx", 5);
+        });
+
+        it("should return additionalSheetMissingColumnHeaderError", function () {
+            test.additionalSheetMissingColumnHeaderError(
+                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx", 5);
+        });
+
+        it("should return twoColumnInvalidGeneTypeError", function () {
+            test.twoColumnInvalidGeneTypeError(
+                "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-type.xlsx", 10);
+        });
+
+        it("should return twoColumnInvalidValueError", function () {
+            test.twoColumnInvalidValueError(
+                "test-files/additional-sheet-test-files/two-column-sheets-invalid-value.xlsx", 10);
+        });
+
+        it("should return twoColumnInvalidGeneLengthError", function () {
+            test.twoColumnInvalidGeneLengthError(
+                "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-length.xlsx", 5);
+        });
+
+        it("should return twoColumnSpecialCharacterError", function () {
+            test.twoColumnSpecialCharacterError(
+                "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx", 5);
+        });
+
+        // exports.twoColumnExtraneousDataWarning = twoColumnExtraneousDataWarning;
+
+        it("should return additionalSheetExtraneousDataWarning", function () {
+            test.additionalSheetExtraneousDataWarning(
+                "test-files/additional-sheet-test-files/two-column-sheets-extraneous-data.xlsx", 5);
         });
     });
+
+
+
 });

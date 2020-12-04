@@ -7,6 +7,8 @@ var parseNetworkSheet = require(__dirname + "/../server/controllers" + "/network
 
 var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expression-sheet-parser");
 
+var parseAdditionalSheet = require(__dirname + "/../server/controllers" + "/additional-sheet-parser");
+
 // ERROR TEST FUNCTIONS:
 
 var noErrors = function (input) {
@@ -502,6 +504,117 @@ var betweennessCentrality = function (input, directed, node, centrality) {
 };
 */
 
+
+
+
+
+
+// New Error Tests
+var twoColumnIdError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var twoColumnIdErrorCount = 0;
+    for (let page in network.test) {
+        twoColumnIdErrorCount += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "MISLABELED_ID_CELL";
+        }).length;
+    }
+    assert.equal(frequency, twoColumnIdErrorCount);
+};
+
+var additionalSheetIncorrectColumnHeaderError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var additionalSheetIncorrectColumnHeaderErrorCount = 0;
+    for (let page in network.test) {
+        additionalSheetIncorrectColumnHeaderErrorCount  += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "INCORRECT_COLUMN_HEADER";
+        }).length;
+    }
+    assert.equal(frequency, additionalSheetIncorrectColumnHeaderErrorCount);
+};
+
+var additionalSheetMissingColumnHeaderError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var additionalSheetMissingColumnHeaderErrorCount = 0;
+    for (let page in network.test) {
+        additionalSheetMissingColumnHeaderErrorCount += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "MISSING_COLUMN_HEADER";
+        }).length;
+    }
+    assert.equal(frequency, additionalSheetMissingColumnHeaderErrorCount);
+};
+
+var twoColumnInvalidGeneTypeError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var twoColumnInvalidGeneTypeErrorCount = 0;
+    for (let page in network.test) {
+        twoColumnInvalidGeneTypeErrorCount += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "INVALID_GENE_TYPE";
+        }).length;
+    }
+    assert.equal(frequency, twoColumnInvalidGeneTypeErrorCount);
+};
+
+var twoColumnInvalidValueError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var twoColumnInvalidValueErrorCount = 0;
+    for (let page in network.test) {
+        twoColumnInvalidValueErrorCount  += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "INVALID_VALUE";
+        }).length;
+    }
+    assert.equal(frequency, twoColumnInvalidValueErrorCount);
+};
+
+var twoColumnInvalidGeneLengthError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var twoColumnInvalidGeneLengthErrorCount = 0;
+    for (let page in network.test) {
+        twoColumnInvalidGeneLengthErrorCount  += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "INVALID_GENE_LENGTH";
+        }).length;
+    }
+    assert.equal(frequency, twoColumnInvalidGeneLengthErrorCount);
+};
+
+var twoColumnSpecialCharacterError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var twoColumnSpecialCharacterErrorCount = 0;
+    for (let page in network.test) {
+        twoColumnSpecialCharacterErrorCount += network.test[page].errors.filter(function (x) {
+            return x.errorCode === "INVALID_CHARACTER";
+        }).length;
+    }
+    assert.equal(frequency, twoColumnSpecialCharacterErrorCount);
+};
+
+// New Warning Tests
+
+var additionalSheetExtraneousDataWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var additionalSheetExtraneousDataWarningCount = 0;
+    for (let page in network.test) {
+        additionalSheetExtraneousDataWarningCount  += network.test[page].warnings.filter(function (x) {
+            return x.warningCode === "EXTRANEOUS_DATA";
+        }).length;
+    }
+    assert.equal(frequency, additionalSheetExtraneousDataWarningCount);
+};
+
+
+
+
+
+
+
+
 exports.noErrors = noErrors;
 exports.duplicateGeneError = duplicateGeneError;
 exports.invalidGeneLengthError = invalidGeneLengthError;
@@ -530,6 +643,25 @@ exports.emptyRowDataError = emptyRowDataError;
 exports.emptyMatrixDataError = emptyMatrixDataError;
 exports.emptyColumnDataError = emptyColumnDataError;
 exports.emptyColumnError = emptyColumnError;
+
+
+// New Error Tests
+exports.twoColumnIdError = twoColumnIdError;
+exports.additionalSheetIncorrectColumnHeaderError = additionalSheetIncorrectColumnHeaderError;
+exports.additionalSheetMissingColumnHeaderError = additionalSheetMissingColumnHeaderError;
+exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
+exports.twoColumnInvalidValueError = twoColumnInvalidValueError;
+exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
+exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
+
+// New Warning Tests
+
+exports.additionalSheetExtraneousDataWarning = additionalSheetExtraneousDataWarning;
+
+
+
+
+
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
