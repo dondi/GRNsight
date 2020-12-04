@@ -16,7 +16,7 @@ describe("errors-adjacency-matrix-modifications", function () {
     });
 
     describe("empty-row", function () {
-        it("should return empty row error", function () {
+        it("should throw EMPTY_ROW error", function () {
             test.emptyRowError("test-files/adjacency-matrix-modifications/empty-row-input.xlsx", 1);
             test.emptyRowError("test-files/adjacency-matrix-modifications/empty-row-output.xlsx", 1);
         });
@@ -46,9 +46,9 @@ describe("errors-adjacency-matrix-modifications", function () {
     });
 
     describe("extra-column-one-column-skipped", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/extra-column-one-column-skipped-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/extra-column-one-column-skipped-output.xlsx");
+        it("should return EMPTYCOLUMN error", function () {
+            test.emptyColumnError("test-files/adjacency-matrix-modifications/extra-column-one-column-skipped-input.xlsx", 1);
+            test.emptyColumnError("test-files/adjacency-matrix-modifications/extra-column-one-column-skipped-output.xlsx", 1);
         });
     });
 
@@ -88,9 +88,9 @@ describe("errors-adjacency-matrix-modifications", function () {
     });
 
     describe("empty-row-or-column", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/empty-column-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/empty-column-output.xlsx");
+        it("should throw EMPTY_ROW or EMPTY_COLUMN errors ", function () {
+            test.emptyColumnError("test-files/adjacency-matrix-modifications/empty-column-input.xlsx", 1);
+            test.emptyColumnError("test-files/adjacency-matrix-modifications/empty-column-output.xlsx", 1);
             test.emptyRowError("test-files/adjacency-matrix-modifications/empty-row-input.xlsx", 1);
             test.emptyRowError("test-files/adjacency-matrix-modifications/empty-row-output.xlsx", 1);
         });
@@ -140,23 +140,23 @@ describe("errors-adjacency-matrix-modifications", function () {
     });
 
     describe("missing-column-top", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-column-top-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-column-top-output.xlsx");
+        it("should throw EMPTY_COLUMN_DATA error", function () {
+            test.emptyColumnDataError("test-files/adjacency-matrix-modifications/missing-column-top-input.xlsx", 1);
+            test.emptyColumnDataError("test-files/adjacency-matrix-modifications/missing-column-top-output.xlsx", 1);
         });
     });
 
     describe("missing-column-middle", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-column-middle-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-column-middle-output.xlsx");
+        it("should throw EMPTY_COLUMN_DATA error", function () {
+            test.emptyColumnDataError("test-files/adjacency-matrix-modifications/missing-column-middle-input.xlsx", 1);
+            test.emptyColumnDataError("test-files/adjacency-matrix-modifications/missing-column-middle-output.xlsx", 1);
         });
     });
 
     describe("missing-column-end", function () {
-        it("should not return any errors", function () {
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx");
-            test.noErrors("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx");
+        it("should throw EMPTY_COLUMN_DATA error", function () {
+            test.emptyColumnDataError("test-files/adjacency-matrix-modifications/missing-column-end-input.xlsx", 1);
+            test.emptyColumnDataError("test-files/adjacency-matrix-modifications/missing-column-end-output.xlsx", 1);
         });
     });
 
