@@ -3,8 +3,8 @@ var xlsx = require("node-xlsx");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
-var parseworkbookSheet = require(__dirname + "/workbook-sheet-parser");
-var demoworkbooks = require(__dirname + "/demo-workbooks");
+var parseworkbookSheet = require(__dirname + "/workbookFIle-sheet-parser");
+var demoworkbooks = require(__dirname + "/demo-workbookss");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
