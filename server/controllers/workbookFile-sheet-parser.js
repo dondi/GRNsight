@@ -2,7 +2,7 @@
 // var path = require("path");
 // var demoworkbooks = require(__dirname + "/demo-workbooks");
 
-const { initworkbook } = require("./helpers");
+const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
@@ -505,7 +505,7 @@ var parseworkbookSheet = function (sheet, workbook) {
 
 
 module.exports = function (workbookFile) {
-    const workbook = initworkbook({sheetType: "unweighted"});
+    const workbook = initWorkbook({sheetType: "unweighted"});
     var workbookSheet;
 
     for (let i = 0; i < workbookFile.length; i++) {

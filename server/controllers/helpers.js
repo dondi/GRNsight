@@ -15,7 +15,7 @@ var createEmptyworkbook = function () {
 };
 
 // Outside of module.exports because needs too access createEmptyworkbook
-var initworkbook = function (net) {
+var initWorkbook = function (net) {
     const workbook = createEmptyworkbook();
     Object.assign(workbook, net);    // copies fields without overriding empty ones :)
     return workbook;
@@ -34,6 +34,6 @@ module.exports = {
     },
 
     createEmptyworkbook: createEmptyworkbook,
-    initworkbook: initworkbook
+    initWorkbook: initWorkbook
 
 };

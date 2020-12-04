@@ -5,9 +5,9 @@ var UTF8 = { encoding: "utf-8" };
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
-var initworkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initworkbook;
+var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedworkbook = initworkbook({
+var expectedUnweightedworkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -30,7 +30,7 @@ var expectedUnweightedworkbook = initworkbook({
     expression:{}
 });
 
-var expectedWeightedworkbook = initworkbook({
+var expectedWeightedworkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -53,7 +53,7 @@ var expectedWeightedworkbook = initworkbook({
     expression:{}
 });
 
-var expectedUnweightedworkbookWithCycle = initworkbook({
+var expectedUnweightedworkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -79,7 +79,7 @@ var expectedUnweightedworkbookWithCycle = initworkbook({
     expression:{}
 });
 
-var expectedWeightedworkbookWithCycle = initworkbook({
+var expectedWeightedworkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -278,7 +278,7 @@ var misspelledGraphTagTestGraphMl = [
 
 
 // Added workbooks and GraphML documents
-var newExpectedWeightedworkbook = initworkbook({
+var newExpectedWeightedworkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -660,7 +660,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/hyper.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal(initworkbook({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "n0" },
                     { name: "n1" },
@@ -686,7 +686,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/nested.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal(initworkbook({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "n0" },
                     { name: "n1" },
@@ -720,7 +720,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-gene_4-edge_Manual-Cytoscape_test-naming.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal(initworkbook({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "Gene4_name" },
                     { name: "Gene3_name" },
@@ -750,7 +750,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/graph-with-yed-tags.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal(initworkbook({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "January" },
                     { name: "n1" }
@@ -775,7 +775,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-node_4-edge_manual-yED.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal(initworkbook({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "A" },
                     { name: "B" },

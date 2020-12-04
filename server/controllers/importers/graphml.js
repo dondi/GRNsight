@@ -2,13 +2,13 @@ var constants = require(__dirname + "/../constants");
 var parseString = require("xml2js").parseString;
 var semanticChecker = require(__dirname + "/../semantic-checker");
 var graphmlConstants = require(__dirname + "/../graphml-constants");
-var initworkbook = require(__dirname + "/../helpers.js").initworkbook;
+var initWorkbook = require(__dirname + "/../helpers.js").initWorkbook;
 
 module.exports = function (graphml) {
     var graph;
     var key;
 
-    var workbook = initworkbook({sheetType: constants.UNWEIGHTED});
+    var workbook = initWorkbook({sheetType: constants.UNWEIGHTED});
 
     // These warnings don't exist. They are a TODO
     // workbook.warnings.push(constants.warnings.noSpeciesInformationDetected);

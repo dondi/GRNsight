@@ -1,6 +1,6 @@
 var constants = require(__dirname + "/../constants");
 var semanticChecker = require(__dirname + "/../semantic-checker");
-var initworkbook = require(__dirname + "/../helpers.js").initworkbook;
+var initWorkbook = require(__dirname + "/../helpers.js").initWorkbook;
 
 var GENE_NAME = 0;
 var RELATIONSHIP = 1;
@@ -125,7 +125,7 @@ module.exports = function (sif) {
         });
     }
 
-    var workbook = initworkbook({
+    var workbook = initWorkbook({
         genes: emptySifFile ? [] : genes.map(function (geneName) {
             return { name: geneName };
         }),

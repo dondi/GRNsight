@@ -5,9 +5,9 @@ var extend = require("jquery-extend");
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
-var initworkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initworkbook;
+var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedworkbook = initworkbook({
+var expectedUnweightedworkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -30,7 +30,7 @@ var expectedUnweightedworkbook = initworkbook({
     expression:{}
 });
 
-var expectedWeightedworkbook = initworkbook({
+var expectedWeightedworkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -53,7 +53,7 @@ var expectedWeightedworkbook = initworkbook({
     expression:{}
 });
 
-var expectedUnweightedworkbookWithCycle = initworkbook({
+var expectedUnweightedworkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -79,7 +79,7 @@ var expectedUnweightedworkbookWithCycle = initworkbook({
     expression:{}
 });
 
-var expectedWeightedworkbookWithCycle = initworkbook({
+var expectedWeightedworkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -328,7 +328,7 @@ describe("Import from SIF", function () {
     it("should import nodes mentioned only in edges (i.e., targeted but targetless)", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithUntargeted)
-        ).to.deep.equal(initworkbook({
+        ).to.deep.equal(initWorkbook({
             genes: [
                 { name: "A" },
                 { name: "B" },
@@ -357,7 +357,7 @@ describe("Import from SIF", function () {
     it("should import a workbook with a single node correctly", function () {
         expect(
             importController.sifToGrnsight(sifWithOneNode)
-        ).to.deep.equal(initworkbook({
+        ).to.deep.equal(initWorkbook({
             genes: [
                 { name: "A" }
             ],
