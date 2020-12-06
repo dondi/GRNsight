@@ -230,7 +230,8 @@ describe("Export to GraphML", function () {
     });
 
     it("should export unweighted workbooks with cycles to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(unweightedTestWorkbookWithCycle).split("\n").map(function (line) {
+        var lines = exportController.grnsightToGraphMl(unweightedTestWorkbookWithCycle).split("\n")
+        .map(function (line) {
             return line.trim();
         });
 
