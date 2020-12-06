@@ -248,7 +248,8 @@ module.exports = function (workbook) {
     checkSpecialCharacter(workbook.errors, workbook.genes);
     checkDuplicates(workbook.errors, workbook.genes);
     checkGeneLength(workbook.errors, workbook.genes);
-    checkWorkbookSize(workbook.errors, workbook.warnings, workbook.genes, workbook.positiveWeights, workbook.negativeWeights);
+    checkWorkbookSize(workbook.errors, workbook.warnings, workbook.genes,
+                    workbook.positiveWeights, workbook.negativeWeights);
     checkIfEmptyWorkbook(workbook.errors, workbook.genes);
     // We're done. Return the workbook.
     return workbook;
