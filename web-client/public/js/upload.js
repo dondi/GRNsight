@@ -3,7 +3,7 @@
 //      controller code installed by setupHandlers can access them.
 
 export const uploadState = {
-    currentworkbook: null,
+    currentWorkbook: null,
 };
 
 export const upload = function () {
@@ -40,7 +40,7 @@ export const upload = function () {
         }
     });
 
-    var flattenworkbook = function (workbook, sheetType) {
+    var flattenWorkbook = function (workbook, sheetType) {
         var result = $.extend(true, { }, workbook, { sheetType: sheetType });
         result.links.forEach(function (link) {
             link.source = link.source.index;
@@ -68,8 +68,8 @@ export const upload = function () {
         return function () {
             // Deleted event parameter
             if (!$(this).parent().hasClass("disabled")) {
-                var workbookToExport = flattenworkbook(uploadState.currentworkbook, sheetType);
-                var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentworkbook.sheetType ?
+                var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
+                var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
                     sheetType : "", extension);
                 workbookToExport.filename = workbookFilename;
 

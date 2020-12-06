@@ -62,28 +62,28 @@ describe.skip("graph-library-tests", function () {
 
         it("returns the undirected shortest path from f to b in 75-genes-150-edges", function () {
             this.timeout(10000);
-            test.shortestPath("test-files/graph-tests/different-sized-workbooks/75-genes-150-edges.xlsx", false, "CDC28", "ADA2", 3);
+            test.shortestPath("test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx", false, "CDC28", "ADA2", 3);
         });
 
         it("returns the directed shortest path from f to b in 75-genes-150-edges", function () {
             this.timeout(10000);
-            test.shortestPath("test-files/graph-tests/different-sized-workbooks/75-genes-150-edges.xlsx", true, "CDC28", "ADA2", Infinity);
+            test.shortestPath("test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx", true, "CDC28", "ADA2", Infinity);
         });
 
         it("returns the undirected shortest path from f to b in 10-genes-max-edges", function () {
-            test.shortestPath("test-files/graph-tests/different-sized-workbooks/10-genes-max-edges.xlsx", false, "DAL80", "ECM22", 1);
+            test.shortestPath("test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx", false, "DAL80", "ECM22", 1);
         });
 
         it("returns the directed shortest path from f to b in 10-genes-max-edges", function () {
-            test.shortestPath("test-files/graph-tests/different-sized-workbooks/10-genes-max-edges.xlsx", true, "DAL80", "ECM22", 1);
+            test.shortestPath("test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx", true, "DAL80", "ECM22", 1);
         });
 
         it("returns the undirected shortest path from f to b in 12-genes-max-edges", function () {
-            test.shortestPath("test-files/graph-tests/different-sized-workbooks/12-genes-max-edges.xlsx", false, "DAL80", "ECM22", 1);
+            test.shortestPath("test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx", false, "DAL80", "ECM22", 1);
         });
 
         it("returns the directed shortest path from f to b in 12-genes-max-edges", function () {
-            test.shortestPath("test-files/graph-tests/different-sized-workbooks/12-genes-max-edges.xlsx", true, "DAL80", "ECM22", 1);
+            test.shortestPath("test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx", true, "DAL80", "ECM22", 1);
         });
     });
 
@@ -138,28 +138,28 @@ describe.skip("graph-library-tests", function () {
 
         it("returns the undirected betweenness centrality of f in 75-genes-150-edges", function () {
             this.timeout(10000);
-            test.betweennessCentrality("test-files/graph-tests/different-sized-workbooks/75-genes-150-edges.xlsx", false, "CDC28", 171.50351735503662);
+            test.betweennessCentrality("test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx", false, "CDC28", 171.50351735503662);
         });
 
         it("returns the directed betweenness centrality of f in 75-genes-150-edges", function () {
             this.timeout(10000);
-            test.betweennessCentrality("test-files/graph-tests/different-sized-workbooks/75-genes-150-edges.xlsx", true, "CDC28", 171.50351735503662);
+            test.betweennessCentrality("test-files/graph-tests/different-sized-networks/75-genes-150-edges.xlsx", true, "CDC28", 171.50351735503662);
         });
 
         it("returns the undirected betweenness centrality of f in 10-genes-max-edges", function () {
-            test.betweennessCentrality("test-files/graph-tests/different-sized-workbooks/10-genes-max-edges.xlsx", false, "DAL80", 0);
+            test.betweennessCentrality("test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx", false, "DAL80", 0);
         });
 
         it("returns the directed betweenness centrality of f in 10-genes-max-edges", function () {
-            test.betweennessCentrality("test-files/graph-tests/different-sized-workbooks/10-genes-max-edges.xlsx", true, "DAL80", 0);
+            test.betweennessCentrality("test-files/graph-tests/different-sized-networks/10-genes-max-edges.xlsx", true, "DAL80", 0);
         });
 
         it("returns the undirected betweenness centrality of f in 12-genes-max-edges", function () {
-            test.betweennessCentrality("test-files/graph-tests/different-sized-workbooks/12-genes-max-edges.xlsx", false, "DAL80", 0);
+            test.betweennessCentrality("test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx", false, "DAL80", 0);
         });
 
         it("returns the directed betweenness centrality of f in 12-genes-max-edges", function () {
-            test.betweennessCentrality("test-files/graph-tests/different-sized-workbooks/12-genes-max-edges.xlsx", true, "DAL80", 0);
+            test.betweennessCentrality("test-files/graph-tests/different-sized-networks/12-genes-max-edges.xlsx", true, "DAL80", 0);
         });
     });
 });

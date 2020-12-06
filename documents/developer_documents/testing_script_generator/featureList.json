@@ -4,7 +4,7 @@
         "text": "GRNsight should",
         "options": {
             "None": "have no graph in the viewport",
-            "Dropdown Menu: File -> Open": "lay out a network graph from the Excel workbook if there are no errors in the file",
+            "Dropdown Menu: File -> Open": "lay out a network graph from the Excel network if there are no errors in the file",
             "Dropdown Menu: File -> Import SIF": "lay out a network graph from the SIF file if there are no errors in the file",
             "Dropdown Menu: File -> Import GraphML": "lay out a network graph from the GraphML file if there are no errors in the file",
             "Dropdown Menu: Demo -> Demo #1": "lay out an unweighted network graph from Demo #1",

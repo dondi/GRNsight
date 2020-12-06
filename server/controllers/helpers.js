@@ -1,6 +1,6 @@
 var constants = require(__dirname + "/constants");
 
-var createEmptyworkbook = function () {
+var createEmptyWorkbook = function () {
     return {
         genes: [],
         links: [],
@@ -14,9 +14,9 @@ var createEmptyworkbook = function () {
     };
 };
 
-// Outside of module.exports because needs too access createEmptyworkbook
+// Outside of module.exports because needs too access createEmptyWorkbook
 var initWorkbook = function (net) {
-    const workbook = createEmptyworkbook();
+    const workbook = createEmptyWorkbook();
     Object.assign(workbook, net);    // copies fields without overriding empty ones :)
     return workbook;
 };
@@ -33,7 +33,7 @@ module.exports = {
         res.header(constants.GRNSIGHT_FILENAME_HEADER, path.split("/").pop());
     },
 
-    createEmptyworkbook: createEmptyworkbook,
+    createEmptyWorkbook: createEmptyWorkbook,
     initWorkbook: initWorkbook
 
 };

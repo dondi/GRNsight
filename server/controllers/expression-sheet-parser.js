@@ -80,9 +80,9 @@ const warningsList = {
         return {
             warningCode: "MISSING_EXPRESSION_SHEET",
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
-            not detected. The workbook graph will display without node coloring. If you want \
+            not detected. The network graph will display without node coloring. If you want \
             the nodes to be colored with expression data, you can upload your own expression \
-            data by adding one or more of those worksheets to your Excel workbook or select \
+            data by adding one or more of those worksheets to your Excel network or select \
             from data in GRNsight's Expression Database, found in the Node menu or panel."
         };
     },

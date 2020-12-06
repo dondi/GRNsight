@@ -1,13 +1,13 @@
 // var multiparty = require("multiparty");
 // var path = require("path");
-// var demoworkbooks = require(__dirname + "/demo-workbooks");
+// var demoWorkbooks = require(__dirname + "/demo-workbooks");
 
 const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
 
-// const workbook_SHEET_NAMES = ["workbook", "workbook_optimized_weights"];
+// const workbook_SHEET_NAMES = ["workbook", "network_optimized_weights"];
 
 // const isworkbookSheet = (sheetName) => {
 //     return workbook_SHEET_NAMES.some(function (workbook) {
@@ -27,9 +27,9 @@ var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
 var errorList = {
-    missingworkbookError: {
-        errorCode: "MISSING_workbook",
-        possibleCause: "This file does not have a 'workbook' sheet or a 'workbook_optimized_weights' sheet.",
+    missingNetworkError: {
+        errorCode: "MISSING_NETWORK",
+        possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
         suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. \
         Please refer to the " + "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' \
         target='_blank'>Documentation page</a> for more information."
@@ -132,7 +132,7 @@ var errorList = {
 
     errorsCountError: {
         errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This workbook has over 20 errors.",
+        possibleCause: "This network has over 20 errors.",
         suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
             "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
             "further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -141,7 +141,7 @@ var errorList = {
 
     warningsCountError: {
         errorCode: "WARNINGS_OVERLOAD",
-        possibleCause: "This workbook has over 75 warnings.",
+        possibleCause: "This network has over 75 warnings.",
         suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
             " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
             " further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -161,9 +161,9 @@ var errorList = {
 // This is the list of warnings.
 // The graph will still load if warnings are detected, but these will be reported to the user.
 var warningsList = {
-    incorrectCellA1workbookWarning: function (sheetName) {
+    incorrectCellA1WorkbookWarning: function (sheetName) {
         return {
-            warningCode: "MISLABELED_workbook_CELL_A1",
+            warningCode: "MISLABELED_NETWORK_CELL_A1",
             errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
             Replace the incorrect label with 'cols regulators/rows targets' exactly.`
         };
@@ -207,7 +207,7 @@ var warningsList = {
 
     workbookSizeWarning: function (genesLength, edgesLength) {
         return {
-            warningCode: "INVALID_workbook_SIZE",
+            warningCode: "INVALID_NETWORK_SIZE",
             errorDescription: `Your workbook has ${genesLength} genes, and ${edgesLength} 
                 edges. Please note that workbooks are recommended to have less than 50 genes and 100 edges.`
         };
@@ -216,15 +216,15 @@ var warningsList = {
     incorrectlyNamedSheetWarning: {
         warningCode: "INCORRECTLY_NAMED_SHEET",
         errorDescription: "The uploaded file appears to contain a weighted workbook, but contains no \
-             'workbook_optimized_weights' sheet. A weighted workbook must be contained in a sheet called \
-             'workbook_optimized_weights' in order to be drawn as a weighted graph. \
+             'network_optimized_weights' sheet. A weighted workbook must be contained in a sheet called \
+             'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     },
 
     missingExpressionSheetWarning: {
         warningCode: "MISSING_EXPRESSION_SHEET",
         errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
-        not detected. The workbook graph will display without node coloring. If you want \
+        not detected. The network graph will display without node coloring. If you want \
         the nodes to be colored with expression data, you can upload your own expression \
         data by adding one or more of those worksheets to your Excel workbook or select \
         from data in GRNsight's Expression Database, found in the Node menu or panel."
@@ -326,7 +326,7 @@ var parseWorkbookSheet = function (sheet, workbook) {
     // check for “cols regulators/rows targets” in cell A1
     const cellA1 = sheet.data[0][0];
     if (cellA1 !== "cols regulators/rows targets") {
-        addWarning(workbook, warningsList.incorrectCellA1workbookWarning(sheet.name));
+        addWarning(workbook, warningsList.incorrectCellA1WorkbookWarning(sheet.name));
     }
 
     // Get Source Genes
@@ -526,7 +526,7 @@ module.exports = function (workbookFile) {
     if (workbookSheet) {
         return parseWorkbookSheet(workbookSheet, workbook);
     } else {
-        addError(workbook, errorList.missingworkbookError);
+        addError(workbook, errorList.missingNetworkError);
         return workbook;
     }
 };

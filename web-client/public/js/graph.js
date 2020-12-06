@@ -94,7 +94,7 @@ export var drawGraph = function (workbook) {
     const zoomScaleRight = createZoomScale(
         ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ZOOM_ADAPTIVE_MAX_SCALE);
 
-    // Create an array of all the workbook weights
+    // Create an array of all the network weights
     var allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
     // Assign the entire array weights of 1, if color edges turned off
     if (!grnState.colorOptimal) {
@@ -112,7 +112,7 @@ export var drawGraph = function (workbook) {
     const maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 
     // Get the largest magnitude weight and set that as the default normalization factor
-    if (grnState.newworkbook) {
+    if (grnState.newWorkbook) {
         grnState.normalizationMax = maxWeight;
         grnState.resetNormalizationMax = maxWeight;
     }
@@ -299,7 +299,7 @@ export var drawGraph = function (workbook) {
         zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY);
 
         // Reset the zoom value to the midpoint whenever we load a new workbook.
-        if (grnState.newworkbook) {
+        if (grnState.newWorkbook) {
             grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
         }
 
@@ -329,7 +329,7 @@ export var drawGraph = function (workbook) {
         manualZoom = false;
     });
 
-    if (!grnState.newworkbook) {
+    if (!grnState.newWorkbook) {
         updateAppBasedOnZoomValue();
     }
 

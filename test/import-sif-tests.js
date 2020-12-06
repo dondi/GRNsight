@@ -7,7 +7,7 @@ var importController = require(__dirname + "/../server/controllers" + "/import-c
 var constants = require(__dirname + "/../server/controllers" + "/constants");
 var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedworkbook = initWorkbook({
+var expectedUnweightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -30,7 +30,7 @@ var expectedUnweightedworkbook = initWorkbook({
     expression:{}
 });
 
-var expectedWeightedworkbook = initWorkbook({
+var expectedWeightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -53,7 +53,7 @@ var expectedWeightedworkbook = initWorkbook({
     expression:{}
 });
 
-var expectedUnweightedworkbookWithCycle = initWorkbook({
+var expectedUnweightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -79,7 +79,7 @@ var expectedUnweightedworkbookWithCycle = initWorkbook({
     expression:{}
 });
 
-var expectedWeightedworkbookWithCycle = initWorkbook({
+var expectedWeightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -251,7 +251,7 @@ var strayDataInMultiColumnFormat = [
     "E"
 ].join("\r\n");
 
-var triviallyTabbedUnweightedworkbook = [
+var triviallyTabbedUnweightedWorkbook = [
     "A",
     [ "B", "pd", "A", "C" ].join("\t"),
     [ "C", "pd", "B" ].join("\t"),
@@ -284,19 +284,19 @@ describe("Import from SIF", function () {
     it("should import unweighted workbooks from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSif)
-        ).to.deep.equal(expectedUnweightedworkbook);
+        ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
     it("should import weighted workbooks from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(weightedTestSif)
-        ).to.deep.equal(expectedWeightedworkbook);
+        ).to.deep.equal(expectedWeightedWorkbook);
     });
 
     it("should import inconsistently weighted workbooks from SIF as unweighted", function () {
         expect(
             importController.sifToGrnsight(inconsistentlyWeightedTestSif)
-        ).to.deep.equal(extend(true, {}, expectedUnweightedworkbook, {
+        ).to.deep.equal(extend(true, {}, expectedUnweightedWorkbook, {
             warnings: [
                 constants.warnings.EDGES_WITHOUT_WEIGHTS
             ]
@@ -306,19 +306,19 @@ describe("Import from SIF", function () {
     it("should import unweighted workbooks with cycles from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithCycle)
-        ).to.deep.equal(expectedUnweightedworkbookWithCycle);
+        ).to.deep.equal(expectedUnweightedWorkbookWithCycle);
     });
 
     it("should import weighted workbooks with cycles from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(weightedTestSifWithCycle)
-        ).to.deep.equal(expectedWeightedworkbookWithCycle);
+        ).to.deep.equal(expectedWeightedWorkbookWithCycle);
     });
 
     it("should import inconsistently weighted workbooks with cycles from SIF as unweighted", function () {
         expect(
             importController.sifToGrnsight(inconsistentlyWeightedTestSifWithCycle)
-        ).to.deep.equal(extend(true, {}, expectedUnweightedworkbookWithCycle, {
+        ).to.deep.equal(extend(true, {}, expectedUnweightedWorkbookWithCycle, {
             warnings: [
                 constants.warnings.EDGES_WITHOUT_WEIGHTS
             ]
@@ -390,7 +390,7 @@ describe("Import from SIF semantic checker", function () {
     it("should throw an error for SIF files with no data", function () {
         expect(
             importController.sifToGrnsight(emptyFile).errors[0].errorCode
-        ).to.equal("EMPTY_workbook_ERROR");
+        ).to.equal("EMPTY_NETWORK_ERROR");
     });
 
 });
@@ -469,8 +469,8 @@ describe("Import from SIF syntactic checker", function () {
 
     it("should accept trivially tabbed workbooks", function () {
         expect(
-            importController.sifToGrnsight(triviallyTabbedUnweightedworkbook)
-        ).to.deep.equal(expectedUnweightedworkbook);
+            importController.sifToGrnsight(triviallyTabbedUnweightedWorkbook)
+        ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
 });

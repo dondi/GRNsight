@@ -26,9 +26,9 @@ var warningsList = {
         };
     },
 
-    incorrectCellA1workbookWarning: function (sheetName) {
+    incorrectCellA1WorkbookWarning: function (sheetName) {
         return {
-            warningCode: "MISLABELED_workbook_CELL_A1",
+            warningCode: "MISLABELED_NETWORK_CELL_A1",
             errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
             Replace the incorrect label with \'cols regulators/rows targets\' exactly.`
         };
@@ -72,7 +72,7 @@ var warningsList = {
 
     workbookSizeWarning: function (genesLength, edgesLength) {
         return {
-            warningCode: "INVALID_workbook_SIZE",
+            warningCode: "INVALID_NETWORK_SIZE",
             errorDescription: "Your workbook has " + genesLength + " genes, and " + edgesLength +
             " edges. Please note that workbooks are recommended to have less than 50 genes and 100 edges."
         };
@@ -81,11 +81,11 @@ var warningsList = {
 
 var errorList = {
 
-    emptyworkbookError: function () {
+    emptyWorkbookError: function () {
         return {
-            errorCode: "EMPTY_workbook_ERROR",
+            errorCode: "EMPTY_NETWORK_ERROR",
             possibleCause: "GRNsight detects that the file you uploaded is empty and \
-            does not contain any workbook information.",
+            does not contain any network information.",
             suggestedFix: "Please review the file and ensure that it specifies a workbook."
         };
     },
@@ -109,10 +109,10 @@ var errorList = {
 
     workbookSizeError: function (genesLength, edgesLength) {
         return {
-            errorCode: "INVALID_workbook_SIZE",
-            possibleCause: "This workbook has " + genesLength + " genes, and " + edgesLength + " edges.",
-            suggestedFix: "workbooks may not have more than 75 genes or 150 edges. Please reduce the size" +
-            " of your workbook and try again."
+            errorCode: "INVALID_NETWORK_SIZE",
+            possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.",
+            suggestedFix: "networks may not have more than 75 genes or 150 edges. Please reduce the size" +
+            " of your network and try again."
         };
     },
 
@@ -178,7 +178,7 @@ var addWarning = function (workbook, message) {
 };
 */
 
-var checkworkbookSize = function (errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+var checkWorkbookSize = function (errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
     var genesLength = genesList.length;
     var edgesLength = positiveWeights.length + negativeWeights.length;
     var GENE_MAX_WARNING = 50;
@@ -237,9 +237,9 @@ var checkSpecialCharacter = function (errorArray, genesList) {
     }
 };
 
-var checkIfEmptyworkbook = function (errorArray, genesList) {
+var checkIfEmptyWorkbook = function (errorArray, genesList) {
     if (genesList.length === 0) {
-        errorArray.push(errorList.emptyworkbookError());
+        errorArray.push(errorList.emptyWorkbookError());
     }
 };
 
@@ -248,8 +248,8 @@ module.exports = function (workbook) {
     checkSpecialCharacter(workbook.errors, workbook.genes);
     checkDuplicates(workbook.errors, workbook.genes);
     checkGeneLength(workbook.errors, workbook.genes);
-    checkworkbookSize(workbook.errors, workbook.warnings, workbook.genes, workbook.positiveWeights, workbook.negativeWeights);
-    checkIfEmptyworkbook(workbook.errors, workbook.genes);
+    checkWorkbookSize(workbook.errors, workbook.warnings, workbook.genes, workbook.positiveWeights, workbook.negativeWeights);
+    checkIfEmptyWorkbook(workbook.errors, workbook.genes);
     // We're done. Return the workbook.
     return workbook;
 };

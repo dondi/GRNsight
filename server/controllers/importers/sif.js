@@ -34,7 +34,7 @@ module.exports = function (sif) {
         return !isNaN(+relationship);
     };
 
-    var sifworkbookType = function (sifEntries) {
+    var sifWorkbookType = function (sifEntries) {
         var errors = [];
         var relationships = [];
         var numRowsWithTwoColumns = 0;
@@ -91,7 +91,7 @@ module.exports = function (sif) {
             }
         });
 
-        workbookType = sifworkbookType(entries);
+        workbookType = sifWorkbookType(entries);
         if (workbookType.warnings) {
             warnings.push(workbookType.warnings);
         }

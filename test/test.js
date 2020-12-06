@@ -91,7 +91,7 @@ var missingValueError = function (input, frequency) {
     }
 };
 
-var missingworkbookError = function (input, frequency) {
+var missingNetworkError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseWorkbookSheet(sheet);
 
@@ -99,7 +99,7 @@ var missingworkbookError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "MISSING_workbook",
+            "MISSING_NETWORK",
             workbook.errors[i].errorCode
         );
     }
@@ -141,7 +141,7 @@ var workbookSizeError = function (input, frequency) {
 
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "INVALID_workbook_SIZE",
+            "INVALID_NETWORK_SIZE",
             workbook.errors[i].errorCode
         );
     }
@@ -420,11 +420,11 @@ var emptyRowWarning = function (input, frequency) {
     assert.equal(frequency, emptyRowCount.length);
 };
 
-var invalidworkbookSizeWarning = function (input, frequency) {
+var invalidNetworkSizeWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseWorkbookSheet(sheet);
     var invalidworkbookSizeCount = workbook.warnings.filter(function (x) {
-        return x.warningCode === "INVALID_workbook_SIZE";
+        return x.warningCode === "INVALID_NETWORK_SIZE";
     });
 
     assert.equal(frequency, invalidworkbookSizeCount.length);
@@ -508,7 +508,7 @@ exports.invalidGeneLengthError = invalidGeneLengthError;
 exports.corruptGeneError = corruptGeneError;
 exports.unknownError = unknownError;
 exports.missingValueError = missingValueError;
-exports.missingworkbookError = missingworkbookError;
+exports.missingNetworkError = missingNetworkError;
 exports.workbookSizeError = workbookSizeError;
 exports.warningsCountError = warningsCountError;
 exports.invalidDataTypeError = invalidDataTypeError;
@@ -537,7 +537,7 @@ exports.missingSourceWarning = missingSourceWarning;
 exports.missingTargetWarning = missingTargetWarning;
 exports.randomDataWarning = randomDataWarning;
 exports.emptyRowWarning = emptyRowWarning;
-exports.invalidworkbookSizeWarning = invalidworkbookSizeWarning;
+exports.invalidNetworkSizeWarning = invalidNetworkSizeWarning;
 exports.extraneousDataWarning = extraneousDataWarning;
 exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;

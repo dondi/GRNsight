@@ -9,12 +9,12 @@ const createArrayWithZeroes = function (length) {
     return Array.apply(null, Array(length)).map(() => 0);
 };
 
-const buildworkbookSheet = function (genes, links) {
+const buildWorkbookSheet = function (genes, links) {
     const geneNameArray = buildGeneNameArray(genes);
-    // The +1 to length is because we ALSO add the gene name to each of the workbook sheet arrays.
+    // The +1 to length is because we ALSO add the gene name to each of the network sheet arrays.
     const workbookSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
 
-    // Place the gene name in the beginning of the workbook sheet array.
+    // Place the gene name in the beginning of the network sheet array.
     // EX: ["CIN5", 0, 0, 1]
     Object.keys(geneNameArray).forEach(index => workbookSheet[index][0] = geneNameArray[index]);
     geneNameArray.unshift("cols regulators/rows targets");
@@ -71,12 +71,12 @@ const buildXlsxSheet = function (workbook) {
     resultSheet.push(
         {
             "name": "workbook",
-            "data": buildworkbookSheet(workbook.genes, workbook.links)
+            "data": buildWorkbookSheet(workbook.genes, workbook.links)
         },
 
         {
             "name": "workbook_weights",
-            "data": buildworkbookSheet(workbook.genes, workbook.links)
+            "data": buildWorkbookSheet(workbook.genes, workbook.links)
         }
     );
 

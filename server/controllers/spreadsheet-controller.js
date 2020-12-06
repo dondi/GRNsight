@@ -4,7 +4,7 @@ var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
 var parseWorkbookSheet = require(__dirname + "/workbook-sheet-parser");
-var demoworkbooks = require(__dirname + "/demo-workbooks");
+var demoWorkbooks = require(__dirname + "/demo-workbooks");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
@@ -49,9 +49,9 @@ var doesSpeciesExist = function (speciesInfo) {
 // This is the massive list of errors. Yay!
 // The graph will not load if an error is detected.
 var errorList = {
-    missingworkbookError: {
-        errorCode: "MISSING_workbook",
-        possibleCause: "This file does not have a 'workbook' sheet or a 'workbook_optimized_weights' sheet.",
+    missingNetworkError: {
+        errorCode: "MISSING_NETWORK",
+        possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
         suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. \
         Please refer to the " + "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' \
         target='_blank'>Documentation page</a> for more information."
@@ -147,10 +147,10 @@ var errorList = {
         return {
             errorCode: "GENE_MISMATCH",
             possibleCause: `Gene names in column A of the "${sheetName}" sheet do not 
-            match the order of those in the workbook sheet`,
+            match the order of those in the network sheet`,
             suggestedFix: `Please ensure that the gene names are in the same order 
-            as those in both the "workbook" sheet and the 
-            "workbook_optimized_weights" sheet.`
+            as those in both the "network" sheet and the 
+            "network_optimized_weights" sheet.`
         };
     },
 
@@ -158,9 +158,9 @@ var errorList = {
         return {
             errorCode: "EXTRA_GENE_NAME",
             possibleCause: `Gene names in column A of the "${sheetName}" sheet have 
-            one or more extra genes than those listed in the workbook sheet`,
+            one or more extra genes than those listed in the network sheet`,
             SuggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
-            the same as the genes in the "workbook" sheet and the "workbook_optimized_weights" sheet.`
+            the same as the genes in the "network" sheet and the "network_optimized_weights" sheet.`
         };
     },
 
@@ -168,10 +168,10 @@ var errorList = {
         return {
             errorCode: "MISSING_GENE_NAME",
             possibleCause: `Gene names in column A of the "${sheetName}"
-                sheet are missing one or more genes from the workbook sheet`,
+                sheet are missing one or more genes from the network sheet`,
             SuggestedFix: `Please ensure that the genes in the "${sheetName}"
-                 are the same as the genes in the "workbook" sheet and the 
-                "workbook_optimized_weights" sheet.`
+                 are the same as the genes in the "network" sheet and the 
+                "network_optimized_weights" sheet.`
         };
     },
 
@@ -228,7 +228,7 @@ var warningsList = {
 
     workbookSizeWarning: function (genesLength, edgesLength) {
         return {
-            warningCode: "INVALID_workbook_SIZE",
+            warningCode: "INVALID_NETWORK_SIZE",
             errorDescription: `Your workbook has ${genesLength} genes, and ${edgesLength} 
                 edges. Please note that workbooks are recommended to have less than 50 genes and 100 edges.`
         };
@@ -237,15 +237,15 @@ var warningsList = {
     incorrectlyNamedSheetWarning: {
         warningCode: "INCORRECTLY_NAMED_SHEET",
         errorDescription: "The uploaded file appears to contain a weighted workbook, but contains no \
-             'workbook_optimized_weights' sheet. A weighted workbook must be contained in a sheet called \
-             'workbook_optimized_weights' in order to be drawn as a weighted graph. \
+             'network_optimized_weights' sheet. A weighted workbook must be contained in a sheet called \
+             'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     },
 
     missingExpressionSheetWarning: {
         warningCode: "MISSING_EXPRESSION_SHEET",
         errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
-        not detected. The workbook graph will display without node coloring. If you want \
+        not detected. The network graph will display without node coloring. If you want \
         the nodes to be colored with expression data, you can upload your own expression \
         data by adding one or more of those worksheets to your Excel workbook or select \
         from data in GRNsight's Expression Database, found in the Node menu or panel."
@@ -387,15 +387,15 @@ var crossSheetInteractions = function (workbookFile) {
 
     workbookFile.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
-            var tempworkbookGenes = new Set();
+            var tempWorkbookGenes = new Set();
             for (let i = 0; i < workbook.genes.length; i++) {
-                tempworkbookGenes.add(workbook.genes[i].name);
+                tempWorkbookGenes.add(workbook.genes[i].name);
             }
             var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
-            var extraExpressionGenes = difference(tempExpressionGenes, tempworkbookGenes);
-            var extraworkbookGenes = difference(tempworkbookGenes, tempExpressionGenes);
+            var extraExpressionGenes = difference(tempExpressionGenes, tempWorkbookGenes);
+            var extraWorkbookGenes = difference(tempWorkbookGenes, tempExpressionGenes);
 
-            if (extraExpressionGenes.size === 0 && extraworkbookGenes.size === 0) {
+            if (extraExpressionGenes.size === 0 && extraWorkbookGenes.size === 0) {
                 for (var i = 0; i < workbook.genes.length; i++) {
                     if (workbook.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]) {
                         addError(workbook, errorList.geneMismatchError(sheet.name));
@@ -403,7 +403,7 @@ var crossSheetInteractions = function (workbookFile) {
                     }
                 }
             } else {
-                if (extraworkbookGenes.size > 0) {
+                if (extraWorkbookGenes.size > 0) {
                     addError(workbook, errorList.missingGeneNamesError(sheet.name));
                 }
                 if (extraExpressionGenes.size > 0) {
@@ -533,20 +533,20 @@ module.exports = function (app) {
 
         // Load the demos
         app.get("/demo/unweighted", function (req, res) {
-            return demoworkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
+            return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return demoworkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
+            return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
              res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
-            return demoworkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+            return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return demoworkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
+            return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx", res, app);
         });
     }
 

@@ -11,7 +11,7 @@ var processDemo = function (path, res, app, workbook) {
         res.status(400).json(workbook);
 };
 
-var demoworkbook1 = function (path, res, app) {
+var demoWorkbook1 = function (path, res, app) {
     let workbook1 = {
         genes: [
             {name: "ACE2"},
@@ -1663,7 +1663,7 @@ var demoworkbook1 = function (path, res, app) {
     return processDemo(path, res, app, workbook1);
 };
 
-var demoworkbook2 = function (path, res, app) {
+var demoWorkbook2 = function (path, res, app) {
     let workbook2 = {
         genes: [
             {name: "ACE2"},
@@ -3350,7 +3350,7 @@ var demoworkbook2 = function (path, res, app) {
     return processDemo(path, res, app, workbook2);
 };
 
-var demoworkbook3 = function (path, res, app) {
+var demoWorkbook3 = function (path, res, app) {
     let workbook3 = {
         genes: [
             {name: "ABF1"}, {name: "ACE2"},
@@ -3930,7 +3930,7 @@ var demoworkbook3 = function (path, res, app) {
     return processDemo(path, res, app, workbook3);
 };
 
-var demoworkbook4 = function (path, res, app) {
+var demoWorkbook4 = function (path, res, app) {
     let workbook4 = {
         genes: [
             {name: "ABF1"}, {name: "ACE2"},
@@ -4530,12 +4530,12 @@ var demoworkbook4 = function (path, res, app) {
 
 module.exports = function (path, res, app, workbook) {
     if (path === "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx") {
-        return demoworkbook1(path, res, app, workbook);
+        return demoWorkbook1(path, res, app, workbook);
     } else if (path === "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx") {
-        return demoworkbook2(path, res, app, workbook);
+        return demoWorkbook2(path, res, app, workbook);
     } else if (path === "test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx") {
-        return demoworkbook3(path, res, app, workbook);
+        return demoWorkbook3(path, res, app, workbook);
     } else if (path === "test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx") {
-        return demoworkbook4(path, res, app, workbook);
+        return demoWorkbook4(path, res, app, workbook);
     }
 };

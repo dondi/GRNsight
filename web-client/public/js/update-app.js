@@ -98,13 +98,13 @@ let expressionDBdesired = false;
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
-    if (uploadState && uploadState.currentworkbook) {
-        drawGraph(uploadState.currentworkbook);
+    if (uploadState && uploadState.currentWorkbook) {
+        drawGraph(uploadState.currentWorkbook);
     }
 };
 
 const displayworkbook = (workbook, name) => {
-    uploadState.currentworkbook = workbook;
+    uploadState.currentWorkbook = workbook;
     // console.log("workbook: ", workbook); // Display the workbook in the console
     $("#graph-metadata").html(workbook.genes.length + " nodes<br>" + workbook.links.length + " edges");
 
@@ -574,7 +574,7 @@ if (!grnState.genePageData.identified) {
 }
 
 export const updateApp = grnState => {
-    if (grnState.newworkbook) {
+    if (grnState.newWorkbook) {
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);
         expandLayoutSidebar();
@@ -612,7 +612,7 @@ export const updateApp = grnState => {
 
         // Rare exception to the MVC cycle: right now we have no way of knowing whether the workbook has changed
         // (which is what necessitates displayworkbook), so we mark the model here.
-        grnState.newworkbook = false;
+        grnState.newWorkbook = false;
     }
 
     synchronizeNormalizationValues(grnState.normalizationMax);

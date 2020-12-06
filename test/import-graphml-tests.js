@@ -7,7 +7,7 @@ var importController = require(__dirname + "/../server/controllers" + "/import-c
 var constants = require(__dirname + "/../server/controllers" + "/constants");
 var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedworkbook = initWorkbook({
+var expectedUnweightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -30,7 +30,7 @@ var expectedUnweightedworkbook = initWorkbook({
     expression:{}
 });
 
-var expectedWeightedworkbook = initWorkbook({
+var expectedWeightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -53,7 +53,7 @@ var expectedWeightedworkbook = initWorkbook({
     expression:{}
 });
 
-var expectedUnweightedworkbookWithCycle = initWorkbook({
+var expectedUnweightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -79,7 +79,7 @@ var expectedUnweightedworkbookWithCycle = initWorkbook({
     expression:{}
 });
 
-var expectedWeightedworkbookWithCycle = initWorkbook({
+var expectedWeightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -278,7 +278,7 @@ var misspelledGraphTagTestGraphMl = [
 
 
 // Added workbooks and GraphML documents
-var newExpectedWeightedworkbook = initWorkbook({
+var newExpectedWeightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -580,25 +580,25 @@ describe("Import from GraphML", function () {
     it("should import unweighted workbooks from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(unweightedTestGraphMl)
-        ).to.deep.equal(expectedUnweightedworkbook);
+        ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
     it("should import weighted workbooks from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(weightedTestGraphMl)
-        ).to.deep.equal(expectedWeightedworkbook);
+        ).to.deep.equal(expectedWeightedWorkbook);
     });
 
     it("should import unweighted workbooks with cycles from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(unweightedTestGraphMlWithCycle)
-        ).to.deep.equal(expectedUnweightedworkbookWithCycle);
+        ).to.deep.equal(expectedUnweightedWorkbookWithCycle);
     });
 
     it("should import weighted workbooks with cycles from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
-        ).to.deep.equal(expectedWeightedworkbookWithCycle);
+        ).to.deep.equal(expectedWeightedWorkbookWithCycle);
     });
 
     it("should issue an general graphML syntax error because there is a missing end tag", function () {
@@ -803,7 +803,7 @@ describe("Import from GraphML", function () {
     it("should import this weighted workbook from GraphML correctly", function () {
         expect(
             importController.graphMlToGrnsight(templateGraphmlFileForNewTests)
-        ).to.deep.equal(newExpectedWeightedworkbook);
+        ).to.deep.equal(newExpectedWeightedWorkbook);
     });
 
     it("should issue an invalid attribute name graphML syntax error because there is a missing source tag name", function () {

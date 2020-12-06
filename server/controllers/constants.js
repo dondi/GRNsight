@@ -10,10 +10,10 @@ module.exports = {
     warnings: {
         EDGES_WITHOUT_WEIGHTS: {
             warningCode: "EDGES_WITHOUT_WEIGHTS",
-            errorDescription: "GRNsight has detected that one or more edges in your workbook are missing numerical" +
+            errorDescription: "GRNsight has detected that one or more edges in your network are missing numerical" +
             " weight values. Because the algorithm GRNsight uses for determining the arrowhead type and the color and" +
             " thickness of the edges requires numerical weight values, your graph will display as an unweighted graph" +
-            " with black edges and pointed arrowheads. If you want to display the workbook as a weighted graph, please" +
+            " with black edges and pointed arrowheads. If you want to display the network as a weighted graph, please" +
             " modify your input file to include weight values for all edges."
         },
 
@@ -27,16 +27,16 @@ module.exports = {
             errorDescription: " GRNsight has detected that there are no tabs in your file. The GRNsight specification" +
             " for SIF files states that data must be delimited by tabs. Please review your data. This warning may" +
             " suggest that your SIF file has comma separated data or contains no data at all. Additionally, valid" +
-            " workbooks which consist of single source nodes may also trigger this warning."
+            " networks which consist of single source nodes may also trigger this warning."
         }
     },
 
     errors: {
         SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR: {
             errorCode: "SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR",
-            possibleCause: "The SIF importer detects an unweighted workbook with an unsupported relationship type.",
+            possibleCause: "The SIF importer detects an unweighted network with an unsupported relationship type.",
             suggestedFix: "SIF files accepted by GRNsight must use 'pd' as the text string for the relationship type" +
-            " in unweighted workbooks. Please review the SIF input documentation. Additionally, this error may be have" +
+            " in unweighted networks. Please review the SIF input documentation. Additionally, this error may be have" +
             " been caused by missing data in your file, which caused the importer to incorrectly interpret a source" +
             " or target as the relationship."
         },

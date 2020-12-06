@@ -11,7 +11,7 @@ import {
   DEFAULT_ZOOM_VALUE,
   FORCE_GRAPH
 } from "./constants";
-let currentworkbook = null;
+let currentWorkbook = null;
 
 const annotateLinks = workbook => {
     // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.
@@ -42,17 +42,17 @@ const annotateLinks = workbook => {
 export const grnState = {
     name: null,
     simulation: undefined,
-    newworkbook: false,
+    newWorkbook: false,
 
     get workbook () {
-        return currentworkbook;
+        return currentWorkbook;
     },
 
     set workbook (workbook) {
-        currentworkbook = workbook;
+        currentWorkbook = workbook;
         // TODO: add colorOptimal so that the rest of the normalization code can get added
         this.resetNormalizationMax = max(workbook.positiveWeights.concat(workbook.negativeWeights));
-        this.newworkbook = true;
+        this.newWorkbook = true;
     },
 
 // Edge Display Parameters
@@ -63,7 +63,7 @@ export const grnState = {
     grayEdgeThreshold: 5,
     dashedLine: false,
 
-    annotateLinks: () => annotateLinks(currentworkbook),
+    annotateLinks: () => annotateLinks(currentWorkbook),
 
 // Zoom Parameter
     zoomValue: DEFAULT_ZOOM_VALUE,

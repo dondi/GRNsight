@@ -6,7 +6,7 @@ var NAME_ID = "name";
 var WEIGHT_ID = "weight";
 
 var grnsightToGraphMlJson = function (workbook) {
-    var convertedworkbook = {
+    var convertedWorkbook = {
         graphml: {
             "@xmlns": "http://graphml.graphdrawing.org/xmlns",
             "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
@@ -43,7 +43,7 @@ var grnsightToGraphMlJson = function (workbook) {
     };
 
     if (workbook.sheetType === constants.WEIGHTED) {
-        convertedworkbook.graphml.key.push({
+        convertedWorkbook.graphml.key.push({
             "@id": WEIGHT_ID,
             "@for": "edge",
             "@attr.name": "weight",
@@ -51,7 +51,7 @@ var grnsightToGraphMlJson = function (workbook) {
         });
     }
 
-    convertedworkbook.graphml.graph = {
+    convertedWorkbook.graphml.graph = {
         "@edgedefault": "directed",
 
         node: workbook.genes.map(function (gene) {
@@ -96,10 +96,10 @@ var grnsightToGraphMlJson = function (workbook) {
     };
 
     if (workbook.filename) {
-        convertedworkbook.graphml.graph["@id"] = workbook.filename;
+        convertedWorkbook.graphml.graph["@id"] = workbook.filename;
     }
 
-    return convertedworkbook;
+    return convertedWorkbook;
 };
 
 module.exports = function (workbook) {
