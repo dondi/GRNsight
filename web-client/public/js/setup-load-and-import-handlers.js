@@ -67,14 +67,14 @@ const uploadHandler = (uploader) => {
     };
 };
 
-const networkErrorDisplayer = xhr => {
+const workbookErrorDisplayer = xhr => {
     // re-enable upload button
     disableUpload(false);
     // Deleted status, error for argument because it was never used
     const err = JSON.parse(xhr.responseText);
     let errorString = "Your graph failed to load.<br><br>";
 
-    if (!err.errors) { // will be falsy if an error was thrown before the network was generated
+    if (!err.errors) { // will be falsy if an error was thrown before the workbook was generated
         errorString += err;
     } else {
         errorString = err.errors.reduce(
@@ -118,7 +118,7 @@ export const setupLoadAndImportHandlers = grnState => {
                 crossDomain: true
             }) :
             $.getJSON(fullUrl)
-            ).done((network, textStatus, jqXhr) => {
+            ).done((workbook, textStatus, jqXhr) => {
                 grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
                 if (demoFiles.indexOf(name) > -1) {
                     switch (name) {
@@ -136,7 +136,7 @@ export const setupLoadAndImportHandlers = grnState => {
                         break;
                     }
                 }
-                grnState.network = network;
+                grnState.workbook = workbook;
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
@@ -144,9 +144,9 @@ export const setupLoadAndImportHandlers = grnState => {
                 // re-enable upload button
                 disableUpload(false);
                 updateApp(grnState);
-                // displayStatistics(network);
+                // displayStatistics(workbook);
 
-            }).error(networkErrorDisplayer);
+            }).error(workbookErrorDisplayer);
     };
     /*
      * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery

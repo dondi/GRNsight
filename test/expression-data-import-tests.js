@@ -6,7 +6,7 @@ describe("expression-data-import-tests", function () {
 
     describe("MISSING_EXPRESSION_SHEET", function () {
         it.skip("_log2_expression or _log2_optimized_expression worksheet was not detected.",
-        "The network graph will display without node coloring. If you wish for the network to be colored",
+        "The network graph will display without node coloring. If you wish for the workbook to be colored",
         "you can upload your own expression data by adding one or more of those worksheets to your Excel",
         "workbook or select, or select from data in GRNsight's Expression Database, found in the Node menu or panel.", function () {
             test.missingExpressionWarning("test-files/expression-data-test-sheets/expression_sheet_not_existing.xlsx", 1);

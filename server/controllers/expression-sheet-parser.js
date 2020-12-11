@@ -82,7 +82,7 @@ const warningsList = {
             errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
             not detected. The network graph will display without node coloring. If you want \
             the nodes to be colored with expression data, you can upload your own expression \
-            data by adding one or more of those worksheets to your Excel workbook or select \
+            data by adding one or more of those worksheets to your Excel network or select \
             from data in GRNsight's Expression Database, found in the Node menu or panel."
         };
     },
@@ -95,30 +95,30 @@ const warningsList = {
     }
 };
 
-const addExpWarning = (network, message) => {
+const addExpWarning = (workbook, message) => {
     let warningsCount;
-    if (!Object.keys(network).includes("warnings")) {
+    if (!Object.keys(workbook).includes("warnings")) {
         warningsCount = 0;
-        network.warnings = [];
+        workbook.warnings = [];
     } else {
-        warningsCount = network.warnings.length;
+        warningsCount = workbook.warnings.length;
     }
     const MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        network.warnings.push(message);
+        workbook.warnings.push(message);
     } else {
-        network.errors.push(errorsList.warningsCountError);
+        workbook.errors.push(errorsList.warningsCountError);
         return false;
     }
 };
 
-const addExpError = (network, message) => {
-    const errorsCount = network.errors.length;
+const addExpError = (workbook, message) => {
+    const errorsCount = workbook.errors.length;
     const MAX_ERRORS = 20;
     if (errorsCount < MAX_ERRORS) {
-        network.errors.push(message);
+        workbook.errors.push(message);
     } else {
-        network.errors.push(errorsList.errorsCountError);
+        workbook.errors.push(errorsList.errorsCountError);
         return false;
     }
 };
@@ -136,7 +136,7 @@ const isExpressionSheet = (sheetName) => {
     });
 };
 
-// Going to continue basing this section off of the parseNetworkSheet function in spreadsheet-controller.js
+// Going to continue basing this section off of the parseWorkbookSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
 
     var geneData = {};

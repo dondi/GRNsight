@@ -1,18 +1,20 @@
 // var multiparty = require("multiparty");
 // var path = require("path");
-// var demoNetworks = require(__dirname + "/demo-networks");
+// var demoWorkbooks = require(__dirname + "/demo-workbooks");
+
+const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
 
-// const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights"];
+// const workbook_SHEET_NAMES = ["workbook", "network_optimized_weights"];
 
-// const isNetworkSheet = (sheetName) => {
-//     return NETWORK_SHEET_NAMES.some(function (network) {
-//         return (sheetName.toLowerCase() === network);
+// const isworkbookSheet = (sheetName) => {
+//     return workbook_SHEET_NAMES.some(function (workbook) {
+//         return (sheetName.toLowerCase() === workbook);
 //     });
 // };
-// Currently only going to number 76 because currently the network errors out at 75+ genes.
+// Currently only going to number 76 because currently the workbook errors out at 75+ genes.
 var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
     12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
     25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
@@ -159,7 +161,7 @@ var errorList = {
 // This is the list of warnings.
 // The graph will still load if warnings are detected, but these will be reported to the user.
 var warningsList = {
-    incorrectCellA1NetworkWarning: function (sheetName) {
+    incorrectCellA1WorkbookWarning: function (sheetName) {
         return {
             warningCode: "MISLABELED_NETWORK_CELL_A1",
             errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
@@ -203,18 +205,18 @@ var warningsList = {
         };
     },
 
-    networkSizeWarning: function (genesLength, edgesLength) {
+    workbookSizeWarning: function (genesLength, edgesLength) {
         return {
             warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: `Your network has ${genesLength} genes, and ${edgesLength} 
-                edges. Please note that networks are recommended to have less than 50 genes and 100 edges.`
+            errorDescription: `Your workbook has ${genesLength} genes, and ${edgesLength} 
+                edges. Please note that workbooks are recommended to have less than 50 genes and 100 edges.`
         };
     },
 
     incorrectlyNamedSheetWarning: {
         warningCode: "INCORRECTLY_NAMED_SHEET",
-        errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
-             'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
+        errorDescription: "The uploaded file appears to contain a weighted workbook, but contains no \
+             'network_optimized_weights' sheet. A weighted workbook must be contained in a sheet called \
              'network_optimized_weights' in order to be drawn as a weighted graph. \
              Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
     },
@@ -235,11 +237,11 @@ var warningsList = {
             " selection in the Species menu or panel."
     },
 
-    unknownSpeciesDetected: function (networkSpecies, networkTaxon) {
+    unknownSpeciesDetected: function (workbookSpecies, workbookTaxon) {
         return {
             warningCode: "UNKNOWN_SPECIES_DETECTED",
-            errorDescription: "GRNsight detected the species " + networkSpecies +
-                " and the taxon " + networkTaxon + " in your input file." +
+            errorDescription: "GRNsight detected the species " + workbookSpecies +
+                " and the taxon " + workbookTaxon + " in your input file." +
                 " This is not one of the supported species, or was formatted incorrectly" +
                 " You can change the species selection in the Species menu or panel."
         };
@@ -250,24 +252,24 @@ var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
 };
 
-var addWarning = function (network, message) {
-    var warningsCount = network.warnings.length;
+var addWarning = function (workbook, message) {
+    var warningsCount = workbook.warnings.length;
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        addMessageToArray(network.warnings, message);
+        addMessageToArray(workbook.warnings, message);
     } else {
-        addMessageToArray(network.errors, errorList.warningsCountError);
+        addMessageToArray(workbook.errors, errorList.warningsCountError);
         return false;
     }
 };
 
-var addError = function (network, message) {
-    var errorsCount = network.errors.length;
+var addError = function (workbook, message) {
+    var errorsCount = workbook.errors.length;
     var MAX_ERRORS = 20;
     if (errorsCount < MAX_ERRORS) {
-        addMessageToArray(network.errors, message);
+        addMessageToArray(workbook.errors, message);
     } else {
-        addMessageToArray(network.errors, errorList.errorsCountError);
+        addMessageToArray(workbook.errors, errorList.errorsCountError);
         return false;
     }
 };
@@ -287,12 +289,12 @@ var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
     }
 };
 
-var addTargetGene = function (network, sheet, row, targetGenes, genesList) {
+var addTargetGene = function (workbook, sheet, row, targetGenes, genesList) {
     let currentGene = { name: sheet.data[row][0] };
     if (currentGene.name === undefined) {
-        addWarning(network, warningsList.missingTargetGeneWarning(row, 0));
+        addWarning(workbook, warningsList.missingTargetGeneWarning(row, 0));
     } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-        addWarning(network, warningsList.missingTargetGeneWarning(row, 0));
+        addWarning(workbook, warningsList.missingTargetGeneWarning(row, 0));
     } else {
         // set currentGeneName to a String so toUpperCase doesn't mess up
         currentGene.name = currentGene.name.toString();
@@ -303,12 +305,12 @@ var addTargetGene = function (network, sheet, row, targetGenes, genesList) {
         // If it's not there, it will return -1, so we add it.
         if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
             genesList.push(String(currentGene.name.toUpperCase()));
-            network.genes.push(currentGene);
+            workbook.genes.push(currentGene);
         }
     }
 };
 
-var parseNetworkSheet = function (sheet, network) {
+var parseWorkbookSheet = function (sheet, workbook) {
     var currentLink;
     var currentGene;
     var sourceGene;
@@ -324,22 +326,22 @@ var parseNetworkSheet = function (sheet, network) {
     // check for “cols regulators/rows targets” in cell A1
     const cellA1 = sheet.data[0][0];
     if (cellA1 !== "cols regulators/rows targets") {
-        addWarning(network, warningsList.incorrectCellA1NetworkWarning(sheet.name));
+        addWarning(workbook, warningsList.incorrectCellA1WorkbookWarning(sheet.name));
     }
 
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {
         currentGene = { name: sheet.data[0][i] };
         if (currentGene.name === undefined) {
-            addWarning(network, warningsList.missingSourceGeneWarning(0, i));
+            addWarning(workbook, warningsList.missingSourceGeneWarning(0, i));
         } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-            addWarning(network, warningsList.missingSourceGeneWarning(0, i));
+            addWarning(workbook, warningsList.missingSourceGeneWarning(0, i));
         } else {
             // set currentGeneName to a String so toUpperCase doesn't mess up
             currentGene.name = currentGene.name.toString();
             sourceGenes.push(String(currentGene.name.toUpperCase()));
             genesList.push(String(currentGene.name.toUpperCase()));
-            network.genes.push(currentGene);
+            workbook.genes.push(currentGene);
         }
     }
     // Set columnCount to undefineds in each column equal to the length of the gene names
@@ -347,11 +349,11 @@ var parseNetworkSheet = function (sheet, network) {
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
         if (sheet.data[row].length === 0) { // if the current row is empty
-            if (addError(network, errorList.emptyRowError(row)) === false) {
-                return network;
+            if (addError(workbook, errorList.emptyRowError(row)) === false) {
+                return workbook;
             }
         } else if (sheet.data[row].length === 1) {
-            addTargetGene(network, sheet, row, targetGenes, genesList);
+            addTargetGene(workbook, sheet, row, targetGenes, genesList);
             rowData.push(row);
         } else { // if the row has data...
             // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
@@ -361,7 +363,7 @@ var parseNetworkSheet = function (sheet, network) {
                 if (sheet.data[row].length < sheet.data[0].length) {
                     for (let i = sheet.data[row].length - 1; i < sheet.data[0].length  - 1; i++) {
                         columnChecker[i]++;
-                        addWarning(network, warningsList.invalidMatrixDataWarning(row, i));
+                        addWarning(workbook, warningsList.invalidMatrixDataWarning(row, i));
                     }
                 }
                 while (column < sheet.data[row].length) {
@@ -370,23 +372,23 @@ var parseNetworkSheet = function (sheet, network) {
                         if (column === 0) {
                             // These genes are the target genes
                             try {
-                                addTargetGene(network, sheet, row, targetGenes, genesList);
+                                addTargetGene(workbook, sheet, row, targetGenes, genesList);
                             } catch (err) {
                                 sourceGene = sheet.data[0][column];
                                 targetGene = sheet.data[row][0];
-                                addError(network, errorList.corruptGeneError(row, column));
-                                return network;
+                                addError(workbook, errorList.corruptGeneError(row, column));
+                                return workbook;
                             }
                         } else { // If we're within the matrix and lookin' at the data...
                             try {
                                 if (sheet.data[row][column] === undefined) {
-                                    // SHOULD BE: addError(network, errorList.missingValueError(row, column));
+                                    // SHOULD BE: addError(workbook, errorList.missingValueError(row, column));
                                     columnChecker[column - 1]++;
-                                    addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
+                                    addWarning(workbook, warningsList.invalidMatrixDataWarning(row, column));
                                 } else if (isNaN(+("" + sheet.data[row][column])) ||
                                     typeof sheet.data[row][column] !== "number") {
-                                    addError(network, errorList.dataTypeError(row, column));
-                                    return network;
+                                    addError(workbook, errorList.dataTypeError(row, column));
+                                    return workbook;
                                 } else {
                                     // columnChecker[column - 1] = columnChecker[column - 1]++;
                                     if (sheet.data[row][column] !== 0) { // We only care about non-zero values
@@ -394,11 +396,11 @@ var parseNetworkSheet = function (sheet, network) {
                                         sourceGene = sheet.data[0][column];
                                         targetGene = sheet.data[row][0];
                                         if (sourceGene === undefined || targetGene === undefined) {
-                                            addWarning(network, warningsList.randomDataWarning("undefined",
+                                            addWarning(workbook, warningsList.randomDataWarning("undefined",
                                                 row, column));
                                         } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
                                             (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                            addWarning(network, warningsList.randomDataWarning("NaN", row, column));
+                                            addWarning(workbook, warningsList.randomDataWarning("NaN", row, column));
                                         } else {
                                             // Grab the source and target genes' numbers
                                             sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
@@ -408,8 +410,8 @@ var parseNetworkSheet = function (sheet, network) {
                                                 value: sheet.data[row][column]
                                             };
                                             // Here we set the properties of the current link
-                                            // before we push them to the network
-                                            if (network.sheetType === "weighted") {
+                                            // before we push them to the workbook
+                                            if (workbook.sheetType === "weighted") {
                                                 if (currentLink.value > 0) {
                                                     // If it's a positive number, mark it as an activator
                                                     currentLink.type = "arrowhead";
@@ -417,33 +419,33 @@ var parseNetworkSheet = function (sheet, network) {
                                                     // currentLink.stroke = "MediumVioletRed";
                                                     // Node coloring-consistent red edge color
                                                     currentLink.stroke = "rgb(195, 61, 61)";
-                                                    network.positiveWeights.push(currentLink.value);
+                                                    workbook.positiveWeights.push(currentLink.value);
                                                 } else { // if it's a negative number, mark it as a repressor
                                                     currentLink.type = "repressor";
                                                     // currentLink.stroke = "DarkTurquoise";
                                                     // GRNsight v1 cyan edge color
                                                     // Node coloring-consistent blue edge color
                                                     currentLink.stroke = "rgb(51, 124, 183)";
-                                                    network.negativeWeights.push(currentLink.value);
+                                                    workbook.negativeWeights.push(currentLink.value);
                                                 }
-                                            } else if (network.sheetType === "unweighted") {
+                                            } else if (workbook.sheetType === "unweighted") {
                                                 currentLink.type = "arrowhead";
                                                 currentLink.stroke = "black";
                                                 if (currentLink.value !== 1) {
-                                                    addWarning(network, warningsList.incorrectlyNamedSheetWarning());
+                                                    addWarning(workbook, warningsList.incorrectlyNamedSheetWarning());
                                                     currentLink.value = 1;
                                                 }
-                                                network.positiveWeights.push(currentLink.value);
+                                                workbook.positiveWeights.push(currentLink.value);
                                             }
-                                            network.links.push(currentLink);
+                                            workbook.links.push(currentLink);
                                         }
                                     }
                                 }
 
                             } catch (err) {
-                                addError(network, errorList.missingValueError(row, column));
-                                // SHOULD BE: addError(network, errorList.unknownFileError);
-                                return network;
+                                addError(workbook, errorList.missingValueError(row, column));
+                                // SHOULD BE: addError(workbook, errorList.unknownFileError);
+                                return workbook;
                             }
                         }
                     }
@@ -457,26 +459,26 @@ var parseNetworkSheet = function (sheet, network) {
                 column = 0; // let's go back to column 0 on the next row!
             } catch (err) {
                 // We only get here if something goes drastically wrong. We don't want to get here.
-                addError(network, errorList.unknownError);
-                return network;
+                addError(workbook, errorList.unknownError);
+                return workbook;
             }
         }
     }
 
     if (rowData.length === sheet.data.length - 1) {
-        addError(network, errorList.emptyMatrixDataError(sheet.name));
+        addError(workbook, errorList.emptyMatrixDataError(sheet.name));
     } else {
         for (let x of rowData) {
-            addError(network, errorList.emptyRowDataError(x, sheet.name));
+            addError(workbook, errorList.emptyRowDataError(x, sheet.name));
         }
     }
 
     for (var i = 0; i < columnChecker.length; i++) {
         if (columnChecker[i] >= sheet.data.length - 1) {
             if (sheet.data[0][i + 1] === undefined) {
-                addError(network, errorList.emptyColumnError(i + 1, sheet.name));
+                addError(workbook, errorList.emptyColumnError(i + 1, sheet.name));
             } else {
-                addError(network, errorList.emptyColumnDataError(i + 1, sheet.name));
+                addError(workbook, errorList.emptyColumnDataError(i + 1, sheet.name));
             }
         }
     }
@@ -490,48 +492,41 @@ var parseNetworkSheet = function (sheet, network) {
     targetGenes.sort();
 
     // syntactic duplicate checker for both columns and rows
-    checkDuplicates(network.errors, sourceGenes, targetGenes);
+    checkDuplicates(workbook.errors, sourceGenes, targetGenes);
 
     // NOTE: Temporarily commented out pending resolution of #474, and other related issues
     // try {
-    //   network.graphStatisticsReport = graphStatisticsReport(network);
+    //   workbook.graphStatisticsReport = graphStatisticsReport(workbook);
     // } catch (err) {
     //   console.log ("Graph statistics report failed to be complete.");
     // }
-    return semanticChecker(network);
+    return semanticChecker(workbook);
 };
 
 
-module.exports = function (workbook) {
-    const network = {
-        genes: [],
-        links: [],
-        errors: [],
-        warnings: [],
-        positiveWeights: [],
-        negativeWeights: [],
-        sheetType: "unweighted",
-    };
-    var networkSheet;
+module.exports = function (workbookFile) {
+    const workbook = initWorkbook({sheetType: "unweighted"});
+    var workbookSheet;
 
-    for (let i = 0; i < workbook.length; i++) {
-        if (workbook[i].name.toLowerCase() === "network") {
+    for (let i = 0; i < workbookFile.length; i++) {
+        // === 'network' for backwards compatibility of test files
+        if (workbookFile[i].name.toLowerCase() === "network") {
             // Here we have found a sheet containing simple data. We keep looking
             // in case there is also a sheet with optimized weights
-            networkSheet = workbook[i];
-        } else if (workbook[i].name.toLowerCase() === "network_optimized_weights") {
+            workbookSheet = workbookFile[i];
+        } else if (workbookFile[i].name.toLowerCase() === "network_optimized_weights" ) {
             // We found a sheet with optimized weights, which is the ideal data source.
             // So we stop looking.
-            networkSheet = workbook[i];
-            network.sheetType = "weighted";
+            workbookSheet = workbookFile[i];
+            workbook.sheetType = "weighted";
             break;
         }
     }
 
-    if (networkSheet) {
-        return parseNetworkSheet(networkSheet, network);
+    if (workbookSheet) {
+        return parseWorkbookSheet(workbookSheet, workbook);
     } else {
-        addError(network, errorList.missingNetworkError);
-        return network;
+        addError(workbook, errorList.missingNetworkError);
+        return workbook;
     }
 };
