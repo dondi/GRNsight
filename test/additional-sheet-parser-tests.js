@@ -55,29 +55,46 @@ describe("additional-sheet-parser", function () {
     //     assert(Object.keys(data.expression).length, 3);
     // });
 
-    it("correctly parses optimization_parameters sheet", function () {
-        var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
-        "optimization_parameters_test.xlsx");
-        var data = parseAdditionalSheets(workbook);
-        /* eslint-disable */
-        assert(data.meta, {
-            alpha: 0.002,
-            kk_max: 1,
-            MaxIter: 100000000,
-            TolFun: 0.000001,
-            MaxFunEval: 100000000,
-            TolX: 0.000001,
-            production_function: 'Sigmoid',
-            L_curve: 0,
-            estimate_params: 1,
-            make_graphs: 1,
-            fix_P: 0,
-            fix_b: 0,
-            expression_timepoints: [ 15, 30, 60 ],
-            Strain: [ 'wt', 'dcin5', 'dgln3', 'dhap4', 'dhmo1', 'dzap1' ],
-            simulation_timepoints: [ 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60 ]
+    describe("optimization parameters sheet", function () {
+        it("correctly parses optimization_parameters sheet", function () {
+            var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
+                "optimization_parameters_test.xlsx");
+            var data = parseAdditionalSheets(workbook);
+            /* eslint-disable */
+            assert(data.meta, {
+                alpha: 0.002,
+                kk_max: 1,
+                MaxIter: 100000000,
+                TolFun: 0.000001,
+                MaxFunEval: 100000000,
+                TolX: 0.000001,
+                production_function: 'Sigmoid',
+                L_curve: 0,
+                estimate_params: 1,
+                make_graphs: 1,
+                fix_P: 0,
+                fix_b: 0,
+                expression_timepoints: [15, 30, 60],
+                Strain: ['wt', 'dcin5', 'dgln3', 'dhap4', 'dhmo1', 'dzap1'],
+                simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+            });
+            /* eslint-enable */
         });
-        /* eslint-enable */
+
+        it("should return additionalSheetMissingColumnHeaderError", function () {
+            test.additionalSheetMissingColumnHeaderError(
+                "test-files/additional-sheet-test-files/optimization-parameters-missing-headers.xlsx", 2);
+        });
+
+        it("should return unknownOptimizationParameterWarning", function () {
+            test.unknownOptimizationParameterWarning(
+                "test-files/additional-sheet-test-files/optimization-parameters-unknown-parameter.xlsx", 1);
+        });
+
+        it("should return invalidOptimizationParameterWarning", function () {
+            test.invalidOptimizationParameterWarning(
+                "test-files/additional-sheet-test-files/optimization-parameters-invalid-optimization-parameter.xlsx", 2);
+        });
     });
 
     describe("two column sheets", function () {

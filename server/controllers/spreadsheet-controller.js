@@ -338,13 +338,13 @@ var crossSheetInteractions = function (workbook) {
         }
     }
 
-    if (additionalData.meta.species === undefined
-    && additionalData.meta.taxon_id === undefined) {
+    if (additionalData.meta.data.species === undefined
+    && additionalData.meta.data.taxon_id === undefined) {
         addWarning(network, warningsList.noSpeciesInformationDetected);
-    } else if (!doesSpeciesExist(additionalData.meta.species) &&
-    !doesSpeciesExist(additionalData.meta.taxon_id)) {
-        addWarning(network, warningsList.unknownSpeciesDetected(additionalData.meta.species,
-            additionalData.meta.taxon_id));
+    } else if (!doesSpeciesExist(additionalData.meta.data.species) &&
+    !doesSpeciesExist(additionalData.meta.data.taxon_id)) {
+        addWarning(network, warningsList.unknownSpeciesDetected(additionalData.meta.data.species,
+            additionalData.meta.data.taxon_id));
     }
 
     // Add errors and warnings from expression sheets
@@ -416,7 +416,7 @@ var crossSheetInteractions = function (workbook) {
     });
 
     // Integrate the desired properties from the other objects.
-    network.meta = additionalData.meta;
+    network.meta = additionalData.meta.data;
     network.test = additionalData.test;
     network.expression = expressionData.expression;
     return network;

@@ -531,6 +531,8 @@ var additionalSheetIncorrectColumnHeaderError = function (input, frequency) {
             return x.errorCode === "INCORRECT_COLUMN_HEADER";
         }).length;
     }
+    additionalSheetIncorrectColumnHeaderErrorCount += network.meta.errors.filter(
+        (x) => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
     assert.equal(frequency, additionalSheetIncorrectColumnHeaderErrorCount);
 };
 
@@ -543,6 +545,8 @@ var additionalSheetMissingColumnHeaderError = function (input, frequency) {
             return x.errorCode === "MISSING_COLUMN_HEADER";
         }).length;
     }
+    additionalSheetMissingColumnHeaderErrorCount += network.meta.errors.filter(
+        (x) => x.errorCode === "MISSING_COLUMN_HEADER").length;
     assert.equal(frequency, additionalSheetMissingColumnHeaderErrorCount);
 };
 
@@ -608,11 +612,23 @@ var additionalSheetExtraneousDataWarning = function (input, frequency) {
     assert.equal(frequency, additionalSheetExtraneousDataWarningCount);
 };
 
+var unknownOptimizationParameterWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var unknownOptimizationParameterWarningCount = 0;
+    unknownOptimizationParameterWarningCount  += network.meta.warnings.filter((x) =>
+        x.warningCode === "UNKNOWN_OPTIMIZATION_PARAMETER").length;
+    assert.equal(frequency, unknownOptimizationParameterWarningCount);
+};
 
-
-
-
-
+var invalidOptimizationParameterWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var network = parseAdditionalSheet(sheet);
+    var invalidOptimizationParameterWarningCount = 0;
+    invalidOptimizationParameterWarningCount += network.meta.warnings.filter((x) =>
+        x.warningCode === "INVALID_OPTIMIZATION_PARAMETER").length;
+    assert.equal(frequency, invalidOptimizationParameterWarningCount);
+};
 
 
 exports.noErrors = noErrors;
@@ -657,6 +673,8 @@ exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 // New Warning Tests
 
 exports.additionalSheetExtraneousDataWarning = additionalSheetExtraneousDataWarning;
+exports.unknownOptimizationParameterWarning = unknownOptimizationParameterWarning;
+exports.invalidOptimizationParameterWarning = invalidOptimizationParameterWarning;
 
 
 
