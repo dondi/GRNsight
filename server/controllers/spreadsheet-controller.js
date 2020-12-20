@@ -337,13 +337,13 @@ var crossSheetInteractions = function (workbookFile) {
     }
 
     if (additionalData.meta.data.species === undefined
-    && additionalData.meta.data.taxon_id === undefined) {
-        addWarning(network, warningsList.noSpeciesInformationDetected);
+        && additionalData.meta.data.taxon_id === undefined) {
+        addWarning(workbook, warningsList.noSpeciesInformationDetected);
     } else if (!doesSpeciesExist(additionalData.meta.data.species) &&
-    !doesSpeciesExist(additionalData.meta.data.taxon_id)) {
-        addWarning(network, warningsList.unknownSpeciesDetected(additionalData.meta.data.species,
+        !doesSpeciesExist(additionalData.meta.data.taxon_id)) {
+        addWarning(workbook, warningsList.unknownSpeciesDetected(additionalData.meta.data.species,
             additionalData.meta.data.taxon_id));
-
+    }
 
     // Add errors and warnings from expression sheets
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
@@ -414,17 +414,10 @@ var crossSheetInteractions = function (workbookFile) {
     });
 
     // Integrate the desired properties from the other objects.
-<<<<<<< HEAD
-    network.meta = additionalData.meta.data;
-    network.test = additionalData.test;
-    network.expression = expressionData.expression;
-    return network;
-=======
     workbook.meta = additionalData.meta;
     workbook.test = additionalData.test;
     workbook.expression = expressionData.expression;
     return workbook;
->>>>>>> 3e26e92df765f4b61d4ff0808dc96807eec03b70
 };
 
 var processGRNmap = function (path, res, app) {
@@ -564,4 +557,4 @@ module.exports = function (app) {
         processGRNmap : processGRNmap,
         crossSheetInteractions: crossSheetInteractions
     };
-};
+}

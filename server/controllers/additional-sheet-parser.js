@@ -99,7 +99,7 @@ const errorsList = {
         return {
             errorCode: "INVALID_GENE_LENGTH",
             possibleCause: `Gene '${gene}' in row ${row}, column A in the ${sheetName} sheet is too long.`,
-            suggestedFix: "Please make your gene names be less than 13 characters"
+            suggestedFix: "Please make your gene names be less than 13 characters."
         };
     },
 
@@ -109,7 +109,7 @@ const errorsList = {
             possibleCause: `The value under gene name ${gene} at row ${row} in the ${sheetName} sheet, 
             contains an invalid character.`,
             suggestedFix: "Please ensure all genes in the data are formatted properly with no" +
-                " special characters except for '-' and '_'"
+                " special characters except for '-' and '_'."
         };
     },
 };
@@ -127,7 +127,7 @@ const warningsList = {
             warningCode: "UNKNOWN_OPTIMIZATION_PARAMETER",
             errorDescription: `The optimization parameter '${param}' in the ${sheetName} sheet, is unknown. ` +
                 "Please ensure that the spelling of all optimization_parameters is correct, and " +
-                "make sure that you are using only supported optimization parameters"
+                "make sure that you are using only supported optimization parameters."
         };
     },
     invalidOptimizationParameter: function (sheetName, param) {
@@ -138,7 +138,7 @@ const warningsList = {
         return {
             warningCode: "INVALID_OPTIMIZATION_PARAMETER",
             errorDescription: `The optimization parameter '${param}' in the ${sheetName} sheet, is invalid. ` +
-                `Please ensure that the optimization parameter's value is a ${paramType}`
+                `Please ensure that the optimization parameter's value is a ${paramType}.`
         };
     },
 
@@ -147,14 +147,14 @@ const warningsList = {
             warningCode: "UNKNOWN_OPTIMIZATION_PARAMETER",
             errorDescription: `The optimization parameter '${param}' in the ${sheetName} sheet, is unknown. ` +
                 "Please ensure that the spelling of all optimization_parameters is correct, and " +
-                "make sure that you are using only supported optimization parameters"
+                "make sure that you are using only supported optimization parameters."
         };
     },
     invalidOptimizationDiagnosticsParameter: function (sheetName, param) {
         return {
             warningCode: "INVALID_OPTIMIZATION_DIAGNOSTICS_PARAMETER",
             errorDescription: `The optimization parameter '${param}' in the ${sheetName} sheet, is invalid. ` +
-                "Please ensure that the optimization parameter's value is a number"
+                "Please ensure that the optimization parameter's value is a number."
         };
     },
     incorrectMSEGeneHeaderWarning: function (sheetName, row) {
@@ -170,7 +170,23 @@ const warningsList = {
         return {
             warningCode: "INCORRECT_MSE_HEADER",
             errorDescription: `The header ${header} in row ${row} column ${colLetter} of the ${sheetName} sheet, ` +
-                "does not contain 'MSE' Please ensure that you have the correct column header"
+                "does not contain 'MSE' Please ensure that you have the correct column header."
+        };
+    },
+    missingMSEDataWarning: function (sheetName, row, column) {
+        let colLetter = numbersToLetters[column];
+        return {
+            warningCode: "MISSING_MSE_DATA",
+            errorDescription: `The MSE data in row ${row} column ${colLetter} of the ${sheetName} sheet, ` +
+                "is missing. Please ensure that your data is correct and complete."
+        };
+    },
+    invalidMSEDataWarning: function (sheetName, row, column) {
+        let colLetter = numbersToLetters[column];
+        return {
+            warningCode: "INCORRECT_MSE_HEADER",
+            errorDescription: `The data in row ${row} column ${colLetter} of the ${sheetName} sheet, ` +
+                "is not a number. Please ensure that your MSE data is correct and only contains numbers."
         };
     }
 };
@@ -353,8 +369,8 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
             if (sheet.data[row].length > output.data.MSE["column-headers"].length + 1) {
                 addWarning(output, warningsList.extraneousDataWarning(sheet.name, row));
             } else if (sheet.data[row].length <= output.data.MSE["column-headers"].length) {
-                for (let i = sheet.data[row].length - 1; i <= output.data.MSE["column-headers"].length; i++) {
-                    // add missing MSE data warning in loop
+                for (let col = sheet.data[row].length - 1; col <= output.data.MSE["column-headers"].length; col++) {
+                    addWarning(output, warningsList.missingMSEDataWarning(sheet.name, row, col));
                 }
             }
             currentGene = sheet.data[row][0];
@@ -364,9 +380,9 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
                     if (typeof sheet.data[row][col] === "number") {
                         currentMSE.push(sheet.data[row][col]);
                     } else if (sheet.data[row][col] === undefined) {
-                        // add missing MSE data warning
+                        addWarning(output, warningsList.missingMSEDataWarning(sheet.name, row, col));
                     } else {
-                        // add invalid MSE data type warning
+                        addWarning(output, warningsList.invalidMSEDataWarning(sheet.name, row, col));
                     }
                 }
                 output.data.MSE.Genes[currentGene] = currentMSE;
@@ -376,8 +392,8 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
         }
     }
     // For Testing Purposes:
-    // console.log("Diagnostics Warnings: ", output.warnings);
-    // console.log("Diagnostics Errors: ", output.errors);
+    console.log("Diagnostics Warnings: ", output.warnings);
+    console.log("Diagnostics Errors: ", output.errors);
     return output;
 };
 
