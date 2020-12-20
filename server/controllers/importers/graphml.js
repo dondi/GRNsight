@@ -2,26 +2,17 @@ var constants = require(__dirname + "/../constants");
 var parseString = require("xml2js").parseString;
 var semanticChecker = require(__dirname + "/../semantic-checker");
 var graphmlConstants = require(__dirname + "/../graphml-constants");
+var initWorkbook = require(__dirname + "/../helpers.js").initWorkbook;
 
 module.exports = function (graphml) {
     var graph;
     var key;
 
-    var network = {
-        genes: [],
-        links: [],
-        errors: [],
-        warnings: [],
-        positiveWeights: [],
-        negativeWeights: [],
-        sheetType: constants.UNWEIGHTED,
-        meta: {},
-        expression:{}
-    };
+    var workbook = initWorkbook({sheetType: constants.UNWEIGHTED});
 
     // These warnings don't exist. They are a TODO
-    // network.warnings.push(constants.warnings.noSpeciesInformationDetected);
-    // network.warnings.push(constants.warnings.missingExpressionData); Doesn't exist
+    // workbook.warnings.push(constants.warnings.noSpeciesInformationDetected);
+    // workbook.warnings.push(constants.warnings.missingExpressionData); Doesn't exist
 
     var parseErr = function (err) {
         err = err.toString().split("\n").join(" ");
@@ -34,7 +25,7 @@ module.exports = function (graphml) {
     };
 
     var pushRelevantError = function (err) {
-        network.errors.push(graphmlConstants.pairError(parseErr(err)));
+        workbook.errors.push(graphmlConstants.pairError(parseErr(err)));
     };
 
     parseString(graphml, function (err, result) {
@@ -42,15 +33,15 @@ module.exports = function (graphml) {
             pushRelevantError(err);
         } else {
             if (!result) {
-                return semanticChecker(network);
+                return semanticChecker(workbook);
             }
             key = result.graphml && result.graphml.key;
             graph = result.graphml && result.graphml.graph && result.graphml.graph[0];
         }
     });
 
-    if (network.errors.length > 0) {
-        return network;
+    if (workbook.errors.length > 0) {
+        return workbook;
     }
 
     var findKeyId = function (attrName, attrFor) {
@@ -103,13 +94,13 @@ module.exports = function (graphml) {
             return data.$.key === weightId && !isNaN(+data._);
         });
     })) {
-        network.sheetType = constants.WEIGHTED;
+        workbook.sheetType = constants.WEIGHTED;
     } else if (weightId) {
-        network.warnings.push(constants.warnings.EDGES_WITHOUT_WEIGHTS);
+        workbook.warnings.push(constants.warnings.EDGES_WITHOUT_WEIGHTS);
     }
 
     if (!graph.$ || graph.$.edgedefault !== "directed") {
-        network.warnings.push(constants.warnings.EDGE_DEFAULT_NOT_DIRECTED);
+        workbook.warnings.push(constants.warnings.EDGE_DEFAULT_NOT_DIRECTED);
     }
 
     var nameId = findKeyId("name", "node");
@@ -118,7 +109,7 @@ module.exports = function (graphml) {
 
     var geneIds = [];
     if (graph.node) {
-        network.genes = graph.node.map(function (node) {
+        workbook.genes = graph.node.map(function (node) {
             var nodeName = node.$.id;
 
             if (yFilesNodeId) {
@@ -163,16 +154,16 @@ module.exports = function (graphml) {
                 return;
             }
 
-            if (network.sheetType === constants.WEIGHTED) {
+            if (workbook.sheetType === constants.WEIGHTED) {
                 link.value = +edge.data.filter(function (data) {
                     return data.$.key === weightId;
                 })[0]._;
             }
 
-            network.links.push(link);
+            workbook.links.push(link);
         });
     }
 
-    return (network.errors.length === 0) ? semanticChecker(network) : network;
+    return (workbook.errors.length === 0) ? semanticChecker(workbook) : workbook;
 
 };

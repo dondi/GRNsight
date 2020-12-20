@@ -47,7 +47,7 @@ export var updaters = {
     removeNodeColoring: () => {},
 };
 
-export var drawGraph = function (network) {
+export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     d3.selectAll("svg").remove();
@@ -63,7 +63,7 @@ export var drawGraph = function (network) {
 
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
-    $("#warningMessage").html(network.warnings.length !== 0 ? "Click here in order to view warnings." : "");
+    $("#warningMessage").html(workbook.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
     var getNodeWidth = function (node) {
         return node.name.length * 12 + 5;
@@ -95,7 +95,7 @@ export var drawGraph = function (network) {
         ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ZOOM_ADAPTIVE_MAX_SCALE);
 
     // Create an array of all the network weights
-    var allWeights = network.positiveWeights.concat(network.negativeWeights);
+    var allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
     // Assign the entire array weights of 1, if color edges turned off
     if (!grnState.colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
@@ -112,7 +112,7 @@ export var drawGraph = function (network) {
     const maxWeight = Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 
     // Get the largest magnitude weight and set that as the default normalization factor
-    if (grnState.newNetwork) {
+    if (grnState.newWorkbook) {
         grnState.normalizationMax = maxWeight;
         grnState.resetNormalizationMax = maxWeight;
     }
@@ -127,7 +127,7 @@ export var drawGraph = function (network) {
     var unweighted = false;
 
     // if unweighted, all weights are 2
-    if (network.sheetType === "unweighted") {
+    if (workbook.sheetType === "unweighted") {
         totalScale = d3.scaleQuantile()
             .domain([d3.extent(allWeights)])
             .range(["2"]);
@@ -298,8 +298,8 @@ export var drawGraph = function (network) {
         zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE);
         zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY);
 
-        // Reset the zoom value to the midpoint whenever we load a new network.
-        if (grnState.newNetwork) {
+        // Reset the zoom value to the midpoint whenever we load a new workbook.
+        if (grnState.newWorkbook) {
             grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
         }
 
@@ -329,7 +329,7 @@ export var drawGraph = function (network) {
         manualZoom = false;
     });
 
-    if (!grnState.newNetwork) {
+    if (!grnState.newWorkbook) {
         updateAppBasedOnZoomValue();
     }
 
@@ -415,18 +415,18 @@ export var drawGraph = function (network) {
     var weight = boundingBoxContainer.selectAll(".weight");
 
     simulation
-        .nodes(network.genes)
+        .nodes(workbook.genes)
         .on("tick", tick);
 
     simulation.force("link")
-        .links(network.links);
+        .links(workbook.links);
 
-    link = link.data(network.links)
+    link = link.data(workbook.links)
         .enter().append("g")
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
-    node = node.data(network.genes)
+    node = node.data(workbook.genes)
         .enter().append("g")
         .attr("class", "node")
         .attr("id", function (d) {
@@ -437,7 +437,7 @@ export var drawGraph = function (network) {
         .call(drag)
         .on("dblclick", dblclick);
 
-    if (network.sheetType === "weighted") {
+    if (workbook.sheetType === "weighted") {
         link.append("path")
             .attr("class", "mousezone")
             .style("stroke-width", function (d) {
@@ -656,7 +656,7 @@ export var drawGraph = function (network) {
             return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         });
 
-    if (network.sheetType === "weighted") {
+    if (workbook.sheetType === "weighted") {
         link.append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
@@ -667,7 +667,7 @@ export var drawGraph = function (network) {
                 return d.value.toPrecision(4);
             });
 
-        weight = weight.data(network.links)
+        weight = weight.data(workbook.links)
             .enter().append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
@@ -973,7 +973,7 @@ export var drawGraph = function (network) {
     }
 
     const getExpressionData = (gene, strain, average) => {
-        const strainData = grnState.network.expression[strain];
+        const strainData = grnState.workbook.expression[strain];
         if (average) {
             const uniqueTimePoints = strainData.timePoints.filter(onlyUnique);
             let avgMap = {};
@@ -1003,7 +1003,7 @@ export var drawGraph = function (network) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    if (grnState.network.expression[dataset].data[p.name]) {
+                    if (grnState.workbook.expression[dataset].data[p.name]) {
                         const result = getExpressionData(p.name, dataset, average);
                         timePoints = result.timePoints;
                         return result.data;
@@ -1145,7 +1145,7 @@ export var drawGraph = function (network) {
         return false;
     };
 
-    if (!$.isEmptyObject(network.expression) && hasExpressionData(network.expression) &&
+    if (!$.isEmptyObject(workbook.expression) && hasExpressionData(workbook.expression) &&
       grnState.nodeColoring.topDataset !== undefined) {
         updaters.renderNodeColoring();
     }
@@ -1166,7 +1166,7 @@ export var drawGraph = function (network) {
 
     var currentWeightVisibilitySetting = null;
 
-    if (network.sheetType === "weighted") {
+    if (workbook.sheetType === "weighted") {
         if ($(".weightedGraphOptions").hasClass("hidden")) {
             $(".weightedGraphOptions").removeClass("hidden");
         }
@@ -1270,7 +1270,7 @@ export var drawGraph = function (network) {
     updaters.setNodesToGrid = () => { // eslint-disable-line no-unused-vars
         const margin = 10;
         const grid = Grid()  // eslint-disable-line no-undef
-            .data(network.genes)
+            .data(workbook.genes)
             .bands(true)
             .padding([0.2, 0])
             .size([$container.width() - margin, $container.height() - margin]); // set size of container

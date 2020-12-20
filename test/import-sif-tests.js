@@ -5,8 +5,9 @@ var extend = require("jquery-extend");
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
+var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedNetwork = {
+var expectedUnweightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -27,9 +28,9 @@ var expectedUnweightedNetwork = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetwork = {
+var expectedWeightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -50,9 +51,9 @@ var expectedWeightedNetwork = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedUnweightedNetworkWithCycle = {
+var expectedUnweightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -76,9 +77,9 @@ var expectedUnweightedNetworkWithCycle = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetworkWithCycle = {
+var expectedWeightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -102,7 +103,7 @@ var expectedWeightedNetworkWithCycle = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
 // Unweighted SIF
 
@@ -250,7 +251,7 @@ var strayDataInMultiColumnFormat = [
     "E"
 ].join("\r\n");
 
-var triviallyTabbedUnweightedNetwork = [
+var triviallyTabbedUnweightedWorkbook = [
     "A",
     [ "B", "pd", "A", "C" ].join("\t"),
     [ "C", "pd", "B" ].join("\t"),
@@ -280,44 +281,44 @@ var sifWithSemanticErrorOnly = [
 ].join("\r\n");
 
 describe("Import from SIF", function () {
-    it("should import unweighted networks from SIF correctly", function () {
+    it("should import unweighted workbooks from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSif)
-        ).to.deep.equal(expectedUnweightedNetwork);
+        ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
-    it("should import weighted networks from SIF correctly", function () {
+    it("should import weighted workbooks from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(weightedTestSif)
-        ).to.deep.equal(expectedWeightedNetwork);
+        ).to.deep.equal(expectedWeightedWorkbook);
     });
 
-    it("should import inconsistently weighted networks from SIF as unweighted", function () {
+    it("should import inconsistently weighted workbooks from SIF as unweighted", function () {
         expect(
             importController.sifToGrnsight(inconsistentlyWeightedTestSif)
-        ).to.deep.equal(extend(true, {}, expectedUnweightedNetwork, {
+        ).to.deep.equal(extend(true, {}, expectedUnweightedWorkbook, {
             warnings: [
                 constants.warnings.EDGES_WITHOUT_WEIGHTS
             ]
         }));
     });
 
-    it("should import unweighted networks with cycles from SIF correctly", function () {
+    it("should import unweighted workbooks with cycles from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithCycle)
-        ).to.deep.equal(expectedUnweightedNetworkWithCycle);
+        ).to.deep.equal(expectedUnweightedWorkbookWithCycle);
     });
 
-    it("should import weighted networks with cycles from SIF correctly", function () {
+    it("should import weighted workbooks with cycles from SIF correctly", function () {
         expect(
             importController.sifToGrnsight(weightedTestSifWithCycle)
-        ).to.deep.equal(expectedWeightedNetworkWithCycle);
+        ).to.deep.equal(expectedWeightedWorkbookWithCycle);
     });
 
-    it("should import inconsistently weighted networks with cycles from SIF as unweighted", function () {
+    it("should import inconsistently weighted workbooks with cycles from SIF as unweighted", function () {
         expect(
             importController.sifToGrnsight(inconsistentlyWeightedTestSifWithCycle)
-        ).to.deep.equal(extend(true, {}, expectedUnweightedNetworkWithCycle, {
+        ).to.deep.equal(extend(true, {}, expectedUnweightedWorkbookWithCycle, {
             warnings: [
                 constants.warnings.EDGES_WITHOUT_WEIGHTS
             ]
@@ -327,7 +328,7 @@ describe("Import from SIF", function () {
     it("should import nodes mentioned only in edges (i.e., targeted but targetless)", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithUntargeted)
-        ).to.deep.equal({
+        ).to.deep.equal(initWorkbook({
             genes: [
                 { name: "A" },
                 { name: "B" },
@@ -350,13 +351,13 @@ describe("Import from SIF", function () {
             sheetType: "unweighted",
             meta: {},
             expression:{}
-        });
+        }));
     });
 
-    it("should import a network with a single node correctly", function () {
+    it("should import a workbook with a single node correctly", function () {
         expect(
             importController.sifToGrnsight(sifWithOneNode)
-        ).to.deep.equal({
+        ).to.deep.equal(initWorkbook({
             genes: [
                 { name: "A" }
             ],
@@ -368,7 +369,7 @@ describe("Import from SIF", function () {
             sheetType: "weighted",
             meta: {},
             expression:{}
-        });
+        }));
     });
 
 });
@@ -454,22 +455,22 @@ describe("Import from SIF syntactic checker", function () {
         ).to.equal("SIF_STRAY_DATA_ERROR");
     });
 
-    it("should throw an error if there is stray data for unweighted networks", function () {
+    it("should throw an error if there is stray data for unweighted workbooks", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithStrayData).errors[0].errorCode
         ).to.equal("SIF_STRAY_DATA_ERROR");
     });
 
-    it("should throw an error if there is stray data at the bottom of an unweighted network", function () {
+    it("should throw an error if there is stray data at the bottom of an unweighted workbook", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithStrayDataAtBottom).errors[0].errorCode
         ).to.equal("SIF_STRAY_DATA_ERROR");
     });
 
-    it("should accept trivially tabbed networks", function () {
+    it("should accept trivially tabbed workbooks", function () {
         expect(
-            importController.sifToGrnsight(triviallyTabbedUnweightedNetwork)
-        ).to.deep.equal(expectedUnweightedNetwork);
+            importController.sifToGrnsight(triviallyTabbedUnweightedWorkbook)
+        ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
 });

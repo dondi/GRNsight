@@ -5,8 +5,9 @@ var UTF8 = { encoding: "utf-8" };
 
 var importController = require(__dirname + "/../server/controllers" + "/import-controller")();
 var constants = require(__dirname + "/../server/controllers" + "/constants");
+var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedNetwork = {
+var expectedUnweightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -27,9 +28,9 @@ var expectedUnweightedNetwork = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetwork = {
+var expectedWeightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -50,9 +51,9 @@ var expectedWeightedNetwork = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedUnweightedNetworkWithCycle = {
+var expectedUnweightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -76,9 +77,9 @@ var expectedUnweightedNetworkWithCycle = {
     sheetType: "unweighted",
     meta: {},
     expression:{}
-};
+});
 
-var expectedWeightedNetworkWithCycle = {
+var expectedWeightedWorkbookWithCycle = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -102,7 +103,7 @@ var expectedWeightedNetworkWithCycle = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
 /* eslint-disable quotes */
 // Temporarily disabling double-quote rule because graphML has a lot of double quotes.
@@ -276,8 +277,8 @@ var misspelledGraphTagTestGraphMl = [
 ].join("\n");
 
 
-// Added networks and GraphML documents
-var newExpectedWeightedNetwork = {
+// Added workbooks and GraphML documents
+var newExpectedWeightedWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -299,7 +300,7 @@ var newExpectedWeightedNetwork = {
     sheetType: "weighted",
     meta: {},
     expression:{}
-};
+});
 
 var templateGraphmlFileForNewTests = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -576,28 +577,28 @@ var missingOpeningQuote = [
 ].join("\n");
 
 describe("Import from GraphML", function () {
-    it("should import unweighted networks from GraphML correctly", function () {
+    it("should import unweighted workbooks from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(unweightedTestGraphMl)
-        ).to.deep.equal(expectedUnweightedNetwork);
+        ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
-    it("should import weighted networks from GraphML correctly", function () {
+    it("should import weighted workbooks from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(weightedTestGraphMl)
-        ).to.deep.equal(expectedWeightedNetwork);
+        ).to.deep.equal(expectedWeightedWorkbook);
     });
 
-    it("should import unweighted networks with cycles from GraphML correctly", function () {
+    it("should import unweighted workbooks with cycles from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(unweightedTestGraphMlWithCycle)
-        ).to.deep.equal(expectedUnweightedNetworkWithCycle);
+        ).to.deep.equal(expectedUnweightedWorkbookWithCycle);
     });
 
-    it("should import weighted networks with cycles from GraphML correctly", function () {
+    it("should import weighted workbooks with cycles from GraphML correctly", function () {
         expect(
           importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
-        ).to.deep.equal(expectedWeightedNetworkWithCycle);
+        ).to.deep.equal(expectedWeightedWorkbookWithCycle);
     });
 
     it("should issue an general graphML syntax error because there is a missing end tag", function () {
@@ -659,7 +660,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/hyper.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "n0" },
                     { name: "n1" },
@@ -679,13 +680,13 @@ describe("Import from GraphML", function () {
                 positiveWeights: [],
                 negativeWeights: [],
                 sheetType: "unweighted"
-            }); // Look ma, no hyperedges.
+            })); // Look ma, no hyperedges.
         });
 
         fs.readFile(__dirname + "/../test-files/import-samples/nested.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "n0" },
                     { name: "n1" },
@@ -711,7 +712,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            }); // Look ma, no nested graphs (nor edges that refer to them).
+            })); // Look ma, no nested graphs (nor edges that refer to them).
         });
     });
 
@@ -719,7 +720,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-gene_4-edge_Manual-Cytoscape_test-naming.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "Gene4_name" },
                     { name: "Gene3_name" },
@@ -741,7 +742,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            });
+            }));
         });
     });
 
@@ -749,7 +750,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/graph-with-yed-tags.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "January" },
                     { name: "n1" }
@@ -766,7 +767,7 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            });
+            }));
         });
     });
 
@@ -774,7 +775,7 @@ describe("Import from GraphML", function () {
         fs.readFile(__dirname + "/../test-files/import-samples/4-node_4-edge_manual-yED.graphml", UTF8, function (error, data) {
             expect(
                 importController.graphMlToGrnsight(data)
-            ).to.deep.equal({
+            ).to.deep.equal(initWorkbook({
                 genes: [
                     { name: "A" },
                     { name: "B" },
@@ -794,15 +795,15 @@ describe("Import from GraphML", function () {
                 sheetType: "unweighted",
                 meta: {},
                 expression:{}
-            });
+            }));
         });
     });
 
     // Added Tests
-    it("should import this weighted network from GraphML correctly", function () {
+    it("should import this weighted workbook from GraphML correctly", function () {
         expect(
             importController.graphMlToGrnsight(templateGraphmlFileForNewTests)
-        ).to.deep.equal(newExpectedWeightedNetwork);
+        ).to.deep.equal(newExpectedWeightedWorkbook);
     });
 
     it("should issue an invalid attribute name graphML syntax error because there is a missing source tag name", function () {

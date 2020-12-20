@@ -26,7 +26,7 @@ var warningsList = {
         };
     },
 
-    incorrectCellA1NetworkWarning: function (sheetName) {
+    incorrectCellA1WorkbookWarning: function (sheetName) {
         return {
             warningCode: "MISLABELED_NETWORK_CELL_A1",
             errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
@@ -70,23 +70,23 @@ var warningsList = {
         };
     },
 
-    networkSizeWarning: function (genesLength, edgesLength) {
+    workbookSizeWarning: function (genesLength, edgesLength) {
         return {
             warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength +
-            " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
+            errorDescription: "Your workbook has " + genesLength + " genes, and " + edgesLength +
+            " edges. Please note that workbooks are recommended to have less than 50 genes and 100 edges."
         };
     },
 };
 
 var errorList = {
 
-    emptyNetworkError: function () {
+    emptyWorkbookError: function () {
         return {
             errorCode: "EMPTY_NETWORK_ERROR",
             possibleCause: "GRNsight detects that the file you uploaded is empty and \
             does not contain any network information.",
-            suggestedFix: "Please review the file and ensure that it specifies a network."
+            suggestedFix: "Please review the file and ensure that it specifies a workbook."
         };
     },
 
@@ -107,11 +107,11 @@ var errorList = {
         };
     },
 
-    networkSizeError: function (genesLength, edgesLength) {
+    workbookSizeError: function (genesLength, edgesLength) {
         return {
             errorCode: "INVALID_NETWORK_SIZE",
             possibleCause: "This network has " + genesLength + " genes, and " + edgesLength + " edges.",
-            suggestedFix: "Networks may not have more than 75 genes or 150 edges. Please reduce the size" +
+            suggestedFix: "networks may not have more than 75 genes or 150 edges. Please reduce the size" +
             " of your network and try again."
         };
     },
@@ -127,7 +127,7 @@ var errorList = {
 
     errorsCountError: {
         errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This network has over 20 errors.",
+        possibleCause: "This workbook has over 20 errors.",
         suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
         "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
         "further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -136,7 +136,7 @@ var errorList = {
 
     warningsCountError: {
         errorCode: "WARNINGS_OVERLOAD",
-        possibleCause: "This network has over 75 warnings.",
+        possibleCause: "This workbook has over 75 warnings.",
         suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
         "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
         "further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -156,29 +156,29 @@ var errorList = {
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
 };
-var addError = function (network, message) {
-    var errorsCount = network.errors.length;
+var addError = function (workbook, message) {
+    var errorsCount = workbook.errors.length;
     var MAX_ERRORS = 20;
     if (errorsCount < MAX_ERRORS) {
-        addMessageToArray(network.errors, message);
+        addMessageToArray(workbook.errors, message);
     } else {
-        addMessageToArray(network.errors, errorList.errorsCountError);
+        addMessageToArray(workbook.errors, errorList.errorsCountError);
         return false;
     }
 };
-var addWarning = function (network, message) {
-    var warningsCount = network.warnings.length;
+var addWarning = function (workbook, message) {
+    var warningsCount = workbook.warnings.length;
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        addMessageToArray(network.warnings, message);
+        addMessageToArray(workbook.warnings, message);
     } else {
-        addMessageToArray(network.errors, errorList.warningsCountError);
+        addMessageToArray(workbook.errors, errorList.warningsCountError);
         return false;
     }
 };
 */
 
-var checkNetworkSize = function (errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+var checkWorkbookSize = function (errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
     var genesLength = genesList.length;
     var edgesLength = positiveWeights.length + negativeWeights.length;
     var GENE_MAX_WARNING = 50;
@@ -188,9 +188,9 @@ var checkNetworkSize = function (errorArray, warningArray, genesList, positiveWe
 
     if ((genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR) ||
       (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)) {
-        warningArray.push(warningsList.networkSizeWarning(genesLength, edgesLength));
+        warningArray.push(warningsList.workbookSizeWarning(genesLength, edgesLength));
     } else if (genesLength >= GENE_MAX_ERROR || edgesLength >= EDGE_MAX_ERROR) {
-        errorArray.push(errorList.networkSizeError(genesLength, edgesLength));
+        errorArray.push(errorList.workbookSizeError(genesLength, edgesLength));
     }
 };
 
@@ -237,19 +237,20 @@ var checkSpecialCharacter = function (errorArray, genesList) {
     }
 };
 
-var checkIfEmptyNetwork = function (errorArray, genesList) {
+var checkIfEmptyWorkbook = function (errorArray, genesList) {
     if (genesList.length === 0) {
-        errorArray.push(errorList.emptyNetworkError());
+        errorArray.push(errorList.emptyWorkbookError());
     }
 };
 
 // TODO Entry-point semantic checker function goes here.
-module.exports = function (network) {
-    checkSpecialCharacter(network.errors, network.genes);
-    checkDuplicates(network.errors, network.genes);
-    checkGeneLength(network.errors, network.genes);
-    checkNetworkSize(network.errors, network.warnings, network.genes, network.positiveWeights, network.negativeWeights);
-    checkIfEmptyNetwork(network.errors, network.genes);
-    // We're done. Return the network.
-    return network;
+module.exports = function (workbook) {
+    checkSpecialCharacter(workbook.errors, workbook.genes);
+    checkDuplicates(workbook.errors, workbook.genes);
+    checkGeneLength(workbook.errors, workbook.genes);
+    checkWorkbookSize(workbook.errors, workbook.warnings, workbook.genes,
+                    workbook.positiveWeights, workbook.negativeWeights);
+    checkIfEmptyWorkbook(workbook.errors, workbook.genes);
+    // We're done. Return the workbook.
+    return workbook;
 };

@@ -11,9 +11,9 @@ describe.skip("graph-library-tests", function () {
         it("convert to cytoscape correctly", function () {
             var input = "test-files/graph-statistics-tests/graph-stats-demo.xlsx";
             var sheet = xlsx.parse(input);
-            var network = spreadsheetController.parseNetworkSheet(sheet);
-            // var cytoscapeElements = grnSightToCytoscape(network);
-            var cytoscapeElements = spreadsheetController.grnSightToCytoscape(network);
+            var workbook = spreadsheetController.parseWorkbookSheet(sheet);
+            // var cytoscapeElements = grnSightToCytoscape(workbook);
+            var cytoscapeElements = spreadsheetController.grnSightToCytoscape(workbook);
 
             /* eslint-disable no-unused-vars */
             // require calls cytoscape as a function so the below code is needed to call cytoscape

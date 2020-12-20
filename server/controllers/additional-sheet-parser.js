@@ -71,7 +71,7 @@ const errorsList = {
 
     errorsCountError: {
         errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This network has over 20 errors.",
+        possibleCause: "This workbook has over 20 errors.",
         suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
             "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
             "further errors detected. As a general approach for fixing the errors, consider copying and " +
@@ -175,19 +175,20 @@ const warningsList = {
     }
 };
 
-const addWarning = (network, message) => {
+
+const addWarning = (workbook, message) => {
     let warningsCount;
-    if (!Object.keys(network).includes("warnings")) {
+    if (!Object.keys(workbook).includes("warnings")) {
         warningsCount = 0;
-        network.warnings = [];
+        workbook.warnings = [];
     } else {
-        warningsCount = network.warnings.length;
+        warningsCount = workbook.warnings.length;
     }
     const MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        network.warnings.push(message);
+        workbook.warnings.push(message);
     } else {
-        network.errors.push(errorsList.warningsCountError);
+        workbook.errors.push(errorsList.warningsCountError);
         return false;
     }
 };
@@ -426,7 +427,7 @@ const parseTwoColumnSheet = (sheet) => {
     return output;
 };
 
-module.exports = function (workbook) {
+module.exports = function (workbookFile) {
     let output = {
         meta: {
             data: {},
@@ -436,7 +437,7 @@ module.exports = function (workbook) {
         test: {}, // 2-column data
         meta2: {} // optimation_diagnostics only //temporary until where it goes is decided
     };
-    workbook.forEach(function (sheet) {
+    workbookFile.forEach(function (sheet) {
         if (sheet.name === "optimization_parameters") {
             output.meta = parseMetaDataSheet(sheet);
             // above line creates an object from the optimization paramerters sheet

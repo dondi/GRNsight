@@ -33,8 +33,8 @@ module.exports = function (app) {
                         throw error;
                     } else {
                         helpers.attachFileHeaders(res, input);
-                        var network = importer(data);
-                        return res.status((network.errors.length === 0) ? 200 : 400).json(network);
+                        var workbook = importer(data);
+                        return res.status((workbook.errors.length === 0) ? 200 : 400).json(workbook);
                     }
                 });
             });
