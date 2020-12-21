@@ -549,7 +549,7 @@ module.exports = function (app) {
 
         app.get("/demo/weighted", function (req, res) {
             return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
-             res, app);
+                res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
@@ -558,14 +558,14 @@ module.exports = function (app) {
 
         app.get("/demo/schadeOutput", function (req, res) {
             return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
-                                 res, app);
+                res, app);
         });
     }
 
     // exporting parseWorkbookSheet for use in testing. Do not remove!
     return {
         grnSightToCytoscape: grnSightToCytoscape,
-        processGRNmap : processGRNmap,
+        processGRNmap: processGRNmap,
         crossSheetInteractions: crossSheetInteractions
     };
-}
+};
