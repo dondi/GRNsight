@@ -88,6 +88,7 @@ const errorsList = {
 
     invalidValueError: function (sheetName, value, row, column) {
         let valueType = getSheetHeader(sheetName, column, row);
+        row++;
         return {
             errorCode: "INVALID_VALUE",
             possibleCause: `${valueType} '${value}' in row ${row}, column B in the ${sheetName} sheet is not a number.`,
@@ -116,6 +117,7 @@ const errorsList = {
 
 const warningsList = {
     extraneousDataWarning: function (sheetName, row) {
+        row++;
         return {
             warningCode: "EXTRANEOUS_DATA",
             errorDescription: `There is extraneous data outside of the set rows and columns of the 
@@ -144,20 +146,21 @@ const warningsList = {
 
     unknownOptimizationDiagnosticsParameter: function (sheetName, param) {
         return {
-            warningCode: "UNKNOWN_OPTIMIZATION_PARAMETER",
+            warningCode: "UNKNOWN_OPTIMIZATION_DIAGNOSTICS_PARAMETER",
             errorDescription: `The optimization parameter '${param}' in the ${sheetName} sheet, is unknown. ` +
                 "Please ensure that the spelling of all optimization_parameters is correct, and " +
                 "make sure that you are using only supported optimization parameters."
         };
     },
-    invalidOptimizationDiagnosticsParameter: function (sheetName, param) {
+    invalidOptimizationDiagnosticsValue: function (sheetName, param) {
         return {
-            warningCode: "INVALID_OPTIMIZATION_DIAGNOSTICS_PARAMETER",
+            warningCode: "INVALID_OPTIMIZATION_DIAGNOSTICS_VALUE",
             errorDescription: `The optimization parameter '${param}' in the ${sheetName} sheet, is invalid. ` +
                 "Please ensure that the optimization parameter's value is a number."
         };
     },
     incorrectMSEGeneHeaderWarning: function (sheetName, row) {
+        row++;
         return {
             warningCode: "INCORRECT_MSE_GENE_HEADER",
             errorDescription: `The Gene Header in row ${row} of the ${sheetName} sheet, is incorrect. ` +
@@ -167,6 +170,7 @@ const warningsList = {
     },
     incorrectMSEHeaderWarning: function (sheetName, header, row, column) {
         let colLetter = numbersToLetters[column];
+        row++;
         return {
             warningCode: "INCORRECT_MSE_HEADER",
             errorDescription: `The header ${header} in row ${row} column ${colLetter} of the ${sheetName} sheet, ` +
@@ -175,6 +179,7 @@ const warningsList = {
     },
     missingMSEDataWarning: function (sheetName, row, column) {
         let colLetter = numbersToLetters[column];
+        row++;
         return {
             warningCode: "MISSING_MSE_DATA",
             errorDescription: `The MSE data in row ${row} column ${colLetter} of the ${sheetName} sheet, ` +
@@ -183,8 +188,9 @@ const warningsList = {
     },
     invalidMSEDataWarning: function (sheetName, row, column) {
         let colLetter = numbersToLetters[column];
+        row++;
         return {
-            warningCode: "INCORRECT_MSE_HEADER",
+            warningCode: "INVALID_MSE_DATA",
             errorDescription: `The data in row ${row} column ${colLetter} of the ${sheetName} sheet, ` +
                 "is not a number. Please ensure that your MSE data is correct and only contains numbers."
         };
@@ -323,15 +329,17 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
     let row = 1;
     // a missing row is the indicator to move onto the MSE
     while (sheet.data[row].length > 0) {
-        if (sheet.data[row].length > 2) {
-            addWarning(output, warningsList.extraneousDataWarning(sheet.name, row));
-        }
         currentParameter = sheet.data[row][0];
         currentValue = sheet.data[row][1];
-        if (currentParameter === undefined && currentValue === undefined) {
-            // if there is no parameter or value assume that its time to move on
-            row++;
-            break;
+        if (currentParameter === undefined || currentParameter.replace(/\s+/g, "") === "") {
+            if (currentValue === undefined || currentValue.replace(/\s+/g, "") === "") {
+                // if there is no parameter or value assume that its time to move on
+                row++;
+                break;
+            }
+        }
+        if (sheet.data[row].length > 2) {
+            addWarning(output, warningsList.extraneousDataWarning(sheet.name, row));
         }
         if (! optimizationDiagnosticsParameters.includes(currentParameter)) {
             if (currentParameter === "Gene") {
@@ -340,7 +348,7 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
             }
             addWarning(output, warningsList.unknownOptimizationDiagnosticsParameter(sheet.name, currentParameter));
         } else if (typeof currentValue !== "number") {
-            addWarning(output, warningsList.invalidOptimizationDiagnosticsParameter(sheet.name, currentParameter));
+            addWarning(output, warningsList.invalidOptimizationDiagnosticsValue(sheet.name, currentParameter));
         } else {
             output.data.Parameters[currentParameter] = currentValue;
         }
@@ -368,15 +376,11 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
         while (row < sheet.data.length) {
             if (sheet.data[row].length > output.data.MSE["column-headers"].length + 1) {
                 addWarning(output, warningsList.extraneousDataWarning(sheet.name, row));
-            } else if (sheet.data[row].length <= output.data.MSE["column-headers"].length) {
-                for (let col = sheet.data[row].length - 1; col <= output.data.MSE["column-headers"].length; col++) {
-                    addWarning(output, warningsList.missingMSEDataWarning(sheet.name, row, col));
-                }
             }
             currentGene = sheet.data[row][0];
             // if it's a valid gene set the key = MSE value
             if (validGeneName(output, sheet.name, currentGene, row)) {
-                for (let col = 1; col < sheet.data[row].length; col++) {
+                for (let col = 1; col <= output.data.MSE["column-headers"].length; col++) {
                     if (typeof sheet.data[row][col] === "number") {
                         currentMSE.push(sheet.data[row][col]);
                     } else if (sheet.data[row][col] === undefined) {
@@ -391,9 +395,6 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
             row++;
         }
     }
-    // For Testing Purposes:
-    console.log("Diagnostics Warnings: ", output.warnings);
-    console.log("Diagnostics Errors: ", output.errors);
     return output;
 };
 
@@ -411,7 +412,7 @@ const parseTwoColumnSheet = (sheet) => {
 
     for (let row = 0; row < sheet.data.length; row++) {
         if (sheet.data[row].length > 2) {
-            addWarning(output, warningsList.extraneousDataWarning(sheet.name, row + 1));
+            addWarning(output, warningsList.extraneousDataWarning(sheet.name, row));
         }
         if (row === 0) {
             if (sheet.data[row].length > 0) {
@@ -434,7 +435,7 @@ const parseTwoColumnSheet = (sheet) => {
                 if (typeof currentValue === "number") {
                     output.data[currentGene] = currentValue;
                 } else {
-                    addError(output, errorsList.invalidValueError(sheet.name, currentValue, row + 1, 1));
+                    addError(output, errorsList.invalidValueError(sheet.name, currentValue, row, 1));
                 }
             }
         }
@@ -465,4 +466,4 @@ module.exports = function (workbookFile) {
         }
     });
     return output;
-}
+};

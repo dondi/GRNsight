@@ -93,7 +93,8 @@ describe("additional-sheet-parser", function () {
 
         it("should return invalidOptimizationParameterWarning", function () {
             test.invalidOptimizationParameterWarning(
-                "test-files/additional-sheet-test-files/optimization-parameters-invalid-optimization-parameter.xlsx", 2);
+                "test-files/additional-sheet-test-files/optimization-parameters-invalid-optimization-parameter.xlsx",
+                2);
         });
     });
 
@@ -144,14 +145,56 @@ describe("additional-sheet-parser", function () {
                 "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx", 5);
         });
 
-        // exports.twoColumnExtraneousDataWarning = twoColumnExtraneousDataWarning;
-
         it("should return additionalSheetExtraneousDataWarning", function () {
             test.additionalSheetExtraneousDataWarning(
                 "test-files/additional-sheet-test-files/two-column-sheets-extraneous-data.xlsx", 5);
         });
     });
 
+    describe("optimization diagnostics sheet", function () {
+        it("should return additionalSheetIncorrectColumnHeader Error", function () {
+            test.additionalSheetIncorrectColumnHeaderError(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-column-headers.xlsx", 2);
+        });
 
+        it("should return additionalSheetMissingColumnHeader Error", function () {
+            test.additionalSheetMissingColumnHeaderError(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-missing-column-headers.xlsx", 2);
+        });
 
+        it("should return unknownOptimizationDiagnosticsParameter Warning", function () {
+            test.unknownOptimizationDiagnosticsParameterWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-unknown-parameter.xlsx", 1);
+        });
+
+        it("should return invalidOptimizationDiagnosticsValue Warning", function () {
+            test.invalidOptimizationDiagnosticsValueWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-invalid-value.xlsx", 1);
+        });
+
+        it("should return optimizationDiagnosticsExtraneousData Warning", function () {
+            test.optimizationDiagnosticsExtraneousDataWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-extraneous-data.xlsx", 3);
+        });
+
+        it("should return incorrectMSEGeneHeader Warning", function () {
+            test.incorrectMSEGeneHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx", 1);
+        });
+
+        it("should return incorrectMSEHeader Warning", function () {
+            test.incorrectMSEHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-header.xlsx", 3);
+        });
+
+        it("should return missingMSEData Warning", function () {
+            test.missingMSEDataWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-missing-MSE-data.xlsx", 10);
+        });
+
+        it("should return invalidMSEData Warning", function () {
+            test.invalidMSEDataWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-invalid-MSE-data.xlsx", 4);
+        });
+    });
 });
