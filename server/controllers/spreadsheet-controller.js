@@ -327,22 +327,33 @@ var crossSheetInteractions = function (workbookFile) {
 
     if (additionalData && additionalData.test) {
         // Add errors and warnings from test sheets
-        if (additionalData.test.errors !== undefined) {
-            additionalData.test.errors.forEach(data => workbook.errors.push(data));
+        for (let sheet in additionalData.test) {
+            additionalData.test[sheet].errors.forEach(data => workbook.errors.push(data));
         }
 
-        if (additionalData.test.warnings !== undefined) {
-            additionalData.test.warnings.forEach(data => workbook.warnings.push(data));
+        for (let sheet in additionalData.test) {
+            additionalData.test[sheet].warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
-    if (additionalData.meta.species === undefined
-    && additionalData.meta.taxon_id === undefined) {
+    if (additionalData && additionalData.meta2) {
+        // Add errors and warnings from test sheets
+        if (additionalData.meta2.errors !== undefined) {
+            additionalData.meta2.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (additionalData.meta2.warnings !== undefined) {
+            additionalData.meta2.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
+
+    if (additionalData.meta.data.species === undefined
+        && additionalData.meta.data.taxon_id === undefined) {
         addWarning(workbook, warningsList.noSpeciesInformationDetected);
-    } else if (!doesSpeciesExist(additionalData.meta.species) &&
-    !doesSpeciesExist(additionalData.meta.taxon_id)) {
-        addWarning(workbook, warningsList.unknownSpeciesDetected(additionalData.meta.species,
-            additionalData.meta.taxon_id));
+    } else if (!doesSpeciesExist(additionalData.meta.data.species) &&
+        !doesSpeciesExist(additionalData.meta.data.taxon_id)) {
+        addWarning(workbook, warningsList.unknownSpeciesDetected(additionalData.meta.data.species,
+            additionalData.meta.data.taxon_id));
     }
 
     // Add errors and warnings from expression sheets
@@ -538,7 +549,7 @@ module.exports = function (app) {
 
         app.get("/demo/weighted", function (req, res) {
             return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
-             res, app);
+                res, app);
         });
 
         app.get("/demo/schadeInput", function (req, res) {
@@ -547,14 +558,14 @@ module.exports = function (app) {
 
         app.get("/demo/schadeOutput", function (req, res) {
             return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
-                                 res, app);
+                res, app);
         });
     }
 
     // exporting parseWorkbookSheet for use in testing. Do not remove!
     return {
         grnSightToCytoscape: grnSightToCytoscape,
-        processGRNmap : processGRNmap,
+        processGRNmap: processGRNmap,
         crossSheetInteractions: crossSheetInteractions
     };
 };

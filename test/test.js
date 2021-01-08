@@ -512,10 +512,10 @@ var betweennessCentrality = function (input, directed, node, centrality) {
 // New Error Tests
 var twoColumnIdError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var twoColumnIdErrorCount = 0;
-    for (let page in network.test) {
-        twoColumnIdErrorCount += network.test[page].errors.filter(function (x) {
+    for (let page in workbook.test) {
+        twoColumnIdErrorCount += workbook.test[page].errors.filter(function (x) {
             return x.errorCode === "MISLABELED_ID_CELL";
         }).length;
     }
@@ -524,34 +524,44 @@ var twoColumnIdError = function (input, frequency) {
 
 var additionalSheetIncorrectColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var additionalSheetIncorrectColumnHeaderErrorCount = 0;
-    for (let page in network.test) {
-        additionalSheetIncorrectColumnHeaderErrorCount  += network.test[page].errors.filter(function (x) {
-            return x.errorCode === "INCORRECT_COLUMN_HEADER";
-        }).length;
+    for (let page in workbook.test) {
+        additionalSheetIncorrectColumnHeaderErrorCount  += workbook.test[page].errors.filter(
+            (x) => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
+    }
+    additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta.errors.filter(
+        (x) => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
+    if (workbook.meta2.errors !== undefined) {
+        additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta2.errors.filter(
+            (x) => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
     }
     assert.equal(frequency, additionalSheetIncorrectColumnHeaderErrorCount);
 };
 
 var additionalSheetMissingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var additionalSheetMissingColumnHeaderErrorCount = 0;
-    for (let page in network.test) {
-        additionalSheetMissingColumnHeaderErrorCount += network.test[page].errors.filter(function (x) {
-            return x.errorCode === "MISSING_COLUMN_HEADER";
-        }).length;
+    for (let page in workbook.test) {
+        additionalSheetMissingColumnHeaderErrorCount += workbook.test[page].errors.filter(
+            (x) => x.errorCode === "MISSING_COLUMN_HEADER").length;
+    }
+    additionalSheetMissingColumnHeaderErrorCount += workbook.meta.errors.filter(
+        (x) => x.errorCode === "MISSING_COLUMN_HEADER").length;
+    if (workbook.meta2.warnings !== undefined) {
+        additionalSheetMissingColumnHeaderErrorCount += workbook.meta2.errors.filter(
+            (x) => x.errorCode === "MISSING_COLUMN_HEADER").length;
     }
     assert.equal(frequency, additionalSheetMissingColumnHeaderErrorCount);
 };
 
 var twoColumnInvalidGeneTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var twoColumnInvalidGeneTypeErrorCount = 0;
-    for (let page in network.test) {
-        twoColumnInvalidGeneTypeErrorCount += network.test[page].errors.filter(function (x) {
+    for (let page in workbook.test) {
+        twoColumnInvalidGeneTypeErrorCount += workbook.test[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_GENE_TYPE";
         }).length;
     }
@@ -560,10 +570,10 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
 
 var twoColumnInvalidValueError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var twoColumnInvalidValueErrorCount = 0;
-    for (let page in network.test) {
-        twoColumnInvalidValueErrorCount  += network.test[page].errors.filter(function (x) {
+    for (let page in workbook.test) {
+        twoColumnInvalidValueErrorCount  += workbook.test[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_VALUE";
         }).length;
     }
@@ -572,10 +582,10 @@ var twoColumnInvalidValueError = function (input, frequency) {
 
 var twoColumnInvalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var twoColumnInvalidGeneLengthErrorCount = 0;
-    for (let page in network.test) {
-        twoColumnInvalidGeneLengthErrorCount  += network.test[page].errors.filter(function (x) {
+    for (let page in workbook.test) {
+        twoColumnInvalidGeneLengthErrorCount  += workbook.test[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_GENE_LENGTH";
         }).length;
     }
@@ -584,10 +594,10 @@ var twoColumnInvalidGeneLengthError = function (input, frequency) {
 
 var twoColumnSpecialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var twoColumnSpecialCharacterErrorCount = 0;
-    for (let page in network.test) {
-        twoColumnSpecialCharacterErrorCount += network.test[page].errors.filter(function (x) {
+    for (let page in workbook.test) {
+        twoColumnSpecialCharacterErrorCount += workbook.test[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_CHARACTER";
         }).length;
     }
@@ -598,20 +608,96 @@ var twoColumnSpecialCharacterError = function (input, frequency) {
 
 var additionalSheetExtraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
-    var network = parseAdditionalSheet(sheet);
+    var workbook = parseAdditionalSheet(sheet);
     var additionalSheetExtraneousDataWarningCount = 0;
-    for (let page in network.test) {
-        additionalSheetExtraneousDataWarningCount  += network.test[page].warnings.filter(function (x) {
+    for (let page in workbook.test) {
+        additionalSheetExtraneousDataWarningCount  += workbook.test[page].warnings.filter(function (x) {
             return x.warningCode === "EXTRANEOUS_DATA";
         }).length;
     }
     assert.equal(frequency, additionalSheetExtraneousDataWarningCount);
 };
 
+var unknownOptimizationParameterWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var unknownOptimizationParameterWarningCount = 0;
+    unknownOptimizationParameterWarningCount  += workbook.meta.warnings.filter((x) =>
+        x.warningCode === "UNKNOWN_OPTIMIZATION_PARAMETER").length;
+    assert.equal(frequency, unknownOptimizationParameterWarningCount);
+};
 
+var invalidOptimizationParameterWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var invalidOptimizationParameterWarningCount = 0;
+    invalidOptimizationParameterWarningCount += workbook.meta.warnings.filter((x) =>
+        x.warningCode === "INVALID_OPTIMIZATION_PARAMETER").length;
+    assert.equal(frequency, invalidOptimizationParameterWarningCount);
+};
 
+var unknownOptimizationDiagnosticsParameterWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var unknownOptimizationDiagnosticsParameterWarningCount = 0;
+    unknownOptimizationDiagnosticsParameterWarningCount  += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "UNKNOWN_OPTIMIZATION_DIAGNOSTICS_PARAMETER").length;
+    assert.equal(frequency, unknownOptimizationDiagnosticsParameterWarningCount);
+};
 
+var invalidOptimizationDiagnosticsValueWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var invalidOptimizationDiagnosticsValueWarningCount = 0;
+    invalidOptimizationDiagnosticsValueWarningCount += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "INVALID_OPTIMIZATION_DIAGNOSTICS_VALUE").length;
+    assert.equal(frequency, invalidOptimizationDiagnosticsValueWarningCount);
+};
 
+var optimizationDiagnosticsExtraneousDataWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var optimizationDiagnosticsExtraneousDataWarningCount = 0;
+    optimizationDiagnosticsExtraneousDataWarningCount += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "EXTRANEOUS_DATA").length;
+    assert.equal(frequency, optimizationDiagnosticsExtraneousDataWarningCount);
+};
+
+var incorrectMSEGeneHeaderWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var incorrectMSEGeneHeaderWarningCount = 0;
+    incorrectMSEGeneHeaderWarningCount += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "INCORRECT_MSE_GENE_HEADER").length;
+    assert.equal(frequency, incorrectMSEGeneHeaderWarningCount);
+};
+
+var incorrectMSEHeaderWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var incorrectMSEHeaderWarningCount = 0;
+    incorrectMSEHeaderWarningCount += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "INCORRECT_MSE_HEADER").length;
+    assert.equal(frequency, incorrectMSEHeaderWarningCount);
+};
+
+var missingMSEDataWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var missingMSEDataWarningCount = 0;
+    missingMSEDataWarningCount += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "MISSING_MSE_DATA").length;
+    assert.equal(frequency, missingMSEDataWarningCount);
+};
+
+var invalidMSEDataWarning = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var invalidMSEDataWarningCount = 0;
+    invalidMSEDataWarningCount += workbook.meta2.warnings.filter((x) =>
+        x.warningCode === "INVALID_MSE_DATA").length;
+    assert.equal(frequency, invalidMSEDataWarningCount);
+};
 
 
 
@@ -643,9 +729,6 @@ exports.emptyRowDataError = emptyRowDataError;
 exports.emptyMatrixDataError = emptyMatrixDataError;
 exports.emptyColumnDataError = emptyColumnDataError;
 exports.emptyColumnError = emptyColumnError;
-
-
-// New Error Tests
 exports.twoColumnIdError = twoColumnIdError;
 exports.additionalSheetIncorrectColumnHeaderError = additionalSheetIncorrectColumnHeaderError;
 exports.additionalSheetMissingColumnHeaderError = additionalSheetMissingColumnHeaderError;
@@ -653,15 +736,6 @@ exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
 exports.twoColumnInvalidValueError = twoColumnInvalidValueError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
-
-// New Warning Tests
-
-exports.additionalSheetExtraneousDataWarning = additionalSheetExtraneousDataWarning;
-
-
-
-
-
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
@@ -675,3 +749,13 @@ exports.invalidMatrixDataWarning = invalidMatrixDataWarning;
 exports.incorrectlyNamedExpressionSheetWarning = incorrectlyNamedExpressionSheetWarning;
 exports.missingExpressionWarning = missingExpressionWarning;
 exports.incorrectlyNamedSheetWarning = incorrectlyNamedSheetWarning;
+exports.additionalSheetExtraneousDataWarning = additionalSheetExtraneousDataWarning;
+exports.unknownOptimizationParameterWarning = unknownOptimizationParameterWarning;
+exports.invalidOptimizationParameterWarning = invalidOptimizationParameterWarning;
+exports.unknownOptimizationDiagnosticsParameterWarning = unknownOptimizationDiagnosticsParameterWarning;
+exports.invalidOptimizationDiagnosticsValueWarning = invalidOptimizationDiagnosticsValueWarning;
+exports.optimizationDiagnosticsExtraneousDataWarning = optimizationDiagnosticsExtraneousDataWarning;
+exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
+exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
+exports.missingMSEDataWarning = missingMSEDataWarning;
+exports.invalidMSEDataWarning = invalidMSEDataWarning;
