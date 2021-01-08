@@ -1,5 +1,6 @@
 var googleapis = require("googleapis");
-var ga = googleapis.google.analytics("v3");
+var google = googleapis.google || googleapis;
+var ga = google.analytics("v3");
 
 var moment = require("moment");
 
