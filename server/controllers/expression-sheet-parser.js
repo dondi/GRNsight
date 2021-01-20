@@ -1,99 +1,9 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
+var constants = require(__dirname + "/constants");
+
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
-
-var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
-    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
-    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
-    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
-    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
-    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
-    74:"BV", 75:"BW", 76:"BX"};
-
-
-const errorsList = {
-    idLabelError: function (sheetName) {
-        return {
-            errorCode: "MISLABELED_ID_CELL",
-            possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
-            suggestedFix: "Replace the incorrect label with \'id\' exactly."
-        };
-    },
-    missingColumnHeaderError: function (sheetName) {
-        return {
-            errorCode: "MISSING_COLUMN_HEADER",
-            possibleCause: `A column in the ${sheetName} sheet is missing a header.`,
-            suggestedFix: "Add headers to all columns."
-        };
-    },
-    emptyExpressionRowError: function (row, sheetName) {
-        return {
-            errorCode: "EMPTY_ROW",
-            possibleCause: `There is an empty row in the ${sheetName} sheet. It is located at row ${row}.`,
-            suggestedFix: "Delete empty row, or populate with data."
-        };
-    },
-    emptyExpressionColumnError: function (column, sheetName ) {
-        var columnLetter = numbersToLetters[column];
-        return {
-            errorCode: "EMPTY_COLUMN",
-            possibleCause: `There is an empty column in the ${sheetName} sheet. It is located at column
-            ${columnLetter}.`,
-            suggestedFix: "Delete empty column, or populate with data."
-        };
-    },
-    negativeTimePointError: function (column, sheetName) {
-        var columnLetter = numbersToLetters[column];
-        return {
-            errorCode: "NEGATIVE_TIME_POINT",
-            possibleCause: `There is a negative time point in the ${sheetName} sheet. It is located at
-            column ${columnLetter}.`,
-            suggestedFix: "Change the negative time point to a positive and ensure expression data is correct."
-        };
-    },
-    nonMonotonicTimePointsError: function (column, sheetName) {
-        var columnLetter = numbersToLetters[column];
-        return {
-            errorCode: "NON_MONOTONIC_TIME_POINTS",
-            possibleCause: `The time points located in the ${sheetName} sheet are not sequenced in an increasing 
-            fashion. The first instance of this is at column ${columnLetter}.`,
-            suggestedFix: `Please ensure that the time points are ordered in an increasing fashion, and ensure 
-            expression data is correct.`
-        };
-    },
-    nonNumericalTimePointsError: function (column, sheetName) {
-        var columnLetter = numbersToLetters[column];
-        return {
-            errorCode: "NON_NUMERICAL_TIME_POINT",
-            possibleCause: `There is a non-numerical time point in the ${sheetName} sheet. It is located at
-            column ${columnLetter}.`,
-            suggestedFix: "Change the non-numerical time point to a positive number and ensure expression data \
-            is correct."
-        };
-    },
-};
-
-
-const warningsList = {
-    missingExpressionWarning: function () {
-        return {
-            warningCode: "MISSING_EXPRESSION_SHEET",
-            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
-            not detected. The network graph will display without node coloring. If you want \
-            the nodes to be colored with expression data, you can upload your own expression \
-            data by adding one or more of those worksheets to your Excel network or select \
-            from data in GRNsight's Expression Database, found in the Node menu or panel."
-        };
-    },
-    extraneousDataWarning: function (sheetName) {
-        return {
-            warningCode: "EXTRANEOUS_DATA",
-            errorDescription: `There is extraneous data outside of the set rows and columns of the 
-            ${sheetName} sheet.`
-        };
-    }
-};
 
 const addExpWarning = (workbook, message) => {
     let warningsCount;
@@ -107,7 +17,7 @@ const addExpWarning = (workbook, message) => {
     if (warningsCount < MAX_WARNINGS) {
         workbook.warnings.push(message);
     } else {
-        workbook.errors.push(errorsList.warningsCountError);
+        workbook.errors.push(constants.errors.warningsCountError);
         return false;
     }
 };
@@ -118,7 +28,7 @@ const addExpError = (workbook, message) => {
     if (errorsCount < MAX_ERRORS) {
         workbook.errors.push(message);
     } else {
-        workbook.errors.push(errorsList.errorsCountError);
+        workbook.errors.push(constants.errors.errorsCountError);
         return false;
     }
 };
@@ -150,18 +60,18 @@ var parseExpressionSheet = function (sheet) {
     // Check that id label is correct. Throw error if not.
     const idLabel = sheet.data[0][0];
     if (idLabel !== "id") {
-        addExpError(expressionData, errorsList.idLabelError(sheet.name));
+        addExpError(expressionData, constants.errors.idLabelError(sheet.name));
     }
     expressionData.timePoints = sheet.data[0].slice(1);
     const numberOfDataPoints = expressionData.timePoints.length;
     let compareTimePoint = 0;
     for (let i = 0; i < numberOfDataPoints; i++) {
         if (isNaN(expressionData.timePoints[i]) && expressionData.timePoints[i] !== undefined) {
-            addExpError(expressionData, errorsList.nonNumericalTimePointsError(i + 1, sheet.name));
+            addExpError(expressionData, constants.errors.nonNumericalTimePointsError(i + 1, sheet.name));
         } else if (expressionData.timePoints[i] < 0) {
-            addExpError(expressionData, errorsList.negativeTimePointError(i + 1, sheet.name));
+            addExpError(expressionData, constants.errors.negativeTimePointError(i + 1, sheet.name));
         } else if (expressionData.timePoints[i] < compareTimePoint) {
-            addExpError(expressionData, errorsList.nonMonotonicTimePointsError(i + 1, sheet.name));
+            addExpError(expressionData, constants.errors.nonMonotonicTimePointsError(i + 1, sheet.name));
             break;
         } else {
             compareTimePoint = expressionData.timePoints[i];
@@ -194,13 +104,13 @@ var parseExpressionSheet = function (sheet) {
         let columnChecker = new Array(rowLength).fill(0);
         Object.values(expressionData.data).forEach(function (row) {
             if (row.length !== rowLength) {
-                addExpWarning(expressionData, warningsList.extraneousDataWarning(sheet.name));
+                addExpWarning(expressionData, constants.warnings.extraneousDataWarning(sheet.name, row));
             }
             // Check for missing Column Headers
             if (rowCounter === 0) {
                 for (let i = 0; i < rowLength; i++) {
                     if (sheet.data[0][i] === undefined) {
-                        addExpError(expressionData, errorsList.missingColumnHeaderError(sheet.name));
+                        addExpError(expressionData, constants.errors.missingColumnHeaderError(sheet.name));
                     }
                 }
             } else {
@@ -216,7 +126,7 @@ var parseExpressionSheet = function (sheet) {
             for (let i = 0; i <= rowLength; i++) {
                 if (i === rowLength) {
                     if (nonnullCount === 0) {
-                        addExpError(expressionData, errorsList.emptyExpressionRowError(i, sheet.name));
+                        addExpError(expressionData, constants.errors.emptyExpressionRowError(i, sheet.name));
                         break;
                     }
                 } else {
@@ -230,7 +140,7 @@ var parseExpressionSheet = function (sheet) {
         // check for empty columns
         for (var i = 0; i < columnChecker.length; i++) {
             if (columnChecker[i] === 0) {
-                addExpError(expressionData, errorsList.emptyExpressionColumnError(i, sheet.name));
+                addExpError(expressionData, constants.errors.emptyExpressionColumnError(i, sheet.name));
             }
         }
     }
@@ -254,7 +164,7 @@ module.exports = function (workbook) {
     });
 
     if (expCount <= 0) {
-        addExpWarning(output, warningsList.missingExpressionWarning());
+        addExpWarning(output, constants.warnings.missingExpressionWarning());
     }
     return output;
 };
