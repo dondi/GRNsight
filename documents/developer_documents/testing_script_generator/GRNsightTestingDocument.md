@@ -1,12 +1,10 @@
 ## GRNsight Client Side Testing Overview
-Last Updated: 2018-04-25
+Last Updated: 2021-01-26
 
 | Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
 | --------------- | ------ | ------- | ------ | 
 |NO | Load Graph|None | GRNsight should have no graph in the viewport|
-|NO | Load Graph|Dropdown Menu: File -> Open | GRNsight should lay out a network graph from the Excel workbook if there are no errors in the file|
-|NO | Load Graph|Dropdown Menu: File -> Import SIF | GRNsight should lay out a network graph from the SIF file if there are no errors in the file|
-|NO | Load Graph|Dropdown Menu: File -> Import GraphML | GRNsight should lay out a network graph from the GraphML file if there are no errors in the file|
+|NO | Load Graph|Dropdown Menu: File -> Open File | GRNsight should lay out a network graph from the Excel, SIF, or GraphML network if there are no errors in the file|
 |NO | Load Graph|Dropdown Menu: Demo -> Demo #1 | GRNsight should lay out an unweighted network graph from Demo #1|
 |NO | Load Graph|Dropdown Menu: Demo -> Demo #2 | GRNsight should lay out a weighted network graph from Demo #2|
 |NO | Load Graph|Dropdown Menu: Demo -> Demo #3 | GRNsight should lay out an unweighted network graph from Demo #3|
@@ -16,6 +14,11 @@ Last Updated: 2018-04-25
 |NO | Dropdown Menu: File -> Export Data|Select "To Weighted SIF" | GRNsight should export a weighted SIF file from the graph currently loaded|
 |NO | Dropdown Menu: File -> Export Data|Select "To Unweighted GraphML" | GRNsight should export an unweighted GraphML file from the graph currently loaded|
 |NO | Dropdown Menu: File -> Export Data|Select "To Weighted GraphML" | GRNsight should export a weighted GraphML file from the graph currently loaded|
+|NO | Dropdown Menu: File -> Export Data|Select "To Unweighted Excel" | GRNsight should export an unweighted Excel file from the graph currently loaded|
+|NO | Dropdown Menu: File -> Export Data|Select "To Weighted Excel" | GRNsight should export a weighted Excel file from the graph currently loaded|
+|NO | Dropdown Menu: File -> Export Image|Select "To PNG" | GRNsight should export a PNG image from the graph currently loaded|
+|NO | Dropdown Menu: File -> Export Image|Select "To SVG" | GRNsight should export a SVG image from the graph currently loaded|
+|NO | Dropdown Menu: File -> Export Image|Select "To PDF" | GRNsight should export a PDF file from the graph currently loaded|
 |NO | Dropdown Menu: File -> Print|Select | GRNsight should open the Print Dialogue Box|
 |NO | Dropdown Menu: Help|Select "Getting Started" | GRNsight should open the GRNsight documentation page|
 |NO | Dropdown Menu: Help|Select "GRNsight Wiki" | GRNsight should open the GRNsight wiki page|
@@ -36,8 +39,10 @@ Last Updated: 2018-04-25
 |NO | Sidebar Menu: Viewport Size|Select "Medium" |  The viewport size should be set to medium|
 |NO | Sidebar Menu: Viewport Size|Select "Large" |  The viewport size should be set to large|
 |NO | Sidebar Menu: Viewport Size|Select "Fit to Window" |  The viewport size should automatically be set to the size of the browser window|
-|NO | Dropdown Menu: Edge|Select "Format edges based on optimized weight parameters" | GRNsight should format edges based on optimized weight parameters|
-|NO | Dropdown Menu: Edge|Select "Default to black edges with regular arrowheads" | GRNsight should default to black edges with regular arrowheads|
+|NO | Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value|Check | GRNsight should enable edge coloring and set the sidebar menu 'Enable Edge Coloring' to checked|
+|NO | Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value|Uncheck | GRNsight should disable edge coloring and set the sidebar menu 'Enable Edge Coloring' to unchecked|
+|NO | Sidebar Menu: Enable Edge Coloring|Check | GRNsight should enable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to checked|
+|NO | Sidebar Menu: Enable Edge Coloring|Uncheck | GRNsight should disable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to unchecked|
 |NO | Sidebar Menu: Hide/Show Edge Weights|Select "Show With Mouse Over" |  A single edge weight should display when user mouses over a single edge.|
 |NO | Sidebar Menu: Hide/Show Edge Weights|Select "Always Show Edge Weights" |  All edge weights should always be visible.|
 |NO | Sidebar Menu: Hide/Show Edge Weights|Select "Never Show Edge Weights" |  No edge weights should be visible.|
@@ -54,11 +59,11 @@ Last Updated: 2018-04-25
 |NO | Sidebar Menu: Show Grey Edges as Dashed Checkbox|Check | The graph should show gray lines as dashed lines|
 |NO | Dropdown Menu: Edge -> Show Grey Edges as Dashed|Uncheck | The graph should show gray lines as solid lines|
 |NO | Dropdown Menu: Edge -> Show Grey Edges as Dashed|Check | The graph should show gray lines as dashed lines|
-|NO | Viewport Menu: D-Pad Control|Click Right Arrow | The graph should shift to the left, if "Restrict Graph to Viewport" is Unchecked.|
-|NO | Viewport Menu: D-Pad Control|Click Left Arrow | The graph should shift to the right, if "Restrict Graph to Viewport" is Unchecked.|
-|NO | Viewport Menu: D-Pad Control|Click Up Arrow | The graph should shift down, if "Restrict Graph to Viewport" is Unchecked.|
-|NO | Viewport Menu: D-Pad Control|Click Down Arrow | The graph should shift up, if "Restrict Graph to Viewport" is Unchecked.|
-|NO | Viewport Menu: D-Pad Control|Click Center Button | The graph should move to the center of the bounding box (note that it is not the same thing as the viewport, if "Restrict Graph to Viewport" is Unchecked.|
+|NO | Viewport Menu: D-Pad Control|Click Right Arrow | The graph should shift to the left|
+|NO | Viewport Menu: D-Pad Control|Click Left Arrow | The graph should shift to the right|
+|NO | Viewport Menu: D-Pad Control|Click Up Arrow | The graph should shift down|
+|NO | Viewport Menu: D-Pad Control|Click Down Arrow | The graph should shift up|
+|NO | Viewport Menu: D-Pad Control|Click Center Button | The graph should move to the center of the bounding box (note that it is not the same thing as the viewport|
 |NO | Viewport Menu: Zoom Slider|Increase Zoom Level | The graph should zoom in (get larger)|
 |NO | Viewport Menu: Zoom Slider|Decrease Zoom Level | The graph should zoom out (get smaller)|
 |NO | Sidebar Menu: Top Dataset|Keep Default Selection | The top half of each node should be colored using data from the first expression dataset detected in the input workbook, if expression data sheets are present in input workbook|
@@ -83,9 +88,9 @@ Last Updated: 2018-04-25
 |NO | Sidebar Menu: Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
 |NO | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)|Check | GRNsight should average replicate values for bottom dataset, if expression data sheets are present in input workbook|
 |NO | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)|Uncheck | GRNsight should not average replicate values for bottom dataset, if expression data sheets are present in input workbook|
-|NO | Sidebar Menu: Node Coloring Toggle Button|Click |  Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring', if expression data sheets are present in input workbook|
-|YES | Dropdown Menu: Node -> Disable Node Coloring|Check |  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook|
-|YES | Dropdown Menu: Node -> Disable Node Coloring|Uncheck |  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook|
+|NO | Sidebar Menu: Node Coloring Toggle Button|Click |  Node coloring should toggle between on and off, with default being on, if expression data sheets are present in input workbook|
+|YES | Dropdown Menu: Node -> Enable Node Coloring|Check |  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook|
+|YES | Dropdown Menu: Node -> Enable Node Coloring|Uncheck |  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook|
 |YES | Sidebar Menu: Grid Layout|Keep at Default | The graph should default to force graph layout|
 |YES | Sidebar Menu: Grid Layout|Click Grid Layout Button | The graph should change to grid layout|
 |YES | Sidebar Menu: Grid Layout|Click Force Graph Layout Button | The graph should change to force graph layout|
@@ -106,15 +111,17 @@ Last Updated: 2018-04-25
 |NO | Dropdown Menu: Layout -> Undo Reset|Click "Undo Reset" | The force graph parameters should return to the values they had before the Undo Reset button (or menu item) was selected, if Undo Reset is enabled.|
 |NO | Dropdown Menu: Layout -> Link Distance|Input Value, then Press Enter |  The graph's edges should visibly change in length to the value entered if Lock Force Graph Parameters is unchecked|
 |NO | Dropdown Menu: Layout -> Charge|Input Value, then Press Enter |  The graph's nodes should visibly change it's level of attraction to each other to the value entered if Lock Force Graph Parameters is unchecked|
+|NO | Viewport Menu: Node|No Click |  |
+|NO | Viewport Menu: Node|Right Click |  Gene information page should appear in a new tab within the browser.|
+|NO | Dropdown Menu: Species -> Current Species|Select a species |  Opening gene information pages will use information of the selected species.|
+|NO | Sidebar Menu: Species -> Current Species|Select a species from a dropdown list |  Opening gene information pages will use information of the selected species.|
 
 ## GRNsight Function Availability Table
 
 | GRNsight Function | No Graph Loaded | Weighted Graph Loaded | Unweighted Graph Loaded  | 
 |  ---------------- | --------------- | ----------------------- | ---------------------- | 
 | Load Graph - None | YES | YES | YES | 
-| Load Graph - Dropdown Menu: File -> Open | YES | YES | YES | 
-| Load Graph - Dropdown Menu: File -> Import SIF | YES | YES | YES | 
-| Load Graph - Dropdown Menu: File -> Import GraphML | YES | YES | YES | 
+| Load Graph - Dropdown Menu: File -> Open File | YES | YES | YES | 
 | Load Graph - Dropdown Menu: Demo -> Demo #1 | YES | YES | YES | 
 | Load Graph - Dropdown Menu: Demo -> Demo #2 | YES | YES | YES | 
 | Load Graph - Dropdown Menu: Demo -> Demo #3 | YES | YES | YES | 
@@ -124,6 +131,11 @@ Last Updated: 2018-04-25
 | Dropdown Menu: File -> Export Data - Select "To Weighted SIF" | NO | YES | YES | 
 | Dropdown Menu: File -> Export Data - Select "To Unweighted GraphML" | NO | YES | YES | 
 | Dropdown Menu: File -> Export Data - Select "To Weighted GraphML" | NO | YES | YES | 
+| Dropdown Menu: File -> Export Data - Select "To Unweighted Excel" | NO | YES | YES | 
+| Dropdown Menu: File -> Export Data - Select "To Weighted Excel" | NO | YES | YES | 
+| Dropdown Menu: File -> Export Image - Select "To PNG" | NO | YES | YES | 
+| Dropdown Menu: File -> Export Image - Select "To SVG" | NO | YES | YES | 
+| Dropdown Menu: File -> Export Image - Select "To PDF" | NO | YES | YES | 
 | Dropdown Menu: File -> Print - Select | NO | YES | YES | 
 | Dropdown Menu: Help - Select "Getting Started" | YES | YES | YES | 
 | Dropdown Menu: Help - Select "GRNsight Wiki" | YES | YES | YES | 
@@ -144,8 +156,10 @@ Last Updated: 2018-04-25
 | Sidebar Menu: Viewport Size - Select "Medium" | YES | YES | YES | 
 | Sidebar Menu: Viewport Size - Select "Large" | YES | YES | YES | 
 | Sidebar Menu: Viewport Size - Select "Fit to Window" | YES | YES | YES | 
-| Dropdown Menu: Edge - Select "Format edges based on optimized weight parameters" | YES | YES | YES | 
-| Dropdown Menu: Edge - Select "Default to black edges with regular arrowheads" | YES | YES | YES | 
+| Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value - Check | YES | YES | YES | 
+| Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value - Uncheck | YES | YES | YES | 
+| Sidebar Menu: Enable Edge Coloring - Check | YES | YES | YES | 
+| Sidebar Menu: Enable Edge Coloring - Uncheck | YES | YES | YES | 
 | Sidebar Menu: Hide/Show Edge Weights - Select "Show With Mouse Over" | NO | YES | NO | 
 | Sidebar Menu: Hide/Show Edge Weights - Select "Always Show Edge Weights" | NO | YES | NO | 
 | Sidebar Menu: Hide/Show Edge Weights - Select "Never Show Edge Weights" | NO | YES | NO | 
@@ -192,8 +206,8 @@ Last Updated: 2018-04-25
 | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Check | NO | YES | YES | 
 | Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset) - Uncheck | NO | YES | YES | 
 | Sidebar Menu: Node Coloring Toggle Button - Click | NO | YES | YES | 
-| Dropdown Menu: Node -> Disable Node Coloring - Check | NO | YES | YES | 
-| Dropdown Menu: Node -> Disable Node Coloring - Uncheck | NO | YES | YES | 
+| Dropdown Menu: Node -> Enable Node Coloring - Check | NO | YES | YES | 
+| Dropdown Menu: Node -> Enable Node Coloring - Uncheck | NO | YES | YES | 
 | Sidebar Menu: Grid Layout - Keep at Default | YES | YES | YES | 
 | Sidebar Menu: Grid Layout - Click Grid Layout Button | YES | YES | YES | 
 | Sidebar Menu: Grid Layout - Click Force Graph Layout Button | YES | YES | YES | 
@@ -214,784 +228,788 @@ Last Updated: 2018-04-25
 | Dropdown Menu: Layout -> Undo Reset - Click "Undo Reset" | YES | YES | YES | 
 | Dropdown Menu: Layout -> Link Distance - Input Value, then Press Enter | YES | YES | YES | 
 | Dropdown Menu: Layout -> Charge - Input Value, then Press Enter | YES | YES | YES | 
+| Viewport Menu: Node - No Click | NO | YES | YES | 
+| Viewport Menu: Node - Right Click | NO | YES | YES | 
+| Dropdown Menu: Species -> Current Species - Select a species | YES | YES | YES | 
+| Sidebar Menu: Species -> Current Species - Select a species from a dropdown list | YES | YES | YES | 
 
 ## Client Side Tests
 ### Test 1
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should always be contained within the viewport.
 
 ### Test 2
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should always be contained within the viewport.
 
 ### Test 3
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should always be contained within the viewport.
 
 ### Test 4
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should always be contained within the viewport.
 
 ### Test 5
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should always be contained within the viewport.
 
 ### Test 6
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should always be contained within the viewport.
 
 ### Test 7
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to small
 - The viewport should always be contained within the viewport.
 
 ### Test 8
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to small
 - The viewport should always be contained within the viewport.
 
 ### Test 9
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to small
 - The viewport should always be contained within the viewport.
 
 ### Test 10
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to small
 - The viewport should always be contained within the viewport.
 
 ### Test 11
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to small
 - The viewport should always be contained within the viewport.
 
 ### Test 12
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to small
 - The viewport should always be contained within the viewport.
 
 ### Test 13
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to medium
 - The viewport should always be contained within the viewport.
 
 ### Test 14
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to medium
 - The viewport should always be contained within the viewport.
 
 ### Test 15
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to medium
 - The viewport should always be contained within the viewport.
 
 ### Test 16
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to medium
 - The viewport should always be contained within the viewport.
 
 ### Test 17
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to medium
 - The viewport should always be contained within the viewport.
 
 ### Test 18
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to medium
 - The viewport should always be contained within the viewport.
 
 ### Test 19
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to large
 - The viewport should always be contained within the viewport.
 
 ### Test 20
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to large
 - The viewport should always be contained within the viewport.
 
 ### Test 21
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to large
 - The viewport should always be contained within the viewport.
 
 ### Test 22
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to large
 - The viewport should always be contained within the viewport.
 
 ### Test 23
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to large
 - The viewport should always be contained within the viewport.
 
 ### Test 24
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to large
 - The viewport should always be contained within the viewport.
 
 ### Test 25
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should always be contained within the viewport.
 
 ### Test 26
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should always be contained within the viewport.
 
 ### Test 27
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should always be contained within the viewport.
 
 ### Test 28
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should always be contained within the viewport.
 
 ### Test 29
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should always be contained within the viewport.
 
 ### Test 30
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Check
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should always be contained within the viewport.
 
 ### Test 31
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should be allowed to extend past the viewport
 
 ### Test 32
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should be allowed to extend past the viewport
 
 ### Test 33
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should be allowed to extend past the viewport
 
 ### Test 34
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should be allowed to extend past the viewport
 
 ### Test 35
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should be allowed to extend past the viewport
 
 ### Test 36
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Keep as Detected
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.
 - The viewport should be allowed to extend past the viewport
 
 ### Test 37
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to small
 - The viewport should be allowed to extend past the viewport
 
 ### Test 38
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to small
 - The viewport should be allowed to extend past the viewport
 
 ### Test 39
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to small
 - The viewport should be allowed to extend past the viewport
 
 ### Test 40
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to small
 - The viewport should be allowed to extend past the viewport
 
 ### Test 41
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to small
 - The viewport should be allowed to extend past the viewport
 
 ### Test 42
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Small"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to small
 - The viewport should be allowed to extend past the viewport
 
 ### Test 43
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to medium
 - The viewport should be allowed to extend past the viewport
 
 ### Test 44
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to medium
 - The viewport should be allowed to extend past the viewport
 
 ### Test 45
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to medium
 - The viewport should be allowed to extend past the viewport
 
 ### Test 46
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to medium
 - The viewport should be allowed to extend past the viewport
 
 ### Test 47
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to medium
 - The viewport should be allowed to extend past the viewport
 
 ### Test 48
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Medium"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to medium
 - The viewport should be allowed to extend past the viewport
 
 ### Test 49
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to large
 - The viewport should be allowed to extend past the viewport
 
 ### Test 50
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should be set to large
 - The viewport should be allowed to extend past the viewport
 
 ### Test 51
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to large
 - The viewport should be allowed to extend past the viewport
 
 ### Test 52
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should be set to large
 - The viewport should be allowed to extend past the viewport
 
 ### Test 53
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to large
 - The viewport should be allowed to extend past the viewport
 
 ### Test 54
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Large"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should be set to large
 - The viewport should be allowed to extend past the viewport
 
 ### Test 55
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should be allowed to extend past the viewport
 
 ### Test 56
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Keep at Default
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should default to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should be allowed to extend past the viewport
 
 ### Test 57
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should be allowed to extend past the viewport
 
 ### Test 58
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Grid Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to grid layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should be allowed to extend past the viewport
 
 ### Test 59
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Check
+- Dropdown Menu: Node -> Enable Node Coloring - Check
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should be allowed to extend past the viewport
 
 ### Test 60
 Instructions:
-- Dropdown Menu: Node -> Disable Node Coloring - Uncheck
+- Dropdown Menu: Node -> Enable Node Coloring - Uncheck
 - Sidebar Menu: Grid Layout - Click Force Graph Layout Button
 - Dropdown Menu: View -> Viewport Size - Check "Fit to Window"
 - Dropdown Menu: View -> Restrict Graph to Viewport - Uncheck
 
 Results:
--  Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring', if expression data sheets are present in input workbook
+-  Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off, if expression data sheets are present in input workbook
 - The graph should change to force graph layout
 -  The viewport size should automatically be set to the size of the browser window
 - The viewport should be allowed to extend past the viewport
