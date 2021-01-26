@@ -4,9 +4,7 @@
         "text": "GRNsight should",
         "options": {
             "None": "have no graph in the viewport",
-            "Dropdown Menu: File -> Open": "lay out a network graph from the Excel network if there are no errors in the file",
-            "Dropdown Menu: File -> Import SIF": "lay out a network graph from the SIF file if there are no errors in the file",
-            "Dropdown Menu: File -> Import GraphML": "lay out a network graph from the GraphML file if there are no errors in the file",
+            "Dropdown Menu: File -> Open File": "lay out a network graph from the Excel, SIF, or GraphML network if there are no errors in the file",
             "Dropdown Menu: Demo -> Demo #1": "lay out an unweighted network graph from Demo #1",
             "Dropdown Menu: Demo -> Demo #2": "lay out a weighted network graph from Demo #2",
             "Dropdown Menu: Demo -> Demo #3": "lay out an unweighted network graph from Demo #3",
@@ -488,9 +486,27 @@
         "text": "",
         "options": {
             "No Click": "",
-            "Right Click": "Gene information page should appear in a new tab within the browser.",
+            "Right Click": "Gene information page should appear in a new tab within the browser."
         },
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Dropdown Menu: Species -> Current Species",
+        "text": "",
+        "options": {
+            "Select a species": "Opening gene information pages will use information of the selected species."
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Species -> Current Species",
+        "text": "",
+        "options": {
+            "Select a species from a dropdown list": "Opening gene information pages will use information of the selected species."
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     }
 ]
