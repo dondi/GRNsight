@@ -29,7 +29,20 @@
             "Select \"To Unweighted SIF\"": "export an unweighted SIF file from the graph currently loaded",
             "Select \"To Weighted SIF\"": "export a weighted SIF file from the graph currently loaded",
             "Select \"To Unweighted GraphML\"": "export an unweighted GraphML file from the graph currently loaded",
-            "Select \"To Weighted GraphML\"": "export a weighted GraphML file from the graph currently loaded"
+            "Select \"To Weighted GraphML\"": "export a weighted GraphML file from the graph currently loaded",
+            "Select \"To Unweighted Excel\"": "export an unweighted Excel file from the graph currently loaded",
+            "Select \"To Weighted Excel\"": "export a weighted Excel file from the graph currently loaded"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Dropdown Menu: File -> Export Image",
+        "text": "GRNsight should",
+        "options": {
+            "Select \"To PNG\"": "export a PNG image from the graph currently loaded",
+            "Select \"To SVG\"": "export a SVG image from the graph currently loaded",
+            "Select \"To PDF\"": "export a PDF file from the graph currently loaded"
         },
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -119,11 +132,21 @@
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu: Edge",
+        "title": "Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value",
         "text": "GRNsight should",
         "options": {
-            "Select \"Format edges based on optimized weight parameters\"": "format edges based on optimized weight parameters",
-            "Select \"Default to black edges with regular arrowheads\"": "default to black edges with regular arrowheads"
+            "Check": "enable edge coloring and set the sidebar menu 'Enable Edge Coloring' to checked",
+            "Uncheck": "disable edge coloring and set the sidebar menu 'Enable Edge Coloring' to unchecked"
+        },
+        "included": false,
+        "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
+    },
+    {
+        "title": "Sidebar Menu: Enable Edge Coloring",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "enable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to checked",
+            "Uncheck": "disable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to unchecked"
         },
         "included": false,
         "availability": {"NoGraphLoaded": true, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
@@ -234,7 +257,6 @@
             "Click Down Arrow": "shift up",
             "Click Center Button": "move to the center of the bounding box (note that it is not the same thing as the viewport"
         },
-        "conditional": "if \"Restrict Graph to Viewport\" is Unchecked.",
         "included": false,
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
@@ -364,18 +386,18 @@
         "title": "Sidebar Menu: Node Coloring Toggle Button",
         "text": "",
         "options": {
-            "Click": "Node coloring should toggle between on and off, with default being on and button text should toggle between 'Enable Node Coloring' and 'Disable Node Coloring'"
+            "Click": "Node coloring should toggle between on and off, with default being on"
         },
         "included": false,
         "conditional": "if expression data sheets are present in input workbook",
         "availability": {"NoGraphLoaded": false, "WeightedGraphLoaded": true, "UnWeightedGraphLoaded": true }
     },
     {
-        "title": "Dropdown Menu: Node -> Disable Node Coloring",
+        "title": "Dropdown Menu: Node -> Enable Node Coloring",
         "text": "",
         "options": {
-            "Check": "Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should read 'Enable Node Coloring'",
-            "Uncheck": "Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should read 'Disable Node Coloring'"
+            "Check": "Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on",
+            "Uncheck": "Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off"
         },
         "included": true,
         "conditional": "if expression data sheets are present in input workbook",
