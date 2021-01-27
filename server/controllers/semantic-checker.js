@@ -6,7 +6,7 @@
 //
 // var helpers = require(__dirname + "/helpers");
 
-var constants = require(__dirname + "/constants");
+var constants = require(__dirname + "/workbook-constants");
 
 /*
 var addMessageToArray = function (messageArray, message) {
@@ -102,8 +102,8 @@ var checkIfEmptyWorkbook = function (errorArray, genesList) {
 // TODO Entry-point semantic checker function goes here.
 module.exports = function (workbook) {
     // Note: checkSpecialCharacter is unused, however it does not contain all of the parameters needed to
-    //       call the specialCharacterError in constants.js. As it has no real impact to the current codebase,
-    //       this is being mentioned because when this is implemented, it ios a good thing to be aware of.
+    //       call the specialCharacterError in rorkbook-constants.js. As it has no real impact to the current codebase,
+    //       this is being mentioned because when this is implemented, it is a good thing to be aware of.
     checkSpecialCharacter(workbook.errors, workbook.genes);
     checkDuplicates(workbook.errors, workbook.genes);
     checkGeneLength(workbook.errors, workbook.genes);

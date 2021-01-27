@@ -5,7 +5,7 @@ var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
 var parseNetworkSheet = require(__dirname + "/network-sheet-parser");
 var demoWorkbooks = require(__dirname + "/demo-workbooks");
-var constants = require(__dirname + "/constants");
+var constants = require(__dirname + "/workbook-constants");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");

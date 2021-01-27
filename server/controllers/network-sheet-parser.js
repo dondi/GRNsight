@@ -6,7 +6,7 @@ const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
-var constants = require(__dirname + "/constants");
+var constants = require(__dirname + "/workbook-constants");
 
 
 // const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights"];

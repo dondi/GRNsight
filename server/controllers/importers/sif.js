@@ -1,4 +1,5 @@
 var constants = require(__dirname + "/../constants");
+var sifConstants = require(__dirname + "/../sif-constants")
 var semanticChecker = require(__dirname + "/../semantic-checker");
 var initWorkbook = require(__dirname + "/../helpers.js").initWorkbook;
 
@@ -22,12 +23,12 @@ module.exports = function (sif) {
     // Stray data detected when there are 2 or more consecutive tabs NOT followed by a newline in the SIF file.
     // OR Stray data detected when there are 2 or more consecutive new lines
     if (sif.match(/(?=.*[\t]{2,}?[^\n\t]).*/g) || sif.match(/[\n]{2,}/g)) {
-        errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
+        errors.push(sifConstants.errors.SIF_STRAY_DATA_ERROR);
     }
 
     // Detects comma separated SIF files
     if (!sif.match(/[\t]+/g) && sif.match(/[,]+/g)) {
-        errors.push(constants.warnings.SIF_FORMAT_WARNING);
+        errors.push(sifConstants.warnings.SIF_FORMAT_WARNING);
     }
 
     var isNumber = function (relationship) {
@@ -54,11 +55,11 @@ module.exports = function (sif) {
         });
 
         if (unweightedRelationshipTypeErrorDetected) {
-            errors.push(constants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
+            errors.push(sifConstants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
         }
 
         if (numRowsWithTwoColumns > 0) {
-            errors.push(constants.errors.SIF_MISSING_DATA_ERROR);
+            errors.push(sifConstants.errors.SIF_MISSING_DATA_ERROR);
         }
 
         var hasNumbers = relationships.some(isNumber);
@@ -83,7 +84,7 @@ module.exports = function (sif) {
     });
 
     if (nullEntries.length > 0) {
-        errors.push(constants.errors.SIF_STRAY_DATA_ERROR);
+        errors.push(sifConstants.errors.SIF_STRAY_DATA_ERROR);
     } else {
         entries.forEach(function (entry) {
             if (entry.length && entry[GENE_NAME] && genes.indexOf(entry[GENE_NAME]) === constants.NOT_FOUND) {

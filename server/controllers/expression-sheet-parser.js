@@ -1,7 +1,7 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
-var constants = require(__dirname + "/constants");
+var constants = require(__dirname + "/workbook-constants");
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
