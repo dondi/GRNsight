@@ -70,12 +70,12 @@ const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
     resultSheet.push(
         {
-            "name": "workbook",
+            "name": "network",
             "data": buildWorkbookSheet(workbook.genes, workbook.links)
         },
 
         {
-            "name": "workbook_weights",
+            "name": "network_weights",
             "data": buildWorkbookSheet(workbook.genes, workbook.links)
         }
     );
