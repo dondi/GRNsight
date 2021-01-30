@@ -8,7 +8,10 @@ var markdownpdf = require("markdown-pdf");
 var moment = require("moment");
 
 // Imports JSON data from data.json
-var grnsightOptions = JSON.parse(fs.readFileSync('featureList.json', 'utf8'));
+const JSONFileList = ['edgeFeatures.json', 'fileFeatures.json', 'layoutFeatures.json',
+                'nodeFeatures.json', 'speciesFeatures.json', 'viewFeatures.json', 'viewportFeatures.json']
+var grnsightOptions = JSONFileList.flatMap((fileName)=> JSON.parse(fs.readFileSync(fileName, 'utf8')) )
+// var grnsightOptions = JSON.parse(fs.readFileSync('featureList.json', 'utf8'));
 
 // Node class for representing each test
 class Node {
