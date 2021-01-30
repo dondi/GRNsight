@@ -1,8 +1,8 @@
 ## GRNsight Client Side Testing Overview
 Last Updated: 2021-01-30
 
-| Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
-| --------------- | ------ | ------- | ------ | 
+| ID | Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
+| ---- |  --------------- | ------ | ------- | ------ | 
 |e1|NO | Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value|Check | GRNsight should enable edge coloring and set the sidebar menu 'Enable Edge Coloring' to checked|
 |e1|NO | Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value|Uncheck | GRNsight should disable edge coloring and set the sidebar menu 'Enable Edge Coloring' to unchecked|
 |e2|NO | Sidebar Menu: Enable Edge Coloring|Check | GRNsight should enable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to checked|
