@@ -1,5 +1,6 @@
 [
     {
+        "id":"s1",
         "title": "Dropdown Menu: Species -> Current Species",
         "text": "",
         "options": {
@@ -13,6 +14,7 @@
         }
     },
     {
+        "id":"s2",
         "title": "Sidebar Menu: Species -> Current Species",
         "text": "",
         "options": {

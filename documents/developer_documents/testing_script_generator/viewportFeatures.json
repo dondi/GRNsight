@@ -1,5 +1,6 @@
 [
     {
+        "id":"vp1",
         "title": "Viewport Menu: D-Pad Control",
         "text": "The graph should",
         "options": {
@@ -17,6 +18,7 @@
         }
     },
     {
+        "id":"vp2",
         "title": "Viewport Menu: Zoom Slider",
         "text": "The graph should",
         "options": {
@@ -31,6 +33,7 @@
         }
     },
     {
+        "id":"vp3",
         "title": "Viewport Menu: Node",
         "text": "",
         "options": {

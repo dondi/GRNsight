@@ -1,5 +1,6 @@
 [
     {
+        "id":"l1",
         "title": "Sidebar Menu: Grid Layout",
         "text": "The graph should",
         "options": {
@@ -15,6 +16,7 @@
         }
     },
     {
+        "id":"l2",
         "title": "Dropdown Menu: Layout -> Graph Options",
         "text": "The graph should",
         "options": {
@@ -30,6 +32,7 @@
         }
     },
     {
+        "id":"l3",
         "title": "Dropdown Menu: Layout -> Lock Force Graph Parameters",
         "text": "The Force Graph Parameter sliders should",
         "options": {
@@ -44,6 +47,7 @@
         }
     },
     {
+        "id":"l4",
         "title": "Dropdown Menu: Layout -> Reset Force Graph Parameters",
         "text": "The force graph parameters should",
         "options": {
@@ -57,6 +61,7 @@
         }
     },
     {
+        "id":"l5",
         "title": "Dropdown Menu: Layout -> Undo Reset",
         "text": "The force graph parameters should",
         "options": {
@@ -70,6 +75,7 @@
         }
     },
     {
+        "id":"l6",
         "title": "Dropdown Menu: Layout -> Link Distance",
         "text": "",
         "options": {
@@ -83,6 +89,7 @@
         }
     },
     {
+        "id":"l7",
         "title": "Dropdown Menu: Layout -> Charge",
         "text": "",
         "options": {
@@ -96,6 +103,7 @@
         }
     },
     {
+        "id":"l8",
         "title": "Sidebar Menu: Force Graph Parameter Sliders",
         "text": "",
         "options": {
@@ -113,6 +121,7 @@
         }
     },
     {
+        "id":"l9",
         "title": "Sidebar Menu: Lock Force Graph Parameters Checkbox",
         "text": "The Force Graph Parameter sliders should",
         "options": {
@@ -127,6 +136,7 @@
         }
     },
     {
+        "id":"l10",
         "title": "Sidebar Menu: Reset Force Graph Parameters Button",
         "text": "The Force Graph Parameter sliders should",
         "options": {
@@ -140,6 +150,7 @@
         }
     },
     {
+        "id":"l11",
         "title": "Sidebar Menu: Undo Reset Button",
         "text": "The Force Graph Parameter sliders should",
         "options": {

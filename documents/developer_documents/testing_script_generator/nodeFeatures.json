@@ -1,5 +1,6 @@
 [
     {
+        "id":"n1",
         "title": "Sidebar Menu: Top Dataset",
         "text": "The top half of each node should be colored using data from",
         "options": {
@@ -15,6 +16,7 @@
         }
     },
     {
+        "id":"n2",
         "title": "Dropdown Menu: Node -> Select Top Dataset",
         "text": "The top half of each node should be colored using data from",
         "options": {
@@ -30,6 +32,7 @@
         }
     },
     {
+        "id":"n3",
         "title": "Sidebar Menu: Bottom Dataset",
         "text": "The bottom half of each node should be colored using data from",
         "options": {
@@ -45,6 +48,7 @@
         }
     },
     {
+        "id":"n4",
         "title": "Dropdown Menu: Node -> Select Bottom Dataset",
         "text": "The bottom half of each node should be colored using data from",
         "options": {
@@ -60,6 +64,7 @@
         }
     },
     {
+        "id":"n5",
         "title": "Sidebar Menu: Log Fold Change Max Value",
         "text": "The node coloring visualization's color intensity should",
         "options": {
@@ -76,6 +81,7 @@
         }
     },
     {
+        "id":"n6",
         "title": "Dropdown Menu: Node -> Log Fold Change Max Value",
         "text": "The node coloring visualization's color intensity should",
         "options": {
@@ -92,6 +98,7 @@
         }
     },
     {
+        "id":"n7",
         "title": "Sidebar Menu: Average Replicates Values (Top Dataset)",
         "text": "GRNsight should",
         "options": {
@@ -107,6 +114,7 @@
         }
     },
     {
+        "id":"n8",
         "title": "Dropdown Menu: Node -> Average Replicates Values (Top Dataset)",
         "text": "GRNsight should",
         "options": {
@@ -122,6 +130,7 @@
         }
     },
     {
+        "id":"n9",
         "title": "Sidebar Menu: Average Replicates Values (Bottom Dataset)",
         "text": "GRNsight should",
         "options": {
@@ -137,6 +146,7 @@
         }
     },
     {
+        "id":"n10",
         "title": "Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)",
         "text": "GRNsight should",
         "options": {
@@ -152,6 +162,7 @@
         }
     },
     {
+        "id":"n11",
         "title": "Sidebar Menu: Node Coloring Toggle Button",
         "text": "",
         "options": {
@@ -166,6 +177,7 @@
         }
     },
     {
+        "id":"n12",
         "title": "Dropdown Menu: Node -> Enable Node Coloring",
         "text": "",
         "options": {

@@ -1,5 +1,6 @@
 [
     {
+        "id": "e1",
         "title": "Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value",
         "text": "GRNsight should",
         "options": {
@@ -14,6 +15,7 @@
         }
     },
     {
+        "id": "e2",
         "title": "Sidebar Menu: Enable Edge Coloring",
         "text": "GRNsight should",
         "options": {
@@ -28,6 +30,7 @@
         }
     },
     {
+        "id": "e3",
         "title": "Sidebar Menu: Hide/Show Edge Weights",
         "text": "",
         "options": {
@@ -43,6 +46,7 @@
         }
     },
     {
+        "id": "e4",
         "title": "Dropdown Menu: Edge -> Hide/Show Edge Weights",
         "text": "",
         "options": {
@@ -58,6 +62,7 @@
         }
     },
     {
+        "id": "e5",
         "title": "Sidebar Menu: Edge Weight Normalization Factor",
         "text": "The graph should",
         "options": {
@@ -71,6 +76,7 @@
         }
     },
     {
+        "id": "e6",
         "title": "Dropdown Menu: Edge -> Edge Weight Normalization Factor",
         "text": "The graph should",
         "options": {
@@ -84,6 +90,7 @@
         }
     },
     {
+        "id": "e7",
         "title": "Sidebar Menu: Reset Factor Button",
         "text": "The graph should",
         "options": {
@@ -97,6 +104,7 @@
         }
     },
     {
+        "id": "e8",
         "title": "Dropdown Menu: Edge -> Reset Edge Weight Normalization",
         "text": "The graph should",
         "options": {
@@ -110,6 +118,7 @@
         }
     },
     {
+        "id": "e10",
         "title": "Sidebar Menu: Gray Threshold Slider",
         "text": "The graph should reload, with",
         "options": {
@@ -123,6 +132,7 @@
         }
     },
     {
+        "id": "e11",
         "title": "Dropdown Menu: Edge -> Gray Threshold Input Box",
         "text": "The graph should reload, with",
         "options": {
@@ -136,6 +146,7 @@
         }
     },
     {
+        "id": "e12",
         "title": "Sidebar Menu: Show Grey Edges as Dashed Checkbox",
         "text": "The graph should",
         "options": {
@@ -150,6 +161,7 @@
         }
     },
     {
+        "id": "e13",
         "title": "Dropdown Menu: Edge -> Show Grey Edges as Dashed",
         "text": "The graph should",
         "options": {

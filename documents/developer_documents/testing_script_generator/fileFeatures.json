@@ -1,5 +1,6 @@
 [
     {
+        "id":"f1",
         "title": "Dropdown Menu: Help",
         "text": "GRNsight should",
         "options": {
@@ -15,6 +16,7 @@
         }
     },
     {
+        "id":"f2",
         "title": "Load Graph",
         "text": "GRNsight should",
         "options": {
@@ -33,6 +35,7 @@
         }
     },
     {
+        "id":"f3",
         "title": "Dropdown Menu: File -> Reload",
         "text": "The graph should",
         "options": {
@@ -46,6 +49,7 @@
         }
     },
     {
+        "id":"f4",
         "title": "Dropdown Menu: File -> Export Data",
         "text": "GRNsight should",
         "options": {
@@ -64,6 +68,7 @@
         }
     },
     {
+        "id":"f5",
         "title": "Dropdown Menu: File -> Export Image",
         "text": "GRNsight should",
         "options": {
@@ -79,6 +84,7 @@
         }
     },
     {
+        "id":"f6",
         "title": "Dropdown Menu: File -> Print",
         "text": "GRNsight should",
         "options": {

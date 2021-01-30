@@ -1,5 +1,6 @@
 [
     {
+        "id":"v1",
         "title": "Sidebar Menu: Restrict Graph to Viewport Checkbox",
         "text": "The graph bounding box should",
         "options": {
@@ -14,6 +15,7 @@
         }
     },
     {
+        "id":"v2",
         "title": "Sidebar Menu: Viewport Size",
         "text": "",
         "options": {
@@ -31,6 +33,7 @@
         }
     },
     {
+        "id":"v3",
         "title": "Dropdown Menu: View -> Viewport Size",
         "text": "",
         "options": {
@@ -48,6 +51,7 @@
         }
     },
     {
+        "id":"v4",
         "title": "Dropdown Menu: View -> Restrict Graph to Viewport",
         "text": "The viewport should",
         "options": {
@@ -62,6 +66,7 @@
         }
     },
     {
+        "id":"v5",
         "title": "Dropdown Menu: View -> Zoom",
         "text": "The viewport should",
         "options": {
