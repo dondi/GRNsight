@@ -88,7 +88,7 @@ grnsightOptions.forEach(function(test) {
     var optionKeys = Object.keys(test.options);
     var entry = "|" + test.title + "|";
     var status = test.included ? "YES" : "NO";
-    var entry = "|" + status + " | " + test.title + "|";
+    var entry = "|" + test.id +"|"+ status + " | " + test.title + "|";
     var noGraphLoadedAvailability = test.availability['NoGraphLoaded'] ? "YES": "NO";
     var weightedGraphLoadedAvailability = test.availability['WeightedGraphLoaded'] ? "YES": "NO";
     var unweightedGraphLoadedAvailability = test.availability['UnWeightedGraphLoaded'] ? "YES": "NO";
