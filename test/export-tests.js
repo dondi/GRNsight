@@ -558,7 +558,7 @@ describe("Export to spreadsheet", function () {
     it("should export a workbook to a spreadsheet object properly", function () {
         const expectedSheet = [
             {
-                name: "workbook",
+                name: "network",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
@@ -568,7 +568,7 @@ describe("Export to spreadsheet", function () {
             },
 
             {
-                name: "workbook_weights",
+                name: "network_weights",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
