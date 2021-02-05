@@ -29,8 +29,8 @@ describe("errors-graph-tests", function () {
     describe("over-75-genes-or-150-nodes", function () {
         it("should return invalid workbook size error", function () {
             this.timeout(10000);
-            test.workbookSizeError("test-files/graph-tests/different-sized-networks/80-genes-0-edges.xlsx", 1);
-            test.workbookSizeError("test-files/graph-tests/different-sized-networks/45-genes-max-edges.xlsx", 1);
+            test.workbookSizeError("test-files/graph-tests/different-sized-networks/134-genes-0-edges.xlsx", 1);
+            test.workbookSizeError("test-files/graph-tests/different-sized-networks/44-source-genes-45-target-genes-max-edges.xlsx", 1);
         });
     });
 
