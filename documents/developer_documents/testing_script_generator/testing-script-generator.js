@@ -2,10 +2,30 @@
 // Make any changes in the data.json file
 // Navigate to documents>developer_documents>testing-script-generator folder on the command line
 // Run node testing-script-generator.js to generate new Testing Document file
+// by default, this will create tests for the features with included=true in their features.json
+// -l is the option to list the ids you would like to test
+//  `node testing-script-generator.js -l e4 e5 e6` will create tests for e4, e5, e6 features from the table
+// -j is the option to read the test ids from a .json file, default name is testFeatures.json
+// `node testing-script-generator.js -j` will create tests for the ids listed in testFeatures.json
+// `node testing-script-generator.js -j example.json` will create tests for the ids listed in example.json
+
 
 var fs = require("fs");
 var markdownpdf = require("markdown-pdf");
 var moment = require("moment");
+
+// Handle user CLI options
+const options = process.argv.slice(2)
+let toTest = undefined
+if(options.length > 0){
+    if(options[0] == '-l'){
+        toTest = options.slice(1)
+        console.log(toTest)
+    } else if(options[0] == '-j'){
+        const fileName = options[1] ? options[1] : 'testFeatures.json'
+        toTest = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
+    }
+}
 
 // Imports JSON data from data.json
 const JSONFileList = ['edgeFeatures.json', 'fileFeatures.json', 'layoutFeatures.json',
@@ -49,7 +69,7 @@ var addChildren = function (arrayOfNodes, optionKeys, test) {
     var newArrayOfNodes = [];
     // Loops through each node in arrayOfNodes
     arrayOfNodes.forEach(function(node) {
-        if (!test.included) {
+        if ( (!test.included && !toTest) || (toTest && !toTest.includes(test.id)) ) {
             // Skip this test by adding the original node itself to the newArrayOfNodes
             newArrayOfNodes.push(node);
         } else {

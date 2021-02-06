@@ -118,7 +118,7 @@
         }
     },
     {
-        "id": "e10",
+        "id": "e9",
         "title": "Sidebar Menu: Gray Threshold Slider",
         "text": "The graph should reload, with",
         "options": {
@@ -132,7 +132,7 @@
         }
     },
     {
-        "id": "e11",
+        "id": "e10",
         "title": "Dropdown Menu: Edge -> Gray Threshold Input Box",
         "text": "The graph should reload, with",
         "options": {
@@ -146,7 +146,7 @@
         }
     },
     {
-        "id": "e12",
+        "id": "e11",
         "title": "Sidebar Menu: Show Grey Edges as Dashed Checkbox",
         "text": "The graph should",
         "options": {
@@ -161,7 +161,7 @@
         }
     },
     {
-        "id": "e13",
+        "id": "e12",
         "title": "Dropdown Menu: Edge -> Show Grey Edges as Dashed",
         "text": "The graph should",
         "options": {

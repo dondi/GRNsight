@@ -53,7 +53,7 @@
     {
         "id":"v4",
         "title": "Dropdown Menu: View -> Restrict Graph to Viewport",
-        "text": "The viewport should",
+        "text": "The graph should",
         "options": {
             "Check": "always be contained within the viewport.",
             "Uncheck": "be allowed to extend past the viewport"
