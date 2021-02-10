@@ -1,5 +1,5 @@
 var constants = require(__dirname + "/../constants");
-var sifConstants = require(__dirname + "/../sif-constants")
+var sifConstants = require(__dirname + "/../sif-constants");
 var semanticChecker = require(__dirname + "/../semantic-checker");
 var initWorkbook = require(__dirname + "/../helpers.js").initWorkbook;
 

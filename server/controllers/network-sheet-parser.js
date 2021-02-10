@@ -170,7 +170,8 @@ var parseNetworkSheet = function (sheet, network) {
                                                 row, column));
                                         } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
                                             (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                            addWarning(network, constants.warnings.randomDataWarning("NaN", row, column));
+                                            addWarning(network, constants.warnings.randomDataWarning(
+                                                "NaN", row, column));
                                         } else {
                                             // Grab the source and target genes' numbers
                                             sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
@@ -202,7 +203,8 @@ var parseNetworkSheet = function (sheet, network) {
                                                 currentLink.type = "arrowhead";
                                                 currentLink.stroke = "black";
                                                 if (currentLink.value !== 1) {
-                                                    addWarning(network, constants.warnings.incorrectlyNamedSheetWarning());
+                                                    addWarning(network, constants.warnings.
+                                                        incorrectlyNamedSheetWarning());
                                                     currentLink.value = 1;
                                                 }
                                                 network.positiveWeights.push(currentLink.value);
