@@ -1,0 +1,166 @@
+[
+    {
+        "id":"l1",
+        "title": "Sidebar Menu: Grid Layout",
+        "text": "The graph should",
+        "options": {
+            "Keep at Default": "default to force graph layout",
+            "Click Grid Layout Button": "change to grid layout",
+            "Click Force Graph Layout Button": "change to force graph layout"
+        },
+        "included": true,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l2",
+        "title": "Dropdown Menu: Layout -> Graph Options",
+        "text": "The graph should",
+        "options": {
+            "Keep at Default": "be in force graph layout by default",
+            "Grid Layout": "apply grid layout",
+            "Force Graph": "apply force graph layout"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l3",
+        "title": "Dropdown Menu: Layout -> Lock Force Graph Parameters",
+        "text": "The Force Graph Parameter sliders should",
+        "options": {
+            "Check \"Lock Force Graph Parameters\"": "be disabled.",
+            "Uncheck \"Lock Force Graph Parameters\"": "be enabled."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l4",
+        "title": "Dropdown Menu: Layout -> Reset Force Graph Parameters",
+        "text": "The force graph parameters should",
+        "options": {
+            "Click \"Reset Force Graph Parameters\"": "revert to the default values, if Lock Force Graph Parameters is unchecked"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l5",
+        "title": "Dropdown Menu: Layout -> Undo Reset",
+        "text": "The force graph parameters should",
+        "options": {
+            "Click \"Undo Reset\"": "return to the values they had before the Undo Reset button (or menu item) was selected, if Undo Reset is enabled."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l6",
+        "title": "Dropdown Menu: Layout -> Link Distance",
+        "text": "",
+        "options": {
+            "Input Value, then Press Enter": "The graph's edges should visibly change in length to the value entered if Lock Force Graph Parameters is unchecked"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l7",
+        "title": "Dropdown Menu: Layout -> Charge",
+        "text": "",
+        "options": {
+            "Input Value, then Press Enter": "The graph's nodes should visibly change it's level of attraction to each other to the value entered if Lock Force Graph Parameters is unchecked"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l8",
+        "title": "Sidebar Menu: Force Graph Parameter Sliders",
+        "text": "",
+        "options": {
+            "Keep at Default Values": "The graph should be laid out according to the default values of the force graph parameter sliders",
+            "Decrease Link Distance": "The graph's edges should visibly decrease in length if Lock Force Graph Parameters is unchecked",
+            "Increase Link Distance": "The graph's edges should visibly increase in length if Lock Force Graph Parameters is unchecked",
+            "Increase Charge": "The graph's nodes should visibly increase attraction to each other if Lock Force Graph Parameters is unchecked",
+            "Decrease Charge": "The graph's nodes should visibly decrease attraction to each other if Lock Force Graph Parameters is unchecked"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l9",
+        "title": "Sidebar Menu: Lock Force Graph Parameters Checkbox",
+        "text": "The Force Graph Parameter sliders should",
+        "options": {
+            "Check": "be disabled.",
+            "Uncheck": "be enabled."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l10",
+        "title": "Sidebar Menu: Reset Force Graph Parameters Button",
+        "text": "The Force Graph Parameter sliders should",
+        "options": {
+            "Click": "revert to the default values, if Lock Force Graph Parameters is unchecked."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"l11",
+        "title": "Sidebar Menu: Undo Reset Button",
+        "text": "The Force Graph Parameter sliders should",
+        "options": {
+            "Click": "return to the values they had before the Undo Reset button (or menu item) was selected, if the Undo Reset button is enabled."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    }
+]

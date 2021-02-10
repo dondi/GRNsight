@@ -1,0 +1,100 @@
+[
+    {
+        "id":"f1",
+        "title": "Dropdown Menu: Help",
+        "text": "GRNsight should",
+        "options": {
+            "Select \"Getting Started\"": "open the GRNsight documentation page",
+            "Select \"GRNsight Wiki\"": "open the GRNsight wiki page",
+            "Select \"About GRNsight\"": "open the About GRNsight page"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"f2",
+        "title": "Load Graph",
+        "text": "GRNsight should",
+        "options": {
+            "None": "have no graph in the viewport",
+            "Dropdown Menu: File -> Open File": "lay out a network graph from the Excel, SIF, or GraphML network if there are no errors in the file",
+            "Dropdown Menu: Demo -> Demo #1": "lay out an unweighted network graph from Demo #1",
+            "Dropdown Menu: Demo -> Demo #2": "lay out a weighted network graph from Demo #2",
+            "Dropdown Menu: Demo -> Demo #3": "lay out an unweighted network graph from Demo #3",
+            "Dropdown Menu: Demo -> Demo #4": "lay out a weighted network graph from Demo #4"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"f3",
+        "title": "Dropdown Menu: File -> Reload",
+        "text": "The graph should",
+        "options": {
+            "Select": "center, zoom to 100%, and reapply the force graph parameters"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"f4",
+        "title": "Dropdown Menu: File -> Export Data",
+        "text": "GRNsight should",
+        "options": {
+            "Select \"To Unweighted SIF\"": "export an unweighted SIF file from the graph currently loaded",
+            "Select \"To Weighted SIF\"": "export a weighted SIF file from the graph currently loaded",
+            "Select \"To Unweighted GraphML\"": "export an unweighted GraphML file from the graph currently loaded",
+            "Select \"To Weighted GraphML\"": "export a weighted GraphML file from the graph currently loaded",
+            "Select \"To Unweighted Excel\"": "export an unweighted Excel file from the graph currently loaded",
+            "Select \"To Weighted Excel\"": "export a weighted Excel file from the graph currently loaded"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"f5",
+        "title": "Dropdown Menu: File -> Export Image",
+        "text": "GRNsight should",
+        "options": {
+            "Select \"To PNG\"": "export a PNG image from the graph currently loaded",
+            "Select \"To SVG\"": "export a SVG image from the graph currently loaded",
+            "Select \"To PDF\"": "export a PDF file from the graph currently loaded"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"f6",
+        "title": "Dropdown Menu: File -> Print",
+        "text": "GRNsight should",
+        "options": {
+            "Select": "open the Print Dialogue Box"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    }
+]

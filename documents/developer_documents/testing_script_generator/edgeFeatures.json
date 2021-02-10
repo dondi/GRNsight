@@ -1,0 +1,178 @@
+[
+    {
+        "id": "e1",
+        "title": "Dropdown Menu: Edge -> Enable Edge Coloring Based on Weight Value",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "enable edge coloring and set the sidebar menu 'Enable Edge Coloring' to checked",
+            "Uncheck": "disable edge coloring and set the sidebar menu 'Enable Edge Coloring' to unchecked"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id": "e2",
+        "title": "Sidebar Menu: Enable Edge Coloring",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "enable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to checked",
+            "Uncheck": "disable edge coloring and set the dropdown menu 'Enable Edge Coloring Based on Weight Value' to unchecked"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id": "e3",
+        "title": "Sidebar Menu: Hide/Show Edge Weights",
+        "text": "",
+        "options": {
+            "Select \"Show With Mouse Over\"": "A single edge weight should display when user mouses over a single edge.",
+            "Select \"Always Show Edge Weights\"": "All edge weights should always be visible.",
+            "Select \"Never Show Edge Weights\"": "No edge weights should be visible."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e4",
+        "title": "Dropdown Menu: Edge -> Hide/Show Edge Weights",
+        "text": "",
+        "options": {
+            "Check \"Show With Mouse Over\"": "A single edge weight should display when user mouses over a single edge.",
+            "Check \"Always Show Edge Weights\"": "All edge weights should always be visible.",
+            "Check \"Never Show Edge Weights\"": "No edge weights should be visible."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e5",
+        "title": "Sidebar Menu: Edge Weight Normalization Factor",
+        "text": "The graph should",
+        "options": {
+            "Enter a Number in the Box and Click \"Set Factor\" button": "reload with the new normalization factor applied to its edge weight thicknesses"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e6",
+        "title": "Dropdown Menu: Edge -> Edge Weight Normalization Factor",
+        "text": "The graph should",
+        "options": {
+            "Enter a Number in the Box and Press Enter": "reload with the new normalization factor applied to its edge weight thicknesses"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e7",
+        "title": "Sidebar Menu: Reset Factor Button",
+        "text": "The graph should",
+        "options": {
+            "Click": "reset to its default normalization factor and reload the graph"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e8",
+        "title": "Dropdown Menu: Edge -> Reset Edge Weight Normalization",
+        "text": "The graph should",
+        "options": {
+            "Click": "reset to its default normalization factor and reload the graph"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e9",
+        "title": "Sidebar Menu: Gray Threshold Slider",
+        "text": "The graph should reload, with",
+        "options": {
+            "Change the Grey Threshold Value": "edges that fall below the threshold value colored gray"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e10",
+        "title": "Dropdown Menu: Edge -> Gray Threshold Input Box",
+        "text": "The graph should reload, with",
+        "options": {
+            "Change the Grey Threshold Value and Press Enter": "edges that fall below the threshold value colored gray"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e11",
+        "title": "Sidebar Menu: Show Grey Edges as Dashed Checkbox",
+        "text": "The graph should",
+        "options": {
+            "Uncheck": "show gray lines as solid lines",
+            "Check": "show gray lines as dashed lines"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    },
+    {
+        "id": "e12",
+        "title": "Dropdown Menu: Edge -> Show Grey Edges as Dashed",
+        "text": "The graph should",
+        "options": {
+            "Uncheck": "show gray lines as solid lines",
+            "Check": "show gray lines as dashed lines"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": false
+        }
+    }
+]
