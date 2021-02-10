@@ -1,0 +1,195 @@
+[
+    {
+        "id":"n1",
+        "title": "Sidebar Menu: Top Dataset",
+        "text": "The top half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the first expression dataset detected in the input workbook",
+            "Select Top Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n2",
+        "title": "Dropdown Menu: Node -> Select Top Dataset",
+        "text": "The top half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the first expression dataset detected in the input workbook",
+            "Check New Top Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n3",
+        "title": "Sidebar Menu: Bottom Dataset",
+        "text": "The bottom half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the same dataset as the top dataset",
+            "Select Bottom Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n4",
+        "title": "Dropdown Menu: Node -> Select Bottom Dataset",
+        "text": "The bottom half of each node should be colored using data from",
+        "options": {
+            "Keep Default Selection": "the same dataset as the top dataset",
+            "Check New Bottom Dataset from Dropdown List": "the selected dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n5",
+        "title": "Sidebar Menu: Log Fold Change Max Value",
+        "text": "The node coloring visualization's color intensity should",
+        "options": {
+            "Keep Default Value": "default to having a Log Fold Change Max Value of 3",
+            "Increase Log Fold Change Max Value": "decrease",
+            "Decrease Log Fold Change Max Value": "increase"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n6",
+        "title": "Dropdown Menu: Node -> Log Fold Change Max Value",
+        "text": "The node coloring visualization's color intensity should",
+        "options": {
+            "Keep Default Value": "default to having a Log Fold Change Max Value of 3",
+            "Increase Log Fold Change Max Value": "decrease",
+            "Decrease Log Fold Change Max Value": "increase"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n7",
+        "title": "Sidebar Menu: Average Replicates Values (Top Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for top dataset",
+            "Uncheck": "not average replicate values for top dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n8",
+        "title": "Dropdown Menu: Node -> Average Replicates Values (Top Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for top dataset",
+            "Uncheck": "not average replicate values for top dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n9",
+        "title": "Sidebar Menu: Average Replicates Values (Bottom Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for bottom dataset",
+            "Uncheck": "not average replicate values for bottom dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n10",
+        "title": "Dropdown Menu: Node -> Average Replicates Values (Bottom Dataset)",
+        "text": "GRNsight should",
+        "options": {
+            "Check": "average replicate values for bottom dataset",
+            "Uncheck": "not average replicate values for bottom dataset"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n11",
+        "title": "Sidebar Menu: Node Coloring Toggle Button",
+        "text": "",
+        "options": {
+            "Click": "Node coloring should toggle between on and off, with default being on"
+        },
+        "included": false,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"n12",
+        "title": "Dropdown Menu: Node -> Enable Node Coloring",
+        "text": "",
+        "options": {
+            "Check": "Node coloring should become enabled, and Node Coloring Toggle Button text in sidebar menu should toggle on",
+            "Uncheck": "Node coloring should become disabled, and Node Coloring Toggle Button text in sidebar menu should toggle off"
+        },
+        "included": true,
+        "conditional": "if expression data sheets are present in input workbook",
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    }
+]
