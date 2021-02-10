@@ -1,4 +1,4 @@
-var constants = require(__dirname + "/sif-constants");
+var constants = require(__dirname + "/constants");
 
 var createEmptyWorkbook = function () {
     return {
