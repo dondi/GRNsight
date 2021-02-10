@@ -451,7 +451,7 @@ module.exports = {
                 errorCode: "EXTRA_GENE_NAME",
                 possibleCause: `Gene names in column A of the "${sheetName}" sheet have 
                 one or more extra genes than those listed in the network sheet`,
-                SuggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
+                suggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
                 the same as the genes in the "network" sheet and the "network_optimized_weights" sheet.`
             };
         },
@@ -461,7 +461,7 @@ module.exports = {
                 errorCode: "MISSING_GENE_NAME",
                 possibleCause: `Gene names in column A of the "${sheetName}"
                     sheet are missing one or more genes from the network sheet`,
-                SuggestedFix: `Please ensure that the genes in the "${sheetName}"
+                suggestedFix: `Please ensure that the genes in the "${sheetName}"
                      are the same as the genes in the "network" sheet and the 
                     "network_optimized_weights" sheet.`
             };
