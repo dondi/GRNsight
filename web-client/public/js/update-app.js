@@ -93,8 +93,6 @@ import {
 
 } from "./constants";
 
-let expressionDBdesired = false;
-
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
@@ -652,10 +650,6 @@ export const updateApp = grnState => {
     }
 
     // Node Coloring
-    if (grnState.workbook !== null && !hasExpressionData(grnState.workbook.expression) && !expressionDBdesired) {
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
-        expressionDBdesired = true;
-    }
     if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
     && hasExpressionData(grnState.workbook.expression)) {
         grnState.nodeColoring.showMenu = true;
@@ -772,6 +766,10 @@ export const updateApp = grnState => {
 
             }
         }
+    } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
+        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
