@@ -228,7 +228,7 @@ export var drawGraph = function (workbook) {
         .attr("height", height)
         .style("fill", "none")
         .style("pointer-events", "all")
-        .attr("stroke", adaptive ? "none" : "#9A9A9A")
+        .attr("stroke", "none" )
         .append("g");
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
