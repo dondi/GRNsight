@@ -110,7 +110,7 @@ const parseMetaDataSheet = (sheet) => {
     }
     if (sheet.data[0][1] === undefined) {
         addError(meta, constants.errors.missingColumnHeaderError(sheet.name, numbersToLetters[1],
-            getSheetHeader(sheet.name, 0, 0)));
+            getSheetHeader(sheet.name, 1, 0)));
     } else if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
         addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, numbersToLetters[1],
             getSheetHeader(sheet.name, 1, 0)));
