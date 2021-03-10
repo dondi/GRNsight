@@ -262,6 +262,255 @@ var demoWorkbook1 = function (path, res, app) {
         ],
         negativeWeights: [],
         sheetType: "unweighted",
+        network: {
+            genes: [
+                {name: "ACE2"},
+                {name: "ASH1"},
+                {name: "CIN5"},
+                {name: "GCR2"},
+                {name: "GLN3"},
+                {name: "HAP4"},
+                {name: "HMO1"},
+                {name: "MSN2"},
+                {name: "SFP1"},
+                {name: "STB5"},
+                {name: "SWI4"},
+                {name: "SWI5"},
+                {name: "YHP1"},
+                {name: "YOX1"},
+                {name: "ZAP1"}
+            ],
+            links: [
+                {
+                    source: 14,
+                    target: 0,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 0,
+                    target: 1,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 1,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 11,
+                    target: 1,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 12,
+                    target: 4,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 9,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 10,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 6,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 7,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 7,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 9,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 9,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 10,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 8,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 1,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 10,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 13,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 13,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 10,
+                    target: 13,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                }
+            ],
+            errors: [],
+            warnings: [],
+            positiveWeights: [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+            ],
+        },
         meta: {
             alpha: 0.002,
             kk_max: 1,
@@ -1915,6 +2164,507 @@ var demoWorkbook2 = function (path, res, app) {
             -0.25954746744906587
         ],
         sheetType: "weighted",
+        network: {
+            genes: [
+                {name: "ACE2"},
+                {name: "ASH1"},
+                {name: "CIN5"},
+                {name: "GCR2"},
+                {name: "GLN3"},
+                {name: "HAP4"},
+                {name: "HMO1"},
+                {name: "MSN2"},
+                {name: "SFP1"},
+                {name: "STB5"},
+                {name: "SWI4"},
+                {name: "SWI5"},
+                {name: "YHP1"},
+                {name: "YOX1"},
+                {name: "ZAP1"}
+            ],
+            links: [
+                {
+                    source: 14,
+                    target: 0,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 0,
+                    target: 1,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 1,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 11,
+                    target: 1,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 12,
+                    target: 4,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 9,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 10,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 6,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 7,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 7,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 9,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 9,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 10,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 8,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 1,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 2,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 10,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 6,
+                    target: 13,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 13,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 10,
+                    target: 13,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                }
+            ],
+            errors: [],
+            warnings: [],
+            positiveWeights: [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+            ],
+        },
+        networkOptimizedWeights: {
+            genes: [
+                {name: "ACE2"},
+                {name: "ASH1"},
+                {name: "CIN5"},
+                {name: "GCR2"},
+                {name: "GLN3"},
+                {name: "HAP4"},
+                {name: "HMO1"},
+                {name: "MSN2"},
+                {name: "SFP1"},
+                {name: "STB5"},
+                {name: "SWI4"},
+                {name: "SWI5"},
+                {name: "YHP1"},
+                {name: "YOX1"},
+                {name: "ZAP1"}
+            ],
+            links: [
+                {
+                    source: 14,
+                    target: 0,
+                    value: 0.7715106466403678,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 0,
+                    target: 1,
+                    value: -1.1672013354497313,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 7,
+                    target: 1,
+                    value: -2.4438462486461163,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 11,
+                    target: 1,
+                    value: 5.212343052095555,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 6,
+                    target: 2,
+                    value: 0.826365326790911,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 7,
+                    target: 2,
+                    value: -1.485274408559026,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 12,
+                    target: 4,
+                    value: 1.5180198066137216,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 2,
+                    target: 5,
+                    value: 0.27964603867183396,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 6,
+                    target: 5,
+                    value: -0.7371671668856121,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 7,
+                    target: 5,
+                    value: 2.9870960868914778,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 9,
+                    target: 5,
+                    value: 0.7743557796125339,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 10,
+                    target: 5,
+                    value: -2.9527940988546217,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 6,
+                    target: 6,
+                    value: 0.6701684007311992,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 3,
+                    target: 7,
+                    value: -3.3875125167057103,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 6,
+                    target: 7,
+                    value: 0.22069064019031245,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 2,
+                    target: 8,
+                    value: -0.0735729607899455,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 7,
+                    target: 8,
+                    value: -0.12373154839822605,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 9,
+                    target: 8,
+                    value: -0.5487650216350863,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 2,
+                    target: 9,
+                    value: -0.442904423529279,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 7,
+                    target: 10,
+                    value: -0.8662459811465724,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 8,
+                    target: 11,
+                    value: -2.850006860838391,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 1,
+                    target: 12,
+                    value: -1.5733259134754158,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 2,
+                    target: 12,
+                    value: 0.2841810246722045,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 7,
+                    target: 12,
+                    value: 0.08852330457981578,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 10,
+                    target: 12,
+                    value: -0.02279063304065471,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 6,
+                    target: 13,
+                    value: 0.5563132195423768,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 7,
+                    target: 13,
+                    value: -1.9832439149172112,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 10,
+                    target: 13,
+                    value: -0.25954746744906587,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                }
+            ],
+            errors: [],
+            warnings: [],
+            positiveWeights: [
+                0.7715106466403678,
+                5.212343052095555,
+                0.826365326790911,
+                1.5180198066137216,
+                0.27964603867183396,
+                2.9870960868914778,
+                0.7743557796125339,
+                0.6701684007311992,
+                0.22069064019031245,
+                0.2841810246722045,
+                0.08852330457981578,
+                0.5563132195423768
+            ],
+            negativeWeights: [
+                -1.1672013354497313,
+                -2.4438462486461163,
+                -1.485274408559026,
+                -0.7371671668856121,
+                -2.9527940988546217,
+                -3.3875125167057103,
+                -0.0735729607899455,
+                -0.12373154839822605,
+                -0.5487650216350863,
+                -0.442904423529279,
+                -0.8662459811465724,
+                -2.850006860838391,
+                -1.5733259134754158,
+                -0.02279063304065471,
+                -1.9832439149172112,
+                -0.25954746744906587
+            ],
+            sheetType: "weighted",
+        },
         meta: {
             alpha: 0.002,
             kk_max: 1,
@@ -3594,6 +4344,250 @@ var demoWorkbook3 = function (path, res, app) {
         ],
         negativeWeights: [],
         sheetType: "unweighted",
+        network: {
+            genes: [
+                {name: "ABF1"}, {name: "ACE2"},
+                {name: "AFT1"}, {name: "CIN5"},
+                {name: "CUP9"}, {name: "FHL1"},
+                {name: "GTS1"}, {name: "HAL9"},
+                {name: "HSF1"}, {name: "MAC1"},
+                {name: "MSN1"}, {name: "MSN4"},
+                {name: "NRG1"}, {name: "PHD1"},
+                {name: "RAP1"}, {name: "REB1"},
+                {name: "ROX1"}, {name: "RPH1"},
+                {name: "SKN7"}, {name: "YAP1"},
+                {name: "YAP6"}
+            ],
+            links: [
+                {
+                    source: 2,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 20,
+                    target: 3,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 9,
+                    target: 4,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 13,
+                    target: 4,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 0,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 11,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 15,
+                    target: 6,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 0,
+                    target: 10,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 10,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 13,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 12,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 18,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 14,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 8,
+                    target: 15,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 18,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 19,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 20,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 17,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 1,
+                    target: 19,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 18,
+                    target: 19,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 4,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 12,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 16,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 19,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 20,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                }
+            ],
+            errors: [],
+            warnings: [],
+            positiveWeights: [
+                1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1
+            ],
+            negativeWeights: [],
+            sheetType: "unweighted",
+        },
         meta: {
             b_or_tau: 1,
             alpha: 0.01,
@@ -4193,6 +5187,513 @@ var demoWorkbook4 = function (path, res, app) {
             -0.302673111220415
         ],
         sheetType: "weighted",
+        network: {
+            genes: [
+                {name: "ABF1"}, {name: "ACE2"},
+                {name: "AFT1"}, {name: "CIN5"},
+                {name: "CUP9"}, {name: "FHL1"},
+                {name: "GTS1"}, {name: "HAL9"},
+                {name: "HSF1"}, {name: "MAC1"},
+                {name: "MSN1"}, {name: "MSN4"},
+                {name: "NRG1"}, {name: "PHD1"},
+                {name: "RAP1"}, {name: "REB1"},
+                {name: "ROX1"}, {name: "RPH1"},
+                {name: "SKN7"}, {name: "YAP1"},
+                {name: "YAP6"}
+            ],
+            links: [
+                {
+                    source: 2,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 2,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 20,
+                    target: 3,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 9,
+                    target: 4,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 13,
+                    target: 4,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 0,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 11,
+                    target: 5,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 15,
+                    target: 6,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 8,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 0,
+                    target: 10,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 10,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 7,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 13,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 11,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 12,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 18,
+                    target: 12,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 14,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 8,
+                    target: 15,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 18,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 19,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 20,
+                    target: 16,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 14,
+                    target: 17,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 1,
+                    target: 19,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 18,
+                    target: 19,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 3,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 4,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 12,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 16,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 19,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                },
+                {
+                    source: 20,
+                    target: 20,
+                    value: 1,
+                    type: "arrowhead",
+                    stroke: "black"
+                }
+            ],
+            errors: [],
+            warnings: [],
+            positiveWeights: [
+                1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1
+            ],
+            negativeWeights: [],
+            sheetType: "unweighted",
+        },
+        networkOptimizedWeights: {
+            genes: [
+                {name: "ABF1"}, {name: "ACE2"},
+                {name: "AFT1"}, {name: "CIN5"},
+                {name: "CUP9"}, {name: "FHL1"},
+                {name: "GTS1"}, {name: "HAL9"},
+                {name: "HSF1"}, {name: "MAC1"},
+                {name: "MSN1"}, {name: "MSN4"},
+                {name: "NRG1"}, {name: "PHD1"},
+                {name: "RAP1"}, {name: "REB1"},
+                {name: "ROX1"}, {name: "RPH1"},
+                {name: "SKN7"}, {name: "YAP1"},
+                {name: "YAP6"}
+            ],
+            links: [
+                {
+                    source: 2,
+                    target: 2,
+                    value: -0.896555677681216,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 14,
+                    target: 2,
+                    value: -0.403028621528307,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 20,
+                    target: 3,
+                    value: -0.0450315496331435,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 9,
+                    target: 4,
+                    value: -0.18820887875915,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 13,
+                    target: 4,
+                    value: -0.650955288189242,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 0,
+                    target: 5,
+                    value: 0.15615434905189,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 11,
+                    target: 5,
+                    value: 0.612066547080511,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 15,
+                    target: 6,
+                    value: 0.0778458823380613,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 14,
+                    target: 8,
+                    value: -1.23208587861177,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 0,
+                    target: 10,
+                    value: -2.97067736065784,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 3,
+                    target: 10,
+                    value: 0.939294826447273,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 7,
+                    target: 11,
+                    value: 1.4282638085008,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 13,
+                    target: 11,
+                    value: 0.544681505712239,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 14,
+                    target: 11,
+                    value: 1.01307889311721,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 12,
+                    target: 12,
+                    value: 1.23409866344768,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 18,
+                    target: 12,
+                    value: -0.185164874102172,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 14,
+                    target: 14,
+                    value: -0.889049094686067,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 8,
+                    target: 15,
+                    value: -0.0101948512124708,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 3,
+                    target: 16,
+                    value: -0.927789501254435,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 18,
+                    target: 16,
+                    value: 0.574424645342421,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 19,
+                    target: 16,
+                    value: -0.431504375436921,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 20,
+                    target: 16,
+                    value: -0.507074385510923,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 14,
+                    target: 17,
+                    value: 1.49988232490169,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 1,
+                    target: 19,
+                    value: -1.3615135448899,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 18,
+                    target: 19,
+                    value: -0.408190452912878,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 3,
+                    target: 20,
+                    value: -0.531223672159855,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 4,
+                    target: 20,
+                    value: -0.129252218618744,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 12,
+                    target: 20,
+                    value: 0.62145042255407,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 16,
+                    target: 20,
+                    value: -0.750331369063822,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                },
+                {
+                    source: 19,
+                    target: 20,
+                    value: 0.0145922505908641,
+                    type: "arrowhead",
+                    stroke: "rgb(195, 61, 61)"
+                },
+                {
+                    source: 20,
+                    target: 20,
+                    value: -0.302673111220415,
+                    type: "repressor",
+                    stroke: "rgb(51, 124, 183)"
+                }
+            ],
+            errors: [],
+            warnings: [],
+            positiveWeights: [
+                0.15615434905189,
+                0.612066547080511,
+                0.0778458823380613,
+                0.939294826447273,
+                1.4282638085008,
+                0.544681505712239,
+                1.01307889311721,
+                1.23409866344768,
+                0.574424645342421,
+                1.49988232490169,
+                0.62145042255407,
+                0.0145922505908641
+            ],
+            negativeWeights: [
+                -0.896555677681216, -0.403028621528307,
+                -0.0450315496331435, -0.18820887875915,
+                -0.650955288189242, -1.23208587861177,
+                -2.97067736065784, -0.185164874102172,
+                -0.889049094686067, -0.0101948512124708,
+                -0.927789501254435, -0.431504375436921,
+                -0.507074385510923, -1.3615135448899,
+                -0.408190452912878, -0.531223672159855,
+                -0.129252218618744, -0.750331369063822,
+                -0.302673111220415
+            ],
+            sheetType: "weighted",
+        },
         meta: {
             b_or_tau: 1,
             alpha: 0.01,
