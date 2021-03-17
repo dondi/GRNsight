@@ -407,10 +407,10 @@ export var drawGraph = function (workbook) {
         graphCenter.x += (direction === "left" ? -50 : (direction === "right" ? 50 : 0));
         graphCenter.y += (direction === "up" ? -50 : (direction === "down" ? 50 : 0));
 
-        simulation.stop() // allows move even while graph is moving
+        simulation.stop() // allows move even while graph is updating
         simulation.force("center", d3.forceCenter(graphCenter.x, graphCenter.y))
         simulation.restart() // otherwise, this will only work ~10 times before the force stops moving
-        simulation.alphaTarget(0.3).restart(); // keeps the nodes from clumping togehter
+        simulation.alphaTarget(0.3).restart(); // keeps the nodes from clumping together
 
     }
 
