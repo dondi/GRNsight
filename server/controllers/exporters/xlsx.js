@@ -43,8 +43,8 @@ const buildTestSheets = testSheet => ["production_rates", "degradation_rates", "
 const buildMetaSheet = function (metaDataContainer) {
     const metaSheet = { name: "optimization_parameters", data: [] };
     metaSheet["data"].push(["optimization_parameter", "value"]);
-    Object.keys(metaDataContainer).forEach((parameter) => {
-        const metaData = metaDataContainer[parameter];
+    Object.keys(metaDataContainer.data).forEach((parameter) => {
+        const metaData = metaDataContainer.data[parameter];
         const cleanedUpData = Array.isArray(metaData)
             ? [parameter, ...metaData]
             : [parameter, metaData];
