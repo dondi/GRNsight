@@ -257,14 +257,23 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
 
     const updateAppBasedOnZoomValue = () => {
-        const zoomDisplay = grnState.zoomValue;
-        if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
-            setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
-        } else {
-            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
-            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
-            setGraphZoom(MIDDLE_SCALE);
+
+        if (!adaptive && grnState.zoomValue > 1.1*ZOOM_DISPLAY_MIDDLE ){
+            grnState.zoomValue = 1.2*ZOOM_DISPLAY_MIDDLE
+        } else if (!adaptive && grnState.zoomValue < 0.9*ZOOM_DISPLAY_MIDDLE) {
+            grnState.zoomValue = 0.9*ZOOM_DISPLAY_MIDDLE
         }
+
+        const zoomDisplay = grnState.zoomValue;
+        setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
+
+        // if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
+        //     setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
+        // } else {
+        //     // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
+        //     grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
+        //     setGraphZoom(MIDDLE_SCALE);
+        // }
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
@@ -395,16 +404,22 @@ export var drawGraph = function (workbook) {
         restrictGraphToViewport(fixed);
     });
 
+    const graphCenter = {x: width / 2, y: height / 2}; //TODO this must go
     function center () {
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
-        zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
-        simulation.alphaTarget(0.3).restart();
+
+        graphCenter.x = viewportWidth / 2
+        graphCenter.y = viewportHeight / 2
+
+        simulation.stop(); // allows move even while graph is updating
+        simulation.force("center", d3.forceCenter(graphCenter.x, graphCenter.y));
+        simulation.restart(); // otherwise, this will only work ~10 times before the force stops moving
+        simulation.alphaTarget(0.3).restart(); // keeps the nodes from clumping together
+
     }
 
-    const graphCenter = {x: width / 2, y: height / 2};
     function move (direction) {
-
         let deltaX = (direction === "left" ? -50 : (direction === "right" ? 50 : 0));
         let deltaY = (direction === "up" ? -50 : (direction === "down" ? 50 : 0));
 
