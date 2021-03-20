@@ -392,6 +392,7 @@ export var drawGraph = function (workbook) {
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
+        updateAppBasedOnZoomValue(); // Update zoom value within bounds
     };
 
     d3.select("#restrict-graph-to-viewport").on("click", function () {
