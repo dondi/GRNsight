@@ -49,7 +49,6 @@ const buildTestSheets = testSheet => ["production_rates",
 const buildMetaSheet = function (metaDataContainer) {
     const meta = [];
     meta.push(["optimization_parameter", "value"]);
-    console.log(metaDataContainer);
     for (let parameter in metaDataContainer.data) {
         const metaData = metaDataContainer.data[parameter];
         const cleanedUpData = Array.isArray(metaData)
@@ -118,6 +117,17 @@ const buildXlsxSheet = function (workbook) {
                     }
                 );
             }
+            break;
+        case "meta2":
+            // Optimization Diagnostics sheet not properly  implemented yet.
+            // if (Object.keys(workbook.meta2).length > 0) {
+            //     resultSheet.push(
+            //         {
+            //             "name": "optimization_diagnostics",
+            //             "data": buildMetaSheet(workbook.meta2)
+            //         }
+            //     );
+            // }
             break;
         case "test":
             resultSheet.push(...buildTestSheets(workbook[key]));
