@@ -3,11 +3,26 @@ var xlsx = require("node-xlsx");
 // var cytoscape = require("cytoscape");
 var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
 
-var parseNetworkSheet = require(__dirname + "/../server/controllers" + "/network-sheet-parser");
+var parseAllNetworkSheet = require(__dirname + "/../server/controllers" + "/network-sheet-parser");
 
 var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expression-sheet-parser");
 
 var parseAdditionalSheet = require(__dirname + "/../server/controllers" + "/additional-sheet-parser");
+
+// changed network parser to preserve all network sheets instead of choosing the best and throwing awway rhe rest
+// this helper method chooses the best network sheet, so prior implemented test behaviour doesn't crash
+var parseNetworkSheet = (sheet) => {
+    var allNetworks = parseAllNetworkSheet(sheet);
+    if (typeof allNetworks.networkOptimizedWeights === "object" &&
+        Object.keys(allNetworks.networkOptimizedWeights).length !== 0) {
+        return allNetworks.networkOptimizedWeights;
+    } else {
+        // Network is the default network. If network_optimized_weights does not exist, then we will want to return the
+        // network sheet. If both network_optimized_weights and network do not exist, it returns an empty initalized
+        // network object with an error saying no network sheet detected.
+        return allNetworks.network;
+    }
+};
 
 // ERROR TEST FUNCTIONS:
 

@@ -9,22 +9,22 @@ const createArrayWithZeroes = function (length) {
     return Array.apply(null, Array(length)).map(() => 0);
 };
 
-const buildWorkbookSheet = function (genes, links) {
+const buildNetworkSheet = function (genes, links) {
     const geneNameArray = buildGeneNameArray(genes);
     // The +1 to length is because we ALSO add the gene name to each of the network sheet arrays.
-    const workbookSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
+    const networkSheet = genes.map(() => createArrayWithZeroes(genes.length + 1));
 
     // Place the gene name in the beginning of the network sheet array.
     // EX: ["CIN5", 0, 0, 1]
-    Object.keys(geneNameArray).forEach(index => workbookSheet[index][0] = geneNameArray[index]);
+    Object.keys(geneNameArray).forEach(index => networkSheet[index][0] = geneNameArray[index]);
     geneNameArray.unshift("cols regulators/rows targets");
 
     links.forEach((link) => {
-        workbookSheet[link.source][link.target + 1] = link.value;
+        networkSheet[link.target][link.source + 1] = link.value;
     });
 
-    workbookSheet.unshift(geneNameArray);
-    return workbookSheet;
+    networkSheet.unshift(geneNameArray);
+    return networkSheet;
 };
 
 
@@ -68,20 +68,40 @@ const buildExpressionSheets = function (expressions) {
 
 const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
-    resultSheet.push(
-        {
-            "name": "network",
-            "data": buildWorkbookSheet(workbook.genes, workbook.links)
-        },
-
-        {
-            "name": "network_weights",
-            "data": buildWorkbookSheet(workbook.genes, workbook.links)
-        }
-    );
 
     Object.keys(workbook).forEach((key) => {
         switch (key) {
+        case "network":
+            if (Object.keys(workbook.network).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network",
+                        "data": buildNetworkSheet(workbook.network.genes, workbook.network.links)
+                    }
+                );
+            }
+            break;
+        case "networkOptimizedWeights":
+            if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network_optimized_weights",
+                        "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
+                            workbook.networkOptimizedWeights.links)
+                    }
+                );
+            }
+            break;
+        case "networkWeights":
+            if (Object.keys(workbook.networkWeights).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network_weights",
+                        "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
+                    }
+                );
+            }
+            break;
         case "meta":
             resultSheet.push(buildMetaSheet(workbook[key]));
             break;

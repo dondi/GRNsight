@@ -448,6 +448,90 @@ const inputWorkbook = {
         }
     ],
 
+    network: {
+        "genes": [
+            { "name": "ACE2" },
+            { "name": "AFT2" },
+            { "name": "CIN5" },
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 0,
+                "value": 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 1,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 2,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            }
+        ],
+    },
+
+    networkWeights: {
+        "genes": [
+            { "name": "ACE2" },
+            { "name": "AFT2" },
+            { "name": "CIN5" },
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 0,
+                "value": 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 1,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 2,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            }
+        ],
+    },
+
     "meta": {
         "L_curve": 0,
         "MaxFunEval": 1000000,
@@ -562,8 +646,8 @@ describe("Export to spreadsheet", function () {
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
-                    ["AFT2", 0, 1, 0],
-                    ["CIN5", 0, 1, 1]
+                    ["AFT2", 0, 1, 1],
+                    ["CIN5", 0, 0, 1]
                 ]
             },
 
@@ -572,8 +656,8 @@ describe("Export to spreadsheet", function () {
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
-                    ["AFT2", 0, 1, 0],
-                    ["CIN5", 0, 1, 1]
+                    ["AFT2", 0, 1, 1],
+                    ["CIN5", 0, 0, 1]
                 ]
             },
 

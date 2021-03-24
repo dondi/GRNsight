@@ -277,28 +277,31 @@ var parseNetworkSheet = function (sheet, network) {
 
 
 module.exports = function (workbookFile) {
-    const network = initWorkbook({sheetType: "unweighted"});
-    var networkSheet;
+    const networks = {
+        network: {},
+        networkOptimizedWeights: {},
+        networkWeights: {},
+    };
 
     for (let i = 0; i < workbookFile.length; i++) {
         // === 'network' for backwards compatibility of test files
         if (workbookFile[i].name.toLowerCase() === "network") {
             // Here we have found a network sheet containing simple data. We keep looking
             // in case there is also a network sheet with optimized weights
-            networkSheet = workbookFile[i];
+            networks.network = parseNetworkSheet(workbookFile[i], initWorkbook({ sheetType: "unweighted" }));
         } else if (workbookFile[i].name.toLowerCase() === "network_optimized_weights" ) {
             // We found a network sheet with optimized weights, which is the ideal data source.
-            // So we stop looking.
-            networkSheet = workbookFile[i];
-            network.sheetType = "weighted";
-            break;
+            networks.networkOptimizedWeights = parseNetworkSheet(workbookFile[i],
+                initWorkbook({ sheetType: "weighted" }));
+        } else if (workbookFile[i].name.toLowerCase() === "network_weights") {
+            // We found a network_weights sheet to preserve existing network type sheet data
+            networks.networkWeights = parseNetworkSheet(workbookFile[i], initWorkbook({ sheetType: "weighted" }));
         }
     }
 
-    if (networkSheet) {
-        return parseNetworkSheet(networkSheet, network);
-    } else {
-        addError(network, constants.errors.missingNetworkError);
-        return network;
+    if (Object.keys(networks.network).length === 0 && Object.keys(networks.networkOptimizedWeights).length === 0) {
+        networks.network = initWorkbook({ sheetType: "unweighted" });
+        addError(networks.network, constants.errors.missingNetworkError);
     }
+    return networks;
 };

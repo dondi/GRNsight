@@ -12,8 +12,14 @@ var helpers = require(__dirname + "/helpers");
 
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-var SPECIES = ["Arabidopsis thaliana", "Caenorhabditis elegans", "Drosophila melanogaster",
-    "Homo sapiens", "Mus musculus", "Saccharomyces cerevisiae"];
+var SPECIES = [
+    "Arabidopsis thaliana",
+    "Caenorhabditis elegans",
+    "Drosophila melanogaster",
+    "Homo sapiens",
+    "Mus musculus",
+    "Saccharomyces cerevisiae",
+];
 
 var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
 
@@ -30,7 +36,7 @@ var doesSpeciesExist = function (speciesInfo) {
         }
     }
     for (var t in TAXON_ID) {
-        if ( TAXON_ID[t] === speciesInfo) {
+        if (TAXON_ID[t] === speciesInfo) {
             return true;
         }
     }
@@ -73,14 +79,73 @@ var difference = function (setA, setB) {
     return _difference;
 };
 
+var deepClone = function (object, isArray) {
+    var clone = isArray ? [] : {};
+    if (isArray) {
+        for (let i of object) {
+            if (i !== null && typeof i === "object") {
+                clone.push(deepClone(i, Array.isArray(i)));
+            } else {
+                clone.push(i);
+            }
+        }
+    } else {
+        for (let i in object) {
+            if (object[i] !== null && typeof (object[i]) === "object") {
+                clone[i] = deepClone(object[i], Array.isArray(object[i]));
+            } else {
+                clone[i] = object[i];
+            }
+        }
+    }
+    return clone;
+};
+
 var crossSheetInteractions = function (workbookFile) {
-    var workbook = parseNetworkSheet(workbookFile);
+    var workbook = {};
+
+    // Refactored the parseNetworkSheet function to preserve all network type sheets including "network",
+    // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
+    var networks = parseNetworkSheet(workbookFile);
 
     // Parse expression and 2-column data, then add to workbook object
     // Eventually, will split this up into parsing for each type of sheet.
     var additionalData = parseAdditionalSheets(workbookFile);
 
     var expressionData = parseExpressionSheets(workbookFile);
+
+    if (networks &&
+        networks.networkOptimizedWeights &&
+        typeof networks.networkOptimizedWeights === "object" &&
+        Object.keys(networks.networkOptimizedWeights).length > 0) {
+        // Base workbook is a clone of the prefered Optimized weights sheet
+        workbook = deepClone(networks.networkOptimizedWeights, false);
+        // Add errors from network sheet if it exists
+        if (networks.network && typeof networks.network === "object" && Object.keys(networks.network).length > 0) {
+            if (networks.network.errors !== undefined) {
+                networks.network.errors.forEach(data => workbook.errors.push(data));
+            }
+
+            if (networks.network.warnings !== undefined) {
+                networks.network.warnings.forEach(data => workbook.warnings.push(data));
+            }
+        }
+    } else {
+        // Set base workbook to a deep copy of the default network if network optimized weights does not exist
+        workbook = deepClone(networks.network, false);
+    }
+    // Add errors and warnings from network weights to preserve the sheet
+    if (networks.networkWeights &&
+        typeof networks.networkWeights === "object" &&
+        Object.keys(networks.networkWeights).length > 0) {
+        if (networks.networkWeights.errors !== undefined) {
+            networks.networkWeights.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (networks.networkWeights.warnings !== undefined) {
+            networks.networkWeights.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
 
     // Add errors and warnings from meta sheets
     if (additionalData && additionalData.meta) {
@@ -115,13 +180,19 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
-    if (additionalData.meta.data.species === undefined
-        && additionalData.meta.data.taxon_id === undefined) {
+    if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
         addWarning(workbook, constants.warnings.noSpeciesInformationDetected);
-    } else if (!doesSpeciesExist(additionalData.meta.data.species) &&
-        !doesSpeciesExist(additionalData.meta.data.taxon_id)) {
-        addWarning(workbook, constants.warnings.unknownSpeciesDetected(additionalData.meta.data.species,
-            additionalData.meta.data.taxon_id));
+    } else if (
+        !doesSpeciesExist(additionalData.meta.data.species) &&
+        !doesSpeciesExist(additionalData.meta.data.taxon_id)
+    ) {
+        addWarning(
+            workbook,
+            constants.warnings.unknownSpeciesDetected(
+                additionalData.meta.data.species,
+                additionalData.meta.data.taxon_id
+            )
+        );
     }
 
     // Add errors and warnings from expression sheets
@@ -129,36 +200,30 @@ var crossSheetInteractions = function (workbookFile) {
     // We need to account for all the different possible expression sheet names.
     if (expressionData) {
         if (expressionData.errors !== undefined) {
-            expressionData.errors
-                .forEach( data => workbook.errors.push(data));
+            expressionData.errors.forEach(data => workbook.errors.push(data));
         }
         if (expressionData.warnings !== undefined) {
-            expressionData.warnings
-                .forEach( data => workbook.warnings.push(data));
+            expressionData.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
     if (expressionData && expressionData.expression) {
         if (expressionData.expression.errors !== undefined) {
-            expressionData.expression.errors
-                .forEach(data => workbook.errors.push(data));
+            expressionData.expression.errors.forEach(data => workbook.errors.push(data));
         }
 
         if (expressionData.expression.warnings !== undefined) {
-            expressionData.expression.warnings
-                .forEach(data => workbook.warnings.push(data));
+            expressionData.expression.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
     if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
         if (expressionData.expression.wt_log2_expression.errors !== undefined) {
-            expressionData.expression.wt_log2_expression.errors
-                .forEach(data => workbook.errors.push(data));
+            expressionData.expression.wt_log2_expression.errors.forEach(data => workbook.errors.push(data));
         }
 
         if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
-            expressionData.expression.wt_log2_expression.warnings
-                .forEach(data => workbook.warnings.push(data));
+            expressionData.expression.wt_log2_expression.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
@@ -193,8 +258,12 @@ var crossSheetInteractions = function (workbookFile) {
     });
 
     // Integrate the desired properties from the other objects.
+    workbook.network = networks.network;
+    workbook.networkOptimizedWeights = networks.networkOptimizedWeights;
+    workbook.networkWeights = networks.networkWeights;
     workbook.meta = additionalData.meta;
     workbook.test = additionalData.test;
+    workbook.meta2 = additionalData.meta2;
     workbook.expression = expressionData.expression;
     return workbook;
 };
@@ -214,11 +283,11 @@ var processGRNmap = function (path, res, app) {
 
     var workbook = crossSheetInteractions(sheet);
 
-    return (workbook.errors.length === 0) ?
-        // If all looks well, return the workbook with an all clear
-        res.json(workbook) :
-        // If all does not look well, return the workbook with an error 400
-        res.status(400).json(workbook);
+    return workbook.errors.length === 0
+        ? // If all looks well, return the workbook with an all clear
+          res.json(workbook)
+        : // If all does not look well, return the workbook with an error 400
+          res.status(400).json(workbook);
 };
 
 var grnSightToCytoscape = function (workbook) {
@@ -226,8 +295,8 @@ var grnSightToCytoscape = function (workbook) {
     workbook.genes.forEach(function (gene) {
         result.push({
             data: {
-                id: gene.name
-            }
+                id: gene.name,
+            },
         });
     });
 
@@ -238,8 +307,8 @@ var grnSightToCytoscape = function (workbook) {
             data: {
                 id: sourceGene.name + targetGene.name,
                 source: sourceGene.name,
-                target: targetGene.name
-            }
+                target: targetGene.name,
+            },
         });
     });
 
@@ -281,11 +350,10 @@ var graphStatisticsReport = function(workbook)  {
 
 module.exports = function (app) {
     if (app) {
-
         // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
         app.post("/upload", function (req, res) {
             // TODO: Add file validation (make sure that file is an Excel file)
-            (new multiparty.Form()).parse(req, function (err, fields, files) {
+            new multiparty.Form().parse(req, function (err, fields, files) {
                 if (err) {
                     return res.json(400, "There was a problem uploading your file. Please try again.");
                 }
@@ -297,12 +365,17 @@ module.exports = function (app) {
                 }
 
                 if (path.extname(input) !== ".xlsx") {
-                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
-                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
+                    return res.json(
+                        400,
+                        "This file cannot be loaded because:<br><br> The file is \
+                        not in a format GRNsight can read." +
+                            "<br>Please select an Excel Workbook \
                         (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
-                        using the importer under File > Import." + " Additional information about file \
-                        types that GRNsight supports is in the Documentation.");
+                            " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
+                        using the importer under File > Import." +
+                            " Additional information about file \
+                        types that GRNsight supports is in the Documentation."
+                    );
                 }
 
                 // input.meta holds the species and taxon data
@@ -316,8 +389,11 @@ module.exports = function (app) {
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
-                res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
+                res,
+                app
+            );
         });
 
         app.get("/demo/schadeInput", function (req, res) {
@@ -325,8 +401,11 @@ module.exports = function (app) {
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
-                res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
+                res,
+                app
+            );
         });
     }
 
@@ -334,6 +413,6 @@ module.exports = function (app) {
     return {
         grnSightToCytoscape: grnSightToCytoscape,
         processGRNmap: processGRNmap,
-        crossSheetInteractions: crossSheetInteractions
+        crossSheetInteractions: crossSheetInteractions,
     };
 };
