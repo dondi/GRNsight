@@ -41,16 +41,17 @@ const buildTestSheets = testSheet => ["production_rates", "degradation_rates", "
       .map(name => convertToSheet(name, testSheet[name]));
 
 const buildMetaSheet = function (metaDataContainer) {
-    const metaSheet = { name: "optimization_parameters", data: [] };
-    metaSheet["data"].push(["optimization_parameter", "value"]);
-    Object.keys(metaDataContainer.data).forEach((parameter) => {
+    const meta = [];
+    meta.push(["optimization_parameter", "value"]);
+    console.log(metaDataContainer);
+    for (let parameter in metaDataContainer.data) {
         const metaData = metaDataContainer.data[parameter];
         const cleanedUpData = Array.isArray(metaData)
             ? [parameter, ...metaData]
             : [parameter, metaData];
-        metaSheet["data"].push(cleanedUpData);
-    });
-    return metaSheet;
+        meta.push(cleanedUpData);
+    }
+    return meta;
 };
 
 const buildExpressionSheets = function (expressions) {
@@ -103,7 +104,14 @@ const buildXlsxSheet = function (workbook) {
             }
             break;
         case "meta":
-            resultSheet.push(buildMetaSheet(workbook[key]));
+            if (Object.keys(workbook.meta).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "optimization_parameters",
+                        "data": buildMetaSheet(workbook.meta)
+                    }
+                );
+            }
             break;
         case "test":
             resultSheet.push(...buildTestSheets(workbook[key]));

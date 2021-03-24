@@ -512,23 +512,25 @@ var demoWorkbook1 = function (path, res, app) {
             ],
         },
         meta: {
-            alpha: 0.002,
-            kk_max: 1,
-            MaxIter: 100000000,
-            TolFun: 0.000001,
-            MaxFunEval: 100000000,
-            TolX: 0.000001,
-            production_function: "Sigmoid",
-            L_curve: 0,
-            estimate_params: 1,
-            make_graphs: 1,
-            fix_P: 0,
-            fix_b: 0,
-            expression_timepoints: [15, 30, 60],
-            Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
-            simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
-            species: "Saccharomyces cerevisiae",
-            taxon_id: 559292
+            data: {
+                alpha: 0.002,
+                kk_max: 1,
+                MaxIter: 100000000,
+                TolFun: 0.000001,
+                MaxFunEval: 100000000,
+                TolX: 0.000001,
+                production_function: "Sigmoid",
+                L_curve: 0,
+                estimate_params: 1,
+                make_graphs: 1,
+                fix_P: 0,
+                fix_b: 0,
+                expression_timepoints: [15, 30, 60],
+                Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
+                simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+                species: "Saccharomyces cerevisiae",
+                taxon_id: 559292
+            }
         },
         test: {
             production_rates: {
@@ -2666,23 +2668,25 @@ var demoWorkbook2 = function (path, res, app) {
             sheetType: "weighted",
         },
         meta: {
-            alpha: 0.002,
-            kk_max: 1,
-            MaxIter: 100000000,
-            TolFun: 0.000001,
-            MaxFunEval: 100000000,
-            TolX: 0.000001,
-            production_function: "Sigmoid",
-            L_curve: 0,
-            estimate_params: 1,
-            make_graphs: 1,
-            fix_P: 0,
-            fix_b: 0,
-            expression_timepoints: [15, 30, 60],
-            Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
-            simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
-            species: "Saccharomyces cerevisiae",
-            taxon_id: 559292
+            data: {
+                alpha: 0.002,
+                kk_max: 1,
+                MaxIter: 100000000,
+                TolFun: 0.000001,
+                MaxFunEval: 100000000,
+                TolX: 0.000001,
+                production_function: "Sigmoid",
+                L_curve: 0,
+                estimate_params: 1,
+                make_graphs: 1,
+                fix_P: 0,
+                fix_b: 0,
+                expression_timepoints: [15, 30, 60],
+                Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
+                simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+                species: "Saccharomyces cerevisiae",
+                taxon_id: 559292
+            }
         },
         test: {
             production_rates: {
@@ -4589,15 +4593,17 @@ var demoWorkbook3 = function (path, res, app) {
             sheetType: "unweighted",
         },
         meta: {
-            b_or_tau: 1,
-            alpha: 0.01,
-            kk_max: 1,
-            MaxIter: 1000000,
-            TolFun: 0.00001,
-            MaxFunEval: 1000000,
-            TolX: 0.00001,
-            species: "Saccharomyces cerevisiae",
-            taxon_id: 559292
+            data: {
+                b_or_tau: 1,
+                alpha: 0.01,
+                kk_max: 1,
+                MaxIter: 1000000,
+                TolFun: 0.00001,
+                MaxFunEval: 1000000,
+                TolX: 0.00001,
+                species: "Saccharomyces cerevisiae",
+                taxon_id: 559292
+            }
         },
         test: {
             production_rates: {
@@ -5695,15 +5701,17 @@ var demoWorkbook4 = function (path, res, app) {
             sheetType: "weighted",
         },
         meta: {
-            b_or_tau: 1,
-            alpha: 0.01,
-            kk_max: 1,
-            MaxIter: 1000000,
-            TolFun: 0.00001,
-            MaxFunEval: 1000000,
-            TolX: 0.00001,
-            species: "Saccharomyces cerevisiae",
-            taxon_id: 559292
+            data: {
+                b_or_tau: 1,
+                alpha: 0.01,
+                kk_max: 1,
+                MaxIter: 1000000,
+                TolFun: 0.00001,
+                MaxFunEval: 1000000,
+                TolX: 0.00001,
+                species: "Saccharomyces cerevisiae",
+                taxon_id: 559292
+            }
         },
         test: {
             production_rates: {
