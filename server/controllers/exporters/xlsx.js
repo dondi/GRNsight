@@ -30,15 +30,21 @@ const buildNetworkSheet = function (genes, links) {
 
 const convertToSheet = function (name, testSheet) {
     const singularName = name.toLowerCase().endsWith("s") ? name.substring(0, name.length - 1) : name;
+    const header = singularName.includes("optimized_") ? singularName.substring(10) : singularName;
     return {
         name: name,
-        data: [["id", singularName], ...Object.keys(testSheet).map(key => [key, testSheet[key]])]
+        data: [["id", header], ...Object.keys(testSheet).map(key => [key, testSheet[key]])]
     };
 };
 
-const buildTestSheets = testSheet => ["production_rates", "degradation_rates", "threshold_b"]
-      .filter(name => testSheet[name])
-      .map(name => convertToSheet(name, testSheet[name]));
+const buildTestSheets = testSheet => ["production_rates",
+    "degradation_rates",
+    "threshold_b",
+    "optimized_production_rates",
+    "optimized_threshold_b"
+]
+    .filter(name => testSheet[name])
+    .map(name => convertToSheet(name, testSheet[name].data));
 
 const buildMetaSheet = function (metaDataContainer) {
     const meta = [];
