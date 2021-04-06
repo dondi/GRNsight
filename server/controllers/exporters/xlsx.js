@@ -1,3 +1,4 @@
+// const { meta } = require("eslint/lib/rules/*");
 const xlsx = require("node-xlsx");
 
 const buildGeneNameArray = function (genes) {
@@ -45,6 +46,22 @@ const buildTestSheets = testSheet => ["production_rates",
 ]
     .filter(name => testSheet[name])
     .map(name => convertToSheet(name, testSheet[name].data));
+
+const buildMeta2Sheet = function (meta2DataContainer) {
+    const meta2 = [];
+    meta2.push(["Parameter", "Value"]);
+    for (let parameter in meta2DataContainer.data.Parameters) {
+        const meta2Data = meta2DataContainer.data.Parameters[parameter];
+        meta2.push([parameter, meta2Data]);
+    }
+    meta2.push([]);
+    meta2.push(["Genes", ...meta2DataContainer.data.MSE["column-headers"]]);
+    for (let gene in meta2DataContainer.data.MSE.Genes) {
+        const meta2GeneData = meta2DataContainer.data.MSE.Genes[gene];
+        meta2.push([gene, ...meta2GeneData]);
+    }
+    return meta2;
+};
 
 const buildMetaSheet = function (metaDataContainer) {
     const meta = [];
@@ -120,14 +137,14 @@ const buildXlsxSheet = function (workbook) {
             break;
         case "meta2":
             // Optimization Diagnostics sheet not properly  implemented yet.
-            // if (Object.keys(workbook.meta2).length > 0) {
-            //     resultSheet.push(
-            //         {
-            //             "name": "optimization_diagnostics",
-            //             "data": buildMetaSheet(workbook.meta2)
-            //         }
-            //     );
-            // }
+            if (Object.keys(workbook.meta2).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "optimization_diagnostics",
+                        "data": buildMeta2Sheet(workbook.meta2)
+                    }
+                );
+            }
             break;
         case "test":
             resultSheet.push(...buildTestSheets(workbook[key]));
