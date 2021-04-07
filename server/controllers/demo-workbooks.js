@@ -4623,56 +4623,56 @@ var demoWorkbook3 = function (path, res, app) {
             }
         },
         test: {
-            production_rates: {
-                data: {
-                    YKL112W: "ABF1",
-                    YLR131C: "ACE2",
-                    YGL071W: "AFT1",
-                    YOR028C: "CIN5",
-                    YPL177C: "CUP9",
-                    YPR104C: "FHL1",
-                    YGL181W: "GTS1",
-                    YOL089C: "HAL9",
-                    YGL073W: "HSF1",
-                    YMR021C: "MAC1",
-                    YOL116W: "MSN1",
-                    YKL062W: "MSN4",
-                    YDR043C: "NRG1",
-                    YKL043W: "PHD1",
-                    YNL216W: "RAP1",
-                    YBR049C: "REB1",
-                    YPR065W: "ROX1",
-                    YER169W: "RPH1",
-                    YHR206W: "SKN7",
-                    YML007W: "YAP1",
-                    YDR259C: "YAP6"
-                }
-            },
-            degradation_rates: {
-                data : {
-                    YKL112W: "ABF1",
-                    YLR131C: "ACE2",
-                    YGL071W: "AFT1",
-                    YOR028C: "CIN5",
-                    YPL177C: "CUP9",
-                    YPR104C: "FHL1",
-                    YGL181W: "GTS1",
-                    YOL089C: "HAL9",
-                    YGL073W: "HSF1",
-                    YMR021C: "MAC1",
-                    YOL116W: "MSN1",
-                    YKL062W: "MSN4",
-                    YDR043C: "NRG1",
-                    YKL043W: "PHD1",
-                    YNL216W: "RAP1",
-                    YBR049C: "REB1",
-                    YPR065W: "ROX1",
-                    YER169W: "RPH1",
-                    YHR206W: "SKN7",
-                    YML007W: "YAP1",
-                    YDR259C: "YAP6"
-                }
-            }
+            // production_rates: {
+            //     data: {
+            //         YKL112W: "ABF1",
+            //         YLR131C: "ACE2",
+            //         YGL071W: "AFT1",
+            //         YOR028C: "CIN5",
+            //         YPL177C: "CUP9",
+            //         YPR104C: "FHL1",
+            //         YGL181W: "GTS1",
+            //         YOL089C: "HAL9",
+            //         YGL073W: "HSF1",
+            //         YMR021C: "MAC1",
+            //         YOL116W: "MSN1",
+            //         YKL062W: "MSN4",
+            //         YDR043C: "NRG1",
+            //         YKL043W: "PHD1",
+            //         YNL216W: "RAP1",
+            //         YBR049C: "REB1",
+            //         YPR065W: "ROX1",
+            //         YER169W: "RPH1",
+            //         YHR206W: "SKN7",
+            //         YML007W: "YAP1",
+            //         YDR259C: "YAP6"
+            //     }
+            // },
+            // degradation_rates: {
+            //     data : {
+            //         YKL112W: "ABF1",
+            //         YLR131C: "ACE2",
+            //         YGL071W: "AFT1",
+            //         YOR028C: "CIN5",
+            //         YPL177C: "CUP9",
+            //         YPR104C: "FHL1",
+            //         YGL181W: "GTS1",
+            //         YOL089C: "HAL9",
+            //         YGL073W: "HSF1",
+            //         YMR021C: "MAC1",
+            //         YOL116W: "MSN1",
+            //         YKL062W: "MSN4",
+            //         YDR043C: "NRG1",
+            //         YKL043W: "PHD1",
+            //         YNL216W: "RAP1",
+            //         YBR049C: "REB1",
+            //         YPR065W: "ROX1",
+            //         YER169W: "RPH1",
+            //         YHR206W: "SKN7",
+            //         YML007W: "YAP1",
+            //         YDR259C: "YAP6"
+            //     }
+            // }
         },
         expression: {
             wt_log2_expression: {
@@ -5735,56 +5735,56 @@ var demoWorkbook4 = function (path, res, app) {
             }
         },
         test: {
-            production_rates: {
-                data: {
-                    YKL112W: "ABF1",
-                    YLR131C: "ACE2",
-                    YGL071W: "AFT1",
-                    YOR028C: "CIN5",
-                    YPL177C: "CUP9",
-                    YPR104C: "FHL1",
-                    YGL181W: "GTS1",
-                    YOL089C: "HAL9",
-                    YGL073W: "HSF1",
-                    YMR021C: "MAC1",
-                    YOL116W: "MSN1",
-                    YKL062W: "MSN4",
-                    YDR043C: "NRG1",
-                    YKL043W: "PHD1",
-                    YNL216W: "RAP1",
-                    YBR049C: "REB1",
-                    YPR065W: "ROX1",
-                    YER169W: "RPH1",
-                    YHR206W: "SKN7",
-                    YML007W: "YAP1",
-                    YDR259C: "YAP6"
-                }
-            },
-            degradation_rates: {
-                data : {
-                    YKL112W: "ABF1",
-                    YLR131C: "ACE2",
-                    YGL071W: "AFT1",
-                    YOR028C: "CIN5",
-                    YPL177C: "CUP9",
-                    YPR104C: "FHL1",
-                    YGL181W: "GTS1",
-                    YOL089C: "HAL9",
-                    YGL073W: "HSF1",
-                    YMR021C: "MAC1",
-                    YOL116W: "MSN1",
-                    YKL062W: "MSN4",
-                    YDR043C: "NRG1",
-                    YKL043W: "PHD1",
-                    YNL216W: "RAP1",
-                    YBR049C: "REB1",
-                    YPR065W: "ROX1",
-                    YER169W: "RPH1",
-                    YHR206W: "SKN7",
-                    YML007W: "YAP1",
-                    YDR259C: "YAP6"
-                }
-            }
+            // production_rates: {
+            //     data: {
+            //         YKL112W: "ABF1",
+            //         YLR131C: "ACE2",
+            //         YGL071W: "AFT1",
+            //         YOR028C: "CIN5",
+            //         YPL177C: "CUP9",
+            //         YPR104C: "FHL1",
+            //         YGL181W: "GTS1",
+            //         YOL089C: "HAL9",
+            //         YGL073W: "HSF1",
+            //         YMR021C: "MAC1",
+            //         YOL116W: "MSN1",
+            //         YKL062W: "MSN4",
+            //         YDR043C: "NRG1",
+            //         YKL043W: "PHD1",
+            //         YNL216W: "RAP1",
+            //         YBR049C: "REB1",
+            //         YPR065W: "ROX1",
+            //         YER169W: "RPH1",
+            //         YHR206W: "SKN7",
+            //         YML007W: "YAP1",
+            //         YDR259C: "YAP6"
+            //     }
+            // },
+            // degradation_rates: {
+            //     data : {
+            //         YKL112W: "ABF1",
+            //         YLR131C: "ACE2",
+            //         YGL071W: "AFT1",
+            //         YOR028C: "CIN5",
+            //         YPL177C: "CUP9",
+            //         YPR104C: "FHL1",
+            //         YGL181W: "GTS1",
+            //         YOL089C: "HAL9",
+            //         YGL073W: "HSF1",
+            //         YMR021C: "MAC1",
+            //         YOL116W: "MSN1",
+            //         YKL062W: "MSN4",
+            //         YDR043C: "NRG1",
+            //         YKL043W: "PHD1",
+            //         YNL216W: "RAP1",
+            //         YBR049C: "REB1",
+            //         YPR065W: "ROX1",
+            //         YER169W: "RPH1",
+            //         YHR206W: "SKN7",
+            //         YML007W: "YAP1",
+            //         YDR259C: "YAP6"
+            //     }
+            // }
         },
         expression: {
             wt_log2_expression: {
