@@ -1537,6 +1537,9 @@ export var drawGraph = function (workbook) {
 
     grnState.simulation = simulation;
 
+    // The restrict graph state is sometimes carried over across reloads
+    restrictGraphToViewport( $("input[name=viewport]").prop("checked"));
+
     modifyChargeParameter(grnState.chargeSlider.currentVal);
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
 
