@@ -55,7 +55,7 @@ const buildMeta2Sheet = function (meta2DataContainer) {
         meta2.push([parameter, meta2Data]);
     }
     meta2.push([]);
-    meta2.push(["Genes", ...meta2DataContainer.data.MSE["column-headers"]]);
+    meta2.push(["Gene", ...meta2DataContainer.data.MSE["column-headers"]]);
     for (let gene in meta2DataContainer.data.MSE.Genes) {
         const meta2GeneData = meta2DataContainer.data.MSE.Genes[gene];
         meta2.push([gene, ...meta2GeneData]);
