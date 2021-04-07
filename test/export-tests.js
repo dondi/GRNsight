@@ -533,40 +533,50 @@ const inputWorkbook = {
     },
 
     "meta": {
-        "L_curve": 0,
-        "MaxFunEval": 1000000,
-        "MaxIter": 1000000,
-        "Strain": ["wt", "dcin5"],
-        "TolFun": 0.00001,
-        "TolX": 0.00001,
-        "alpha": 0.001,
-        "estimate_params": 1,
-        "expression_timepoints": [0.4, 0.8, 1.2],
-        "fix_P": 1,
-        "fix_b": 0,
-        "kk_max": 1,
-        "make_graphs": 1,
-        "production_function": "testMM",
-        "simulation_timepoints": [0, 0.1, 0.2],
+        data: {
+            "L_curve": 0,
+            "MaxFunEval": 1000000,
+            "MaxIter": 1000000,
+            "Strain": ["wt", "dcin5"],
+            "TolFun": 0.00001,
+            "TolX": 0.00001,
+            "alpha": 0.001,
+            "estimate_params": 1,
+            "expression_timepoints": [0.4, 0.8, 1.2],
+            "fix_P": 1,
+            "fix_b": 0,
+            "kk_max": 1,
+            "make_graphs": 1,
+            "production_function": "testMM",
+            "simulation_timepoints": [0, 0.1, 0.2],
+            "species": "Saccharomyces cerevisiae",
+            "taxon_id": 559292
+        }
     },
 
     "test": {
         "production_rates": {
-            "ACE2": 0.5,
-            "AFT2": 1,
-            "CIN5": 2
+            data: {
+                "ACE2": 0.5,
+                "AFT2": 1,
+                "CIN5": 2
+            }
         },
 
         "degradation_rates": {
-            "ACE2": 1,
-            "AFT2": 1,
-            "CIN5": 1
+            data: {
+                "ACE2": 1,
+                "AFT2": 1,
+                "CIN5": 1
+            }
         },
 
         "threshold_b": {
-            "ACE2": 0,
-            "AFT2": 0,
-            "CIN5": 0
+            data: {
+                "ACE2": 0,
+                "AFT2": 0,
+                "CIN5": 0
+            }
         }
     },
 
@@ -680,6 +690,8 @@ describe("Export to spreadsheet", function () {
                     ["make_graphs", 1],
                     ["production_function", "testMM"],
                     ["simulation_timepoints", 0, 0.1, 0.2],
+                    ["species", "Saccharomyces cerevisiae"],
+                    ["taxon_id", 559292]
                 ]
             },
 

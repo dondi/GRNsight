@@ -533,8 +533,8 @@ var demoWorkbook1 = function (path, res, app) {
             }
         },
         test: {
-            data: {
-                production_rates: {
+            production_rates: {
+                data: {
                     ACE2: 0.2236,
                     ASH1: 0.4332,
                     CIN5: 0.2009,
@@ -550,8 +550,10 @@ var demoWorkbook1 = function (path, res, app) {
                     YHP1: 0.1733,
                     YOX1: 0.7296,
                     ZAP1: 0.1042
-                },
-                degradation_rates: {
+                }
+            },
+            degradation_rates: {
+                data: {
                     ACE2: 0.1118,
                     ASH1: 0.2166,
                     CIN5: 0.1005,
@@ -567,8 +569,10 @@ var demoWorkbook1 = function (path, res, app) {
                     YHP1: 0.0866,
                     YOX1: 0.3648,
                     ZAP1: 0.0521
-                },
-                threshold_b: {
+                }
+            },
+            threshold_b: {
+                data: {
                     ACE2: 0,
                     ASH1: 0,
                     CIN5: 0,
@@ -587,6 +591,7 @@ var demoWorkbook1 = function (path, res, app) {
                 }
             }
         },
+
         expression: {
             wt_log2_expression: {
                 errors: [],
@@ -2691,8 +2696,8 @@ var demoWorkbook2 = function (path, res, app) {
             }
         },
         test: {
-            data: {
-                production_rates: {
+            production_rates: {
+                data: {
                     ACE2: 0.2236,
                     ASH1: 0.4332,
                     CIN5: 0.2009,
@@ -2708,8 +2713,10 @@ var demoWorkbook2 = function (path, res, app) {
                     YHP1: 0.1733,
                     YOX1: 0.7296,
                     ZAP1: 0.1042
-                },
-                degradation_rates: {
+                }
+            },
+            degradation_rates: {
+                data: {
                     ACE2: 0.1118,
                     ASH1: 0.2166,
                     CIN5: 0.1005,
@@ -2725,8 +2732,10 @@ var demoWorkbook2 = function (path, res, app) {
                     YHP1: 0.0866,
                     YOX1: 0.3648,
                     ZAP1: 0.0521
-                },
-                threshold_b: {
+                }
+            },
+            threshold_b: {
+                data: {
                     ACE2: 0,
                     ASH1: 0,
                     CIN5: 0,
@@ -2742,8 +2751,10 @@ var demoWorkbook2 = function (path, res, app) {
                     YHP1: 0,
                     YOX1: 0,
                     ZAP1: 0
-                },
-                optimized_production_rates: {
+                }
+            },
+            optimized_production_rates: {
+                data: {
                     ACE2: 0.20169762419350315,
                     ASH1: 1.6768486409669303,
                     CIN5: 0.6556267091220588,
@@ -2759,8 +2770,10 @@ var demoWorkbook2 = function (path, res, app) {
                     YHP1: 0.20798709920402955,
                     YOX1: 1.3911530501950775,
                     ZAP1: 0.12824047744417516
-                },
-                optimized_threshold_b: {
+                }
+            },
+            optimized_threshold_b: {
+                data: {
                     ACE2: 0.8985074404608185,
                     ASH1: 2.582256164350256,
                     CIN5: -0.47809974269974775,
@@ -4610,8 +4623,8 @@ var demoWorkbook3 = function (path, res, app) {
             }
         },
         test: {
-            data: {
-                production_rates: {
+            production_rates: {
+                data: {
                     YKL112W: "ABF1",
                     YLR131C: "ACE2",
                     YGL071W: "AFT1",
@@ -4633,8 +4646,10 @@ var demoWorkbook3 = function (path, res, app) {
                     YHR206W: "SKN7",
                     YML007W: "YAP1",
                     YDR259C: "YAP6"
-                },
-                degradation_rates: {
+                }
+            },
+            degradation_rates: {
+                data : {
                     YKL112W: "ABF1",
                     YLR131C: "ACE2",
                     YGL071W: "AFT1",
@@ -5720,8 +5735,8 @@ var demoWorkbook4 = function (path, res, app) {
             }
         },
         test: {
-            data: {
-                production_rates: {
+            production_rates: {
+                data: {
                     YKL112W: "ABF1",
                     YLR131C: "ACE2",
                     YGL071W: "AFT1",
@@ -5743,8 +5758,10 @@ var demoWorkbook4 = function (path, res, app) {
                     YHR206W: "SKN7",
                     YML007W: "YAP1",
                     YDR259C: "YAP6"
-                },
-                degradation_rates: {
+                }
+            },
+            degradation_rates: {
+                data : {
                     YKL112W: "ABF1",
                     YLR131C: "ACE2",
                     YGL071W: "AFT1",
