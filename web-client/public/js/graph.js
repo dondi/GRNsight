@@ -265,14 +265,6 @@ export var drawGraph = function (workbook) {
         const zoomDisplay = grnState.zoomValue;
         setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
 
-        // if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
-        //     setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
-        // } else {
-        //     // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
-        //     grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
-        //     setGraphZoom(MIDDLE_SCALE);
-        // }
-
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
 
