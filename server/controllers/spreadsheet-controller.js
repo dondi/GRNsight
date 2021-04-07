@@ -197,8 +197,6 @@ var crossSheetInteractions = function (workbookFile) {
         );
         additionalData.meta.data.species = "Saccharomyces cerevisiae";
         additionalData.meta.data["taxon_id"] = 559292;
-        console.log("Hey Sista Soul Sista");
-        console.log(typeof additionalData.meta.data.taxon_id);
     }
 
     // Add errors and warnings from expression sheets
