@@ -409,40 +409,17 @@ export var drawGraph = function (workbook) {
         restrictGraphToViewport(fixed);
     });
 
-    const graphCenter = {x: width / 2, y: height / 2}; //TODO this must go
     function center () {
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
-
-        graphCenter.x = viewportWidth / 2
-        graphCenter.y = viewportHeight / 2
-
-        simulation.stop(); // allows move even while graph is updating
-        simulation.force("center", d3.forceCenter(graphCenter.x, graphCenter.y));
-        simulation.restart(); // otherwise, this will only work ~10 times before the force stops moving
-        simulation.alphaTarget(0.3).restart(); // keeps the nodes from clumping together
         zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
+        simulation.alphaTarget(0.3).restart();
     }
 
     function move (direction) {
-        let deltaX = (direction === "left" ? -50 : (direction === "right" ? 50 : 0));
-        let deltaY = (direction === "up" ? -50 : (direction === "down" ? 50 : 0));
-
-            // Stop adding deltaX is the graph if it merely moves the bounds further outside a restricted viewport
-            // Stops the centre from moving very far away from bounding
-        if (adaptive || graphCenter.x > 0 && graphCenter.x < width || (graphCenter.x <= 0 && deltaX >= 0)
-            || (graphCenter.x >= width && deltaX <= 0)) {
-            graphCenter.x += deltaX;
-        }
-        if (adaptive || graphCenter.y > 0 && graphCenter.y < height || (graphCenter.y <= 0 && deltaY >= 0)
-            || (graphCenter.y >= height && deltaY <= 0)) {
-            graphCenter.y += deltaY;
-        }
-
-        simulation.stop(); // allows move even while graph is updating
-        simulation.force("center", d3.forceCenter(graphCenter.x, graphCenter.y));
-        simulation.restart(); // otherwise, this will only work ~10 times before the force stops moving
-        simulation.alphaTarget(0.3).restart(); // keeps the nodes from clumping together
+        var width = direction === "left" ? -50 : (direction === "right" ? 50 : 0);
+        var height = direction === "up" ? -50 : (direction === "down" ? 50 : 0);
+        zoom.translateBy(zoomContainer, width, height);
     }
 
     var defs = boundingBoxContainer.append("defs");
