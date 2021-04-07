@@ -16,7 +16,8 @@ var exportResponse = function (app, req, res, converter) {
 };
 
 var generalExportError = function (res, error) {
-    return res.json(400, {
+    // Express deprecated res.json(status, obj): Use res.status(status).json(obj)
+    return res.status(400).json({
         message: "Invalid GRNsight format.",
         details: {
             name: error.name,

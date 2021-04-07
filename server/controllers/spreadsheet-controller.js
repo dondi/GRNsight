@@ -182,6 +182,8 @@ var crossSheetInteractions = function (workbookFile) {
 
     if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
         addWarning(workbook, constants.warnings.noSpeciesInformationDetected);
+        additionalData.meta.data.species = "Saccharomyces cerevisiae";
+        additionalData.meta.data["taxon_id"] = "559292";
     } else if (
         !doesSpeciesExist(additionalData.meta.data.species) &&
         !doesSpeciesExist(additionalData.meta.data.taxon_id)
@@ -193,6 +195,8 @@ var crossSheetInteractions = function (workbookFile) {
                 additionalData.meta.data.taxon_id
             )
         );
+        additionalData.meta.data.species = "Saccharomyces cerevisiae";
+        additionalData.meta.data["taxon_id"] = 559292;
     }
 
     // Add errors and warnings from expression sheets

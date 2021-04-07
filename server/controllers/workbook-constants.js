@@ -439,7 +439,7 @@ module.exports = {
             return {
                 errorCode: "GENE_MISMATCH",
                 possibleCause: `Gene names in column A of the "${sheetName}" sheet do not 
-                match the order of those in the network sheet`,
+                match the order of those in the network sheet.`,
                 suggestedFix: `Please ensure that the gene names are in the same order 
                 as those in both the "network" sheet and the 
                 "network_optimized_weights" sheet.`
@@ -450,7 +450,7 @@ module.exports = {
             return {
                 errorCode: "EXTRA_GENE_NAME",
                 possibleCause: `Gene names in column A of the "${sheetName}" sheet have 
-                one or more extra genes than those listed in the network sheet`,
+                one or more extra genes than those listed in the network sheet.`,
                 suggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
                 the same as the genes in the "network" sheet and the "network_optimized_weights" sheet.`
             };
@@ -460,7 +460,7 @@ module.exports = {
             return {
                 errorCode: "MISSING_GENE_NAME",
                 possibleCause: `Gene names in column A of the "${sheetName}"
-                    sheet are missing one or more genes from the network sheet`,
+                    sheet are missing one or more genes from the network sheet.`,
                 suggestedFix: `Please ensure that the genes in the "${sheetName}"
                      are the same as the genes in the "network" sheet and the 
                     "network_optimized_weights" sheet.`
