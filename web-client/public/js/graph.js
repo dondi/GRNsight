@@ -256,15 +256,11 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
 
-    const getMaxZoom = () => {
-        d3.select('svg').selec
-    }
-
     const updateAppBasedOnZoomValue = () => {
 
-        if (!adaptive){
-            grnState.zoomValue = 100.0
-        } 
+        if (!adaptive) {
+            grnState.zoomValue = 100.0;
+        }
 
         const zoomDisplay = grnState.zoomValue;
         setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
@@ -371,7 +367,7 @@ export var drawGraph = function (workbook) {
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
-            $(".scale-and-scroll").show()
+            $(".scale-and-scroll").show();
             $("input[name=viewport]").removeProp("checked");
             $container.addClass("cursorGrabbing");
             adaptive = true;
@@ -380,7 +376,7 @@ export var drawGraph = function (workbook) {
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             $("input[name=viewport]").prop("checked", "checked");
-            $(".scale-and-scroll").hide()
+            $(".scale-and-scroll").hide();
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
