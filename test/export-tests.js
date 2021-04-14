@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 var extend = require("jquery-extend");
 var xlsx = require("node-xlsx");
+var test = require("./test");
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
@@ -361,7 +362,6 @@ describe("Export to GraphML", function () {
         var lines = exportController.grnsightToGraphMl(workbookWithFilename).split("\n").map(function (line) {
             return line.trim();
         });
-
         var expectedGraphMlLines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
@@ -780,4 +780,23 @@ describe("Export to spreadsheet", function () {
         const actualSheet = exportController.grnsightToXlsx(inputWorkbook);
         expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
+
+    it("should import a workbook with minor additional sheet warnings," +
+    " export the workbook, and import the exported workbook properly",
+        function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx");
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx");
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx");
+        }
+    );
+
+    it("should import a workbook with no warnings, export the workbook, and import the exported workbook properly",
+        function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
+        }
+    );
 });

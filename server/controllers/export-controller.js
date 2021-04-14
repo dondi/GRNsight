@@ -4,6 +4,8 @@ var grnsightToSif = require(__dirname + "/exporters/sif");
 var grnsightToGraphMl = require(__dirname + "/exporters/graphml");
 var grnsightToXlsx = require(__dirname + "/exporters/xlsx");
 
+var spreadsheetController = require(__dirname + "./spreadsheet-controller")();
+
 var convertResponse = function (app, req, res, converter) {
     helpers.attachCorsHeader(res, app);
     return res.status(200).send(converter(req.body));

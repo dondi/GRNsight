@@ -9,6 +9,8 @@ var parseExpressionSheet = require(__dirname + "/../server/controllers" + "/expr
 
 var parseAdditionalSheet = require(__dirname + "/../server/controllers" + "/additional-sheet-parser");
 
+var exportController = require(__dirname + "/../server/controllers/export-controller")();
+
 // changed network parser to preserve all network sheets instead of choosing the best and throwing awway rhe rest
 // this helper method chooses the best network sheet, so prior implemented test behaviour doesn't crash
 var parseNetworkSheet = (sheet) => {
@@ -519,12 +521,7 @@ var betweennessCentrality = function (input, directed, node, centrality) {
 };
 */
 
-
-
-
-
-
-// New Error Tests
+// Additional Sheets Error Tests
 var twoColumnIdError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
@@ -619,7 +616,7 @@ var twoColumnSpecialCharacterError = function (input, frequency) {
     assert.equal(frequency, twoColumnSpecialCharacterErrorCount);
 };
 
-// New Warning Tests
+// Additional Sheets Warning Tests
 
 var additionalSheetExtraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
@@ -714,6 +711,18 @@ var invalidMSEDataWarning = function (input, frequency) {
     assert.equal(frequency, invalidMSEDataWarningCount);
 };
 
+// Export Tests
+
+var importExportReImportNoErrorsOrWarnings = function (input) {
+    var sheet = xlsx.parse(input);
+    var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
+    var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
+    var sheet2 = xlsx.parse(exportedWorkbook);
+    var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
+    // check if the re-imported workbook has no errors or warnings
+    assert.equal(0, reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length);
+};
+
 
 
 exports.noErrors = noErrors;
@@ -774,3 +783,5 @@ exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
+
+exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
