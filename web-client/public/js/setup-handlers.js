@@ -348,16 +348,11 @@ export const setupHandlers = grnState => {
     });
 
     $(VIEWPORT_OPTION_CLASS_SIDEBAR).click(function(){
-        console.log(this)
-        console.log("click detected")
         grnState.viewportSize = $(this).val()
         updateApp(grnState)
     })
 
     $(VIEWPORT_OPTION_CLASS).click(function(){
-        console.log(this)
-        console.log($(this).attr("value"))
-        console.log("click detected")
         grnState.viewportSize = $(this).attr("value")
         updateApp(grnState)
     })

@@ -283,7 +283,6 @@ const synchronizeViewportSizeFit = () => {
 }
 
 const updateViewportSize = (currentValue) => {
-    console.log("Hello from update viewport size")
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
     const HEIGHT_OFFSET = 53;
@@ -314,7 +313,6 @@ const updateViewportSize = (currentValue) => {
     };
 
     let grnsightContainerClass = `grnsight-container ${currentValue}`;
-    console.log(grnsightContainerClass)
     if (!container.hasClass(currentValue)) {
         container.attr("class", grnsightContainerClass);
         if (currentValue === VIEWPORT_FIT) {
@@ -334,7 +332,6 @@ const updateViewportSize = (currentValue) => {
     } else if(currentValue === VIEWPORT_FIT){
         synchronizeViewportSizeFit()
     } 
-    console.log("Hello")
 }
 
 // Expression DB Access Functions
