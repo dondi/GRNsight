@@ -61,7 +61,9 @@ import {
     SPECIES_BUTTON_HUMAN,
     SPECIES_BUTTON_MOUSE,
     SPECIES_BUTTON_NEMATODE,
-    SPECIES_BUTTON_YEAST
+    SPECIES_BUTTON_YEAST,
+    VIEWPORT_OPTION_CLASS,
+    VIEWPORT_OPTION_CLASS_SIDEBAR
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -344,6 +346,21 @@ export const setupHandlers = grnState => {
         }
         updateApp(grnState);
     });
+
+    $(VIEWPORT_OPTION_CLASS_SIDEBAR).click(function(){
+        console.log(this)
+        console.log("click detected")
+        grnState.viewportSize = $(this).val()
+        updateApp(grnState)
+    })
+
+    $(VIEWPORT_OPTION_CLASS).click(function(){
+        console.log(this)
+        console.log($(this).attr("value"))
+        console.log("click detected")
+        grnState.viewportSize = $(this).attr("value")
+        updateApp(grnState)
+    })
 
     $(RESET_SLIDERS_CLASS).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;

@@ -90,45 +90,45 @@ export const container = function () {
         container.addClass("containerL");
     }
 
-    $("#viewport-size-s").on("click", function () {
-        $("#boundBoxS").prop("checked", true).trigger("click");
-        small();
-    });
+    // $("#viewport-size-s").on("click", function () {
+    //     $("#boundBoxS").prop("checked", true).trigger("click");
+    //     small();
+    // });
 
-    $("#boundBoxS").on("click", function () {
-        $("#boundBoxS").prop("checked", true);
-        small();
-    });
+    // $("#boundBoxS").on("click", function () {
+    //     $("#boundBoxS").prop("checked", true);
+    //     small();
+    // });
 
-    $("#viewport-size-m").on("click", function () {
-        $("#boundBoxM").prop("checked", true).trigger("click");
-        medium();
-    });
+    // $("#viewport-size-m").on("click", function () {
+    //     $("#boundBoxM").prop("checked", true).trigger("click");
+    //     medium();
+    // });
 
-    $("#boundBoxM").on("click", function () {
-        $("#viewport-size-m").prop("checked", true);
-        medium();
-    });
+    // $("#boundBoxM").on("click", function () {
+    //     $("#viewport-size-m").prop("checked", true);
+    //     medium();
+    // });
 
-    $("#viewport-size-l").on("click", function () {
-        $("#boundBoxL").prop("checked", true).trigger("click");
-        large();
-    });
+    // $("#viewport-size-l").on("click", function () {
+    //     $("#boundBoxL").prop("checked", true).trigger("click");
+    //     large();
+    // });
 
-    $("#boundBoxL").on("click", function () {
-        $("#viewport-size-l").prop("checked", true);
-        large();
-    });
+    // $("#boundBoxL").on("click", function () {
+    //     $("#viewport-size-l").prop("checked", true);
+    //     large();
+    // });
 
-    $("#viewport-size-fit").on("click", function () {
-        $("#boundBoxFit").prop("checked", true).trigger("click");
-        fit();
-    });
+    // $("#viewport-size-fit").on("click", function () {
+    //     $("#boundBoxFit").prop("checked", true).trigger("click");
+    //     fit();
+    // });
 
-    $("#boundBoxFit").on("click", function () {
-        $("#viewport-size-fit").prop("checked", true);
-        fit();
-    });
+    // $("#boundBoxFit").on("click", function () {
+    //     $("#viewport-size-fit").prop("checked", true);
+    //     fit();
+    // });
 
     $("#restrict-graph-to-viewport").on("click", function () {
         if ($(".viewport").prop("checked")) {
@@ -151,16 +151,16 @@ export const container = function () {
         }
     });
 
-    $(".boundBoxSize").on("click", function () {
-        var currentValue = $(this).val();
-        var grnsightContainerClass = `grnsight-container ${currentValue}`;
-        if (!container.hasClass(currentValue)) {
-            container.attr("class", grnsightContainerClass);
-            if (currentValue === VIEWPORT_FIT) {
-                requestWindowDimensions();
-            } else {
-                container.css({ width: "", height: "" });
-            }
-        }
-    });
+    // $(".boundBoxSize").on("click", function () {
+    //     var currentValue = $(this).val();
+    //     var grnsightContainerClass = `grnsight-container ${currentValue}`;
+    //     if (!container.hasClass(currentValue)) {
+    //         container.attr("class", grnsightContainerClass);
+    //         if (currentValue === VIEWPORT_FIT) {
+    //             requestWindowDimensions();
+    //         } else {
+    //             container.css({ width: "", height: "" });
+    //         }
+    //     }
+    // });
 };
