@@ -4,8 +4,8 @@
         "title": "Viewport Menu: D-Pad Control",
         "text": "The graph should",
         "options": {
-            "Click Right Arrow": "shift to the left",
-            "Click Left Arrow": "shift to the right",
+            "Click Right Arrow": "shift to the right",
+            "Click Left Arrow": "shift to the left",
             "Click Up Arrow": "shift down",
             "Click Down Arrow": "shift up",
             "Click Center Button": "move to the center of the bounding box (note that it is not the same thing as the viewport"
