@@ -9,5 +9,5 @@ import { setupHandlers } from "./setup-handlers";
 setupHandlers(grnState);
 updateApp(grnState);
 
-container();
+container(grnState);
 upload();

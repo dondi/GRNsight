@@ -1,6 +1,7 @@
 import { VIEWPORT_FIT } from "./constants";
+import { updateApp } from "./update-app";
 
-export const container = function () {
+export const container = function (grnState) {
     var container = $(".grnsight-container");
     var pageWidth = $(window).width();
 
@@ -50,45 +51,38 @@ export const container = function () {
         });
     }
 
-    
+    // var setSizeIndicator = function (selector) {
+    //     $("#viewport-size-s span, #viewport-size-m span, #viewport-size-l span, #viewport-size-fit span")
+    //       .removeClass("glyphicon-ok");
+    //     $(selector).addClass("glyphicon-ok");
+    // };
 
-    var setSizeIndicator = function (selector) {
-        $("#viewport-size-s span, #viewport-size-m span, #viewport-size-l span, #viewport-size-fit span")
-          .removeClass("glyphicon-ok");
-        $(selector).addClass("glyphicon-ok");
-    };
+    // var small = function () {
+    //     setSizeIndicator("#viewport-size-s span");
+    // };
 
-    var small = function () {
-        setSizeIndicator("#viewport-size-s span");
-    };
+    // var medium = function () {
+    //     setSizeIndicator("#viewport-size-m span");
+    // };
 
-    var medium = function () {
-        setSizeIndicator("#viewport-size-m span");
-    };
+    // var large = function () {
+    //     setSizeIndicator("#viewport-size-l span");
+    // };
 
-    var large = function () {
-        setSizeIndicator("#viewport-size-l span");
-    };
-
-    var fit = function () {
-        setSizeIndicator("#viewport-size-fit span");
-    };
+    // var fit = function () {
+    //     setSizeIndicator("#viewport-size-fit span");
+    // };
 
     requestWindowDimensions();
 
     if (pageWidth < MEDIUM_PAGE_WIDTH) {
-        $("#boundBoxS").prop("checked", true);
-        small();
-        container.addClass("containerS");
+        grnState.viewportSize = "containerS";
     } else if (pageWidth > MEDIUM_PAGE_WIDTH && pageWidth < LARGE_PAGE_WIDTH) {
-        $("#boundBoxM").prop("checked", true);
-        medium();
-        container.addClass("containerM");
+        grnState.viewportSize = "containerM";
     } else {
-        $("#boundBoxL").prop("checked", true);
-        large();
-        container.addClass("containerL");
+        grnState.viewportSize = "containerL";
     }
+    updateApp(grnState);
 
     // $("#viewport-size-s").on("click", function () {
     //     $("#boundBoxS").prop("checked", true).trigger("click");

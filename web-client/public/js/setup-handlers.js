@@ -347,15 +347,15 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(VIEWPORT_OPTION_CLASS_SIDEBAR).click(function(){
-        grnState.viewportSize = $(this).val()
-        updateApp(grnState)
-    })
+    $(VIEWPORT_OPTION_CLASS_SIDEBAR).click(function () {
+        grnState.viewportSize = $(this).val();
+        updateApp(grnState);
+    });
 
-    $(VIEWPORT_OPTION_CLASS).click(function(){
-        grnState.viewportSize = $(this).attr("value")
-        updateApp(grnState)
-    })
+    $(VIEWPORT_OPTION_CLASS).click(function () {
+        grnState.viewportSize = $(this).attr("value");
+        updateApp(grnState);
+    });
 
     $(RESET_SLIDERS_CLASS).click(() => {
         grnState.chargeSlider.backup = grnState.chargeSlider.currentVal;

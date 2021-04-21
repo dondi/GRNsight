@@ -223,10 +223,10 @@ const synchronizeHideAllWeights = () => {
 
 // Viewport
 const synchronizeViewportSizeSmall = () => {
-    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok")
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
 
     $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
     $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
@@ -235,13 +235,13 @@ const synchronizeViewportSizeSmall = () => {
 
     $(VIEWPORT_SIZE_S_SIDEBAR).prop("checked", "checked");
     $(VIEWPORT_SIZE_S_DROPDOWN + " span").addClass("glyphicon-ok");
-}
+};
 
 const synchronizeViewportSizeMedium = () => {
-    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok")
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
 
     $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
     $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
@@ -250,13 +250,13 @@ const synchronizeViewportSizeMedium = () => {
 
     $(VIEWPORT_SIZE_M_SIDEBAR).prop("checked", "checked");
     $(VIEWPORT_SIZE_M_DROPDOWN + " span").addClass("glyphicon-ok");
-}
+};
 
 const synchronizeViewportSizeLarge = () => {
-    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok")
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
 
     $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
     $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
@@ -264,14 +264,14 @@ const synchronizeViewportSizeLarge = () => {
     $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
 
     $(VIEWPORT_SIZE_L_SIDEBAR).prop("checked", "checked");
-    $(VIEWPORT_SIZE_L_DROPDOWN+ " span").addClass("glyphicon-ok");
-}
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").addClass("glyphicon-ok");
+};
 
 const synchronizeViewportSizeFit = () => {
-    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok")
-    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok")
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
 
     $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
     $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
@@ -280,13 +280,15 @@ const synchronizeViewportSizeFit = () => {
 
     $(VIEWPORT_SIZE_FIT_SIDEBAR).prop("checked", "checked");
     $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").addClass("glyphicon-ok");
-}
+};
 
 const updateViewportSize = (currentValue) => {
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
     const HEIGHT_OFFSET = 53;
+    const HOST_SITE = "https://dondi.github.io";
     let container = $(".grnsight-container");
+
     // from jquery
     const fitContainer = dimensions => {
         if (container.hasClass(VIEWPORT_FIT)) {
@@ -323,16 +325,16 @@ const updateViewportSize = (currentValue) => {
     }
 
     // Added synchronization
-    if(currentValue === VIEWPORT_S){
-        synchronizeViewportSizeSmall()
-    } else if(currentValue === VIEWPORT_M){
-        synchronizeViewportSizeMedium()
-    } else if(currentValue === VIEWPORT_L){
-        synchronizeViewportSizeLarge()
-    } else if(currentValue === VIEWPORT_FIT){
-        synchronizeViewportSizeFit()
-    } 
-}
+    if (currentValue === VIEWPORT_S) {
+        synchronizeViewportSizeSmall();
+    } else if (currentValue === VIEWPORT_M) {
+        synchronizeViewportSizeMedium();
+    } else if (currentValue === VIEWPORT_L) {
+        synchronizeViewportSizeLarge();
+    } else if (currentValue === VIEWPORT_FIT) {
+        synchronizeViewportSizeFit();
+    }
+};
 
 // Expression DB Access Functions
 const buildTimepointsString = function (selection) {
