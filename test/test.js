@@ -723,6 +723,16 @@ var importExportReImportNoErrorsOrWarnings = function (input) {
     assert.equal(0, reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length);
 };
 
+var importFileSameAsExportFile = function (input) {
+    var sheet = xlsx.parse(input);
+    var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
+    var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
+    var sheet2 = xlsx.parse(exportedWorkbook);
+    sheet.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    sheet2.sort((a, b) => (a.name > b.name) ? 1 : -1);
+    assert.deepEqual(sheet, sheet2);
+}
+
 
 
 exports.noErrors = noErrors;
@@ -785,3 +795,4 @@ exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
+exports.importFileSameAsExportFile = importFileSameAsExportFile;

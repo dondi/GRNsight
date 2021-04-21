@@ -728,27 +728,27 @@ describe("Export to spreadsheet", function () {
             {
                 name: "wt_log2_expression",
                 data:
-                [
-                    [ "id", 0.4, 0.8, 1.2],
                     [
-                        "ACE2",
-                        1,
-                        2,
-                        3
-                    ],
-                    [
-                        "AFT2",
-                        4,
-                        5,
-                        6
-                    ],
-                    [
-                        "CIN5",
-                        7,
-                        8,
-                        9
+                        ["id", 0.4, 0.8, 1.2],
+                        [
+                            "ACE2",
+                            1,
+                            2,
+                            3
+                        ],
+                        [
+                            "AFT2",
+                            4,
+                            5,
+                            6
+                        ],
+                        [
+                            "CIN5",
+                            7,
+                            8,
+                            9
+                        ]
                     ]
-                ]
             },
 
             {
@@ -780,6 +780,17 @@ describe("Export to spreadsheet", function () {
         const actualSheet = exportController.grnsightToXlsx(inputWorkbook);
         expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
+
+    it("should export a workbook exactly as the import",
+        function () {
+            test.importFileSameAsExportFile(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
+            test.importFileSameAsExportFile(
+                "test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx");
+            test.importFileSameAsExportFile(
+                "test-files/additional-sheet-test-files/optimization-parameters-default.xlsx");
+        }
+    );
 
     it("should import a workbook with minor additional sheet warnings," +
     " export the workbook, and import the exported workbook properly",
