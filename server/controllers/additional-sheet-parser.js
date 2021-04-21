@@ -3,14 +3,6 @@
 
 var constants = require(__dirname + "/workbook-constants");
 
-const numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
-    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
-    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
-    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
-    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
-    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
-    74:"BV", 75:"BW", 76:"BX"};
-
 const getSheetHeader = (sheetName, column, row) => {
     if (row === 0) {
         if (sheetName === "production_rates" || sheetName === "optimized_production_rates") {
@@ -24,8 +16,6 @@ const getSheetHeader = (sheetName, column, row) => {
         } else if (sheetName === "optimization_diagnostics") {
             return (column === 0) ? "Parameter" : "Value";
         }
-    } else {
-        // if (sh)
     }
 };
 
@@ -103,17 +93,17 @@ const parseMetaDataSheet = (sheet) => {
     };
     let paramType;
     if (sheet.data[0][0] === undefined) {
-        addError(meta, constants.errors.missingColumnHeaderError(sheet.name, numbersToLetters[0],
+        addError(meta, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[0],
             getSheetHeader(sheet.name, 0, 0)));
     } else if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-        addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, numbersToLetters[0],
+        addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[0],
             getSheetHeader(sheet.name, 0, 0)));
     }
     if (sheet.data[0][1] === undefined) {
-        addError(meta, constants.errors.missingColumnHeaderError(sheet.name, numbersToLetters[1],
+        addError(meta, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[1],
             getSheetHeader(sheet.name, 1, 0)));
     } else if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-        addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, numbersToLetters[1],
+        addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[1],
             getSheetHeader(sheet.name, 1, 0)));
     }
 
@@ -168,17 +158,17 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
     // Check Headers
     if (sheet.data[0].length > 1) {
         if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-            addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, numbersToLetters[0],
+            addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[0],
                 getSheetHeader(sheet.name, 0, 0)));
         }
         if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-            addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, numbersToLetters[1],
+            addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[1],
                 getSheetHeader(sheet.name, 1, 0)));
         }
     } else {
         // seems a bit sus, but we'll see if this works properly during testing :\
         for (let col = 1; col >= sheet.data[0].length; col--) {
-            addError(output, constants.errors.missingColumnHeaderError(sheet.name, numbersToLetters[col],
+            addError(output, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[col],
                 getSheetHeader(sheet.name, col, 0)));
         }
     }
@@ -224,7 +214,7 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
         for (let col = 1; col < sheet.data[row].length; col++) {
             if (!sheet.data[row][col].includes("MSE")) {
                 addWarning(output, constants.warnings.incorrectMSEHeaderWarning(sheet.name, sheet.data[row][col],
-                    row + 1, numbersToLetters[col]));
+                    row + 1, constants.numbersToLetters[col]));
             }
             // we still push the header (even tho it's sus) because the gene MSE's are
             // dependent on the order of the column headers
@@ -244,10 +234,10 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
                         currentMSE.push(sheet.data[row][col]);
                     } else if (sheet.data[row][col] === undefined) {
                         addWarning(output, constants.warnings.missingMSEDataWarning(sheet.name, row + 1,
-                            numbersToLetters[col]));
+                            constants.numbersToLetters[col]));
                     } else {
                         addWarning(output, constants.warnings.invalidMSEDataWarning(sheet.name, row + 1,
-                            numbersToLetters[col]));
+                            constants.numbersToLetters[col]));
                     }
                 }
                 output.data.MSE.Genes[currentGene] = currentMSE;
@@ -283,11 +273,12 @@ const parseTwoColumnSheet = (sheet) => {
             }
             if (sheet.data[row].length > 1) {
                 if (sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)) {
-                    addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, numbersToLetters[1],
+                    addError(output, constants.errors.incorrectColumnHeaderError(sheet.name,
+                        constants.numbersToLetters[1],
                         getSheetHeader(sheet.name, 1, row)));
                 }
             } else {
-                addError(output, constants.errors.missingColumnHeaderError(sheet.name, numbersToLetters[1],
+                addError(output, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[1],
                     getSheetHeader(sheet.name, 1, row)));
             }
         } else {
