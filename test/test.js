@@ -731,7 +731,7 @@ var importFileSameAsExportFile = function (input) {
     sheet.sort((a, b) => (a.name > b.name) ? 1 : -1);
     sheet2.sort((a, b) => (a.name > b.name) ? 1 : -1);
     assert.deepEqual(sheet, sheet2);
-}
+};
 
 
 

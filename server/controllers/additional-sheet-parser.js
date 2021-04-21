@@ -16,8 +16,6 @@ const getSheetHeader = (sheetName, column, row) => {
         } else if (sheetName === "optimization_diagnostics") {
             return (column === 0) ? "Parameter" : "Value";
         }
-    } else {
-        // if (sh)
     }
 };
 
@@ -275,7 +273,8 @@ const parseTwoColumnSheet = (sheet) => {
             }
             if (sheet.data[row].length > 1) {
                 if (sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)) {
-                    addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[1],
+                    addError(output, constants.errors.incorrectColumnHeaderError(sheet.name,
+                        constants.numbersToLetters[1],
                         getSheetHeader(sheet.name, 1, row)));
                 }
             } else {

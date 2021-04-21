@@ -728,27 +728,27 @@ describe("Export to spreadsheet", function () {
             {
                 name: "wt_log2_expression",
                 data:
+                [
+                    ["id", 0.4, 0.8, 1.2],
                     [
-                        ["id", 0.4, 0.8, 1.2],
-                        [
-                            "ACE2",
-                            1,
-                            2,
-                            3
-                        ],
-                        [
-                            "AFT2",
-                            4,
-                            5,
-                            6
-                        ],
-                        [
-                            "CIN5",
-                            7,
-                            8,
-                            9
-                        ]
+                        "ACE2",
+                        1,
+                        2,
+                        3
+                    ],
+                    [
+                        "AFT2",
+                        4,
+                        5,
+                        6
+                    ],
+                    [
+                        "CIN5",
+                        7,
+                        8,
+                        9
                     ]
+                ]
             },
 
             {
