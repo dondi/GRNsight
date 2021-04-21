@@ -228,7 +228,7 @@ export var drawGraph = function (workbook) {
         .attr("height", height)
         .style("fill", "none")
         .style("pointer-events", "all")
-        .attr("stroke", adaptive ? "none" : "#9A9A9A")
+        .attr("stroke", "none" )
         .append("g");
 
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -257,14 +257,13 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
 
     const updateAppBasedOnZoomValue = () => {
-        const zoomDisplay = grnState.zoomValue;
-        if (adaptive || (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE)) {
-            setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
-        } else {
-            // Prohibit zooming past 100% if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE)
-            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
-            setGraphZoom(MIDDLE_SCALE);
+
+        if (!adaptive) {
+            grnState.zoomValue = 100.0;
         }
+
+        const zoomDisplay = grnState.zoomValue;
+        setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
@@ -360,6 +359,7 @@ export var drawGraph = function (workbook) {
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
+            $(".scale-and-scroll").show();
             $("input[name=viewport]").removeProp("checked");
             $container.addClass("cursorGrabbing");
             adaptive = true;
@@ -368,6 +368,7 @@ export var drawGraph = function (workbook) {
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             $("input[name=viewport]").prop("checked", "checked");
+            $(".scale-and-scroll").hide();
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
@@ -383,6 +384,7 @@ export var drawGraph = function (workbook) {
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
+        updateAppBasedOnZoomValue(); // Update zoom value within bounds
     };
 
     d3.select("#restrict-graph-to-viewport").on("click", function () {
@@ -399,7 +401,6 @@ export var drawGraph = function (workbook) {
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
         zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
-        simulation.alphaTarget(0.3).restart();
     }
 
     function move (direction) {
@@ -1499,6 +1500,9 @@ export var drawGraph = function (workbook) {
     }
 
     grnState.simulation = simulation;
+
+    // The restrict graph state is sometimes carried over across reloads
+    restrictGraphToViewport( $("input[name=viewport]").prop("checked"));
 
     modifyChargeParameter(grnState.chargeSlider.currentVal);
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);

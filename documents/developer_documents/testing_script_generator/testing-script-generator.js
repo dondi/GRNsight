@@ -107,7 +107,7 @@ for (var i = grnsightOptions.length - 1; i >=0; i--) {
 grnsightOptions.forEach(function(test) {
     var optionKeys = Object.keys(test.options);
     var entry = "|" + test.title + "|";
-    var status = test.included ? "YES" : "NO";
+    var status = (test.included && !toTest || toTest && toTest.includes(test.id)) ? "YES" : "NO";
     var entry = "|" + test.id +"|"+ status + " | " + test.title + "|";
     var noGraphLoadedAvailability = test.availability['NoGraphLoaded'] ? "YES": "NO";
     var weightedGraphLoadedAvailability = test.availability['WeightedGraphLoaded'] ? "YES": "NO";
