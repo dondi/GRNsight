@@ -89,8 +89,19 @@ import {
   SPECIES_BUTTON_HUMAN,
   SPECIES_BUTTON_MOUSE,
   SPECIES_BUTTON_NEMATODE,
-  SPECIES_BUTTON_YEAST
-
+  SPECIES_BUTTON_YEAST,
+  VIEWPORT_FIT,
+  VIEWPORT_S,
+  VIEWPORT_M,
+  VIEWPORT_L,
+  VIEWPORT_SIZE_S_DROPDOWN,
+  VIEWPORT_SIZE_M_DROPDOWN,
+  VIEWPORT_SIZE_L_DROPDOWN,
+  VIEWPORT_SIZE_FIT_DROPDOWN,
+  VIEWPORT_SIZE_S_SIDEBAR,
+  VIEWPORT_SIZE_M_SIDEBAR,
+  VIEWPORT_SIZE_L_SIDEBAR,
+  VIEWPORT_SIZE_FIT_SIDEBAR,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -208,6 +219,121 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
+};
+
+// Viewport
+const synchronizeViewportSizeSmall = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeMedium = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_M_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeLarge = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_L_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeFit = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const updateViewportSize = (currentValue) => {
+    // These values are bound to the layout dimensions of the GRNsight website.
+    const WIDTH_OFFSET = 250;
+    const HEIGHT_OFFSET = 53;
+    const HOST_SITE = "https://dondi.github.io";
+    let container = $(".grnsight-container");
+
+    // from jquery
+    const fitContainer = dimensions => {
+        if (container.hasClass(VIEWPORT_FIT)) {
+            container.css({
+                width: dimensions.width - WIDTH_OFFSET,
+                height: dimensions.height - HEIGHT_OFFSET
+            });
+        }
+    };
+    const fitContainerToWindow = () => {
+        fitContainer({
+            width: $(window).width(),
+            height: $(window).height()
+        });
+    };
+
+    const requestWindowDimensions = () => {
+        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
+        if (window === window.top) {
+            fitContainerToWindow();
+        } else {
+            window.top.postMessage("dimensions", HOST_SITE);
+        }
+    };
+
+    let grnsightContainerClass = `grnsight-container ${currentValue}`;
+    if (!container.hasClass(currentValue)) {
+        container.attr("class", grnsightContainerClass);
+        if (currentValue === VIEWPORT_FIT) {
+            requestWindowDimensions();
+        } else {
+            container.css({ width: "", height: "" });
+        }
+    }
+
+    // Added synchronization
+    if (currentValue === VIEWPORT_S) {
+        synchronizeViewportSizeSmall();
+    } else if (currentValue === VIEWPORT_M) {
+        synchronizeViewportSizeMedium();
+    } else if (currentValue === VIEWPORT_L) {
+        synchronizeViewportSizeLarge();
+    } else if (currentValue === VIEWPORT_FIT) {
+        synchronizeViewportSizeFit();
+    }
 };
 
 // Expression DB Access Functions
@@ -648,6 +774,9 @@ export const updateApp = grnState => {
     } else if (grnState.graphLayout === GRID_LAYOUT) {
         updatetoGridLayout();
     }
+
+// Viewport
+    updateViewportSize(grnState.viewportSize);
 
     // Node Coloring
     if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled

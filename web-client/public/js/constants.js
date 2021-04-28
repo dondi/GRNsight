@@ -155,4 +155,22 @@ export const ZOOM_ADAPTIVE_MAX_SCALE                    = 4;
 export const ZOOM_SLIDER                                = "#zoomSlider";
 export const ZOOM_INPUT                                 = "#zoomInput";
 export const ZOOM_PERCENT                               = "#zoomPercent";
+
 export const VIEWPORT_FIT                               = "containerFit";
+export const VIEWPORT_S                               = "containerS";
+export const VIEWPORT_M                               = "containerM";
+export const VIEWPORT_L                               = "containerL";
+
+export const VIEWPORT_SIZE_S_DROPDOWN                   = "#viewport-size-s";
+export const VIEWPORT_SIZE_M_DROPDOWN                   = "#viewport-size-m";
+export const VIEWPORT_SIZE_L_DROPDOWN                   = "#viewport-size-l";
+export const VIEWPORT_SIZE_FIT_DROPDOWN                 = "#viewport-size-fit";
+export const VIEWPORT_SIZE_S_SIDEBAR                    = "#boundBoxS";
+export const VIEWPORT_SIZE_M_SIDEBAR                    = "#boundBoxM";
+export const VIEWPORT_SIZE_L_SIDEBAR                    = "#boundBoxL";
+export const VIEWPORT_SIZE_FIT_SIDEBAR                  = "#boundBoxFit";
+export const VIEWPORT_OPTION_CLASS                      = ".viewportOption";
+export const VIEWPORT_OPTION_CLASS_SIDEBAR              = ".boundBoxSize";
+
+
+

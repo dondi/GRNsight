@@ -9,7 +9,8 @@ import {
   CHARGE_DEFAULT_VALUE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
   DEFAULT_ZOOM_VALUE,
-  FORCE_GRAPH
+  FORCE_GRAPH,
+  VIEWPORT_FIT
 } from "./constants";
 let currentWorkbook = null;
 
@@ -139,5 +140,8 @@ export const grnState = {
     },
 
 // Graph Layout Parameter
-    graphLayout: FORCE_GRAPH
+    graphLayout: FORCE_GRAPH,
+
+// Viewport Size Parameter
+    viewportSize: VIEWPORT_FIT,
 };

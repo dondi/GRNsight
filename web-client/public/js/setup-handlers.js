@@ -61,7 +61,9 @@ import {
     SPECIES_BUTTON_HUMAN,
     SPECIES_BUTTON_MOUSE,
     SPECIES_BUTTON_NEMATODE,
-    SPECIES_BUTTON_YEAST
+    SPECIES_BUTTON_YEAST,
+    VIEWPORT_OPTION_CLASS,
+    VIEWPORT_OPTION_CLASS_SIDEBAR
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -342,6 +344,16 @@ export const setupHandlers = grnState => {
         if (grnState.slidersLocked) {
             grnState.showUndoReset = false;
         }
+        updateApp(grnState);
+    });
+
+    $(VIEWPORT_OPTION_CLASS_SIDEBAR).click(function () {
+        grnState.viewportSize = $(this).val();
+        updateApp(grnState);
+    });
+
+    $(VIEWPORT_OPTION_CLASS).click(function () {
+        grnState.viewportSize = $(this).attr("value");
         updateApp(grnState);
     });
 
