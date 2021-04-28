@@ -39,6 +39,19 @@ export const container = function (grnState) {
         }
     };
 
+    const adjustViewportSize = () => {
+        const pageWidth = $(window).width();
+        if (pageWidth < MEDIUM_PAGE_WIDTH) {
+            grnState.viewportSize = "containerS";
+        } else if (pageWidth > MEDIUM_PAGE_WIDTH && pageWidth < LARGE_PAGE_WIDTH) {
+            grnState.viewportSize = "containerM";
+        } else {
+            grnState.viewportSize = "containerL";
+        }
+
+        updateApp(grnState);
+    };
+
     if (window === window.top) {
         $(window).on("resize", fitContainerToWindow);
     } else {
@@ -48,19 +61,12 @@ export const container = function (grnState) {
             }
 
             fitContainer(event.data);
+            adjustViewportSize();
         });
     }
 
     requestWindowDimensions();
-
-    if (pageWidth < MEDIUM_PAGE_WIDTH) {
-        grnState.viewportSize = "containerS";
-    } else if (pageWidth > MEDIUM_PAGE_WIDTH && pageWidth < LARGE_PAGE_WIDTH) {
-        grnState.viewportSize = "containerM";
-    } else {
-        grnState.viewportSize = "containerL";
-    }
-    updateApp(grnState);
+    adjustViewportSize();
 
     $("#restrict-graph-to-viewport").on("click", function () {
         if ($(".viewport").prop("checked")) {
