@@ -3,7 +3,7 @@ import { updateApp } from "./update-app";
 
 export const container = function (grnState) {
     var container = $(".grnsight-container");
-    var pageWidth = $(window).width();
+    // var pageWidth = $(window).width();
 
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
@@ -28,6 +28,7 @@ export const container = function (grnState) {
             width: $(window).width(),
             height: $(window).height()
         });
+        adjustViewportSize($(window).width())
     };
 
     const requestWindowDimensions = () => {
@@ -39,16 +40,14 @@ export const container = function (grnState) {
         }
     };
 
-    const adjustViewportSize = () => {
-        const pageWidth = $(window).width();
-        if (pageWidth < MEDIUM_PAGE_WIDTH) {
+    const adjustViewportSize = (width) => {
+        if (width < MEDIUM_PAGE_WIDTH) {
             grnState.viewportSize = "containerS";
-        } else if (pageWidth > MEDIUM_PAGE_WIDTH && pageWidth < LARGE_PAGE_WIDTH) {
+        } else if (width > MEDIUM_PAGE_WIDTH && width < LARGE_PAGE_WIDTH) {
             grnState.viewportSize = "containerM";
         } else {
             grnState.viewportSize = "containerL";
         }
-
         updateApp(grnState);
     };
 
@@ -59,14 +58,12 @@ export const container = function (grnState) {
             if (event.origin.indexOf(HOST_SITE) !== 0) {
                 return;
             }
-
             fitContainer(event.data);
-            adjustViewportSize();
+            adjustViewportSize(event.data.width);
         });
     }
 
     requestWindowDimensions();
-    adjustViewportSize();
 
     $("#restrict-graph-to-viewport").on("click", function () {
         if ($(".viewport").prop("checked")) {
