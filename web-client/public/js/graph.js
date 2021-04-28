@@ -359,7 +359,9 @@ export var drawGraph = function (workbook) {
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
-            $(".scale-and-scroll").show();
+            $(document).ready(function () {
+                $(".scale-and-scroll").show();
+            });
             $("input[name=viewport]").removeProp("checked");
             $container.addClass("cursorGrabbing");
             adaptive = true;
@@ -368,7 +370,9 @@ export var drawGraph = function (workbook) {
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             $("input[name=viewport]").prop("checked", "checked");
-            $(".scale-and-scroll").hide();
+            $(document).ready(function () {
+                $(".scale-and-scroll").hide();
+            });
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
