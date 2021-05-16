@@ -36,7 +36,7 @@ html
                       | &nbsp; Open File
                       i  (.xlsx, .sif, .graphml)
                     input(type='file' name='upload' id='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
-                    input(type='hidden' id='service-root' value='#{serviceRoot}')
+                    input(type='hidden' id='service-root' value=`${serviceRoot}`)
                 li(class='startDisabled disabled')
                   a(href='#' id='reload')
                     span(class='glyphicon glyphicon-repeat')

@@ -4,7 +4,7 @@ html
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
     link(rel='stylesheet', href='gene/info.css')
   body
-    input#service-root(type='hidden', value='#{serviceRoot}')
+    input#service-root(type='hidden', value=`${serviceRoot}`)
     // The following code is for the error modal
     #errorModal.modal.fade(tab-index='-1', role='dialog', aria-labelledby='mySmallModalLabel', aria-hidden='true')
       .modal-dialog
@@ -20,10 +20,6 @@ html
           .modal-footer
             input.btn.btn-default(type='button', data-dismiss='modal', value='Close')
     // End error modal
-    #header
-      iframe#iframeHeader(src='https://dondi.github.io/GRNsight/onlyheader.html', scrolling='no')
-    #navBar
-      iframe#iframeMenu(src='https://dondi.github.io/GRNsight/onlysidebar.html', scrolling='no')
     #mainContent
       #pageContent
         #pageHead.row
