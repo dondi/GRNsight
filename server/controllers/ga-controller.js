@@ -1,4 +1,4 @@
-var { google } = require("googleapis");
+var google = require("googleapis");
 var ga = google.analytics("v3");
 
 var moment = require("moment");
@@ -45,7 +45,7 @@ module.exports = function (app) {
             pemFilename: "grnsight.pem",
             origin: "https://dondi.github.io",
             accountId: "ga:91279024",
-            pathRoot: "GRNsight",
+            pathRoot: "GRNsight"
         });
     });
 
@@ -55,7 +55,7 @@ module.exports = function (app) {
             pemFilename: "grnmap.pem",
             origin: "http://kdahlquist.github.io",
             accountId: "ga:97014398",
-            pathRoot: "GRNmap",
+            pathRoot: "GRNmap"
         });
     });
 };
