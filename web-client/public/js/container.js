@@ -23,23 +23,6 @@ export const container = function (grnState) {
         }
     };
 
-    const fitContainerToWindow = () => {
-        fitContainer({
-            width: $(window).width(),
-            height: $(window).height()
-        });
-        adjustViewportSize($(window).width())
-    };
-
-    const requestWindowDimensions = () => {
-        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
-        if (window === window.top) {
-            fitContainerToWindow();
-        } else {
-            window.top.postMessage("dimensions", HOST_SITE);
-        }
-    };
-
     const adjustViewportSize = (width) => {
         if (width < MEDIUM_PAGE_WIDTH) {
             grnState.viewportSize = "containerS";
@@ -49,6 +32,23 @@ export const container = function (grnState) {
             grnState.viewportSize = "containerL";
         }
         updateApp(grnState);
+    };
+
+    const fitContainerToWindow = () => {
+        fitContainer({
+            width: $(window).width(),
+            height: $(window).height()
+        });
+        adjustViewportSize($(window).width());
+    };
+
+    const requestWindowDimensions = () => {
+        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
+        if (window === window.top) {
+            fitContainerToWindow();
+        } else {
+            window.top.postMessage("dimensions", HOST_SITE);
+        }
     };
 
     if (window === window.top) {
