@@ -9,6 +9,6 @@ module.exports = function (app) {
     });
 
     app.get("/info", function (req, res) {
-        res.render("info", {title: "Test", serviceRoot: app.get("serviceRoot")});
+        res.render("info", {title: "Info", serviceRoot: app.get("serviceRoot")});
     });
 };
