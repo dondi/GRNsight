@@ -1,3 +1,5 @@
+export const HOST_SITE = "https://dondi.github.io";
+
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
@@ -156,6 +158,7 @@ export const ZOOM_SLIDER                                = "#zoomSlider";
 export const ZOOM_INPUT                                 = "#zoomInput";
 export const ZOOM_PERCENT                               = "#zoomPercent";
 
+export const VIEWPORT_INIT                              = "containerInit";
 export const VIEWPORT_FIT                               = "containerFit";
 export const VIEWPORT_S                               = "containerS";
 export const VIEWPORT_M                               = "containerM";

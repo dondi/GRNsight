@@ -5,6 +5,7 @@ import * as jsPDF from "jspdf";
 import canvg from "canvg";
 
 import {
+    HOST_SITE,
     FORCE_GRAPH,
     GRID_LAYOUT,
     SET_NORMALIZATION_SIDEBAR,
@@ -62,6 +63,8 @@ import {
     SPECIES_BUTTON_MOUSE,
     SPECIES_BUTTON_NEMATODE,
     SPECIES_BUTTON_YEAST,
+    VIEWPORT_FIT,
+    VIEWPORT_INIT,
     VIEWPORT_OPTION_CLASS,
     VIEWPORT_OPTION_CLASS_SIDEBAR
 } from "./constants";
@@ -520,4 +523,95 @@ export const setupHandlers = grnState => {
 
     $(ZOOM_DISPLAY_MAXIMUM_SELECTOR).text(ZOOM_DISPLAY_MAXIMUM_VALUE);
     $(ZOOM_DISPLAY_MINIMUM_SELECTOR).text(ZOOM_DISPLAY_MINIMUM_VALUE);
+
+    // Viewport handling.
+    const setupContainer = function () {
+        const MEDIUM_PAGE_WIDTH = 1500;
+        const LARGE_PAGE_WIDTH = 2200;
+
+        const initializeViewportSize = (width) => {
+            if (width < MEDIUM_PAGE_WIDTH) {
+                grnState.viewportSize = "containerS";
+            } else if (width > MEDIUM_PAGE_WIDTH && width < LARGE_PAGE_WIDTH) {
+                grnState.viewportSize = "containerM";
+            } else {
+                grnState.viewportSize = "containerL";
+            }
+        };
+
+        // For viewport-fit, we create a transient `dimensions` property in `grnState`
+        // which `updateApp` will use to determine the latest size.
+        //
+        // For any other size, we blank out the transient `dimensions`.
+        if (window === window.top) {
+            initializeViewportSize($(window).width());
+            $(window).on("resize", () => {
+                if (grnState.viewportSize === VIEWPORT_FIT) {
+                    grnState.dimensions = {
+                        width: $(window).width(),
+                        height: $(window).height(),
+                        top: 0
+                    };
+
+                    updateApp(grnState);
+                } else {
+                    delete grnState.dimensions;
+                }
+            });
+        } else {
+            window.addEventListener("message", event => {
+                if (event.origin.indexOf(HOST_SITE) !== 0) {
+                    return;
+                }
+
+                // Also filter out all but dimensions messages.
+                const { data } = event;
+                if (typeof(data) !== "object" || (
+                    data.width === undefined ||
+                    data.height === undefined ||
+                    data.top === undefined
+                )) {
+                    return;
+                }
+
+                // Live changes only matter if we are doing Fit to Window or initializing.
+                if ([VIEWPORT_FIT, VIEWPORT_INIT].includes(grnState.viewportSize)) {
+                    if (grnState.viewportSize === VIEWPORT_INIT) {
+                        initializeViewportSize(data.width);
+                    }
+
+                    if (grnState.viewportSize === VIEWPORT_FIT) {
+                        grnState.dimensions = data;
+                    }
+
+                    updateApp(grnState);
+                } else {
+                    delete grnState.dimensions;
+                }
+            });
+        }
+
+        $("#restrict-graph-to-viewport").on("click", function () {
+            if ($(".viewport").prop("checked")) {
+                $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
+                $(".viewport").prop("checked", false);
+                $(".viewport").trigger("change");
+            } else {
+                $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
+                $(".viewport").prop("checked", true).trigger("change");
+            }
+        });
+
+        $("#expressionDB").on("click", function () {
+            if (!$("#expressionDB span").hasClass("glyphicon-ok")) {
+                $("#expressionDB span").addClass("glyphicon-ok");
+                $("#expressionDB").trigger("change");
+            } else {
+                $("#expressionDB span").removeClass("glyphicon-ok");
+                $("#expressionDB").trigger("change");
+            }
+        });
+    };
+
+    setupContainer();
 };
