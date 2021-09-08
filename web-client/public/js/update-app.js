@@ -5,6 +5,7 @@ import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
 import {
+  HOST_SITE,
   FORCE_GRAPH,
   GRID_LAYOUT,
   GREY_EDGES_DASHED_MENU,
@@ -102,6 +103,7 @@ import {
   VIEWPORT_SIZE_M_SIDEBAR,
   VIEWPORT_SIZE_L_SIDEBAR,
   VIEWPORT_SIZE_FIT_SIDEBAR,
+  VIEWPORT_INIT,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -286,22 +288,30 @@ const updateViewportSize = (currentValue) => {
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
     const HEIGHT_OFFSET = 53;
-    const HOST_SITE = "https://dondi.github.io";
+
     let container = $(".grnsight-container");
 
     // from jquery
     const fitContainer = dimensions => {
-        if (container.hasClass(VIEWPORT_FIT)) {
+        if (!dimensions) {
+            return; // First call; the next one should have dimensions filled in.
+        }
+
+        const fitWidth = dimensions.width - WIDTH_OFFSET;
+        const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
+        if (fitWidth !== container.width() || fitHeight !== container.height()) {
             container.css({
-                width: dimensions.width - WIDTH_OFFSET,
-                height: dimensions.height - HEIGHT_OFFSET
+                width: fitWidth,
+                height: fitHeight
             });
         }
     };
+
     const fitContainerToWindow = () => {
         fitContainer({
             width: $(window).width(),
-            height: $(window).height()
+            height: $(window).height(),
+            top: 0
         });
     };
 
@@ -332,7 +342,11 @@ const updateViewportSize = (currentValue) => {
     } else if (currentValue === VIEWPORT_L) {
         synchronizeViewportSizeLarge();
     } else if (currentValue === VIEWPORT_FIT) {
+        fitContainer(grnState.dimensions);
         synchronizeViewportSizeFit();
+    } else if (currentValue === VIEWPORT_INIT) {
+        // First time around: initialize.
+        requestWindowDimensions();
     }
 };
 

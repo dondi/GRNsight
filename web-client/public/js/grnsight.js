@@ -1,4 +1,3 @@
-import { container } from "./container";
 import { displayStatistics } from "./graph-statistics"; // eslint-disable-line no-unused-vars
 import { upload } from "./upload";
 
@@ -9,5 +8,4 @@ import { setupHandlers } from "./setup-handlers";
 setupHandlers(grnState);
 updateApp(grnState);
 
-container(grnState);
 upload();
