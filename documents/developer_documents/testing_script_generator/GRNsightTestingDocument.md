@@ -1,5 +1,5 @@
 ## GRNsight Client Side Testing Overview
-Last Updated: 2021-02-06
+Last Updated: 2021-09-09
 
 | ID | Included in Testing Protocol  | GRNsight Option |  User Action | Result | 
 | ---- |  --------------- | ------ | ------- | ------ | 
@@ -106,8 +106,8 @@ Last Updated: 2021-02-06
 |v4|YES | Dropdown Menu: View -> Restrict Graph to Viewport|Check | The graph should always be contained within the viewport.|
 |v4|YES | Dropdown Menu: View -> Restrict Graph to Viewport|Uncheck | The graph should be allowed to extend past the viewport|
 |v5|NO | Dropdown Menu: View -> Zoom|Enter Zoom Value, then Press Enter | The viewport should should zoom according to the value|
-|vp1|NO | Viewport Menu: D-Pad Control|Click Right Arrow | The graph should shift to the left|
-|vp1|NO | Viewport Menu: D-Pad Control|Click Left Arrow | The graph should shift to the right|
+|vp1|NO | Viewport Menu: D-Pad Control|Click Right Arrow | The graph should shift to the right|
+|vp1|NO | Viewport Menu: D-Pad Control|Click Left Arrow | The graph should shift to the left|
 |vp1|NO | Viewport Menu: D-Pad Control|Click Up Arrow | The graph should shift down|
 |vp1|NO | Viewport Menu: D-Pad Control|Click Down Arrow | The graph should shift up|
 |vp1|NO | Viewport Menu: D-Pad Control|Click Center Button | The graph should move to the center of the bounding box (note that it is not the same thing as the viewport|
