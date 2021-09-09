@@ -5,6 +5,7 @@ import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
 import {
+  HOST_SITE,
   FORCE_GRAPH,
   GRID_LAYOUT,
   GREY_EDGES_DASHED_MENU,
@@ -68,6 +69,8 @@ import {
   BOTTOM_DATASET_SELECTION_SIDEBAR,
   BOTTOM_DATASET_SELECTION_MENU,
   LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+  LOG_FOLD_CHANGE_MAX_VALUE_HEADER,
   MAX_NUM_CHARACTERS_DROPDOWN,
   ENDS_IN_EXPRESSION_REGEXP,
   ZOOM_CONTROL,
@@ -80,30 +83,44 @@ import {
   EDGE_WEIGHT_SIDEBAR,
   EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
   SPECIES_DISPLAY,
+  EXPRESSION_DB_LOADER,
+  EXPRESSION_DB_LOADER_TEXT,
   SPECIES_BUTTON_CRESS,
   SPECIES_BUTTON_FLY,
   SPECIES_BUTTON_HUMAN,
   SPECIES_BUTTON_MOUSE,
   SPECIES_BUTTON_NEMATODE,
-  SPECIES_BUTTON_YEAST
-
+  SPECIES_BUTTON_YEAST,
+  VIEWPORT_FIT,
+  VIEWPORT_S,
+  VIEWPORT_M,
+  VIEWPORT_L,
+  VIEWPORT_SIZE_S_DROPDOWN,
+  VIEWPORT_SIZE_M_DROPDOWN,
+  VIEWPORT_SIZE_L_DROPDOWN,
+  VIEWPORT_SIZE_FIT_DROPDOWN,
+  VIEWPORT_SIZE_S_SIDEBAR,
+  VIEWPORT_SIZE_M_SIDEBAR,
+  VIEWPORT_SIZE_L_SIDEBAR,
+  VIEWPORT_SIZE_FIT_SIDEBAR,
+  VIEWPORT_INIT,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
-    if (uploadState && uploadState.currentNetwork) {
-        drawGraph(uploadState.currentNetwork);
+    if (uploadState && uploadState.currentWorkbook) {
+        drawGraph(uploadState.currentWorkbook);
     }
 };
 
-const displayNetwork = (network, name) => {
-    uploadState.currentNetwork = network;
-    // console.log("Network: ", network); // Display the network in the console
-    $("#graph-metadata").html(network.genes.length + " nodes<br>" + network.links.length + " edges");
+const displayworkbook = (workbook, name) => {
+    uploadState.currentWorkbook = workbook;
+    // console.log("workbook: ", workbook); // Display the workbook in the console
+    $("#graph-metadata").html(workbook.genes.length + " nodes<br>" + workbook.links.length + " edges");
 
-    if (network.warnings.length > 0) {
-        displayWarnings(network.warnings);
+    if (workbook.warnings.length > 0) {
+        displayWarnings(workbook.warnings);
     }
 
     $("#fileName").text(name); // Set the name of the file to display in the top bar
@@ -206,6 +223,190 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
 };
 
+// Viewport
+const synchronizeViewportSizeSmall = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeMedium = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_M_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeLarge = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_L_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeFit = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const updateViewportSize = (currentValue) => {
+    // These values are bound to the layout dimensions of the GRNsight website.
+    const WIDTH_OFFSET = 250;
+    const HEIGHT_OFFSET = 53;
+
+    let container = $(".grnsight-container");
+
+    // from jquery
+    const fitContainer = dimensions => {
+        if (!dimensions) {
+            return; // First call; the next one should have dimensions filled in.
+        }
+
+        const fitWidth = dimensions.width - WIDTH_OFFSET;
+        const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
+        if (fitWidth !== container.width() || fitHeight !== container.height()) {
+            container.css({
+                width: fitWidth,
+                height: fitHeight
+            });
+        }
+    };
+
+    const fitContainerToWindow = () => {
+        fitContainer({
+            width: $(window).width(),
+            height: $(window).height(),
+            top: 0
+        });
+    };
+
+    const requestWindowDimensions = () => {
+        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
+        if (window === window.top) {
+            fitContainerToWindow();
+        } else {
+            window.top.postMessage("dimensions", HOST_SITE);
+        }
+    };
+
+    let grnsightContainerClass = `grnsight-container ${currentValue}`;
+    if (!container.hasClass(currentValue)) {
+        container.attr("class", grnsightContainerClass);
+        if (currentValue === VIEWPORT_FIT) {
+            requestWindowDimensions();
+        } else {
+            container.css({ width: "", height: "" });
+        }
+    }
+
+    // Added synchronization
+    if (currentValue === VIEWPORT_S) {
+        synchronizeViewportSizeSmall();
+    } else if (currentValue === VIEWPORT_M) {
+        synchronizeViewportSizeMedium();
+    } else if (currentValue === VIEWPORT_L) {
+        synchronizeViewportSizeLarge();
+    } else if (currentValue === VIEWPORT_FIT) {
+        fitContainer(grnState.dimensions);
+        synchronizeViewportSizeFit();
+    } else if (currentValue === VIEWPORT_INIT) {
+        // First time around: initialize.
+        requestWindowDimensions();
+    }
+};
+
+// Expression DB Access Functions
+const buildTimepointsString = function (selection) {
+    let timepoints = "";
+    selection.timepoints.forEach(x => timepoints += (x + ","));
+    return timepoints.substring(0, timepoints.length - 1);
+};
+const buildGeneQuery = function () {
+    let genes = "";
+    grnState.workbook.genes.forEach(x => genes += (x.name + ","));
+    return genes.substring(0, genes.length - 1);
+};
+
+const buildURL = function (selection) {
+    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildGeneQuery()}`;
+    return selection.timepoints ?
+    `${baseQuery}&timepoints=${buildTimepointsString(selection)}` :
+    baseQuery;
+};
+
+const startLoadingIcon = function () {
+    $(EXPRESSION_DB_LOADER).css("display", "block");
+    $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
+};
+
+const responseData = (formData, queryURL) => {
+    return new Promise(function (resolve) {
+        const uploadRoute = queryURL;
+        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        startLoadingIcon();
+        (formData ?
+            $.ajax({
+                url: fullUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "GET",
+                crossDomain: true
+            }) :
+            $.getJSON(fullUrl)
+            ).done((expressionData) => {
+                resolve(expressionData);
+            }).error(console.log("Error in accessing expression database. Result may just be loading."));
+    });
+};
+
+const stopLoadingIcon = function () {
+    $(EXPRESSION_DB_LOADER).css("display", "none");
+    $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
+};
+
+const enableNodeColoringUI = function () {
+    grnState.nodeColoring.nodeColoringEnabled = true;
+    $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
+    $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
+};
+
 // Sliders Functions
 const updateSliderState = slidersLocked => {
     const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
@@ -244,7 +445,7 @@ export const modifyLinkDistanceParameter = (value) => {
 };
 
 const updateChargeSliderValues = () => {
-    if (grnState.network !== null) {
+    if (grnState.workbook !== null) {
         modifyChargeParameter(grnState.chargeSlider.currentVal);
     }
     $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
@@ -256,7 +457,7 @@ const updateChargeSliderValues = () => {
 };
 
 const updateLinkDistanceSliderValues = () => {
-    if (grnState.network !== null) {
+    if (grnState.workbook !== null) {
         modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);
     }
     $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
@@ -320,11 +521,9 @@ const shortenExpressionSheetName = (name) => {
 const hasExpressionData = (sheets) => {
     for (var property in sheets) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            grnState.nodeColoring.showMenu = true;
             return true;
         }
     }
-    grnState.nodeColoring.showMenu = false;
     return false;
 };
 
@@ -366,6 +565,8 @@ export const identifySpeciesMenu = (data) => {
             grnState.genePageData.species = nameTax[n].spec;
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
             grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            grnState.genePageData.ensembl = nameTax[n].ensembl;
+            grnState.genePageData.mine = nameTax[n].mine;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             updateSpeciesMenu();
             return grnState.genePageData.identified;
@@ -377,16 +578,31 @@ export const identifySpeciesMenu = (data) => {
 const identifySpeciesOrTaxon = (data) => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        if (n === data.toString()) { // <-- change if to work
+        if (n === data) { // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
-            grnState.genePageData.taxonJaspar = nameTax[n].jaspar;
-            grnState.genePageData.taxonUniprot = nameTax[n].uniprot;
+            grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
+            grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
             grnState.genePageData.identified = true;
-            grnState.genePageData.readFromNetwork = true;
+            grnState.genePageData.ensembl = nameTax[n].ensembl;
+            grnState.genePageData.mine = nameTax[n].mine;
             $(SPECIES_DISPLAY).val(grnState.genePageData.species);
             updateSpeciesMenu();
             return grnState.genePageData.identified;
+        }
+        for (var t in Object.values(nameTax[n])) {
+            if (Object.values(nameTax[n])[t] === data) {
+                grnState.genePageData.commonName = n;
+                grnState.genePageData.species = nameTax[n].spec;
+                grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
+                grnState.genePageData.taxonUniprot = nameTax[n].uniprot.toString();
+                grnState.genePageData.identified = true;
+                grnState.genePageData.ensembl = nameTax[n].ensembl;
+                grnState.genePageData.mine = nameTax[n].mine;
+                $(SPECIES_DISPLAY).val(grnState.genePageData.species);
+                updateSpeciesMenu();
+                return grnState.genePageData.identified;
+            }
         }
     }
     return false;
@@ -399,7 +615,11 @@ const clearDropdownMenus = () => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
 };
 
-const resetDatasetDropdownMenus = (network) => {
+const expressionDBDatasets = ["Barreto_2012_wt", "Dahlquist_2018_dcin5",
+    "Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
+    "Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
+
+const resetDatasetDropdownMenus = (workbook) => {
     clearDropdownMenus();
     $(".dataset-option").remove(); // clear all menu dataset options
 
@@ -414,16 +634,21 @@ const resetDatasetDropdownMenus = (network) => {
     };
 
     grnState.nodeColoring.nodeColoringOptions = [];
-    for (var property in network.expression) {
+    for (var property in workbook.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             grnState.nodeColoring.nodeColoringOptions.push({value: property});
         }
     }
 
+    // Add expression database options
+    expressionDBDatasets.forEach(option => grnState.nodeColoring.nodeColoringOptions.push({value: [option]}));
+
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
 
     $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
+
+    // $(DATA_SET_SELECT).append($("<option>").attr("value", "Dahlquist").text("Dahlquist"));
 
     grnState.nodeColoring.nodeColoringOptions.forEach(function (option) {
         var shortenedSheetName = shortenExpressionSheetName(option.value);
@@ -463,7 +688,6 @@ const updateTopDataset = () => {
     removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
     $(`${TOP_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.topDataset}'] a span`).addClass("glyphicon-ok");
     updaters.renderNodeColoring();
-    // TO DO: If bottomDataSameAsTop make bottom selction "Same As Top"
 };
 
 const updateBottomDataset = () => {
@@ -479,6 +703,7 @@ const updateBottomDataset = () => {
             .addClass("glyphicon-ok");
         /* eslint-enable max-len */
     }
+
     updaters.renderNodeColoring();
 };
 
@@ -487,21 +712,21 @@ if (!grnState.genePageData.identified) {
 }
 
 export const updateApp = grnState => {
-    if (grnState.newNetwork) {
-        grnState.normalizationMax = max(grnState.network.positiveWeights.concat(grnState.network.negativeWeights));
-        displayNetwork(grnState.network, grnState.name);
+    if (grnState.newWorkbook) {
+        grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
+        displayworkbook(grnState.workbook, grnState.name);
         expandLayoutSidebar();
         clearDropdownMenus();
-        if (hasExpressionData(grnState.network.expression)) {
-            resetDatasetDropdownMenus(grnState.network);
-
-            // check if the species has been identified yet, if not try to identify it
-            // also checks if the areas have been populated at all
-            if (grnState.network.meta.species !== undefined) {
-                identifySpeciesOrTaxon(grnState.network.meta.species);
-            } else if (grnState.network.meta.taxon_id !== undefined) {
-                identifySpeciesOrTaxon(grnState.network.meta.taxon_id);
-            }
+        // check if the species has been identified yet, if not try to identify it
+        // also checks if the areas have been populated at all
+        var workbookSpecies = grnState.workbook.meta.species;
+        var workbookTaxon = grnState.workbook.meta.taxon_id;
+        if (identifySpeciesOrTaxon(workbookSpecies) || identifySpeciesOrTaxon(workbookTaxon)) {
+            identifySpeciesOrTaxon(workbookSpecies);
+            identifySpeciesOrTaxon(workbookTaxon);
+        }
+        if (hasExpressionData(grnState.workbook.expression)) {
+            resetDatasetDropdownMenus(grnState.workbook);
 
             grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
@@ -523,9 +748,9 @@ export const updateApp = grnState => {
         }
         refreshApp();
 
-        // Rare exception to the MVC cycle: right now we have no way of knowing whether the network has changed
-        // (which is what necessitates displayNetwork), so we mark the model here.
-        grnState.newNetwork = false;
+        // Rare exception to the MVC cycle: right now we have no way of knowing whether the workbook has changed
+        // (which is what necessitates displayworkbook), so we mark the model here.
+        grnState.newWorkbook = false;
     }
 
     synchronizeNormalizationValues(grnState.normalizationMax);
@@ -564,26 +789,135 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Node Coloring
-    if (grnState.network !== null && grnState.nodeColoring.nodeColoringEnabled
-      && hasExpressionData(grnState.network.expression)) {
+// Viewport
+    updateViewportSize(grnState.viewportSize);
+
+    // Node Coloring
+    if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
+    && hasExpressionData(grnState.workbook.expression)) {
+        grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        updaters.renderNodeColoring();
-    } else {
+        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
+        grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
+            if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+
+                responseData("", queryURLTop).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+                    enableNodeColoringUI();
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop ||
+                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
+        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+        !grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            if (!grnState.nodeColoring.bottomDataSameAsTop) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("", queryURLBottom).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
+                    enableNodeColoringUI();
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
+        } else {
+            updaters.renderNodeColoring();
+        }
+    } else if (grnState.workbook !== null && !hasExpressionData(grnState.workbook.expression)
+    && grnState.nodeColoring.nodeColoringEnabled) {
+        if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
+        (!grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
+            updaters.removeNodeColoring();
+            resetDatasetDropdownMenus(grnState.workbook);
+        }
+        grnState.nodeColoring.showMenu = true;
+        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
+        grnState.nodeColoring.topDataset : "Barreto_2012_wt";
+        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
+        grnState.nodeColoring.bottomDataset : "Barreto_2012_wt";
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
+        if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+            if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+
+                responseData("", queryURLTop).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+                    enableNodeColoringUI();
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
+            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("", queryURLBottom).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
+                    enableNodeColoringUI();
+
+                    stopLoadingIcon();
+
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else {
+                enableNodeColoringUI();
+                // There is as problem here! When a dataset from the database is used to do node coloring,
+                // but then the layout of the graph is changed (force graph to grid layout, for instance),
+                // node coloring goes away, seemingly inexplicably.
+                // !!!!! TEMPORARY WORKAROUND:
+                //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
+                //   has to take place, done here via `setTimeout`.
+                //
+                //   The delay is built-in to the cases where a query has to happen first.
+                //
+                //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
+                //   actually perform the node coloring.
+                //
+                //   Investigate why a timeout is required in order for node coloring to take place
+                //   successfully in this case.
+                setTimeout(() => updaters.renderNodeColoring(), 250);
+
+            }
+        }
+    } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
+        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
-        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
-        updaters.removeNodeColoring();
     }
 
-    if (grnState.network !== null &&  grnState.network.sheetType === "weighted") {
+    if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
         showEdgeWeightOptions();
-    } else if (grnState.network !== null &&  grnState.network.sheetType === "unweighted") {
+    } else if (grnState.workbook !== null &&  grnState.workbook.sheetType === "unweighted") {
         hideEdgeWeightOptions();
     } else {
         hideEdgeWeightOptions();
@@ -605,11 +939,13 @@ export const updateApp = grnState => {
         $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").addClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_BOTTOM_MENU).prop("checked", "checked");
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", "checked");
+
         updaters.renderNodeColoring();
     } else {
         $(AVG_REPLICATE_VALS_BOTTOM_MENU + " span").removeClass("glyphicon-ok");
         $(AVG_REPLICATE_VALS_BOTTOM_MENU).removeProp("checked");
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).removeProp("checked");
+
         updaters.renderNodeColoring();
     }
 
@@ -635,13 +971,13 @@ export const updateApp = grnState => {
     updateChargeSliderValues();
     updateLinkDistanceSliderValues();
 
-    $(ZOOM_CONTROL).prop({ disabled: !grnState.network });
-    if (!grnState.network) {
-        // Set initial values when there is no network: this is necessarily explicit because Firefox
+    $(ZOOM_CONTROL).prop({ disabled: !grnState.workbook });
+    if (!grnState.workbook) {
+        // Set initial values when there is no workbook: this is necessarily explicit because Firefox
         // preserves these values even upon a browser reload.
         $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
         $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
-
     refreshApp();
+
 };

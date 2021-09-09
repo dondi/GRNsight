@@ -61,6 +61,11 @@ html
                       a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
                     li(class='startDisabled disabled weighted export')
                       a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
+                    li(class='divider')
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedExcel') To Unweighted Excel
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedExcel') To Weighted Excel
 
                 li(class='dropdown-submenu')
                   a(href='#')
@@ -148,7 +153,7 @@ html
                   a(href='#' class='nodeOptions with-input')
                     span(class='glyphicon invisible')
                     | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
-                    input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
+                    input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')                  
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -197,19 +202,19 @@ html
               ul(class='dropdown-menu' role='menu')
                 span(class='menu-subheader') Viewport Size
                 li
-                  a(href='#' id='viewport-size-s' class='viewportOption active')
+                  a(href='#' id='viewport-size-s' class='viewportOption active' value='containerS')
                     span(class='glyphicon')
                     | &nbsp; Small (1104 x 648 pixels)
                 li
-                  a(href='#' id='viewport-size-m' class='viewportOption')
+                  a(href='#' id='viewport-size-m' class='viewportOption' value='containerM')
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Medium (1414 x 840 pixels)
                 li
-                  a(href='#' id='viewport-size-l' class='viewportOption')
+                  a(href='#' id='viewport-size-l' class='viewportOption' value='containerL')
                     span(class='glyphicon')
                     | &nbsp; Large (1920 x 1080 pixels)
                 li
-                  a(href='#' id='viewport-size-fit' class='viewportOption')
+                  a(href='#' id='viewport-size-fit' class='viewportOption' value='containerFit')
                     span(class='glyphicon')
                     | &nbsp; Fit To Window
                 li(class='divider')
@@ -361,6 +366,7 @@ html
                 input(id='nodeColoringToggleSidebar' class='nodeColoringToggle' type='checkbox' checked)
                 label(for='nodeColoringToggleSidebar' class='sideLabel') Enable Node Coloring
               div(class="nodeColoringSidebarBody")
+                p(class='sideHeader info' data-toggle='tooltip') Select from user-uploaded expression data, or use data from our Expression Database
                 p(class='sideHeader info' data-toggle='tooltip') Top Dataset
                 select(id="dataset-top")
                 form
@@ -376,6 +382,8 @@ html
                   input(type='number' min='1' max='100' step='1' id='log-fold-change-max-value-sidebar' class='logFoldChangeMaxValue' aria-describedby='basic-addon1')
                   button(type="button" class='btn btn-default s' id="log-fold-change-button") Set
                 div(class="node-coloring-legend")
+                div(class="expression-db-loader-text") Expression Database is Loading
+                div(class="expression-db-loader")
 
         div(class='edge-weight-sidebar disabled panel panel-default disabled')
           p(class='panel-title sidebarPanelHeader disabledOnLaunch')
@@ -441,8 +449,7 @@ html
             a(id='speciesHeaderLink' data-toggle='collapse' data-target='#speciesSidebarPanel') Species
           div(id="speciesSidebarPanel" class="panel-collapse collapse")
             div(class="panel-body")
-              div(class="currentSpecies") Current Species
-                //- p(class="speciesIdentifiedDisplay" id="speciesName" href="#") Saccharomyces cerevisiae
+              div(class="sideHeader currentSpecies") Current Species
                 select(class="speciesIdentifiedDropdown" id='speciesDropdown' href='#')
                   option(href='#' id='cressOption' value='Arabidopsis_thaliana') Arabidopsis thaliana
                   option(href='#' id='nematodeOption' value='Caenorhabditis_elegans') Caenorhabditis elegans
@@ -479,7 +486,7 @@ html
             p(id='error')
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
-            input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File')
+            input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
 
     div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog')
@@ -499,6 +506,19 @@ html
                   div(class='panel-body' id='list-frame')
                     p(id='warningsList')
 
+          div(class='modal-footer')
+            input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
+            //- input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+
+    div(id='warningsModalSpecies' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+      div(class='modal-dialog')
+        div(class='modal-content')
+          div(class='modal-header')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+            h4(class='modal-title') Warning
+          div(class='modal-body' overflow='scroll')
+            p(id='warningIntroSpecies')
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             //- input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")

@@ -3,7 +3,7 @@
 //      controller code installed by setupHandlers can access them.
 
 export const uploadState = {
-    currentNetwork: null,
+    currentWorkbook: null,
 };
 
 export const upload = function () {
@@ -40,8 +40,8 @@ export const upload = function () {
         }
     });
 
-    var flattenNetwork = function (network, sheetType) {
-        var result = $.extend(true, { }, network, { sheetType: sheetType });
+    var flattenWorkbook = function (workbook, sheetType) {
+        var result = $.extend(true, { }, workbook, { sheetType: sheetType });
         result.links.forEach(function (link) {
             link.source = link.source.index;
             link.target = link.target.index;
@@ -68,10 +68,10 @@ export const upload = function () {
         return function () {
             // Deleted event parameter
             if (!$(this).parent().hasClass("disabled")) {
-                var networkToExport = flattenNetwork(uploadState.currentNetwork, sheetType);
-                var networkFilename = filenameWithExtension(sheetType !== uploadState.currentNetwork.sheetType ?
+                var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
+                var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
                     sheetType : "", extension);
-                networkToExport.filename = networkFilename;
+                workbookToExport.filename = workbookFilename;
 
                 var exportForm = $("<form></form>").attr({
                     method: "POST",
@@ -79,11 +79,11 @@ export const upload = function () {
                 }).append($("<input></input>").attr({
                     type: "hidden",
                     name: "filename",
-                    value: networkFilename
+                    value: workbookFilename
                 })).append($("<input></input>").attr({
                     type: "hidden",
-                    name: "network",
-                    value: JSON.stringify(networkToExport)
+                    name: "workbook",
+                    value: JSON.stringify(workbookToExport)
                 }));
                 $("body").append(exportForm);
                 exportForm.submit();
@@ -97,4 +97,7 @@ export const upload = function () {
     $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
     $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
     $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
+    $("#exportAsUnweightedExcel").click(performExport("export-to-excel", "xlsx", "unweighted"));
+    $("#exportAsWeightedExcel").click(performExport("export-to-excel", "xlsx", "weighted"));
+
 };

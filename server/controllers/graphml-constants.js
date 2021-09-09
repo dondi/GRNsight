@@ -1,19 +1,3 @@
-var graphmlWarnings = {
-    EDGES_WITHOUT_WEIGHTS: {
-        warningCode: "EDGES_WITHOUT_WEIGHTS",
-        errorDescription: "GRNsight has detected that one or more edges in your network are missing numerical" +
-        " weight values. Because the algorithm GRNsight uses for determining the arrowhead type and the" +
-        " color and thickness of the edges requires numerical weight values, your graph will" +
-        " display as an unweighted graph with black edges and pointed arrowheads. If you want to" +
-        " display the network as a weighted graph, please modify your input file to include weight" +
-        " values for all edges."
-    },
-    EDGE_DEFAULT_NOT_DIRECTED: {
-        warningCode: "EDGE_DEFAULT_NOT_DIRECTED",
-        errorDescription: "GRNsight interprets the graph as directed unconditionally."
-    },
-};
-
 var graphmlErrors = {
     GRAPHML_GENERAL_SYNTAX_ERROR: function (error) {
         return {
@@ -166,7 +150,6 @@ var pairError = function (error) {
 
 module.exports = {
     graphmlErrors: graphmlErrors,
-    graphmlWarnings: graphmlWarnings,
     errorMessageToGraphmlError: errorMessageToGraphmlError,
     pairError: pairError,
 };

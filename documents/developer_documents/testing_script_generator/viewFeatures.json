@@ -1,0 +1,82 @@
+[
+    {
+        "id":"v1",
+        "title": "Sidebar Menu: Restrict Graph to Viewport Checkbox",
+        "text": "The graph bounding box should",
+        "options": {
+            "Check": "always be contained within the viewport.",
+            "Uncheck": "be allowed to extend past the viewport"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"v2",
+        "title": "Sidebar Menu: Viewport Size",
+        "text": "",
+        "options": {
+            "Keep as Detected": "Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.",
+            "Select \"Small\"": "The viewport size should be set to small",
+            "Select \"Medium\"": "The viewport size should be set to medium",
+            "Select \"Large\"": "The viewport size should be set to large",
+            "Select \"Fit to Window\"": "The viewport size should automatically be set to the size of the browser window"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"v3",
+        "title": "Dropdown Menu: View -> Viewport Size",
+        "text": "",
+        "options": {
+            "Keep as Detected": "Upon loading or reloading the GRNsight webpage, the viewport size should be automatically detected and set to small, medium, or large, based on the size of the browser window.",
+            "Check \"Small\"": "The viewport size should be set to small",
+            "Check \"Medium\"": "The viewport size should be set to medium",
+            "Check \"Large\"": "The viewport size should be set to large",
+            "Check \"Fit to Window\"": "The viewport size should automatically be set to the size of the browser window"
+        },
+        "included": true,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"v4",
+        "title": "Dropdown Menu: View -> Restrict Graph to Viewport",
+        "text": "The graph should",
+        "options": {
+            "Check": "always be contained within the viewport.",
+            "Uncheck": "be allowed to extend past the viewport"
+        },
+        "included": true,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"v5",
+        "title": "Dropdown Menu: View -> Zoom",
+        "text": "The viewport should",
+        "options": {
+            "Enter Zoom Value, then Press Enter": "should zoom according to the value"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    }
+]

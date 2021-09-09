@@ -1,0 +1,30 @@
+[
+    {
+        "id":"s1",
+        "title": "Dropdown Menu: Species -> Current Species",
+        "text": "",
+        "options": {
+            "Select a species": "Opening gene information pages will use information of the selected species."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"s2",
+        "title": "Sidebar Menu: Species -> Current Species",
+        "text": "",
+        "options": {
+            "Select a species from a dropdown list": "Opening gene information pages will use information of the selected species."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": true,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    }
+]

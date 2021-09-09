@@ -1,0 +1,50 @@
+[
+    {
+        "id":"vp1",
+        "title": "Viewport Menu: D-Pad Control",
+        "text": "The graph should",
+        "options": {
+            "Click Right Arrow": "shift to the right",
+            "Click Left Arrow": "shift to the left",
+            "Click Up Arrow": "shift down",
+            "Click Down Arrow": "shift up",
+            "Click Center Button": "move to the center of the bounding box (note that it is not the same thing as the viewport"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"vp2",
+        "title": "Viewport Menu: Zoom Slider",
+        "text": "The graph should",
+        "options": {
+            "Increase Zoom Level": "zoom in (get larger)",
+            "Decrease Zoom Level": "zoom out (get smaller)"
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    },
+    {
+        "id":"vp3",
+        "title": "Viewport Menu: Node",
+        "text": "",
+        "options": {
+            "No Click": "",
+            "Right Click": "Gene information page should appear in a new tab within the browser."
+        },
+        "included": false,
+        "availability": {
+            "NoGraphLoaded": false,
+            "WeightedGraphLoaded": true,
+            "UnWeightedGraphLoaded": true
+        }
+    }
+]

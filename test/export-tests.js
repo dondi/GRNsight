@@ -1,11 +1,12 @@
 var expect = require("chai").expect;
 var extend = require("jquery-extend");
 var xlsx = require("node-xlsx");
+var test = require("./test");
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
 
-var unweightedTestNetwork = {
+var unweightedTestWorkbook = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -22,7 +23,7 @@ var unweightedTestNetwork = {
     sheetType: "unweighted"
 };
 
-var weightedTestNetwork = {
+var weightedTestWorkbook = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -39,7 +40,7 @@ var weightedTestNetwork = {
     sheetType: "weighted"
 };
 
-var unweightedTestNetworkWithCycle = {
+var unweightedTestWorkbookWithCycle = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -59,7 +60,7 @@ var unweightedTestNetworkWithCycle = {
     sheetType: "unweighted"
 };
 
-var weightedTestNetworkWithCycle = {
+var weightedTestWorkbookWithCycle = {
     genes: [
         { name: "A" },
         { name: "B" },
@@ -80,8 +81,8 @@ var weightedTestNetworkWithCycle = {
 };
 
 describe("Export to SIF", function () {
-    it("should export unweighted networks to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(unweightedTestNetwork).split("\n");
+    it("should export unweighted workbooks to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(unweightedTestWorkbook).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "", "" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "pd", "C" ]);
@@ -89,8 +90,8 @@ describe("Export to SIF", function () {
         expect(lines[4].split("\t")).to.deep.equal([ "D", "", "" ]);
     });
 
-    it("should export weighted networks to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(weightedTestNetwork).split("\n");
+    it("should export weighted workbooks to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(weightedTestWorkbook).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "", "" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
@@ -98,8 +99,8 @@ describe("Export to SIF", function () {
         expect(lines[4].split("\t")).to.deep.equal([ "D", "", "" ]);
     });
 
-    it("should export unweighted networks with cycles to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(unweightedTestNetworkWithCycle).split("\n");
+    it("should export unweighted workbooks with cycles to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(unweightedTestWorkbookWithCycle).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "pd", "A" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "pd", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "pd", "C" ]);
@@ -108,8 +109,8 @@ describe("Export to SIF", function () {
         expect(lines[5].split("\t")).to.deep.equal([ "E", "", "" ]);
     });
 
-    it("should export weighted networks with cycles to SIF correctly", function () {
-        var lines = exportController.grnsightToSif(weightedTestNetworkWithCycle).split("\n");
+    it("should export weighted workbooks with cycles to SIF correctly", function () {
+        var lines = exportController.grnsightToSif(weightedTestWorkbookWithCycle).split("\n");
         expect(lines[0].split("\t")).to.deep.equal([ "A", "0.875", "A" ]);
         expect(lines[1].split("\t")).to.deep.equal([ "B", "-0.75", "A" ]);
         expect(lines[2].split("\t")).to.deep.equal([ "B", "0.25", "C" ]);
@@ -127,8 +128,8 @@ var EXPORT_COMMENT = "<!-- Exported by GRNsight v" + constants.VERSION + "  " +
 // We'll allow single quotes here because graphMl has a lot of double quotes in it
 // and it's easier to not escape them all.
 describe("Export to GraphML", function () {
-    it("should export unweighted networks to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(unweightedTestNetwork).split("\n").map(function (line) {
+    it("should export unweighted workbooks to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(unweightedTestWorkbook).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -176,8 +177,8 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export weighted networks to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(weightedTestNetwork).split("\n").map(function (line) {
+    it("should export weighted workbooks to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(weightedTestWorkbook).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -229,8 +230,9 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export unweighted networks with cycles to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(unweightedTestNetworkWithCycle).split("\n").map(function (line) {
+    it("should export unweighted workbooks with cycles to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(unweightedTestWorkbookWithCycle).split("\n")
+        .map(function (line) {
             return line.trim();
         });
 
@@ -289,8 +291,8 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export weighted networks with cycles to GraphML correctly", function () {
-        var lines = exportController.grnsightToGraphMl(weightedTestNetworkWithCycle).split("\n").map(function (line) {
+    it("should export weighted workbooks with cycles to GraphML correctly", function () {
+        var lines = exportController.grnsightToGraphMl(weightedTestWorkbookWithCycle).split("\n").map(function (line) {
             return line.trim();
         });
 
@@ -355,12 +357,11 @@ describe("Export to GraphML", function () {
         });
     });
 
-    it("should export networks with a filename as the graph element id", function () {
-        var networkWithFilename = extend(true, unweightedTestNetwork, { filename: "hello.graphml" });
-        var lines = exportController.grnsightToGraphMl(networkWithFilename).split("\n").map(function (line) {
+    it("should export workbooks with a filename as the graph element id", function () {
+        var workbookWithFilename = extend(true, unweightedTestWorkbook, { filename: "hello.graphml" });
+        var lines = exportController.grnsightToGraphMl(workbookWithFilename).split("\n").map(function (line) {
             return line.trim();
         });
-
         var expectedGraphMlLines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
@@ -406,7 +407,7 @@ describe("Export to GraphML", function () {
     });
 });
 
-const inputNetwork = {
+const inputWorkbook = {
     "genes": [
         { "name": "ACE2" },
         { "name": "AFT2" },
@@ -447,41 +448,135 @@ const inputNetwork = {
         }
     ],
 
+    network: {
+        "genes": [
+            { "name": "ACE2" },
+            { "name": "AFT2" },
+            { "name": "CIN5" },
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 0,
+                "value": 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 1,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 2,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            }
+        ],
+    },
+
+    networkWeights: {
+        "genes": [
+            { "name": "ACE2" },
+            { "name": "AFT2" },
+            { "name": "CIN5" },
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 0,
+                "value": 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 1,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 2,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            }
+        ],
+    },
+
     "meta": {
-        "L_curve": 0,
-        "MaxFunEval": 1000000,
-        "MaxIter": 1000000,
-        "Strain": ["wt", "dcin5"],
-        "TolFun": 0.00001,
-        "TolX": 0.00001,
-        "alpha": 0.001,
-        "estimate_params": 1,
-        "expression_timepoints": [0.4, 0.8, 1.2],
-        "fix_P": 1,
-        "fix_b": 0,
-        "kk_max": 1,
-        "make_graphs": 1,
-        "production_function": "testMM",
-        "simulation_timepoints": [0, 0.1, 0.2],
+        data: {
+            "L_curve": 0,
+            "MaxFunEval": 1000000,
+            "MaxIter": 1000000,
+            "Strain": ["wt", "dcin5"],
+            "TolFun": 0.00001,
+            "TolX": 0.00001,
+            "alpha": 0.001,
+            "estimate_params": 1,
+            "expression_timepoints": [0.4, 0.8, 1.2],
+            "fix_P": 1,
+            "fix_b": 0,
+            "kk_max": 1,
+            "make_graphs": 1,
+            "production_function": "testMM",
+            "simulation_timepoints": [0, 0.1, 0.2],
+            "species": "Saccharomyces cerevisiae",
+            "taxon_id": 559292
+        }
     },
 
     "test": {
         "production_rates": {
-            "ACE2": 0.5,
-            "AFT2": 1,
-            "CIN5": 2
+            data: {
+                "ACE2": 0.5,
+                "AFT2": 1,
+                "CIN5": 2
+            }
         },
 
         "degradation_rates": {
-            "ACE2": 1,
-            "AFT2": 1,
-            "CIN5": 1
+            data: {
+                "ACE2": 1,
+                "AFT2": 1,
+                "CIN5": 1
+            }
         },
 
         "threshold_b": {
-            "ACE2": 0,
-            "AFT2": 0,
-            "CIN5": 0
+            data: {
+                "ACE2": 0,
+                "AFT2": 0,
+                "CIN5": 0
+            }
         }
     },
 
@@ -554,15 +649,15 @@ const inputNetwork = {
 };
 
 describe("Export to spreadsheet", function () {
-    it("should export a network to a spreadsheet object properly", function () {
+    it("should export a workbook to a spreadsheet object properly", function () {
         const expectedSheet = [
             {
                 name: "network",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
-                    ["AFT2", 0, 1, 0],
-                    ["CIN5", 0, 1, 1]
+                    ["AFT2", 0, 1, 1],
+                    ["CIN5", 0, 0, 1]
                 ]
             },
 
@@ -571,8 +666,8 @@ describe("Export to spreadsheet", function () {
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
-                    ["AFT2", 0, 1, 0],
-                    ["CIN5", 0, 1, 1]
+                    ["AFT2", 0, 1, 1],
+                    ["CIN5", 0, 0, 1]
                 ]
             },
 
@@ -595,6 +690,8 @@ describe("Export to spreadsheet", function () {
                     ["make_graphs", 1],
                     ["production_function", "testMM"],
                     ["simulation_timepoints", 0, 0.1, 0.2],
+                    ["species", "Saccharomyces cerevisiae"],
+                    ["taxon_id", 559292]
                 ]
             },
 
@@ -632,7 +729,7 @@ describe("Export to spreadsheet", function () {
                 name: "wt_log2_expression",
                 data:
                 [
-                    [ "id", 0.4, 0.8, 1.2],
+                    ["id", 0.4, 0.8, 1.2],
                     [
                         "ACE2",
                         1,
@@ -680,7 +777,37 @@ describe("Export to spreadsheet", function () {
             }
         ];
 
-        const actualSheet = exportController.grnsightToXlsx(inputNetwork);
+        const actualSheet = exportController.grnsightToXlsx(inputWorkbook);
         expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
+
+    it("should export a workbook exactly as the import",
+        function () {
+            test.importFileSameAsExportFile(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
+            test.importFileSameAsExportFile(
+                "test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx");
+            test.importFileSameAsExportFile(
+                "test-files/additional-sheet-test-files/optimization-parameters-default.xlsx");
+        }
+    );
+
+    it("should import a workbook with minor additional sheet warnings," +
+    " export the workbook, and import the exported workbook properly",
+        function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx");
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx");
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx");
+        }
+    );
+
+    it("should import a workbook with no warnings, export the workbook, and import the exported workbook properly",
+        function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
+        }
+    );
 });

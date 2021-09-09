@@ -12,11 +12,12 @@ var convertResponse = function (app, req, res, converter) {
 var exportResponse = function (app, req, res, converter) {
     helpers.attachCorsHeader(res, app);
     res.header("Content-Disposition", "attachment;filename=\"" + req.body.filename + "\"");
-    return res.status(200).send(converter(JSON.parse(req.body.network)));
+    return res.status(200).send(converter(JSON.parse(req.body.workbook)));
 };
 
 var generalExportError = function (res, error) {
-    return res.json(400, {
+    // Express deprecated res.json(status, obj): Use res.status(status).json(obj)
+    return res.status(400).json({
         message: "Invalid GRNsight format.",
         details: {
             name: error.name,

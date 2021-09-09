@@ -14,7 +14,7 @@ describe("errors-sheet-modifications", function () {
     });
 
     describe("missing-sheet", function () {
-        it("should return missing network error code on input sheet", function () {
+        it("should return missing workbook error code on input sheet", function () {
             test.missingNetworkError("test-files/sheet-modifications/missing-sheet-input.xlsx", 1);
             test.noErrors("test-files/sheet-modifications/missing-sheet-output.xlsx");
         });

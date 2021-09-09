@@ -9,19 +9,20 @@ import {
   CHARGE_DEFAULT_VALUE,
   DEFAULT_MAX_LOG_FOLD_CHANGE,
   DEFAULT_ZOOM_VALUE,
-  FORCE_GRAPH
+  FORCE_GRAPH,
+  VIEWPORT_INIT
 } from "./constants";
-let currentNetwork = null;
+let currentWorkbook = null;
 
-const annotateLinks = network => {
+const annotateLinks = workbook => {
     // TODO This duplicates logic that is done on the server side for an .xlsx spreadsheet.
     //      Think of a way to consolidate it. Having discovered this, it seems like this should
     //      be done on the client side because it rearranges data redundantly, for ease of display.
-    network.positiveWeights = [];
-    network.negativeWeights = [];
+    workbook.positiveWeights = [];
+    workbook.negativeWeights = [];
 
-    network.links.forEach(link => {
-        if (network.sheetType === "unweighted" && !link.value) {
+    workbook.links.forEach(link => {
+        if (workbook.sheetType === "unweighted" && !link.value) {
             link.value = 1;
         }
 
@@ -29,12 +30,12 @@ const annotateLinks = network => {
             link.type = "arrowhead";
             // link.stroke = "MediumVioletRed";   // GRNsight v1 magenta edge color
             link.stroke = "rgb(195, 61, 61)";     // Node coloring-consistent red edge color
-            network.positiveWeights.push(link.value);
+            workbook.positiveWeights.push(link.value);
         } else {
             link.type = "repressor";
             // link.stroke = "DarkTurquoise";     // GRNsight v1 cyan edge color
             link.stroke = "rgb(51, 124, 183)";    // Node coloring-consistent blue edge color
-            network.negativeWeights.push(link.value);
+            workbook.negativeWeights.push(link.value);
         }
     });
 };
@@ -42,17 +43,17 @@ const annotateLinks = network => {
 export const grnState = {
     name: null,
     simulation: undefined,
-    newNetwork: false,
+    newWorkbook: false,
 
-    get network () {
-        return currentNetwork;
+    get workbook () {
+        return currentWorkbook;
     },
 
-    set network (network) {
-        currentNetwork = network;
+    set workbook (workbook) {
+        currentWorkbook = workbook;
         // TODO: add colorOptimal so that the rest of the normalization code can get added
-        this.resetNormalizationMax = max(network.positiveWeights.concat(network.negativeWeights));
-        this.newNetwork = true;
+        this.resetNormalizationMax = max(workbook.positiveWeights.concat(workbook.negativeWeights));
+        this.newWorkbook = true;
     },
 
 // Edge Display Parameters
@@ -63,7 +64,7 @@ export const grnState = {
     grayEdgeThreshold: 5,
     dashedLine: false,
 
-    annotateLinks: () => annotateLinks(currentNetwork),
+    annotateLinks: () => annotateLinks(currentWorkbook),
 
 // Zoom Parameter
     zoomValue: DEFAULT_ZOOM_VALUE,
@@ -92,7 +93,9 @@ export const grnState = {
         species: "Saccharomyces_cerevisiae",
         taxonUniprot: "559292",
         taxonJaspar: "4932",
-        identified: false
+        identified: false,
+        ensembl: "reg",
+        mine: "yeast"
     },
 
     nameToTaxon: {
@@ -100,12 +103,18 @@ export const grnState = {
         // and values being a dictionary of (latin name, Uniprot, Jaspar)
         // some taxon ids are different between the two
         // changed spec names for common english and will have them formatted before calling an api
-        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: "3702", uniprot: "3702" },
-        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: "6293", uniprot: "6293" },
-        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: "7227", uniprot: "7227" },
-        "Homo sapiens": { spec: "Homo_sapiens", jaspar: "9606", uniprot: "9606" },
-        "Mus musculus": { spec: "Mus_musculus", jaspar: "10090", uniprot: "10090" },
-        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: "4932", uniprot: "559292" }
+        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: 3702, uniprot: 3702,
+            ensembl: "plant", mine: "thale"},
+        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: 6293, uniprot: 6293,
+            ensembl: "reg", mine: "worm"},
+        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: 7227, uniprot: 7227,
+            ensembl: "reg", mine: "fly"},
+        "Homo sapiens": { spec: "Homo_sapiens", jaspar: 9606, uniprot: 9606, ensembl: "reg",
+            mine: "fly"},
+        "Mus musculus": { spec: "Mus_musculus", jaspar: 10090, uniprot: 10090, ensembl: "reg",
+            mine: "mouse"},
+        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: 4932, uniprot: 559292,
+            ensembl: "reg", mine: "yeast"}
     },
 
 // Slider Parameters
@@ -131,5 +140,8 @@ export const grnState = {
     },
 
 // Graph Layout Parameter
-    graphLayout: FORCE_GRAPH
+    graphLayout: FORCE_GRAPH,
+
+// Viewport Size Parameter
+    viewportSize: VIEWPORT_INIT,
 };

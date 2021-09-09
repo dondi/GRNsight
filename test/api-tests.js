@@ -30,7 +30,7 @@ describe("The Gene Page", () => {
 
 // final result is a promise
 // call this with known input
-// part of what the function needs is a network request, alongside the query -
+// part of what the function needs is a workbook request, alongside the query -
 // tell fake server "idc who asks, make this response"
 // mocks return the data ONLY IF the correct parameters are supplied
 // set up fake server to only return happy answers with expected URLS and fail everything else

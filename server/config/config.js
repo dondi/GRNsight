@@ -10,7 +10,10 @@ module.exports = {
         root: rootPath,
         app: {
             name: "GRNsight"
-        }
+        },
+        databaseHost: "localhost",  // This will most likely stay as localhost due to tunneling.
+        databaseName: "postgres",
+        databaseDialect: "postgres"
     },
 
     production: {
@@ -21,7 +24,10 @@ module.exports = {
         root: rootPath,
         app: {
             name: "GRNsight"
-        }
+        },
+        databaseHost: "grnsight2.cfimp3lu6uob.us-west-1.rds.amazonaws.com",
+        databaseName: "postgres",
+        databaseDialect: "postgres"
     },
 
     beta: {
@@ -32,6 +38,9 @@ module.exports = {
         root: rootPath,
         app: {
             name: "GRNsight"
-        }
+        },
+        databaseHost: "grnsight2.cfimp3lu6uob.us-west-1.rds.amazonaws.com",
+        databaseName: "postgres",
+        databaseDialect: "postgres"
     }
 };

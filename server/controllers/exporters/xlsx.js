@@ -1,3 +1,4 @@
+// const { meta } = require("eslint/lib/rules/*");
 const xlsx = require("node-xlsx");
 
 const buildGeneNameArray = function (genes) {
@@ -20,7 +21,7 @@ const buildNetworkSheet = function (genes, links) {
     geneNameArray.unshift("cols regulators/rows targets");
 
     links.forEach((link) => {
-        networkSheet[link.source][link.target + 1] = link.value;
+        networkSheet[link.target][link.source + 1] = link.value;
     });
 
     networkSheet.unshift(geneNameArray);
@@ -30,27 +31,49 @@ const buildNetworkSheet = function (genes, links) {
 
 const convertToSheet = function (name, testSheet) {
     const singularName = name.toLowerCase().endsWith("s") ? name.substring(0, name.length - 1) : name;
+    const header = singularName.includes("optimized_") ? singularName.substring(10) : singularName;
     return {
         name: name,
-        data: [["id", singularName], ...Object.keys(testSheet).map(key => [key, testSheet[key]])]
+        data: [["id", header], ...Object.keys(testSheet).map(key => [key, testSheet[key]])]
     };
 };
 
-const buildTestSheets = testSheet => ["production_rates", "degradation_rates", "threshold_b"]
-      .filter(name => testSheet[name])
-      .map(name => convertToSheet(name, testSheet[name]));
+const buildTestSheets = testSheet => ["production_rates",
+    "degradation_rates",
+    "threshold_b",
+    "optimized_production_rates",
+    "optimized_threshold_b"
+]
+    .filter(name => testSheet[name])
+    .map(name => convertToSheet(name, testSheet[name].data));
+
+const buildMeta2Sheet = function (meta2DataContainer) {
+    const meta2 = [];
+    meta2.push(["Parameter", "Value"]);
+    for (let parameter in meta2DataContainer.data.Parameters) {
+        const meta2Data = meta2DataContainer.data.Parameters[parameter];
+        meta2.push([parameter, meta2Data]);
+    }
+    meta2.push([]);
+    meta2.push(["Gene", ...meta2DataContainer.data.MSE["column-headers"]]);
+    for (let gene in meta2DataContainer.data.MSE.Genes) {
+        const meta2GeneData = meta2DataContainer.data.MSE.Genes[gene];
+        meta2.push([gene, ...meta2GeneData]);
+    }
+    return meta2;
+};
 
 const buildMetaSheet = function (metaDataContainer) {
-    const metaSheet = { name: "optimization_parameters", data: [] };
-    metaSheet["data"].push(["optimization_parameter", "value"]);
-    Object.keys(metaDataContainer).forEach((parameter) => {
-        const metaData = metaDataContainer[parameter];
+    const meta = [];
+    meta.push(["optimization_parameter", "value"]);
+    for (let parameter in metaDataContainer.data) {
+        const metaData = metaDataContainer.data[parameter];
         const cleanedUpData = Array.isArray(metaData)
             ? [parameter, ...metaData]
             : [parameter, metaData];
-        metaSheet["data"].push(cleanedUpData);
-    });
-    return metaSheet;
+        meta.push(cleanedUpData);
+    }
+    return meta;
 };
 
 const buildExpressionSheets = function (expressions) {
@@ -66,30 +89,68 @@ const buildExpressionSheets = function (expressions) {
     return builtExpressionSheets;
 };
 
-const buildXlsxSheet = function (network) {
+const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
-    resultSheet.push(
-        {
-            "name": "network",
-            "data": buildNetworkSheet(network.genes, network.links)
-        },
 
-        {
-            "name": "network_weights",
-            "data": buildNetworkSheet(network.genes, network.links)
-        }
-    );
-
-    Object.keys(network).forEach((key) => {
+    Object.keys(workbook).forEach((key) => {
         switch (key) {
+        case "network":
+            if (Object.keys(workbook.network).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network",
+                        "data": buildNetworkSheet(workbook.network.genes, workbook.network.links)
+                    }
+                );
+            }
+            break;
+        case "networkOptimizedWeights":
+            if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network_optimized_weights",
+                        "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
+                            workbook.networkOptimizedWeights.links)
+                    }
+                );
+            }
+            break;
+        case "networkWeights":
+            if (Object.keys(workbook.networkWeights).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network_weights",
+                        "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
+                    }
+                );
+            }
+            break;
         case "meta":
-            resultSheet.push(buildMetaSheet(network[key]));
+            if (Object.keys(workbook.meta).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "optimization_parameters",
+                        "data": buildMetaSheet(workbook.meta)
+                    }
+                );
+            }
+            break;
+        case "meta2":
+            // Optimization Diagnostics sheet not properly  implemented yet.
+            if (Object.keys(workbook.meta2).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "optimization_diagnostics",
+                        "data": buildMeta2Sheet(workbook.meta2)
+                    }
+                );
+            }
             break;
         case "test":
-            resultSheet.push(...buildTestSheets(network[key]));
+            resultSheet.push(...buildTestSheets(workbook[key]));
             break;
         case "expression":
-            resultSheet.push(...buildExpressionSheets(network[key]));
+            resultSheet.push(...buildExpressionSheets(workbook[key]));
             break;
         default:
             break;
@@ -99,6 +160,6 @@ const buildXlsxSheet = function (network) {
     return resultSheet;
 };
 
-module.exports = function (network) {
-    return xlsx.build(buildXlsxSheet(network));
+module.exports = function (workbook) {
+    return xlsx.build(buildXlsxSheet(workbook));
 };

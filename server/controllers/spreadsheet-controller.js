@@ -3,22 +3,25 @@ var xlsx = require("node-xlsx");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
+var parseNetworkSheet = require(__dirname + "/network-sheet-parser");
+var demoWorkbooks = require(__dirname + "/demo-workbooks");
+var constants = require(__dirname + "/workbook-constants");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
 
-var semanticChecker = require(__dirname + "/semantic-checker");
-
-// Currently only going to number 76 because currently the network errors out at 75+ genes.
-var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
-    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
-    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
-    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
-    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
-    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
-    74:"BV", 75:"BW", 76:"BX"};
-
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+
+var SPECIES = [
+    "Arabidopsis thaliana",
+    "Caenorhabditis elegans",
+    "Drosophila melanogaster",
+    "Homo sapiens",
+    "Mus musculus",
+    "Saccharomyces cerevisiae",
+];
+
+var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
 
 var isExpressionSheet = function (sheetName) {
     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
@@ -26,419 +29,251 @@ var isExpressionSheet = function (sheetName) {
     });
 };
 
-// TODO: Put this and the warnings list into helpers.
-// This is the massive list of errors. Yay!
-// The graph will not load if an error is detected.
-var errorList = {
-    missingNetworkError: {
-        errorCode: "MISSING_NETWORK",
-        possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
-        suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. \
-        Please refer to the " + "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' \
-        target='_blank'>Documentation page</a> for more information."
-    },
-
-    corruptGeneError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "CORRUPT_GENE",
-            possibleCause: "The gene name in cell " + colLetter + rowNum + " appears to be invalid.",
-            suggestedFix: "Please fix the error and try uploading again."
-        };
-    },
-
-    missingValueError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "MISSING_VALUE",
-            possibleCause: "The value in the cell " + colLetter + rowNum +
-            " in the adjacency matrix appears to have a missing value.",
-            suggestedFix: "Please ensure that all cells have a value, then upload the file again."
-        };
-    },
-
-    duplicateGeneError: function (geneType, geneName) {
-        return {
-            errorCode: "DUPLICATE_GENE",
-            possibleCause: "There exists a duplicate for " + geneType + " gene " + geneName + ".",
-            suggestedFix: "Please remove the duplicate gene and submit again."
-        };
-    },
-
-    dataTypeError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "INVALID_CELL_DATA_TYPE",
-            possibleCause: "The value in cell " + colLetter + rowNum + " is not a number.",
-            suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
-        };
-    },
-
-    emptyRowError: function (row) {
-        var rowNum = row + 1;
-        return {
-            errorCode: "EMPTY_ROW",
-            possibleCause: "Row " + rowNum + " does not contain any data.",
-            suggestedFix: "Please ensure all rows contain data and all empty rows are removed. " +
-                        "Also, please ensure that no extraneous data is outside of the matrix, " +
-                        "as this may cause this error."
-        };
-    },
-
-    outsideCellError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "EMPTY_CELL",
-            possibleCause: "The cell at " + colLetter + rowNum + " contains data that is outside the matrix.",
-            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure" +
-                        " the matrix is "
-        };
-    },
-
-    errorsCountError: {
-        errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This network has over 20 errors.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-        "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-        "further errors detected. As a general approach for fixing the errors, consider copying and " +
-        "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-    },
-
-    warningsCountError: {
-        errorCode: "WARNINGS_OVERLOAD",
-        possibleCause: "This network has over 75 warnings.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidlines outlined on the" +
-        " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-        " further errors detected. As a general approach for fixing the errors, consider copying and " +
-        " pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-    },
-
-    unknownError: {
-        errorCode: "UNKNOWN_ERROR",
-        possibleCause: "An unexpected error occurred.",
-        suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, \
-        and attach the spreadsheet you attempted to upload."
+var doesSpeciesExist = function (speciesInfo) {
+    for (var s in SPECIES) {
+        if (SPECIES[s] === speciesInfo) {
+            return true;
+        }
     }
-
-};
-
-
-// This is the list of warnings.
-// The graph will still load if warnings are detected, but these will be reported to the user.
-var warningsList = {
-    missingSourceGeneWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "MISSING_SOURCE",
-            errorDescription: "A source gene name is missing in cell " + colLetter + rowNum + "."
-        };
-    },
-
-    missingTargetGeneWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "MISSING_TARGET",
-            errorDescription: "A target gene name is missing in cell " + colLetter + rowNum + "."
-        };
-    },
-
-    invalidMatrixDataWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "INVALID_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum + ", is undefined."
-        };
-    },
-
-    randomDataWarning: function (type, row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "RANDOM_DATA",
-            errorDescription: "The value in cell " + colLetter + rowNum +
-            ", has a corresponding source and/or target gene that is detected as " + type + "."
-        };
-    },
-
-    emptyRowWarning: function (row) {
-        var rowNum = row + 1;
-        return {
-            warningCode: "EMPTY_ROW",
-            errorDescription: "Row " + rowNum + " was found to contain no data."
-        };
-    },
-
-    networkSizeWarning: function (genesLength, edgesLength) {
-        return {
-            warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: "Your network has " + genesLength + " genes, and " + edgesLength +
-            " edges. Please note that networks are recommended to have less than 50 genes and 100 edges."
-        };
-    },
-
-    incorrectlyNamedSheetWarning: {
-        warningCode: "INCORRECTLY_NAMED_SHEET",
-        errorDescription: "The uploaded file appears to contain a weighted network, but contains no \
-             'network_optimized_weights' sheet. A weighted network must be contained in a sheet called \
-             'network_optimized_weights' in order to be drawn as a weighted graph. \
-             Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
-    },
-
-    missingExpressionSheetWarning: {
-        warningCode: "MISSING_EXPRESSION_SHEET",
-        errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
-        The network graph will display without node coloring."
-    },
+    for (var t in TAXON_ID) {
+        if (TAXON_ID[t] === speciesInfo) {
+            return true;
+        }
+    }
+    return false;
 };
 
 var addMessageToArray = function (messageArray, message) {
     messageArray.push(message);
 };
 
-var addWarning = function (network, message) {
-    var warningsCount = network.warnings.length;
+var addWarning = function (workbook, message) {
+    var warningsCount = workbook.warnings.length;
     var MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        addMessageToArray(network.warnings, message);
+        addMessageToArray(workbook.warnings, message);
     } else {
-        addMessageToArray(network.errors, errorList.warningsCountError);
+        addMessageToArray(workbook.errors, constants.errors.warningsCountError);
         return false;
     }
 };
 
-var addError = function (network, message) {
-    var errorsCount = network.errors.length;
+var addError = function (workbook, message) {
+    var errorsCount = workbook.errors.length;
     var MAX_ERRORS = 20;
     if (errorsCount < MAX_ERRORS) {
-        addMessageToArray(network.errors, message);
+        addMessageToArray(workbook.errors, message);
     } else {
-        addMessageToArray(network.errors, errorList.errorsCountError);
+        addMessageToArray(workbook.errors, constants.errors.errorsCountError);
         return false;
     }
 };
 
-var checkDuplicates = function (errorArray, sourceGenes, targetGenes) {
-  // Run through the source genes and check if the gene in slot i is the same as the one next to it
-    for (var i = 0; i < sourceGenes.length - 1; i++) {
-        if (sourceGenes[i] === sourceGenes[i + 1]) {
-            errorArray.push(errorList.duplicateGeneError("source", sourceGenes[i]));
+var difference = function (setA, setB) {
+    let _difference = new Set(setA);
+    for (let elemB of setB) {
+        if (_difference.has(elemB)) {
+            _difference.delete(elemB);
         }
     }
-  // Run through the target genes and check if the gene in slot j is the same as the one next to it
-    for (var j = 0; j < targetGenes.length - 1; j++) {
-        if (targetGenes[j] === targetGenes[j + 1]) {
-            errorArray.push(errorList.duplicateGeneError("target", targetGenes[j]));
-        }
-    }
+    return _difference;
 };
 
-var parseNetworkSheet = function (sheet) {
-    var currentSheet;
-    var network = {
-        genes: [],
-        links: [],
-        errors: [],
-        warnings: [],
-        positiveWeights: [],
-        negativeWeights: [],
-        sheetType: "unweighted",
-    };
-    var currentLink;
-    var currentGene;
-    var sourceGene;
-    var targetGene;
-    var sourceGeneNumber;
-    var targetGeneNumber;
-    var genesList = []; // This will contain all of the genes in upper case for use in error checking
-    var sourceGenes = [];
-    var targetGenes = [];
+var deepClone = function (object, isArray) {
+    var clone = isArray ? [] : {};
+    if (isArray) {
+        for (let i of object) {
+            if (i !== null && typeof i === "object") {
+                clone.push(deepClone(i, Array.isArray(i)));
+            } else {
+                clone.push(i);
+            }
+        }
+    } else {
+        for (let i in object) {
+            if (object[i] !== null && typeof (object[i]) === "object") {
+                clone[i] = deepClone(object[i], Array.isArray(object[i]));
+            } else {
+                clone[i] = object[i];
+            }
+        }
+    }
+    return clone;
+};
 
-    // Look for the worksheet containing the network data
-    for (var i = 0; i < sheet.length; i++) {
-        if (sheet[i].name.toLowerCase() === "network") {
-            // Here we have found a sheet containing simple data. We keep looking
-            // in case there is also a sheet with optimized weights
-            currentSheet = sheet[i];
-        } else if (sheet[i].name.toLowerCase() === "network_optimized_weights") {
-            // We found a sheet with optimized weights, which is the ideal data source.
-            // So we stop looking.
-            currentSheet = sheet[i];
-            network.sheetType = "weighted";
-            break;
+var crossSheetInteractions = function (workbookFile) {
+    var workbook = {};
+
+    // Refactored the parseNetworkSheet function to preserve all network type sheets including "network",
+    // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
+    var networks = parseNetworkSheet(workbookFile);
+
+    // Parse expression and 2-column data, then add to workbook object
+    // Eventually, will split this up into parsing for each type of sheet.
+    var additionalData = parseAdditionalSheets(workbookFile);
+
+    var expressionData = parseExpressionSheets(workbookFile);
+
+    if (networks &&
+        networks.networkOptimizedWeights &&
+        typeof networks.networkOptimizedWeights === "object" &&
+        Object.keys(networks.networkOptimizedWeights).length > 0) {
+        // Base workbook is a clone of the prefered Optimized weights sheet
+        workbook = deepClone(networks.networkOptimizedWeights, false);
+        // Add errors from network sheet if it exists
+        if (networks.network && typeof networks.network === "object" && Object.keys(networks.network).length > 0) {
+            if (networks.network.errors !== undefined) {
+                networks.network.errors.forEach(data => workbook.errors.push(data));
+            }
+
+            if (networks.network.warnings !== undefined) {
+                networks.network.warnings.forEach(data => workbook.warnings.push(data));
+            }
+        }
+    } else {
+        // Set base workbook to a deep copy of the default network if network optimized weights does not exist
+        workbook = deepClone(networks.network, false);
+    }
+    // Add errors and warnings from network weights to preserve the sheet
+    if (networks.networkWeights &&
+        typeof networks.networkWeights === "object" &&
+        Object.keys(networks.networkWeights).length > 0) {
+        if (networks.networkWeights.errors !== undefined) {
+            networks.networkWeights.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (networks.networkWeights.warnings !== undefined) {
+            networks.networkWeights.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
-  // If it didn't find a network/network_optimized_weights sheet
-  // TODO For expediency, we are wrapping every `return network` statement in `semanticChecker`.
-  //      Some refactoring may be desirable to prevent excessive repetition.
-    if (currentSheet === undefined) {
-        addError(network, errorList.missingNetworkError);
-        return network;
+    // Add errors and warnings from meta sheets
+    if (additionalData && additionalData.meta) {
+        if (additionalData.meta.errors !== undefined) {
+            additionalData.meta.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (additionalData.meta.warnings !== undefined) {
+            additionalData.meta.warnings.forEach(data => workbook.warnings.push(data));
+        }
     }
 
-    for (var row = 0, column = 1; row < currentSheet.data.length; row++) {
-        if (currentSheet.data[row].length === 0) { // if the current row is empty
-            if (addError(network, errorList.emptyRowError(row)) === false) {
-                return network;
-            }
-        } else { // if the row has data...
-            // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
-            // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
-            // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
-            try { // This prevents the server from crashing if something goes wrong anywhere in here
-                while (column < currentSheet.data[row].length) {
-                // While we haven't gone through all of the columns in this row...
-                    if (row === 0) { // If we are at the top of a new column...
-                        // These genes are the source genes
-                        try {
-                            currentGene = {name: currentSheet.data[0][column]};
-                            // ie: Cin5 is the same as cin5
-                            if (currentGene.name === undefined) {
-                                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-                            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                                addWarning(network, warningsList.missingSourceGeneWarning(row, column));
-                            } else {
-                                // set currentGeneName to a String so toUpperCase doesn't mess up
-                                currentGene.name = currentGene.name.toString();
-                                sourceGenes.push(String(currentGene.name.toUpperCase()));
-                                genesList.push(String(currentGene.name.toUpperCase()));
-                                network.genes.push(currentGene);
-                            }
-                        } catch (err) {
-                            addError(network, errorList.corruptGeneError(row, column));
-                            return network;
-                        }
-                    } else if (column === 0) { // If we are at the far left of a new row...
-                        // These genes are the target genes
-                        try {
-                            currentGene = {name: currentSheet.data[row][0]};
-                            if (currentGene.name === undefined) {
-                                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-                            } else if (isNaN(currentGene.name) && typeof currentGene.name !== "string") {
-                                addWarning(network, warningsList.missingTargetGeneWarning(row, column));
-                            } else {
-                                // set currentGeneName to a String so toUpperCase doesn't mess up
-                                currentGene.name = currentGene.name.toString();
-                                targetGenes.push(String(currentGene.name.toUpperCase()));
-                                // Here we check to see if we've already seen the gene name that we're about to store
-                                // Genes may or may not be present due to asymmetry or unorderedness
-                                // If it's in the genesList, it will return a number > 0, so we won't store it
-                                // If it's not there, it will return -1, so we add it.
-                                if (genesList.indexOf(String(currentGene.name.toUpperCase())) === -1) {
-                                    genesList.push(String(currentGene.name.toUpperCase()));
-                                    network.genes.push(currentGene);
-                                }
-                            }
-                        } catch (err) {
-                            sourceGene = currentSheet.data[0][column];
-                            targetGene = currentSheet.data[row][0];
-                            addError(network, errorList.corruptGeneError(row, column));
-                            return network;
-                        }
-                    } else { // If we're within the matrix and lookin' at the data...
-                        try {
-                            if (currentSheet.data[row][column] === undefined) {
-                                // SHOULD BE: addError(network, errorList.missingValueError(row, column));
-                                addWarning(network, warningsList.invalidMatrixDataWarning(row, column));
-                            } else if (isNaN(+("" + currentSheet.data[row][column])) ||
-                                        typeof currentSheet.data[row][column] !== "number") {
-                                addError(network, errorList.dataTypeError(row, column));
-                                return network;
-                            } else {
-                                if (currentSheet.data[row][column] !== 0) { // We only care about non-zero values
-                                    // Grab the source and target genes' names
-                                    sourceGene = currentSheet.data[0][column];
-                                    targetGene = currentSheet.data[row][0];
-                                    if (sourceGene === undefined || targetGene === undefined) {
-                                        addWarning(network, warningsList.randomDataWarning("undefined", row, column));
-                                    } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
-                                                (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                        addWarning(network, warningsList.randomDataWarning("NaN", row, column));
-                                    } else {
-                                        // Grab the source and target genes' numbers
-                                        sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
-                                        targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
-                                        currentLink = {source: sourceGeneNumber, target: targetGeneNumber,
-                                            value: currentSheet.data[row][column]};
-                                        // Here we set the properties of the current link
-                                        // before we push them to the network
-                                        if (network.sheetType === "weighted") {
-                                            if (currentLink.value > 0) {
-                                                // If it's a positive number, mark it as an activator
-                                                currentLink.type = "arrowhead";
-                                                // GRNsight v1 magenta edge color
-                                                // currentLink.stroke = "MediumVioletRed";
-                                                // Node coloring-consistent red edge color
-                                                currentLink.stroke = "rgb(195, 61, 61)";
-                                                network.positiveWeights.push(currentLink.value);
-                                            } else { // if it's a negative number, mark it as a repressor
-                                                currentLink.type = "repressor";
-                                                // currentLink.stroke = "DarkTurquoise"; // GRNsight v1 cyan edge color
-                                                // Node coloring-consistent blue edge color
-                                                currentLink.stroke = "rgb(51, 124, 183)";
-                                                network.negativeWeights.push(currentLink.value);
-                                            }
-                                        } else if (network.sheetType === "unweighted") {
-                                            currentLink.type = "arrowhead";
-                                            currentLink.stroke = "black";
-                                            if (currentLink.value !== 1) {
-                                                addWarning(network, warningsList.incorrectlyNamedSheetWarning());
-                                                currentLink.value = 1;
-                                            }
-                                            network.positiveWeights.push(currentLink.value);
-                                        }
-                                        network.links.push(currentLink);
-                                    }
-                                }
-                            }
+    if (additionalData && additionalData.test) {
+        // Add errors and warnings from test sheets
+        for (let sheet in additionalData.test) {
+            additionalData.test[sheet].errors.forEach(data => workbook.errors.push(data));
+        }
 
-                        } catch (err) {
-                            addError(network, errorList.missingValueError(row, column));
-                            // SHOULD BE: addError(network, errorList.unknownFileError);
-                            return network;
-                        }
+        for (let sheet in additionalData.test) {
+            additionalData.test[sheet].warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
+
+    if (additionalData && additionalData.meta2) {
+        // Add errors and warnings from test sheets
+        if (additionalData.meta2.errors !== undefined) {
+            additionalData.meta2.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (additionalData.meta2.warnings !== undefined) {
+            additionalData.meta2.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
+
+    if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
+        addWarning(workbook, constants.warnings.noSpeciesInformationDetected);
+        additionalData.meta.data.species = "Saccharomyces cerevisiae";
+        additionalData.meta.data["taxon_id"] = "559292";
+    } else if (
+        !doesSpeciesExist(additionalData.meta.data.species) &&
+        !doesSpeciesExist(additionalData.meta.data.taxon_id)
+    ) {
+        addWarning(
+            workbook,
+            constants.warnings.unknownSpeciesDetected(
+                additionalData.meta.data.species,
+                additionalData.meta.data.taxon_id
+            )
+        );
+        additionalData.meta.data.species = "Saccharomyces cerevisiae";
+        additionalData.meta.data["taxon_id"] = 559292;
+    }
+
+    // Add errors and warnings from expression sheets
+    // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
+    // We need to account for all the different possible expression sheet names.
+    if (expressionData) {
+        if (expressionData.errors !== undefined) {
+            expressionData.errors.forEach(data => workbook.errors.push(data));
+        }
+        if (expressionData.warnings !== undefined) {
+            expressionData.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
+
+    if (expressionData && expressionData.expression) {
+        if (expressionData.expression.errors !== undefined) {
+            expressionData.expression.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (expressionData.expression.warnings !== undefined) {
+            expressionData.expression.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
+
+    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
+        if (expressionData.expression.wt_log2_expression.errors !== undefined) {
+            expressionData.expression.wt_log2_expression.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
+            expressionData.expression.wt_log2_expression.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
+
+    // Gene Mismatch and Label Error Tests
+
+    workbookFile.forEach(function (sheet) {
+        if (isExpressionSheet(sheet.name)) {
+            var tempWorkbookGenes = new Set();
+            for (let i = 0; i < workbook.genes.length; i++) {
+                tempWorkbookGenes.add(workbook.genes[i].name);
+            }
+            var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
+            var extraExpressionGenes = difference(tempExpressionGenes, tempWorkbookGenes);
+            var extraWorkbookGenes = difference(tempWorkbookGenes, tempExpressionGenes);
+
+            if (extraExpressionGenes.size === 0 && extraWorkbookGenes.size === 0) {
+                for (var i = 0; i < workbook.genes.length; i++) {
+                    if (workbook.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]) {
+                        addError(workbook, constants.errors.geneMismatchError(sheet.name));
+                        break;
                     }
-                    column++; // Let's move on to the next column!
-                } // Once we finish with the current row...
-                column = 0; // let's go back to column 0 on the next row!
-            } catch (err) {
-                // We only get here if something goes drastically wrong. We don't want to get here.
-                addError(network, errorList.unknownError);
-                return network;
+                }
+            } else {
+                if (extraWorkbookGenes.size > 0) {
+                    addError(workbook, constants.errors.missingGeneNamesError(sheet.name));
+                }
+                if (extraExpressionGenes.size > 0) {
+                    addError(workbook, constants.errors.extraGeneNamesError(sheet.name));
+                }
             }
         }
-    }
+    });
 
-  // Move on to semanticChecker.
-
-
-  // We sort them here because gene order is not relevant before this point
-  // Sorting them now means duplicates will be right next to each other
-    sourceGenes.sort();
-    targetGenes.sort();
-
-  // syntactic duplicate checker for both columns and rows
-    checkDuplicates(network.errors, sourceGenes, targetGenes);
-
-  // NOTE: Temporarily commented out pending resolution of #474, and other related issues
-  // try {
-  //   network.graphStatisticsReport = graphStatisticsReport(network);
-  // } catch (err) {
-  //   console.log ("Graph statistics report failed to be complete.");
-  // }
-    return semanticChecker(network);
+    // Integrate the desired properties from the other objects.
+    workbook.network = networks.network;
+    workbook.networkOptimizedWeights = networks.networkOptimizedWeights;
+    workbook.networkWeights = networks.networkWeights;
+    workbook.meta = additionalData.meta;
+    workbook.test = additionalData.test;
+    workbook.meta2 = additionalData.meta2;
+    workbook.expression = expressionData.expression;
+    return workbook;
 };
 
 var processGRNmap = function (path, res, app) {
     var sheet;
-    var network;
 
     helpers.attachCorsHeader(res, app);
 
@@ -449,100 +284,35 @@ var processGRNmap = function (path, res, app) {
     }
 
     helpers.attachFileHeaders(res, path);
-    network = parseNetworkSheet(sheet);
 
-    // Parse expression and 2-column data, then add to network object
-    // Eventually, will split this up into parsing for each type of sheet.
-    var additionalData = parseAdditionalSheets(sheet);
-    var expCount = 0;
-    sheet.forEach(function (sheet) {
-        // CHECK FOR MISSING EXPRESSION SHEET
-        if (isExpressionSheet(sheet.name)) {
-            expCount++;
-        }
-    });
-    if (expCount <= 0) {
-        addWarning(network, warningsList.missingExpressionSheetWarning);
-    }
+    var workbook = crossSheetInteractions(sheet);
 
-    var expressionData = parseExpressionSheets(sheet);
-
-    // Add errors and warnings from meta sheets
-    if (additionalData && additionalData.meta) {
-        if (additionalData.meta.errors !== undefined) {
-            additionalData.meta.errors.forEach(data => network.errors.push(data));
-        }
-
-        if (additionalData.meta.warnings !== undefined) {
-            additionalData.meta.warnings.forEach(data => network.warnings.push(data));
-        }
-    }
-
-    if (additionalData && additionalData.test) {
-        // Add errors and warnings from test sheets
-        if (additionalData.test.errors !== undefined) {
-            additionalData.test.errors.forEach(data => network.errors.push(data));
-        }
-
-        if (additionalData.test.warnings !== undefined) {
-            additionalData.test.warnings.forEach(data => network.warnings.push(data));
-        }
-    }
-
-    // Add errors and warnings from expression sheets
-    // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
-    // We need to account for all the different possible expression sheet names.
-    if (expressionData && expressionData.expression) {
-        if (expressionData.expression.errors !== undefined) {
-            expressionData.expression.errors
-            .forEach(data => network.errors.push(data));
-        }
-
-        if (expressionData.expression.warnings !== undefined) {
-            expressionData.expression.warnings
-            .forEach(data => network.warnings.push(data));
-        }
-    }
-
-    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
-        if (expressionData.expression.wt_log2_expression.errors !== undefined) {
-            expressionData.expression.wt_log2_expression.errors
-            .forEach(data => network.errors.push(data));
-        }
-
-        if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
-            expressionData.expression.wt_log2_expression.warnings
-            .forEach(data => network.warnings.push(data));
-        }
-    }
-
-    Object.assign(network, additionalData, expressionData);
-    return (network.errors.length === 0) ?
-        // If all looks well, return the network with an all clear
-        res.json(network) :
-        // If all does not look well, return the network with an error 400
-        res.status(400).json(network);
+    return workbook.errors.length === 0
+        ? // If all looks well, return the workbook with an all clear
+          res.json(workbook)
+        : // If all does not look well, return the workbook with an error 400
+          res.status(400).json(workbook);
 };
 
-var grnSightToCytoscape = function (network) {
+var grnSightToCytoscape = function (workbook) {
     var result = [];
-    network.genes.forEach(function (gene) {
+    workbook.genes.forEach(function (gene) {
         result.push({
             data: {
-                id: gene.name
-            }
+                id: gene.name,
+            },
         });
     });
 
-    network.links.forEach(function (link) {
-        var sourceGene = network.genes[link.source];
-        var targetGene = network.genes[link.target];
+    workbook.links.forEach(function (link) {
+        var sourceGene = workbook.genes[link.source];
+        var targetGene = workbook.genes[link.target];
         result.push({
             data: {
                 id: sourceGene.name + targetGene.name,
                 source: sourceGene.name,
-                target: targetGene.name
-            }
+                target: targetGene.name,
+            },
         });
     });
 
@@ -550,31 +320,27 @@ var grnSightToCytoscape = function (network) {
 };
 
 /* NOTE: See above. Commented out until resolution of #474
-var graphStatisticsReport = function(network)  {
+var graphStatisticsReport = function(workbook)  {
     var betweennessCentrality = [];
     var shortestPath = [];
-    var cytoscapeElements = grnSightToCytoscape(network);
-
+    var cytoscapeElements = grnSightToCytoscape(workbook);
     var cy = cytoscape({
         headless: true,
         elements: cytoscapeElements
     });
-
-    for (var i = 0; i < network.genes.length; i++) {
+    for (var i = 0; i < workbook.genes.length; i++) {
         var bc = cy.$().bc();
         betweennessCentrality.push({
-            gene: network.genes[i],
-            betweennessCentrality: bc.betweenness("#" + network.genes[i].name, null, true)
+            gene: workbook.genes[i],
+            betweennessCentrality: bc.betweenness("#" + workbook.genes[i].name, null, true)
         });
-
-        var dijkstra = cy.elements().dijkstra("#" + network.genes[i].name, null, true);
-
-        for (var j = 0; j < network.genes.length; j++) {
+        var dijkstra = cy.elements().dijkstra("#" + workbook.genes[i].name, null, true);
+        for (var j = 0; j < workbook.genes.length; j++) {
             shortestPath.push({
-                source: network.genes[i].name,
+                source: workbook.genes[i].name,
                 pathData: {
-                    target: network.genes[j].name,
-                    shortestPath: dijkstra.distanceTo("#" + network.genes[j].name, null, true)
+                    target: workbook.genes[j].name,
+                    shortestPath: dijkstra.distanceTo("#" + workbook.genes[j].name, null, true)
                 }
             });
         }
@@ -588,11 +354,10 @@ var graphStatisticsReport = function(network)  {
 
 module.exports = function (app) {
     if (app) {
-
-    // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
+        // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
         app.post("/upload", function (req, res) {
-      // TODO: Add file validation (make sure that file is an Excel file)
-            (new multiparty.Form()).parse(req, function (err, fields, files) {
+            // TODO: Add file validation (make sure that file is an Excel file)
+            new multiparty.Form().parse(req, function (err, fields, files) {
                 if (err) {
                     return res.json(400, "There was a problem uploading your file. Please try again.");
                 }
@@ -604,12 +369,17 @@ module.exports = function (app) {
                 }
 
                 if (path.extname(input) !== ".xlsx") {
-                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
-                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
+                    return res.json(
+                        400,
+                        "This file cannot be loaded because:<br><br> The file is \
+                        not in a format GRNsight can read." +
+                            "<br>Please select an Excel Workbook \
                         (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
-                        using the importer under File > Import." + " Additional information about file \
-                        types that GRNsight supports is in the Documentation.");
+                            " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
+                        using the importer under File > Import." +
+                            " Additional information about file \
+                        types that GRNsight supports is in the Documentation."
+                    );
                 }
 
                 // input.meta holds the species and taxon data
@@ -619,28 +389,34 @@ module.exports = function (app) {
 
         // Load the demos
         app.get("/demo/unweighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
+            return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return processGRNmap("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
-                res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
+                res,
+                app
+            );
         });
 
         app.get("/demo/schadeInput", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+            return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return processGRNmap("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
-                res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
+                res,
+                app
+            );
         });
     }
 
     // exporting parseNetworkSheet for use in testing. Do not remove!
     return {
-        parseNetworkSheet: parseNetworkSheet,
         grnSightToCytoscape: grnSightToCytoscape,
-        processGRNmap : processGRNmap
+        processGRNmap: processGRNmap,
+        crossSheetInteractions: crossSheetInteractions,
     };
 };

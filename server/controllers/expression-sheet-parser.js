@@ -1,72 +1,34 @@
 // Parses "optimization_paramters," expression data sheets, and 2-column sheets
 // from GRNmap input or output workbook
 
+var constants = require(__dirname + "/workbook-constants");
+
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-const errorsList = {
-    idLabelError: function () {
-        return {
-            errorCode: "MISLABELED_ID_CELL",
-            possibleCause: "The top left cell of the expression sheet is mislabeled.",
-            suggestedFix: "Replace the incorrect label with \'id\' exactly."
-        };
-    },
-    missingColumnHeaderError: function () {
-        return {
-            errorCode: "MISSING_COLUMN_HEADER",
-            possibleCause: "A column in the expression sheet is missing a header.",
-            suggestedFix: "Add headers to all columns."
-        };
-    },
-    emptyExpressionRowError: function () {
-        return {
-            errorCode: "EMPTY_ROW",
-            possibleCause: "There is an empty row in the input sheet.",
-            suggestedFix: "Delete empty row, or populate with data."
-        };
-    },
-};
-
-const warningsList = {
-    missingExpressionWarning: function () {
-        return {
-            warningCode: "MISSING_EXPRESSION_SHEET",
-            errorDescription: "_log2_expression or _log2_optimized_expression worksheet was not detected. \
-            The network graph will display without node coloring."
-        };
-    },
-    extraneousDataWarning: function () {
-        return {
-            warningCode: "EXTRANEOUS_DATA",
-            errorDescription: "There is extraneous data outside of the set rows and columns of the expression sheet."
-        };
-    }
-};
-
-const addExpWarning = (network, message) => {
+const addExpWarning = (workbook, message) => {
     let warningsCount;
-    if (!Object.keys(network).includes("warnings")) {
+    if (!Object.keys(workbook).includes("warnings")) {
         warningsCount = 0;
-        network.warnings = [];
+        workbook.warnings = [];
     } else {
-        warningsCount = network.warnings.length;
+        warningsCount = workbook.warnings.length;
     }
     const MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
-        network.warnings.push(message);
+        workbook.warnings.push(message);
     } else {
-        network.errors.push(errorsList.warningsCountError);
+        workbook.errors.push(constants.errors.warningsCountError);
         return false;
     }
 };
 
-const addExpError = (network, message) => {
-    const errorsCount = network.errors.length;
+const addExpError = (workbook, message) => {
+    const errorsCount = workbook.errors.length;
     const MAX_ERRORS = 20;
     if (errorsCount < MAX_ERRORS) {
-        network.errors.push(message);
+        workbook.errors.push(message);
     } else {
-        network.errors.push(errorsList.errorsCountError);
+        workbook.errors.push(constants.errors.errorsCountError);
         return false;
     }
 };
@@ -84,25 +46,41 @@ const isExpressionSheet = (sheetName) => {
     });
 };
 
-// Going to continue basing this section off of the parseNetworkSheet function in spreadsheet-controller.js
+// Going to continue basing this section off of the parseWorkbookSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
+
     var geneData = {};
     var expressionData = {
         errors: [],
         warnings: [],
-        timePoints: []
+        timePoints: [],
+        columnGeneNames: []
     };
 
     // Check that id label is correct. Throw error if not.
     const idLabel = sheet.data[0][0];
     if (idLabel !== "id") {
-        addExpError(expressionData, errorsList.idLabelError());
+        addExpError(expressionData, constants.errors.idLabelError(sheet.name));
     }
-
     expressionData.timePoints = sheet.data[0].slice(1);
     const numberOfDataPoints = expressionData.timePoints.length;
+    let compareTimePoint = 0;
+    for (let i = 0; i < numberOfDataPoints; i++) {
+        if (isNaN(expressionData.timePoints[i]) && expressionData.timePoints[i] !== undefined) {
+            addExpError(expressionData, constants.errors.nonNumericalTimePointsError(i + 1, sheet.name));
+        } else if (expressionData.timePoints[i] < 0) {
+            addExpError(expressionData, constants.errors.negativeTimePointError(i + 1, sheet.name));
+        } else if (expressionData.timePoints[i] < compareTimePoint) {
+            addExpError(expressionData, constants.errors.nonMonotonicTimePointsError(i + 1, sheet.name));
+            break;
+        } else {
+            compareTimePoint = expressionData.timePoints[i];
+        }
+
+    }
     let geneNames = [];
     sheet.data.forEach(function (sheet) {
+
         const geneName = sheet[0];
         if (geneName) {
             geneNames.push(geneName);
@@ -116,22 +94,39 @@ var parseExpressionSheet = function (sheet) {
         }
     });
     geneNames = geneNames.slice(1);
+    geneNames.forEach(x => expressionData.columnGeneNames.push(x));
     expressionData.data = geneData;
     if (expressionData.data.id) {
         // Throw warning in case of extraneous data
         // Need to add a case where it checks the depth of the columns, as well
         const rowLength = expressionData.data.id.length;
+        let rowCounter = 0;
+        let columnChecker = new Array(rowLength).fill(0);
         Object.values(expressionData.data).forEach(function (row) {
             if (row.length !== rowLength) {
-                addExpWarning(expressionData, warningsList.extraneousDataWarning());
+                addExpWarning(expressionData, constants.warnings.extraneousDataWarning(sheet.name, row));
+            }
+            // Check for missing Column Headers
+            if (rowCounter === 0) {
+                for (let i = 0; i < rowLength; i++) {
+                    if (sheet.data[0][i] === undefined) {
+                        addExpError(expressionData, constants.errors.missingColumnHeaderError(sheet.name));
+                    }
+                }
+            } else {
+                for (var i = 0; i < rowLength; i++) {
+                    if (sheet.data[rowCounter][i] !== undefined) {
+                        columnChecker[i]++;
+                    }
+                }
             }
 
-            // Throw error in case of empty row
             let nonnullCount = 0;
+            // check for empty rows
             for (let i = 0; i <= rowLength; i++) {
                 if (i === rowLength) {
                     if (nonnullCount === 0) {
-                        addExpError(expressionData, errorsList.emptyExpressionRowError());
+                        addExpError(expressionData, constants.errors.emptyExpressionRowError(i, sheet.name));
                         break;
                     }
                 } else {
@@ -140,17 +135,14 @@ var parseExpressionSheet = function (sheet) {
                     }
                 }
             }
+            rowCounter++;
         });
-
-        // Throw error in case of missing column header
-        let nonemptyValues = 0;
-        expressionData.data.id.forEach(function () {
-            nonemptyValues++;
-        });
-        if (rowLength !== nonemptyValues) {
-            addExpError(expressionData, errorsList.missingColumnHeaderError());
+        // check for empty columns
+        for (var i = 0; i < columnChecker.length; i++) {
+            if (columnChecker[i] === 0) {
+                addExpError(expressionData, constants.errors.emptyExpressionColumnError(i, sheet.name));
+            }
         }
-
     }
 
     return expressionData;
@@ -158,12 +150,21 @@ var parseExpressionSheet = function (sheet) {
 
 module.exports = function (workbook) {
     const output = {
-        expression: {}
+        expression: {},
+        warnings: [],
+        errors: []
     };
+    var expCount = 0;
+
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
+            expCount++;
         }
     });
+
+    if (expCount <= 0) {
+        addExpWarning(output, constants.warnings.missingExpressionWarning());
+    }
     return output;
 };

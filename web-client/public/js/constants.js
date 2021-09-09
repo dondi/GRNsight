@@ -1,3 +1,5 @@
+export const HOST_SITE = "https://dondi.github.io";
+
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
@@ -103,11 +105,18 @@ export const LAYOUT_SIDEBAR_PANEL                       = "#layoutSidebarPanel";
 export const EDGE_WEIGHT_MENU_CLASS                     = ".weightedGraphOptionsMenu";
 export const EDGE_WEIGHT_SIDEBAR                        = ".edge-weight-sidebar";
 export const EDGE_WEIGHT_SIDEBAR_HEADER_LINK            = "#edgeWeightHeaderLink";
+export const EXPRESSION_DB_MENU                         = ".data-sidebar";
+export const EXPRESSION_DB_MENU_HEADER_LINK             = "#dataSidebarLink";
+export const EXPRESSION_DB_SIDEBAR_PANEL                = "#dataSidebarPanel";
+export const EXPRESSION_DB_LOADER                       = ".expression-db-loader";
+export const EXPRESSION_DB_LOADER_TEXT                  = ".expression-db-loader-text";
+export const DATA_SET_SELECT                            = "#data-set-select";
 export const NODE_COLORING_MENU                         = ".node-coloring";
 export const NODE_COLORING_MENU_CLASS                   = ".node-coloring-menu";
 export const NODE_COLORING_SIDEBAR_PANEL                = "#nodeColoringSidebarPanel";
 export const NODE_COLORING_SIDEBAR_HEADER_LINK          = "#nodeColoringHeaderLink";
 export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
+export const DATA_SIDEBAR_BODY                          = ".dataSidebarBody";
 export const NODE_COLORING_SIDEBAR_HEADER               = "#sidebarPanelHeader";
 export const NODE_COLORING_TOGGLE_SIDEBAR               = "#nodeColoringToggleSidebar";
 export const AVG_REPLICATE_VALS_BOTTOM_SIDEBAR          = "#averageDataBottom";
@@ -117,6 +126,7 @@ export const AVG_REPLICATE_VALS_BOTTOM_MENU             = "#averageDataBottomMen
 export const NODE_COLORING_TOGGLE_MENU                  = "#node-coloring-toggle-menu";
 export const NODE_COLORING_TOGGLE_CLASS                 = ".nodeColoringToggle";
 export const LOG_FOLD_CHANGE_MAX_VALUE_CLASS            = ".logFoldChangeMaxValue";
+export const LOG_FOLD_CHANGE_MAX_VALUE_HEADER           = "#logFoldChangeMaxValue";
 export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT    = "#log-fold-change-max-value-sidebar";
 export const LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON   = "#log-fold-change-button";
 export const LOG_FOLD_CHANGE_MAX_VALUE_MENU             = "#log-fold-change-max-value-menu";
@@ -135,6 +145,8 @@ export const SPECIES_BUTTON_NEMATODE                    = "#Caenorhabditis_elega
 export const SPECIES_BUTTON_MOUSE                       = "#Mus_musculus";
 export const SPECIES_BUTTON_CRESS                       = "#Arabidopsis_thaliana";
 
+export const NODE_COLORING_USING_EXPRESSION_DATA        = "#expressionDB";
+
 export const ZOOM_CONTROL                               = ".zoom";
 export const ZOOM_DISPLAY_MAXIMUM_SELECTOR              = ".maximum-zoom-display";
 export const ZOOM_DISPLAY_MAXIMUM_VALUE                 = 200;
@@ -145,4 +157,23 @@ export const ZOOM_ADAPTIVE_MAX_SCALE                    = 4;
 export const ZOOM_SLIDER                                = "#zoomSlider";
 export const ZOOM_INPUT                                 = "#zoomInput";
 export const ZOOM_PERCENT                               = "#zoomPercent";
+
+export const VIEWPORT_INIT                              = "containerInit";
 export const VIEWPORT_FIT                               = "containerFit";
+export const VIEWPORT_S                               = "containerS";
+export const VIEWPORT_M                               = "containerM";
+export const VIEWPORT_L                               = "containerL";
+
+export const VIEWPORT_SIZE_S_DROPDOWN                   = "#viewport-size-s";
+export const VIEWPORT_SIZE_M_DROPDOWN                   = "#viewport-size-m";
+export const VIEWPORT_SIZE_L_DROPDOWN                   = "#viewport-size-l";
+export const VIEWPORT_SIZE_FIT_DROPDOWN                 = "#viewport-size-fit";
+export const VIEWPORT_SIZE_S_SIDEBAR                    = "#boundBoxS";
+export const VIEWPORT_SIZE_M_SIDEBAR                    = "#boundBoxM";
+export const VIEWPORT_SIZE_L_SIDEBAR                    = "#boundBoxL";
+export const VIEWPORT_SIZE_FIT_SIDEBAR                  = "#boundBoxFit";
+export const VIEWPORT_OPTION_CLASS                      = ".viewportOption";
+export const VIEWPORT_OPTION_CLASS_SIDEBAR              = ".boundBoxSize";
+
+
+
