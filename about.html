@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 6/16/19
+modified: 9/16/21
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -94,33 +94,39 @@ description: >-
                                                       <li>Error and warning messages became more descriptive and pinpointed which sheet the issue was found in, and the row/column or cell that the error was located.</li>
                                                     </ul>
                                                     <li> Refatored existing GRNsight import test, and expanded export tests </li>
-                                                    </ul>
-                                                      <li>Refactored existing GRNsight code to consolidate error and warning messages, as well as adding new tests for additional sheets in a GRNsight workbook.</li>
-                                                      <li>Updated tests to reflect additional features that GRNsight recently developed.</li>
-                                                      <li>Expanded export tests to increase user visibility on possible errors that occurred during the import process.</li>
-                                                      <li>Fixed bugs within the existing GRNsight export functionality and created a system to automatically fix minor issues within a workbook, alert a user of issues within a file that they must fix, or send an error message that something went wrong with the export process.</li>
-                                                    <li> Graph visualization was refined </li>
-                                                    </ul>
-                                                      <li>Improved edge detection for nodes, eliminating issues with nodes going out of the viewport.</li>
-                                                      <li>Grey edge threshold was fixed to properly gray out all edges at 100% threshold.</li>
-                                                      <li>Toggle buttons were fixed so that all buttons properly represent the state of the program.</li>
-                                                      <li>Viewport resizing was modified to account for window resizing.</li>
+                                                        <ul>
+                                                          <li>Refactored existing GRNsight code to consolidate error and warning messages, as well as adding new tests for additional sheets in a GRNsight workbook.</li>
+                                                          <li>Updated tests to reflect additional features that GRNsight recently developed.</li>
+                                                          <li>Expanded export tests to increase user visibility on possible errors that occurred during the import process.</li>
+                                                          <li>Fixed bugs within the existing GRNsight export functionality and created a system to automatically fix minor issues within a workbook, alert a user of issues within a file that they must fix, or send an error message that something went wrong with the export process.</li>
+                                                        <ul>
+                                                     <li> Graph visualization was refined </li>
+                                                        <ul>
+                                                          <li>Improved edge detection for nodes, eliminating issues with nodes going out of the viewport.</li>
+                                                          <li>Grey edge threshold was fixed to properly gray out all edges at 100% threshold.</li>
+                                                          <li>Toggle buttons were fixed so that all buttons properly represent the state of the program.</li>
+                                                          <li>Viewport resizing was modified to account for window resizing.</li>
+                                                        </ul>
                                                     <li> Model-View-Controller (MVC) Architecture </li>
-                                                    </ul>
-                                                      <li>MVC separates the software into 3 main, interconnected parts, which control various parts of the software. The controller listens for any changes to the application state enacted by the user.</li>
-                                                      <li>Strict MVC reduces bugs, simplifies the codebase, makes it much simpler for developers to revise and add new features to GRNsight, and makes code readability much easier.</li>
+                                                        <ul>
+                                                          <li>MVC separates the software into 3 main, interconnected parts, which control various parts of the software. The controller listens for any changes to the application state enacted by the user.</li>
+                                                          <li>Strict MVC reduces bugs, simplifies the codebase, makes it much simpler for developers to revise and add new features to GRNsight, and makes code readability much easier.</li>
+                                                        </ul>
                                                     <li> Export to excel feature </li>
-                                                    </ul>
-                                                      <li>GRNsight can import data in a variety of formats including Excel workbook, SIF, and GraphML and can export to SIF and GraphML.</li>
-                                                      <li>Added an element to the user interface that gives the user the option to export GRNsight data to an Excel workbook.</li>
+                                                        <ul>
+                                                          <li>GRNsight can import data in a variety of formats including Excel workbook, SIF, and GraphML and can export to SIF and GraphML.</li>
+                                                          <li>Added an element to the user interface that gives the user the option to export GRNsight data to an Excel workbook.</li>
+                                                        </ul>
                                                     <li> Gene information from Public Databases when a user selects a node </li>
-                                                    </ul>
-                                                      <li>Application Processing Interfaces (APIs) allow GRNsight to gather data from public databases for display on gene pages. </li>
-                                                      <li>Databases include Saccharomyces Genome Database (SGD), NCBI gene database, UniProt, JASPAR. </li>
+                                                        <ul>
+                                                          <li>Application Processing Interfaces (APIs) allow GRNsight to gather data from public databases for display on gene pages. </li>
+                                                          <li>Databases include Saccharomyces Genome Database (SGD), NCBI gene database, UniProt, JASPAR. </li>
+                                                        </ul>
                                                     <li> Documentation update </li>
-                                                    </ul>
-                                                      <li>Updated wiki layout </li>
-                                                      <li>New documentation </li>
+                                                        <ul>
+                                                          <li>Updated wiki layout </li>
+                                                          <li>New documentation </li>
+                                                        </ul>
                                                 </ul>
                                             </div>
                                         </div>
