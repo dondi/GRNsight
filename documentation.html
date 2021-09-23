@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Documentation
-modified: 4/27/18
+modified: 9/23/21
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small- to medium-scale gene regulatory networks.
 ---
           <p id="pageTitle">Documentation</p>
@@ -117,6 +117,26 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 </li>
                                 <li>
                                   Please see <a href="#node_coloring" data-toggle="collapse"> Section 3e</a> for more information on how to interpret and manipulate the node coloring visualization.
+                                </li>
+                              </ul>
+                            </li>
+                            <li>
+                              Starting in v4.0.0 GRNsight reads metadata from a sheet entitled “optimization_parameters.”
+                              <ul>
+                                <li>
+                                  The header should contain “optimization” cell A1 and “value” in cell B1.
+                                </li>
+                                <li>
+                                  The following optimization parameters can be a number: “alpha”, “kk_max”, “MaxIter”, “TolFun”, “MaxFunEval”, “TolX”, “L_curve”, “estimate_params”, “make_graphs”, “fix_P”, “fix_b”, “taxon_id”, and “b_or_tau”.
+                                </li>
+                                <li>
+                                  The following optimization parameters can be a string: “production_function” and “species”.
+                                </li>
+                                <li>
+                                  The following optimization parameters can be a list of numbers: “expression_timepoints” and “simulation_timepoints”.
+                                </li>
+                                <li>
+                                  The following optimization parameters can be a list of numbers: “expression_timepoints” and “simulation_timepoints”.
                                 </li>
                               </ul>
                             </li>
@@ -691,13 +711,13 @@ description: Learn how to format and upload files to GRNsight, a web application
                               <b>Node Coloring Toggle Button</b><br>Turns node coloring on or off.
                             </li>
                             <li>
-                              <b>Top Dataset</b><br>Users may select the dataset used to generate the top half of the node coloring visualiztion. Options in the dropdown list are automatically populated with names of detected expression sheets.
+                              <b>Top Dataset</b><br>Users may select the dataset used to generate the top half of the node coloring visualization. Options in the dropdown list are automatically populated with names of detected expression sheets. In GRNsight v5.0.0, users may also select an expression sheet from our Expression Database.
                             </li>
                             <li>
                               <b>Average Replicate Values (Top Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the top half of node coloring.
                             </li>
                             <li>
-                              <b>Bottom Dataset</b><br>Users may select the dataset used to generate the bottom half of the node coloring visualiztion. Options in the dropdown list are automatically populated with names of detected expression sheets.
+                              <b>Bottom Dataset</b><br>Users may select the dataset used to generate the bottom half of the node coloring visualization. Options in the dropdown list are automatically populated with names of detected expression sheets. In GRNsight v5.0.0, users may also select an expression sheet from our Expression Database.
                             </li>
                             <li>
                               <b>Average Replicate Values (Bottom Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the bottom half of node coloring.
@@ -856,6 +876,17 @@ description: Learn how to format and upload files to GRNsight, a web application
                               The figure on the right displays that after clicking on a button corresponding to a certain section, the page is directed to that section and displays information about the specified information about the gene in the species. In this instance, a sequence logo, frequency matrix, and a list of gene ontology values are displayed.
                             </li>
                           </ul>
+                          <p>
+                            In GRNsight v5.0.0, the species feature was added. GRNsight now supports the following species: “Arabidopsis thaliana”, “Caenorhabditis elegans”, “Drosophila melanogaster”, “Homo sapiens”, “Mus musculus”, and “Saccharomyces cerevisiae.”
+                          </p>
+                          <ul>
+                            <li>
+                              If you don’t add a supported species to the “optimization_parameters” sheet, then it will default to the species “Saccharomyces cerevisiae” and the taxon id “559292.”
+                            </li>
+                            <li>
+                              You can change the species in the GRNsight web application under Node > Current Species.
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     </div>
@@ -957,6 +988,41 @@ description: Learn how to format and upload files to GRNsight, a web application
                               <li>When a weighted network is loaded, you have the option to export to an unweighted or weighted GraphML file.</li>
                             </ul>
                             <li>The unweighted and weighted GraphML files will be formatted according to the description in <a href="#graphml_instructions" data-toggle="collapse">Section 1d</a>.
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                        
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a href="#excel_export" data-toggle="collapse">
+                            5c. Exporting data to Excel format
+                          </a>
+                        </h4>
+                      </div>
+                      <div id="excel_export" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                          <ul>
+                            <li>
+                              To export your data to Excel format, select the menu option File > Export Data > To Unweighted Excel or File > Export Data > To Weighted Excel. A dialog box will open for you to Save your workbook. Clicking the Cancel button will return you to the GRNsight web page.
+                            </li>
+                            <ul>
+                              <li>
+                                When an unweighted network is loaded, exporting to an unweighted Excel workbook will be the only option available.
+                              </li>
+                              <li>
+                                When a weighted network is loaded, you have the option to export to an unweighted or weighted Excel workbook.
+                              </li>
+                              <ul>
+                                <li>
+                                  If you use any Expression Data from our Expression Database, all Expression Data Sheets will be exported into the Excel workbook.
+                                </li>
+                              </ul>
+                            </ul>
+                            <li>The unweighted and weighted Excel workbooks will be formatted according to the description in <a href="#excel_instructions" data-toggle="collapse">Section 1a</a>.
                             </li>
                           </ul>
                         </div>
