@@ -509,6 +509,49 @@ html
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             //- input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
+    div(id='exportExcelModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+      div(class='modal-dialog')
+        div(class='modal-content')
+          div(class='modal-header')
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+            h4(class='modal-title') Export to Excel
+          div(class='modal-body')
+            div(id='exportExcelQuestions-containter')
+              form(class='exportExcelForm')
+                div(class='form-group')
+                  p(id='exportExcelNetwork')
+                  div(class='export-radio-group')
+                    input(type='radio' name='network-weights' checked="true" value="weighted" id='exportExcelWeightedRadio' class='export-radio')
+                    label(for='exportExcelWeightedCheckbox' id='exportExcelWeighted' class='export-radio-label')
+      
+                    input(type='radio' name='network-weights' value="unweighted" id='exportExcelUnweightedRadio' class='export-radio')
+                    label(for='exportExcelUnweightedCheckbox' id='exportExcelUnweighted' class='export-radio-label')
+                div(class='form-group')
+                  p(id='exportExcelExpressionSources')
+                  div(class='export-radio-group')
+                    input(type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio')
+                    label(for='exportExcelExpressionSource-userInputCheckbox' id='exportExcelExpressionSource-userInput' class='export-radio-label')
+                  
+                    input(type='radio' name='expressionSource' value="Dahlquist" id='exportExcelExpressionSource-DahlquistRadio' class='export-radio')
+                    label(for='exportExcelExpressionSource-DahlquistCheckbox' id='exportExcelExpressionSource-Dahlquist' class='export-radio-label')
+                  
+                    input(type='radio' name='expressionSource' value="Kitagawa" id='exportExcelExpressionSource-KitagawaRadio' class='export-radio')
+                    label(for='exportExcelExpressionSource-KitagawaCheckbox' id='exportExcelExpressionSource-Kitagawa' class='export-radio-label')
+                  
+                    input(type='radio' name='expressionSource' value="Thorsen" id='exportExcelExpressionSource-ThorsenRadio' class='export-radio')
+                    label(for='exportExcelExpressionSource-ThorsenCheckbox' id='exportExcelExpressionSource-Thorsen' class='export-radio-label')
+                  
+                    input(type='radio' name='expressionSource' value="Barreto" id='exportExcelExpressionSource-BarretoRadio' class='export-radio')
+                    label(for='exportExcelExpressionSource-BarretoCheckbox' id='exportExcelExpressionSource-Barreto' class='export-radio-label')  
+                div(class='form-group')
+                  p(id='exportExcelExpressionSheets')
+                  div(class='exportExcelExpressionSheets')
+                    //- input(type='checkbox' value='expression_sheet_name_expressionSuffix')
+                button(type='submit' class='btn btn-default' id='exportExcelButton') Export Workbook
+          div(class='modal-footer')
+            input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
+            //- input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('#upload').click()")
 
     div(id='warningsModalSpecies' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
       div(class='modal-dialog')

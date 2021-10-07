@@ -2,6 +2,8 @@
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
 
+import { displayExportExcelModal } from "./exportHelper";
+
 export const uploadState = {
     currentWorkbook: null,
 };
@@ -92,12 +94,21 @@ export const upload = function () {
         };
     };
 
-    $("#exportAsExcelWkbk").click(performExport("export-to-excel", "xlsx", "unweighted"));
-    $("#exportAsUnweightedSif").click(performExport("export-to-sif", "sif", "unweighted"));
-    $("#exportAsWeightedSif").click(performExport("export-to-sif", "sif", "weighted"));
-    $("#exportAsUnweightedGraphMl").click(performExport("export-to-graphml", "graphml", "unweighted"));
-    $("#exportAsWeightedGraphMl").click(performExport("export-to-graphml", "graphml", "weighted"));
-    $("#exportAsUnweightedExcel").click(performExport("export-to-excel", "xlsx", "unweighted"));
-    $("#exportAsWeightedExcel").click(performExport("export-to-excel", "xlsx", "weighted"));
+    var performExcelExport = function () {
+        return function () {
+            if (!$(this).parent().hasClass("disabled")) {
+                displayExportExcelModal();
+            }
+        };
+    };
+
+    // $("#exportAsExcelWkbk").click(performExport("export-to-excel", "xlsx", "unweighted"));
+    $("#exportAsUnweightedSif").on("click", performExport("export-to-sif", "sif", "unweighted"));
+    $("#exportAsWeightedSif").on("click", performExport("export-to-sif", "sif", "weighted"));
+    $("#exportAsUnweightedGraphMl").on("click", performExport("export-to-graphml", "graphml", "unweighted"));
+    $("#exportAsWeightedGraphMl").on("click", performExport("export-to-graphml", "graphml", "weighted"));
+    $("#exportAsUnweightedExcel").on("click", performExport("export-to-excel", "xlsx", "unweighted"));
+    // $("#exportAsWeightedExcel").on("click", performExport("export-to-excel", "xlsx", "weighted"));
+    $("#exportAsWeightedExcel").on("click", performExcelExport());
 
 };
