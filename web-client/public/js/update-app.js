@@ -104,7 +104,9 @@ import {
   VIEWPORT_SIZE_L_SIDEBAR,
   VIEWPORT_SIZE_FIT_SIDEBAR,
   VIEWPORT_INIT,
+//   EXPRESSION_SOURCE,
 } from "./constants";
+// import { createHTMLforExpressionSheets } from "./exportHelper";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
@@ -711,6 +713,14 @@ if (!grnState.genePageData.identified) {
     $(SPECIES_DISPLAY).val(grnState.genePageData.species);
 }
 
+// const handleExportExcelModal = () => {
+//     // console.log($(EXPRESSION_SOURCE).checked());
+//     // if ($("input[name=gender]:checked").length > 0) {
+//     createHTMLforExpressionSheets($("input[name=expressionSource]:checked", "exportExcelForm").val());
+//     // console.log($("input[name=expressionSource]:checked", "exportExcelForm").val());
+//     // }
+// };
+
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
@@ -788,6 +798,8 @@ export const updateApp = grnState => {
     } else if (grnState.graphLayout === GRID_LAYOUT) {
         updatetoGridLayout();
     }
+// Export Modal
+    // handleExportExcelModal();
 
 // Viewport
     updateViewportSize(grnState.viewportSize);
