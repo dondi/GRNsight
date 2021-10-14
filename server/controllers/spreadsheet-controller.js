@@ -3,25 +3,23 @@ var xlsx = require("node-xlsx");
 var path = require("path");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
-var parseWorkbookSheet = require(__dirname + "/workbook-sheet-parser");
+var parseNetworkSheet = require(__dirname + "/network-sheet-parser");
 var demoWorkbooks = require(__dirname + "/demo-workbooks");
+var constants = require(__dirname + "/workbook-constants");
 // var cytoscape = require("cytoscape"); //NOTE: Commented out for issue #474
 
 var helpers = require(__dirname + "/helpers");
 
-// Currently only going to number 76 because currently the workbook errors out at 75+ genes.
-var numbersToLetters = {0:"A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7:"H", 8: "I", 9:"J", 10:"K", 11:"L",
-    12:"M", 13:"N", 14:"O", 15:"P", 16:"Q", 17:"R", 18:"S", 19:"T", 20:"U", 21:"V", 22:"W", 23:"X", 24:"Y",
-    25:"Z", 26:"AA", 27:"AB", 28:"AC", 29:"AD", 30:"AE", 31:"AF", 32:"AG", 33:"AH", 34:"AI", 35:"AJ", 36:"AK",
-    37:"AL", 38:"AM", 39:"AN", 40:"AO", 41:"AP", 42:"AQ", 43:"AR", 44:"AS", 45:"AT", 46:"AU", 47:"AV", 48:"AW",
-    49:"AX", 51:"AY", 52:"AZ", 53:"BA", 54:"BB", 55:"BC", 56:"BD", 57:"BE", 58:"BF", 59:"BG", 60:"BH", 61:"BI",
-    62:"BJ", 63:"BK", 64:"BL", 65:"BM", 66:"BN", 67:"BO", 68:"BP", 69:"BQ", 70:"BR", 71:"BS", 72:"BT", 73:"BU",
-    74:"BV", 75:"BW", 76:"BX"};
-
 var EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-var SPECIES = ["Arabidopsis thaliana", "Caenorhabditis elegans", "Drosophila melanogaster",
-    "Homo sapiens", "Mus musculus", "Saccharomyces cerevisiae"];
+var SPECIES = [
+    "Arabidopsis thaliana",
+    "Caenorhabditis elegans",
+    "Drosophila melanogaster",
+    "Homo sapiens",
+    "Mus musculus",
+    "Saccharomyces cerevisiae",
+];
 
 var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
 
@@ -38,235 +36,11 @@ var doesSpeciesExist = function (speciesInfo) {
         }
     }
     for (var t in TAXON_ID) {
-        if ( TAXON_ID[t] === speciesInfo) {
+        if (TAXON_ID[t] === speciesInfo) {
             return true;
         }
     }
     return false;
-};
-
-// TODO: Put this and the warnings list into helpers.
-// This is the massive list of errors. Yay!
-// The graph will not load if an error is detected.
-var errorList = {
-    missingNetworkError: {
-        errorCode: "MISSING_NETWORK",
-        possibleCause: "This file does not have a 'network' sheet or a 'network_optimized_weights' sheet.",
-        suggestedFix: "Please select another file, or rename the sheet containing the adjacency matrix accordingly. \
-        Please refer to the " + "<a href='http://dondi.github.io/GRNsight/documentation.html#section1' \
-        target='_blank'>Documentation page</a> for more information."
-    },
-
-    corruptGeneError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "CORRUPT_GENE",
-            possibleCause: `The gene name in cell ${colLetter} ${rowNum} appears to be invalid.`,
-            suggestedFix: "Please fix the error and try uploading again."
-        };
-    },
-
-    missingValueError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "MISSING_VALUE",
-            possibleCause: `The value in the cell ${colLetter} ${rowNum} 
-            in the adjacency matrix appears to have a missing value.`,
-            suggestedFix: "Please ensure that all cells have a value, then upload the file again."
-        };
-    },
-
-
-    duplicateGeneError: function (geneType, geneName) {
-        return {
-            errorCode: "DUPLICATE_GENE",
-            possibleCause: `There exists a duplicate for ${geneType} gene ${geneName}.`,
-            suggestedFix: "Please remove the duplicate gene and submit again."
-        };
-    },
-
-    dataTypeError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "INVALID_CELL_DATA_TYPE",
-            possibleCause: `The value in cell ${colLetter} ${rowNum} is not a number.`,
-            suggestedFix: "Please ensure all values in the data matrix are numbers and try again."
-        };
-    },
-
-    emptyRowError: function (row) {
-        var rowNum = row + 1;
-        return {
-            errorCode: "EMPTY_ROW",
-            possibleCause: `Row ${rowNum} does not contain any data.`,
-            suggestedFix: `Please ensure all rows contain data and all empty rows are removed. 
-            Also, please ensure that no extraneous data is outside of the matrix, 
-            as this may cause this error.`
-        };
-    },
-
-    outsideCellError: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            errorCode: "EMPTY_CELL",
-            possibleCause: `The cell at ${colLetter} ${rowNum} contains data that is outside the matrix.`,
-            suggestedFix: "Please remove all extraneous data from outside the matrix and ensure matrix is correct"
-        };
-    },
-
-    errorsCountError: {
-        errorCode: "ERRORS_OVERLOAD",
-        possibleCause: "This workbook has over 20 errors.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
-            "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-            "further errors detected. As a general approach for fixing the errors, consider copying and " +
-            "pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-    },
-
-    warningsCountError: {
-        errorCode: "WARNINGS_OVERLOAD",
-        possibleCause: "This workbook has over 75 warnings.",
-        suggestedFix: "Please check the format of your spreadsheet with the guidelines outlined on the" +
-            " Documentation page and try again. If you fix these errors and try to upload again, there may be " +
-            " further errors detected. As a general approach for fixing the errors, consider copying and " +
-            " pasting just your adjacency matrix into a fresh Excel Workbook and saving it."
-    },
-
-    unknownError: {
-        errorCode: "UNKNOWN_ERROR",
-        possibleCause: "An unexpected error occurred.",
-        suggestedFix: "Please contact the GRNsight team at kdahlquist@lmu.edu, \
-        and attach the spreadsheet you attempted to upload."
-    },
-
-    geneMismatchError: function (sheetName) {
-        return {
-            errorCode: "GENE_MISMATCH",
-            possibleCause: `Gene names in column A of the "${sheetName}" sheet do not 
-            match the order of those in the network sheet`,
-            suggestedFix: `Please ensure that the gene names are in the same order 
-            as those in both the "network" sheet and the 
-            "network_optimized_weights" sheet.`
-        };
-    },
-
-    extraGeneNamesError: function (sheetName) {
-        return {
-            errorCode: "EXTRA_GENE_NAME",
-            possibleCause: `Gene names in column A of the "${sheetName}" sheet have 
-            one or more extra genes than those listed in the network sheet`,
-            SuggestedFix: `Please ensure that the genes in the "${sheetName}" sheet are
-            the same as the genes in the "network" sheet and the "network_optimized_weights" sheet.`
-        };
-    },
-
-    missingGeneNamesError: function (sheetName) {
-        return {
-            errorCode: "MISSING_GENE_NAME",
-            possibleCause: `Gene names in column A of the "${sheetName}"
-                sheet are missing one or more genes from the network sheet`,
-            SuggestedFix: `Please ensure that the genes in the "${sheetName}"
-                 are the same as the genes in the "network" sheet and the 
-                "network_optimized_weights" sheet.`
-        };
-    },
-
-};
-
-
-// This is the list of warnings.
-// The graph will still load if warnings are detected, but these will be reported to the user.
-var warningsList = {
-    missingSourceGeneWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "MISSING_SOURCE",
-            errorDescription: `A source gene name is missing in cell ${colLetter}${rowNum}.`
-        };
-    },
-
-    missingTargetGeneWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "MISSING_TARGET",
-            errorDescription: `A target gene name is missing in cell ${colLetter}${rowNum}.`
-        };
-    },
-
-    invalidMatrixDataWarning: function (row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "INVALID_DATA",
-            errorDescription: `The value in cell ${colLetter}${rowNum}, is undefined.`
-        };
-    },
-
-    randomDataWarning: function (type, row, column) {
-        var colLetter = numbersToLetters[column];
-        var rowNum = row + 1;
-        return {
-            warningCode: "RANDOM_DATA",
-            errorDescription: `The value in cell ${colLetter}${rowNum}, 
-            has a corresponding source and/or target gene that is detected as ${type}.`
-        };
-    },
-
-    emptyRowWarning: function (row) {
-        var rowNum = row + 1;
-        return {
-            warningCode: "EMPTY_ROW",
-            errorDescription: `Row ${rowNum} was found to contain no data.`
-        };
-    },
-
-    workbookSizeWarning: function (genesLength, edgesLength) {
-        return {
-            warningCode: "INVALID_NETWORK_SIZE",
-            errorDescription: `Your workbook has ${genesLength} genes, and ${edgesLength} 
-                edges. Please note that workbooks are recommended to have less than 50 genes and 100 edges.`
-        };
-    },
-
-    incorrectlyNamedSheetWarning: {
-        warningCode: "INCORRECTLY_NAMED_SHEET",
-        errorDescription: "The uploaded file appears to contain a weighted workbook, but contains no \
-             'network_optimized_weights' sheet. A weighted workbook must be contained in a sheet called \
-             'network_optimized_weights' in order to be drawn as a weighted graph. \
-             Please check if the sheet(s) in the uploaded spreadsheet have been named properly."
-    },
-
-    missingExpressionSheetWarning: {
-        warningCode: "MISSING_EXPRESSION_SHEET",
-        errorDescription: "_log2_expression or _log2_optimized_expression worksheet was \
-        not detected. The network graph will display without node coloring. If you want \
-        the nodes to be colored with expression data, you can upload your own expression \
-        data by adding one or more of those worksheets to your Excel workbook or select \
-        from data in GRNsight's Expression Database, found in the Node menu or panel."
-    },
-
-    noSpeciesInformationDetected: {
-        warningCode: "MISSING_SPECIES_INFORMATION",
-        errorDescription: "No species information was detected in your input file." +
-            " GRNsight defaults to Saccharomyces cerevisiae. You can change the species" +
-            " selection in the Species menu or panel."
-    },
-
-    unknownSpeciesDetected: function (workbookSpecies, workbookTaxon) {
-        return {
-            warningCode: "UNKNOWN_SPECIES_DETECTED",
-            errorDescription: "GRNsight detected the species " + workbookSpecies +
-                " and the taxon " + workbookTaxon + " in your input file." +
-                " This is not one of the supported species, or was formatted incorrectly" +
-                " You can change the species selection in the Species menu or panel."
-        };
-    }
 };
 
 var addMessageToArray = function (messageArray, message) {
@@ -279,7 +53,7 @@ var addWarning = function (workbook, message) {
     if (warningsCount < MAX_WARNINGS) {
         addMessageToArray(workbook.warnings, message);
     } else {
-        addMessageToArray(workbook.errors, errorList.warningsCountError);
+        addMessageToArray(workbook.errors, constants.errors.warningsCountError);
         return false;
     }
 };
@@ -290,7 +64,7 @@ var addError = function (workbook, message) {
     if (errorsCount < MAX_ERRORS) {
         addMessageToArray(workbook.errors, message);
     } else {
-        addMessageToArray(workbook.errors, errorList.errorsCountError);
+        addMessageToArray(workbook.errors, constants.errors.errorsCountError);
         return false;
     }
 };
@@ -305,14 +79,73 @@ var difference = function (setA, setB) {
     return _difference;
 };
 
+var deepClone = function (object, isArray) {
+    var clone = isArray ? [] : {};
+    if (isArray) {
+        for (let i of object) {
+            if (i !== null && typeof i === "object") {
+                clone.push(deepClone(i, Array.isArray(i)));
+            } else {
+                clone.push(i);
+            }
+        }
+    } else {
+        for (let i in object) {
+            if (object[i] !== null && typeof (object[i]) === "object") {
+                clone[i] = deepClone(object[i], Array.isArray(object[i]));
+            } else {
+                clone[i] = object[i];
+            }
+        }
+    }
+    return clone;
+};
+
 var crossSheetInteractions = function (workbookFile) {
-    var workbook = parseWorkbookSheet(workbookFile);
+    var workbook = {};
+
+    // Refactored the parseNetworkSheet function to preserve all network type sheets including "network",
+    // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
+    var networks = parseNetworkSheet(workbookFile);
 
     // Parse expression and 2-column data, then add to workbook object
     // Eventually, will split this up into parsing for each type of sheet.
     var additionalData = parseAdditionalSheets(workbookFile);
 
     var expressionData = parseExpressionSheets(workbookFile);
+
+    if (networks &&
+        networks.networkOptimizedWeights &&
+        typeof networks.networkOptimizedWeights === "object" &&
+        Object.keys(networks.networkOptimizedWeights).length > 0) {
+        // Base workbook is a clone of the prefered Optimized weights sheet
+        workbook = deepClone(networks.networkOptimizedWeights, false);
+        // Add errors from network sheet if it exists
+        if (networks.network && typeof networks.network === "object" && Object.keys(networks.network).length > 0) {
+            if (networks.network.errors !== undefined) {
+                networks.network.errors.forEach(data => workbook.errors.push(data));
+            }
+
+            if (networks.network.warnings !== undefined) {
+                networks.network.warnings.forEach(data => workbook.warnings.push(data));
+            }
+        }
+    } else {
+        // Set base workbook to a deep copy of the default network if network optimized weights does not exist
+        workbook = deepClone(networks.network, false);
+    }
+    // Add errors and warnings from network weights to preserve the sheet
+    if (networks.networkWeights &&
+        typeof networks.networkWeights === "object" &&
+        Object.keys(networks.networkWeights).length > 0) {
+        if (networks.networkWeights.errors !== undefined) {
+            networks.networkWeights.errors.forEach(data => workbook.errors.push(data));
+        }
+
+        if (networks.networkWeights.warnings !== undefined) {
+            networks.networkWeights.warnings.forEach(data => workbook.warnings.push(data));
+        }
+    }
 
     // Add errors and warnings from meta sheets
     if (additionalData && additionalData.meta) {
@@ -347,13 +180,23 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
-    if (additionalData.meta.data.species === undefined
-        && additionalData.meta.data.taxon_id === undefined) {
-        addWarning(workbook, warningsList.noSpeciesInformationDetected);
-    } else if (!doesSpeciesExist(additionalData.meta.data.species) &&
-        !doesSpeciesExist(additionalData.meta.data.taxon_id)) {
-        addWarning(workbook, warningsList.unknownSpeciesDetected(additionalData.meta.data.species,
-            additionalData.meta.data.taxon_id));
+    if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
+        addWarning(workbook, constants.warnings.noSpeciesInformationDetected);
+        additionalData.meta.data.species = "Saccharomyces cerevisiae";
+        additionalData.meta.data["taxon_id"] = "559292";
+    } else if (
+        !doesSpeciesExist(additionalData.meta.data.species) &&
+        !doesSpeciesExist(additionalData.meta.data.taxon_id)
+    ) {
+        addWarning(
+            workbook,
+            constants.warnings.unknownSpeciesDetected(
+                additionalData.meta.data.species,
+                additionalData.meta.data.taxon_id
+            )
+        );
+        additionalData.meta.data.species = "Saccharomyces cerevisiae";
+        additionalData.meta.data["taxon_id"] = 559292;
     }
 
     // Add errors and warnings from expression sheets
@@ -361,36 +204,30 @@ var crossSheetInteractions = function (workbookFile) {
     // We need to account for all the different possible expression sheet names.
     if (expressionData) {
         if (expressionData.errors !== undefined) {
-            expressionData.errors
-                .forEach( data => workbook.errors.push(data));
+            expressionData.errors.forEach(data => workbook.errors.push(data));
         }
         if (expressionData.warnings !== undefined) {
-            expressionData.warnings
-                .forEach( data => workbook.warnings.push(data));
+            expressionData.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
     if (expressionData && expressionData.expression) {
         if (expressionData.expression.errors !== undefined) {
-            expressionData.expression.errors
-                .forEach(data => workbook.errors.push(data));
+            expressionData.expression.errors.forEach(data => workbook.errors.push(data));
         }
 
         if (expressionData.expression.warnings !== undefined) {
-            expressionData.expression.warnings
-                .forEach(data => workbook.warnings.push(data));
+            expressionData.expression.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
     if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
         if (expressionData.expression.wt_log2_expression.errors !== undefined) {
-            expressionData.expression.wt_log2_expression.errors
-                .forEach(data => workbook.errors.push(data));
+            expressionData.expression.wt_log2_expression.errors.forEach(data => workbook.errors.push(data));
         }
 
         if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
-            expressionData.expression.wt_log2_expression.warnings
-                .forEach(data => workbook.warnings.push(data));
+            expressionData.expression.wt_log2_expression.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
@@ -409,24 +246,28 @@ var crossSheetInteractions = function (workbookFile) {
             if (extraExpressionGenes.size === 0 && extraWorkbookGenes.size === 0) {
                 for (var i = 0; i < workbook.genes.length; i++) {
                     if (workbook.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]) {
-                        addError(workbook, errorList.geneMismatchError(sheet.name));
+                        addError(workbook, constants.errors.geneMismatchError(sheet.name));
                         break;
                     }
                 }
             } else {
                 if (extraWorkbookGenes.size > 0) {
-                    addError(workbook, errorList.missingGeneNamesError(sheet.name));
+                    addError(workbook, constants.errors.missingGeneNamesError(sheet.name));
                 }
                 if (extraExpressionGenes.size > 0) {
-                    addError(workbook, errorList.extraGeneNamesError(sheet.name));
+                    addError(workbook, constants.errors.extraGeneNamesError(sheet.name));
                 }
             }
         }
     });
 
     // Integrate the desired properties from the other objects.
+    workbook.network = networks.network;
+    workbook.networkOptimizedWeights = networks.networkOptimizedWeights;
+    workbook.networkWeights = networks.networkWeights;
     workbook.meta = additionalData.meta;
     workbook.test = additionalData.test;
+    workbook.meta2 = additionalData.meta2;
     workbook.expression = expressionData.expression;
     return workbook;
 };
@@ -446,11 +287,11 @@ var processGRNmap = function (path, res, app) {
 
     var workbook = crossSheetInteractions(sheet);
 
-    return (workbook.errors.length === 0) ?
-        // If all looks well, return the workbook with an all clear
-        res.json(workbook) :
-        // If all does not look well, return the workbook with an error 400
-        res.status(400).json(workbook);
+    return workbook.errors.length === 0
+        ? // If all looks well, return the workbook with an all clear
+          res.json(workbook)
+        : // If all does not look well, return the workbook with an error 400
+          res.status(400).json(workbook);
 };
 
 var grnSightToCytoscape = function (workbook) {
@@ -458,8 +299,8 @@ var grnSightToCytoscape = function (workbook) {
     workbook.genes.forEach(function (gene) {
         result.push({
             data: {
-                id: gene.name
-            }
+                id: gene.name,
+            },
         });
     });
 
@@ -470,8 +311,8 @@ var grnSightToCytoscape = function (workbook) {
             data: {
                 id: sourceGene.name + targetGene.name,
                 source: sourceGene.name,
-                target: targetGene.name
-            }
+                target: targetGene.name,
+            },
         });
     });
 
@@ -513,11 +354,10 @@ var graphStatisticsReport = function(workbook)  {
 
 module.exports = function (app) {
     if (app) {
-
         // parse the incoming form data, then parse the spreadsheet. Finally, send back json.
         app.post("/upload", function (req, res) {
             // TODO: Add file validation (make sure that file is an Excel file)
-            (new multiparty.Form()).parse(req, function (err, fields, files) {
+            new multiparty.Form().parse(req, function (err, fields, files) {
                 if (err) {
                     return res.json(400, "There was a problem uploading your file. Please try again.");
                 }
@@ -529,12 +369,17 @@ module.exports = function (app) {
                 }
 
                 if (path.extname(input) !== ".xlsx") {
-                    return res.json(400, "This file cannot be loaded because:<br><br> The file is \
-                        not in a format GRNsight can read." + "<br>Please select an Excel Workbook \
+                    return res.json(
+                        400,
+                        "This file cannot be loaded because:<br><br> The file is \
+                        not in a format GRNsight can read." +
+                            "<br>Please select an Excel Workbook \
                         (.xlsx) file. Note that Excel 97-2003 Workbook (.xls) files are not " +
-                        " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
-                        using the importer under File > Import." + " Additional information about file \
-                        types that GRNsight supports is in the Documentation.");
+                            " able to be read by GRNsight. <br><br>SIF and GraphML files can be loaded \
+                        using the importer under File > Import." +
+                            " Additional information about file \
+                        types that GRNsight supports is in the Documentation."
+                    );
                 }
 
                 // input.meta holds the species and taxon data
@@ -548,8 +393,11 @@ module.exports = function (app) {
         });
 
         app.get("/demo/weighted", function (req, res) {
-            return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
-                res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx",
+                res,
+                app
+            );
         });
 
         app.get("/demo/schadeInput", function (req, res) {
@@ -557,15 +405,18 @@ module.exports = function (app) {
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
-            return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
-                res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.xlsx",
+                res,
+                app
+            );
         });
     }
 
-    // exporting parseWorkbookSheet for use in testing. Do not remove!
+    // exporting parseNetworkSheet for use in testing. Do not remove!
     return {
         grnSightToCytoscape: grnSightToCytoscape,
         processGRNmap: processGRNmap,
-        crossSheetInteractions: crossSheetInteractions
+        crossSheetInteractions: crossSheetInteractions,
     };
 };

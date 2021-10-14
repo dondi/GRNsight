@@ -5,6 +5,7 @@ import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
 import {
+  HOST_SITE,
   FORCE_GRAPH,
   GRID_LAYOUT,
   GREY_EDGES_DASHED_MENU,
@@ -89,11 +90,21 @@ import {
   SPECIES_BUTTON_HUMAN,
   SPECIES_BUTTON_MOUSE,
   SPECIES_BUTTON_NEMATODE,
-  SPECIES_BUTTON_YEAST
-
+  SPECIES_BUTTON_YEAST,
+  VIEWPORT_FIT,
+  VIEWPORT_S,
+  VIEWPORT_M,
+  VIEWPORT_L,
+  VIEWPORT_SIZE_S_DROPDOWN,
+  VIEWPORT_SIZE_M_DROPDOWN,
+  VIEWPORT_SIZE_L_DROPDOWN,
+  VIEWPORT_SIZE_FIT_DROPDOWN,
+  VIEWPORT_SIZE_S_SIDEBAR,
+  VIEWPORT_SIZE_M_SIDEBAR,
+  VIEWPORT_SIZE_L_SIDEBAR,
+  VIEWPORT_SIZE_FIT_SIDEBAR,
+  VIEWPORT_INIT,
 } from "./constants";
-
-let expressionDBdesired = false;
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
@@ -210,6 +221,133 @@ const synchronizeHideAllWeights = () => {
     $(WEIGHTS_SHOW_MOUSE_OVER_CLASS).removeClass("selected");
     $(WEIGHTS_SHOW_ALWAYS_CLASS).removeClass("selected");
     $(WEIGHTS_HIDE_CLASS).addClass("selected");
+};
+
+// Viewport
+const synchronizeViewportSizeSmall = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeMedium = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_M_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeLarge = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_L_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const synchronizeViewportSizeFit = () => {
+    $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").removeClass("glyphicon-ok");
+
+    $(VIEWPORT_SIZE_S_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_M_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_L_SIDEBAR).removeProp("checked");
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).removeProp("checked");
+
+    $(VIEWPORT_SIZE_FIT_SIDEBAR).prop("checked", "checked");
+    $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").addClass("glyphicon-ok");
+};
+
+const updateViewportSize = (currentValue) => {
+    // These values are bound to the layout dimensions of the GRNsight website.
+    const WIDTH_OFFSET = 250;
+    const HEIGHT_OFFSET = 53;
+
+    let container = $(".grnsight-container");
+
+    // from jquery
+    const fitContainer = dimensions => {
+        if (!dimensions) {
+            return; // First call; the next one should have dimensions filled in.
+        }
+
+        const fitWidth = dimensions.width - WIDTH_OFFSET;
+        const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
+        if (fitWidth !== container.width() || fitHeight !== container.height()) {
+            container.css({
+                width: fitWidth,
+                height: fitHeight
+            });
+        }
+    };
+
+    const fitContainerToWindow = () => {
+        fitContainer({
+            width: $(window).width(),
+            height: $(window).height(),
+            top: 0
+        });
+    };
+
+    const requestWindowDimensions = () => {
+        // We send a message if we are in an iframe, and manipulate directly if we aren’t.
+        if (window === window.top) {
+            fitContainerToWindow();
+        } else {
+            window.top.postMessage("dimensions", HOST_SITE);
+        }
+    };
+
+    let grnsightContainerClass = `grnsight-container ${currentValue}`;
+    if (!container.hasClass(currentValue)) {
+        container.attr("class", grnsightContainerClass);
+        if (currentValue === VIEWPORT_FIT) {
+            requestWindowDimensions();
+        } else {
+            container.css({ width: "", height: "" });
+        }
+    }
+
+    // Added synchronization
+    if (currentValue === VIEWPORT_S) {
+        synchronizeViewportSizeSmall();
+    } else if (currentValue === VIEWPORT_M) {
+        synchronizeViewportSizeMedium();
+    } else if (currentValue === VIEWPORT_L) {
+        synchronizeViewportSizeLarge();
+    } else if (currentValue === VIEWPORT_FIT) {
+        fitContainer(grnState.dimensions);
+        synchronizeViewportSizeFit();
+    } else if (currentValue === VIEWPORT_INIT) {
+        // First time around: initialize.
+        requestWindowDimensions();
+    }
 };
 
 // Expression DB Access Functions
@@ -651,11 +789,10 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
+// Viewport
+    updateViewportSize(grnState.viewportSize);
+
     // Node Coloring
-    if (grnState.workbook !== null && !hasExpressionData(grnState.workbook.expression) && !expressionDBdesired) {
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
-        expressionDBdesired = true;
-    }
     if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
     && hasExpressionData(grnState.workbook.expression)) {
         grnState.nodeColoring.showMenu = true;
@@ -772,6 +909,10 @@ export const updateApp = grnState => {
 
             }
         }
+    } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
+        $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {

@@ -1,6 +1,7 @@
 var expect = require("chai").expect;
 var extend = require("jquery-extend");
 var xlsx = require("node-xlsx");
+var test = require("./test");
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
@@ -361,7 +362,6 @@ describe("Export to GraphML", function () {
         var lines = exportController.grnsightToGraphMl(workbookWithFilename).split("\n").map(function (line) {
             return line.trim();
         });
-
         var expectedGraphMlLines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<graphml xmlns="http://graphml.graphdrawing.org/xmlns" ' +
@@ -448,41 +448,135 @@ const inputWorkbook = {
         }
     ],
 
+    network: {
+        "genes": [
+            { "name": "ACE2" },
+            { "name": "AFT2" },
+            { "name": "CIN5" },
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 0,
+                "value": 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 1,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 2,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            }
+        ],
+    },
+
+    networkWeights: {
+        "genes": [
+            { "name": "ACE2" },
+            { "name": "AFT2" },
+            { "name": "CIN5" },
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 0,
+                "value": 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 1,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 1,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            },
+
+            {
+                source: 2,
+                target: 2,
+                value: 1,
+                type: "arrowhead",
+                stroke: "black"
+            }
+        ],
+    },
+
     "meta": {
-        "L_curve": 0,
-        "MaxFunEval": 1000000,
-        "MaxIter": 1000000,
-        "Strain": ["wt", "dcin5"],
-        "TolFun": 0.00001,
-        "TolX": 0.00001,
-        "alpha": 0.001,
-        "estimate_params": 1,
-        "expression_timepoints": [0.4, 0.8, 1.2],
-        "fix_P": 1,
-        "fix_b": 0,
-        "kk_max": 1,
-        "make_graphs": 1,
-        "production_function": "testMM",
-        "simulation_timepoints": [0, 0.1, 0.2],
+        data: {
+            "L_curve": 0,
+            "MaxFunEval": 1000000,
+            "MaxIter": 1000000,
+            "Strain": ["wt", "dcin5"],
+            "TolFun": 0.00001,
+            "TolX": 0.00001,
+            "alpha": 0.001,
+            "estimate_params": 1,
+            "expression_timepoints": [0.4, 0.8, 1.2],
+            "fix_P": 1,
+            "fix_b": 0,
+            "kk_max": 1,
+            "make_graphs": 1,
+            "production_function": "testMM",
+            "simulation_timepoints": [0, 0.1, 0.2],
+            "species": "Saccharomyces cerevisiae",
+            "taxon_id": 559292
+        }
     },
 
     "test": {
         "production_rates": {
-            "ACE2": 0.5,
-            "AFT2": 1,
-            "CIN5": 2
+            data: {
+                "ACE2": 0.5,
+                "AFT2": 1,
+                "CIN5": 2
+            }
         },
 
         "degradation_rates": {
-            "ACE2": 1,
-            "AFT2": 1,
-            "CIN5": 1
+            data: {
+                "ACE2": 1,
+                "AFT2": 1,
+                "CIN5": 1
+            }
         },
 
         "threshold_b": {
-            "ACE2": 0,
-            "AFT2": 0,
-            "CIN5": 0
+            data: {
+                "ACE2": 0,
+                "AFT2": 0,
+                "CIN5": 0
+            }
         }
     },
 
@@ -558,22 +652,22 @@ describe("Export to spreadsheet", function () {
     it("should export a workbook to a spreadsheet object properly", function () {
         const expectedSheet = [
             {
-                name: "workbook",
+                name: "network",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
-                    ["AFT2", 0, 1, 0],
-                    ["CIN5", 0, 1, 1]
+                    ["AFT2", 0, 1, 1],
+                    ["CIN5", 0, 0, 1]
                 ]
             },
 
             {
-                name: "workbook_weights",
+                name: "network_weights",
                 data: [
                     ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
-                    ["AFT2", 0, 1, 0],
-                    ["CIN5", 0, 1, 1]
+                    ["AFT2", 0, 1, 1],
+                    ["CIN5", 0, 0, 1]
                 ]
             },
 
@@ -596,6 +690,8 @@ describe("Export to spreadsheet", function () {
                     ["make_graphs", 1],
                     ["production_function", "testMM"],
                     ["simulation_timepoints", 0, 0.1, 0.2],
+                    ["species", "Saccharomyces cerevisiae"],
+                    ["taxon_id", 559292]
                 ]
             },
 
@@ -633,7 +729,7 @@ describe("Export to spreadsheet", function () {
                 name: "wt_log2_expression",
                 data:
                 [
-                    [ "id", 0.4, 0.8, 1.2],
+                    ["id", 0.4, 0.8, 1.2],
                     [
                         "ACE2",
                         1,
@@ -684,4 +780,34 @@ describe("Export to spreadsheet", function () {
         const actualSheet = exportController.grnsightToXlsx(inputWorkbook);
         expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
+
+    it("should export a workbook exactly as the import",
+        function () {
+            test.importFileSameAsExportFile(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
+            test.importFileSameAsExportFile(
+                "test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx");
+            test.importFileSameAsExportFile(
+                "test-files/additional-sheet-test-files/optimization-parameters-default.xlsx");
+        }
+    );
+
+    it("should import a workbook with minor additional sheet warnings," +
+    " export the workbook, and import the exported workbook properly",
+        function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx");
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx");
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx");
+        }
+    );
+
+    it("should import a workbook with no warnings, export the workbook, and import the exported workbook properly",
+        function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
+        }
+    );
 });
