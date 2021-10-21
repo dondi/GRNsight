@@ -313,9 +313,9 @@ export const upload = function () {
                 </label>
             </li>
             <li class=\'export-excel-expression-sheet-option\'>
-                <input type=\'checkbox\' checked=\"true\" name=\'expressionSheets\' value=\"Dahlquist_2018_dgin3\" id=\'exportExcelExpression-Dahlquist_2018_dgin3\' class=\'export-checkbox\' />
-                <label for=\'exportExcelExpression-Dahlquist_2018_dgin3\' id=\'exportExcelExpression-Dahlquist_2018_dgin3-label\' class=\'export-checkbox-label\' >
-                    Dahlquist_2018_dgin3
+                <input type=\'checkbox\' checked=\"true\" name=\'expressionSheets\' value=\"Dahlquist_2018_dgln3\" id=\'exportExcelExpression-Dahlquist_2018_dgln3\' class=\'export-checkbox\' />
+                <label for=\'exportExcelExpression-Dahlquist_2018_dgln3\' id=\'exportExcelExpression-Dahlquist_2018_dgln3-label\' class=\'export-checkbox-label\' >
+                    Dahlquist_2018_dgln3
                 </label>
             </li>
             <li class=\'export-excel-expression-sheet-option\'>
