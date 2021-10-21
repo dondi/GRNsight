@@ -127,6 +127,7 @@ export const upload = function () {
                 exportForm.submit();
                 exportForm.remove();
             }
+            $("#exportExcelModal").modal("hide");
         } else {
             // source is from database so lets query her up
             for (let sheet of chosenSheets) {
@@ -159,6 +160,7 @@ export const upload = function () {
                                 exportForm.submit();
                                 exportForm.remove();
                             }
+                            $("#exportExcelModal").modal("hide");
                         }
                     }
                 }).catch(function (error) {
