@@ -74,11 +74,8 @@ export const upload = function () {
     };
 
     const handleExportExcelButtonExport = (route, extension, sheetType, source) => {
-        console.log(source);
-        // Get the chosen sheets
         const expressionSheets = $("input[name=expressionSheets]:checked");
         var chosenSheets = [];
-        console.log("selected sheets:");
         for (const [key, value] of Object.entries(expressionSheets)) {
             if (!isNaN(parseInt(key, 10))) {
                 if (value.value === "select all") {
@@ -97,7 +94,6 @@ export const upload = function () {
                 }
             }
         }
-        console.log(chosenSheets);
         const exportSheets = {};
 
         if (source === "userInput" && grnState.workbook.expression) {
@@ -108,11 +104,9 @@ export const upload = function () {
                     exportSheets[sheet] = grnState.workbook.expression[sheet];
                 }
             }
-            console.log(exportSheets);
             grnState.workbook.exportExpression = exportSheets;
             if (!$(this).parent().hasClass("disabled")) {
                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-                console.log(workbookToExport);
                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
                     sheetType : "", extension);
                 workbookToExport.filename = workbookFilename;
@@ -143,12 +137,9 @@ export const upload = function () {
                         stopLoadingIcon();
                         if (Object.keys(exportSheets).length === chosenSheets.length) {
                             // we have all of the sheets so lets initilize the export process
-                            console.log(exportSheets);
                             grnState.workbook.exportExpression = exportSheets;
                             if (!$(this).parent().hasClass("disabled")) {
                                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-                                console.log("Expression sheets to export");
-                                console.log(workbookToExport);
                                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
                                     sheetType : "", extension);
                                 workbookToExport.filename = workbookFilename;
@@ -185,11 +176,8 @@ export const upload = function () {
             if (route === "export-to-excel" && source) {
                 handleExportExcelButtonExport(route, extension, sheetType, source);
             } else {
-                console.log("performing Export!!!");
-                // console.log(expressionSheets);
                 if (!$(this).parent().hasClass("disabled")) {
                     var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-                    console.log(workbookToExport);
                     var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
                         sheetType : "", extension);
                     workbookToExport.filename = workbookFilename;
@@ -292,7 +280,6 @@ export const upload = function () {
     };
 
     const createHTMLforExpressionSheets = (source) => {
-        // console.log(source);
         $(".export-excel-expression-sheet-option").remove();
         // check if user updated data is selected
         let result =  `
@@ -305,7 +292,6 @@ export const upload = function () {
             `;
         if (source === "userInput") {
             for (let expression in grnState.workbook.expression) {
-                // console.log(expression);
                 result = result + `
                 <li class=\'export-excel-expression-sheet-option\'>
                     <input type=\'checkbox\' name=\'expressionSheets\' checked=\"true\" value=\"${expression}\" id=\'exportExcelExpression-${expression}\' class=\'export-checkbox\' />
@@ -386,7 +372,6 @@ export const upload = function () {
     };
 
     const handleExportExcelButtonContinue = () => {
-        // console.log("continue");
         const weight = $("input[name=network-weights]:checked")[0].value;
         const source = $("input[name=expressionSource]:checked")[0].value;
         $("#exportExcelForm1").remove();

@@ -150,11 +150,10 @@ const buildXlsxSheet = function (workbook) {
             resultSheet.push(...buildTestSheets(workbook[key]));
             break;
         case "expression":
-            resultSheet.push(...buildExpressionSheets(workbook[key]));
+            // resultSheet.push(...buildExpressionSheets(workbook[key]));
             break;
         case "exportExpression":
-            console.log("she exists bruv");
-            // resultSheet.push(...buildExpressionSheets(workbook[key]));
+            resultSheet.push(...buildExpressionSheets(workbook[key]));
             break;
         default:
             break;
