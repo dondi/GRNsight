@@ -87,10 +87,11 @@ const isExpressionSheet = (sheetName) => {
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
+        let expressionName = expression;
         if (!isExpressionSheet(expression)) {
-            expression = expression + "_expression";
+            expressionName = expression + "_expression";
         }
-        const builtSheet = { name: expression, data: []};
+        const builtSheet = { name: expressionName, data: []};
         Object.keys(expressions[expression]["data"]).forEach((key) => {
             const expressionData = expressions[expression]["data"][key];
             builtSheet["data"].push([key, ...expressionData]);
