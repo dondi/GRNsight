@@ -76,21 +76,21 @@ const buildMetaSheet = function (metaDataContainer) {
     return meta;
 };
 
-const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+// const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-const isExpressionSheet = (sheetName) => {
-    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
-        return sheetName.includes(suffix);
-    });
-};
+// const isExpressionSheet = (sheetName) => {
+//     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+//         return sheetName.includes(suffix);
+//     });
+// };
 
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
         let expressionName = expression;
-        if (!isExpressionSheet(expression)) {
-            expressionName = expression + "_expression";
-        }
+        // if (!isExpressionSheet(expression)) {
+        //     expressionName = expression + "_expression";
+        // }
         const builtSheet = { name: expressionName, data: []};
         Object.keys(expressions[expression]["data"]).forEach((key) => {
             const expressionData = expressions[expression]["data"][key];
