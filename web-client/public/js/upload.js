@@ -66,7 +66,6 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-
         if (suffix) {
             filename = filename + "_" + suffix;
         }
@@ -109,12 +108,8 @@ export const upload = function () {
                     exportSheets[sheet] = grnState.workbook.expression[sheet];
                 }
             }
-
             console.log(exportSheets);
             grnState.workbook.exportExpression = exportSheets;
-            console.log("she should be exporting");
-            console.log("performing Export!!!");
-            // console.log(expressionSheets);
             if (!$(this).parent().hasClass("disabled")) {
                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
                 console.log(workbookToExport);
@@ -138,31 +133,25 @@ export const upload = function () {
                 exportForm.submit();
                 exportForm.remove();
             }
-
-            console.log("she did do them exports");
         } else {
             // source is from database so lets query her up
             for (let sheet of chosenSheets) {
                 let queryURL = buildURL({ dataset: sheet });
                 responseData("", queryURL).then(function (response) {
                     exportSheets[sheet] = response;
-
                     if (exportSheets[sheet]) {
                         stopLoadingIcon();
                         if (Object.keys(exportSheets).length === chosenSheets.length) {
                             // we have all of the sheets so lets initilize the export process
                             console.log(exportSheets);
                             grnState.workbook.exportExpression = exportSheets;
-                            console.log("she should be exporting");
-                            console.log("performing Export!!!");
-                            // console.log(expressionSheets);
                             if (!$(this).parent().hasClass("disabled")) {
                                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
+                                console.log("Expression sheets to export");
                                 console.log(workbookToExport);
                                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
                                     sheetType : "", extension);
                                 workbookToExport.filename = workbookFilename;
-
                                 var exportForm = $("<form></form>").attr({
                                     method: "POST",
                                     action: $("#service-root").val() + "/" + route
@@ -179,11 +168,8 @@ export const upload = function () {
                                 exportForm.submit();
                                 exportForm.remove();
                             }
-
-                            console.log("she did do them exports");
                         }
                     }
-                    // enableNodeColoringUI();
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
