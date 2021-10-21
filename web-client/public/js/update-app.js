@@ -351,7 +351,6 @@ const updateViewportSize = (currentValue) => {
         requestWindowDimensions();
     }
 };
-
 // Expression DB Access Functions
 const buildTimepointsString = function (selection) {
     let timepoints = "";
@@ -993,3 +992,6 @@ export const updateApp = grnState => {
     refreshApp();
 
 };
+
+
+export {buildURL, responseData, stopLoadingIcon};
