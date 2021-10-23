@@ -137,6 +137,8 @@ export const upload = function () {
                     if (exportSheets[sheet]) {
                         stopLoadingIcon();
                         if (Object.keys(exportSheets).length === chosenSheets.length) {
+                            console.log("Checking to see what a bad response gives us");
+                            console.log(exportSheets);
                             // we have all of the sheets so lets initilize the export process
                             grnState.workbook.exportExpression = exportSheets;
                             if (!$(this).parent().hasClass("disabled")) {
@@ -291,6 +293,12 @@ export const upload = function () {
                     All Expression Sheets
                 </label>
             </li>
+            <li class=\'export-excel-expression-sheet-option\'>
+                <input type=\'checkbox\' name=\'expressionSheets\' checked=\"true\" value=\"break\" id=\'exportExcelExpression-All\' class=\'export-checkbox\' />
+                <label for=\'exportExcelExpression-All\' id=\'exportExcelExpression-All-label\' class=\'export-checkbox-label\' >
+                    Will break the database query
+            </label>
+        </li>
             `;
         if (source === "userInput") {
             for (let expression in grnState.workbook.expression) {
