@@ -87,8 +87,7 @@ const isExpressionSheet = (sheetName) => {
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
-        if (expression.timePoints && expression.data) {
-            // if the expression sheet has expression data
+        if (expressions[expression].timePoints && expression[expression].data) {
             let expressionName = expression;
             if (!isExpressionSheet(expression)) {
                 expressionName = expression + "_expression";
