@@ -133,12 +133,23 @@ export const upload = function () {
             for (let sheet of chosenSheets) {
                 let queryURL = buildURL({ dataset: sheet });
                 responseData("", queryURL).then(function (response) {
-                    exportSheets[sheet] = response;
-                    if (exportSheets[sheet]) {
+                    // Check if the query gives back a valid sheet
+                    // The database will return an object that contains the key data (the genes queried)
+                    // and the key timePoints (the actual timepoint sequence data)
+                    const keys = Object.keys(response);
+                    let returned = false;
+                    if (keys.includes() && keys.includes()) {
+                        // If they are both there, assume that the response was good and add it to the exported sheets object
+                        exportSheets[sheet] = response;
+                        returned = true;
+                    } else {
+                        // If one of them is missing, assume that the response was bad and don't add it to the
+                        // exported sheets object
+                        returned = true;
+                    }
+                    if (returned) {
                         stopLoadingIcon();
                         if (Object.keys(exportSheets).length === chosenSheets.length) {
-                            console.log("Checking to see what a bad response gives us");
-                            console.log(exportSheets);
                             // we have all of the sheets so lets initilize the export process
                             grnState.workbook.exportExpression = exportSheets;
                             if (!$(this).parent().hasClass("disabled")) {

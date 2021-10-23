@@ -103,6 +103,7 @@ const buildExpressionSheets = function (expressions) {
 
 const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
+    console.log(workbook);
 
     Object.keys(workbook).forEach((key) => {
         switch (key) {
