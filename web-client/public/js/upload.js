@@ -159,6 +159,7 @@ export const upload = function () {
                                 $("body").append(exportForm);
                                 exportForm.submit();
                                 exportForm.remove();
+                                console.log(grnState);
                             }
                             $("#exportExcelModal").modal("hide");
                         }
