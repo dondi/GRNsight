@@ -87,16 +87,19 @@ const isExpressionSheet = (sheetName) => {
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
-        let expressionName = expression;
-        if (!isExpressionSheet(expression)) {
-            expressionName = expression + "_expression";
+        if (expression.timePoints && expression.data) {
+            // if the expression sheet has expression data
+            let expressionName = expression;
+            if (!isExpressionSheet(expression)) {
+                expressionName = expression + "_expression";
+            }
+            const builtSheet = { name: expressionName, data: [] };
+            Object.keys(expressions[expression]["data"]).forEach((key) => {
+                const expressionData = expressions[expression]["data"][key];
+                builtSheet["data"].push([key, ...expressionData]);
+            });
+            builtExpressionSheets.push(builtSheet);
         }
-        const builtSheet = { name: expressionName, data: []};
-        Object.keys(expressions[expression]["data"]).forEach((key) => {
-            const expressionData = expressions[expression]["data"][key];
-            builtSheet["data"].push([key, ...expressionData]);
-        });
-        builtExpressionSheets.push(builtSheet);
     });
     return builtExpressionSheets;
 };
