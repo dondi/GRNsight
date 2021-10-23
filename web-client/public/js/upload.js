@@ -301,12 +301,6 @@ export const upload = function () {
                     All Expression Sheets
                 </label>
             </li>
-            <li class=\'export-excel-expression-sheet-option\'>
-                <input type=\'checkbox\' name=\'expressionSheets\' checked=\"true\" value=\"break\" id=\'exportExcelExpression-All\' class=\'export-checkbox\' />
-                <label for=\'exportExcelExpression-All\' id=\'exportExcelExpression-All-label\' class=\'export-checkbox-label\' >
-                    Will break the database query
-            </label>
-        </li>
             `;
         if (source === "userInput") {
             for (let expression in grnState.workbook.expression) {
