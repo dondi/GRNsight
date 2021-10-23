@@ -141,11 +141,13 @@ export const upload = function () {
                     if (keys.includes() && keys.includes()) {
                         // If they are both there, assume that the response was good and add it to the exported sheets object
                         exportSheets[sheet] = response;
+                        console.log(`returned sheet ${sheet}`);
                         returned = true;
                     } else {
                         // If one of them is missing, assume that the response was bad and don't add it to the
                         // exported sheets object
                         returned = true;
+                        console.log(`returned bad sheet ${sheet}`);
                     }
                     if (returned) {
                         stopLoadingIcon();
