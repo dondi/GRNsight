@@ -74,6 +74,7 @@ export const upload = function () {
     };
 
     const handleExportExcelButtonExport = (route, extension, sheetType, source) => {
+        grnState.workbook.exportNetworkType = sheetType;
         const expressionSheets = $("input[name=expressionSheets]:checked");
         var chosenSheets = [];
         for (const [key, value] of Object.entries(expressionSheets)) {
@@ -159,7 +160,6 @@ export const upload = function () {
                                 $("body").append(exportForm);
                                 exportForm.submit();
                                 exportForm.remove();
-                                console.log(grnState.workbook);
                             }
                             $("#exportExcelModal").modal("hide");
                         }

@@ -103,7 +103,7 @@ const buildExpressionSheets = function (expressions) {
 
 const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
-    console.log(workbook);
+    const exportNetworkType = workbook.exportNetworkType;
 
     Object.keys(workbook).forEach((key) => {
         switch (key) {
@@ -118,24 +118,28 @@ const buildXlsxSheet = function (workbook) {
             }
             break;
         case "networkOptimizedWeights":
-            if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": "network_optimized_weights",
-                        "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
-                            workbook.networkOptimizedWeights.links)
-                    }
-                );
+            if (exportNetworkType === "weighted") {
+                if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
+                    resultSheet.push(
+                        {
+                            "name": "network_optimized_weights",
+                            "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
+                                workbook.networkOptimizedWeights.links)
+                        }
+                    );
+                }
             }
             break;
         case "networkWeights":
-            if (Object.keys(workbook.networkWeights).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": "network_weights",
-                        "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
-                    }
-                );
+            if (exportNetworkType === "weighted") {
+                if (Object.keys(workbook.networkWeights).length > 0) {
+                    resultSheet.push(
+                        {
+                            "name": "network_weights",
+                            "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
+                        }
+                    );
+                }
             }
             break;
         case "meta":
