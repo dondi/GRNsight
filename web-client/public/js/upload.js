@@ -139,7 +139,16 @@ export const upload = function () {
                         stopLoadingIcon();
                         if (Object.keys(exportSheets).length === chosenSheets.length) {
                             // we have all of the sheets so lets initilize the export process
-                            grnState.workbook.exportExpression = exportSheets;
+                            const finalExportSheets = {};
+                            Object.keys(exportSheets).forEach((sheet) => {
+                                // make sure that the sheets we queried are populated with the correct data
+                                if (exportSheets[sheet].data && exportSheets[sheet].timePoints) {
+                                    // if the resulting query contains both the timePoint data and
+                                    // the gene data then export it. If not don't :)
+                                    finalExportSheets[sheet] = exportSheets[sheet];
+                                }
+                            });
+                            grnState.workbook.exportExpression = finalExportSheets;
                             if (!$(this).parent().hasClass("disabled")) {
                                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
                                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
