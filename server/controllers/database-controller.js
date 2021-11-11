@@ -76,6 +76,7 @@ let buildGenesQuery = function (geneString) {
 };
 
 let buildQuery = function (dataset, timepoints, genes) {
+    console.log("Orientation is here!!!!");
     console.log(timepoints ?
         `SELECT DISTINCT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
         (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
@@ -115,6 +116,10 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
+
+            console.log("Orientation is also here!!!!");
+            console.log(sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
+            { type: sequelize.QueryTypes.SELECT }));
             return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
