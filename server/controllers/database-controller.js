@@ -76,6 +76,12 @@ let buildGenesQuery = function (geneString) {
 };
 
 let buildQuery = function (dataset, timepoints, genes) {
+    console.log(timepoints ?
+        `SELECT DISTINCT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
+        (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
+        (${buildGenesQuery(genes)}) ORDER BY sortindex;`
+        : `SELECT DISTINCT * FROM fall2021.expression WHERE fall2021.expression.dataset='${dataset}'
+        AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`);
     return timepoints ?
     `SELECT DISTINCT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
     (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
