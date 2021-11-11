@@ -105,10 +105,6 @@ let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
     return JSONOutput;
 };
 
-// module.exports = function (dataset, timepoints, genes) {
-//     console.log(`\n\n\n\n\nDataset: ${dataset}\nTimepoints: ${timepoints}\nGenes: ${genes}`);
-//     return buildQuery(dataset, timepoints, genes);
-// };
 module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {

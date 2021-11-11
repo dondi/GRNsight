@@ -149,6 +149,7 @@ export const upload = function () {
                                 }
                             });
                             grnState.workbook.exportExpression = finalExportSheets;
+                            console.log(grnState.workbook.exportExpression);
                             if (!$(this).parent().hasClass("disabled")) {
                                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
                                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
