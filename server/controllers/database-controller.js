@@ -110,6 +110,7 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
+            console.log(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes));
             return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
