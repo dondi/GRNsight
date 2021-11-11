@@ -80,7 +80,7 @@ let buildQuery = function (dataset, timepoints, genes) {
     `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
     (${buildTimepointsQuery(timepoints)}) AND
     (${buildGenesQuery(genes)}) ORDER BY sort_index;`
-    : `SELECT * FROM fall2021.expression WHERE fall2021.expression.dataset='${dataset}'
+    : `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
     AND (${buildGenesQuery(genes)}) ORDER BY sort_index;`;
 };
 
@@ -106,7 +106,7 @@ let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
 };
 
 // module.exports = function (dataset, timepoints, genes) {
-//     console.log(`Dataset: ${dataset}\nTimepoints: ${timepoints}\nGenes: ${genes}`);
+//     console.log(`\n\n\n\n\nDataset: ${dataset}\nTimepoints: ${timepoints}\nGenes: ${genes}`);
 //     return buildQuery(dataset, timepoints, genes);
 // };
 module.exports = function (app) {
