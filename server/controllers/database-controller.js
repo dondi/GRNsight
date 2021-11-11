@@ -87,7 +87,7 @@ let buildQuery = function (dataset, timepoints, genes) {
 let listGeneData = function (gene, totalOutput) {
     let listOfData = [];
     totalOutput.forEach(function (x) {
-        if (x.standardname === gene) {
+        if (x.display_gene_id === gene) {
             listOfData.push(Number(x.expression));
         }
     });
