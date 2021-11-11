@@ -71,18 +71,17 @@ let buildTimepointsQuery = function (selection) {
 let buildGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ("(SELECT *  FROM fall2021.expression, fall2021.gene " +
-        `WHERE fall2021.expression.dataset = '\${dataset}' AND fall2021.gene.display_gene_id =\'${x}\') OR `));
+    geneList.forEach(x => genes += ( `(fall2021.gene.display_gene_id =\'${x}\') OR `));
     return genes.substring(0, genes.length - 4);
 };
 
 let buildQuery = function (dataset, timepoints, genes) {
     return timepoints ?
     `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
-    (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
-    (${buildGenesQuery(genes)}) ORDER BY sortindex;`
+    (${buildTimepointsQuery(timepoints)}) AND
+    (${buildGenesQuery(genes)}) ORDER BY sort_index;`
     : `SELECT * FROM fall2021.expression WHERE fall2021.expression.dataset='${dataset}'
-    AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
+    AND (${buildGenesQuery(genes)}) ORDER BY sort_index;`;
 };
 
 let listGeneData = function (gene, totalOutput) {
@@ -106,11 +105,14 @@ let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
     return JSONOutput;
 };
 
+// module.exports = function (dataset, timepoints, genes) {
+//     console.log(`Dataset: ${dataset}\nTimepoints: ${timepoints}\nGenes: ${genes}`);
+//     return buildQuery(dataset, timepoints, genes);
+// };
 module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
-            console.log(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes));
             return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
