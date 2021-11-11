@@ -77,10 +77,10 @@ let buildGenesQuery = function (geneString) {
 
 let buildQuery = function (dataset, timepoints, genes) {
     return timepoints ?
-    `SELECT * FROM expressiondata WHERE dataset='${dataset}' AND
+    `SELECT * FROM fall2021.expression WHERE dataset='${dataset}' AND
     (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
     (${buildGenesQuery(genes)}) ORDER BY sortindex;`
-    : `SELECT * FROM expressiondata WHERE dataset='${dataset}'
+    : `SELECT * FROM fall2021.expression WHERE dataset='${dataset}'
     AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
 };
 
