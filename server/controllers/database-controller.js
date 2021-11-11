@@ -64,30 +64,24 @@ timepointsSources.forEach(source => timepointsByDataset[source.key] = source.val
 
 let buildTimepointsQuery = function (selection) {
     let timepoints = "";
-    selection.forEach(x => timepoints += ("fall2021.expression.timepoint=" + x + " OR "));
+    selection.forEach(x => timepoints += ("fall2021.expression.time_point=" + x + " OR "));
     return timepoints.substring(0, timepoints.length - 4);
 };
 
 let buildGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ("fall2021.gene.display_gene_id=\'" + x + "\' OR "));
+    geneList.forEach(x => genes += ("(SELECT *  FROM fall2021.expression, fall2021.gene " +
+        `WHERE fall2021.expression.dataset = '\${dataset}' AND fall2021.gene.display_gene_id =\'${x}\') OR `));
     return genes.substring(0, genes.length - 4);
 };
 
 let buildQuery = function (dataset, timepoints, genes) {
-    console.log("Orientation is here!!!!");
-    console.log(timepoints ?
-        `SELECT DISTINCT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
-        (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
-        (${buildGenesQuery(genes)}) ORDER BY sortindex;`
-        : `SELECT DISTINCT * FROM fall2021.expression WHERE fall2021.expression.dataset='${dataset}'
-        AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`);
     return timepoints ?
-    `SELECT DISTINCT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
+    `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
     (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
     (${buildGenesQuery(genes)}) ORDER BY sortindex;`
-    : `SELECT DISTINCT * FROM fall2021.expression WHERE fall2021.expression.dataset='${dataset}'
+    : `SELECT * FROM fall2021.expression WHERE fall2021.expression.dataset='${dataset}'
     AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
 };
 
@@ -116,10 +110,6 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
-
-            console.log("Orientation is also here!!!!");
-            console.log(sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
-            { type: sequelize.QueryTypes.SELECT }));
             return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
