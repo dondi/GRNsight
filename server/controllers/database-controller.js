@@ -1,3 +1,4 @@
+
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -64,30 +65,30 @@ timepointsSources.forEach(source => timepointsByDataset[source.key] = source.val
 
 let buildTimepointsQuery = function (selection) {
     let timepoints = "";
-    selection.forEach(x => timepoints += ("timepoints=\'" + x + "\' OR "));
+    selection.forEach(x => timepoints += ("fall2021.expression.time_point=" + x + " OR "));
     return timepoints.substring(0, timepoints.length - 4);
 };
 
 let buildGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ("standardname=\'" + x + "\' OR "));
+    geneList.forEach(x => genes += ( `(fall2021.gene.display_gene_id =\'${x}\') OR `));
     return genes.substring(0, genes.length - 4);
 };
 
 let buildQuery = function (dataset, timepoints, genes) {
     return timepoints ?
-    `SELECT * FROM expressiondata WHERE dataset='${dataset}' AND
-    (${buildTimepointsQuery(timepoints)}) ORDER BY sortindex AND
-    (${buildGenesQuery(genes)}) ORDER BY sortindex;`
-    : `SELECT * FROM expressiondata WHERE dataset='${dataset}'
-    AND (${buildGenesQuery(genes)}) ORDER BY sortindex;`;
+    `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
+    (${buildTimepointsQuery(timepoints)}) AND
+    (${buildGenesQuery(genes)}) ORDER BY sort_index;`
+    : `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
+    AND (${buildGenesQuery(genes)}) ORDER BY sort_index;`;
 };
 
 let listGeneData = function (gene, totalOutput) {
     let listOfData = [];
     totalOutput.forEach(function (x) {
-        if (x.standardname === gene) {
+        if (x.display_gene_id === gene) {
             listOfData.push(Number(x.expression));
         }
     });
@@ -114,8 +115,7 @@ module.exports = function (app) {
                 .then(function (stdname) {
                     let dataset = req.query.dataset;
                     let geneList = req.query.genes.split(",");
-                    // let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
-                    let response = stdname;
+                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
                     return res.send(response);
                 });
         } catch (e) {
