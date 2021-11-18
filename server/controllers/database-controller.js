@@ -115,7 +115,7 @@ module.exports = function (app) {
                     let dataset = req.query.dataset;
                     let geneList = req.query.genes.split(",");
                     // let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
-                    response = stdname;
+                    let response = stdname;
                     return res.send(response);
                 });
         } catch (e) {
