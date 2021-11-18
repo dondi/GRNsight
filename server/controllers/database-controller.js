@@ -80,9 +80,9 @@ let buildQuery = function (dataset, timepoints, genes) {
     return timepoints ?
     `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
     (${buildTimepointsQuery(timepoints)}) AND
-    (${buildGenesQuery(genes)}) ORDER BY sort_index;`
+    ((${buildGenesQuery(genes)}) AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`
     : `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
-    AND (${buildGenesQuery(genes)}) ORDER BY sort_index;`;
+    AND ((${buildGenesQuery(genes)}) AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`;
 };
 
 let listGeneData = function (gene, totalOutput) {
