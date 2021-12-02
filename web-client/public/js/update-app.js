@@ -969,6 +969,8 @@ export const updateApp = grnState => {
     updateLogFoldChangeMaxValue();
     updateTopDataset();
     updateBottomDataset();
+    // We update the Top Dataset again for the case where someone edits the bottom dataset first, then the Top dataset
+    updateTopDataset();
     updateSliderState(grnState.slidersLocked);
 
     if (grnState.showUndoReset) {
