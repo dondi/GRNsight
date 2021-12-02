@@ -837,7 +837,7 @@ export const updateApp = grnState => {
                                     grnState.workbook.expression[DB] = DBDatasetResponses[DB]
                                 }
                                 enableNodeColoringUI();
-                                updaters.renderNodeColoring();
+                                setTimeout(() => updaters.renderNodeColoring(), 250);
                             }
                         }
                     }).catch(function (error) {
@@ -920,7 +920,7 @@ export const updateApp = grnState => {
                                     grnState.workbook.expression[DB] = DBDatasetResponses[DB]
                                 }
                                 enableNodeColoringUI();
-                                updaters.renderNodeColoring();
+                                setTimeout(() => updaters.renderNodeColoring(), 250);
                             }
                         }
                     }).catch(function (error) {
@@ -950,7 +950,7 @@ export const updateApp = grnState => {
         }
 
 
-        
+
         // if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
         //     if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
         //         let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
