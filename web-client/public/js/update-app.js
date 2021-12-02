@@ -669,24 +669,6 @@ const resetDatasetDropdownMenus = (workbook) => {
     $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
 };
 
-const DBDatasetExists = (DB) => {
-    return grnState.workbook.expression[DB] !== undefined;
-}
-
-const getMissingDatasets = () => {
-    const datasets = [];
-    const top = grnState.nodeColoring.topDataset;
-    const bottom = grnState.nodeColoring.bottomDataset;
-
-    if (expressionDBDatasets.includes(top) && !DBDatasetExists(top)){
-        datasets.push(top);
-    }
-    if (expressionDBDatasets.includes(bottom) && !DBDatasetExists(bottom)){
-        datasets.push(bottom);
-    }
-    return datasets;
-}
-
 const updateLogFoldChangeMaxValue = () => {
     var value = logFoldChangeMaxValueInputValidation(grnState.nodeColoring.logFoldChangeMaxValue);
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val(value);
@@ -821,68 +803,42 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        const DBDatasetsNeeded = getMissingDatasets()
-        const DBDatasetResponses = {}
-        if (DBDatasetsNeeded.length !== 0) {
+        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
+        grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-                for (let currentDataset of DBDatasetsNeeded) {
-                    let queryURL = buildURL({dataset: currentDataset})
-                    responseData("", queryURL).then(function (response) {
-                        DBDatasetResponses[currentDataset] = response;
-                        if (DBDatasetResponses[currentDataset]) {
-                            stopLoadingIcon();
-                            if (Object.keys(DBDatasetResponses).length === DBDatasetsNeeded) {
-                                // we have all requested datasets, so lets update the grnState
-                                for (let DB in DBDatasetResponses){
-                                    grnState.workbook.expression[DB] = DBDatasetResponses[DB]
-                                }
-                                enableNodeColoringUI();
-                                setTimeout(() => updaters.renderNodeColoring(), 250);
-                            }
-                        }
-                    }).catch(function (error) {
-                        console.log(error.stack);
-                        console.log(error.name);
-                        console.log(error.message);
-                    });
-                }
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
+
+                responseData("", queryURLTop).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+                    enableNodeColoringUI();
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop ||
+                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
             }
-        // if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
-        // grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
-        //     if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-        //         let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-
-        //         responseData("", queryURLTop).then(function (response) {
-        //             grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
-        //             enableNodeColoringUI();
-
-        //             if (grnState.nodeColoring.bottomDataSameAsTop ||
-        //             expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
-        //                 stopLoadingIcon();
-        //                 updaters.renderNodeColoring();
-        //             }
-        //         }).catch(function (error) {
-        //             console.log(error.stack);
-        //             console.log(error.name);
-        //             console.log(error.message);
-        //         });
-        //     }
-        // } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
-        // !grnState.nodeColoring.bottomDataSameAsTop &&
-        // grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
-        //     if (!grnState.nodeColoring.bottomDataSameAsTop) {
-        //         let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
-        //         responseData("", queryURLBottom).then(function (response) {
-        //             grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
-        //             enableNodeColoringUI();
-        //             stopLoadingIcon();
-        //             updaters.renderNodeColoring();
-        //         }).catch(function (error) {
-        //             console.log(error.stack);
-        //             console.log(error.name);
-        //             console.log(error.message);
-        //         });
-        //     }
+        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+        !grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            if (!grnState.nodeColoring.bottomDataSameAsTop) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("", queryURLBottom).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
+                    enableNodeColoringUI();
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
         } else {
             updaters.renderNodeColoring();
         }
@@ -902,107 +858,58 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
+        if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+            if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
+                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
 
-        
-        const DBDatasetsNeeded = getMissingDatasets()
-        const DBDatasetResponses = {}
-        if (DBDatasetsNeeded.length !== 0) {
-            if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-                for (let currentDataset of DBDatasetsNeeded) {
-                    let queryURL = buildURL({dataset: currentDataset})
-                    responseData("", queryURL).then(function (response) {
-                        DBDatasetResponses[currentDataset] = response;
-                        if (DBDatasetResponses[currentDataset]) {
-                            stopLoadingIcon();
-                            if (Object.keys(DBDatasetResponses).length === DBDatasetsNeeded) {
-                                // we have all requested datasets, so lets update the grnState
-                                for (let DB in DBDatasetResponses){
-                                    grnState.workbook.expression[DB] = DBDatasetResponses[DB]
-                                }
-                                enableNodeColoringUI();
-                                setTimeout(() => updaters.renderNodeColoring(), 250);
-                            }
-                        }
-                    }).catch(function (error) {
-                        console.log(error.stack);
-                        console.log(error.name);
-                        console.log(error.message);
-                    });
-                }
+                responseData("", queryURLTop).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+                    enableNodeColoringUI();
+
+                    if (grnState.nodeColoring.bottomDataSameAsTop) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
+            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
+                responseData("", queryURLBottom).then(function (response) {
+                    grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
+                    enableNodeColoringUI();
+
+                    stopLoadingIcon();
+
+                    updaters.renderNodeColoring();
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else {
+                enableNodeColoringUI();
+                // There is as problem here! When a dataset from the database is used to do node coloring,
+                // but then the layout of the graph is changed (force graph to grid layout, for instance),
+                // node coloring goes away, seemingly inexplicably.
+                // !!!!! TEMPORARY WORKAROUND:
+                //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
+                //   has to take place, done here via `setTimeout`.
+                //
+                //   The delay is built-in to the cases where a query has to happen first.
+                //
+                //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
+                //   actually perform the node coloring.
+                //
+                //   Investigate why a timeout is required in order for node coloring to take place
+                //   successfully in this case.
+                setTimeout(() => updaters.renderNodeColoring(), 250);
+
             }
-        } else {
-            enableNodeColoringUI();
-            // There is as problem here! When a dataset from the database is used to do node coloring,
-            // but then the layout of the graph is changed (force graph to grid layout, for instance),
-            // node coloring goes away, seemingly inexplicably.
-            // !!!!! TEMPORARY WORKAROUND:
-            //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
-            //   has to take place, done here via `setTimeout`.
-            //
-            //   The delay is built-in to the cases where a query has to happen first.
-            //
-            //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
-            //   actually perform the node coloring.
-            //
-            //   Investigate why a timeout is required in order for node coloring to take place
-            //   successfully in this case.
-            setTimeout(() => updaters.renderNodeColoring(), 250);
         }
-
-
-
-        // if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-        //     if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
-        //         let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-
-        //         responseData("", queryURLTop).then(function (response) {
-        //             grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
-        //             enableNodeColoringUI();
-
-        //             if (grnState.nodeColoring.bottomDataSameAsTop) {
-        //                 stopLoadingIcon();
-        //                 updaters.renderNodeColoring();
-        //             }
-        //         }).catch(function (error) {
-        //             console.log(error.stack);
-        //             console.log(error.name);
-        //             console.log(error.message);
-        //         });
-        //     } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
-        //     grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
-        //         let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
-        //         responseData("", queryURLBottom).then(function (response) {
-        //             grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
-        //             enableNodeColoringUI();
-
-        //             stopLoadingIcon();
-
-        //             updaters.renderNodeColoring();
-        //         }).catch(function (error) {
-        //             console.log(error.stack);
-        //             console.log(error.name);
-        //             console.log(error.message);
-        //         });
-        //     } else {
-        //         enableNodeColoringUI();
-        //         // There is as problem here! When a dataset from the database is used to do node coloring,
-        //         // but then the layout of the graph is changed (force graph to grid layout, for instance),
-        //         // node coloring goes away, seemingly inexplicably.
-        //         // !!!!! TEMPORARY WORKAROUND:
-        //         //   Calling `updaters.renderNodeColoring()` inline does not succeed; instead, a delay
-        //         //   has to take place, done here via `setTimeout`.
-        //         //
-        //         //   The delay is built-in to the cases where a query has to happen first.
-        //         //
-        //         //   For some reason, calling updates.renderNodeColoring() _synchronously_ does not
-        //         //   actually perform the node coloring.
-        //         //
-        //         //   Investigate why a timeout is required in order for node coloring to take place
-        //         //   successfully in this case.
-        //         setTimeout(() => updaters.renderNodeColoring(), 250);
-
-        //     }
-        // }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
