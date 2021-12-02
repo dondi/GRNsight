@@ -812,11 +812,11 @@ export const updateApp = grnState => {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
 
-                    // if (grnState.nodeColoring.bottomDataSameAsTop ||
-                    // expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
-                    stopLoadingIcon();
-                    updaters.renderNodeColoring();
-                    // }
+                    if (grnState.nodeColoring.bottomDataSameAsTop ||
+                    expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                        stopLoadingIcon();
+                        updaters.renderNodeColoring();
+                    }
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
@@ -866,10 +866,11 @@ export const updateApp = grnState => {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
 
-                    // if (grnState.nodeColoring.bottomDataSameAsTop) {
+                    if (grnState.nodeColoring.bottomDataSameAsTop||
+                        expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
-                    // }
+                    }
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
