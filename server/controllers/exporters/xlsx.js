@@ -131,15 +131,13 @@ const buildXlsxSheet = function (workbook) {
             }
             break;
         case "networkWeights":
-            if (exportNetworkType === "weighted") {
-                if (Object.keys(workbook.networkWeights).length > 0) {
-                    resultSheet.push(
-                        {
-                            "name": "network_weights",
-                            "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
-                        }
-                    );
-                }
+            if (Object.keys(workbook.networkWeights).length > 0) {
+                resultSheet.push(
+                    {
+                        "name": "network_weights",
+                        "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
+                    }
+                );
             }
             break;
         case "meta":

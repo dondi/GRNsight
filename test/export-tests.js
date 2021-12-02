@@ -581,7 +581,7 @@ const inputWorkbook = {
     },
 
 
-    "expression": {
+    "exportExpression": {
         "wt_log2_expression": {
             "timePoints": [
                 0.4,
@@ -786,7 +786,7 @@ describe("Export to spreadsheet", function () {
             test.importFileSameAsExportFile(
                 "test-files/additional-sheet-test-files/optimization-diagnostics-default.xlsx");
             test.importFileSameAsExportFile(
-                "test-files/expression-data-test-sheets/expression_sheet_missing_data_ok.xlsx");
+                "test-files/expression-data-test-sheets/expression_sheet_missing_data_ok_export_exact.xlsx");
             test.importFileSameAsExportFile(
                 "test-files/additional-sheet-test-files/optimization-parameters-default.xlsx");
         }
