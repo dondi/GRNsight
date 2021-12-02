@@ -712,14 +712,6 @@ if (!grnState.genePageData.identified) {
     $(SPECIES_DISPLAY).val(grnState.genePageData.species);
 }
 
-// const handleExportExcelModal = () => {
-//     // console.log($(EXPRESSION_SOURCE).checked());
-//     // if ($("input[name=gender]:checked").length > 0) {
-//     createHTMLforExpressionSheets($("input[name=expressionSource]:checked", "exportExcelForm").val());
-//     // console.log($("input[name=expressionSource]:checked", "exportExcelForm").val());
-//     // }
-// };
-
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
@@ -797,8 +789,6 @@ export const updateApp = grnState => {
     } else if (grnState.graphLayout === GRID_LAYOUT) {
         updatetoGridLayout();
     }
-// Export Modal
-    // handleExportExcelModal();
 
 // Viewport
     updateViewportSize(grnState.viewportSize);
@@ -823,9 +813,9 @@ export const updateApp = grnState => {
                     enableNodeColoringUI();
 
                     if (grnState.nodeColoring.bottomDataSameAsTop ||
-                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
-                        stopLoadingIcon();
-                        updaters.renderNodeColoring();
+                    expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
                     }
                 }).catch(function (error) {
                     console.log(error.stack);
@@ -969,8 +959,6 @@ export const updateApp = grnState => {
     updateLogFoldChangeMaxValue();
     updateTopDataset();
     updateBottomDataset();
-    // We update the Top Dataset again for the case where someone edits the bottom dataset first, then the Top dataset
-    updateTopDataset();
     updateSliderState(grnState.slidersLocked);
 
     if (grnState.showUndoReset) {
