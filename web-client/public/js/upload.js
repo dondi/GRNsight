@@ -2,7 +2,6 @@
 //      But placed here for now so that the true MVC cycle of grnState, updateApp, and the
 //      controller code installed by setupHandlers can access them.
 
-// import { displayExportExcelModal } from "./exportHelper";
 /* eslint-disable max-len */
 import { grnState } from "./grnstate";
 

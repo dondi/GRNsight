@@ -106,7 +106,6 @@ import {
   VIEWPORT_INIT,
 //   EXPRESSION_SOURCE,
 } from "./constants";
-// import { createHTMLforExpressionSheets } from "./exportHelper";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
@@ -811,8 +810,8 @@ export const updateApp = grnState => {
                 responseData("", queryURLTop).then(function (response) {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
-                        stopLoadingIcon();
-                        updaters.renderNodeColoring();
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
@@ -862,8 +861,8 @@ export const updateApp = grnState => {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
 
-                        stopLoadingIcon();
-                        updaters.renderNodeColoring();
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
