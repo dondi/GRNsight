@@ -397,7 +397,6 @@ const responseData = (formData, queryURL) => {
 };
 
 const stopLoadingIcon = function () {
-    console.log("About to stop loading");
     $(EXPRESSION_DB_LOADER).css("display", "none");
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
 };
@@ -810,20 +809,11 @@ export const updateApp = grnState => {
                 let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
 
                 responseData("", queryURLTop).then(function (response) {
-                    console.log("Top loaded, response");
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
-                    console.log(`grnState.nodeColoring.bottomDataSameAsTop: ${grnState.nodeColoring.bottomDataSameAsTop}`);
-                    console.log(`expressionDBDatasets: ${expressionDBDatasets}`)
-                    console.log(`grnState.nodeColoring.bottomDataset: ${grnState.nodeColoring.bottomDataset}`)
-                    // if (grnState.nodeColoring.bottomDataSameAsTop ||
-                    // !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
-                        console.log("About to stop loading and render node coloring")
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
-                    // }
                 }).catch(function (error) {
-                    console.log("Caught")
                     console.log(error.stack);
                     console.log(error.name);
                     console.log(error.message);
@@ -872,10 +862,8 @@ export const updateApp = grnState => {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
 
-                    if (grnState.nodeColoring.bottomDataSameAsTop) {
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
-                    }
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
