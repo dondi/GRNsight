@@ -816,12 +816,12 @@ export const updateApp = grnState => {
                     console.log(`grnState.nodeColoring.bottomDataSameAsTop: ${grnState.nodeColoring.bottomDataSameAsTop}`);
                     console.log(`expressionDBDatasets: ${expressionDBDatasets}`)
                     console.log(`grnState.nodeColoring.bottomDataset: ${grnState.nodeColoring.bottomDataset}`)
-                    if (grnState.nodeColoring.bottomDataSameAsTop ||
-                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
+                    // if (grnState.nodeColoring.bottomDataSameAsTop ||
+                    // !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
                         console.log("About to stop loading and render node coloring")
                         stopLoadingIcon();
                         updaters.renderNodeColoring();
-                    }
+                    // }
                 }).catch(function (error) {
                     console.log("Caught")
                     console.log(error.stack);
