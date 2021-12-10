@@ -104,6 +104,7 @@ import {
   VIEWPORT_SIZE_L_SIDEBAR,
   VIEWPORT_SIZE_FIT_SIDEBAR,
   VIEWPORT_INIT,
+//   EXPRESSION_SOURCE,
 } from "./constants";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
@@ -349,7 +350,6 @@ const updateViewportSize = (currentValue) => {
         requestWindowDimensions();
     }
 };
-
 // Expression DB Access Functions
 const buildTimepointsString = function (selection) {
     let timepoints = "";
@@ -810,12 +810,8 @@ export const updateApp = grnState => {
                 responseData("", queryURLTop).then(function (response) {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
-
-                    if (grnState.nodeColoring.bottomDataSameAsTop ||
-                    !expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset)) {
-                        stopLoadingIcon();
-                        updaters.renderNodeColoring();
-                    }
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
@@ -865,10 +861,8 @@ export const updateApp = grnState => {
                     grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
                     enableNodeColoringUI();
 
-                    if (grnState.nodeColoring.bottomDataSameAsTop) {
-                        stopLoadingIcon();
-                        updaters.renderNodeColoring();
-                    }
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
                 }).catch(function (error) {
                     console.log(error.stack);
                     console.log(error.name);
@@ -981,3 +975,6 @@ export const updateApp = grnState => {
     refreshApp();
 
 };
+
+
+export {buildURL, responseData, stopLoadingIcon};
