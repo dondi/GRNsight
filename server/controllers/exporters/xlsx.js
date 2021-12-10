@@ -76,10 +76,22 @@ const buildMetaSheet = function (metaDataContainer) {
     return meta;
 };
 
+const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+
+const isExpressionSheet = (sheetName) => {
+    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+        return sheetName.includes(suffix);
+    });
+};
+
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
-        const builtSheet = { name: expression, data: []};
+        let expressionName = expression;
+        if (!isExpressionSheet(expression)) {
+            expressionName = expression + "_expression";
+        }
+        const builtSheet = { name: expressionName, data: [] };
         Object.keys(expressions[expression]["data"]).forEach((key) => {
             const expressionData = expressions[expression]["data"][key];
             builtSheet["data"].push([key, ...expressionData]);
@@ -91,6 +103,7 @@ const buildExpressionSheets = function (expressions) {
 
 const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
+    const exportNetworkType = workbook.exportNetworkType;
 
     Object.keys(workbook).forEach((key) => {
         switch (key) {
@@ -105,14 +118,16 @@ const buildXlsxSheet = function (workbook) {
             }
             break;
         case "networkOptimizedWeights":
-            if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": "network_optimized_weights",
-                        "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
-                            workbook.networkOptimizedWeights.links)
-                    }
-                );
+            if (exportNetworkType === "weighted") {
+                if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
+                    resultSheet.push(
+                        {
+                            "name": "network_optimized_weights",
+                            "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
+                                workbook.networkOptimizedWeights.links)
+                        }
+                    );
+                }
             }
             break;
         case "networkWeights":
@@ -150,6 +165,9 @@ const buildXlsxSheet = function (workbook) {
             resultSheet.push(...buildTestSheets(workbook[key]));
             break;
         case "expression":
+            // resultSheet.push(...buildExpressionSheets(workbook[key]));
+            break;
+        case "exportExpression":
             resultSheet.push(...buildExpressionSheets(workbook[key]));
             break;
         default:

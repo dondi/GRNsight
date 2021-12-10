@@ -1,5 +1,7 @@
 export const HOST_SITE = "https://dondi.github.io";
 
+export const FILE_NAME = "#fileName";
+
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
@@ -13,7 +15,7 @@ export const SCHADE_INPUT_ID      = "#schadeInput";
 export const SCHADE_INPUT_PATH    = "demo/schadeInput";
 export const SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
 export const SCHADE_OUTPUT_ID     = "#schadeOutput";
-export const SCHADE_OUTPUT_PATH   = "demo/schadeOutput";
+export const SCHADE_OUTPUT_PATH = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
 export const EXPORT_TO_EXCEL            = "#exportAsExcelWkbk";
@@ -25,6 +27,7 @@ export const EXPORT_TO_PNG              = "#exportAsPng";
 export const EXPORT_TO_SVG              = "#exportAsSvg";
 export const EXPORT_TO_PDF              = "#exportAsPdf";
 export const EXPORT_WEIGHTED_CLASS      = ".weighted.export";
+export const EXPRESSION_SOURCE          = "#expressionSource";
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],

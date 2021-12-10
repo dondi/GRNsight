@@ -716,16 +716,18 @@ var invalidMSEDataWarning = function (input, frequency) {
 var importExportReImportNoErrorsOrWarnings = function (input) {
     var sheet = xlsx.parse(input);
     var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
+    inputWorkbook["exportExpression"] = inputWorkbook.expression;
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
-    // check if the re-imported workbook has no errors or warnings
     assert.equal(0, reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length);
 };
 
 var importFileSameAsExportFile = function (input) {
     var sheet = xlsx.parse(input);
     var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
+    inputWorkbook["exportExpression"] = inputWorkbook.expression;
+    inputWorkbook["exportNetworkType"] = inputWorkbook.sheetType;
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     sheet.sort((a, b) => (a.name > b.name) ? 1 : -1);

@@ -15,8 +15,10 @@ var app = express();
 app.set("port", process.env.PORT || config.port || 3000);
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
 app.use(methodOverride());
 app.use(cors());
 
