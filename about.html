@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 9/23/21
+modified: 1/18/22
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -65,6 +65,43 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
+                                    
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v5_1_0Content" data-toggle="collapse">
+                                                    GRNsight v5.1.0
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v5_1_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v5.1.0 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>New Expression Database</li>
+                                                      <ul>
+                                                        <li>Refactored the Expression Database to take into account multiple species, and added appropriate data types to data stored within the database.</li>
+                                                        <li>Connected Expression Database to the export to excel functionality, so that users can export data from the Expression Database.</li>
+                                                        <li>Fixed bugs within the expression data selection.</li>
+                                                      </ul>
+                                                    </li>
+                                                    <li>New Export to Excel functionality</li>
+                                                    <ul>
+                                                      <li>GRNsight can export workbooks using a modal selector to determine the data in the exported workbook.</li>
+                                                      <ul>
+                                                        <li>Users can select between weighted and unweighted graphs, what expression data source (either the original expression data, or sources from the Expression Database), and which particular expression data sheets to export.</li>
+                                                      </ul>
+                                                      <li>Error and warning messages became more descriptive and pinpointed which sheet the issue was found in, and the row/column or cell that the error was located.</li>
+                                                    </ul>
+                                                    <li> Documentation update </li>
+                                                    <ul>
+                                                      <li>Updated Export to Excel instructions to reflect the new Export to Excel feature's functionality.</li>
+                                                    </ul>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
