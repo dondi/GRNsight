@@ -101,9 +101,6 @@ describe("The Gene Page", () => {
         </eSearchResult>`;
 
 
-        let NCBIDoc = document.implementation.createDocument("", "", null);
-        let sequenceText = NCBIDoc.createTextNode(testString);
-        NCBIDoc.appendChild(sequenceText);
         server.respondWith([
             200,
         {"Content-Type": "text/plain" }, testString]);
