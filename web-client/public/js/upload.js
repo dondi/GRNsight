@@ -6,10 +6,11 @@
 import { grnState } from "./grnstate";
 
 import {
-    buildURL,
-    responseData,
-    stopLoadingIcon
+    stopLoadingIcon,
+    startLoadingIcon
 } from "./update-app";
+
+import { queryExpressionDatabase } from "./dal/grnsight-dal.js";
 
 export const uploadState = {
     currentWorkbook: null,
@@ -131,8 +132,11 @@ export const upload = function () {
         } else {
             // source is from database so lets query her up
             for (let sheet of chosenSheets) {
-                let queryURL = buildURL({ dataset: sheet });
-                responseData("", queryURL).then(function (response) {
+                startLoadingIcon();
+                queryExpressionDatabase({
+                    dataset: sheet,
+                    genes : grnState.workbook.genes
+                }).then(function (response) {
                     exportSheets[sheet] = response;
                     if (exportSheets[sheet]) {
                         stopLoadingIcon();

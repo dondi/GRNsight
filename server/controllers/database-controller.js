@@ -18,7 +18,7 @@ var sequelize = new Sequelize(
     }
 );
 
-const timepointsSources = [
+const expressionTimepointsSources = [
     {
         key: "Barreto_2012_wt",
         value: [10, 10, 20, 20, 20, 20, 40, 40, 40, 40, 60, 60, 60, 60, 120, 120, 120, 120]
@@ -60,32 +60,34 @@ const timepointsSources = [
     }
 ];
 
-const timepointsByDataset = {};
-timepointsSources.forEach(source => timepointsByDataset[source.key] = source.value);
+const expressionTimepointsByDataset = {};
+expressionTimepointsSources.forEach(source => expressionTimepointsByDataset[source.key] = source.value);
 
-let buildTimepointsQuery = function (selection) {
+let buildExpressionTimepointsQuery = function (selection) {
     let timepoints = "";
     selection.forEach(x => timepoints += ("fall2021.expression.time_point=" + x + " OR "));
     return timepoints.substring(0, timepoints.length - 4);
 };
 
-let buildGenesQuery = function (geneString) {
+let buildExpressionGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
     geneList.forEach(x => genes += ( `(fall2021.gene.display_gene_id =\'${x}\') OR `));
     return genes.substring(0, genes.length - 4);
 };
 
-let buildQuery = function (dataset, timepoints, genes) {
+let buildExpressionQuery = function (dataset, timepoints, genes) {
     return timepoints ?
     `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
-    (${buildTimepointsQuery(timepoints)}) AND
-    ((${buildGenesQuery(genes)}) AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`
+    (${buildExpressionTimepointsQuery(timepoints)}) AND
+    ((${buildExpressionGenesQuery(genes)}) 
+    AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`
     : `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
-    AND ((${buildGenesQuery(genes)}) AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`;
+    AND ((${buildExpressionGenesQuery(genes)}) 
+    AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`;
 };
 
-let listGeneData = function (gene, totalOutput) {
+let listExpressionGeneData = function (gene, totalOutput) {
     let listOfData = [];
     totalOutput.forEach(function (x) {
         if (x.display_gene_id === gene) {
@@ -95,14 +97,14 @@ let listGeneData = function (gene, totalOutput) {
     return listOfData;
 };
 
-let convertToJSON = function (totalOutput, dataset, timePoints, allGenes) {
+let convertExpressionToJSON = function (totalOutput, dataset, timePoints, allGenes) {
     let JSONOutput = {
         timePoints,
         data: {
             id: timePoints
         }
     };
-    allGenes.forEach(x => JSONOutput.data[x.toString()] = listGeneData(x, totalOutput));
+    allGenes.forEach(x => JSONOutput.data[x.toString()] = listExpressionGeneData(x, totalOutput));
     return JSONOutput;
 };
 
@@ -110,12 +112,13 @@ module.exports = function (app) {
 
     app.get("/expressiondb", function (req, res) {
         try {
-            return sequelize.query(buildQuery(req.query.dataset, req.query.timepoints, req.query.genes),
+            return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
                     let dataset = req.query.dataset;
                     let geneList = req.query.genes.split(",");
-                    let response = convertToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
+                    let response = convertExpressionToJSON(
+                        stdname, dataset, expressionTimepointsByDataset[dataset], geneList);
                     return res.send(response);
                 });
         } catch (e) {
@@ -125,5 +128,23 @@ module.exports = function (app) {
 
         }
     });
+
+    // app.get("/networkdb", function (req, res) {
+    //     try {
+    //         return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
+    //         { type: sequelize.QueryTypes.SELECT })
+    //             .then(function (stdname) {
+    //                 let dataset = req.query.dataset;
+    //                 let geneList = req.query.genes.split(",");
+    //                 let response = convertExpressionToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
+    //                 return res.send(response);
+    //             });
+    //     } catch (e) {
+    //         res.json({error: e.stack});
+    //         res.json({error: e.name});
+    //         res.json({error: e.message});
+
+    //     }
+    // });
 
 };
