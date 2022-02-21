@@ -117,4 +117,4 @@ export const queryExpressionDatabase = (req, res) => {
                         stdname, dataset, expressionTimepointsByDataset[dataset], geneList);
                     return res.send(response);
                 });
-}
+};
