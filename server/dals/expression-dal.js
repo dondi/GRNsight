@@ -1,4 +1,3 @@
-
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -108,11 +107,8 @@ let convertExpressionToJSON = function (totalOutput, dataset, timePoints, allGen
     return JSONOutput;
 };
 
-module.exports = function (app) {
-
-    app.get("/expressiondb", function (req, res) {
-        try {
-            return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
+export const queryExpressionDatabase = (req, res) => {
+    return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
             { type: sequelize.QueryTypes.SELECT })
                 .then(function (stdname) {
                     let dataset = req.query.dataset;
@@ -121,30 +117,4 @@ module.exports = function (app) {
                         stdname, dataset, expressionTimepointsByDataset[dataset], geneList);
                     return res.send(response);
                 });
-        } catch (e) {
-            res.json({error: e.stack});
-            res.json({error: e.name});
-            res.json({error: e.message});
-
-        }
-    });
-
-    // app.get("/networkdb", function (req, res) {
-    //     try {
-    //         return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
-    //         { type: sequelize.QueryTypes.SELECT })
-    //             .then(function (stdname) {
-    //                 let dataset = req.query.dataset;
-    //                 let geneList = req.query.genes.split(",");
-    //                 let response = convertExpressionToJSON(stdname, dataset, timepointsByDataset[dataset], geneList);
-    //                 return res.send(response);
-    //             });
-    //     } catch (e) {
-    //         res.json({error: e.stack});
-    //         res.json({error: e.name});
-    //         res.json({error: e.message});
-
-    //     }
-    // });
-
-};
+}

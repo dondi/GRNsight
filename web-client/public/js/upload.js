@@ -10,7 +10,7 @@ import {
     startLoadingIcon
 } from "./update-app";
 
-import { queryExpressionDatabase } from "./dal/grnsight-dal.js";
+import { queryExpressionDatabase } from "./api/grnsight-api.js";
 
 export const uploadState = {
     currentWorkbook: null,

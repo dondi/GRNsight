@@ -107,7 +107,7 @@ import {
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
-import { queryExpressionDatabase } from "./dal/grnsight-dal.js";
+import { queryExpressionDatabase } from "./api/grnsight-api.js";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
