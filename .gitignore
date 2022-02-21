@@ -17,6 +17,8 @@ logs
 results
 /.idea
 
+database/network-database/script-results
+
 npm-debug.log
 node_modules
 package-lock.json
