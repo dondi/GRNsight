@@ -4,12 +4,8 @@ from intermine.webservice import Service
 service = Service("https://yeastmine.yeastgenome.org/yeastmine/service")
 
 import csv
-import re
-import sys
 import os
-import datetime
-import pytz
-import tzlocal
+import pandas as pd
 
 # Extracting regulator and target genes from file 
 
@@ -101,6 +97,7 @@ if not os.path.exists('../script-results/yeastract-to-sgd-networks'):
 # Create Networks
 
 SGD_MATRIX = '../script-results/yeastract-to-sgd-networks/SGD_Regulation_matrix_profile2.csv'
+SGD_MATRIX_EXCEL = '../script-results/yeastract-to-sgd-networks/SGD_Regulation_matrix_profile2.xlsx'
 
 print(f'Creating SGD MATRIX\n')
 sgd_matrix_file = open(SGD_MATRIX, 'w')
@@ -113,3 +110,11 @@ for target in targets:
     sgd_matrix_file.write(f'{result}\n')
 sgd_matrix_file.close()
 
+# Reading the csv file
+df_new = pd.read_csv(SGD_MATRIX, sep='\t')
+ 
+# saving xlsx file
+GFG = pd.ExcelWriter(SGD_MATRIX_EXCEL)
+df_new.to_excel(GFG, sheet_name="network", index=False)
+ 
+GFG.save()
