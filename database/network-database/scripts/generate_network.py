@@ -71,16 +71,14 @@ for regulator in regulators:
 
 
 
-def create_regulator_to_target_row(regulator, targets, all_targets):
-    if regulator != None:
-        result = "" + regulator
-        for target in all_targets:
-            if target in targets:
-                result += "\t" + "1"
-            else: 
-                result += "\t" + "0"
-        return result
-    return False
+def create_regulator_to_target_row(target, all_regulators):
+    result = "" + target
+    for regulator in all_regulators:
+        if target in all_regulators[regulator]["targets"]:
+            result += "\t" + "1"
+        else: 
+            result += "\t" + "0"
+    return result
 
 
 # Create files
@@ -118,10 +116,10 @@ for regulator in regulators_to_targets:
 print(f'Creating REGULATORS TO TARGETS MATRIX\n')
 regulator_to_target_file = open(REGULATORS_TO_TARGETS_MATRIX, 'w')
 headers = "cols regulators/rows targets"
-headers += '\t'.join(targets)
+headers += '\t'.join(regulators_list)
 regulator_to_target_file.write(f'{headers}\n')
-for regulator in regulators_to_targets:
-  result = create_regulator_to_target_row(regulator, regulators_to_targets[regulator]["targets"], targets)
+for target in targets:
+  result = create_regulator_to_target_row(target, regulators_to_targets)
   if result != False:
     regulator_to_target_file.write(f'{result}\n')
 regulator_to_target_file.close()
@@ -131,8 +129,8 @@ regulator_to_regulator_file = open(REGULATORS_TO_REGULATORS_MATRIX, 'w')
 headers = "cols regulators/rows targets"
 headers += '\t'.join(regulators_list)
 regulator_to_regulator_file.write(f'{headers}\n')
-for regulator in regulators_to_targets:
-  result = create_regulator_to_target_row(regulator, regulators_to_targets[regulator]["targets"], regulators_list)
+for target in targets:
+  result = create_regulator_to_target_row(target, regulators_to_targets)
   if result != False:
     regulator_to_regulator_file.write(f'{result}\n')
 regulator_to_regulator_file.close()

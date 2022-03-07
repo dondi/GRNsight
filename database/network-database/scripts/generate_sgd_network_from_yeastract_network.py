@@ -21,16 +21,16 @@ with open(YEASTRACT_NETWORK, 'r+', encoding="UTF-8") as f:
     reader = csv.reader(f)
     for row in reader:
         if i == 0:
-            # we are getting the targets
+            # we are getting the regulators
             j = 0
             x = row[0].split()
-            for target in x:
+            for regulator in x:
                 if j > 2:
-                    targets.append(target)
+                    regulators.append(regulator)
                 j += 1    
         else:
-            # we are getting the regulators
-            regulators.append(row[0].split()[0])
+            # we are getting the targets
+            targets.append(row[0].split()[0])
         i+=1
 
 print (targets)
@@ -102,7 +102,7 @@ SGD_MATRIX_EXCEL = '../script-results/yeastract-to-sgd-networks/SGD_Regulation_m
 print(f'Creating SGD MATRIX\n')
 sgd_matrix_file = open(SGD_MATRIX, 'w')
 headers = "cols regulators/rows targets\t"
-headers += '\t'.join(targets)
+headers += '\t'.join(regulators)
 sgd_matrix_file.write(f'{headers}\n')
 for target in targets:
   result = create_regulator_to_target_row(target, regulators_to_targets)
