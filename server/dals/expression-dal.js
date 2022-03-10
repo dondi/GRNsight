@@ -108,7 +108,7 @@ let convertExpressionToJSON = function (totalOutput, dataset, timePoints, allGen
 };
 
 module.exports = {
-    queryExpressionDatabase: function(req, res) {
+    queryExpressionDatabase: function (req, res) {
         return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
                 { type: sequelize.QueryTypes.SELECT })
                     .then(function (stdname) {
@@ -119,4 +119,4 @@ module.exports = {
                         return res.send(response);
                     });
     }
-}
+};
