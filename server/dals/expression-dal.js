@@ -107,14 +107,16 @@ let convertExpressionToJSON = function (totalOutput, dataset, timePoints, allGen
     return JSONOutput;
 };
 
-export const queryExpressionDatabase = (req, res) => {
-    return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
-            { type: sequelize.QueryTypes.SELECT })
-                .then(function (stdname) {
-                    let dataset = req.query.dataset;
-                    let geneList = req.query.genes.split(",");
-                    let response = convertExpressionToJSON(
-                        stdname, dataset, expressionTimepointsByDataset[dataset], geneList);
-                    return res.send(response);
-                });
+module.exports = {
+    queryExpressionDatabase: function (req, res) {
+        return sequelize.query(buildExpressionQuery(req.query.dataset, req.query.timepoints, req.query.genes),
+                { type: sequelize.QueryTypes.SELECT })
+                    .then(function (stdname) {
+                        let dataset = req.query.dataset;
+                        let geneList = req.query.genes.split(",");
+                        let response = convertExpressionToJSON(
+                            stdname, dataset, expressionTimepointsByDataset[dataset], geneList);
+                        return res.send(response);
+                    });
+    }
 };
