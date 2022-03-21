@@ -23,6 +23,7 @@ Within the scripts directory, there are the following files:
 - `generate_network.py`
 - `generate_sgd_network_from_yeastract_network.py`
 - `loader.py`
+- `filter_genes.py`
 
 #### Network Generator (and data preprocessor)
 
