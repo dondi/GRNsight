@@ -27,7 +27,7 @@ html
         div(class='collapse navbar-collapse' id='header-nav')
           ul(class='nav navbar-nav')
             li(class='dropdown')
-              a(href='#' class='dropdown-toggle' data-toggle='dropdown') File
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Network
               ul(class='dropdown-menu' role='menu')
                 li
                   a(class='upload' href='#' id='open-item')
@@ -43,48 +43,47 @@ html
                     | &nbsp; Reload
                 li(class='divider')
                 li(class='dropdown-submenu')
-                  a(href='#')
-                    span(class='glyphicon glyphicon-export')
-                    | &nbsp; Export Data
+                  a(href='#')  Species
                   ul(class='dropdown-menu')
-                    //- Temporary hardcoded display: none pending further testing of the Excel export feature.
-                    li(class='startDisabled disabled unweighted export' style='display: none')
-                      a(href='#' id='exportAsExcelWkbk') To Excel Workbook
-                    //- Need to omit the divider too.
-                    li(class='divider' style='display: none')
-                    li(class='startDisabled disabled unweighted export')
-                      a(href='#' id='exportAsUnweightedSif') To Unweighted SIF
-                    li(class='startDisabled disabled weighted export')
-                      a(href='#' id='exportAsWeightedSif') To Weighted SIF
-                    li(class='divider')
-                    li(class='startDisabled disabled unweighted export')
-                      a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
-                    li(class='startDisabled disabled weighted export')
-                      a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
-                    li(class='divider')
-                    //- li(class='startDisabled disabled unweighted export')
-                      a(href='#' id='exportAsUnweightedExcel') To Unweighted Excel
-                    //- li(class='startDisabled disabled weighted export')
-                    //-   a(href='#' id='exportAsWeightedExcel') To Weighted Excel
-                    li(class='startDisabled disabled export')
-                      a(href='#' id='exportAsExcel') To Excel
-
-                li(class='dropdown-submenu')
-                  a(href='#')
-                    span(class='glyphicon glyphicon-picture')
-                    | &nbsp; Export Image
-                  ul(class='dropdown-menu')
-                    li(class='startDisabled disabled')
-                      a(href='#' id='exportAsPng') To PNG
-                    li(class='startDisabled disabled')
-                      a(href='#' id='exportAsSvg') To SVG
-                    li(class='startDisabled disabled')
-                      a(href='#' id='exportAsPdf') To PDF
+                    li
+                      a(href='#' id='Arabidopsis_thaliana' class='viewportOption active')
+                        span(class='glyphicon')
+                        | &nbsp; Arabidopsis thaliana
+                    li
+                      a(href='#' id='Caenorhabditis_elegans' class='viewportOption')
+                        span(class='glyphicon')
+                        | &nbsp; Caenorhabditis elegans
+                    li
+                      a(href='#' id='Drosophila_melanogaster' class='viewportOption')
+                        span(class='glyphicon')
+                        | &nbsp; Drosophilia melanogaster
+                    li
+                      a(href='#' id='Homo_sapiens' class='viewportOption')
+                        span(class='glyphicon')
+                        | &nbsp; Homo sapiens
+                    li
+                      a(href='#' id='Mus_musculus' class='viewportOption')
+                        span(class='glyphicon')
+                        | &nbsp; Mus musculus
+                    li
+                      a(href='#' id='Saccharomyces_cerevisiae' class='viewportOption')
+                        span(class='glyphicon glyphicon-ok')
+                        | &nbsp; Saccharomyces cerevisiae
+              
                 li(class='divider')
-                li(class='startDisabled disabled')
-                  a(href='#' id='printGraph')
-                    span(class='glyphicon glyphicon-print')
-                    | &nbsp; Print
+                li
+                  a(href='#' id='charge' class='with-input') Data Source: &nbsp; 
+                    select(id='data-source-menu' name='data-source')
+                li(class='divider')
+                li
+                  a(href='#' id='charge' class='search') Genes:&nbsp; 
+                    input(type='search' id='gene-search-bar' name='gene-search')
+                    span(class='glyphicon glyphicon-searchbar glyphicon-search')
+                  ul 
+                    li Genes Go Here!
+                li
+                  a(href='#' id='charge' class='with-input') Load Network
+
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle', data-toggle='dropdown') Layout
@@ -238,33 +237,52 @@ html
                     | &nbsp; %
 
             li(class='dropdown')
-              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Species
+              a(href='#' class='dropdown-toggle' data-toggle='dropdown') Export
               ul(class='dropdown-menu' role='menu')
-                span(class='menu-subheader') Current Species
-                li
-                  a(href='#' id='Arabidopsis_thaliana' class='viewportOption active')
-                    span(class='glyphicon')
-                    | &nbsp; Arabidopsis thaliana
-                li
-                  a(href='#' id='Caenorhabditis_elegans' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Caenorhabditis elegans
-                li
-                  a(href='#' id='Drosophila_melanogaster' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Drosophilia melanogaster
-                li
-                  a(href='#' id='Homo_sapiens' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Homo sapiens
-                li
-                  a(href='#' id='Mus_musculus' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Mus musculus
-                li
-                  a(href='#' id='Saccharomyces_cerevisiae' class='viewportOption')
-                    span(class='glyphicon glyphicon-ok')
-                    | &nbsp; Saccharomyces cerevisiae
+                li(class='dropdown-submenu')
+                  a(href='#')
+                    span(class='glyphicon glyphicon-export')
+                    | &nbsp; Export Data
+                  ul(class='dropdown-menu')
+                    //- Temporary hardcoded display: none pending further testing of the Excel export feature.
+                    li(class='startDisabled disabled unweighted export' style='display: none')
+                      a(href='#' id='exportAsExcelWkbk') To Excel Workbook
+                    //- Need to omit the divider too.
+                    li(class='divider' style='display: none')
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedSif') To Unweighted SIF
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedSif') To Weighted SIF
+                    li(class='divider')
+                    li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
+                    li(class='startDisabled disabled weighted export')
+                      a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
+                    li(class='divider')
+                    //- li(class='startDisabled disabled unweighted export')
+                      a(href='#' id='exportAsUnweightedExcel') To Unweighted Excel
+                    //- li(class='startDisabled disabled weighted export')
+                    //-   a(href='#' id='exportAsWeightedExcel') To Weighted Excel
+                    li(class='startDisabled disabled export')
+                      a(href='#' id='exportAsExcel') To Excel
+
+                li(class='dropdown-submenu')
+                  a(href='#')
+                    span(class='glyphicon glyphicon-picture')
+                    | &nbsp; Export Image
+                  ul(class='dropdown-menu')
+                    li(class='startDisabled disabled')
+                      a(href='#' id='exportAsPng') To PNG
+                    li(class='startDisabled disabled')
+                      a(href='#' id='exportAsSvg') To SVG
+                    li(class='startDisabled disabled')
+                      a(href='#' id='exportAsPdf') To PDF
+                li(class='divider')
+                li(class='startDisabled disabled')
+                  a(href='#' id='printGraph')
+                    span(class='glyphicon glyphicon-print')
+                    | &nbsp; Print
+
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Help
@@ -332,6 +350,33 @@ html
 
     div(class='sidebar' data-iframe-height)
       div(class='panel-group')
+        div(class="network panel panel-default")
+            p(class='panel-title sidebarPanelHeader')
+              a(data-toggle='collapse' data-target='#networkSidebarPanel') Network
+            div(id="networkSidebarPanel" class="panel-collapse collapse")
+              div(class="panel-body")
+                  form(class='panelDropdownContainer')
+                    label(for='speciesDropdown' class='info') Current Species
+                    select(class="speciesIdentifiedDropdown panelDropdown" id='speciesDropdown' href='#')
+                      option(href='#' id='cressOption' value='Arabidopsis_thaliana') Arabidopsis thaliana
+                      option(href='#' id='nematodeOption' value='Caenorhabditis_elegans') Caenorhabditis elegans
+                      option(href='#' id='fruitflyOption' value='Drosophila_melanogaster') Drosophila melanogaster
+                      option(href='#' id='humanOption' value='Homo_sapiens') Homo sapiens
+                      option(href='#' id='mouseOption' value='Mus_musculus') Mus musculus
+                      option(href='#' id='yeastOption' value='Saccharomyces_cerevisiae') Saccharomyces cerevisiae
+                  form(class='panelDropdownContainer')
+                    label(for='dataSourceDropdown' class='info') Data Source
+                    select(class="" id='dataSourceDropdown panelDropdown' href='#')
+                      option(href='#' id='defaultOption' value='default') default Value Goes Here
+                  form(class='panelDropdownContainer')
+                    label(for='dataSourceDropdown' class='info') Genes: 
+                    span(id='total-genes' class='forceVal') 0
+                    div(class='panelGeneSearchBar')
+                      input(type='search' id='panel-gene-search-bar' name='gene-search')
+                      span(class='glyphicon glyphicon-searchbar glyphicon-search')
+                    div(class='createNetworkContainer')
+                      input(id='createNetworkButton' type='button' class='btn btn-default' value='Create Network')
+                  
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(class="force-graph panel panel-default")
             p(class='panel-title sidebarPanelHeader')
