@@ -38,8 +38,8 @@ const convertResponseToJSON = function (queryType, totalOutput) {
         totalOutput.forEach(function (x) {
             let timestamp = x.time_stamp;
             let source = x.source;
-            // JSONOutput.sources.push(`${timestamp.slice(0, 10)} : ${source}`);
-            JSONOutput.sources.push(x)
+            JSONOutput.sources.push(`${timestamp.slice(0, 10)} : ${source}`);
+            // JSONOutput.sources.push(x)
         });
         return JSONOutput;
     case "":
