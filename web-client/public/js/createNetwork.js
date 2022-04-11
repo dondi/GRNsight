@@ -39,17 +39,16 @@ export const createNetwork = function () {
         $("#createNetworkForm").remove();
     // get sources from database
         // let sources = queryNetworkDatabase({type:"NetworkSource"});
-        let x;
         queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
             console.log("It gets here correctly");
             console.log(response);
-            x = response;
+            $("#creatNetworkQuestions-container").append(createHTMLforForm(response.sources));
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
         });
-        $("#creatNetworkQuestions-container").append(createHTMLforForm(["source1", "source2", "source3"]));
+        // $("#creatNetworkQuestions-container").append(createHTMLforForm(["source1", "source2", "source3"]));
         $(CREATE_NETWORK_MODAL).modal("show");
     };
 
