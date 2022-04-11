@@ -75,4 +75,4 @@ const queryNetworkDatabase = (query) => {
 };
 
 
-export {queryExpressionDatabase, queryNetworkDatabase}
+export {queryExpressionDatabase, queryNetworkDatabase};

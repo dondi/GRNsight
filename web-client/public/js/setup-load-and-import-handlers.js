@@ -156,7 +156,7 @@ export const setupLoadAndImportHandlers = grnState => {
     $(".upload").change(uploadHandler(loadGrn));
 
     const loadDemo = (url, value) => {
-        $("#demoSourceDropdown option[value='"+value.substring(1)+"']").prop('selected', true);
+        $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
         loadGrn(url);
         reloader = () => loadGrn(url);
 
@@ -165,16 +165,16 @@ export const setupLoadAndImportHandlers = grnState => {
 
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
         // Deleted parameter `event`
-        console.log(demoClass)
+        console.log(demoClass);
         $("body").on("click", demoClass, () => {
-            loadDemo(demoPath, demoClass, demoName)
+            loadDemo(demoPath, demoClass, demoName);
         });
 
         // $("body").on("select", demoClass, () => loadDemo(demoPath, demoName));
     };
 
     DEMO_INFORMATION.forEach(demoInfo => initializeDemoFile.apply(null, demoInfo));
-    
+
     $("body").on("click", ".reload", function () {
         // Deleted `event` parameter but need `function` because of `this`.
         if (!$(this).parent().hasClass("disabled")) {
