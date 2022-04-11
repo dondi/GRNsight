@@ -38,9 +38,10 @@ export const createNetwork = function () {
     const displayCreateNetworkModal = function () {
         $("#createNetworkForm").remove();
     // get sources from database
-        console.log("It gets here correctly");
+        
         // let sources = queryNetworkDatabase({type:"NetworkSource"});
         queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
+            console.log("It gets here correctly");
             console.log(response);
         }).catch(function (error) {
             console.log(error.stack);
