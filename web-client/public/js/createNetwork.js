@@ -39,8 +39,15 @@ export const createNetwork = function () {
         $("#createNetworkForm").remove();
     // get sources from database
         console.log("It gets here correctly");
-        let sources = queryNetworkDatabase({type:"NetworkSource"});
-        console.log(sources);
+        // let sources = queryNetworkDatabase({type:"NetworkSource"});
+        queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
+            console.log(response);
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
+        // console.log(sources);
         $("#creatNetworkQuestions-container").append(createHTMLforForm(["source1", "source2", "source3"]));
         $(CREATE_NETWORK_MODAL).modal("show");
     };
