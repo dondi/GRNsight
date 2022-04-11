@@ -1,6 +1,6 @@
 const jsdom = require("jsdom");
 
-// Our fake document needs a #service-root element so that a fake "host" can be found by the code.
+// Our fake document needs a .service-root element so that a fake "host" can be found by the code.
 const { document } = (new jsdom.JSDOM("<input type='hidden' id='service-root' value='http://test'>")).window;
 global.document = document;
 global.window = document;

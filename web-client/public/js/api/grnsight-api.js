@@ -20,7 +20,7 @@ const buildExpressionURL = function (selection, genes) {
 const responseExpressionData = (formData, queryURL) => {
     return new Promise(function (resolve) {
         const uploadRoute = queryURL;
-        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         (formData ?
             $.ajax({
                 url: fullUrl,
@@ -37,7 +37,42 @@ const responseExpressionData = (formData, queryURL) => {
     });
 };
 
-export const queryExpressionDatabase = (query) => {
+const queryExpressionDatabase = (query) => {
     let queryURL = buildExpressionURL({dataset: query.dataset}, query.genes);
     return responseExpressionData("", queryURL);
 };
+
+// Network DB Access Functions
+
+const buildNetworkURL = function (queryType) {
+    const baseQuery = `networkdb?queryType=${queryType}`;
+    return baseQuery;
+};
+
+const responseNetworkData = (formData, queryURL) => {
+    return new Promise(function (resolve) {
+        const uploadRoute = queryURL;
+        const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
+        (formData ?
+            $.ajax({
+                url: fullUrl,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: "GET",
+                crossDomain: true
+            }) :
+            $.getJSON(fullUrl)
+            ).done((networkData) => {
+                resolve(networkData);
+            }).error(console.log("Error in accessing network database. Result may just be loading."));
+    });
+};
+
+const queryNetworkDatabase = (query) => {
+    let queryURL = buildNetworkURL(query.type);
+    return responseNetworkData("", queryURL);
+};
+
+
+export {queryExpressionDatabase, queryNetworkDatabase}

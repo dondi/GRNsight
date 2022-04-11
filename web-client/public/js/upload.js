@@ -114,7 +114,7 @@ export const upload = function () {
 
                 var exportForm = $("<form></form>").attr({
                     method: "POST",
-                    action: $("#service-root").val() + "/" + route
+                    action: $(".service-root").val() + "/" + route
                 }).append($("<input></input>").attr({
                     type: "hidden",
                     name: "filename",
@@ -159,7 +159,7 @@ export const upload = function () {
                                 workbookToExport.filename = workbookFilename;
                                 var exportForm = $("<form></form>").attr({
                                     method: "POST",
-                                    action: $("#service-root").val() + "/" + route
+                                    action: $(".service-root").val() + "/" + route
                                 }).append($("<input></input>").attr({
                                     type: "hidden",
                                     name: "filename",
@@ -199,7 +199,7 @@ export const upload = function () {
 
                     var exportForm = $("<form></form>").attr({
                         method: "POST",
-                        action: $("#service-root").val() + "/" + route
+                        action: $(".service-root").val() + "/" + route
                     }).append($("<input></input>").attr({
                         type: "hidden",
                         name: "filename",

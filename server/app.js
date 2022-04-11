@@ -34,6 +34,7 @@ require(__dirname + "/controllers/import-controller")(app);
 require(__dirname + "/controllers/ga-controller")(app);
 require(__dirname + "/controllers/api-controllers")(app);
 require(__dirname + "/controllers/expression-database-controller")(app);
+require(__dirname + "/controllers/network-database-controller")(app);
 
 // Don"t start the server if this app is run as a child process.
 if (!module.parent) {
