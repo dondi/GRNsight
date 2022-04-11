@@ -34,11 +34,11 @@ const convertResponseToJSON = function (queryType, totalOutput) {
     let JSONOutput = {};
     switch (queryType) {
     case "NetworkSource":
-        JSONOutput.sources = [];
+        JSONOutput.sources = {};
         totalOutput.forEach(function (x) {
             let timestamp = x.time_stamp;
             let source = x.source;
-            JSONOutput.sources.push(`${source} : ${timestamp}`);
+            JSONOutput.sources[`${source} : ${timestamp}`] = {timestamp, source};
         });
         return JSONOutput;
     case "":
