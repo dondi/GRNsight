@@ -96,7 +96,7 @@ export const createNetwork = function () {
     // get sources from database
         let sources = queryNetworkDatabase({type:"NetworkSource"});
         queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
-            $("#creatNetworkQuestions-container").append(createHTMLforForm(response.sources));
+            $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
