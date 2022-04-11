@@ -17,6 +17,7 @@ export const createNetwork = function () {
                         <option value=\'${source}\'>${sources[source]}</option>
             `;
         }
+        
         result += `</select>
                 </div>
         <div class=\'form-group\'>
