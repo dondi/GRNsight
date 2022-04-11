@@ -23,24 +23,26 @@ const buildNetworkSourceQuery = function () {
 const buildQueryByType = function (queryType) {
     switch (queryType) {
     case "NetworkSource":
-        console.log("building source :)");
         return buildNetworkSourceQuery();
     case "":
         // code block
-        console.log("what happened :((");
         break;
     }
 };
 
-let convertResponseToJSON = function (queryType, totalOutput) {
+const convertResponseToJSON = function (queryType, totalOutput) {
+    let JSONOutput = {};
     switch (queryType) {
     case "NetworkSource":
-        console.log("got response :)");
-        // let JSONOutput = {}
-        return totalOutput;
+        JSONOutput.sources = [];
+        totalOutput.forEach(function (x) {
+            let timestamp = x.time_stamp;
+            let source = x.source;
+            JSONOutput.sources.push(`${timestamp.slice(0, 10)} : ${source}`);
+        });
+        return JSONOutput;
     case "":
         // code block
-        console.log("what happened :(");
         break;
     }
 };

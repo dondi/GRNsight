@@ -38,19 +38,18 @@ export const createNetwork = function () {
     const displayCreateNetworkModal = function () {
         $("#createNetworkForm").remove();
     // get sources from database
-        
         // let sources = queryNetworkDatabase({type:"NetworkSource"});
         queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
             console.log("It gets here correctly");
             console.log(response);
+
+            $("#creatNetworkQuestions-container").append(createHTMLforForm(["source1", "source2", "source3"]));
+            $(CREATE_NETWORK_MODAL).modal("show");
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
         });
-        // console.log(sources);
-        $("#creatNetworkQuestions-container").append(createHTMLforForm(["source1", "source2", "source3"]));
-        $(CREATE_NETWORK_MODAL).modal("show");
     };
 
     const performNetworkCreation = function () {
