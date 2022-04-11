@@ -70,20 +70,11 @@ export const createNetwork = function () {
     };
 
     const addGene = function() {
-        let gene = `${$("#network-search-bar").val()}`;
-        let source = `${$("#network-source").val()}`;
+        let gene = `${$("#network-search-bar").val()}`
         $("#network-search-bar").val("")
         // get genes from database
-            queryNetworkDatabase({
-                type:"NetworkGeneFromSource", 
-                info: {
-                    gene,
-                    source:grnState.customWorkbook.sources[source].source, 
-                    timestamp:grnState.customWorkbook.sources[source].timestamp
-                }
-            }).then(function (response) {
-                let x = response
-                console.log(x)
+            queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
+                $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             }).catch(function (error) {
                 console.log(error.stack);
                 console.log(error.name);
@@ -104,9 +95,9 @@ export const createNetwork = function () {
             {geneId: "c", displayGeneId: "C"}]
         };
     // get sources from database
-        queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
+        let sources = queryNetworkDatabase({type:"NetworkSource"});
+        queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
             $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
-            grnState.customWorkbook.sources = response.sources;
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);

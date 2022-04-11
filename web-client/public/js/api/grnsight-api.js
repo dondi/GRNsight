@@ -1,5 +1,3 @@
-import { query } from "express";
-
 // Expression DB Access Functions
 const buildExpressionTimepointsString = function (selection) {
     let timepoints = "";
@@ -46,11 +44,8 @@ const queryExpressionDatabase = (query) => {
 
 // Network DB Access Functions
 
-const buildNetworkURL = function (queryType, queryInfo) {
+const buildNetworkURL = function (queryType) {
     const baseQuery = `networkdb?type=${queryType}`;
-    if (queryInfo !== null) {
-        //  do stuff here for additional params
-    }
     return baseQuery;
 };
 
@@ -75,7 +70,7 @@ const responseNetworkData = (formData, queryURL) => {
 };
 
 const queryNetworkDatabase = (query) => {
-    let queryURL = buildNetworkURL(query.type, query.info);
+    let queryURL = buildNetworkURL(query.type);
     return responseNetworkData("", queryURL);
 };
 
