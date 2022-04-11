@@ -18,7 +18,7 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM spring2022_network.source ORDER BY time_stamp";
+    return "SELECT * FROM spring2022_network.source ORDER BY time_stamp;";
 };
 const buildQueryByType = function (queryType) {
     switch (queryType) {
