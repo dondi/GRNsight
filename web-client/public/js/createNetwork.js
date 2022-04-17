@@ -23,9 +23,9 @@ export const createNetwork = function () {
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
             <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
             <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
-            <a href=\'#\' id=\'enter-search\' class=\'search-button\'>
+            <button id=\'enter-search\' class=\'search-button\'>
                 <span class=\'glyphicon glyphicon-search\'></span>
-            </a>
+            </button>
         </div>
         <div id=\'selected-genes-container\'>
             <div id=\'selected-genes\'>
@@ -114,12 +114,6 @@ export const createNetwork = function () {
             genes : {},
             source : null
         };
-        $("#network-source").on("change", () => {
-            grnState.customWorkbook.source = $("#network-source").val();
-            grnState.customWorkbook.genes = {};
-            ev.stopPropagation();
-            displayCurrentGenes();
-        });
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
             $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
@@ -129,6 +123,12 @@ export const createNetwork = function () {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
+        });
+        $("#network-source").on("change", () => {
+            grnState.customWorkbook.source = $("#network-source").val();
+            grnState.customWorkbook.genes = {};
+            ev.stopPropagation();
+            displayCurrentGenes();
         });
         // $('#getNetworkGenesForm').on("submit", ev => {
         //     let gene = `${$("#network-search-bar").val()}`;
