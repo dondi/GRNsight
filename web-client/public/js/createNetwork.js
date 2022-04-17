@@ -170,6 +170,10 @@ export const createNetwork = function () {
     //     ev.stopPropagation();
     //     displayCurrentGenes();
     // })(ev));
+    $("#getNetworkGenesForm").on("submit", (ev) => {
+        console.log("gets here form>>?")
+        ev.preventDefault();
+    })
     $("#enter-search").on("click", (ev) => {
         console.log("search button has been clicked")
         console.log($('#getNetworkGenesForm').serializeArray())
