@@ -77,7 +77,7 @@ export const createNetwork = function () {
         // console.log("Gets here")
         // let source = grnState.customWorkbook.source
         // console.log("Gets here 2")
-        // $("#network-search-bar").val("")
+        $("#network-search-bar").val("")
         // console.log("Gets here")
         // console.log(`Gene: ${gene}`);
         // console.log(`Source: ${grnState.customWorkbook.sources[source].source}`);
