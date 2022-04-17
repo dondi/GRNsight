@@ -20,14 +20,12 @@ export const createNetwork = function () {
         result += `</select>
                    <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
-        <div class=\'form-group\'>
-            <form id=\'getNetworkGenesForm\' action=\'/networkdb\'>
-                <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
-                <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
-                <a href=\'#\' id=\'enter-search\' class=\'search-button\'>
-                    <span class=\'glyphicon glyphicon-search\'></span>
-                </a>        
-            </form>
+        <div class=\'form-group\' id=\'getNetworkGenesForm\'>
+            <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
+            <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
+            <a href=\'#\' id=\'enter-search\' class=\'search-button\'>
+                <span class=\'glyphicon glyphicon-search\'></span>
+            </a>
         </div>
         <div id=\'selected-genes-container\'>
             <div id=\'selected-genes\'>
@@ -130,34 +128,36 @@ export const createNetwork = function () {
             console.log(error.name);
             console.log(error.message);
         });
-        $('#getNetworkGenesForm').on("submit", ev => {
-            let gene = `${$("#network-search-bar").val()}`;
-            let source = grnState.customWorkbook.source
-            console.log("Gets here");
-            ev.stopPropagation();
-            queryNetworkDatabase({
-                type:"NetworkGeneFromSource", 
-                info: {
-                    gene,
-                    source:grnState.customWorkbook.sources[source].source, 
-                    timestamp:grnState.customWorkbook.sources[source].timestamp
-                }
-            }).then(function (response) {
-                let x = response
-                console.log(x)
-            }).catch(function (error) {
-                console.log(error.stack);
-                console.log(error.name);
-                console.log(error.message);
-            });
-            return false;
-        }); 
+        // $('#getNetworkGenesForm').on("submit", ev => {
+        //     let gene = `${$("#network-search-bar").val()}`;
+        //     let source = grnState.customWorkbook.source
+        //     console.log("Gets here");
+        //     ev.stopPropagation();
+        //     queryNetworkDatabase({
+        //         type:"NetworkGeneFromSource", 
+        //         info: {
+        //             gene,
+        //             source:grnState.customWorkbook.sources[source].source, 
+        //             timestamp:grnState.customWorkbook.sources[source].timestamp
+        //         }
+        //     }).then(function (response) {
+        //         let x = response
+        //         console.log(x)
+        //     }).catch(function (error) {
+        //         console.log(error.stack);
+        //         console.log(error.name);
+        //         console.log(error.message);
+        //     });
+        //     return false;
+        // }); 
         $("#enter-search").on("click", (ev) => {
             ev.stopPropagation();
+            console.log("It has beeen clicked")
             updateGenes();
         });
         $("#network-search-bar").on("keydown", (ev) => {
             if(ev.key === 'Enter') {
+                console.log("It has beeen entered")
                 ev.preventDefault();
                 ev.stopPropagation();
                 updateGenes();
