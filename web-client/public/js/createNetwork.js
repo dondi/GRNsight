@@ -21,11 +21,13 @@ export const createNetwork = function () {
                    <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
-            <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
-            <button id=\'enter-search\' class=\'search-button\'>
-                <span class=\'glyphicon glyphicon-search\'></span>
-            </button>
+            <form id=\'getNetworkGenesForm\'>
+                <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
+                <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
+                <button id=\'enter-search\' type=\'submit\' class=\'search-button\'>
+                    <span class=\'glyphicon glyphicon-search\'></span>
+                </button>
+            </form>
         </div>
         <div id=\'selected-genes-container\'>
             <div id=\'selected-genes\'>
@@ -158,23 +160,26 @@ export const createNetwork = function () {
 
     // $(CREATE_NETWORK_CLASS).one("click", performNetworkCreation());
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
-    $("#network-source").on("change", ((ev) => {
-        if (grnState.customWorkbook === undefined) grnState.customWorkbook = {source:null, genes: {}}
-        grnState.customWorkbook.source = $("#network-source").val();
-        grnState.customWorkbook.genes = {};
-        console.log("User changed source!")
-        console.log(grnState.customWorkbook)
-        ev.stopPropagation();
-        displayCurrentGenes();
-    })(ev));
+    // $("#network-source").on("change", ((ev) => {
+    //     if (grnState.customWorkbook === undefined) grnState.customWorkbook = {source:null, genes: {}}
+    //     grnState.customWorkbook.source = $("#network-source").val();
+    //     grnState.customWorkbook.genes = {};
+    //     console.log("User changed source!")
+    //     console.log(grnState.customWorkbook)
+        
+    //     ev.stopPropagation();
+    //     displayCurrentGenes();
+    // })(ev));
     $("#enter-search").on("click", ((ev) => {
         console.log("search button has been clicked")
+        console.log($('#getNetworkGenesForm').serializeArray())
         ev.stopPropagation();
         updateGenes();
     })(ev));
     $("#network-search-bar").on("keydown", ((ev) => {
         if(ev.key === 'Enter') {
             console.log("search bar has been entered")
+            console.log($('#getNetworkGenesForm').serializeArray())
             ev.preventDefault();
             ev.stopPropagation();
             updateGenes();
