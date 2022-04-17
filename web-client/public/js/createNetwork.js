@@ -170,13 +170,13 @@ export const createNetwork = function () {
     //     ev.stopPropagation();
     //     displayCurrentGenes();
     // })(ev));
-    $("#enter-search").on("click", ((ev) => {
+    $("#enter-search").on("click", (ev) => {
         console.log("search button has been clicked")
         console.log($('#getNetworkGenesForm').serializeArray())
         ev.stopPropagation();
         updateGenes();
-    })(ev));
-    $("#network-search-bar").on("keydown", ((ev) => {
+    });
+    $("#network-search-bar").on("keydown", (ev) => {
         if(ev.key === 'Enter') {
             console.log("search bar has been entered")
             console.log($('#getNetworkGenesForm').serializeArray())
@@ -184,5 +184,5 @@ export const createNetwork = function () {
             ev.stopPropagation();
             updateGenes();
         }
-    })(ev));
+    });
 };
