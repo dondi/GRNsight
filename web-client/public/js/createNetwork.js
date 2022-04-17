@@ -159,6 +159,7 @@ export const createNetwork = function () {
     // $(CREATE_NETWORK_CLASS).one("click", performNetworkCreation());
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
     $("#network-source").on("change", (() => {
+        if (grnState.customWorkbook === undefined) grnState.customWorkbook = {source:null, genes: {}}
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
         console.log("User changed source!")
