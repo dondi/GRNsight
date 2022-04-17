@@ -21,7 +21,7 @@ export const createNetwork = function () {
                    <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <form id=\'getNetworkGenesForm\' method=\'post\'>
+            <form id=\'getNetworkGenesForm\'>
                 <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
                 <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
                 <button id=\'enter-search\' type=\'submit\' class=\'search-button\'>
@@ -170,7 +170,7 @@ export const createNetwork = function () {
     //     ev.stopPropagation();
     //     displayCurrentGenes();
     // })(ev));
-    $("#getNetworkGenesForm").on("submit", (ev) => {
+    $("form").on("submit", (ev) => {
         console.log("gets here form>>?")
         ev.preventDefault();
     })
