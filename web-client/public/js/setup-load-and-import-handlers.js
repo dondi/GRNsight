@@ -166,11 +166,13 @@ export const setupLoadAndImportHandlers = grnState => {
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
         // Deleted parameter `event`
         console.log(demoClass);
-        $("body").on("click", demoClass, () => {
+        $(demoClass).on("click", () => {
             loadDemo(demoPath, demoClass, demoName);
         });
 
-        // $("body").on("select", demoClass, () => loadDemo(demoPath, demoName));
+        $("#demoSourceDropdown").on("change", () => {
+            loadDemo(demoPath, demoClass, demoName);
+        });
     };
 
     DEMO_INFORMATION.forEach(demoInfo => initializeDemoFile.apply(null, demoInfo));

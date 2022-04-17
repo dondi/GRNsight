@@ -508,16 +508,21 @@ path.mousezone
   border:1px solid #CCC
   border-radius: 5px
   height: 50px
-  padding: 10px
+  padding: auto
   display: flex
   justify-content: center
   align-items:center
-  width: 12%
+  flex-direction: column
+  width: 100%
   margin:5px
 
 #custom-network-genes-container
-  display: flex
+  display: grid
+  column-gap: 20px
+  row-gap: 5px
+  grid-template-columns: 1fr 1fr 1fr
   padding: 10px 5px
+
 
 
 .custom-network-gene-display-id
@@ -526,6 +531,7 @@ path.mousezone
 .custom-network-gene-id
   color: #BBB
   font-size: 12px
+
 .network-type
   font-size: 12px
   display: inline-block

@@ -17,8 +17,8 @@ export const createNetwork = function () {
                         <option value=\'${source}\'>${sources[source]}</option>
             `;
         }
-        
         result += `</select>
+                   <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
         <div class=\'form-group\'>
                     <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
@@ -43,12 +43,14 @@ export const createNetwork = function () {
                         <p>Added genes go below! Click on a gene to remove it.</p>
                         <div id=\'custom-network-genes-container\'>
         `
-        for (let gene of grnState.customWorkbook.genes) {
+        for (let gene in grnState.customWorkbook.genes) {
             result += `
-                <div class=\'custom-network-gene\' id=${gene.geneId}>
+                <div class=\'custom-network-gene\' id=${gene}>
                     <p class=\'custom-network-gene-display-id\'>
-                        ${gene.displayGeneId}
-                        <span class=\'custom-network-gene-id\'>(${gene.geneId})</span
+                        ${grnState.customWorkbook.genes[gene]}
+                    </p>
+                    <p class=\'custom-network-gene-id\'>
+                        (${gene})
                     </p>
                 </div>
             `
@@ -60,21 +62,35 @@ export const createNetwork = function () {
     const displayCurrentGenes = function () {
         $("#selected-genes").remove();
         $("#selected-genes-container").append(createGeneButtons());
-        for (let i in grnState.customWorkbook.genes) {
-            $(`#${grnState.customWorkbook.genes[i].geneId}`).on("click", (ev) => {
+        for (let gene in grnState.customWorkbook.genes) {
+            console.log(gene);
+            $(`#${gene}`).on("click", (ev) => {
                 ev.stopPropagation();
-                $(`#${grnState.customWorkbook.genes[i].geneId}`).remove();
-                grnState.customWorkbook.genes.splice(i, 1);
+                $(`#${gene}`).remove();
+                delete grnState.customWorkbook.genes[gene];
             });
         }
     };
 
     const addGene = function() {
-        let gene = `${$("#network-search-bar").val()}`
+        let gene = `${$("#network-search-bar").val()}`;
+        let source = grnState.customWorkbook.source
         $("#network-search-bar").val("")
+        console.log(`Gene: ${gene}`);
+        console.log(`Source: ${grnState.customWorkbook.sources[source].source}`);
+        console.log(`TimeStamp: ${grnState.customWorkbook.sources[source].timestamp}`);
+        grnState.customWorkbook.genes[gene.toUpperCase()] = gene.toLowerCase()
         // get genes from database
-            queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
-                $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+            queryNetworkDatabase({
+                type:"NetworkGeneFromSource", 
+                info: {
+                    gene,
+                    source:grnState.customWorkbook.sources[source].source, 
+                    timestamp:grnState.customWorkbook.sources[source].timestamp
+                }
+            }).then(function (response) {
+                let x = response
+                console.log(x)
             }).catch(function (error) {
                 console.log(error.stack);
                 console.log(error.name);
@@ -89,20 +105,25 @@ export const createNetwork = function () {
 
     const displayCreateNetworkModal = function () {
         $("#createNetworkForm").remove();
+        $("#creatNetworkQuestions-container").append(createHTMLforForm(["1", "2", "3"]));
         grnState.customWorkbook = {
-            genes : [{geneId: "a", displayGeneId: "A"},
-            {geneId: "b", displayGeneId: "B"},
-            {geneId: "c", displayGeneId: "C"}]
+            genes : {},
+            source : null
         };
-    // get sources from database
-        let sources = queryNetworkDatabase({type:"NetworkSource"});
-        queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
-            $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
-        }).catch(function (error) {
-            console.log(error.stack);
-            console.log(error.name);
-            console.log(error.message);
+        $("#network-source").on("change", () => {
+            grnState.customWorkbook.source = $("#network-source").val();
+            grnState.customWorkbook.genes = {};
+            displayCurrentGenes();
         });
+    // get sources from database
+        // queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
+        //     $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+        //     grnState.customWorkbook.sources = response.sources;
+        // }).catch(function (error) {
+        //     console.log(error.stack);
+        //     console.log(error.name);
+        //     console.log(error.message);
+        // });
         $("#enter-search").on("click", (ev) => {
             ev.stopPropagation();
             updateGenes();
