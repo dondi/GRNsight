@@ -105,7 +105,7 @@ export const createNetwork = function () {
 
     const displayCreateNetworkModal = function () {
         $("#createNetworkForm").remove();
-        $("#creatNetworkQuestions-container").append(createHTMLforForm(["1", "2", "3"]));
+        // $("#creatNetworkQuestions-container").append(createHTMLforForm(["1", "2", "3"]));
         grnState.customWorkbook = {
             genes : {},
             source : null
@@ -116,14 +116,14 @@ export const createNetwork = function () {
             displayCurrentGenes();
         });
     // get sources from database
-        // queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
-        //     $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
-        //     grnState.customWorkbook.sources = response.sources;
-        // }).catch(function (error) {
-        //     console.log(error.stack);
-        //     console.log(error.name);
-        //     console.log(error.message);
-        // });
+        queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
+            $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+            grnState.customWorkbook.sources = response.sources;
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
         $("#enter-search").on("click", (ev) => {
             ev.stopPropagation();
             updateGenes();
