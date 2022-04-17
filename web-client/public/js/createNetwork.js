@@ -166,12 +166,12 @@ export const createNetwork = function () {
         console.log(grnState.customWorkbook)
         ev.stopPropagation();
         displayCurrentGenes();
-    })(this));
+    })(ev));
     $("#enter-search").on("click", ((ev) => {
         console.log("search button has been clicked")
         ev.stopPropagation();
         updateGenes();
-    })(this));
+    })(ev));
     $("#network-search-bar").on("keydown", ((ev) => {
         if(ev.key === 'Enter') {
             console.log("search bar has been entered")
@@ -179,5 +179,5 @@ export const createNetwork = function () {
             ev.stopPropagation();
             updateGenes();
         }
-    })(this));
+    })(ev));
 };
