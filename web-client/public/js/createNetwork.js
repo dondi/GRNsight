@@ -158,7 +158,7 @@ export const createNetwork = function () {
 
     // $(CREATE_NETWORK_CLASS).one("click", performNetworkCreation());
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
-    $("#network-source").on("change", (() => {
+    $("#network-source").on("change", ((ev) => {
         if (grnState.customWorkbook === undefined) grnState.customWorkbook = {source:null, genes: {}}
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
@@ -166,7 +166,7 @@ export const createNetwork = function () {
         console.log(grnState.customWorkbook)
         ev.stopPropagation();
         displayCurrentGenes();
-    })());
+    })(this));
     $("#enter-search").on("click", ((ev) => {
         console.log("search button has been clicked")
         ev.stopPropagation();
