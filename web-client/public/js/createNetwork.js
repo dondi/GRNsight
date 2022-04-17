@@ -150,6 +150,7 @@ export const createNetwork = function () {
                 console.log(error.name);
                 console.log(error.message);
             });
+            return false;
         }); 
         $("#enter-search").on("click", (ev) => {
             ev.stopPropagation();
