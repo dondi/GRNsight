@@ -22,7 +22,7 @@ export const createNetwork = function () {
                 </div>
         <div class=\'form-group\'>
                     <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
-                    <input type=\'search\' id=\'network-search-bar\' name=\'network-search-bar\'>
+                    <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'>
             </input>
             <a href=\'#\' id=\'enter-search\' class=\'search-button\'>
             <span class=\'glyphicon glyphicon-search\'></span>
