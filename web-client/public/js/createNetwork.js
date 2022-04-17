@@ -21,7 +21,7 @@ export const createNetwork = function () {
                    <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <form id=\'getNetworkGenesForm\'>
+            <form id=\'getNetworkGenesForm\' method=\'post\'>
                 <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
                 <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
                 <button id=\'enter-search\' type=\'submit\' class=\'search-button\'>
