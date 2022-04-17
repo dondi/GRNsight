@@ -158,25 +158,25 @@ export const createNetwork = function () {
 
     // $(CREATE_NETWORK_CLASS).one("click", performNetworkCreation());
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
-    $("#network-source").on("change", () => {
+    $("#network-source").on("change", (() => {
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
         console.log("User changed source!")
         console.log(grnState.customWorkbook)
         ev.stopPropagation();
         displayCurrentGenes();
-    });
-    $("#enter-search").on("click", (ev) => {
+    })());
+    $("#enter-search").on("click", ((ev) => {
         console.log("search button has been clicked")
         ev.stopPropagation();
         updateGenes();
-    });
-    $("#network-search-bar").on("keydown", (ev) => {
+    })(this));
+    $("#network-search-bar").on("keydown", ((ev) => {
         if(ev.key === 'Enter') {
             console.log("search bar has been entered")
             ev.preventDefault();
             ev.stopPropagation();
             updateGenes();
         }
-    });
+    })(this));
 };
