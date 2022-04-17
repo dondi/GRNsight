@@ -5,7 +5,7 @@ import { grnState } from "./grnstate";
 export const createNetwork = function () {
     const createHTMLforForm = (sources) => {
         let result =  `
-            <form id=\'createNetworkForm\'>
+            <form id=\'createNetworkForm\' action=\'/networkdb\'>
                 <h2 id=\'createNetwork\'>Create Network</h2>
         <div class=\'form-group\'>
             <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
