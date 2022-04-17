@@ -72,7 +72,9 @@ export const createNetwork = function () {
     };
 
     const addGene = function() {
+        console.log("Begin Add Gene")
         let gene = `${$("#network-search-bar").val()}`;
+        console.log(gene)
         // console.log("Gets here")
         // let source = grnState.customWorkbook.source
         // console.log("Gets here 2")
@@ -151,13 +153,13 @@ export const createNetwork = function () {
         //     return false;
         // }); 
         $("#enter-search").on("click", (ev) => {
+            console.log("search button has been clicked")
             ev.stopPropagation();
-            console.log("It has beeen clicked")
             updateGenes();
         });
         $("#network-search-bar").on("keydown", (ev) => {
             if(ev.key === 'Enter') {
-                console.log("It has beeen entered")
+                console.log("search bar has been entered")
                 ev.preventDefault();
                 ev.stopPropagation();
                 updateGenes();
