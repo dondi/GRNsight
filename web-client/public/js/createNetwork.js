@@ -124,12 +124,6 @@ export const createNetwork = function () {
             console.log(error.name);
             console.log(error.message);
         });
-        $("#network-source").on("change", () => {
-            grnState.customWorkbook.source = $("#network-source").val();
-            grnState.customWorkbook.genes = {};
-            ev.stopPropagation();
-            displayCurrentGenes();
-        });
         // $('#getNetworkGenesForm').on("submit", ev => {
         //     let gene = `${$("#network-search-bar").val()}`;
         //     let source = grnState.customWorkbook.source
@@ -152,6 +146,15 @@ export const createNetwork = function () {
         //     });
         //     return false;
         // }); 
+        $("#network-source").on("change", () => {
+            grnState.customWorkbook.source = $("#network-source").val();
+            grnState.customWorkbook.genes = {};
+            console.log("User changed source!")
+            console.log(grnState.customWorkbook)
+            ev.stopPropagation();
+            displayCurrentGenes();
+        });
+        $(CREATE_NETWORK_MODAL).modal("show");
         $("#enter-search").on("click", (ev) => {
             console.log("search button has been clicked")
             ev.stopPropagation();
@@ -165,7 +168,6 @@ export const createNetwork = function () {
                 updateGenes();
             }
         });
-        $(CREATE_NETWORK_MODAL).modal("show");
     };
 
     const performNetworkCreation = function () {
