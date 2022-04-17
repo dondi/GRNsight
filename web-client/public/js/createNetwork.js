@@ -5,7 +5,7 @@ import { grnState } from "./grnstate";
 export const createNetwork = function () {
     const createHTMLforForm = (sources) => {
         let result =  `
-            <form id=\'createNetworkForm\' action=\'/networkdb\'>
+            <div id=\'createNetworkFormContainer\' '>
                 <h2 id=\'createNetwork\'>Create Network</h2>
         <div class=\'form-group\'>
             <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
@@ -21,20 +21,21 @@ export const createNetwork = function () {
                    <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
         <div class=\'form-group\'>
-                    <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
-                    <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'>
-            </input>
-            <a href=\'#\' id=\'enter-search\' class=\'search-button\'>
-            <span class=\'glyphicon glyphicon-search\'></span>
-            </a>
+            <form id=\'getNetworkGenesForm\' action=\'/networkdb\'>
+                <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
+                <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
+                <a href=\'#\' id=\'enter-search\' class=\'search-button\'>
+                    <span class=\'glyphicon glyphicon-search\'></span>
+                </a>        
+            </form>
         </div>
         <div id=\'selected-genes-container\'>
             <div id=\'selected-genes\'>
                 <p>Added genes go here! Click on a gene to remove it</p>
             </div>
         </div>
-        <input type=\'button\' id=\'submit-network\' value=\'Create Network\'></input>
-            </form
+        <input type=\'submit\' id=\'submit-network\' value=\'Create Network\'></input>
+            </div>
         `;
         return result;
     };
@@ -107,7 +108,7 @@ export const createNetwork = function () {
     };
 
     const displayCreateNetworkModal = function () {
-        $("#createNetworkForm").remove();
+        $("#createNetworkFormContainer").remove();
         // $("#creatNetworkQuestions-container").append(createHTMLforForm(["1", "2", "3"]));
         grnState.customWorkbook = {
             genes : {},
@@ -116,17 +117,40 @@ export const createNetwork = function () {
         $("#network-source").on("change", () => {
             grnState.customWorkbook.source = $("#network-source").val();
             grnState.customWorkbook.genes = {};
+            ev.stopPropagation();
             displayCurrentGenes();
         });
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
             $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
+            console.log(grnState.customWorkbook)
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
         });
+        $('#getNetworkGenesForm').on("submit", ev => {
+            let gene = `${$("#network-search-bar").val()}`;
+            let source = grnState.customWorkbook.source
+            console.log("Gets here");
+            ev.stopPropagation();
+            queryNetworkDatabase({
+                type:"NetworkGeneFromSource", 
+                info: {
+                    gene,
+                    source:grnState.customWorkbook.sources[source].source, 
+                    timestamp:grnState.customWorkbook.sources[source].timestamp
+                }
+            }).then(function (response) {
+                let x = response
+                console.log(x)
+            }).catch(function (error) {
+                console.log(error.stack);
+                console.log(error.name);
+                console.log(error.message);
+            });
+        }); 
         $("#enter-search").on("click", (ev) => {
             ev.stopPropagation();
             updateGenes();

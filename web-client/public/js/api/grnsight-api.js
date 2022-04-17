@@ -44,8 +44,11 @@ const queryExpressionDatabase = (query) => {
 
 // Network DB Access Functions
 
-const buildNetworkURL = function (queryType) {
+const buildNetworkURL = function (queryType, queryInfo) {
     const baseQuery = `networkdb?type=${queryType}`;
+    if (queryInfo !== null) {
+        //  do stuff here for additional params
+    }
     return baseQuery;
 };
 
@@ -70,7 +73,7 @@ const responseNetworkData = (formData, queryURL) => {
 };
 
 const queryNetworkDatabase = (query) => {
-    let queryURL = buildNetworkURL(query.type);
+    let queryURL = buildNetworkURL(query.type, query.info);
     return responseNetworkData("", queryURL);
 };
 
