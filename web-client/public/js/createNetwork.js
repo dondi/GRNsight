@@ -118,7 +118,7 @@ export const createNetwork = function () {
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
             $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
-            grnState.customWorkbook.source = $("#network-source").val() === "none"? null : `${$("#network-source").val()}`
+            grnState.customWorkbook.source = Object.keys(response.sources).length === 1? Object.keys(response.sources)[0] : null;
             console.log(grnState.customWorkbook)
         }).catch(function (error) {
             console.log(error.stack);
