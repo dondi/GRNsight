@@ -181,7 +181,7 @@ export const createNetwork = function () {
         } catch (error) {
             console.log(error);
         }
-        return false;
+        // return false;
     });
     // $("body").on("keydown", "#network-search-bar", function () {
     //     if(event.key === 'Enter') {
@@ -191,5 +191,5 @@ export const createNetwork = function () {
     //         event.stopPropagation();
     //         updateGenes();
     //     }
-    });
+    // });
 };
