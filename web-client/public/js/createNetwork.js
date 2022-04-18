@@ -90,6 +90,7 @@ export const createNetwork = function () {
         queryNetworkDatabase(headers).then(function (response) {
             if (response.geneId !== null && response.displayGeneId !==null) {
             grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
+            displayCurrentGenes();
             }
             else {
                 alert (`Gene: ${gene} was not found in this database. Please check for any typos and try again.`);
@@ -99,11 +100,6 @@ export const createNetwork = function () {
             console.log(error.name);
             console.log(error.message);
         });
-    };
-
-    const updateGenes = function () {
-        addGene();
-        displayCurrentGenes();
     };
 
     const displayCreateNetworkModal = function () {
@@ -149,7 +145,7 @@ export const createNetwork = function () {
             console.log($('#getNetworkGenesForm').serializeArray())
             event.preventDefault();
             event.stopPropagation();
-            updateGenes();
+            addGene();
         } catch (error) {
             console.log(error);
         }
