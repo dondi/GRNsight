@@ -45,7 +45,7 @@ const queryExpressionDatabase = (query) => {
 // Network DB Access Functions
 
 const buildNetworkURL = function (queryType, queryInfo) {
-    const baseQuery = `networkdb?type=${queryType}`;
+    let baseQuery = `networkdb?type=${queryType}`;
     if (queryInfo !== null) {
         for (let header in queryInfo){
             baseQuery += `&${header}=${queryInfo.header}`
