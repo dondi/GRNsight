@@ -11,11 +11,17 @@ export const createNetwork = function () {
         <div class=\'form-group\'>
             <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
             <select class=\'network-dropdown\' id=\'network-source\'>
-                <option value=\'none\' selected=\'true\' disabled hidden>Select Network Source</option> 
-                    `;
-        for (let source in sources) {
+            `;
+        if (sources.length !== 1) {
+            result += `<option value=\'none\' selected=\'true\' disabled hidden>Select Network Source</option> `
+            for (let source in sources) {
+                result += `
+                            <option value=\'${sources[source]}\'>${sources[source]}</option>
+                `;
+            }
+        } else {
             result += `
-                        <option value=\'${sources[source]}\'>${sources[source]}</option>
+                        <option value=\'${sources[0]}\' selected=\'true\' disabled hidden>${sources[0]}</option>
             `;
         }
         result += `</select>
