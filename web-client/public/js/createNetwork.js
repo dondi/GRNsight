@@ -19,19 +19,20 @@ export const createNetwork = function () {
         console.log(genes)
         console.log(grnState.customWorkbook.genes)
         for (let regulator in grnState.customWorkbook.links) {
-            console.log("regulator: ",regulator, ", ",  genesByIndex[regulator])
-            console.log("target", grnState.customWorkbook.links[regulator], ", ", 
-            genesByIndex[grnState.customWorkbook.links[regulator]]
+            for (let target of grnState.customWorkbook.links[regulator]){
+                console.log("regulator: ",regulator, ", ",  genesByIndex[regulator])
+                console.log("target", target, ", ", 
+                genesByIndex[target]
             )
-
-            links.push({
-                source: genesByIndex[regulator],
-                target: genesByIndex[grnState.customWorkbook.links[regulator]],
-                value:1,
-                type:"arrowhead",
-                stroke: "black"
-            });
-            positiveWeights.push(1);
+                links.push({
+                    source: genesByIndex[regulator],
+                    target: genesByIndex[target],
+                    value:1,
+                    type:"arrowhead",
+                    stroke: "black"
+                });
+                positiveWeights.push(1);
+            }
         }
         return  {
             genes,
