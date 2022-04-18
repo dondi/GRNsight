@@ -92,15 +92,16 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp
             }
         }
+        console.log("Pre-query")
         queryNetworkDatabase(headers).then(function (response) {
-            let x = response
             console.log("Incomming response!!!!!!")
-            console.log(x)
+            console.log(response)
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
         });
+        console.log("postquery")
         // get genes from database
             // queryNetworkDatabase({
             //     type:"NetworkGeneFromSource", 

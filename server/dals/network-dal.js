@@ -27,18 +27,20 @@ const buildNetworkGeneFromSourceQuery = function(gene, source, timestamp) {
  (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
  (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id)`
 };
-const buildQueryByType = function (queryType, queryInfo) {
-    switch (queryType) {
+const buildQueryByType = function (query) {
+    switch (query.type) {
     case "NetworkSource":
         return buildNetworkSourceQuery();
     case "NetworkGeneFromSource":
         console.log("Query Info:")
-        console.log(queryInfo)
-        return buildNetworkGeneFromSourceQuery(queryInfo.gene, queryInfo.source, queryInfo.timestamp);
+        console.log(query.gene)
+        console.log(query.source)
+        console.log(query.timestamp)
+        return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);
     }
 };
 
-const convertResponseToJSON = function (queryType, queryInfo, totalOutput) {
+const convertResponseToJSON = function (queryType, query, totalOutput) {
     let JSONOutput = {};
     switch (queryType) {
     case "NetworkSource":
@@ -59,7 +61,7 @@ const convertResponseToJSON = function (queryType, queryInfo, totalOutput) {
         // JSONOutput[sourceKey].genes[queryInfo.gene] = {
         //     displayGeneId: totalOutput
         // }
-        JSONOutput.queryInfo = queryInfo
+        JSONOutput.queryInfo = query
         JSONOutput.totalOutput = totalOutput
         return JSONOutput;
     }
@@ -69,9 +71,9 @@ module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function (req, res) {
         return req.query.type === "NetworkSource" ? 
-        sequelize.query(buildQueryByType(req.query.type, req.query.info), { type: sequelize.QueryTypes.SELECT })
+        sequelize.query(buildQueryByType(req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
-                let response = convertResponseToJSON(req.query.type, req.query.info, stdname);
+                let response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
             }) : req.query;
     }
