@@ -57,7 +57,7 @@ const buildNetworkURL = function (queryType, queryInfo) {
     if (queryInfo !== null) {
         for (let header in queryInfo){
             if (header === "genes") {
-                baseQuery += buildNetworkGenesQuery(queryInfo[header])
+                baseQuery += `&${header}=${buildNetworkGenesQuery(queryInfo[header])}`
             } else {
             baseQuery += `&${header}=${queryInfo[header]}`
             }
