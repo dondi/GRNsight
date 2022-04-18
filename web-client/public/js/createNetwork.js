@@ -160,6 +160,7 @@ export const createNetwork = function () {
         queryNetworkDatabase(headers).then(function (response) {
             console.log("HERE IS THE DATA FOR NETWORK CREATION")
             console.log(response)
+            console.log(grnState)
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
             console.log(error.stack);
