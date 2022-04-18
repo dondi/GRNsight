@@ -212,7 +212,7 @@ export const createNetwork = function () {
             let workbook = createCustomWorkbook();
             let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
             let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
-            grnState.workbook = (workbook);
+            grnState.workbook = workbook;
             grnState.newWorkbook = true;
             grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
             updateApp(grnState);
@@ -224,6 +224,7 @@ export const createNetwork = function () {
         });
         console.dir(grnState)
     });
+    
     $("body").on("click", "#enter-search", function(event) {
         try {
             console.log("search button has been clicked")
