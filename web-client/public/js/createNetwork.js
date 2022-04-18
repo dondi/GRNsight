@@ -170,13 +170,13 @@ export const createNetwork = function () {
     //     ev.stopPropagation();
     //     displayCurrentGenes();
     // })(ev));
-    $("#enter-search").on("click", function() {
+    $("body").on("click", "#enter-search", function() {
         console.log("search button has been clicked")
         console.log($('#getNetworkGenesForm').serializeArray())
         this.stopPropagation();
         updateGenes();
     });
-    $("#network-search-bar").on("keydown", function () {
+    $("body").on("keydown", "#network-search-bar", function () {
         if(this.key === 'Enter') {
             console.log("search bar has been entered")
             console.log($('#getNetworkGenesForm').serializeArray())
