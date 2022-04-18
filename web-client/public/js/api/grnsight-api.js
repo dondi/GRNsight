@@ -44,11 +44,23 @@ const queryExpressionDatabase = (query) => {
 
 // Network DB Access Functions
 
+const buildNetworkGenesQuery = (genes) => {
+    result = ""
+    for (let gene in genes) {
+        result += `${genes[gene]},`
+    }
+    return result.substring(0, result.length - 1);
+}
+
 const buildNetworkURL = function (queryType, queryInfo) {
     let baseQuery = `networkdb?type=${queryType}`;
     if (queryInfo !== null) {
         for (let header in queryInfo){
+            if (header = "genes") {
+                baseQuery += buildNetworkGenesQuery(queryInfo[header])
+            } else {
             baseQuery += `&${header}=${queryInfo[header]}`
+            }
         }
     }
     return baseQuery;

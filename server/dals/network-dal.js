@@ -1,3 +1,4 @@
+const { JSONB } = require("sequelize");
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -27,22 +28,35 @@ const buildNetworkGeneFromSourceQuery = function(gene, source, timestamp) {
  (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
  (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`
 };
-const buildQueryByType = function (queryType, query) {
-    switch (queryType) {
+
+let buildNetworkGenesQuery = function (geneString) {
+    let genes = "";
+    let geneList = geneString.split(",");
+    geneList.forEach(x => genes += ( `(spring2022_network.gene.display_gene_id =\'${x}\') OR `));
+    return genes.substring(0, genes.length - 4);
+};
+
+const buildCreateNetworkQuery = function(genes, source, timestamp) {
+    return `SELECT DISTINCT regulator_gene_id, target_gene_id FROM
+ spring2022_network.network, spring2022_network.gene WHERE
+ network.time_stamp='${timestamp}' AND network.source='${source}' AND
+ (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id) AND
+ ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`
+}
+const buildQueryByType = function (query) {
+    switch (query.type) {
     case "NetworkSource":
         return buildNetworkSourceQuery();
     case "NetworkGeneFromSource":
-        console.log("Query Info:")
-        console.log(query.gene)
-        console.log(query.source)
-        console.log(query.timestamp)
         return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);
+    case "CreateNetwork":
+        return buildCreateNetworkQuery(query.genes, query.source, query.timestamp)
     }
 };
 
-const convertResponseToJSON = function (queryType, query, totalOutput) {
+const convertResponseToJSON = function (query, totalOutput) {
     let JSONOutput = {};
-    switch (queryType) {
+    switch (queryType.type) {
     case "NetworkSource":
         JSONOutput.sources = {};
         totalOutput.forEach(function (x) {
@@ -52,17 +66,12 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
         });
         return JSONOutput;
     case "NetworkGeneFromSource":
-        // let sourceKey = `${queryInfo.source} : ${queryInfo.timestamp}`
-        // JSONOutput[sourceKey] = {
-        //     source: queryInfo.source,
-        //     timestamp: queryInfo.timestamp,
-        //     genes: []
-        // }
-        // JSONOutput[sourceKey].genes[queryInfo.gene] = {
-        //     displayGeneId: totalOutput
-        // }
         JSONOutput.displayGeneId = totalOutput.length > 0 ? totalOutput[0].display_gene_id: null;
         JSONOutput.geneId = totalOutput.length > 0 ? totalOutput[0].gene_id: null;
+        return JSONOutput;
+    case "CreateNetwork":
+        JSONOutput.query = query;
+        JSONOutput.totalOutput = totalOutput;
         return JSONOutput;
     }
 };
@@ -70,9 +79,9 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
 module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function (req, res) {
-        sequelize.query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
+        sequelize.query(buildQueryByType(req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
-                let response = convertResponseToJSON(req.query.type, req.query, stdname);
+                let response = convertResponseToJSON(req.query, stdname);
                 return res.send(response);
             });
     }

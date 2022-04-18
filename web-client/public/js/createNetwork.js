@@ -13,7 +13,7 @@ export const createNetwork = function () {
             <select class=\'network-dropdown\' id=\'network-source\'>
             `;
         if (sources.length !== 1) {
-            result += `<option value=\'none\' selected=\'true\' disabled hidden>Select Network Source</option> `
+            result += `<option value=\'none\' selected=\'true\' disabled>Select Network Source</option> `
             for (let source in sources) {
                 result += `
                             <option value=\'${sources[source]}\'>${sources[source]}</option>
@@ -41,7 +41,7 @@ export const createNetwork = function () {
                 <p>Added genes go here! Click on a gene to remove it</p>
             </div>
         </div>
-        <input type=\'submit\' id=\'submit-network\' value=\'Create Network\'></input>
+        <button id=\'submit-network\' value=\'Create Network\'></input>
             </div>
         `;
         return result;
@@ -81,7 +81,6 @@ export const createNetwork = function () {
     };
 
     const addGene = function() {
-        console.log("Begin Add Gene")
         let gene = `${$("#network-search-bar").val()}`.toUpperCase();
         $("#network-search-bar").val("");
         let source = grnState.customWorkbook.source
@@ -144,6 +143,25 @@ export const createNetwork = function () {
         console.log(grnState.customWorkbook) 
         event.stopPropagation();
         displayCurrentGenes();
+    });
+    $("body").on("click", "#submit-network", function() {
+        let headers = {
+            type:"CreateNetwork", 
+            info: {
+                genes: grnState.customWorkbook.genes,
+                source:grnState.customWorkbook.sources[source].source, 
+                timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
+            }
+        }
+        queryNetworkDatabase(headers).then(function (response) {
+            console.log("HERE IS THE DATA FOR NETWORK CREATION")
+            console.log(response)
+            $(CREATE_NETWORK_MODAL).modal("hide");
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
     });
     $("body").on("click", "#enter-search", function(event) {
         try {
