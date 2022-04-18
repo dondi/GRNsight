@@ -25,20 +25,22 @@ const buildNetworkGeneFromSourceQuery = function(gene, source, timestamp) {
     return `SELECT DISTINCT gene_id, display_gene_id FROM spring2022_network.network, spring2022_network.gene WHERE
  network.time_stamp='${timestamp}' AND network.source='${source}' AND
  (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
- (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id)`
+ (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`
 };
-const buildQueryByType = function (queryType, queryInfo) {
+const buildQueryByType = function (queryType, query) {
     switch (queryType) {
     case "NetworkSource":
         return buildNetworkSourceQuery();
     case "NetworkGeneFromSource":
         console.log("Query Info:")
-        console.log(queryInfo)
-        return buildNetworkGeneFromSourceQuery(queryInfo.gene, queryInfo.source, queryInfo.timestamp);
+        console.log(query.gene)
+        console.log(query.source)
+        console.log(query.timestamp)
+        return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);
     }
 };
 
-const convertResponseToJSON = function (queryType, queryInfo, totalOutput) {
+const convertResponseToJSON = function (queryType, query, totalOutput) {
     let JSONOutput = {};
     switch (queryType) {
     case "NetworkSource":
@@ -59,7 +61,7 @@ const convertResponseToJSON = function (queryType, queryInfo, totalOutput) {
         // JSONOutput[sourceKey].genes[queryInfo.gene] = {
         //     displayGeneId: totalOutput
         // }
-        JSONOutput.queryInfo = queryInfo
+        JSONOutput.queryInfo = query
         JSONOutput.totalOutput = totalOutput
         return JSONOutput;
     }
@@ -68,9 +70,9 @@ const convertResponseToJSON = function (queryType, queryInfo, totalOutput) {
 module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function (req, res) {
-        return sequelize.query(buildQueryByType(req.query.type, req.query.info), { type: sequelize.QueryTypes.SELECT })
+        sequelize.query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
-                let response = convertResponseToJSON(req.query.type, req.query.info, stdname);
+                let response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
             });
     }
