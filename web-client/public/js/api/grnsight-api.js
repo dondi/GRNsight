@@ -48,7 +48,7 @@ const buildNetworkURL = function (queryType, queryInfo) {
     let baseQuery = `networkdb?type=${queryType}`;
     if (queryInfo !== null) {
         for (let header in queryInfo){
-            baseQuery += `&${header}=${queryInfo.header}`
+            baseQuery += `&${header}=${queryInfo[header]}`
         }
     }
     return baseQuery;

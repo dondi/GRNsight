@@ -87,7 +87,7 @@ export const createNetwork = function () {
         let headers = {
             type:"NetworkGeneFromSource", 
             info: {
-                gene,
+                gene: gene,
                 source:grnState.customWorkbook.sources[source].source, 
                 timestamp:grnState.customWorkbook.sources[source].timestamp
             }
