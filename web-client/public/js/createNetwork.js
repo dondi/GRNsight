@@ -110,10 +110,9 @@ export const createNetwork = function () {
 
     const displayCreateNetworkModal = function () {
         $("#createNetworkFormContainer").remove();
-        // $("#creatNetworkQuestions-container").append(createHTMLforForm(["1", "2", "3"]));
         grnState.customWorkbook = {
             genes : {},
-            source : null
+            source : $("#network-source").val() === 'none'? null : $("#network-source").val()
         };
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
