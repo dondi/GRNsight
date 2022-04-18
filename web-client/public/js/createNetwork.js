@@ -1,6 +1,7 @@
 import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
+import { event } from "jquery";
 
 export const createNetwork = function () {
     const createHTMLforForm = (sources) => {
@@ -173,15 +174,15 @@ export const createNetwork = function () {
     $("body").on("click", "#enter-search", function() {
         console.log("search button has been clicked")
         console.log($('#getNetworkGenesForm').serializeArray())
-        this.stopPropagation();
+        event.stopPropagation();
         updateGenes();
     });
     $("body").on("keydown", "#network-search-bar", function () {
-        if(this.key === 'Enter') {
+        if(event.key === 'Enter') {
             console.log("search bar has been entered")
             console.log($('#getNetworkGenesForm').serializeArray())
-            this.preventDefault();
-            this.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
             updateGenes();
         }
     });
