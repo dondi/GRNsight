@@ -133,11 +133,6 @@ export const setupLoadAndImportHandlers = grnState => {
                         break;
                     case SCHADE_OUTPUT_PATH:
                         grnState.name = SCHADE_OUTPUT_NAME;
-                    case "CustomWorkbook/unweighted":
-                        let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
-                        let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
-                        grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-                        break;
                     }
                 }
                 grnState.workbook = workbook;
