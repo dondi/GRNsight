@@ -209,6 +209,7 @@ export const createNetwork = function () {
         queryNetworkDatabase(headers).then(function (response) {
             console.log("HERE IS THE DATA FOR NETWORK CREATION");
             grnState.customWorkbook.links = response.regulatoryConnections;
+            console.dir(grnState)
             let workbook = createCustomWorkbook();
             let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
             let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
