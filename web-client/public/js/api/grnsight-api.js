@@ -88,6 +88,7 @@ const responseNetworkData = (formData, queryURL) => {
 
 const queryNetworkDatabase = (query) => {
     let queryURL = buildNetworkURL(query.type, query.info);
+    console.log(queryURL)
     return responseNetworkData("", queryURL);
 };
 

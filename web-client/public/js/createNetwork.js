@@ -41,7 +41,7 @@ export const createNetwork = function () {
                 <p>Added genes go here! Click on a gene to remove it</p>
             </div>
         </div>
-        <button id=\'submit-network\' >Create Network</input>
+        <button id=\'submit-network\'>Create Network</input>
             </div>
         `;
         return result;
@@ -81,6 +81,7 @@ export const createNetwork = function () {
     };
 
     const addGene = function() {
+        console.log("Adding Gene")
         let gene = `${$("#network-search-bar").val()}`.toUpperCase();
         $("#network-search-bar").val("");
         let source = grnState.customWorkbook.source
@@ -145,6 +146,7 @@ export const createNetwork = function () {
         displayCurrentGenes();
     });
     $("body").on("click", "#submit-network", function() {
+        console.log("Creating network")
         let headers = {
             type:"CreateNetwork", 
             info: {
@@ -166,7 +168,6 @@ export const createNetwork = function () {
     $("body").on("click", "#enter-search", function(event) {
         try {
             console.log("search button has been clicked")
-            console.log($('#getNetworkGenesForm').serializeArray())
             event.preventDefault();
             event.stopPropagation();
             addGene();
