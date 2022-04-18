@@ -4,7 +4,7 @@ import { grnState } from "./grnstate";
 import { updateApp } from "./update-app";
 
 export const createNetwork = function () {
-    const createCustomWorkbook = (res, app) => {
+    const createCustomWorkbook = () => {
         let genes = []
         let genesByIndex = {}
         let links = []
@@ -172,9 +172,6 @@ export const createNetwork = function () {
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1? Object.keys(response.sources)[0] : null;
             console.log(grnState.customWorkbook)
-            app.get("CustomWorkbook/unweighted", function (req, res) {
-                return createCustomWorkbook( res, app);
-            });
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
