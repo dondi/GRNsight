@@ -41,7 +41,7 @@ export const createNetwork = function () {
                 <p>Added genes go here! Click on a gene to remove it</p>
             </div>
         </div>
-        <button id=\'submit-network\' value=\'Create Network\'></input>
+        <button id=\'submit-network\' >Create Network</input>
             </div>
         `;
         return result;
