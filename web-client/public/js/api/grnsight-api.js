@@ -47,7 +47,7 @@ const queryExpressionDatabase = (query) => {
 const buildNetworkGenesQuery = (genes) => {
     let result = ""
     for (let gene in genes) {
-        result += `${genes[gene]},`
+        result += `${gene},`
     }
     return result.substring(0, result.length - 1);
 }

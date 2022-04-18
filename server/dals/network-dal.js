@@ -30,17 +30,19 @@ const buildNetworkGeneFromSourceQuery = function(gene, source, timestamp) {
 };
 
 let buildNetworkGenesQuery = function (geneString) {
-    let genes = "";
+    let genes = "(";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ( `(spring2022_network.gene.display_gene_id =\'${x}\') OR `));
-    return genes.substring(0, genes.length - 4);
+    geneList.forEach(x => genes += ( `(network.regulator_gene_id =\'${x}\') OR `));
+    genes = `${genes.substring(0, genes.length - 4)}) AND (`;
+    geneList.forEach(x => genes += ( `(network.target_gene_id =\'${x}\') OR `));
+    return `${genes.substring(0, genes.length - 4)})`;
+
 };
 
 const buildCreateNetworkQuery = function(genes, source, timestamp) {
     return `SELECT DISTINCT regulator_gene_id, target_gene_id FROM
- spring2022_network.network, spring2022_network.gene WHERE
- network.time_stamp='${timestamp}' AND network.source='${source}' AND
- (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id) AND
+ spring2022_network.network WHERE
+ time_stamp='${timestamp}' AND source='${source}' AND
  ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`
 }
 const buildQueryByType = function (queryType, query) {
