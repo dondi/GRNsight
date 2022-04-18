@@ -68,11 +68,11 @@ const convertResponseToJSON = function (queryType, queryInfo, totalOutput) {
 module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function (req, res) {
-        return req.query
-        // return sequelize.query(buildQueryByType(req.query.type, req.query.info), { type: sequelize.QueryTypes.SELECT })
-        //     .then(function (stdname) {
-        //         let response = convertResponseToJSON(req.query.type, req.query.info, stdname);
-        //         return res.send(response);
-        //     });
+        return req.query.type === "NetworkSource" ? 
+        sequelize.query(buildQueryByType(req.query.type, req.query.info), { type: sequelize.QueryTypes.SELECT })
+            .then(function (stdname) {
+                let response = convertResponseToJSON(req.query.type, req.query.info, stdname);
+                return res.send(response);
+            }) : req.query;
     }
 };
