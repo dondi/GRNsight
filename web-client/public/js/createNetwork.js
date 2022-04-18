@@ -112,12 +112,13 @@ export const createNetwork = function () {
         $("#createNetworkFormContainer").remove();
         grnState.customWorkbook = {
             genes : {},
-            source : $("#network-source").val() === 'none'? null : $("#network-source").val()
+            source : null
         };
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
             $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
+            grnState.customWorkbook.source = $("#network-source").val() === "none"? null : `${$("#network-source").val()}`
             console.log(grnState.customWorkbook)
         }).catch(function (error) {
             console.log(error.stack);
