@@ -2,9 +2,9 @@ import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 import { updateApp } from "./update-app";
-export const createNetwork = function () {
 
-    const createCustomWorkbook = () => {
+export const createNetwork = function () {
+    const createCustomWorkbook = (res, app) => {
         let genes = []
         let genesByIndex = {}
         let links = []
@@ -25,7 +25,7 @@ export const createNetwork = function () {
             });
             positiveWeights.push(1);
         }
-        return {
+        return  {
             genes,
             links,
             errors: [],
@@ -172,6 +172,9 @@ export const createNetwork = function () {
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1? Object.keys(response.sources)[0] : null;
             console.log(grnState.customWorkbook)
+            app.get("CustomWorkbook/unweighted", function (req, res) {
+                return createCustomWorkbook( res, app);
+            });
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -224,7 +227,7 @@ export const createNetwork = function () {
         });
         console.dir(grnState)
     });
-    
+
     $("body").on("click", "#enter-search", function(event) {
         try {
             console.log("search button has been clicked")
