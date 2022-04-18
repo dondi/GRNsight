@@ -82,11 +82,24 @@ export const createNetwork = function () {
         // let source = grnState.customWorkbook.source
         // console.log("Gets here 2")
         $("#network-search-bar").val("")
-        // console.log("Gets here")
-        // console.log(`Gene: ${gene}`);
-        // console.log(`Source: ${grnState.customWorkbook.sources[source].source}`);
-        // console.log(`TimeStamp: ${grnState.customWorkbook.sources[source].timestamp}`);
         grnState.customWorkbook.genes[gene.toUpperCase()] = gene.toLowerCase()
+        let source = grnState.customWorkbook.source
+        let headers = {
+            type:"NetworkGeneFromSource", 
+            info: {
+                gene,
+                source:grnState.customWorkbook.sources[source].source, 
+                timestamp:grnState.customWorkbook.sources[source].timestamp
+            }
+        }
+        queryNetworkDatabase(headers).then(function (response) {
+            let x = response
+            console.log(x)
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
         // get genes from database
             // queryNetworkDatabase({
             //     type:"NetworkGeneFromSource", 
@@ -127,28 +140,6 @@ export const createNetwork = function () {
             console.log(error.name);
             console.log(error.message);
         });
-        // $('#getNetworkGenesForm').on("submit", ev => {
-        //     let gene = `${$("#network-search-bar").val()}`;
-        //     let source = grnState.customWorkbook.source
-        //     console.log("Gets here");
-        //     ev.stopPropagation();
-        //     queryNetworkDatabase({
-        //         type:"NetworkGeneFromSource", 
-        //         info: {
-        //             gene,
-        //             source:grnState.customWorkbook.sources[source].source, 
-        //             timestamp:grnState.customWorkbook.sources[source].timestamp
-        //         }
-        //     }).then(function (response) {
-        //         let x = response
-        //         console.log(x)
-        //     }).catch(function (error) {
-        //         console.log(error.stack);
-        //         console.log(error.name);
-        //         console.log(error.message);
-        //     });
-        //     return false;
-        // }); 
         $(CREATE_NETWORK_MODAL).modal("show");
     };
 
@@ -161,16 +152,14 @@ export const createNetwork = function () {
 
     // $(CREATE_NETWORK_CLASS).one("click", performNetworkCreation());
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
-    // $("#network-source").on("change", ((ev) => {
-    //     if (grnState.customWorkbook === undefined) grnState.customWorkbook = {source:null, genes: {}}
-    //     grnState.customWorkbook.source = $("#network-source").val();
-    //     grnState.customWorkbook.genes = {};
-    //     console.log("User changed source!")
-    //     console.log(grnState.customWorkbook)
-        
-    //     ev.stopPropagation();
-    //     displayCurrentGenes();
-    // })(ev));
+    $("body").on("change", "#network-source", function(event) {
+        grnState.customWorkbook.source = $("#network-source").val();
+        grnState.customWorkbook.genes = {};
+        console.log("User changed source!")
+        console.log(grnState.customWorkbook) 
+        event.stopPropagation();
+        displayCurrentGenes();
+    });
     $("body").on("click", "#enter-search", function(event) {
         try {
             console.log("search button has been clicked")
@@ -181,15 +170,5 @@ export const createNetwork = function () {
         } catch (error) {
             console.log(error);
         }
-        // return false;
     });
-    // $("body").on("keydown", "#network-search-bar", function () {
-    //     if(event.key === 'Enter') {
-    //         console.log("search bar has been entered")
-    //         console.log($('#getNetworkGenesForm').serializeArray())
-    //         event.preventDefault();
-    //         event.stopPropagation();
-    //         updateGenes();
-    //     }
-    // });
 };

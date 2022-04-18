@@ -47,7 +47,9 @@ const queryExpressionDatabase = (query) => {
 const buildNetworkURL = function (queryType, queryInfo) {
     const baseQuery = `networkdb?type=${queryType}`;
     if (queryInfo !== null) {
-        //  do stuff here for additional params
+        for (let header in queryInfo){
+            baseQuery += `&${header}=${queryInfo.header}`
+        }
     }
     return baseQuery;
 };
