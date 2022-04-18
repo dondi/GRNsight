@@ -32,6 +32,8 @@ const buildQueryByType = function (queryType, queryInfo) {
     case "NetworkSource":
         return buildNetworkSourceQuery();
     case "NetworkGeneFromSource":
+        console.log("Query Info:")
+        console.log(queryInfo)
         return buildNetworkGeneFromSourceQuery(queryInfo.gene, queryInfo.source, queryInfo.timestamp);
     }
 };
