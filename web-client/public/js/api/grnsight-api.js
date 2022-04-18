@@ -45,7 +45,7 @@ const queryExpressionDatabase = (query) => {
 // Network DB Access Functions
 
 const buildNetworkGenesQuery = (genes) => {
-    result = ""
+    let result = ""
     for (let gene in genes) {
         result += `${genes[gene]},`
     }
