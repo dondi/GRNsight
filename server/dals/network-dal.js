@@ -70,7 +70,7 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
 module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function (req, res) {
-        return sequelize.query(buildQueryByType(req.query.type, query), { type: sequelize.QueryTypes.SELECT })
+        return sequelize.query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
                 let response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
