@@ -170,22 +170,18 @@ export const createNetwork = function () {
     //     ev.stopPropagation();
     //     displayCurrentGenes();
     // })(ev));
-    $("form").on("submit", (ev) => {
-        console.log("gets here form>>?")
-        ev.preventDefault();
-    })
-    $("#enter-search").on("click", (ev) => {
+    $("#enter-search").on("click", function() {
         console.log("search button has been clicked")
         console.log($('#getNetworkGenesForm').serializeArray())
-        ev.stopPropagation();
+        this.stopPropagation();
         updateGenes();
     });
-    $("#network-search-bar").on("keydown", (ev) => {
-        if(ev.key === 'Enter') {
+    $("#network-search-bar").on("keydown", function () {
+        if(this.key === 'Enter') {
             console.log("search bar has been entered")
             console.log($('#getNetworkGenesForm').serializeArray())
-            ev.preventDefault();
-            ev.stopPropagation();
+            this.preventDefault();
+            this.stopPropagation();
             updateGenes();
         }
     });
