@@ -171,10 +171,11 @@ export const createNetwork = function () {
     //     ev.stopPropagation();
     //     displayCurrentGenes();
     // })(ev));
-    $("body").on("click", "#enter-search", function() {
+    $("body").on("click", "#enter-search", function(event) {
         try {
             console.log("search button has been clicked")
             console.log($('#getNetworkGenesForm').serializeArray())
+            event.preventDefault();
             event.stopPropagation();
             updateGenes();
         } catch (error) {
