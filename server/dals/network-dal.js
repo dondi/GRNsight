@@ -27,8 +27,8 @@ const buildNetworkGeneFromSourceQuery = function(gene, source, timestamp) {
  (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
  (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`
 };
-const buildQueryByType = function (queryType, query) {
-    switch (queryType) {
+const buildQueryByType = function (query) {
+    switch (query.type) {
     case "NetworkSource":
         return buildNetworkSourceQuery();
     case "NetworkGeneFromSource":
@@ -70,7 +70,7 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
 module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function (req, res) {
-        return sequelize.query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
+        sequelize.query(buildQueryByType(req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
                 let response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
