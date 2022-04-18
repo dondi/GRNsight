@@ -56,7 +56,7 @@ const buildNetworkURL = function (queryType, queryInfo) {
     let baseQuery = `networkdb?type=${queryType}`;
     if (queryInfo !== null) {
         for (let header in queryInfo){
-            if (header = "genes") {
+            if (header === "genes") {
                 baseQuery += buildNetworkGenesQuery(queryInfo[header])
             } else {
             baseQuery += `&${header}=${queryInfo[header]}`
