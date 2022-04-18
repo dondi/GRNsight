@@ -61,8 +61,8 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
         // JSONOutput[sourceKey].genes[queryInfo.gene] = {
         //     displayGeneId: totalOutput
         // }
-        JSONOutput.queryInfo = query
-        JSONOutput.totalOutput = totalOutput
+        JSONOutput.displayGeneId = totalOutput.length > 0 ? totalOutput[0].display_gene_id: null;
+        JSONOutput.geneId = totalOutput.length > 0 ? totalOutput[0].gene_id: null;
         return JSONOutput;
     }
 };

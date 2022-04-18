@@ -76,13 +76,8 @@ export const createNetwork = function () {
 
     const addGene = function() {
         console.log("Begin Add Gene")
-        let gene = `${$("#network-search-bar").val()}`;
-        console.log(gene)
-        // console.log("Gets here")
-        // let source = grnState.customWorkbook.source
-        // console.log("Gets here 2")
-        $("#network-search-bar").val("")
-        grnState.customWorkbook.genes[gene.toUpperCase()] = gene.toLowerCase()
+        let gene = `${$("#network-search-bar").val()}`.toUpperCase();
+        $("#network-search-bar").val("");
         let source = grnState.customWorkbook.source
         let headers = {
             type:"NetworkGeneFromSource", 
@@ -92,32 +87,18 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
         }
-        console.log("Pre-query")
         queryNetworkDatabase(headers).then(function (response) {
-            console.log("Incomming response!!!!!!")
-            console.log(response)
+            if (response.geneId !== null && response.displayGeneId !==null) {
+            grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
+            }
+            else {
+                alert (`Gene: ${gene} was not found in this database. Please check for any typos and try again.`);
+            }
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
         });
-        console.log("postquery")
-        // get genes from database
-            // queryNetworkDatabase({
-            //     type:"NetworkGeneFromSource", 
-            //     info: {
-            //         gene,
-            //         source:grnState.customWorkbook.sources[source].source, 
-            //         timestamp:grnState.customWorkbook.sources[source].timestamp
-            //     }
-            // }).then(function (response) {
-            //     let x = response
-            //     console.log(x)
-            // }).catch(function (error) {
-            //     console.log(error.stack);
-            //     console.log(error.name);
-            //     console.log(error.message);
-            // });
     };
 
     const updateGenes = function () {
