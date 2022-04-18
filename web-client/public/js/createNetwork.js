@@ -137,8 +137,6 @@ export const createNetwork = function () {
         };
     };
 
-
-    // $(CREATE_NETWORK_CLASS).one("click", performNetworkCreation());
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
     $("body").on("change", "#network-source", function(event) {
         grnState.customWorkbook.source = $("#network-source").val();
@@ -150,6 +148,7 @@ export const createNetwork = function () {
     });
     $("body").on("click", "#submit-network", function() {
         console.log("Creating network")
+        let source = grnState.customWorkbook.source
         let headers = {
             type:"CreateNetwork", 
             info: {
