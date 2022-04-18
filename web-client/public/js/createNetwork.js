@@ -167,6 +167,7 @@ export const createNetwork = function () {
             console.log(error.name);
             console.log(error.message);
         });
+        console.dir(grnState)
     });
     $("body").on("click", "#enter-search", function(event) {
         try {
