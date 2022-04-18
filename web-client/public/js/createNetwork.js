@@ -89,7 +89,7 @@ export const createNetwork = function () {
             info: {
                 gene: gene,
                 source:grnState.customWorkbook.sources[source].source, 
-                timestamp:grnState.customWorkbook.sources[source].timestamp
+                timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,18)
             }
         }
         console.log("Pre-query")
