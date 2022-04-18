@@ -94,6 +94,7 @@ export const createNetwork = function () {
         }
         queryNetworkDatabase(headers).then(function (response) {
             let x = response
+            console.log("Incomming response!!!!!!")
             console.log(x)
         }).catch(function (error) {
             console.log(error.stack);
