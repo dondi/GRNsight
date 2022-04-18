@@ -1,6 +1,7 @@
 import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
+import { updateApp } from "./update-app";
 export const createNetwork = function () {
 
     const createCustomWorkbook = () => {
@@ -214,6 +215,7 @@ export const createNetwork = function () {
             grnState.workbook = (workbook);
             grnState.newWorkbook = true;
             grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
+            updateApp(grnState);
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
             console.log(error.stack);
