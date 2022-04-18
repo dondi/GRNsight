@@ -175,7 +175,6 @@ export const createNetwork = function () {
         try {
             console.log("search button has been clicked")
             console.log($('#getNetworkGenesForm').serializeArray())
-            event.preventDefault();
             event.stopPropagation();
             updateGenes();
         } catch (error) {
