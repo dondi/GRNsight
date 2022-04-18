@@ -93,7 +93,10 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
         }
+        console.log("Adding Gene headers:")
+        console.log(headers)
         queryNetworkDatabase(headers).then(function (response) {
+            console.log("recieved response")
             if (response.geneId !== null && response.displayGeneId !==null) {
             grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
             displayCurrentGenes();
