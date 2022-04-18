@@ -211,6 +211,7 @@ export const createNetwork = function () {
             let workbook = createCustomWorkbook();
             let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
             let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
+            grnState.workbook = (workbook);
             grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
