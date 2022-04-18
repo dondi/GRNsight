@@ -15,7 +15,15 @@ export const createNetwork = function () {
             genesByIndex[gene] = i;
             i++;
         }
+        console.log(genesByIndex)
+        console.log(genes)
+        console.log(grnState.customWorkbook.genes)
         for (let regulator in grnState.customWorkbook.links) {
+            console.log("regulator: ",regulator, ", ",  genesByIndex[regulator])
+            console.log("target", grnState.customWorkbook.links[regulator], ", ", 
+            genesByIndex[grnState.customWorkbook.links[regulator]]
+            )
+
             links.push({
                 source: genesByIndex[regulator],
                 target: genesByIndex[grnState.customWorkbook.links[regulator]],
