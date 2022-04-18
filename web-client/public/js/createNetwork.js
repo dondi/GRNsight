@@ -15,7 +15,7 @@ export const createNetwork = function () {
                     `;
         for (let source in sources) {
             result += `
-                        <option value=\'${source}\'>${sources[source]}</option>
+                        <option value=\'${sources[source]}\'>${sources[source]}</option>
             `;
         }
         result += `</select>
