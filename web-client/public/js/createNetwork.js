@@ -172,18 +172,24 @@ export const createNetwork = function () {
     //     displayCurrentGenes();
     // })(ev));
     $("body").on("click", "#enter-search", function() {
-        console.log("search button has been clicked")
-        console.log($('#getNetworkGenesForm').serializeArray())
-        event.stopPropagation();
-        updateGenes();
-    });
-    $("body").on("keydown", "#network-search-bar", function () {
-        if(event.key === 'Enter') {
-            console.log("search bar has been entered")
+        try {
+            console.log("search button has been clicked")
             console.log($('#getNetworkGenesForm').serializeArray())
             event.preventDefault();
             event.stopPropagation();
             updateGenes();
+        } catch (error) {
+            console.log(error);
         }
+        return false;
+    });
+    // $("body").on("keydown", "#network-search-bar", function () {
+    //     if(event.key === 'Enter') {
+    //         console.log("search bar has been entered")
+    //         console.log($('#getNetworkGenesForm').serializeArray())
+    //         event.preventDefault();
+    //         event.stopPropagation();
+    //         updateGenes();
+    //     }
     });
 };
