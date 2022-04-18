@@ -2,9 +2,20 @@ import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 import { updateApp } from "./update-app";
+
+var helpers = require(__dirname + "../../../server/controllers/helpers");
 export const createNetwork = function () {
 
-    const createCustomWorkbook = () => {
+    var processWorkbook = function (path, res, app, workbook) {
+        helpers.attachCorsHeader(res, app);
+        helpers.attachFileHeaders(res, path);
+        return workbook.errors.length === 0
+            ? // If all looks well, return the workbook with an all clear
+            res.json(workbook)
+            : // If all does not look well, return the workbook with an error 400
+            res.status(400).json(workbook);
+    };
+    const createCustomWorkbook = (res, app) => {
         let genes = []
         let genesByIndex = {}
         let links = []
@@ -25,7 +36,7 @@ export const createNetwork = function () {
             });
             positiveWeights.push(1);
         }
-        return {
+        let workbook =  {
             genes,
             links,
             errors: [],
@@ -51,6 +62,7 @@ export const createNetwork = function () {
             expression: {
             }
         };
+        return processWorkbook("CustomWorkbook/unweighted", res, app, workbook)
 
     }
     const createHTMLforForm = (sources) => {
@@ -172,6 +184,9 @@ export const createNetwork = function () {
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1? Object.keys(response.sources)[0] : null;
             console.log(grnState.customWorkbook)
+            app.get("CustomWorkbook/unweighted", function (req, res) {
+                return createCustomWorkbook( res, app);
+            });
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -210,12 +225,9 @@ export const createNetwork = function () {
             console.log("HERE IS THE DATA FOR NETWORK CREATION");
             grnState.customWorkbook.links = response.regulatoryConnections;
             let workbook = createCustomWorkbook();
-            let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
-            let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
-            grnState.workbook = (workbook);
-            grnState.newWorkbook = true;
-            grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-            updateApp(grnState);
+            app.get("/demo/unweighted", function (req, res) {
+                return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
+            });
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
             console.log(error.stack);
