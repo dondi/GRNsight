@@ -95,7 +95,6 @@ let reloader = () => { };
 
 const returnUploadRoute = filename => {
     if (demoFiles.indexOf(filename) !== -1) {
-        console.log(filename)
         return filename;
     } else if (filename.includes(".xlsx")) {
         return "upload";
@@ -103,17 +102,16 @@ const returnUploadRoute = filename => {
         return "upload-sif";
     } else if (filename.includes(".graphml")) {
         return "upload-graphml";
-    // } else if (filename.includes("Custom Workbook:")) {
-    //     return filename
     }
 };
 
 export const setupLoadAndImportHandlers = grnState => {
-    const loadGrn = (name, formData, customWorkbook) => {
+    const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
+        console.log(uploadRoute)
+        console.log(name)
         const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
-        console.log(fullUrl)
         (formData ?
             $.ajax({
                 url: fullUrl,
@@ -140,18 +138,17 @@ export const setupLoadAndImportHandlers = grnState => {
                     case SCHADE_OUTPUT_PATH:
                         grnState.name = SCHADE_OUTPUT_NAME;
                     }
-                } else if (customWorkbook !== null) {
-                    // case if it's a custom workbook
                 }
                 grnState.workbook = workbook;
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
-                reloader = () => loadGrn(name, formData);
+                reloader = () => loadGrn(name, formData, customWorkbook);
                 // re-enable upload button
                 disableUpload(false);
                 updateApp(grnState);
                 // displayStatistics(workbook);
+            
 
             }).error(workbookErrorDisplayer);
     };
@@ -194,76 +191,16 @@ export const setupLoadAndImportHandlers = grnState => {
     });
 };
 
-export const createAndLoadCustomWorkbook = (response, grnState) => {
-    const createCustomWorkbook = () => {
-        let genes = []
-        let genesByIndex = {}
-        let links = []
-        let positiveWeights = []
-        let i = 0
-        for (let gene in grnState.customWorkbook.genes){
-            genes.push({name : grnState.customWorkbook.genes[gene]});
-            genesByIndex[gene] = i;
-            i++;
-        }
-        console.log(genesByIndex)
-        console.log(genes)
-        console.log(grnState.customWorkbook.genes)
-        for (let regulator in grnState.customWorkbook.links) {
-            for (let target of grnState.customWorkbook.links[regulator]){
-                console.log("regulator: ",regulator, ", ",  genesByIndex[regulator])
-                console.log("target", target, ", ", 
-                genesByIndex[target]
-            )
-                links.push({
-                    source: genesByIndex[regulator],
-                    target: genesByIndex[target],
-                    value:1,
-                    type:"arrowhead",
-                    stroke: "black"
-                });
-                positiveWeights.push(1);
-            }
-        }
-        return  {
-            genes,
-            links,
-            errors: [],
-            warnings: [],
-            positiveWeights,
-            negativeWeights: [],
-            sheetType: "unweighted",
-            network: {
-                genes,
-                links,
-                errors: [],
-                warnings: [],
-                positiveWeights,
-            },
-            meta: {
-                data: {
-                    species: "Saccharomyces cerevisiae",
-                    taxon_id: 559292
-                }
-            },
-            test: {
-            },
-            expression: {
-            }
-        };
-    }
-
-    grnState.customWorkbook.links = response.regulatoryConnections;
-    let workbook = createCustomWorkbook();
-    let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
-    let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
-    grnState.workbook = workbook;
-    grnState.newWorkbook = true;
-    grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-    updateApp(grnState);
-
-    reloader = () => {
-        createCustomWorkbook();
+export const responseCustomWorkbookData = (grnState, queryURL, name) => {
+    const uploadRoute = queryURL;
+    const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
+    $.getJSON(fullUrl).done((workbook) => {
+        grnState.name = name;
+        grnState.workbook = workbook
+        grnState.annotateLinks();
+        reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
+        disableUpload(false);
         updateApp(grnState);
-    }
-}
+    });
+};
+

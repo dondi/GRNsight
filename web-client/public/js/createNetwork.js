@@ -157,8 +157,11 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
         }
-        queryNetworkDatabase(headers).then(function (response) {
-            createAndLoadCustomWorkbook(response, grnState);
+        queryNetworkDatabase(headers).then(function (response) {   
+            let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
+            let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
+            let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
+            uploadCustomWorkbook({name, genes: grnState.customWorkbook.genes, links:grnState.customWorkbook.links}, grnState)
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
             console.log(error.stack);

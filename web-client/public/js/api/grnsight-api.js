@@ -1,3 +1,6 @@
+
+import {responseCustomWorkbookData} from "./setupLoadAndImportHandlers"
+
 // Expression DB Access Functions
 const buildExpressionTimepointsString = function (selection) {
     let timepoints = "";
@@ -92,5 +95,36 @@ const queryNetworkDatabase = (query) => {
     return responseNetworkData("", queryURL);
 };
 
+// Upload Custom Workbook Functions
+const buildCustomWorkbookURL = (name, genes, links) => {
+    let baseQuery = `/upload-custom-workbook?name=${name}`;
+    let genesString = ""; 
+    let linksString = "";
+    let genesByIndex = {};
+    let i = 0;
+    for (let gene in genes) {
+        genesString+=`${genes[gene]},`
+        genesByIndex[gene] = i;
+        i++;
+    }
+    for (let regulator in links) {
+        for (let target of links[regulator]){
+            linksString += `${genesByIndex[regulator]}->${genesByIndex[target]},`
+            positiveWeights.push(1);
+        }
+    }
+    genesString = genesString.substring(0, genesString.length - 1);
+    linksString = linksString.substring(0, linksString.length - 1);
+    baseQuery+=`genes=${genesString}`
+    baseQuery+=`&links=${linksString}`
+    return baseQuery;
+}
 
-export {queryExpressionDatabase, queryNetworkDatabase};
+const uploadCustomWorkbook = (workbook, grnState) => {
+    let queryURL = buildCustomWorkbookURL(workbook.name, workbook.genes, workbook.links);
+    console.log(queryURL)
+    return responseCustomWorkbookData(grnState, queryURL, workbook.name);
+}
+
+
+export {queryExpressionDatabase, queryNetworkDatabase, uploadCustomWorkbook};
