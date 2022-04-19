@@ -97,7 +97,7 @@ const queryNetworkDatabase = (query) => {
 
 // Upload Custom Workbook Functions
 const buildCustomWorkbookURL = (name, genes, links) => {
-    let baseQuery = `/upload-custom-workbook?name=${name}`;
+    let baseQuery = `upload-custom-workbook?name=${name}`;
     let genesString = ""; 
     let linksString = "";
     let genesByIndex = {};
