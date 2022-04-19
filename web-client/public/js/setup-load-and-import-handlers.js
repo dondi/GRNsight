@@ -109,7 +109,7 @@ const returnUploadRoute = filename => {
 };
 
 export const setupLoadAndImportHandlers = grnState => {
-    const loadGrn = (name, formData, ) => {
+    const loadGrn = (name, formData, customWorkbook) => {
         const uploadRoute = returnUploadRoute(name);
         const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
@@ -140,6 +140,8 @@ export const setupLoadAndImportHandlers = grnState => {
                     case SCHADE_OUTPUT_PATH:
                         grnState.name = SCHADE_OUTPUT_NAME;
                     }
+                } else if (customWorkbook !== null) {
+                    // case if it's a custom workbook
                 }
                 grnState.workbook = workbook;
                 if (uploadRoute !== "upload") {
