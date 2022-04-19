@@ -157,7 +157,10 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
         }
-        queryNetworkDatabase(headers).then(function (response) {createAndLoadCustomWorkbook(response, grnState)}).catch(function (error) {
+        queryNetworkDatabase(headers).then(function (response) {
+            createAndLoadCustomWorkbook(response, grnState);
+            $(CREATE_NETWORK_MODAL).modal("hide");
+        }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);

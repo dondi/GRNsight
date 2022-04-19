@@ -113,6 +113,7 @@ export const setupLoadAndImportHandlers = grnState => {
         const uploadRoute = returnUploadRoute(name);
         const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
+        console.log(fullUrl)
         (formData ?
             $.ajax({
                 url: fullUrl,
@@ -258,9 +259,6 @@ export const createAndLoadCustomWorkbook = (response, grnState) => {
     grnState.newWorkbook = true;
     grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
     updateApp(grnState);
-    $(CREATE_NETWORK_MODAL).modal("hide");
 
-    reloader = () => {
-
-    }
+    reloader = () => {createCustomWorkbook()}
 }
