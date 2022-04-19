@@ -260,5 +260,8 @@ export const createAndLoadCustomWorkbook = (response, grnState) => {
     grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
     updateApp(grnState);
 
-    reloader = () => {createCustomWorkbook()}
+    reloader = () => {
+        createCustomWorkbook();
+        updateApp(grnState);
+    }
 }
