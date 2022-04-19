@@ -11,6 +11,7 @@ import {
     SCHADE_INPUT_NAME,
     SCHADE_OUTPUT_NAME,
 } from "./constants";
+import { grnState } from "./grnstate";
 
 const demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
 
@@ -91,8 +92,10 @@ const workbookErrorDisplayer = xhr => {
 
 let reloader = () => { };
 
+
 const returnUploadRoute = filename => {
     if (demoFiles.indexOf(filename) !== -1) {
+        console.log(filename)
         return filename;
     } else if (filename.includes(".xlsx")) {
         return "upload";
@@ -100,11 +103,13 @@ const returnUploadRoute = filename => {
         return "upload-sif";
     } else if (filename.includes(".graphml")) {
         return "upload-graphml";
+    // } else if (filename.includes("Custom Workbook:")) {
+    //     return filename
     }
 };
 
 export const setupLoadAndImportHandlers = grnState => {
-    const loadGrn = (name, formData) => {
+    const loadGrn = (name, formData, ) => {
         const uploadRoute = returnUploadRoute(name);
         const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
@@ -152,8 +157,8 @@ export const setupLoadAndImportHandlers = grnState => {
      * for helping to resolve this.
      */
 
-    $(".upload").change(uploadHandler(loadGrn));
-
+    // $(".upload").change(uploadHandler(loadGrn));
+    $("body").on("change", ".upload", uploadHandler(loadGrn));
     const loadDemo = (url, value) => {
         $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
         loadGrn(url);
@@ -185,3 +190,77 @@ export const setupLoadAndImportHandlers = grnState => {
         }
     });
 };
+
+export const createAndLoadCustomWorkbook = (response, grnState) => {
+    const createCustomWorkbook = () => {
+        let genes = []
+        let genesByIndex = {}
+        let links = []
+        let positiveWeights = []
+        let i = 0
+        for (let gene in grnState.customWorkbook.genes){
+            genes.push({name : grnState.customWorkbook.genes[gene]});
+            genesByIndex[gene] = i;
+            i++;
+        }
+        console.log(genesByIndex)
+        console.log(genes)
+        console.log(grnState.customWorkbook.genes)
+        for (let regulator in grnState.customWorkbook.links) {
+            for (let target of grnState.customWorkbook.links[regulator]){
+                console.log("regulator: ",regulator, ", ",  genesByIndex[regulator])
+                console.log("target", target, ", ", 
+                genesByIndex[target]
+            )
+                links.push({
+                    source: genesByIndex[regulator],
+                    target: genesByIndex[target],
+                    value:1,
+                    type:"arrowhead",
+                    stroke: "black"
+                });
+                positiveWeights.push(1);
+            }
+        }
+        return  {
+            genes,
+            links,
+            errors: [],
+            warnings: [],
+            positiveWeights,
+            negativeWeights: [],
+            sheetType: "unweighted",
+            network: {
+                genes,
+                links,
+                errors: [],
+                warnings: [],
+                positiveWeights,
+            },
+            meta: {
+                data: {
+                    species: "Saccharomyces cerevisiae",
+                    taxon_id: 559292
+                }
+            },
+            test: {
+            },
+            expression: {
+            }
+        };
+    }
+
+    grnState.customWorkbook.links = response.regulatoryConnections;
+    let workbook = createCustomWorkbook();
+    let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
+    let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
+    grnState.workbook = workbook;
+    grnState.newWorkbook = true;
+    grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
+    updateApp(grnState);
+    $(CREATE_NETWORK_MODAL).modal("hide");
+
+    reloader = () => {
+
+    }
+}

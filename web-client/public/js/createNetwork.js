@@ -1,67 +1,9 @@
 import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
-import { updateApp } from "./update-app";
+import { createAndLoadCustomWorkbook } from "./setup-load-and-import-handlers";
 
 export const createNetwork = function () {
-    const createCustomWorkbook = () => {
-        let genes = []
-        let genesByIndex = {}
-        let links = []
-        let positiveWeights = []
-        let i = 0
-        for (let gene in grnState.customWorkbook.genes){
-            genes.push({name : grnState.customWorkbook.genes[gene]});
-            genesByIndex[gene] = i;
-            i++;
-        }
-        console.log(genesByIndex)
-        console.log(genes)
-        console.log(grnState.customWorkbook.genes)
-        for (let regulator in grnState.customWorkbook.links) {
-            for (let target of grnState.customWorkbook.links[regulator]){
-                console.log("regulator: ",regulator, ", ",  genesByIndex[regulator])
-                console.log("target", target, ", ", 
-                genesByIndex[target]
-            )
-                links.push({
-                    source: genesByIndex[regulator],
-                    target: genesByIndex[target],
-                    value:1,
-                    type:"arrowhead",
-                    stroke: "black"
-                });
-                positiveWeights.push(1);
-            }
-        }
-        return  {
-            genes,
-            links,
-            errors: [],
-            warnings: [],
-            positiveWeights,
-            negativeWeights: [],
-            sheetType: "unweighted",
-            network: {
-                genes,
-                links,
-                errors: [],
-                warnings: [],
-                positiveWeights,
-            },
-            meta: {
-                data: {
-                    species: "Saccharomyces cerevisiae",
-                    taxon_id: 559292
-                }
-            },
-            test: {
-            },
-            expression: {
-            }
-        };
-
-    }
     const createHTMLforForm = (sources) => {
         let result =  `
             <div id=\'createNetworkFormContainer\' '>
@@ -215,19 +157,7 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
         }
-        queryNetworkDatabase(headers).then(function (response) {
-            console.log("HERE IS THE DATA FOR NETWORK CREATION");
-            grnState.customWorkbook.links = response.regulatoryConnections;
-            console.dir(grnState)
-            let workbook = createCustomWorkbook();
-            let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
-            let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
-            grnState.workbook = workbook;
-            grnState.newWorkbook = true;
-            grnState.name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-            updateApp(grnState);
-            $(CREATE_NETWORK_MODAL).modal("hide");
-        }).catch(function (error) {
+        queryNetworkDatabase(headers).then(createAndLoadCustomWorkbook(response, grnState)).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);

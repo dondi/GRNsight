@@ -365,6 +365,7 @@ module.exports = function (app) {
                 try {
                     input = files.file[0].path;
                 } catch (err) {
+                    console.log(req)
                     return res.json(400, "No upload file selected.");
                 }
 

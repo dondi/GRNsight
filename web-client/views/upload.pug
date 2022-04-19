@@ -38,11 +38,11 @@ html
                 li(class='sub-divider')
                 li
                   a(class='upload' href='#' id='open-item')
-                    label(for='upload' id='open')
+                    label(for='upload-nav' id='open')
                       span(class='glyphicon glyphicon-folder-open')
                       | &nbsp; Open File...
                       i  (.xlsx, .sif, .graphml)
-                    input(type='file' name='upload' class='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
+                    input(type='file' name='upload' id="upload-nav" class='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
                     input(type='hidden' class='service-root' value=`${serviceRoot}`)      
                 li(class='sub-divider')
                 li 
