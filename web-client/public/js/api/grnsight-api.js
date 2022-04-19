@@ -1,5 +1,5 @@
 
-import {responseCustomWorkbookData} from "./setup-load-and-import-handlers"
+import {responseCustomWorkbookData} from "../setup-load-and-import-handlers"
 
 // Expression DB Access Functions
 const buildExpressionTimepointsString = function (selection) {
