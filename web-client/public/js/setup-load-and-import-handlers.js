@@ -194,7 +194,9 @@ export const setupLoadAndImportHandlers = grnState => {
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
     const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
+    console.log("Messed up before her? .getJSON")
     $.getJSON(fullUrl).done((workbook) => {
+        console.log("Messed up after here? .getJSON")
         grnState.name = name;
         grnState.workbook = workbook
         grnState.annotateLinks();
