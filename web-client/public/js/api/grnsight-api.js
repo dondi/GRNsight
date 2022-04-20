@@ -103,6 +103,7 @@ const buildCustomWorkbookURL = (name, genes, links) => {
     let genesByIndex = {};
     let i = 0;
     for (let gene in genes) {
+        console.log("Gene", gene)
         genesString+=`${genes[gene]},`
         genesByIndex[gene] = i;
         i++;
