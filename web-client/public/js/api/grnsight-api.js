@@ -108,6 +108,7 @@ const buildCustomWorkbookURL = (name, genes, links) => {
         genesByIndex[gene] = i;
         i++;
     }
+    console.log(genesString)
     for (let regulator in links) {
         for (let target of links[regulator]){
             linksString += `${genesByIndex[regulator]}->${genesByIndex[target]},`
