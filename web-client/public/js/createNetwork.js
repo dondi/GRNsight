@@ -70,7 +70,6 @@ export const createNetwork = function () {
         $("#selected-genes").remove();
         $("#selected-genes-container").append(createGeneButtons());
         for (let gene in grnState.customWorkbook.genes) {
-            console.log(gene);
             $(`#${gene}`).on("click", (ev) => {
                 ev.stopPropagation();
                 $(`#${gene}`).remove();
@@ -80,7 +79,6 @@ export const createNetwork = function () {
     };
 
     const addGene = function() {
-        console.log("Adding Gene")
         let gene = `${$("#network-search-bar").val()}`.toUpperCase();
         $("#network-search-bar").val("");
         let source = grnState.customWorkbook.source
@@ -92,10 +90,7 @@ export const createNetwork = function () {
                 timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
         }
-        console.log("Adding Gene headers:")
-        console.log(headers)
         queryNetworkDatabase(headers).then(function (response) {
-            console.log("recieved response")
             if (response.geneId !== null && response.displayGeneId !==null) {
             grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
             displayCurrentGenes();
@@ -121,7 +116,6 @@ export const createNetwork = function () {
             $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1? Object.keys(response.sources)[0] : null;
-            console.log(grnState.customWorkbook)
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -140,13 +134,10 @@ export const createNetwork = function () {
     $("body").on("change", "#network-source", function(event) {
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
-        console.log("User changed source!")
-        console.log(grnState.customWorkbook) 
         event.stopPropagation();
         displayCurrentGenes();
     });
     $("body").on("click", "#submit-network", function() {
-        console.log("Creating network")
         let source = grnState.customWorkbook.source
         let headers = {
             type:"CreateNetwork", 
@@ -158,11 +149,12 @@ export const createNetwork = function () {
         }
         queryNetworkDatabase(headers).then(function (response) {   
             grnState.customWorkbook.links = response.links;
-            let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
-            let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
+            let genes = grnState.customWorkbook.genes;
+            let links = grnState.customWorkbook.links;
+            let genesAmount = Object.keys(genes).length;
+            let edgesAmount = Object.keys(links).length;
             let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-            let workbook = {name, genes: grnState.customWorkbook.genes, links:grnState.customWorkbook.links}
-            console.log("Broken??? :((((")
+            let workbook = {name, genes, links}
             uploadCustomWorkbook(workbook, grnState);
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
@@ -170,12 +162,10 @@ export const createNetwork = function () {
             console.log(error.name);
             console.log(error.message);
         });
-        console.dir(grnState)
     });
 
     $("body").on("click", "#enter-search", function(event) {
         try {
-            console.log("search button has been clicked")
             event.preventDefault();
             event.stopPropagation();
             addGene();

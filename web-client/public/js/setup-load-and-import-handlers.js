@@ -108,8 +108,6 @@ const returnUploadRoute = filename => {
 export const setupLoadAndImportHandlers = grnState => {
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
-        console.log(uploadRoute)
-        console.log(name)
         const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
         (formData ?
@@ -143,7 +141,7 @@ export const setupLoadAndImportHandlers = grnState => {
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
-                reloader = () => loadGrn(name, formData, customWorkbook);
+                reloader = () => loadGrn(name, formData);
                 // re-enable upload button
                 disableUpload(false);
                 updateApp(grnState);
@@ -169,7 +167,6 @@ export const setupLoadAndImportHandlers = grnState => {
 
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
         // Deleted parameter `event`
-        console.log(demoClass);
         $(demoClass).on("click", () => {
             loadDemo(demoPath, demoClass, demoName);
         });
@@ -194,15 +191,13 @@ export const setupLoadAndImportHandlers = grnState => {
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
     const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
-    console.log("Messed up before her? .getJSON")
     $.getJSON(fullUrl).done((workbook) => {
-        console.log("Messed up after here? .getJSON")
         grnState.name = name;
         grnState.workbook = workbook
         grnState.annotateLinks();
-        reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
         disableUpload(false);
         updateApp(grnState);
+        reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
     });
 };
 

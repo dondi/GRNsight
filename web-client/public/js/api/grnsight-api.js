@@ -91,7 +91,6 @@ const responseNetworkData = (formData, queryURL) => {
 
 const queryNetworkDatabase = (query) => {
     let queryURL = buildNetworkURL(query.type, query.info);
-    console.log(queryURL)
     return responseNetworkData("", queryURL);
 };
 
@@ -103,12 +102,10 @@ const buildCustomWorkbookURL = (name, genes, links) => {
     let genesByIndex = {};
     let i = 0;
     for (let gene in genes) {
-        console.log("Gene", gene)
         genesString+=`${genes[gene]},`
         genesByIndex[gene] = i;
         i++;
     }
-    console.log(genesString)
     for (let regulator in links) {
         for (let target of links[regulator]){
             linksString += `${genesByIndex[regulator]}->${genesByIndex[target]},`
@@ -116,18 +113,13 @@ const buildCustomWorkbookURL = (name, genes, links) => {
     }
     genesString = genesString.substring(0, genesString.length - 1);
     linksString = linksString.substring(0, linksString.length - 1);
-    console.log(genesString)
-    console.log(linksString)
     baseQuery+=`&genes=${genesString}`
     baseQuery+=`&links=${linksString}`
-    console.log
     return baseQuery;
 }
 
 const uploadCustomWorkbook = (workbook, grnState) => {
-    console.log("\n\nWe uploading nowwww", workbook.name, workbook.genes, workbook.links)
     let queryURL = buildCustomWorkbookURL(workbook.name, workbook.genes, workbook.links);
-    console.log("upload Custom Workbook Query URL", queryURL)
     return responseCustomWorkbookData(grnState, queryURL, workbook.name);
 }
 
