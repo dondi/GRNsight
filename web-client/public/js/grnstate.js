@@ -50,7 +50,7 @@ export const grnState = {
     },
 
     set workbook (workbook) {
-        console.dir(workbook);
+        // console.dir(workbook);
         currentWorkbook = workbook;
         // TODO: add colorOptimal so that the rest of the normalization code can get added
         this.resetNormalizationMax = max(workbook.positiveWeights.concat(workbook.negativeWeights));
