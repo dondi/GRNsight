@@ -120,7 +120,7 @@ const buildCustomWorkbookURL = (name, genes, links) => {
 }
 
 const uploadCustomWorkbook = (workbook, grnState) => {
-    console.log("\n\nWe uploading nowwww")
+    console.log("\n\nWe uploading nowwww", workbook.name, workbook.genes, workbook.links)
     let queryURL = buildCustomWorkbookURL(workbook.name, workbook.genes, workbook.links);
     console.log("upload Custom Workbook Query URL", queryURL)
     return responseCustomWorkbookData(grnState, queryURL, workbook.name);
