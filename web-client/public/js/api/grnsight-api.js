@@ -116,8 +116,11 @@ const buildCustomWorkbookURL = (name, genes, links) => {
     }
     genesString = genesString.substring(0, genesString.length - 1);
     linksString = linksString.substring(0, linksString.length - 1);
+    console.log(genesString)
+    console.log(linksString)
     baseQuery+=`&genes=${genesString}`
     baseQuery+=`&links=${linksString}`
+    console.log
     return baseQuery;
 }
 
