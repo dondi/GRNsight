@@ -110,7 +110,6 @@ const buildCustomWorkbookURL = (name, genes, links) => {
     for (let regulator in links) {
         for (let target of links[regulator]){
             linksString += `${genesByIndex[regulator]}->${genesByIndex[target]},`
-            positiveWeights.push(1);
         }
     }
     genesString = genesString.substring(0, genesString.length - 1);
