@@ -57,8 +57,8 @@ module.exports = function (app) {
 
         // Load Custom Workbook
         app.get("/upload-custom-workbook", function (req, res) {
-            let workbook = createCustomWorkbook(req.headers.genes, req.headers.links)
-            return processCustomWorkbook(req.headers.name, res, app, workbook)
+            let workbook = createCustomWorkbook(req.query.genes, req.query.link)
+            return processCustomWorkbook(req.query.name, res, app, workbook)
         });
     }
 };
