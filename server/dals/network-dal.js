@@ -72,12 +72,12 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
         JSONOutput.geneId = totalOutput.length > 0 ? totalOutput[0].gene_id: null;
         return JSONOutput;
     case "CreateNetwork":
-        JSONOutput.regulatoryConnections = {};
+        JSONOutput.links = {};
         for (let connection of totalOutput) {
-            if (JSONOutput.regulatoryConnections[connection.regulator_gene_id] === undefined) {
-                JSONOutput.regulatoryConnections[connection.regulator_gene_id] = [connection.target_gene_id]
+            if (JSONOutput.links[connection.regulator_gene_id] === undefined) {
+                JSONOutput.links[connection.regulator_gene_id] = [connection.target_gene_id]
             } else {
-                JSONOutput.regulatoryConnections[connection.regulator_gene_id].push(connection.target_gene_id)
+                JSONOutput.links[connection.regulator_gene_id].push(connection.target_gene_id)
             }; 
         }
         

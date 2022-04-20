@@ -157,6 +157,7 @@ export const createNetwork = function () {
             }
         }
         queryNetworkDatabase(headers).then(function (response) {   
+            grnState.customWorkbook.links = response.links;
             let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
             let edgesAmount = Object.keys(grnState.customWorkbook.links).length;
             let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
