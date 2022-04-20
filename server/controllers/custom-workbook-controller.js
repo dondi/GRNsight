@@ -24,7 +24,7 @@ const createCustomWorkbook = (genesString, linksString) => {
         };
     });
     let positiveWeights = Array(links.length).fill(1);
-    workbook =   {
+    return  {
         genes,
         links,
         errors: [],
