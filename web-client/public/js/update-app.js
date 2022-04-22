@@ -709,10 +709,15 @@ export const updateApp = grnState => {
             identifySpeciesOrTaxon(workbookSpecies);
             identifySpeciesOrTaxon(workbookTaxon);
         }
+
+        // nodeColoringEnabled will only be set the very first time; because otherwise the user will have
+        // made a choice and we will let the choice stick.
         if (hasExpressionData(grnState.workbook.expression)) {
             resetDatasetDropdownMenus(grnState.workbook);
+            if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
+                grnState.nodeColoring.nodeColoringEnabled = true;
+            }
 
-            grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.lastDataset = name;
@@ -728,7 +733,9 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.bottomDataSameAsTop = false;
             }
         } else {
-            grnState.nodeColoringEnabled = false;
+            if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
+                grnState.nodeColoringEnabled = false;
+            }
         }
         refreshApp();
 
@@ -783,14 +790,14 @@ export const updateApp = grnState => {
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
-        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true); 
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
                 loadExpressionDatabase(true);
-            }
+            } 
         } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
         !grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
@@ -846,7 +853,9 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
-    }
+       
+    } 
+
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
         showEdgeWeightOptions();
@@ -855,6 +864,7 @@ export const updateApp = grnState => {
     } else {
         hideEdgeWeightOptions();
     }
+  
 
     if (grnState.nodeColoring.averageTopDataset) {
         $(AVG_REPLICATE_VALS_TOP_MENU + " span").addClass("glyphicon-ok");
