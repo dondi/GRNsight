@@ -11,7 +11,6 @@ import {
     SCHADE_INPUT_NAME,
     SCHADE_OUTPUT_NAME,
 } from "./constants";
-import { grnState } from "./grnstate";
 
 const demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
 
@@ -146,8 +145,6 @@ export const setupLoadAndImportHandlers = grnState => {
                 disableUpload(false);
                 updateApp(grnState);
                 // displayStatistics(workbook);
-            
-
             }).error(workbookErrorDisplayer);
     };
     /*
@@ -193,10 +190,11 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
     $.getJSON(fullUrl).done((workbook) => {
         grnState.name = name;
-        grnState.workbook = workbook
+        grnState.workbook = workbook;
         grnState.annotateLinks();
         disableUpload(false);
         updateApp(grnState);
         reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
     });
 };
+
