@@ -9,10 +9,10 @@ export const createNetwork = function () {
                 <h2 id=\'createNetwork\'>Create Network</h2>
         <div class=\'form-group\'>
             <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
-            <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
+            <select class=\'network-dropdown\' id=\'network-source\'>
             `;
         if (sources.length !== 1) {
-            result += "<option value=\'none\' selected=\'true\' disabled>Select Network Source</option>";
+            result += `<option value=\'none\' selected=\'true\' disabled>Select Network Source</option> `
             for (let source in sources) {
                 result += `
                             <option value=\'${sources[source]}\'>${sources[source]}</option>
@@ -30,7 +30,7 @@ export const createNetwork = function () {
             <form id=\'getNetworkGenesForm\'>
                 <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
                 <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
-                <button id=\'enter-search\' type=\'submit\' class=\'search-button btn btn-default\'>
+                <button id=\'enter-search\' type=\'submit\' class=\'search-button\'>
                     <span class=\'glyphicon glyphicon-search\'></span>
                 </button>
             </form>
@@ -40,7 +40,7 @@ export const createNetwork = function () {
                 <p>Added genes go here! Click on a gene to remove it</p>
             </div>
         </div>
-        <button id=\'submit-network\' class=\'btn btn-default\'>Create Network</input>
+        <button id=\'submit-network\'>Create Network</input>
             </div>
         `;
         return result;
@@ -49,7 +49,7 @@ export const createNetwork = function () {
         let result =  `<div id=\'selected-genes\'>
                         <p>Added genes go below! Click on a gene to remove it.</p>
                         <div id=\'custom-network-genes-container\'>
-        `;
+        `
         for (let gene in grnState.customWorkbook.genes) {
             result += `
                 <div class=\'custom-network-gene\' id=${gene}>
@@ -60,11 +60,11 @@ export const createNetwork = function () {
                         (${gene})
                     </p>
                 </div>
-            `;
+            `
         }
-
-        result += "</div></div>";
-        return result;
+        
+        result += "</div></div>"
+        return result
     };
     const displayCurrentGenes = function () {
         $("#selected-genes").remove();
@@ -78,36 +78,31 @@ export const createNetwork = function () {
         }
     };
 
-    const addGene = function () {
+    const addGene = function() {
         let gene = `${$("#network-search-bar").val()}`.toUpperCase();
         $("#network-search-bar").val("");
-        if (/^[A-Z0-9_-]{1,12}$/.test(gene)) {
-            alert(`Gene: ${gene} is not to GRNsight specifications. Genes must be 12 characters or less,
-containing "-", "_", and alpha-numeric characters only`);
-        } else {
-            let source = grnState.customWorkbook.source;
-            let headers = {
-                type:"NetworkGeneFromSource",
-                info: {
-                    gene: gene,
-                    source:grnState.customWorkbook.sources[source].source,
-                    timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0, 19).replace("T", " ")
-                }
-            };
-            queryNetworkDatabase(headers).then(function (response) {
-                if (response.geneId !== null && response.displayGeneId !== null) {
-                    grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
-                    displayCurrentGenes();
-                } else {
-                    alert(`Gene: ${gene} was not found in this database. Please check for any typos and try again.`);
-                }
-            }).catch(function (error) {
-                console.log(error.stack);
-                console.log(error.name);
-                console.log(error.message);
-            });
-
+        let source = grnState.customWorkbook.source
+        let headers = {
+            type:"NetworkGeneFromSource", 
+            info: {
+                gene: gene,
+                source:grnState.customWorkbook.sources[source].source, 
+                timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
+            }
         }
+        queryNetworkDatabase(headers).then(function (response) {
+            if (response.geneId !== null && response.displayGeneId !==null) {
+            grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
+            displayCurrentGenes();
+            }
+            else {
+                alert (`Gene: ${gene} was not found in this database. Please check for any typos and try again.`);
+            }
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
     };
 
     const displayCreateNetworkModal = function () {
@@ -118,10 +113,9 @@ containing "-", "_", and alpha-numeric characters only`);
         };
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
-            $("#createNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+            $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
-            grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
-                Object.keys(response.sources)[0] : null;
+            grnState.customWorkbook.source = Object.keys(response.sources).length === 1? Object.keys(response.sources)[0] : null;
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -137,30 +131,30 @@ containing "-", "_", and alpha-numeric characters only`);
     };
 
     $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation());
-    $("body").on("change", "#network-source", function (event) {
+    $("body").on("change", "#network-source", function(event) {
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
         event.stopPropagation();
         displayCurrentGenes();
     });
-    $("body").on("click", "#submit-network", function () {
-        let source = grnState.customWorkbook.source;
+    $("body").on("click", "#submit-network", function() {
+        let source = grnState.customWorkbook.source
         let headers = {
-            type:"CreateNetwork",
+            type:"CreateNetwork", 
             info: {
                 genes: grnState.customWorkbook.genes,
-                source:grnState.customWorkbook.sources[source].source,
-                timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0, 19).replace("T", " ")
+                source:grnState.customWorkbook.sources[source].source, 
+                timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0,19).replace("T", " ")
             }
-        };
-        queryNetworkDatabase(headers).then(function (response) {
+        }
+        queryNetworkDatabase(headers).then(function (response) {   
             grnState.customWorkbook.links = response.links;
             let genes = grnState.customWorkbook.genes;
             let links = grnState.customWorkbook.links;
             let genesAmount = Object.keys(genes).length;
             let edgesAmount = Object.keys(links).length;
             let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-            let workbook = {name, genes, links};
+            let workbook = {name, genes, links}
             uploadCustomWorkbook(workbook, grnState);
             $(CREATE_NETWORK_MODAL).modal("hide");
         }).catch(function (error) {
@@ -170,7 +164,7 @@ containing "-", "_", and alpha-numeric characters only`);
         });
     });
 
-    $("body").on("click", "#enter-search", function (event) {
+    $("body").on("click", "#enter-search", function(event) {
         try {
             event.preventDefault();
             event.stopPropagation();

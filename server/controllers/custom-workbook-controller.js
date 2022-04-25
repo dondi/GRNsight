@@ -1,5 +1,5 @@
-/* eslint-disable camelcase */
 var helpers = require(__dirname + "/helpers");
+
 
 var processCustomWorkbook = function (path, res, app, workbook) {
     helpers.attachCorsHeader(res, app);
@@ -12,17 +12,15 @@ var processCustomWorkbook = function (path, res, app, workbook) {
 };
 
 const createCustomWorkbook = (genesString, linksString) => {
-    let genes = genesString.split(",").map(gene => {
-        return {name: gene};
-    });
+    let genes = genesString.split(",").map(gene => { return {name: gene};})
     let links = linksString.split(",").map( link => {
-        link = link.split("->");
+        link = link.split('->');
         return {
-            source: parseInt(link[0]),
-            target: parseInt(link[1]),
-            value:1,
-            type:"arrowhead",
-            stroke: "black"
+          source: parseInt(link[0]),
+          target: parseInt(link[1]),
+          value:1,
+          type:"arrowhead",
+          stroke: "black"
         };
     });
     let positiveWeights = Array(links.length).fill(1);
@@ -52,15 +50,15 @@ const createCustomWorkbook = (genesString, linksString) => {
         expression: {
         }
     };
-};
+}
 
 module.exports = function (app) {
     if (app) {
 
         // Load Custom Workbook
         app.get("/upload-custom-workbook", function (req, res) {
-            let workbook = createCustomWorkbook(req.query.genes, req.query.links);
-            return processCustomWorkbook(req.query.name, res, app, workbook);
+            let workbook = createCustomWorkbook(req.query.genes, req.query.links)
+            return processCustomWorkbook(req.query.name, res, app, workbook)
         });
     }
 };
