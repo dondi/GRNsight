@@ -330,40 +330,29 @@ html
               a(data-toggle='collapse' data-target='#networkSidebarPanel') Network
             div(id="networkSidebarPanel" class="panel-collapse")
               div(class="panel-body")
+                form(class='panelDropdownContainer')
                   p(class="network-source-section-title") Network Source
                   div(class="network-source-section")
                     form(class='panelDropdownContainer')
                       label(for='speciesDropdown' class='info') Demo
-                      select(class="DemoSourceDropdown panelDropdown" id='demoSourceDropdown' href='#')
+                      select(class="DemoSourceDropdown panelDropdown btn btn-default" id='demoSourceDropdown' href='#')
                         option(value="none" selected="true" disabled hidden) Select a Demo
                         option(href='#' id='demoSourceDropdown-unweighted' class='unweighted' value='unweighted') Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
                         option(href='#' id='demoSourceDropdown-weighted' class='weighted' value='weighted')  Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
                         option(href='#' id='demoSourceDropdown-schadeInput' class='schadeInput' value='schadeInput') Demo #3: Unweighted GRN (21 genes, 31 edges)
                         option(href='#' id='demoSourceDropdown-schadeOutput' class='schadeOutput' value='schadeOutput') Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)
-                    form(class='panelDropdownContainer')
-                      div(class='network-button-container')
-                        div(class='network-button')
-                          label(for='upload-network' class='open' data-toggle='tooltip', title='(.xlsx, .sif, .graphml)')
-                            span(class='glyphicon glyphicon-folder-open')
-                            | &nbsp; Open File 
-                            //- span(class="network-type")  (.xlsx, .sif, .graphml)
-                          input(type='file' name='upload' id='upload-network' class='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
-                          input(type='hidden' class='service-root' value=`${serviceRoot}`)   
-                    form(class='panelDropdownContainer')
-                      div(class='network-button-container')
-                        div(class='network-button')
-                          label(for='create-network-button' class='create-network-label')
-                            span(class='glyphicon glyphicon-hdd')
-                            | &nbsp; Load from Database
-                          input(type='button' id='create-network-button' class='create-network hidden-button')
+                    label(for='upload-network' class='open btn btn-default network-button' data-toggle='tooltip', title='(.xlsx, .sif, .graphml)')
+                      span(class='glyphicon glyphicon-folder-open')
+                      | &nbsp; Open File 
+                    input(type='file' name='upload' id='upload-network' class='upload btn btn-default' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
+                    input(type='hidden' class='service-root' value=`${serviceRoot}`)   
+                    button(id="create-network-button" class="btn btn-default create-network network-button")
+                          span(class='glyphicon glyphicon-hdd sidebar-glyphicon')
+                          | &nbsp; Load from Database
                   div(class="long-sub-divider")
-                  form(class='panelDropdownContainer')
-                    div(class='network-button-container')
-                      div(class='network-button-3 startDisabled disabled')
-                        label(for='reload-button' class='create-network-label')
-                          span(class='glyphicon glyphicon-repeat')
-                          | &nbsp; Reload
-                        input(type='button' id="reload-button" class='reload hidden-button')
+                  button(id="reload-button", class="btn btn-default network-button startDisabled disabled")
+                    span(class='glyphicon glyphicon-repeat sidebar-glyphicon')
+                    | &nbsp; Reload
                   div(class="long-sub-divider")
                   label(for='species-info' class='info') Species: 
                     span(id='species' class='network-type') Saccharomyces cerevisiae
@@ -551,6 +540,7 @@ html
           div(class='modal-header')
             button(type='button' class='close' data-dismiss='modal' aria-label='Close')
               span(aria-hidden='true') &times;
+            h4(class='modal-title') Load from Database
           div(class='modal-body')
             div(id='createNetworkQuestions-container')
           div(class='modal-footer')
