@@ -1,4 +1,4 @@
-import {responseCustomWorkbookData} from "../setup-load-and-import-handlers";
+import {responseCustomWorkbookData} from "../setup-load-and-import-handlers"
 
 // Expression DB Access Functions
 const buildExpressionTimepointsString = function (selection) {
@@ -47,21 +47,21 @@ const queryExpressionDatabase = (query) => {
 // Network DB Access Functions
 
 const buildNetworkGenesQuery = (genes) => {
-    let result = "";
+    let result = ""
     for (let gene in genes) {
-        result += `${gene},`;
+        result += `${gene},`
     }
     return result.substring(0, result.length - 1);
-};
+}
 
 const buildNetworkURL = function (queryType, queryInfo) {
     let baseQuery = `networkdb?type=${queryType}`;
     if (queryInfo !== null) {
-        for (let header in queryInfo) {
+        for (let header in queryInfo){
             if (header === "genes") {
-                baseQuery += `&${header}=${buildNetworkGenesQuery(queryInfo[header])}`;
+                baseQuery += `&${header}=${buildNetworkGenesQuery(queryInfo[header])}`
             } else {
-                baseQuery += `&${header}=${queryInfo[header]}`;
+            baseQuery += `&${header}=${queryInfo[header]}`
             }
         }
     }
@@ -96,29 +96,31 @@ const queryNetworkDatabase = (query) => {
 // Upload Custom Workbook Functions
 const buildCustomWorkbookURL = (name, genes, links) => {
     let baseQuery = `upload-custom-workbook?name=${name}`;
-    let genesString = "";
+    let genesString = ""; 
     let linksString = "";
     let genesByIndex = {};
     let i = 0;
     for (let gene in genes) {
-        genesString += `${genes[gene]},`;
+        genesString+=`${genes[gene]},`
         genesByIndex[gene] = i;
         i++;
     }
     for (let regulator in links) {
-        for (let target of links[regulator]) {
-            linksString += `${genesByIndex[regulator]}->${genesByIndex[target]},`;
+        for (let target of links[regulator]){
+            linksString += `${genesByIndex[regulator]}->${genesByIndex[target]},`
         }
     }
-    baseQuery += `&genes=${genesString.substring(0, genesString.length - 1)}`;
-    baseQuery += `&links=${linksString.substring(0, linksString.length - 1)}`;
+    genesString = genesString.substring(0, genesString.length - 1);
+    linksString = linksString.substring(0, linksString.length - 1);
+    baseQuery+=`&genes=${genesString}`
+    baseQuery+=`&links=${linksString}`
     return baseQuery;
-};
+}
 
 const uploadCustomWorkbook = (workbook, grnState) => {
     let queryURL = buildCustomWorkbookURL(workbook.name, workbook.genes, workbook.links);
     return responseCustomWorkbookData(grnState, queryURL, workbook.name);
-};
+}
 
 
 export {queryExpressionDatabase, queryNetworkDatabase, uploadCustomWorkbook};
