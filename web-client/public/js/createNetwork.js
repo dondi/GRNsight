@@ -144,44 +144,30 @@ containing "-", "_", and alpha-numeric characters only`);
         displayCurrentGenes();
     });
     $("body").on("click", "#submit-network", function () {
-        let genesAmount = Object.keys(grnState.customWorkbook.genes).length;
-        if (genesAmount === 0 ) {
-            alert("Network must have at least 1 gene");
-        } else if (genesAmount > 75) {
-            alert(`GRNsight is only capable of handling 75 genes at most. Your proposed network contains
- ${genesAmount} genes. Please remove some genes from your proposed network.`);
-        } else {
-
-            let source = grnState.customWorkbook.source;
-            let headers = {
-                type:"CreateNetwork",
-                info: {
-                    genes: grnState.customWorkbook.genes,
-                    source:grnState.customWorkbook.sources[source].source,
-                    timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0, 19).replace("T", " ")
-                }
-            };
-            queryNetworkDatabase(headers).then(function (response) {
-                grnState.customWorkbook.links = response.links;
-                let genes = grnState.customWorkbook.genes;
-                let links = grnState.customWorkbook.links;
-                let genesAmount = Object.keys(genes).length;
-                let edgesAmount = Object.keys(links).length;
-                if (edgesAmount > 100) {
-                    alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
- ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
-                } else {
-                    let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-                    let workbook = {name, genes, links};
-                    uploadCustomWorkbook(workbook, grnState);
-                    $(CREATE_NETWORK_MODAL).modal("hide");
-                }
-            }).catch(function (error) {
-                console.log(error.stack);
-                console.log(error.name);
-                console.log(error.message);
-            });
-        }
+        let source = grnState.customWorkbook.source;
+        let headers = {
+            type:"CreateNetwork",
+            info: {
+                genes: grnState.customWorkbook.genes,
+                source:grnState.customWorkbook.sources[source].source,
+                timestamp:grnState.customWorkbook.sources[source].timestamp.substring(0, 19).replace("T", " ")
+            }
+        };
+        queryNetworkDatabase(headers).then(function (response) {
+            grnState.customWorkbook.links = response.links;
+            let genes = grnState.customWorkbook.genes;
+            let links = grnState.customWorkbook.links;
+            let genesAmount = Object.keys(genes).length;
+            let edgesAmount = Object.keys(links).length;
+            let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
+            let workbook = {name, genes, links};
+            uploadCustomWorkbook(workbook, grnState);
+            $(CREATE_NETWORK_MODAL).modal("hide");
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
     });
 
     $("body").on("click", "#enter-search", function (event) {
