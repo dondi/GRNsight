@@ -118,7 +118,7 @@ containing "-", "_", and alpha-numeric characters only`);
         };
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
-            $("#creatNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+            $("#createNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
                 Object.keys(response.sources)[0] : null;
