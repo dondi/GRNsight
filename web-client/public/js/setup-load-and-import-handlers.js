@@ -155,6 +155,8 @@ export const setupLoadAndImportHandlers = grnState => {
     // $(".upload").change(uploadHandler(loadGrn));
     $("body").on("change", ".upload", uploadHandler(loadGrn));
     const loadDemo = (url, value) => {
+        console.log(url);
+        console.log(value);
         $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
         loadGrn(url);
         reloader = () => loadGrn(url);
