@@ -156,9 +156,8 @@ export const setupLoadAndImportHandlers = grnState => {
     $("body").on("change", ".upload", uploadHandler(loadGrn));
     const loadDemo = (url, value) => {
         $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
-        let newURL = "demo/" + value.substring(1);
-        loadGrn(newURL);
-        reloader = () => loadGrn(newURL);
+        loadGrn(url);
+        reloader = () => loadGrn(url);
 
         $("a.upload > input[type=file]").val("");
     };
@@ -169,9 +168,7 @@ export const setupLoadAndImportHandlers = grnState => {
             loadDemo(demoPath, demoClass, demoName);
         });
 
-        $("#demoSourceDropdown").on("change", (event) => {
-            event.preventDefault();
-            event.stopPropagation();
+        $("#demoSourceDropdown").on("change", () => {
             loadDemo(demoPath, demoClass, demoName);
         });
     };
