@@ -168,7 +168,9 @@ export const setupLoadAndImportHandlers = grnState => {
             loadDemo(demoPath, demoClass, demoName);
         });
 
-        $("#demoSourceDropdown").on("change", () => {
+        $("#demoSourceDropdown").on("change", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
             loadDemo(demoPath, demoClass, demoName);
         });
     };
