@@ -130,15 +130,11 @@ containing "-", "_", and alpha-numeric characters only`);
         $(CREATE_NETWORK_MODAL).modal("show");
     };
 
-    const performNetworkCreation = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        return function () {
-            displayCreateNetworkModal();
-        };
-    };
-
-    $("body").on("click", CREATE_NETWORK_CLASS, performNetworkCreation(e));
+    $("body").on("click", CREATE_NETWORK_CLASS, function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        displayCreateNetworkModal();
+    });
     $("body").on("change", "#network-source", function (event) {
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
