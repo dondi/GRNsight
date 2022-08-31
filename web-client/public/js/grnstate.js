@@ -50,6 +50,7 @@ export const grnState = {
     },
 
     set workbook (workbook) {
+        // console.dir(workbook);
         currentWorkbook = workbook;
         // TODO: add colorOptimal so that the rest of the normalization code can get added
         this.resetNormalizationMax = max(workbook.positiveWeights.concat(workbook.negativeWeights));
@@ -72,7 +73,7 @@ export const grnState = {
 // Node Coloring
     nodeColoring: {
         showMenu: false,
-        nodeColoringEnabled: true,
+        nodeColoringEnabled: undefined,
         logFoldChangeMaxValue: DEFAULT_MAX_LOG_FOLD_CHANGE,
         logFoldChangeUpdateTriggered: false,
         averageTopDataset: true,

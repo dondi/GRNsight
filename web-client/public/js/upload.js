@@ -6,10 +6,11 @@
 import { grnState } from "./grnstate";
 
 import {
-    buildURL,
-    responseData,
-    stopLoadingIcon
+    stopLoadingIcon,
+    startLoadingIcon
 } from "./update-app";
+
+import { queryExpressionDatabase } from "./api/grnsight-api.js";
 
 export const uploadState = {
     currentWorkbook: null,
@@ -113,7 +114,7 @@ export const upload = function () {
 
                 var exportForm = $("<form></form>").attr({
                     method: "POST",
-                    action: $("#service-root").val() + "/" + route
+                    action: $(".service-root").val() + "/" + route
                 }).append($("<input></input>").attr({
                     type: "hidden",
                     name: "filename",
@@ -131,8 +132,11 @@ export const upload = function () {
         } else {
             // source is from database so lets query her up
             for (let sheet of chosenSheets) {
-                let queryURL = buildURL({ dataset: sheet });
-                responseData("", queryURL).then(function (response) {
+                startLoadingIcon();
+                queryExpressionDatabase({
+                    dataset: sheet,
+                    genes : grnState.workbook.genes
+                }).then(function (response) {
                     exportSheets[sheet] = response;
                     if (exportSheets[sheet]) {
                         stopLoadingIcon();
@@ -155,7 +159,7 @@ export const upload = function () {
                                 workbookToExport.filename = workbookFilename;
                                 var exportForm = $("<form></form>").attr({
                                     method: "POST",
-                                    action: $("#service-root").val() + "/" + route
+                                    action: $(".service-root").val() + "/" + route
                                 }).append($("<input></input>").attr({
                                     type: "hidden",
                                     name: "filename",
@@ -195,7 +199,7 @@ export const upload = function () {
 
                     var exportForm = $("<form></form>").attr({
                         method: "POST",
-                        action: $("#service-root").val() + "/" + route
+                        action: $(".service-root").val() + "/" + route
                     }).append($("<input></input>").attr({
                         type: "hidden",
                         name: "filename",

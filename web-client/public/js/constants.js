@@ -5,16 +5,19 @@ export const FILE_NAME = "#fileName";
 export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
-export const UNWEIGHTED_DEMO_ID   = "#unweighted";
+export const CREATE_NETWORK_CLASS = ".create-network";
+export const CREATE_NETWORK_MODAL = "#createNetworkModal";
+
+export const UNWEIGHTED_DEMO_ID   = ".unweighted";
 export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
 export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (15 genes, 28 edges)";
-export const WEIGHTED_DEMO_ID     = "#weighted";
+export const WEIGHTED_DEMO_ID     = ".weighted";
 export const WEIGHTED_DEMO_PATH   = "demo/weighted";
 export const WEIGHTED_DEMO_NAME   = "Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
-export const SCHADE_INPUT_ID      = "#schadeInput";
+export const SCHADE_INPUT_ID      = ".schadeInput";
 export const SCHADE_INPUT_PATH    = "demo/schadeInput";
 export const SCHADE_INPUT_NAME    = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
-export const SCHADE_OUTPUT_ID     = "#schadeOutput";
+export const SCHADE_OUTPUT_ID     = ".schadeOutput";
 export const SCHADE_OUTPUT_PATH = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 

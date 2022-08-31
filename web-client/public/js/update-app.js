@@ -107,6 +107,8 @@ import {
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
+import { queryExpressionDatabase } from "./api/grnsight-api.js";
+
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 const refreshApp = () => {
@@ -350,62 +352,44 @@ const updateViewportSize = (currentValue) => {
         requestWindowDimensions();
     }
 };
-// Expression DB Access Functions
-const buildTimepointsString = function (selection) {
-    let timepoints = "";
-    selection.timepoints.forEach(x => timepoints += (x + ","));
-    return timepoints.substring(0, timepoints.length - 1);
-};
-const buildGeneQuery = function () {
-    let genes = "";
-    grnState.workbook.genes.forEach(x => genes += (x.name + ","));
-    return genes.substring(0, genes.length - 1);
-};
 
-const buildURL = function (selection) {
-    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildGeneQuery()}`;
-    return selection.timepoints ?
-    `${baseQuery}&timepoints=${buildTimepointsString(selection)}` :
-    baseQuery;
-};
 
+// Expression DB Functions
 const startLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER).css("display", "block");
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "block");
 };
-
-const responseData = (formData, queryURL) => {
-    return new Promise(function (resolve) {
-        const uploadRoute = queryURL;
-        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
-        startLoadingIcon();
-        (formData ?
-            $.ajax({
-                url: fullUrl,
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: "GET",
-                crossDomain: true
-            }) :
-            $.getJSON(fullUrl)
-            ).done((expressionData) => {
-                resolve(expressionData);
-            }).error(console.log("Error in accessing expression database. Result may just be loading."));
-    });
-};
-
 const stopLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER).css("display", "none");
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
 };
-
 const enableNodeColoringUI = function () {
     grnState.nodeColoring.nodeColoringEnabled = true;
     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 };
+const loadExpressionDatabase = function (isTopDataset) {
+    startLoadingIcon();
+    queryExpressionDatabase({
+        dataset: isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset,
+        genes : grnState.workbook.genes
+    }).then(function (response) {
+        if (isTopDataset) {
+            grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+        } else {
+            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
+        }
+        enableNodeColoringUI();
+        stopLoadingIcon();
+        updaters.renderNodeColoring();
+    }).catch(function (error) {
+        console.log(error.stack);
+        console.log(error.name);
+        console.log(error.message);
+    });
+};
+
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
@@ -725,10 +709,15 @@ export const updateApp = grnState => {
             identifySpeciesOrTaxon(workbookSpecies);
             identifySpeciesOrTaxon(workbookTaxon);
         }
+
+        // nodeColoringEnabled will only be set the very first time; because otherwise the user will have
+        // made a choice and we will let the choice stick.
         if (hasExpressionData(grnState.workbook.expression)) {
             resetDatasetDropdownMenus(grnState.workbook);
+            if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
+                grnState.nodeColoring.nodeColoringEnabled = true;
+            }
 
-            grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.lastDataset = name;
@@ -744,7 +733,9 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.bottomDataSameAsTop = false;
             }
         } else {
-            grnState.nodeColoringEnabled = false;
+            if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
+                grnState.nodeColoringEnabled = false;
+            }
         }
         refreshApp();
 
@@ -805,34 +796,13 @@ export const updateApp = grnState => {
         if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-
-                responseData("", queryURLTop).then(function (response) {
-                    grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
-                    enableNodeColoringUI();
-                    stopLoadingIcon();
-                    updaters.renderNodeColoring();
-                }).catch(function (error) {
-                    console.log(error.stack);
-                    console.log(error.name);
-                    console.log(error.message);
-                });
+                loadExpressionDatabase(true);
             }
         } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
         !grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
             if (!grnState.nodeColoring.bottomDataSameAsTop) {
-                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
-                responseData("", queryURLBottom).then(function (response) {
-                    grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
-                    enableNodeColoringUI();
-                    stopLoadingIcon();
-                    updaters.renderNodeColoring();
-                }).catch(function (error) {
-                    console.log(error.stack);
-                    console.log(error.name);
-                    console.log(error.message);
-                });
+                loadExpressionDatabase(false);
             }
         } else {
             updaters.renderNodeColoring();
@@ -855,34 +825,10 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
-                let queryURLTop = buildURL({dataset: grnState.nodeColoring.topDataset});
-
-                responseData("", queryURLTop).then(function (response) {
-                    grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
-                    enableNodeColoringUI();
-
-                    stopLoadingIcon();
-                    updaters.renderNodeColoring();
-                }).catch(function (error) {
-                    console.log(error.stack);
-                    console.log(error.name);
-                    console.log(error.message);
-                });
+                loadExpressionDatabase(true);
             } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
             grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
-                let queryURLBottom = buildURL({dataset: grnState.nodeColoring.bottomDataset});
-                responseData("", queryURLBottom).then(function (response) {
-                    grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
-                    enableNodeColoringUI();
-
-                    stopLoadingIcon();
-
-                    updaters.renderNodeColoring();
-                }).catch(function (error) {
-                    console.log(error.stack);
-                    console.log(error.name);
-                    console.log(error.message);
-                });
+                loadExpressionDatabase(false);
             } else {
                 enableNodeColoringUI();
                 // There is as problem here! When a dataset from the database is used to do node coloring,
@@ -977,4 +923,4 @@ export const updateApp = grnState => {
 };
 
 
-export {buildURL, responseData, stopLoadingIcon};
+export { stopLoadingIcon, startLoadingIcon};
