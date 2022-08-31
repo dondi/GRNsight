@@ -104,18 +104,34 @@ form label, form span
 .glyphicon
   min-width: 22px
 
+.glyphicon-searchbar
+  margin-left: -22px
+  
 .dropdown-menu > li > a.upload
-  padding-left: 0
+  padding-top: 7px
+  padding-bottom: 5px
+  padding-left: 10px
   padding-right: 0
+
+.dropdown-menu > li > a.demo
+  padding-top: 7px
+  padding-left: 30px
+  padding-bottom: 5px
+
+.dropdown-menu > li > a.create-network
+  padding-top: 7px
+  padding-bottom: 0px
+  padding-left: 30px
+  margin-bottom: -5px
 
 .dropdown-menu > li > a.upload > label
   font-weight: normal
   margin-bottom: 0
-  padding-left: 20px
+  padding-left: 22px
   padding-right: 20px
   width: 100%
 
-.dropdown-menu > li > a.upload > input[type=file]
+.dropdown-menu > li > a.upload > input[type=file], #upload-network
   display: none
 
 #fileName
@@ -138,6 +154,9 @@ nav.navbar.navbar-default
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus
   background-color: #16693F
   color: #FFFFFF
+
+.open
+  font-weight: normal
 
 .navbar-right.graph-metadata-container > li
   margin-top: 4px
@@ -167,6 +186,22 @@ nav.navbar.navbar-default
   display: flex
   justify-content: space-between
   margin-top: 0px
+
+.panelDropdownContainer
+  margin-top 0px
+  padding: 0px 10px 10px 0px
+
+.panelGeneSearchBar
+  display: flex
+  width: 102.5%
+
+.createNetworkContainer
+  padding: 10px 0px
+  display: flex
+#panel-gene-search-bar
+  width: calc(100% + 22px)
+#createNetworkButton
+  width: 100%
 
 .buttonPairContainer > input[type=button], .buttonPairContainer > button
   padding: 6px 10px
@@ -333,6 +368,10 @@ text.weight.visible
 .speciesIdentifiedDropdown
     font-weight: normal
 
+.panelDropdown
+    width: 100%
+    font-weight: normal
+
 .currentSpecies
     font-weight: bold
 
@@ -384,6 +423,8 @@ path.mousezone
 
 .menu-subheader
     padding-left: 12px;
+.menu-subheader
+    padding-left: 12px;
 
 #force-graph input[type=range]
     box-shadow: none
@@ -424,3 +465,110 @@ path.mousezone
     margin-top: 15 px
     display: none
 
+#Saccharomyces-cerevisiae
+  color: #AAA
+  margin-left: 30px
+
+.create-network-label
+  font-weight: normal
+
+.sub-divider
+  border-top: 1px dotted #bbb
+  width:95%
+  margin: auto
+
+.network-source-section
+  margin-left: 12px
+
+.long-sub-divider
+  border-top: 1px dotted #bbb
+  margin: 0px 0px 10px
+
+.network-button-container
+  border:1px solid #CCC
+  border-radius: 5px
+  height: 45px
+
+  justify-content: center
+  display: flex
+
+.network-button
+  width:100%
+  margin:5px 0px
+  height:34px
+
+
+#upload-network
+  border: 2px solid #6c5ce7
+  padding: .2em .4em
+  border-radius: .2em
+  background-color: #a29bfe
+  transition: 1s
+
+
+#upload-network:hover 
+  background-color: #81ecec
+  border: 2px solid #00cec9
+
+
+
+.sidebar-glyphicon
+  margin-right: 0px
+
+.network-button.disabled
+  color: #AAA
+
+.network-dropdown
+  width: 50%
+
+#enter-search
+  margin-left: 0px
+  height: 100%
+  padding: 0
+  border-color:#aeaeae
+
+#network-search-bar
+  margin-right: 0px
+  height: 100%
+  border-radius:5px
+  border: 1px solid #aeaeae
+
+.custom-network-gene
+  border:1px solid #CCC
+  border-radius: 5px
+  height: 50px
+  padding: auto
+  display: flex
+  justify-content: center
+  align-items:center
+  flex-direction: column
+  width: 100%
+  margin:5px
+
+#custom-network-genes-container
+  display: grid
+  column-gap: 20px
+  row-gap: 5px
+  grid-template-columns: 1fr 1fr 1fr
+  padding: 10px 5px
+
+#submit-network
+  margin-top: 20px
+.custom-network-gene-display-id
+  font-size: 14px
+
+.custom-network-gene-id
+  color: #BBB
+  font-size: 12px
+
+.network-type
+  font-size: 12px
+  display: inline-block
+  font-style: italic
+
+.network-source-section-title
+  font-weight: bold
+  font-size: 14px
+
+.hidden-button
+  display:none

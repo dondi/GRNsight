@@ -1,7 +1,7 @@
 "use strict";
 
 // Using "use strict" global
-const serviceRoot = $("#service-root").attr("value");
+const serviceRoot = $(".service-root").attr("value");
 const serializer = new XMLSerializer();
 const XMLParser = function (data) {
     return serializer.serializeToString(data).replace(/\<.*?\>\s?/g, "");

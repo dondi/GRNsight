@@ -44,9 +44,9 @@ const uploadEpilogue = event => {
     event.preventDefault();
 };
 const disableUpload = state => {
-    $("#upload").attr("disabled", state);
-    $("#upload-sif").attr("disabled", state);
-    $("#upload-graphml").attr("disabled", state);
+    $(".upload").attr("disabled", state);
+    $(".upload-sif").attr("disabled", state);
+    $(".upload-graphml").attr("disabled", state);
 };
 
 const uploadHandler = (uploader) => {
@@ -91,6 +91,7 @@ const workbookErrorDisplayer = xhr => {
 
 let reloader = () => { };
 
+
 const returnUploadRoute = filename => {
     if (demoFiles.indexOf(filename) !== -1) {
         return filename;
@@ -106,7 +107,7 @@ const returnUploadRoute = filename => {
 export const setupLoadAndImportHandlers = grnState => {
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
-        const fullUrl = [ $("#service-root").val(), uploadRoute ].join("/");
+        const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
         (formData ?
             $.ajax({
@@ -133,7 +134,6 @@ export const setupLoadAndImportHandlers = grnState => {
                         break;
                     case SCHADE_OUTPUT_PATH:
                         grnState.name = SCHADE_OUTPUT_NAME;
-                        break;
                     }
                 }
                 grnState.workbook = workbook;
@@ -145,7 +145,6 @@ export const setupLoadAndImportHandlers = grnState => {
                 disableUpload(false);
                 updateApp(grnState);
                 // displayStatistics(workbook);
-
             }).error(workbookErrorDisplayer);
     };
     /*
@@ -153,23 +152,30 @@ export const setupLoadAndImportHandlers = grnState => {
      * for helping to resolve this.
      */
 
-    $("#upload").change(uploadHandler(loadGrn));
-
-    const loadDemo = url => {
+    // $(".upload").change(uploadHandler(loadGrn));
+    $("body").on("change", ".upload", uploadHandler(loadGrn));
+    const loadDemo = (url, value) => {
+        $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
         loadGrn(url);
         reloader = () => loadGrn(url);
 
         $("a.upload > input[type=file]").val("");
     };
 
-    const initializeDemoFile = (demoId, demoPath, demoName) => {
+    const initializeDemoFile = (demoClass, demoPath, demoName) => {
         // Deleted parameter `event`
-        $(demoId).on("click", () => loadDemo(demoPath, demoName));
+        $(demoClass).on("click", () => {
+            loadDemo(demoPath, demoClass, demoName);
+        });
+
+        $("#demoSourceDropdown").on("change", () => {
+            loadDemo(demoPath, demoClass, demoName);
+        });
     };
 
     DEMO_INFORMATION.forEach(demoInfo => initializeDemoFile.apply(null, demoInfo));
 
-    $("#reload").click(function () {
+    $("body").on("click", ".reload", function () {
         // Deleted `event` parameter but need `function` because of `this`.
         if (!$(this).parent().hasClass("disabled")) {
             if ($.isFunction(reloader)) {
@@ -178,3 +184,17 @@ export const setupLoadAndImportHandlers = grnState => {
         }
     });
 };
+
+export const responseCustomWorkbookData = (grnState, queryURL, name) => {
+    const uploadRoute = queryURL;
+    const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
+    $.getJSON(fullUrl).done((workbook) => {
+        grnState.name = name;
+        grnState.workbook = workbook;
+        grnState.annotateLinks();
+        disableUpload(false);
+        updateApp(grnState);
+        reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
+    });
+};
+
