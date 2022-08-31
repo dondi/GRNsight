@@ -709,10 +709,15 @@ export const updateApp = grnState => {
             identifySpeciesOrTaxon(workbookSpecies);
             identifySpeciesOrTaxon(workbookTaxon);
         }
+
+        // nodeColoringEnabled will only be set the very first time; because otherwise the user will have
+        // made a choice and we will let the choice stick.
         if (hasExpressionData(grnState.workbook.expression)) {
             resetDatasetDropdownMenus(grnState.workbook);
+            if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
+                grnState.nodeColoring.nodeColoringEnabled = true;
+            }
 
-            grnState.nodeColoring.nodeColoringEnabled = true;
             if (isNewWorkbook(name)) {
                 grnState.nodeColoring.showMenu = true;
                 grnState.nodeColoring.lastDataset = name;
@@ -728,7 +733,9 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.bottomDataSameAsTop = false;
             }
         } else {
-            grnState.nodeColoringEnabled = false;
+            if (grnState.nodeColoring.nodeColoringEnabled === undefined) {
+                grnState.nodeColoringEnabled = false;
+            }
         }
         refreshApp();
 
