@@ -167,9 +167,11 @@ export const setupLoadAndImportHandlers = grnState => {
         $(demoClass).on("click", () => {
             loadDemo(demoPath, demoClass, demoName);
         });
-
         $("#demoSourceDropdown").on("change", () => {
-            loadDemo(demoPath, demoClass, demoName);
+            let selected = `.${$("#demoSourceDropdown").val()}`;
+            if (selected == demoClass) {
+                loadDemo(demoPath, demoClass, demoName);
+            }
         });
     };
 
