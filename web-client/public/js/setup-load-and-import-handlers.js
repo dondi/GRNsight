@@ -137,6 +137,7 @@ export const setupLoadAndImportHandlers = grnState => {
                     }
                 }
                 grnState.workbook = workbook;
+                grnState.workbook.expressionNames = Object.keys(workbook.expression);
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
