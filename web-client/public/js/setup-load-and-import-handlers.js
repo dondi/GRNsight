@@ -170,7 +170,7 @@ export const setupLoadAndImportHandlers = grnState => {
         });
         $("#demoSourceDropdown").on("change", () => {
             let selected = `.${$("#demoSourceDropdown").val()}`;
-            if (selected == demoClass) {
+            if (selected === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
             }
         });

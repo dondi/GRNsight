@@ -391,38 +391,23 @@ export const upload = function () {
         return result;
     };
 
-     const createHTMLforModalButtons = (isInitialModal) => {
+    const createHTMLforModalButtons = (isInitialModal) => {
         return `
             <div id=\'exportExcelFooter\'>
-                ${ !isInitialModal?
+                ${ !isInitialModal ?
                     `<div>
                         <input type=\'button\' class=\'btn btn-default\' id=\'Export-Excel-Button-Back\' value=\'Back\'  />
                     </div>` : ""
                 }
                 <div>
-                    <input type=\'button\' class=\'btn btn-default\' id=\'Export-Excel-Button${isInitialModal?'-Continue':''}\' />
+                    <input type=\'button\' class=\'btn btn-default\' id=\'Export-Excel-Button${isInitialModal ? "-Continue" : ""}\' />
                     <input type=\'button\' class=\'btn btn-default\' data-dismiss=\'modal\' value=\'Cancel\'  />
                 <div>
             </div>
-        `
-    }
-
-    const handleExportExcelButtonContinue = () => {
-        const weight = $("input[name=network-weights]:checked")[0].value;
-        const source = $("input[name=expressionSource]:checked")[0].value;
-        $("#exportExcelForm1").remove();
-        $("#exportExcelFooter").remove();
-        $("#exportExcelFooter-container").append(createHTMLforModalButtons(false));
-        // $("#exportExcelForm1")[0].style = "display:none;";
-        $("#Export-Excel-Button").prop("value", "Export Workbook");
-        $("#exportExcelQuestions-containter").append(createHTMLforForm2);
-        $("#exportExcelExpressionSheets").html("Select Expression Sheets:");
-        $("#export-excel-expression-sheet-list").append(createHTMLforExpressionSheets(source));
-        $("#Export-Excel-Button-Back").on("click", performHandleExportButtonBack(weight, source));
-        $("#Export-Excel-Button").on("click", performExport("export-to-excel", "xlsx", weight, source));
+        `;
     };
 
-    var displayExportExcelModal = function () {
+    var handleExportExcelModal = function () {
         $("#exportExcelForm2").remove();
         $("#exportExcelFooter").remove();
         $("#exportExcelQuestions-containter").append(createHTMLforForm1);
@@ -437,39 +422,46 @@ export const upload = function () {
         $("#exportExcelExpressionSource-Dahlquist").html("Dahlquist_2018");
         $("#exportExcelExpressionSource-Kitagawa").html("Kitagawa_2002");
         $("#exportExcelExpressionSource-Thorsen").html("Thorsen_2007");
-        $("#Export-Excel-Button-Continue").on("click", performHandleExportButtonContinue());
+    };
+
+    // var handleExportButtonBack = function (weight, source) {
+    //     return function () {
+    //         handleExportExcelModal();
+    //         $("input[name=network-weights]").removeAttr("checked");
+    //         $("input[name=network-weights][value=" + weight + "]").prop("checked", true);
+    //         $("input[name=expressionSource]").removeAttr("checked");
+    //         $("input[name=expressionSource][value=" + source + "]").prop("checked", true);
+    //     };
+    // };
+
+    var handleExportExcelButtonContinue = () => {
+        const weight = $("input[name=network-weights]:checked")[0].value;
+        const source = $("input[name=expressionSource]:checked")[0].value;
+        $("#exportExcelForm1").remove();
+        $("#exportExcelFooter").remove();
+        $("#exportExcelFooter-container").append(createHTMLforModalButtons(false));
+        // $("#exportExcelForm1")[0].style = "display:none;";
+        $("#Export-Excel-Button").prop("value", "Export Workbook");
+        $("#exportExcelQuestions-containter").append(createHTMLforForm2);
+        $("#exportExcelExpressionSheets").html("Select Expression Sheets:");
+        $("#export-excel-expression-sheet-list").append(createHTMLforExpressionSheets(source));
+        $("#Export-Excel-Button-Back").on("click", () => {
+            handleExportExcelModal();
+            $("input[name=network-weights]").removeAttr("checked");
+            $("input[name=network-weights][value=" + weight + "]").prop("checked", true);
+            $("input[name=expressionSource]").removeAttr("checked");
+            $("input[name=expressionSource][value=" + source + "]").prop("checked", true);
+            $("#Export-Excel-Button-Continue").on("click", () => handleExportExcelButtonContinue());
+        });
+        $("#Export-Excel-Button").on("click", performExport("export-to-excel", "xlsx", weight, source));
+    };
+
+    var displayExportExcelModal = function () {
+        handleExportExcelModal();
+        $("#Export-Excel-Button-Continue").on("click", () => handleExportExcelButtonContinue());
         $("#exportExcelModal").modal("show");
     };
 
-    var performHandleExportButtonContinue = function () {
-        return function () {
-            handleExportExcelButtonContinue();
-        }
-    }
-    var performHandleExportButtonBack = function (weight, source) {
-        return function () {
-            $("#exportExcelForm2").remove();
-            $("#exportExcelFooter").remove();
-            $("#exportExcelQuestions-containter").append(createHTMLforForm1);
-            $("#exportExcelFooter-container").append(createHTMLforModalButtons(true));
-
-            $("#exportExcelNetwork").html("Select the edge type:");
-            $("#export-excel-weights-list").append(createHTMLforWeights());
-            $("#Export-Excel-Button-Continue").prop("value", "Continue");
-            $("#exportExcelExpressionSources").html("Select the Expression Data Source:");
-            $("#exportExcelExpressionSource-userInput").html(grnState.name);
-            $("#exportExcelExpressionSource-Barreto").html("Barreto_2012");
-            $("#exportExcelExpressionSource-Dahlquist").html("Dahlquist_2018");
-            $("#exportExcelExpressionSource-Kitagawa").html("Kitagawa_2002");
-            $("#exportExcelExpressionSource-Thorsen").html("Thorsen_2007");
-
-            $("input[name=network-weights]").removeAttr('checked');
-            $("input[name=network-weights][value=" + weight + "]").prop('checked', true);
-            $("input[name=expressionSource]").removeAttr('checked');
-            $("input[name=expressionSource][value=" + source + "]").prop('checked', true);
-            $("#Export-Excel-Button-Continue").on("click", performHandleExportButtonContinue());
-        }
-    }
 
     var performExcelExport = function () {
         return function () {
