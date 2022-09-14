@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 1/18/22
+modified: 9/14/22
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -65,7 +65,32 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
-                                    
+                                                                        <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v6_0_0Content" data-toggle="collapse">
+                                                    GRNsight v6.0.0
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v6_0_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v6.0.0 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>A new gene regulatory network backend database was implemented and menu and panels were re-organized to reflect the new feature.
+                                                        <ul>
+                                                          <li>In the Network menu, users can select one of the four demo networks, upload a network from a file, or (new) load a network from the database.  The database contains regulation information from the Saccharomyces Genome Database (SGD) obtained via Yeastmine.</li>
+                                                          <li>The user selects genes to include in the network and GRNsight generated the connected network according to SGD data.</li>
+                                                          <li>An Export menu now hold the Export functions.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>Bug Fix: If node coloring is disabled, it will remain disabled upon reload of the graph</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
