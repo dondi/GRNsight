@@ -424,16 +424,6 @@ export const upload = function () {
         $("#exportExcelExpressionSource-Thorsen").html("Thorsen_2007");
     };
 
-    // var handleExportButtonBack = function (weight, source) {
-    //     return function () {
-    //         handleExportExcelModal();
-    //         $("input[name=network-weights]").removeAttr("checked");
-    //         $("input[name=network-weights][value=" + weight + "]").prop("checked", true);
-    //         $("input[name=expressionSource]").removeAttr("checked");
-    //         $("input[name=expressionSource][value=" + source + "]").prop("checked", true);
-    //     };
-    // };
-
     var handleExportExcelButtonContinue = () => {
         const weight = $("input[name=network-weights]:checked")[0].value;
         const source = $("input[name=expressionSource]:checked")[0].value;
