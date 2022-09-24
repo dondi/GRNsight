@@ -16,7 +16,7 @@ if not os.path.exists('../script-results'):
     os.makedirs('../script-results')
 
 if not os.path.exists('../script-results/processed-expression/'):
-    os.makedirs('../script-results/networks')
+    os.makedirs('../script-results/processed-expression')
 
 # For simplicity, we assume that the program runs in the expression-database-folder.
 EXPRESSION_DATA_SOURCE = '../source-files/Expression 2020/ExpressionData.csv'
