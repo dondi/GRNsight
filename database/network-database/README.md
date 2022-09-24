@@ -41,7 +41,7 @@ This script (`generate_network.py`) is a two-for-one. It first uses the yeastmin
 
 The resulting network matrices are located in `script-results/networks` and the resulting processed loader files are located within `script-results/processed-loader-files`
 
-Make sure to have all dependencies installed beforehand or you will recieve errors. (pip3 install intermine, tzlocal, etc. [see file for all imports])
+Make sure to have all dependencies installed beforehand or you will recieve errors. (pip3 install intermine, tzlocal, etc. [see file for all imports]
 
 Usage: 
 ```
