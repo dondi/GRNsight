@@ -591,7 +591,6 @@ export const upload = function () {
         $("#exportExcelWorkbookSheet-All").on("click", ()=>{
             const allSheets = $("input[name=workbookSheets]");
             const selectAll = $("#exportExcelWorkbookSheet-All");
-            console.log(selectAll)
             for (let i in allSheets) {
                 if (typeof allSheets[i] === "object") {
                     allSheets[i].checked = selectAll[0].checked
