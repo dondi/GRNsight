@@ -532,7 +532,7 @@ var demoWorkbook1 = function (path, res, app) {
                 taxon_id: 559292
             }
         },
-        two_column_sheets: {
+        twoColumnSheets: {
             production_rates: {
                 data: {
                     ACE2: 0.2236,
@@ -2695,7 +2695,7 @@ var demoWorkbook2 = function (path, res, app) {
                 taxon_id: 559292
             }
         },
-        two_column_sheets: {
+        twoColumnSheets: {
             production_rates: {
                 data: {
                     ACE2: 0.2236,
@@ -4622,7 +4622,7 @@ var demoWorkbook3 = function (path, res, app) {
                 taxon_id: 559292
             }
         },
-        two_column_sheets: {},
+        twoColumnSheets: {},
         expression: {
             wt_log2_expression: {
                 errors: [],
@@ -5683,7 +5683,7 @@ var demoWorkbook4 = function (path, res, app) {
                 taxon_id: 559292
             }
         },
-        two_column_sheets: {},
+        twoColumnSheets: {},
         expression: {
             wt_log2_expression: {
                 errors: [],

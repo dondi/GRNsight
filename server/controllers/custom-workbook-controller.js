@@ -15,7 +15,7 @@ const createCustomWorkbook = (genesString, linksString) => {
     let genes = genesString.split(",").map(gene => {
         return {name: gene};
     });
-    let links = linksString.split(",").map( link => {
+    let links = linksString === "" ? [] : linksString.split(",").map( link => {
         link = link.split("->");
         return {
             source: parseInt(link[0]),

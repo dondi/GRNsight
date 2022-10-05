@@ -46,27 +46,26 @@ export const createNetwork = function () {
         return result;
     };
     const getFormattedDateTime = (date) => {
-        let current_date = date.getDate(),
-        current_month = date.getMonth() + 1,
-        current_year = date.getFullYear(),
-        current_hrs = date.getHours(),
-        current_mins = date.getMinutes(),
-        current_secs = date.getSeconds(),
-        current_datetime;
+        const currentYear = date.getFullYear();
+        let currentDate = date.getDate();
+        let currentMonth = date.getMonth() + 1;
+        let currentHrs = date.getHours();
+        let currentMins = date.getMinutes();
+        let currentSecs = date.getSeconds();
+        let currentDatetime;
 
-        // Add 0 before date, month, hrs, mins or secs if they are less than 0
-        current_date = current_date < 10 ? '0' + current_date : current_date;
-        current_month = current_month < 10 ? '0' + current_month : current_month;
-        current_hrs = current_hrs < 10 ? '0' + current_hrs : current_hrs;
-        current_mins = current_mins < 10 ? '0' + current_mins : current_mins;
-        current_secs = current_secs < 10 ? '0' + current_secs : current_secs;
+        // Add 0 before date, month, hrs, mins or secs if they are less than 10
+        currentDate = currentDate < 10 ? "0" + currentDate : currentDate;
+        currentMonth = currentMonth < 10 ? "0" + currentMonth : currentMonth;
+        currentHrs = currentHrs < 10 ? "0" + currentHrs : currentHrs;
+        currentMins = currentMins < 10 ? "0" + currentMins : currentMins;
+        currentSecs = currentSecs < 10 ? "0" + currentSecs : currentSecs;
 
-        // Current datetime
-        // String such as 2016-07-16T19:20:30
-        current_datetime = current_year + '-' + current_month + '-' + current_date + ' ' + current_hrs + ':' + current_mins + ':' + current_secs;
-        // 2022-09-23 17:10:26
-        return current_datetime
-    }
+        // Create Properly formatted datetime string like `2022-09-23 17:10:26`
+        currentDatetime = currentYear + "-" + currentMonth + "-" + currentDate + " " + currentHrs + ":"
+            + currentMins + ":" + currentSecs;
+        return currentDatetime;
+    };
     const createGeneButtons = function () {
         let result =  `<div id=\'selected-genes\'>
                         <p>Added genes go below! Click on a gene to remove it.</p>
@@ -145,12 +144,12 @@ containing "-", "_", and alpha-numeric characters only`);
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
                 Object.keys(response.sources)[0] : null;
-                for (let source in response.sources) {
-                    let i = source.indexOf(":")
-                    let date = new Date(source.substring(i+1))
-                    date = getFormattedDateTime(date)
-                    grnState.customWorkbook.sources[source].timestamp = date;
-                }
+            for (let source in response.sources) {
+                let i = source.indexOf(":");
+                let date = new Date(source.substring(i + 1));
+                date = getFormattedDateTime(date);
+                grnState.customWorkbook.sources[source].timestamp = date;
+            }
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);

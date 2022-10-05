@@ -158,14 +158,14 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
-    if (additionalData && additionalData.two_column_sheets) {
+    if (additionalData && additionalData.twoColumnSheets) {
         // Add errors and warnings from two column sheets
-        for (let sheet in additionalData.two_column_sheets) {
-            additionalData.two_column_sheets[sheet].errors.forEach(data => workbook.errors.push(data));
+        for (let sheet in additionalData.twoColumnSheets) {
+            additionalData.twoColumnSheets[sheet].errors.forEach(data => workbook.errors.push(data));
         }
 
-        for (let sheet in additionalData.two_column_sheets) {
-            additionalData.two_column_sheets[sheet].warnings.forEach(data => workbook.warnings.push(data));
+        for (let sheet in additionalData.twoColumnSheets) {
+            additionalData.twoColumnSheets[sheet].warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
@@ -266,7 +266,7 @@ var crossSheetInteractions = function (workbookFile) {
     workbook.networkOptimizedWeights = networks.networkOptimizedWeights;
     workbook.networkWeights = networks.networkWeights;
     workbook.meta = additionalData.meta;
-    workbook.two_column_sheets = additionalData.two_column_sheets;
+    workbook.twoColumnSheets = additionalData.twoColumnSheets;
     workbook.meta2 = additionalData.meta2;
     workbook.expression = expressionData.expression;
     return workbook;
