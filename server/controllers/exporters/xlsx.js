@@ -105,6 +105,7 @@ const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
     const exportNetworkType = workbook.exportNetworkType;
 
+
     Object.keys(workbook).forEach((key) => {
         switch (key) {
         case "network":
