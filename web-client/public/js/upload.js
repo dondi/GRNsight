@@ -5,12 +5,22 @@
 /* eslint-disable max-len */
 import { grnState } from "./grnstate";
 
+
 import {
     stopLoadingIcon,
     startLoadingIcon
 } from "./update-app";
 
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
+
+
+const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
+
+const isExpressionSheet = (sheetName) => {
+    return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
+        return sheetName.includes(suffix);
+    });
+};
 
 export const uploadState = {
     currentWorkbook: null,
@@ -95,42 +105,32 @@ export const upload = function () {
                 }
             }
         }
-        const exportSheets = {};
-        const finalExportSheets = {};
-        // const chosenExpression = {}
-
-        // Handle Network Sheets and Additional Sheets first
+        const finalExportSheets = {
+            networks: {},
+            expression: {},
+            "two_column_sheets": {}
+        };
+        // Collect all of the Sheets to be exported
         for (let sheet of chosenSheets) {
-            console.log(sheet);
-            //  Get the network sheets
             if (sheet === "network_optimized_weights") {
-                finalExportSheets[sheet] = grnState.workbook.networkOptimizedWeights;
+                finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
             } else if (sheet === "network") {
-                finalExportSheets[sheet] = grnState.workbook.network;
+                finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                finalExportSheets[sheet] = grnState.workbook.networkWeights;
+                finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
             } else if (sheet === "optimization_diagnostics") { // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
             } else if (sheet === "optimization_parameters") {
                 finalExportSheets[sheet] = grnState.workbook.meta;
+            } else if (isExpressionSheet(sheet)) {
+                finalExportSheets.expression[sheet] = source === "userInput" ? grnState.workbook.expression[sheet] : null;
+            } else {
+                finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets[sheet];
             }
-            // else if (sheet.indexOf(source) === -1 || sheet.indexOf(source) || sheet.indexOf(source)) {
-            //     // If it is not an expression sheet
-            //     finalExportSheets
-            // }
         }
 
         if (source === "userInput" && grnState.workbook.expression) {
-            // source is from user speadsheet
-            // parse through grnState expression sheets and collect the sheets to be exported
-            for (let sheet of chosenSheets) {
-                if (grnState.workbook.expression[sheet]) {
-                    exportSheets[sheet] = grnState.workbook.expression[sheet];
-                //     if (sheet === "network") {}
-                //     if (sheet ===)
-                }
-            }
-            grnState.workbook.exportExpression = exportSheets;
+            grnState.workbook.exportSheets = finalExportSheets;
             if (!$(this).parent().hasClass("disabled")) {
                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
@@ -156,26 +156,31 @@ export const upload = function () {
             $("#exportExcelModal").modal("hide");
         } else {
             // source is from database so lets query her up
-            for (let sheet of chosenSheets) {
+            for (let sheet in finalExportSheets.expression) {
                 startLoadingIcon();
                 queryExpressionDatabase({
-                    dataset: sheet,
+                    dataset: `${source}_${sheet.replace("_log2_expression", "")}`,
                     genes : grnState.workbook.genes
                 }).then(function (response) {
-                    exportSheets[sheet] = response;
-                    if (exportSheets[sheet]) {
+                    finalExportSheets.expression[sheet] = response;
+                    if (finalExportSheets.expression[sheet]) {
                         stopLoadingIcon();
-                        if (Object.keys(exportSheets).length === chosenSheets.length) {
+                        if (
+                            Object.keys(finalExportSheets.expression).filter(
+                                function (s) {
+                                    return finalExportSheets.expression[s] === null;
+                                }).length === 0
+                        ) {
                             // we have all of the sheets so lets initilize the export process
-                            Object.keys(exportSheets).forEach((sheet) => {
+                            Object.keys(finalExportSheets.expression).forEach((sheet) => {
                                 // make sure that the sheets we queried are populated with the correct data
-                                if (exportSheets[sheet].data && exportSheets[sheet].timePoints) {
-                                    // if the resulting query contains both the timePoint data and
-                                    // the gene data then export it. If not don't :)
-                                    finalExportSheets[sheet] = exportSheets[sheet];
+                                if (!(finalExportSheets.expression[sheet].data && finalExportSheets.expression[sheet].timePoints)) {
+                                    // if the resulting query doesn't contains both the timePoint data and
+                                    // the gene data then don't export it. If not don't :)
+                                    finalExportSheets.expression[sheet] = null;
                                 }
                             });
-                            grnState.workbook.exportExpression = finalExportSheets;
+                            grnState.workbook.exportSheets = finalExportSheets;
                             if (!$(this).parent().hasClass("disabled")) {
                                 var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
                                 var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
@@ -376,31 +381,31 @@ export const upload = function () {
             if (source === "Dahlquist_2018") {
                 result = result +  `
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"Dahlquist_2018_dcin5\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dcin5\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"dcin5_log2_expression\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dcin5\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Dahlquist_2018_dcin5\' id=\'exportExcelWorkbookSheet-Dahlquist_2018_dcin5-label\' class=\'export-checkbox-label\' >
                         dcin5_log2_expression
                     </label>
                 </li>
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Dahlquist_2018_dgln3\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dgln3\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"dgln3_log2_expression\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dgln3\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Dahlquist_2018_dgln3\' id=\'exportExcelWorkbookSheet-Dahlquist_2018_dgln3-label\' class=\'export-checkbox-label\' >
                         dgln3_log2_expression
                     </label>
                 </li>
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Dahlquist_2018_dhap4\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dhap4\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"dhap4_log2_expression\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dhap4\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Dahlquist_2018_dhap4\' id=\'exportExcelWorkbookSheet-Dahlquist_2018_dhap4-label\' class=\'export-checkbox-label\' >
                         dhap4_log2_expression
                     </label>
                 </li>
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Dahlquist_2018_dzap1\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dzap1\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"dzap1_log2_expression\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_dzap1\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Dahlquist_2018_dzap1\' id=\'exportExcelWorkbookSheet-Dahlquist_2018_dzap1-label\' class=\'export-checkbox-label\' >
                         dzap1_log2_expression
                     </label>
                 </li>
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Dahlquist_2018_wt\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_wt\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"wt_log2_expression\" id=\'exportExcelWorkbookSheet-Dahlquist_2018_wt\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Dahlquist_2018_wt\' id=\'exportExcelWorkbookSheet-Dahlquist_2018_wt-label\' class=\'export-checkbox-label\' >
                         wt_log2_expression
                     </label>
@@ -410,7 +415,7 @@ export const upload = function () {
                 // if the source is from a database
                 result = result +  `
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Kitagawa_2002_wt\" id=\'exportExcelWorkbookSheet-Kitagawa_2002_wt\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"wt_log2_expression\" id=\'exportExcelWorkbookSheet-Kitagawa_2002_wt\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Kitagawa_2002_wt\' id=\'exportExcelWorkbookSheet-Kitagawa_2002_wt-label\' class=\'export-checkbox-label\' >
                         wt_log2_expression
                     </label>
@@ -420,7 +425,7 @@ export const upload = function () {
                 // if the source is from a database
                 result = result +  `
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Thorsen_2007_wt\" id=\'exportExcelWorkbookSheet-Thorsen_2007_wt\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"wt_log2_expression\" id=\'exportExcelWorkbookSheet-Thorsen_2007_wt\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Thorsen_2007_wt\' id=\'exportExcelWorkbookSheet-Thorsen_2007_wt-label\' class=\'export-checkbox-label\' >
                         wt_log2_expression
                     </label>
@@ -430,7 +435,7 @@ export const upload = function () {
                 // if the source is from a database
                 result = result + `
                 <li class=\'export-excel-workbook-sheet-option\'>
-                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"Barreto_2012_wt\" id=\'exportExcelWorkbookSheet-Barreto_2012_wt\' class=\'export-checkbox\' />
+                    <input type=\'checkbox\' checked=\"true\" name=\'workbookSheets\' value=\"wt_log2_expression\" id=\'exportExcelWorkbookSheet-Barreto_2012_wt\' class=\'export-checkbox\' />
                     <label for=\'exportExcelWorkbookSheet-Barreto_2012_wt\' id=\'exportExcelWorkbookSheet-Barreto_2012_wt-label\' class=\'export-checkbox-label\' >
                         wt_log2_expression
                     </label>
