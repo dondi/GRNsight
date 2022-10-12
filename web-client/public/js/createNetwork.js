@@ -193,7 +193,11 @@ containing "-", "_", and alpha-numeric characters only`);
                 let genes = grnState.customWorkbook.genes;
                 let links = grnState.customWorkbook.links;
                 let genesAmount = Object.keys(genes).length;
-                let edgesAmount = Object.keys(links).length;
+                let edgesAmount = Object.entries(links).flatMap( (entry) => {
+                    return entry[1].map((target) => {
+                        return [entry[0], target];
+                    });
+                }).length;
                 if (edgesAmount > 100) {
                     alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
  ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
