@@ -144,11 +144,14 @@ containing "-", "_", and alpha-numeric characters only`);
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
                 Object.keys(response.sources)[0] : null;
+            let i;
+            let dateTime;
+            let timestamp;
             for (let source in response.sources) {
-                let i = source.indexOf(":");
-                let date = new Date(source.substring(i + 1));
-                date = getFormattedDateTime(date);
-                grnState.customWorkbook.sources[source].timestamp = date;
+                i = source.indexOf(":");
+                dateTime = new Date(source.substring(i + 1));
+                timestamp = getFormattedDateTime(dateTime);
+                grnState.customWorkbook.sources[source].timestamp = timestamp;
             }
         }).catch(function (error) {
             console.log(error.stack);
