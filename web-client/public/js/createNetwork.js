@@ -144,9 +144,6 @@ containing "-", "_", and alpha-numeric characters only`);
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
                 Object.keys(response.sources)[0] : null;
-            let i;
-            let dateTime;
-            let timestamp;
             for (let source in response.sources) {
                 const i = source.indexOf(":");
                 const dateTime = new Date(source.substring(i + 1));
