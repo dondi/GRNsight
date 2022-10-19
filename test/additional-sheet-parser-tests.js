@@ -103,7 +103,7 @@ describe("additional-sheet-parser", function () {
             var workbook = xlsx.parse(__dirname + "/../test-files/spreadsheet-controller-test-files/" +
             "2_column_data_format_test.xlsx");
             var data = parseAdditionalSheets(workbook);
-            assert(data["test"]["degradation_rates"], {
+            assert(data.twoColumnSheets["degradation_rates"], {
                 "ACE2": 0.1118,
                 "ASH1": 0.2166,
                 "CIN5": 0.1005,

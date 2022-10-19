@@ -87,94 +87,70 @@ const isExpressionSheet = (sheetName) => {
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
     Object.keys(expressions).forEach((expression) => {
-        let expressionName = expression;
-        if (!isExpressionSheet(expression)) {
-            expressionName = expression + "_expression";
+        if (expressions[expression] !== null) {
+            let expressionName = expression;
+            if (!isExpressionSheet(expression)) {
+                expressionName = expression + "_expression";
+            }
+            const builtSheet = { name: expressionName, data: [] };
+            Object.keys(expressions[expression]["data"]).forEach((key) => {
+                const expressionData = expressions[expression]["data"][key];
+                builtSheet["data"].push([key, ...expressionData]);
+            });
+            builtExpressionSheets.push(builtSheet);
         }
-        const builtSheet = { name: expressionName, data: [] };
-        Object.keys(expressions[expression]["data"]).forEach((key) => {
-            const expressionData = expressions[expression]["data"][key];
-            builtSheet["data"].push([key, ...expressionData]);
-        });
-        builtExpressionSheets.push(builtSheet);
     });
     return builtExpressionSheets;
 };
 
 const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
-    const exportNetworkType = workbook.exportNetworkType;
 
-    Object.keys(workbook).forEach((key) => {
-        switch (key) {
-        case "network":
-            if (Object.keys(workbook.network).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": "network",
-                        "data": buildNetworkSheet(workbook.network.genes, workbook.network.links)
-                    }
-                );
-            }
-            break;
-        case "networkOptimizedWeights":
-            if (exportNetworkType === "weighted") {
-                if (Object.keys(workbook.networkOptimizedWeights).length > 0) {
+    Object.keys(workbook.exportSheets).forEach((type) => {
+        switch (type) {
+        case "networks":
+            for (let network in workbook.exportSheets.networks) {
+                if (Object.keys(workbook.exportSheets.networks[network]).length > 0) {
                     resultSheet.push(
                         {
-                            "name": "network_optimized_weights",
-                            "data": buildNetworkSheet(workbook.networkOptimizedWeights.genes,
-                                workbook.networkOptimizedWeights.links)
+                            "name": network,
+                            "data": buildNetworkSheet(workbook.network.genes, workbook.network.links)
                         }
                     );
                 }
             }
             break;
-        case "networkWeights":
-            if (Object.keys(workbook.networkWeights).length > 0) {
+        case "optimization_parameters":
+            if (Object.keys(workbook.exportSheets[type]).length > 0) {
                 resultSheet.push(
                     {
-                        "name": "network_weights",
-                        "data": buildNetworkSheet(workbook.networkWeights.genes, workbook.networkWeights.links)
+                        "name": type,
+                        "data": buildMetaSheet(workbook.exportSheets[type])
                     }
                 );
             }
             break;
-        case "meta":
-            if (Object.keys(workbook.meta).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": "optimization_parameters",
-                        "data": buildMetaSheet(workbook.meta)
-                    }
-                );
-            }
-            break;
-        case "meta2":
+        case "optimization_diagnostics":
             // Optimization Diagnostics sheet not properly  implemented yet.
-            if (Object.keys(workbook.meta2).length > 0) {
+            if (Object.keys(workbook.exportSheets[type]).length > 0) {
                 resultSheet.push(
                     {
                         "name": "optimization_diagnostics",
-                        "data": buildMeta2Sheet(workbook.meta2)
+                        "data": buildMeta2Sheet(workbook.exportSheets[type])
                     }
                 );
             }
             break;
-        case "test":
-            resultSheet.push(...buildTestSheets(workbook[key]));
+        case "two_column_sheets":
+            resultSheet.push(...buildTestSheets(workbook.exportSheets[type]));
             break;
         case "expression":
-            // resultSheet.push(...buildExpressionSheets(workbook[key]));
-            break;
-        case "exportExpression":
-            resultSheet.push(...buildExpressionSheets(workbook[key]));
+            resultSheet.push(...buildExpressionSheets(workbook.exportSheets.expression));
             break;
         default:
             break;
         }
     });
-
     return resultSheet;
 };
 

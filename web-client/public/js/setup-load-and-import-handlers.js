@@ -137,6 +137,7 @@ export const setupLoadAndImportHandlers = grnState => {
                     }
                 }
                 grnState.workbook = workbook;
+                grnState.workbook.expressionNames = Object.keys(workbook.expression);
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
@@ -167,9 +168,11 @@ export const setupLoadAndImportHandlers = grnState => {
         $(demoClass).on("click", () => {
             loadDemo(demoPath, demoClass, demoName);
         });
-
         $("#demoSourceDropdown").on("change", () => {
-            loadDemo(demoPath, demoClass, demoName);
+            const selected = `.${$("#demoSourceDropdown").val()}`;
+            if (selected === demoClass) {
+                loadDemo(demoPath, demoClass, demoName);
+            }
         });
     };
 

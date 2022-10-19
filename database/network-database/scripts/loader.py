@@ -57,8 +57,8 @@ This function Loads the Network Matrix into the database
 """
 def LOAD_NETWORK():
     print('COPY spring2022_network.network (regulator_gene_id, target_gene_id, taxon_id, time_stamp, source) FROM stdin;')
-    GENE_SOURCE = '../script-results/processed-loader-files/network.csv'
-    with open(GENE_SOURCE, 'r+') as f:
+    NETWORK_SOURCE = '../script-results/processed-loader-files/network.csv'
+    with open(NETWORK_SOURCE, 'r+') as f:
         reader = csv.reader(f)
         row_num = 0
         for row in reader:
