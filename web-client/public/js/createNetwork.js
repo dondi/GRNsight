@@ -148,9 +148,9 @@ containing "-", "_", and alpha-numeric characters only`);
             let dateTime;
             let timestamp;
             for (let source in response.sources) {
-                i = source.indexOf(":");
-                dateTime = new Date(source.substring(i + 1));
-                timestamp = getFormattedDateTime(dateTime);
+                const i = source.indexOf(":");
+                const dateTime = new Date(source.substring(i + 1));
+                const timestamp = getFormattedDateTime(dateTime);
                 grnState.customWorkbook.sources[source].timestamp = timestamp;
             }
         }).catch(function (error) {
