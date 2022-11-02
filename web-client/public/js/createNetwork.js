@@ -45,27 +45,6 @@ export const createNetwork = function () {
         `;
         return result;
     };
-    const getFormattedDateTime = (date) => {
-        const currentYear = date.getFullYear();
-        let currentDate = date.getDate();
-        let currentMonth = date.getMonth() + 1;
-        let currentHrs = date.getHours();
-        let currentMins = date.getMinutes();
-        let currentSecs = date.getSeconds();
-        let currentDatetime;
-
-        // Add 0 before date, month, hrs, mins or secs if they are less than 10
-        currentDate = currentDate < 10 ? "0" + currentDate : currentDate;
-        currentMonth = currentMonth < 10 ? "0" + currentMonth : currentMonth;
-        currentHrs = currentHrs < 10 ? "0" + currentHrs : currentHrs;
-        currentMins = currentMins < 10 ? "0" + currentMins : currentMins;
-        currentSecs = currentSecs < 10 ? "0" + currentSecs : currentSecs;
-
-        // Create Properly formatted datetime string like `2022-09-23 17:10:26`
-        currentDatetime = currentYear + "-" + currentMonth + "-" + currentDate + " " + currentHrs + ":"
-            + currentMins + ":" + currentSecs;
-        return currentDatetime;
-    };
     const createGeneButtons = function () {
         let result =  `<div id=\'selected-genes\'>
                         <p>Added genes go below! Click on a gene to remove it.</p>
@@ -142,14 +121,8 @@ containing "-", "_", and alpha-numeric characters only`);
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
             $("#createNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
-            grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
+            grnState.customWorkbook.source = Object.keys(response.sources).length >= 1 ?
                 Object.keys(response.sources)[0] : null;
-            for (let source in response.sources) {
-                const i = source.indexOf(":");
-                const dateTime = new Date(source.substring(i + 1));
-                const timestamp = getFormattedDateTime(dateTime);
-                grnState.customWorkbook.sources[source].timestamp = timestamp;
-            }
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);

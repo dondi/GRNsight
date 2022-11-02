@@ -19,6 +19,36 @@ const buildExpressionURL = function (selection, genes) {
     baseQuery;
 };
 
+
+const buildNetworkGenesQuery = (genes) => {
+    let result = "";
+    if (Array.isArray(genes)) {
+        for (let gene of genes) {
+            result += `${gene},`;
+        }
+    } else {
+        for (let gene in genes) {
+            result += `${gene},`;
+        }
+    }
+    return result.substring(0, result.length - 1);
+};
+
+
+const buildAltExpressionURL = function (queryType, queryInfo) {
+    let baseQuery = `expressiondb?type=${queryType}`;
+    if (queryInfo !== null) {
+        for (let header in queryInfo) {
+            if (header === "genes") {
+                baseQuery += `&${header}=${buildNetworkGenesQuery(queryInfo[header])}`;
+            } else {
+                baseQuery += `&${header}=${queryInfo[header]}`;
+            }
+        }
+    }
+    return baseQuery;
+};
+
 const responseExpressionData = (formData, queryURL) => {
     return new Promise(function (resolve) {
         const uploadRoute = queryURL;
@@ -40,19 +70,13 @@ const responseExpressionData = (formData, queryURL) => {
 };
 
 const queryExpressionDatabase = (query) => {
-    let queryURL = buildExpressionURL({dataset: query.dataset}, query.genes);
+    let queryURL = query.dataset ?
+        buildExpressionURL({dataset: query.dataset}, query.genes) :
+        buildAltExpressionURL(query.type, query.info);
     return responseExpressionData("", queryURL);
 };
 
 // Network DB Access Functions
-
-const buildNetworkGenesQuery = (genes) => {
-    let result = "";
-    for (let gene in genes) {
-        result += `${gene},`;
-    }
-    return result.substring(0, result.length - 1);
-};
 
 const buildNetworkURL = function (queryType, queryInfo) {
     let baseQuery = `networkdb?type=${queryType}`;
@@ -121,4 +145,4 @@ const uploadCustomWorkbook = (workbook, grnState) => {
 };
 
 
-export {queryExpressionDatabase, queryNetworkDatabase, uploadCustomWorkbook};
+export { queryExpressionDatabase, queryNetworkDatabase, uploadCustomWorkbook };

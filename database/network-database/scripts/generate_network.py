@@ -8,8 +8,6 @@ import re
 import sys
 import os
 import datetime
-import pytz
-import tzlocal
 
 # Get Network Data from Yeastmine
 
@@ -142,21 +140,8 @@ regulator_to_regulator_file.close()
 # Source Table
 
 SOURCE_DESTINATION = '../script-results/processed-loader-files/source.csv'
-dt = datetime.datetime.now()
+timestamp = datetime.datetime.now(datetime.timezone.utc)
 
-year = dt.year
-month = f'{dt.month}'
-if len(month) == 1:
-    month = "0" + month
-day = f'{dt.day}'
-if len(day) == 1:
-    day = "0" + day
-hour = dt.hour
-minute = dt.minute
-second = dt.second
-
-
-timestamp = f'{year}-{month}-{day} {hour}:{minute}:{second}'
 source = "YeastMine - Saccharomyces Genome Database"
 
 source_file = open(SOURCE_DESTINATION, 'w')
