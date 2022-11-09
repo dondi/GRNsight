@@ -556,7 +556,7 @@ export const upload = function () {
 
     const createHTMLforModalButtons = (isInitialModal) => {
         return `
-            <div id=\'exportExcelFooter\'>
+            <div id=\'exportExcelFooter\' class=\'modal-footer-div\'>
                 ${ !isInitialModal ?
                     `<div>
                         <input type=\'button\' class=\'btn btn-default\' id=\'Export-Excel-Button-Back\' value=\'Back\'  />

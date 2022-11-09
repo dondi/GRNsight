@@ -38,7 +38,7 @@ const buildNetworkGenesQuery = function (geneString) {
 
 };
 
-const buildCreateNetworkQuery = function (genes, source, timestamp) {
+const buildGenerateNetworkQuery = function (genes, source, timestamp) {
     return `SELECT DISTINCT regulator_gene_id, target_gene_id FROM
  spring2022_network.network WHERE
  time_stamp='${timestamp}' AND source='${source}' AND
@@ -51,8 +51,8 @@ const buildQueryByType = function (queryType, query) {
         return buildNetworkSourceQuery();
     case "NetworkGeneFromSource":
         return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);
-    case "CreateNetwork":
-        return buildCreateNetworkQuery(query.genes, query.source, query.timestamp);
+    case "GenerateNetwork":
+        return buildGenerateNetworkQuery(query.genes, query.source, query.timestamp);
     }
 };
 
@@ -71,7 +71,7 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
         JSONOutput.displayGeneId = totalOutput.length > 0 ? totalOutput[0].display_gene_id : null;
         JSONOutput.geneId = totalOutput.length > 0 ? totalOutput[0].gene_id : null;
         return JSONOutput;
-    case "CreateNetwork":
+    case "GenerateNetwork":
         JSONOutput.links = {};
         for (let connection of totalOutput) {
             if (JSONOutput.links[connection.regulator_gene_id] === undefined) {

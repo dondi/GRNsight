@@ -1,5 +1,4 @@
 import {responseCustomWorkbookData} from "../setup-load-and-import-handlers";
-
 // Expression DB Access Functions
 const buildExpressionTimepointsString = function (selection) {
     let timepoints = "";
@@ -8,12 +7,12 @@ const buildExpressionTimepointsString = function (selection) {
 };
 const buildExpressionGeneQuery = function (workbookGenes) {
     let genes = "";
-    workbookGenes.forEach(x => genes += (x.name + ","));
+    workbookGenes.forEach(x => genes += (x.name + ",")); 
     return genes.substring(0, genes.length - 1);
 };
 
 const buildExpressionURL = function (selection, genes) {
-    const baseQuery = `expressiondb?dataset=${selection.dataset}&genes=${buildExpressionGeneQuery(genes)}`;
+    const baseQuery = `expressiondb?type=ExpressionData&dataset=${selection.dataset}&genes=${buildExpressionGeneQuery(genes)}`;
     return selection.timepoints ?
     `${baseQuery}&timepoints=${buildExpressionTimepointsString(selection)}` :
     baseQuery;
@@ -23,17 +22,13 @@ const buildExpressionURL = function (selection, genes) {
 const buildNetworkGenesQuery = (genes) => {
     let result = "";
     if (Array.isArray(genes)) {
-        for (let gene of genes) {
-            result += `${gene},`;
-        }
+        result += genes.join(",")
     } else {
-        for (let gene in genes) {
-            result += `${gene},`;
-        }
+        result += Object.keys(genes).join(",")
     }
     return result.substring(0, result.length - 1);
 };
-
+  
 
 const buildAltExpressionURL = function (queryType, queryInfo) {
     let baseQuery = `expressiondb?type=${queryType}`;
@@ -47,6 +42,20 @@ const buildAltExpressionURL = function (queryType, queryInfo) {
         }
     }
     return baseQuery;
+
+    const searchParams = new URLSearchParams('expressiondb?');
+    searchParams.append("type", queryType)
+    if (queryInfo !== null) {
+        for (let header in queryInfo) {
+            if (header === "genes") {
+                searchParams.append(header, buildNetworkGenesQuery(queryInfo[header]));
+            } else {
+                searchParams.append(header, queryInfo[header]);
+            }
+        }
+    }
+    console.log(searchParams.toString())
+    return searchParams.toString()
 };
 
 const responseExpressionData = (formData, queryURL) => {

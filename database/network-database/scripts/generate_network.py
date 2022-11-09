@@ -95,7 +95,7 @@ if not os.path.exists('../script-results/processed-loader-files'):
 
 # Files to be generated
 
-# Create Networks
+# Generate Networks
 
 REGULATORS_TO_TARGETS_MATRIX = '../script-results/networks/regulators_to_targets.csv'
 REGULATORS_TO_REGULATORS_MATRIX = '../script-results/networks/regulators_to_regulators.csv'

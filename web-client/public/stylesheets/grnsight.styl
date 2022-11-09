@@ -196,13 +196,16 @@ nav.navbar.navbar-default
   display: flex
   width: 102.5%
 
-.createNetworkContainer
+.generateNetworkContainer
   padding: 10px 0px
   display: flex
 #panel-gene-search-bar
   width: calc(100% + 22px)
-#createNetworkButton
+#generateNetworkButton
   width: 100%
+
+.NetworkGenesForm
+  padding-left: 0px
 
 .buttonPairContainer > input[type=button], .buttonPairContainer > button
   padding: 6px 10px
@@ -481,6 +484,10 @@ path.mousezone
 .network-source-section
   margin-left: 12px
 
+
+#network-source-label
+  margin-left: 0px
+
 .long-sub-divider
   border-top: 1px dotted #bbb
   margin: 0px 0px 10px
@@ -554,7 +561,6 @@ path.mousezone
   padding: 10px 5px
 
 #submit-network
-  margin-top: 20px
 .custom-network-gene-display-id
   font-size: 14px
 
@@ -571,13 +577,16 @@ path.mousezone
   font-weight: bold
   font-size: 14px
 
+.network-source-label
+  margin-left: 0px
+
 .hidden-button
   display:none
 
-#exportExcelFooter
+.modal-footer-div
   display: flex
 
-#exportExcelFooter >div:last-of-type {
+.modal-footer-div >div:last-of-type {
   margin-left: auto;
 }
 

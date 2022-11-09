@@ -2,7 +2,7 @@ import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 
-export const createNetwork = function () {
+export const generateNetwork = function () {
     const GENE_EXCEPTIONS = {
         "DUR1.2" : "DUR12",
         "IMP2'" : "IMP21",
@@ -13,11 +13,11 @@ export const createNetwork = function () {
     };
     const createHTMLforForm = (sources) => {
         let result =  `
-            <div id=\'createNetworkFormContainer\' '>
-                <h2 id=\'createNetwork\'>Create Network</h2>
-        <div class=\'form-group\'>
-            <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
-            <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
+            <div id=\'generateNetworkFormContainer\' '>
+                <h2 id=\'generateNetwork\'>Generate Network</h2>
+                <div class=\'form-group\'>
+                    <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
+                    <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
             `;
         if (sources.length !== 1) {
             result += "<option value=\'none\' selected=\'true\' disabled>Select Network Source</option>";
@@ -35,7 +35,7 @@ export const createNetwork = function () {
                    <p>Warning: changing network source will remove all current genes in network</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <form id=\'getNetworkGenesForm\'>
+            <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
                 <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
                 <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
                 <button id=\'enter-search\' type=\'submit\' class=\'search-button btn btn-default\'>
@@ -45,10 +45,7 @@ export const createNetwork = function () {
         </div>
         <div id=\'selected-genes-container\'>
             <div id=\'selected-genes\'>
-                <p>Added genes go here! Click on a gene to remove it</p>
-            </div>
-        </div>
-        <button id=\'submit-network\' class=\'btn btn-default\'>Create Network</input>
+                <p>Added genes go here! Click on a gene to remove it.</p>
             </div>
         `;
         return result;
@@ -130,8 +127,21 @@ containing "-", "_", and alpha-numeric characters only`);
         }
     };
 
-    const displayCreateNetworkModal = function () {
-        $("#createNetworkFormContainer").remove();
+    const createHTMLforModalButtons = () => {
+        return `
+            <div id=\'generateNetworkFooter\' class=\'modal-footer-div\'>
+                <div>
+                    <input type=\'button\' class=\'btn btn-default\' id=\'submit-network\' value=\'Generate Network\'  />
+                    <input type=\'button\' class=\'btn btn-default\' data-dismiss=\'modal\' value=\'Cancel\'  />
+                </div>
+            </div>
+        `;
+    };
+
+    const displayGenerateNetworkModal = function () {
+        $("#generateNetworkFormContainer").remove();
+        $("#generateNetworkFooter").remove();
+        $("#generateNetworkFooter-container").append(createHTMLforModalButtons());
         grnState.customWorkbook = {
             genes : {},
             source : null,
@@ -139,7 +149,7 @@ containing "-", "_", and alpha-numeric characters only`);
         };
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
-            $("#createNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length >= 1 ?
                 Object.keys(response.sources)[0] : null;
@@ -154,7 +164,7 @@ containing "-", "_", and alpha-numeric characters only`);
     $("body").on("click", CREATE_NETWORK_CLASS, function (event) {
         event.preventDefault();
         event.stopPropagation();
-        displayCreateNetworkModal();
+        displayGenerateNetworkModal();
     });
 
     $("body").on("change", "#network-source", function (event) {
@@ -174,7 +184,7 @@ containing "-", "_", and alpha-numeric characters only`);
 
             let source = grnState.customWorkbook.source;
             let headers = {
-                type:"CreateNetwork",
+                type:"GenerateNetwork",
                 info: {
                     genes: grnState.customWorkbook.genes,
                     source:grnState.customWorkbook.sources[source].source,

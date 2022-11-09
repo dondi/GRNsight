@@ -96,17 +96,14 @@ const buildExpressionDataQuery = function (dataset, timepoints, genes) {
 
 
 const buildExpressionQuery = function (query) {
-    switch (query.type) {
-    case "DegradationRates":
-        return buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes);
-    case "ProductionRates":
-        return buildExpressionProductionDegradationRatesQuery("production_rate", query.genes);
-    case undefined:
-        // This is the original expression database call.
-        // Will restructure code so that it follows the standardized query type, query data structure that all
-        // other queries use
-        return buildExpressionDataQuery(query.dataset, query.timepoints, query.genes);
+    const expressionQueries = {
+        "DegradationRates": buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
+        "ProductionRates" : buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
+        "ExpressionData" : buildExpressionDataQuery(query.dataset, query.timepoints, query.genes)
     }
+    if (Object.keys(expressionQueries).includes(query.type)) {
+        return expressionQueries[query.type]
+    } 
 };
 
 const listExpressionGeneData = function (gene, totalOutput) {
@@ -144,19 +141,17 @@ module.exports = {
         return sequelize.query(buildExpressionQuery(req.query),
                 { type: sequelize.QueryTypes.SELECT })
                     .then(function (stdname) {
+                        convertToJSON = {
+                            "DegradationRates" : convertProductionDegradationRateToJSON(stdname, "degradation_rate"),
+                            "ProductionRates" : convertProductionDegradationRateToJSON(stdname, "production_rate"),
+                            "ExpressionData" : convertExpressionToJSON(
+                                stdname, req.query.dataset, expressionTimepointsByDataset[req.query.dataset], req.query.genes.split(","))
+                        }
                         const type = req.query.type;
-                        if (type === "DegradationRates") {
-                            return res.send(convertProductionDegradationRateToJSON(stdname, "degradation_rate"));
-
-                        } else if (type === "ProductionRates") {
-                            return res.send(convertProductionDegradationRateToJSON(stdname, "production_rate"));
-
-                        } else if (type === undefined) {
-                            let dataset = req.query.dataset;
-                            let geneList = req.query.genes.split(",");
-                            let response = convertExpressionToJSON(
-                                stdname, dataset, expressionTimepointsByDataset[dataset], geneList);
-                            return res.send(response);
+                        if (Object.keys(convertToJSON).includes(type)) {
+                            return res.send(convertToJSON[type])
+                        } else {
+                            return res.send(500, { errors: "Something went wrong."});  
                         }
                     });
     }
