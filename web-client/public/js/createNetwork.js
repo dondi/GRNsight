@@ -3,6 +3,14 @@ import { queryNetworkDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 
 export const createNetwork = function () {
+    const GENE_EXCEPTIONS = {
+        "DUR1.2" : "DUR12",
+        "IMP2'" : "IMP21",
+        "ARG5,6" : "ARG56",
+        "ADE5,7" : "ADE5,7",
+        "MF(ALPHA)1" : "YPL187W",
+        "MF(ALPHA)2" : "YGL089C"
+    };
     const createHTMLforForm = (sources) => {
         let result =  `
             <div id=\'createNetworkFormContainer\' '>
@@ -78,11 +86,21 @@ export const createNetwork = function () {
         }
     };
 
+    const validGene = function (gene) {
+        if (/^[A-Z0-9_-]{1,12}$/.test(gene)) {
+            return gene;
+        }
+        if (Object.keys(GENE_EXCEPTIONS).includes(gene)) {
+            return GENE_EXCEPTIONS[gene];
+        }
+        return "";
+    };
     const addGene = function () {
-        let gene = `${$("#network-search-bar").val()}`.toUpperCase();
+        const searchGene = `${$("#network-search-bar").val()}`.toUpperCase();
         $("#network-search-bar").val("");
-        if (!(/^[A-Z0-9_-]{1,12}$/.test(gene))) {
-            alert(`Gene: ${gene} is not to GRNsight specifications. Genes must be 12 characters or less,
+        const gene = validGene(searchGene);
+        if (gene === "") {
+            alert(`Gene: ${searchGene} is not to GRNsight specifications. Genes must be 12 characters or less,
 containing "-", "_", and alpha-numeric characters only`);
         } else {
             let source = grnState.customWorkbook.source;
@@ -99,7 +117,9 @@ containing "-", "_", and alpha-numeric characters only`);
                     grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
                     displayCurrentGenes();
                 } else {
-                    alert(`Gene: ${gene} was not found in this database. Please check for any typos and try again.`);
+                    alert(
+                        `Gene: ${searchGene}was not found in this database. Please check for any typos and try again.`
+                    );
                 }
             }).catch(function (error) {
                 console.log(error.stack);
