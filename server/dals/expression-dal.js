@@ -100,10 +100,10 @@ const buildExpressionQuery = function (query) {
         "DegradationRates": buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
         "ProductionRates" : buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
         "ExpressionData" : buildExpressionDataQuery(query.dataset, query.timepoints, query.genes)
-    }
+    };
     if (Object.keys(expressionQueries).includes(query.type)) {
-        return expressionQueries[query.type]
-    } 
+        return expressionQueries[query.type];
+    }
 };
 
 const listExpressionGeneData = function (gene, totalOutput) {
@@ -141,17 +141,21 @@ module.exports = {
         return sequelize.query(buildExpressionQuery(req.query),
                 { type: sequelize.QueryTypes.SELECT })
                     .then(function (stdname) {
-                        convertToJSON = {
+                        const convertToJSON = {
                             "DegradationRates" : convertProductionDegradationRateToJSON(stdname, "degradation_rate"),
                             "ProductionRates" : convertProductionDegradationRateToJSON(stdname, "production_rate"),
                             "ExpressionData" : convertExpressionToJSON(
-                                stdname, req.query.dataset, expressionTimepointsByDataset[req.query.dataset], req.query.genes.split(","))
-                        }
+                                stdname,
+                                req.query.dataset,
+                                expressionTimepointsByDataset[req.query.dataset],
+                                req.query.genes.split(",")
+                            )
+                        };
                         const type = req.query.type;
                         if (Object.keys(convertToJSON).includes(type)) {
-                            return res.send(convertToJSON[type])
+                            return res.send(convertToJSON[type]);
                         } else {
-                            return res.send(500, { errors: "Something went wrong."});  
+                            return res.send(500, { errors: "Something went wrong."});
                         }
                     });
     }

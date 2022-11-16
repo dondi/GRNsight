@@ -170,8 +170,11 @@ export const upload = function () {
             for (let sheet in finalExportSheets.expression) {
                 startLoadingIcon();
                 queryExpressionDatabase({
+                    type:"ExpressionData",
                     dataset: `${source}_${sheet.replace("_log2_expression", "")}`,
-                    genes : grnState.workbook.genes
+                    genes : grnState.workbook.genes.map(x => {
+                        return x.name;
+                    }).join(",")
                 }).then(function (response) {
                     finalExportSheets.expression[sheet] = response;
                     if (finalExportSheets.expression[sheet]) {
@@ -283,7 +286,12 @@ export const upload = function () {
                         genes.push(g.name);
                     }
 
-                    queryExpressionDatabase({type:twoColumnSheetType[sheet], info:{genes:genes}}).then(function (response) {
+                    queryExpressionDatabase({
+                        type:twoColumnSheetType[sheet],
+                        genes:grnState.workbook.genes.map(x => {
+                            return x.name;
+                        }).join(",")
+                    }).then(function (response) {
                         result.data = response;
                         finalExportSheets.two_column_sheets[sheet] = result;
                         if (!Object.values(finalExportSheets.two_column_sheets).includes(null)) {

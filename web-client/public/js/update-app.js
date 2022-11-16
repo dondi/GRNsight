@@ -372,8 +372,11 @@ const enableNodeColoringUI = function () {
 const loadExpressionDatabase = function (isTopDataset) {
     startLoadingIcon();
     queryExpressionDatabase({
+        type:"ExpressionData",
         dataset: isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset,
-        genes : grnState.workbook.genes
+        genes : grnState.workbook.genes.map(x => {
+            return x.name;
+        }).join(",")
     }).then(function (response) {
         if (isTopDataset) {
             grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;

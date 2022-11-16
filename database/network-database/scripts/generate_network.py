@@ -143,9 +143,10 @@ SOURCE_DESTINATION = '../script-results/processed-loader-files/source.csv'
 timestamp = datetime.datetime.now(datetime.timezone.utc)
 
 source = "YeastMine - Saccharomyces Genome Database"
+display_name = "Yeastmine - SGD"
 
 source_file = open(SOURCE_DESTINATION, 'w')
-headers = f'Timestamp\tSource\n{timestamp}\t{source}'
+headers = f'Timestamp\tSource\tDisplay Name\n{timestamp}\t{source}\t{display_name}'
 source_file.write(f'{headers}\n')
 source_file.close()
 

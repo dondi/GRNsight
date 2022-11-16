@@ -32,7 +32,7 @@ export const generateNetwork = function () {
             `;
         }
         result += `</select>
-                   <p>Warning: changing network source will remove all current genes in network</p>
+                   <p>Warning: changing network source will clear the list of genes below.</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
             <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
@@ -103,11 +103,9 @@ containing "-", "_", and alpha-numeric characters only`);
             let source = grnState.customWorkbook.source;
             let headers = {
                 type:"NetworkGeneFromSource",
-                info: {
-                    gene: gene,
-                    source:grnState.customWorkbook.sources[source].source,
-                    timestamp:grnState.customWorkbook.sources[source].timestamp
-                }
+                gene: gene,
+                source:grnState.customWorkbook.sources[source].source,
+                timestamp:grnState.customWorkbook.sources[source].timestamp
             };
             queryNetworkDatabase(headers).then(function (response) {
                 if (response.geneId !== null && response.displayGeneId !== null) {
@@ -131,7 +129,7 @@ containing "-", "_", and alpha-numeric characters only`);
         return `
             <div id=\'generateNetworkFooter\' class=\'modal-footer-div\'>
                 <div>
-                    <input type=\'button\' class=\'btn btn-default\' id=\'submit-network\' value=\'Generate Network\'  />
+                    <input type=\'button\' class=\'btn btn-default\' id=\'submit-network\' value=\'Generate Network\'/>
                     <input type=\'button\' class=\'btn btn-default\' data-dismiss=\'modal\' value=\'Cancel\'  />
                 </div>
             </div>
@@ -148,7 +146,7 @@ containing "-", "_", and alpha-numeric characters only`);
             sources : null
         };
     // get sources from database
-        queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
+        queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
             $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length >= 1 ?
@@ -181,22 +179,21 @@ containing "-", "_", and alpha-numeric characters only`);
             alert(`GRNsight is only capable of handling 75 genes at most. Your proposed network contains
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
-
-            let source = grnState.customWorkbook.source;
-            let headers = {
+            const genes = Object.keys(grnState.customWorkbook.genes).map(g => {
+                return grnState.customWorkbook.genes[g];
+            });
+            const source = grnState.customWorkbook.source;
+            const headers = {
                 type:"GenerateNetwork",
-                info: {
-                    genes: grnState.customWorkbook.genes,
-                    source:grnState.customWorkbook.sources[source].source,
-                    timestamp:grnState.customWorkbook.sources[source].timestamp
-                }
+                genes: genes.join(","),
+                source:grnState.customWorkbook.sources[source].source,
+                timestamp:grnState.customWorkbook.sources[source].timestamp
             };
             queryNetworkDatabase(headers).then(function (response) {
                 grnState.customWorkbook.links = response.links;
-                let genes = grnState.customWorkbook.genes;
-                let links = grnState.customWorkbook.links;
-                let genesAmount = Object.keys(genes).length;
-                let edgesAmount = Object.entries(links).flatMap( (entry) => {
+                const links = Object.entries(grnState.customWorkbook.links);
+                const genesAmount = genes.length;
+                const edgesAmount = links.flatMap( (entry) => {
                     return entry[1].map((target) => {
                         return [entry[0], target];
                     });
@@ -205,8 +202,10 @@ containing "-", "_", and alpha-numeric characters only`);
                     alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
  ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
                 } else {
-                    let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-                    let workbook = {name, genes, links};
+                    const name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
+                    const workbook = {name, genes, links : links.map( l => {
+                        return `${l[0]}->${l[1]}`;
+                    }).join(",")};
                     uploadCustomWorkbook(workbook, grnState);
                     $(CREATE_NETWORK_MODAL).modal("hide");
                 }
