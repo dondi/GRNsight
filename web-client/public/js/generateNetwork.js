@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
@@ -179,9 +180,7 @@ containing "-", "_", and alpha-numeric characters only`);
             alert(`GRNsight is only capable of handling 75 genes at most. Your proposed network contains
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
-            const genes = Object.keys(grnState.customWorkbook.genes).map(g => {
-                return grnState.customWorkbook.genes[g];
-            });
+            const genes = Object.keys(grnState.customWorkbook.genes).map(g => {return grnState.customWorkbook.genes[g];});
             const source = grnState.customWorkbook.source;
             const headers = {
                 type:"GenerateNetwork",
@@ -193,19 +192,13 @@ containing "-", "_", and alpha-numeric characters only`);
                 grnState.customWorkbook.links = response.links;
                 const links = Object.entries(grnState.customWorkbook.links);
                 const genesAmount = genes.length;
-                const edgesAmount = links.flatMap( (entry) => {
-                    return entry[1].map((target) => {
-                        return [entry[0], target];
-                    });
-                }).length;
+                const edgesAmount = links.flatMap( (entry) => {return entry[1].map((target) => {return [entry[0], target];});}).length;
                 if (edgesAmount > 100) {
                     alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
  ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
                 } else {
                     const name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-                    const workbook = {name, genes, links : links.map( l => {
-                        return `${l[0]}->${l[1]}`;
-                    }).join(",")};
+                    const workbook = {name, genes, links : links.map( l => {return `${l[0]}->${l[1]}`;}).join(",")};
                     uploadCustomWorkbook(workbook, grnState);
                     $(CREATE_NETWORK_MODAL).modal("hide");
                 }

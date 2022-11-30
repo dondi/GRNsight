@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -97,12 +98,12 @@ const buildExpressionDataQuery = function (dataset, timepoints, genes) {
 
 const buildExpressionQuery = function (query) {
     const expressionQueries = {
-        "DegradationRates": buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
-        "ProductionRates" : buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
-        "ExpressionData" : buildExpressionDataQuery(query.dataset, query.timepoints, query.genes)
+        "DegradationRates": () => {return buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes);},
+        "ProductionRates" : () => {return buildExpressionProductionDegradationRatesQuery("production_rate", query.genes);},
+        "ExpressionData" : () => {return buildExpressionDataQuery(query.dataset, query.timepoints, query.genes);}
     };
     if (Object.keys(expressionQueries).includes(query.type)) {
-        return expressionQueries[query.type];
+        return expressionQueries[query.type]();
     }
 };
 
@@ -142,21 +143,20 @@ module.exports = {
                 { type: sequelize.QueryTypes.SELECT })
                     .then(function (stdname) {
                         const convertToJSON = {
-                            "DegradationRates" : convertProductionDegradationRateToJSON(stdname, "degradation_rate"),
-                            "ProductionRates" : convertProductionDegradationRateToJSON(stdname, "production_rate"),
-                            "ExpressionData" : convertExpressionToJSON(
-                                stdname,
-                                req.query.dataset,
-                                expressionTimepointsByDataset[req.query.dataset],
-                                req.query.genes.split(",")
-                            )
+                            "DegradationRates" : () => {return convertProductionDegradationRateToJSON(stdname, "degradation_rate");},
+                            "ProductionRates" : () => {return convertProductionDegradationRateToJSON(stdname, "production_rate");},
+                            "ExpressionData" : () => {
+                                return convertExpressionToJSON(
+                                    stdname,
+                                    req.query.dataset,
+                                    expressionTimepointsByDataset[req.query.dataset],
+                                    req.query.genes.split(",")
+                                );
+                            }
                         };
                         const type = req.query.type;
-                        if (Object.keys(convertToJSON).includes(type)) {
-                            return res.send(convertToJSON[type]);
-                        } else {
-                            return res.send(500, { errors: "Something went wrong."});
-                        }
+
+                        return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) : res.send(500, { errors: "Something went wrong."});
                     });
     }
 };

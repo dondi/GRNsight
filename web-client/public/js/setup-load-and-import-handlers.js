@@ -194,6 +194,9 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     $.getJSON(fullUrl).done((workbook) => {
         grnState.name = name;
         grnState.workbook = workbook;
+        // Reset the node coloring dataset selection
+        grnState.nodeColoring.topDataset = undefined;
+        grnState.nodeColoring.bottomDataset = undefined;
         grnState.annotateLinks();
         disableUpload(false);
         updateApp(grnState);

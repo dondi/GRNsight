@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -46,13 +47,13 @@ const buildGenerateNetworkQuery = function (genes, source, timestamp) {
 };
 
 const buildQueryByType = function (queryType, query) {
-    switch (queryType) {
-    case "NetworkSource":
-        return buildNetworkSourceQuery();
-    case "NetworkGeneFromSource":
-        return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);
-    case "GenerateNetwork":
-        return buildGenerateNetworkQuery(query.genes, query.source, query.timestamp);
+    const networkQueries = {
+        "NetworkSource": () => {return buildNetworkSourceQuery();},
+        "NetworkGeneFromSource": () => {return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);},
+        "GenerateNetwork": () => {return buildGenerateNetworkQuery(query.genes, query.source, query.timestamp);}
+    };
+    if (Object.keys(networkQueries).includes(query.type)) {
+        return networkQueries[query.type]();
     }
 };
 
@@ -82,7 +83,10 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
             }
         }
         return JSONOutput;
+    default:
+        return JSONOutput;
     }
+
 };
 
 module.exports = {
@@ -90,7 +94,7 @@ module.exports = {
     queryNetworkDatabase: function (req, res) {
         sequelize.query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
-                let response = convertResponseToJSON(req.query.type, req.query, stdname);
+                const response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
             });
     }
