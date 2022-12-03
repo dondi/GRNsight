@@ -48,9 +48,9 @@ const buildGenerateNetworkQuery = function (genes, source, timestamp) {
 
 const buildQueryByType = function (queryType, query) {
     const networkQueries = {
-        "NetworkSource": () => {return buildNetworkSourceQuery();},
-        "NetworkGeneFromSource": () => {return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);},
-        "GenerateNetwork": () => {return buildGenerateNetworkQuery(query.genes, query.source, query.timestamp);}
+        "NetworkSource": () => buildNetworkSourceQuery(),
+        "NetworkGeneFromSource": () => buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp),
+        "GenerateNetwork": () => buildGenerateNetworkQuery(query.genes, query.source, query.timestamp)
     };
     if (Object.keys(networkQueries).includes(query.type)) {
         return networkQueries[query.type]();

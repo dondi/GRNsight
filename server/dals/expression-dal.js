@@ -98,9 +98,9 @@ const buildExpressionDataQuery = function (dataset, timepoints, genes) {
 
 const buildExpressionQuery = function (query) {
     const expressionQueries = {
-        "DegradationRates": () => {return buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes);},
-        "ProductionRates" : () => {return buildExpressionProductionDegradationRatesQuery("production_rate", query.genes);},
-        "ExpressionData" : () => {return buildExpressionDataQuery(query.dataset, query.timepoints, query.genes);}
+        "DegradationRates": () => buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
+        "ProductionRates" : () => buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
+        "ExpressionData" : () => buildExpressionDataQuery(query.dataset, query.timepoints, query.genes)
     };
     if (Object.keys(expressionQueries).includes(query.type)) {
         return expressionQueries[query.type]();
@@ -128,7 +128,7 @@ const convertExpressionToJSON = function (totalOutput, dataset, timePoints, allG
     return JSONOutput;
 };
 
-const convertProductionDegradationRateToJSON = (totalOutput, rateType) => {
+const ProductionDegradationRateToJSON = (totalOutput, rateType) => {
     const JSONOutput = {
     };
     for (let gene of totalOutput) {
@@ -143,16 +143,14 @@ module.exports = {
                 { type: sequelize.QueryTypes.SELECT })
                     .then(function (stdname) {
                         const convertToJSON = {
-                            "DegradationRates" : () => {return convertProductionDegradationRateToJSON(stdname, "degradation_rate");},
-                            "ProductionRates" : () => {return convertProductionDegradationRateToJSON(stdname, "production_rate");},
-                            "ExpressionData" : () => {
-                                return convertExpressionToJSON(
-                                    stdname,
-                                    req.query.dataset,
-                                    expressionTimepointsByDataset[req.query.dataset],
-                                    req.query.genes.split(",")
-                                );
-                            }
+                            "DegradationRates" : () => ProductionDegradationRateToJSON(stdname, "degradation_rate"),
+                            "ProductionRates" : () => ProductionDegradationRateToJSON(stdname, "production_rate"),
+                            "ExpressionData" : () => convertExpressionToJSON(
+                                stdname,
+                                req.query.dataset,
+                                expressionTimepointsByDataset[req.query.dataset],
+                                req.query.genes.split(",")
+                            )
                         };
                         const type = req.query.type;
 
