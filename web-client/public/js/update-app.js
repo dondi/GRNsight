@@ -372,8 +372,9 @@ const enableNodeColoringUI = function () {
 const loadExpressionDatabase = function (isTopDataset) {
     startLoadingIcon();
     queryExpressionDatabase({
+        type:"ExpressionData",
         dataset: isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset,
-        genes : grnState.workbook.genes
+        genes : grnState.workbook.genes.map(x => {return x.name;}).join(",")
     }).then(function (response) {
         if (isTopDataset) {
             grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
@@ -599,9 +600,9 @@ const clearDropdownMenus = () => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
 };
 
-const expressionDBDatasets = ["Barreto_2012_wt", "Dahlquist_2018_dcin5",
+const expressionDBDatasets = ["Dahlquist_2018_wt", "Dahlquist_2018_dcin5",
     "Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
-    "Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
+    "Barreto_2012_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
 
 const resetDatasetDropdownMenus = (workbook) => {
     clearDropdownMenus();
@@ -818,9 +819,9 @@ export const updateApp = grnState => {
         }
         grnState.nodeColoring.showMenu = true;
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-        grnState.nodeColoring.topDataset : "Barreto_2012_wt";
+        grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-        grnState.nodeColoring.bottomDataset : "Barreto_2012_wt";
+        grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");

@@ -114,14 +114,15 @@ const buildXlsxSheet = function (workbook) {
                     resultSheet.push(
                         {
                             "name": network,
-                            "data": buildNetworkSheet(workbook.network.genes, workbook.network.links)
+                            "data": buildNetworkSheet(workbook.exportSheets.networks[network].genes,
+                                workbook.exportSheets.networks[network].links)
                         }
                     );
                 }
             }
             break;
         case "optimization_parameters":
-            if (Object.keys(workbook.exportSheets[type]).length > 0) {
+            if (workbook.exportSheets[type] !== null && Object.keys(workbook.exportSheets[type]).length > 0) {
                 resultSheet.push(
                     {
                         "name": type,

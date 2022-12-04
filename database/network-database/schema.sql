@@ -1,6 +1,7 @@
 CREATE TABLE spring2022_network.source (
-  time_stamp TIMESTAMP,
+  time_stamp TIMESTAMP WITH TIME ZONE,
   source VARCHAR,
+  source_display_name VARCHAR,
   PRIMARY KEY(time_stamp, source)
 );
 
@@ -16,7 +17,7 @@ CREATE TABLE spring2022_network.network (
   regulator_gene_id VARCHAR,
   target_gene_id VARCHAR,
   taxon_id VARCHAR,
-  time_stamp TIMESTAMP,
+  time_stamp TIMESTAMP WITH TIME ZONE,
   source VARCHAR,
   FOREIGN KEY (regulator_gene_id, taxon_id) REFERENCES spring2022_network.gene(gene_id, taxon_id),
   FOREIGN KEY (target_gene_id, taxon_id) REFERENCES spring2022_network.gene(gene_id, taxon_id),

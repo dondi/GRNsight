@@ -47,7 +47,8 @@ const createCustomWorkbook = (genesString, linksString) => {
                 taxon_id: 559292
             }
         },
-        test: {
+        meta2: {},
+        twoColumnSheets: {
         },
         expression: {
         }

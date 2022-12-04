@@ -6,7 +6,7 @@ export const GREY_EDGES_DASHED_MENU = "#grey-edges-dashed-menu";
 export const GREY_EDGES_DASHED_SIDEBAR = "#dashedGrayLineButton";
 
 export const CREATE_NETWORK_CLASS = ".create-network";
-export const CREATE_NETWORK_MODAL = "#createNetworkModal";
+export const CREATE_NETWORK_MODAL = "#generateNetworkModal";
 
 export const UNWEIGHTED_DEMO_ID   = ".unweighted";
 export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
