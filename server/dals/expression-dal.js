@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -18,57 +17,6 @@ var sequelize = new Sequelize(
     }
 );
 
-const expressionTimepointsSources = [
-    {
-        key: "Barreto_2012_wt",
-        value: [10, 10, 20, 20, 20, 20, 40, 40, 40, 40, 60, 60, 60, 60, 120, 120, 120, 120]
-    },
-
-    {
-        key: "Dahlquist_2018_dcin5",
-        value: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 120, 120, 120, 120]
-    },
-
-    {
-        key: "Dahlquist_2018_dgln3",
-        value: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 120, 120, 120, 120]
-    },
-
-    {
-        key: "Dahlquist_2018_dhap4",
-        value: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 120, 120, 120]
-    },
-
-    {
-        key: "Dahlquist_2018_dzap1",
-        value: [15, 15, 15, 15, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 120, 120, 120, 120]
-    },
-
-    {
-        key: "Dahlquist_2018_wt",
-        value: [15, 15, 15, 15, 30, 30, 30, 30, 30, 60, 60, 60, 60, 90, 90, 90, 90, 90, 120, 120, 120, 120, 120]
-    },
-
-    {
-        key: "Kitagawa_2002_wt",
-        value: [15, 15, 15, 30, 30, 30, 120, 120, 120]
-    },
-
-    {
-        key: "Thorsen_2007_wt",
-        value: [15, 15, 15, 30, 30, 30, 60, 60, 60, 60, 60, 60, 1080, 1080, 1080]
-    }
-];
-
-const expressionTimepointsByDataset = {};
-expressionTimepointsSources.forEach(source => expressionTimepointsByDataset[source.key] = source.value);
-
-const buildExpressionTimepointsQuery = function (selection) {
-    let timepoints = "";
-    selection.forEach(x => timepoints += ("fall2021.expression.time_point=" + x + " OR "));
-    return timepoints.substring(0, timepoints.length - 4);
-};
-
 const buildExpressionGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
@@ -83,13 +31,14 @@ const buildExpressionProductionDegradationRatesQuery = function (rateType, genes
     AND fall2021.gene.gene_id = fall2021.${rateType}.gene_id) ORDER BY display_gene_id;`;
 };
 
-const buildExpressionDataQuery = function (dataset, timepoints, genes) {
-    return timepoints ?
-    `SELECT *  FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}' AND
-    (${buildExpressionTimepointsQuery(timepoints)}) AND
-    ((${buildExpressionGenesQuery(genes)}) 
-    AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`
-    : `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
+const buildExpressionTimepointsFromDatasetQuery = function (dataset) {
+    return `
+    SELECT DISTINCT time_point, sample_id FROM fall2021.expression WHERE
+    dataset = '${dataset}' ORDER BY time_point ASC;`;
+};
+
+const buildExpressionDataQuery = function (dataset, genes) {
+    return `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
     AND ((${buildExpressionGenesQuery(genes)}) 
     AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`;
 };
@@ -100,7 +49,9 @@ const buildExpressionQuery = function (query) {
     const expressionQueries = {
         "DegradationRates": () => buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
         "ProductionRates" : () => buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
-        "ExpressionData" : () => buildExpressionDataQuery(query.dataset, query.timepoints, query.genes)
+        "ExpressionData" : () => buildExpressionDataQuery(query.dataset, query.genes),
+        "ExpressionDatasets" : () => "SELECT DISTINCT dataset FROM fall2021.expression ORDER BY dataset ASC;",
+        "ExpressionTimePoints": () => buildExpressionTimepointsFromDatasetQuery(query.dataset)
     };
     if (Object.keys(expressionQueries).includes(query.type)) {
         return expressionQueries[query.type]();
@@ -137,6 +88,25 @@ const ProductionDegradationRateToJSON = (totalOutput, rateType) => {
     return JSONOutput;
 };
 
+const DatasetToJSON = (totalOutput) => {
+    const JSONOutput = {
+        expressionDatasets : []
+    };
+    for (let dataset of totalOutput) {
+        JSONOutput.expressionDatasets.push(dataset.dataset);
+    }
+    return JSONOutput;
+};
+
+const TimePointsToJSON = (totalOutput, dataset) => {
+    const JSONOutput = {};
+    JSONOutput[dataset] = [];
+    for (let timePoint of totalOutput) {
+        JSONOutput[dataset].push(timePoint.time_point);
+    }
+    return JSONOutput;
+};
+
 module.exports = {
     queryExpressionDatabase: function (req, res) {
         return sequelize.query(buildExpressionQuery(req.query),
@@ -146,15 +116,16 @@ module.exports = {
                             "DegradationRates" : () => ProductionDegradationRateToJSON(stdname, "degradation_rate"),
                             "ProductionRates" : () => ProductionDegradationRateToJSON(stdname, "production_rate"),
                             "ExpressionData" : () => convertExpressionToJSON(
-                                stdname,
-                                req.query.dataset,
-                                expressionTimepointsByDataset[req.query.dataset],
-                                req.query.genes.split(",")
-                            )
+                                        stdname,
+                                        req.query.dataset,
+                                        req.query.timepoints.split(",").map(x => Number(x)),
+                                        req.query.genes.split(",")),
+                            "ExpressionDatasets": () => DatasetToJSON(stdname),
+                            "ExpressionTimePoints": () => TimePointsToJSON(stdname, req.query.dataset)
                         };
                         const type = req.query.type;
-
-                        return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) : res.send(500, { errors: "Something went wrong."});
+                        return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) :
+                            res.send(500, { errors: "Something went wrong."});
                     });
     }
 };
