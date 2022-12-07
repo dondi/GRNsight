@@ -8,8 +8,6 @@ import re
 import sys
 import os
 import datetime
-import pytz
-import tzlocal
 
 # Get Network Data from Yeastmine
 
@@ -97,7 +95,7 @@ if not os.path.exists('../script-results/processed-loader-files'):
 
 # Files to be generated
 
-# Create Networks
+# Generate Networks
 
 REGULATORS_TO_TARGETS_MATRIX = '../script-results/networks/regulators_to_targets.csv'
 REGULATORS_TO_REGULATORS_MATRIX = '../script-results/networks/regulators_to_regulators.csv'
@@ -142,25 +140,13 @@ regulator_to_regulator_file.close()
 # Source Table
 
 SOURCE_DESTINATION = '../script-results/processed-loader-files/source.csv'
-dt = datetime.datetime.now()
+timestamp = datetime.datetime.now(datetime.timezone.utc)
 
-year = dt.year
-month = f'{dt.month}'
-if len(month) == 1:
-    month = "0" + month
-day = f'{dt.day}'
-if len(day) == 1:
-    day = "0" + day
-hour = dt.hour
-minute = dt.minute
-second = dt.second
-
-
-timestamp = f'{year}-{month}-{day} {hour}:{minute}:{second}'
 source = "YeastMine - Saccharomyces Genome Database"
+display_name = "Yeastmine - SGD"
 
 source_file = open(SOURCE_DESTINATION, 'w')
-headers = f'Timestamp\tSource\n{timestamp}\t{source}'
+headers = f'Timestamp\tSource\tDisplay Name\n{timestamp}\t{source}\t{display_name}'
 source_file.write(f'{headers}\n')
 source_file.close()
 

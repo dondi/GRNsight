@@ -526,8 +526,8 @@ var twoColumnIdError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var twoColumnIdErrorCount = 0;
-    for (let page in workbook.test) {
-        twoColumnIdErrorCount += workbook.test[page].errors.filter(function (x) {
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnIdErrorCount += workbook.twoColumnSheets[page].errors.filter(function (x) {
             return x.errorCode === "MISLABELED_ID_CELL";
         }).length;
     }
@@ -538,8 +538,8 @@ var additionalSheetIncorrectColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var additionalSheetIncorrectColumnHeaderErrorCount = 0;
-    for (let page in workbook.test) {
-        additionalSheetIncorrectColumnHeaderErrorCount  += workbook.test[page].errors.filter(
+    for (let page in workbook.twoColumnSheets) {
+        additionalSheetIncorrectColumnHeaderErrorCount  += workbook.twoColumnSheets[page].errors.filter(
             (x) => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
     }
     additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta.errors.filter(
@@ -555,8 +555,8 @@ var additionalSheetMissingColumnHeaderError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var additionalSheetMissingColumnHeaderErrorCount = 0;
-    for (let page in workbook.test) {
-        additionalSheetMissingColumnHeaderErrorCount += workbook.test[page].errors.filter(
+    for (let page in workbook.twoColumnSheets) {
+        additionalSheetMissingColumnHeaderErrorCount += workbook.twoColumnSheets[page].errors.filter(
             (x) => x.errorCode === "MISSING_COLUMN_HEADER").length;
     }
     additionalSheetMissingColumnHeaderErrorCount += workbook.meta.errors.filter(
@@ -572,8 +572,8 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var twoColumnInvalidGeneTypeErrorCount = 0;
-    for (let page in workbook.test) {
-        twoColumnInvalidGeneTypeErrorCount += workbook.test[page].errors.filter(function (x) {
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnInvalidGeneTypeErrorCount += workbook.twoColumnSheets[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_GENE_TYPE";
         }).length;
     }
@@ -584,8 +584,8 @@ var twoColumnInvalidValueError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var twoColumnInvalidValueErrorCount = 0;
-    for (let page in workbook.test) {
-        twoColumnInvalidValueErrorCount  += workbook.test[page].errors.filter(function (x) {
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnInvalidValueErrorCount  += workbook.twoColumnSheets[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_VALUE";
         }).length;
     }
@@ -596,8 +596,8 @@ var twoColumnInvalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var twoColumnInvalidGeneLengthErrorCount = 0;
-    for (let page in workbook.test) {
-        twoColumnInvalidGeneLengthErrorCount  += workbook.test[page].errors.filter(function (x) {
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnInvalidGeneLengthErrorCount  += workbook.twoColumnSheets[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_GENE_LENGTH";
         }).length;
     }
@@ -608,8 +608,8 @@ var twoColumnSpecialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var twoColumnSpecialCharacterErrorCount = 0;
-    for (let page in workbook.test) {
-        twoColumnSpecialCharacterErrorCount += workbook.test[page].errors.filter(function (x) {
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnSpecialCharacterErrorCount += workbook.twoColumnSheets[page].errors.filter(function (x) {
             return x.errorCode === "INVALID_CHARACTER";
         }).length;
     }
@@ -622,8 +622,8 @@ var additionalSheetExtraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
     var additionalSheetExtraneousDataWarningCount = 0;
-    for (let page in workbook.test) {
-        additionalSheetExtraneousDataWarningCount  += workbook.test[page].warnings.filter(function (x) {
+    for (let page in workbook.twoColumnSheets) {
+        additionalSheetExtraneousDataWarningCount  += workbook.twoColumnSheets[page].warnings.filter(function (x) {
             return x.warningCode === "EXTRANEOUS_DATA";
         }).length;
     }
@@ -716,7 +716,26 @@ var invalidMSEDataWarning = function (input, frequency) {
 var importExportReImportNoErrorsOrWarnings = function (input) {
     var sheet = xlsx.parse(input);
     var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
-    inputWorkbook["exportExpression"] = inputWorkbook.expression;
+    inputWorkbook.exportSheets = {
+        "optimization_parameters": inputWorkbook.meta,
+        expression: inputWorkbook.expression,
+        networks: {}
+    };
+    if (inputWorkbook.network) {
+        inputWorkbook.exportSheets.networks["network"] = inputWorkbook.network;
+    }
+    if (inputWorkbook.networkOptimizedWeights) {
+        inputWorkbook.exportSheets.networks["network_optimized_weights"] = inputWorkbook.networkOptimizedWeights;
+    }
+    if (inputWorkbook.networkWeights) {
+        inputWorkbook.exportSheets.networks["network_weights"] = inputWorkbook.networkWeights;
+    }
+    if (inputWorkbook.twoColumnSheets) {
+        inputWorkbook.exportSheets["two_column_sheets"] = inputWorkbook.twoColumnSheets;
+    }
+    if (inputWorkbook.meta2) {
+        inputWorkbook.exportSheets["optimization_diagnostics"] = inputWorkbook.meta2;
+    }
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
@@ -726,8 +745,26 @@ var importExportReImportNoErrorsOrWarnings = function (input) {
 var importFileSameAsExportFile = function (input) {
     var sheet = xlsx.parse(input);
     var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
-    inputWorkbook["exportExpression"] = inputWorkbook.expression;
-    inputWorkbook["exportNetworkType"] = inputWorkbook.sheetType;
+    inputWorkbook.exportSheets = {
+        "optimization_parameters": inputWorkbook.meta,
+        expression: inputWorkbook.expression,
+        networks: {}
+    };
+    if (inputWorkbook.network) {
+        inputWorkbook.exportSheets.networks["network"] = inputWorkbook.network;
+    }
+    if (inputWorkbook.networkOptimizedWeights) {
+        inputWorkbook.exportSheets.networks["network_optimized_weights"] = inputWorkbook.networkOptimizedWeights;
+    }
+    if (inputWorkbook.networkWeights) {
+        inputWorkbook.exportSheets.networks["network_weights"] = inputWorkbook.networkWeights;
+    }
+    if (inputWorkbook.twoColumnSheets) {
+        inputWorkbook.exportSheets["two_column_sheets"] = inputWorkbook.twoColumnSheets;
+    }
+    if (inputWorkbook.meta2) {
+        inputWorkbook.exportSheets["optimization_diagnostics"] = inputWorkbook.meta2;
+    }
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     sheet.sort((a, b) => (a.name > b.name) ? 1 : -1);

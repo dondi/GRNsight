@@ -1,3 +1,7 @@
+# dotenv environment variables file
+.env
+.env.test
+
 lib-cov
 *.seed
 *.log
@@ -12,6 +16,7 @@ lib-cov
 documents/developer_documents/testing_script_generator/GRNsightTestingDocument.pdf
 web-client/public/js/grnsight.min.js
 
+
 pids
 logs
 results
@@ -19,6 +24,8 @@ results
 
 database/network-database/script-results
 database/network-database/source-files
+database/expression-database/script-results
+database/expression-database/source-files
 
 npm-debug.log
 node_modules

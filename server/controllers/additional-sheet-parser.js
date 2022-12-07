@@ -306,7 +306,7 @@ module.exports = function (workbookFile) {
             errors: [],
             warnings: []
         }, // optimization_parameters only
-        test: {}, // 2-column data
+        twoColumnSheets: {}, // 2-column data
         meta2: {} // optimation_diagnostics only //temporary until where it goes is decided
     };
     workbookFile.forEach(function (sheet) {
@@ -315,7 +315,7 @@ module.exports = function (workbookFile) {
             // above line creates an object from the optimization paramerters sheet
             // these are part of the "meta" property
         } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
-            output["test"][sheet.name] = parseTwoColumnSheet(sheet);
+            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet);
         } else if (sheet.name === "optimization_diagnostics") {
             output.meta2 = parseOptimizationDiagnosticsSheet(sheet);
         }

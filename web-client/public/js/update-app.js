@@ -111,6 +111,15 @@ import { queryExpressionDatabase } from "./api/grnsight-api.js";
 
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
+
+queryExpressionDatabase({type:"ExpressionDatasets"}).then(function (response) {
+    grnState.database = response;
+}).catch(function (error) {
+    console.log(error.stack);
+    console.log(error.name);
+    console.log(error.message);
+});
+
 const refreshApp = () => {
     if (uploadState && uploadState.currentWorkbook) {
         drawGraph(uploadState.currentWorkbook);
@@ -369,20 +378,33 @@ const enableNodeColoringUI = function () {
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 };
+
 const loadExpressionDatabase = function (isTopDataset) {
+    const dataset = isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset;
     startLoadingIcon();
     queryExpressionDatabase({
-        dataset: isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset,
-        genes : grnState.workbook.genes
-    }).then(function (response) {
-        if (isTopDataset) {
-            grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
-        } else {
-            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
-        }
-        enableNodeColoringUI();
-        stopLoadingIcon();
-        updaters.renderNodeColoring();
+        type: "ExpressionTimePoints",
+        dataset
+    }).then(function (timepointsResponse) {
+        queryExpressionDatabase({
+            type:"ExpressionData",
+            dataset,
+            genes : grnState.workbook.genes.map(x => {return x.name;}).join(","),
+            timepoints: timepointsResponse[dataset]
+        }).then(function (response) {
+            if (isTopDataset) {
+                grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+            } else {
+                grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
+            }
+            enableNodeColoringUI();
+            stopLoadingIcon();
+            updaters.renderNodeColoring();
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
     }).catch(function (error) {
         console.log(error.stack);
         console.log(error.name);
@@ -599,10 +621,6 @@ const clearDropdownMenus = () => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
 };
 
-const expressionDBDatasets = ["Barreto_2012_wt", "Dahlquist_2018_dcin5",
-    "Dahlquist_2018_dgln3", "Dahlquist_2018_dhap4", "Dahlquist_2018_dzap1",
-    "Dahlquist_2018_wt", "Kitagawa_2002_wt", "Thorsen_2007_wt"];
-
 const resetDatasetDropdownMenus = (workbook) => {
     clearDropdownMenus();
     $(".dataset-option").remove(); // clear all menu dataset options
@@ -625,7 +643,8 @@ const resetDatasetDropdownMenus = (workbook) => {
     }
 
     // Add expression database options
-    expressionDBDatasets.forEach(option => grnState.nodeColoring.nodeColoringOptions.push({value: [option]}));
+    grnState.database.expressionDatasets.forEach( option =>
+        grnState.nodeColoring.nodeColoringOptions.push({value: [option]}));
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -697,6 +716,7 @@ if (!grnState.genePageData.identified) {
 
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
+        grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);
         expandLayoutSidebar();
@@ -793,12 +813,12 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-        if (expressionDBDatasets.includes(grnState.nodeColoring.topDataset) &&
+        if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
                 loadExpressionDatabase(true);
             }
-        } else if (expressionDBDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+        } else if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.bottomDataset) &&
         !grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
             if (!grnState.nodeColoring.bottomDataSameAsTop) {
@@ -817,9 +837,9 @@ export const updateApp = grnState => {
         }
         grnState.nodeColoring.showMenu = true;
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-        grnState.nodeColoring.topDataset : "Barreto_2012_wt";
+        grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-        grnState.nodeColoring.bottomDataset : "Barreto_2012_wt";
+        grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
