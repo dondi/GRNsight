@@ -5,10 +5,10 @@ import { grnState } from "./grnstate";
 
 export const generateNetwork = function () {
     const GENE_EXCEPTIONS = {
-        "DUR1.2" : "DUR12",
+        "DUR1,2" : "DUR12",
         "IMP2'" : "IMP21",
         "ARG5,6" : "ARG56",
-        "ADE5,7" : "ADE5,7",
+        "ADE5,7" : "ADE57",
         "MF(ALPHA)1" : "YPL187W",
         "MF(ALPHA)2" : "YGL089C"
     };
