@@ -114,7 +114,7 @@ containing "-", "_", and alpha-numeric characters only`);
                     displayCurrentGenes();
                 } else {
                     alert(
-                        `Gene: ${searchGene}was not found in this database. Please check for any typos and try again.`
+                        `Gene: ${searchGene} was not found in this database. Please check for any typos and try again.`
                     );
                 }
             }).catch(function (error) {
