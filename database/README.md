@@ -48,13 +48,25 @@ Here are the files pertaining to both the network and expression databases. Look
           ```
           
           Once the dependencies have been installed, you can run
-          
           ```
           cd <path to GRNsight/database/network-database/scripts>
           python3 generate_network.py
           ```
-        
           This will take a while to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/network-database/script-results`.
+          
+          *** Note: *** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
+          
+        ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
+
+          - Navigate the referenced file ( \<path specific to your machine>/intermine/webservice.py )
+          
+          - The try-catch block should look like this:
+          
+              - ![image](https://user-images.githubusercontent.com/21343072/213094796-c48f54da-b76c-4266-81fb-6aaef24a36c9.png)
+              
+          - Change it to the following, rerun the `generate_network.py` command and it should work! If it doesn't you may need to troubleshoot a bit further (´◕ ᵔ ◕`✿)*ᶜʳᶦᵉˢ*.
+          
+              - ![image](https://user-images.githubusercontent.com/21343072/213094984-bff2deb3-d26b-4809-83d6-6a6615b6e3cf.png)
   
         2. Load the processed files into your database.
         
