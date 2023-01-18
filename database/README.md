@@ -47,18 +47,20 @@ Here are the files pertaining to both the network and expression databases. Look
           pip3 install pandas requests intermine tzlocal
           ```
           
-          Once the dependencies have been installed, you can run 
+          Once the dependencies have been installed, you can run
           
           ```
-          python3 <path to GRNsight/database/network-database/scripts>/generate_network.py
+          cd <path to GRNsight/database/network-database/scripts>
+          python3 generate_network.py
           ```
         
           This will take a while to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/network-database/script-results`.
   
-        2. Load the processed files into your database. 
+        2. Load the processed files into your database.
         
             ```
-            python3 <path to GRNsight/database/network-database/scripts>/loader.py | psql postgresql://localhost/postgres
+            cd <path to GRNsight/database/network-database/scripts>
+            python3 loader.py | psql postgresql://localhost/postgres
             ```
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the network data.
@@ -70,18 +72,19 @@ Here are the files pertaining to both the network and expression databases. Look
             mkdir <path to GRNsight/database/expression-database>/source-files
             ```
         
-        2. Download the _"Expression 2020"_ folder from Box located in `GRNsight > GRNsight Expression > Expression 2020` to your newly created `source-files` folder
+        2. Download the _"Expression 2020"_ folder from Box located in `GRNsight > GRNsight Expression > Expression 2020` to your newly created `source-files` folder. Your the path should look like this: GRNsight > database > expression-database > source-files > Expression 2020 > [the actual csv and xlsx files are here!]
         3. Run the pre-processing script on the data. This will create a folder full of the processed files in `database/expression-database/script-results`.
         
             ```
-            python3 <path to GRNsight/database/expression-database/scripts>/preprocessing.py
+            cd <path to GRNsight/database/expression-database/scripts>
+            python3 preprocessing.py
             ```
             
         4. Load the processed files into your database. 
         
             ```
-            python3 <path to GRNsight/database/expression-database/scripts>/loader.py | psql postgresql://localhost/postgres
+            cd <path to GRNsight/database/expression-database/scripts>
+            python3 loader.py | psql postgresql://localhost/postgres
             ```
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the expression data.
-        
