@@ -65,7 +65,56 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
-                                                                        <div class="panel panel-default">
+                                    
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v6_0_4Content" data-toggle="collapse">
+                                                    GRNsight v6.0.4
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v6_0_4Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v6.0.4 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>The back-end database was updated.
+                                                        <ul>
+                                                          <li>Apweiler data is uploaded to backend expression database.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>The language of the export to excel menu was clarified and the functionality expanded.
+                                                        <ul>
+                                                            <li>GRNsight can now export additional sheets (i.e: _production_rates_, _optimization_parameters_, etc).</li>
+                                                            <li>GRNsight allows users to choose which specific sheets they would like to include in their exported workbook.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>The language of the Load from Database modal was clarified.</li>
+                                                    <li>The GRNsight API module and the GRNsight DAL were refactored and expanded.
+                                                        <ul>
+                                                            <li>Removed residual hard-coded database information and replaced them with database calls.</li>
+                                                            <li>Transitioned remaining "bare" network calls to the API module.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>The Documentation for loading a local copy of GRNsight's databases was completed.</li>
+                                                    <li>Bug Fixes:
+                                                        <ul>
+                                                            <li>Yeast genes with irregular naming patterns are now allowed in the load from database function.</li>
+                                                            <li>If a demo is chosen from the sidebar dropdown menu, the UI will update consistently.</li>
+                                                            <li>If a network is generated from the database and no relations are observed, GRNsight will work as intended. </li>
+                                                            <li>Node menu is active after generating a network from the database.</li>
+                                                            <li>Generating a network from the database correctly counts all of the edges in the assigned workbook name.</li>
+                                                            <li>Updated database to store timestamp values in UTC.</li>
+                                                            <li>Export to Excel modal acts appropriately when you cancel out of it and go back in.</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
                                                 <a href="#v6_0_0Content" data-toggle="collapse">
