@@ -249,8 +249,7 @@ export const upload = function () {
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                grnState.workbook.networkWeights !== undefined;
-                finalExportSheets.networks[sheet] = grnState.workbook.networkWeights !== undefined ? grnState.workbook.networkWeights !== undefined : grnState.workbook.network;
+                finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
             } else if (sheet === "optimization_diagnostics") { // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
             } else if (sheet === "optimization_parameters") {
@@ -413,10 +412,10 @@ export const upload = function () {
             `;
         const optionalAdditionalSheets = ["optimization_parameters", "production_rates", "degradation_rates", "threshold_b"];
         let networks = [
-            (grnState.workbook.networkOptimizedWeights !== undefined && "network_optimized_weights"),
-            ("network"),
-            ("network_weights")];
-        networks = networks.filter(x => x !== false);
+            [grnState.workbook.network !== undefined, "network"],
+            [grnState.workbook.networkOptimizedWeights !== undefined, "network_optimized_weights"],
+            [grnState.workbook.networkWeights !== undefined, "network_weights"]];
+        // networks = networks.filter(x => x !== false);
         let additionalsheets = grnState.workbook.twoColumnSheets ? [
             ...Object.keys(grnState.workbook.twoColumnSheets),
             (grnState.workbook.meta2 !== undefined && "optimization_diagnostics")
@@ -426,10 +425,12 @@ export const upload = function () {
         additionalsheets = additionalsheets.filter(x => (x !== false && -1 !== optionalAdditionalSheets.indexOf(x)));
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...(new Set(additionalsheets))];
-        for (let network of networks) {
+        for (let n of networks) {
+            const state = n[0];
+            const network = n[1];
             result = result + `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' />
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"${state}\" value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${!state && "disabled"}/>
                 <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
                     ${network}
                 </label>
