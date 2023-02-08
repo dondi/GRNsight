@@ -32,6 +32,7 @@
     "save-svg-as-png": "1.4.14",
     "sequelize": "5.21.6",
     "serve-static": "1.13.1",
+    "serverless-http": "^3.1.1",
     "should": "11.2.0",
     "stylus": "0.54.5",
     "supertest": "3.0.0",
