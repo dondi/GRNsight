@@ -249,7 +249,8 @@ export const upload = function () {
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
+                grnState.workbook.networkWeights !== undefined;
+                finalExportSheets.networks[sheet] = grnState.workbook.networkWeights !== undefined ? grnState.workbook.networkWeights !== undefined : grnState.workbook.network;
             } else if (sheet === "optimization_diagnostics") { // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
             } else if (sheet === "optimization_parameters") {
@@ -413,8 +414,8 @@ export const upload = function () {
         const optionalAdditionalSheets = ["optimization_parameters", "production_rates", "degradation_rates", "threshold_b"];
         let networks = [
             (grnState.workbook.networkOptimizedWeights !== undefined && "network_optimized_weights"),
-            (grnState.workbook.network !== undefined && "network"),
-            (grnState.workbook.networkWeights !== undefined && "network_weights")];
+            ("network"),
+            ("network_weights")];
         networks = networks.filter(x => x !== false);
         let additionalsheets = grnState.workbook.twoColumnSheets ? [
             ...Object.keys(grnState.workbook.twoColumnSheets),
