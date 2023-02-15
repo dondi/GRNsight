@@ -15,7 +15,7 @@ directly into a database command line utility such as `psql`.
 This function Loads Network Data Sources into the database
 """
 def LOAD_SOURCES():
-    print('COPY spring2022_network.source (time_stamp, source, display_name) FROM stdin;')
+    print('COPY spring2022_network.source (time_stamp, source, source_display_name) FROM stdin;')
     NETWORK_DATA_SOURCE = '../script-results/processed-loader-files/source.csv'
     with open(NETWORK_DATA_SOURCE, 'r+') as f:
         reader = csv.reader(f)
