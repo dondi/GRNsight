@@ -30,6 +30,7 @@ database/expression-database/source-files
 npm-debug.log
 node_modules
 package-lock.json
+.serverless
 
 .DS_Store
 *.pem

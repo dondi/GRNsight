@@ -6,6 +6,8 @@ var morgan = require("morgan");
 var methodOverride = require("method-override");
 var bodyParser = require("body-parser");
 
+const serverless = require("serverless-http");
+
 console.log("Configuring GRNsight server");
 
 var env = process.env.NODE_ENV || "development";
@@ -17,8 +19,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 // app.use(bodyParser.urlencoded({extended: true}));
 // app.use(bodyParser.json());
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(methodOverride());
 app.use(cors());
 
@@ -37,11 +39,19 @@ require(__dirname + "/controllers/expression-database-controller")(app);
 require(__dirname + "/controllers/network-database-controller")(app);
 require(__dirname + "/controllers/custom-workbook-controller")(app);
 
-// Don"t start the server if this app is run as a child process.
-if (!module.parent) {
-    http.createServer(app).listen(app.get("port"), function () {
-        console.log("GRNsight server running on port %s, environment=%s", app.get("port"), app.get("env"));
-    });
+// Don’t start the server if this app is run as a child process.
+if (env === "development") {
+    if (!module.parent) {
+        http.createServer(app).listen(app.get("port"), function() {
+            console.log(
+                "GRNsight server running on port %s, environment=%s",
+                app.get("port"),
+                app.get("env")
+            );
+        });
+    } else {
+        module.exports = app;
+    }
 } else {
-    module.exports = app;
+    module.exports.handler = serverless(app);
 }

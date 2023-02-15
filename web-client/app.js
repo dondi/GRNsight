@@ -10,6 +10,8 @@ var serveStatic = require("serve-static");
 var bodyParser = require("body-parser");
 var errorHandler = require("errorhandler");
 
+const serverless = require("serverless-http");
+
 var env = process.env.NODE_ENV || "development";
 var config = require("./config/config")[env];
 var app = express();
@@ -19,7 +21,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 app.use(morgan("dev"));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 // app.use(express.cookieSession());
@@ -36,10 +38,18 @@ console.log("Web service root: " + app.get("serviceRoot"));
 require("./controllers/main")(app);
 
 // Don't start the server if this app is run as a child process.
-if (!module.parent) {
-    http.createServer(app).listen(app.get("port"), function () {
-        console.log("GRNsight web client running on port %s, environment=%s", app.get("port"), env);
-    });
+if (env === "development") {
+    if (!module.parent) {
+        http.createServer(app).listen(app.get("port"), function() {
+            console.log(
+                "GRNsight web client running on port %s, environment=%s",
+                app.get("port"),
+                env
+            );
+        });
+    } else {
+        module.exports = app;
+    }
 } else {
-    module.exports = app;
+    module.exports.handler = serverless(app);
 }
