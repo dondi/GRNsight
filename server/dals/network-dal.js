@@ -19,11 +19,11 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM spring2022_network.source ORDER BY time_stamp;";
+    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp;";
 };
 
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
-    return `SELECT DISTINCT gene_id, display_gene_id FROM spring2022_network.network, spring2022_network.gene WHERE
+    return `SELECT DISTINCT gene_id, display_gene_id FROM gene_regulatory_network.network, gene_regulatory_network.gene WHERE
  network.time_stamp='${timestamp}' AND network.source='${source}' AND
  (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
  (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`;
@@ -41,7 +41,7 @@ const buildNetworkGenesQuery = function (geneString) {
 
 const buildGenerateNetworkQuery = function (genes, source, timestamp) {
     return `SELECT DISTINCT regulator_gene_id, target_gene_id FROM
- spring2022_network.network WHERE
+ gene_regulatory_network.network WHERE
  time_stamp='${timestamp}' AND source='${source}' AND
  ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`;
 };

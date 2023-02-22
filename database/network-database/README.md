@@ -6,9 +6,9 @@ All files pertaining the network database live within this directory.
 
 ### Schema
 
-All network data is stored within the spring2022_network schema on our Postgres database.
+All network data is stored within the gene_regulatory_network schema on our Postgres database.
 
-The schema is located within this directory at the top level in the file `schema.sql`. It defines the tables located within the spring2022_network schema. 
+The schema is located within this directory at the top level in the file `schema.sql`. It defines the tables located within the gene_regulatory_network schema. 
 
 Usage:
 To load to local database
