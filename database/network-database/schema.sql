@@ -1,7 +1,7 @@
 CREATE TABLE spring2022_network.source (
   time_stamp TIMESTAMP WITH TIME ZONE,
   source VARCHAR,
-  source_display_name VARCHAR,
+  display_name VARCHAR,
   PRIMARY KEY(time_stamp, source)
 );
 

@@ -140,7 +140,7 @@ regulator_to_regulator_file.close()
 # Source Table
 
 SOURCE_DESTINATION = '../script-results/processed-loader-files/source.csv'
-timestamp = datetime.datetime.now(datetime.timezone.utc)
+timestamp = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
 
 source = "YeastMine - Saccharomyces Genome Database"
 display_name = "Yeastmine - SGD"
