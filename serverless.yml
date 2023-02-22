@@ -8,6 +8,8 @@ provider:
 functions:
   server:
     handler: server/app.handler
+    url:
+      cors: true
     events:
       - http:
           path: /
@@ -19,6 +21,7 @@ functions:
           cors: true
   web-client:
     handler: web-client/app.handler
+    url: true
     events:
       - http:
           path: /
