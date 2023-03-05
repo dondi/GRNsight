@@ -12,7 +12,7 @@ var processCustomWorkbook = function (path, res, app, workbook) {
 };
 
 const createCustomWorkbook = (genesString, linksString) => {
-    const g = genesString.split(",")
+    const g = genesString.split(",");
     let genes = g.map(gene => {
         return {name: gene};
     });

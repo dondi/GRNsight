@@ -38,7 +38,8 @@ const buildExpressionTimepointsFromDatasetQuery = function (dataset) {
 };
 
 const buildExpressionDataQuery = function (dataset, genes) {
-    return `SELECT * FROM gene_expression.expression, gene_expression.gene WHERE gene_expression.expression.dataset='${dataset}'
+    return `SELECT * FROM gene_expression.expression, gene_expression.gene 
+    WHERE gene_expression.expression.dataset='${dataset}'
     AND ((${buildExpressionGenesQuery(genes)}) 
     AND gene_expression.gene.gene_id = gene_expression.expression.gene_id) ORDER BY sort_index;`;
 };

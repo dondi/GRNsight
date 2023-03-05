@@ -23,7 +23,8 @@ export const generateNetwork = function () {
         if (sources.length !== 1) {
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]} ${selected == sources[source]?"\'selected=\'true":"" }\'>${sources[source]}</option>
+                            <option value=\'${sources[source]} ${selected === sources[source] ?
+                                "\'selected=\'true" : "" }\'>${sources[source]}</option>
                 `;
             }
         } else {
@@ -180,7 +181,7 @@ containing "-", "_", and alpha-numeric characters only`);
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
             const genes = Object.keys(grnState.customWorkbook.genes);
-            const display_genes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
+            const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
             const source = grnState.customWorkbook.source;
             const headers = {
                 type:"GenerateNetwork",
@@ -198,14 +199,14 @@ containing "-", "_", and alpha-numeric characters only`);
  ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
                 } else {
                     const name = `GRN(${grnState.customWorkbook.source};${genesAmount} genes, ${edgesAmount} edges)`;
-                    const l = []
-                    for (let link of links){
+                    const l = [];
+                    for (let link of links) {
                         const r = link[0];
                         for (let t of link[1]) {
-                            l.push(`${grnState.customWorkbook.genes[r]}->${grnState.customWorkbook.genes[t]}`)
+                            l.push(`${grnState.customWorkbook.genes[r]}->${grnState.customWorkbook.genes[t]}`);
                         }
                     }
-                    const workbook = {name, genes: display_genes, links : l.join(",")};
+                    const workbook = {name, genes: displayGenes, links : l.join(",")};
                     uploadCustomWorkbook(workbook, grnState);
                     $(CREATE_NETWORK_MODAL).modal("hide");
                 }
