@@ -12,7 +12,7 @@ export const generateNetwork = function () {
         "MF(ALPHA)1" : "YPL187W",
         "MF(ALPHA)2" : "YGL089C"
     };
-    const createHTMLforForm = (sources) => {
+    const createHTMLforForm = (sources, selected) => {
         let result =  `
             <div id=\'generateNetworkFormContainer\' '>
                 <h2 id=\'generateNetwork\'>Generate Network</h2>
@@ -21,10 +21,9 @@ export const generateNetwork = function () {
                     <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
             `;
         if (sources.length !== 1) {
-            result += "<option value=\'none\' selected=\'true\' disabled>Select Network Source</option>";
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]}\'>${sources[source]}</option>
+                            <option value=\'${sources[source]} ${selected == sources[source]?"\'selected=\'true":"" }\'>${sources[source]}</option>
                 `;
             }
         } else {
@@ -148,10 +147,10 @@ containing "-", "_", and alpha-numeric characters only`);
         };
     // get sources from database
         queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
-            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
             grnState.customWorkbook.sources = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length >= 1 ?
                 Object.keys(response.sources)[0] : null;
+            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources), grnState.customWorkbook.source));
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
