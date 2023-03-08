@@ -100,3 +100,4 @@ Here are the files pertaining to both the network and expression databases. Look
             ```
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the expression data.
+3. Continue setting up in the [Initial Setup Wiki page](https://github.com/dondi/GRNsight/wiki/Initial-Setup)
