@@ -23,7 +23,7 @@ export const generateNetwork = function () {
         if (sources.length !== 1) {
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]} ${selected === sources[source] ?
+                            <option value=\'${sources[source]}\' ${selected === sources[source] ?
                                 "\'selected=\'true" : "" }\'>${sources[source]}</option>
                 `;
             }
