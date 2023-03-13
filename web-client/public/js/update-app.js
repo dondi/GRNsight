@@ -130,7 +130,7 @@ const refreshApp = () => {
 
 const displayworkbook = (workbook, name) => {
   uploadState.currentWorkbook = workbook;
-  // console.log("workbook: ", workbook); // Display the workbook in the console
+  console.log("workbook: ", workbook); // Display the workbook in the console
   $("#graph-metadata").html(
     workbook.genes.length + " nodes<br>" + workbook.links.length + " edges"
   );
@@ -141,7 +141,6 @@ const displayworkbook = (workbook, name) => {
 
   $("#fileName").text(name); // Set the name of the file to display in the top bar
   $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
-  
 };
 
 // Value Validators
@@ -544,14 +543,16 @@ const toggleLayout = (on, off) => {
   }
 };
 
-const updatetoForceGraph = () => {
+export const updatetoForceGraph = () => {
   $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-  toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
+  // toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
+  console.log("Update to FOrce graph");
 };
 
 const updatetoGridLayout = () => {
   // $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-  toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
+  // toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
+  console.log("Update to Grid Layout");
 };
 
 // Node Coloring Functions
