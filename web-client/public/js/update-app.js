@@ -697,7 +697,6 @@ if (!grnState.genePageData.identified) {
 
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
-        grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);
         expandLayoutSidebar();
