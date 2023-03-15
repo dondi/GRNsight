@@ -1,21 +1,30 @@
+/* eslint-disable max-len */
 import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
 import { queryNetworkDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 
-export const createNetwork = function () {
-    const createHTMLforForm = (sources) => {
+export const generateNetwork = function () {
+    const GENE_EXCEPTIONS = {
+        "DUR1,2" : "DUR12",
+        "IMP2'" : "IMP21",
+        "ARG5,6" : "ARG56",
+        "ADE5,7" : "ADE57",
+        "MF(ALPHA)1" : "YPL187W",
+        "MF(ALPHA)2" : "YGL089C"
+    };
+    const createHTMLforForm = (sources, selected) => {
         let result =  `
-            <div id=\'createNetworkFormContainer\' '>
-                <h2 id=\'createNetwork\'>Create Network</h2>
-        <div class=\'form-group\'>
-            <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
-            <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
+            <div id=\'generateNetworkFormContainer\' '>
+                <h2 id=\'generateNetwork\'>Generate Network</h2>
+                <div class=\'form-group\'>
+                    <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
+                    <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
             `;
         if (sources.length !== 1) {
-            result += "<option value=\'none\' selected=\'true\' disabled>Select Network Source</option>";
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]}\'>${sources[source]}</option>
+                            <option value=\'${sources[source]}\' ${selected === sources[source] ?
+                                "\'selected=\'true" : "" }\'>${sources[source]}</option>
                 `;
             }
         } else {
@@ -24,10 +33,10 @@ export const createNetwork = function () {
             `;
         }
         result += `</select>
-                   <p>Warning: changing network source will remove all current genes in network</p>
+                   <p>Warning: changing network source will clear the list of genes below.</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
-            <form id=\'getNetworkGenesForm\'>
+            <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
                 <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
                 <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
                 <button id=\'enter-search\' type=\'submit\' class=\'search-button btn btn-default\'>
@@ -37,34 +46,10 @@ export const createNetwork = function () {
         </div>
         <div id=\'selected-genes-container\'>
             <div id=\'selected-genes\'>
-                <p>Added genes go here! Click on a gene to remove it</p>
-            </div>
-        </div>
-        <button id=\'submit-network\' class=\'btn btn-default\'>Create Network</input>
+                <p>Added genes go here! Click on a gene to remove it.</p>
             </div>
         `;
         return result;
-    };
-    const getFormattedDateTime = (date) => {
-        const currentYear = date.getFullYear();
-        let currentDate = date.getDate();
-        let currentMonth = date.getMonth() + 1;
-        let currentHrs = date.getHours();
-        let currentMins = date.getMinutes();
-        let currentSecs = date.getSeconds();
-        let currentDatetime;
-
-        // Add 0 before date, month, hrs, mins or secs if they are less than 10
-        currentDate = currentDate < 10 ? "0" + currentDate : currentDate;
-        currentMonth = currentMonth < 10 ? "0" + currentMonth : currentMonth;
-        currentHrs = currentHrs < 10 ? "0" + currentHrs : currentHrs;
-        currentMins = currentMins < 10 ? "0" + currentMins : currentMins;
-        currentSecs = currentSecs < 10 ? "0" + currentSecs : currentSecs;
-
-        // Create Properly formatted datetime string like `2022-09-23 17:10:26`
-        currentDatetime = currentYear + "-" + currentMonth + "-" + currentDate + " " + currentHrs + ":"
-            + currentMins + ":" + currentSecs;
-        return currentDatetime;
     };
     const createGeneButtons = function () {
         let result =  `<div id=\'selected-genes\'>
@@ -99,28 +84,38 @@ export const createNetwork = function () {
         }
     };
 
+    const validGene = function (gene) {
+        if (/^[A-Z0-9_-]{1,12}$/.test(gene)) {
+            return gene;
+        }
+        if (Object.keys(GENE_EXCEPTIONS).includes(gene)) {
+            return GENE_EXCEPTIONS[gene];
+        }
+        return "";
+    };
     const addGene = function () {
-        let gene = `${$("#network-search-bar").val()}`.toUpperCase();
+        const searchGene = `${$("#network-search-bar").val()}`.toUpperCase();
         $("#network-search-bar").val("");
-        if (!(/^[A-Z0-9_-]{1,12}$/.test(gene))) {
-            alert(`Gene: ${gene} is not to GRNsight specifications. Genes must be 12 characters or less,
+        const gene = validGene(searchGene);
+        if (gene === "") {
+            alert(`Gene: ${searchGene} is not to GRNsight specifications. Genes must be 12 characters or less,
 containing "-", "_", and alpha-numeric characters only`);
         } else {
             let source = grnState.customWorkbook.source;
             let headers = {
                 type:"NetworkGeneFromSource",
-                info: {
-                    gene: gene,
-                    source:grnState.customWorkbook.sources[source].source,
-                    timestamp:grnState.customWorkbook.sources[source].timestamp
-                }
+                gene: gene,
+                source:grnState.customWorkbook.sources[source].source,
+                timestamp:grnState.customWorkbook.sources[source].timestamp
             };
             queryNetworkDatabase(headers).then(function (response) {
                 if (response.geneId !== null && response.displayGeneId !== null) {
                     grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
                     displayCurrentGenes();
                 } else {
-                    alert(`Gene: ${gene} was not found in this database. Please check for any typos and try again.`);
+                    alert(
+                        `Gene: ${searchGene} was not found in this database. Please check for any typos and try again.`
+                    );
                 }
             }).catch(function (error) {
                 console.log(error.stack);
@@ -131,25 +126,32 @@ containing "-", "_", and alpha-numeric characters only`);
         }
     };
 
-    const displayCreateNetworkModal = function () {
-        $("#createNetworkFormContainer").remove();
+    const createHTMLforModalButtons = () => {
+        return `
+            <div id=\'generateNetworkFooter\' class=\'modal-footer-div\'>
+                <div>
+                    <input type=\'button\' class=\'btn btn-default\' id=\'submit-network\' value=\'Generate Network\'/>
+                    <input type=\'button\' class=\'btn btn-default\' data-dismiss=\'modal\' value=\'Cancel\'  />
+                </div>
+            </div>
+        `;
+    };
+
+    const displayGenerateNetworkModal = function () {
+        $("#generateNetworkFormContainer").remove();
+        $("#generateNetworkFooter").remove();
+        $("#generateNetworkFooter-container").append(createHTMLforModalButtons());
         grnState.customWorkbook = {
             genes : {},
             source : null,
             sources : null
         };
     // get sources from database
-        queryNetworkDatabase({type:"NetworkSource", info:null}).then(function (response) {
-            $("#createNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources)));
+        queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
             grnState.customWorkbook.sources = response.sources;
-            grnState.customWorkbook.source = Object.keys(response.sources).length === 1 ?
+            grnState.customWorkbook.source = Object.keys(response.sources).length >= 1 ?
                 Object.keys(response.sources)[0] : null;
-            for (let source in response.sources) {
-                let i = source.indexOf(":");
-                let date = new Date(source.substring(i + 1));
-                date = getFormattedDateTime(date);
-                grnState.customWorkbook.sources[source].timestamp = date;
-            }
+            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources), grnState.customWorkbook.source));
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -161,7 +163,7 @@ containing "-", "_", and alpha-numeric characters only`);
     $("body").on("click", CREATE_NETWORK_CLASS, function (event) {
         event.preventDefault();
         event.stopPropagation();
-        displayCreateNetworkModal();
+        displayGenerateNetworkModal();
     });
 
     $("body").on("change", "#network-source", function (event) {
@@ -178,28 +180,33 @@ containing "-", "_", and alpha-numeric characters only`);
             alert(`GRNsight is only capable of handling 75 genes at most. Your proposed network contains
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
-
-            let source = grnState.customWorkbook.source;
-            let headers = {
-                type:"CreateNetwork",
-                info: {
-                    genes: grnState.customWorkbook.genes,
-                    source:grnState.customWorkbook.sources[source].source,
-                    timestamp:grnState.customWorkbook.sources[source].timestamp
-                }
+            const genes = Object.keys(grnState.customWorkbook.genes);
+            const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
+            const source = grnState.customWorkbook.source;
+            const headers = {
+                type:"GenerateNetwork",
+                genes: genes.join(","),
+                source:grnState.customWorkbook.sources[source].source,
+                timestamp:grnState.customWorkbook.sources[source].timestamp
             };
             queryNetworkDatabase(headers).then(function (response) {
                 grnState.customWorkbook.links = response.links;
-                let genes = grnState.customWorkbook.genes;
-                let links = grnState.customWorkbook.links;
-                let genesAmount = Object.keys(genes).length;
-                let edgesAmount = Object.keys(links).length;
+                const links = Object.entries(grnState.customWorkbook.links);
+                const genesAmount = genes.length;
+                const edgesAmount = links.flatMap( (entry) => entry[1].map((target) => [entry[0], target])).length;
                 if (edgesAmount > 100) {
                     alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
  ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
                 } else {
-                    let name = `Custom Workbook: UnweightedGRN(${genesAmount} genes, ${edgesAmount} edges)`;
-                    let workbook = {name, genes, links};
+                    const name = `GRN(${grnState.customWorkbook.source};${genesAmount} genes, ${edgesAmount} edges)`;
+                    const l = [];
+                    for (let link of links) {
+                        const r = link[0];
+                        for (let t of link[1]) {
+                            l.push(`${grnState.customWorkbook.genes[r]}->${grnState.customWorkbook.genes[t]}`);
+                        }
+                    }
+                    const workbook = {name, genes: displayGenes, links : l.join(",")};
                     uploadCustomWorkbook(workbook, grnState);
                     $(CREATE_NETWORK_MODAL).modal("hide");
                 }

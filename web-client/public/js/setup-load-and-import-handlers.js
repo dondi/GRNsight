@@ -11,10 +11,17 @@ import {
     SCHADE_INPUT_NAME,
     SCHADE_OUTPUT_NAME,
 } from "./constants";
+import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
 
-const demoFiles = [UNWEIGHTED_DEMO_PATH, WEIGHTED_DEMO_PATH, SCHADE_INPUT_PATH, SCHADE_OUTPUT_PATH];
 
-const submittedFilename = $upload => {
+const demoFiles = [
+    UNWEIGHTED_DEMO_PATH,
+    WEIGHTED_DEMO_PATH,
+    SCHADE_INPUT_PATH,
+    SCHADE_OUTPUT_PATH,
+];
+
+const submittedFilename = ($upload) => {
     let path = $upload.val();
     let fakePathCheck = path.search("\\\\") + 1;
 
@@ -26,31 +33,32 @@ const submittedFilename = $upload => {
     return path;
 };
 
-const createFileForm = $upload => {
+const createFileForm = ($upload) => {
     const formData = new FormData();
     formData.append("file", $upload[0].files[0]);
     return formData;
 };
 
-const uploadEpilogue = event => {
+const uploadEpilogue = (event) => {
     if (window.ga) {
         window.ga("send", "pageview", {
             page: "/GRNsight/upload",
-            sessionControl: "start"
+            sessionControl: "start",
         });
     }
 
     $("a.upload > input[type=file]").val("");
     event.preventDefault();
 };
-const disableUpload = state => {
+const disableUpload = (state) => {
     $(".upload").attr("disabled", state);
     $(".upload-sif").attr("disabled", state);
     $(".upload-graphml").attr("disabled", state);
 };
 
 const uploadHandler = (uploader) => {
-    return function (event) { // Must be `function` due to use of `this`.
+    return function (event) {
+        // Must be `function` due to use of `this`.
         const $upload = $(this);
         const filename = submittedFilename($upload); // TODO: remove before master release (beta@4.0.6)
         if ($upload[0].files[0].size < 2000000) {
@@ -60,21 +68,23 @@ const uploadHandler = (uploader) => {
             uploader(filename, formData);
             uploadEpilogue(event);
         } else {
-            let errorString = "The file uploaded is too large. Please try again with a file smaller than 1 MB.";
+            let errorString =
+                "The file uploaded is too large. Please try again with a file smaller than 1 MB.";
             $("#error").html(errorString);
             $("#errorModal").modal("show");
         }
     };
 };
 
-const workbookErrorDisplayer = xhr => {
+const workbookErrorDisplayer = (xhr) => {
     // re-enable upload button
     disableUpload(false);
     // Deleted status, error for argument because it was never used
     const err = JSON.parse(xhr.responseText);
     let errorString = "Your graph failed to load.<br><br>";
 
-    if (!err.errors) { // will be falsy if an error was thrown before the workbook was generated
+    if (!err.errors) {
+        // will be falsy if an error was thrown before the workbook was generated
         errorString += err;
     } else {
         errorString = err.errors.reduce(
@@ -91,8 +101,7 @@ const workbookErrorDisplayer = xhr => {
 
 let reloader = () => { };
 
-
-const returnUploadRoute = filename => {
+const returnUploadRoute = (filename) => {
     if (demoFiles.indexOf(filename) !== -1) {
         return filename;
     } else if (filename.includes(".xlsx")) {
@@ -104,22 +113,12 @@ const returnUploadRoute = filename => {
     }
 };
 
-export const setupLoadAndImportHandlers = grnState => {
+export const setupLoadAndImportHandlers = (grnState) => {
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
-        const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
         // The presence of formData is taken to indicate a POST.
-        (formData ?
-            $.ajax({
-                url: fullUrl,
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: "POST",
-                crossDomain: true
-            }) :
-            $.getJSON(fullUrl)
-            ).done((workbook, textStatus, jqXhr) => {
+        getWorkbookFromForm(formData, uploadRoute)
+            .done((workbook, textStatus, jqXhr) => {
                 grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
                 if (demoFiles.indexOf(name) > -1) {
                     switch (name) {
@@ -146,7 +145,8 @@ export const setupLoadAndImportHandlers = grnState => {
                 disableUpload(false);
                 updateApp(grnState);
                 // displayStatistics(workbook);
-            }).error(workbookErrorDisplayer);
+            })
+            .error(workbookErrorDisplayer);
     };
     /*
      * Thanks to http://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
@@ -156,7 +156,10 @@ export const setupLoadAndImportHandlers = grnState => {
     // $(".upload").change(uploadHandler(loadGrn));
     $("body").on("change", ".upload", uploadHandler(loadGrn));
     const loadDemo = (url, value) => {
-        $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
+        $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop(
+            "selected",
+            true
+        );
         loadGrn(url);
         reloader = () => loadGrn(url);
 
@@ -176,11 +179,17 @@ export const setupLoadAndImportHandlers = grnState => {
         });
     };
 
-    DEMO_INFORMATION.forEach(demoInfo => initializeDemoFile.apply(null, demoInfo));
+    DEMO_INFORMATION.forEach((demoInfo) =>
+        initializeDemoFile.apply(null, demoInfo)
+    );
 
     $("body").on("click", ".reload", function () {
         // Deleted `event` parameter but need `function` because of `this`.
-        if (!$(this).parent().hasClass("disabled")) {
+        if (
+            !$(this)
+                .parent()
+                .hasClass("disabled")
+        ) {
             if ($.isFunction(reloader)) {
                 reloader();
             }
@@ -190,14 +199,15 @@ export const setupLoadAndImportHandlers = grnState => {
 
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
-    const fullUrl = [ $(".service-root").val(), uploadRoute ].join("/");
-    $.getJSON(fullUrl).done((workbook) => {
+    getWorkbookFromUrl(uploadRoute).done((workbook) => {
         grnState.name = name;
         grnState.workbook = workbook;
+        // Reset the node coloring dataset selection
+        grnState.nodeColoring.topDataset = undefined;
+        grnState.nodeColoring.bottomDataset = undefined;
         grnState.annotateLinks();
         disableUpload(false);
         updateApp(grnState);
         reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
     });
 };
-

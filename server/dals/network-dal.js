@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -18,11 +19,11 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM spring2022_network.source ORDER BY time_stamp;";
+    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp;";
 };
 
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
-    return `SELECT DISTINCT gene_id, display_gene_id FROM spring2022_network.network, spring2022_network.gene WHERE
+    return `SELECT DISTINCT gene_id, display_gene_id FROM gene_regulatory_network.network, gene_regulatory_network.gene WHERE
  network.time_stamp='${timestamp}' AND network.source='${source}' AND
  (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
  (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`;
@@ -38,21 +39,21 @@ const buildNetworkGenesQuery = function (geneString) {
 
 };
 
-const buildCreateNetworkQuery = function (genes, source, timestamp) {
+const buildGenerateNetworkQuery = function (genes, source, timestamp) {
     return `SELECT DISTINCT regulator_gene_id, target_gene_id FROM
- spring2022_network.network WHERE
+ gene_regulatory_network.network WHERE
  time_stamp='${timestamp}' AND source='${source}' AND
  ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`;
 };
 
 const buildQueryByType = function (queryType, query) {
-    switch (queryType) {
-    case "NetworkSource":
-        return buildNetworkSourceQuery();
-    case "NetworkGeneFromSource":
-        return buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp);
-    case "CreateNetwork":
-        return buildCreateNetworkQuery(query.genes, query.source, query.timestamp);
+    const networkQueries = {
+        "NetworkSource": () => buildNetworkSourceQuery(),
+        "NetworkGeneFromSource": () => buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp),
+        "GenerateNetwork": () => buildGenerateNetworkQuery(query.genes, query.source, query.timestamp)
+    };
+    if (Object.keys(networkQueries).includes(query.type)) {
+        return networkQueries[query.type]();
     }
 };
 
@@ -62,16 +63,17 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
     case "NetworkSource":
         JSONOutput.sources = {};
         totalOutput.forEach(function (x) {
-            let timestamp = x.time_stamp;
-            let source = x.source;
-            JSONOutput.sources[`${source} : ${timestamp}`] = {timestamp, source};
+            const timestamp = x.time_stamp;
+            const source = x.source;
+            const displayName = x.display_name;
+            JSONOutput.sources[`${displayName} : ${timestamp.toISOString().split("T")[0]}`] = {timestamp, source};
         });
         return JSONOutput;
     case "NetworkGeneFromSource":
         JSONOutput.displayGeneId = totalOutput.length > 0 ? totalOutput[0].display_gene_id : null;
         JSONOutput.geneId = totalOutput.length > 0 ? totalOutput[0].gene_id : null;
         return JSONOutput;
-    case "CreateNetwork":
+    case "GenerateNetwork":
         JSONOutput.links = {};
         for (let connection of totalOutput) {
             if (JSONOutput.links[connection.regulator_gene_id] === undefined) {
@@ -81,7 +83,10 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
             }
         }
         return JSONOutput;
+    default:
+        return JSONOutput;
     }
+
 };
 
 module.exports = {
@@ -89,7 +94,7 @@ module.exports = {
     queryNetworkDatabase: function (req, res) {
         sequelize.query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
-                let response = convertResponseToJSON(req.query.type, req.query, stdname);
+                const response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
             });
     }

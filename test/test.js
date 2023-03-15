@@ -716,7 +716,26 @@ var invalidMSEDataWarning = function (input, frequency) {
 var importExportReImportNoErrorsOrWarnings = function (input) {
     var sheet = xlsx.parse(input);
     var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
-    inputWorkbook["exportExpression"] = inputWorkbook.expression;
+    inputWorkbook.exportSheets = {
+        "optimization_parameters": inputWorkbook.meta,
+        expression: inputWorkbook.expression,
+        networks: {}
+    };
+    if (inputWorkbook.network) {
+        inputWorkbook.exportSheets.networks["network"] = inputWorkbook.network;
+    }
+    if (inputWorkbook.networkOptimizedWeights) {
+        inputWorkbook.exportSheets.networks["network_optimized_weights"] = inputWorkbook.networkOptimizedWeights;
+    }
+    if (inputWorkbook.networkWeights) {
+        inputWorkbook.exportSheets.networks["network_weights"] = inputWorkbook.networkWeights;
+    }
+    if (inputWorkbook.twoColumnSheets) {
+        inputWorkbook.exportSheets["two_column_sheets"] = inputWorkbook.twoColumnSheets;
+    }
+    if (inputWorkbook.meta2) {
+        inputWorkbook.exportSheets["optimization_diagnostics"] = inputWorkbook.meta2;
+    }
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
@@ -726,8 +745,26 @@ var importExportReImportNoErrorsOrWarnings = function (input) {
 var importFileSameAsExportFile = function (input) {
     var sheet = xlsx.parse(input);
     var inputWorkbook = spreadsheetController.crossSheetInteractions(sheet);
-    inputWorkbook["exportExpression"] = inputWorkbook.expression;
-    inputWorkbook["exportNetworkType"] = inputWorkbook.sheetType;
+    inputWorkbook.exportSheets = {
+        "optimization_parameters": inputWorkbook.meta,
+        expression: inputWorkbook.expression,
+        networks: {}
+    };
+    if (inputWorkbook.network) {
+        inputWorkbook.exportSheets.networks["network"] = inputWorkbook.network;
+    }
+    if (inputWorkbook.networkOptimizedWeights) {
+        inputWorkbook.exportSheets.networks["network_optimized_weights"] = inputWorkbook.networkOptimizedWeights;
+    }
+    if (inputWorkbook.networkWeights) {
+        inputWorkbook.exportSheets.networks["network_weights"] = inputWorkbook.networkWeights;
+    }
+    if (inputWorkbook.twoColumnSheets) {
+        inputWorkbook.exportSheets["two_column_sheets"] = inputWorkbook.twoColumnSheets;
+    }
+    if (inputWorkbook.meta2) {
+        inputWorkbook.exportSheets["optimization_diagnostics"] = inputWorkbook.meta2;
+    }
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     sheet.sort((a, b) => (a.name > b.name) ? 1 : -1);

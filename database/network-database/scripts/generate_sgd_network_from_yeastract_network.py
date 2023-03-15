@@ -94,7 +94,7 @@ if not os.path.exists('../script-results/yeastract-to-sgd-networks'):
 
 # Files to be generated
 
-# Create Networks
+# Generate Networks
 
 SGD_MATRIX = '../script-results/yeastract-to-sgd-networks/SGD_Regulation_matrix_profile2.csv'
 SGD_MATRIX_EXCEL = '../script-results/yeastract-to-sgd-networks/SGD_Regulation_matrix_profile2.xlsx'

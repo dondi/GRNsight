@@ -13,7 +13,7 @@ try:
                                   port="5432",
                                   database="postgres")
     cursor = connection.cursor()
-    postgreSQL_select_Query = "select * from spring2022_network.gene"
+    postgreSQL_select_Query = "select * from gene_regulatory_network.gene"
 
     cursor.execute(postgreSQL_select_Query)
     print("Selecting rows from gene table using cursor.fetchall")

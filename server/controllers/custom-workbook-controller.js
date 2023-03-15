@@ -12,14 +12,15 @@ var processCustomWorkbook = function (path, res, app, workbook) {
 };
 
 const createCustomWorkbook = (genesString, linksString) => {
-    let genes = genesString.split(",").map(gene => {
+    const g = genesString.split(",");
+    let genes = g.map(gene => {
         return {name: gene};
     });
     let links = linksString === "" ? [] : linksString.split(",").map( link => {
         link = link.split("->");
         return {
-            source: parseInt(link[0]),
-            target: parseInt(link[1]),
+            source: g.indexOf(link[0]),
+            target: g.indexOf(link[1]),
             value:1,
             type:"arrowhead",
             stroke: "black"
@@ -47,7 +48,8 @@ const createCustomWorkbook = (genesString, linksString) => {
                 taxon_id: 559292
             }
         },
-        test: {
+        meta2: {},
+        twoColumnSheets: {
         },
         expression: {
         }
