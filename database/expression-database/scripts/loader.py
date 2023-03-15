@@ -45,7 +45,7 @@ def convert_int(potential_int):
 This program Loads Refs into the database
 """
 def LOAD_REFS():
-    print('COPY fall2021.ref (pubmed_id, authors, publication_year, title, doi, ncbi_geo_id) FROM stdin;')
+    print('COPY gene_expression.ref (pubmed_id, authors, publication_year, title, doi, ncbi_geo_id) FROM stdin;')
     REFS_SOURCE = '../script-results/processed-expression/refs.csv'
     with open(REFS_SOURCE, 'r+') as f:
         reader = csv.reader(f)
@@ -67,7 +67,7 @@ def LOAD_REFS():
 This program Loads ID Mapping into the database
 """
 def LOAD_GENES():
-    print('COPY fall2021.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
+    print('COPY gene_expression.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
     GENE_SOURCE = '../script-results/processed-expression/genes.csv'
     with open(GENE_SOURCE, 'r+') as f:
         reader = csv.reader(f)
@@ -87,7 +87,7 @@ def LOAD_GENES():
 This program Loads Expression Metadata into the database
 """
 def LOAD_EXPRESSION_METADATA():
-    print('COPY fall2021.expression_metadata (ncbi_geo_id, pubmed_id, control_yeast_strain, treatment_yeast_strain, control, treatment, concentration_value, concentration_unit, time_value, time_unit, number_of_replicates, expression_table) FROM stdin;')
+    print('COPY gene_expression.expression_metadata (ncbi_geo_id, pubmed_id, control_yeast_strain, treatment_yeast_strain, control, treatment, concentration_value, concentration_unit, time_value, time_unit, number_of_replicates, expression_table) FROM stdin;')
     EXPRESSION_METADATA_SOURCE = '../script-results/processed-expression/expression-metadata.csv'
     with open(EXPRESSION_METADATA_SOURCE, 'r+') as f:
         reader = csv.reader(f)
@@ -116,7 +116,7 @@ def LOAD_EXPRESSION_METADATA():
 This program Loads Expression Data into the database
 """
 def LOAD_EXPRESSION_DATA():
-    print('COPY fall2021.expression (gene_id, taxon_id, sort_index, sample_id, expression, time_point, dataset) FROM stdin;')
+    print('COPY gene_expression.expression (gene_id, taxon_id, sort_index, sample_id, expression, time_point, dataset) FROM stdin;')
     EXPRESSION_DATA_SOURCE = '../script-results/processed-expression/expression-data.csv'
     with open(EXPRESSION_DATA_SOURCE, 'r+') as f:
         reader = csv.reader(f)
@@ -140,7 +140,7 @@ def LOAD_EXPRESSION_DATA():
 This program Loads Production Rates into the database
 """
 def LOAD_PRODUCTION_RATES():
-    print('COPY fall2021.production_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, production_rate) FROM stdin;')
+    print('COPY gene_expression.production_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, production_rate) FROM stdin;')
     PRODUCTION_RATES_SOURCE = '../script-results/processed-expression/production-rates.csv'
     with open(PRODUCTION_RATES_SOURCE, 'r+') as f:
         reader = csv.reader(f)
@@ -161,7 +161,7 @@ def LOAD_PRODUCTION_RATES():
 This program Loads Degradation Rates into the database
 """
 def LOAD_DEGRADATION_RATES():
-    print('COPY fall2021.degradation_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, degradation_rate) FROM stdin;')
+    print('COPY gene_expression.degradation_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, degradation_rate) FROM stdin;')
     DEGRADATION_RATES_SOURCE = '../script-results/processed-expression/degradation-rates.csv'
     with open(DEGRADATION_RATES_SOURCE, 'r+') as f:
         reader = csv.reader(f)
