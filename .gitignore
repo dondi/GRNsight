@@ -22,6 +22,8 @@ logs
 results
 /.idea
 
+database/protein-protein-database/script-results
+database/protein-protein-database/source-files
 database/network-database/script-results
 database/network-database/source-files
 database/expression-database/script-results
