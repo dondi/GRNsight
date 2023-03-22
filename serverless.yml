@@ -8,17 +8,14 @@ provider:
 functions:
   server:
     handler: server/app.handler
-    url:
-      cors: true
+    url: true
     events:
       - http:
           path: /
           method: ANY
-          cors: true
       - http:
           path: /{proxy+}
           method: ANY
-          cors: true
   web-client:
     handler: web-client/app.handler
     url: true
@@ -26,8 +23,6 @@ functions:
       - http:
           path: /
           method: ANY
-          cors: true
       - http:
           path: /{proxy+}
           method: ANY
-          cors: true

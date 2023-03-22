@@ -33,5 +33,17 @@ module.exports = {
             name: "GRNsight"
         },
         serviceRoot: "//grnsight.cs.lmu.edu/beta/server"
+    },
+
+    "beta-lambda": {
+        host: "2dz4kdk52j37d7xhm6cwi4u4wq0ydwdv.lambda-url.us-east-1.on.aws",
+        port: 4001,
+        url: "https://" + this.host,
+        root: rootPath,
+        app: {
+            name: "GRNsight"
+        },
+        serviceRoot:
+            "//o5mku5nb65lxg6bstf6ctxwium0zcaqi.lambda-url.us-east-1.on.aws"
     }
 };
