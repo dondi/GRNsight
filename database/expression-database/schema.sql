@@ -1,4 +1,4 @@
-CREATE TABLE fall2021.ref (
+CREATE TABLE gene_expression.ref (
   pubmed_id VARCHAR,
   authors VARCHAR,
   publication_year VARCHAR,
@@ -8,7 +8,7 @@ CREATE TABLE fall2021.ref (
   PRIMARY KEY(ncbi_geo_id, pubmed_id)
 );
 
-CREATE TABLE fall2021.gene (
+CREATE TABLE gene_expression.gene (
   gene_id VARCHAR, -- systematic like name
   display_gene_id VARCHAR, -- standard like name
   species VARCHAR,
@@ -16,10 +16,10 @@ CREATE TABLE fall2021.gene (
   PRIMARY KEY(gene_id, taxon_id)
 ); 
 
-CREATE TABLE fall2021.expression_metadata (
+CREATE TABLE gene_expression.expression_metadata (
   ncbi_geo_id VARCHAR,
   pubmed_id VARCHAR,
-  FOREIGN KEY (ncbi_geo_id, pubmed_id) REFERENCES fall2021.ref(ncbi_geo_id, pubmed_id),
+  FOREIGN KEY (ncbi_geo_id, pubmed_id) REFERENCES gene_expression.ref(ncbi_geo_id, pubmed_id),
   control_yeast_strain VARCHAR,
   treatment_yeast_strain VARCHAR,
   control VARCHAR,
@@ -33,10 +33,10 @@ CREATE TABLE fall2021.expression_metadata (
   display_expression_table VARCHAR,
   PRIMARY KEY(ncbi_geo_id, pubmed_id, time_value)
 );
-CREATE TABLE fall2021.expression (
+CREATE TABLE gene_expression.expression (
   gene_id VARCHAR,
   taxon_id VARCHAR,
-  FOREIGN KEY (gene_id, taxon_id) REFERENCES fall2021.gene(gene_id, taxon_id),
+  FOREIGN KEY (gene_id, taxon_id) REFERENCES gene_expression.gene(gene_id, taxon_id),
   -- ncbi_geo_id VARCHAR,
   -- pubmed_id VARCHAR,
   sort_index INT,
@@ -45,27 +45,27 @@ CREATE TABLE fall2021.expression (
   time_point FLOAT,
   dataset VARCHAR, 
   PRIMARY KEY(gene_id, sample_id)
-  -- FOREIGN KEY (ncbi_geo_id, pubmed_id, time_point) REFERENCES fall2021.expression_metadata(ncbi_geo_id, pubmed_id, time_value)
+  -- FOREIGN KEY (ncbi_geo_id, pubmed_id, time_point) REFERENCES gene_expression.expression_metadata(ncbi_geo_id, pubmed_id, time_value)
 ); 
-CREATE TABLE fall2021.degradation_rate (
+CREATE TABLE gene_expression.degradation_rate (
   gene_id VARCHAR,
   taxon_id VARCHAR,
-  FOREIGN KEY (gene_id, taxon_id) REFERENCES fall2021.gene(gene_id, taxon_id),
+  FOREIGN KEY (gene_id, taxon_id) REFERENCES gene_expression.gene(gene_id, taxon_id),
   ncbi_geo_id VARCHAR,
   pubmed_id VARCHAR,
-  FOREIGN KEY (ncbi_geo_id, pubmed_id) REFERENCES fall2021.ref(ncbi_geo_id, pubmed_id),
+  FOREIGN KEY (ncbi_geo_id, pubmed_id) REFERENCES gene_expression.ref(ncbi_geo_id, pubmed_id),
   PRIMARY KEY(gene_id, ncbi_geo_id, pubmed_id),
   degradation_rate FLOAT
 );
 
-CREATE TABLE fall2021.production_rate (
+CREATE TABLE gene_expression.production_rate (
   gene_id VARCHAR,
   taxon_id VARCHAR,
-  FOREIGN KEY (gene_id, taxon_id) REFERENCES fall2021.gene(gene_id, taxon_id),
+  FOREIGN KEY (gene_id, taxon_id) REFERENCES gene_expression.gene(gene_id, taxon_id),
   ncbi_geo_id VARCHAR,
   pubmed_id VARCHAR,
-  FOREIGN KEY (ncbi_geo_id, pubmed_id) REFERENCES fall2021.ref(ncbi_geo_id, pubmed_id),
+  FOREIGN KEY (ncbi_geo_id, pubmed_id) REFERENCES gene_expression.ref(ncbi_geo_id, pubmed_id),
   PRIMARY KEY(gene_id, ncbi_geo_id, pubmed_id),
   production_rate FLOAT
-  -- FOREIGN KEY (gene_id, ncbi_geo_id, pubmed_id) REFERENCES fall2021.degradation_rate(gene_id, ncbi_geo_id, pubmed_id) -- not sure if we want to link the generated production rate to it's original degradation rate
+  -- FOREIGN KEY (gene_id, ncbi_geo_id, pubmed_id) REFERENCES gene_expression.degradation_rate(gene_id, ncbi_geo_id, pubmed_id) -- not sure if we want to link the generated production rate to it's original degradation rate
 );

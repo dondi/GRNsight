@@ -2,12 +2,27 @@ from __future__ import print_function
 
 from intermine.webservice import Service
 service = Service("https://yeastmine.yeastgenome.org/yeastmine/service")
+from sqlalchemy import create_engine
 
 import csv
 import re
 import sys
 import os
 import datetime
+
+
+def get_all_genes():
+    db = create_engine(os.environ['DB_URL'])
+    
+    with db.connect() as connection:
+        result_set = connection.execute(
+        f"""
+            SELECT display_gene_id, gene_id FROM gene_regulatory_network.gene;
+        """)
+        result = result_set.fetchall()
+        return list(result)
+
+
 
 # Get Network Data from Yeastmine
 
@@ -154,19 +169,42 @@ source_file.close()
 
 GENE_DESTINATION = '../script-results/processed-loader-files/gene.csv'
 
+database_genes = {g[1] : g[0] for g in get_all_genes()}
+database_standard_names = [g[0] for g in get_all_genes()]
+database_systematic_names = [g[1] for g in get_all_genes()]
 species = "Saccharomyces cerevisiae"
 taxon_id = "559292"
-
+genes_to_update = {}
 print(f'Creating gene.csv\n')
 gene_file = open(GENE_DESTINATION, 'w')
 headers = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\tRegulator'
 gene_file.write(f'{headers}\n')
 for gene in all_genes:
-    if gene in regulators:
-        gene_file.write(f'{all_genes[gene]}\t{gene}\t{species}\t{taxon_id}\ttrue\n')
-    else:
-        gene_file.write(f'{all_genes[gene]}\t{gene}\t{species}\t{taxon_id}\tfalse\n')
+    if gene not in database_standard_names:
+        if all_genes[gene] not in database_systematic_names:
+            if gene in regulators:
+                gene_file.write(f'{all_genes[gene]}\t{gene}\t{species}\t{taxon_id}\ttrue\n')
+            else:
+                gene_file.write(f'{all_genes[gene]}\t{gene}\t{species}\t{taxon_id}\tfalse\n')
+        else:
+            # if systematic name is found, then we need to update the gene
+            genes_to_update[gene] = all_genes[gene]
+gene_file.close()
 
+# Gene Table Updates
+
+GENE_UPDATES_DESTINATION = '../script-results/processed-loader-files/gene_update.csv'
+
+
+print(f'Creating gene_update.csv\n')
+gene_file = open(GENE_UPDATES_DESTINATION, 'w')
+headers = f'Gene ID\tDisplay Gene ID\tRegulator'
+gene_file.write(f'{headers}\n')
+for gene in genes_to_update:
+    if gene in regulators:
+        gene_file.write(f'{all_genes[gene]}\t{gene}\ttrue\n')
+    else:
+        gene_file.write(f'{all_genes[gene]}\t{gene}\tfalse\n')
 gene_file.close()
 
 

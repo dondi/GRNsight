@@ -20,27 +20,28 @@ var sequelize = new Sequelize(
 const buildExpressionGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ( `(fall2021.gene.display_gene_id =\'${x}\') OR `));
+    geneList.forEach(x => genes += ( `(gene_expression.gene.display_gene_id =\'${x}\') OR `));
     return genes.substring(0, genes.length - 4);
 };
 
 const buildExpressionProductionDegradationRatesQuery = function (rateType, genes) {
     return `
-    SELECT gene.display_gene_id, ${rateType}  FROM fall2021.${rateType}, fall2021.gene WHERE
+    SELECT gene.display_gene_id, ${rateType}  FROM gene_expression.${rateType}, gene_expression.gene WHERE
     ((${buildExpressionGenesQuery(genes)}) 
-    AND fall2021.gene.gene_id = fall2021.${rateType}.gene_id) ORDER BY display_gene_id;`;
+    AND gene_expression.gene.gene_id = gene_expression.${rateType}.gene_id) ORDER BY display_gene_id;`;
 };
 
 const buildExpressionTimepointsFromDatasetQuery = function (dataset) {
     return `
-    SELECT DISTINCT time_point, sample_id FROM fall2021.expression WHERE
+    SELECT DISTINCT time_point, sample_id FROM gene_expression.expression WHERE
     dataset = '${dataset}' ORDER BY time_point ASC;`;
 };
 
 const buildExpressionDataQuery = function (dataset, genes) {
-    return `SELECT * FROM fall2021.expression, fall2021.gene WHERE fall2021.expression.dataset='${dataset}'
+    return `SELECT * FROM gene_expression.expression, gene_expression.gene 
+    WHERE gene_expression.expression.dataset='${dataset}'
     AND ((${buildExpressionGenesQuery(genes)}) 
-    AND fall2021.gene.gene_id = fall2021.expression.gene_id) ORDER BY sort_index;`;
+    AND gene_expression.gene.gene_id = gene_expression.expression.gene_id) ORDER BY sort_index;`;
 };
 
 
@@ -50,7 +51,7 @@ const buildExpressionQuery = function (query) {
         "DegradationRates": () => buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
         "ProductionRates" : () => buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
         "ExpressionData" : () => buildExpressionDataQuery(query.dataset, query.genes),
-        "ExpressionDatasets" : () => "SELECT DISTINCT dataset FROM fall2021.expression ORDER BY dataset ASC;",
+        "ExpressionDatasets" : () => "SELECT DISTINCT dataset FROM gene_expression.expression ORDER BY dataset ASC;",
         "ExpressionTimePoints": () => buildExpressionTimepointsFromDatasetQuery(query.dataset)
     };
     if (Object.keys(expressionQueries).includes(query.type)) {
