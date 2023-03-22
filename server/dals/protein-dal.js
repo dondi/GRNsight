@@ -18,10 +18,10 @@ var sequelize = new Sequelize(
     }
 );
 
-const buildNetworkFromGeneProteinQuery = function (gene_protein) {
+const buildNetworkFromGeneProteinQuery = function (geneProtein) {
     return `SELECT DISTINCT gene_id, display_gene_id, standard_name, length, molecular_weight, PI FROM
  protein_protein_interactions.gene, protein_protein_interactions.protein WHERE
- (gene.gene_id ='${gene_protein}' OR gene.display_gene_id ='${gene_protein}' OR protein.standard_name ='${query}') AND
+ (gene.gene_id ='${geneProtein}' OR gene.display_gene_id ='${geneProtein}' OR protein.standard_name ='${geneProtein}') AND
  gene.gene_id = protein.gene_systematic_name;`;
 };
 
@@ -29,7 +29,7 @@ const buildNetworkProteinsQuery = function (proteinString) {
     let proteins = "(";
     let proteinList = proteinString.split(",");
     proteinList.forEach(x => proteins += ( `(physical_interactions.protein1 =\'${x}\') OR `));
-    proteins = `${genes.substring(0, proteins.length - 4)}) AND (`;
+    proteins = `${proteins.substring(0, proteins.length - 4)}) AND (`;
     proteinList.forEach(x => proteins += ( `(physical_interactions.protein2 =\'${x}\') OR `));
     return `${proteins.substring(0, proteins.length - 4)})`;
 
@@ -43,7 +43,7 @@ const buildGenerateProteinNetworkQuery = function (proteins) {
 
 const buildQueryByType = function (query) {
     const networkQueries = {
-        "NetworkFromGeneProtein": () => buildNetworkFromGeneProteinQuery(query.gene_protein),
+        "NetworkFromGeneProtein": () => buildNetworkFromGeneProteinQuery(query.geneProtein),
         "GenerateProteinNetwork": () => buildGenerateProteinNetworkQuery(query.proteins)
     };
     if (Object.keys(networkQueries).includes(query.type)) {
@@ -56,11 +56,11 @@ const convertResponseToJSON = function (queryType, totalOutput) {
     switch (queryType) {
     case "NetworkFromGeneProtein":
         if (totalOutput.length > 0) {
-            JSONOutput.standard_name = totalOutput[0].standard_name;
+            JSONOutput.standardName = totalOutput[0].standard_name;
             JSONOutput.displayGeneId = totalOutput[0].display_gene_id;
             JSONOutput.geneId = totalOutput[0].gene_id;
             JSONOutput.length = totalOutput[0].length;
-            JSONOutput.molecular_weight = totalOutput[0].molecular_weight;
+            JSONOutput.molecularWeight = totalOutput[0].molecular_weight;
             JSONOutput.PI = totalOutput[0].PI;
         }
         JSONOutput.completed = true;
