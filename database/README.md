@@ -2,10 +2,18 @@
 Here are the files pertaining to both the network and expression databases. Look within the README.md files of both folders for information pertinent to the schema that you intend to be using.
 ## Setting up a local postgres GRNsight Database
 1. Installing PostgreSQL on your computer
-    - MacOS and Windows can follow these [instructions](https://dondi.lmu.build/share/db/postgresql-setup-day.pdf) on how to install postgreSQL.
-        - Step 1 tells you how to install postgreSQL on your local machine, initialize a database, and how to start and stop running your database instance.
-        - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
-        - Additionally, your installer may start the server for you upon installation. To start the server yourself run `pg_ctl start -D location-of-cluster`. To stop the server run `pg_ctl stop -D location-of-cluster`.
+    - MacOS and Windows can follow these instructions on how to install postgreSQL.
+        - Install the software at this [link](https://www.postgresql.org/download/) 
+        - Initialize the database
+           - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
+           - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
+           - "Cluster" is the PostgreSQL term for the file structure of a PostgreSQL database instance
+           - You will have to modify location-of-cluster to the folder name you want to store the database (you don't need to create a folder, the command will create the folder for you, just create the name)
+        - Start and stop the server
+            - Additionally, your installer may start the server for you upon installation (You can save this command for further reuse).
+            - To start the server yourself run `pg_ctl start -D location-of-cluster` (You can save this command for further reuse).
+            - To stop the server run `pg_ctl stop -D location-of-cluster`.
+        
     - Linux users
       - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
       - Linux users can try these [instructions](https://www.geeksforgeeks.org/install-postgresql-on-linux/) and that should work for you (...maybe...). If it doesn't try googling instructions with your specific operating system. Sorry!
