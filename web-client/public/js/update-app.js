@@ -543,10 +543,9 @@ const toggleLayout = (on, off) => {
   }
 };
 
-export const updatetoForceGraph = () => {
+const updatetoForceGraph = () => {
   $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
   // toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
-  console.log("Update to FOrce graph");
 };
 
 const updatetoGridLayout = () => {
