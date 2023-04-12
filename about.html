@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 1/30/23
+modified: 4/11/23
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -61,10 +61,51 @@ description: >-
                                 </a>
                             </p>
                         </div>
-
+                        
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
+                                    
+                                    
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v6_0_7Content" data-toggle="collapse">
+                                                    GRNsight v6.0.7
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v6_0_7Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v6.0.7 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>The back-end database was updated.
+                                                        <ul>
+                                                            <li>Refreshed the network database on the production database.</li>
+                                                            <li>Renamed Backend Database to appropriately reflect the data contained within.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>The language of the file names in the menu bar was clarified.
+                                                        <ul>
+                                                            <li>When generating a network from the database it will display "GRN (data source; X genes Y edges)".</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>Dependancy Version Update:
+                                                        <ul>
+                                                            <li>Updated from pg v8.0.0 to 8.0.3</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>Bug Fixes:
+                                                        <ul>
+                                                            <li>Export to Excel now exports the specified sheets when exporting.</li>
+                                                            <li>Fixed the graph to display the edges of the network.</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
