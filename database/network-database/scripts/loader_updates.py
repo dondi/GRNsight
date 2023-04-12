@@ -51,7 +51,25 @@ def LOAD_GENES():
                 print(f'{gene_id}\t{display_gene_id}\t{species}\t{taxon_id}\t{regulator}')
             row_num += 1
     print('\\.')
-
+    
+"""
+This Updates to Gene ID Mapping into the database
+"""
+def UPDATE_GENES():
+    print('BEGIN;')
+    GENE_SOURCE = '../script-results/processed-loader-files/gene_update.csv'
+    with open(GENE_SOURCE, 'r+') as f:
+        reader = csv.reader(f)
+        row_num = 0
+        for row in reader:
+            if row_num != 0:
+                r= ','.join(row).split('\t')
+                gene_id = r[0]
+                display_gene_id= r[1]
+                regulator = r[2]
+                print(f"UPDATE gene_regulatory_network.gene\nSET display_gene_id = '{display_gene_id}', regulator={regulator}\nWHERE gene_id = '{gene_id}';")
+            row_num += 1
+    print('COMMIT;')
 
 """
 This function Loads the Network Matrix into the database
@@ -74,6 +92,8 @@ def LOAD_NETWORK():
             row_num += 1
     print('\\.')
 
+
+UPDATE_GENES()
 LOAD_SOURCES()
 LOAD_GENES()
 LOAD_NETWORK()
