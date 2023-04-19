@@ -48,6 +48,13 @@ const queryNetworkDatabase = (query) => {
     return responseData("network", "", queryURL);
 };
 
+// GRNsettings DB Access Functions
+
+const queryDefaultDataset = (query) => {
+    const queryURL = buildQueryURL("grnsettingsdb", query);
+    return responseData("grnsettings", "", queryURL);
+};
+
 // Upload Custom Workbook Functions
 
 const uploadCustomWorkbook = (workbook, grnState) => {
@@ -86,4 +93,5 @@ export {
     uploadCustomWorkbook,
     getWorkbookFromForm,
     getWorkbookFromUrl,
+    queryDefaultDataset,
 };
