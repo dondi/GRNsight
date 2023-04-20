@@ -28,11 +28,11 @@ Here are the files pertaining to both the network and expression databases. Look
            From there, create the schemas using the following commands:
             
             ```
-            CREATE SCHEMA spring2022_network;
+            CREATE SCHEMA gene_regulatory_network;
             ```
             
             ```
-            CREATE SCHEMA fall2021;
+            CREATE SCHEMA gene_expression;
             ```
             
            Once they are created you can exit your database using the command `\q`.
