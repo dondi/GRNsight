@@ -1,4 +1,5 @@
 import { updateApp } from "./update-app";
+import { FORCE_GRAPH } from "./constants";
 
 import {
     DEMO_INFORMATION,
@@ -162,7 +163,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
         );
         loadGrn(url);
         reloader = () => loadGrn(url);
-
+        grnState.graphLayout = FORCE_GRAPH;
         $("a.upload > input[type=file]").val("");
     };
 

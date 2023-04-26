@@ -2,10 +2,18 @@
 Here are the files pertaining to both the network and expression databases. Look within the README.md files of both folders for information pertinent to the schema that you intend to be using.
 ## Setting up a local postgres GRNsight Database
 1. Installing PostgreSQL on your computer
-    - MacOS and Windows can follow these [instructions](https://dondi.lmu.build/share/db/postgresql-setup-day.pdf) on how to install postgreSQL.
-        - Step 1 tells you how to install postgreSQL on your local machine, initialize a database, and how to start and stop running your database instance.
-        - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
-        - Additionally, your installer may start the server for you upon installation. To start the server yourself run `pg_ctl start -D location-of-cluster`. To stop the server run `pg_ctl stop -D location-of-cluster`.
+    - MacOS and Windows can follow these instructions on how to install postgreSQL.
+        - Install the software at this [link](https://www.postgresql.org/download/) 
+        - Initialize the database
+           - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
+           - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
+           - "Cluster" is the PostgreSQL term for the file structure of a PostgreSQL database instance
+           - You will have to modify location-of-cluster to the folder name you want to store the database (you don't need to create a folder, the command will create the folder for you, just create the name)
+        - Start and stop the server
+            - Additionally, your installer may start the server for you upon installation (You can save this command for further reuse).
+            - To start the server yourself run `pg_ctl start -D location-of-cluster` (You can save this command for further reuse).
+            - To stop the server run `pg_ctl stop -D location-of-cluster`.
+        
     - Linux users
       - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
       - Linux users can try these [instructions](https://www.geeksforgeeks.org/install-postgresql-on-linux/) and that should work for you (...maybe...). If it doesn't try googling instructions with your specific operating system. Sorry!
@@ -47,18 +55,32 @@ Here are the files pertaining to both the network and expression databases. Look
           pip3 install pandas requests intermine tzlocal
           ```
           
-          Once the dependencies have been installed, you can run 
-          
+          Once the dependencies have been installed, you can run
           ```
-          python3 <path to GRNsight/database/network-database/scripts>/generate_network.py
+          cd <path to GRNsight/database/network-database/scripts>
+          python3 generate_network.py
           ```
-        
           This will take a while to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/network-database/script-results`.
+          
+          *** Note: *** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
+          
+        ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
+
+          - Navigate the referenced file ( \<path specific to your machine>/intermine/webservice.py )
+          
+          - The try-catch block should look like this:
+          
+              - ![image](https://user-images.githubusercontent.com/21343072/213094796-c48f54da-b76c-4266-81fb-6aaef24a36c9.png)
+              
+          - Change it to the following, rerun the `generate_network.py` command and it should work! If it doesn't you may need to troubleshoot a bit further (´◕ ᵔ ◕`✿)*ᶜʳᶦᵉˢ*.
+          
+              - ![image](https://user-images.githubusercontent.com/21343072/213094984-bff2deb3-d26b-4809-83d6-6a6615b6e3cf.png)
   
-        2. Load the processed files into your database. 
+        2. Load the processed files into your database.
         
             ```
-            python3 <path to GRNsight/database/network-database/scripts>/loader.py | psql postgresql://localhost/postgres
+            cd <path to GRNsight/database/network-database/scripts>
+            python3 loader.py | psql postgresql://localhost/postgres
             ```
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the network data.
@@ -70,18 +92,20 @@ Here are the files pertaining to both the network and expression databases. Look
             mkdir <path to GRNsight/database/expression-database>/source-files
             ```
         
-        2. Download the _"Expression 2020"_ folder from Box located in `GRNsight > GRNsight Expression > Expression 2020` to your newly created `source-files` folder
+        2. Download the _"Expression 2020"_ folder from Box located in `GRNsight > GRNsight Expression > Expression 2020` to your newly created `source-files` folder. Your the path should look like this: GRNsight > database > expression-database > source-files > Expression 2020 > [the actual csv and xlsx files are here!]
         3. Run the pre-processing script on the data. This will create a folder full of the processed files in `database/expression-database/script-results`.
         
             ```
-            python3 <path to GRNsight/database/expression-database/scripts>/preprocessing.py
+            cd <path to GRNsight/database/expression-database/scripts>
+            python3 preprocessing.py
             ```
             
         4. Load the processed files into your database. 
         
             ```
-            python3 <path to GRNsight/database/expression-database/scripts>/loader.py | psql postgresql://localhost/postgres
+            cd <path to GRNsight/database/expression-database/scripts>
+            python3 loader.py | psql postgresql://localhost/postgres
             ```
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the expression data.
-        
+3. Continue setting up in the [Initial Setup Wiki page](https://github.com/dondi/GRNsight/wiki/Initial-Setup)
