@@ -490,12 +490,14 @@ const toggleLayout = (on, off) => {
 
 const updatetoForceGraph = () => {
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
+    // toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
+    console.log("Update to Force graph");
 };
 
 const updatetoGridLayout = () => {
-    $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
+    // $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
+    // toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
+    console.log("Update to Grid Layout");
 };
 
 // Node Coloring Functions
