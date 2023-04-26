@@ -1,5 +1,5 @@
-import { updateApp, updatetoForceGraph } from "./update-app";
-import { grnState } from "./grnstate";
+import { updateApp } from "./update-app";
+import { FORCE_GRAPH } from "./constants";
 
 import {
     DEMO_INFORMATION,
