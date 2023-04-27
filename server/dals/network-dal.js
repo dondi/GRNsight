@@ -19,7 +19,7 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp;";
+    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp DESC;";
 };
 
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
