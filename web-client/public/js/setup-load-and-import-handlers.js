@@ -136,6 +136,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
                     }
                 }
                 grnState.workbook = workbook;
+                grnState.mode = workbook.meta.data.workbookType;
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
@@ -200,6 +201,11 @@ export const setupLoadAndImportHandlers = (grnState) => {
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
     getWorkbookFromUrl(uploadRoute).done((workbook) => {
+        if (workbook.meta.data.workbookType === "protein-protein-physical-interaction") {
+            grnState.mode = workbook.meta.data.workbookType;
+        } else {
+            grnState.mode = "grn";
+        }
         grnState.name = name;
         grnState.workbook = workbook;
         // Reset the node coloring dataset selection
