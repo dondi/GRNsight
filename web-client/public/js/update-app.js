@@ -104,6 +104,11 @@ import {
   VIEWPORT_SIZE_L_SIDEBAR,
   VIEWPORT_SIZE_FIT_SIDEBAR,
   VIEWPORT_INIT,
+  NETWORK_MODE_DROPDOWN,
+  NETWORK_MODE_CLASS,
+  NETWORK_MODE_PROTEIN_PHYS,
+  NETWORK_MODE_GRN,
+  EXPORT_TO_UNWEIGHTED_GML_MENU,
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -128,7 +133,6 @@ const refreshApp = () => {
 
 const displayworkbook = (workbook, name) => {
     uploadState.currentWorkbook = workbook;
-    // console.log("workbook: ", workbook); // Display the workbook in the console
     $("#graph-metadata").html(workbook.genes.length + " nodes<br>" + workbook.links.length + " edges");
 
     if (workbook.warnings.length > 0) {
@@ -519,6 +523,61 @@ const isNewWorkbook = (name) => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
 };
 
+// Workbook Mode Functions
+
+const updateModeViews = () =>{
+    // Select correct dropdown item
+    $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
+    $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
+    // Select the correct menu items
+    $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
+    if (grnState.mode === "grn") {
+        toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
+    } else if (grnState.mode === "protein-protein-physical-interaction") {
+        toggleLayout(NETWORK_MODE_PROTEIN_PHYS, NETWORK_MODE_GRN);
+    }
+};
+
+const checkWorkbookModeSettings = () => {
+    if (grnState.mode === "protein-protein-physical-interaction") {
+        grnState.nodeColoring.nodeColoringEnabled = false;
+        grnState.colorOptimal = false;
+        disableNodeColoringMenus();
+        hideEdgeWeightOptions();
+        updateModeViews();
+    } else if (grnState.mode === "grn") {
+        grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.colorOptimal = true;
+        showNodeColoringMenus();
+        showEdgeWeightOptions();
+        updateModeViews();
+    }
+};
+
+$("body").on("click", () => {
+    if (grnState.mode === "protein-protein-physical-interaction") {
+        $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
+    } else if (grnState.mode === "grn") {
+        $(EXPORT_TO_UNWEIGHTED_GML_MENU).removeClass("disabled");
+    }
+});
+
+$(NETWORK_MODE_DROPDOWN).on("change", () => {
+    grnState.mode = $(NETWORK_MODE_DROPDOWN).val();
+    checkWorkbookModeSettings();
+    refreshApp();
+});
+$(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
+    grnState.mode = "protein-protein-physical-interaction";
+    checkWorkbookModeSettings();
+    refreshApp();
+});
+$(NETWORK_MODE_GRN).on("click", () => {
+    grnState.mode = "grn";
+    checkWorkbookModeSettings();
+    refreshApp();
+});
+
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
@@ -716,7 +775,7 @@ if (!grnState.genePageData.identified) {
 
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
-        grnState.nodeColoring.nodeColoringEnabled = true;
+        checkWorkbookModeSettings();
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);
         expandLayoutSidebar();
