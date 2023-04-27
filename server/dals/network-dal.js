@@ -66,7 +66,7 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
             const timestamp = x.time_stamp;
             const source = x.source;
             const displayName = x.display_name;
-            JSONOutput.sources[`${displayName} : ${timestamp.toISOString().split("T")[0]}`] = {timestamp, source};
+            JSONOutput.sources[`${displayName}: ${timestamp.toISOString().split("T")[0]}`] = {timestamp, source};
         });
         return JSONOutput;
     case "NetworkGeneFromSource":
