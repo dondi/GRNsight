@@ -45,8 +45,6 @@ import {
   CHARGE_SLIDER_SIDEBAR,
   CHARGE_MENU,
   CHARGE_VALUE,
-  GRID_LAYOUT_MENU,
-  FORCE_GRAPH_MENU,
   LAYOUT_SIDEBAR_PANEL,
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
@@ -483,23 +481,25 @@ const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
 };
 
-const toggleLayout = (on, off) => {
-    if (!$(on).prop("checked")) {
-        $(on).prop("checked", true);
-        $(off).prop("checked", false);
-        $(`${off} span`).removeClass("glyphicon-ok");
-        $(`${on} span`).addClass("glyphicon-ok");
-    }
-};
+// const toggleLayout = (on, off) => {
+//     if (!$(on).prop("checked")) {
+//         $(on).prop("checked", true);
+//         $(off).prop("checked", false);
+//         $(`${off} span`).removeClass("glyphicon-ok");
+//         $(`${on} span`).addClass("glyphicon-ok");
+//     }
+// };
 
 const updatetoForceGraph = () => {
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
+    // toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
+    console.log("Update to Force graph");
 };
 
 const updatetoGridLayout = () => {
-    $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
+    // $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
+    // toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
+    console.log("Update to Grid Layout");
 };
 
 // Node Coloring Functions
