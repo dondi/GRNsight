@@ -26,6 +26,12 @@ if not os.path.exists('../script-results/processed-loader-files'):
 GENE_FILE = '../script-results/processed-loader-files/gene.csv'
 PROTEIN_FILE = '../script-results/processed-loader-files/protein.csv'
 PHYSICAL_INTERACTION_FILE = '../script-results/processed-loader-files/physical_interaction.csv'
+SOURCE_DESTINATION = '../script-results/processed-loader-files/source.csv'
+
+# Instantiate Source variables
+timestamp = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+source = "YeastMine - Saccharomyces Genome Database"
+display_name = "Yeastmine - SGD"
 
 # Get Network Data from Yeastmine
 
@@ -108,7 +114,7 @@ for row in query.rows():
         
 print("COLLECTING/WRITING INTERACTIONS\n")
 file = open(PHYSICAL_INTERACTION_FILE,"w")
-file.write(f"Protein1\tProtein2\tInteraction Detection Methods Identifier\tExperiment Name\n")
+file.write(f"Protein1\tProtein2\tInteraction Detection Methods Identifier\tExperiment Name\tTime_Stamp\tSource\n")
 
 exceptions = []
 for gene in genes:
@@ -128,7 +134,7 @@ for gene in genes:
             exp_name = row["interactions.details.experiment.name"]
             
             if gene2 in genes and gene1 in genes:
-                file.write(f'{g[0]}\t{g[1]}\t{idmi}\t{exp_name}\n')
+                file.write(f'{g[0]}\t{g[1]}\t{idmi}\t{exp_name}\t{timestamp}\t{source}\n')
         else: 
             exceptions.append(gene2)
 
@@ -173,7 +179,7 @@ while exceptions != None:
                 exp_name = row["interactions.details.experiment.name"]
                 
                 if gene2 in genes and gene1 in genes:
-                    file.write(f'{g[0]}\t{g[1]}\t{idmi}\t{exp_name}\n')
+                    file.write(f'{g[0]}\t{g[1]}\t{idmi}\t{exp_name}\t{timestamp}\t{source}\n')
             elif gene not in failed_genes: 
                 more_exceptions.append(gene2)
     if len(more_exceptions) == 0:
@@ -185,10 +191,20 @@ while exceptions != None:
 file.close()
 
 
+# Source Table
+
+print(f"Completed {PHYSICAL_INTERACTION_FILE} Starting{SOURCE_DESTINATION}")
+
+source_file = open(SOURCE_DESTINATION, 'w')
+headers = f'Timestamp\tSource\tDisplay Name\n{timestamp}\t{source}\t{display_name}'
+source_file.write(f'{headers}\n')
+source_file.close()
+
+
 species = "Saccharomyces cerevisiae"
 taxon_id = "559292"
 
-print(f"Completed {PHYSICAL_INTERACTION_FILE} Starting{GENE_FILE}")
+print(f"Completed {SOURCE_DESTINATION} Starting{GENE_FILE}")
 file = open(GENE_FILE,"w")
 file.write(f"Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\n")
 for gene in genes:
