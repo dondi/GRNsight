@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
-import { queryNetworkDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
+import { queryNetworkDatabase, queryProteinProteinDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 
 export const generateNetwork = function () {
@@ -12,18 +12,27 @@ export const generateNetwork = function () {
         "MF(ALPHA)1" : "YPL187W",
         "MF(ALPHA)2" : "YGL089C"
     };
-    const createHTMLforForm = (sources, selected) => {
+    const createHTMLforForm = (sources, source, networkType) => {
+        const geneProtein = networkType === "protein-protein-physical-interaction" ? "protein" : "gene";
         let result =  `
             <div id=\'generateNetworkFormContainer\' '>
                 <h2 id=\'generateNetwork\'>Generate Network</h2>
-                <div class=\'form-group\'>
+                <p>Warning: changing network type or source will clear the list of selected genes or proteins below.</p>
+                <div class=\'form-group\' id=\'getNetworkTypeForm\'>
+                    <label for=\'network-type\' id=\'network-type-label\'>Network Type</label>
+                    <select class=\'network-dropdown btn btn-default\' id=\'network-type\'>
+                        <option value=\'grn\' ${geneProtein === "gene" ? "selected=\'true\'" : "" }>Gene Regulatory</option>
+                        <option value=\'protein-protein-physical-interaction\' ${geneProtein === "protein" ? "selected=\'true\'" : "" }>Protein-Protein Physical Interactions</option>
+                    </select>
+                </div>
+                <div class=\'form-group\' id=\'getNetworkSourceForm\'>
                     <label for=\'network-source\' id=\'network-source-label\'>Network Source</label>
                     <select class=\'network-dropdown btn btn-default\' id=\'network-source\'>
             `;
         if (sources.length !== 1) {
             for (let source in sources) {
                 result += `
-                            <option value=\'${sources[source]}\' ${selected === sources[source] ?
+                            <option value=\'${sources[source]}\' ${source === sources[source] ?
                                 "\'selected=\'true" : "" }\'>${sources[source]}</option>
                 `;
             }
@@ -33,11 +42,10 @@ export const generateNetwork = function () {
             `;
         }
         result += `</select>
-                   <p>Warning: changing network source will clear the list of genes below.</p>
                 </div>
         <div class=\'form-group\' id=\'getNetworkGenesForm\'>
             <form id=\'getNetworkGenesForm\' class=\'NetworkGenesForm\' >
-                <label for=\'network-search-bar\' id=\'network-source-label\'>Select genes</label>
+                <label for=\'network-search-bar\' id=\'network-source-label\'>Select ${geneProtein}</label>
                 <input type=\'text\' id=\'network-search-bar\' name=\'network-search-bar\'></input>
                 <button id=\'enter-search\' type=\'submit\' class=\'search-button btn btn-default\'>
                     <span class=\'glyphicon glyphicon-search\'></span>
@@ -45,25 +53,27 @@ export const generateNetwork = function () {
             </form>
         </div>
         <div id=\'selected-genes-container\'>
+            <p>Added ${geneProtein}s go below! Click on a ${geneProtein} to remove it.</p>
             <div id=\'selected-genes\'>
-                <p>Added genes go here! Click on a gene to remove it.</p>
             </div>
         `;
         return result;
     };
     const createGeneButtons = function () {
         let result =  `<div id=\'selected-genes\'>
-                        <p>Added genes go below! Click on a gene to remove it.</p>
                         <div id=\'custom-network-genes-container\'>
         `;
         for (let gene in grnState.customWorkbook.genes) {
+            const primaryName = grnState.customWorkbook.type === "grn" ? grnState.customWorkbook.genes[gene] : gene;
+            const secondaryName = grnState.customWorkbook.type === "grn" ? gene :
+                `${grnState.customWorkbook.genes[gene].displayGeneID} | ${grnState.customWorkbook.genes[gene].geneID}`;
             result += `
                 <div class=\'custom-network-gene\' id=${gene}>
                     <p class=\'custom-network-gene-display-id\'>
-                        ${grnState.customWorkbook.genes[gene]}
+                        ${primaryName}
                     </p>
                     <p class=\'custom-network-gene-id\'>
-                        (${gene})
+                        (${secondaryName})
                     </p>
                 </div>
             `;
@@ -94,34 +104,58 @@ export const generateNetwork = function () {
         return "";
     };
     const addGene = function () {
-        const searchGene = `${$("#network-search-bar").val()}`.toUpperCase();
+        const userGeneProtein = grnState.customWorkbook.type === "grn" ? "Gene" : "Protein";
+        const searchGeneProtein = `${$("#network-search-bar").val()}`;
         $("#network-search-bar").val("");
-        const gene = validGene(searchGene);
-        if (gene === "") {
-            alert(`Gene: ${searchGene} is not to GRNsight specifications. Genes must be 12 characters or less,
+        const geneProtein = validGene(searchGeneProtein.toUpperCase());
+        if (geneProtein === "") {
+            alert(`${userGeneProtein}: "${searchGeneProtein}" is not to GRNsight specifications. ${userGeneProtein}s must be 12 characters or less,
 containing "-", "_", and alpha-numeric characters only`);
         } else {
             let source = grnState.customWorkbook.source;
-            let headers = {
-                type:"NetworkGeneFromSource",
-                gene: gene,
-                source:grnState.customWorkbook.sources[source].source,
-                timestamp:grnState.customWorkbook.sources[source].timestamp
-            };
-            queryNetworkDatabase(headers).then(function (response) {
-                if (response.geneId !== null && response.displayGeneId !== null) {
-                    grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
-                    displayCurrentGenes();
-                } else {
-                    alert(
-                        `Gene: ${searchGene} was not found in this database. Please check for any typos and try again.`
-                    );
-                }
-            }).catch(function (error) {
-                console.log(error.stack);
-                console.log(error.name);
-                console.log(error.message);
-            });
+            if (grnState.customWorkbook.type === "grn") {
+                let headers = {
+                    type:"NetworkGeneFromSource",
+                    gene: geneProtein,
+                    source:grnState.customWorkbook.sources.geneRegulation[source].source,
+                    timestamp:grnState.customWorkbook.sources.geneRegulation[source].timestamp
+                };
+                queryNetworkDatabase(headers).then(function (response) {
+                    if (response.geneId && response.displayGeneId ) {
+                        grnState.customWorkbook.genes[response.geneId] = response.displayGeneId;
+                        displayCurrentGenes();
+                    } else {
+                        alert(
+                            `${userGeneProtein}: "${searchGeneProtein}" was not found in this database. Please check for any typos and try again.`
+                        );
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else if (grnState.customWorkbook.type === "protein-protein-physical-interaction") {
+                let headers = {
+                    type:"NetworkFromGeneProtein",
+                    geneProtein: geneProtein,
+                    source:grnState.customWorkbook.sources.proteinProteinInteractions[source].source,
+                    timestamp:grnState.customWorkbook.sources.proteinProteinInteractions[source].timestamp
+                };
+                queryProteinProteinDatabase(headers).then(function (response) {
+                    if (response.standardName && response.displayGeneId && response.geneId) {
+                        grnState.customWorkbook.genes[response.standardName] = {displayGeneID: response.displayGeneId, geneID: response.geneId};
+                        displayCurrentGenes();
+                    } else {
+                        alert(
+                            `${userGeneProtein}: "${searchGeneProtein}" was not found in this database. Please check for any typos and try again.`
+                        );
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
 
         }
     };
@@ -143,15 +177,26 @@ containing "-", "_", and alpha-numeric characters only`);
         $("#generateNetworkFooter-container").append(createHTMLforModalButtons());
         grnState.customWorkbook = {
             genes : {},
+            type: "grn",
             source : null,
-            sources : null
+            sources : {
+                proteinProteinInteractions : null,
+                geneRegulation: null
+            }
         };
     // get sources from database
+        queryProteinProteinDatabase({type:"NetworkSource"}).then(function (response) {
+            grnState.customWorkbook.sources.proteinProteinInteractions = response.sources;
+        }).catch(function (error) {
+            console.log(error.stack);
+            console.log(error.name);
+            console.log(error.message);
+        });
         queryNetworkDatabase({type:"NetworkSource"}).then(function (response) {
-            grnState.customWorkbook.sources = response.sources;
+            grnState.customWorkbook.sources.geneRegulation = response.sources;
             grnState.customWorkbook.source = Object.keys(response.sources).length >= 1 ?
                 Object.keys(response.sources)[0] : null;
-            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources), grnState.customWorkbook.source));
+            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(response.sources), grnState.customWorkbook.source, grnState.customWorkbook.type));
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -165,7 +210,23 @@ containing "-", "_", and alpha-numeric characters only`);
         event.stopPropagation();
         displayGenerateNetworkModal();
     });
-
+    $("body").on("change", "#network-type", function (event) {
+        grnState.customWorkbook.type = $("#network-type").val();
+        grnState.customWorkbook.genes = {};
+        if (grnState.customWorkbook.type === "protein-protein-physical-interaction") {
+            grnState.customWorkbook.source = Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions).length >= 1 ?
+            Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions)[0] : null;
+            $("#generateNetworkFormContainer").remove();
+            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions), grnState.customWorkbook.source, grnState.customWorkbook.type));
+        } else if (grnState.customWorkbook.type === "grn") {
+            grnState.customWorkbook.source = Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions).length >= 1 ?
+            Object.keys(grnState.customWorkbook.sources.geneRegulation)[0] : null;
+            $("#generateNetworkFormContainer").remove();
+            $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(grnState.customWorkbook.sources.geneRegulation), grnState.customWorkbook.source, grnState.customWorkbook.type));
+        }
+        event.stopPropagation();
+        displayCurrentGenes();
+    });
     $("body").on("change", "#network-source", function (event) {
         grnState.customWorkbook.source = $("#network-source").val();
         grnState.customWorkbook.genes = {};
@@ -180,41 +241,78 @@ containing "-", "_", and alpha-numeric characters only`);
             alert(`GRNsight is only capable of handling 75 genes at most. Your proposed network contains
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
-            const genes = Object.keys(grnState.customWorkbook.genes);
-            const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
-            const source = grnState.customWorkbook.source;
-            const headers = {
-                type:"GenerateNetwork",
-                genes: genes.join(","),
-                source:grnState.customWorkbook.sources[source].source,
-                timestamp:grnState.customWorkbook.sources[source].timestamp
-            };
-            queryNetworkDatabase(headers).then(function (response) {
-                grnState.customWorkbook.links = response.links;
-                const links = Object.entries(grnState.customWorkbook.links);
-                const genesAmount = genes.length;
-                const edgesAmount = links.flatMap( (entry) => entry[1].map((target) => [entry[0], target])).length;
-                if (edgesAmount > 100) {
-                    alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
- ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
-                } else {
-                    const name = `GRN(${grnState.customWorkbook.source};${genesAmount} genes, ${edgesAmount} edges)`;
-                    const l = [];
-                    for (let link of links) {
-                        const r = link[0];
-                        for (let t of link[1]) {
-                            l.push(`${grnState.customWorkbook.genes[r]}->${grnState.customWorkbook.genes[t]}`);
+            if (grnState.customWorkbook.type === "grn") {
+                const genes = Object.keys(grnState.customWorkbook.genes);
+                const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
+                const source = grnState.customWorkbook.source;
+                const headers = {
+                    type:"GenerateNetwork",
+                    genes: genes.join(","),
+                    source:grnState.customWorkbook.sources.geneRegulation[source].source,
+                    timestamp:grnState.customWorkbook.sources.geneRegulation[source].timestamp
+                };
+                queryNetworkDatabase(headers).then(function (response) {
+                    grnState.customWorkbook.links = response.links;
+                    const links = Object.entries(grnState.customWorkbook.links);
+                    const genesAmount = genes.length;
+                    const edgesAmount = links.flatMap( (entry) => entry[1].map((target) => [entry[0], target])).length;
+                    if (edgesAmount > 100) {
+                        alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
+    ${edgesAmount} regulatory connections. Please remove some genes from your proposed network.`);
+                    } else {
+                        const name = `GRN(${grnState.customWorkbook.source};${genesAmount} genes, ${edgesAmount} edges)`;
+                        const l = [];
+                        for (let link of links) {
+                            const r = link[0];
+                            for (let t of link[1]) {
+                                l.push(`${grnState.customWorkbook.genes[r]}->${grnState.customWorkbook.genes[t]}`);
+                            }
                         }
+                        const workbook = {name, genes: displayGenes, links : l.join(","), networkType: grnState.customWorkbook.type};
+                        uploadCustomWorkbook(workbook, grnState);
+                        $(CREATE_NETWORK_MODAL).modal("hide");
                     }
-                    const workbook = {name, genes: displayGenes, links : l.join(",")};
-                    uploadCustomWorkbook(workbook, grnState);
-                    $(CREATE_NETWORK_MODAL).modal("hide");
-                }
-            }).catch(function (error) {
-                console.log(error.stack);
-                console.log(error.name);
-                console.log(error.message);
-            });
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            } else if (grnState.customWorkbook.type === "protein-protein-physical-interaction") {
+                const proteins = Object.keys(grnState.customWorkbook.genes);
+                const source = grnState.customWorkbook.source;
+                const headers = {
+                    type:"GenerateProteinNetwork",
+                    proteins: proteins.join(","),
+                    source:grnState.customWorkbook.sources.proteinProteinInteractions[source].source,
+                    timestamp:grnState.customWorkbook.sources.proteinProteinInteractions[source].timestamp
+                };
+                queryProteinProteinDatabase(headers).then(function (response) {
+                    grnState.customWorkbook.links = response.links;
+                    const links = Object.entries(grnState.customWorkbook.links);
+                    const proteinsAmount = proteins.length;
+                    const edgesAmount = links.flatMap( (entry) => entry[1].map((target) => [entry[0], target])).length;
+                    if (edgesAmount > 100) {
+                        alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
+    ${edgesAmount} physical interactions. Please remove some proteins from your proposed network.`);
+                    } else {
+                        const name = `Protein-Protein-Physical Interactions (${grnState.customWorkbook.source};${proteinsAmount} proteins, ${edgesAmount} edges)`;
+                        const l = [];
+                        for (let link of links) {
+                            const p1 = link[0];
+                            for (let p2 of link[1]) {
+                                l.push(`${p1}->${p2}`);
+                            }
+                        }
+                        const workbook = {name, genes: proteins, links : l.join(","), networkType: grnState.customWorkbook.type};
+                        uploadCustomWorkbook(workbook, grnState);
+                        $(CREATE_NETWORK_MODAL).modal("hide");
+                    }
+                }).catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+            }
         }
     });
 
