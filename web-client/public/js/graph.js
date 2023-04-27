@@ -595,70 +595,72 @@ export var drawGraph = function (workbook) {
                         });
                 } else {
                     // Arrowheads
-                    if (d.strokeWidth === 2) {
-                        d.strokeWidth = 4;
-                    }
-                    defs.append("marker")
-                        .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
-                        .attr("viewBox", "0 0 15 15")
-                        .attr("preserveAspectRatio", "xMinYMin meet")
-                        .attr("refX", function () {
-                        // Individual offsets for each possible stroke width
-                            return ((x1 === x2 && y1 === y2) ?
-                            {
-                                2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
-                                8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
-                                14: 8.3
-                            } : {
-                                2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
-                                8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
-                                14: 9
-                            }
-                            )[d.strokeWidth];
-                        })
-                        .attr("refY", function () {
-                            return ((x1 === x2 && y1 === y2) ?
-                            {
-                                2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
-                                8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
-                                14: 6
-                            } : {
-                                2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
-                                8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
-                                13: 5, 14: 5.3
-                            }
-                            )[d.strokeWidth];
-                        })
-                        .attr("markerUnits", "userSpaceOnUse")
-                        .attr("markerWidth", function () {
-                            return 12 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
-                        })
-                        .attr("markerHeight", function () {
-                            return 5 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
-                        })
-                        .attr("orient", function () {
-                            return (x1 === x2 && y1 === y2) ?
+                    if (grnState.mode === "grn") {
+                        if (d.strokeWidth === 2) {
+                            d.strokeWidth = 4;
+                        }
+                        defs.append("marker")
+                            .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                            .attr("viewBox", "0 0 15 15")
+                            .attr("preserveAspectRatio", "xMinYMin meet")
+                            .attr("refX", function () {
+                            // Individual offsets for each possible stroke width
+                                return ((x1 === x2 && y1 === y2) ?
                                 {
-                                    2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
-                                    8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
-                                    14: 232
-                                }[d.strokeWidth] : "auto";
-                        })
-                        .append("path")
-                        .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
-                        .attr("style", function () {
-                            if (unweighted || !grnState.colorOptimal) {
-                                color = "black";
-                            } else if ( normalize(d) <= grayThreshold) {
-                                color = "gray";
-                            } else {
-                                color = d.stroke;
-                            }
-                            return "stroke: " + color + "; fill: " + color;
-                        });
+                                    2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
+                                    8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                                    14: 8.3
+                                } : {
+                                    2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
+                                    8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
+                                    14: 9
+                                }
+                                )[d.strokeWidth];
+                            })
+                            .attr("refY", function () {
+                                return ((x1 === x2 && y1 === y2) ?
+                                {
+                                    2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
+                                    8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
+                                    14: 6
+                                } : {
+                                    2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
+                                    8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
+                                    13: 5, 14: 5.3
+                                }
+                                )[d.strokeWidth];
+                            })
+                            .attr("markerUnits", "userSpaceOnUse")
+                            .attr("markerWidth", function () {
+                                return 12 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
+                            })
+                            .attr("markerHeight", function () {
+                                return 5 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
+                            })
+                            .attr("orient", function () {
+                                return (x1 === x2 && y1 === y2) ?
+                                    {
+                                        2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
+                                        8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
+                                        14: 232
+                                    }[d.strokeWidth] : "auto";
+                            })
+                            .append("path")
+                            .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
+                            .attr("style", function () {
+                                if (unweighted || !grnState.colorOptimal) {
+                                    color = "black";
+                                } else if ( normalize(d) <= grayThreshold) {
+                                    color = "gray";
+                                } else {
+                                    color = d.stroke;
+                                }
+                                return "stroke: " + color + "; fill: " + color;
+                            });
+                    }
                 }
+                return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
             }
-            return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
         });
 
     if (workbook.sheetType === "weighted") {
