@@ -481,24 +481,21 @@ const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
 };
 
-// const toggleLayout = (on, off) => {
-//     if (!$(on).prop("checked")) {
-//         $(on).prop("checked", true);
-//         $(off).prop("checked", false);
-//         $(`${off} span`).removeClass("glyphicon-ok");
-//         $(`${on} span`).addClass("glyphicon-ok");
-//     }
-// };
+const toggleLayout = (on, off) => {
+    if (!$(on).prop("checked")) {
+        $(on).prop("checked", true);
+        $(off).prop("checked", false);
+        $(`${off} span`).removeClass("glyphicon-ok");
+        $(`${on} span`).addClass("glyphicon-ok");
+    }
+};
 
 const updatetoForceGraph = () => {
     $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    // toggleLayout(FORCE_GRAPH_MENU, GRID_LAYOUT_MENU);
     console.log("Update to Force graph");
 };
 
 const updatetoGridLayout = () => {
-    // $(LOCK_SLIDERS_BUTTON).attr("disabled", true);
-    // toggleLayout(GRID_LAYOUT_MENU, FORCE_GRAPH_MENU);
     console.log("Update to Grid Layout");
 };
 
