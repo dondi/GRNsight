@@ -154,17 +154,11 @@ module.exports = function (workbook) {
         warnings: [],
         errors: []
     };
-    var expCount = 0;
 
     workbook.forEach(function (sheet) {
         if (isExpressionSheet(sheet.name)) {
             output["expression"][sheet.name] = parseExpressionSheet(sheet);
-            expCount++;
         }
     });
-
-    if (expCount <= 0) {
-        addExpWarning(output, constants.warnings.missingExpressionWarning());
-    }
     return output;
 };

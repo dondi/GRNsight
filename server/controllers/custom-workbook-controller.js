@@ -11,7 +11,7 @@ var processCustomWorkbook = function (path, res, app, workbook) {
         res.status(400).json(workbook);
 };
 
-const createCustomWorkbook = (genesString, linksString) => {
+const createCustomWorkbook = (genesString, linksString, networkType) => {
     const g = genesString.split(",");
     let genes = g.map(gene => {
         return {name: gene};
@@ -45,7 +45,8 @@ const createCustomWorkbook = (genesString, linksString) => {
         meta: {
             data: {
                 species: "Saccharomyces cerevisiae",
-                taxon_id: 559292
+                taxon_id: 559292,
+                workbookType: networkType,
             }
         },
         meta2: {},
@@ -61,7 +62,7 @@ module.exports = function (app) {
 
         // Load Custom Workbook
         app.get("/upload-custom-workbook", function (req, res) {
-            let workbook = createCustomWorkbook(req.query.genes, req.query.links);
+            let workbook = createCustomWorkbook(req.query.genes, req.query.links, req.query.networkType);
             return processCustomWorkbook(req.query.name, res, app, workbook);
         });
     }

@@ -118,7 +118,7 @@ export const upload = function () {
 
     const updateOptimizationParameters = (finalExportSheets) => {
         let optimizationParameters = {
-            data: {
+            data: grnState.mode === "grn" ? {
                 alpha: 0.002,
                 "kk_max": 1,
                 MaxIter: 100000000,
@@ -131,26 +131,33 @@ export const upload = function () {
                 "make_graphs": 1,
                 "fix_P": 0,
                 "fix_b": 0,
+                species: "Saccharomyces cerevisiae",
+                "taxon_id":559292,
+                workbookType: "grn"
+            } : {
+                species: "Saccharomyces cerevisiae",
+                "taxon_id":559292,
+                workbookType: "protein-protein-physical-interaction"
             }
         };
-        const expression = Object.keys(finalExportSheets.expression);
-        let expTimepoints = expression.length > 0 ? finalExportSheets.expression[expression[0]].timePoints : null;
-        expTimepoints = expTimepoints ? [...(new Set(expTimepoints))].sort(function (a, b) {
-            return a - b;
-        }) : null;
-        const simTimepoints = expTimepoints ? Array.from(Array(expTimepoints[expTimepoints.length - 1] + 1).keys()).filter(x => x % 5 === 0) : null;
-        const strain = expression.length > 0 ? expression.map(x => removeExpressionSuffix(x)) : null;
-        if (expTimepoints) {
-            optimizationParameters.data["expression_timepoints"] = expTimepoints;
+        if (grnState.mode === "grn") {
+            const expression = Object.keys(finalExportSheets.expression);
+            let expTimepoints = expression.length > 0 ? finalExportSheets.expression[expression[0]].timePoints : null;
+            expTimepoints = expTimepoints ? [...(new Set(expTimepoints))].sort(function (a, b) {
+                return a - b;
+            }) : null;
+            const simTimepoints = expTimepoints ? Array.from(Array(expTimepoints[expTimepoints.length - 1] + 1).keys()).filter(x => x % 5 === 0) : null;
+            const strain = expression.length > 0 ? expression.map(x => removeExpressionSuffix(x)) : null;
+            if (expTimepoints) {
+                optimizationParameters.data["expression_timepoints"] = expTimepoints;
+            }
+            if (strain) {
+                optimizationParameters.data.Strain = strain;
+            }
+            if (simTimepoints) {
+                optimizationParameters.data["simulation_timepoints"] = simTimepoints;
+            }
         }
-        if (strain) {
-            optimizationParameters.data.Strain = strain;
-        }
-        if (simTimepoints) {
-            optimizationParameters.data["simulation_timepoints"] = simTimepoints;
-        }
-        optimizationParameters.data.species = "Saccharomyces cerevisiae";
-        optimizationParameters.data["taxon_id"] = 559292;
         return optimizationParameters;
     };
 
@@ -366,7 +373,7 @@ export const upload = function () {
         };
     };
 
-    const createHTMLforForm = () => {
+    const createHTMLforGRNForm = () => {
         const sources = [...new Set(grnState.database.expressionDatasets.map(s => s.slice(0, s.lastIndexOf("_"))))];
         let result = `
         <form id=\'exportExcelForm\'>
@@ -506,6 +513,34 @@ export const upload = function () {
         `;
     };
 
+    const createHTMLforProteinProteinPhysicalInteractionForm = () => {
+        $(".export-excel-workbook-sheet-option").remove();
+        // check if user updated data is selected
+        let result = `
+            <form id=\'exportExcelForm\'>
+                <div class=\'form-group export-form-group\'>
+                    <p id=\'exportExcelWorkbookSheets\'></p>
+                    <ul class=\'exportExcelWorkbookSheets\' id=\'export-excel-workbook-sheet-list\' style=\"list-style-type:none;\">
+                        <p class=\'export-excel-workbook-sheet-option-subheader\'> Network Sheets </p>
+                        <li class=\'export-excel-workbook-sheet-option\'>
+                            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"network\" id=\'exportExcelWorkbookSheet-network\' class=\'export-checkbox\'/>
+                            <label for=\'exportExcelWorkbookSheet-network\' id=\'exportExcelWorkbookSheet-network-label\' class=\'export-checkbox-label\' >
+                                network
+                            </label>
+                        </li>
+                        <p class=\'export-excel-workbook-sheet-option-subheader\'> Additional Sheets </p>
+                        <li class=\'export-excel-workbook-sheet-option\'>
+                            <input type=\'checkbox\' name=\'workbookSheets\' checked=\"true\" value=\"optimization_parameters\" id=\'exportExcelWorkbookSheet-optimization_parameters\' class=\'export-checkbox\' />
+                            <label for=\'exportExcelWorkbookSheet-optimization_parameters\' id=\'exportExcelWorkbookSheet-optimization_parameters-label\' class=\'export-checkbox-label\' >
+                                optimization_parameters
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </form>`;
+        return result;
+    };
+
 
     var handleWorkbookSheetCheckboxBehaviour = () => {
         $("input[name=workbookSheets]").not($("#exportExcelWorkbookSheet-All")).on("click", () => {
@@ -538,24 +573,37 @@ export const upload = function () {
         $("#Export-Excel-Button").on("click", performExport("export-to-excel", "xlsx", null, source));
     };
     const handleExportExcelModal = function () {
-        $("#exportExcelForm").remove();
-        $("#exportExcelFooter").remove();
-        $("#exportExcelQuestions-containter").append(createHTMLforForm);
-        $("#exportExcelFooter-container").append(createHTMLforModalButtons());
-        $("#Export-Excel-Button").prop("value", "Export Workbook");
-        $("#exportExcelExpressionSources").html("Select the Expression Data Source:");
-        $("#exportExcelExpressionSource-userInput").html(grnState.name);
-        $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");
-        let source = $("input[name=expressionSource]:checked")[0].value;
-        $("#exportExcelForm").on("change", function () {
-            const selectedValue = $("input[name=expressionSource]:checked")[0].value;
-            if (selectedValue !== source) {
-                source = selectedValue;
-                $(".export-excel-workbook-sheet-option-subheader").remove();
-                handleExpressionSheetsFromSource(source);
-            }
-        });
-        handleExpressionSheetsFromSource(source);
+        if (grnState.mode === "grn") {
+            $("#exportExcelForm").remove();
+            $("#exportExcelFooter").remove();
+            $("#exportExcelQuestions-containter").append(createHTMLforGRNForm);
+            $("#exportExcelFooter-container").append(createHTMLforModalButtons());
+            $("#Export-Excel-Button").prop("value", "Export Workbook");
+            $("#exportExcelExpressionSources").html("Select the Expression Data Source:");
+            $("#exportExcelExpressionSource-userInput").html(grnState.name);
+            $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");
+            let source = $("input[name=expressionSource]:checked")[0].value;
+            $("#exportExcelForm").on("change", function () {
+                const selectedValue = $("input[name=expressionSource]:checked")[0].value;
+                if (selectedValue !== source) {
+                    source = selectedValue;
+                    $(".export-excel-workbook-sheet-option-subheader").remove();
+                    handleExpressionSheetsFromSource(source);
+                }
+            });
+            handleExpressionSheetsFromSource(source);
+        } else if (grnState.mode === "protein-protein-physical-interaction") {
+            const source = "userInput";
+            $("#exportExcelForm").remove();
+            $("#exportExcelFooter").remove();
+            $("#exportExcelQuestions-containter").append(createHTMLforProteinProteinPhysicalInteractionForm);
+            $("#exportExcelFooter-container").append(createHTMLforModalButtons());
+            $("#Export-Excel-Button").prop("value", "Export Workbook");
+            $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");
+            handleWorkbookSheetCheckboxBehaviour();
+            $("#Export-Excel-Button").on("click", performExport("export-to-excel", "xlsx", null, source));
+
+        }
     };
 
 

@@ -178,8 +178,7 @@ module.exports = {
         noSpeciesInformationDetected: {
             warningCode: "MISSING_SPECIES_INFORMATION",
             errorDescription: "No species information was detected in your input file." +
-                " GRNsight defaults to Saccharomyces cerevisiae. You can change the species" +
-                " selection in the Species menu or panel."
+                " GRNsight defaults to Saccharomyces cerevisiae."
         },
 
         unknownSpeciesDetected: function (workbookSpecies, workbookTaxon) {
@@ -188,7 +187,24 @@ module.exports = {
                 errorDescription: "GRNsight detected the species " + workbookSpecies +
                     " and the taxon " + workbookTaxon + " in your input file." +
                     " This is not one of the supported species, or was formatted incorrectly" +
-                    " You can change the species selection in the Species menu or panel."
+                    " GRNsight defaults to Saccharomyces cerevisiae."
+            };
+        },
+
+        noWorkbookTypeDetected : {
+            warningCode: "MISSING_WORKBOOK_TYPE_INFORMATION",
+            errorDescription: "No workbook type was detected in your input file." +
+                " GRNsight defaults to a gene regulatory network. You can change the workbook type" +
+                " selection in the Network menu or panel."
+        },
+
+        unsupportedWorkbookTypeDetected: function (workbookType) {
+            return {
+                warningCode: "UNKNOWN_WORKBOOK_TYPE_DETECTED",
+                errorDescription: "GRNsight detected the workbook type " + workbookType +
+                    " in your input file. This is not one of the supported workbook types, or was formatted" +
+                    " incorrectly. GRNsight defaults to a gene regulatory network. You can change the workbook type" +
+                    " selection in the Network menu or panel."
             };
         },
 

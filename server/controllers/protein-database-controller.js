@@ -1,12 +1,12 @@
 
-var networkDal = require(__dirname + "/../dals/network-dal");
+var proteinDal = require(__dirname + "/../dals/protein-dal");
 
 
 module.exports = function (app) {
 
-    app.get("/networkdb", function (req, res) {
+    app.get("/proteindb", function (req, res) {
         try {
-            return networkDal.queryNetworkDatabase(req, res);
+            return proteinDal.queryProteinDatabase(req, res);
         } catch (e) {
             res.json({error: e.stack});
             res.json({error: e.name});

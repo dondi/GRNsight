@@ -529,7 +529,8 @@ var demoWorkbook1 = function (path, res, app) {
                 Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
                 simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
                 species: "Saccharomyces cerevisiae",
-                taxon_id: 559292
+                taxon_id: 559292,
+                workbookType: "grn"
             }
         },
         twoColumnSheets: {
@@ -2692,7 +2693,8 @@ var demoWorkbook2 = function (path, res, app) {
                 Strain: ["wt", "dcin5", "dgln3", "dhap4", "dhmo1", "dzap1"],
                 simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
                 species: "Saccharomyces cerevisiae",
-                taxon_id: 559292
+                taxon_id: 559292,
+                workbookType: "grn"
             }
         },
         twoColumnSheets: {
@@ -4619,7 +4621,8 @@ var demoWorkbook3 = function (path, res, app) {
                 MaxFunEval: 1000000,
                 TolX: 0.00001,
                 species: "Saccharomyces cerevisiae",
-                taxon_id: 559292
+                taxon_id: 559292,
+                workbookType: "grn"
             }
         },
         twoColumnSheets: {},
@@ -5680,7 +5683,8 @@ var demoWorkbook4 = function (path, res, app) {
                 MaxFunEval: 1000000,
                 TolX: 0.00001,
                 species: "Saccharomyces cerevisiae",
-                taxon_id: 559292
+                taxon_id: 559292,
+                workbookType: "grn"
             }
         },
         twoColumnSheets: {},

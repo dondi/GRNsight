@@ -58,9 +58,20 @@ html
                 li(class='divider')
 
                 li
+                  span(class='menu-subheader') Network Mode
+                  
+                li(class='startDisabled disabled')
+                  a(href='#' id='network-mode-grn-menu' class="menu-submenu network-mode")
+                    span(class='glyphicon')
+                    | &nbsp; Gene Regulatory Network
+                li(class='startDisabled disabled')
+                  a(href='#' id='network-mode-protein-protein-physical-interaction-menu' class="menu-submenu network-mode")
+                    span(class='glyphicon')
+                    | &nbsp; Protein-Protein Physical Interaction Network
+                li
                   span(class='menu-subheader') Species
                 li
-                  p(id='Saccharomyces-cerevisiae')
+                  p(id='Saccharomyces-cerevisiae', class="menu-submenu")
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Saccharomyces cerevisiae
 
@@ -71,10 +82,8 @@ html
                 span(class='menu-subheader') Graph Options
                 li
                   a(href='#' id='forceGraph' class='layout')
-                    //- span(class='glyphicon glyphicon-ok')
                     | &nbsp; Force Graph
                   a(href='#' id='gridLayout' class='layout')
-                    //- span(class='glyphicon')
                     | &nbsp; Grid Layout
                 li(class='divider')
                 li
@@ -234,15 +243,11 @@ html
                     li(class='startDisabled disabled weighted export')
                       a(href='#' id='exportAsWeightedSif') To Weighted SIF
                     li(class='divider')
-                    li(class='startDisabled disabled unweighted export')
+                    li(class='startDisabled disabled unweighted export' id='unweightedGraphmlContainer')
                       a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
                     li(class='startDisabled disabled weighted export')
                       a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
                     li(class='divider')
-                    //- li(class='startDisabled disabled unweighted export')
-                      a(href='#' id='exportAsUnweightedExcel') To Unweighted Excel
-                    //- li(class='startDisabled disabled weighted export')
-                    //-   a(href='#' id='exportAsWeightedExcel') To Weighted Excel
                     li(class='startDisabled disabled export')
                       a(href='#' id='exportAsExcel') To Excel
 
@@ -354,6 +359,13 @@ html
                     span(class='glyphicon glyphicon-repeat sidebar-glyphicon')
                     | &nbsp; Reload
                   div(class="long-sub-divider")
+                    form(class='panelDropdownContainer')
+                      label(for='speciesDropdown' class='info') Network Mode
+                      select(class="networkMode panelDropdown btn btn-default startDisabled disabled" id='networkModeDropdown' name="networkModeDropdown" href='#')
+                        option(value="none" selected="true" disabled hidden) Change Network Mode
+                        option(href='#' id='demoSourceDropdown-grn' value='grn') Gene Regulatory Network
+                        option(href='#' id='demoSourceDropdown-protein-protein-physical-interaction' value='protein-protein-physical-interaction') Protein-Protein Physical Interaction Network
+
                   label(for='species-info' class='info') Species: 
                     span(id='species' class='network-type') Saccharomyces cerevisiae
                   input(type="hidden" id='species-info')

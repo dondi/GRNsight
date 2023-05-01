@@ -34,6 +34,10 @@ Here are the files pertaining to both the network and expression databases. Look
             ```
             CREATE SCHEMA gene_expression;
             ```
+
+            ```
+            CREATE SCHEMA protein_protein_interactions;
+            ```
             
            Once they are created you can exit your database using the command `\q`.
          2. Once your schema's are created, you can add the table specifications using the following commands:
@@ -46,10 +50,13 @@ Here are the files pertaining to both the network and expression databases. Look
             psql postgresql://localhost/postgres -f <path to GRNsight/database/expression-database>/schema.sql
             ```
             
+            ```
+            psql postgresql://localhost/postgres -f <path to GRNsight/database/protein-protein-database>/schema.sql
+            ```
             Your database is now ready to accept expression and network data!
             
     2. Loading the GRNsight Network Data to your local database
-        1. GRNsight generates Network Data from SGD through YeastMine. In order to run the script that generates these Network files, you must pip3 install the dependencies used. If you get an error saying that a module doesn't exist, just run `pip3 install <Module Name>` and it should fix the error. If the error persists and is found in a specific file on your machine, you might have to manually go into that file and alter the naming conventions of the dependencies that are used. _Note: So far this issue has only occured on Ubuntu 22.04.1, so you might be lucky and not have to do it!_
+        1. GRNsight generates Network Data from SGD through YeastMine. In order to run the script that generates these Network files, you must pip3 install the dependencies used. If you get an error saying that a module doesn't exist, just run `pip3 install <Module Name>` and it should fix the error. If the error persists and is found in a specific file on your machine, you might have to manually go into that file and alter the naming conventions of the dependencies that are used. _Note: So far this issue has only occured on Ubuntu 22.04.1, and certain MacOS versions so you might be lucky and not have to do it!_
         
           ```
           pip3 install pandas requests intermine tzlocal
@@ -108,4 +115,34 @@ Here are the files pertaining to both the network and expression databases. Look
             ```
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the expression data.
+    4. Loading the GRNsight Protein-Protein Interactions to your local database
+        1. GRNsight generates Protein-Protein Interactions from SGD through YeastMine. In order to run the script that generates these Network files, you must pip3 install the dependencies used. These are the same dependencies used when creating the Network Database, so if you have completed step 2.2.1, then you should be fine. Once the dependencies have been installed, you can run
+            ```
+            cd <path to GRNsight/database/protein-protein-database/scripts>
+            python3 generate_protein_network.py
+            ```
+            This will take a while {almost 2 hours  (´◕ ᵔ ◕\`✿)*ᶜʳᶦᵉˢ*} to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/protein-protein-database/script-results`.
+            
+        2. Once you have finished generating the loader files, you need to remove duplicate entries from the physical interactions file. The bash script (`remove_duplicates.sh`) does this for you. The resultant file (`no_dupe.csv`)will be generated in the script-results directory located in the sub-directory processed-loader-files. If your machine doesn't support bash shell scripts, then you have to make a new script that removes duplicate lines from a file and writes the results to a file. Sorry!
+        
+            Run the following:
+            ```
+            chmod u+x remove_duplicates.sh
+            
+            ./remove_duplicates.sh
+            ```
+        3. Load the processed files into your database. Note: You may get an error saying that there was a duplicate protein. You have to manually check which protein was being inserted twice, go to the SGD website (or Yeastmine) and confirm the correct protein gene interaction. Currently this occurs with the protein 'Aad6p'. To fix it go to your protein.csv file and make sure that 'Aad6p' is paired with the gene 'YFL056C', and 'Aad16p' is paired with the gene 'YFL057C'. If any other issues arise, you must manually confirm on the SGD website. Sorry!
+
+            To load to local database
+            ```
+            python3 loader.py | psql postgresql://localhost/postgres
+            ```
+            To load to production database
+            ```
+            python3 loader.py | psql <path to database>
+            ```
+            Once again, this should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the expression data.
+
+        
+           
 3. Continue setting up in the [Initial Setup Wiki page](https://github.com/dondi/GRNsight/wiki/Initial-Setup)

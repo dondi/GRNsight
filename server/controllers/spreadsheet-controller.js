@@ -21,6 +21,11 @@ var SPECIES = [
     "Saccharomyces cerevisiae",
 ];
 
+const WORKBOOK_TYPES = [
+    "grn",
+    "protein-protein-physical-interaction"
+];
+
 var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
 
 var isExpressionSheet = function (sheetName) {
@@ -37,6 +42,15 @@ var doesSpeciesExist = function (speciesInfo) {
     }
     for (var t in TAXON_ID) {
         if (TAXON_ID[t] === speciesInfo) {
+            return true;
+        }
+    }
+    return false;
+};
+
+var supportWorkbookType = function (type) {
+    for (var t in WORKBOOK_TYPES) {
+        if (WORKBOOK_TYPES[t] === type) {
             return true;
         }
     }
@@ -180,6 +194,19 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
+    if (additionalData.meta.data.workbookType === undefined) {
+        addWarning(workbook, constants.warnings.noWorkbookTypeDetected);
+        additionalData.meta.data.workbookType = "grn";
+    } else if (!supportWorkbookType(additionalData.meta.data.workbookType)) {
+        addWarning(
+            workbook,
+            constants.warnings.unsupportedWorkbookTypeDetected(
+                additionalData.meta.data.workbookType
+            )
+        );
+        additionalData.meta.data.workbookType = "grn";
+    }
+
     if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
         addWarning(workbook, constants.warnings.noSpeciesInformationDetected);
         additionalData.meta.data.species = "Saccharomyces cerevisiae";
@@ -203,6 +230,11 @@ var crossSheetInteractions = function (workbookFile) {
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
     // We need to account for all the different possible expression sheet names.
     if (expressionData) {
+        if (additionalData.meta.data.workbookType === "grn") {
+            if (expressionData["expression"] && Object.keys(expressionData["expression"]).length === 0) {
+                addWarning(expressionData, constants.warnings.missingExpressionWarning());
+            }
+        }
         if (expressionData.errors !== undefined) {
             expressionData.errors.forEach(data => workbook.errors.push(data));
         }

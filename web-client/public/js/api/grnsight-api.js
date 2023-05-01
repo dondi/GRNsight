@@ -48,6 +48,13 @@ const queryNetworkDatabase = (query) => {
     return responseData("network", "", queryURL);
 };
 
+// Protein-Protein DB Access Functions
+
+const queryProteinProteinDatabase = (query) => {
+    const queryURL = buildQueryURL("proteindb", query);
+    return responseData("network", "", queryURL);
+};
+
 // Upload Custom Workbook Functions
 
 const uploadCustomWorkbook = (workbook, grnState) => {
@@ -86,4 +93,5 @@ export {
     uploadCustomWorkbook,
     getWorkbookFromForm,
     getWorkbookFromUrl,
+    queryProteinProteinDatabase
 };
