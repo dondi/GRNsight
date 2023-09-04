@@ -419,13 +419,11 @@ const loadExpressionDatabase = function (isTopDataset) {
 const updateSliderState = slidersLocked => {
     const forceGraphDisabled = grnState.graphLayout === GRID_LAYOUT || slidersLocked;
     if (forceGraphDisabled) {
-        $(`${LOCK_SLIDERS_MENU} span`).removeClass("invisible").addClass("glyphicon-ok");
         $(RESET_SLIDERS_MENU).parent().addClass("disabled");
         $(UNDO_SLIDERS_RESET_MENU).parent().addClass("disabled");
         $(LINK_DIST_CLASS).parent().addClass("disabled");
         $(CHARGE_CLASS).parent().addClass("disabled");
     } else {
-        $(`${LOCK_SLIDERS_MENU} span`).removeClass("glyphicon-ok").addClass("invisible");
         $(RESET_SLIDERS_MENU).parent().removeClass("disabled");
         $(UNDO_SLIDERS_RESET_MENU).parent().removeClass("disabled");
         $(LINK_DIST_CLASS).parent().removeClass("disabled");
@@ -435,6 +433,17 @@ const updateSliderState = slidersLocked => {
     $(LINK_DIST_SLIDER_SIDEBAR).prop("disabled", forceGraphDisabled);
     $(CHARGE_SLIDER_SIDEBAR).prop("disabled", forceGraphDisabled);
     $(RESET_SLIDERS_SIDEBAR).prop("disabled", forceGraphDisabled);
+
+    if (slidersLocked) {
+        $(`${LOCK_SLIDERS_MENU} span`)
+          .removeClass("invisible")
+          .addClass("glyphicon-ok");
+    } else {
+        $(`${LOCK_SLIDERS_MENU} span`)
+          .removeClass("glyphicon-ok")
+          .addClass("invisible");
+    }
+
     $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
 
     if (!grnState.showUndoReset) {
@@ -491,7 +500,7 @@ const toggleLayout = (on, off) => {
 };
 
 const updatetoForceGraph = () => {
-    $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
+    // $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
     console.log("Update to Force graph");
 };
 
