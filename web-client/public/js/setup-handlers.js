@@ -239,8 +239,8 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-    $(TOP_DATASET_SELECTION_MENU).click(() => {
-        var selection = $(this).attr("value");
+    $(TOP_DATASET_SELECTION_MENU).click((event) => {
+        const selection = event.target.textContent.trim();
         grnState.nodeColoring.topDataset = selection;
         if (grnState.nodeColoring.bottomDataSameAsTop) {
             grnState.nodeColoring.bottomDataset = selection;
