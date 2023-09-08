@@ -499,14 +499,9 @@ const toggleLayout = (on, off) => {
     }
 };
 
-const updatetoForceGraph = () => {
-    // $(LOCK_SLIDERS_BUTTON).removeAttr("disabled");
-    console.log("Update to Force graph");
-};
+const updatetoForceGraph = () => {};
 
-const updatetoGridLayout = () => {
-    console.log("Update to Grid Layout");
-};
+const updatetoGridLayout = () => {};
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
