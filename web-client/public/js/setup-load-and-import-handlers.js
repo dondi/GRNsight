@@ -1,5 +1,4 @@
 import { updateApp } from "./update-app";
-import { FORCE_GRAPH } from "./constants";
 
 import {
     DEMO_INFORMATION,
@@ -11,6 +10,7 @@ import {
     UNWEIGHTED_DEMO_NAME,
     SCHADE_INPUT_NAME,
     SCHADE_OUTPUT_NAME,
+    FORCE_GRAPH
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
 
