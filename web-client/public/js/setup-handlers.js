@@ -240,7 +240,7 @@ export const setupHandlers = grnState => {
     });
 
     $(TOP_DATASET_SELECTION_MENU).click((event) => {
-        const selection = event.target.textContent.trim();
+        const selection = event.target.dataset.expression;
         grnState.nodeColoring.topDataset = selection;
         if (grnState.nodeColoring.bottomDataSameAsTop) {
             grnState.nodeColoring.bottomDataset = selection;
