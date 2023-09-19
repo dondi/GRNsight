@@ -688,7 +688,7 @@ const resetDatasetDropdownMenus = (workbook) => {
     var createHTMLforDataset = function (name) {
         return `
             <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
-              <a>
+              <a data-expression=\"${name}\">
                 <span class=\"glyphicon\"></span>
                 &nbsp;${name}
               </a>
