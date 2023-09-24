@@ -232,22 +232,21 @@ export const setupHandlers = grnState => {
 
     $(TOP_DATASET_SELECTION_SIDEBAR).change(() => {
         var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-        grnState.nodeColoring.topDataset = selection;
-        if (grnState.nodeColoring.bottomDataSameAsTop) {
-            grnState.nodeColoring.bottomDataset = selection;
-        }
-        updateApp(grnState);
+        updateTopDatasetSelection(selection);
     });
 
     $(TOP_DATASET_SELECTION_MENU).click((event) => {
         const selection = event.target.dataset.expression;
-        grnState.nodeColoring.topDataset = selection;
-        if (grnState.nodeColoring.bottomDataSameAsTop) {
-            grnState.nodeColoring.bottomDataset = selection;
-        }
-        updateApp(grnState);
+        updateTopDatasetSelection(selection)
     });
 
+    const updateTopDatasetSelection = (selection) => {
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+          grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    }
     $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(() => {
         grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
@@ -259,29 +258,28 @@ export const setupHandlers = grnState => {
     });
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).change(() => {
-        var selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-        grnState.nodeColoring.bottomDataset = selection;
-        if (grnState.nodeColoring.bottomDataset === "Same as Top Dataset") {
-            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
-            grnState.nodeColoring.bottomDataSameAsTop = true;
-        } else {
-            grnState.nodeColoring.bottomDataSameAsTop = false;
-        }
-        updateApp(grnState);
+        const selection = $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        updateBottomDatasetSelection(selection);
     });
 
-    $(BOTTOM_DATASET_SELECTION_MENU).click(() => {
-        var selection = $(this).attr("value");
+    $(BOTTOM_DATASET_SELECTION_MENU).click((event) => {
+        const selection = event.target.dataset.expression;
+        updateBottomDatasetSelection(selection);
+        
+    });
+
+    const updateBottomDatasetSelection = (selection) => {
         grnState.nodeColoring.bottomDataset = selection;
         if (selection === "Same as Top Dataset") {
-            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
-            grnState.nodeColoring.bottomDataSameAsTop = true;
+            grnState.nodeColoring.bottomDataset =
+            grnState.nodeColoring.topDataset;
+          grnState.nodeColoring.bottomDataSameAsTop = true;
         } else {
             grnState.nodeColoring.bottomDataSameAsTop = false;
             grnState.nodeColoring.bottomDataset = selection;
         }
         updateApp(grnState);
-    });
+    }
 
     $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).change(() => {
         grnState.nodeColoring.averageBottomDataset = !grnState.nodeColoring.averageBottomDataset;
