@@ -1010,12 +1010,20 @@ export var drawGraph = function (workbook) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    if (grnState.workbook.expression[dataset].data[p.name]) {
-                        const result = getExpressionData(p.name, dataset, average);
-                        timePoints = result.timePoints;
-                        return result.data;
-                    } else {
-                        return 0;
+                    if(grnState.workbook.expression[dataset]) {
+                        if (
+                            grnState.workbook.expression[dataset].data[p.name]
+                        ) {
+                            const result = getExpressionData(
+                                p.name,
+                                dataset,
+                                average
+                            );
+                            timePoints = result.timePoints;
+                            return result.data;
+                        } else {
+                            return 0;
+                        }
                     }
                 })
                 .attr("class", "coloring")
