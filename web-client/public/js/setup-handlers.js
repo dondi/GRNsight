@@ -231,7 +231,7 @@ export const setupHandlers = grnState => {
     });
 
     $(TOP_DATASET_SELECTION_SIDEBAR).change(() => {
-        var selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+        const selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
         updateTopDatasetSelection(selection);
     });
 
@@ -247,6 +247,7 @@ export const setupHandlers = grnState => {
         }
         updateApp(grnState);
     }
+     
     $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(() => {
         grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
@@ -265,15 +266,13 @@ export const setupHandlers = grnState => {
     $(BOTTOM_DATASET_SELECTION_MENU).click((event) => {
         const selection = event.target.dataset.expression;
         updateBottomDatasetSelection(selection);
-        
     });
 
     const updateBottomDatasetSelection = (selection) => {
         grnState.nodeColoring.bottomDataset = selection;
         if (selection === "Same as Top Dataset") {
-            grnState.nodeColoring.bottomDataset =
-            grnState.nodeColoring.topDataset;
-          grnState.nodeColoring.bottomDataSameAsTop = true;
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
         } else {
             grnState.nodeColoring.bottomDataSameAsTop = false;
             grnState.nodeColoring.bottomDataset = selection;
