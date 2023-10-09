@@ -1010,7 +1010,7 @@ export var drawGraph = function (workbook) {
                 .append("g")
                 .selectAll(".coloring")
                 .data(function () {
-                    if(grnState.workbook.expression[dataset]) {
+                    if (grnState.workbook.expression[dataset]) {
                         if (
                             grnState.workbook.expression[dataset].data[p.name]
                         ) {

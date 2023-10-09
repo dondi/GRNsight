@@ -225,6 +225,26 @@ export const setupHandlers = grnState => {
     });
 
 // Node Coloring
+    const updateTopDatasetSelection = (selection) => {
+        grnState.nodeColoring.topDataset = selection;
+        if (grnState.nodeColoring.bottomDataSameAsTop) {
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    };
+
+    const updateBottomDatasetSelection = (selection) => {
+        grnState.nodeColoring.bottomDataset = selection;
+        if (selection === "Same as Top Dataset") {
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
+            grnState.nodeColoring.bottomDataSameAsTop = true;
+        } else {
+            grnState.nodeColoring.bottomDataSameAsTop = false;
+            grnState.nodeColoring.bottomDataset = selection;
+        }
+        updateApp(grnState);
+    };
+
     $(NODE_COLORING_TOGGLE_CLASS).click(() => {
         grnState.nodeColoring.nodeColoringEnabled = !grnState.nodeColoring.nodeColoringEnabled;
         updateApp(grnState);
@@ -237,17 +257,8 @@ export const setupHandlers = grnState => {
 
     $(TOP_DATASET_SELECTION_MENU).click((event) => {
         const selection = event.target.dataset.expression;
-        updateTopDatasetSelection(selection)
+        updateTopDatasetSelection(selection);
     });
-
-    const updateTopDatasetSelection = (selection) => {
-        grnState.nodeColoring.topDataset = selection;
-        if (grnState.nodeColoring.bottomDataSameAsTop) {
-          grnState.nodeColoring.bottomDataset = selection;
-        }
-        updateApp(grnState);
-    }
-     
     $(AVG_REPLICATE_VALS_TOP_SIDEBAR).change(() => {
         grnState.nodeColoring.averageTopDataset = !grnState.nodeColoring.averageTopDataset;
         updateApp(grnState);
@@ -267,18 +278,6 @@ export const setupHandlers = grnState => {
         const selection = event.target.dataset.expression;
         updateBottomDatasetSelection(selection);
     });
-
-    const updateBottomDatasetSelection = (selection) => {
-        grnState.nodeColoring.bottomDataset = selection;
-        if (selection === "Same as Top Dataset") {
-            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
-            grnState.nodeColoring.bottomDataSameAsTop = true;
-        } else {
-            grnState.nodeColoring.bottomDataSameAsTop = false;
-            grnState.nodeColoring.bottomDataset = selection;
-        }
-        updateApp(grnState);
-    }
 
     $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).change(() => {
         grnState.nodeColoring.averageBottomDataset = !grnState.nodeColoring.averageBottomDataset;
