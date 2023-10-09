@@ -85,7 +85,11 @@ Here are the files pertaining to both the network and expression databases. Look
           
               - ![image](https://user-images.githubusercontent.com/21343072/213094984-bff2deb3-d26b-4809-83d6-6a6615b6e3cf.png)
   
-        2. Load the processed files into your database.
+           *** Note: *** If you get the following error:
+           ImportError: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.1.0h 27 Mar 2018'. See: Drop support for OpenSSL<1.1.1 urllib3/urllib3#2168
+           Run `pip install urllib3==1.26.6`
+       
+        3. Load the processed files into your database.
         
             ```
             cd <path to GRNsight/database/network-database/scripts>
@@ -108,8 +112,10 @@ Here are the files pertaining to both the network and expression databases. Look
             cd <path to GRNsight/database/expression-database/scripts>
             python3 preprocessing.py
             ```
-            
-        4. Load the processed files into your database. 
+  
+            *** Note: *** If you receive a UnicodeEncodeError add `-X utf8` to the beginning of the command
+           
+        5. Load the processed files into your database. 
         
             ```
             cd <path to GRNsight/database/expression-database/scripts>
