@@ -4,6 +4,7 @@ Here are the files pertaining to both the network and expression databases. Look
 1. Installing PostgreSQL on your computer
     - MacOS and Windows can follow these instructions on how to install postgreSQL.
         - Install the software at this [link](https://www.postgresql.org/download/) 
+        - Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
         - Initialize the database
            - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
            - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
@@ -25,6 +26,12 @@ Here are the files pertaining to both the network and expression databases. Look
             psql postgresql://localhost/postgres
             ``` 
             
+           For Windows users use this command:
+            ```
+            psql -U postgres postgresql://localhost/postgres
+            ```            
+           When prompted for the password, use the password you specified earlier during the installation process. For all future commands requiring you to access postgres, you will need to add ```-U postgres ``` 
+
            From there, create the schemas using the following commands:
             
             ```
@@ -36,7 +43,7 @@ Here are the files pertaining to both the network and expression databases. Look
             ```
             
            Once they are created you can exit your database using the command `\q`.
-         2. Once your schema's are created, you can add the table specifications using the following commands:
+         3. Once your schema's are created, you can add the table specifications using the following commands:
             
             ```
             psql postgresql://localhost/postgres -f <path to GRNsight/database/network-database>/schema.sql
@@ -60,7 +67,9 @@ Here are the files pertaining to both the network and expression databases. Look
           cd <path to GRNsight/database/network-database/scripts>
           python3 generate_network.py
           ```
-          This will take a while to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/network-database/script-results`.
+       Windows users should use ```py``` instead of ```python3```.
+
+       This will take a while to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/network-database/script-results`.
           
           *** Note: *** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
           
@@ -85,7 +94,7 @@ Here are the files pertaining to both the network and expression databases. Look
             
             This should output a bunch of COPY print statements to your terminal. Once complete your database is now loaded with the network data.
         
-    3. Loading the GRNsight Expression Data to your local database
+    4. Loading the GRNsight Expression Data to your local database
         1. Create a directory (aka folder) in the database/expression-database folder called `source-files`. 
         
             ```
