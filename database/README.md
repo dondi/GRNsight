@@ -4,7 +4,7 @@ Here are the files pertaining to both the network and expression databases. Look
 1. Installing PostgreSQL on your computer
     - MacOS and Windows can follow these instructions on how to install postgreSQL.
         - Install the software at this [link](https://www.postgresql.org/download/) 
-        - Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
+        - > Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
         - Initialize the database
            - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
            - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
@@ -26,7 +26,7 @@ Here are the files pertaining to both the network and expression databases. Look
             psql postgresql://localhost/postgres
             ``` 
             
-           For Windows users use this command:
+           > For Windows users use this command:
             ```
             psql -U postgres postgresql://localhost/postgres
             ```            
@@ -67,16 +67,16 @@ Here are the files pertaining to both the network and expression databases. Look
           cd <path to GRNsight/database/network-database/scripts>
           python3 generate_network.py
           ```
-       Windows users should use ```py``` instead of ```python3```.
+       > Windows users should use ```py``` instead of ```python3```.
 
        This will take a while to get all of the network data and generate all of the files. This will create a folder full of the processed files in `database/network-database/script-results`.
 
-       *** Note: *** If you get the following error:
+       **Note:** If you get the following error:
            ImportError: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.1.0h 27 Mar 2018'. See: Drop support for OpenSSL<1.1.1 urllib3/urllib3#2168
            Run `pip install urllib3==1.26.6`
 
 
-       *** Note: *** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
+       **Note:** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
           
         ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
 
@@ -114,7 +114,7 @@ Here are the files pertaining to both the network and expression databases. Look
             python3 preprocessing.py
             ```
   
-            *** Note: *** If you receive a UnicodeEncodeError add `-X utf8` to the beginning of the command
+            **Note:** If you receive a UnicodeEncodeError add `-X utf8` to the beginning of the command
            
         5. Load the processed files into your database. 
         
