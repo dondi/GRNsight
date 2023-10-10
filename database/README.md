@@ -46,11 +46,11 @@ Here are the files pertaining to both the network and expression databases. Look
          3. Once your schema's are created, you can add the table specifications using the following commands:
             
             ```
-            psql postgresql://localhost/postgres -f <path to GRNsight/database/network-database>/schema.sql
+            psql -f <path to GRNsight/database/network-database>/schema.sql postgresql://localhost/postgres
             ```
             
             ```
-            psql postgresql://localhost/postgres -f <path to GRNsight/database/expression-database>/schema.sql
+            psql -f <path to GRNsight/database/expression-database>/schema.sql postgresql://localhost/postgres
             ```
             
             Your database is now ready to accept expression and network data!
