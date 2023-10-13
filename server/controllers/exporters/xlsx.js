@@ -18,7 +18,7 @@ const buildNetworkSheet = function (genes, links) {
     // Place the gene name in the beginning of the network sheet array.
     // EX: ["CIN5", 0, 0, 1]
     Object.keys(geneNameArray).forEach(index => networkSheet[index][0] = geneNameArray[index]);
-    geneNameArray.unshift("cols regulators/rows targets");
+    geneNameArray.unshift("cols protein1/rows protein2");
 
     links.forEach((link) => {
         networkSheet[link.target][link.source + 1] = link.value;
