@@ -101,7 +101,7 @@ SGD_MATRIX_EXCEL = '../script-results/yeastract-to-sgd-networks/SGD_Regulation_m
 
 print(f'Creating SGD MATRIX\n')
 sgd_matrix_file = open(SGD_MATRIX, 'w')
-headers = "Cols protein1/ rows protein2\t"
+headers = "cols regulators/rows targets\t"
 headers += '\t'.join(regulators)
 sgd_matrix_file.write(f'{headers}\n')
 for target in targets:

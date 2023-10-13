@@ -128,7 +128,7 @@ for regulator in regulators_to_targets:
 
 print(f'Creating REGULATORS TO TARGETS MATRIX\n')
 regulator_to_target_file = open(REGULATORS_TO_TARGETS_MATRIX, 'w')
-headers = "Cols protein1/ rows protein2"
+headers = "cols regulators/rows targets"
 headers += '\t'.join(regulators_list)
 regulator_to_target_file.write(f'{headers}\n')
 for target in targets:
@@ -139,7 +139,7 @@ regulator_to_target_file.close()
 
 print(f'Creating REGULATORS TO TARGETS MATRIX\n')
 regulator_to_regulator_file = open(REGULATORS_TO_REGULATORS_MATRIX, 'w')
-headers = "Cols protein1/ rows protein2"
+headers = "cols regulators/rows targets"
 headers += '\t'.join(regulators_list)
 regulator_to_regulator_file.write(f'{headers}\n')
 for target in targets:
