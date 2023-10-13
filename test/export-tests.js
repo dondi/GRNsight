@@ -664,7 +664,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network",
                 data: [
-                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    ["cols protein1/rows protein2", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
                     ["AFT2", 0, 1, 1],
                     ["CIN5", 0, 0, 1]
@@ -674,7 +674,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network_weights",
                 data: [
-                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    ["cols protein1/rows protein2", "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
                     ["AFT2", 0, 1, 1],
                     ["CIN5", 0, 0, 1]

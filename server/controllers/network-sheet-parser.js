@@ -93,9 +93,9 @@ var parseNetworkSheet = function (sheet, network) {
     var columnChecker = [];
     var rowData = [];
 
-    // check for “cols regulators/rows targets” in cell A1
+    // check for “cols protein1/rows protein2” in cell A1
     const cellA1 = sheet.data[0][0];
-    if (cellA1 !== "cols regulators/rows targets") {
+    if (cellA1 !== "cols protein1/rows protein2") {
         addWarning(network, constants.warnings.incorrectCellA1WorkbookWarning(sheet.name));
     }
 
