@@ -48,6 +48,13 @@ const queryNetworkDatabase = (query) => {
     return responseData("network", "", queryURL);
 };
 
+// GRNsettings DB Access Functions
+
+const queryDefaultDataset = (query) => {
+    const queryURL = buildQueryURL("grnsettingsdb", query);
+    return responseData("grnsettings", "", queryURL);
+};
+
 // Protein-Protein DB Access Functions
 
 const queryProteinProteinDatabase = (query) => {
@@ -93,5 +100,6 @@ export {
     uploadCustomWorkbook,
     getWorkbookFromForm,
     getWorkbookFromUrl,
+    queryDefaultDataset,
     queryProteinProteinDatabase
 };

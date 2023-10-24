@@ -210,8 +210,8 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
         grnState.name = name;
         grnState.workbook = workbook;
         // Reset the node coloring dataset selection
-        grnState.nodeColoring.topDataset = undefined;
-        grnState.nodeColoring.bottomDataset = undefined;
+        grnState.nodeColoring.topDataset = grnState.defaultDataset;
+        grnState.nodeColoring.bottomDataset = grnState.defaultDataset;
         grnState.annotateLinks();
         disableUpload(false);
         updateApp(grnState);
