@@ -23,7 +23,8 @@ const optimizationParametersTypeKey = {
     alpha: "number", "kk_max": "number", MaxIter: "number", TolFun: "number", MaxFunEval: "number",
     TolX: "number", "production_function": "string", "L_curve": "number", "estimate_params": "number",
     "make_graphs": "number", "fix_P": "number", "fix_b": "number", "expression_timepoints": "object",
-    Strain: "object", species: "string", "taxon_id": "number", "simulation_timepoints": "object", "b_or_tau" : "number"
+    Strain: "object", species: "string", "taxon_id": "number", workbookType: "string",
+    "simulation_timepoints": "object", "b_or_tau" : "number"
 
 };
 

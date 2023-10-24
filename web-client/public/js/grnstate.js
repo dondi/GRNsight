@@ -41,6 +41,7 @@ const annotateLinks = workbook => {
 };
 
 export const grnState = {
+    mode: "grn",    // GRNsight will display GRN view unless specified
     name: null,
     simulation: undefined,
     newWorkbook: false,

@@ -10,6 +10,7 @@ import {
     UNWEIGHTED_DEMO_NAME,
     SCHADE_INPUT_NAME,
     SCHADE_OUTPUT_NAME,
+    FORCE_GRAPH
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
 
@@ -136,6 +137,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
                     }
                 }
                 grnState.workbook = workbook;
+                grnState.mode = workbook.meta.data.workbookType;
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
@@ -162,7 +164,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
         );
         loadGrn(url);
         reloader = () => loadGrn(url);
-
+        grnState.graphLayout = FORCE_GRAPH;
         $("a.upload > input[type=file]").val("");
     };
 
@@ -200,6 +202,11 @@ export const setupLoadAndImportHandlers = (grnState) => {
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
     getWorkbookFromUrl(uploadRoute).done((workbook) => {
+        if (workbook.meta.data.workbookType === "protein-protein-physical-interaction") {
+            grnState.mode = workbook.meta.data.workbookType;
+        } else {
+            grnState.mode = "grn";
+        }
         grnState.name = name;
         grnState.workbook = workbook;
         // Reset the node coloring dataset selection
