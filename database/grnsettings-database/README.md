@@ -21,7 +21,7 @@ The schema is located within this directory at the top level of this file `schem
     
     For Mac: 
     ```
-    psql postgresql://localhost/postgres -f schema.sql
+    psql -f schema.sql postgresql://localhost/postgres
     ```
 
 ### Changing the default database name
