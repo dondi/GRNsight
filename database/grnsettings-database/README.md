@@ -11,17 +11,18 @@ The schema is located within this directory at the top level of this file `schem
 1. Move to file that contains `schema.sql` file, which is under `database/grnsettings-database` folder
 
 2. Load database
-
-    To load to production database
-    ```
-    psql <address to database> -U postgres -f schema.sql
-    ```
     
     Example of loading to local database
+   
+    For Windows:
+    ```
+    psql -U postgres -f schema.sql postgresql://localhost/postgres
+    ```
+    
+    For Mac: 
     ```
     psql postgresql://localhost/postgres -f schema.sql
     ```
-
 
 ### Changing the default database name
 
@@ -29,7 +30,7 @@ The schema is located within this directory at the top level of this file `schem
 
     For Windows:
     ```
-    psql <address to database> -U postgres
+    psql -U postgres <address to database> 
     ```
     For Mac:
     ```
@@ -45,12 +46,6 @@ The schema is located within this directory at the top level of this file `schem
     DELETE FROM grnsettings;
     ```
 4. And then insert the new database name using the following command
-
-   For Windows:
-   ```
-   INSERT INTO grnsettings VALUES <'the new default database name'>;
-   ```
-   For Mac: 
     ```
     INSERT INTO grnsettings(expression_dataset) VALUES ('the new default database name');
     ```
