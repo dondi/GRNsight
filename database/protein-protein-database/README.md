@@ -13,11 +13,11 @@ The schema is located within this directory at the top level in the file `schema
 Usage:
 To load to local database
 ```
-psql postgresql://localhost/postgres -f schema.sql
+psql -f schema.sql postgresql://localhost/postgres
 ```
 To load to production database 
 ```
-psql <address to database> -f schema.sql
+psql -f schema.sql <address to database>
 ```
 
 ### Scripts
