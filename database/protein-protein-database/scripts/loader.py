@@ -16,7 +16,7 @@ directly into a database command line utility such as `psql`.
 This function Loads Protein-Protein Network Data Sources into the database
 """
 def LOAD_SOURCES():
-    print('COPY protein_protein_interactions.source (time_stamp, source, display_name) FROM stdin;')
+    print('COPY protein_protein_interactions (time_stamp, source, display_name) FROM stdin;')
     NETWORK_DATA_SOURCE = '../script-results/processed-loader-files/source.csv'
     with open(NETWORK_DATA_SOURCE, 'r+') as f:
         reader = csv.reader(f)
@@ -95,6 +95,13 @@ def LOAD_PHYSICAL_INTERACTIONS():
                 print(f'{protein1}\t{protein2}\t{idmi}\t{exp_name}\t{timestamp}\t{source}')
             row_num += 1
     print('\\.')
+    
+def TRUNCATE_TABLES():
+    # Truncate tables to remove existing data
+    print('TRUNCATE TABLE protein_protein_interactions.physical_interactions, protein_protein_interactions.protein, protein_protein_interactions.gene, protein_protein_interactions;')
+
+# Call the TRUNCATE_TABLES function before loading data
+TRUNCATE_TABLES()
 
 LOAD_SOURCES()
 LOAD_GENES()
