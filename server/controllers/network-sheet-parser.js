@@ -105,11 +105,11 @@ var parseNetworkSheet = function (sheet, network) {
       cellA1 !== "cols regulators/rows targets" ||
       cellA1 !== "protein 1/protein 2"
     ) {
-      addWarning(
+        addWarning(
         network,
         constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
       );
-    } 
+    }
 
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {

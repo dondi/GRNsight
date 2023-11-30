@@ -72,7 +72,6 @@ import {
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
 
 export const setupHandlers = grnState => {
-    print("setup-handlers.js > setupHandlers")
     setupLoadAndImportHandlers(grnState);
 
     var valueValidator = (min, max, value) => {
