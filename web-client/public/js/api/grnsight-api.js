@@ -75,7 +75,6 @@ const constructFullUrl = (queryURL) =>
 const getWorkbookFromForm = (formData, queryURL) => {
     const fullUrl = constructFullUrl(queryURL);
 
-
     // The presence of formData is taken to indicate a POST.
     return formData
         ? $.ajax({

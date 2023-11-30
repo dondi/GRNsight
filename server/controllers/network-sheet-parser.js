@@ -95,9 +95,21 @@ var parseNetworkSheet = function (sheet, network) {
 
     // check for “cols regulators/rows targets” in cell A1
     const cellA1 = sheet.data[0][0];
-    if (cellA1 !== "cols regulators/rows targets") {
-        addWarning(network, constants.warnings.incorrectCellA1WorkbookWarning(sheet.name));
-    }
+
+    // TODO There are now 2 valid values for cellA1. One indicates GRN, the other is PPI.
+    // If neither, then we continue with the warning.
+
+    // Depending on the value of cellA1, we want to make a new property `networkType` which
+    // will indicate the network type. THe web app then reads this to decide what to do next.
+    if (
+      cellA1 !== "cols regulators/rows targets" ||
+      cellA1 !== "protein 1/protein 2"
+    ) {
+      addWarning(
+        network,
+        constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
+      );
+    } 
 
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {
@@ -283,19 +295,19 @@ module.exports = function (workbookFile) {
         networkWeights: {},
     };
 
-    for (let i = 0; i < workbookFile.length; i++) {
+    for (const element of workbookFile) {
         // === 'network' for backwards compatibility of test files
-        if (workbookFile[i].name.toLowerCase() === "network") {
+        if (element.name.toLowerCase() === "network") {
             // Here we have found a network sheet containing simple data. We keep looking
             // in case there is also a network sheet with optimized weights
-            networks.network = parseNetworkSheet(workbookFile[i], initWorkbook({ sheetType: "unweighted" }));
-        } else if (workbookFile[i].name.toLowerCase() === "network_optimized_weights" ) {
+            networks.network = parseNetworkSheet(element, initWorkbook({ sheetType: "unweighted" }));
+        } else if (element.name.toLowerCase() === "network_optimized_weights" ) {
             // We found a network sheet with optimized weights, which is the ideal data source.
-            networks.networkOptimizedWeights = parseNetworkSheet(workbookFile[i],
+            networks.networkOptimizedWeights = parseNetworkSheet(element,
                 initWorkbook({ sheetType: "weighted" }));
-        } else if (workbookFile[i].name.toLowerCase() === "network_weights") {
+        } else if (element.name.toLowerCase() === "network_weights") {
             // We found a network_weights sheet to preserve existing network type sheet data
-            networks.networkWeights = parseNetworkSheet(workbookFile[i], initWorkbook({ sheetType: "weighted" }));
+            networks.networkWeights = parseNetworkSheet(element, initWorkbook({ sheetType: "weighted" }));
         }
     }
 

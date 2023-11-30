@@ -10,6 +10,8 @@ import {
     UNWEIGHTED_DEMO_NAME,
     SCHADE_INPUT_NAME,
     SCHADE_OUTPUT_NAME,
+    PPI_DEMO_PATH,
+    PPI_DEMO_NAME,
     FORCE_GRAPH
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
@@ -20,6 +22,7 @@ const demoFiles = [
     WEIGHTED_DEMO_PATH,
     SCHADE_INPUT_PATH,
     SCHADE_OUTPUT_PATH,
+    PPI_DEMO_PATH
 ];
 
 const submittedFilename = ($upload) => {
@@ -134,8 +137,14 @@ export const setupLoadAndImportHandlers = (grnState) => {
                         break;
                     case SCHADE_OUTPUT_PATH:
                         grnState.name = SCHADE_OUTPUT_NAME;
+                        break;
+                    case PPI_DEMO_PATH:
+                        grnState.name = PPI_DEMO_NAME;
+                        break;
                     }
                 }
+                // TODO 👆🏼 The back end will add a `networkType` property to this object.
+                //     The web app can then adjust various things based on that.
                 grnState.workbook = workbook;
                 grnState.mode = workbook.meta.data.workbookType;
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
