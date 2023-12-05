@@ -101,14 +101,11 @@ var parseNetworkSheet = function (sheet, network) {
 
     // Depending on the value of cellA1, we want to make a new property `networkType` which
     // will indicate the network type. THe web app then reads this to decide what to do next.
-    if (
-      cellA1 !== "cols regulators/rows targets" ||
-      cellA1 !== "protein 1/protein 2"
-    ) {
+    if (cellA1 !== "cols regulators/rows targets") {
         addWarning(
-        network,
-        constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
-      );
+            network,
+            constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
+        );
     }
 
     // Get Source Genes
