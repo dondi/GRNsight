@@ -95,6 +95,13 @@ def LOAD_PHYSICAL_INTERACTIONS():
                 print(f'{protein1}\t{protein2}\t{idmi}\t{exp_name}\t{timestamp}\t{source}')
             row_num += 1
     print('\\.')
+    
+def TRUNCATE_TABLES():
+    # Truncate tables to remove existing data
+    print('TRUNCATE TABLE protein_protein_interactions.physical_interactions, protein_protein_interactions.protein, protein_protein_interactions.gene, protein_protein_interactions;')
+
+# Call the TRUNCATE_TABLES function before loading data
+TRUNCATE_TABLES()
 
 LOAD_SOURCES()
 LOAD_GENES()

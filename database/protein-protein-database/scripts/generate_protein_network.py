@@ -36,6 +36,7 @@ display_name = "Yeastmine - SGD"
 # Get Network Data from Yeastmine
 
 def getPhysicalInteractions(gene):
+    print("Query data from Yeastmine to get Physical Interactions")
     query = service.new_query("Gene")
     query.add_constraint("interactions.participant2", "Gene")
     query.add_view(
@@ -53,6 +54,7 @@ def getPhysicalInteractions(gene):
     return query
 
 def getProteinFromGene(gene):
+    print("Query data from Yeastmine to get Protein information")
     query = service.new_query("Gene")
     query.add_view(
         "primaryIdentifier", "proteins.symbol", "sgdAlias", "proteins.length",
@@ -64,6 +66,7 @@ def getProteinFromGene(gene):
     return query
 
 def getAllProteins():
+    print("Query data from Yeastmine to get all proteins")
 
     query = service.new_query("Protein")
 
@@ -93,8 +96,7 @@ genes = {
         #  proteins : {protein standard name : {protein info}}
     # }
 }
-print("COLLECTING PROTEINS\n")
-count = 0
+print("COLLECTING PROTEINS FROM QUERY RESULTS\n")
 
 for row in query.rows():
     gene_systematic_name = row["genes.secondaryIdentifier"]
@@ -111,12 +113,16 @@ for row in query.rows():
                 "PI": PI
         }      
     }
+
         
 print("COLLECTING/WRITING INTERACTIONS\n")
 file = open(PHYSICAL_INTERACTION_FILE,"w")
+print(f"Open file {PHYSICAL_INTERACTION_FILE} and write data into that file")
 file.write(f"Protein1\tProtein2\tInteraction Detection Methods Identifier\tExperiment Name\tTime_Stamp\tSource\n")
 
+
 exceptions = []
+print("Processing Physical Interactions")
 for gene in genes:
     query = getPhysicalInteractions(gene)
     first_row = True
@@ -138,6 +144,7 @@ for gene in genes:
         else: 
             exceptions.append(gene2)
 
+print("Handling Exceptions")
 failed_genes = []
 while exceptions != None:
     acceptable_genes = []
@@ -160,7 +167,7 @@ while exceptions != None:
             }      
         }
         if len(rows) == 0:
-            failed_genes.append(gene)
+            failed_genes.append(gene)  
             
     more_exceptions = []
     for gene in acceptable_genes:
@@ -190,7 +197,6 @@ while exceptions != None:
     
 file.close()
 
-
 # Source Table
 
 print(f"Completed {PHYSICAL_INTERACTION_FILE} Starting{SOURCE_DESTINATION}")
@@ -204,6 +210,7 @@ source_file.close()
 species = "Saccharomyces cerevisiae"
 taxon_id = "559292"
 
+# create gene csv
 print(f"Completed {SOURCE_DESTINATION} Starting{GENE_FILE}")
 file = open(GENE_FILE,"w")
 file.write(f"Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\n")
@@ -211,14 +218,10 @@ for gene in genes:
     file.write(f"{gene}\t{genes[gene]['standard_name']}\t{species}\t{taxon_id}\n")
 file.close()
 
+# create protein csv
 print(f"Completed {GENE_FILE} Starting{PROTEIN_FILE}")
 file = open(PROTEIN_FILE, "w")
 file.write(f"Standard Name\tGene Systematic Name\tLength\tMolecular Weight\tPI\tTaxon ID\n")
 for gene in genes:
     file.write(f"{genes[gene]['protein']['standard_name']}\t{gene}\t{genes[gene]['protein']['length']}\t{genes[gene]['protein']['molecular_weight']}\t{genes[gene]['protein']['PI']}\t{taxon_id}\n")
 file.close()
-        
-
-# create gene csv
-
-# create protein csv
