@@ -443,6 +443,14 @@ module.exports = function (app) {
                 app
             );
         });
+
+        app.get("/demo/ppi", function (req, res) {
+            return demoWorkbooks(
+                "test-files/demo-files/18_proteins_81_edges_PPI.xlsx",
+                res,
+                app
+            );
+        });
     }
 
     // exporting parseNetworkSheet for use in testing. Do not remove!
