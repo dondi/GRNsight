@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -57,6 +56,7 @@ const buildQueryByType = function (queryType, query) {
     }
 };
 
+// const response = convertResponseToJSON(req.query.type, req.query, stdname);
 const convertResponseToJSON = function (queryType, query, totalOutput) {
     let JSONOutput = {};
     switch (queryType) {

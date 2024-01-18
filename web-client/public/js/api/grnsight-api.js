@@ -5,7 +5,7 @@ const buildQueryURL = function (path, parameters) {
     for (let p in parameters) {
         searchParams.append(p, parameters[p]);
     }
-    return `${path}?${searchParams.toString()}`;
+    return `${path}?${searchParams}`;
 };
 
 const responseData = (database, formData, queryURL) => {
