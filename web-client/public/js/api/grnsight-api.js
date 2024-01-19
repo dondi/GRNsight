@@ -48,6 +48,20 @@ const queryNetworkDatabase = (query) => {
     return responseData("network", "", queryURL);
 };
 
+// GRNsettings DB Access Functions
+
+const queryDefaultDataset = (query) => {
+    const queryURL = buildQueryURL("grnsettingsdb", query);
+    return responseData("grnsettings", "", queryURL);
+};
+
+// Protein-Protein DB Access Functions
+
+const queryProteinProteinDatabase = (query) => {
+    const queryURL = buildQueryURL("proteindb", query);
+    return responseData("network", "", queryURL);
+};
+
 // Upload Custom Workbook Functions
 
 const uploadCustomWorkbook = (workbook, grnState) => {
@@ -60,7 +74,6 @@ const constructFullUrl = (queryURL) =>
 
 const getWorkbookFromForm = (formData, queryURL) => {
     const fullUrl = constructFullUrl(queryURL);
-
 
     // The presence of formData is taken to indicate a POST.
     return formData
@@ -86,4 +99,6 @@ export {
     uploadCustomWorkbook,
     getWorkbookFromForm,
     getWorkbookFromUrl,
+    queryDefaultDataset,
+    queryProteinProteinDatabase
 };

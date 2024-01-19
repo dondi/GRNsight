@@ -58,9 +58,20 @@ html
                 li(class='divider')
 
                 li
+                  span(class='menu-subheader') Network Mode
+                  
+                li(class='startDisabled disabled')
+                  a(href='#' id='network-mode-grn-menu' class="menu-submenu network-mode")
+                    span(class='glyphicon')
+                    | &nbsp; Gene Regulatory Network
+                li(class='startDisabled disabled')
+                  a(href='#' id='network-mode-protein-protein-physical-interaction-menu' class="menu-submenu network-mode")
+                    span(class='glyphicon')
+                    | &nbsp; Protein-Protein Physical Interaction Network
+                li
                   span(class='menu-subheader') Species
                 li
-                  p(id='Saccharomyces-cerevisiae')
+                  p(id='Saccharomyces-cerevisiae', class="menu-submenu")
                     span(class='glyphicon glyphicon-ok')
                     | &nbsp; Saccharomyces cerevisiae
 
@@ -70,35 +81,33 @@ html
               ul(class='dropdown-menu' role='menu')
                 span(class='menu-subheader') Graph Options
                 li
-                  a(href='#' id='forceGraph' class='layout' checked)
-                    span(class='glyphicon glyphicon-ok')
-                    | &nbsp; Force Graph
+                  a(href='#' id='forceGraph' class='layout')
+                    | &nbsp; &nbsp; &nbsp;Force Graph
                   a(href='#' id='gridLayout' class='layout')
-                    span(class='glyphicon')
-                    | &nbsp; Grid Layout
+                    | &nbsp; &nbsp; &nbsp;Grid Layout
                 li(class='divider')
                 li
                   a(href='#' id='lockSlidersMenu' class="lockSliders")
                     span(class='glyphicon invisible')
-                    | &nbsp; Lock Force Graph Parameters
+                    |Lock Force Graph Parameters
                 li
                   a(href='#' id='resetSlidersMenu' class="resetSliders")
                     span(class='glyphicon invisible')
-                    | &nbsp; Reset Force Graph Parameters
+                    |Reset Force Graph Parameters
                 li(class='disabled')
                   a(href='#' id='undoResetMenu' class="undoSliderReset")
                     span(class='glyphicon invisible')
-                    | &nbsp; Undo Reset
+                    |Undo Reset
                 li(class='divider')
                 li
                   a(href='#' id='link-distance' class='with-input')
                     span(class='glyphicon invisible')
-                    | &nbsp; Link Distance (1 - 1000) &nbsp;
+                    |Link Distance (1 - 1000) &nbsp;
                     input(type='number' id='link-distance-menu' class='keepopen' value='500' aria-describedby='basic-addon1')
                 li
                   a(href='#' id='charge' class='with-input')
                     span(class='glyphicon invisible')
-                    | &nbsp; Charge (-2000 - 0) &nbsp;
+                    |Charge (-2000 - 0) &nbsp;
                     input(type='number' id='charge-menu' class='keepopen' value='-50' aria-describedby='basic-addon1')
 
 
@@ -200,7 +209,7 @@ html
                     | &nbsp; Fit To Window
                 li(class='divider')
                 li
-                  a(href='#' id='restrict-graph-to-viewport' class='viewportOption')
+                  a(href='#' id='restrict-graph-to-viewport' class='viewport')
                     span(class='glyphicon')
                     | &nbsp; Restrict Graph to Viewport
                 li(class='divider')
@@ -234,15 +243,11 @@ html
                     li(class='startDisabled disabled weighted export')
                       a(href='#' id='exportAsWeightedSif') To Weighted SIF
                     li(class='divider')
-                    li(class='startDisabled disabled unweighted export')
+                    li(class='startDisabled disabled unweighted export' id='unweightedGraphmlContainer')
                       a(href='#' id='exportAsUnweightedGraphMl') To Unweighted GraphML
                     li(class='startDisabled disabled weighted export')
                       a(href='#' id='exportAsWeightedGraphMl') To Weighted GraphML
                     li(class='divider')
-                    //- li(class='startDisabled disabled unweighted export')
-                      a(href='#' id='exportAsUnweightedExcel') To Unweighted Excel
-                    //- li(class='startDisabled disabled weighted export')
-                    //-   a(href='#' id='exportAsWeightedExcel') To Weighted Excel
                     li(class='startDisabled disabled export')
                       a(href='#' id='exportAsExcel') To Excel
 
@@ -341,6 +346,7 @@ html
                         option(href='#' id='demoSourceDropdown-weighted' class='weighted' value='weighted')  Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
                         option(href='#' id='demoSourceDropdown-schadeInput' class='schadeInput' value='schadeInput') Demo #3: Unweighted GRN (21 genes, 31 edges)
                         option(href='#' id='demoSourceDropdown-schadeOutput' class='schadeOutput' value='schadeOutput') Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)
+                        option(href='#' id='demoSourceDropdown-ppi' class='ppi' value='ppi') Demo #5: PPI (18 proteins, 81 edges)
                     label(for='upload-network' class='open btn btn-default network-button' data-toggle='tooltip', title='(.xlsx, .sif, .graphml)')
                       span(class='glyphicon glyphicon-folder-open')
                       | &nbsp; Open File 
@@ -354,6 +360,13 @@ html
                     span(class='glyphicon glyphicon-repeat sidebar-glyphicon')
                     | &nbsp; Reload
                   div(class="long-sub-divider")
+                    form(class='panelDropdownContainer')
+                      label(for='speciesDropdown' class='info') Network Mode
+                      select(class="networkMode panelDropdown btn btn-default startDisabled disabled" id='networkModeDropdown' name="networkModeDropdown" href='#')
+                        option(value="none" selected="true" disabled hidden) Change Network Mode
+                        option(href='#' id='demoSourceDropdown-grn' value='grn') Gene Regulatory Network
+                        option(href='#' id='demoSourceDropdown-protein-protein-physical-interaction' value='protein-protein-physical-interaction') Protein-Protein Physical Interaction Network
+
                   label(for='species-info' class='info') Species: 
                     span(id='species' class='network-type') Saccharomyces cerevisiae
                   input(type="hidden" id='species-info')
@@ -488,7 +501,7 @@ html
                 tr(class='shortest-path-column-headers')
               tbody
 
-    div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='errorModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
@@ -501,7 +514,7 @@ html
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('.upload').click()")
 
-    div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='warningsModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
@@ -522,7 +535,7 @@ html
           div(class='modal-footer')
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
 
-    div(id='exportExcelModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='exportExcelModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
@@ -534,7 +547,7 @@ html
           div(class='modal-footer')
             div(id='exportExcelFooter-container')
           
-    div(id='generateNetworkModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='generateNetworkModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
@@ -546,7 +559,7 @@ html
           div(class='modal-footer')
             div(id='generateNetworkFooter-container')
 
-    div(id='warningsModalSpecies' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true')
+    div(id='warningsModalSpecies' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')
@@ -559,7 +572,7 @@ html
             input(type='button' class='btn btn-default' data-dismiss='modal' value='Close')
             //- input(type='button' id='launchFileOpen' class='btn btn-primary' data-dismiss='modal' value='Select New File' onclick="$('.upload').click()")
 
-    div(id='importErrorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true')
+    div(id='importErrorModal' class='modal fade' tab-index='-1' role='dialog' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')
           div(class='modal-header')

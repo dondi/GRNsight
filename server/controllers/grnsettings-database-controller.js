@@ -1,12 +1,12 @@
 
-var networkDal = require(__dirname + "/../dals/network-dal");
+var grnsettingDal = require(__dirname + "/../dals/grnsetting-dal");
 
 
 module.exports = function (app) {
 
-    app.get("/networkdb", function (req, res) {
+    app.get("/grnsettingsdb", function (req, res) {
         try {
-            return networkDal.queryNetworkDatabase(req, res);
+            return grnsettingDal.queryDefaultDataset(req, res);
         } catch (e) {
             res.json({error: e.stack});
             res.json({error: e.name});
@@ -14,5 +14,4 @@ module.exports = function (app) {
 
         }
     });
-
 };

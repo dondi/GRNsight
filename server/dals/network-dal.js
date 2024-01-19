@@ -19,7 +19,7 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp;";
+    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp DESC;";
 };
 
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
@@ -66,7 +66,7 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
             const timestamp = x.time_stamp;
             const source = x.source;
             const displayName = x.display_name;
-            JSONOutput.sources[`${displayName} : ${timestamp.toISOString().split("T")[0]}`] = {timestamp, source};
+            JSONOutput.sources[`${displayName}: ${timestamp.toISOString().split("T")[0]}`] = {timestamp, source};
         });
         return JSONOutput;
     case "NetworkGeneFromSource":

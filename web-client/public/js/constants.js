@@ -21,22 +21,34 @@ export const SCHADE_OUTPUT_ID     = ".schadeOutput";
 export const SCHADE_OUTPUT_PATH = "demo/schadeOutput";
 export const SCHADE_OUTPUT_NAME   = "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 
-export const EXPORT_TO_EXCEL            = "#exportAsExcelWkbk";
-export const EXPORT_TO_UNWEIGHTED_SIF   = "#exportAsUnweightedSif";
-export const EXPORT_TO_WEIGHTED_SIF     = "#exportAsWeightedSif";
-export const EXPORT_TO_UNWEIGHTED_GML   = "#exportAsUnweightedGraphMl";
-export const EXPORT_TO_WEIGHTED_GML     = "#exportAsWeightedGraphMl";
-export const EXPORT_TO_PNG              = "#exportAsPng";
-export const EXPORT_TO_SVG              = "#exportAsSvg";
-export const EXPORT_TO_PDF              = "#exportAsPdf";
-export const EXPORT_WEIGHTED_CLASS      = ".weighted.export";
-export const EXPRESSION_SOURCE          = "#expressionSource";
+export const PPI_DEMO_ID = ".ppi";
+export const PPI_DEMO_PATH = "demo/ppi";
+export const PPI_DEMO_NAME = "Demo #5: PPI (18 proteins, 81 edges)";
+
+export const EXPORT_TO_EXCEL                        = "#exportAsExcelWkbk";
+export const EXPORT_TO_UNWEIGHTED_SIF               = "#exportAsUnweightedSif";
+export const EXPORT_TO_WEIGHTED_SIF                 = "#exportAsWeightedSif";
+export const EXPORT_TO_UNWEIGHTED_GML               = "#exportAsUnweightedGraphMl";
+export const EXPORT_TO_UNWEIGHTED_GML_MENU          = "#unweightedGraphmlContainer";
+export const EXPORT_TO_WEIGHTED_GML                 = "#exportAsWeightedGraphMl";
+export const EXPORT_TO_PNG                          = "#exportAsPng";
+export const EXPORT_TO_SVG                          = "#exportAsSvg";
+export const EXPORT_TO_PDF                          = "#exportAsPdf";
+export const EXPORT_WEIGHTED_CLASS                  = ".weighted.export";
+export const EXPRESSION_SOURCE                      = "#expressionSource";
+
+export const NETWORK_MODE_GRN           = "#network-mode-grn-menu";
+export const NETWORK_MODE_PROTEIN_PHYS  = "#network-mode-protein-protein-physical-interaction-menu";
+export const NETWORK_MODE_DROPDOWN      = "#networkModeDropdown";
+export const NETWORK_MODE_CLASS         = ".network-mode";
+
 
 export const DEMO_INFORMATION = [
     [ WEIGHTED_DEMO_ID,   WEIGHTED_DEMO_PATH,   WEIGHTED_DEMO_NAME   ],
     [ UNWEIGHTED_DEMO_ID, UNWEIGHTED_DEMO_PATH, UNWEIGHTED_DEMO_NAME ],
     [ SCHADE_INPUT_ID,    SCHADE_INPUT_PATH,    SCHADE_INPUT_NAME    ],
-    [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ]
+    [ SCHADE_OUTPUT_ID,   SCHADE_OUTPUT_PATH,   SCHADE_OUTPUT_NAME   ],
+    [ PPI_DEMO_ID,        PPI_DEMO_PATH,        PPI_DEMO_NAME        ]
 ];
 
 export const MIN_EDGE_WEIGHT_NORMALIZATION      = 0.0001;
