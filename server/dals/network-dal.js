@@ -22,10 +22,11 @@ const buildNetworkSourceQuery = function () {
 };
 
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
-    return `SELECT DISTINCT gene_id, display_gene_id FROM gene_regulatory_network.network, gene_regulatory_network.gene WHERE
- network.time_stamp='${timestamp}' AND network.source='${source}' AND
- (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
- (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`;
+    return `SELECT DISTINCT gene_id, display_gene_id FROM 
+    gene_regulatory_network.network, gene_regulatory_network.gene WHERE
+    network.time_stamp='${timestamp}' AND network.source='${source}' AND
+    (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
+    (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`;
 };
 
 const buildNetworkGenesQuery = function (geneString) {
