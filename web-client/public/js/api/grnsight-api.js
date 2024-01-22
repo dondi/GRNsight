@@ -26,7 +26,7 @@ const responseData = (database, formData, queryURL) => {
             .done((data) => {
                 resolve(data);
             })
-            .error(function () {
+            .error(() => {
                 console.log(
                     `Error in accessing ${database} database. Result may just be loading.`
                 );

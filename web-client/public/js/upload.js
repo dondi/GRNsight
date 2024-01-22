@@ -225,30 +225,6 @@ export const upload = function () {
         }
     };
 
-
-    // .then(function (response) {
-    //     finalExportSheets.expression[sheet] = response;
-    //     if (finalExportSheets.expression[sheet]) {
-    //         stopLoadingIcon();
-    //         if (!Object.values(finalExportSheets.expression).includes(null)) {
-    //             // we have all of the expression sheets so lets initilize the export process
-    //             Object.keys(finalExportSheets.expression).forEach((sheet) => {
-    //                 // make sure that the sheets we queried are populated with the correct data
-    //                 if (!(finalExportSheets.expression[sheet].data && finalExportSheets.expression[sheet].timePoints)) {
-    //                     // if the resulting query doesn't contains both the timePoint data and
-    //                     // the gene data then don't export it. If not don't :)
-    //                     finalExportSheets.expression[sheet] = null;
-    //                 }
-    //             });
-    //             if (finalExportSheets["optimization_parameters"] === null) {
-    //                 finalExportSheets["optimization_parameters"] = updateOptimizationParameters(finalExportSheets);
-    //             }
-    //             grnState.workbook.exportSheets = finalExportSheets;
-    //             exportExcel(route, extension, sheetType);
-    //         }
-    //     }
-    // }
-
     const handleExportExcelButtonExport = (route, extension, sheetType, source) => {
         grnState.workbook.exportNetworkType = sheetType;
         const workbookSheets = $("input[name=workbookSheets]:checked");
@@ -461,7 +437,7 @@ export const upload = function () {
         ] : [
             (grnState.workbook.meta2 !== undefined && "optimization_diagnostics")
         ];
-        additionalsheets = additionalsheets.filter(x => (x !== false && -1 !== optionalAdditionalSheets.indexOf(x)));
+        additionalsheets = additionalsheets.filter(sheet => (sheet && -1 !== optionalAdditionalSheets.indexOf(sheet)));
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...(new Set(additionalsheets))];
         for (let n of networks) {

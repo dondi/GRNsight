@@ -63,10 +63,10 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
     switch (queryType) {
     case "NetworkSource":
         JSONOutput.sources = {};
-        totalOutput.forEach(function (x) {
-            const timestamp = x.time_stamp;
-            const source = x.source;
-            const displayName = x.display_name;
+        totalOutput.forEach(function (connection) {
+            const timestamp = connection.time_stamp;
+            const source = connection.source;
+            const displayName = connection.display_name;
             JSONOutput.sources[`${displayName}: ${timestamp.toISOString().split("T")[0]}`] = {timestamp, source};
         });
         return JSONOutput;
