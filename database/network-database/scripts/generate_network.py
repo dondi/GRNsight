@@ -120,7 +120,7 @@ def createMatrix(fileName: str):
     regulator_to_target_file.write(f'{headers}\n')
     for target in targets:
         result = create_regulator_to_target_row(target, regulators_to_targets)
-        if result != False:
+        if result:
             regulator_to_target_file.write(f'{result}\n')
     regulator_to_target_file.close()
 
