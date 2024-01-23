@@ -143,10 +143,15 @@ export const setupLoadAndImportHandlers = (grnState) => {
                         break;
                     }
                 }
-                // TODO 👆🏼 The back end will add a `networkType` property to this object.
-                //     The web app can then adjust various things based on that.
                 grnState.workbook = workbook;
-                grnState.mode = workbook.meta.data.workbookType;
+
+                if (grnState.name.includes(".sif")) {
+                    grnState.mode = workbook.networkMode;
+                } else if (grnState.name.includes(".graphml")) {
+                    grnState.mode = "grn";
+                } else {
+                    grnState.mode = workbook.meta.data.workbookType;
+                }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();

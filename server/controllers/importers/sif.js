@@ -64,7 +64,18 @@ module.exports = function (sif) {
 
         var hasNumbers = relationships.some(isNumber);
         var allNumbers = relationships.every(isNumber);
+
+        let networkMode = "grn";
+        for (const relationship of relationships) {
+            if (relationship === "pp") {
+                networkMode = "protein-protein-physical-interaction";
+                break;
+            } else if (relationship === "pd") {
+                break;
+            }
+        }
         return {
+            networkMode: networkMode,
             sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
             warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null,
             errors: errors
@@ -134,6 +145,7 @@ module.exports = function (sif) {
         errors: errors,
         warnings: warnings,
         sheetType: workbookType.sheetType,
+        networkMode: workbookType.networkMode,
         positiveWeights: [],
         negativeWeights: [],
         meta: {},

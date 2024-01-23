@@ -27,7 +27,8 @@ var expectedUnweightedWorkbook = initWorkbook({
     negativeWeights: [],
     sheetType: "unweighted",
     meta: {},
-    expression:{}
+    expression:{},
+    networkMode: "grn"
 });
 
 var expectedWeightedWorkbook = initWorkbook({
@@ -50,6 +51,7 @@ var expectedWeightedWorkbook = initWorkbook({
     negativeWeights: [],
     sheetType: "weighted",
     meta: {},
+    networkMode: "grn",
     expression:{}
 });
 
@@ -76,7 +78,8 @@ var expectedUnweightedWorkbookWithCycle = initWorkbook({
     negativeWeights: [],
     sheetType: "unweighted",
     meta: {},
-    expression:{}
+    expression:{},
+    networkMode: "grn"
 });
 
 var expectedWeightedWorkbookWithCycle = initWorkbook({
@@ -102,7 +105,8 @@ var expectedWeightedWorkbookWithCycle = initWorkbook({
     negativeWeights: [],
     sheetType: "weighted",
     meta: {},
-    expression:{}
+    expression:{},
+    networkMode: "grn"
 });
 
 // Unweighted SIF
@@ -350,7 +354,8 @@ describe("Import from SIF", function () {
             negativeWeights: [],
             sheetType: "unweighted",
             meta: {},
-            expression:{}
+            expression:{},
+            networkMode: "grn"
         }));
     });
 
@@ -368,7 +373,8 @@ describe("Import from SIF", function () {
             negativeWeights: [],
             sheetType: "weighted",
             meta: {},
-            expression:{}
+            expression:{},
+            networkMode: "grn"
         }));
     });
 
