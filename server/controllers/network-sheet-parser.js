@@ -8,7 +8,6 @@ var semanticChecker = require(__dirname + "/semantic-checker");
 
 var constants = require(__dirname + "/workbook-constants");
 
-
 // const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights"];
 
 // const isNetworkSheet = (sheetName) => {
@@ -92,21 +91,6 @@ var parseNetworkSheet = function (sheet, network) {
     var targetGenes = [];
     var columnChecker = [];
     var rowData = [];
-
-    // check for “cols regulators/rows targets” in cell A1
-    const cellA1 = sheet.data[0][0];
-
-    // TODO There are now 2 valid values for cellA1. One indicates GRN, the other is PPI.
-    // If neither, then we continue with the warning.
-
-    // Depending on the value of cellA1, we want to make a new property `networkType` which
-    // will indicate the network type. THe web app then reads this to decide what to do next.
-    if (cellA1 !== "cols regulators/rows targets") {
-        addWarning(
-            network,
-            constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
-        );
-    }
 
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {
@@ -284,8 +268,33 @@ var parseNetworkSheet = function (sheet, network) {
     return semanticChecker(network);
 };
 
+/*
+ * This method detect the network type of the workbook file either grn or protein-protein-physical-interactions
+ * If cellA1 = "cols regulators/ row targets" -> networkMode = grn
+ * If cellA1 = "protein 1/protein 2" -> networkMode = "protein-protein-physical-interaction"
+ * else undefined
+*/
 
-module.exports = function (workbookFile) {
+exports.networkMode = function (workbookFile) {
+    let networkMode = "grn";
+    for (const sheet of workbookFile) {
+        if (sheet.name.toLowerCase() === "network") {
+            const cellA1 = sheet.data[0][0];
+
+            if (cellA1 === "cols regulators/rows targets") {
+                networkMode = "grn";
+            } else if (cellA1 === "protein 1/protein 2") {
+                networkMode = "protein-protein-physical-interaction";
+            } else {
+                networkMode = undefined;
+            }
+            break;
+        }
+    }
+    return networkMode;
+};
+
+exports.networks = function (workbookFile) {
     const networks = {
         network: {},
         networkOptimizedWeights: {},
