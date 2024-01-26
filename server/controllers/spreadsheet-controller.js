@@ -121,7 +121,6 @@ var crossSheetInteractions = function (workbookFile) {
     // Refactored the parseNetworkSheet function to preserve all network type sheets including "network",
     // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
 
-    // var parseNetworkSheetData = parseNetworkSheet(workbookFile)
     var networks = parseNetworkSheet.networks(workbookFile);
 
     // Parse expression and 2-column data, then add to workbook object
