@@ -44,7 +44,7 @@ module.exports = function (sif) {
         sifEntries.forEach(function (entry) {
             if (entry.length > TARGET) {
                 if (!isNumber(entry[RELATIONSHIP])) {
-                    if (entry[RELATIONSHIP] !== "pd" && entry[RELATIONSHIP] !== 'pp') {
+                    if (entry[RELATIONSHIP] !== "pd" && entry[RELATIONSHIP] !== "pp") {
                         unweightedRelationshipTypeErrorDetected = true;
                     }
                 }
@@ -59,14 +59,14 @@ module.exports = function (sif) {
 
         let networkMode;
         if (allNumbers) {
-            networkMode = "grn"
+            networkMode = "grn";
         } else {
             for (const relationship of relationships) {
                 if (relationship === "pp") {
                     networkMode = "protein-protein-physical-interaction";
                     break;
                 } else if (relationship === "pd") {
-                    networkMode = "grn"
+                    networkMode = "grn";
                     break;
                 }
             }
@@ -79,7 +79,7 @@ module.exports = function (sif) {
         if (numRowsWithTwoColumns > 0) {
             errors.push(sifConstants.errors.SIF_MISSING_DATA_ERROR);
         }
-        
+
         return {
             networkMode: networkMode,
             sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
