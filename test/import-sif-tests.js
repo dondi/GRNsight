@@ -7,7 +7,7 @@ var importController = require(__dirname + "/../server/controllers" + "/import-c
 var constants = require(__dirname + "/../server/controllers" + "/constants");
 var initWorkbook = require(__dirname + "/../server/controllers" + "/helpers.js").initWorkbook;
 
-var expectedUnweightedWorkbook = initWorkbook({
+let expectedUnweightedGRNWorkbook = initWorkbook({
     genes: [
         { name: "A" },
         { name: "B" },
@@ -30,6 +30,31 @@ var expectedUnweightedWorkbook = initWorkbook({
     expression:{},
     networkMode: "grn"
 });
+
+let expectedUnweightedPPIWorkbook = initWorkbook({
+    genes: [
+        { name: "A" },
+        { name: "B" },
+        { name: "C" },
+        { name: "D" }
+    ],
+
+    links: [
+        { source: 1, target: 0 },
+        { source: 1, target: 2 },
+        { source: 2, target: 1 }
+    ],
+
+    errors: [],
+    warnings: [],
+    positiveWeights: [],
+    negativeWeights: [],
+    sheetType: "unweighted",
+    meta: {},
+    expression:{},
+    networkMode: "protein-protein-physical-interaction"
+});
+
 
 var expectedWeightedWorkbook = initWorkbook({
     genes: [
@@ -111,10 +136,17 @@ var expectedWeightedWorkbookWithCycle = initWorkbook({
 
 // Unweighted SIF
 
-var unweightedTestSif = [
+var unweightedGRNTestSif = [
     "A",
     [ "B", "pd", "A", "C" ].join("\t"),
     [ "C", "pd", "B" ].join("\t"),
+    "D"
+].join("\r\n"); // Mix up linebreak types to test normalization.
+
+var unweightedPPITestSif = [
+    "A",
+    [ "B", "pp", "A", "C" ].join("\t"),
+    [ "C", "pp", "B" ].join("\t"),
     "D"
 ].join("\r\n"); // Mix up linebreak types to test normalization.
 
@@ -287,8 +319,11 @@ var sifWithSemanticErrorOnly = [
 describe("Import from SIF", function () {
     it("should import unweighted workbooks from SIF correctly", function () {
         expect(
-            importController.sifToGrnsight(unweightedTestSif)
-        ).to.deep.equal(expectedUnweightedWorkbook);
+            importController.sifToGrnsight(unweightedGRNTestSif)
+        ).to.deep.equal(expectedUnweightedGRNWorkbook);
+        expect(
+            importController.sifToGrnsight(unweightedPPITestSif)
+        ).to.deep.equal(expectedUnweightedPPIWorkbook);
     });
 
     it("should import weighted workbooks from SIF correctly", function () {
@@ -300,7 +335,7 @@ describe("Import from SIF", function () {
     it("should import inconsistently weighted workbooks from SIF as unweighted", function () {
         expect(
             importController.sifToGrnsight(inconsistentlyWeightedTestSif)
-        ).to.deep.equal(extend(true, {}, expectedUnweightedWorkbook, {
+        ).to.deep.equal(extend(true, {}, expectedUnweightedGRNWorkbook, {
             warnings: [
                 constants.warnings.EDGES_WITHOUT_WEIGHTS
             ]
@@ -405,11 +440,11 @@ describe("Import from SIF syntactic checker", function () {
 
     it("should produce no warnings or errors for correct data", function () {
         expect(
-            importController.sifToGrnsight(unweightedTestSif).errors.length
+            importController.sifToGrnsight(unweightedGRNTestSif).errors.length
         ).to.equal(0);
     });
 
-    it("should throw an error for unweighted graphs with relationship types other than 'pd'", function () {
+    it("should throw an error for unweighted graphs with relationship types other than 'pd' and 'pp", function () {
         expect(
             importController.sifToGrnsight(unweightedTestSifWithIncorrectRelationshipType).errors.length
         ).to.equal(1);
@@ -476,7 +511,7 @@ describe("Import from SIF syntactic checker", function () {
     it("should accept trivially tabbed workbooks", function () {
         expect(
             importController.sifToGrnsight(triviallyTabbedUnweightedWorkbook)
-        ).to.deep.equal(expectedUnweightedWorkbook);
+        ).to.deep.equal(expectedUnweightedGRNWorkbook);
     });
 
 });

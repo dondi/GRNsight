@@ -13,7 +13,7 @@ module.exports = {
         SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR: {
             errorCode: "SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR",
             possibleCause: "The SIF importer detects an unweighted network with an unsupported relationship type.",
-            suggestedFix: "SIF files accepted by GRNsight must use 'pd' as the text string for the relationship" +
+            suggestedFix: "SIF files accepted by GRNsight must use 'pd' or 'pp' as the text string for the relationship" +
                 " type in unweighted networks. Please review the SIF input documentation. Additionally, this" +
                 " error may be have been caused by missing data in your file, which caused the importer to" +
                 " incorrectly interpret a source or target as the relationship."
