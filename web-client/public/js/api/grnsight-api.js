@@ -5,7 +5,7 @@ const buildQueryURL = function (path, parameters) {
     for (let p in parameters) {
         searchParams.append(p, parameters[p]);
     }
-    return `${path}?${searchParams.toString()}`;
+    return `${path}?${searchParams}`;
 };
 
 const responseData = (database, formData, queryURL) => {
@@ -26,7 +26,7 @@ const responseData = (database, formData, queryURL) => {
             .done((data) => {
                 resolve(data);
             })
-            .error(function () {
+            .error(() => {
                 console.log(
                     `Error in accessing ${database} database. Result may just be loading.`
                 );

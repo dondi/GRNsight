@@ -391,7 +391,7 @@ const loadExpressionDatabase = function (isTopDataset) {
         queryExpressionDatabase({
             type:"ExpressionData",
             dataset,
-            genes : grnState.workbook.genes.map(x => {return x.name;}).join(","),
+            genes : grnState.workbook.genes.map(gene => {return gene.name;}).join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
