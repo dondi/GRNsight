@@ -3,7 +3,8 @@ Here are the files pertaining to both the network and expression databases. Look
 ## Setting up a local postgres GRNsight Database
 1. Installing PostgreSQL on your computer
     - MacOS and Windows can follow these instructions on how to install postgreSQL.
-        - Install the software at this [link](https://www.postgresql.org/download/) 
+        - Install the software at this [link](https://www.postgresql.org/download/)
+        - > MacOS users: It is recommended to install with homebrew rather than the interactive installation in order to correctly view the  `initdb --locale=C -E UTF-8 location-of-cluster` message in the documentation.
         - > Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
         - Initialize the database
            - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
@@ -14,6 +15,14 @@ Here are the files pertaining to both the network and expression databases. Look
             - Additionally, your installer may start the server for you upon installation (You can save this command for further reuse).
             - To start the server yourself run `pg_ctl start -D location-of-cluster` (You can save this command for further reuse).
             - To stop the server run `pg_ctl stop -D location-of-cluster`.
+                - After installing with homebrew on MacOS, you may receive an error when you try to start the server that the server is unable to be started, and when attempting to stop the server, there terminal states there is no server running. In this case, you have to directly kill the port that the server is running on.
+                -  To double check that this is the issue, you can open the Activity Monitor app on your computer and search for the `postgres` activity.  If there is one, that means the server is running, and we have to terminate the port that the server is running on.
+                - First, we have to check what port the server is running on. Navigate to your homebrew installation, which is the same `location-of-cluster` from when the database was initialized and open that location in VSCode.
+                - Search for `port =` in the file `postgresql.conf`. By default, the port should be port 5432, but keep note of this port in case it is different.
+                - Refer to this Stack Overflow documentation on how to kill a server:
+                  - https://stackoverflow.com/questions/4075287/node-express-eaddrinuse-address-already-in-use-kill-server
+                - If that doesn't work, then refer to the different methods on this link from Stack Overflow: 
+                  - https://stackoverflow.com/questions/42416527/postgres-app-port-in-use
         
     - Linux users
       - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
