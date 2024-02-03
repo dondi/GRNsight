@@ -163,12 +163,14 @@ export var drawGraph = function (workbook) {
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+        // this prevents the zoom from zooming in and out
         if (!adaptive) {
             $container.removeClass(CURSOR_CLASSES);
         }
     };
 
     var zoomDragged = function () {
+        // this only allows the zoom slider to be dragged if adaptive
         if (adaptive) {
             var scale = 1;
             if (zoomContainer.attr("transform")) {
@@ -182,6 +184,7 @@ export var drawGraph = function (workbook) {
     };
 
     var zoomDragEnded = function () {
+        // this only allows the zoom slider to be dragged if adaptive
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         if (!adaptive) {
             $container.removeClass(CURSOR_CLASSES);
@@ -243,7 +246,12 @@ export var drawGraph = function (workbook) {
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
+        } // this only allows the zoom slider to be dragged if adaptive -> new code
+        // else if (zoomScale >= MIDDLE_SCALE) {
+        //     $container.removeClass(CURSOR_CLASSES);
+        // }
+        // this prevents the zoom slider to be dragged if not adaptive -> old code
+        else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES);
         }
         var container = zoomContainer;
@@ -257,7 +265,7 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
 
     const updateAppBasedOnZoomValue = () => {
-
+        // sets constant zoomvalue if not adaptive
         if (!adaptive) {
             grnState.zoomValue = 100.0;
         }
@@ -369,10 +377,12 @@ export var drawGraph = function (workbook) {
             center();
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
+            // this checks the box that restricts viewport
             $("input[name=viewport]").prop("checked", "checked");
-            $(document).ready(function () {
-                $(".scale-and-scroll").hide();
-            });
+            // this hides the dpad and the scroll
+            // $(document).ready(function () {
+            //     $(".scale-and-scroll").hide();
+            // });
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
