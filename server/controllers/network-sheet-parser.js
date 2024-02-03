@@ -98,6 +98,8 @@ var parseNetworkSheet = function (sheet, network) {
     try {
         cellA1 = sheet.data[0][0];
     } catch (err) {
+        const row = 0;
+        const column = 0;
         addError(network, constants.errors.missingValueError(row, column));
         return network;
     }
