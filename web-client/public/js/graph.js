@@ -195,8 +195,6 @@ export var drawGraph = function (workbook) {
             zoomDragPrevX = d3.event.x;
             zoomDragPrevY = d3.event.y;
             }
-            
-            
         }
     };
 
@@ -263,13 +261,6 @@ export var drawGraph = function (workbook) {
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        } // this only allows the zoom slider to be dragged if adaptive -> new code
-        // else if (zoomScale >= MIDDLE_SCALE) {
-        //     $container.removeClass(CURSOR_CLASSES);
-        // }
-        // this prevents the zoom slider to be dragged if not adaptive -> old code
-        else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
-            $container.removeClass(CURSOR_CLASSES);
         }
         var container = zoomContainer;
         zoom.scaleTo(container, zoomScale);
@@ -282,10 +273,10 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
 
     const updateAppBasedOnZoomValue = () => {
-        // TODO: sets constant zoomvalue if not adaptive. This is the line that keeps it constant
-        // if (!adaptive) {
-        //     grnState.zoomValue = 100.0;
-        // }
+        // If !adaptive, set Zoomvalue to ZOOM_DISPLAY_MIDDLE, 100, so do not zoom outside Ggr
+        if (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE) {
+          grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
+        }
 
         const zoomDisplay = grnState.zoomValue;
         if (adaptive) {
@@ -294,14 +285,12 @@ export var drawGraph = function (workbook) {
                 ? zoomScaleLeft
                 : zoomScaleRight)(zoomDisplay)
             );
-        } else {
-            if (grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
-                setGraphZoom(
-                  (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
-                    ? zoomScaleLeft
-                    : zoomScaleRight)(zoomDisplay)
-                );
-            } 
+        } else if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE){
+            setGraphZoom(
+                (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleLeft
+                : zoomScaleRight)(zoomDisplay)
+            );
         }
 
         const finalDisplay = grnState.zoomValue;
@@ -314,8 +303,22 @@ export var drawGraph = function (workbook) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        $(ZOOM_SLIDER).val((finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)
-            .invert(finalDisplay));
+        if (adaptive) {
+            $(ZOOM_SLIDER).val(
+              (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight
+              ).invert(finalDisplay)
+            );
+        } else if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
+            // only allow minimum zoom value to be 100% so that do not go outside of viewport
+            $(ZOOM_SLIDER).val(
+            (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight
+            ).invert(finalDisplay)
+            );
+        }
     };
 
     /**
