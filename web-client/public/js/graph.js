@@ -411,12 +411,7 @@ export var drawGraph = function (workbook) {
             center();
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
-            // this checks the box that restricts viewport
             $("input[name=viewport]").prop("checked", "checked");
-            // this hides the dpad and the scroll
-            // $(document).ready(function () {
-            //     $(".scale-and-scroll").hide();
-            // });
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
