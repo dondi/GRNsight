@@ -164,9 +164,9 @@ export var drawGraph = function (workbook) {
         zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
         // this prevents the zoom from zooming in and out
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
+        // if (!adaptive) {
+        //     $container.removeClass(CURSOR_CLASSES);
+        // }
     };
 
     var zoomDragged = function () {
@@ -180,15 +180,32 @@ export var drawGraph = function (workbook) {
             zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
             zoomDragPrevX = d3.event.x;
             zoomDragPrevY = d3.event.y;
+        } else {
+            var scale = 1;
+            if (zoomContainer.attr("transform")) {
+              var string = zoomContainer.attr("transform");
+              scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+            }
+            if (d3.event.x >= ZOOM_DISPLAY_MIDDLE) {
+                zoom.translateBy(
+                    zoomContainer,
+                    scale * (d3.event.x - zoomDragPrevX),
+                    scale * (d3.event.y - zoomDragPrevY)
+                );
+            zoomDragPrevX = d3.event.x;
+            zoomDragPrevY = d3.event.y;
+            }
+            
+            
         }
     };
 
     var zoomDragEnded = function () {
         // this only allows the zoom slider to be dragged if adaptive
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
+        // if (!adaptive) {
+        //     $container.removeClass(CURSOR_CLASSES);
+        // }
     };
 
     var zoomDrag = d3.drag()
@@ -265,13 +282,27 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
 
     const updateAppBasedOnZoomValue = () => {
-        // sets constant zoomvalue if not adaptive
-        if (!adaptive) {
-            grnState.zoomValue = 100.0;
-        }
+        // TODO: sets constant zoomvalue if not adaptive. This is the line that keeps it constant
+        // if (!adaptive) {
+        //     grnState.zoomValue = 100.0;
+        // }
 
         const zoomDisplay = grnState.zoomValue;
-        setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
+        if (adaptive) {
+            setGraphZoom(
+                (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleLeft
+                : zoomScaleRight)(zoomDisplay)
+            );
+        } else {
+            if (grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
+                setGraphZoom(
+                  (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+                    ? zoomScaleLeft
+                    : zoomScaleRight)(zoomDisplay)
+                );
+            } 
+        }
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
