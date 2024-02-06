@@ -92,6 +92,29 @@ var parseNetworkSheet = function (sheet, network) {
     var columnChecker = [];
     var rowData = [];
 
+    // check for “cols regulators/rows targets” in cell A1
+    let cellA1 = "";
+    try {
+        cellA1 = sheet.data[0][0];
+    } catch (err) {
+        const row = 0;
+        const column = 0;
+        addError(network, constants.errors.missingValueError(row, column));
+        return network;
+    }
+
+    // TODO There are now 2 valid values for cellA1. One indicates GRN, the other is PPI.
+    // If neither, then we continue with the warning.
+
+    // Depending on the value of cellA1, we want to make a new property `networkType` which
+    // will indicate the network type. THe web app then reads this to decide what to do next.
+    if (cellA1 !== "cols regulators/rows targets") {
+        addWarning(
+            network,
+            constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
+        );
+    }
+
     // Get Source Genes
     for (let i = 1; i <= sheet.data[0].slice(1).length; i++) {
         currentGene = { name: sheet.data[0][i] };
