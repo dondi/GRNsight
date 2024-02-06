@@ -94,7 +94,15 @@ var parseNetworkSheet = function (sheet, network) {
     var rowData = [];
 
     // check for “cols regulators/rows targets” in cell A1
-    const cellA1 = sheet.data[0][0];
+    let cellA1 = "";
+    try {
+        cellA1 = sheet.data[0][0];
+    } catch (err) {
+        const row = 0;
+        const column = 0;
+        addError(network, constants.errors.missingValueError(row, column));
+        return network;
+    }
 
     // TODO There are now 2 valid values for cellA1. One indicates GRN, the other is PPI.
     // If neither, then we continue with the warning.
