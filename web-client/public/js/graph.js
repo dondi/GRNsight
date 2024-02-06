@@ -163,10 +163,6 @@ export var drawGraph = function (workbook) {
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
-        // this prevents the zoom from zooming in and out
-        // if (!adaptive) {
-        //     $container.removeClass(CURSOR_CLASSES);
-        // }
     };
 
     var zoomDragged = function () {
@@ -199,11 +195,7 @@ export var drawGraph = function (workbook) {
     };
 
     var zoomDragEnded = function () {
-        // this only allows the zoom slider to be dragged if adaptive
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        // if (!adaptive) {
-        //     $container.removeClass(CURSOR_CLASSES);
-        // }
     };
 
     var zoomDrag = d3.drag()
@@ -249,10 +241,11 @@ export var drawGraph = function (workbook) {
         .attr("stroke", "none" )
         .append("g");
 
+    // this controls the D-pad
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
     arrowMovement.forEach(function (direction) {
-        d3.select(".scroll" + direction).on("click", function () {
+        d3.select(".scroll" + direction).on("click", function() {
             move(direction.toLowerCase());
         });
     });
@@ -447,9 +440,48 @@ export var drawGraph = function (workbook) {
     }
 
     function move (direction) {
-        var width = direction === "left" ? -50 : (direction === "right" ? 50 : 0);
-        var height = direction === "up" ? -50 : (direction === "down" ? 50 : 0);
-        zoom.translateBy(zoomContainer, width, height);
+        // TODO: move is what moves the graph!!!
+        var width =
+            direction === "left" ? -50 : direction === "right" ? 50 : 0;
+        var height =
+            direction === "up" ? -50 : direction === "down" ? 50 : 0;
+
+        if (adaptive) {
+          zoom.translateBy(zoomContainer, width, height);
+        } else if (!adaptive && grnState.zoomValue != ZOOM_DISPLAY_MIDDLE) {
+          // we parse through transform attribute of zoomContainer which contains information about the scale of the graph
+            const graphScale = parseFloat(
+              zoomContainer
+              .attr("transform")
+              .split("(")[2].split(")")[0]
+            );
+
+            const xTranslation = parseFloat(zoomContainer
+              .attr("transform")
+              .split("(")[1].split(",")[0])
+
+            const yTranslation = parseFloat(zoomContainer
+              .attr("transform")
+              .split("(")[1].split(",")[1].split(")")[0])
+
+            const zoomContainerWidth = parseInt(zoomContainer.attr("width"));
+            const zoomContainerHeight = parseInt(zoomContainer.attr("height"));
+            
+            // right: abs(new x coordinate) / zoomContainerWidth - 1.0 == all digits after decimal point if graphscale > 1 and < 2 or graphScale - 1 if graphScale >= 2
+            // bottom: abs(new y coordinate) / zoomContainerHeight - 1.0 == all digits after decimal point if graphscale > 1 and < 2 or graphScale - 1 if graphScale >= 2
+            // top: y coordinate rounded == -0
+            // left: y coordinate rounded == -0
+            if (
+                Math.abs(xTranslation + width) / zoomContainerWidth <=
+                    graphScale - 1.0 &&
+                Math.abs(yTranslation + height) / zoomContainerHeight <=
+                    graphScale - 1.0 &&
+                xTranslation + width <= 0 &&
+                yTranslation + height <= 0
+            ) {
+                zoom.translateBy(zoomContainer, width, height);
+            }
+        } 
     }
 
     var defs = boundingBoxContainer.append("defs");
@@ -1365,6 +1397,7 @@ export var drawGraph = function (workbook) {
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
+        // this controls movement and position of nodes
         try {
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
@@ -1406,17 +1439,16 @@ export var drawGraph = function (workbook) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
                         link
-                            .attr("y1", function (d) {
-                                return d.source.y;
-                            })
-                            .attr("y2", function (d) {
-                                return d.target.y;
-                            });
+                        .attr("y1", function(d) {
+                            return d.source.y;
+                        })
+                        .attr("y2", function(d) {
+                            return d.target.y;
+                        });
 
-                        node
-                            .attr("y", function (d) {
-                                return d.y;
-                            });
+                        node.attr("y", function(d) {
+                        return d.y;
+                        });
                     }
                 }
                 return d.y = currentYPos;
