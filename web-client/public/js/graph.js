@@ -165,33 +165,24 @@ export var drawGraph = function (workbook) {
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
     };
 
+    // allows zoom slider to be moved and limits movement when !adaptive
     var zoomDragged = function () {
-        // this only allows the zoom slider to be dragged if adaptive
-        if (adaptive) {
             var scale = 1;
             if (zoomContainer.attr("transform")) {
                 var string = zoomContainer.attr("transform");
                 scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
             }
-            zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
+            if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE) {
+              zoom.translateBy(
+                zoomContainer,
+                scale * (d3.event.x - zoomDragPrevX),
+                scale * (d3.event.y - zoomDragPrevY)
+              );
+            } else if (adaptive) {
+                zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
+            }
             zoomDragPrevX = d3.event.x;
             zoomDragPrevY = d3.event.y;
-        } else {
-            var scale = 1;
-            if (zoomContainer.attr("transform")) {
-              var string = zoomContainer.attr("transform");
-              scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
-            }
-            if (d3.event.x >= ZOOM_DISPLAY_MIDDLE) {
-                zoom.translateBy(
-                    zoomContainer,
-                    scale * (d3.event.x - zoomDragPrevX),
-                    scale * (d3.event.y - zoomDragPrevY)
-                );
-            zoomDragPrevX = d3.event.x;
-            zoomDragPrevY = d3.event.y;
-            }
-        }
     };
 
     var zoomDragEnded = function () {
@@ -284,6 +275,7 @@ export var drawGraph = function (workbook) {
                 ? zoomScaleLeft
                 : zoomScaleRight)(zoomDisplay)
             );
+            center();
         }
 
         const finalDisplay = grnState.zoomValue;
@@ -407,10 +399,12 @@ export var drawGraph = function (workbook) {
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
+            $container.removeClass("cursorGrab");
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
                 grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
                 updateAppBasedOnZoomValue();
                 $container.removeClass(CURSOR_CLASSES);
+                $container.removeClass("cursorGrabbing");
             }
             width = $container.width();
             height = $container.height();
@@ -439,8 +433,8 @@ export var drawGraph = function (workbook) {
         zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
     }
 
+    // move: moves graph with D-pad
     function move (direction) {
-        // TODO: move is what moves the graph!!!
         var width =
             direction === "left" ? -50 : direction === "right" ? 50 : 0;
         var height =
