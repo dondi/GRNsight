@@ -442,9 +442,10 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, width, height);
         } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE) {
-          /* transform attribute of zoomContainer contains translation info about graph */
-                    /* we parse through transform attribute of zoomContainer which
-          contains information about the scale of the graph */
+            /* 
+            * transform attribute of zoomContainer contains translation info about graph
+            * we parse through transform attribute of zoomContainer which
+                contains information about the scale of the graph */
             const graphScale = parseFloat(
               zoomContainer
               .attr("transform")
@@ -461,44 +462,6 @@ export var drawGraph = function (workbook) {
 
             const zoomContainerWidth = parseInt(zoomContainer.attr("width"));
             const zoomContainerHeight = parseInt(zoomContainer.attr("height"));
-            console.log(" ")
-            console.log("graphScale", graphScale)
-            /* 
-            "new translation",
-            width + xTranslation + zoomContainerWidth,
-            
-            "height + yTranslation",
-            height + yTranslation + zoomContainerHidth,
-            */
-            console.log(
-              "width",
-              zoomContainerWidth,
-              "xTranslation",
-              xTranslation,
-              "movement width",
-              width * graphScale,
-              "test for new width move",
-              Math.abs(xTranslation + width * graphScale) / zoomContainerWidth
-            );
-            console.log("height",
-              zoomContainerHeight,
-              "yTranslation",
-              yTranslation,
-              "movement height",
-              height * graphScale, 
-              "total new height translation",
-              height + yTranslation + zoomContainerHeight,
-              "test for new y move",
-              Math.abs(yTranslation + height * graphScale) / zoomContainerHeight
-            );
-            // make sure new position within bounds of graph
-            //TODO: tried multiplying width by graphScale?
-            // const newWidth = width * graphScale + xTranslation + zoomContainerWidth <= zoomContainerWidth;
-            // const newHeight = height * graphScale + yTranslation + zoomContainerHeight <= zoomContainerHeight
-
-            // if (0 <= newWidth && zoomContainerWidth >= newWidth && 0 <= newHeight && zoomContainerHeight >= newHeight) {
-            //   zoom.translateBy(zoomContainer, width, height);
-            // }
 
             /*
             * right: abs(new x coordinate) / zoomContainerWidth - 1.0 == all digits after decimal point if
