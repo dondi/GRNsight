@@ -242,11 +242,107 @@ export var drawGraph = function (workbook) {
     });
     d3.select(".center").on("click", center);
 
-    const boundingBoxListener = () => {
-        console.log("boundingBox clicked")
+    let graphScale = 0;
+    let xTranslation = 0;
+    let yTranslation = 0;
+    let zoomContainerWidth = 0;
+    let zoomContainerHeight = 0;
+
+    const updateZoomContainerInfo = () => {
+        /* 
+        * transform attribute of zoomContainer contains translation info about graph
+        * we parse through transform attribute of zoomContainer which
+            contains information about the scale of the graph */
+        graphScale = parseFloat(
+            zoomContainer
+            .attr("transform")
+            .split("(")[2].split(")")[0]
+        );
+
+        xTranslation = parseFloat(zoomContainer
+            .attr("transform")
+            .split("(")[1].split(",")[0]);
+
+        yTranslation = parseFloat(zoomContainer
+            .attr("transform")
+            .split("(")[1].split(",")[1].split(")")[0]);
+
+        zoomContainerWidth = parseInt(zoomContainer.attr("width"));
+        zoomContainerHeight = parseInt(zoomContainer.attr("height"));
     }
 
-    zoomContainer.on("click", boundingBoxListener)
+    const inBounds = (width, height) => {
+        /*
+        * right:  Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0
+        * bottom: Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <= graphScale - 1.0
+        * top: y coordinate == -0, left: x coordinate == -0
+        * Amount of movement is dependent on graphScale, so actual movement is not just the width or height 
+            but width or height multiplied by graphScale
+        * multiply Math.abs(yTranslation + height * graphScale) / zoomContainerHeight by 10 because 
+            decimals like 0.5 are in bounds but decimals like 0.05 or less are out of bounds, then 
+            get floor to ensure that decimal does not have 0 in tenths place
+        */
+        updateZoomContainerInfo()
+        
+        return (
+          Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0 &&
+          Math.floor((Math.abs(xTranslation + width * graphScale) / zoomContainerWidth) * 10) !== 0 &&
+          Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
+            graphScale - 1.0 &&
+          Math.floor((Math.abs(yTranslation + height * graphScale) / zoomContainerHeight) * 10) != 0 &&
+          xTranslation + width <= 0 &&
+          yTranslation + height <= 0
+        );
+    }
+
+    const boundingBoxListener = () => {
+        console.log("boundingBox mousedown");
+        // TODO: change to !adaptive only, || adaptive for testing
+        if (!adaptive || adaptive && !inBounds(width=0, height=0)) {
+            /*
+                * stack overflow combine mouseover and mousemove: 
+                https://stackoverflow.com/questions/55987499/prevent-panning-outside-of-map-bounds-in-d3v5
+            */
+            var e = d3.event;
+            console.log(e)
+            
+            var scale = 1;
+            if (zoomContainer.attr("transform")) {
+                var string = zoomContainer.attr("transform");
+                scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+            }
+            var tx = Math.min(0, Math.max(e.x, width - width * scale));
+            var ty = Math.min(0, Math.max(e.y, height - height * scale));
+            zoom.translateBy(zoomContainer, tx, ty);
+            // zoomContainer.attr(
+            //   "transform",
+            //   [
+            //     "translate(" + [tx, ty] + ")",
+            //     "scale(" + scale + ")",
+            //   ].join(" ")
+            // );
+            console.log("not in bounds")
+        } 
+        // console.log(tx, ty)
+        // console.log("e event info", e.x, e.y, e.scale, e.k)
+    }
+
+    zoomContainer.on("mouseover", boundingBoxListener)
+
+    // let isMouseDown = false;
+    // zoomContainer.on("mousedown", () => { 
+    //     isMouseDown = true;
+    // })
+
+    // zoomContainer.on("mousemove", () => {
+    //     if (isMouseDown) {
+    //         boundingBoxListener();
+    //     }
+    // });
+
+    // zoomContainer.on("mouseup", () => { 
+    //     isMouseDown = false;
+    // })
 
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
@@ -444,49 +540,7 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, width, height);
         } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE) {
-            /* 
-            * transform attribute of zoomContainer contains translation info about graph
-            * we parse through transform attribute of zoomContainer which
-                contains information about the scale of the graph */
-            const graphScale = parseFloat(
-              zoomContainer
-              .attr("transform")
-              .split("(")[2].split(")")[0]
-            );
-
-            const xTranslation = parseFloat(zoomContainer
-              .attr("transform")
-              .split("(")[1].split(",")[0]);
-
-            const yTranslation = parseFloat(zoomContainer
-              .attr("transform")
-              .split("(")[1].split(",")[1].split(")")[0]);
-
-            const zoomContainerWidth = parseInt(zoomContainer.attr("width"));
-            const zoomContainerHeight = parseInt(zoomContainer.attr("height"));
-
-            /*
-            * right:  Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0
-            * bottom: Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
-                    graphScale - 1.0 &&
-            * top: y coordinate rounded == -0
-            * left: y coordinate rounded == -0
-            * Amount of movement is dependent on graphScale, so actual movement is not just the width or height 
-                but width or height multiplied by graphScale
-            * multiply Math.abs(yTranslation + height * graphScale) / zoomContainerHeight by 10 because 
-                decimals like 0.5 are in bounds but decimals like 0.05 or less are out of bounds, then 
-                get floor to ensure that decimal does not have 0 in tenths place
-            */
-            if (
-                Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <=
-                    graphScale - 1.0 &&
-                Math.floor(Math.abs(xTranslation + width * graphScale) / zoomContainerWidth * 10 ) !== 0 &&
-                Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
-                    graphScale - 1.0 &&
-                Math.floor(Math.abs(yTranslation + height * graphScale) / zoomContainerHeight * 10) != 0 &&
-                xTranslation + width <= 0 &&
-                yTranslation + height <= 0
-            ) {
+            if (inBounds(width, height)) {
                 zoom.translateBy(zoomContainer, width, height);
             }
         }
