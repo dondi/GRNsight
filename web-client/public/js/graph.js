@@ -215,7 +215,6 @@ export var drawGraph = function (workbook) {
     svg.style("pointer-events", "all").call(zoomDrag)
         .style("font-family", "sans-serif");
 
-
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
     }
@@ -284,31 +283,27 @@ export var drawGraph = function (workbook) {
         */
         updateZoomContainerInfo()
         console.log("inBounds function ran")
-        if (width == 0 && height == 0) {
-            console.log("width and height change = 0")
-            
-            // console.log("in bounds?",
-            //   Math.abs(xTranslation) / zoomContainerWidth <= graphScale - 1.0 &&
-            //     Math.floor(
-            //       (Math.abs(xTranslation) / zoomContainerWidth) * 10
-            //     ) !== 0 &&
-            //     Math.abs(yTranslation) / zoomContainerHeight <=
-            //       graphScale - 1.0 &&
-            //     Math.floor(
-            //       (Math.abs(yTranslation) / zoomContainerHeight) * 10
-            //     ) != 0 &&
-            //     xTranslation + width <= 0 &&
-            //     yTranslation + height <= 0
-            // );
-            return (
-                Math.abs(xTranslation) / zoomContainerWidth <= graphScale - 1.0 &&
-                Math.floor((Math.abs(xTranslation) / zoomContainerWidth) * 10) !== 0 &&
-                Math.abs(yTranslation) / zoomContainerHeight <= graphScale - 1.0 &&
-                Math.floor((Math.abs(yTranslation) / zoomContainerHeight) * 10) != 0 &&
-                xTranslation + width <= 0 &&
-                yTranslation + height <= 0)
-            
-        }
+
+        console.log(
+          "in bounds?",
+          Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <=
+            graphScale - 1.0 &&
+            Math.floor(
+              (Math.abs(xTranslation + width * graphScale) /
+                zoomContainerWidth) *
+                10
+            ) !== 0 &&
+            Math.abs(yTranslation + height * graphScale) /
+              zoomContainerHeight <=
+              graphScale - 1.0 &&
+            Math.floor(
+              (Math.abs(yTranslation + height * graphScale) /
+                zoomContainerHeight) *
+                10
+            ) != 0 &&
+            xTranslation + width <= 0 &&
+            yTranslation + height <= 0
+        );
         
         return (
             Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0 &&
@@ -323,51 +318,56 @@ export var drawGraph = function (workbook) {
 
     const boundingBoxListener = () => {
         console.log("boundingBox mousedown");
-        // TODO: change to !adaptive only, || adaptive for testing
-        if (!adaptive && !inBounds(width=0, height=0)) {
-            /*
-                * stack overflow combine mouseover and mousemove: 
-                https://stackoverflow.com/questions/55987499/prevent-panning-outside-of-map-bounds-in-d3v5
-            */
+        /* hardcode width and height as 0 since this is special case where we just want to check 
+            if the current xTranslation and yTranslation are inBounds
+        */
+        if (!adaptive && !inBounds((width = 0), (height = 0))) {
+        /*
+            * stack overflow combine mouseover and mousemove: 
+            https://stackoverflow.com/questions/55987499/prevent-panning-outside-of-map-bounds-in-d3v5
+        */
             var e = d3.event;
-            console.log(e)
-            
-            var scale = 1;
-            if (zoomContainer.attr("transform")) {
-                var string = zoomContainer.attr("transform");
-                scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+            if (e) {
+                var scale = 1;
+                if (zoomContainer.attr("transform")) {
+                    var string = zoomContainer.attr("transform");
+                    scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+                }
+                var tx = Math.min(0, Math.max(e.x, width - width * scale));
+                var ty = Math.min(0, Math.max(e.y, height - height * scale));
+                zoom.translateBy(zoomContainer, tx, ty);
+                // zoomContainer.attr(
+                //   "transform",
+                //   [
+                //     "translate(" + [tx, ty] + ")",
+                //     "scale(" + scale + ")",
+                //   ].join(" ")
+                // )
             }
-            var tx = Math.min(0, Math.max(e.x, width - width * scale));
-            var ty = Math.min(0, Math.max(e.y, height - height * scale));
-            zoom.translateBy(zoomContainer, tx, ty);
-            // zoomContainer.attr(
-            //   "transform",
-            //   [
-            //     "translate(" + [tx, ty] + ")",
-            //     "scale(" + scale + ")",
-            //   ].join(" ")
-            // )
-        } 
-        // console.log(tx, ty)
-        // console.log("e event info", e.x, e.y, e.scale, e.k)
+        }
     }
+    
+    // Thanks for MutationObserver help from: https://www.seanmcp.com/articles/listen-for-class-change-in-javascript/
+    let lastContainerClassList = $container.attr("class");
+    let mutationCallback2 = null;
+    const cursorDownObserver = new MutationObserver((mutationsList, observer) => {
+        let classList = $container.attr("class")
+        console.log(mutationsList)
+        if (typeof mutationCallback2 === "function") {
+            for (const item of mutationsList) {
+                if (item.attributeName === "class" && classList !== lastContainerClassList) {
+                    // console.log("current list", classList);
+                    // console.log("lastclasslist", lastContainerClassList);
+                    lastContainerClassList = classList;
+                    mutationCallback2();
+                }
+            }
+        }
+    });
 
-    zoomContainer.on("mouseover", boundingBoxListener)
-
-    // let isMouseDown = false;
-    // zoomContainer.on("mousedown", () => { 
-    //     isMouseDown = true;
-    // })
-
-    // zoomContainer.on("mousemove", () => {
-    //     if (isMouseDown) {
-    //         boundingBoxListener();
-    //     }
-    // });
-
-    // zoomContainer.on("mouseup", () => { 
-    //     isMouseDown = false;
-    // })
+    mutationCallback2 = boundingBoxListener;
+    cursorDownObserver.disconnect();
+    cursorDownObserver.observe($container.get(0), { attributeFilter: ["class"] });
 
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
@@ -514,7 +514,7 @@ export var drawGraph = function (workbook) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $("input[name=viewport]").removeProp("checked");
-            $container.addClass("cursorGrabbing");
+            // $container.addClass("cursorGrabbing");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
             center();
