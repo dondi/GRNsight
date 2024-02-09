@@ -50,6 +50,7 @@ export var updaters = {
 export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
+    var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
     d3.selectAll("svg").remove();
 
     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
@@ -60,8 +61,6 @@ export var drawGraph = function (workbook) {
     var grayThreshold = +$("#grayThresholdInput").val();
 
     var dashedLine = $("#dashedGrayLineButton").prop("checked");
-
-    var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
     $("#warningMessage").html(workbook.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
@@ -243,6 +242,12 @@ export var drawGraph = function (workbook) {
     });
     d3.select(".center").on("click", center);
 
+    const boundingBoxListener = () => {
+        console.log("boundingBox clicked")
+    }
+
+    zoomContainer.on("click", boundingBoxListener)
+
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
@@ -395,9 +400,6 @@ export var drawGraph = function (workbook) {
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             $("input[name=viewport]").prop("checked", "checked");
-            // $(document).ready(function() {
-            //     $(".scale-and-scroll").hide();
-            // });
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
@@ -464,16 +466,16 @@ export var drawGraph = function (workbook) {
             const zoomContainerHeight = parseInt(zoomContainer.attr("height"));
 
             /*
-            * right: abs(new x coordinate) / zoomContainerWidth - 1.0 == all digits after decimal point if
-                graphscale > 1 and < 2 or graphScale - 1 if graphScale >= 2
-            * bottom: abs(new y coordinate) / zoomContainerHeight - 1.0 == all digits after decimal point if
-                graphscale > 1 and < 2 or graphScale - 1 if graphScale >= 2
+            * right:  Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0
+            * bottom: Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
+                    graphScale - 1.0 &&
             * top: y coordinate rounded == -0
             * left: y coordinate rounded == -0
             * Amount of movement is dependent on graphScale, so actual movement is not just the width or height 
                 but width or height multiplied by graphScale
             * multiply Math.abs(yTranslation + height * graphScale) / zoomContainerHeight by 10 because 
-                decimals like 0.5 are in bounds but decimals like 0.05 are out of bounds
+                decimals like 0.5 are in bounds but decimals like 0.05 or less are out of bounds, then 
+                get floor to ensure that decimal does not have 0 in tenths place
             */
             if (
                 Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <=
@@ -1581,11 +1583,13 @@ export var drawGraph = function (workbook) {
         if (!d3.event.active) {
             simulation.alphaTarget(0.3).restart();
         }
+        
         d.fx = d.x;
         d.fy = d.y;
     }
 
     function dragged (d) {
+        console.log("dragged");
         d.fx = d3.event.x;
         d.fy = d3.event.y;
     }
