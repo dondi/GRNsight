@@ -283,22 +283,48 @@ export var drawGraph = function (workbook) {
             get floor to ensure that decimal does not have 0 in tenths place
         */
         updateZoomContainerInfo()
+        console.log("inBounds function ran")
+        if (width == 0 && height == 0) {
+            console.log("width and height change = 0")
+            
+            // console.log("in bounds?",
+            //   Math.abs(xTranslation) / zoomContainerWidth <= graphScale - 1.0 &&
+            //     Math.floor(
+            //       (Math.abs(xTranslation) / zoomContainerWidth) * 10
+            //     ) !== 0 &&
+            //     Math.abs(yTranslation) / zoomContainerHeight <=
+            //       graphScale - 1.0 &&
+            //     Math.floor(
+            //       (Math.abs(yTranslation) / zoomContainerHeight) * 10
+            //     ) != 0 &&
+            //     xTranslation + width <= 0 &&
+            //     yTranslation + height <= 0
+            // );
+            return (
+                Math.abs(xTranslation) / zoomContainerWidth <= graphScale - 1.0 &&
+                Math.floor((Math.abs(xTranslation) / zoomContainerWidth) * 10) !== 0 &&
+                Math.abs(yTranslation) / zoomContainerHeight <= graphScale - 1.0 &&
+                Math.floor((Math.abs(yTranslation) / zoomContainerHeight) * 10) != 0 &&
+                xTranslation + width <= 0 &&
+                yTranslation + height <= 0)
+            
+        }
         
         return (
-          Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0 &&
-          Math.floor((Math.abs(xTranslation + width * graphScale) / zoomContainerWidth) * 10) !== 0 &&
-          Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
-            graphScale - 1.0 &&
-          Math.floor((Math.abs(yTranslation + height * graphScale) / zoomContainerHeight) * 10) != 0 &&
-          xTranslation + width <= 0 &&
-          yTranslation + height <= 0
+            Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0 &&
+            Math.floor((Math.abs(xTranslation + width * graphScale) / zoomContainerWidth) * 10) !== 0 &&
+            Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
+                graphScale - 1.0 &&
+            Math.floor((Math.abs(yTranslation + height * graphScale) / zoomContainerHeight) * 10) != 0 &&
+            xTranslation + width <= 0 &&
+            yTranslation + height <= 0
         );
     }
 
     const boundingBoxListener = () => {
         console.log("boundingBox mousedown");
         // TODO: change to !adaptive only, || adaptive for testing
-        if (!adaptive || adaptive && !inBounds(width=0, height=0)) {
+        if (!adaptive && !inBounds(width=0, height=0)) {
             /*
                 * stack overflow combine mouseover and mousemove: 
                 https://stackoverflow.com/questions/55987499/prevent-panning-outside-of-map-bounds-in-d3v5
@@ -320,8 +346,7 @@ export var drawGraph = function (workbook) {
             //     "translate(" + [tx, ty] + ")",
             //     "scale(" + scale + ")",
             //   ].join(" ")
-            // );
-            console.log("not in bounds")
+            // )
         } 
         // console.log(tx, ty)
         // console.log("e event info", e.x, e.y, e.scale, e.k)
