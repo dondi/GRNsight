@@ -163,7 +163,6 @@ export var drawGraph = function (workbook) {
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
-        console.log("zoomDragStarted", $container.attr("class"))
     };
 
     // allows zoom slider to be moved and limits movement when !adaptive
@@ -250,7 +249,7 @@ export var drawGraph = function (workbook) {
     let zoomContainerHeight = 0;
 
     const updateZoomContainerInfo = () => {
-        /* 
+        /*
         * transform attribute of zoomContainer contains translation info about graph
         * we parse through transform attribute of zoomContainer which
             contains information about the scale of the graph */
@@ -270,31 +269,31 @@ export var drawGraph = function (workbook) {
 
         zoomContainerWidth = parseInt(zoomContainer.attr("width"));
         zoomContainerHeight = parseInt(zoomContainer.attr("height"));
-    }
+    };
 
     const inBounds = (width, height) => {
         /*
         * right:  Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0
         * bottom: Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <= graphScale - 1.0
         * top: y coordinate == -0, left: x coordinate == -0
-        * Amount of movement is dependent on graphScale, so actual movement is not just the width or height 
+        * Amount of movement is dependent on graphScale, so actual movement is not just the width or height
             but width or height multiplied by graphScale
-        * multiply Math.abs(yTranslation + height * graphScale) / zoomContainerHeight by 10 because 
-            decimals like 0.5 are in bounds but decimals like 0.05 or less are out of bounds, then 
+        * multiply Math.abs(yTranslation + height * graphScale) / zoomContainerHeight by 10 because
+            decimals like 0.5 are in bounds but decimals like 0.05 or less are out of bounds, then
             get floor to ensure that decimal does not have 0 in tenths place
         */
-        updateZoomContainerInfo()
+        updateZoomContainerInfo();
 
         return (
             Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0 &&
             Math.floor((Math.abs(xTranslation + width * graphScale) / zoomContainerWidth) * 10) !== 0 &&
             Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
                 graphScale - 1.0 &&
-            Math.floor((Math.abs(yTranslation + height * graphScale) / zoomContainerHeight) * 10) != 0 &&
+            Math.floor((Math.abs(yTranslation + height * graphScale) / zoomContainerHeight) * 10) !== 0 &&
             xTranslation + width <= 0 &&
             yTranslation + height <= 0
         );
-    }
+    };
 
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
@@ -1589,13 +1588,11 @@ export var drawGraph = function (workbook) {
         if (!d3.event.active) {
             simulation.alphaTarget(0.3).restart();
         }
-        
         d.fx = d.x;
         d.fy = d.y;
     }
 
     function dragged (d) {
-        console.log("dragged");
         d.fx = d3.event.x;
         d.fy = d3.event.y;
     }
