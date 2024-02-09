@@ -163,6 +163,7 @@ export var drawGraph = function (workbook) {
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+        console.log("zoomDragStarted", $container.attr("class"))
     };
 
     // allows zoom slider to be moved and limits movement when !adaptive
@@ -172,7 +173,7 @@ export var drawGraph = function (workbook) {
             var string = zoomContainer.attr("transform");
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
-        if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE) {
+        if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE && inBounds(width=5, height=5)) {
             zoom.translateBy(
             zoomContainer,
             scale * (d3.event.x - zoomDragPrevX),
@@ -189,6 +190,7 @@ export var drawGraph = function (workbook) {
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
     };
 
+    // TODO: this is what keeps track of cursorGrabbing!
     var zoomDrag = d3.drag()
         .on("start", zoomDragStarted)
         .on("drag", zoomDragged)
@@ -212,6 +214,7 @@ export var drawGraph = function (workbook) {
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
         .on("zoom", zoomed);
 
+    // this is how we keep track of mousedrags
     svg.style("pointer-events", "all").call(zoomDrag)
         .style("font-family", "sans-serif");
 
@@ -348,26 +351,26 @@ export var drawGraph = function (workbook) {
     }
     
     // Thanks for MutationObserver help from: https://www.seanmcp.com/articles/listen-for-class-change-in-javascript/
-    let lastContainerClassList = $container.attr("class");
-    let mutationCallback2 = null;
-    const cursorDownObserver = new MutationObserver((mutationsList, observer) => {
-        let classList = $container.attr("class")
-        console.log(mutationsList)
-        if (typeof mutationCallback2 === "function") {
-            for (const item of mutationsList) {
-                if (item.attributeName === "class" && classList !== lastContainerClassList) {
-                    // console.log("current list", classList);
-                    // console.log("lastclasslist", lastContainerClassList);
-                    lastContainerClassList = classList;
-                    mutationCallback2();
-                }
-            }
-        }
-    });
+    // let lastContainerClassList = $container.attr("class");
+    // let mutationCallback2 = null;
+    // const cursorDownObserver = new MutationObserver((mutationsList, observer) => {
+    //     let classList = $container.attr("class")
+    //     // console.log(mutationsList)
+    //     if (typeof mutationCallback2 === "function") {
+    //         for (const item of mutationsList) {
+    //             if (item.attributeName === "class" && classList !== lastContainerClassList) {
+    //                 // console.log("current list", classList);
+    //                 // console.log("lastclasslist", lastContainerClassList);
+    //                 lastContainerClassList = classList;
+    //                 mutationCallback2();
+    //             }
+    //         }
+    //     }
+    // });
 
-    mutationCallback2 = boundingBoxListener;
-    cursorDownObserver.disconnect();
-    cursorDownObserver.observe($container.get(0), { attributeFilter: ["class"] });
+    // mutationCallback2 = boundingBoxListener;
+    // cursorDownObserver.disconnect();
+    // cursorDownObserver.observe($container.get(0), { attributeFilter: ["class"] });
 
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
