@@ -172,12 +172,26 @@ export var drawGraph = function (workbook) {
             var string = zoomContainer.attr("transform");
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
-        if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE && inBounds(d3.event.dx, d3.event.dy)) {
-            zoom.translateBy(
-                zoomContainer,
-                scale * (d3.event.x - zoomDragPrevX),
-                scale * (d3.event.y - zoomDragPrevY)
-            );
+        if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE ) {
+            if (
+              inBounds(d3.event.dx, d3.event.dy) ||
+              inBounds(d3.event.x * graphScale, d3.event.x * graphScale)
+            ) {
+                // zoom.translateExtent([0,0], [zoomContainerWidth, zoomContainerHeight])
+                zoom.translateBy(
+                    zoomContainer,
+                    scale * (d3.event.x - zoomDragPrevX),
+                    scale * (d3.event.y - zoomDragPrevY)
+                );
+            }
+            // } else if (!inBounds(d3.event.x * graphScale, d3.event.x * graphScale)) {
+            //     console.log(d3.event)
+            //     zoom.translateBy(
+            //         zoomContainer,
+            //         scale * (d3.event.x - zoomDragPrevX),
+            //         scale * (d3.event.y - zoomDragPrevY)
+            //     );
+            // }
         } else if (adaptive) {
             zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
         }
@@ -267,8 +281,6 @@ export var drawGraph = function (workbook) {
             .attr("transform")
             .split("(")[1].split(",")[1].split(")")[0]);
 
-        zoomContainerWidth = parseInt(zoomContainer.attr("width"));
-        zoomContainerHeight = parseInt(zoomContainer.attr("height"));
     };
 
     const inBounds = (width, height) => {
@@ -284,14 +296,44 @@ export var drawGraph = function (workbook) {
         */
         updateZoomContainerInfo();
 
-        return (
-            Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <= graphScale - 1.0 &&
-            Math.floor((Math.abs(xTranslation + width * graphScale) / zoomContainerWidth) * 10) !== 0 &&
-            Math.abs(yTranslation + height * graphScale) / zoomContainerHeight <=
-                graphScale - 1.0 &&
-            Math.floor((Math.abs(yTranslation + height * graphScale) / zoomContainerHeight) * 10) !== 0 &&
+        console.log(
+          Math.abs(xTranslation + width * graphScale) / zoomContainerWidth <=
+            graphScale - 1.0 &&
+            Math.floor(
+              (Math.abs(xTranslation + width * graphScale) /
+                zoomContainerWidth) *
+                10
+            ) !== 0 &&
+            Math.abs(yTranslation + height * graphScale) /
+              zoomContainerHeight <=
+              graphScale - 1.0 &&
+            Math.floor(
+              (Math.abs(yTranslation + height * graphScale) /
+                zoomContainerHeight) *
+                10
+            ) !== 0 &&
             xTranslation + width <= 0 &&
             yTranslation + height <= 0
+        );
+
+        // console.log($container.width(), $container.height(), zoomContainerWidth, zoomContainerHeight)
+
+        return (
+          Math.abs(xTranslation + width * graphScale) / $container.width() <=
+            graphScale - 1.0 &&
+          Math.floor(
+            (Math.abs(xTranslation + width * graphScale) / $container.width()) *
+              10
+          ) !== 0 &&
+          Math.abs(yTranslation + height * graphScale) / $container.height() <=
+            graphScale - 1.0 &&
+          Math.floor(
+            (Math.abs(yTranslation + height * graphScale) /
+              $container.height()) *
+              10
+          ) !== 0 &&
+          xTranslation + width * graphScale <= 0 &&
+          yTranslation + height * graphScale <= 0
         );
     };
 
@@ -490,10 +532,8 @@ export var drawGraph = function (workbook) {
 
         if (adaptive) {
             zoom.translateBy(zoomContainer, width, height);
-        } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE) {
-            if (inBounds(width, height)) {
-                zoom.translateBy(zoomContainer, width, height);
-            }
+        } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE && inBounds(width, height)) {
+            zoom.translateBy(zoomContainer, width, height);
         }
     }
 
