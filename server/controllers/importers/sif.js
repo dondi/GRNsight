@@ -44,7 +44,7 @@ module.exports = function (sif) {
         sifEntries.forEach(function (entry) {
             if (entry.length > TARGET) {
                 if (!isNumber(entry[RELATIONSHIP])) {
-                    if (entry[RELATIONSHIP] !== "pd") {
+                    if (entry[RELATIONSHIP] !== "pd" && entry[RELATIONSHIP] !== "pp") {
                         unweightedRelationshipTypeErrorDetected = true;
                     }
                 }
@@ -54,6 +54,24 @@ module.exports = function (sif) {
             }
         });
 
+        let hasNumbers = relationships.some(isNumber);
+        let allNumbers = relationships.every(isNumber);
+
+        let networkMode;
+        if (allNumbers) {
+            networkMode = "grn";
+        } else {
+            for (const relationship of relationships) {
+                if (relationship === "pp") {
+                    networkMode = "protein-protein-physical-interaction";
+                    break;
+                } else if (relationship === "pd") {
+                    networkMode = "grn";
+                    break;
+                }
+            }
+        }
+
         if (unweightedRelationshipTypeErrorDetected) {
             errors.push(sifConstants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
         }
@@ -62,9 +80,8 @@ module.exports = function (sif) {
             errors.push(sifConstants.errors.SIF_MISSING_DATA_ERROR);
         }
 
-        var hasNumbers = relationships.some(isNumber);
-        var allNumbers = relationships.every(isNumber);
         return {
+            networkMode: networkMode,
             sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
             warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null,
             errors: errors
@@ -134,6 +151,7 @@ module.exports = function (sif) {
         errors: errors,
         warnings: warnings,
         sheetType: workbookType.sheetType,
+        networkMode: workbookType.networkMode,
         positiveWeights: [],
         negativeWeights: [],
         meta: {},

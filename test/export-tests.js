@@ -407,6 +407,100 @@ describe("Export to GraphML", function () {
     });
 });
 
+const inputPPIWorkbook = {
+    "genes": [
+        { "name": "Aim32p" },
+        { "name": "Ccr4p" },
+        { "name": "Erv1p" }
+    ],
+
+    "links": [
+        {
+            "source": 0,
+            "target": 1,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black"
+        },
+        {
+            "source": 1,
+            "target": 1,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black",
+        },
+        {
+            "source": 0,
+            "target": 2,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black",
+        },
+        {
+            "source": 2,
+            "target": 2,
+            "value": 1,
+            "type": "arrowhead",
+            "stroke": "black",
+        }
+    ],
+
+    network: {
+        "genes": [
+            { "name": "Aim32p" },
+            { "name": "Ccr4p" },
+            { "name": "Erv1p" }
+        ],
+
+        "links": [
+            {
+                "source": 0,
+                "target": 1,
+                "value": 1,
+                "type": "arrowhead",
+                "stroke": "black"
+            },
+            {
+                "source": 1,
+                "target": 1,
+                "value": 1,
+                "type": "arrowhead",
+                "stroke": "black",
+            },
+            {
+                "source": 0,
+                "target": 2,
+                "value": 1,
+                "type": "arrowhead",
+                "stroke": "black",
+            },
+            {
+                "source": 2,
+                "target": 2,
+                "value": 1,
+                "type": "arrowhead",
+                "stroke": "black",
+            }
+        ],
+    },
+    networkWeights: {},
+
+    "meta": {
+        data: {
+            "workbookType": "protein-protein-physical-interaction",
+            "species": "Saccharomyces cerevisiae",
+            "taxon_id": "559292",
+        }
+    },
+};
+
+inputPPIWorkbook.exportSheets = {
+    networks: {
+        "network": inputPPIWorkbook.network
+    },
+    "optimization_parameters": inputPPIWorkbook.meta
+};
+
 const inputWorkbook = {
     "genes": [
         { "name": "ACE2" },
@@ -550,7 +644,8 @@ const inputWorkbook = {
             "production_function": "testMM",
             "simulation_timepoints": [0, 0.1, 0.2],
             "species": "Saccharomyces cerevisiae",
-            "taxon_id": 559292
+            "taxon_id": 559292,
+            "workbookType": "grn"
         }
     },
 
@@ -659,7 +754,7 @@ inputWorkbook.exportSheets = {
 };
 
 describe("Export to spreadsheet", function () {
-    it("should export a workbook to a spreadsheet object properly", function () {
+    it("should export a workbook of gene regulatory network to a spreadsheet object properly", function () {
         const expectedSheet = [
             {
                 name: "network",
@@ -701,7 +796,8 @@ describe("Export to spreadsheet", function () {
                     ["production_function", "testMM"],
                     ["simulation_timepoints", 0, 0.1, 0.2],
                     ["species", "Saccharomyces cerevisiae"],
-                    ["taxon_id", 559292]
+                    ["taxon_id", 559292],
+                    ["workbookType", "grn"]
                 ]
             },
 
@@ -788,6 +884,32 @@ describe("Export to spreadsheet", function () {
         ];
 
         const actualSheet = exportController.grnsightToXlsx(inputWorkbook);
+        expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
+    });
+
+    it("should export a workbook of ppi to a spreadsheet object properly", function () {
+        const expectedSheet = [
+            {
+                name: "network",
+                data: [
+                    ["protein 1/protein 2", "Aim32p", "Ccr4p", "Erv1p"],
+                    ["Aim32p", 0, 0, 0],
+                    ["Ccr4p", 1, 1, 0],
+                    ["Erv1p", 1, 0, 1]
+                ]
+            },
+
+            {
+                name: "optimization_parameters",
+                data: [
+                    ["optimization_parameter", "value"],
+                    ["workbookType", "protein-protein-physical-interaction"],
+                    ["species", "Saccharomyces cerevisiae"],
+                    ["taxon_id", "559292"]
+                ]
+            }
+        ];
+        const actualSheet = exportController.grnsightToXlsx(inputPPIWorkbook);
         expect(actualSheet).to.deep.equal(xlsx.build(expectedSheet));
     });
 

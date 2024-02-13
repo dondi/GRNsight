@@ -14,7 +14,7 @@ var exportController = require(__dirname + "/../server/controllers/export-contro
 // changed network parser to preserve all network sheets instead of choosing the best and throwing awway rhe rest
 // this helper method chooses the best network sheet, so prior implemented test behaviour doesn't crash
 var parseNetworkSheet = (sheet) => {
-    var allNetworks = parseAllNetworkSheet(sheet);
+    var allNetworks = parseAllNetworkSheet.networks(sheet);
     if (typeof allNetworks.networkOptimizedWeights === "object" &&
         Object.keys(allNetworks.networkOptimizedWeights).length !== 0) {
         return allNetworks.networkOptimizedWeights;
