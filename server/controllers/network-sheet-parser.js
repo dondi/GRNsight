@@ -293,28 +293,28 @@ var parseNetworkSheet = function (sheet, network) {
 
 /*
  * This method detect the network type of the workbook file either grn or protein-protein-physical-interactions
- * If cellA1 = "cols regulators/ row targets" -> networkMode = grn
- * If cellA1 = "protein 1/protein 2" -> networkMode = "protein-protein-physical-interaction"
+ * If cellA1 = "cols regulators/ row targets" -> workbookType = grn
+ * If cellA1 = "protein 1/protein 2" -> workbookType = "protein-protein-physical-interaction"
  * else undefined
 */
 
-exports.networkMode = function (workbookFile) {
-    let networkMode = "grn";
+exports.workbookType = function (workbookFile) {
+    let workbookType = "grn";
     for (const sheet of workbookFile) {
         if (sheet.name.toLowerCase() === "network") {
             const cellA1 = sheet.data[0][0];
 
             if (cellA1 === "cols regulators/rows targets") {
-                networkMode = "grn";
+                workbookType = "grn";
             } else if (cellA1 === "protein 1/protein 2") {
-                networkMode = "protein-protein-physical-interaction";
+                workbookType = "protein-protein-physical-interaction";
             } else {
-                networkMode = undefined;
+                workbookType = undefined;
             }
             break;
         }
     }
-    return networkMode;
+    return workbookType;
 };
 
 exports.networks = function (workbookFile) {

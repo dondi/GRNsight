@@ -28,7 +28,7 @@ let expectedUnweightedGRNWorkbook = initWorkbook({
     sheetType: "unweighted",
     meta: {},
     expression:{},
-    networkMode: "grn"
+    workbookType: "grn"
 });
 
 let expectedUnweightedPPIWorkbook = initWorkbook({
@@ -52,7 +52,7 @@ let expectedUnweightedPPIWorkbook = initWorkbook({
     sheetType: "unweighted",
     meta: {},
     expression:{},
-    networkMode: "protein-protein-physical-interaction"
+    workbookType: "protein-protein-physical-interaction"
 });
 
 
@@ -76,7 +76,7 @@ var expectedWeightedWorkbook = initWorkbook({
     negativeWeights: [],
     sheetType: "weighted",
     meta: {},
-    networkMode: "grn",
+    workbookType: "grn",
     expression:{}
 });
 
@@ -104,7 +104,7 @@ var expectedUnweightedWorkbookWithCycle = initWorkbook({
     sheetType: "unweighted",
     meta: {},
     expression:{},
-    networkMode: "grn"
+    workbookType: "grn"
 });
 
 var expectedWeightedWorkbookWithCycle = initWorkbook({
@@ -131,7 +131,7 @@ var expectedWeightedWorkbookWithCycle = initWorkbook({
     sheetType: "weighted",
     meta: {},
     expression:{},
-    networkMode: "grn"
+    workbookType: "grn"
 });
 
 // Unweighted SIF
@@ -390,7 +390,7 @@ describe("Import from SIF", function () {
             sheetType: "unweighted",
             meta: {},
             expression:{},
-            networkMode: "grn"
+            workbookType: "grn"
         }));
     });
 
@@ -409,7 +409,7 @@ describe("Import from SIF", function () {
             sheetType: "weighted",
             meta: {},
             expression:{},
-            networkMode: "grn"
+            workbookType: "grn"
         }));
     });
 

@@ -146,7 +146,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
                 grnState.workbook = workbook;
 
                 if (grnState.name.includes(".sif")) {
-                    grnState.mode = workbook.networkMode;
+                    grnState.mode = workbook.workbookType;
                 } else if (grnState.name.includes(".graphml")) {
                     grnState.mode = "grn";
                 } else {

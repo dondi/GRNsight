@@ -46,7 +46,7 @@ const createCustomWorkbook = (genesString, linksString, networkType) => {
             data: {
                 species: "Saccharomyces cerevisiae",
                 taxon_id: 559292,
-                workbookType: networkType,
+                workbookType: networkType
             }
         },
         meta2: {},
