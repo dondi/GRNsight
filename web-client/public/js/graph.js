@@ -481,15 +481,22 @@ export var drawGraph = function (workbook) {
 
     // move: moves graph with D-pad
     function move (direction) {
-        var width =
-            direction === "left" ? -50 : direction === "right" ? 50 : 0;
-        var height =
-            direction === "up" ? -50 : direction === "down" ? 50 : 0;
-
+        var width = direction === "left" ? -50 : direction === "right" ? 50 : 0;
+        var height = direction === "up" ? -50 : direction === "down" ? 50 : 0;
         if (adaptive) {
             zoom.translateBy(zoomContainer, width, height);
-        } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE && inBounds(width, height)) {
-            zoom.translateBy(zoomContainer, width, height);
+        } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE) {
+            if (inBounds(width, height)) {
+                zoom.translateBy(zoomContainer, width, height);
+            } else if (inBounds(0, 0)) {
+                // ^check if current position in bounds but still not at border,
+                // then move remaining amount left in graph
+                if (width !== 0 && inBounds(width / graphZoom / 3, height)) {
+                    zoom.translateBy(zoomContainer, width / graphZoom / 3, height);
+                } else if (height !== 0 && inBounds(width, height / graphZoom / 3)) {
+                    zoom.translateBy(zoomContainer, width, height / graphZoom / 3);
+                }
+            }
         }
     }
 
