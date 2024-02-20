@@ -175,6 +175,7 @@ export var drawGraph = function (workbook) {
             var string = zoomContainer.attr("transform");
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
+        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
         if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE ) {
             if (inBounds(d3.event.dx, d3.event.dy)) {
                 zoom.translateBy(
@@ -212,14 +213,15 @@ export var drawGraph = function (workbook) {
         .attr("width", width)
         .attr("height", height);
 
-    var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
+    var boundingBoxContainer = zoomContainer.append("g")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1); // appended another g here...
 
     var flexibleContainerRect = boundingBoxContainer.append("rect")
         .attr("class", "boundingBox")
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .attr("fill", "none")
-        // .append("g")
 
     var zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -320,9 +322,7 @@ export var drawGraph = function (workbook) {
 
     const updateAppBasedOnZoomValue = () => {
         // If !adaptive, set Zoomvalue to ZOOM_DISPLAY_MIDDLE, 100, so do not zoom outside graph
-        if (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE) {
-            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
-        }
+        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
 
         const zoomDisplay = grnState.zoomValue;
         if (adaptive) {
@@ -331,7 +331,9 @@ export var drawGraph = function (workbook) {
                 ? zoomScaleLeft
                 : zoomScaleRight)(zoomDisplay)
             );
-        } else if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
+        }
+        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
+        else if (!adaptive) {
             setGraphZoom(
                 (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
                 ? zoomScaleLeft
@@ -357,7 +359,9 @@ export var drawGraph = function (workbook) {
                 : zoomScaleSliderRight
               ).invert(finalDisplay)
             );
-        } else if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
+        }
+        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
+        else if (!adaptive) {
             // only allow minimum zoom value to be 100% so that do not go outside of viewport
             $(ZOOM_SLIDER).val(
             (finalDisplay <= ZOOM_DISPLAY_MIDDLE
