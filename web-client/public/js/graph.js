@@ -33,6 +33,9 @@ import {
  * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable
  * updateFunction being set when needed.
  */
+
+// Stack overflow link for trying to create a box containing the graph:
+// https://stackoverflow.com/questions/47544041/how-to-visualize-groups-of-nodes-in-a-d3-force-directed-graph-layout
 let mutationCallback = null;
 const resizeObserver = new MutationObserver((mutationsList, observer) => {
     if (typeof(mutationCallback) === "function") {
@@ -210,6 +213,13 @@ export var drawGraph = function (workbook) {
         .attr("height", height);
 
     var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
+
+    var flexibleContainerRect = svg
+        .append("rect")
+        .attr("class", "boundingBox")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .attr("fill", "none")
 
     var zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -1394,6 +1404,25 @@ export var drawGraph = function (workbook) {
         }
     };
 
+
+    //need to manipulate tick so that box changes whenever the nodes move
+
+    //node has all the nodes
+    var nodes = simulation.nodes()
+
+    const calculateFlexibleBox = (nodes) => {
+        const xValues = nodes.map(node => node.x)
+        const yValues = nodes.map(node => node.y)
+        const minX = Math.min(...xValues)
+        const minY = Math.min(...yValues)
+        const maxX = Math.max(...xValues)
+        const maxY = Math.max(...yValues)
+
+        return {x: minX, y: minY, width: maxX - minX, height: maxY - minY}
+    }
+
+    let flexibleContainer = calculateFlexibleBox(nodes)
+    
     // Tick only runs while the graph physics are still running.
     // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
@@ -1412,6 +1441,14 @@ export var drawGraph = function (workbook) {
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
+
+        flexibleContainer = calculateFlexibleBox(nodes)
+
+        flexibleContainerRect
+            .attr("x", flexibleContainer.x)
+            .attr("y", flexibleContainer.y)
+            .attr("width", flexibleContainer.width)
+            .attr("height", flexibleContainer.height)
 
         // this controls movement and position of nodes
         try {
