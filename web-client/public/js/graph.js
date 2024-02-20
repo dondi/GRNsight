@@ -1409,17 +1409,24 @@ export var drawGraph = function (workbook) {
     var nodes = simulation.nodes()
 
     function calcFlexiBox (nodes) {
+        // let nodeHeight = 0
+        // let height = 0
+        // if (nodes.length > 0) {
+        //     width = nodes[0].width
+        //     height = nodes[0].height
+        // }
         const xValues = nodes.map(node => node.x)
         const yValues = nodes.map(node => node.y)
         const minX = Math.min(...xValues)
         const minY = Math.min(...yValues)
         const maxX = Math.max(...xValues)
-        const maxY = Math.max(...yValues)
+        const maxY = Math.max(...yValues) + nodeHeight
 
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY}
     }
 
-    let flexibleContainer = calcFlexiBox(nodes)
+    // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
+    let flexibleContainer = null
     
     // Tick only runs while the graph physics are still running.
     // (I.e. when the graph is completely relaxed, tick stops running.)
