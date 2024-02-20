@@ -7,7 +7,9 @@ var exportEdges = function (workbook, gene, geneIndex) {
         if (link.source === geneIndex) {
             result += [
                 gene.name,
-                workbook.sheetType === constants.UNWEIGHTED ? "pd" : link.value,
+                workbook.sheetType === constants.WEIGHTED ?
+                    link.value : workbook.workbookType === "protein-protein-physical-interactions" ?
+                    "pp" : "pd",
                 workbook.genes[link.target].name
             ].join("\t") + "\n";
         }

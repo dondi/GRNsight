@@ -20,7 +20,8 @@ var unweightedTestWorkbook = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "unweighted"
+    sheetType: "unweighted",
+    workbookType: "grn"
 };
 
 var weightedTestWorkbook = {
@@ -37,7 +38,8 @@ var weightedTestWorkbook = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "weighted"
+    sheetType: "weighted",
+    workbookType: "grn"
 };
 
 var unweightedTestWorkbookWithCycle = {
@@ -57,7 +59,8 @@ var unweightedTestWorkbookWithCycle = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "unweighted"
+    sheetType: "unweighted",
+    workbookType: "grn"
 };
 
 var weightedTestWorkbookWithCycle = {
@@ -77,7 +80,8 @@ var weightedTestWorkbookWithCycle = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "weighted"
+    sheetType: "weighted",
+    workbookType: "grn"
 };
 
 describe("Export to SIF", function () {

@@ -195,7 +195,7 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
-    additionalData.meta.data.workbookType = parseNetworkSheet.networkMode(workbookFile);
+    additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
     if (additionalData.meta.data.workbookType === undefined) {
         addWarning(workbook, constants.warnings.noWorkbookTypeDetected);
         additionalData.meta.data.workbookType = "grn";
