@@ -1409,19 +1409,17 @@ export var drawGraph = function (workbook) {
     var nodes = simulation.nodes()
 
     function calcFlexiBox (nodes) {
-        // let nodeHeight = 0
-        // let height = 0
-        // if (nodes.length > 0) {
-        //     width = nodes[0].width
-        //     height = nodes[0].height
-        // }
+        let nodeWidth = 0
+        if (nodes.length > 0) {
+            nodeWidth = nodes[0].textWidth + 8
+        }
         const xValues = nodes.map(node => node.x)
         const yValues = nodes.map(node => node.y)
         const minX = Math.min(...xValues)
         const minY = Math.min(...yValues)
-        const maxX = Math.max(...xValues)
+    
+        const maxX = Math.max(...xValues) + nodeWidth
         const maxY = Math.max(...yValues) + nodeHeight
-
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY}
     }
 
@@ -1447,13 +1445,15 @@ export var drawGraph = function (workbook) {
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
-        flexibleContainer = calcFlexiBox(nodes);
+        if (!adaptive) {
+            flexibleContainer = calcFlexiBox(nodes);
 
-        flexibleContainerRect
-            .attr("x", flexibleContainer.x)
-            .attr("y", flexibleContainer.y)
-            .attr("width", flexibleContainer.width)
-            .attr("height", flexibleContainer.height)
+            flexibleContainerRect
+                .attr("x", flexibleContainer.x)
+                .attr("y", flexibleContainer.y)
+                .attr("width", flexibleContainer.width)
+                .attr("height", flexibleContainer.height)
+        }
 
         // this controls movement and position of nodes
         try {
