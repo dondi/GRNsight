@@ -213,9 +213,17 @@ export var drawGraph = function (workbook) {
         .attr("width", width)
         .attr("height", height);
 
-    var boundingBoxContainer = zoomContainer.append("g")
-        .attr("stroke", "black")
-        .attr("stroke-width", 1); // appended another g here...
+    var boundingBoxContainer = zoomContainer.append("g"); // appended another g here...
+
+    // This rectangle catches all of the mousewheel and pan events, without letting
+    // them bubble up to the body.
+    boundingBoxContainer.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .attr("stroke", "none" )
+        .append("g");
 
     var flexibleContainerRect = boundingBoxContainer.append("rect")
         .attr("class", "boundingBox")
@@ -236,16 +244,6 @@ export var drawGraph = function (workbook) {
     }
 
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
-
-    // This rectangle catches all of the mousewheel and pan events, without letting
-    // them bubble up to the body.
-    boundingBoxContainer.append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .style("fill", "none")
-        .style("pointer-events", "all")
-        .attr("stroke", "none" )
-        .append("g");
 
     // this controls the D-pad
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
