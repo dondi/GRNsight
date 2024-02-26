@@ -21,7 +21,7 @@ const buildNetworkSheet = function (genes, links, workbookType) {
     if (workbookType === "grn") {
         geneNameArray.unshift("cols regulators/rows targets");
     } else {
-        geneNameArray.unshift("protein 1/protein 2");
+        geneNameArray.unshift("cols protein1/ rows protein2");
     }
 
     links.forEach((link) => {

@@ -896,7 +896,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network",
                 data: [
-                    ["protein 1/protein 2", "Aim32p", "Ccr4p", "Erv1p"],
+                    ["cols protein1/ rows protein2", "Aim32p", "Ccr4p", "Erv1p"],
                     ["Aim32p", 0, 0, 0],
                     ["Ccr4p", 1, 1, 0],
                     ["Erv1p", 1, 0, 1]
