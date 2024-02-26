@@ -183,10 +183,12 @@ export const setupLoadAndImportHandlers = (grnState) => {
     };
 
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
-        // Deleted parameter `event`
-        $(demoClass).on("click", () => {
-            loadDemo(demoPath, demoClass, demoName);
-        });
+        $(".dropdown-menu li a").on("click", (event) => {
+            const selected = event.target.dataset.expression;
+            if (`.${selected}` === demoClass) {
+                loadDemo(demoPath, demoClass, demoName);
+            }
+        })
         $("#demoSourceDropdown").on("change", () => {
             const selected = `.${$("#demoSourceDropdown").val()}`;
             if (selected === demoClass) {
