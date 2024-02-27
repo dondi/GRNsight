@@ -484,6 +484,8 @@ export var drawGraph = function (workbook) {
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
+        // refresh the graph so that nodes and paths are restricted
+        tick()
     });
 
     function center () {
@@ -1408,21 +1410,41 @@ export var drawGraph = function (workbook) {
     };
 
     //node has all the nodes
-    var nodes = simulation.nodes()
+    let nodes = simulation.nodes()
+    // let paths = link.selectAll("path").data()
 
     function calcFlexiBox (nodes) {
-        let nodeWidth = 0
-        if (nodes.length > 0) {
-            nodeWidth = nodes[0].textWidth + 8
+        // paths = link.selectAll("path").data();
+        // if (nodes && paths) {
+        if (nodes) {
+            let nodeWidth = 0;
+            if (nodes.length > 0) {
+                nodeWidth = nodes[0].textWidth + 8;
+            }
+
+            // const xValuesPaths = paths.map((path) => path.label.x);
+            // const yValuesPaths = paths.map((path) => path.label.y);
+
+            const xValuesNodes = nodes.map((node) => node.x);
+            const yValuesNodes = nodes.map((node) => node.y);
+
+            // const xValues = xValuesPaths.concat(xValuesNodes);
+            // const yValues = yValuesPaths.concat(yValuesNodes);
+            const xValues = xValuesNodes
+            const yValues = yValuesNodes
+
+            const minX = Math.min(...xValues);
+            const minY = Math.min(...yValues);
+
+            const maxX = Math.max(...xValues) + nodeWidth;
+            const maxY = Math.max(...yValues) + nodeHeight;
+            return {
+                x: minX,
+                y: minY,
+                width: maxX - minX,
+                height: maxY - minY,
+            };
         }
-        const xValues = nodes.map(node => node.x)
-        const yValues = nodes.map(node => node.y)
-        const minX = Math.min(...xValues)
-        const minY = Math.min(...yValues)
-    
-        const maxX = Math.max(...xValues) + nodeWidth
-        const maxY = Math.max(...yValues) + nodeHeight
-        return {x: minX, y: minY, width: maxX - minX, height: maxY - minY}
     }
 
     // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
@@ -1447,18 +1469,17 @@ export var drawGraph = function (workbook) {
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
-        if (!adaptive) {
-            flexibleContainer = calcFlexiBox(nodes);
-
-            flexibleContainerRect
-                .attr("x", flexibleContainer.x)
-                .attr("y", flexibleContainer.y)
-                .attr("width", flexibleContainer.width)
-                .attr("height", flexibleContainer.height)
-        }
-
         // this controls movement and position of nodes
         try {
+            if (!adaptive) {
+                flexibleContainer = calcFlexiBox(nodes);
+
+                flexibleContainerRect
+                    .attr("x", flexibleContainer.x)
+                    .attr("y", flexibleContainer.y)
+                    .attr("width", flexibleContainer.width)
+                    .attr("height", flexibleContainer.height);
+            }
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
 
