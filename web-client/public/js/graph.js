@@ -1424,14 +1424,28 @@ export var drawGraph = function (workbook) {
 
             // const xValuesPaths = paths.map((path) => path.label.x);
             // const yValuesPaths = paths.map((path) => path.label.y);
+            let xValuesPaths = []
+            let yValuesPaths = []
+            link.selectAll("path").attr("d", (pathData) => {
+                if (pathData.label) {
+                    // have to make sure paths are rendered before reading label
+                    // console.log(pathData.label.x)
+                    xValuesPaths.push(pathData.label.x)
+                    yValuesPaths.push(pathData.label.y)
+                    // console.log(pathData.label.y)
+                } 
+            })
+            // let xValuesPaths = paths.map(path => console.log(path))
+
+            // console.log(xValuesPaths, yValuesPaths)
 
             const xValuesNodes = nodes.map((node) => node.x);
             const yValuesNodes = nodes.map((node) => node.y);
 
-            // const xValues = xValuesPaths.concat(xValuesNodes);
-            // const yValues = yValuesPaths.concat(yValuesNodes);
-            const xValues = xValuesNodes
-            const yValues = yValuesNodes
+            const xValues = xValuesPaths.concat(xValuesNodes);
+            const yValues = yValuesPaths.concat(yValuesNodes);
+            // const xValues = xValuesNodes
+            // const yValues = yValuesNodes
 
             const minX = Math.min(...xValues);
             const minY = Math.min(...yValues);
@@ -1469,17 +1483,18 @@ export var drawGraph = function (workbook) {
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
+        if (!adaptive) {
+            flexibleContainer = calcFlexiBox(nodes);
+
+            flexibleContainerRect
+                .attr("x", flexibleContainer.x)
+                .attr("y", flexibleContainer.y)
+                .attr("width", flexibleContainer.width)
+                .attr("height", flexibleContainer.height);
+        }
+
         // this controls movement and position of nodes
         try {
-            if (!adaptive) {
-                flexibleContainer = calcFlexiBox(nodes);
-
-                flexibleContainerRect
-                    .attr("x", flexibleContainer.x)
-                    .attr("y", flexibleContainer.y)
-                    .attr("width", flexibleContainer.width)
-                    .attr("height", flexibleContainer.height);
-            }
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
 
