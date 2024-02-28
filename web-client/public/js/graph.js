@@ -1414,57 +1414,56 @@ export var drawGraph = function (workbook) {
     // let paths = link.selectAll("path").data()
 
     function calcFlexiBox (nodes) {
-        if (nodes) {
-            let nodeWidth = 0;
-            if (nodes.length > 0) {
-                nodeWidth = nodes[0].textWidth + 8;
-            }
+        let nodeWidth = 0;
+        if (nodes.length > 0) {
+            nodeWidth = nodes[0].textWidth + 8;
+        }
 
-            let xValuesPaths = []
-            let yValuesPaths = []
+        let xValuesPaths = []
+        let yValuesPaths = []
 
-            // this would reassign the values of pathData, since no value being assigned, then the value would be null
-            link.selectAll("path").each( function(pathData) {
-                if (pathData.source) {
-                    // Log the "d" attribute for each path
-                    const controlPoints = d3.select(this).attr("d");
+        // this would reassign the values of pathData, since no value being assigned, then the value would be null
+        link.selectAll("path").each( function(pathData) {
+            if (pathData.source) {
+                // Log the "d" attribute for each path
+                const controlPoints = d3.select(this).attr("d");
+                if (controlPoints) {
                     if (controlPoints.includes("A")) {
                         const splitSpaces = controlPoints.split(" ");
-                        const controlPoint1 = splitSpaces[0].split("M")[1].split(",");
-                        const controlPoint1X = controlPoint1[0];
-                        const controlPoint1Y = controlPoint1[1];
-                        console.log("A contains", controlPoint1X, controlPoint1Y);
+                        const controlPoint = splitSpaces[0].split("M")[1].split(",");
+                        const controlPointX = controlPoint[0];
+                        const controlPointY = controlPoint[1];
+                        // console.log(typeof(controlPointX), typeof(controlPointY))
+                        xValuesPaths.push(parseFloat(controlPointX))
+                        yValuesPaths.push(parseFloat(controlPointY))
                     }
-                    else {
+                    else if (controlPoints.includes("C")) {
                         const splitC = controlPoints.split("C");
-                        const splitM = splitC[0].split("M")[1].split(",");
-                        xValuesPaths.push(splitM[0]);
-                        yValuesPaths.push(splitM[1]);
 
                         splitC[1].split(",").forEach((coordinates) => {
                             const splitSpaces = coordinates.split(" ");
-                            const xValue = splitSpaces[splitSpaces.length - 2]
+                            const xValue = splitSpaces[splitSpaces.length - 2];
                             const yValue = splitSpaces[splitSpaces.length - 1];
-                            xValuesPaths.push(xValue)
-                            yValuesPaths.push(yValue)
-                        })
+                            xValuesPaths.push(parseFloat(xValue));
+                            yValuesPaths.push(parseFloat(yValue));
+                        });
                     }
                 }
-            });
+            }
+        });
 
-            const xValuesNodes = nodes.map((node) => node.x);
-            const yValuesNodes = nodes.map((node) => node.y);
+        const xValuesNodes = nodes.map((node) => node.x);
+        const yValuesNodes = nodes.map((node) => node.y);
 
-            const xValues = xValuesPaths.concat(xValuesNodes);
-            const yValues = yValuesPaths.concat(yValuesNodes);
+        const xValues = xValuesPaths.concat(xValuesNodes);
+        const yValues = yValuesPaths.concat(yValuesNodes);
 
-            const minX = Math.min(...xValues);
-            const minY = Math.min(...yValues);
+        const minX = Math.min(...xValues);
+        const minY = Math.min(...yValues);
 
-            const maxX = Math.max(...xValues) + nodeWidth;
-            const maxY = Math.max(...yValues) + nodeHeight;
-            return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
-        }
+        const maxX = Math.max(...xValues) + nodeWidth;
+        const maxY = Math.max(...yValues) + nodeHeight;
+        return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
     // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
