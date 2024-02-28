@@ -270,7 +270,7 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    const inBounds = (width, height) => {
+    function inBounds(width, height) {
         /*
         * right:  Math.abs(xTranslation + width * graphZoom) / zoomContainerWidth <= graphZoom - 1.0
         * bottom: Math.abs(yTranslation + height * graphZoom) / zoomContainerHeight <= graphZoom - 1.0
@@ -1414,50 +1414,56 @@ export var drawGraph = function (workbook) {
     // let paths = link.selectAll("path").data()
 
     function calcFlexiBox (nodes) {
-        // paths = link.selectAll("path").data();
-        // if (nodes && paths) {
         if (nodes) {
             let nodeWidth = 0;
             if (nodes.length > 0) {
                 nodeWidth = nodes[0].textWidth + 8;
             }
 
-            // const xValuesPaths = paths.map((path) => path.label.x);
-            // const yValuesPaths = paths.map((path) => path.label.y);
             let xValuesPaths = []
             let yValuesPaths = []
-            link.selectAll("path").attr("d", (pathData) => {
-                if (pathData.label) {
-                    // have to make sure paths are rendered before reading label
-                    // console.log(pathData.label.x)
-                    xValuesPaths.push(pathData.label.x)
-                    yValuesPaths.push(pathData.label.y)
-                    // console.log(pathData.label.y)
-                } 
-            })
-            // let xValuesPaths = paths.map(path => console.log(path))
 
-            // console.log(xValuesPaths, yValuesPaths)
+            // this would reassign the values of pathData, since no value being assigned, then the value would be null
+            link.selectAll("path").each( function(pathData) {
+                if (pathData.source) {
+                    // Log the "d" attribute for each path
+                    const controlPoints = d3.select(this).attr("d");
+                    if (controlPoints.includes("A")) {
+                        const splitSpaces = controlPoints.split(" ");
+                        const controlPoint1 = splitSpaces[0].split("M")[1].split(",");
+                        const controlPoint1X = controlPoint1[0];
+                        const controlPoint1Y = controlPoint1[1];
+                        console.log("A contains", controlPoint1X, controlPoint1Y);
+                    }
+                    else {
+                        const splitC = controlPoints.split("C");
+                        const splitM = splitC[0].split("M")[1].split(",");
+                        xValuesPaths.push(splitM[0]);
+                        yValuesPaths.push(splitM[1]);
+
+                        splitC[1].split(",").forEach((coordinates) => {
+                            const splitSpaces = coordinates.split(" ");
+                            const xValue = splitSpaces[splitSpaces.length - 2]
+                            const yValue = splitSpaces[splitSpaces.length - 1];
+                            xValuesPaths.push(xValue)
+                            yValuesPaths.push(yValue)
+                        })
+                    }
+                }
+            });
 
             const xValuesNodes = nodes.map((node) => node.x);
             const yValuesNodes = nodes.map((node) => node.y);
 
             const xValues = xValuesPaths.concat(xValuesNodes);
             const yValues = yValuesPaths.concat(yValuesNodes);
-            // const xValues = xValuesNodes
-            // const yValues = yValuesNodes
 
             const minX = Math.min(...xValues);
             const minY = Math.min(...yValues);
 
             const maxX = Math.max(...xValues) + nodeWidth;
             const maxY = Math.max(...yValues) + nodeHeight;
-            return {
-                x: minX,
-                y: minY,
-                width: maxX - minX,
-                height: maxY - minY,
-            };
+            return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
         }
     }
 
