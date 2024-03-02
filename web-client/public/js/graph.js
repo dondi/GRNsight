@@ -176,16 +176,12 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE ) {
-            if (inBounds(d3.event.dx, d3.event.dy)) {
-                zoom.translateBy(
-                    zoomContainer,
-                    scale * (d3.event.x - zoomDragPrevX),
-                    scale * (d3.event.y - zoomDragPrevY)
-                );
-            }
-        } else if (adaptive) {
-            zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
+        if (adaptive && (!adaptive && inBounds(d3.event.dx, d3.event.dy))) {
+            zoom.translateBy(
+                zoomContainer,
+                scale * (d3.event.x - zoomDragPrevX),
+                scale * (d3.event.y - zoomDragPrevY)
+            );
         }
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
@@ -323,20 +319,14 @@ export var drawGraph = function (workbook) {
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
 
         const zoomDisplay = grnState.zoomValue;
-        if (adaptive) {
-            setGraphZoom(
-                (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleLeft
-                : zoomScaleRight)(zoomDisplay)
-            );
-        }
+        setGraphZoom(
+          (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
+            zoomDisplay
+          )
+        );
+
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        else if (!adaptive) {
-            setGraphZoom(
-                (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleLeft
-                : zoomScaleRight)(zoomDisplay)
-            );
+        if (!adaptive) {
             center();
         }
 
@@ -350,22 +340,13 @@ export var drawGraph = function (workbook) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        if (adaptive) {
+        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
+        if (adaptive || !adaptive) {
             $(ZOOM_SLIDER).val(
               (finalDisplay <= ZOOM_DISPLAY_MIDDLE
                 ? zoomScaleSliderLeft
                 : zoomScaleSliderRight
               ).invert(finalDisplay)
-            );
-        }
-        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
-        else if (!adaptive) {
-            // only allow minimum zoom value to be 100% so that do not go outside of viewport
-            $(ZOOM_SLIDER).val(
-            (finalDisplay <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleSliderLeft
-                : zoomScaleSliderRight
-            ).invert(finalDisplay)
             );
         }
     };
@@ -1409,11 +1390,8 @@ export var drawGraph = function (workbook) {
         }
     };
 
-    //node has all the nodes
-    let nodes = simulation.nodes()
-    // let paths = link.selectAll("path").data()
-
-    function calcFlexiBox (nodes) {
+    function calcFlexiBox () {
+        const nodes = simulation.nodes()
         let nodeWidth = 0;
         if (nodes.length > 0) {
             nodeWidth = nodes[0].textWidth + 8;
@@ -1433,7 +1411,6 @@ export var drawGraph = function (workbook) {
                         const controlPoint = splitSpaces[0].split("M")[1].split(",");
                         const controlPointX = controlPoint[0];
                         const controlPointY = controlPoint[1];
-                        // console.log(typeof(controlPointX), typeof(controlPointY))
                         xValuesPaths.push(parseFloat(controlPointX))
                         yValuesPaths.push(parseFloat(controlPointY))
                     }
@@ -1466,6 +1443,14 @@ export var drawGraph = function (workbook) {
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
+    function flexiCollision(flexibleContainer) {
+        if (flexibleContainer) {
+            console.log("flexiCollision");
+            console.log(flexibleContainer.x, flexibleContainer.y, zoomContainer.attr("transform"))
+            console.log(svg.attr("width"), svg.attr("height"))
+        }
+    }
+
     // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
     let flexibleContainer = null
     
@@ -1489,7 +1474,8 @@ export var drawGraph = function (workbook) {
         var OFFSET_VALUE = 5;
 
         if (!adaptive) {
-            flexibleContainer = calcFlexiBox(nodes);
+            flexibleContainer = calcFlexiBox();
+            flexiCollision(flexibleContainer)
 
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
