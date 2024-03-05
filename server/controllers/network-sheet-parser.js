@@ -299,7 +299,7 @@ var parseNetworkSheet = function (sheet, network) {
 */
 
 exports.workbookType = function (workbookFile) {
-    let workbookType = "grn";
+    let workbookType;
     for (const sheet of workbookFile) {
         if (sheet.name.toLowerCase() === "network") {
             const cellA1 = sheet.data[0][0];
