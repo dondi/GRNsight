@@ -226,6 +226,7 @@ export var drawGraph = function (workbook) {
         .attr("stroke", "black")
         .attr("stroke-width", 1)
         .attr("fill", "none")
+        .attr("id", "flexibleContainerRect");
 
     var zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -234,7 +235,6 @@ export var drawGraph = function (workbook) {
     svg.style("pointer-events", "all").call(zoomDrag)
         .style("font-family", "sans-serif");
 
-    // this is why drag happens inside the flexibleContainerRect
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
     }
@@ -432,9 +432,9 @@ export var drawGraph = function (workbook) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $("input[name=viewport]").removeProp("checked");
-            // $container.addClass("cursorGrabbing");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
+            d3.select("#flexibleContainerRect").attr("stroke", "none")
             center();
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
@@ -448,10 +448,12 @@ export var drawGraph = function (workbook) {
             }
             width = $container.width();
             height = $container.height();
+            // put a border with a gray stroke around the original container size
             d3.select("rect").attr("stroke", "#9A9A9A")
                 .attr("width", width)
                 .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
+            d3.select("#flexibleContainerRect").attr("stroke", "black");
             center();
         }
         updateAppBasedOnZoomValue(); // Update zoom value within bounds
@@ -1477,6 +1479,7 @@ export var drawGraph = function (workbook) {
             flexibleContainer = calcFlexiBox();
             flexiCollision(flexibleContainer)
 
+            // TODO: do I need to make this transform and translate? This is firing too much
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
                 .attr("y", flexibleContainer.y)
@@ -1538,6 +1541,8 @@ export var drawGraph = function (workbook) {
                         });
                     }
                 }
+                // height += OFFSET_VALUE;
+                // boundingBoxContainer.attr("height", height);
                 return d.y = currentYPos;
             }).attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
