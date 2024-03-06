@@ -170,13 +170,14 @@ export var drawGraph = function (workbook) {
 
     // allows zoom slider to be moved and limits movement when !adaptive
     var zoomDragged = function () {
+        console.log("zoom dragged ran")
         var scale = 1;
         if (zoomContainer.attr("transform")) {
             var string = zoomContainer.attr("transform");
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy))) {
+        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexiRectInBounds())) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -204,15 +205,6 @@ export var drawGraph = function (workbook) {
         .attr("height", height)
         .attr("id", "exportContainer");
 
-    // var viewportBoundingBox = svg
-    //     .append("g")
-    //     .append("rect")
-    //     .attr("class", "boundingBox")
-    //     .attr("width", width)
-    //     .attr("height", height)
-    //     .style("fill", "none")
-    //     .attr("id", "viewportBoundingBox");
-
     var zoomContainer = svg.append("g") // required for zoom to work
         .attr("class", "boundingBox")
         .attr("width", width)
@@ -236,6 +228,15 @@ export var drawGraph = function (workbook) {
         .attr("stroke-width", 1)
         .attr("fill", "none")
         .attr("id", "flexibleContainerRect");
+    
+    // var viewportBoundingBox = svg
+    //     .append("g")
+    //     .append("rect")
+    //     .attr("class", "boundingBox")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .style("fill", "none")
+    //     .attr("id", "viewportBoundingBox");
 
     var zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -335,7 +336,7 @@ export var drawGraph = function (workbook) {
         );
 
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (!adaptive) {
+        if (!adaptive && flexiRectInBounds()) {
             center();
         }
 
@@ -349,13 +350,13 @@ export var drawGraph = function (workbook) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
-        if (adaptive || !adaptive) {
+        // TODO:instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
+        if (adaptive || (!adaptive && flexiRectInBounds())) {
             $(ZOOM_SLIDER).val(
-              (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+                (finalDisplay <= ZOOM_DISPLAY_MIDDLE
                 ? zoomScaleSliderLeft
                 : zoomScaleSliderRight
-              ).invert(finalDisplay)
+                ).invert(finalDisplay)
             );
         }
     };
@@ -1454,38 +1455,54 @@ export var drawGraph = function (workbook) {
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
-    function flexiCollision(flexibleContainer) {
-        if (flexibleContainer) {
-            // console.log("flexiCollision");
-            // console.log(flexibleContainer.x, flexibleContainer.y, zoomContainer.attr("transform"))
-            // console.log(svg.attr("width"), svg.attr("height"))
-        }
-    }
-
-
     // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
     let flexibleContainer = null
 
     function flexiRectInBounds() {
-        // x left bound
-        if (flexibleContainer.x < 0) {
-            flexibleContainer.x = 0
+        if (flexibleContainer) {
+            if (flexibleContainer.width * graphZoom > width) {
+                return false;
+            } else if (flexibleContainer.height * graphZoom > height) {
+                return false;
+            }
+            console.log("widths of flexible and viewport", flexibleContainer.width * graphZoom, width)
+            console.log("heights of flexible and viewport", flexibleContainer.height * graphZoom, height)
+        }
+        return true
+    }
+
+    function flexiRectLimitBounds() {
+        // TODO: with collision, if any of these are true then that means that graph is colliding with boundingBox
+        // can also determine if collide with edge of graph here to see if can zoom in or not
+        let flexiBoxInBounds = true;
+        if (flexibleContainer != null) {
+            // x left bound
+            // TODO: if graphZoom < 1, then do borders based on viewport? 
+            if (flexibleContainer.x < 0) {
+                flexibleContainer.x = 0;
+                flexiBoxInBounds = false;
+            }
+
+            // x right bound
+            if (!(flexibleContainer.width - flexibleContainer.x  <= width * graphZoom)) {
+                flexibleContainer.width = width - flexibleContainer.x;
+                flexiBoxInBounds = false;
+            }
+
+            // y top bound
+            if (flexibleContainer.y < 0) {
+                flexibleContainer.y = 0;
+                flexiBoxInBounds = false;
+            }
+            
+            // y bottom bound
+            if (!(flexibleContainer.height - flexibleContainer.y <= height * graphZoom)) {
+                flexibleContainer.height = height - flexibleContainer.y;
+                flexiBoxInBounds = false;
+            }
         }
 
-        // x right bound
-        if (!(flexibleContainer.width - flexibleContainer.x  <= width * graphZoom)) {
-            flexibleContainer.width = width - flexibleContainer.x;
-        }
-
-        // y top bound
-        if (flexibleContainer.y < 0) {
-            flexibleContainer.y = 0;
-        }
-        
-        // y bottom bound
-        if (!(flexibleContainer.height - flexibleContainer.y <= height * graphZoom)) {
-            flexibleContainer.height = height - flexibleContainer.y;
-        }
+        return flexiBoxInBounds;
     }
 
     // Tick only runs while the graph physics are still running.
@@ -1509,8 +1526,8 @@ export var drawGraph = function (workbook) {
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
+            flexiRectLimitBounds();
             flexiRectInBounds();
-            // flexiCollision(flexibleContainer)
 
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
