@@ -176,7 +176,7 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (adaptive && (!adaptive && inBounds(d3.event.dx, d3.event.dy))) {
+        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy))) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -1541,8 +1541,6 @@ export var drawGraph = function (workbook) {
                         });
                     }
                 }
-                // height += OFFSET_VALUE;
-                // boundingBoxContainer.attr("height", height);
                 return d.y = currentYPos;
             }).attr("transform", function (d) {
                 return "translate(" + d.x + "," + d.y + ")";
