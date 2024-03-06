@@ -49,6 +49,7 @@ import {
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
+  NODE_COLORING_NAVBAR_OPTIONS,
   NODE_COLORING_SIDEBAR_BODY,
   NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
@@ -874,7 +875,7 @@ export const updateApp = grnState => {
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_MENU).removeClass("hidden");
-        $("#node-coloring-options").removeClass("hidden");
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
         console.log("node coloring menus shown")
         if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
@@ -935,7 +936,7 @@ export const updateApp = grnState => {
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         $(NODE_COLORING_MENU).addClass("disabled");
-        $("#node-coloring-options").addClass("hidden");
+        $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         
         console.log("node coloring hidden")
