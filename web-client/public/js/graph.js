@@ -1462,15 +1462,31 @@ export var drawGraph = function (workbook) {
         }
     }
 
-    function flexiRectInBounds() {
-        const xInBounds = flexibleContainer.width - flexibleContainer.x  <= width * graphZoom;
-        const yInBounds = flexibleContainer.height - flexibleContainer.y <= height * graphZoom;
-
-        return {x: xInBounds, y: yInBounds};
-    }
 
     // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
     let flexibleContainer = null
+
+    function flexiRectInBounds() {
+        // x left bound
+        if (flexibleContainer.x < 0) {
+            flexibleContainer.x = 0
+        }
+
+        // x right bound
+        if (!(flexibleContainer.width - flexibleContainer.x  <= width * graphZoom)) {
+            flexibleContainer.width = width - flexibleContainer.x;
+        }
+
+        // y top bound
+        if (flexibleContainer.y < 0) {
+            flexibleContainer.y = 0;
+        }
+        
+        // y bottom bound
+        if (!(flexibleContainer.height - flexibleContainer.y <= height * graphZoom)) {
+            flexibleContainer.height = height - flexibleContainer.y;
+        }
+    }
 
     // Tick only runs while the graph physics are still running.
     // (I.e. when the graph is completely relaxed, tick stops running.)
@@ -1493,38 +1509,14 @@ export var drawGraph = function (workbook) {
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
-            flexiCollision(flexibleContainer)
+            flexiRectInBounds();
+            // flexiCollision(flexibleContainer)
 
-            console.log(flexiRectInBounds())
-            const flexiRectValidation = flexiRectInBounds()
-
-            // if outside x or y bounds, set flexiRect width or height to max size of bounding box
-            if (!flexiRectValidation.x) {
-                flexibleContainer.width = width - flexibleContainer.x;
-            }
-
-            if (!flexiRectValidation.y) {
-                flexibleContainer.height = height - flexibleContainer.y;
-            }
-            
-            // console.log("d3 events", d3.event)
-            // const flexiRectValidation = flexiRectInBounds(d3.event.dx, d3.event.dy)
-            // if (
-            //   d3.event.x &&d3.event.dy && flexiRectValidation[0] &&flexiRectValidation[1]
-            // ) 
-            // {
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
                 .attr("y", flexibleContainer.y)
                 .attr("width", flexibleContainer.width)
                 .attr("height", flexibleContainer.height);
-            // } else {
-            //   flexibleContainerRect
-            //     .attr("x", flexibleContainer.x)
-            //     .attr("y", flexibleContainer.y)
-            //     .attr("width", flexibleContainer.width)
-            //     .attr("height", flexibleContainer.height);
-            // }
         }
 
         // this controls movement and position of nodes
