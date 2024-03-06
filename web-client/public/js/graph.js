@@ -204,16 +204,14 @@ export var drawGraph = function (workbook) {
         .attr("height", height)
         .attr("id", "exportContainer");
 
-    var viewportBoundingBox = svg
-        .append("g")
-        .append("rect")
-        .attr("class", "boundingBox")
-        .attr("width", width)
-        .attr("height", height)
-        .style("fill", "none")
-        // .attr("stroke", "black")
-        // .attr("stroke-width", 2)
-        .attr("id", "viewportBoundingBox");
+    // var viewportBoundingBox = svg
+    //     .append("g")
+    //     .append("rect")
+    //     .attr("class", "boundingBox")
+    //     .attr("width", width)
+    //     .attr("height", height)
+    //     .style("fill", "none")
+    //     .attr("id", "viewportBoundingBox");
 
     var zoomContainer = svg.append("g") // required for zoom to work
         .attr("class", "boundingBox")
@@ -1458,15 +1456,22 @@ export var drawGraph = function (workbook) {
 
     function flexiCollision(flexibleContainer) {
         if (flexibleContainer) {
-            console.log("flexiCollision");
-            console.log(flexibleContainer.x, flexibleContainer.y, zoomContainer.attr("transform"))
-            console.log(svg.attr("width"), svg.attr("height"))
+            // console.log("flexiCollision");
+            // console.log(flexibleContainer.x, flexibleContainer.y, zoomContainer.attr("transform"))
+            // console.log(svg.attr("width"), svg.attr("height"))
         }
+    }
+
+    function flexiRectInBounds() {
+        const xInBounds = flexibleContainer.width - flexibleContainer.x  <= width * graphZoom;
+        const yInBounds = flexibleContainer.height - flexibleContainer.y <= height * graphZoom;
+
+        return {x: xInBounds, y: yInBounds};
     }
 
     // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
     let flexibleContainer = null
-    
+
     // Tick only runs while the graph physics are still running.
     // (I.e. when the graph is completely relaxed, tick stops running.)
     function tick () {
@@ -1490,12 +1495,36 @@ export var drawGraph = function (workbook) {
             flexibleContainer = calcFlexiBox();
             flexiCollision(flexibleContainer)
 
-            // TODO: do I need to make this transform and translate? This is firing too much
+            console.log(flexiRectInBounds())
+            const flexiRectValidation = flexiRectInBounds()
+
+            // if outside x or y bounds, set flexiRect width or height to max size of bounding box
+            if (!flexiRectValidation.x) {
+                flexibleContainer.width = width - flexibleContainer.x;
+            }
+
+            if (!flexiRectValidation.y) {
+                flexibleContainer.height = height - flexibleContainer.y;
+            }
+            
+            // console.log("d3 events", d3.event)
+            // const flexiRectValidation = flexiRectInBounds(d3.event.dx, d3.event.dy)
+            // if (
+            //   d3.event.x &&d3.event.dy && flexiRectValidation[0] &&flexiRectValidation[1]
+            // ) 
+            // {
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
                 .attr("y", flexibleContainer.y)
                 .attr("width", flexibleContainer.width)
                 .attr("height", flexibleContainer.height);
+            // } else {
+            //   flexibleContainerRect
+            //     .attr("x", flexibleContainer.x)
+            //     .attr("y", flexibleContainer.y)
+            //     .attr("width", flexibleContainer.width)
+            //     .attr("height", flexibleContainer.height);
+            // }
         }
 
         // this controls movement and position of nodes
