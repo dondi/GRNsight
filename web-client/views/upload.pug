@@ -118,32 +118,33 @@ html
                   a(href='#' id='node-coloring-toggle-menu' class='nodeColoringToggle')
                     span(class='glyphicon')
                     | &nbsp; Enable Node Coloring
-                li(class='divider')
-                li(class='node-coloring-menu dropdown-submenu disabled')
-                  a(href='#')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Select Top Dataset
-                  ul(class='dropdown-menu' id='topDatasetDropdownMenu')
-                li(class='node-coloring-menu disabled')
-                  a(href='#' id='averageDataTopMenu' class='nodeColoring')
-                    span(class='glyphicon')
-                    | &nbsp; Average Replicate Values for Top Dataset
-                li(class='divider')
-                li(class='node-coloring-menu dropdown-submenu disabled')
-                  a(href='#')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Select Bottom Dataset
-                  ul(class='dropdown-menu' id='bottomDatasetDropdownMenu')
-                li(class='node-coloring-menu disabled')
-                  a(href='#' id='averageDataBottomMenu' class='viewportOption')
-                    span(class='glyphicon')
-                    | &nbsp; Average Replicate Values for Bottom Dataset
-                li(class='divider')
-                li(class='node-coloring-menu disabled')
-                  a(href='#' class='nodeOptions with-input')
-                    span(class='glyphicon invisible')
-                    | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
-                    input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')                  
+                div(id='node-coloring-options')
+                  li(class='divider')
+                  li(class='node-coloring-menu dropdown-submenu disabled')
+                    a(href='#')
+                      span(class='glyphicon invisible')
+                      | &nbsp; Select Top Dataset
+                    ul(class='dropdown-menu' id='topDatasetDropdownMenu')
+                  li(class='node-coloring-menu disabled')
+                    a(href='#' id='averageDataTopMenu' class='nodeColoring')
+                      span(class='glyphicon')
+                      | &nbsp; Average Replicate Values for Top Dataset
+                  li(class='divider')
+                  li(class='node-coloring-menu dropdown-submenu disabled')
+                    a(href='#')
+                      span(class='glyphicon invisible')
+                      | &nbsp; Select Bottom Dataset
+                    ul(class='dropdown-menu' id='bottomDatasetDropdownMenu')
+                  li(class='node-coloring-menu disabled')
+                    a(href='#' id='averageDataBottomMenu' class='viewportOption')
+                      span(class='glyphicon')
+                      | &nbsp; Average Replicate Values for Bottom Dataset
+                  li(class='divider')
+                  li(class='node-coloring-menu disabled')
+                    a(href='#' class='nodeOptions with-input')
+                      span(class='glyphicon invisible')
+                      | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
+                      input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')                  
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
