@@ -204,6 +204,17 @@ export var drawGraph = function (workbook) {
         .attr("height", height)
         .attr("id", "exportContainer");
 
+    var viewportBoundingBox = svg
+        .append("g")
+        .append("rect")
+        .attr("class", "boundingBox")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        // .attr("stroke", "black")
+        // .attr("stroke-width", 2)
+        .attr("id", "viewportBoundingBox");
+
     var zoomContainer = svg.append("g") // required for zoom to work
         .attr("class", "boundingBox")
         .attr("width", width)
