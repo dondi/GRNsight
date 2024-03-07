@@ -315,13 +315,13 @@ export var drawGraph = function (workbook) {
     let sliderMidpoint;
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
+    let prevGrnstateZoomVal;
 
     const updateAppBasedOnZoomValue = () => {
         // If !adaptive, set Zoomvalue to ZOOM_DISPLAY_MIDDLE, 100, so do not zoom outside graph
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
 
         const zoomDisplay = grnState.zoomValue;
-        console.log("zoomDisplay", zoomDisplay)
         setGraphZoom(
           (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
             zoomDisplay
@@ -387,6 +387,7 @@ export var drawGraph = function (workbook) {
     };
 
     $(ZOOM_INPUT).on("input", () => {
+        prevGrnstateZoomVal = grnState.zoomValue
         grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
         updateAppBasedOnZoomValue();
     }).blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
@@ -397,10 +398,18 @@ export var drawGraph = function (workbook) {
         if (flexibleContainerRect) {
             maxZoomValue = width / flexibleContainerRect.attr("width");
         }
-        
-        console.log(maxZoomValue, graphZoom)
 
-        if (adaptive || (!adaptive && (graphZoom + 0.5 < maxZoomValue))) {
+        console.log(maxZoomValue, graphZoom, graphZoom + 0.5 < maxZoomValue);
+
+        let validZoom = false
+        // cannot zoom in any farther if exceed maxZoomValue, but can zoom back out to smaller value
+        if (graphZoom + 0.5 > maxZoomValue && sliderValue < prevGrnstateZoomVal) {
+            validZoom = true
+        } else if (!prevGrnstateZoomVal) {
+            validZoom = true
+        }
+
+        if (adaptive || (!adaptive && validZoom)) {
             console.log("zoom slider value changed")
             grnState.zoomValue = Math.floor(
                 (sliderValue <= sliderMidpoint
@@ -408,6 +417,7 @@ export var drawGraph = function (workbook) {
                 : zoomScaleSliderRight)(sliderValue)
             );
         }
+
         updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
         manualZoom = true;
