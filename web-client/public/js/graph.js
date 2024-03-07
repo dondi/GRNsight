@@ -168,16 +168,14 @@ export var drawGraph = function (workbook) {
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
     };
 
-    // allows zoom slider to be moved and limits movement when !adaptive
     var zoomDragged = function () {
-        console.log("zoom dragged ran")
         var scale = 1;
         if (zoomContainer.attr("transform")) {
             var string = zoomContainer.attr("transform");
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexiRectInBounds())) {
+        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds())) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -192,7 +190,7 @@ export var drawGraph = function (workbook) {
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
     };
 
-    // zoomDrag keeps track of cursor position
+    // zoomDrag and all functions that it calls handles cursor dragging
     var zoomDrag = d3.drag()
         .on("start", zoomDragStarted)
         .on("drag", zoomDragged)
@@ -228,15 +226,6 @@ export var drawGraph = function (workbook) {
         .attr("stroke-width", 1)
         .attr("fill", "none")
         .attr("id", "flexibleContainerRect");
-    
-    // var viewportBoundingBox = svg
-    //     .append("g")
-    //     .append("rect")
-    //     .attr("class", "boundingBox")
-    //     .attr("width", width)
-    //     .attr("height", height)
-    //     .style("fill", "none")
-    //     .attr("id", "viewportBoundingBox");
 
     var zoom = d3.zoom()
         .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -264,6 +253,7 @@ export var drawGraph = function (workbook) {
     let graphZoom = 0;
     let xTranslation = 0;
     let yTranslation = 0;
+    let flexibleContainer = null;
 
     const updateZoomContainerInfo = () => {
         // transform attribute of zoomContainer contains translation info about graph
@@ -313,7 +303,9 @@ export var drawGraph = function (workbook) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         }
         var container = zoomContainer;
-        zoom.scaleTo(container, zoomScale);
+        if (adaptive || (!adaptive && flexRectInBounds())) {
+            zoom.scaleTo(container, zoomScale);
+        }
         // graphZoom is used in inBounds(width, height) to check if graph in zoomContainer when restricted to viewport
         graphZoom = zoomScale;
     };
@@ -329,16 +321,12 @@ export var drawGraph = function (workbook) {
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
 
         const zoomDisplay = grnState.zoomValue;
+        console.log("zoomDisplay", zoomDisplay)
         setGraphZoom(
           (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
             zoomDisplay
           )
         );
-
-        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (!adaptive && flexiRectInBounds()) {
-            center();
-        }
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
@@ -351,7 +339,12 @@ export var drawGraph = function (workbook) {
         }
 
         // TODO:instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
-        if (adaptive || (!adaptive && flexiRectInBounds())) {
+        if (adaptive || (!adaptive && flexRectInBounds())) {
+            
+            if (!adaptive) {
+                center();
+            }
+
             $(ZOOM_SLIDER).val(
                 (finalDisplay <= ZOOM_DISPLAY_MIDDLE
                 ? zoomScaleSliderLeft
@@ -399,10 +392,22 @@ export var drawGraph = function (workbook) {
     }).blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
 
     d3.select(ZOOM_SLIDER).on("input", function () {
-        const sliderValue = +$(this).val();
-        grnState.zoomValue = Math.floor(
-            (sliderValue <= sliderMidpoint ? zoomScaleSliderLeft : zoomScaleSliderRight)(sliderValue)
-        );
+        const sliderValue = $(this).val();
+        let maxZoomValue = 2;
+        if (flexibleContainerRect) {
+            maxZoomValue = width / flexibleContainerRect.attr("width");
+        }
+        
+        console.log(maxZoomValue, graphZoom)
+
+        if (adaptive || (!adaptive && (graphZoom + 0.5 < maxZoomValue))) {
+            console.log("zoom slider value changed")
+            grnState.zoomValue = Math.floor(
+                (sliderValue <= sliderMidpoint
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight)(sliderValue)
+            );
+        }
         updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
         manualZoom = true;
@@ -446,7 +451,7 @@ export var drawGraph = function (workbook) {
             d3.select("rect").attr("stroke", "none");
             d3.select("#flexibleContainerRect").attr("stroke", "none")
             center();
-        } else if (fixed) {
+        } else {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             $("input[name=viewport]").prop("checked", "checked");
             adaptive = false;
@@ -1455,27 +1460,26 @@ export var drawGraph = function (workbook) {
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
-    // don't set flexibleContainer = calcFlexiBox or else the function does not stop running, only want to run on tick
-    let flexibleContainer = null
-
-    function flexiRectInBounds() {
+    function flexRectInBounds() {
         if (flexibleContainer) {
             if (flexibleContainer.width * graphZoom > width) {
+                // console.log("width check", flexibleContainer.width * graphZoom > width);
                 return false;
             } else if (flexibleContainer.height * graphZoom > height) {
+                // console.log("height check", flexibleContainer.height * graphZoom > height);
                 return false;
             }
-            console.log("widths of flexible and viewport", flexibleContainer.width * graphZoom, width)
-            console.log("heights of flexible and viewport", flexibleContainer.height * graphZoom, height)
+            // console.log("widths of flexible and viewport", flexibleContainer.width * graphZoom, width)
+            // console.log("heights of flexible and viewport", flexibleContainer.height * graphZoom, height)
         }
         return true
     }
 
-    function flexiRectLimitBounds() {
+    function flexRectLimitBounds() {
         // TODO: with collision, if any of these are true then that means that graph is colliding with boundingBox
         // can also determine if collide with edge of graph here to see if can zoom in or not
         let flexiBoxInBounds = true;
-        if (flexibleContainer != null) {
+        if (flexibleContainer) {
             // x left bound
             // TODO: if graphZoom < 1, then do borders based on viewport? 
             if (flexibleContainer.x < 0) {
@@ -1526,8 +1530,7 @@ export var drawGraph = function (workbook) {
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
-            flexiRectLimitBounds();
-            flexiRectInBounds();
+            flexRectLimitBounds();
 
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
@@ -1536,7 +1539,7 @@ export var drawGraph = function (workbook) {
                 .attr("height", flexibleContainer.height);
         }
 
-        // this controls movement and position of nodes
+        // this controls movement and position of nodes, clamps the nodes to boundary
         try {
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
@@ -1544,6 +1547,7 @@ export var drawGraph = function (workbook) {
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
                 var rightBoundary = width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+                // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
                 if (adaptive && width < MAX_WIDTH &&
                     (currentXPos === BOUNDARY_MARGIN || currentXPos === rightBoundary)) {
@@ -1571,6 +1575,7 @@ export var drawGraph = function (workbook) {
                 var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                   selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
                 var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
+                // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentYPos = Math.max(BOUNDARY_MARGIN, Math.min(bottomBoundary, d.y));
                 if (adaptive && height < MAX_HEIGHT &&
                   (currentYPos === BOUNDARY_MARGIN || currentYPos === bottomBoundary)) {
