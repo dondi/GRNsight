@@ -2,6 +2,7 @@
 // var path = require("path");
 // var demoWorkbooks = require(__dirname + "/demo-workbooks");
 
+const { CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
 const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
@@ -108,7 +109,7 @@ var parseNetworkSheet = function (sheet, network) {
 
     // Depending on the value of cellA1, we want to make a new property `networkType` which
     // will indicate the network type. THe web app then reads this to decide what to do next.
-    if (cellA1 !== "cols regulators/rows targets") {
+    if (cellA1 !== CELL_A1_GRN || cellA1 !== CELL_A1_PPI) {
         addWarning(
             network,
             constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
@@ -304,9 +305,9 @@ exports.workbookType = function (workbookFile) {
         if (sheet.name.toLowerCase() === "network") {
             const cellA1 = sheet.data[0][0];
 
-            if (cellA1 === "cols regulators/rows targets") {
+            if (cellA1 === CELL_A1_GRN) {
                 workbookType = "grn";
-            } else if (cellA1 === "cols protein1/ rows protein2") {
+            } else if (cellA1 === CELL_A1_PPI) {
                 workbookType = "protein-protein-physical-interaction";
             } else {
                 workbookType = undefined;

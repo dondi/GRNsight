@@ -2,6 +2,7 @@ var expect = require("chai").expect;
 var extend = require("jquery-extend");
 var xlsx = require("node-xlsx");
 var test = require("./test");
+const { CELL_A1_PPI, CELL_A1_GRN } = require("../server/controllers/constants");
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
@@ -763,7 +764,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network",
                 data: [
-                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    [CELL_A1_GRN, "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
                     ["AFT2", 0, 1, 1],
                     ["CIN5", 0, 0, 1]
@@ -773,7 +774,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network_weights",
                 data: [
-                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    [CELL_A1_GRN, "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
                     ["AFT2", 0, 1, 1],
                     ["CIN5", 0, 0, 1]
@@ -896,7 +897,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network",
                 data: [
-                    ["cols protein1/ rows protein2", "Aim32p", "Ccr4p", "Erv1p"],
+                    [CELL_A1_PPI, "Aim32p", "Ccr4p", "Erv1p"],
                     ["Aim32p", 0, 0, 0],
                     ["Ccr4p", 1, 1, 0],
                     ["Erv1p", 1, 0, 1]

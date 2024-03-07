@@ -4,6 +4,8 @@ module.exports = {
     NOT_FOUND: -1,
     WEIGHTED: "weighted",
     UNWEIGHTED: "unweighted",
+    CELL_A1_PPI: "cols protein1/ rows protein2",
+    CELL_A1_GRN: "cols regulators/rows targets",
 
     GRNSIGHT_FILENAME_HEADER: "X-GRNsight-Filename",
 
