@@ -59,14 +59,14 @@ module.exports = function (sif) {
 
         let workbookType;
         if (allNumbers) {
-            workbookType = "grn";
+            workbookType = constants.NETWORK_GRN_MODE;
         } else {
             for (const relationship of relationships) {
                 if (relationship === "pp") {
-                    workbookType = "protein-protein-physical-interaction";
+                    workbookType = constants.NETWORK_PPI_MODE;
                     break;
                 } else if (relationship === "pd") {
-                    workbookType = "grn";
+                    workbookType = constants.NETWORK_GRN_MODE;
                     break;
                 }
             }

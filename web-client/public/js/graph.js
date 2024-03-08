@@ -11,6 +11,7 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
+    NETWORK_GRN_MODE
 } from "./constants";
 
 /* globals d3 */
@@ -682,7 +683,7 @@ export var drawGraph = function (workbook) {
                         });
                 } else {
                     // Arrowheads
-                    if (grnState.mode === "grn") {
+                    if (grnState.mode === NETWORK_GRN_MODE) {
                         if (d.strokeWidth === 2) {
                             d.strokeWidth = 4;
                         }

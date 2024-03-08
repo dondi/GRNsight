@@ -5,6 +5,9 @@ module.exports = {
     WEIGHTED: "weighted",
     UNWEIGHTED: "unweighted",
 
+    NETWORK_PPI_MODE: "protein-protein-physical-interaction",
+    NETWORK_GRN_MODE: "grn",
+
     GRNSIGHT_FILENAME_HEADER: "X-GRNsight-Filename",
 
     warnings: {

@@ -107,6 +107,8 @@ import {
   NETWORK_MODE_PROTEIN_PHYS,
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
+  NETWORK_GRN_MODE,
+  NETWORK_PPI_MODE
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -532,21 +534,21 @@ const updateModeViews = () =>{
     $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
     // Select the correct menu items
     $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
-    if (grnState.mode === "grn") {
+    if (grnState.mode === NETWORK_GRN_MODE) {
         toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
-    } else if (grnState.mode === "protein-protein-physical-interaction") {
+    } else if (grnState.mode === NETWORK_PPI_MODE) {
         toggleLayout(NETWORK_MODE_PROTEIN_PHYS, NETWORK_MODE_GRN);
     }
 };
 
 const checkWorkbookModeSettings = () => {
-    if (grnState.mode === "protein-protein-physical-interaction") {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.colorOptimal = false;
         disableNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
-    } else if (grnState.mode === "grn") {
+    } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.colorOptimal = true;
         showNodeColoringMenus();
@@ -556,9 +558,9 @@ const checkWorkbookModeSettings = () => {
 };
 
 $("body").on("click", () => {
-    if (grnState.mode === "protein-protein-physical-interaction") {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
-    } else if (grnState.mode === "grn") {
+    } else if (grnState.mode === NETWORK_GRN_MODE) {
         $(EXPORT_TO_UNWEIGHTED_GML_MENU).removeClass("disabled");
     }
 });
@@ -569,12 +571,12 @@ $(NETWORK_MODE_DROPDOWN).on("change", () => {
     refreshApp();
 });
 $(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
-    grnState.mode = "protein-protein-physical-interaction";
+    grnState.mode = NETWORK_PPI_MODE;
     checkWorkbookModeSettings();
     refreshApp();
 });
 $(NETWORK_MODE_GRN).on("click", () => {
-    grnState.mode = "grn";
+    grnState.mode = NETWORK_GRN_MODE;
     checkWorkbookModeSettings();
     refreshApp();
 });

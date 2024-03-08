@@ -2,6 +2,7 @@
 // var path = require("path");
 // var demoWorkbooks = require(__dirname + "/demo-workbooks");
 
+const { NETWORK_PPI_MODE, NETWORK_GRN_MODE } = require("./constants");
 const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
@@ -305,9 +306,9 @@ exports.workbookType = function (workbookFile) {
             const cellA1 = sheet.data[0][0];
 
             if (cellA1 === "cols regulators/rows targets") {
-                workbookType = "grn";
+                workbookType = NETWORK_GRN_MODE;
             } else if (cellA1 === "protein 1/protein 2") {
-                workbookType = "protein-protein-physical-interaction";
+                workbookType = NETWORK_PPI_MODE;
             } else {
                 workbookType = undefined;
             }
