@@ -174,8 +174,10 @@ export var drawGraph = function (workbook) {
             var string = zoomContainer.attr("transform");
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
+
+
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds())) {
+        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds(scale, 2))) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -298,16 +300,21 @@ export var drawGraph = function (workbook) {
         );
     };
 
+    // controls reading movement of zoomSlider and scaling graph to that zoomScale
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         }
         var container = zoomContainer;
-        if (adaptive || (!adaptive && flexRectInBounds())) {
-            zoom.scaleTo(container, zoomScale);
-        }
         // graphZoom is used in inBounds(width, height) to check if graph in zoomContainer when restricted to viewport
         graphZoom = zoomScale;
+        var nextZoomValue = graphZoom + 0.25;
+        console.log("graphZoom", graphZoom, "nextZoomValue", nextZoomValue)
+        if (adaptive || (!adaptive && flexRectInBounds(nextZoomValue, width / flexibleContainerRect.attr("width")))) {
+            zoom.scaleTo(container, zoomScale);
+        }
+        
+        
     };
 
     // See setupZoomElements below to see how these are initialized. They are declared here because
@@ -320,8 +327,36 @@ export var drawGraph = function (workbook) {
     const updateAppBasedOnZoomValue = () => {
         // If !adaptive, set Zoomvalue to ZOOM_DISPLAY_MIDDLE, 100, so do not zoom outside graph
         // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
+        let nextZoomValue = (grnState.zoomValue + 6 <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(grnState.zoomValue + 6);
+        let maxZoomValue = 2;
+        console.log(width, flexibleContainerRect.attr("width"));
+        if (!adaptive && flexibleContainer) {
+            flexibleContainer = calcFlexiBox()
+            maxZoomValue = width / flexibleContainerRect.attr("width");
+        }
 
         const zoomDisplay = grnState.zoomValue;
+
+        // if (!adaptive && !flexRectInBounds(nextZoomValue, maxZoomValue) && prevGrnstateZoomVal) {
+        //     grnState.zoomValue = prevGrnstateZoomVal
+        // }
+
+        
+
+        console.log(
+          "zoomDisplay",
+          zoomDisplay,
+          "set graphzoom value",
+          (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
+            zoomDisplay
+          ),
+          "nextZoomValue",
+          nextZoomValue,
+          flexRectInBounds(nextZoomValue, maxZoomValue),
+          "maxZoomValue",
+          maxZoomValue
+        );
+
         setGraphZoom(
           (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
             zoomDisplay
@@ -339,18 +374,25 @@ export var drawGraph = function (workbook) {
         }
 
         // TODO:instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
-        if (adaptive || (!adaptive && flexRectInBounds())) {
-            
-            if (!adaptive) {
-                center();
-            }
+        if (
+          adaptive ||
+          (!adaptive &&
+            flexRectInBounds(
+              (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleLeft
+                : zoomScaleRight)(zoomDisplay)
+            ))
+        ) {
+          if (!adaptive) {
+            center();
+          }
 
-            $(ZOOM_SLIDER).val(
-                (finalDisplay <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleSliderLeft
-                : zoomScaleSliderRight
-                ).invert(finalDisplay)
-            );
+          $(ZOOM_SLIDER).val(
+            (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+              ? zoomScaleSliderLeft
+              : zoomScaleSliderRight
+            ).invert(finalDisplay)
+          );
         }
     };
 
@@ -387,36 +429,19 @@ export var drawGraph = function (workbook) {
     };
 
     $(ZOOM_INPUT).on("input", () => {
-        prevGrnstateZoomVal = grnState.zoomValue
         grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
         updateAppBasedOnZoomValue();
     }).blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
 
     d3.select(ZOOM_SLIDER).on("input", function () {
         const sliderValue = $(this).val();
-        let maxZoomValue = 2;
-        if (flexibleContainerRect) {
-            maxZoomValue = width / flexibleContainerRect.attr("width");
-        }
+        prevGrnstateZoomVal = grnState.zoomValue;
 
-        console.log(maxZoomValue, graphZoom, graphZoom + 0.5 < maxZoomValue);
-
-        let validZoom = false
-        // cannot zoom in any farther if exceed maxZoomValue, but can zoom back out to smaller value
-        if (graphZoom + 0.5 > maxZoomValue && sliderValue < prevGrnstateZoomVal) {
-            validZoom = true
-        } else if (!prevGrnstateZoomVal) {
-            validZoom = true
-        }
-
-        if (adaptive || (!adaptive && validZoom)) {
-            console.log("zoom slider value changed")
-            grnState.zoomValue = Math.floor(
-                (sliderValue <= sliderMidpoint
-                ? zoomScaleSliderLeft
-                : zoomScaleSliderRight)(sliderValue)
-            );
-        }
+        grnState.zoomValue = Math.floor(
+            (sliderValue <= sliderMidpoint
+            ? zoomScaleSliderLeft
+            : zoomScaleSliderRight)(sliderValue)
+        );
 
         updateAppBasedOnZoomValue();
     }).on("mousedown", function () {
@@ -1470,17 +1495,15 @@ export var drawGraph = function (workbook) {
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
-    function flexRectInBounds() {
+    function flexRectInBounds(nextZoom, maxZoomValue) {
         if (flexibleContainer) {
-            if (flexibleContainer.width * graphZoom > width) {
-                // console.log("width check", flexibleContainer.width * graphZoom > width);
+            if (nextZoom > maxZoomValue) {
+                return false
+            } else if (flexibleContainer.width * nextZoom > width) {
                 return false;
-            } else if (flexibleContainer.height * graphZoom > height) {
-                // console.log("height check", flexibleContainer.height * graphZoom > height);
+            } else if (flexibleContainer.height * nextZoom > height) {
                 return false;
             }
-            // console.log("widths of flexible and viewport", flexibleContainer.width * graphZoom, width)
-            // console.log("heights of flexible and viewport", flexibleContainer.height * graphZoom, height)
         }
         return true
     }
