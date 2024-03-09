@@ -161,6 +161,7 @@ export var drawGraph = function (workbook) {
 
     var zoomDragPrevX = 0;
     var zoomDragPrevY = 0;
+    let graphZoom = 0;
 
     var zoomDragStarted = function () {
         zoomDragPrevX = d3.event.x;
@@ -175,9 +176,11 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
 
+        // console.log("scale", scale, "graphZoom", graphZoom)
+        // inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds(graphZoom)
 
-        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-        if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds(scale, 2))) {
+        if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && inBounds(graphZoom, d3.event.dx, d3.event.dy))) {
+        // if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds(graphZoom))) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -252,12 +255,11 @@ export var drawGraph = function (workbook) {
     });
     d3.select(".center").on("click", center);
 
-    let graphZoom = 0;
     let xTranslation = 0;
     let yTranslation = 0;
     let flexibleContainer = null;
 
-    const updateZoomContainerInfo = () => {
+    function updateZoomContainerInfo() {
         // transform attribute of zoomContainer contains translation info about graph
         xTranslation = parseFloat(zoomContainer
             .attr("transform")
@@ -268,36 +270,60 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    function inBounds(width, height) {
-        /*
-        * right:  Math.abs(xTranslation + width * graphZoom) / zoomContainerWidth <= graphZoom - 1.0
-        * bottom: Math.abs(yTranslation + height * graphZoom) / zoomContainerHeight <= graphZoom - 1.0
-        * top: y coordinate == -0, left: x coordinate == -0
-        * Amount of movement is dependent on graphZoom, so actual movement is not just the width or height
-            but width or height multiplied by graphZoom
-        * multiply Math.abs(yTranslation + height * graphZoom) / zoomContainerHeight by 1000 because
-            decimals like 0.005 (in the thousandths place) or less are out of bounds,
-            then get floor of that to ensure that decimal does not have 0 in hundredths place
-        */
+    function inBounds(graphZoom, dx, dy) {
         updateZoomContainerInfo();
+        // if ((xTranslation < 0 && Math.abs(xTranslation) * graphZoom >= Math.floor(flexibleContainer.x + dx)) || 
+        // (xTranslation > 0 && (flexibleContainer.width + flexibleContainer.x + xTranslation) + dx >= width / graphZoom)) {
+        /*(xTranslation < 0 &&
+            ((graphZoom <= 1 &&
+              Math.abs(xTranslation) * graphZoom >=
+                Math.floor(flexibleContainer.x + dx)) ||
+              flexibleContainer.width + flexibleContainer.x + Math.abs(xTranslation) >= width * graphZoom)) ||*/
+        if (
+          (xTranslation < 0 &&
+              Math.abs(xTranslation) * graphZoom >=
+                Math.floor(flexibleContainer.x + dx)) ||
+          (xTranslation > 0 &&
+            flexibleContainer.width + flexibleContainer.x + xTranslation + dx >=
+              width / graphZoom)
+        ) {
+          console.log(
+            Math.abs(xTranslation) * graphZoom >=
+              Math.floor(flexibleContainer.x + dx),
+            xTranslation,
+            xTranslation * graphZoom,
+            flexibleContainer.x
+          );
+          return false;
+        } else if (
+            (yTranslation < 0 &&
+            Math.abs(yTranslation) * graphZoom >=
+                Math.floor(flexibleContainer.y + dy)) ||
+            (yTranslation > 0 &&
+            flexibleContainer.height +
+                flexibleContainer.y +
+                yTranslation +
+                dy >=
+                height / graphZoom)
+        ) {
+            // validations for up/down cursor drag and movement
+            console.log(
+            "flexContainer.y",
+            flexibleContainer.y,
+            "flexibleContainer.height",
+            flexibleContainer.height,
+            "yTranslation",
+            yTranslation,
+            "total height",
+            height
+            );
+            console.log(" ");
+            return false
+        }
+        console.log("flexContainer.x",flexibleContainer.x,"flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "total width", width);
+        console.log("flexContainer height and width in bounds");
 
-        return (
-          Math.abs(xTranslation + width * graphZoom) / $container.width() <=
-            graphZoom - 1.0 &&
-          Math.floor(
-            (Math.abs(xTranslation + width * graphZoom) / $container.width()) *
-              1000
-          ) !== 0 &&
-          Math.abs(yTranslation + height * graphZoom) / $container.height() <=
-            graphZoom - 1.0 &&
-          Math.floor(
-            (Math.abs(yTranslation + height * graphZoom) /
-              $container.height()) *
-              1000
-          ) !== 0 &&
-          xTranslation + width * graphZoom <= 0 &&
-          yTranslation + height * graphZoom <= 0
-        );
+        return true
     };
 
     // controls reading movement of zoomSlider and scaling graph to that zoomScale
@@ -308,8 +334,6 @@ export var drawGraph = function (workbook) {
         var container = zoomContainer;
         // graphZoom is used in inBounds(width, height) to check if graph in zoomContainer when restricted to viewport
         graphZoom = zoomScale;
-        // var nextZoomValue = graphZoom + 0.25;
-        // console.log("graphZoom", graphZoom, "nextZoomValue", nextZoomValue)
         if (adaptive || (!adaptive && flexRectInBounds(graphZoom))) {
             zoom.scaleTo(container, zoomScale);
         }
@@ -325,9 +349,6 @@ export var drawGraph = function (workbook) {
     let prevGrnstateZoomVal;
 
     const updateAppBasedOnZoomValue = () => {
-        // If !adaptive, set Zoomvalue to ZOOM_DISPLAY_MIDDLE, 100, so do not zoom outside graph
-        // TODO: instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds
-
         let zoomDisplay;
 
         if (adaptive) {
@@ -335,25 +356,15 @@ export var drawGraph = function (workbook) {
         } else if (!adaptive && flexRectInBounds((grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(grnState.zoomValue)) ) {
             zoomDisplay = grnState.zoomValue;
         } else {
-            console.log("statement false")
             grnState.zoomValue = prevGrnstateZoomVal;
             zoomDisplay = grnState.zoomValue;
         }
 
-        console.log(
-          "zoomDisplay",
-          zoomDisplay,
-          "set graphzoom value",
-          (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
-            zoomDisplay
-          )
-        );
+        const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+          ? zoomScaleLeft
+          : zoomScaleRight)(zoomDisplay);
 
-        setGraphZoom(
-          (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
-            zoomDisplay
-          )
-        );
+        setGraphZoom(calcGraphZoom);
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
@@ -365,26 +376,20 @@ export var drawGraph = function (workbook) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        // TODO:instead of d3.event.x >= ZOOM_DISPLAY_MIDDLE, need to make sure that box in bounds 
-        if (
-          adaptive ||
-          (!adaptive &&
-            flexRectInBounds(
-              (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleLeft
-                : zoomScaleRight)(zoomDisplay)
-            ))
-        ) {
-          if (!adaptive) {
-            center();
-          }
+        // This controls actual movement of slider
+        if (adaptive || (!adaptive && flexRectInBounds(calcGraphZoom))) {
+        // don't really want to center anymore for zooming since don't care if see bounding box anymore
+        // if don't center, then get issue of zooming into the box since not inside the width of the viewport
+            if (!adaptive) {
+                center();
+            }
 
-          $(ZOOM_SLIDER).val(
-            (finalDisplay <= ZOOM_DISPLAY_MIDDLE
-              ? zoomScaleSliderLeft
-              : zoomScaleSliderRight
-            ).invert(finalDisplay)
-          );
+            $(ZOOM_SLIDER).val(
+                (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight
+                ).invert(finalDisplay)
+            );
         }
     };
 
@@ -525,18 +530,20 @@ export var drawGraph = function (workbook) {
         var height = direction === "up" ? -50 : direction === "down" ? 50 : 0;
         if (adaptive) {
             zoom.translateBy(zoomContainer, width, height);
-        } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE) {
-            if (inBounds(width, height)) {
+        } else if (!adaptive) {
+            // if (inBounds(width, height) && flexRectInBounds(graphZoom)) {
+            if (flexRectInBounds(graphZoom)) {
                 zoom.translateBy(zoomContainer, width, height);
-            } else if (inBounds(0, 0)) {
-                // ^check if current position in bounds but still not at border,
-                // then move remaining amount left in graph
-                if (width !== 0 && inBounds(width / graphZoom / 3, height)) {
-                    zoom.translateBy(zoomContainer, width / graphZoom / 3, height);
-                } else if (height !== 0 && inBounds(width, height / graphZoom / 3)) {
-                    zoom.translateBy(zoomContainer, width, height / graphZoom / 3);
-                }
-            }
+            } 
+            // else if (inBounds(0, 0)) {
+            //     // ^check if current position in bounds but still not at border,
+            //     // then move remaining amount left in graph
+            //     if (width !== 0 && inBounds(width / graphZoom / 3, height)) {
+            //         zoom.translateBy(zoomContainer, width / graphZoom / 3, height);
+            //     } else if (height !== 0 && inBounds(width, height / graphZoom / 3)) {
+            //         zoom.translateBy(zoomContainer, width, height / graphZoom / 3);
+            //     }
+            // }
         }
     }
 
@@ -1444,7 +1451,6 @@ export var drawGraph = function (workbook) {
         let xValuesPaths = []
         let yValuesPaths = []
 
-        // this would reassign the values of pathData, since no value being assigned, then the value would be null
         link.selectAll("path").each( function(pathData) {
             if (pathData.source) {
                 // Log the "d" attribute for each path
@@ -1489,25 +1495,37 @@ export var drawGraph = function (workbook) {
 
     function flexRectInBounds(zoomValue) {
         if (flexibleContainer) {
-            if (flexibleContainer.width * zoomValue > width) {
-                console.log(flexibleContainer.width, zoomValue, width, flexibleContainer.width * zoomValue > width);
-                console.log("width exceeds")
+            updateZoomContainerInfo();
+            // validations for zoom and left/right cursor drag and D-pad movement
+            if (flexibleContainer.width * zoomValue > width ) {
+                console.log(
+                  "width exceeds",
+                  flexibleContainer.width * zoomValue,
+                  "total width",
+                  width,
+                  "graphZoom",
+                  graphZoom,
+                  "zoomValue",
+                  zoomValue
+                );
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
-                console.log("height exceeds")
+                console.log(
+                  "height exceeds",
+                  flexibleContainer.height * zoomValue,
+                  "total height",
+                  height
+                );
                 return false;
-            }
+            } 
         }
         return true
     }
 
     function flexRectLimitBounds() {
-        // TODO: with collision, if any of these are true then that means that graph is colliding with boundingBox
-        // can also determine if collide with edge of graph here to see if can zoom in or not
         let flexiBoxInBounds = true;
         if (flexibleContainer) {
             // x left bound
-            // TODO: if graphZoom < 1, then do borders based on viewport? 
             if (flexibleContainer.x < 0) {
                 flexibleContainer.x = 0;
                 flexiBoxInBounds = false;
