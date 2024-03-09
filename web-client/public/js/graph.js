@@ -176,11 +176,7 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
 
-        // console.log("scale", scale, "graphZoom", graphZoom)
-        // inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds(graphZoom)
-
-        if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && inBounds(graphZoom, d3.event.dx, d3.event.dy))) {
-        // if (adaptive || (!adaptive && inBounds(d3.event.dx, d3.event.dy) && flexRectInBounds(graphZoom))) {
+        if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && inBounds(graphZoom, d3.event.dx, d3.event.dy, false))) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -270,8 +266,9 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    function inBounds(graphZoom, dx, dy) {
+    function inBounds(graphZoom, dx, dy, dPad) {
         updateZoomContainerInfo();
+        console.log("dx", dx, "dy", dy, "yTranslation", yTranslation)
         // if ((xTranslation < 0 && Math.abs(xTranslation) * graphZoom >= Math.floor(flexibleContainer.x + dx)) || 
         // (xTranslation > 0 && (flexibleContainer.width + flexibleContainer.x + xTranslation) + dx >= width / graphZoom)) {
         /*(xTranslation < 0 &&
@@ -279,26 +276,42 @@ export var drawGraph = function (workbook) {
               Math.abs(xTranslation) * graphZoom >=
                 Math.floor(flexibleContainer.x + dx)) ||
               flexibleContainer.width + flexibleContainer.x + Math.abs(xTranslation) >= width * graphZoom)) ||*/
+
+        if (dPad) {
+            // if () {
+                console.log("flexContainer.y", flexibleContainer.y, "flexibleContainer.height", 
+                flexibleContainer.height,"yTranslation",yTranslation, "dy", dy, "total height",height);
+            // } else {
+                console.log((yTranslation < 0 &&
+                Math.abs(yTranslation) * graphZoom >=
+                    Math.floor(flexibleContainer.y + dy)) ||
+            (yTranslation > 0 &&
+            flexibleContainer.height +
+                flexibleContainer.y +
+                yTranslation +
+                dy >=
+                height / graphZoom))
+                console.log("dPad violated")
+            // }
+            
+        }
+
         if (
           (xTranslation < 0 &&
               Math.abs(xTranslation) * graphZoom >=
                 Math.floor(flexibleContainer.x + dx)) ||
           (xTranslation > 0 &&
-            flexibleContainer.width + flexibleContainer.x + xTranslation + dx >=
-              width / graphZoom)
+            flexibleContainer.width + 
+            flexibleContainer.x + 
+            xTranslation + 
+            dx >=
+            width / graphZoom)
         ) {
-          console.log(
-            Math.abs(xTranslation) * graphZoom >=
-              Math.floor(flexibleContainer.x + dx),
-            xTranslation,
-            xTranslation * graphZoom,
-            flexibleContainer.x
-          );
           return false;
         } else if (
             (yTranslation < 0 &&
-            Math.abs(yTranslation) * graphZoom >=
-                Math.floor(flexibleContainer.y + dy)) ||
+                Math.abs(yTranslation) * graphZoom >=
+                    Math.floor(flexibleContainer.y + dy)) ||
             (yTranslation > 0 &&
             flexibleContainer.height +
                 flexibleContainer.y +
@@ -306,21 +319,9 @@ export var drawGraph = function (workbook) {
                 dy >=
                 height / graphZoom)
         ) {
-            // validations for up/down cursor drag and movement
-            console.log(
-            "flexContainer.y",
-            flexibleContainer.y,
-            "flexibleContainer.height",
-            flexibleContainer.height,
-            "yTranslation",
-            yTranslation,
-            "total height",
-            height
-            );
-            console.log(" ");
             return false
         }
-        console.log("flexContainer.x",flexibleContainer.x,"flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "total width", width);
+        // console.log("flexContainer.x",flexibleContainer.x,"flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "total width", width);
         console.log("flexContainer height and width in bounds");
 
         return true
@@ -526,22 +527,22 @@ export var drawGraph = function (workbook) {
 
     // move: moves graph with D-pad
     function move (direction) {
-        var width = direction === "left" ? -50 : direction === "right" ? 50 : 0;
-        var height = direction === "up" ? -50 : direction === "down" ? 50 : 0;
+        var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
+        var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
         if (adaptive) {
-            zoom.translateBy(zoomContainer, width, height);
+            zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
             // if (inBounds(width, height) && flexRectInBounds(graphZoom)) {
-            if (flexRectInBounds(graphZoom)) {
-                zoom.translateBy(zoomContainer, width, height);
+            if (flexRectInBounds(graphZoom) && inBounds(graphZoom, moveWidth, moveHeight, true)) {
+                zoom.translateBy(zoomContainer, moveWidth, moveHeight);
             } 
-            // else if (inBounds(0, 0)) {
+            // else if (inBounds(graphZoom, 0, 0)) {
             //     // ^check if current position in bounds but still not at border,
             //     // then move remaining amount left in graph
-            //     if (width !== 0 && inBounds(width / graphZoom / 3, height)) {
-            //         zoom.translateBy(zoomContainer, width / graphZoom / 3, height);
-            //     } else if (height !== 0 && inBounds(width, height / graphZoom / 3)) {
-            //         zoom.translateBy(zoomContainer, width, height / graphZoom / 3);
+            //     if (moveWidth !== 0 && inBounds(graphZoom, moveWidth / 3, moveHeight)) {
+            //         zoom.translateBy(zoomContainer, moveWidth / 3, moveHeight);
+            //     } else if (moveHeight !== 0 && inBounds(graphZoom, moveWidth, moveHeight / 3)) {
+            //         zoom.translateBy(zoomContainer, moveWidth, moveHeight / 3);
             //     }
             // }
         }
