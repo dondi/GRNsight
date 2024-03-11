@@ -4,6 +4,8 @@ module.exports = {
     NOT_FOUND: -1,
     WEIGHTED: "weighted",
     UNWEIGHTED: "unweighted",
+    CELL_A1_PPI: "cols protein1/ rows protein2",
+    CELL_A1_GRN: "cols regulators/rows targets",
 
     NETWORK_PPI_MODE: "protein-protein-physical-interaction",
     NETWORK_GRN_MODE: "grn",
