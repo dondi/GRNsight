@@ -269,39 +269,12 @@ export var drawGraph = function (workbook) {
     function inBounds(graphZoom, dx, dy, dPad) {
         updateZoomContainerInfo();
         console.log("dx", dx, "dy", dy, "yTranslation", yTranslation)
-        // if ((xTranslation < 0 && Math.abs(xTranslation) * graphZoom >= Math.floor(flexibleContainer.x + dx)) || 
-        // (xTranslation > 0 && (flexibleContainer.width + flexibleContainer.x + xTranslation) + dx >= width / graphZoom)) {
-        /*(xTranslation < 0 &&
-            ((graphZoom <= 1 &&
-              Math.abs(xTranslation) * graphZoom >=
-                Math.floor(flexibleContainer.x + dx)) ||
-              flexibleContainer.width + flexibleContainer.x + Math.abs(xTranslation) >= width * graphZoom)) ||*/
-
-        if (dPad) {
-            // if () {
-                console.log("flexContainer.y", flexibleContainer.y, "flexibleContainer.height", 
-                flexibleContainer.height,"yTranslation",yTranslation, "dy", dy, "total height",height);
-            // } else {
-                console.log((yTranslation < 0 &&
-                Math.abs(yTranslation) * graphZoom >=
-                    Math.floor(flexibleContainer.y + dy)) ||
-            (yTranslation > 0 &&
-            flexibleContainer.height +
-                flexibleContainer.y +
-                yTranslation +
-                dy >=
-                height / graphZoom))
-                console.log("dPad violated")
-            // }
-            
-        }
 
         if (
-          (xTranslation < 0 &&
+          ((dx < 0 || xTranslation < 0) &&
               Math.abs(xTranslation) * graphZoom >=
                 Math.floor(flexibleContainer.x + dx)) ||
-          (xTranslation > 0 &&
-            flexibleContainer.width + 
+          (flexibleContainer.width + 
             flexibleContainer.x + 
             xTranslation + 
             dx >=
@@ -309,16 +282,16 @@ export var drawGraph = function (workbook) {
         ) {
           return false;
         } else if (
-            (yTranslation < 0 &&
+            ((dy < 0 || yTranslation < 0) &&
                 Math.abs(yTranslation) * graphZoom >=
                     Math.floor(flexibleContainer.y + dy)) ||
-            (yTranslation > 0 &&
-            flexibleContainer.height +
+            (flexibleContainer.height +
                 flexibleContainer.y +
                 yTranslation +
                 dy >=
                 height / graphZoom)
         ) {
+            console.log("yTranslation returned FALSE")
             return false
         }
         // console.log("flexContainer.x",flexibleContainer.x,"flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "total width", width);
@@ -1499,24 +1472,8 @@ export var drawGraph = function (workbook) {
             updateZoomContainerInfo();
             // validations for zoom and left/right cursor drag and D-pad movement
             if (flexibleContainer.width * zoomValue > width ) {
-                console.log(
-                  "width exceeds",
-                  flexibleContainer.width * zoomValue,
-                  "total width",
-                  width,
-                  "graphZoom",
-                  graphZoom,
-                  "zoomValue",
-                  zoomValue
-                );
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
-                console.log(
-                  "height exceeds",
-                  flexibleContainer.height * zoomValue,
-                  "total height",
-                  height
-                );
                 return false;
             } 
         }
