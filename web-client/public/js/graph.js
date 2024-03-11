@@ -176,7 +176,7 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
 
-        if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && inBounds(graphZoom, d3.event.dx, d3.event.dy, false))) {
+        if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && inBounds(graphZoom, d3.event.dx, d3.event.dy))) {
             zoom.translateBy(
                 zoomContainer,
                 scale * (d3.event.x - zoomDragPrevX),
@@ -266,40 +266,51 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    function inBounds(graphZoom, dx, dy, dPad) {
+    function inBounds(graphZoom, dx, dy) {
         updateZoomContainerInfo();
-        console.log("dx", dx, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport height", height)
-        console.log("dy", dy, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport width", width)
-        console.log(" ")
 
         if (
           ((dx < 0 || xTranslation < 0) &&
               Math.abs(xTranslation) * graphZoom >=
-                Math.floor(flexibleContainer.x + dx)) ||
+                Math.floor(flexibleContainer.x) + dx) && 
+                !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx) || (dx > 0 &&
           (flexibleContainer.width + 
             flexibleContainer.x + 
             xTranslation + 
             dx >=
-            width / graphZoom)
+            width / graphZoom))
         ) {
-          return false;
+            console.log("dx", dx, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
+            return false;
         } else if (
             ((dy < 0 || yTranslation < 0) &&
                 Math.abs(yTranslation) * graphZoom >=
-                    Math.floor(flexibleContainer.y + dy)) ||
+                    Math.floor(flexibleContainer.y) + dy) && 
+                        !(Math.abs(yTranslation) * graphZoom - flexibleContainer.y > dy) || (dy > 0 &&
             (flexibleContainer.height +
                 flexibleContainer.y +
                 yTranslation +
                 dy >=
-                height / graphZoom)
+                height / graphZoom))
         ) {
             console.log("yTranslation returned FALSE")
+            console.log("dy", dy, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
+            console.log("first statement dy or y Translation", (dy < 0 || yTranslation < 0))
+            console.log("first truth move up", Math.abs(yTranslation) * graphZoom >=
+                    Math.floor(flexibleContainer.y + dy), Math.abs(yTranslation) * graphZoom, ">=", Math.floor(flexibleContainer.y + dy))
+            console.log("first statement move down", (flexibleContainer.height +
+                flexibleContainer.y +
+                yTranslation +
+                dy >=
+                height / graphZoom))
+            
             return false
+        } else {
+            // console.log("flexContainer.x",flexibleContainer.x,"flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "total width", width);
+            console.log("flexContainer height and width in bounds");
+            return true
         }
-        // console.log("flexContainer.x",flexibleContainer.x,"flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "total width", width);
-        console.log("flexContainer height and width in bounds");
-
-        return true
+        
     };
 
     // controls reading movement of zoomSlider and scaling graph to that zoomScale
@@ -313,8 +324,6 @@ export var drawGraph = function (workbook) {
         if (adaptive || (!adaptive && flexRectInBounds(graphZoom))) {
             zoom.scaleTo(container, zoomScale);
         }
-        
-        
     };
 
     // See setupZoomElements below to see how these are initialized. They are declared here because
@@ -507,19 +516,9 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            // if (inBounds(width, height) && flexRectInBounds(graphZoom)) {
-            if (flexRectInBounds(graphZoom) && inBounds(graphZoom, moveWidth, moveHeight, true)) {
+            if (flexRectInBounds(graphZoom) && inBounds(graphZoom, moveWidth, moveHeight)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-            } 
-            // else if (inBounds(graphZoom, 0, 0)) {
-            //     // ^check if current position in bounds but still not at border,
-            //     // then move remaining amount left in graph
-            //     if (moveWidth !== 0 && inBounds(graphZoom, moveWidth / 3, moveHeight)) {
-            //         zoom.translateBy(zoomContainer, moveWidth / 3, moveHeight);
-            //     } else if (moveHeight !== 0 && inBounds(graphZoom, moveWidth, moveHeight / 3)) {
-            //         zoom.translateBy(zoomContainer, moveWidth, moveHeight / 3);
-            //     }
-            // }
+            }
         }
     }
 
@@ -1477,7 +1476,7 @@ export var drawGraph = function (workbook) {
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
                 return false;
-            } 
+            }
         }
         return true
     }
@@ -1493,7 +1492,7 @@ export var drawGraph = function (workbook) {
 
             // x right bound
             if (!(flexibleContainer.width - flexibleContainer.x  <= width * graphZoom)) {
-                flexibleContainer.width = width - flexibleContainer.x;
+                flexibleContainer.width = (width - flexibleContainer.x) * graphZoom;
                 flexiBoxInBounds = false;
             }
 
@@ -1505,7 +1504,7 @@ export var drawGraph = function (workbook) {
             
             // y bottom bound
             if (!(flexibleContainer.height - flexibleContainer.y <= height * graphZoom)) {
-                flexibleContainer.height = height - flexibleContainer.y;
+                flexibleContainer.height = (height - flexibleContainer.y) * graphZoom;
                 flexiBoxInBounds = false;
             }
         }
