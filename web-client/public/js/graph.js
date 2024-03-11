@@ -268,7 +268,9 @@ export var drawGraph = function (workbook) {
 
     function inBounds(graphZoom, dx, dy, dPad) {
         updateZoomContainerInfo();
-        console.log("dx", dx, "dy", dy, "yTranslation", yTranslation)
+        console.log("dx", dx, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport height", height)
+        console.log("dy", dy, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport width", width)
+        console.log(" ")
 
         if (
           ((dx < 0 || xTranslation < 0) &&
@@ -1432,9 +1434,9 @@ export var drawGraph = function (workbook) {
                 if (controlPoints) {
                     if (controlPoints.includes("A")) {
                         const splitSpaces = controlPoints.split(" ");
-                        const controlPoint = splitSpaces[0].split("M")[1].split(",");
-                        const controlPointX = controlPoint[0];
-                        const controlPointY = controlPoint[1];
+                        const controlPointXY = splitSpaces[2].split(",")
+                        const controlPointX = controlPointXY[0];
+                        const controlPointY = controlPointXY[1];
                         xValuesPaths.push(parseFloat(controlPointX))
                         yValuesPaths.push(parseFloat(controlPointY))
                     }
