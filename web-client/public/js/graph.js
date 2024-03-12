@@ -337,6 +337,7 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
     let prevGrnstateZoomVal;
+    let centerXCoord;
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
@@ -372,6 +373,7 @@ export var drawGraph = function (workbook) {
         // if don't center, then get issue of zooming into the box since not inside the width of the viewport
             if (!adaptive) {
                 center();
+                centerXCoord = xTranslation
             }
 
             $(ZOOM_SLIDER).val(
@@ -1488,6 +1490,7 @@ export var drawGraph = function (workbook) {
     }
 
     function flexRectLimitBounds() {
+        //prevent flexContainer from having bounds outside of bounding box
         if (flexibleContainer) {
             // x left bound
             if (flexibleContainer.x < 0) {
@@ -1532,17 +1535,19 @@ export var drawGraph = function (workbook) {
         
         
         let BOUNDARY_MARGIN = 5;
-
-        let BOUNDARY_MARGIN_X = adaptive? BOUNDARY_MARGIN : graphZoom > 1 ?  Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-        let BOUNDARY_MARGIN_Y = adaptive? BOUNDARY_MARGIN: graphZoom > 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
+        // xTranslation > 0 -> moved to the left? wo right boundary hidden, left is too short
+        let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+        let BOUNDARY_MARGIN_X_RIGHT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation >= centerXCoord ?  Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+        let BOUNDARY_MARGIN_Y = adaptive? BOUNDARY_MARGIN: graphZoom >= 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
         // let BOUNDARY_MARGIN_X = BOUNDARY_MARGIN
         // let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN
         var SELF_REFERRING_Y_OFFSET = 6;
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
-        console.log("xboundary margin", BOUNDARY_MARGIN_X);
+        console.log("xboundary margin", BOUNDARY_MARGIN_X_LEFT, BOUNDARY_MARGIN_X_RIGHT);
         console.log("yboundary margin", BOUNDARY_MARGIN_Y);
+        console.log("xTranslation", xTranslation)
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
@@ -1562,16 +1567,13 @@ export var drawGraph = function (workbook) {
 
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
-                // var rightBoundary = width -
-                //     (d.textWidth + OFFSET_VALUE) -
-                //     BOUNDARY_MARGIN_X -
-                //     selfReferringEdgeWidth
-                //     ;
-                var rightBoundary = width -(d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN_X - selfReferringEdgeWidth;
+                // this creates too much whitespace, want it to be the BOUNDARY_MARGIN_X when can see right side of borerbox
+
+                var rightBoundary = width -(d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN_X_RIGHT - selfReferringEdgeWidth;
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
-                var currentXPos = Math.max(BOUNDARY_MARGIN_X, Math.min(rightBoundary, d.x));
+                var currentXPos = Math.max(BOUNDARY_MARGIN_X_LEFT, Math.min(rightBoundary, d.x));
                 if (adaptive && width < MAX_WIDTH &&
-                    (currentXPos === BOUNDARY_MARGIN_X || currentXPos === rightBoundary)) {
+                    (currentXPos === BOUNDARY_MARGIN_X_LEFT || currentXPos === rightBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         boundingBoxContainer.attr("width", width);
