@@ -12,7 +12,9 @@ import {
     SCHADE_OUTPUT_NAME,
     PPI_DEMO_PATH,
     PPI_DEMO_NAME,
-    FORCE_GRAPH
+    FORCE_GRAPH,
+    NETWORK_PPI_MODE,
+    NETWORK_GRN_MODE
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
 
@@ -148,7 +150,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
                 if (grnState.name.includes(".sif")) {
                     grnState.mode = workbook.workbookType;
                 } else if (grnState.name.includes(".graphml")) {
-                    grnState.mode = "grn";
+                    grnState.mode = NETWORK_GRN_MODE;
                 } else {
                     grnState.mode = workbook.meta.data.workbookType;
                 }
@@ -218,10 +220,10 @@ export const setupLoadAndImportHandlers = (grnState) => {
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
     getWorkbookFromUrl(uploadRoute).done((workbook) => {
-        if (workbook.meta.data.workbookType === "protein-protein-physical-interaction") {
+        if (workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
             grnState.mode = workbook.meta.data.workbookType;
         } else {
-            grnState.mode = "grn";
+            grnState.mode = NETWORK_GRN_MODE;
         }
         grnState.name = name;
         grnState.workbook = workbook;
