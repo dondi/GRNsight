@@ -2,11 +2,7 @@
 // var path = require("path");
 // var demoWorkbooks = require(__dirname + "/demo-workbooks");
 
-<<<<<<< HEAD
 const { NETWORK_PPI_MODE, NETWORK_GRN_MODE, CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
-=======
-const { CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
->>>>>>> beta
 const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
@@ -310,15 +306,9 @@ exports.workbookType = function (workbookFile) {
             const cellA1 = sheet.data[0][0];
 
             if (cellA1 === CELL_A1_GRN) {
-<<<<<<< HEAD
                 workbookType = NETWORK_GRN_MODE;
             } else if (cellA1 === CELL_A1_PPI) {
                 workbookType = NETWORK_PPI_MODE;
-=======
-                workbookType = "grn";
-            } else if (cellA1 === CELL_A1_PPI) {
-                workbookType = "protein-protein-physical-interaction";
->>>>>>> beta
             } else {
                 workbookType = undefined;
             }

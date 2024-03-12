@@ -1,10 +1,6 @@
 // const { meta } = require("eslint/lib/rules/*");
 const xlsx = require("node-xlsx");
-<<<<<<< HEAD
 const { CELL_A1_GRN, CELL_A1_PPI, NETWORK_GRN_MODE } = require("../constants");
-=======
-const { CELL_A1_GRN, CELL_A1_PPI } = require("../constants");
->>>>>>> beta
 
 const buildGeneNameArray = function (genes) {
     const geneNameArray = genes.map(gene => gene["name"]);
