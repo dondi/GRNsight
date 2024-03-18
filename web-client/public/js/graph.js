@@ -176,12 +176,18 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
 
-        if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && inBounds(graphZoom, d3.event.dx, d3.event.dy))) {
-            zoom.translateBy(
-                zoomContainer,
-                scale * (d3.event.x - zoomDragPrevX),
-                scale * (d3.event.y - zoomDragPrevY)
-            );
+        // if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && exportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))) {
+        if (
+          adaptive ||
+          (!adaptive &&
+            flexRectInBounds(graphZoom) &&
+            exportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
+        ) {
+          zoom.translateBy(
+            zoomContainer,
+            scale * (d3.event.x - zoomDragPrevX),
+            scale * (d3.event.y - zoomDragPrevY)
+          );
         }
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
@@ -266,55 +272,63 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    function inBounds(graphZoom, dx, dy) {
+    // TODO: issue with this, might also have to do with boundaries of graph and clamping
+    // does not allow flexbox to go outside of container when move or drag, have to incorporate into tick somehow?
+    function exportBoundsMoveDrag(graphZoom, dx, dy) {
         updateZoomContainerInfo();
-        // console.log("dy", dy, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
-        // console.log("dx", dx, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
-        // console.log(Math.abs(xTranslation) < flexibleContainer.x, !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx))
+        console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
+        console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
 
         // TODO: this handles left border, but the graph still goes through the left edge
         // console.log(!(Math.abs(xTranslation) < flexibleContainer.x), !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx));
-        if (!(Math.abs(yTranslation) < flexibleContainer.y) && (Math.abs(yTranslation) * graphZoom - flexibleContainer.y > dy)) {
-            return false
-        }
+        
+        // if (!(Math.abs(yTranslation) < flexibleContainer.y) && (Math.abs(yTranslation) * graphZoom - flexibleContainer.y > dy * graphZoom)) {
+        //     console.log("first statement false")
+        //     return false
+        // }
+
 
         if (
-          ((dx < 0 || (xTranslation < 0 && Math.abs(xTranslation) > flexibleContainer.x)) &&
+          ((dx * graphZoom < 0 || (xTranslation < 0 && Math.abs(xTranslation) > flexibleContainer.x)) &&
               Math.abs(xTranslation) * graphZoom >=
-                Math.floor(flexibleContainer.x) + dx)) {
+                Math.floor(flexibleContainer.x) + dx * graphZoom)) {
             // BOUNDARY_MARGIN_X = graphZoom > 1 ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+            console.log("second statement false")
             return false
         }
 
-        if (dx > 0 &&
+        if (dx * graphZoom > 0 &&
           (flexibleContainer.width + 
             flexibleContainer.x + 
             xTranslation + 
-            dx >=
+            dx * graphZoom >=
             width / graphZoom)) {
+                console.log("third statement false")
             // BOUNDARY_MARGIN_X = width / graphZoom;
             return false
         }
 
         if (
-            ((dy < 0 || yTranslation < 0) && (Math.abs(yTranslation) > flexibleContainer.y) &&
+            ((dy * graphZoom < 0 || yTranslation < 0) && (Math.abs(yTranslation) > flexibleContainer.y) &&
                 Math.abs(yTranslation) * graphZoom >=
-                    Math.floor(flexibleContainer.y) + dy))
+                    Math.floor(flexibleContainer.y) + dy * graphZoom))
         {
             // console.log("yTranslation returned FALSE")
             // BOUNDARY_MARGIN_Y = graphZoom > 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
+            console.log("fourth statement false")
             return false
         }
 
         if (
-          dy > 0 &&
-          flexibleContainer.height + flexibleContainer.y + yTranslation + dy >=
+          dy * graphZoom > 0 &&
+          flexibleContainer.height + flexibleContainer.y + yTranslation + dy * graphZoom >=
             height / graphZoom
         ) {
             // BOUNDARY_MARGIN_Y = height / graphZoom;
+            console.log("fifth statement false")
             return false
         }
-        //   console.log("flexContainer height and width in bounds");
+        console.log("flexContainer height and width in bounds");
         return true
     };
 
@@ -324,7 +338,7 @@ export var drawGraph = function (workbook) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         }
         var container = zoomContainer;
-        // graphZoom is used in inBounds(width, height) to check if graph in zoomContainer when restricted to viewport
+        // graphZoom is current zoom of
         graphZoom = zoomScale;
         if (adaptive || (!adaptive && flexRectInBounds(graphZoom))) {
             zoom.scaleTo(container, zoomScale);
@@ -524,7 +538,7 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            if (flexRectInBounds(graphZoom) && inBounds(graphZoom, moveWidth, moveHeight)) {
+            if (exportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
             }
         }
@@ -1424,6 +1438,7 @@ export var drawGraph = function (workbook) {
         }
     };
 
+    // there is too much whitespace in flexiContainer
     function calcFlexiBox () {
         const nodes = simulation.nodes()
         let nodeWidth = 0;
@@ -1474,16 +1489,19 @@ export var drawGraph = function (workbook) {
         const maxX = Math.max(...xValues) + nodeWidth;
         const maxY = Math.max(...yValues) + nodeHeight;
 
+        // console.log("minX", minX, "minY", minY, "width", maxX - minX, "height", maxY - minY);
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
+    // this checks if zoomInValue is in bounds when zoom in and out
     function flexRectInBounds(zoomValue) {
         if (flexibleContainer) {
             updateZoomContainerInfo();
-            // validations for zoom and left/right cursor drag and D-pad movement
             if (flexibleContainer.width * zoomValue > width ) {
+                console.log("width out of bounds")
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
+                console.log("height out of bounds")
                 return false;
             }
         }
@@ -1491,26 +1509,24 @@ export var drawGraph = function (workbook) {
     }
 
     function flexRectLimitBounds() {
-        //prevent flexContainer from having bounds outside of bounding box
+        // limit flexContainer from exceeding bounding box
+        // TODO: add 5 so never hit edges exactly
         if (flexibleContainer) {
             // x left bound
             if (flexibleContainer.x < 0) {
-                flexibleContainer.x = 0;
+                flexibleContainer.x = 0 + 5;
             }
-
             // x right bound
             if (flexibleContainer.width > width - flexibleContainer.x) {
-                flexibleContainer.width = width - flexibleContainer.x;
+                flexibleContainer.width = width - flexibleContainer.x - 5;            
             }
-
             // y top bound
             if (flexibleContainer.y < 0) {
-                flexibleContainer.y = 0;
+                flexibleContainer.y = 0 + 5;
             }
-            
             // y bottom bound
             if (flexibleContainer.height > height - flexibleContainer.y) {
-                flexibleContainer.height = height - flexibleContainer.y;
+                flexibleContainer.height = height - flexibleContainer.y - 5;
             }
         }
     }
@@ -1532,7 +1548,9 @@ export var drawGraph = function (workbook) {
         let BOUNDARY_MARGIN = 5;
         // xTranslation > 0 -> moved to the left? wo right boundary hidden, left is too short
         // let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-        // let BOUNDARY_MARGIN_X_RIGHT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation >= centerXCoord ?  Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+        // let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+
+        // let BOUNDARY_MARGIN_X_RIGHT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation >= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
         // let BOUNDARY_MARGIN_Y = adaptive? BOUNDARY_MARGIN: graphZoom >= 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
         let BOUNDARY_MARGIN_X_LEFT = BOUNDARY_MARGIN
         let BOUNDARY_MARGIN_X_RIGHT = BOUNDARY_MARGIN
@@ -1541,9 +1559,6 @@ export var drawGraph = function (workbook) {
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
-        console.log("xboundary margin", BOUNDARY_MARGIN_X_LEFT, BOUNDARY_MARGIN_X_RIGHT);
-        console.log("yboundary margin", BOUNDARY_MARGIN_Y);
-        console.log("xTranslation", xTranslation)
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
