@@ -369,10 +369,11 @@ export var drawGraph = function (workbook) {
 
         // This controls actual movement of slider
         if (adaptive || (!adaptive && flexRectInBounds(calcGraphZoom))) {
-        // don't really want to center anymore for zooming since don't care if see bounding box anymore
+        // TODO: don't really want to center anymore for zooming since don't care if see bounding box anymore
         // if don't center, then get issue of zooming into the box since not inside the width of the viewport
             if (!adaptive) {
                 center();
+                updateZoomContainerInfo();
                 centerXCoord = xTranslation
             }
 
@@ -1495,25 +1496,21 @@ export var drawGraph = function (workbook) {
             // x left bound
             if (flexibleContainer.x < 0) {
                 flexibleContainer.x = 0;
-                return false
             }
 
             // x right bound
-            if (!(flexibleContainer.width - flexibleContainer.x  <= width * graphZoom)) {
-                flexibleContainer.width = (width - flexibleContainer.x) * graphZoom;
-                return false
+            if (flexibleContainer.width > width - flexibleContainer.x) {
+                flexibleContainer.width = width - flexibleContainer.x;
             }
 
             // y top bound
             if (flexibleContainer.y < 0) {
                 flexibleContainer.y = 0;
-                return false
             }
             
             // y bottom bound
-            if (!(flexibleContainer.height - flexibleContainer.y <= height * graphZoom)) {
-                flexibleContainer.height = (height - flexibleContainer.y) * graphZoom;
-                return false
+            if (flexibleContainer.height > height - flexibleContainer.y) {
+                flexibleContainer.height = height - flexibleContainer.y;
             }
         }
     }
@@ -1532,15 +1529,14 @@ export var drawGraph = function (workbook) {
             return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
         };
 
-        
-        
         let BOUNDARY_MARGIN = 5;
         // xTranslation > 0 -> moved to the left? wo right boundary hidden, left is too short
-        let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-        let BOUNDARY_MARGIN_X_RIGHT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation >= centerXCoord ?  Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-        let BOUNDARY_MARGIN_Y = adaptive? BOUNDARY_MARGIN: graphZoom >= 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
-        // let BOUNDARY_MARGIN_X = BOUNDARY_MARGIN
-        // let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN
+        // let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+        // let BOUNDARY_MARGIN_X_RIGHT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation >= centerXCoord ?  Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
+        // let BOUNDARY_MARGIN_Y = adaptive? BOUNDARY_MARGIN: graphZoom >= 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
+        let BOUNDARY_MARGIN_X_LEFT = BOUNDARY_MARGIN
+        let BOUNDARY_MARGIN_X_RIGHT = BOUNDARY_MARGIN
+        let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN
         var SELF_REFERRING_Y_OFFSET = 6;
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
@@ -1568,7 +1564,9 @@ export var drawGraph = function (workbook) {
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
                 // this creates too much whitespace, want it to be the BOUNDARY_MARGIN_X when can see right side of borerbox
-
+                // a stack overflow link to look at: https://stackoverflow.com/questions/26781129/d3-v2-prevent-zooming-and-panning-chart-outside-viewport
+                // could also look at this: https://observablehq.com/@john-guerra/force-directed-adjusted
+                // and look at this too: https://www.w3.org/TR/SVG/coords.html
                 var rightBoundary = width -(d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN_X_RIGHT - selfReferringEdgeWidth;
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(BOUNDARY_MARGIN_X_LEFT, Math.min(rightBoundary, d.x));
