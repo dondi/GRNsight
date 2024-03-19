@@ -176,12 +176,11 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
 
-        // if (adaptive || (!adaptive && flexRectInBounds(graphZoom) && exportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))) {
         if (
           adaptive ||
           (!adaptive &&
             flexRectInBounds(graphZoom) &&
-            exportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy, false))
+            viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy, false))
         ) {
           zoom.translateBy(
             zoomContainer,
@@ -272,47 +271,52 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    function exportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
+    function viewportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
         updateZoomContainerInfo();
-        console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
+        console.log("dx", dx, dx * graphZoom, "flexContainer.x", flexibleContainer.x, "flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "viewport width", width)
         // console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
-        // TODO: take away hardcoded 5 and use BOUNDARY_MARGIN instead
-        if (
-          (flexibleContainer.x <= 5 || xTranslation < 0) &&
-          Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) &&
+        // left border
+        if (xTranslation < 0 &&
+          Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) * graphZoom &&
           (dx < 0 ||
             (dx > 0 &&
-              Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) + dx))
+              Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom))
         ) {
-            console.log("2nd x statement false")
+            console.log("1st x statement false")
           return false;
         }
-
+        
+        //dPad movement when moving left
         if (
           dPadMove &&
           xTranslation < 0 &&
           dx < 0 &&
-          Math.abs(xTranslation + dx) > flexibleContainer.x
+          Math.abs(xTranslation + dx) > flexibleContainer.x * graphZoom
         ) {
             console.log("3rd x statement false")
           return false;
         }
 
-        if (
-          dx > 0 &&
-          flexibleContainer.width +
-            flexibleContainer.x +
-            xTranslation +
-            dx * graphZoom >=
-            width / graphZoom
-        ) {
-            console.log("4th x statement false")
-          return false;
+        // right border
+        if (graphZoom >= 1) {
+            if (dx > 0 &&
+            flexibleContainer.width +
+                flexibleContainer.x +
+                xTranslation +
+                dx * graphZoom >=
+                width / graphZoom
+            ) {
+                console.log("4th x statement false")
+                return false;
+            }
+        } else {
+
         }
+        
 
         // Y-axis boundaries
-        if (
-          dy < 0 && Math.abs(yTranslation) * graphZoom >
+        // moving up, prevents from graph locking at bottom of viewport
+        if (dy < 0 && Math.abs(yTranslation) * graphZoom >
             Math.floor(flexibleContainer.y) + dy * graphZoom
            &&
           !(
@@ -323,9 +327,7 @@ export var drawGraph = function (workbook) {
           return false;
         }
 
-        // TODO: take away hardcoded 5 and use BOUNDARY_MARGIN instead
-        if ((flexibleContainer.y <= 5 ||
-          yTranslation < 0) &&
+        if (yTranslation < 0 &&
           Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) &&
           (dy < 0 ||
             (dy > 0 &&
@@ -556,10 +558,8 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            if (exportBoundsMoveDrag(graphZoom, moveWidth, moveHeight, true)) {
+            if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight, true)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-                updateZoomContainerInfo();
-                console.log("new yTranslation value", yTranslation)
             }
         }
     }
@@ -1530,7 +1530,7 @@ export var drawGraph = function (workbook) {
 
     function flexRectLimitBounds() {
         // limit flexContainer from exceeding bounding box
-        // TODO: add 5 so never hit edges exactly
+        // TODO: add 5 so flexibleContainerRect stays within BOUNDARY_MARGIN, remove hardcoded value later
         if (flexibleContainer) {
             // x left bound
             if (flexibleContainer.x < 0) {
