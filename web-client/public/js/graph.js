@@ -181,7 +181,7 @@ export var drawGraph = function (workbook) {
           adaptive ||
           (!adaptive &&
             flexRectInBounds(graphZoom) &&
-            exportBoundsMoveDragY(graphZoom, d3.event.dx, d3.event.dy))
+            exportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy, false))
         ) {
           zoom.translateBy(
             zoomContainer,
@@ -278,11 +278,10 @@ export var drawGraph = function (workbook) {
     // let prevUpwardMoveViolated = false
     // issue where if drag graph and then move with arrows, exceed bounds, has something to do with yTranslation since for some reason the old value is kept
     // when use cursor, top and bottom bound are shifted up by same amount
-    function exportBoundsMoveDragY(graphZoom, dx, dy) {
+    function exportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
         updateZoomContainerInfo();
         // console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
         console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
-
         // if (
         //   ((dx < 0 || xTranslation < 0) &&
         //     Math.abs(xTranslation) * graphZoom >=
@@ -319,6 +318,10 @@ export var drawGraph = function (workbook) {
               Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy ))
         ) {
           return false;
+        }
+
+        if (dPadMove && yTranslation < 0 && dy < 0 && Math.abs(yTranslation + dy) > flexibleContainer.y) {
+            return false
         }
         
         if (dy > 0 &&
@@ -540,7 +543,7 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            if (exportBoundsMoveDragY(graphZoom, moveWidth, moveHeight)) {
+            if (exportBoundsMoveDrag(graphZoom, moveWidth, moveHeight, true)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
                 updateZoomContainerInfo();
                 console.log("new yTranslation value", yTranslation)
