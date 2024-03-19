@@ -272,32 +272,45 @@ export var drawGraph = function (workbook) {
             .split("(")[1].split(",")[1].split(")")[0]);
     };
 
-    // TODO: issue with this, might also have to do with boundaries of graph and clamping
-    // does not allow flexbox to go outside of container when move or drag, have to incorporate into tick somehow?
-    // NEED TO USE PREVIOUS POSITION
-    // let prevUpwardMoveViolated = false
-    // issue where if drag graph and then move with arrows, exceed bounds, has something to do with yTranslation since for some reason the old value is kept
-    // when use cursor, top and bottom bound are shifted up by same amount
     function exportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
         updateZoomContainerInfo();
-        // console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
-        console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
-        // if (
-        //   ((dx < 0 || xTranslation < 0) &&
-        //     Math.abs(xTranslation) * graphZoom >=
-        //       Math.floor(flexibleContainer.x) + dx * graphZoom &&
-        //     !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx * graphZoom)) ||
-        //   (dx > 0 &&
-        //     flexibleContainer.width + flexibleContainer.x + xTranslation + dx * graphZoom >=
-        //       width / graphZoom)
-        // ) {
-        //   return false;
-        // } 
+        console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
+        // console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
+        // TODO: take away hardcoded 5 and use BOUNDARY_MARGIN instead
+        if (
+          (flexibleContainer.x <= 5 || xTranslation < 0) &&
+          Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) &&
+          (dx < 0 ||
+            (dx > 0 &&
+              Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) + dx))
+        ) {
+            console.log("2nd x statement false")
+          return false;
+        }
 
-        // TODO: this handles left border, but the graph still goes through the left edge
-        // console.log(!(Math.abs(xTranslation) < flexibleContainer.x), !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx));
+        if (
+          dPadMove &&
+          xTranslation < 0 &&
+          dx < 0 &&
+          Math.abs(xTranslation + dx) > flexibleContainer.x
+        ) {
+            console.log("3rd x statement false")
+          return false;
+        }
 
-        // this allows to move up and down from bottom border, but goes through top border
+        if (
+          dx > 0 &&
+          flexibleContainer.width +
+            flexibleContainer.x +
+            xTranslation +
+            dx * graphZoom >=
+            width / graphZoom
+        ) {
+            console.log("4th x statement false")
+          return false;
+        }
+
+        // Y-axis boundaries
         if (
           dy < 0 && Math.abs(yTranslation) * graphZoom >
             Math.floor(flexibleContainer.y) + dy * graphZoom
@@ -310,6 +323,7 @@ export var drawGraph = function (workbook) {
           return false;
         }
 
+        // TODO: take away hardcoded 5 and use BOUNDARY_MARGIN instead
         if ((flexibleContainer.y <= 5 ||
           yTranslation < 0) &&
           Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) &&
@@ -330,7 +344,6 @@ export var drawGraph = function (workbook) {
             yTranslation +
             dy * graphZoom >=
             height / graphZoom) {
-                console.log("downward movement returning false")
             return false
         }
 
