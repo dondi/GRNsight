@@ -181,7 +181,7 @@ export var drawGraph = function (workbook) {
           adaptive ||
           (!adaptive &&
             flexRectInBounds(graphZoom) &&
-            exportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
+            exportBoundsMoveDragY(graphZoom, d3.event.dx, d3.event.dy))
         ) {
           zoom.translateBy(
             zoomContainer,
@@ -274,61 +274,63 @@ export var drawGraph = function (workbook) {
 
     // TODO: issue with this, might also have to do with boundaries of graph and clamping
     // does not allow flexbox to go outside of container when move or drag, have to incorporate into tick somehow?
-    function exportBoundsMoveDrag(graphZoom, dx, dy) {
+    // NEED TO USE PREVIOUS POSITION
+    // let prevUpwardMoveViolated = false
+    // issue where if drag graph and then move with arrows, exceed bounds, has something to do with yTranslation since for some reason the old value is kept
+    // when use cursor, top and bottom bound are shifted up by same amount
+    function exportBoundsMoveDragY(graphZoom, dx, dy) {
         updateZoomContainerInfo();
-        console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
+        // console.log("dx", dx, dx * graphZoom, "flexibleContainer.x", flexibleContainer.x, "xTranslation", xTranslation, "viewport width", width)
         console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
+
+        // if (
+        //   ((dx < 0 || xTranslation < 0) &&
+        //     Math.abs(xTranslation) * graphZoom >=
+        //       Math.floor(flexibleContainer.x) + dx * graphZoom &&
+        //     !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx * graphZoom)) ||
+        //   (dx > 0 &&
+        //     flexibleContainer.width + flexibleContainer.x + xTranslation + dx * graphZoom >=
+        //       width / graphZoom)
+        // ) {
+        //   return false;
+        // } 
 
         // TODO: this handles left border, but the graph still goes through the left edge
         // console.log(!(Math.abs(xTranslation) < flexibleContainer.x), !(Math.abs(xTranslation) * graphZoom - flexibleContainer.x > dx));
-        
-        // if (!(Math.abs(yTranslation) < flexibleContainer.y) && (Math.abs(yTranslation) * graphZoom - flexibleContainer.y > dy * graphZoom)) {
-        //     console.log("first statement false")
-        //     return false
-        // }
 
-
+        // this allows to move up and down from bottom border, but goes through top border
         if (
-          ((dx * graphZoom < 0 || (xTranslation < 0 && Math.abs(xTranslation) > flexibleContainer.x)) &&
-              Math.abs(xTranslation) * graphZoom >=
-                Math.floor(flexibleContainer.x) + dx * graphZoom)) {
-            // BOUNDARY_MARGIN_X = graphZoom > 1 ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-            console.log("second statement false")
-            return false
-        }
-
-        if (dx * graphZoom > 0 &&
-          (flexibleContainer.width + 
-            flexibleContainer.x + 
-            xTranslation + 
-            dx * graphZoom >=
-            width / graphZoom)) {
-                console.log("third statement false")
-            // BOUNDARY_MARGIN_X = width / graphZoom;
-            return false
-        }
-
-        if (
-            ((dy * graphZoom < 0 || yTranslation < 0) && (Math.abs(yTranslation) > flexibleContainer.y) &&
-                Math.abs(yTranslation) * graphZoom >=
-                    Math.floor(flexibleContainer.y) + dy * graphZoom))
-        {
-            // console.log("yTranslation returned FALSE")
-            // BOUNDARY_MARGIN_Y = graphZoom > 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
-            console.log("fourth statement false")
-            return false
-        }
-
-        if (
-          dy * graphZoom > 0 &&
-          flexibleContainer.height + flexibleContainer.y + yTranslation + dy * graphZoom >=
-            height / graphZoom
+          dy < 0 && Math.abs(yTranslation) * graphZoom >
+            Math.floor(flexibleContainer.y) + dy * graphZoom
+           &&
+          !(
+            Math.abs(yTranslation) * graphZoom - flexibleContainer.y >
+            dy * graphZoom
+          )
         ) {
-            // BOUNDARY_MARGIN_Y = height / graphZoom;
-            console.log("fifth statement false")
+          return false;
+        }
+
+        if ((flexibleContainer.y <= 5 ||
+          yTranslation < 0) &&
+          Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) &&
+          (dy < 0 ||
+            (dy > 0 &&
+              Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy ))
+        ) {
+          return false;
+        }
+        
+        if (dy > 0 &&
+        flexibleContainer.height +
+            flexibleContainer.y +
+            yTranslation +
+            dy * graphZoom >=
+            height / graphZoom) {
+                console.log("downward movement returning false")
             return false
         }
-        console.log("flexContainer height and width in bounds");
+
         return true
     };
 
@@ -538,8 +540,10 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            if (exportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
+            if (exportBoundsMoveDragY(graphZoom, moveWidth, moveHeight)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+                updateZoomContainerInfo();
+                console.log("new yTranslation value", yTranslation)
             }
         }
     }
@@ -1517,15 +1521,15 @@ export var drawGraph = function (workbook) {
                 flexibleContainer.x = 0 + 5;
             }
             // x right bound
-            if (flexibleContainer.width > width - flexibleContainer.x) {
-                flexibleContainer.width = width - flexibleContainer.x - 5;            
+            if (flexibleContainer.width > width - flexibleContainer.x - 5) {
+                flexibleContainer.width = width - flexibleContainer.x - 5;
             }
             // y top bound
             if (flexibleContainer.y < 0) {
                 flexibleContainer.y = 0 + 5;
             }
             // y bottom bound
-            if (flexibleContainer.height > height - flexibleContainer.y) {
+            if (flexibleContainer.height > height - flexibleContainer.y - 5) {
                 flexibleContainer.height = height - flexibleContainer.y - 5;
             }
         }
