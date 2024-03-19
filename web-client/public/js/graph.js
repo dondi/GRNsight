@@ -310,6 +310,18 @@ export var drawGraph = function (workbook) {
                 return false;
             }
         } else {
+            // this is somewhat of a solution, still a white gap sometimes
+            if (
+              dx > 0 &&
+              (flexibleContainer.width +
+                flexibleContainer.x +
+                xTranslation +
+                dx * graphZoom) + flexibleContainer.x * graphZoom >=
+                width / graphZoom
+            ) {
+              console.log("4th x statement false");
+              return false;
+            }
 
         }
         
