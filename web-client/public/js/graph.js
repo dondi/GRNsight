@@ -273,8 +273,6 @@ export var drawGraph = function (workbook) {
 
     function viewportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
         updateZoomContainerInfo();
-        console.log("dx", dx, dx * graphZoom, "flexContainer.x", flexibleContainer.x, "flexContainer.width", flexibleContainer.width, "xTranslation", xTranslation, "viewport width", width)
-        // console.log("dy", dy, dy * graphZoom, "flexibleContainer.y", flexibleContainer.y, "yTranslation", yTranslation, "viewport height", height)
         // left border
         if (xTranslation < 0 &&
           Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) * graphZoom &&
@@ -298,36 +296,12 @@ export var drawGraph = function (workbook) {
         }
 
         // right border
-        if (graphZoom >= 1) {
-            if (dx > 0 &&
-            flexibleContainer.width +
-                flexibleContainer.x +
-                xTranslation +
-                dx * graphZoom >=
-                width / graphZoom
-            ) {
-                console.log("4th x statement false")
-                return false;
-            }
-        } else {
-            // this is somewhat of a solution, still a white gap sometimes
-            if (
-              dx > 0 &&
-              (flexibleContainer.width +
-                flexibleContainer.x +
-                xTranslation +
-                dx * graphZoom) + flexibleContainer.x * graphZoom >=
-                width / graphZoom
-            ) {
-              console.log("4th x statement false");
-              return false;
-            }
-
+        if (xTranslation + dx > width - (graphZoom * flexibleContainer.width + graphZoom * flexibleContainer.x)) {
+            return false
         }
-        
 
         // Y-axis boundaries
-        // moving up, prevents from graph locking at bottom of viewport
+        // when moving graph up, prevents from graph from locking at bottom of viewport
         if (dy < 0 && Math.abs(yTranslation) * graphZoom >
             Math.floor(flexibleContainer.y) + dy * graphZoom
            &&
@@ -336,31 +310,33 @@ export var drawGraph = function (workbook) {
             dy * graphZoom
           )
         ) {
-          return false;
+            console.log("first y statement false")
+            return false;
         }
 
+        // prevents graph from going through top border
         if (yTranslation < 0 &&
-          Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) &&
+          Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) * graphZoom &&
           (dy < 0 ||
             (dy > 0 &&
-              Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy ))
+              Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy * graphZoom))
         ) {
-          return false;
+            console.log("second y statement false")
+            return false;
         }
 
+        // moving up with dPad
         if (dPadMove && yTranslation < 0 && dy < 0 && Math.abs(yTranslation + dy) > flexibleContainer.y) {
+            console.log("third y statement false")
             return false
         }
         
-        if (dy > 0 &&
-        flexibleContainer.height +
-            flexibleContainer.y +
-            yTranslation +
-            dy * graphZoom >=
-            height / graphZoom) {
+        // bottom border
+        if (yTranslation + dy > height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
+            console.log("hard coded y statement retuning false")
             return false
         }
-
+        
         return true
     };
 
@@ -370,10 +346,9 @@ export var drawGraph = function (workbook) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         }
         var container = zoomContainer;
-        // graphZoom is current zoom of
-        graphZoom = zoomScale;
         if (adaptive || (!adaptive && flexRectInBounds(graphZoom))) {
             zoom.scaleTo(container, zoomScale);
+            graphZoom = zoomScale
         }
     };
 
@@ -383,7 +358,7 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
     let prevGrnstateZoomVal;
-    let centerXCoord;
+    // let centerXCoord;
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
@@ -420,7 +395,6 @@ export var drawGraph = function (workbook) {
             if (!adaptive) {
                 center();
                 updateZoomContainerInfo();
-                centerXCoord = xTranslation
             }
 
             $(ZOOM_SLIDER).val(
