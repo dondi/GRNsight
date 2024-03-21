@@ -275,12 +275,10 @@ export var drawGraph = function (workbook) {
         updateZoomContainerInfo();
         // left border
         if (xTranslation < 0 &&
-          Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) * graphZoom &&
-          (dx < 0 ||
-            (dx > 0 &&
-              Math.abs(xTranslation) >= Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom))
-        ) {
-            console.log("1st x statement false")
+              Math.abs(xTranslation) >=
+                Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom)
+         {
+          console.log("1st x statement false");
           return false;
         }
         
@@ -301,19 +299,6 @@ export var drawGraph = function (workbook) {
         }
 
         // Y-axis boundaries
-        // when moving graph up, prevents from graph from locking at bottom of viewport
-        if (dy < 0 && Math.abs(yTranslation) * graphZoom >
-            Math.floor(flexibleContainer.y) + dy * graphZoom
-           &&
-          !(
-            Math.abs(yTranslation) * graphZoom - flexibleContainer.y >
-            dy * graphZoom
-          )
-        ) {
-            console.log("first y statement false")
-            return false;
-        }
-
         // prevents graph from going through top border
         if (yTranslation < 0 &&
           Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) * graphZoom &&
