@@ -3,20 +3,14 @@ import csv
 import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy import text
-
-PROCESSED_GENES = "../script-results/processed-loader-files/gene.csv"
-PROCESSED_PROTEIN = "../script-results/processed-loader-files/protein.csv"
-MISSING_GENE_DESTINATION = '../script-results/processed-loader-files/missing-genes.csv'
-UPDATE_GENE_DESTINATION = '../script-results/processed-loader-files/update-genes.csv'
-MISSING_PROTEIN_DESTINATION = '../script-results/processed-loader-files/missing-proteins.csv'
-UPDATE_PROTEIN_DESTINATION = '../script-results/processed-loader-files/update-proteins.csv'
+from constants import *
 
 def get_all_genes_proteins():
     # Create envrionment variable for db url
     db = create_engine(os.environ['DB_URL'])
     
     with db.connect() as connection:
-        result_set = connection.execute(text("SELECT * FROM protein_protein_interactions.gene"))
+        result_set = connection.execute(text(f"SELECT * FROM {Constants.DATABASE_NAMESPACE}.gene"))
         
         genes_record = result_set.fetchall()
         
@@ -30,7 +24,7 @@ def get_all_genes_proteins():
             db_genes[key] = value
         
         # Collect proteins
-        result_set = connection.execute(text("SELECT * FROM protein_protein_interactions.protein"))
+        result_set = connection.execute(text(f"SELECT * FROM {Constants.DATABASE_NAMESPACE}.protein"))
         proteins_record = result_set.fetchall()
         
         db_proteins = {}
@@ -51,8 +45,8 @@ print("Protein", db_proteins)
 genes_to_update = {}
 missing_genes = {}
 
-print(f'Processing file {PROCESSED_GENES}')
-with open(PROCESSED_GENES, 'r+', encoding="UTF-8") as f:
+print(f'Processing file {Constants.PROCESSED_GENES}')
+with open(Constants.PROCESSED_GENES, 'r+', encoding="UTF-8") as f:
     i = 0
     reader = csv.reader(f)
     for row in reader:
@@ -68,14 +62,12 @@ with open(PROCESSED_GENES, 'r+', encoding="UTF-8") as f:
                 missing_genes[key] = value
                 print(f'Gene {display_gene_id} not found in the database')
             elif db_genes[key] != value:
-                print("db_genes[key]", db_genes[key])
-                print("value", value)
                 # the value is not the same, let's update
                 genes_to_update[key] = value
         i+=1
         
 print(f'Creating missing-genes.csv\n')
-gene_file = open(MISSING_GENE_DESTINATION, 'w')
+gene_file = open(Constants.MISSING_GENE_DESTINATION, 'w')
 headers = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID'
 gene_file.write(f'{headers}\n')
 for gene in missing_genes:
@@ -83,7 +75,7 @@ for gene in missing_genes:
 gene_file.close()
 
 print(f'Creating update-genes.csv\n')
-gene_file = open(UPDATE_GENE_DESTINATION, 'w')
+gene_file = open(Constants.UPDATE_GENE_DESTINATION, 'w')
 headers = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID'
 gene_file.write(f'{headers}\n')
 for gene in genes_to_update:
@@ -93,8 +85,8 @@ gene_file.close()
 missing_proteins = {}
 proteins_to_update = {}
 
-print(f"Processing file {PROCESSED_PROTEIN}")
-with open(PROCESSED_PROTEIN, 'r+', encoding="UTF-8") as f:
+print(f"Processing file {Constants.PROCESSED_PROTEIN}")
+with open(Constants.PROCESSED_PROTEIN, 'r+', encoding="UTF-8") as f:
     i = 0
     reader = csv.reader(f)
     for row in reader:
@@ -117,7 +109,7 @@ with open(PROCESSED_PROTEIN, 'r+', encoding="UTF-8") as f:
         i+=1
         
 print(f'Creating missing-proteins.csv\n')
-protein_file = open(MISSING_PROTEIN_DESTINATION, 'w')
+protein_file = open(Constants.MISSING_PROTEIN_DESTINATION, 'w')
 headers = f'Standard Name\tGene Systematic Name\tLength\t Molecular Weight\tPI\tTaxon ID'
 protein_file.write(f'{headers}\n')
 for protein in missing_proteins:
@@ -125,7 +117,7 @@ for protein in missing_proteins:
 protein_file.close()
 
 print(f'Creating update-proteins.csv\n')
-protein_file = open(UPDATE_PROTEIN_DESTINATION, 'w')
+protein_file = open(Constants.UPDATE_PROTEIN_DESTINATION, 'w')
 headers = f'Standard Name\tGene Systematic Name\tLength\t Molecular Weight\tPI\tTaxon ID'
 protein_file.write(f'{headers}\n')
 for protein in proteins_to_update:

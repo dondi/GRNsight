@@ -1,5 +1,10 @@
 import csv
 import re
+import sys
+
+sys.path.insert(1, '../database')
+from constants import *
+from utils import *
 # Usage
 # python3 loader.py | psql postgresql://localhost/postgres
 """
@@ -11,13 +16,13 @@ some kind of database library for the loading process, instead passing the state
 directly into a database command line utility such as `psql`.
 """
 
-"""
+"""x
 This function Loads Network Data Sources into the database
 """
-def LOAD_SOURCES():
+def load_sources():
     print('COPY gene_regulatory_network.source (time_stamp, source, display_name) FROM stdin;')
-    NETWORK_DATA_SOURCE = '../script-results/processed-loader-files/source.csv'
-    with open(NETWORK_DATA_SOURCE, 'r+') as f:
+    # NETWORK_DATA_SOURCE = '../script-results/processed-loader-files/source.csv'
+    with open(Constants.NETWORK_DATA_SOURCE, 'r+') as f:
         reader = csv.reader(f)
         row_num = 0
         for row in reader:
@@ -34,7 +39,7 @@ def LOAD_SOURCES():
 """
 This function Loads Gene ID Mapping into the database
 """
-def LOAD_GENES():
+def load_genes():
     print('COPY gene_regulatory_network.gene (gene_id, display_gene_id, species, taxon_id, regulator) FROM stdin;')
     GENE_SOURCE = '../script-results/processed-loader-files/gene.csv'
     with open(GENE_SOURCE, 'r+') as f:
@@ -56,7 +61,7 @@ def LOAD_GENES():
 """
 This function Loads the Network Matrix into the database
 """
-def LOAD_NETWORK():
+def load_network():
     print('COPY gene_regulatory_network.network (regulator_gene_id, target_gene_id, taxon_id, time_stamp, source) FROM stdin;')
     NETWORK_SOURCE = '../script-results/processed-loader-files/network.csv'
     with open(NETWORK_SOURCE, 'r+') as f:
@@ -74,6 +79,11 @@ def LOAD_NETWORK():
             row_num += 1
     print('\\.')
 
-LOAD_SOURCES()
-LOAD_GENES()
-LOAD_NETWORK()
+# load_sources()
+Utils.load_sources(Constants.NETWORK_DATA_SOURCE, Constants.DATABASE_NAMESPACE)
+
+# load_genes()
+Utils.load_genes(Constants.GENE_SOURCE, Constants.DATABASE_NAMESPACE, False)
+
+# load_network()
+Utils.load_network(Constants.NETWORK_SOURCE, Constants.DATABASE_NAMESPACE, False)
