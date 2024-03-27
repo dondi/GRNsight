@@ -14,6 +14,6 @@ directly into a database command line utility such as `psql`.
 """
 
 Utils.load_sources(Constants.NETWORK_DATA_SOURCE, Constants.DATABASE_NAMESPACE)
-Utils.load_genes(Constants.GENE_SOURCE, Constants.DATABASE_NAMESPACE, True)
+Utils.load_genes(Constants.GENE_SOURCE, Constants.DATABASE_NAMESPACE,is_protein=True)
 Utils.load_proteins(Constants.PROTEIN_SOURCE, Constants.DATABASE_NAMESPACE)
-Utils.load_network(Constants.NETWORK_SOURCE, Constants.DATABASE_NAMESPACE, True)
+Utils.load_network(Constants.NETWORK_SOURCE, Constants.DATABASE_NAMESPACE,is_protein=True)
