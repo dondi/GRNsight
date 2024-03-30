@@ -1540,22 +1540,17 @@ export var drawGraph = function (workbook) {
         };
 
         let BOUNDARY_MARGIN = 5;
-        // xTranslation > 0 -> moved to the left? wo right boundary hidden, left is too short
-        // let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-        // let BOUNDARY_MARGIN_X_LEFT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation <= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-
-        // let BOUNDARY_MARGIN_X_RIGHT = adaptive ? BOUNDARY_MARGIN : graphZoom >= 1 && xTranslation >= centerXCoord ? Math.abs(xTranslation) * graphZoom: BOUNDARY_MARGIN;
-
-        // let BOUNDARY_MARGIN_Y = adaptive? BOUNDARY_MARGIN: graphZoom >= 1 ? Math.abs(yTranslation) * graphZoom: BOUNDARY_MARGIN;
         // Left and right boundary margins:
         let BOUNDARY_MARGIN_X_L = BOUNDARY_MARGIN;
         let BOUNDARY_MARGIN_X_R = BOUNDARY_MARGIN;
+        let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN;
         if (!adaptive && flexibleContainer && graphZoom >= 1) {
             
             if (
               Math.abs(xTranslation) >
               Math.floor(flexibleContainer.x) * graphZoom
             ) {
+            // bouncing behavior because for some reason 15 pixels too far to the right
                 BOUNDARY_MARGIN_X_L = Math.abs(xTranslation);
             }
             if (
@@ -1564,13 +1559,16 @@ export var drawGraph = function (workbook) {
                 (graphZoom * flexibleContainer.width +
                   graphZoom * flexibleContainer.x)
             ) {
-                console.log(flexibleContainer.x + flexibleContainer.width, xTranslation)
                 BOUNDARY_MARGIN_X_R = Math.abs(xTranslation);
+                console.log("BOUNDARY_MARGIN_X_R", BOUNDARY_MARGIN_X_R, flexibleContainer.x + flexibleContainer.width)
+            }
+            if (
+              Math.abs(yTranslation) >
+              Math.floor(flexibleContainer.y) * graphZoom
+            ) {
+                BOUNDARY_MARGIN_Y = Math.abs(yTranslation);
             }
         }
-        // must be equal to the left border of exportContainer * graphZoom, right?
-        // export container - exportContainer * graphZoom and then take into account xTranslation for margin
-        let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN
         var SELF_REFERRING_Y_OFFSET = 6;
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
@@ -1600,11 +1598,12 @@ export var drawGraph = function (workbook) {
                 // could also look at this: https://observablehq.com/@john-guerra/force-directed-adjusted
                 // and look at this too: https://www.w3.org/TR/SVG/coords.html
                 var rightBoundary = width -(d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN_X_R - selfReferringEdgeWidth;
+                console.log("rightBoundary", rightBoundary, width, d.textWidth, BOUNDARY_MARGIN_X_R, selfReferringEdgeWidth)
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(BOUNDARY_MARGIN_X_L, Math.min(rightBoundary, d.x));
                 if (width < MAX_WIDTH &&
                     (currentXPos === BOUNDARY_MARGIN_X_L || currentXPos === rightBoundary)) {
-                    if (!d3.select(this).classed("fixed")) {
+                    // if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         boundingBoxContainer.attr("width", width);
 
@@ -1620,7 +1619,7 @@ export var drawGraph = function (workbook) {
                             .attr("x", function (d) {
                                 return d.x;
                             });
-                    }
+                    // }
                 }
                 return d.x = currentXPos;
             }).attr("y", function (d) {
@@ -1630,9 +1629,9 @@ export var drawGraph = function (workbook) {
                 var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN_Y - selfReferringEdgeHeight;
                 // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentYPos = Math.max(BOUNDARY_MARGIN_Y, Math.min(bottomBoundary, d.y));
-                if (adaptive && height < MAX_HEIGHT &&
+                if (height < MAX_HEIGHT &&
                   (currentYPos === BOUNDARY_MARGIN_Y || currentYPos === bottomBoundary)) {
-                    if (!d3.select(this).classed("fixed")) {
+                    // if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
                         link
@@ -1646,7 +1645,7 @@ export var drawGraph = function (workbook) {
                         node.attr("y", function (d) {
                             return d.y;
                         });
-                    }
+                    // }
                 }
                 return d.y = currentYPos;
             }).attr("transform", function (d) {
