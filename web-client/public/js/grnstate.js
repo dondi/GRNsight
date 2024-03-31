@@ -10,7 +10,8 @@ import {
   DEFAULT_MAX_LOG_FOLD_CHANGE,
   DEFAULT_ZOOM_VALUE,
   FORCE_GRAPH,
-  VIEWPORT_INIT
+  VIEWPORT_INIT,
+  NETWORK_GRN_MODE
 } from "./constants";
 let currentWorkbook = null;
 
@@ -41,7 +42,7 @@ const annotateLinks = workbook => {
 };
 
 export const grnState = {
-    mode: "grn",    // GRNsight will display GRN view unless specified
+    mode: NETWORK_GRN_MODE,    // GRNsight will display GRN view unless specified
     name: null,
     simulation: undefined,
     newWorkbook: false,

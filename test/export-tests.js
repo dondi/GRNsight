@@ -2,6 +2,7 @@ var expect = require("chai").expect;
 var extend = require("jquery-extend");
 var xlsx = require("node-xlsx");
 var test = require("./test");
+const { CELL_A1_PPI, CELL_A1_GRN } = require("../server/controllers/constants");
 
 var exportController = require(__dirname + "/../server/controllers/export-controller")();
 var constants = require(__dirname + "/../server/controllers/constants");
@@ -20,7 +21,8 @@ var unweightedTestWorkbook = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "unweighted"
+    sheetType: "unweighted",
+    workbookType: constants.NETWORK_GRN_MODE
 };
 
 var weightedTestWorkbook = {
@@ -37,7 +39,8 @@ var weightedTestWorkbook = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "weighted"
+    sheetType: "weighted",
+    workbookType: constants.NETWORK_GRN_MODE
 };
 
 var unweightedTestWorkbookWithCycle = {
@@ -57,7 +60,8 @@ var unweightedTestWorkbookWithCycle = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "unweighted"
+    sheetType: "unweighted",
+    workbookType: "constants.NETWORK_GRN_MODE"
 };
 
 var weightedTestWorkbookWithCycle = {
@@ -77,7 +81,8 @@ var weightedTestWorkbookWithCycle = {
     ],
     errors: [],
     warnings: [],
-    sheetType: "weighted"
+    sheetType: "weighted",
+    workbookType: constants.NETWORK_GRN_MODE
 };
 
 describe("Export to SIF", function () {
@@ -645,7 +650,7 @@ const inputWorkbook = {
             "simulation_timepoints": [0, 0.1, 0.2],
             "species": "Saccharomyces cerevisiae",
             "taxon_id": 559292,
-            "workbookType": "grn"
+            "workbookType": constants.NETWORK_GRN_MODE
         }
     },
 
@@ -759,7 +764,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network",
                 data: [
-                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    [CELL_A1_GRN, "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
                     ["AFT2", 0, 1, 1],
                     ["CIN5", 0, 0, 1]
@@ -769,7 +774,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network_weights",
                 data: [
-                    ["cols regulators/rows targets", "ACE2", "AFT2", "CIN5"],
+                    [CELL_A1_GRN, "ACE2", "AFT2", "CIN5"],
                     ["ACE2", 1, 0, 0],
                     ["AFT2", 0, 1, 1],
                     ["CIN5", 0, 0, 1]
@@ -797,7 +802,7 @@ describe("Export to spreadsheet", function () {
                     ["simulation_timepoints", 0, 0.1, 0.2],
                     ["species", "Saccharomyces cerevisiae"],
                     ["taxon_id", 559292],
-                    ["workbookType", "grn"]
+                    ["workbookType", constants.NETWORK_GRN_MODE]
                 ]
             },
 
@@ -892,7 +897,7 @@ describe("Export to spreadsheet", function () {
             {
                 name: "network",
                 data: [
-                    ["protein 1/protein 2", "Aim32p", "Ccr4p", "Erv1p"],
+                    [CELL_A1_PPI, "Aim32p", "Ccr4p", "Erv1p"],
                     ["Aim32p", 0, 0, 0],
                     ["Ccr4p", 1, 1, 0],
                     ["Erv1p", 1, 0, 1]
@@ -903,7 +908,7 @@ describe("Export to spreadsheet", function () {
                 name: "optimization_parameters",
                 data: [
                     ["optimization_parameter", "value"],
-                    ["workbookType", "protein-protein-physical-interaction"],
+                    ["workbookType", constants.NETWORK_PPI_MODE],
                     ["species", "Saccharomyces cerevisiae"],
                     ["taxon_id", "559292"]
                 ]
