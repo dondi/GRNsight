@@ -1,5 +1,6 @@
 // const { meta } = require("eslint/lib/rules/*");
 const xlsx = require("node-xlsx");
+const { CELL_A1_GRN, CELL_A1_PPI, NETWORK_GRN_MODE } = require("../constants");
 
 const buildGeneNameArray = function (genes) {
     const geneNameArray = genes.map(gene => gene["name"]);
@@ -18,10 +19,10 @@ const buildNetworkSheet = function (genes, links, workbookType) {
     // Place the gene name in the beginning of the network sheet array.
     // EX: ["CIN5", 0, 0, 1]
     Object.keys(geneNameArray).forEach(index => networkSheet[index][0] = geneNameArray[index]);
-    if (workbookType === "grn") {
-        geneNameArray.unshift("cols regulators/rows targets");
+    if (workbookType === NETWORK_GRN_MODE) {
+        geneNameArray.unshift(CELL_A1_GRN);
     } else {
-        geneNameArray.unshift("protein 1/protein 2");
+        geneNameArray.unshift(CELL_A1_PPI);
     }
 
     links.forEach((link) => {

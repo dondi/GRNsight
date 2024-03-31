@@ -194,5 +194,6 @@ export const VIEWPORT_SIZE_FIT_SIDEBAR                  = "#boundBoxFit";
 export const VIEWPORT_OPTION_CLASS                      = ".viewportOption";
 export const VIEWPORT_OPTION_CLASS_SIDEBAR              = ".boundBoxSize";
 
-
+export const NETWORK_PPI_MODE                           = "protein-protein-physical-interaction";
+export const NETWORK_GRN_MODE                           = "grn";
 

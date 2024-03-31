@@ -11,6 +11,7 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
+    NETWORK_GRN_MODE
 } from "./constants";
 
 /* globals d3 */
@@ -50,6 +51,7 @@ export var updaters = {
 export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
+    var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
     d3.selectAll("svg").remove();
 
     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
@@ -60,8 +62,6 @@ export var drawGraph = function (workbook) {
     var grayThreshold = +$("#grayThresholdInput").val();
 
     var dashedLine = $("#dashedGrayLineButton").prop("checked");
-
-    var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
 
     $("#warningMessage").html(workbook.warnings.length !== 0 ? "Click here in order to view warnings." : "");
 
@@ -159,35 +159,40 @@ export var drawGraph = function (workbook) {
 
     var zoomDragPrevX = 0;
     var zoomDragPrevY = 0;
+
     var zoomDragStarted = function () {
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
     };
 
+    // allows zoom slider to be moved and limits movement when !adaptive
     var zoomDragged = function () {
-        if (adaptive) {
-            var scale = 1;
-            if (zoomContainer.attr("transform")) {
-                var string = zoomContainer.attr("transform");
-                scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
-            }
-            zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
-            zoomDragPrevX = d3.event.x;
-            zoomDragPrevY = d3.event.y;
+        var scale = 1;
+        if (zoomContainer.attr("transform")) {
+            var string = zoomContainer.attr("transform");
+            scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
+        if (!adaptive && d3.event.x >= ZOOM_DISPLAY_MIDDLE ) {
+            if (inBounds(d3.event.dx, d3.event.dy)) {
+                zoom.translateBy(
+                    zoomContainer,
+                    scale * (d3.event.x - zoomDragPrevX),
+                    scale * (d3.event.y - zoomDragPrevY)
+                );
+            }
+        } else if (adaptive) {
+            zoom.translateBy(zoomContainer, scale * (d3.event.x - zoomDragPrevX), scale * (d3.event.y - zoomDragPrevY));
+        }
+        zoomDragPrevX = d3.event.x;
+        zoomDragPrevY = d3.event.y;
     };
 
     var zoomDragEnded = function () {
         $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        if (!adaptive) {
-            $container.removeClass(CURSOR_CLASSES);
-        }
     };
 
+    // zoomDrag keeps track of cursor position
     var zoomDrag = d3.drag()
         .on("start", zoomDragStarted)
         .on("drag", zoomDragged)
@@ -214,7 +219,6 @@ export var drawGraph = function (workbook) {
     svg.style("pointer-events", "all").call(zoomDrag)
         .style("font-family", "sans-serif");
 
-
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
     }
@@ -231,6 +235,7 @@ export var drawGraph = function (workbook) {
         .attr("stroke", "none" )
         .append("g");
 
+    // this controls the D-pad
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
     arrowMovement.forEach(function (direction) {
@@ -240,14 +245,61 @@ export var drawGraph = function (workbook) {
     });
     d3.select(".center").on("click", center);
 
+    let graphZoom = 0;
+    let xTranslation = 0;
+    let yTranslation = 0;
+
+    const updateZoomContainerInfo = () => {
+        // transform attribute of zoomContainer contains translation info about graph
+        xTranslation = parseFloat(zoomContainer
+            .attr("transform")
+            .split("(")[1].split(",")[0]);
+
+        yTranslation = parseFloat(zoomContainer
+            .attr("transform")
+            .split("(")[1].split(",")[1].split(")")[0]);
+    };
+
+    const inBounds = (width, height) => {
+        /*
+        * right:  Math.abs(xTranslation + width * graphZoom) / zoomContainerWidth <= graphZoom - 1.0
+        * bottom: Math.abs(yTranslation + height * graphZoom) / zoomContainerHeight <= graphZoom - 1.0
+        * top: y coordinate == -0, left: x coordinate == -0
+        * Amount of movement is dependent on graphZoom, so actual movement is not just the width or height
+            but width or height multiplied by graphZoom
+        * multiply Math.abs(yTranslation + height * graphZoom) / zoomContainerHeight by 1000 because
+            decimals like 0.005 (in the thousandths place) or less are out of bounds,
+            then get floor of that to ensure that decimal does not have 0 in hundredths place
+        */
+        updateZoomContainerInfo();
+
+        return (
+          Math.abs(xTranslation + width * graphZoom) / $container.width() <=
+            graphZoom - 1.0 &&
+          Math.floor(
+            (Math.abs(xTranslation + width * graphZoom) / $container.width()) *
+              1000
+          ) !== 0 &&
+          Math.abs(yTranslation + height * graphZoom) / $container.height() <=
+            graphZoom - 1.0 &&
+          Math.floor(
+            (Math.abs(yTranslation + height * graphZoom) /
+              $container.height()) *
+              1000
+          ) !== 0 &&
+          xTranslation + width * graphZoom <= 0 &&
+          yTranslation + height * graphZoom <= 0
+        );
+    };
+
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
-        } else if (!adaptive && zoomScale >= MIDDLE_SCALE) {
-            $container.removeClass(CURSOR_CLASSES);
         }
         var container = zoomContainer;
         zoom.scaleTo(container, zoomScale);
+        // graphZoom is used in inBounds(width, height) to check if graph in zoomContainer when restricted to viewport
+        graphZoom = zoomScale;
     };
 
     // See setupZoomElements below to see how these are initialized. They are declared here because
@@ -257,13 +309,26 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
 
     const updateAppBasedOnZoomValue = () => {
-
-        if (!adaptive) {
-            grnState.zoomValue = 100.0;
+        // If !adaptive, set Zoomvalue to ZOOM_DISPLAY_MIDDLE, 100, so do not zoom outside graph
+        if (!adaptive && grnState.zoomValue < ZOOM_DISPLAY_MIDDLE) {
+            grnState.zoomValue = ZOOM_DISPLAY_MIDDLE;
         }
 
         const zoomDisplay = grnState.zoomValue;
-        setGraphZoom((zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(zoomDisplay));
+        if (adaptive) {
+            setGraphZoom(
+                (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleLeft
+                : zoomScaleRight)(zoomDisplay)
+            );
+        } else if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
+            setGraphZoom(
+                (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleLeft
+                : zoomScaleRight)(zoomDisplay)
+            );
+            center();
+        }
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
@@ -275,8 +340,22 @@ export var drawGraph = function (workbook) {
             $(ZOOM_INPUT).val(finalDisplay);
         }
 
-        $(ZOOM_SLIDER).val((finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)
-            .invert(finalDisplay));
+        if (adaptive) {
+            $(ZOOM_SLIDER).val(
+              (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight
+              ).invert(finalDisplay)
+            );
+        } else if (!adaptive && grnState.zoomValue >= ZOOM_DISPLAY_MIDDLE) {
+            // only allow minimum zoom value to be 100% so that do not go outside of viewport
+            $(ZOOM_SLIDER).val(
+            (finalDisplay <= ZOOM_DISPLAY_MIDDLE
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight
+            ).invert(finalDisplay)
+            );
+        }
     };
 
     /**
@@ -359,20 +438,14 @@ export var drawGraph = function (workbook) {
     var restrictGraphToViewport = function (fixed) {
         if (!fixed) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
-            $(document).ready(function () {
-                $(".scale-and-scroll").show();
-            });
             $("input[name=viewport]").removeProp("checked");
-            $container.addClass("cursorGrabbing");
+            // $container.addClass("cursorGrabbing");
             adaptive = true;
             d3.select("rect").attr("stroke", "none");
             center();
         } else if (fixed) {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
             $("input[name=viewport]").prop("checked", "checked");
-            $(document).ready(function () {
-                $(".scale-and-scroll").hide();
-            });
             adaptive = false;
             $container.removeClass(CURSOR_CLASSES);
             if (grnState.zoomValue > ZOOM_DISPLAY_MIDDLE) {
@@ -407,10 +480,25 @@ export var drawGraph = function (workbook) {
         zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
     }
 
+    // move: moves graph with D-pad
     function move (direction) {
-        var width = direction === "left" ? -50 : (direction === "right" ? 50 : 0);
-        var height = direction === "up" ? -50 : (direction === "down" ? 50 : 0);
-        zoom.translateBy(zoomContainer, width, height);
+        var width = direction === "left" ? -50 : direction === "right" ? 50 : 0;
+        var height = direction === "up" ? -50 : direction === "down" ? 50 : 0;
+        if (adaptive) {
+            zoom.translateBy(zoomContainer, width, height);
+        } else if (!adaptive && grnState.zoomValue !== ZOOM_DISPLAY_MIDDLE) {
+            if (inBounds(width, height)) {
+                zoom.translateBy(zoomContainer, width, height);
+            } else if (inBounds(0, 0)) {
+                // ^check if current position in bounds but still not at border,
+                // then move remaining amount left in graph
+                if (width !== 0 && inBounds(width / graphZoom / 3, height)) {
+                    zoom.translateBy(zoomContainer, width / graphZoom / 3, height);
+                } else if (height !== 0 && inBounds(width, height / graphZoom / 3)) {
+                    zoom.translateBy(zoomContainer, width, height / graphZoom / 3);
+                }
+            }
+        }
     }
 
     var defs = boundingBoxContainer.append("defs");
@@ -595,7 +683,7 @@ export var drawGraph = function (workbook) {
                         });
                 } else {
                     // Arrowheads
-                    if (grnState.mode === "grn") {
+                    if (grnState.mode === NETWORK_GRN_MODE) {
                         if (d.strokeWidth === 2) {
                             d.strokeWidth = 4;
                         }
@@ -1326,6 +1414,7 @@ export var drawGraph = function (workbook) {
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
+        // this controls movement and position of nodes
         try {
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
@@ -1367,17 +1456,16 @@ export var drawGraph = function (workbook) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
                         link
-                            .attr("y1", function (d) {
-                                return d.source.y;
-                            })
-                            .attr("y2", function (d) {
-                                return d.target.y;
-                            });
+                        .attr("y1", function (d) {
+                            return d.source.y;
+                        })
+                        .attr("y2", function (d) {
+                            return d.target.y;
+                        });
 
-                        node
-                            .attr("y", function (d) {
-                                return d.y;
-                            });
+                        node.attr("y", function (d) {
+                            return d.y;
+                        });
                     }
                 }
                 return d.y = currentYPos;
