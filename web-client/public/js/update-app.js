@@ -938,7 +938,7 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         $(NODE_COLORING_MENU).addClass("disabled");
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
-        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");        
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
     }
 
