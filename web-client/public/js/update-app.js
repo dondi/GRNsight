@@ -878,7 +878,6 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_MENU).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
-        console.log("node coloring menus shown")
         if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
@@ -939,9 +938,7 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
         $(NODE_COLORING_MENU).addClass("disabled");
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
-        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
-        
-        console.log("node coloring hidden")
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");        
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
     }
 
