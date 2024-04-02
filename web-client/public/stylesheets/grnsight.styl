@@ -163,8 +163,9 @@ nav.navbar.navbar-default
   font-size: 12px
   display: inline-block
 
-.dropdown-menu > li > a:hover
+.dropdown-menu > li > a:hover, .dropdown-menu > #node-coloring-navbar-options > li > a:hover
   background-color: #dfebe5
+  text-decoration: none;
 
 #undoResetButton
   margin-top: 5px
@@ -246,7 +247,7 @@ nav.navbar.navbar-default
 .dropdown-submenu
     position:relative
 
-.dropdown-submenu>.dropdown-menu
+.dropdown-submenu>.dropdown-menu, .dropdown-menu > #node-coloring-navbar-options dropdown-submenu
     top:0
     left:100%
     margin-top:-6px
@@ -255,8 +256,11 @@ nav.navbar.navbar-default
     -moz-border-radius:0 6px 6px 6px
     border-radius:0 6px 6px 6px
 
-.dropdown-submenu:hover>.dropdown-menu
+.dropdown-submenu:hover>.dropdown-menu, #node-coloring-navbar-options .dropdown-submenu:hover>.dropdown-menu
     display:block
+
+.dropdown-submenu:hover>.dropdown-menu, #node-coloring-navbar-options .disabled:hover>.dropdown-menu
+    display:none
 
 .dropdown-submenu>a:after
     display:block
@@ -274,22 +278,43 @@ nav.navbar.navbar-default
 .dropdown-submenu:hover>a:after
     border-left-color:#ffffff
 
-.dropdown-submenu.pull-left
+#node-coloring-navbar-options>li>a
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+
+#node-coloring-navbar-options>.disabled>a, #node-coloring-navbar-options
+    color: #999;
+    cursor: not-allowed;
+    text-decoration: none;
+    aria-disabled: true;
+
+.dropdown-menu > #node-coloring-navbar-options > .disabled > a:hover
+    background-color: #FFFFFF;
+
+.dropdown-submenu.pull-left, #node-coloring-navbar-options .dropdown-submenu.pull-left
     float:none
 
-.dropdown-submenu.pull-left>.dropdown-menu
+#node-coloring-navbar-options
+    cursor: pointer
+
+.dropdown-submenu.pull-left>.dropdown-menu, .dropdown-submenu.pull-left, .dropdown-menu #node-coloring-navbar-options .dropdown-submenu.pull-left
     left:-100%
     margin-left:10px
     -webkit-border-radius:6px 0 6px 6px
     -moz-border-radius:6px 0 6px 6px
     border-radius:6px 0 6px 6px
 
-.dropdown a.with-input
+.dropdown a.with-input, #node-coloring-navbar-options a.with-input
     display:flex
     align-items:center
     user-select:none
 
-.dropdown a.with-input>*:last-child
+.dropdown a.with-input>*:last-child, #node-coloring-navbar-options a.with-input > *:last-child
     margin-left:auto
 
 // Graph statistics styling is due to absolute position and size of grnsight-container
