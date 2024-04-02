@@ -17,7 +17,7 @@ def get_all_genes():
     with db.connect() as connection:
         result_set = connection.execute(
         f"""
-            SELECT display_gene_id, gene_id FROM gene_regulatory_network.gene;
+            SELECT display_gene_id, gene_id FROM gene_regulatory_network.gene
         """)
         result = result_set.fetchall()
         return list(result)
