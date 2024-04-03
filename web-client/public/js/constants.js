@@ -131,6 +131,7 @@ export const EXPRESSION_DB_LOADER_TEXT                  = ".expression-db-loader
 export const DATA_SET_SELECT                            = "#data-set-select";
 export const NODE_COLORING_MENU                         = ".node-coloring";
 export const NODE_COLORING_MENU_CLASS                   = ".node-coloring-menu";
+export const NODE_COLORING_NAVBAR_OPTIONS               = "#node-coloring-navbar-options";
 export const NODE_COLORING_SIDEBAR_PANEL                = "#nodeColoringSidebarPanel";
 export const NODE_COLORING_SIDEBAR_HEADER_LINK          = "#nodeColoringHeaderLink";
 export const NODE_COLORING_SIDEBAR_BODY                 = ".nodeColoringSidebarBody";
