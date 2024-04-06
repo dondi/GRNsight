@@ -1427,7 +1427,7 @@ export var drawGraph = function (workbook) {
     };
 
     // there is too much whitespace in flexiContainer
-    function calcFlexiBox (BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R) {
+    function calcFlexiBox (BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y) {
         const nodes = simulation.nodes()
         let nodeWidth = 0;
         if (nodes.length > 0) {
@@ -1471,15 +1471,17 @@ export var drawGraph = function (workbook) {
         // const yValues = yValuesPaths.concat(yValuesNodes);
 
         let minX = Math.min(...xValuesNodes);
-        let minY = Math.min(...yValuesNodes);
-
         let maxX = Math.max(...xValuesNodes) + nodeWidth;
+
+        let minY = Math.min(...yValuesNodes);
         let maxY = Math.max(...yValuesNodes) + nodeHeight;
 
         // handle left x and y boundaries to not exceed BOUNDARY_MARGIN
         minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
         // TODO: probably need to factor in graphZoom
         maxX = maxX > $container.width() ? $container.width() - BOUNDARY_MARGIN_X_R : maxX;
+        minY = minY < BOUNDARY_MARGIN_Y ? BOUNDARY_MARGIN_Y : minY;
+        maxY = maxY > $container.height() ? $container.height() - BOUNDARY_MARGIN_Y : maxY;
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
@@ -1506,20 +1508,6 @@ export var drawGraph = function (workbook) {
       // limit flexContainer from exceeding bounding box
       // TODO: add 5 so flexibleContainerRect stays within BOUNDARY_MARGIN, remove hardcoded value later
       if (flexibleContainer) {
-        // x right bound
-        if (
-            (graphZoom * flexibleContainer.width +
-              graphZoom * flexibleContainer.x) > $container.width() * graphZoom - BOUNDARY_MARGIN_X_R
-        ) {
-            // flexibleContainer.width = $container.width() - flexibleContainer.width - BOUNDARY_MARGIN_X_R;
-          console.log(
-            "right boundary exceeds",
-            BOUNDARY_MARGIN_X_R,
-            $container.width() -
-              (graphZoom * flexibleContainer.width +
-                graphZoom * flexibleContainer.x)
-          );
-        }
         // y top bound
         if (flexibleContainer.y < BOUNDARY_MARGIN_Y) {
           flexibleContainer.y = BOUNDARY_MARGIN_Y;
@@ -1580,8 +1568,7 @@ export var drawGraph = function (workbook) {
         var OFFSET_VALUE = 5;
 
         if (!adaptive) {
-            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R);
-
+            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y);
             const flexDimensions = `flex.x
               ${flexibleContainer.x}
               flex.width
