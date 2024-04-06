@@ -1427,7 +1427,7 @@ export var drawGraph = function (workbook) {
     };
 
     // there is too much whitespace in flexiContainer
-    function calcFlexiBox (BOUNDARY_MARGIN_X_L) {
+    function calcFlexiBox (BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R) {
         const nodes = simulation.nodes()
         let nodeWidth = 0;
         if (nodes.length > 0) {
@@ -1471,14 +1471,15 @@ export var drawGraph = function (workbook) {
         // const yValues = yValuesPaths.concat(yValuesNodes);
 
         let minX = Math.min(...xValuesNodes);
-        const minY = Math.min(...yValuesNodes);
+        let minY = Math.min(...yValuesNodes);
 
-        const maxX = Math.max(...xValuesNodes) + nodeWidth;
-        const maxY = Math.max(...yValuesNodes) + nodeHeight;
+        let maxX = Math.max(...xValuesNodes) + nodeWidth;
+        let maxY = Math.max(...yValuesNodes) + nodeHeight;
 
-        // handle left x boundary to not be less than 0 
-        console.log("left boundary", BOUNDARY_MARGIN_X_L)
+        // handle left x and y boundaries to not exceed BOUNDARY_MARGIN
         minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
+        // TODO: probably need to factor in graphZoom
+        maxX = maxX > $container.width() ? $container.width() - BOUNDARY_MARGIN_X_R : maxX;
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
@@ -1527,16 +1528,6 @@ export var drawGraph = function (workbook) {
         if (flexibleContainer.height > height - flexibleContainer.y) {
           flexibleContainer.height = height - flexibleContainer.y;
         }
-
-        const flexDimensions = `flex.x
-              ${flexibleContainer.x}
-              flex.width
-              ${flexibleContainer.width}
-              flex.y
-              ${flexibleContainer.y}
-              flex.height
-              ${flexibleContainer.height}`;
-        $("#flexiBox-dimensions").text(flexDimensions);
       }
     }
 
@@ -1589,8 +1580,17 @@ export var drawGraph = function (workbook) {
         var OFFSET_VALUE = 5;
 
         if (!adaptive) {
-            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L);
-            flexRectLimitBounds(BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_Y);
+            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R);
+
+            const flexDimensions = `flex.x
+              ${flexibleContainer.x}
+              flex.width
+              ${flexibleContainer.width}
+              flex.y
+              ${flexibleContainer.y}
+              flex.height
+              ${flexibleContainer.height}`;
+            $("#flexiBox-dimensions").text(flexDimensions);
 
             flexibleContainerRect
               .attr("x", flexibleContainer.x)
