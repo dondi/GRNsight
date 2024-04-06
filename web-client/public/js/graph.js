@@ -1427,7 +1427,7 @@ export var drawGraph = function (workbook) {
     };
 
     // there is too much whitespace in flexiContainer
-    function calcFlexiBox () {
+    function calcFlexiBox (BOUNDARY_MARGIN_X_L) {
         const nodes = simulation.nodes()
         let nodeWidth = 0;
         if (nodes.length > 0) {
@@ -1470,12 +1470,15 @@ export var drawGraph = function (workbook) {
         // const xValues = xValuesPaths.concat(xValuesNodes);
         // const yValues = yValuesPaths.concat(yValuesNodes);
 
-        const minX = Math.min(...xValuesNodes);
+        let minX = Math.min(...xValuesNodes);
         const minY = Math.min(...yValuesNodes);
 
         const maxX = Math.max(...xValuesNodes) + nodeWidth;
         const maxY = Math.max(...yValuesNodes) + nodeHeight;
 
+        // handle left x boundary to not be less than 0 
+        console.log("left boundary", BOUNDARY_MARGIN_X_L)
+        minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
@@ -1502,11 +1505,6 @@ export var drawGraph = function (workbook) {
       // limit flexContainer from exceeding bounding box
       // TODO: add 5 so flexibleContainerRect stays within BOUNDARY_MARGIN, remove hardcoded value later
       if (flexibleContainer) {
-        // x left bound
-        if (flexibleContainer.x < BOUNDARY_MARGIN_X_L) {
-        //   flexibleContainer.x = BOUNDARY_MARGIN_X_L;
-          console.log("left boundary exceeds", BOUNDARY_MARGIN_X_L);
-        }
         // x right bound
         if (
             (graphZoom * flexibleContainer.width +
@@ -1529,6 +1527,16 @@ export var drawGraph = function (workbook) {
         if (flexibleContainer.height > height - flexibleContainer.y) {
           flexibleContainer.height = height - flexibleContainer.y;
         }
+
+        const flexDimensions = `flex.x
+              ${flexibleContainer.x}
+              flex.width
+              ${flexibleContainer.width}
+              flex.y
+              ${flexibleContainer.y}
+              flex.height
+              ${flexibleContainer.height}`;
+        $("#flexiBox-dimensions").text(flexDimensions);
       }
     }
 
@@ -1551,44 +1559,44 @@ export var drawGraph = function (workbook) {
         let BOUNDARY_MARGIN_X_L = BOUNDARY_MARGIN;
         let BOUNDARY_MARGIN_X_R = BOUNDARY_MARGIN;
         let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN;
-        if (!adaptive && flexibleContainer && graphZoom >= 1) {
+        // if (!adaptive && flexibleContainer && graphZoom >= 1) {
+            // if (
+            //   Math.abs(xTranslation) >
+            //   Math.floor(flexibleContainer.x) * graphZoom
+            // ) {
+            // // bouncing behavior because for some reason 15 pixels too far to the right
+            //     BOUNDARY_MARGIN_X_L = Math.abs(xTranslation);
+            // }
+            // if (
+            //   xTranslation >
+            //   $container.width() -
+            //     (graphZoom * flexibleContainer.width +
+            //       graphZoom * flexibleContainer.x)
+            // ) {
+            //     BOUNDARY_MARGIN_X_R = Math.abs(xTranslation);
+            // }
+            // if (
+            //   Math.abs(yTranslation) >
+            //   Math.floor(flexibleContainer.y) * graphZoom
+            // ) {
+            //     BOUNDARY_MARGIN_Y = Math.abs(yTranslation);
+            // }
             
-            if (
-              Math.abs(xTranslation) >
-              Math.floor(flexibleContainer.x) * graphZoom
-            ) {
-            // bouncing behavior because for some reason 15 pixels too far to the right
-                BOUNDARY_MARGIN_X_L = Math.abs(xTranslation);
-            }
-            if (
-              xTranslation >
-              $container.width() -
-                (graphZoom * flexibleContainer.width +
-                  graphZoom * flexibleContainer.x)
-            ) {
-                BOUNDARY_MARGIN_X_R = Math.abs(xTranslation);
-            }
-            if (
-              Math.abs(yTranslation) >
-              Math.floor(flexibleContainer.y) * graphZoom
-            ) {
-                BOUNDARY_MARGIN_Y = Math.abs(yTranslation);
-            }
-        }
+        // }
         var SELF_REFERRING_Y_OFFSET = 6;
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
         if (!adaptive) {
-            flexibleContainer = calcFlexiBox();
+            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L);
             flexRectLimitBounds(BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_Y);
 
             flexibleContainerRect
-                .attr("x", flexibleContainer.x)
-                .attr("y", flexibleContainer.y)
-                .attr("width", flexibleContainer.width)
-                .attr("height", flexibleContainer.height);
+              .attr("x", flexibleContainer.x)
+              .attr("y", flexibleContainer.y)
+              .attr("width", flexibleContainer.width)
+              .attr("height", flexibleContainer.height);
             // console.log(flexibleContainer.x, flexibleContainer.width)
         }
         
