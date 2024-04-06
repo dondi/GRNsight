@@ -279,7 +279,6 @@ export var drawGraph = function (workbook) {
               Math.abs(xTranslation) >=
                 Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom)
          {
-          console.log("1st x statement false");
           return false;
         }
         
@@ -290,7 +289,6 @@ export var drawGraph = function (workbook) {
           dx < 0 &&
           Math.abs(xTranslation + dx) > flexibleContainer.x * graphZoom
         ) {
-            console.log("3rd x statement false")
           return false;
         }
 
@@ -341,7 +339,7 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
     let prevGrnstateZoomVal;
-    // let centerXCoord;
+    let centerXCoord;
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
@@ -378,6 +376,7 @@ export var drawGraph = function (workbook) {
             if (!adaptive) {
                 center();
                 updateZoomContainerInfo();
+                centerXCoord = xTranslation
             }
 
             $(ZOOM_SLIDER).val(
@@ -1438,46 +1437,45 @@ export var drawGraph = function (workbook) {
         let xValuesPaths = []
         let yValuesPaths = []
 
-        link.selectAll("path").each( function(pathData) {
-            if (pathData.source) {
-                // Log the "d" attribute for each path
-                const controlPoints = d3.select(this).attr("d");
-                if (controlPoints) {
-                    if (controlPoints.includes("A")) {
-                        const splitSpaces = controlPoints.split(" ");
-                        const controlPointXY = splitSpaces[2].split(",")
-                        const controlPointX = controlPointXY[0];
-                        const controlPointY = controlPointXY[1];
-                        xValuesPaths.push(parseFloat(controlPointX))
-                        yValuesPaths.push(parseFloat(controlPointY))
-                    }
-                    else if (controlPoints.includes("C")) {
-                        const splitC = controlPoints.split("C");
+        // link.selectAll("path").each( function(pathData) {
+        //     if (pathData.source) {
+        //         // Log the "d" attribute for each path
+        //         const controlPoints = d3.select(this).attr("d");
+        //         if (controlPoints) {
+        //             if (controlPoints.includes("A")) {
+        //                 const splitSpaces = controlPoints.split(" ");
+        //                 const controlPointXY = splitSpaces[2].split(",")
+        //                 const controlPointX = controlPointXY[0];
+        //                 const controlPointY = controlPointXY[1];
+        //                 xValuesPaths.push(parseFloat(controlPointX))
+        //                 yValuesPaths.push(parseFloat(controlPointY))
+        //             }
+        //             else if (controlPoints.includes("C")) {
+        //                 const splitC = controlPoints.split("C");
 
-                        splitC[1].split(",").forEach((coordinates) => {
-                            const splitSpaces = coordinates.split(" ");
-                            const xValue = splitSpaces[splitSpaces.length - 2];
-                            const yValue = splitSpaces[splitSpaces.length - 1];
-                            xValuesPaths.push(parseFloat(xValue));
-                            yValuesPaths.push(parseFloat(yValue));
-                        });
-                    }
-                }
-            }
-        });
+        //                 splitC[1].split(",").forEach((coordinates) => {
+        //                     const splitSpaces = coordinates.split(" ");
+        //                     const xValue = splitSpaces[splitSpaces.length - 2];
+        //                     const yValue = splitSpaces[splitSpaces.length - 1];
+        //                     xValuesPaths.push(parseFloat(xValue));
+        //                     yValuesPaths.push(parseFloat(yValue));
+        //                 });
+        //             }
+        //         }
+        //     }
+        // });
         const xValuesNodes = nodes.map((node) => node.x);
         const yValuesNodes = nodes.map((node) => node.y);
 
-        const xValues = xValuesPaths.concat(xValuesNodes);
-        const yValues = yValuesPaths.concat(yValuesNodes);
+        // const xValues = xValuesPaths.concat(xValuesNodes);
+        // const yValues = yValuesPaths.concat(yValuesNodes);
 
-        const minX = Math.min(...xValues);
-        const minY = Math.min(...yValues);
+        const minX = Math.min(...xValuesNodes);
+        const minY = Math.min(...yValuesNodes);
 
-        const maxX = Math.max(...xValues) + nodeWidth;
-        const maxY = Math.max(...yValues) + nodeHeight;
+        const maxX = Math.max(...xValuesNodes) + nodeWidth;
+        const maxY = Math.max(...yValuesNodes) + nodeHeight;
 
-        // console.log("minX", minX, "minY", minY, "width", maxX - minX, "height", maxY - minY);
         return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
     }
 
@@ -1498,30 +1496,38 @@ export var drawGraph = function (workbook) {
 
     function flexRectLimitBounds(
       BOUNDARY_MARGIN_X_L,
-      BOUNDARY_MARGIN_X_R
+      BOUNDARY_MARGIN_X_R,
+      BOUNDARY_MARGIN_Y
     ) {
       // limit flexContainer from exceeding bounding box
       // TODO: add 5 so flexibleContainerRect stays within BOUNDARY_MARGIN, remove hardcoded value later
       if (flexibleContainer) {
         // x left bound
-        if (flexibleContainer.x < 0) {
-          flexibleContainer.x = BOUNDARY_MARGIN_X_L;
+        if (flexibleContainer.x < BOUNDARY_MARGIN_X_L) {
+        //   flexibleContainer.x = BOUNDARY_MARGIN_X_L;
+          console.log("left boundary exceeds", BOUNDARY_MARGIN_X_L);
         }
         // x right bound
         if (
-          flexibleContainer.width >
-          width - flexibleContainer.x - BOUNDARY_MARGIN_X_R
+            (graphZoom * flexibleContainer.width +
+              graphZoom * flexibleContainer.x) > $container.width() * graphZoom - BOUNDARY_MARGIN_X_R
         ) {
-          flexibleContainer.width =
-            width - flexibleContainer.x - BOUNDARY_MARGIN_X_R;
+            // flexibleContainer.width = $container.width() - flexibleContainer.width - BOUNDARY_MARGIN_X_R;
+          console.log(
+            "right boundary exceeds",
+            BOUNDARY_MARGIN_X_R,
+            $container.width() -
+              (graphZoom * flexibleContainer.width +
+                graphZoom * flexibleContainer.x)
+          );
         }
         // y top bound
-        if (flexibleContainer.y < 0) {
-          flexibleContainer.y = 0 + 5;
+        if (flexibleContainer.y < BOUNDARY_MARGIN_Y) {
+          flexibleContainer.y = BOUNDARY_MARGIN_Y;
         }
         // y bottom bound
-        if (flexibleContainer.height > height - flexibleContainer.y - 5) {
-          flexibleContainer.height = height - flexibleContainer.y - 5;
+        if (flexibleContainer.height > height - flexibleContainer.y) {
+          flexibleContainer.height = height - flexibleContainer.y;
         }
       }
     }
@@ -1561,7 +1567,6 @@ export var drawGraph = function (workbook) {
                   graphZoom * flexibleContainer.x)
             ) {
                 BOUNDARY_MARGIN_X_R = Math.abs(xTranslation);
-                console.log("BOUNDARY_MARGIN_X_R", BOUNDARY_MARGIN_X_R, flexibleContainer.x + flexibleContainer.width)
             }
             if (
               Math.abs(yTranslation) >
@@ -1577,13 +1582,14 @@ export var drawGraph = function (workbook) {
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
-            flexRectLimitBounds(BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_X_L);
+            flexRectLimitBounds(BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_Y);
 
             flexibleContainerRect
                 .attr("x", flexibleContainer.x)
                 .attr("y", flexibleContainer.y)
                 .attr("width", flexibleContainer.width)
                 .attr("height", flexibleContainer.height);
+            // console.log(flexibleContainer.x, flexibleContainer.width)
         }
         
 
