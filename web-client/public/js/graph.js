@@ -278,10 +278,10 @@ export var drawGraph = function (workbook) {
         if (xTranslation < 0 &&
               Math.abs(xTranslation) >=
                 Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom)
-         {
-          return false;
+        {
+            return false;
         }
-        
+
         //dPad movement when moving left
         if (
           dPadMove &&
@@ -289,7 +289,7 @@ export var drawGraph = function (workbook) {
           dx < 0 &&
           Math.abs(xTranslation + dx) > flexibleContainer.x * graphZoom
         ) {
-          return false;
+            return false;
         }
 
         // right border
@@ -340,6 +340,7 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderRight;
     let prevGrnstateZoomVal;
     let centerXCoord;
+    let centerYCoord;
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
@@ -376,7 +377,8 @@ export var drawGraph = function (workbook) {
             if (!adaptive) {
                 center();
                 updateZoomContainerInfo();
-                centerXCoord = xTranslation
+                centerXCoord = xTranslation;
+                centerYCoord = yTranslation;
             }
 
             $(ZOOM_SLIDER).val(
@@ -1427,7 +1429,7 @@ export var drawGraph = function (workbook) {
     };
 
     // there is too much whitespace in flexiContainer
-    function calcFlexiBox (BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y) {
+    function calcFlexiBox (BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y_T, BOUNDARY_MARGIN_Y_B) {
         const nodes = simulation.nodes()
         let nodeWidth = 0;
         if (nodes.length > 0) {
@@ -1480,9 +1482,9 @@ export var drawGraph = function (workbook) {
         minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
         // TODO: probably need to factor in graphZoom
         maxX = maxX > $container.width() ? $container.width() - BOUNDARY_MARGIN_X_R : maxX;
-        minY = minY < BOUNDARY_MARGIN_Y ? BOUNDARY_MARGIN_Y : minY;
-        maxY = maxY > $container.height() ? $container.height() - BOUNDARY_MARGIN_Y : maxY;
-        return {x: minX, y: minY, width: maxX - minX, height: maxY - minY};
+        minY = minY < BOUNDARY_MARGIN_Y_T ? BOUNDARY_MARGIN_Y_T : minY;
+        maxY = maxY > $container.height() ? $container.height() - BOUNDARY_MARGIN_Y_B : maxY;
+        return {x: minX, y: minY, width: maxX - minX, height: maxY - minY, maxX: maxX, maxY: maxY};
     }
 
     // this checks if zoomInValue is in bounds when zoom in and out
@@ -1498,25 +1500,6 @@ export var drawGraph = function (workbook) {
             }
         }
         return true
-    }
-
-    function flexRectLimitBounds(
-      BOUNDARY_MARGIN_X_L,
-      BOUNDARY_MARGIN_X_R,
-      BOUNDARY_MARGIN_Y
-    ) {
-      // limit flexContainer from exceeding bounding box
-      // TODO: add 5 so flexibleContainerRect stays within BOUNDARY_MARGIN, remove hardcoded value later
-      if (flexibleContainer) {
-        // y top bound
-        if (flexibleContainer.y < BOUNDARY_MARGIN_Y) {
-          flexibleContainer.y = BOUNDARY_MARGIN_Y;
-        }
-        // y bottom bound
-        if (flexibleContainer.height > height - flexibleContainer.y) {
-          flexibleContainer.height = height - flexibleContainer.y;
-        }
-      }
     }
 
     // Tick only runs while the graph physics are still running.
@@ -1537,46 +1520,64 @@ export var drawGraph = function (workbook) {
         // Left and right boundary margins:
         let BOUNDARY_MARGIN_X_L = BOUNDARY_MARGIN;
         let BOUNDARY_MARGIN_X_R = BOUNDARY_MARGIN;
-        let BOUNDARY_MARGIN_Y = BOUNDARY_MARGIN;
-        // if (!adaptive && flexibleContainer && graphZoom >= 1) {
-            // if (
-            //   Math.abs(xTranslation) >
-            //   Math.floor(flexibleContainer.x) * graphZoom
-            // ) {
-            // // bouncing behavior because for some reason 15 pixels too far to the right
-            //     BOUNDARY_MARGIN_X_L = Math.abs(xTranslation);
-            // }
-            // if (
-            //   xTranslation >
-            //   $container.width() -
-            //     (graphZoom * flexibleContainer.width +
-            //       graphZoom * flexibleContainer.x)
-            // ) {
-            //     BOUNDARY_MARGIN_X_R = Math.abs(xTranslation);
-            // }
-            // if (
-            //   Math.abs(yTranslation) >
-            //   Math.floor(flexibleContainer.y) * graphZoom
-            // ) {
-            //     BOUNDARY_MARGIN_Y = Math.abs(yTranslation);
-            // }
-            
-        // }
+        // top and bottom boundary margins:
+        let BOUNDARY_MARGIN_Y_T = BOUNDARY_MARGIN;
+        let BOUNDARY_MARGIN_Y_B = BOUNDARY_MARGIN;
+        if (!adaptive && flexibleContainer && graphZoom >= 1) {
+            if (Math.abs(xTranslation) >=
+              Math.floor(flexibleContainer.x) * graphZoom
+            ) {
+                BOUNDARY_MARGIN_X_L = Math.abs(xTranslation) / graphZoom;
+            }
+            if (
+              xTranslation >
+              $container.width() -
+                (graphZoom * flexibleContainer.width +
+                  graphZoom * flexibleContainer.x)
+            ) {
+              console.log("right bound violated");
+              BOUNDARY_MARGIN_X_R = Math.abs(xTranslation) / graphZoom;
+            }
+            if (
+              Math.abs(yTranslation) >=
+              Math.floor(flexibleContainer.y) * graphZoom
+            ) {
+                // console.log("top bound violated")
+                // BOUNDARY_MARGIN_Y_T = Math.abs(xTranslation);
+            }
+
+            if (yTranslation >= height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
+                // console.log("bottom bound violated")
+                // BOUNDARY_MARGIN_Y_B = Math.abs(xTranslation);
+            }
+        }
+
         var SELF_REFERRING_Y_OFFSET = 6;
         var MAX_WIDTH = 5000;
         var MAX_HEIGHT = 5000;
         var OFFSET_VALUE = 5;
 
         if (!adaptive) {
-            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y);
-            const flexDimensions = `flex.x
-              ${flexibleContainer.x}
-              flex.width
-              ${flexibleContainer.width}
-              flex.y
-              ${flexibleContainer.y}
-              flex.height
-              ${flexibleContainer.height}`;
+            flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y_T, BOUNDARY_MARGIN_Y_B);
+            const flexDimensions = `xTrnslt
+                ${Math.round(xTranslation)}
+                yTrnslt
+                ${Math.round(yTranslation)}
+                flx.x
+                ${Math.round(flexibleContainer.x)}
+                flx.w
+                ${Math.round(flexibleContainer.width)}
+                flx.y
+                ${Math.round(flexibleContainer.y)}
+                flx.h
+                ${Math.round(flexibleContainer.height)}
+                
+                boundX
+                ${Math.round(BOUNDARY_MARGIN_X_L)}
+                ${Math.round(BOUNDARY_MARGIN_X_R)}
+                boundY
+                ${Math.round(BOUNDARY_MARGIN_Y_T)}
+                ${Math.round(BOUNDARY_MARGIN_Y_B)}`;
             $("#flexiBox-dimensions").text(flexDimensions);
 
             flexibleContainerRect
@@ -1584,7 +1585,6 @@ export var drawGraph = function (workbook) {
               .attr("y", flexibleContainer.y)
               .attr("width", flexibleContainer.width)
               .attr("height", flexibleContainer.height);
-            // console.log(flexibleContainer.x, flexibleContainer.width)
         }
         
 
@@ -1628,11 +1628,11 @@ export var drawGraph = function (workbook) {
                 var selfReferringEdge = getSelfReferringEdge(d);
                 var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                   selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
-                var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN_Y - selfReferringEdgeHeight;
+                var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN_Y_B - selfReferringEdgeHeight;
                 // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
-                var currentYPos = Math.max(BOUNDARY_MARGIN_Y, Math.min(bottomBoundary, d.y));
+                var currentYPos = Math.max(BOUNDARY_MARGIN_Y_T, Math.min(bottomBoundary, d.y));
                 if (adaptive && height < MAX_HEIGHT &&
-                  (currentYPos === BOUNDARY_MARGIN_Y || currentYPos === bottomBoundary)) {
+                  (currentYPos === BOUNDARY_MARGIN_Y_T || currentYPos === bottomBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
