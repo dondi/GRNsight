@@ -1527,17 +1527,28 @@ export var drawGraph = function (workbook) {
             if (Math.abs(xTranslation) >=
               Math.floor(flexibleContainer.x) * graphZoom
             ) {
+                console.log("left bound violated")
                 BOUNDARY_MARGIN_X_L = Math.abs(xTranslation) / graphZoom;
             }
+            console.log($container.width() -
+                  (graphZoom * flexibleContainer.width +
+                    graphZoom * flexibleContainer.x))
             if (
-              xTranslation >
+              xTranslation >=
               $container.width() -
                 (graphZoom * flexibleContainer.width +
                   graphZoom * flexibleContainer.x)
             ) {
-              console.log("right bound violated");
-              BOUNDARY_MARGIN_X_R = Math.abs(xTranslation) / graphZoom;
-            }
+                console.log("right bound violated");
+                if (flexibleContainer.x * graphZoom < $container.width() / graphZoom / 2){
+                    BOUNDARY_MARGIN_X_R =
+                      $container.width() -
+                      (graphZoom * flexibleContainer.width +
+                        graphZoom * flexibleContainer.x);
+                } else {
+                    BOUNDARY_MARGIN_X_R = Math.abs(xTranslation) / graphZoom;
+                }
+              }
             if (
               Math.abs(yTranslation) >=
               Math.floor(flexibleContainer.y) * graphZoom
@@ -1559,25 +1570,29 @@ export var drawGraph = function (workbook) {
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox(BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y_T, BOUNDARY_MARGIN_Y_B);
+            /*
+             yTrnslt
+                ${Math.round(yTranslation)}
+            flx.y
+                ${Math.round(flexibleContainer.y)}
+                flx.h
+                ${Math.round(flexibleContainer.height)} 
+            boundY
+                ${Math.round(BOUNDARY_MARGIN_Y_T)}
+                ${Math.round(BOUNDARY_MARGIN_Y_B)}*/
             const flexDimensions = `xTrnslt
                 ${Math.round(xTranslation)}
-                yTrnslt
-                ${Math.round(yTranslation)}
                 flx.x
                 ${Math.round(flexibleContainer.x)}
                 flx.w
                 ${Math.round(flexibleContainer.width)}
-                flx.y
-                ${Math.round(flexibleContainer.y)}
-                flx.h
-                ${Math.round(flexibleContainer.height)}
-                
+                flx.x+flx.w
+                ${Math.round(flexibleContainer.x + flexibleContainer.width)}
+                flxx+w scaled
+                ${Math.round((flexibleContainer.x + flexibleContainer.width) * graphZoom) }
                 boundX
                 ${Math.round(BOUNDARY_MARGIN_X_L)}
-                ${Math.round(BOUNDARY_MARGIN_X_R)}
-                boundY
-                ${Math.round(BOUNDARY_MARGIN_Y_T)}
-                ${Math.round(BOUNDARY_MARGIN_Y_B)}`;
+                ${Math.round(BOUNDARY_MARGIN_X_R)}`;
             $("#flexiBox-dimensions").text(flexDimensions);
 
             flexibleContainerRect
@@ -1600,7 +1615,7 @@ export var drawGraph = function (workbook) {
                 // could also look at this: https://observablehq.com/@john-guerra/force-directed-adjusted
                 // and look at this too: https://www.w3.org/TR/SVG/coords.html
                 var rightBoundary = width -(d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN_X_R - selfReferringEdgeWidth;
-                // console.log("rightBoundary", rightBoundary, width, d.textWidth, BOUNDARY_MARGIN_X_R, selfReferringEdgeWidth)
+                // console.log("rightBoundary", rightBoundary)
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(BOUNDARY_MARGIN_X_L, Math.min(rightBoundary, d.x));
                 if (adaptive && width < MAX_WIDTH &&
