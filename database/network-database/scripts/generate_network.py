@@ -115,7 +115,7 @@ def createMatrix(fileName: str):
     statusMessage: str = 'Creating REGULATORS TO TARGETS MATRIX\n' if fileName == REGULATORS_TO_TARGETS_MATRIX else 'Creating REGULATORS TO REGULATORS MATRIX\n'
     print(statusMessage)
     regulator_to_target_file = open(fileName, 'w')
-    headers = "cols regulators/rows targets"
+    headers = "cols regulators/rows targets\t"
     headers += '\t'.join(regulators_list)
     regulator_to_target_file.write(f'{headers}\n')
     for target in targets:
