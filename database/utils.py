@@ -60,14 +60,18 @@ class Utils:
         
     @classmethod
     def load_network_genes(cls, gene_path: str, database_namespace: str):
-        cls._load_genes(gene_path, database_namespace, is_protein = False)
+        cls._load_genes(gene_path, database_namespace, is_network = True)
         
     @classmethod
     def load_protein_genes(cls, gene_path: str, database_namespace: str):
-        cls._load_genes(gene_path, database_namespace, is_protein = True)
+        cls._load_genes(gene_path, database_namespace, is_network = False)
+        
+    @classmethod
+    def load_expression_genes(cls, gene_path: str, database_namespace: str):
+        cls._load_genes(gene_path, database_namespace, is_network = False)
     
     @classmethod
-    def _load_genes(cls, gene_path: str, database_namespace: str, is_protein: bool):
+    def _load_genes(cls, gene_path: str, database_namespace: str, is_network: bool):
         """
         Load Gene ID Mapping into the database using the COPY command
 
@@ -77,13 +81,13 @@ class Utils:
                 The path to the file containing the gene data that want to add to the database
             database_namespace: str
                 The database namespace i.e the schema name where the gene data will be loaded
-            is_protein : bool
-                A boolean value to check if the schema is for protein_protein_interactions or gene_regulatory_network
+            is_network : bool
+                A boolean value to check if the schema is for gene_regulatory_network
         """
-        if is_protein:
-            print(f'COPY {database_namespace}.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
-        else:
+        if is_network:
             print(f'COPY {database_namespace}.gene (gene_id, display_gene_id, species, taxon_id, regulator) FROM stdin;')
+        else:
+            print(f'COPY {database_namespace}.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
         with open(gene_path, 'r+') as f:
             reader = csv.reader(f)
             row_num = 0
@@ -94,7 +98,7 @@ class Utils:
                     display_gene_id= r[1]
                     species = r[2]
                     taxon_id = r[3]
-                    if not is_protein:
+                    if is_network:
                         regulator = r[4]
                         print(f'{gene_id}\t{display_gene_id}\t{species}\t{taxon_id}\t{regulator}')
                     else:
@@ -132,7 +136,15 @@ class Utils:
         print('\\.')
         
     @classmethod
-    def load_network(cls, network_source_path: str, database_namespace: str, is_protein: bool):
+    def load_protein_network(cls, network_source_path: str, database_namespace: str):
+        cls._load_network(network_source_path, database_namespace, is_protein = True)
+    
+    @classmethod
+    def load_network_network(cls, network_source_path: str, database_namespace: str):
+        cls._load_network(network_source_path, database_namespace, is_protein = False)
+        
+    @classmethod
+    def _load_network(cls, network_source_path: str, database_namespace: str, is_protein: bool):
         """
         Load Network Matrix into the database using the COPY command
 
@@ -238,3 +250,120 @@ class Utils:
                     print(f"UPDATE {database_namespace}.gene\nSET standard_name = '{standard_name}', length = {length}, molecular_weight = {molecular_weight}, PI = {pi}\nWHERE gene_systematic_name = '{gene_name}';")
                 row_num += 1
         print('COMMIT;')
+    
+    # The following functions are for expression database specifically
+    """
+    This program Loads Refs into the database
+    """
+    @classmethod
+    def load_refs(cls, refs_path: str, database_namespace: str):
+        print(f'COPY {database_namespace}.ref (pubmed_id, authors, publication_year, title, doi, ncbi_geo_id) FROM stdin;')
+        with open(refs_path, 'r+') as f:
+            reader = csv.reader(f)
+            row_num = 0
+            for row in reader:
+                if row_num != 0:
+                    r=  ','.join(row).split('\t')
+                    pubmed_id = r[0]
+                    authors = r[1]
+                    publication_year = r[2]
+                    title = r[3]
+                    doi = r[4]
+                    ncbi_geo_id = r[5]
+                    print(f'{pubmed_id}\t{authors}\t{publication_year}\t{title}\t{doi}\t{ncbi_geo_id}')
+                row_num += 1
+        print('\\.')
+        
+    """
+    This program Loads Expression Metadata into the database
+    """
+    @classmethod
+    def load_expression_metadata(cls, expression_metadata_path: str, database_namespace: str):
+        print(f'COPY {database_namespace}.expression_metadata (ncbi_geo_id, pubmed_id, control_yeast_strain, treatment_yeast_strain, control, treatment, concentration_value, concentration_unit, time_value, time_unit, number_of_replicates, expression_table) FROM stdin;')
+        with open(expression_metadata_path, 'r+') as f:
+            reader = csv.reader(f)
+            row_num = 0
+            for row in reader:
+                if row_num != 0:
+                    r=  ','.join(row).split('\t')
+                    ncbi_geo_id = r[0]
+                    pubmed_id =r[1]
+                    control_yeast_strain = r[2]
+                    treatment_yeast_strain = r[3]
+                    control = r[4]
+                    treatment = r[5]
+                    concentration_value = float(r[6])
+                    concentration_unit = r[7]
+                    time_value = float(r[8])
+                    time_unit = r[9]
+                    number_of_replicates = int(r[10])
+                    expression_table = r[11]
+
+                    print(f'{ncbi_geo_id}\t{pubmed_id}\t{control_yeast_strain}\t{treatment_yeast_strain}\t{control}\t{treatment}\t{concentration_value}\t{concentration_unit}\t{time_value}\t{time_unit}\t{number_of_replicates}\t{expression_table}')
+                row_num += 1
+        print('\\.')
+    """
+    This program Loads Expression Data into the database
+    """
+    @classmethod
+    def load_expression_data(cls, expression_data_path: str, database_namespace: str):
+        print(f'COPY {database_namespace}.expression (gene_id, taxon_id, sort_index, sample_id, expression, time_point, dataset) FROM stdin;')
+        with open(expression_data_path, 'r+') as f:
+            reader = csv.reader(f)
+            row_num = 0
+            for row in reader:
+                if row_num != 0:
+                    r=  ','.join(row).split('\t')
+                    gene_id = r[0]
+                    taxon_id = r[1]
+                    sort_index = int(r[2])
+                    sample_id = r[3]
+                    expression = float(r[4]) if r[4] != "" else "NaN"
+
+                    time_point = float(r[5])
+                    data_set = r[6]
+                    print(f'{gene_id}\t{taxon_id}\t{sort_index}\t{sample_id}\t{expression}\t{time_point}\t{data_set}')
+                row_num += 1
+        print('\\.')
+
+    """
+    This program Loads Production Rates into the database
+    """
+    @classmethod
+    def load_production_rates(cls, production_rates_path: str, database_namespace: str):
+        print(f'COPY {database_namespace}.production_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, production_rate) FROM stdin;')
+        with open(production_rates_path, 'r+') as f:
+            reader = csv.reader(f)
+            row_num = 0
+            for row in reader:
+                if row_num != 0:
+                    r=  ','.join(row).split('\t')
+                    gene_id = r[0]
+                    taxon_id = r[1]
+                    ncbi_geo_id = r[2]
+                    pubmed_id = r[3]
+                    production_rate = float(r[4]) if r[4] != "" else "NaN"
+                    print(f'{gene_id}\t{taxon_id}\t{ncbi_geo_id}\t{pubmed_id}\t{production_rate}')
+                row_num += 1
+        print('\\.')
+
+    """
+    This program Loads Degradation Rates into the database
+    """
+    @classmethod
+    def load_degradation_rates(cls, degradation_rates_path: str, database_namespace: str):
+        print(f'COPY {database_namespace}.degradation_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, degradation_rate) FROM stdin;')
+        with open(degradation_rates_path, 'r+') as f:
+            reader = csv.reader(f)
+            row_num = 0
+            for row in reader:
+                if row_num != 0:
+                    r=  ','.join(row).split('\t')
+                    gene_id = r[0]
+                    taxon_id = r[1]
+                    ncbi_geo_id = r[2]
+                    pubmed_id = r[3]
+                    degradation_rate = float(r[4]) if r[4] != "" else "NaN"
+                    print(f'{gene_id}\t{taxon_id}\t{ncbi_geo_id}\t{pubmed_id}\t{degradation_rate}')
+                row_num += 1
+        print('\\.')
