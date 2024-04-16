@@ -4,13 +4,6 @@ NETWORK_GENE_SOURCE = "network-database/script-results/processed-loader-files/ge
 PROTEIN_GENE_SOURCE = "protein-protein-database/script-results/processed-loader-files/gene.csv"
 EXPRESSION_GENE_SOURCE = "expression-database/script-results/processed-expression/genes.csv"
 
-# all_genes = {}
-# with open(NETWORK_GENE_SOURCE, 'r') as network_gene_file:
-#     network_gene_file.readline()
-#     for line in network_gene_file:
-#         gene_id, display_gene_id, species, taxon_id, regulator = line.strip().split('\t')
-#         all_genes[display_gene_id] = gene_id
-        
 import csv
 
 
@@ -26,24 +19,6 @@ def read_genes_from_csv(file_path):
                 genes.add(r[0])
             row_num += 1
     return genes
-
-# # Function to read gene information from a CSV file into a dictionary
-# def read_gene_info_from_csv(file_path):
-#     gene_info = {}
-#     with open(file_path, 'r') as file:
-#         reader = csv.reader(file)
-#         row_num = 0
-#         for row in reader:
-#             if row_num != 0:
-#                 r= ','.join(row).split('\t')
-#                 gene_info[r[0]] = {
-#                     'Display Gene ID': r[1],
-#                     'Species': r[2],
-#                     'Taxon': r[3],
-#                     'Regulator': r[4]
-#                 }
-#             row_num += 1
-#     return gene_info
 
 def read_gene_info_from_csv(file_path):
     gene_info = {}
