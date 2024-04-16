@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL} from "./constants";
+import { CREATE_NETWORK_CLASS, CREATE_NETWORK_MODAL, NETWORK_PPI_MODE, NETWORK_GRN_MODE} from "./constants";
 import { queryNetworkDatabase, queryProteinProteinDatabase, uploadCustomWorkbook } from "./api/grnsight-api";
 import { grnState } from "./grnstate";
 
@@ -13,7 +13,7 @@ export const generateNetwork = function () {
         "MF(ALPHA)2" : "YGL089C"
     };
     const createHTMLforForm = (sources, source, networkType) => {
-        const geneProtein = networkType === "protein-protein-physical-interaction" ? "protein" : "gene";
+        const geneProtein = networkType === NETWORK_PPI_MODE ? "protein" : "gene";
         let result =  `
             <div id=\'generateNetworkFormContainer\' '>
                 <h2 id=\'generateNetwork\'>Generate Network</h2>
@@ -64,8 +64,8 @@ export const generateNetwork = function () {
                         <div id=\'custom-network-genes-container\'>
         `;
         for (let gene in grnState.customWorkbook.genes) {
-            const primaryName = grnState.customWorkbook.type === "grn" ? grnState.customWorkbook.genes[gene] : gene;
-            const secondaryName = grnState.customWorkbook.type === "grn" ? gene :
+            const primaryName = grnState.customWorkbook.type === NETWORK_GRN_MODE ? grnState.customWorkbook.genes[gene] : gene;
+            const secondaryName = grnState.customWorkbook.type === NETWORK_GRN_MODE ? gene :
                 `${grnState.customWorkbook.genes[gene].displayGeneID} | ${grnState.customWorkbook.genes[gene].geneID}`;
             result += `
                 <div class=\'custom-network-gene\' id=${gene}>
@@ -104,7 +104,7 @@ export const generateNetwork = function () {
         return "";
     };
     const addGene = function () {
-        const userGeneProtein = grnState.customWorkbook.type === "grn" ? "Gene" : "Protein";
+        const userGeneProtein = grnState.customWorkbook.type === NETWORK_GRN_MODE ? "Gene" : "Protein";
         const searchGeneProtein = `${$("#network-search-bar").val()}`;
         $("#network-search-bar").val("");
         const geneProtein = validGene(searchGeneProtein.toUpperCase());
@@ -113,7 +113,7 @@ export const generateNetwork = function () {
 containing "-", "_", and alpha-numeric characters only`);
         } else {
             let source = grnState.customWorkbook.source;
-            if (grnState.customWorkbook.type === "grn") {
+            if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
                 let headers = {
                     type:"NetworkGeneFromSource",
                     gene: geneProtein,
@@ -134,7 +134,7 @@ containing "-", "_", and alpha-numeric characters only`);
                     console.log(error.name);
                     console.log(error.message);
                 });
-            } else if (grnState.customWorkbook.type === "protein-protein-physical-interaction") {
+            } else if (grnState.customWorkbook.type === NETWORK_PPI_MODE) {
                 let headers = {
                     type:"NetworkFromGeneProtein",
                     geneProtein: geneProtein,
@@ -177,7 +177,7 @@ containing "-", "_", and alpha-numeric characters only`);
         $("#generateNetworkFooter-container").append(createHTMLforModalButtons());
         grnState.customWorkbook = {
             genes : {},
-            type: "grn",
+            type: NETWORK_GRN_MODE,
             source : null,
             sources : {
                 proteinProteinInteractions : null,
@@ -213,12 +213,12 @@ containing "-", "_", and alpha-numeric characters only`);
     $("body").on("change", "#network-type", function (event) {
         grnState.customWorkbook.type = $("#network-type").val();
         grnState.customWorkbook.genes = {};
-        if (grnState.customWorkbook.type === "protein-protein-physical-interaction") {
+        if (grnState.customWorkbook.type === NETWORK_PPI_MODE) {
             grnState.customWorkbook.source = Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions).length >= 1 ?
             Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions)[0] : null;
             $("#generateNetworkFormContainer").remove();
             $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions), grnState.customWorkbook.source, grnState.customWorkbook.type));
-        } else if (grnState.customWorkbook.type === "grn") {
+        } else if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
             grnState.customWorkbook.source = Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions).length >= 1 ?
             Object.keys(grnState.customWorkbook.sources.geneRegulation)[0] : null;
             $("#generateNetworkFormContainer").remove();
@@ -241,7 +241,7 @@ containing "-", "_", and alpha-numeric characters only`);
             alert(`GRNsight is only capable of handling 75 genes at most. Your proposed network contains
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
-            if (grnState.customWorkbook.type === "grn") {
+            if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
                 const genes = Object.keys(grnState.customWorkbook.genes);
                 const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
                 const source = grnState.customWorkbook.source;
@@ -277,7 +277,7 @@ containing "-", "_", and alpha-numeric characters only`);
                     console.log(error.name);
                     console.log(error.message);
                 });
-            } else if (grnState.customWorkbook.type === "protein-protein-physical-interaction") {
+            } else if (grnState.customWorkbook.type === NETWORK_PPI_MODE) {
                 const proteins = Object.keys(grnState.customWorkbook.genes);
                 const source = grnState.customWorkbook.source;
                 const headers = {

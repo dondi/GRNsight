@@ -12,6 +12,7 @@ import {
 } from "./update-app";
 
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
+import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
@@ -118,7 +119,7 @@ export const upload = function () {
 
     const updateOptimizationParameters = (finalExportSheets) => {
         let optimizationParameters = {
-            data: grnState.mode === "grn" ? {
+            data: grnState.mode === NETWORK_GRN_MODE ? {
                 alpha: 0.002,
                 "kk_max": 1,
                 MaxIter: 100000000,
@@ -133,14 +134,14 @@ export const upload = function () {
                 "fix_b": 0,
                 species: "Saccharomyces cerevisiae",
                 "taxon_id":559292,
-                workbookType: "grn"
+                workbookType: NETWORK_GRN_MODE
             } : {
                 species: "Saccharomyces cerevisiae",
                 "taxon_id":559292,
-                workbookType: "protein-protein-physical-interaction"
+                workbookType: NETWORK_PPI_MODE
             }
         };
-        if (grnState.mode === "grn") {
+        if (grnState.mode === NETWORK_GRN_MODE) {
             const expression = Object.keys(finalExportSheets.expression);
             let expTimepoints = expression.length > 0 ? finalExportSheets.expression[expression[0]].timePoints : null;
             expTimepoints = expTimepoints ? [...(new Set(expTimepoints))].sort(function (a, b) {
@@ -581,7 +582,7 @@ export const upload = function () {
         $("#Export-Excel-Button").on("click", performExport("export-to-excel", "xlsx", null, source));
     };
     const handleExportExcelModal = function () {
-        if (grnState.mode === "grn") {
+        if (grnState.mode === NETWORK_GRN_MODE) {
             $("#exportExcelForm").remove();
             $("#exportExcelFooter").remove();
             $("#exportExcelQuestions-containter").append(createHTMLforGRNForm);
@@ -600,7 +601,7 @@ export const upload = function () {
                 }
             });
             handleExpressionSheetsFromSource(source);
-        } else if (grnState.mode === "protein-protein-physical-interaction") {
+        } else if (grnState.mode === NETWORK_PPI_MODE) {
             const source = "userInput";
             $("#exportExcelForm").remove();
             $("#exportExcelFooter").remove();

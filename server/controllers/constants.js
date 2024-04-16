@@ -7,6 +7,9 @@ module.exports = {
     CELL_A1_PPI: "cols protein1/ rows protein2",
     CELL_A1_GRN: "cols regulators/rows targets",
 
+    NETWORK_PPI_MODE: "protein-protein-physical-interaction",
+    NETWORK_GRN_MODE: "grn",
+
     GRNSIGHT_FILENAME_HEADER: "X-GRNsight-Filename",
 
     warnings: {

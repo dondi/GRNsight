@@ -1,3 +1,5 @@
+const constants = require("./constants");
+
 /* eslint-disable camelcase */
 var helpers = require(__dirname + "/helpers");
 
@@ -530,7 +532,7 @@ var demoWorkbook1 = function (path, res, app) {
                 simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
                 species: "Saccharomyces cerevisiae",
                 taxon_id: 559292,
-                workbookType: "grn"
+                workbookType: constants.NETWORK_GRN_MODE
             }
         },
         twoColumnSheets: {
@@ -2694,7 +2696,7 @@ var demoWorkbook2 = function (path, res, app) {
                 simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
                 species: "Saccharomyces cerevisiae",
                 taxon_id: 559292,
-                workbookType: "grn"
+                workbookType: constants.NETWORK_GRN_MODE
             }
         },
         twoColumnSheets: {
@@ -4622,7 +4624,7 @@ var demoWorkbook3 = function (path, res, app) {
                 TolX: 0.00001,
                 species: "Saccharomyces cerevisiae",
                 taxon_id: 559292,
-                workbookType: "grn"
+                workbookType: constants.NETWORK_GRN_MODE
             }
         },
         twoColumnSheets: {},
@@ -5684,7 +5686,7 @@ var demoWorkbook4 = function (path, res, app) {
                 TolX: 0.00001,
                 species: "Saccharomyces cerevisiae",
                 taxon_id: 559292,
-                workbookType: "grn"
+                workbookType: constants.NETWORK_GRN_MODE
             }
         },
         twoColumnSheets: {},
@@ -6680,7 +6682,7 @@ var demoWorkbook5 = function (path, res, app) {
         sheetType: "unweighted",
         meta: {
             data: {
-                workbookType: "protein-protein-physical-interaction",
+                workbookType: constants.NETWORK_PPI_MODE,
                 species: "Saccharomyces cerevisiae",
                 taxon_id: "559292",
             },

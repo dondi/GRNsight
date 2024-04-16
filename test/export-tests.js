@@ -22,7 +22,7 @@ var unweightedTestWorkbook = {
     errors: [],
     warnings: [],
     sheetType: "unweighted",
-    workbookType: "grn"
+    workbookType: constants.NETWORK_GRN_MODE
 };
 
 var weightedTestWorkbook = {
@@ -40,7 +40,7 @@ var weightedTestWorkbook = {
     errors: [],
     warnings: [],
     sheetType: "weighted",
-    workbookType: "grn"
+    workbookType: constants.NETWORK_GRN_MODE
 };
 
 var unweightedTestWorkbookWithCycle = {
@@ -61,7 +61,7 @@ var unweightedTestWorkbookWithCycle = {
     errors: [],
     warnings: [],
     sheetType: "unweighted",
-    workbookType: "grn"
+    workbookType: "constants.NETWORK_GRN_MODE"
 };
 
 var weightedTestWorkbookWithCycle = {
@@ -82,7 +82,7 @@ var weightedTestWorkbookWithCycle = {
     errors: [],
     warnings: [],
     sheetType: "weighted",
-    workbookType: "grn"
+    workbookType: constants.NETWORK_GRN_MODE
 };
 
 describe("Export to SIF", function () {
@@ -650,7 +650,7 @@ const inputWorkbook = {
             "simulation_timepoints": [0, 0.1, 0.2],
             "species": "Saccharomyces cerevisiae",
             "taxon_id": 559292,
-            "workbookType": "grn"
+            "workbookType": constants.NETWORK_GRN_MODE
         }
     },
 
@@ -802,7 +802,7 @@ describe("Export to spreadsheet", function () {
                     ["simulation_timepoints", 0, 0.1, 0.2],
                     ["species", "Saccharomyces cerevisiae"],
                     ["taxon_id", 559292],
-                    ["workbookType", "grn"]
+                    ["workbookType", constants.NETWORK_GRN_MODE]
                 ]
             },
 
@@ -908,7 +908,7 @@ describe("Export to spreadsheet", function () {
                 name: "optimization_parameters",
                 data: [
                     ["optimization_parameter", "value"],
-                    ["workbookType", "protein-protein-physical-interaction"],
+                    ["workbookType", constants.NETWORK_PPI_MODE],
                     ["species", "Saccharomyces cerevisiae"],
                     ["taxon_id", "559292"]
                 ]
