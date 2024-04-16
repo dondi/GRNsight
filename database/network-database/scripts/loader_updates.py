@@ -8,5 +8,5 @@ from utils import *
 
 Utils.update_genes(Constants.GENE_UPDATE_DESTINATION, Constants.DATABASE_NAMESPACE, is_protein=False)
 Utils.load_sources(Constants.NETWORK_DATA_SOURCE, Constants.DATABASE_NAMESPACE)
-Utils.load_genes(Constants.GENE_SOURCE, Constants.DATABASE_NAMESPACE, is_protein=False)
+Utils.load_network_genes(Constants.GENE_SOURCE, Constants.DATABASE_NAMESPACE)
 Utils.load_network(Constants.NETWORK_SOURCE, Constants.DATABASE_NAMESPACE, is_protein=False)

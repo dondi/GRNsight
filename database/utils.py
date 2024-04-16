@@ -57,6 +57,14 @@ class Utils:
                     print(f'{time_stamp}\t{source}\t{display_name}')
                 row_num += 1
         print('\\.')
+        
+    @classmethod
+    def load_network_genes(cls, gene_path: str, database_namespace: str):
+        cls.load_genes(gene_path, database_namespace, is_protein = False)
+        
+    @classmethod
+    def load_protein_genes(cls, gene_path: str, database_namespace: str):
+        cls.load_genes(gene_path, database_namespace, is_protein = True)
     
     @classmethod
     def load_genes(cls, gene_path: str, database_namespace: str, is_protein: bool):
