@@ -60,14 +60,14 @@ class Utils:
         
     @classmethod
     def load_network_genes(cls, gene_path: str, database_namespace: str):
-        cls.load_genes(gene_path, database_namespace, is_protein = False)
+        cls._load_genes(gene_path, database_namespace, is_protein = False)
         
     @classmethod
     def load_protein_genes(cls, gene_path: str, database_namespace: str):
-        cls.load_genes(gene_path, database_namespace, is_protein = True)
+        cls._load_genes(gene_path, database_namespace, is_protein = True)
     
     @classmethod
-    def load_genes(cls, gene_path: str, database_namespace: str, is_protein: bool):
+    def _load_genes(cls, gene_path: str, database_namespace: str, is_protein: bool):
         """
         Load Gene ID Mapping into the database using the COPY command
 
@@ -172,9 +172,17 @@ class Utils:
                         print(f'{regulator_gene_id}\t{target_gene_id}\t{taxon_id}\t{time_stamp}\t{source}')
                 row_num += 1
         print('\\.')
+        
+    @classmethod
+    def update_network_genes(cls, gene_path: str, database_namespace: str):
+        cls._update_genes(gene_path, database_namespace, is_protein = False)
+    
+    @classmethod
+    def update_protein_genes(cls, gene_path: str, database_namespace: str):
+        cls._update_genes(gene_path, database_namespace, is_protein = True)
     
     @classmethod    
-    def update_genes(cls, update_gene_path: str, database_namespace: str, is_protein: bool):
+    def _update_genes(cls, update_gene_path: str, database_namespace: str, is_protein: bool):
         """
         Update Gene ID Mapping into the database
 
