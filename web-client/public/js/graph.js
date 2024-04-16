@@ -219,13 +219,13 @@ export var drawGraph = function (workbook) {
 
     // This rectangle catches all of the mousewheel and pan events, without letting
     // them bubble up to the body.
-    boundingBoxContainer.append("rect")
+    var boundingBoxRect = boundingBoxContainer.append("rect")
         .attr("width", width)
         .attr("height", height)
         .style("fill", "none")
         .style("pointer-events", "all")
         .attr("stroke", "none" )
-        .append("g");
+        .attr("id", "boundingBoxRect");
 
     var flexibleContainerRect = boundingBoxContainer.append("rect")
         .attr("class", "boundingBox")
@@ -241,6 +241,7 @@ export var drawGraph = function (workbook) {
     svg.style("pointer-events", "all").call(zoomDrag)
         .style("font-family", "sans-serif");
 
+    // this allows zoomContainer to be zoomed, dragged
     function zoomed () {
         zoomContainer.attr("transform", d3.event.transform);
     }
@@ -261,15 +262,28 @@ export var drawGraph = function (workbook) {
     let yTranslation = 0;
     let flexibleContainer = null;
 
+    function getXTranslation() {
+        return xTranslation;
+    }
+
     function updateZoomContainerInfo() {
         // transform attribute of zoomContainer contains translation info about graph
-        xTranslation = parseFloat(zoomContainer
-            .attr("transform")
-            .split("(")[1].split(",")[0]);
+        if (zoomContainer.attr("transform")) {
+            xTranslation = parseFloat(
+              zoomContainer
+                .attr("transform")
+                .split("(")[1]
+                .split(",")[0]
+            );
 
-        yTranslation = parseFloat(zoomContainer
-            .attr("transform")
-            .split("(")[1].split(",")[1].split(")")[0]);
+            yTranslation = parseFloat(
+              zoomContainer
+                .attr("transform")
+                .split("(")[1]
+                .split(",")[1]
+                .split(")")[0]
+            );
+        }
     };
 
     function viewportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
@@ -328,8 +342,13 @@ export var drawGraph = function (workbook) {
         }
         var container = zoomContainer;
         if (adaptive || (!adaptive && flexRectInBounds(graphZoom))) {
-            zoom.scaleTo(container, zoomScale);
-            graphZoom = zoomScale
+          zoom.scaleTo(container, zoomScale);
+          console.log(
+            "zoomContainer transform",
+            zoomContainer.attr("transform")
+          );
+          //   boundingBoxContainer.attr("transform", zoomContainer.attr("transform") * (1/scale));
+          graphZoom = zoomScale;
         }
     };
 
@@ -1528,11 +1547,11 @@ export var drawGraph = function (workbook) {
               Math.floor(flexibleContainer.x) * graphZoom
             ) {
                 console.log("left bound violated")
-                BOUNDARY_MARGIN_X_L = Math.abs(xTranslation) / graphZoom;
+                BOUNDARY_MARGIN_X_L = -xTranslation / graphZoom;
             }
-            console.log($container.width() -
-                  (graphZoom * flexibleContainer.width +
-                    graphZoom * flexibleContainer.x))
+            // console.log($container.width() -
+            //       (graphZoom * flexibleContainer.width +
+            //         graphZoom * flexibleContainer.x))
             if (
               xTranslation >=
               $container.width() -
@@ -1554,12 +1573,12 @@ export var drawGraph = function (workbook) {
               Math.floor(flexibleContainer.y) * graphZoom
             ) {
                 // console.log("top bound violated")
-                // BOUNDARY_MARGIN_Y_T = Math.abs(xTranslation);
+                BOUNDARY_MARGIN_Y_T = Math.abs(xTranslation);
             }
 
             if (yTranslation >= height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
                 // console.log("bottom bound violated")
-                // BOUNDARY_MARGIN_Y_B = Math.abs(xTranslation);
+                BOUNDARY_MARGIN_Y_B = Math.abs(xTranslation);
             }
         }
 
@@ -1600,6 +1619,12 @@ export var drawGraph = function (workbook) {
               .attr("y", flexibleContainer.y)
               .attr("width", flexibleContainer.width)
               .attr("height", flexibleContainer.height);
+
+            boundingBoxRect
+                .attr("x", -xTranslation)
+                .attr("width", width / graphZoom - BOUNDARY_MARGIN_X_R)
+                .attr("y", -yTranslation)
+                .attr("height", height / graphZoom - BOUNDARY_MARGIN_X_R);
         }
         
 
