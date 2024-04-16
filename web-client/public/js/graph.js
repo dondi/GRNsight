@@ -13,6 +13,7 @@ import {
     ZOOM_ADAPTIVE_MAX_SCALE,
     NETWORK_GRN_MODE
 } from "./constants";
+import { max } from "moment";
 
 /* globals d3 */
 /* eslint-disable no-use-before-define, func-style */
@@ -1506,7 +1507,20 @@ export var drawGraph = function (workbook) {
         maxX = maxX > $container.width() ? $container.width() - BOUNDARY_MARGIN_X_R : maxX;
         minY = minY < BOUNDARY_MARGIN_Y_T ? BOUNDARY_MARGIN_Y_T : minY;
         maxY = maxY > $container.height() ? $container.height() - BOUNDARY_MARGIN_Y_B : maxY;
-        return {x: minX, y: minY, width: maxX - minX, height: maxY - minY, maxX: maxX, maxY: maxY};
+        // console.log("flexi box width and height", maxX - minX, "maxX", maxX, "minX", minX, "maxY - minY", maxY - minY, "maxY", maxY, "minY", minY)
+        let width = 1234;
+        if (maxX < 0 && minX < 0) {
+            width = Math.abs(maxX) - Math.abs(minX);
+        } else {
+            width = maxX - minX;
+        }
+        let height = 1234;
+        if (maxY < 0 && minY < 0) {
+            height = Math.abs(maxY) - Math.abs(minY);
+        } else {
+            height = maxY - minY;
+        }
+        return {x: minX, y: minY, maxX: maxX, maxY: maxY, width: width, height: height};
     }
 
     // this checks if zoomInValue is in bounds when zoom in and out
@@ -1590,9 +1604,7 @@ export var drawGraph = function (workbook) {
                 boundX
                 ${Math.round(BOUNDARY_MARGIN_X_L)}
                 ${Math.round(BOUNDARY_MARGIN_X_R)}
-            */
-            const flexDimensions = `
-                 yTrnslt
+                yTrnslt
                 ${Math.round(yTranslation)}
                 flx.y
                 ${Math.round(flexibleContainer.y)}
@@ -1601,13 +1613,14 @@ export var drawGraph = function (workbook) {
                 boundY
                 ${Math.round(BOUNDARY_MARGIN_Y_T)}
                 ${Math.round(BOUNDARY_MARGIN_Y_B)}
-                flx.x
-                ${Math.round(flexibleContainer.x)}
-                flx.w
-                ${Math.round(flexibleContainer.width)}
-                boundX
-                ${Math.round(BOUNDARY_MARGIN_X_L)}
-                ${Math.round(BOUNDARY_MARGIN_X_R)}
+            */
+            const flexDimensions = `
+                width ${Math.round(flexibleContainerRect.attr("width"))}
+                x ${Math.round(flexibleContainerRect.attr("x"))}
+                maxX ${Math.round(flexibleContainer.maxX)}
+                height ${Math.round(flexibleContainerRect.attr("height"))}
+                y ${Math.round(flexibleContainerRect.attr("y"))}
+                maxY ${Math.round(flexibleContainer.maxY)}
                 `;
             $("#flexiBox-dimensions").text(flexDimensions);
 
