@@ -1620,8 +1620,8 @@ export var drawGraph = function (workbook) {
             boundingBoxRect
                 .attr("x", -xTranslation / graphZoom + BOUNDARY_MARGIN_X_L / 2)
                 .attr("width", width / graphZoom - BOUNDARY_MARGIN_X_R)
-                .attr("y", -yTranslation / graphZoom + BOUNDARY_MARGIN_Y_T)
-                .attr("height", height / graphZoom - BOUNDARY_MARGIN_Y_B / 2);
+                .attr("y", -yTranslation / graphZoom + BOUNDARY_MARGIN_Y_T / 2)
+                .attr("height", height / graphZoom - BOUNDARY_MARGIN_Y_B);
         }
 
         // this controls movement and position of nodes, clamps the nodes to boundary
