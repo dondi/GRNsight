@@ -6,7 +6,6 @@ EXPRESSION_GENE_SOURCE = "expression-database/script-results/processed-expressio
 
 import csv
 
-
 # Function to read genes from a CSV file into a set
 def read_genes_from_csv(file_path):
     genes = set()
@@ -39,7 +38,6 @@ def read_gene_info_from_csv(file_path):
             row_num += 1
     return gene_info
 
-
 # File paths for the three source files
 protein_protein_interactions_file = 'protein_protein_interactions.csv'
 network_table_file = 'network_table.csv'
@@ -50,20 +48,8 @@ protein_genes = read_genes_from_csv(PROTEIN_GENE_SOURCE)
 network_genes = read_genes_from_csv(NETWORK_GENE_SOURCE)
 expression_genes = read_genes_from_csv(EXPRESSION_GENE_SOURCE)
 
-# Determine the missing genes from protein table and expression table compared to network table genes. If a gene is missing, set its regulator status to False
-missing_genes_from_protein = protein_genes - network_genes
-missing_genes_from_expression = expression_genes - network_genes
-missing_genes = missing_genes_from_protein.union(missing_genes_from_expression)
-
 # Create a union set containing all unique genes
 all_genes = protein_genes.union(network_genes, expression_genes)
-
-# Create a dictionary to store regulator status for each gene
-gene_regulator_status = {gene: False for gene in all_genes}
-
-# Update regulator status for missing genes
-for gene in missing_genes:
-    gene_regulator_status[gene] = False  # Set to False as per requirement
     
 # Read gene information from each source file into dictionaries
 protein_gene_info = read_gene_info_from_csv(PROTEIN_GENE_SOURCE)
