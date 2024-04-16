@@ -1549,9 +1549,6 @@ export var drawGraph = function (workbook) {
                 console.log("left bound violated")
                 BOUNDARY_MARGIN_X_L = -xTranslation / graphZoom;
             }
-            // console.log($container.width() -
-            //       (graphZoom * flexibleContainer.width +
-            //         graphZoom * flexibleContainer.x))
             if (
               xTranslation >=
               $container.width() -
@@ -1621,12 +1618,11 @@ export var drawGraph = function (workbook) {
               .attr("height", flexibleContainer.height);
 
             boundingBoxRect
-                .attr("x", -xTranslation)
+                .attr("x", -xTranslation / graphZoom + BOUNDARY_MARGIN_X_L / 2)
                 .attr("width", width / graphZoom - BOUNDARY_MARGIN_X_R)
-                .attr("y", -yTranslation)
-                .attr("height", height / graphZoom - BOUNDARY_MARGIN_X_R);
+                .attr("y", -yTranslation / graphZoom + BOUNDARY_MARGIN_Y_T)
+                .attr("height", height / graphZoom - BOUNDARY_MARGIN_Y_B / 2);
         }
-        
 
         // this controls movement and position of nodes, clamps the nodes to boundary
         try {
