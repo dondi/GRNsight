@@ -1502,16 +1502,27 @@ export var drawGraph = function (workbook) {
         // handle left x and top y boundaries to not exceed BOUNDARY_MARGIN
         minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
         minY = minY < BOUNDARY_MARGIN_Y_T ? BOUNDARY_MARGIN_Y_T : minY;
-        let width = maxX - minX;
+        
+        maxX =
+          maxX > -xTranslation / graphZoom + 5 / 2 + width / graphZoom - 5
+            ? -xTranslation / graphZoom + 5 / 2 + width / graphZoom - 5
+            : maxX;
+
+        maxY =
+          maxY > -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5
+            ? -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5
+            : maxY;
+
+        let flexiBoxWidth = maxX - minX;
         if (maxX < 0 && minX < 0) {
-            width = Math.abs(maxX) - Math.abs(minX);
+            flexiBoxWidth = Math.abs(maxX) - Math.abs(minX);
         } 
 
-        let height = maxY - minY;
+        let flexiBoxHeight = maxY - minY;
         if (maxY < 0 && minY < 0) {
-            height = Math.abs(maxY) - Math.abs(minY);
+            flexiBoxHeight = Math.abs(maxY) - Math.abs(minY);
         }
-        return {x: minX, y: minY, maxX: maxX, maxY: maxY, width: width, height: height};
+        return {x: minX, y: minY, maxX: maxX, maxY: maxY, width: flexiBoxWidth, height: flexiBoxHeight};
     }
 
     // this checks if zoomValue is in bounds when zoom in and out
@@ -1519,10 +1530,8 @@ export var drawGraph = function (workbook) {
         if (flexibleContainer) {
             updateZoomContainerInfo();
             if (flexibleContainer.width * zoomValue > width ) {
-                console.log("width out of bounds")
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
-                console.log("height out of bounds")
                 return false;
             }
         }
@@ -1797,14 +1806,13 @@ export var drawGraph = function (workbook) {
     }
 
     function dragged (d) {
-        console.log(d, "d.fx", d3.event.x, "d.fy", d3.event.y)
         if (!adaptive) {
             if (d3.event.x + d.textWidth <= (-xTranslation / graphZoom + 5/2) + (width / graphZoom) - 5) {
                 d.fx = d3.event.x;
             } else {
                 d.fx = (-xTranslation / graphZoom + 5/2) + (width / graphZoom) - 5 - d.textWidth;
             }
-            if (d3.event.y + nodeHeight<= -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5) {
+            if (d3.event.y + nodeHeight <= -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5) {
                 d.fy = d3.event.y;
             } else {
                 d.fy = -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5 - nodeHeight;
