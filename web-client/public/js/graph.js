@@ -1452,7 +1452,7 @@ export var drawGraph = function (workbook) {
 
     // there is too much whitespace in flexiContainer
     function calcFlexiBox (BOUNDARY_MARGIN_X_L, BOUNDARY_MARGIN_X_R, BOUNDARY_MARGIN_Y_T, BOUNDARY_MARGIN_Y_B) {
-        console.log("calc flexi box run")
+        // console.log("calc flexi box run")
         const nodes = simulation.nodes()
         let nodeWidth = 0;
         if (nodes.length > 0) {
@@ -1504,9 +1504,10 @@ export var drawGraph = function (workbook) {
         // handle left x and y boundaries to not exceed BOUNDARY_MARGIN
         minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
         // TODO: probably need to factor in graphZoom
-        maxX = maxX > $container.width() ? $container.width() - BOUNDARY_MARGIN_X_R : maxX;
+        // maxX = maxX > $container.width() ? $container.width() - BOUNDARY_MARGIN_X_R : maxX;
         minY = minY < BOUNDARY_MARGIN_Y_T ? BOUNDARY_MARGIN_Y_T : minY;
-        maxY = maxY > $container.height() ? $container.height() - BOUNDARY_MARGIN_Y_B : maxY;
+        // maxY = maxY > $container.height() ? $container.height() - BOUNDARY_MARGIN_Y_B : maxY;
+
         // console.log("flexi box width and height", maxX - minX, "maxX", maxX, "minX", minX, "maxY - minY", maxY - minY, "maxY", maxY, "minY", minY)
         let width = 1234;
         if (maxX < 0 && minX < 0) {
@@ -1570,15 +1571,8 @@ export var drawGraph = function (workbook) {
                 // console.log("right bound violated");
                 // if (flexibleContainer.x * graphZoom < $container.width() / graphZoom / 2){
             BOUNDARY_MARGIN_X_R = width / graphZoom - BOUNDARY_MARGIN;
-                // } else {
-                //     BOUNDARY_MARGIN_X_R = Math.abs(xTranslation) / graphZoom;
-                // }
-            //   }
             BOUNDARY_MARGIN_Y_T = -yTranslation / graphZoom + BOUNDARY_MARGIN / 2;
-            // if (yTranslation >= height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
-                // console.log("bottom bound violated")
             BOUNDARY_MARGIN_Y_B = height / graphZoom - BOUNDARY_MARGIN;
-            // }
         }
 
         var SELF_REFERRING_Y_OFFSET = 6;
@@ -1618,9 +1612,15 @@ export var drawGraph = function (workbook) {
                 width ${Math.round(flexibleContainerRect.attr("width"))}
                 x ${Math.round(flexibleContainerRect.attr("x"))}
                 maxX ${Math.round(flexibleContainer.maxX)}
+                boundX
+                ${Math.round(BOUNDARY_MARGIN_X_L)}
+                ${Math.round(BOUNDARY_MARGIN_X_R)}
                 height ${Math.round(flexibleContainerRect.attr("height"))}
                 y ${Math.round(flexibleContainerRect.attr("y"))}
                 maxY ${Math.round(flexibleContainer.maxY)}
+                boundY
+                ${Math.round(BOUNDARY_MARGIN_Y_T)}
+                ${Math.round(BOUNDARY_MARGIN_Y_B)}
                 `;
             $("#flexiBox-dimensions").text(flexDimensions);
 
@@ -1833,8 +1833,22 @@ export var drawGraph = function (workbook) {
     }
 
     function dragged (d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+        console.log(d, "d.fx", d3.event.x, "d.fy", d3.event.y)
+        if (!adaptive) {
+            if (d3.event.x + d.textWidth <= (-xTranslation / graphZoom + 5/2) + (width / graphZoom) - 5) {
+                d.fx = d3.event.x;
+            } else {
+                d.fx = (-xTranslation / graphZoom + 5/2) + (width / graphZoom) - 5 - d.textWidth;
+            }
+            if (d3.event.y + nodeHeight<= -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5) {
+                d.fy = d3.event.y;
+            } else {
+                d.fy = -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5 - nodeHeight;
+            }
+        } else {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
     }
 
     grnState.simulation = simulation;
