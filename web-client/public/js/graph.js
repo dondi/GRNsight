@@ -1577,11 +1577,9 @@ export var drawGraph = function (workbook) {
                 width ${Math.round(flexibleContainerRect.attr("width"))}
                 x ${Math.round(flexibleContainerRect.attr("x"))}
                 maxX ${Math.round(flexibleContainer.maxX)}
-                
                 height ${Math.round(flexibleContainerRect.attr("height"))}
                 y ${Math.round(flexibleContainerRect.attr("y"))}
                 maxY ${Math.round(flexibleContainer.maxY)}
-
                 `;
             $("#flexiBox-dimensions").text(flexDimensions);
 
@@ -1611,7 +1609,7 @@ export var drawGraph = function (workbook) {
                       selfReferringEdgeWidth;
                 }
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
-                var currentXPos = Math.max(BOUNDARY_MARGIN, Math.min(rightBoundary, d.x));
+                var currentXPos = Math.max(getBOUNDARY_MARGIN_X_L(), Math.min(rightBoundary, d.x));
                 if (
                   adaptive &&
                   width < MAX_WIDTH &&
