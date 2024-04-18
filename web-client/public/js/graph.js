@@ -295,6 +295,7 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
     let prevGrnstateZoomVal;
+    let flexibleContainer = null;
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
@@ -436,8 +437,7 @@ export var drawGraph = function (workbook) {
             $("#restrict-graph-to-viewport span").removeClass("glyphicon-ok");
             $("input[name=viewport]").removeProp("checked");
             adaptive = true;
-            d3.select("rect").attr("stroke", "none");
-            d3.select("#flexibleContainerRect").attr("stroke", "none");
+            flexibleContainer = null;
             center();
         } else {
             $("#restrict-graph-to-viewport span").addClass("glyphicon-ok");
@@ -1386,7 +1386,6 @@ export var drawGraph = function (workbook) {
     };
 
     const BOUNDARY_MARGIN = 5;
-    let flexibleContainer = null;
 
     function viewportBoundsMoveDrag (graphZoom, dx, dy) {
         updateZoomContainerInfo();
@@ -1479,7 +1478,7 @@ export var drawGraph = function (workbook) {
         return {x: minX, y: minY, maxX: maxX, maxY: maxY, width: flexiBoxWidth, height: flexiBoxHeight};
     }
 
-    // this checks if zoomValue is in bounds when zoom in and out
+    // Checks if zoomValue is in bounds when zoom in and out
     function flexZoomInBounds (zoomValue) {
         if (flexibleContainer) {
             updateZoomContainerInfo();
