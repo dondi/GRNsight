@@ -281,56 +281,6 @@ export var drawGraph = function (workbook) {
         }
     };
 
-    function viewportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
-        updateZoomContainerInfo();
-        flexibleContainer = calcFlexiBox()
-        // left border
-        if (xTranslation < 0 &&
-              Math.abs(xTranslation) >=
-                Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom)
-        {
-            return false;
-        }
-
-        //dPad movement when moving left
-        if (
-          dPadMove &&
-          xTranslation < 0 &&
-          dx < 0 &&
-          Math.abs(xTranslation + dx) > flexibleContainer.x * graphZoom
-        ) {
-            return false;
-        }
-
-        // right border
-        if (xTranslation + dx > width - (graphZoom * flexibleContainer.width + graphZoom * flexibleContainer.x)) {
-            return false
-        }
-
-        // Y-axis boundaries
-        // prevents graph from going through top border
-        if (yTranslation < 0 &&
-          Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) * graphZoom &&
-          (dy < 0 ||
-            (dy > 0 &&
-              Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy * graphZoom))
-        ) {
-            return false;
-        }
-
-        // moving up with dPad
-        if (dPadMove && yTranslation < 0 && dy < 0 && Math.abs(yTranslation + dy) > flexibleContainer.y) {
-            return false
-        }
-        
-        // bottom border
-        if (yTranslation + dy > height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
-            return false
-        }
-
-        return true
-    };
-
     // controls reading movement of zoomSlider and scaling graph to that zoomScale
     const setGraphZoom = zoomScale => {
         if (zoomScale < MIDDLE_SCALE) {
@@ -1433,6 +1383,56 @@ export var drawGraph = function (workbook) {
     };
 
     const BOUNDARY_MARGIN = 5;
+    function viewportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
+        updateZoomContainerInfo();
+        flexibleContainer = calcFlexiBox()
+        // left border
+        if (xTranslation < 0 &&
+              Math.abs(xTranslation) >=
+                Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom)
+        {
+            return false;
+        }
+
+        //dPad movement when moving left
+        if (
+          dPadMove &&
+          xTranslation < 0 &&
+          dx < 0 &&
+          Math.abs(xTranslation + dx) > flexibleContainer.x * graphZoom
+        ) {
+            return false;
+        }
+
+        // right border
+        if (xTranslation + dx > width - (graphZoom * flexibleContainer.width + graphZoom * flexibleContainer.x)) {
+            return false
+        }
+
+        // Y-axis boundaries
+        // prevents graph from going through top border
+        if (yTranslation < 0 &&
+          Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) * graphZoom &&
+          (dy < 0 ||
+            (dy > 0 &&
+              Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy * graphZoom))
+        ) {
+            return false;
+        }
+
+        // moving up with dPad
+        if (dPadMove && yTranslation < 0 && dy < 0 && Math.abs(yTranslation + dy) > flexibleContainer.y) {
+            return false
+        }
+
+        // bottom border
+        if (yTranslation + dy > height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
+            return false
+        }
+
+        return true
+    };
+    
     function calcFlexiBox () {
         const nodes = simulation.nodes()
         let nodeWidth = 0;
