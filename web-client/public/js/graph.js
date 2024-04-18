@@ -178,17 +178,15 @@ export var drawGraph = function (workbook) {
             scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
         }
 
-        if (
-        adaptive ||
-        (!adaptive &&
+        if (adaptive || (!adaptive &&
             flexZoomInBounds(graphZoom) &&
-            viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy, false))
+            viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
         ) {
-          zoom.translateBy(
-            zoomContainer,
-            scale * (d3.event.x - zoomDragPrevX),
-            scale * (d3.event.y - zoomDragPrevY)
-          );
+            zoom.translateBy(
+                zoomContainer,
+                scale * (d3.event.x - zoomDragPrevX),
+                scale * (d3.event.y - zoomDragPrevY)
+            );
         }
         zoomDragPrevX = d3.event.x;
         zoomDragPrevY = d3.event.y;
@@ -482,7 +480,7 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight, true)) {
+            if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
             }
         }
@@ -1383,51 +1381,37 @@ export var drawGraph = function (workbook) {
     };
 
     const BOUNDARY_MARGIN = 5;
-    function viewportBoundsMoveDrag(graphZoom, dx, dy, dPadMove) {
+    // TODO: take off dPadMove
+    function viewportBoundsMoveDrag(graphZoom, dx, dy) {
         updateZoomContainerInfo();
-        flexibleContainer = calcFlexiBox()
-        // left border
-        if (xTranslation < 0 &&
-              Math.abs(xTranslation) >=
-                Math.floor(flexibleContainer.x) * graphZoom + dx * graphZoom)
-        {
-            return false;
-        }
+        flexibleContainer = calcFlexiBox();
 
-        //dPad movement when moving left
         if (
-          dPadMove &&
-          xTranslation < 0 &&
-          dx < 0 &&
-          Math.abs(xTranslation + dx) > flexibleContainer.x * graphZoom
+            flexibleContainer.x + flexibleContainer.width + dx >= 
+            -xTranslation / graphZoom +
+            BOUNDARY_MARGIN / 2 +
+            width / graphZoom -
+            BOUNDARY_MARGIN
         ) {
             return false;
         }
 
-        // right border
-        if (xTranslation + dx > width - (graphZoom * flexibleContainer.width + graphZoom * flexibleContainer.x)) {
-            return false
-        }
-
-        // Y-axis boundaries
-        // prevents graph from going through top border
-        if (yTranslation < 0 &&
-          Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) * graphZoom &&
-          (dy < 0 ||
-            (dy > 0 &&
-              Math.abs(yTranslation) >= Math.floor(flexibleContainer.y) + dy * graphZoom))
-        ) {
+        if (flexibleContainer.x + dx <= getBOUNDARY_MARGIN_X_L()) {
             return false;
         }
 
-        // moving up with dPad
-        if (dPadMove && yTranslation < 0 && dy < 0 && Math.abs(yTranslation + dy) > flexibleContainer.y) {
+        if (
+            flexibleContainer.y + flexibleContainer.height + dy >=
+            -yTranslation / graphZoom +
+            BOUNDARY_MARGIN / 2 +
+            height / graphZoom -
+            BOUNDARY_MARGIN
+        ) {
             return false
         }
 
-        // bottom border
-        if (yTranslation + dy > height - (graphZoom * flexibleContainer.height + graphZoom * flexibleContainer.y)) {
-            return false
+        if (flexibleContainer.y + dy <= getBOUNDARY_MARGIN_Y_T()) {
+            return false;
         }
 
         return true
@@ -1440,41 +1424,8 @@ export var drawGraph = function (workbook) {
             nodeWidth = nodes[0].textWidth + 8;
         }
 
-        let xValuesPaths = []
-        let yValuesPaths = []
-
-        // link.selectAll("path").each( function(pathData) {
-        //     if (pathData.source) {
-        //         // Log the "d" attribute for each path
-        //         const controlPoints = d3.select(this).attr("d");
-        //         if (controlPoints) {
-        //             if (controlPoints.includes("A")) {
-        //                 const splitSpaces = controlPoints.split(" ");
-        //                 const controlPointXY = splitSpaces[2].split(",")
-        //                 const controlPointX = controlPointXY[0];
-        //                 const controlPointY = controlPointXY[1];
-        //                 xValuesPaths.push(parseFloat(controlPointX))
-        //                 yValuesPaths.push(parseFloat(controlPointY))
-        //             }
-        //             else if (controlPoints.includes("C")) {
-        //                 const splitC = controlPoints.split("C");
-
-        //                 splitC[1].split(",").forEach((coordinates) => {
-        //                     const splitSpaces = coordinates.split(" ");
-        //                     const xValue = splitSpaces[splitSpaces.length - 2];
-        //                     const yValue = splitSpaces[splitSpaces.length - 1];
-        //                     xValuesPaths.push(parseFloat(xValue));
-        //                     yValuesPaths.push(parseFloat(yValue));
-        //                 });
-        //             }
-        //         }
-        //     }
-        // });
         const xValuesNodes = nodes.map((node) => node.x);
         const yValuesNodes = nodes.map((node) => node.y);
-
-        // const xValues = xValuesPaths.concat(xValuesNodes);
-        // const yValues = yValuesPaths.concat(yValuesNodes);
 
         let minX = Math.min(...xValuesNodes);
         let maxX = Math.max(...xValuesNodes) + nodeWidth;
@@ -1681,7 +1632,6 @@ export var drawGraph = function (workbook) {
                     var ADDITIONAL_SHIFT = 0.07;
                     var END_POINT_ADJUSTMENT = 1.2;
 
-
                     // Self edge.
                     if (x1 === x2 && y1 === y2) {
                         // Move the position of the loop.
@@ -1778,15 +1728,39 @@ export var drawGraph = function (workbook) {
 
     function dragged (d) {
         if (!adaptive) {
-            if (d3.event.x + d.textWidth <= (-xTranslation / graphZoom + 5/2) + (width / graphZoom) - 5) {
+            // prevents nodes from being dragged outside of right boundary
+            if (
+                d3.event.x + d.textWidth <= 
+                -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + 
+                width / graphZoom - 
+                BOUNDARY_MARGIN
+                ) {
                 d.fx = d3.event.x;
             } else {
-                d.fx = (-xTranslation / graphZoom + 5/2) + (width / graphZoom) - 5 - d.textWidth;
+                d.fx =
+                  -xTranslation / graphZoom +
+                  BOUNDARY_MARGIN / 2 +
+                  width / graphZoom -
+                  BOUNDARY_MARGIN -
+                  d.textWidth;
             }
-            if (d3.event.y + nodeHeight <= -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5) {
-                d.fy = d3.event.y;
+
+            // prevent nodes from being dragged out of bottom boundary
+            if (
+              d3.event.y + nodeHeight <=
+              -yTranslation / graphZoom +
+                BOUNDARY_MARGIN / 2 +
+                height / graphZoom -
+                BOUNDARY_MARGIN
+            ) {
+              d.fy = d3.event.y;
             } else {
-                d.fy = -yTranslation / graphZoom + 5 / 2 + height / graphZoom - 5 - nodeHeight;
+              d.fy =
+                -yTranslation / graphZoom +
+                BOUNDARY_MARGIN / 2 +
+                height / graphZoom -
+                BOUNDARY_MARGIN -
+                nodeHeight;
             }
         } else {
             d.fx = d3.event.x;
