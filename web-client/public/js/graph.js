@@ -230,8 +230,6 @@ export var drawGraph = function (workbook) {
 
     var flexibleContainerRect = boundingBoxContainer.append("rect")
         .attr("class", "boundingBox")
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
         .attr("fill", "none")
         .attr("id", "flexibleContainerRect");
 
@@ -262,10 +260,6 @@ export var drawGraph = function (workbook) {
     let xTranslation = 0;
     let yTranslation = 0;
     let flexibleContainer = null;
-
-    function getXTranslation() {
-        return xTranslation;
-    }
 
     function updateZoomContainerInfo() {
         // transform attribute of zoomContainer contains translation info about graph
@@ -355,12 +349,11 @@ export var drawGraph = function (workbook) {
     let zoomScaleSliderLeft;
     let zoomScaleSliderRight;
     let prevGrnstateZoomVal;
-    let centerXCoord;
-    let centerYCoord;
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
 
+        // If the zoom value is out of bounds, reset it to the previous value.
         if (adaptive) {
             zoomDisplay = grnState.zoomValue
         } else if (!adaptive && flexZoomInBounds((grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(grnState.zoomValue)) ) {
@@ -391,8 +384,6 @@ export var drawGraph = function (workbook) {
             if (!adaptive) {
                 center();
                 updateZoomContainerInfo();
-                centerXCoord = xTranslation;
-                centerYCoord = yTranslation;
             }
 
             $(ZOOM_SLIDER).val(
@@ -507,11 +498,10 @@ export var drawGraph = function (workbook) {
             width = $container.width();
             height = $container.height();
             // put a border with a gray stroke around the original container size
-            d3.select("rect").attr("stroke", "#9A9A9A")
-                .attr("width", width)
-                .attr("height", height);
+            d3.select("rect")
+              .attr("width", width)
+              .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
-            d3.select("#flexibleContainerRect").attr("stroke", "black");
             center();
         }
         updateAppBasedOnZoomValue(); // Update zoom value within bounds
@@ -1497,7 +1487,7 @@ export var drawGraph = function (workbook) {
         const BOUNDARY_MARGIN_Y_T = getBOUNDARY_MARGIN_Y_T();
         minX = minX < BOUNDARY_MARGIN_X_L ? BOUNDARY_MARGIN_X_L : minX;
         minY = minY < BOUNDARY_MARGIN_Y_T ? BOUNDARY_MARGIN_Y_T : minY;
-        
+
         maxX =
           maxX > -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
             ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
@@ -1511,7 +1501,7 @@ export var drawGraph = function (workbook) {
         let flexiBoxWidth = maxX - minX;
         if (maxX < 0 && minX < 0) {
             flexiBoxWidth = Math.abs(maxX) - Math.abs(minX);
-        } 
+        }
 
         let flexiBoxHeight = maxY - minY;
         if (maxY < 0 && minY < 0) {
@@ -1538,7 +1528,7 @@ export var drawGraph = function (workbook) {
                 return false;
             }
         }
-        return true
+        return true;
     }
 
     // only calculate Left and Top boundary margins because calculate rightboundary and bottomboundary in tick
@@ -1572,17 +1562,6 @@ export var drawGraph = function (workbook) {
 
         if (!adaptive) {
             flexibleContainer = calcFlexiBox();
-
-            const flexDimensions = `
-                width ${Math.round(flexibleContainerRect.attr("width"))}
-                x ${Math.round(flexibleContainerRect.attr("x"))}
-                maxX ${Math.round(flexibleContainer.maxX)}
-                height ${Math.round(flexibleContainerRect.attr("height"))}
-                y ${Math.round(flexibleContainerRect.attr("y"))}
-                maxY ${Math.round(flexibleContainer.maxY)}
-                `;
-            $("#flexiBox-dimensions").text(flexDimensions);
-
 
             flexibleContainerRect
               .attr("x", flexibleContainer.x)
