@@ -35,8 +35,6 @@ import {
  * updateFunction being set when needed.
  */
 
-// Stack overflow link for trying to create a box containing the graph:
-// https://stackoverflow.com/questions/47544041/how-to-visualize-groups-of-nodes-in-a-d3-force-directed-graph-layout
 let mutationCallback = null;
 const resizeObserver = new MutationObserver((mutationsList, observer) => {
     if (typeof(mutationCallback) === "function") {
@@ -260,14 +258,14 @@ export var drawGraph = function (workbook) {
     function updateZoomContainerInfo () {
         // transform attribute of zoomContainer contains translation info about graph
         if (zoomContainer.attr("transform")) {
-            xTranslation = parseFloat(
+            xTranslation = Number(
               zoomContainer
                 .attr("transform")
                 .split("(")[1]
                 .split(",")[0]
             );
 
-            yTranslation = parseFloat(
+            yTranslation = Number(
               zoomContainer
                 .attr("transform")
                 .split("(")[1]
