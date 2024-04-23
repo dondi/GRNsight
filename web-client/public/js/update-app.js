@@ -1,6 +1,6 @@
 import { drawGraph, updaters } from "./graph";
 import { uploadState } from "./upload";
-import { displayWarnings } from "./warnings";
+import { displayWarnings, displayPPINodeColorWarning } from "./warnings";
 import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
@@ -870,6 +870,7 @@ export const updateApp = grnState => {
     if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
     && hasExpressionData(grnState.workbook.expression)) {
         grnState.nodeColoring.showMenu = true;
+        // TODO: check if PPI mode is enabled and then show warning
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
@@ -933,6 +934,15 @@ export const updateApp = grnState => {
                 setTimeout(() => updaters.renderNodeColoring(), 250);
 
             }
+        }
+        console.log(
+          "grnState mode",
+          grnState.mode,
+          "network ppi mode",
+          NETWORK_PPI_MODE
+        );
+        if (grnState.mode === NETWORK_PPI_MODE) {
+          displayPPINodeColorWarning();
         }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
