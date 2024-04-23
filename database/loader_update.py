@@ -24,3 +24,6 @@ Utils.load_sources(Constants.NETWORK_SOURCE_TABLE_DATA_DIRECTORY, Constants.NETW
 Utils.update_network_genes(Constants.UPDATE_GENE_UNION_DIRECTORY, Constants.NETWORK_DATABASE_NAMESPACE)
 Utils.load_network_genes(Constants.MISSING_GENE_UNION_DIRECTORY, Constants.NETWORK_DATABASE_NAMESPACE)
 Utils.load_network_network(Constants.NETWORK_NETWORK_TABLE_DATA_DIRECTORY, Constants.NETWORK_DATABASE_NAMESPACE)
+
+# Expression
+Utils.update_expression_genes(Constants.UPDATE_GENE_UNION_DIRECTORY, Constants.EXPRESISON_DATABASE_NAMESPACE)

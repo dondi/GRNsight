@@ -192,6 +192,10 @@ class Utils:
     @classmethod
     def update_protein_genes(cls, gene_path: str, database_namespace: str):
         cls._update_genes(gene_path, database_namespace, is_protein = True)
+        
+    @classmethod
+    def update_expression_genes(cls, gene_path: str, database_namespace: str):
+        cls._update_genes(gene_path, database_namespace, is_protein = False)
     
     @classmethod    
     def _update_genes(cls, update_gene_path: str, database_namespace: str, is_protein: bool):
