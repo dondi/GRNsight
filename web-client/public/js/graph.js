@@ -483,7 +483,7 @@ export var drawGraph = function (workbook) {
         if (adaptive) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
-            if ((graphZoom, moveWidth, moveHeight)) {
+            if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
                 zoom.translateBy(zoomContainer, moveWidth, moveHeight);
             }
         }
