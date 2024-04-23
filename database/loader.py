@@ -2,7 +2,11 @@ import csv
 from utils import *
 from constants import Constants
 # python3 loader.py | psql postgresql://localhost/postgres
+import os
 
+if not os.path.exists('union-gene-data'):
+    os.makedirs('union-gene-data')
+    
 # Get union gene data
 Utils.create_union_file([Constants.EXPRESSION_GENE_SOURCE, Constants.PROTEIN_GENE_SOURCE, Constants.NETWORK_GENE_SOURCE], Constants.GENE_DATA_DIRECTORY)
 

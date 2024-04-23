@@ -1,6 +1,10 @@
 from constants import Constants
 from utils import Utils
+import os
 
+if not os.path.exists('union-gene-data'):
+    os.makedirs('union-gene-data')
+    
 # Get missing union gene data
 Utils.create_union_file([Constants.PROTEIN_MISSING_GENE_DIRECTORY, Constants.NETWORK_MISSING_GENE_DIRECTORY], Constants.MISSING_GENE_UNION_DIRECTORY)
 
