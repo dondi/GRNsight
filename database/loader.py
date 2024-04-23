@@ -3,7 +3,16 @@ from utils import *
 
 # python3 loader.py | psql postgresql://localhost/postgres
 
+# Get union gene data
+
+# Gene data source file path
+NETWORK_GENE_SOURCE = "network-database/script-results/processed-loader-files/gene.csv"
+PROTEIN_GENE_SOURCE = "protein-protein-database/script-results/processed-loader-files/gene.csv"
+EXPRESSION_GENE_SOURCE = "expression-database/script-results/processed-expression/genes.csv"
+
 GENE_DATA_DIRECTORY = 'union_genes.csv'
+Utils.create_union_file([EXPRESSION_GENE_SOURCE, PROTEIN_GENE_SOURCE, NETWORK_GENE_SOURCE], GENE_DATA_DIRECTORY)
+
 # Network data source file path
 # Constants name: NETWORK_<table_name>_DATA_DIRECTORY
 NETWORK_DATABASE_NAMESPACE = 'gene_regulatory_network_testing'

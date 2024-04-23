@@ -367,3 +367,48 @@ class Utils:
                     print(f'{gene_id}\t{taxon_id}\t{ncbi_geo_id}\t{pubmed_id}\t{degradation_rate}')
                 row_num += 1
         print('\\.')
+        
+    @classmethod
+    def _read_gene_info_from_csv(cls, file_path):
+        gene_info = {}
+        with open(file_path, 'r') as file:
+            reader = csv.reader(file)
+            row_num = 0
+            for row in reader:
+                if row_num != 0:
+                    r= ','.join(row).split('\t')
+                    if len(r) == 4:
+                        r.append('False')
+                    if r[1] == 'None':
+                        r[1] = r[0]
+                    gene_info[r[0]] = {
+                        'Display Gene ID': r[1],
+                        'Species': r[2],
+                        'Taxon': r[3],
+                        'Regulator': r[4]
+                    }
+                row_num += 1
+        return gene_info
+    
+    @classmethod
+    def create_union_file(cls, file_paths, output_file_path):
+        """
+        Create a union file containing all unique genes from all input files.
+
+        Args:
+            file_paths (List[str]): a list of file paths to read genes from (should list network genes file path at the end) because it can overwrite the regulator status of the gene
+            output_file_path (str): the file path to write the union genes to
+        """
+        all_gene_info = {}
+        
+        for file_path in file_paths:
+            gene_info = cls._read_gene_info_from_csv(file_path)
+            all_gene_info.update(gene_info)
+            
+        with open(output_file_path, 'w', newline='') as union_file:
+            headers = ['Gene ID', 'Display Gene ID', 'Species', 'Taxon', 'Regulator']
+            union_file.write('\t'.join(headers) + '\n')
+            
+            for gene_id, gene_info in all_gene_info.items():
+                row_data = [gene_id, gene_info['Display Gene ID'], gene_info['Species'], gene_info['Taxon'], gene_info['Regulator']]
+                union_file.write('\t'.join(row_data) + '\n')
