@@ -484,7 +484,7 @@ export var drawGraph = function (workbook) {
             zoom.translateBy(zoomContainer, moveWidth, moveHeight);
         } else if (!adaptive) {
             if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
-              zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+                zoom.translateBy(zoomContainer, moveWidth, moveHeight);
             }
         }
     }
