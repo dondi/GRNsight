@@ -15,18 +15,18 @@ class Constants:
     UPDATE_GENE_UNION_DIRECTORY = UNION_GENE_FOLDER_PATH + 'union-update-genes.csv'
     
     # Constants name: NETWORK_<table_name>_DATA_DIRECTORY
-    NETWORK_DATABASE_NAMESPACE = 'gene_regulatory_network_testing'
+    NETWORK_DATABASE_NAMESPACE = 'gene_regulatory_network'
     NETWORK_SOURCE_TABLE_DATA_DIRECTORY = NETWORK_FOLDER_PATH +  '/script-results/processed-loader-files/source.csv'
     NETWORK_NETWORK_TABLE_DATA_DIRECTORY = NETWORK_FOLDER_PATH +  '/script-results/processed-loader-files/network.csv'
     
     # Protein-protein-interactions
-    PROTEIN_DATABASE_NAMESPACE = 'protein_protein_interactions_testing'
+    PROTEIN_DATABASE_NAMESPACE = 'protein_protein_interactions'
     PROTEIN_SOURCE_TABLE_DATA_DIRECTORY = PROTEIN_FOLDER_PATH + '/script-results/processed-loader-files/source.csv'
     PROTEIN_NETWORK_TABLE_DATA_DIRECTORY = PROTEIN_FOLDER_PATH + '/script-results/processed-loader-files/physical_interaction_no_dupe.csv'
     PROTEIN_PROTEIN_TABLE_DATA_DIRECTORY = PROTEIN_FOLDER_PATH + '/script-results/processed-loader-files/protein.csv'
     
     # Expression data
-    EXPRESISON_DATABASE_NAMESPACE = 'gene_expression_testing'
+    EXPRESISON_DATABASE_NAMESPACE = 'gene_expression'
     EXPRESSION_REFS_TABLE_DATA_DIRECTORY = 'expression-database/script-results/processed-expression/refs.csv'
     EXPRESSION_METADATA_TABLE_DATA_DIRECTORY = 'expression-database/script-results/processed-expression/expression-metadata.csv'
     EXPRESSION_EXPRESSION_TABLE_DATA_DIRECTORY = 'expression-database/script-results/processed-expression/expression-data.csv'
