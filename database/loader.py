@@ -8,18 +8,18 @@ if not os.path.exists('union-gene-data'):
     os.makedirs('union-gene-data')
     
 # Get union gene data
-Utils.create_union_file([Constants.EXPRESSION_GENE_SOURCE, Constants.PROTEIN_GENE_SOURCE, Constants.NETWORK_GENE_SOURCE], Constants.GENE_DATA_DIRECTORY)
+Utils.create_union_file([Constants.EXPRESSION_GENE_SOURCE, Constants.PPI_GENE_SOURCE, Constants.GRN_GENE_SOURCE], Constants.GENE_DATA_DIRECTORY)
 
 # Regulatory Network
-Utils.load_sources(Constants.NETWORK_SOURCE_TABLE_DATA_DIRECTORY, Constants.NETWORK_DATABASE_NAMESPACE)
-Utils.load_network_genes(Constants.NETWORK_GENE_SOURCE, Constants.NETWORK_DATABASE_NAMESPACE)
-Utils.load_network_network(Constants.NETWORK_NETWORK_TABLE_DATA_DIRECTORY, Constants.NETWORK_DATABASE_NAMESPACE)
+Utils.load_sources(Constants.GRN_SOURCE_TABLE_DATA_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
+Utils.load_grn_genes(Constants.GRN_GENE_SOURCE, Constants.GRN_DATABASE_NAMESPACE)
+Utils.load_grn_network(Constants.GRN_NETWORK_TABLE_DATA_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
 
 # Protein-protein-interactions
-Utils.load_sources(Constants.PROTEIN_SOURCE_TABLE_DATA_DIRECTORY, Constants.PROTEIN_DATABASE_NAMESPACE)
-Utils.load_protein_genes(Constants.PROTEIN_GENE_SOURCE, Constants.PROTEIN_DATABASE_NAMESPACE)
-Utils.load_proteins(Constants.PROTEIN_PROTEIN_TABLE_DATA_DIRECTORY, Constants.PROTEIN_DATABASE_NAMESPACE)
-Utils.load_protein_network(Constants.PROTEIN_NETWORK_TABLE_DATA_DIRECTORY, Constants.PROTEIN_DATABASE_NAMESPACE)
+Utils.load_sources(Constants.PPI_SOURCE_TABLE_DATA_DIRECTORY, Constants.PPI_DATABASE_NAMESPACE)
+Utils.load_ppi_genes(Constants.PPI_GENE_SOURCE, Constants.PPI_DATABASE_NAMESPACE)
+Utils.load_proteins(Constants.PPI_PROTEIN_TABLE_DATA_DIRECTORY, Constants.PPI_DATABASE_NAMESPACE)
+Utils.load_ppi_network(Constants.PPI_NETWORK_TABLE_DATA_DIRECTORY, Constants.PPI_DATABASE_NAMESPACE)
 
 # Expression data
 Utils.load_refs(Constants.EXPRESSION_REFS_TABLE_DATA_DIRECTORY, Constants.EXPRESISON_DATABASE_NAMESPACE)

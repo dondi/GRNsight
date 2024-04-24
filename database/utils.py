@@ -28,7 +28,7 @@ class Utils:
         Load Network Matrix into the database
     update_genes(update_gene_path: str, database_namespace: str, is_protein: bool)
         Update Gene ID Mapping into the database
-    update_proteins(update_protein_path: str, database_namespace: str)
+    update_ppi_proteins(update_protein_path: str, database_namespace: str)
         Update Protein ID Mapping into the database
     """
     
@@ -59,19 +59,19 @@ class Utils:
         print('\\.')
         
     @classmethod
-    def load_network_genes(cls, gene_path: str, database_namespace: str):
-        cls._load_genes(gene_path, database_namespace, is_network = True)
+    def load_grn_genes(cls, gene_path: str, database_namespace: str):
+        cls._load_genes(gene_path, database_namespace, is_grn = True)
         
     @classmethod
-    def load_protein_genes(cls, gene_path: str, database_namespace: str):
-        cls._load_genes(gene_path, database_namespace, is_network = False)
+    def load_ppi_genes(cls, gene_path: str, database_namespace: str):
+        cls._load_genes(gene_path, database_namespace, is_grn = False)
         
     @classmethod
     def load_expression_genes(cls, gene_path: str, database_namespace: str):
-        cls._load_genes(gene_path, database_namespace, is_network = False)
+        cls._load_genes(gene_path, database_namespace, is_grn = False)
     
     @classmethod
-    def _load_genes(cls, gene_path: str, database_namespace: str, is_network: bool):
+    def _load_genes(cls, gene_path: str, database_namespace: str, is_grn: bool):
         """
         Load Gene ID Mapping into the database using the COPY command
 
@@ -81,10 +81,10 @@ class Utils:
                 The path to the file containing the gene data that want to add to the database
             database_namespace: str
                 The database namespace i.e the schema name where the gene data will be loaded
-            is_network : bool
+            is_grn : bool
                 A boolean value to check if the schema is for gene_regulatory_network
         """
-        if is_network:
+        if is_grn:
             print(f'COPY {database_namespace}.gene (gene_id, display_gene_id, species, taxon_id, regulator) FROM stdin;')
         else:
             print(f'COPY {database_namespace}.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
@@ -98,7 +98,7 @@ class Utils:
                     display_gene_id= r[1]
                     species = r[2]
                     taxon_id = r[3]
-                    if is_network:
+                    if is_grn:
                         regulator = r[4]
                         print(f'{gene_id}\t{display_gene_id}\t{species}\t{taxon_id}\t{regulator}')
                     else:
@@ -136,11 +136,11 @@ class Utils:
         print('\\.')
         
     @classmethod
-    def load_protein_network(cls, network_source_path: str, database_namespace: str):
+    def load_ppi_network(cls, network_source_path: str, database_namespace: str):
         cls._load_network(network_source_path, database_namespace, is_protein = True)
     
     @classmethod
-    def load_network_network(cls, network_source_path: str, database_namespace: str):
+    def load_grn_network(cls, network_source_path: str, database_namespace: str):
         cls._load_network(network_source_path, database_namespace, is_protein = False)
         
     @classmethod
@@ -186,11 +186,11 @@ class Utils:
         print('\\.')
         
     @classmethod
-    def update_network_genes(cls, gene_path: str, database_namespace: str):
+    def update_grn_genes(cls, gene_path: str, database_namespace: str):
         cls._update_genes(gene_path, database_namespace, is_protein = False)
     
     @classmethod
-    def update_protein_genes(cls, gene_path: str, database_namespace: str):
+    def update_ppi_genes(cls, gene_path: str, database_namespace: str):
         cls._update_genes(gene_path, database_namespace, is_protein = True)
         
     @classmethod
@@ -229,7 +229,7 @@ class Utils:
         print('COMMIT;')
     
     @classmethod    
-    def update_proteins(cls, update_protein_path: str, database_namespace: str):
+    def update_ppi_proteins(cls, update_protein_path: str, database_namespace: str):
         """
         Update Protein ID Mapping into the database
         

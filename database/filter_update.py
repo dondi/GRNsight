@@ -4,6 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy import text
 from constants import Constants
 
+PROTEIN_GENE_HEADER = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID'
+GRN_GENE_HEADER = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\tRegulator'
+
 def get_all_data_from_database_table(database_namespace, table_name):
     db = create_engine(os.environ['DB_URL'])
     with db.connect() as connection:
@@ -22,14 +25,14 @@ def get_all_genes(database_namespace):
         genes[key] = value
     return genes
 
-def get_all_network_genes():
-    return get_all_genes(Constants.NETWORK_DATABASE_NAMESPACE)
+def get_all_grn_genes():
+    return get_all_genes(Constants.GRN_DATABASE_NAMESPACE)
 
-def get_all_protein_genes():
-    return get_all_genes(Constants.PROTEIN_DATABASE_NAMESPACE)
+def get_all_ppi_genes():
+    return get_all_genes(Constants.PPI_DATABASE_NAMESPACE)
 
 def get_all_proteins():
-    protein_records = get_all_data_from_database_table(Constants.PROTEIN_DATABASE_NAMESPACE, "protein")
+    protein_records = get_all_data_from_database_table(Constants.PPI_DATABASE_NAMESPACE, "protein")
     proteins = {}
     for protein in protein_records:
         key = (protein[1], protein[5])
@@ -37,7 +40,13 @@ def get_all_proteins():
         proteins[key] = value
     return proteins
 
-def processing_gene_file(file_path, db_genes, is_protein=True):
+def processing_grn_gene_file():
+    _processing_gene_file(Constants.GRN_GENE_SOURCE, get_all_grn_genes(), is_protein=False)
+    
+def processing_ppi_gene_file():
+    _processing_gene_file(Constants.PPI_GENE_SOURCE, get_all_ppi_genes())
+
+def _processing_gene_file(file_path, db_genes, is_protein=True):
     print(f'Processing file {file_path}')
     missing_genes = {}
     genes_to_update = {}
@@ -68,8 +77,8 @@ def processing_gene_file(file_path, db_genes, is_protein=True):
 
 def processing_protein_file(file_path, db_proteins):
     print(f'Processing file {file_path}')
-    missing_proteins = {}
-    proteins_to_update = {}
+    ppi_missing_proteins = {}
+    ppi_proteins_to_update = {}
     with open(file_path, 'r+', encoding="UTF-8") as f:
         i = 0
         reader = csv.reader(f)
@@ -85,13 +94,19 @@ def processing_protein_file(file_path, db_proteins):
                 key = (gene_systematic_name, taxon_id)
                 value = (standard_name, length, molecular_weight, pi)
                 if key not in db_proteins:
-                    missing_proteins[key] = value
+                    ppi_missing_proteins[key] = value
                 elif db_proteins[key] != value: 
-                    proteins_to_update[key] = value
+                    ppi_proteins_to_update[key] = value
             i+=1
-    return missing_proteins, proteins_to_update
+    return ppi_missing_proteins, ppi_proteins_to_update
 
-def create_gene_file(file_path, headers, data, is_protein=True):
+def create_grn_gene_file(file_path, data):
+    _create_gene_file(file_path, GRN_GENE_HEADER, data, is_protein=False)
+    
+def create_ppi_gene_file(file_path, data):
+    _create_gene_file(file_path, PROTEIN_GENE_HEADER, data)
+
+def _create_gene_file(file_path, headers, data, is_protein=True):
     print(f'Creating {file_path}\n')
     gene_file = open(file_path, 'w')
     gene_file.write(f'{headers}\n')
@@ -102,7 +117,7 @@ def create_gene_file(file_path, headers, data, is_protein=True):
             gene_file.write(f'{gene[0]}\t{data[gene][0]}\t{data[gene][1]}\t{gene[1]}\t{data[gene][2]}\n')
     gene_file.close()
 
-def create_protein_file(file_path, data):
+def create_ppi_protein_file(file_path, data):
     print(f'Creating {file_path}\n')
     protein_file = open(file_path, 'w')
     headers = f'Standard Name\tGene Systematic Name\tLength\tMolecular Weight\tPI\tTaxon ID'
@@ -112,16 +127,12 @@ def create_protein_file(file_path, data):
     protein_file.close()
 
 # Processing gene files
-protein_headers = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID'
-network_headers = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\tRegulator'
-network_db_genes = get_all_network_genes()
-protein_db_genes = get_all_protein_genes()
-protein_missing_genes, protein_genes_to_update = processing_gene_file(Constants.PROTEIN_GENE_SOURCE, protein_db_genes)
-network_missing_genes, network_genes_to_update = processing_gene_file(Constants.NETWORK_GENE_SOURCE, network_db_genes, is_protein=False)
-missing_proteins, proteins_to_update = processing_protein_file(Constants.PROTEIN_PROTEIN_TABLE_DATA_DIRECTORY, get_all_proteins())
-create_gene_file(Constants.NETWORK_MISSING_GENE_DIRECTORY, network_headers, network_missing_genes, is_protein=False)
-create_gene_file(Constants.PROTEIN_MISSING_GENE_DIRECTORY, protein_headers, protein_missing_genes)
-create_gene_file(Constants.NETWORK_UPDATE_GENE_DIRECTORY, network_headers, network_genes_to_update, is_protein=False)
-create_gene_file(Constants.PROTEIN_UPDATE_GENE_DIRECTORY, protein_headers, protein_genes_to_update)
-create_protein_file(Constants.PROTEIN_MISSING_PROTEIN_DIRECTORY, missing_proteins)
-create_protein_file(Constants.PROTEIN_UPDATE_PROTEIN_DIRECTORY, proteins_to_update)
+ppi_missing_genes, ppi_genes_to_update = processing_ppi_gene_file()
+grn_missing_genes, grn_genes_to_update = processing_grn_gene_file()
+ppi_missing_proteins, ppi_proteins_to_update = processing_protein_file(Constants.PPI_PROTEIN_TABLE_DATA_DIRECTORY, get_all_proteins())
+create_grn_gene_file(Constants.GRN_MISSING_GENE_DIRECTORY, grn_missing_genes)
+create_grn_gene_file(Constants.GRN_UPDATE_GENE_DIRECTORY, grn_genes_to_update)
+create_ppi_gene_file(Constants.PPI_MISSING_GENE_DIRECTORY, ppi_missing_genes)
+create_ppi_gene_file(Constants.PPI_UPDATE_GENE_DIRECTORY, ppi_genes_to_update)
+create_ppi_protein_file(Constants.PPI_MISSING_PROTEIN_DIRECTORY, ppi_missing_proteins)
+create_ppi_protein_file(Constants.PPI_UPDATE_PROTEIN_DIRECTORY, ppi_proteins_to_update)
