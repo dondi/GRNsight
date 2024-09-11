@@ -3,18 +3,19 @@ import csv
 from sqlalchemy import create_engine
 from sqlalchemy import text
 from constants import Constants
+from utils import Utils
 
 PROTEIN_GENE_HEADER = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID'
 GRN_GENE_HEADER = f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\tRegulator'
 
-def get_all_data_from_database_table(database_namespace, table_name):
+def _get_all_data_from_database_table(database_namespace, table_name):
     db = create_engine(os.environ['DB_URL'])
     with db.connect() as connection:
         result_set = connection.execute(text(f"SELECT * FROM {database_namespace}.{table_name}"))
         return result_set.fetchall()
     
-def get_all_genes(database_namespace):
-    gene_records = get_all_data_from_database_table(database_namespace, "gene")
+def _get_all_db_genes(database_namespace):
+    gene_records = _get_all_data_from_database_table(database_namespace, "gene")
     genes = {}
     for gene in gene_records:
         key = (gene[0], gene[3])
@@ -25,32 +26,24 @@ def get_all_genes(database_namespace):
         genes[key] = value
     return genes
 
-def get_all_grn_genes():
-    return get_all_genes(Constants.GRN_DATABASE_NAMESPACE)
+def _get_all_db_grn_genes():
+    return _get_all_db_genes(Constants.GRN_DATABASE_NAMESPACE)
 
-def get_all_ppi_genes():
-    return get_all_genes(Constants.PPI_DATABASE_NAMESPACE)
+def _get_all_db_ppi_genes():
+    return _get_all_db_genes(Constants.PPI_DATABASE_NAMESPACE)  
 
-def get_all_proteins():
-    protein_records = get_all_data_from_database_table(Constants.PPI_DATABASE_NAMESPACE, "protein")
-    proteins = {}
-    for protein in protein_records:
-        key = (protein[1], protein[5])
-        value = (protein[0], protein[2], protein[3], protein[4])
-        proteins[key] = value
-    return proteins
-
-def processing_grn_gene_file():
-    _processing_gene_file(Constants.GRN_GENE_SOURCE, get_all_grn_genes(), is_protein=False)
+def _get_all_genes():
+    db_grn_genes = _get_all_db_grn_genes()
+    db_ppi_genes = _get_all_db_ppi_genes()
+    Utils.create_union_file([Constants.PPI_GENE_SOURCE, Constants.GRN_GENE_SOURCE], Constants.GENE_DATA_DIRECTORY)
+    genes = db_grn_genes
     
-def processing_ppi_gene_file():
-    _processing_gene_file(Constants.PPI_GENE_SOURCE, get_all_ppi_genes())
-
-def _processing_gene_file(file_path, db_genes, is_protein=True):
-    print(f'Processing file {file_path}')
-    missing_genes = {}
-    genes_to_update = {}
-    with open(file_path, 'r+', encoding="UTF-8") as f:
+    for gene in db_ppi_genes:
+        if gene not in genes:
+            display_gene_id, species = db_ppi_genes[gene]
+            genes[gene] = [display_gene_id, species, False]
+    
+    with open(Constants.GENE_DATA_DIRECTORY, 'r+', encoding="UTF-8") as f:
         i = 0
         reader = csv.reader(f)
         for row in reader:
@@ -60,19 +53,55 @@ def _processing_gene_file(file_path, db_genes, is_protein=True):
                 display_gene_id = row[1]
                 species = row[2]
                 taxon_id = row[3]
+                regulator = row[4].capitalize()
                 key = (gene_id, taxon_id)
-                if (is_protein):
-                    value = (display_gene_id, species)
-                else:
-                    regulator = row[4].capitalize()
-                    value = (display_gene_id, species, regulator)
-                if key not in db_genes:
-                    missing_genes[key] = value
-                elif db_genes[key][0] != display_gene_id:
-                    # the value is not the same, let's update
+                value = (display_gene_id, species, regulator)
+                if key not in genes:
+                    genes[key] = value
+                elif genes[key][0] != display_gene_id:
                     if display_gene_id != "None":
-                        genes_to_update[key] = value
+                        genes[key] = value
             i+=1
+    return genes
+        
+
+def get_all_proteins():
+    protein_records = _get_all_data_from_database_table(Constants.PPI_DATABASE_NAMESPACE, "protein")
+    proteins = {}
+    for protein in protein_records:
+        key = (protein[1], protein[5])
+        value = (protein[0], protein[2], protein[3], protein[4])
+        proteins[key] = value
+    return proteins
+
+def processing_grn_gene_file():
+    return _processing_gene_file(_get_all_db_grn_genes(), is_protein=False)
+    
+def processing_ppi_gene_file():
+    return _processing_gene_file(_get_all_db_ppi_genes())
+
+def _processing_gene_file(db_genes, is_protein=True):
+    print(f'Processing gene')
+    missing_genes = {}
+    genes_to_update = {}
+    all_genes = _get_all_genes()
+    for gene in all_genes:
+        display_gene_id, species, regulator = all_genes[gene]
+        values_for_ppi = (display_gene_id, species)
+        values_for_grn = (display_gene_id, species, regulator)
+        if gene not in db_genes:
+            if is_protein:
+                missing_genes[gene] = values_for_ppi
+            else:
+                missing_genes[gene] = values_for_grn
+        elif gene in db_genes and db_genes[gene][0] != display_gene_id:
+            if db_genes[gene][0] != "None":
+                if is_protein: 
+                    genes_to_update[gene] = values_for_ppi
+                else:
+                    genes_to_update[gene] = values_for_grn
+    print("Missing genes", missing_genes)
+    print("Genes to update", genes_to_update)
     return missing_genes, genes_to_update
 
 def processing_protein_file(file_path, db_proteins):
@@ -123,7 +152,7 @@ def create_ppi_protein_file(file_path, data):
     headers = f'Standard Name\tGene Systematic Name\tLength\tMolecular Weight\tPI\tTaxon ID'
     protein_file.write(f'{headers}\n')
     for protein in data:
-        protein_file.write(f'{data[protein][0]}\t{[protein][0]}\t{data[protein][1]}\t{data[protein][2]}\t{data[protein][3]}\t{protein[1]}\n')
+        protein_file.write(f'{data[protein][0]}\t{protein[0]}\t{data[protein][1]}\t{data[protein][2]}\t{data[protein][3]}\t{protein[1]}\n')
     protein_file.close()
 
 # Processing gene files
