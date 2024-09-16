@@ -223,7 +223,7 @@ class Utils:
                     if is_protein:
                         print(f"UPDATE {database_namespace}.gene\nSET display_gene_id = '{display_gene_id}'\nWHERE gene_id = '{gene_id}';")
                     else:
-                        regulator = r[2]
+                        regulator = r[4]
                         print(f"UPDATE {database_namespace}.gene\nSET display_gene_id = '{display_gene_id}', regulator={regulator}\nWHERE gene_id = '{gene_id}';")
                 row_num += 1
         print('COMMIT;')

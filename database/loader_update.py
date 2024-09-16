@@ -3,10 +3,10 @@ from constants import Constants
 from utils import Utils
 
 def load_grn_data_into_database():
-    Utils.load_sources(Constants.GRN_SOURCE_TABLE_DATA_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
+    # Utils.load_sources(Constants.GRN_SOURCE_TABLE_DATA_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
     Utils.update_grn_genes(Constants.GRN_UPDATE_GENE_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
-    Utils.load_grn_genes(Constants.GRN_MISSING_GENE_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
-    Utils.load_grn_network(Constants.GRN_NETWORK_TABLE_DATA_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
+    # Utils.load_grn_genes(Constants.GRN_MISSING_GENE_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
+    # Utils.load_grn_network(Constants.GRN_NETWORK_TABLE_DATA_DIRECTORY, Constants.GRN_DATABASE_NAMESPACE)
 
 def load_ppi_data_into_database():
     Utils.load_sources(Constants.PPI_SOURCE_TABLE_DATA_DIRECTORY, Constants.PPI_DATABASE_NAMESPACE)

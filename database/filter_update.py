@@ -35,6 +35,9 @@ def _get_all_db_ppi_genes():
 def _get_all_genes():
     db_grn_genes = _get_all_db_grn_genes()
     db_ppi_genes = _get_all_db_ppi_genes()
+    
+    if not os.path.exists('union-gene-data'):
+        os.makedirs('union-gene-data')
     Utils.create_union_file([Constants.PPI_GENE_SOURCE, Constants.GRN_GENE_SOURCE], Constants.GENE_DATA_DIRECTORY)
     genes = db_grn_genes
     
@@ -99,9 +102,7 @@ def _processing_gene_file(db_genes, is_protein=True):
                 if is_protein: 
                     genes_to_update[gene] = values_for_ppi
                 else:
-                    genes_to_update[gene] = values_for_grn
-    print("Missing genes", missing_genes)
-    print("Genes to update", genes_to_update)
+                    genes_to_update[gene] = values_for_grn  
     return missing_genes, genes_to_update
 
 def processing_protein_file(file_path, db_proteins):
