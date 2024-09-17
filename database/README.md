@@ -156,37 +156,44 @@ Here are the files pertaining to both the network and expression databases. Look
 
 ## Instructions for Updating Database
 
-1.  Getting new data
+    1.  Getting new data
 
-   1. Generate a new network from Yeastmine using the script `generate_network.py` inside `network-database` folder.
+        1. Generate a new network from Yeastmine using the script `generate_network.py` inside `network-database` folder.
+                ```
+                cd <path to GRNsight/database/network-database/scripts>
+                python3 generate_network.py
+                ```
+        2. Generate a new Protein-Protein Interactions from SGD using Yeastmine
+
+                ```
+                cd <path to GRNsight/database/protein-protein-database/scripts>
+                python3 generate_protein_network.py
+                ```
+
+    2. Filter all the missing genes, and updated genes in both Network and Protein-Protein Interactions. Also you need to filter the missing protein, and updated proteins in Protein-Protein Interactions. Everything is done in `filter_update.py`. The script will access the database get all of the genes stored within. From there it will generate a csv file of all genes that are missing from your database, and all genes that have updated their display name (standard like name). After running this script, you will see `missing-genes.csv`, `update-genes.csv` in `processed-loader-files` for both `network-database` and `protein-protein-database`, also `missing-protein.csv` and `update-protein.csv`.
+
         ```
-        cd <path to GRNsight/database/network-database/scripts>
-        python3 generate_network.py
-        ```
-   2. Generate a new Protein-Protein Interactions from SGD using Yeastmine
-
-        ```
-        cd <path to GRNsight/database/protein-protein-database/scripts>
-        python3 generate_protein_network.py
+        cd <path to GRNsight/database/>
+        DB_URL="postgresql://[<db_user>:<password>]@<address to database>/<database name>" python3 filter_update.py
         ```
 
-   3. Filter all the missing genes, and updated genes in both Network and Protein-Protein Interactions. Also you need to filter the missing protein, and updated        proteins in Protein-Protein Interactions. Everything is done in `filter_update.py`. The script will access the database get all of the genes stored within. From there it will generate a csv file of all genes that are missing from your database, and all genes that have updated their display name (standard like name).
+        Ex:
+        ```
+        DB_URL="postgresql://postgres@localhost/postgres" python3 filter_update.py
+        ```
+    3. Loading all the updates from Network or Protein-Protein Interactions to database.
 
-      ```
-      cd <path to GRNsight/database/
-      DB_URL="postgresql://[<db_user>:<password>]@<address to database>/<database name>" python3 filter_update.py
-      ```
-   4. Loading all the updates from Network and Protein-Protein Interactions to database
-      To load to local database
+        In the command below, the --network option specifies the network source, which can be either GRN or PPI. Ensure you select the correct network type.
+        To load to local database
 
-      ```
-      python3 loader_update.py | psql postgresql://localhost/postgres
-      ```
+        ```
+        python3 loader_update.py --network=[GRN|PPI] | psql postgresql://localhost/postgres
+        ```
 
-      To load to production database
+        To load to production database
 
-      ```
-      python3 loader_update.py | psql <path to database>
-      ```
+        ```
+        python3 loader_update.py --network=[GRN|PPI]| psql <path to database>
+        ```
 
-3. Continue setting up in the [Initial Setup Wiki page](https://github.com/dondi/GRNsight/wiki/Initial-Setup)
+Continue setting up in the [Initial Setup Wiki page](https://github.com/dondi/GRNsight/wiki/Initial-Setup)
