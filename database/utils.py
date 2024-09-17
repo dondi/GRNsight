@@ -251,7 +251,7 @@ class Utils:
                     length = r[2] if r[2] != "None" else 0
                     molecular_weight = r[3] if r[3] != "None" else 0
                     pi = r[4] if r[4] != "None" else 0
-                    print(f"UPDATE {database_namespace}.gene\nSET standard_name = '{standard_name}', length = {length}, molecular_weight = {molecular_weight}, PI = {pi}\nWHERE gene_systematic_name = '{gene_name}';")
+                    print(f"UPDATE {database_namespace}.protein\nSET standard_name = '{standard_name}', length = {length}, molecular_weight = {molecular_weight}, PI = {pi}\nWHERE gene_systematic_name = '{gene_name}';")
                 row_num += 1
         print('COMMIT;')
     

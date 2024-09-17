@@ -72,8 +72,8 @@ def get_all_proteins():
     protein_records = _get_all_data_from_database_table(Constants.PPI_DATABASE_NAMESPACE, "protein")
     proteins = {}
     for protein in protein_records:
-        key = (protein[1], protein[5])
-        value = (protein[0], protein[2], protein[3], protein[4])
+        key = (protein[0], protein[5])
+        value = (protein[1], protein[2], protein[3], protein[4])
         proteins[key] = value
     return proteins
 
@@ -121,8 +121,8 @@ def processing_protein_file(file_path, db_proteins):
                 molecular_weight = float(row[3]) if row[3] != "None" else 0
                 pi = float(row[4]) if row[4] != "None" else 0
                 taxon_id = row[5]
-                key = (gene_systematic_name, taxon_id)
-                value = (standard_name, length, molecular_weight, pi)
+                key = (standard_name, taxon_id)
+                value = (gene_systematic_name, length, molecular_weight, pi)
                 if key not in db_proteins:
                     ppi_missing_proteins[key] = value
                 elif db_proteins[key] != value: 
@@ -153,7 +153,7 @@ def create_ppi_protein_file(file_path, data):
     headers = f'Standard Name\tGene Systematic Name\tLength\tMolecular Weight\tPI\tTaxon ID'
     protein_file.write(f'{headers}\n')
     for protein in data:
-        protein_file.write(f'{data[protein][0]}\t{protein[0]}\t{data[protein][1]}\t{data[protein][2]}\t{data[protein][3]}\t{protein[1]}\n')
+        protein_file.write(f'{protein[0]}\t{data[protein][0]}\t{data[protein][1]}\t{data[protein][2]}\t{data[protein][3]}\t{protein[1]}\n')
     protein_file.close()
 
 # Processing gene files
