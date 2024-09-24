@@ -49,6 +49,7 @@ import {
   NODE_COLORING_MENU,
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
+  NODE_COLORING_NAVBAR_OPTIONS,
   NODE_COLORING_SIDEBAR_BODY,
   NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
@@ -107,6 +108,8 @@ import {
   NETWORK_MODE_PROTEIN_PHYS,
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
+  NETWORK_GRN_MODE,
+  NETWORK_PPI_MODE
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -391,7 +394,7 @@ const loadExpressionDatabase = function (isTopDataset) {
         queryExpressionDatabase({
             type:"ExpressionData",
             dataset,
-            genes : grnState.workbook.genes.map(x => {return x.name;}).join(","),
+            genes : grnState.workbook.genes.map(gene => {return gene.name;}).join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
@@ -515,8 +518,8 @@ const showNodeColoringMenus = () => {
 const disableNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
-    $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+    $(NODE_COLORING_MENU).addClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
@@ -532,21 +535,21 @@ const updateModeViews = () =>{
     $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
     // Select the correct menu items
     $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
-    if (grnState.mode === "grn") {
+    if (grnState.mode === NETWORK_GRN_MODE) {
         toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
-    } else if (grnState.mode === "protein-protein-physical-interaction") {
+    } else if (grnState.mode === NETWORK_PPI_MODE) {
         toggleLayout(NETWORK_MODE_PROTEIN_PHYS, NETWORK_MODE_GRN);
     }
 };
 
 const checkWorkbookModeSettings = () => {
-    if (grnState.mode === "protein-protein-physical-interaction") {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.colorOptimal = false;
         disableNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
-    } else if (grnState.mode === "grn") {
+    } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.colorOptimal = true;
         showNodeColoringMenus();
@@ -556,9 +559,9 @@ const checkWorkbookModeSettings = () => {
 };
 
 $("body").on("click", () => {
-    if (grnState.mode === "protein-protein-physical-interaction") {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
-    } else if (grnState.mode === "grn") {
+    } else if (grnState.mode === NETWORK_GRN_MODE) {
         $(EXPORT_TO_UNWEIGHTED_GML_MENU).removeClass("disabled");
     }
 });
@@ -569,12 +572,12 @@ $(NETWORK_MODE_DROPDOWN).on("change", () => {
     refreshApp();
 });
 $(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
-    grnState.mode = "protein-protein-physical-interaction";
+    grnState.mode = NETWORK_PPI_MODE;
     checkWorkbookModeSettings();
     refreshApp();
 });
 $(NETWORK_MODE_GRN).on("click", () => {
-    grnState.mode = "grn";
+    grnState.mode = NETWORK_GRN_MODE;
     checkWorkbookModeSettings();
     refreshApp();
 });
@@ -873,6 +876,8 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_MENU).removeClass("hidden");
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
         if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
@@ -931,6 +936,8 @@ export const updateApp = grnState => {
         }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        $(NODE_COLORING_MENU).addClass("disabled");
+        $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
     }

@@ -2,12 +2,12 @@
 // var path = require("path");
 // var demoWorkbooks = require(__dirname + "/demo-workbooks");
 
+const { NETWORK_PPI_MODE, NETWORK_GRN_MODE, CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
 const { initWorkbook } = require("./helpers");
 
 var semanticChecker = require(__dirname + "/semantic-checker");
 
 var constants = require(__dirname + "/workbook-constants");
-
 
 // const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights"];
 
@@ -94,14 +94,22 @@ var parseNetworkSheet = function (sheet, network) {
     var rowData = [];
 
     // check for “cols regulators/rows targets” in cell A1
-    const cellA1 = sheet.data[0][0];
+    let cellA1 = "";
+    try {
+        cellA1 = sheet.data[0][0];
+    } catch (err) {
+        const row = 0;
+        const column = 0;
+        addError(network, constants.errors.missingValueError(row, column));
+        return network;
+    }
 
     // TODO There are now 2 valid values for cellA1. One indicates GRN, the other is PPI.
     // If neither, then we continue with the warning.
 
     // Depending on the value of cellA1, we want to make a new property `networkType` which
     // will indicate the network type. THe web app then reads this to decide what to do next.
-    if (cellA1 !== "cols regulators/rows targets") {
+    if (cellA1 !== CELL_A1_GRN && cellA1 !== CELL_A1_PPI) {
         addWarning(
             network,
             constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
@@ -284,8 +292,33 @@ var parseNetworkSheet = function (sheet, network) {
     return semanticChecker(network);
 };
 
+/*
+ * This method detect the network type of the workbook file either grn or protein-protein-physical-interactions
+ * If cellA1 = "cols regulators/ row targets" -> workbookType = grn
+ * If cellA1 = "cols protein1/ rows protein2" -> workbookType = "protein-protein-physical-interaction"
+ * else undefined
+*/
 
-module.exports = function (workbookFile) {
+exports.workbookType = function (workbookFile) {
+    let workbookType;
+    for (const sheet of workbookFile) {
+        if (sheet.name.toLowerCase() === "network") {
+            const cellA1 = sheet.data[0][0];
+
+            if (cellA1 === CELL_A1_GRN) {
+                workbookType = NETWORK_GRN_MODE;
+            } else if (cellA1 === CELL_A1_PPI) {
+                workbookType = NETWORK_PPI_MODE;
+            } else {
+                workbookType = undefined;
+            }
+            break;
+        }
+    }
+    return workbookType;
+};
+
+exports.networks = function (workbookFile) {
     const networks = {
         network: {},
         networkOptimizedWeights: {},

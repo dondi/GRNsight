@@ -12,7 +12,9 @@ import {
     SCHADE_OUTPUT_NAME,
     PPI_DEMO_PATH,
     PPI_DEMO_NAME,
-    FORCE_GRAPH
+    FORCE_GRAPH,
+    NETWORK_PPI_MODE,
+    NETWORK_GRN_MODE
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
 
@@ -143,10 +145,15 @@ export const setupLoadAndImportHandlers = (grnState) => {
                         break;
                     }
                 }
-                // TODO 👆🏼 The back end will add a `networkType` property to this object.
-                //     The web app can then adjust various things based on that.
                 grnState.workbook = workbook;
-                grnState.mode = workbook.meta.data.workbookType;
+
+                if (grnState.name.includes(".sif")) {
+                    grnState.mode = workbook.workbookType;
+                } else if (grnState.name.includes(".graphml")) {
+                    grnState.mode = NETWORK_GRN_MODE;
+                } else {
+                    grnState.mode = workbook.meta.data.workbookType;
+                }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
@@ -178,9 +185,11 @@ export const setupLoadAndImportHandlers = (grnState) => {
     };
 
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
-        // Deleted parameter `event`
-        $(demoClass).on("click", () => {
-            loadDemo(demoPath, demoClass, demoName);
+        $(".dropdown-menu li a").on("click", (event) => {
+            const selected = event.target.dataset.expression;
+            if (`.${selected}` === demoClass) {
+                loadDemo(demoPath, demoClass, demoName);
+            }
         });
         $("#demoSourceDropdown").on("change", () => {
             const selected = `.${$("#demoSourceDropdown").val()}`;
@@ -211,10 +220,10 @@ export const setupLoadAndImportHandlers = (grnState) => {
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
     getWorkbookFromUrl(uploadRoute).done((workbook) => {
-        if (workbook.meta.data.workbookType === "protein-protein-physical-interaction") {
+        if (workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
             grnState.mode = workbook.meta.data.workbookType;
         } else {
-            grnState.mode = "grn";
+            grnState.mode = NETWORK_GRN_MODE;
         }
         grnState.name = name;
         grnState.workbook = workbook;

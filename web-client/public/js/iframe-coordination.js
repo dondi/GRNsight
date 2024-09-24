@@ -11,7 +11,7 @@
  *                loaded into the web browser when this script executes.
  */
 iFrameResize({
-  checkOrigin: ["https://dondi.github.io", "https://grnsight.cs.lmu.edu"],
+  checkOrigin: ["https://dondi.github.io", "https://grnsight.lmucs.org"],
   widthCalculationMethod: "taggedElement",
   heightCalculationMethod: "taggedElement",
   sizeWidth: true,
@@ -40,7 +40,7 @@ const sendDimensions = (destination, origin) => {
 };
 
 window.addEventListener("message", event => {
-  if (event.origin.indexOf("https://grnsight.cs.lmu.edu") !== 0) {
+  if (event.origin.indexOf("https://grnsight.lmucs.org") !== 0) {
     // Ignore any message that did not originate from the GRNsight web client server.
     return;
   }
@@ -51,5 +51,5 @@ window.addEventListener("message", event => {
 });
 
 window.addEventListener("resize", () => sendDimensions(
-  document.querySelector("iframe.embedded-demo").contentWindow, "https://grnsight.cs.lmu.edu"
+  document.querySelector("iframe.embedded-demo").contentWindow, "https://grnsight.lmucs.org"
 ));

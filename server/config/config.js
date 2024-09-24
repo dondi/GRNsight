@@ -17,10 +17,10 @@ module.exports = {
     },
 
     production: {
-        host: "grnsight.cs.lmu.edu",
+        host: "grnsight.lmucs.org",
         port: 3000,
         url: "https://" + this.host + "/server",
-        corsOrigin: "//grnsight.cs.lmu.edu",
+        corsOrigin: "//grnsight.lmucs.org",
         root: rootPath,
         app: {
             name: "GRNsight"
@@ -31,10 +31,10 @@ module.exports = {
     },
 
     beta: {
-        host: "grnsight.cs.lmu.edu",
+        host: "grnsight.lmucs.org",
         port: 4000,
         url: "https://" + this.host + "/beta/server/",
-        corsOrigin: "//grnsight.cs.lmu.edu",
+        corsOrigin: "//grnsight.lmucs.org",
         root: rootPath,
         app: {
             name: "GRNsight"

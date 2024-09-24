@@ -12,6 +12,7 @@ import {
 } from "./update-app";
 
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
+import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
@@ -118,7 +119,7 @@ export const upload = function () {
 
     const updateOptimizationParameters = (finalExportSheets) => {
         let optimizationParameters = {
-            data: grnState.mode === "grn" ? {
+            data: grnState.mode === NETWORK_GRN_MODE ? {
                 alpha: 0.002,
                 "kk_max": 1,
                 MaxIter: 100000000,
@@ -133,14 +134,14 @@ export const upload = function () {
                 "fix_b": 0,
                 species: "Saccharomyces cerevisiae",
                 "taxon_id":559292,
-                workbookType: "grn"
+                workbookType: NETWORK_GRN_MODE
             } : {
                 species: "Saccharomyces cerevisiae",
                 "taxon_id":559292,
-                workbookType: "protein-protein-physical-interaction"
+                workbookType: NETWORK_PPI_MODE
             }
         };
-        if (grnState.mode === "grn") {
+        if (grnState.mode === NETWORK_GRN_MODE) {
             const expression = Object.keys(finalExportSheets.expression);
             let expTimepoints = expression.length > 0 ? finalExportSheets.expression[expression[0]].timePoints : null;
             expTimepoints = expTimepoints ? [...(new Set(expTimepoints))].sort(function (a, b) {
@@ -159,6 +160,39 @@ export const upload = function () {
             }
         }
         return optimizationParameters;
+    };
+
+    // helper method for handleExpressionDataAndExport to reduce indentation
+    const expressionDataHandler = (expressionData, sheet, route, extension, sheetType, finalExportSheets) => {
+        finalExportSheets.expression[sheet] = expressionData;
+        if (finalExportSheets.expression[sheet]) {
+            stopLoadingIcon();
+            if (!Object.values(finalExportSheets.expression).includes(null)) {
+                // we have all of the expression sheets so lets initilize the export process
+                Object.keys(finalExportSheets.expression).forEach((sheet) => {
+                    // make sure that the sheets we queried are populated with the correct data
+                    if (!(finalExportSheets.expression[sheet].data && finalExportSheets.expression[sheet].timePoints)) {
+                    // if the resulting query doesn't contains both the timePoint data and
+                    // the gene data then don't export it. If not don't :)
+                        finalExportSheets.expression[sheet] = null;
+                    }
+                });
+                if (finalExportSheets["optimization_parameters"] === null) {
+                    finalExportSheets[
+                    "optimization_parameters"
+                    ] = updateOptimizationParameters(finalExportSheets);
+                }
+                grnState.workbook.exportSheets = finalExportSheets;
+                exportExcel(route, extension, sheetType);
+            }
+        }
+    };
+
+    // helper method for handleExpressionDataAndExport and handleExportExcelButtonExport to avoid redundant code
+    const expressionExportErrorHandler = (error) => {
+        console.log(error.stack);
+        console.log(error.name);
+        console.log(error.message);
     };
 
     const handleExpressionDataAndExport = (route, extension, sheetType, source, finalExportSheets) => {
@@ -185,41 +219,12 @@ export const upload = function () {
                             return x.name;
                         }).join(","),
                         timepoints: timepointsResponse[dataset]
-                    }).then(function (response) {
-                        finalExportSheets.expression[sheet] = response;
-                        if (finalExportSheets.expression[sheet]) {
-                            stopLoadingIcon();
-                            if (!Object.values(finalExportSheets.expression).includes(null)) {
-                                // we have all of the expression sheets so lets initilize the export process
-                                Object.keys(finalExportSheets.expression).forEach((sheet) => {
-                                    // make sure that the sheets we queried are populated with the correct data
-                                    if (!(finalExportSheets.expression[sheet].data && finalExportSheets.expression[sheet].timePoints)) {
-                                        // if the resulting query doesn't contains both the timePoint data and
-                                        // the gene data then don't export it. If not don't :)
-                                        finalExportSheets.expression[sheet] = null;
-                                    }
-                                });
-                                if (finalExportSheets["optimization_parameters"] === null) {
-                                    finalExportSheets["optimization_parameters"] = updateOptimizationParameters(finalExportSheets);
-                                }
-                                grnState.workbook.exportSheets = finalExportSheets;
-                                exportExcel(route, extension, sheetType);
-                            }
-                        }
-                    }).catch(function (error) {
-                        console.log(error.stack);
-                        console.log(error.name);
-                        console.log(error.message);
-                    });
-                }).catch(function (error) {
-                    console.log(error.stack);
-                    console.log(error.name);
-                    console.log(error.message);
-                });
+                    }).then((expressionData) => expressionDataHandler(expressionData, sheet, route, extension, sheetType, finalExportSheets))
+                    .catch((error) => expressionExportErrorHandler(error));
+                }).catch((error) => expressionExportErrorHandler(error));
             }
         }
     };
-
 
     const handleExportExcelButtonExport = (route, extension, sheetType, source) => {
         grnState.workbook.exportNetworkType = sheetType;
@@ -303,23 +308,27 @@ export const upload = function () {
 
                     queryExpressionDatabase({
                         type: twoColumnSheetType[sheet],
-                        genes: grnState.workbook.genes.map(x => {
+                        genes: grnState.workbook.genes
+                        .map((x) => {
                             return x.name;
-                        }).join(",")
-                    }).then(function (response) {
+                        })
+                        .join(","),
+                    })
+                    .then(function (response) {
                         result.data = response;
                         finalExportSheets.two_column_sheets[sheet] = result;
-                        if (!Object.values(finalExportSheets.two_column_sheets).includes(null)) {
+                        if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
                             // if we got all of the two column sheets, then proceed with export
-                            handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
+                            handleExpressionDataAndExport(
+                                route,
+                                extension,
+                                sheetType,
+                                source,
+                                finalExportSheets
+                            );
                         }
-
-                    }).catch(function (error) {
-                        console.log(error.stack);
-                        console.log(error.name);
-                        console.log(error.message);
-                    });
-
+                    })
+                      .catch(error => expressionExportErrorHandler(error));
                 }
             }
         } else {
@@ -429,7 +438,7 @@ export const upload = function () {
         ] : [
             (grnState.workbook.meta2 !== undefined && "optimization_diagnostics")
         ];
-        additionalsheets = additionalsheets.filter(x => (x !== false && -1 !== optionalAdditionalSheets.indexOf(x)));
+        additionalsheets = additionalsheets.filter(sheet => (sheet && -1 !== optionalAdditionalSheets.indexOf(sheet)));
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...(new Set(additionalsheets))];
         for (let n of networks) {
@@ -573,7 +582,7 @@ export const upload = function () {
         $("#Export-Excel-Button").on("click", performExport("export-to-excel", "xlsx", null, source));
     };
     const handleExportExcelModal = function () {
-        if (grnState.mode === "grn") {
+        if (grnState.mode === NETWORK_GRN_MODE) {
             $("#exportExcelForm").remove();
             $("#exportExcelFooter").remove();
             $("#exportExcelQuestions-containter").append(createHTMLforGRNForm);
@@ -592,7 +601,7 @@ export const upload = function () {
                 }
             });
             handleExpressionSheetsFromSource(source);
-        } else if (grnState.mode === "protein-protein-physical-interaction") {
+        } else if (grnState.mode === NETWORK_PPI_MODE) {
             const source = "userInput";
             $("#exportExcelForm").remove();
             $("#exportExcelFooter").remove();

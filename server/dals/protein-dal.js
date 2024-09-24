@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -25,7 +24,8 @@ const buildNetworkSourceQuery = function () {
 const buildNetworkFromGeneProteinQuery = function (geneProtein) {
     return `SELECT DISTINCT gene_id, display_gene_id, standard_name, length, molecular_weight, PI FROM
  protein_protein_interactions.gene, protein_protein_interactions.protein WHERE
- (LOWER(gene.gene_id)=LOWER('${geneProtein}') OR LOWER(gene.display_gene_id)=LOWER('${geneProtein}') OR LOWER(protein.standard_name) =LOWER('${geneProtein}')) AND
+ (LOWER(gene.gene_id)=LOWER('${geneProtein}') OR LOWER(gene.display_gene_id)=LOWER('${geneProtein}') 
+ OR LOWER(protein.standard_name) =LOWER('${geneProtein}')) AND
  LOWER(gene.gene_id) = LOWER(protein.gene_systematic_name);`;
 };
 

@@ -44,7 +44,7 @@ module.exports = function (sif) {
         sifEntries.forEach(function (entry) {
             if (entry.length > TARGET) {
                 if (!isNumber(entry[RELATIONSHIP])) {
-                    if (entry[RELATIONSHIP] !== "pd") {
+                    if (entry[RELATIONSHIP] !== "pd" && entry[RELATIONSHIP] !== "pp") {
                         unweightedRelationshipTypeErrorDetected = true;
                     }
                 }
@@ -54,6 +54,24 @@ module.exports = function (sif) {
             }
         });
 
+        let hasNumbers = relationships.some(isNumber);
+        let allNumbers = relationships.every(isNumber);
+
+        let workbookType;
+        if (allNumbers) {
+            workbookType = constants.NETWORK_GRN_MODE;
+        } else {
+            for (const relationship of relationships) {
+                if (relationship === "pp") {
+                    workbookType = constants.NETWORK_PPI_MODE;
+                    break;
+                } else if (relationship === "pd") {
+                    workbookType = constants.NETWORK_GRN_MODE;
+                    break;
+                }
+            }
+        }
+
         if (unweightedRelationshipTypeErrorDetected) {
             errors.push(sifConstants.errors.SIF_UNWEIGHTED_RELATIONSHIP_TYPE_ERROR);
         }
@@ -62,9 +80,8 @@ module.exports = function (sif) {
             errors.push(sifConstants.errors.SIF_MISSING_DATA_ERROR);
         }
 
-        var hasNumbers = relationships.some(isNumber);
-        var allNumbers = relationships.every(isNumber);
         return {
+            workbookType: workbookType,
             sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
             warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null,
             errors: errors
@@ -77,7 +94,7 @@ module.exports = function (sif) {
 
     var genes = [];
     var links = [];
-    var workbookType = "unweighted";
+    var workbookMeta = "unweighted";
 
     var nullEntries = entries.filter(function (entry) {
         return entry === null;
@@ -92,13 +109,13 @@ module.exports = function (sif) {
             }
         });
 
-        workbookType = sifWorkbookType(entries);
-        if (workbookType.warnings) {
-            warnings.push(workbookType.warnings);
+        workbookMeta = sifWorkbookType(entries);
+        if (workbookMeta.warnings) {
+            warnings.push(workbookMeta.warnings);
         }
 
-        if (workbookType.errors) {
-            workbookType.errors.forEach(function (error) {
+        if (workbookMeta.errors) {
+            workbookMeta.errors.forEach(function (error) {
                 errors.push(error);
             });
         }
@@ -117,7 +134,7 @@ module.exports = function (sif) {
                         source: sourceIndex,
                         target: targetIndex
                     };
-                    if (workbookType.sheetType === constants.WEIGHTED) {
+                    if (workbookMeta.sheetType === constants.WEIGHTED) {
                         link.value = +entry[RELATIONSHIP];
                     }
                     links.push(link);
@@ -133,7 +150,8 @@ module.exports = function (sif) {
         links: links,
         errors: errors,
         warnings: warnings,
-        sheetType: workbookType.sheetType,
+        sheetType: workbookMeta.sheetType,
+        workbookType: workbookMeta.workbookType,
         positiveWeights: [],
         negativeWeights: [],
         meta: {},

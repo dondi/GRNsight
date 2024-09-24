@@ -111,29 +111,21 @@ for regulator in regulators_to_targets:
     if regulator != None:
         regulators_list.append(regulator)
 
-print(f'Creating REGULATORS TO TARGETS MATRIX\n')
-regulator_to_target_file = open(REGULATORS_TO_TARGETS_MATRIX, 'w')
-headers = "cols regulators/rows targets"
-headers += '\t'.join(regulators_list)
-regulator_to_target_file.write(f'{headers}\n')
-for target in targets:
-  result = create_regulator_to_target_row(target, regulators_to_targets)
-  if result != False:
-    regulator_to_target_file.write(f'{result}\n')
-regulator_to_target_file.close()
+def createMatrix(fileName: str):
+    statusMessage: str = 'Creating REGULATORS TO TARGETS MATRIX\n' if fileName == REGULATORS_TO_TARGETS_MATRIX else 'Creating REGULATORS TO REGULATORS MATRIX\n'
+    print(statusMessage)
+    regulator_to_target_file = open(fileName, 'w')
+    headers = "cols regulators/rows targets\t"
+    headers += '\t'.join(regulators_list)
+    regulator_to_target_file.write(f'{headers}\n')
+    for target in targets:
+        result = create_regulator_to_target_row(target, regulators_to_targets)
+        if result:
+            regulator_to_target_file.write(f'{result}\n')
+    regulator_to_target_file.close()
 
-print(f'Creating REGULATORS TO TARGETS MATRIX\n')
-regulator_to_regulator_file = open(REGULATORS_TO_REGULATORS_MATRIX, 'w')
-headers = "cols regulators/rows targets"
-headers += '\t'.join(regulators_list)
-regulator_to_regulator_file.write(f'{headers}\n')
-for target in targets:
-  result = create_regulator_to_target_row(target, regulators_to_targets)
-  if result != False:
-    regulator_to_regulator_file.write(f'{result}\n')
-regulator_to_regulator_file.close()
-
-
+createMatrix(REGULATORS_TO_TARGETS_MATRIX)
+createMatrix(REGULATORS_TO_REGULATORS_MATRIX)
 
 # Create loader-files
 

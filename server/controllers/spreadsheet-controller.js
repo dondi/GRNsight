@@ -1,6 +1,7 @@
 var multiparty = require("multiparty");
 var xlsx = require("node-xlsx");
 var path = require("path");
+const { NETWORK_GRN_MODE, NETWORK_PPI_MODE } = require("./constants");
 var parseAdditionalSheets = require(__dirname + "/additional-sheet-parser");
 var parseExpressionSheets = require(__dirname + "/expression-sheet-parser");
 var parseNetworkSheet = require(__dirname + "/network-sheet-parser");
@@ -22,8 +23,8 @@ var SPECIES = [
 ];
 
 const WORKBOOK_TYPES = [
-    "grn",
-    "protein-protein-physical-interaction"
+    NETWORK_GRN_MODE,
+    NETWORK_PPI_MODE
 ];
 
 var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
@@ -120,7 +121,8 @@ var crossSheetInteractions = function (workbookFile) {
 
     // Refactored the parseNetworkSheet function to preserve all network type sheets including "network",
     // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
-    var networks = parseNetworkSheet(workbookFile);
+
+    var networks = parseNetworkSheet.networks(workbookFile);
 
     // Parse expression and 2-column data, then add to workbook object
     // Eventually, will split this up into parsing for each type of sheet.
@@ -194,9 +196,10 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
+    additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
     if (additionalData.meta.data.workbookType === undefined) {
         addWarning(workbook, constants.warnings.noWorkbookTypeDetected);
-        additionalData.meta.data.workbookType = "grn";
+        additionalData.meta.data.workbookType = NETWORK_GRN_MODE;
     } else if (!supportWorkbookType(additionalData.meta.data.workbookType)) {
         addWarning(
             workbook,
@@ -204,7 +207,7 @@ var crossSheetInteractions = function (workbookFile) {
                 additionalData.meta.data.workbookType
             )
         );
-        additionalData.meta.data.workbookType = "grn";
+        additionalData.meta.data.workbookType = NETWORK_GRN_MODE;
     }
 
     if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
@@ -230,7 +233,7 @@ var crossSheetInteractions = function (workbookFile) {
     // FUTURE IMPROVEMENT: not all expression sheets are specifically named 'wt_log2_expression.'
     // We need to account for all the different possible expression sheet names.
     if (expressionData) {
-        if (additionalData.meta.data.workbookType === "grn") {
+        if (additionalData.meta.data.workbookType === constants.NETWORK_GRN_MODE) {
             if (expressionData["expression"] && Object.keys(expressionData["expression"]).length === 0) {
                 addWarning(expressionData, constants.warnings.missingExpressionWarning());
             }
