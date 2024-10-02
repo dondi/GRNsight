@@ -456,6 +456,8 @@ export var drawGraph = function (workbook) {
             center();
         }
         updateAppBasedOnZoomValue(); // Update zoom value within bounds
+        // Refresh the graph so that nodes and paths are adjusted to fit in viewport
+        tick();
     };
 
     d3.select("#restrict-graph-to-viewport").on("click", function () {
@@ -466,8 +468,6 @@ export var drawGraph = function (workbook) {
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
-        // Refresh the graph so that nodes and paths are adjusted to fit in viewport when restrictd to viewport
-        tick();
     });
 
     function center () {
