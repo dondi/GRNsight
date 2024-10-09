@@ -543,16 +543,18 @@ const updateModeViews = () =>{
 };
 
 const checkWorkbookModeSettings = () => {
+    showNodeColoringMenus();
+
     if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.colorOptimal = false;
-        disableNodeColoringMenus();
+        // showNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
     } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.colorOptimal = true;
-        showNodeColoringMenus();
+        // showNodeColoringMenus();
         showEdgeWeightOptions();
         updateModeViews();
     }
@@ -950,6 +952,7 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        console.log("Node coloring disabled")
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
@@ -988,9 +991,11 @@ export const updateApp = grnState => {
 
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
-    } else {
-        disableNodeColoringMenus();
-    }
+    } 
+    
+    // else {
+    //     disableNodeColoringMenus();
+    // }
 
     updateLogFoldChangeMaxValue();
     updateTopDataset();

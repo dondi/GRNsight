@@ -60,6 +60,13 @@ export var displayWarnings = function (warnings) {
 };
 
 export var displayPPINodeColorWarning = function() {
+    // TODO: what should warning intro be? Should there be one?
+    $("#warningIntro").html(
+        "You are displaying mRNA-level expression data on a protein-protein interaction network. " +
+        "Please note that this may not be the most accurate representation of the data." +
+        " We recommend you review your file and ensure that it is formatted correctly." +
+        " To view the details of the warning(s), please click on the \"Warnings List\" below."
+    );
     
     $("#warningsList").html("You are displaying mRNA-level expression data on a protein-protein interaction network.");
 
