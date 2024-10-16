@@ -43,8 +43,7 @@ export var displayWarnings = function (warnings) {
         index++;
     }
 
-    $("#warningsList").html(warningsString);
-
+    
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
@@ -60,14 +59,10 @@ export var displayWarnings = function (warnings) {
 };
 
 export var displayPPINodeColorWarning = function() {
-    $("#warningIntro").html(
-        "You are displaying mRNA-level expression data on a protein-protein interaction network." +
+    $("#warningIntro").html("Protein-protein interaction node coloring warning.");
+    $("#warningsList").html("You are displaying mRNA-level expression data on a protein-protein interaction network." +
         "Please note that this may not be the most appropriate representation of the data."
     );
-
-    $("#warningsList").addClass("hidden");
-    
-    // $("#warningsList").html("You are displaying mRNA-level expression data on a protein-protein interaction network.");
 
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
