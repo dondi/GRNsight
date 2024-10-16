@@ -513,14 +513,8 @@ const showNodeColoringMenus = () => {
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
-};
-
-const disableNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
-    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
-    $(NODE_COLORING_MENU_CLASS).addClass("disabled");
-    $(NODE_COLORING_MENU).addClass("disabled");
-    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
+    $(NODE_COLORING_MENU).removeClass("hidden");
+    $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
 };
 
 const isNewWorkbook = (name) => {
@@ -876,10 +870,8 @@ export const updateApp = grnState => {
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_MENU).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
-        console.log("node coloring enabled")
 
         if (hasExpressionData(grnState.workbook.expression)) {
             if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
@@ -897,6 +889,11 @@ export const updateApp = grnState => {
                 updaters.renderNodeColoring();
             }
         } else {
+            grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
+                grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
+            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
+                grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
+
             if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
                 (!grnState.nodeColoring.bottomDataSameAsTop &&
                 grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
@@ -904,11 +901,6 @@ export const updateApp = grnState => {
                     resetDatasetDropdownMenus(grnState.workbook);
             }
 
-            grnState.nodeColoring.showMenu = true;
-            grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-            grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
-            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-            grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
             if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
                 loadExpressionDatabase(true);
             } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
@@ -936,21 +928,14 @@ export const updateApp = grnState => {
             if (grnState.mode === NETWORK_PPI_MODE) {
               displayPPINodeColorWarning();
             }
-            console.log(
-              "grnState mode",
-              grnState.mode,
-              "network ppi mode",
-              NETWORK_PPI_MODE
-            );
         }
         refreshApp();
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
-        $(NODE_COLORING_MENU).addClass("disabled");
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
-        console.log("node coloring disabled in line 953")
+        console.log("node coloring disabled in line 942")
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
@@ -990,10 +975,6 @@ export const updateApp = grnState => {
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
     } 
-    
-    // else {
-    //     disableNodeColoringMenus();
-    // }
 
     updateLogFoldChangeMaxValue();
     updateTopDataset();
