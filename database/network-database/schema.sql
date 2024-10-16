@@ -20,6 +20,6 @@ CREATE TABLE gene_regulatory_network.network (
   time_stamp TIMESTAMP WITH TIME ZONE,
   source VARCHAR,
   FOREIGN KEY (regulator_gene_id, taxon_id) REFERENCES gene_regulatory_network.gene(gene_id, taxon_id),
-  FOREIGN KEY (target_gene_id, taxon_id) REFERENCES gene_regulatory_network_testing.gene(gene_id, taxon_id),
-  FOREIGN KEY (time_stamp, source) REFERENCES gene_regulatory_network_testing.source(time_stamp, source)
+  FOREIGN KEY (target_gene_id, taxon_id) REFERENCES gene_regulatory_network.gene(gene_id, taxon_id),
+  FOREIGN KEY (time_stamp, source) REFERENCES gene_regulatory_network.source(time_stamp, source)
 ); 
