@@ -32,5 +32,12 @@ module.exports = {
             possibleCause: "GRNsight has detected stray data and/or extraneous blank rows in your SIF file. ",
             suggestedFix: "Please review the data and delete extraneous data from the file."
         },
+
+        SIF_MIXED_RELATIONSHIP_TYPE_ERROR: {
+            errorCode: "SIF_MIXED_RELATIONSHIP_TYPE_ERROR",
+            possibleCause: "The SIF importer detects a SIF file with mixed relationship types.",
+            suggestedFix: ["GRNsight only supports networks with a single relationship type.",
+                "Please review the relationships for consistency."].join(" ")
+        },
     },
 };

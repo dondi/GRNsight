@@ -61,14 +61,15 @@ module.exports = function (sif) {
         if (allNumbers) {
             workbookType = constants.NETWORK_GRN_MODE;
         } else {
-            for (const relationship of relationships) {
-                if (relationship === "pp") {
-                    workbookType = constants.NETWORK_PPI_MODE;
-                    break;
-                } else if (relationship === "pd") {
-                    workbookType = constants.NETWORK_GRN_MODE;
-                    break;
-                }
+            let stringRelationships = relationships.filter(function (relationship) {
+                return !isNumber(relationship);
+            });
+            if (stringRelationships.every(rel => rel === "pp")) {
+                workbookType = constants.NETWORK_PPI_MODE;
+            } else if (stringRelationships.every(rel => rel === "pd")) {
+                workbookType = constants.NETWORK_GRN_MODE;
+            } else if (stringRelationships.every(rel => rel === "pp" || rel === "pd")) {
+                errors.push(sifConstants.errors.SIF_MIXED_RELATIONSHIP_TYPE_ERROR);
             }
         }
 

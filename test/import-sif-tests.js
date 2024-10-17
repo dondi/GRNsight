@@ -316,6 +316,13 @@ var sifWithSemanticErrorOnly = [
     "E"
 ].join("\r\n");
 
+var sifWithMixedRelationshipTypes = [
+    [ "A", "pd", "A" ].join("\t"),
+    [ "B", "pd", "A", "C" ].join("\t"),
+    [ "C", "pd", "B" ].join("\t"),
+    [ "D", "pp", "D" ].join("\t"),
+].join("\r\n");
+
 describe("Import from SIF", function () {
     it("should import unweighted workbooks from SIF correctly", function () {
         expect(
@@ -512,6 +519,12 @@ describe("Import from SIF syntactic checker", function () {
         expect(
             importController.sifToGrnsight(triviallyTabbedUnweightedWorkbook)
         ).to.deep.equal(expectedUnweightedGRNWorkbook);
+    });
+
+    it("should throw an error for SIF files with mixed relationship types", function () {
+        expect(
+            importController.sifToGrnsight(sifWithMixedRelationshipTypes).errors[0].errorCode
+        ).to.equal("SIF_MIXED_RELATIONSHIP_TYPE_ERROR");
     });
 
 });
