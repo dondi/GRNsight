@@ -51,7 +51,6 @@ import {
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_NAVBAR_OPTIONS,
   NODE_COLORING_SIDEBAR_BODY,
-  NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
@@ -508,8 +507,7 @@ const updatetoGridLayout = () => {};
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
-    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
+    $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
@@ -786,7 +784,6 @@ export const updateApp = grnState => {
             identifySpeciesOrTaxon(workbookSpecies);
             identifySpeciesOrTaxon(workbookTaxon);
         }
-        
         // nodeColoringEnabled will only be set the very first time; because otherwise the user will have
         // made a choice and we will let the choice stick.
         if (hasExpressionData(grnState.workbook.expression)) {
@@ -896,8 +893,8 @@ export const updateApp = grnState => {
             if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
                 (!grnState.nodeColoring.bottomDataSameAsTop &&
                 grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
-                    updaters.removeNodeColoring();
-                    resetDatasetDropdownMenus(grnState.workbook);
+                updaters.removeNodeColoring();
+                resetDatasetDropdownMenus(grnState.workbook);
             }
 
             if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
@@ -925,7 +922,7 @@ export const updateApp = grnState => {
 
             }
             if (grnState.mode === NETWORK_PPI_MODE) {
-              displayPPINodeColorWarning();
+                displayPPINodeColorWarning();
             }
         }
         refreshApp();
@@ -972,7 +969,7 @@ export const updateApp = grnState => {
 
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
-    } 
+    }
 
     updateLogFoldChangeMaxValue();
     updateTopDataset();
