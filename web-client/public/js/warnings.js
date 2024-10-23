@@ -58,12 +58,16 @@ export var displayWarnings = function (warnings) {
     $("#warningsModal").modal("show");
 };
 
-export var displayPPINodeColorWarning = function() {
+export var displayPPINodeColorWarning = function(warningDisplayed) {
+    if (warningDisplayed) {
+        return
+    }
+
     $("#warningIntro").html("Protein-protein interaction node coloring warning.");
     $("#warningsList").html(
       [
         "You are displaying mRNA-level expression data on a protein-protein interaction network.",
-        "Please note that this may not be the most appropriate representation of the data.",
+        "Please note that this may not be the most appropriate representation of the data."
       ].join(" ")
     );
 

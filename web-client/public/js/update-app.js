@@ -926,7 +926,10 @@ export const updateApp = grnState => {
 
             }
             if (grnState.mode === NETWORK_PPI_MODE) {
-              displayPPINodeColorWarning();
+                displayPPINodeColorWarning(
+                  grnState.nodeColoring.ppiNodeColorWarningDisplayed
+                );
+                grnState.nodeColoring.ppiNodeColorWarningDisplayed = true;
             }
         }
         refreshApp();
@@ -935,6 +938,9 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            grnState.nodeColoring.ppiNodeColorWarningDisplayed = false;
+        }
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
