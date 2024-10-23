@@ -870,6 +870,7 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_MENU).removeClass("hidden");
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
 
         if (hasExpressionData(grnState.workbook.expression)) {
