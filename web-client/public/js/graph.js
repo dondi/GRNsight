@@ -1119,7 +1119,7 @@ export var drawGraph = function (workbook) {
                 .attr("stroke-width", "0px")
                 .style("fill", function (d) {
                     d = d || 0; // missing values are changed to 0
-                    if (d == 0) {
+                    if (d === 0) {
                         return "white"
                     }
                     var scale = d3.scaleLinear()
