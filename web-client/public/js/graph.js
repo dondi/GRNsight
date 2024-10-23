@@ -49,6 +49,7 @@ export var updaters = {
     removeNodeColoring: () => {},
 };
 
+// TODO:
 export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
@@ -1118,6 +1119,9 @@ export var drawGraph = function (workbook) {
                 .attr("stroke-width", "0px")
                 .style("fill", function (d) {
                     d = d || 0; // missing values are changed to 0
+                    if (d == 0) {
+                        return "white"
+                    }
                     var scale = d3.scaleLinear()
                         .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                         .range([0, 1]);
