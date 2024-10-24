@@ -49,7 +49,6 @@ export var updaters = {
     removeNodeColoring: () => {},
 };
 
-// TODO:
 export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
@@ -311,7 +310,8 @@ export var drawGraph = function (workbook) {
             )
         ) {
             zoomDisplay = grnState.zoomValue;
-        } else {
+        } 
+        else {
             grnState.zoomValue = prevGrnstateZoomVal;
             zoomDisplay = grnState.zoomValue;
         }
