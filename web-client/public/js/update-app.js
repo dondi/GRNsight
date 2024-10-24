@@ -393,7 +393,12 @@ const loadExpressionDatabase = function (isTopDataset) {
         queryExpressionDatabase({
             type:"ExpressionData",
             dataset,
-            genes : grnState.workbook.genes.map(gene => {return gene.name;}).join(","),
+            genes : grnState.workbook.genes.map(gene => {
+                if (grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
+                    return gene.name.endsWith("p") ? gene.name.slice(0, -1) : gene.name;
+                }
+                return gene.name;
+            }).join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
