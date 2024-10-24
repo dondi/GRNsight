@@ -11,7 +11,8 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
-    NETWORK_GRN_MODE
+    NETWORK_GRN_MODE,
+    BOUNDARY_MARGIN
 } from "./constants";
 
 /* globals d3 */
@@ -1380,8 +1381,6 @@ export var drawGraph = function (workbook) {
             nodeGroup[i].__data__.fy = null;
         }
     };
-
-    const BOUNDARY_MARGIN = 5;
 
     function viewportBoundsMoveDrag (graphZoom, dx, dy) {
         updateZoomContainerInfo();
