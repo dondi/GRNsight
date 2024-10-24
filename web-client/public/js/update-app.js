@@ -384,6 +384,7 @@ const enableNodeColoringUI = function () {
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 };
 
+// this is where updateApp goes when change to Bareto top dataset
 const loadExpressionDatabase = function (isTopDataset) {
     const dataset = isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset;
     startLoadingIcon();

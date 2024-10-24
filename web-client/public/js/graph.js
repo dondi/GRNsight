@@ -11,7 +11,8 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
-    NETWORK_GRN_MODE
+    NETWORK_GRN_MODE,
+    BOUNDARY_MARGIN
 } from "./constants";
 
 /* globals d3 */
@@ -457,8 +458,6 @@ export var drawGraph = function (workbook) {
             center();
         }
         updateAppBasedOnZoomValue(); // Update zoom value within bounds
-        // Refresh the graph so that nodes and paths are adjusted to fit in viewport
-        tick();
     };
 
     d3.select("#restrict-graph-to-viewport").on("click", function () {
@@ -1386,8 +1385,6 @@ export var drawGraph = function (workbook) {
             nodeGroup[i].__data__.fy = null;
         }
     };
-
-    const BOUNDARY_MARGIN = 5;
 
     function viewportBoundsMoveDrag (graphZoom, dx, dy) {
         updateZoomContainerInfo();
