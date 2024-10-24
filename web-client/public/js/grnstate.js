@@ -85,6 +85,7 @@ export const grnState = {
         lastDataset: null,
         bottomDataSameAsTop: true,
         nodeColoringOptions: [],
+        ppiNodeColorWarningDisplayed: false,
     },
 
 

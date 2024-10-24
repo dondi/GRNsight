@@ -50,6 +50,7 @@ import {
   NODE_COLORING_TOGGLE_MENU,
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_NAVBAR_OPTIONS,
+  NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_BODY,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
@@ -383,6 +384,7 @@ const enableNodeColoringUI = function () {
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 };
 
+// this is where updateApp goes when change to Bareto top dataset
 const loadExpressionDatabase = function (isTopDataset) {
     const dataset = isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset;
     startLoadingIcon();
@@ -507,7 +509,9 @@ const updatetoGridLayout = () => {};
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+    // $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
@@ -771,6 +775,7 @@ if (!grnState.genePageData.identified) {
 
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
+        console.log("updateApp runs before BOUNDARY_MARGIN variable created")
         checkWorkbookModeSettings();
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);
@@ -867,6 +872,7 @@ export const updateApp = grnState => {
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(NODE_COLORING_MENU).removeClass("hidden");
+        // $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
 
         if (hasExpressionData(grnState.workbook.expression)) {
@@ -922,7 +928,10 @@ export const updateApp = grnState => {
 
             }
             if (grnState.mode === NETWORK_PPI_MODE) {
-                displayPPINodeColorWarning();
+                displayPPINodeColorWarning(
+                  grnState.nodeColoring.ppiNodeColorWarningDisplayed
+                );
+                grnState.nodeColoring.ppiNodeColorWarningDisplayed = true;
             }
         }
         refreshApp();
@@ -931,6 +940,9 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            grnState.nodeColoring.ppiNodeColorWarningDisplayed = false;
+        }
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {

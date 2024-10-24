@@ -115,6 +115,7 @@ const returnUploadRoute = (filename) => {
     } else if (filename.includes(".sif")) {
         return "upload-sif";
     } else if (filename.includes(".graphml")) {
+        console.log("grn loaded?")
         return "upload-graphml";
     }
 };
@@ -122,6 +123,7 @@ const returnUploadRoute = (filename) => {
 export const setupLoadAndImportHandlers = (grnState) => {
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
+        console.log("grn loaded")
         // The presence of formData is taken to indicate a POST.
         getWorkbookFromForm(formData, uploadRoute)
             .done((workbook, textStatus, jqXhr) => {
@@ -152,6 +154,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
                 } else if (grnState.name.includes(".graphml")) {
                     grnState.mode = NETWORK_GRN_MODE;
                 } else {
+                    console.log("workbook.meta.data.workbookType", workbook.meta.data.workbookType);
                     grnState.mode = workbook.meta.data.workbookType;
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
@@ -182,6 +185,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
         reloader = () => loadGrn(url);
         grnState.graphLayout = FORCE_GRAPH;
         $("a.upload > input[type=file]").val("");
+        console.log("eval happened?")
     };
 
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
@@ -195,6 +199,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
             const selected = `.${$("#demoSourceDropdown").val()}`;
             if (selected === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
+                console.log("demo loaded in initializeDemoFile")
             }
         });
     };
