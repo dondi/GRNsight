@@ -456,8 +456,6 @@ export var drawGraph = function (workbook) {
             center();
         }
         updateAppBasedOnZoomValue(); // Update zoom value within bounds
-        // Refresh the graph so that nodes and paths are adjusted to fit in viewport
-        tick();
     };
 
     d3.select("#restrict-graph-to-viewport").on("click", function () {
