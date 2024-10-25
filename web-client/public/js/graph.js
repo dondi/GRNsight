@@ -54,6 +54,7 @@ export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
+    console.log("draw graph again")
     d3.selectAll("svg").remove();
 
     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
@@ -244,6 +245,7 @@ export var drawGraph = function (workbook) {
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
     // this controls the D-pad
+    console.log("scroll button")
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
     arrowMovement.forEach(function (direction) {
@@ -465,6 +467,7 @@ export var drawGraph = function (workbook) {
         restrictGraphToViewport(fixed);
     });
 
+    console.log("viewport change")
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
@@ -1073,9 +1076,15 @@ export var drawGraph = function (workbook) {
                     return partialSum + currentValue;
                 }, 0);
                 avgs.push(sum / length);
+                console.log("hellooo")
+            });
+            console.log("GET EXPRESSION DATA1", {
+              data: avgs,
+              timePoints: uniqueTimePoints,
             });
             return {data: avgs, timePoints: uniqueTimePoints};
         }
+        console.log("GET EXPRESSION DATA2", {data: strainData.data[gene], timePoints: strainData.timePoints})
         return {data: strainData.data[gene], timePoints: strainData.timePoints};
     };
 
@@ -1543,7 +1552,7 @@ export var drawGraph = function (workbook) {
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(getLeftXBoundaryMargin(), Math.min(rightBoundary, d.x));
                 if (
-                  adaptive &&
+                  
                   width < MAX_WIDTH &&
                   (currentXPos === getLeftXBoundaryMargin() ||
                     currentXPos === rightBoundary)
@@ -1583,7 +1592,7 @@ export var drawGraph = function (workbook) {
                 // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentYPos = Math.max(getTopYBoundaryMargin(), Math.min(bottomBoundary, d.y));
 
-                if (adaptive && height < MAX_HEIGHT &&
+                if (height < MAX_HEIGHT &&
                   (currentYPos === getTopYBoundaryMargin() || currentYPos === bottomBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
