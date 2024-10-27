@@ -1,6 +1,6 @@
 import { drawGraph, updaters } from "./graph";
 import { uploadState } from "./upload";
-import { displayWarnings } from "./warnings";
+import { displayWarnings, displayPPINodeColorWarning } from "./warnings";
 import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
@@ -109,7 +109,7 @@ import {
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
   NETWORK_GRN_MODE,
-  NETWORK_PPI_MODE
+  NETWORK_PPI_MODE,
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -527,20 +527,11 @@ const showNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
 };
 
-// const disableNodeColoringMenus = () => {
-//     $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
-//     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
-//     $(NODE_COLORING_MENU_CLASS).addClass("disabled");
-//     $(NODE_COLORING_MENU).addClass("disabled");
-//     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
-// };
-
 const isNewWorkbook = (name) => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
 };
 
 // Workbook Mode Functions
-
 const updateModeViews = () =>{
     // Select correct dropdown item
     $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
@@ -960,6 +951,11 @@ export const updateApp = grnState => {
                 console.log("set timeout")
 
             }
+
+            if (grnState.mode === NETWORK_PPI_MODE) {
+                displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
+                grnState.ppiNodeColorWarningDisplayed = true;
+            }
         }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         console.log("disable node coloring")
@@ -967,6 +963,9 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            grnState.ppiNodeColorWarningDisplayed = false;
+        }
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
