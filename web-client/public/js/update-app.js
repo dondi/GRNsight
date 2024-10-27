@@ -520,11 +520,14 @@ const updatetoGridLayout = () => {};
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
+    $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
-    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
+    // $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
+    $(NODE_COLORING_MENU).removeClass("hidden");
+    $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
 };
 
 const isNewWorkbook = (name) => {
@@ -905,13 +908,12 @@ export const updateApp = grnState => {
             updaters.removeNodeColoring();
             resetDatasetDropdownMenus(grnState.workbook);
         }
-        console.log("enable node coloring no expression data")
         grnState.nodeColoring.showMenu = true;
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
         grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
         grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
-        if (grnState.mode = NETWORK_PPI_MODE) {
+        if (grnState.mode === NETWORK_PPI_MODE) {
             console.log("network ppi mode")
             $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
             $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
