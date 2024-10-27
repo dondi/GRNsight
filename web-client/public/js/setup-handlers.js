@@ -227,12 +227,9 @@ export const setupHandlers = grnState => {
 // Node Coloring
     const updateTopDatasetSelection = (selection) => {
         grnState.nodeColoring.topDataset = selection;
-        console.log("new dataset selection", selection);
         if (grnState.nodeColoring.bottomDataSameAsTop) {
-            console.log("bottom dataset same as top")
             grnState.nodeColoring.bottomDataset = selection;
         }
-        console.log("update app called")
         updateApp(grnState);
     };
 
@@ -255,7 +252,6 @@ export const setupHandlers = grnState => {
 
     $(TOP_DATASET_SELECTION_SIDEBAR).change(() => {
         const selection = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-        console.log("update Top Dataset Selection");
         updateTopDatasetSelection(selection);
     });
 

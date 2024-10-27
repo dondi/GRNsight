@@ -54,7 +54,6 @@ export var drawGraph = function (workbook) {
 /* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
-    console.log("draw graph again")
     d3.selectAll("svg").remove();
 
     $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab"); // allow graph dragging right away
@@ -245,7 +244,6 @@ export var drawGraph = function (workbook) {
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
     // this controls the D-pad
-    console.log("scroll button")
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = [ "Up", "Left", "Right", "Down" ];
     arrowMovement.forEach(function (direction) {
@@ -313,8 +311,7 @@ export var drawGraph = function (workbook) {
             )
         ) {
             zoomDisplay = grnState.zoomValue;
-        } 
-        else {
+        } else {
             grnState.zoomValue = prevGrnstateZoomVal;
             zoomDisplay = grnState.zoomValue;
         }
@@ -467,7 +464,6 @@ export var drawGraph = function (workbook) {
         restrictGraphToViewport(fixed);
     });
 
-    console.log("viewport change")
     d3.selectAll("input[name=viewport]").on("change", function () {
         var fixed = $(this).prop("checked");
         restrictGraphToViewport(fixed);
@@ -1122,7 +1118,7 @@ export var drawGraph = function (workbook) {
                 .style("fill", function (d) {
                     d = d || 0; // missing values are changed to 0
                     if (d === 0) {
-                        return "white"
+                        return "white";
                     }
                     var scale = d3.scaleLinear()
                         .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
