@@ -1,6 +1,11 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
+import {
+    modifyChargeParameter,
+    modifyLinkDistanceParameter,
+    valueValidator,
+    adjustGeneNameForExpression,
+} from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
     VIEWPORT_FIT,
@@ -12,7 +17,6 @@ import {
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
     NETWORK_GRN_MODE,
-    NETWORK_PPI_MODE
 } from "./constants";
 
 /* globals d3 */
@@ -1088,10 +1092,7 @@ export var drawGraph = function (workbook) {
                 .selectAll(".coloring")
                 .data(function () {
                     if (grnState.workbook.expression[dataset]) {
-                        var geneName = p.name;
-                        if (grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE && geneName.endsWith("p")) {
-                            geneName = geneName.slice(0, -1);
-                        }
+                        const geneName = adjustGeneNameForExpression(p);
                         if (
                             grnState.workbook.expression[dataset].data[geneName]
                         ) {
