@@ -11,7 +11,8 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
-    NETWORK_GRN_MODE
+    NETWORK_GRN_MODE,
+    BOUNDARY_MARGIN
 } from "./constants";
 
 /* globals d3 */
@@ -456,8 +457,6 @@ export var drawGraph = function (workbook) {
             center();
         }
         updateAppBasedOnZoomValue(); // Update zoom value within bounds
-        // Refresh the graph so that nodes and paths are adjusted to fit in viewport
-        tick();
     };
 
     d3.select("#restrict-graph-to-viewport").on("click", function () {
@@ -1118,6 +1117,9 @@ export var drawGraph = function (workbook) {
                 .attr("stroke-width", "0px")
                 .style("fill", function (d) {
                     d = d || 0; // missing values are changed to 0
+                    if (d === 0) {
+                        return "white";
+                    }
                     var scale = d3.scaleLinear()
                         .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                         .range([0, 1]);
@@ -1383,8 +1385,6 @@ export var drawGraph = function (workbook) {
         }
     };
 
-    const BOUNDARY_MARGIN = 5;
-
     function viewportBoundsMoveDrag (graphZoom, dx, dy) {
         updateZoomContainerInfo();
         flexibleContainer = calcFlexiBox();
@@ -1526,7 +1526,6 @@ export var drawGraph = function (workbook) {
         try {
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
-
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
                 var rightBoundary = width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
@@ -1541,9 +1540,7 @@ export var drawGraph = function (workbook) {
                 }
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(getLeftXBoundaryMargin(), Math.min(rightBoundary, d.x));
-                if (
-                  adaptive &&
-                  width < MAX_WIDTH &&
+                if (adaptive && width < MAX_WIDTH &&
                   (currentXPos === getLeftXBoundaryMargin() ||
                     currentXPos === rightBoundary)
                 ) {
