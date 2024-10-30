@@ -378,7 +378,6 @@ const stopLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER_TEXT).css("display", "none");
 };
 const enableNodeColoringUI = function () {
-    console.log("node coloring UI enabled")
     grnState.nodeColoring.nodeColoringEnabled = true;
     $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).removeClass("hidden");
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).removeClass("hidden");
@@ -392,14 +391,6 @@ const loadExpressionDatabase = function (isTopDataset) {
         type: "ExpressionTimePoints",
         dataset
     }).then(function (timepointsResponse) {
-        console.log(
-          "genes",
-          grnState.workbook.genes
-            .map((gene) => {
-              return gene.name;
-            })
-            .join(",")
-        );
         queryExpressionDatabase({
             type:"ExpressionData",
             dataset,
@@ -407,16 +398,13 @@ const loadExpressionDatabase = function (isTopDataset) {
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
-                console.log("query expresison database response", response);
                 grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
             } else {
                 grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
             }
-            console.log("try to update top dataset")
             enableNodeColoringUI();
             stopLoadingIcon();
             updaters.renderNodeColoring();
-            console.log("render node coloring")
         }).catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
@@ -520,14 +508,19 @@ const updatetoGridLayout = () => {};
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
     $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
-    // $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
-    $(NODE_COLORING_MENU).removeClass("hidden");
-    $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+};
+
+const disableNodeColoringMenus = () => {
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
+    $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+    $(NODE_COLORING_MENU).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
 const isNewWorkbook = (name) => {
@@ -549,16 +542,18 @@ const updateModeViews = () =>{
 };
 
 const checkWorkbookModeSettings = () => {
-    showNodeColoringMenus();
-
     if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
+        grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
+        showNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
     } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = true;
+        showNodeColoringMenus();
         showEdgeWeightOptions();
         updateModeViews();
     }
@@ -876,7 +871,6 @@ export const updateApp = grnState => {
     if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
     && hasExpressionData(grnState.workbook.expression)) {
         grnState.nodeColoring.showMenu = true;
-        console.log("enable node coloring but with expression data")
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
@@ -885,6 +879,10 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_MENU).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
+            grnState.ppiNodeColorWarningDisplayed = true;
+        }
         if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
@@ -904,7 +902,6 @@ export const updateApp = grnState => {
         if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
         (!grnState.nodeColoring.bottomDataSameAsTop &&
         grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
-            console.log("remove node coloring and reset data dropdowns")
             updaters.removeNodeColoring();
             resetDatasetDropdownMenus(grnState.workbook);
         }
@@ -913,27 +910,22 @@ export const updateApp = grnState => {
         grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
         grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
-        if (grnState.mode === NETWORK_PPI_MODE) {
-            console.log("network ppi mode")
-            $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
-            $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
-            $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
-            $(NODE_COLORING_MENU).removeClass("hidden");
-            $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
-        }
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_MENU).removeClass("hidden");
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
-                console.log('load expression database 1')
                 loadExpressionDatabase(true);
             } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
             grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
-                console.log("load expression database 2")
                 loadExpressionDatabase(false);
             } else {
-                console.log("else statement called")
                 enableNodeColoringUI();
                 // There is as problem here! When a dataset from the database is used to do node coloring,
                 // but then the layout of the graph is changed (force graph to grid layout, for instance),
@@ -950,18 +942,15 @@ export const updateApp = grnState => {
                 //   Investigate why a timeout is required in order for node coloring to take place
                 //   successfully in this case.
                 setTimeout(() => updaters.renderNodeColoring(), 250);
-                console.log("set timeout")
-
             }
-
             if (grnState.mode === NETWORK_PPI_MODE) {
                 displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
                 grnState.ppiNodeColorWarningDisplayed = true;
             }
         }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
-        console.log("disable node coloring")
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        $(NODE_COLORING_MENU).addClass("disabled");
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
@@ -1006,6 +995,8 @@ export const updateApp = grnState => {
 
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
+    } else {
+        disableNodeColoringMenus();
     }
 
     updateLogFoldChangeMaxValue();

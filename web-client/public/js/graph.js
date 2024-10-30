@@ -1529,18 +1529,18 @@ export var drawGraph = function (workbook) {
                 var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                     selfReferringEdge.strokeWidth + 2 : 0);
                 var rightBoundary = width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
-                // if (!adaptive) {
-                //     rightBoundary =
-                //       -xTranslation / graphZoom +
-                //       BOUNDARY_MARGIN / 2 +
-                //       width / graphZoom -
-                //       BOUNDARY_MARGIN -
-                //       (d.textWidth + OFFSET_VALUE) -
-                //       selfReferringEdgeWidth;
-                // }
+                if (!adaptive) {
+                    rightBoundary =
+                      -xTranslation / graphZoom +
+                      BOUNDARY_MARGIN / 2 +
+                      width / graphZoom -
+                      BOUNDARY_MARGIN -
+                      (d.textWidth + OFFSET_VALUE) -
+                      selfReferringEdgeWidth;
+                }
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(getLeftXBoundaryMargin(), Math.min(rightBoundary, d.x));
-                if (width < MAX_WIDTH &&
+                if (adaptive && width < MAX_WIDTH &&
                   (currentXPos === getLeftXBoundaryMargin() ||
                     currentXPos === rightBoundary)
                 ) {
@@ -1567,19 +1567,19 @@ export var drawGraph = function (workbook) {
                 var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
                   selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
                 var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
-                // if (!adaptive) {
-                //     bottomBoundary =
-                //       -yTranslation / graphZoom +
-                //       BOUNDARY_MARGIN / 2 +
-                //       height / graphZoom -
-                //       BOUNDARY_MARGIN -
-                //       nodeHeight -
-                //       selfReferringEdgeHeight;
-                // }
+                if (!adaptive) {
+                    bottomBoundary =
+                      -yTranslation / graphZoom +
+                      BOUNDARY_MARGIN / 2 +
+                      height / graphZoom -
+                      BOUNDARY_MARGIN -
+                      nodeHeight -
+                      selfReferringEdgeHeight;
+                }
                 // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentYPos = Math.max(getTopYBoundaryMargin(), Math.min(bottomBoundary, d.y));
 
-                if (height < MAX_HEIGHT &&
+                if (adaptive && height < MAX_HEIGHT &&
                   (currentYPos === getTopYBoundaryMargin() || currentYPos === bottomBoundary)) {
                     if (!d3.select(this).classed("fixed")) {
                         height += OFFSET_VALUE;
