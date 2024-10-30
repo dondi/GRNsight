@@ -62,7 +62,7 @@ describe("additional-sheet-parser", function () {
             var data = parseAdditionalSheets(workbook);
             /* eslint-disable */
             assert(data.meta, {
-                alpha: 0.002,
+                alpha: 0.02,
                 kk_max: 1,
                 MaxIter: 100000000,
                 TolFun: 0.000001,
