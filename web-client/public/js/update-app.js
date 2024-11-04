@@ -384,6 +384,14 @@ const enableNodeColoringUI = function () {
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 };
 
+const adjustGeneNameForExpression = function (gene) {
+    const geneName = gene.name;
+    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE &&
+        geneName.endsWith("p")
+        ? geneName.slice(0, -1)
+        : geneName;
+};
+
 const loadExpressionDatabase = function (isTopDataset) {
     const dataset = isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset;
     startLoadingIcon();
@@ -394,7 +402,9 @@ const loadExpressionDatabase = function (isTopDataset) {
         queryExpressionDatabase({
             type:"ExpressionData",
             dataset,
-            genes : grnState.workbook.genes.map(gene => {return gene.name;}).join(","),
+            genes: grnState.workbook.genes
+                    .map(adjustGeneNameForExpression)
+                    .join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
@@ -1027,4 +1037,4 @@ export const updateApp = grnState => {
 };
 
 
-export { stopLoadingIcon, startLoadingIcon};
+export { stopLoadingIcon, startLoadingIcon, adjustGeneNameForExpression};

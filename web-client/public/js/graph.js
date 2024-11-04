@@ -1,6 +1,11 @@
 import Grid from "d3-v4-grid";
 import { grnState } from "./grnstate";
-import { modifyChargeParameter, modifyLinkDistanceParameter, valueValidator } from "./update-app";
+import {
+    modifyChargeParameter,
+    modifyLinkDistanceParameter,
+    valueValidator,
+    adjustGeneNameForExpression,
+} from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
     VIEWPORT_FIT,
@@ -1086,11 +1091,12 @@ export var drawGraph = function (workbook) {
                 .selectAll(".coloring")
                 .data(function () {
                     if (grnState.workbook.expression[dataset]) {
+                        const geneName = adjustGeneNameForExpression(p);
                         if (
-                            grnState.workbook.expression[dataset].data[p.name]
+                            grnState.workbook.expression[dataset].data[geneName]
                         ) {
                             const result = getExpressionData(
-                                p.name,
+                                geneName,
                                 dataset,
                                 average
                             );
