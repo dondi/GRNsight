@@ -120,7 +120,7 @@ export const upload = function () {
     const updateOptimizationParameters = (finalExportSheets) => {
         let optimizationParameters = {
             data: grnState.mode === NETWORK_GRN_MODE ? {
-                alpha: 0.002,
+                alpha: 0.02,
                 "kk_max": 1,
                 MaxIter: 100000000,
                 TolFun: 0.000001,
