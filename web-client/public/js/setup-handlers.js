@@ -160,7 +160,7 @@ export const setupHandlers = grnState => {
     };
 
     const exportSVG = (svgElement, name) => {
-        let source = svgElement;
+        let source = svgElement.cloneNode(true);
 
         sourceAttributeSetter(source);
         setInlineStyles(source);

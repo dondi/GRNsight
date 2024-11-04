@@ -51,6 +51,7 @@ import {
   NODE_COLORING_MENU_CLASS,
   NODE_COLORING_NAVBAR_OPTIONS,
   NODE_COLORING_SIDEBAR_BODY,
+  NODE_COLORING_SIDEBAR_PANEL,
   NODE_COLORING_SIDEBAR_HEADER_LINK,
   NODE_COLORING_TOGGLE_SIDEBAR,
   AVG_REPLICATE_VALS_TOP_MENU,
@@ -108,7 +109,7 @@ import {
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
   NETWORK_GRN_MODE,
-  NETWORK_PPI_MODE
+  NETWORK_PPI_MODE,
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -517,12 +518,19 @@ const updatetoGridLayout = () => {};
 
 // Node Coloring Functions
 const showNodeColoringMenus = () => {
-    $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("in");
     $(NODE_COLORING_MENU).removeClass("disabled");
     $(NODE_COLORING_MENU_CLASS).removeClass("disabled");
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "collapse");
-    $(NODE_COLORING_MENU).removeClass("hidden");
-    $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+};
+
+const disableNodeColoringMenus = () => {
+    $(NODE_COLORING_SIDEBAR_PANEL).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_PANEL).removeClass("in");
+    $(NODE_COLORING_MENU_CLASS).addClass("disabled");
+    $(NODE_COLORING_MENU).addClass("disabled");
+    $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
 const isNewWorkbook = (name) => {
@@ -530,7 +538,6 @@ const isNewWorkbook = (name) => {
 };
 
 // Workbook Mode Functions
-
 const updateModeViews = () =>{
     // Select correct dropdown item
     $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
@@ -545,16 +552,18 @@ const updateModeViews = () =>{
 };
 
 const checkWorkbookModeSettings = () => {
-    showNodeColoringMenus();
-
     if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
+        grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
+        showNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
     } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = true;
+        showNodeColoringMenus();
         showEdgeWeightOptions();
         updateModeViews();
     }
@@ -794,6 +803,7 @@ export const updateApp = grnState => {
             identifySpeciesOrTaxon(workbookSpecies);
             identifySpeciesOrTaxon(workbookTaxon);
         }
+
         // nodeColoringEnabled will only be set the very first time; because otherwise the user will have
         // made a choice and we will let the choice stick.
         if (hasExpressionData(grnState.workbook.expression)) {
@@ -869,44 +879,57 @@ export const updateApp = grnState => {
 
     // Node Coloring
     if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
-    ) {
+    && hasExpressionData(grnState.workbook.expression)) {
         grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_MENU).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
-
-        if (hasExpressionData(grnState.workbook.expression)) {
-            if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
+            grnState.ppiNodeColorWarningDisplayed = true;
+        }
+        if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
-                if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
-                    loadExpressionDatabase(true);
-                }
-            } else if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.bottomDataset) &&
-            !grnState.nodeColoring.bottomDataSameAsTop &&
-            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
-                if (!grnState.nodeColoring.bottomDataSameAsTop) {
-                    loadExpressionDatabase(false);
-                }
-            } else {
-                updaters.renderNodeColoring();
+            if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
+                loadExpressionDatabase(true);
+            }
+        } else if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+        !grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            if (!grnState.nodeColoring.bottomDataSameAsTop) {
+                loadExpressionDatabase(false);
             }
         } else {
-            grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-                grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
-            grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-                grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
-
-            if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
-                (!grnState.nodeColoring.bottomDataSameAsTop &&
-                grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
-                updaters.removeNodeColoring();
-                resetDatasetDropdownMenus(grnState.workbook);
-            }
-
+            updaters.renderNodeColoring();
+        }
+    } else if (grnState.workbook !== null && !hasExpressionData(grnState.workbook.expression)
+    && grnState.nodeColoring.nodeColoringEnabled) {
+        if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
+        (!grnState.nodeColoring.bottomDataSameAsTop &&
+        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
+            updaters.removeNodeColoring();
+            resetDatasetDropdownMenus(grnState.workbook);
+        }
+        grnState.nodeColoring.showMenu = true;
+        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
+        grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
+        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
+        grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_MENU).removeClass("hidden");
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
+        if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
                 loadExpressionDatabase(true);
             } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
@@ -929,18 +952,21 @@ export const updateApp = grnState => {
                 //   Investigate why a timeout is required in order for node coloring to take place
                 //   successfully in this case.
                 setTimeout(() => updaters.renderNodeColoring(), 250);
-
             }
             if (grnState.mode === NETWORK_PPI_MODE) {
-                displayPPINodeColorWarning();
+                displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
+                grnState.ppiNodeColorWarningDisplayed = true;
             }
         }
-        refreshApp();
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
         $(NODE_COLORING_SIDEBAR_BODY).addClass("hidden");
+        $(NODE_COLORING_MENU).addClass("disabled");
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            grnState.ppiNodeColorWarningDisplayed = false;
+        }
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
@@ -979,6 +1005,8 @@ export const updateApp = grnState => {
 
     if (grnState.nodeColoring.showMenu) {
         showNodeColoringMenus();
+    } else {
+        disableNodeColoringMenus();
     }
 
     updateLogFoldChangeMaxValue();
