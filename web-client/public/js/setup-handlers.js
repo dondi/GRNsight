@@ -193,7 +193,8 @@ export const setupHandlers = grnState => {
 
         const aspectRatio = svgWidth / svgHeight;
         let scaledWidth = pdfWidth;
-        let scaledHeight = pdfWidth / aspectRatio;
+        // ratio = width/height --> height = width/ratio
+        let scaledHeight = scaledWidth / aspectRatio;
 
         if (scaledHeight > pdfHeight) {
             scaledHeight = pdfHeight;
@@ -201,8 +202,6 @@ export const setupHandlers = grnState => {
         }
 
         pdf.addImage(imgData, "PNG", 0, 0, scaledWidth, scaledHeight);
-    
-        // pdf.addImage(imgData, "PNG", 0, 0, width, height);
         pdf.save(name);
     };
 
