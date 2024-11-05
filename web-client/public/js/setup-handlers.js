@@ -94,13 +94,11 @@ export const setupHandlers = grnState => {
         window.document.body.appendChild(emptySvg);
         var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
 
-        const traverse = svg => {
-            var tree = [];
-            tree.push(svg);
-            // implement DFS
-            const visit = (node) => {
-                if (node && node.hasChildNodes()) {
-                    var child = node.firstChild;
+        const traverse = (node) => {
+            const tree = [];
+            const visit = (currentNode) => {
+                if (currentNode && currentNode.hasChildNodes()) {
+                    let child = currentNode.firstChild;
                     while (child) {
                         if (child.nodeType === 1 && child.nodeName !== "SCRIPT") {
                             tree.push(child);
@@ -110,38 +108,38 @@ export const setupHandlers = grnState => {
                     }
                 }
             };
-            visit(svg);
+            visit(node);
             return tree;
         };
 
         const explicitlySetStyle = element => {
             const cSSStyleDeclarationComputed = window.getComputedStyle(element);
-            let i;
-            let len;
-            let key;
-            let value;
             let computedStyleStr = "";
 
-            for (i = 0, len = cSSStyleDeclarationComputed.length; i < len; i++) {
-                key = cSSStyleDeclarationComputed[i];
-                value = cSSStyleDeclarationComputed.getPropertyValue(key);
+            for (let i = 0; i < cSSStyleDeclarationComputed.length; i++) {
+                const key = cSSStyleDeclarationComputed[i];
+                const value = cSSStyleDeclarationComputed.getPropertyValue(key);
                 if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
                     // Don't set computed style of width and height. Makes SVG elmements disappear.
                     if ((key !== "height") && (key !== "width")) {
-                        computedStyleStr += key + ":" + value + ";";
+                        computedStyleStr += `${key}:${value};`;
                     }
 
                 }
             }
-            element.setAttribute("style", computedStyleStr);
+
+            if (element.classList.contains("weight")) {
+                computedStyleStr += "visibility: hidden;";
+            }
+
+            if (computedStyleStr) {
+                element.setAttribute("style", computedStyleStr);
+            }
         };
 
         // hardcode computed css styles inside svg
         var allElements = traverse(svg);
-        var i = allElements.length;
-        while (i--) {
-            explicitlySetStyle(allElements[i]);
-        }
+        allElements.forEach(explicitlySetStyle);
     };
 
     const sourceAttributeSetter = (svg) => {
