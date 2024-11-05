@@ -185,10 +185,24 @@ export const setupHandlers = grnState => {
         const imgData = canvas.toDataURL("image/png");
 
         const pdf = new jsPDF("l", "mm", "letter");
-        const width = pdf.internal.pageSize.getWidth();
-        const height = pdf.internal.pageSize.getHeight();
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
 
-        pdf.addImage(imgData, "PNG", 0, 0, width, height);
+        const svgWidth = canvas.width;
+        const svgHeight = canvas.height;
+
+        const aspectRatio = svgWidth / svgHeight;
+        let scaledWidth = pdfWidth;
+        let scaledHeight = pdfWidth / aspectRatio;
+
+        if (scaledHeight > pdfHeight) {
+            scaledHeight = pdfHeight;
+            scaledWidth = pdfHeight * aspectRatio;
+        }
+
+        pdf.addImage(imgData, "PNG", 0, 0, scaledWidth, scaledHeight);
+    
+        // pdf.addImage(imgData, "PNG", 0, 0, width, height);
         pdf.save(name);
     };
 
