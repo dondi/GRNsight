@@ -222,7 +222,7 @@ export const setupHandlers = grnState => {
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
-        saveSvgAsPng(svgContainer, editedName);
+        saveSvgAsPng(svgContainer, editedName, { backgroundColor: "white"});
     });
 
     $(EXPORT_TO_SVG).click(() => {
