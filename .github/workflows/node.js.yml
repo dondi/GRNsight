@@ -3,11 +3,7 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ "issue-1118-github-actions" ]
-  pull_request:
-    branches: [ "issue-1118-github-actions" ]
+on: [push]
 
 jobs:
   build:
