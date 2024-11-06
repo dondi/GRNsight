@@ -1101,9 +1101,7 @@ export var drawGraph = function (workbook) {
                                 average
                             );
                             timePoints = result.timePoints;
-                            return result.data && result.data.length > 0
-                                ? result.data
-                                : [];
+                            return result.data || [];
                         }
                     }
                     return [];
