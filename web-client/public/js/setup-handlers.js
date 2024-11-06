@@ -113,27 +113,28 @@ export const setupHandlers = grnState => {
         };
 
         const explicitlySetStyle = element => {
-            const cSSStyleDeclarationComputed = window.getComputedStyle(element);
-            let computedStyleStr = "";
+            const cssStyleDeclarationComputed = window.getComputedStyle(element);
+            const computedStyleObj = {};    
 
-            for (let i = 0; i < cSSStyleDeclarationComputed.length; i++) {
-                const key = cSSStyleDeclarationComputed[i];
+
+            for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
+                const key = cssStyleDeclarationComputed[i];
                 const value = cSSStyleDeclarationComputed.getPropertyValue(key);
                 if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
                     // Don't set computed style of width and height. Makes SVG elmements disappear.
                     if ((key !== "height") && (key !== "width")) {
-                        computedStyleStr += `${key}:${value};`;
+                        computedStyleObj[key] = value;
                     }
 
                 }
             }
 
             if (element.classList.contains("weight")) {
-                computedStyleStr += "visibility: hidden;";
+                computedStyleObj["visibility"] = "hidden";
             }
 
-            if (computedStyleStr) {
-                element.setAttribute("style", computedStyleStr);
+            if (computedStyleObj) {
+                Object.assign(element.style, computedStyleObj)
             }
         };
 
