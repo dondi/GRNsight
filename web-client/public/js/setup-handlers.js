@@ -201,7 +201,14 @@ export const setupHandlers = grnState => {
             scaledWidth = pdfHeight * aspectRatio;
         }
 
-        pdf.addImage(imgData, "PNG", 0, 0, scaledWidth, scaledHeight);
+        pdf.addImage(
+            imgData,
+            "PNG",
+            (pdfWidth - scaledWidth) / 2,
+            (pdfHeight - scaledHeight) / 2,
+            scaledWidth,
+            scaledHeight
+        );
         pdf.save(name);
     };
 
