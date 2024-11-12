@@ -543,6 +543,7 @@ export const setupHandlers = grnState => {
             initializeViewportSize($(window).width());
             $(window).on("resize", () => {
                 if (grnState.viewportSize === VIEWPORT_FIT) {
+                    console.log("window resize");
                     grnState.dimensions = {
                         width: $(window).width(),
                         height: $(window).height(),
@@ -572,11 +573,14 @@ export const setupHandlers = grnState => {
 
                 // Live changes only matter if we are doing Fit to Window or initializing.
                 if ([VIEWPORT_FIT, VIEWPORT_INIT].includes(grnState.viewportSize)) {
+                    console.log("this is a live change and probably where issue is happening")
+                    // when deploy grnsight, run in an iframe, and whwen run locally, run in a iwndow and window directly showing the app
                     if (grnState.viewportSize === VIEWPORT_INIT) {
                         initializeViewportSize(data.width);
                     }
 
                     if (grnState.viewportSize === VIEWPORT_FIT) {
+                        console.log("we fit to viewport in setup-handlers")
                         grnState.dimensions = data;
                     }
 

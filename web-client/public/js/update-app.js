@@ -335,8 +335,10 @@ const updateViewportSize = (currentValue) => {
     const requestWindowDimensions = () => {
         // We send a message if we are in an iframe, and manipulate directly if we aren’t.
         if (window === window.top) {
+            console.log("fit container to window")
             fitContainerToWindow();
         } else {
+            console.log("dimensions requested")
             window.top.postMessage("dimensions", HOST_SITE);
         }
     };
@@ -345,6 +347,7 @@ const updateViewportSize = (currentValue) => {
     if (!container.hasClass(currentValue)) {
         container.attr("class", grnsightContainerClass);
         if (currentValue === VIEWPORT_FIT) {
+            console.log("Requesting window dimensions");
             requestWindowDimensions();
         } else {
             container.css({ width: "", height: "" });
@@ -359,6 +362,7 @@ const updateViewportSize = (currentValue) => {
     } else if (currentValue === VIEWPORT_L) {
         synchronizeViewportSizeLarge();
     } else if (currentValue === VIEWPORT_FIT) {
+        console.log("updating viewport size in update-app.js");
         fitContainer(grnState.dimensions);
         synchronizeViewportSizeFit();
     } else if (currentValue === VIEWPORT_INIT) {

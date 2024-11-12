@@ -45,6 +45,7 @@ let mutationCallback = null;
 const resizeObserver = new MutationObserver((mutationsList, observer) => {
     if (typeof(mutationCallback) === "function") {
         mutationCallback(mutationsList, observer);
+        console.log("adjusted graph size?")
     }
 });
 
@@ -423,6 +424,8 @@ export var drawGraph = function (workbook) {
             width = newWidth;
             height = newHeight;
         }
+
+        console.log("adjust graph size");
 
         // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
         // Is inconsistent, but I'm tired of fighting with it...
