@@ -119,7 +119,7 @@ export const setupHandlers = grnState => {
 
             for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
                 const key = cssStyleDeclarationComputed[i];
-                const value = cSSStyleDeclarationComputed.getPropertyValue(key);
+                const value = cssStyleDeclarationComputed.getPropertyValue(key);
                 if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
                     // Don't set computed style of width and height. Makes SVG elmements disappear.
                     if ((key !== "height") && (key !== "width")) {
