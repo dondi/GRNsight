@@ -11,7 +11,7 @@
  *                loaded into the web browser when this script executes.
  */
 iFrameResize({
-  checkOrigin: ["https://localhost:8080", "https://grnsight.lmucs.org"],
+  checkOrigin: ["http://localhost:8080/"],
   widthCalculationMethod: "taggedElement",
   heightCalculationMethod: "taggedElement",
   sizeWidth: true,
@@ -28,6 +28,7 @@ const FIT_MARGIN = 4;  // A little space so that "fit" isn’t totally flush wit
 
 const sendDimensions = (destination, origin) => {
   const iframeOffset = $("iframe.embedded-demo").offset();
+  console.log("*****************SEND DIMENSIONS CALLED******************")
   destination.postMessage(
     {
       width: $(window).width() - iframeOffset.left,
@@ -40,19 +41,21 @@ const sendDimensions = (destination, origin) => {
 };
 
 window.addEventListener("message", event => {
-  if (event.origin.indexOf("https://grnsight.lmucs.org") !== 0) {
+  console.log("HELLLLLOOOOO FROM WINDOW EVENT LISTENER")
+  if (event.origin.indexOf("http://localhost:8080/") !== 0) {
     // Ignore any message that did not originate from the GRNsight web client server.
-    console.log("we do not send message from iframe-coordination")
+    console.log("we do not send message from iframe-coordination");
     return;
   }
 
   console.log("look here at iframe-coordination because this is where error with fit to viewport may be happening");
 
   if (event.data === "dimensions") {
+    console.log("***************DIMENSIONS SENT******************")
     sendDimensions(event.source, event.origin);
   }
 });
 
 window.addEventListener("resize", () => sendDimensions(
-  document.querySelector("iframe.embedded-demo").contentWindow, "https://grnsight.lmucs.org"
+  document.querySelector("iframe.embedded-demo").contentWindow, "http://localhost:8080/"
 ));

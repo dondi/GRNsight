@@ -1,4 +1,4 @@
-export const HOST_SITE = "https://dondi.github.io";
+export const HOST_SITE = "http://localhost:8080/";
 
 export const FILE_NAME = "#fileName";
 
