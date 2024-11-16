@@ -1,6 +1,6 @@
 {
   "name": "grnsight",
-  "version": "7.1.7",
+  "version": "7.1.8",
   "description": "Web app and service for visualizing models of gene regulatory networks",
   "directories": {
     "test": "test"
