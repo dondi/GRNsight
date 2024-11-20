@@ -552,14 +552,15 @@ const updateModeViews = () =>{
 };
 
 const checkWorkbookModeSettings = () => {
-    if (grnState.mode === NETWORK_PPI_MODE) {
+    const hasExpression = hasExpressionData(workbook.expression);
+    if (grnState.mode === NETWORK_PPI_MODE || !hasExpression) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
         showNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
-    } else if (grnState.mode === NETWORK_GRN_MODE) {
+    } else if (grnState.mode === NETWORK_GRN_MODE && hasExpression) {
         grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = true;
