@@ -1104,11 +1104,10 @@ export var drawGraph = function (workbook) {
                                 average
                             );
                             timePoints = result.timePoints;
-                            return result.data;
-                        } else {
-                            return 0;
+                            return result.data || [];
                         }
                     }
+                    return [];
                 })
                 .attr("class", "coloring")
                 .enter().append("rect")

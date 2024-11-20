@@ -43,6 +43,8 @@ export var displayWarnings = function (warnings) {
         index++;
     }
 
+    $("#warningsList").html(warningsString);
+
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
