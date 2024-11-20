@@ -339,7 +339,8 @@ const updateViewportSize = (currentValue) => {
             fitContainerToWindow();
         } else {
             console.log("dimensions requested")
-            window.top.postMessage("dimensions", "http://localhost:8080/");
+            console.log("iframe.embedded-demo")
+            window.top.postMessage("dimensions", HOST_SITE);
             console.log("dimensions request complete")
         }
     };

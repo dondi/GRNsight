@@ -11,7 +11,7 @@
  *                loaded into the web browser when this script executes.
  */
 iFrameResize({
-  checkOrigin: ["http://localhost:8080/"],
+  checkOrigin: ["http://localhost:8080", "http://localhost:5001"],
   widthCalculationMethod: "taggedElement",
   heightCalculationMethod: "taggedElement",
   sizeWidth: true,
@@ -42,7 +42,7 @@ const sendDimensions = (destination, origin) => {
 
 window.addEventListener("message", event => {
   console.log("HELLLLLOOOOO FROM WINDOW EVENT LISTENER")
-  if (event.origin.indexOf("http://localhost:8080/") !== 0) {
+  if (event.origin.indexOf("http://localhost:5001/") !== 0) {
     // Ignore any message that did not originate from the GRNsight web client server.
     console.log("we do not send message from iframe-coordination");
     return;
@@ -57,5 +57,5 @@ window.addEventListener("message", event => {
 });
 
 window.addEventListener("resize", () => sendDimensions(
-  document.querySelector("iframe.embedded-demo").contentWindow, "http://localhost:8080/"
+  document.querySelector("iframe.embedded-demo").contentWindow, "http://localhost:5001/"
 ));

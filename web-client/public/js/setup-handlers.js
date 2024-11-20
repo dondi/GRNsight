@@ -558,8 +558,11 @@ export const setupHandlers = grnState => {
         } else {
             window.addEventListener("message", event => {
                 if (event.origin.indexOf(HOST_SITE) !== 0) {
+                    console.log("WE TRY TO SET UP HOST SITE WITH LISTENER", HOST_SITE)
                     return;
                 }
+
+                console.log("WE SUCCESSFULLY PROCEED WITH SET UP OF HOST SITE INSTEAD OF RETURNING")
 
                 // Also filter out all but dimensions messages.
                 const { data } = event;

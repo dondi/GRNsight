@@ -14,14 +14,14 @@ module.exports = {
     },
 
     production: {
-        host: "grnsight.lmucs.org",
-        port: 3001,
-        url: "https://" + this.host + "/client",
+        host: "localhost",
+        port: 8080,
+        url: "http://" + this.host + "/" + this.port,
         root: rootPath,
         app: {
             name: "GRNsight"
         },
-        serviceRoot: "//grnsight.lmucs.org/server"
+        serviceRoot: "//localhost:5000"
     },
 
     beta: {
