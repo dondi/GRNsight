@@ -4,8 +4,8 @@ var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
 var sequelize = new Sequelize(
     config.databaseName,
-    process.env.EXPRESSION_DB_USERNAME,
-    process.env.EXPRESSION_DB_PASSWORD,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
     {
         host: config.databaseHost,
         dialect: config.databaseDialect,
