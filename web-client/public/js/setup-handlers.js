@@ -114,7 +114,7 @@ export const setupHandlers = grnState => {
 
         const explicitlySetStyle = element => {
             const cssStyleDeclarationComputed = window.getComputedStyle(element);
-            const computedStyleObj = {};    
+            const computedStyleObj = {};
 
 
             for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
@@ -134,7 +134,7 @@ export const setupHandlers = grnState => {
             }
 
             if (computedStyleObj) {
-                Object.assign(element.style, computedStyleObj)
+                Object.assign(element.style, computedStyleObj);
             }
         };
 

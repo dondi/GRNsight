@@ -570,7 +570,7 @@ const checkWorkbookModeSettings = () => {
         showNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
-    } else if (grnState.mode === NETWORK_GRN_MODE && hasExpression) {
+    } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = true;
