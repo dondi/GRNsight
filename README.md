@@ -3,6 +3,7 @@ GRNsight
 [![DOI](https://zenodo.org/badge/16195791.svg)](https://zenodo.org/badge/latestdoi/16195791)
 [![Build Status](https://app.travis-ci.com/dondi/GRNsight.svg?branch=master)](https://app.travis-ci.com/dondi/GRNsight)
 [![Coverage Status](https://coveralls.io/repos/github/dondi/GRNsight/badge.svg?branch=master)](https://coveralls.io/github/dondi/GRNsight?branch=master)
+[![Node.js CI](https://github.com/dondi/GRNsight/actions/workflows/node.js.yml/badge.svg)](https://github.com/dondi/GRNsight/actions/workflows/node.js.yml)
 
 http://dondi.github.io/GRNsight/
 
