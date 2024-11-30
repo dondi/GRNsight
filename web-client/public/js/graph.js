@@ -1235,12 +1235,7 @@ export var drawGraph = function (workbook) {
     };
 
     const hasExpressionData = sheets => {
-        for (var property in sheets) {
-            if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-                return true;
-            }
-        }
-        return false;
+        return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
     };
 
     if (!$.isEmptyObject(workbook.expression) && hasExpressionData(workbook.expression) &&
