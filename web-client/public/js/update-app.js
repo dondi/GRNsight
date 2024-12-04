@@ -512,6 +512,10 @@ const toggleLayout = (on, off) => {
     }
 };
 
+export const hasExpressionData = (sheets) => {
+    return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
+};
+
 const updatetoForceGraph = () => {};
 
 const updatetoGridLayout = () => {};
@@ -552,7 +556,9 @@ const updateModeViews = () =>{
 };
 
 const checkWorkbookModeSettings = () => {
-    if (grnState.mode === NETWORK_PPI_MODE) {
+    const hasExpression = hasExpressionData(grnState.workbook.expression);
+
+    if (grnState.mode === NETWORK_PPI_MODE || !hasExpression) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
@@ -596,15 +602,6 @@ $(NETWORK_MODE_GRN).on("click", () => {
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
-};
-
-const hasExpressionData = (sheets) => {
-    for (var property in sheets) {
-        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            return true;
-        }
-    }
-    return false;
 };
 
 const updateSpeciesMenu = () => {
