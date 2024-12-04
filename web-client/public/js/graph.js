@@ -8,7 +8,6 @@ import {
     hasExpressionData,
 } from "./update-app";
 import {
-    ENDS_IN_EXPRESSION_REGEXP,
     VIEWPORT_FIT,
     ZOOM_INPUT,
     ZOOM_PERCENT,
