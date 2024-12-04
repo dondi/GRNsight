@@ -512,13 +512,8 @@ const toggleLayout = (on, off) => {
     }
 };
 
-const hasExpressionData = (sheets) => {
-    for (var property in sheets) {
-        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            return true;
-        }
-    }
-    return false;
+export const hasExpressionData = (sheets) => {
+    return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
 };
 
 const updatetoForceGraph = () => {};

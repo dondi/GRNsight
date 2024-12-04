@@ -5,6 +5,7 @@ import {
     modifyLinkDistanceParameter,
     valueValidator,
     adjustGeneNameForExpression,
+    hasExpressionData,
 } from "./update-app";
 import {
     ENDS_IN_EXPRESSION_REGEXP,
@@ -1232,10 +1233,6 @@ export var drawGraph = function (workbook) {
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
-    };
-
-    const hasExpressionData = sheets => {
-        return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
     };
 
     if (!$.isEmptyObject(workbook.expression) && hasExpressionData(workbook.expression) &&
