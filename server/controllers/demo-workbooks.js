@@ -515,7 +515,7 @@ var demoWorkbook1 = function (path, res, app) {
         },
         meta: {
             data: {
-                alpha: 0.002,
+                alpha: 0.02,
                 kk_max: 1,
                 MaxIter: 100000000,
                 TolFun: 0.000001,
@@ -2679,7 +2679,7 @@ var demoWorkbook2 = function (path, res, app) {
         },
         meta: {
             data: {
-                alpha: 0.002,
+                alpha: 0.02,
                 kk_max: 1,
                 MaxIter: 100000000,
                 TolFun: 0.000001,

@@ -1,6 +1,6 @@
 import { drawGraph, updaters } from "./graph";
 import { uploadState } from "./upload";
-import { displayWarnings } from "./warnings";
+import { displayWarnings, displayPPINodeColorWarning } from "./warnings";
 import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
@@ -109,7 +109,7 @@ import {
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
   NETWORK_GRN_MODE,
-  NETWORK_PPI_MODE
+  NETWORK_PPI_MODE,
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -384,6 +384,14 @@ const enableNodeColoringUI = function () {
     $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).removeClass("hidden");
 };
 
+const adjustGeneNameForExpression = function (gene) {
+    const geneName = gene.name;
+    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE &&
+        geneName.endsWith("p")
+        ? geneName.slice(0, -1)
+        : geneName;
+};
+
 const loadExpressionDatabase = function (isTopDataset) {
     const dataset = isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset;
     startLoadingIcon();
@@ -394,7 +402,9 @@ const loadExpressionDatabase = function (isTopDataset) {
         queryExpressionDatabase({
             type:"ExpressionData",
             dataset,
-            genes : grnState.workbook.genes.map(gene => {return gene.name;}).join(","),
+            genes: grnState.workbook.genes
+                    .map(adjustGeneNameForExpression)
+                    .join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
@@ -502,6 +512,10 @@ const toggleLayout = (on, off) => {
     }
 };
 
+export const hasExpressionData = (sheets) => {
+    return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
+};
+
 const updatetoForceGraph = () => {};
 
 const updatetoGridLayout = () => {};
@@ -528,7 +542,6 @@ const isNewWorkbook = (name) => {
 };
 
 // Workbook Mode Functions
-
 const updateModeViews = () =>{
     // Select correct dropdown item
     $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
@@ -543,14 +556,18 @@ const updateModeViews = () =>{
 };
 
 const checkWorkbookModeSettings = () => {
-    if (grnState.mode === NETWORK_PPI_MODE) {
+    const hasExpression = hasExpressionData(grnState.workbook.expression);
+
+    if (grnState.mode === NETWORK_PPI_MODE || !hasExpression) {
         grnState.nodeColoring.nodeColoringEnabled = false;
+        grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
-        disableNodeColoringMenus();
+        showNodeColoringMenus();
         hideEdgeWeightOptions();
         updateModeViews();
     } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = true;
         showNodeColoringMenus();
         showEdgeWeightOptions();
@@ -585,15 +602,6 @@ $(NETWORK_MODE_GRN).on("click", () => {
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
-};
-
-const hasExpressionData = (sheets) => {
-    for (var property in sheets) {
-        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            return true;
-        }
-    }
-    return false;
 };
 
 const updateSpeciesMenu = () => {
@@ -878,6 +886,10 @@ export const updateApp = grnState => {
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
         $(NODE_COLORING_MENU).removeClass("hidden");
         $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
+            grnState.ppiNodeColorWarningDisplayed = true;
+        }
         if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
         grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
@@ -905,6 +917,12 @@ export const updateApp = grnState => {
         grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
         grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
+        $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
+        $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
+        $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
+        $(NODE_COLORING_MENU).removeClass("hidden");
+        $(NODE_COLORING_NAVBAR_OPTIONS).removeClass("hidden");
+        $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).val(DEFAULT_MAX_LOG_FOLD_CHANGE);
         $(LOG_FOLD_CHANGE_MAX_VALUE_CLASS).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).addClass("hidden");
         $(LOG_FOLD_CHANGE_MAX_VALUE_HEADER).addClass("hidden");
@@ -931,7 +949,10 @@ export const updateApp = grnState => {
                 //   Investigate why a timeout is required in order for node coloring to take place
                 //   successfully in this case.
                 setTimeout(() => updaters.renderNodeColoring(), 250);
-
+            }
+            if (grnState.mode === NETWORK_PPI_MODE) {
+                displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
+                grnState.ppiNodeColorWarningDisplayed = true;
             }
         }
     } else if (grnState.workbook !== null && !grnState.nodeColoring.nodeColoringEnabled) {
@@ -940,6 +961,9 @@ export const updateApp = grnState => {
         $(NODE_COLORING_NAVBAR_OPTIONS).addClass("hidden");
         $(`${NODE_COLORING_TOGGLE_MENU} span`).removeClass("glyphicon-ok");
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", false);
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            grnState.ppiNodeColorWarningDisplayed = false;
+        }
     }
 
     if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
@@ -1010,4 +1034,4 @@ export const updateApp = grnState => {
 };
 
 
-export { stopLoadingIcon, startLoadingIcon};
+export { stopLoadingIcon, startLoadingIcon, adjustGeneNameForExpression};

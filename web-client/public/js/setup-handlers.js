@@ -94,13 +94,11 @@ export const setupHandlers = grnState => {
         window.document.body.appendChild(emptySvg);
         var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
 
-        const traverse = svg => {
-            var tree = [];
-            tree.push(svg);
-            // implement DFS
-            const visit = (node) => {
-                if (node && node.hasChildNodes()) {
-                    var child = node.firstChild;
+        const traverse = (node) => {
+            const tree = [];
+            const visit = (currentNode) => {
+                if (currentNode && currentNode.hasChildNodes()) {
+                    let child = currentNode.firstChild;
                     while (child) {
                         if (child.nodeType === 1 && child.nodeName !== "SCRIPT") {
                             tree.push(child);
@@ -110,38 +108,39 @@ export const setupHandlers = grnState => {
                     }
                 }
             };
-            visit(svg);
+            visit(node);
             return tree;
         };
 
         const explicitlySetStyle = element => {
-            const cSSStyleDeclarationComputed = window.getComputedStyle(element);
-            let i;
-            let len;
-            let key;
-            let value;
-            let computedStyleStr = "";
+            const cssStyleDeclarationComputed = window.getComputedStyle(element);
+            const computedStyleObj = {};
 
-            for (i = 0, len = cSSStyleDeclarationComputed.length; i < len; i++) {
-                key = cSSStyleDeclarationComputed[i];
-                value = cSSStyleDeclarationComputed.getPropertyValue(key);
+
+            for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
+                const key = cssStyleDeclarationComputed[i];
+                const value = cssStyleDeclarationComputed.getPropertyValue(key);
                 if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
                     // Don't set computed style of width and height. Makes SVG elmements disappear.
                     if ((key !== "height") && (key !== "width")) {
-                        computedStyleStr += key + ":" + value + ";";
+                        computedStyleObj[key] = value;
                     }
 
                 }
             }
-            element.setAttribute("style", computedStyleStr);
+
+            if (element.classList.contains("weight")) {
+                computedStyleObj["visibility"] = "hidden";
+            }
+
+            if (computedStyleObj) {
+                Object.assign(element.style, computedStyleObj);
+            }
         };
 
         // hardcode computed css styles inside svg
         var allElements = traverse(svg);
-        var i = allElements.length;
-        while (i--) {
-            explicitlySetStyle(allElements[i]);
-        }
+        allElements.forEach(explicitlySetStyle);
     };
 
     const sourceAttributeSetter = (svg) => {
@@ -160,7 +159,7 @@ export const setupHandlers = grnState => {
     };
 
     const exportSVG = (svgElement, name) => {
-        let source = svgElement;
+        let source = svgElement.cloneNode(true);
 
         sourceAttributeSetter(source);
         setInlineStyles(source);
@@ -185,10 +184,30 @@ export const setupHandlers = grnState => {
         const imgData = canvas.toDataURL("image/png");
 
         const pdf = new jsPDF("l", "mm", "letter");
-        const width = pdf.internal.pageSize.getWidth();
-        const height = pdf.internal.pageSize.getHeight();
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
 
-        pdf.addImage(imgData, "PNG", 0, 0, width, height);
+        const svgWidth = canvas.width;
+        const svgHeight = canvas.height;
+
+        const aspectRatio = svgWidth / svgHeight;
+        let scaledWidth = pdfWidth;
+        // ratio = width/height --> height = width/ratio
+        let scaledHeight = scaledWidth / aspectRatio;
+
+        if (scaledHeight > pdfHeight) {
+            scaledHeight = pdfHeight;
+            scaledWidth = pdfHeight * aspectRatio;
+        }
+
+        pdf.addImage(
+            imgData,
+            "PNG",
+            (pdfWidth - scaledWidth) / 2,
+            (pdfHeight - scaledHeight) / 2,
+            scaledWidth,
+            scaledHeight
+        );
         pdf.save(name);
     };
 
@@ -209,7 +228,7 @@ export const setupHandlers = grnState => {
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
-        saveSvgAsPng(svgContainer, editedName);
+        saveSvgAsPng(svgContainer, editedName, { backgroundColor: "white"});
     });
 
     $(EXPORT_TO_SVG).click(() => {

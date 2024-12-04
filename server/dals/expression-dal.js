@@ -4,8 +4,8 @@ var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
 var sequelize = new Sequelize(
     config.databaseName,
-    process.env.EXPRESSION_DB_USERNAME,
-    process.env.EXPRESSION_DB_PASSWORD,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
     {
         host: config.databaseHost,
         dialect: config.databaseDialect,
@@ -20,7 +20,7 @@ var sequelize = new Sequelize(
 const buildExpressionGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ( `(gene_expression.gene.display_gene_id =\'${x}\') OR `));
+    geneList.forEach(x => genes += ( `(LOWER(gene_expression.gene.display_gene_id) = LOWER(\'${x}\')) OR `));
     return genes.substring(0, genes.length - 4);
 };
 
@@ -62,7 +62,7 @@ const buildExpressionQuery = function (query) {
 const listExpressionGeneData = function (gene, totalOutput) {
     let listOfData = [];
     totalOutput.forEach(function (x) {
-        if (x.display_gene_id === gene) {
+        if (x.display_gene_id.toLowerCase() === gene.toLowerCase()) {
             listOfData.push(Number(x.expression));
         }
     });

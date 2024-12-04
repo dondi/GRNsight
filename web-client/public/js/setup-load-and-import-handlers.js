@@ -171,8 +171,8 @@ export const setupLoadAndImportHandlers = (grnState) => {
      * for helping to resolve this.
      */
 
-    // $(".upload").change(uploadHandler(loadGrn));
     $("body").on("change", ".upload", uploadHandler(loadGrn));
+
     const loadDemo = (url, value) => {
         $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop(
             "selected",

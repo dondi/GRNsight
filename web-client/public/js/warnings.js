@@ -58,3 +58,28 @@ export var displayWarnings = function (warnings) {
 
     $("#warningsModal").modal("show");
 };
+
+export var displayPPINodeColorWarning = function (warningDisplayed) {
+    if (warningDisplayed) {
+        return;
+    }
+
+    $("#warningIntro").html("Protein-protein interaction node coloring warning.");
+    $("#warningsList").html(
+      ["You are displaying mRNA-level expression data on a protein-protein interaction network.",
+          "Please note that this may not be the most appropriate representation of the data."].join(" ")
+    );
+
+    var screenHeight = $(window).height();
+    var MIN_SCREEN_HEIGHT = 600;
+    var BORDER = 425;
+    var setPanel = screenHeight - BORDER + "px";
+    var minPanel = MIN_SCREEN_HEIGHT - BORDER + "px";
+    if (screenHeight > MIN_SCREEN_HEIGHT) {
+        $("#list-frame").css({ height: setPanel });
+    } else {
+        $("#list-frame").css({ height: minPanel });
+    }
+
+    $("#warningsModal").modal("show");
+};

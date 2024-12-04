@@ -4,8 +4,8 @@ var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
 var sequelize = new Sequelize(
     config.databaseName,
-    process.env.EXPRESSION_DB_USERNAME,
-    process.env.EXPRESSION_DB_PASSWORD,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
     {
         host: config.databaseHost,
         dialect: config.databaseDialect,
@@ -21,12 +21,10 @@ const buildNetworkSourceQuery = function () {
     return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp DESC;";
 };
 
-const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
+const buildNetworkGeneFromSourceQuery = function (gene) {
     return `SELECT DISTINCT gene_id, display_gene_id FROM 
-    gene_regulatory_network.network, gene_regulatory_network.gene WHERE
-    network.time_stamp='${timestamp}' AND network.source='${source}' AND
-    (gene.gene_id ='${gene}' OR gene.display_gene_id ='${gene}') AND
-    (gene.gene_id = network.regulator_gene_id OR gene.gene_id = network.target_gene_id);`;
+    gene_regulatory_network.gene WHERE (gene.gene_id ='${gene}'
+    OR gene.display_gene_id ='${gene}')`;
 };
 
 const buildNetworkGenesQuery = function (geneString) {
@@ -49,7 +47,7 @@ const buildGenerateNetworkQuery = function (genes, source, timestamp) {
 const buildQueryByType = function (queryType, query) {
     const networkQueries = {
         "NetworkSource": () => buildNetworkSourceQuery(),
-        "NetworkGeneFromSource": () => buildNetworkGeneFromSourceQuery(query.gene, query.source, query.timestamp),
+        "NetworkGeneFromSource": () => buildNetworkGeneFromSourceQuery(query.gene),
         "GenerateNetwork": () => buildGenerateNetworkQuery(query.genes, query.source, query.timestamp)
     };
     if (Object.keys(networkQueries).includes(query.type)) {
