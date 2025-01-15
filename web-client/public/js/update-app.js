@@ -287,7 +287,6 @@ const synchronizeViewportSizeLarge = () => {
 };
 
 const synchronizeViewportSizeFit = () => {
-    console.log("synchronizeViewportSizeFit called");
     $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
     $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
     $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
@@ -340,9 +339,9 @@ const updateViewportSize = (currentValue) => {
         if (window === window.top) {
             fitContainerToWindow();
         } else {
-            console.log("dimensions requested")
+            console.log("dimensions request posted FROM IFRAME to HOST_SITE")
             window.top.postMessage("dimensions", HOST_SITE);
-            console.log("dimensions request complete")
+            console.log("try printing grnState.dimensions after posting to iframe", grnState.dimensions)
         }
     };
 
@@ -350,7 +349,7 @@ const updateViewportSize = (currentValue) => {
     if (!container.hasClass(currentValue)) {
         container.attr("class", grnsightContainerClass);
         if (currentValue === VIEWPORT_FIT) {
-            console.log("Requesting window dimensions");
+            console.log("***************Requesting window dimensions in check for current value*******************");
             requestWindowDimensions();
         } else {
             container.css({ width: "", height: "" });
@@ -367,15 +366,19 @@ const updateViewportSize = (currentValue) => {
     } else if (currentValue === VIEWPORT_FIT) {
         console.log("updating viewport size in update-app.js");
         // fitContainer is called before the dimensions are set 
-        synchronizeViewportSizeSmall();
-        if (grnState.dimensions) {
-            console.log("dimensions are set", grnState.dimensions);
-            fitContainer(grnState.dimensions);
-            synchronizeViewportSizeFit();
-        } 
+        // NEED TO WAIT FOR GRNSTATE.DIMENSIONS HERE because this continues running fitContainer without dimensions
+        // if (grnState.dimensions) {
+        console.log("dimensions are set", grnState.dimensions);
+        // console.log("REQUESTED DIMENSIONS NOW ")
+        // fit container will NOT work. this functionality needs to be done somewhere else
+        fitContainer(grnState.dimensions);
+        synchronizeViewportSizeFit();
+        // }
     } else if (currentValue === VIEWPORT_INIT) {
         // First time around: initialize.
+        console.log("REQUESTING DIMENSIONS INIT")
         requestWindowDimensions();
+        console.log("FINISH REQUESTING DIMENSIONS")
     }
 
     console.log("UPDATE VIEWPORT SIZE FINISHED BUT MOVE ON TO RELOADING ALL NODES AND PATHS ON GRAPH, AND THEY ARE NOT SURE WHAT SIZE THEY ARE SUPPOSED TO FIT")

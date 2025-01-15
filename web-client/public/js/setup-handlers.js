@@ -581,11 +581,11 @@ export const setupHandlers = grnState => {
         } else {
             window.addEventListener("message", event => {
                 console.log("EVENT.ORIGIN IN SETUP HANDLERS", event.origin)
-                // if (event.origin.indexOf("http://localhost:5001") !== 0) {
-                //     console.log("WE TRY TO SET UP HOST SITE WITH LISTENER", HOST_SITE, )
-                //     return;
-                // }
-                // console.log("WE SUCCESSFULLY PROCEED WITH SET UP OF HOST SITE INSTEAD OF RETURNING")
+                if (event.origin != HOST_SITE) {
+                    console.log("WE TRY TO SET UP HOST SITE WITH LISTENER", HOST_SITE)
+                    return;
+                }
+                console.log("WE SUCCESSFULLY PROCEED WITH SET UP OF HOST SITE INSTEAD OF RETURNING")
 
                 // Also filter out all but dimensions messages.
                 const { data } = event;
