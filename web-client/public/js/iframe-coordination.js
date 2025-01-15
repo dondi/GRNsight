@@ -26,9 +26,17 @@ const MEDIUM_HEIGHT = 840 + HEIGHT_OFFSET;
 const LARGE_HEIGHT = 1080 + HEIGHT_OFFSET;
 const FIT_MARGIN = 4;  // A little space so that "fit" isn’t totally flush with window bounds.
 
-const sendDimensions = (destination, origin) => {
+const sendDimensions = async (destination, origin) => {
+
+  console.log("***************DIMENSIONS SENT******************");
   const iframeOffset = $("iframe.embedded-demo").offset();
-  console.log("*****************SEND DIMENSIONS CALLED******************")
+  console.log("destination", destination, "origin", origin);
+  console.log("message posted to iframe: ", {
+    width: $(window).width() - iframeOffset.left,
+    height: $(window).height() - FIT_MARGIN,
+    top: iframeOffset.top,
+  }, origin);
+ 
   destination.postMessage(
     {
       width: $(window).width() - iframeOffset.left,
@@ -40,21 +48,95 @@ const sendDimensions = (destination, origin) => {
   );
 };
 
-window.addEventListener("message", event => {
-  console.log("HELLLLLOOOOO FROM WINDOW EVENT LISTENER")
-  if (event.origin.indexOf("http://localhost:5001/") !== 0) {
-    // Ignore any message that did not originate from the GRNsight web client server.
-    console.log("we do not send message from iframe-coordination");
-    return;
-  }
+// const sendDimensions = async (destination, origin) => {
+//   try {
+//     console.log("***************DIMENSIONS SENT******************");
+//     const iframeOffset = $("iframe.embedded-demo").offset();
+//     console.log("destination", destination, "origin", origin);
+//     console.log(
+//       "message posted to iframe: ",
+//       {
+//         width: $(window).width() - iframeOffset.left,
+//         height: $(window).height() - FIT_MARGIN,
+//         top: iframeOffset.top,
+//       },
+//       origin
+//     );
 
-  console.log("look here at iframe-coordination because this is where error with fit to viewport may be happening");
+//     // Await response from the iframe
+//     const response = await sendMessageAndWaitForResponse(
+//       dimensions,
+//       origin,
+//       destination
+//     );
+//     console.log("Received response: ", response);
+//   } catch (error) {
+//     console.error("Error sending dimensions: ", error);
+//   }
+
+//   // destination.postMessage(
+//   //   {
+//   //     width: $(window).width() - iframeOffset.left,
+//   //     height: $(window).height() - FIT_MARGIN,
+//   //     top: iframeOffset.top
+//   //   },
+
+//   //   origin
+//   // );
+// };
+
+// const sendMessageAndWaitForResponse = async (message, targetOrigin, targetWindow) => {
+//   return new Promise((resolve, reject) => {
+//     // Set up the message event listener
+//     function handleMessage(event) {
+//       if (event.origin !== targetOrigin) return; // Ignore messages from unexpected origins
+
+//       if (event.data.type === "dimensionsResponse") {
+//         window.removeEventListener("message", handleMessage); // Clean up the listener
+//         resolve(event.data); // Resolve with the response data
+//       }
+//     }
+
+//     window.addEventListener("message", handleMessage);
+
+//     // Send the message
+//     targetWindow.postMessage(message, targetOrigin);
+
+//     // Add a timeout to reject if no response is received
+//     setTimeout(() => {
+//       window.removeEventListener("message", handleMessage); // Clean up on timeout
+//       reject(new Error("Timeout waiting for response"));
+//     }, 5000); // 5-second timeout
+//   });
+// };
+
+window.addEventListener("message", async event => {
+  console.log("event.origin: ", event.origin, "event.data", event.data);
+  // if (event.origin.indexOf("http://localhost:8080/") !== 0) {
+  //   // Ignore any message that did not originate from the GRNsight web client server.
+  //   console.log("we do not send message from iframe-coordination");
+  //   return;
+  // }
 
   if (event.data === "dimensions") {
     console.log("***************DIMENSIONS SENT******************")
     sendDimensions(event.source, event.origin);
   }
 });
+
+// window.addEventListener("message", async (event) => {
+//   console.log("event.origin: ", event.origin, "event.data", event.data);
+//   // if (event.origin.indexOf("http://localhost:8080/") !== 0) {
+//   //   // Ignore any message that did not originate from the GRNsight web client server.
+//   //   console.log("we do not send message from iframe-coordination");
+//   //   return;
+//   // }
+
+//   if (event.data === "dimensions") {
+//     console.log("*****************SEND DIMENSIONS CALLED******************");
+//     await sendDimensions(event.source, event.origin);
+//   }
+// });
 
 window.addEventListener("resize", () => sendDimensions(
   document.querySelector("iframe.embedded-demo").contentWindow, "http://localhost:5001/"

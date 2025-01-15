@@ -414,6 +414,7 @@ export var drawGraph = function (workbook) {
     }
 
     const adjustGraphSize = () => {
+        console.log("*************ADJUSTING GRAPH SIZE**************")
         var newWidth = $container.width();
         var newHeight = $container.height();
 
@@ -424,8 +425,6 @@ export var drawGraph = function (workbook) {
             width = newWidth;
             height = newHeight;
         }
-
-        console.log("adjust graph size");
 
         // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
         // Is inconsistent, but I'm tired of fighting with it...

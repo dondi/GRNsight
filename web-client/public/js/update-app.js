@@ -287,6 +287,7 @@ const synchronizeViewportSizeLarge = () => {
 };
 
 const synchronizeViewportSizeFit = () => {
+    console.log("synchronizeViewportSizeFit called");
     $(VIEWPORT_SIZE_S_DROPDOWN + " span").removeClass("glyphicon-ok");
     $(VIEWPORT_SIZE_M_DROPDOWN + " span").removeClass("glyphicon-ok");
     $(VIEWPORT_SIZE_L_DROPDOWN + " span").removeClass("glyphicon-ok");
@@ -310,10 +311,11 @@ const updateViewportSize = (currentValue) => {
 
     // from jquery
     const fitContainer = dimensions => {
-        if (!dimensions) {
-            return; // First call; the next one should have dimensions filled in.
-        }
-
+        console.log("try calling fitContainer. dimensions", dimensions);
+        // this logic is to prevent the first call from doing anything, but this causes error because website does not know what size to do on first run, and then fits to container properly on second run. 
+        // this causes all nodes to overlap but then graph dimensions loaded correctly later
+        
+        console.log("fit container to screen")
         const fitWidth = dimensions.width - WIDTH_OFFSET;
         const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
         if (fitWidth !== container.width() || fitHeight !== container.height()) {
@@ -325,6 +327,7 @@ const updateViewportSize = (currentValue) => {
     };
 
     const fitContainerToWindow = () => {
+        console.log("***************FIT CONTAINER TO WINDOW******************");
         fitContainer({
             width: $(window).width(),
             height: $(window).height(),
@@ -335,11 +338,9 @@ const updateViewportSize = (currentValue) => {
     const requestWindowDimensions = () => {
         // We send a message if we are in an iframe, and manipulate directly if we aren’t.
         if (window === window.top) {
-            console.log("fit container to window")
             fitContainerToWindow();
         } else {
             console.log("dimensions requested")
-            console.log("iframe.embedded-demo")
             window.top.postMessage("dimensions", HOST_SITE);
             console.log("dimensions request complete")
         }
@@ -365,12 +366,19 @@ const updateViewportSize = (currentValue) => {
         synchronizeViewportSizeLarge();
     } else if (currentValue === VIEWPORT_FIT) {
         console.log("updating viewport size in update-app.js");
-        fitContainer(grnState.dimensions);
-        synchronizeViewportSizeFit();
+        // fitContainer is called before the dimensions are set 
+        synchronizeViewportSizeSmall();
+        if (grnState.dimensions) {
+            console.log("dimensions are set", grnState.dimensions);
+            fitContainer(grnState.dimensions);
+            synchronizeViewportSizeFit();
+        } 
     } else if (currentValue === VIEWPORT_INIT) {
         // First time around: initialize.
         requestWindowDimensions();
     }
+
+    console.log("UPDATE VIEWPORT SIZE FINISHED BUT MOVE ON TO RELOADING ALL NODES AND PATHS ON GRAPH, AND THEY ARE NOT SURE WHAT SIZE THEY ARE SUPPOSED TO FIT")
 };
 
 
@@ -796,6 +804,7 @@ if (!grnState.genePageData.identified) {
 
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
+        console.log("*************UPDATE APP CALLLED*************")
         checkWorkbookModeSettings();
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);
@@ -880,7 +889,7 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Viewport
+    // Viewport
     updateViewportSize(grnState.viewportSize);
 
     // Node Coloring
