@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 10/9/24
+modified: 01/17/25
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -65,6 +65,45 @@ description: >-
                         <div id="releaseContent" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="panel-group">
+
+                                    <div class="panel panel-default"></div>
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v7_2_0Content" data-toggle="collapse">
+                                                    GRNsight v7.2.0
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v7_2_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                GRNsight v7.2.0 includes the following new features and bug fixes:
+                                                <ul>
+                                                    <li>Features:
+                                                        <ul>
+                                                            <li>Added node coloring for Protein-Protein Interaction (PPI) networks, including warning indicators.</li>
+                                                            <li>Introduced a network mode toggle to seamlessly switch between Gene Regulatory Networks (GRN) and PPI graphs.</li>
+                                                            <li>Enabled automatic detection of network mode based on imported files.</li>
+                                                            <li>Integrated GitHub Actions for continuous integration, running npm run lint and npm run test automatically.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>Enhancements:
+                                                        <ul>
+                                                            <li>Increased the alpha value in _optimization_parameters_ from 0.002 to 0.02 when exporting GRN graphs to Excel for better visibility and clarity.</li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>Bug Fixes:
+                                                        <ul>
+                                                            <li>Fixed an issue where exporting to SVG would modify the graph.</li>
+                                                            <li>Resolved a bug causing the file selector to appear twice when importing an invalid file in Chrome.</li>
+                                                            <li>Corrected the display of the warning message string.</li>
+                                                            <li>Ensured consistency between navbar and sidebar options for node coloring.</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="panel panel-default"></div>
                                         <div class="panel-heading">
