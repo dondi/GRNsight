@@ -607,7 +607,8 @@ export const setupHandlers = grnState => {
                         console.log("************HAVE DATA, FIT TO VIEWPORT IN SETUP CONTAINER***********")
                         grnState.dimensions = data;
                     }
-                    console.log("******************CALL UPDATEAPP AGAIN***********")
+
+                    console.log("******************CALL UPDATEAPP AGAIN FROM SETUP-HANDLERS***********")
                     updateApp(grnState);
                 } else {
                     delete grnState.dimensions;

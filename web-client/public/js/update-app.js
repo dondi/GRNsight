@@ -302,27 +302,22 @@ const synchronizeViewportSizeFit = () => {
 };
 
 const updateViewportSize = (currentValue) => {
+    console.log("********updateViewportSize CALLLED********")
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
     const HEIGHT_OFFSET = 53;
 
     let container = $(".grnsight-container");
 
-    // from jquery
     const fitContainer = dimensions => {
         console.log("try calling fitContainer. dimensions", dimensions);
-        // this logic is to prevent the first call from doing anything, but this causes error because website does not know what size to do on first run, and then fits to container properly on second run. 
-        // this causes all nodes to overlap but then graph dimensions loaded correctly later
-        
-        console.log("fit container to screen")
-        const fitWidth = dimensions.width - WIDTH_OFFSET;
-        const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
-        if (fitWidth !== container.width() || fitHeight !== container.height()) {
-            container.css({
-                width: fitWidth,
-                height: fitHeight
-            });
-        }
+        const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET: container.width();
+        const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET: container.height();
+
+        container.css({
+            width: fitWidth,
+            height: fitHeight
+        });
     };
 
     const fitContainerToWindow = () => {
@@ -339,9 +334,7 @@ const updateViewportSize = (currentValue) => {
         if (window === window.top) {
             fitContainerToWindow();
         } else {
-            console.log("dimensions request posted FROM IFRAME to HOST_SITE")
             window.top.postMessage("dimensions", HOST_SITE);
-            console.log("try printing grnState.dimensions after posting to iframe", grnState.dimensions)
         }
     };
 
@@ -349,7 +342,6 @@ const updateViewportSize = (currentValue) => {
     if (!container.hasClass(currentValue)) {
         container.attr("class", grnsightContainerClass);
         if (currentValue === VIEWPORT_FIT) {
-            console.log("***************Requesting window dimensions in check for current value*******************");
             requestWindowDimensions();
         } else {
             container.css({ width: "", height: "" });
@@ -365,23 +357,14 @@ const updateViewportSize = (currentValue) => {
         synchronizeViewportSizeLarge();
     } else if (currentValue === VIEWPORT_FIT) {
         console.log("updating viewport size in update-app.js");
-        // fitContainer is called before the dimensions are set 
-        // NEED TO WAIT FOR GRNSTATE.DIMENSIONS HERE because this continues running fitContainer without dimensions
-        // if (grnState.dimensions) {
-        console.log("dimensions are set", grnState.dimensions);
-        // console.log("REQUESTED DIMENSIONS NOW ")
-        // fit container will NOT work. this functionality needs to be done somewhere else
         fitContainer(grnState.dimensions);
         synchronizeViewportSizeFit();
-        // }
     } else if (currentValue === VIEWPORT_INIT) {
         // First time around: initialize.
-        console.log("REQUESTING DIMENSIONS INIT")
         requestWindowDimensions();
-        console.log("FINISH REQUESTING DIMENSIONS")
     }
 
-    console.log("UPDATE VIEWPORT SIZE FINISHED BUT MOVE ON TO RELOADING ALL NODES AND PATHS ON GRAPH, AND THEY ARE NOT SURE WHAT SIZE THEY ARE SUPPOSED TO FIT")
+    console.log("UPDATE VIEWPORT SIZE FINISHED BUT MOVE ON TO RELOADING ALL NODES AND PATHS ON GRAPH")
 };
 
 

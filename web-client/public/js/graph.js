@@ -45,7 +45,6 @@ let mutationCallback = null;
 const resizeObserver = new MutationObserver((mutationsList, observer) => {
     if (typeof(mutationCallback) === "function") {
         mutationCallback(mutationsList, observer);
-        console.log("adjusted graph size?")
     }
 });
 
@@ -414,10 +413,10 @@ export var drawGraph = function (workbook) {
     }
 
     const adjustGraphSize = () => {
-        console.log("*************ADJUSTING GRAPH SIZE**************")
+        console.log("*************ADJUSTING GRAPH SIZE IN GRAPH.JS**************")
         var newWidth = $container.width();
         var newHeight = $container.height();
-
+        console.log("adjustGraphSize newWidth", newWidth, "newHeight", newHeight)
         if (adaptive) {
             width = (width < newWidth) ? newWidth : width;
             height = (height < newHeight) ? newHeight : height;
