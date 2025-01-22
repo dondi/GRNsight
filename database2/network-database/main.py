@@ -67,7 +67,7 @@ def adding_data_to_databse(network_option, db_url):
 def main(network_option, db_url):
     load_data(network_option)
     filter_data(network_option, db_url)
-    # adding_data_to_databse(network_option, db_url)
+    adding_data_to_databse(network_option, db_url)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate data for different networks.")
