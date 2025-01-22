@@ -6,33 +6,33 @@ Here are the instructions how to set up the database for GRNsight.
 
 ### Installing PostgreSQL on your computer
 
-    - MacOS and Windows can follow these instructions on how to install postgreSQL.
+- MacOS and Windows can follow these instructions on how to install postgreSQL.
 
-    - Install the software at this [link](https://www.postgresql.org/download/)
-    - > MacOS users: It is recommended to install with homebrew rather than the interactive installation in order to correctly view the `initdb --locale=C -E UTF-8 location-of-cluster` message in the documentation.
-    - > Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
-    - Initialize the database
-       - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
-       - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
-       - "Cluster" is the PostgreSQL term for the file structure of a PostgreSQL database instance
-       - You will have to modify location-of-cluster to the folder name you want to store the database (you don't need to create a folder, the command will create the folder for you, just create the name)
-    - Start and stop the server
-        - Additionally, your installer may start the server for you upon installation (You can save this command for further reuse).
-        - To start the server yourself run `pg_ctl start -D location-of-cluster` (You can save this command for further reuse).
-        - To stop the server run `pg_ctl stop -D location-of-cluster`.
-            - After installing with homebrew on MacOS, you may receive an error when you try to start the server that the server is unable to be started, and when attempting to stop the server, there terminal states there is no server running. In this case, you have to directly kill the port that the server is running on.
-            - To double check that this is the issue, you can open the Activity Monitor app on your computer and search for the `postgres` activity. If there is one, that means the server is running, and we have to terminate the port that the server is running on.
-            - First, we have to check what port the server is running on. Navigate to your homebrew installation, which is the same `location-of-cluster` from when the database was initialized and open that location in VSCode.
-            - Search for `port =` in the file `postgresql.conf`. By default, the port should be port 5432, but keep note of this port in case it is different.
-            - Refer to this Stack Overflow documentation on how to kill a server:
-                - https://stackoverflow.com/questions/4075287/node-express-eaddrinuse-address-already-in-use-kill-server
-            - If that doesn't work, then refer to the different methods on this link from Stack Overflow:
-                - https://stackoverflow.com/questions/42416527/postgres-app-port-in-use
+- Install the software at this [link](https://www.postgresql.org/download/)
+- > MacOS users: It is recommended to install with homebrew rather than the interactive installation in order to correctly view the `initdb --locale=C -E UTF-8 location-of-cluster` message in the documentation.
+- > Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
+- Initialize the database
+   - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
+   - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
+   - "Cluster" is the PostgreSQL term for the file structure of a PostgreSQL database instance
+   - You will have to modify location-of-cluster to the folder name you want to store the database (you don't need to create a folder, the command will create the folder for you, just create the name)
+- Start and stop the server
+    - Additionally, your installer may start the server for you upon installation (You can save this command for further reuse).
+    - To start the server yourself run `pg_ctl start -D location-of-cluster` (You can save this command for further reuse).
+    - To stop the server run `pg_ctl stop -D location-of-cluster`.
+        - After installing with homebrew on MacOS, you may receive an error when you try to start the server that the server is unable to be started, and when attempting to stop the server, there terminal states there is no server running. In this case, you have to directly kill the port that the server is running on.
+        - To double check that this is the issue, you can open the Activity Monitor app on your computer and search for the `postgres` activity. If there is one, that means the server is running, and we have to terminate the port that the server is running on.
+        - First, we have to check what port the server is running on. Navigate to your homebrew installation, which is the same `location-of-cluster` from when the database was initialized and open that location in VSCode.
+        - Search for `port =` in the file `postgresql.conf`. By default, the port should be port 5432, but keep note of this port in case it is different.
+        - Refer to this Stack Overflow documentation on how to kill a server:
+            - https://stackoverflow.com/questions/4075287/node-express-eaddrinuse-address-already-in-use-kill-server
+        - If that doesn't work, then refer to the different methods on this link from Stack Overflow:
+            - https://stackoverflow.com/questions/42416527/postgres-app-port-in-use
 
-    - Linux users
+- Linux users
 
-        - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
-        - Linux users can try these [instructions](https://www.geeksforgeeks.org/install-postgresql-on-linux/) and that should work for you (...maybe...). If it doesn't try googling instructions with your specific operating system. Sorry!
+    - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
+    - Linux users can try these [instructions](https://www.geeksforgeeks.org/install-postgresql-on-linux/) and that should work for you (...maybe...). If it doesn't try googling instructions with your specific operating system. Sorry!
 
 ### Loading data to your database
 
@@ -117,6 +117,22 @@ For example, to populate both GRN and PPI data into a local database, run:
 ```
 python3 main.py --network all --db_url postgresql://localhost/postgres
 ```
+
+ **Note:** If you get the following error:
+ ImportError: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.1.0h 27 Mar 2018'. See: Drop support for OpenSSL<1.1.1 urllib3/urllib3#2168
+ Run `pip install urllib3==1.26.6`
+
+ **Note:** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
+
+ ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
+
+ - Navigate the referenced file ( \<path specific to your machine>/intermine/webservice.py )
+ - The try-catch block should look like this:
+
+ - ![image](https://user-images.githubusercontent.com/21343072/213094796-c48f54da-b76c-4266-81fb-6aaef24a36c9.png)
+ - Change it to the following, rerun the `generate_network.py` command and it should work! If it doesn't you may need to troubleshoot a bit further (´◕ ᵔ ◕`✿)_ᶜʳᶦᵉˢ_.
+
+ - ![image](https://user-images.githubusercontent.com/21343072/213094984-bff2deb3-d26b-4809-83d6-6a6615b6e3cf.png)
 
 For more information, refer to the `README.md` in the `network-folder`.
 
