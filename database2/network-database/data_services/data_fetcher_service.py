@@ -103,30 +103,32 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
 class ProteinProteinInteractionsFetcherService(DataFetcherService):
     def fetch_data(self):
         print("Fetching data from ProteinProteinInteractionsFetcherService")
-
         query = self.service.new_query("Gene")
         query.add_constraint("interactions.participant2", "Gene")
+
         query.add_view(
             "primaryIdentifier", "secondaryIdentifier", "symbol", "name", "sgdAlias",
-            "interactions.details.annotationType", "interactions.details.phenotype",
-            "interactions.details.role1",
+            "interactions.details.annotationType",
             "interactions.details.experiment.publication.pubMedId",
-            "interactions.details.experiment.publication.citation",
-            "interactions.details.experiment.publication.title",
-            "interactions.details.experiment.publication.journal",
             "interactions.participant2.symbol",
             "interactions.participant2.secondaryIdentifier",
             "interactions.details.experiment.interactionDetectionMethods.identifier",
             "interactions.details.experiment.name",
-            "interactions.details.relationshipType",
-            "interactions.participant2.proteins.symbol", "proteins.symbol"
+            "interactions.details.relationshipType", "featureType",
+            "interactions.participant2.featureType", "proteins.symbol",
+            "interactions.participant2.proteins.symbol"
         )
-        query.add_constraint("interactions.details.relationshipType", "=", "physical", code="A")
+        
         query.add_sort_order("Gene.primaryIdentifier", "ASC")
+        query.add_constraint("interactions.details.relationshipType", "=", "physical", code="A")
+        query.add_constraint("interactions.participant2.featureType", "=", "ORF", code="C")
+        query.add_constraint("featureType", "=", "ORF", code="B")
+        query.set_logic("A and B and C")
         
         rows_data = []
         interactions = set()
         count = 0
+        print("Query length: ", len(query.rows()))
         for row in query.rows():
             interaction = (row["secondaryIdentifier"], row["interactions.participant2.secondaryIdentifier"])
             if interaction in interactions:
@@ -142,12 +144,7 @@ class ProteinProteinInteractionsFetcherService(DataFetcherService):
                 "name   ": row["name"],
                 "sgdAlias": row["sgdAlias"],
                 "annotationType": row["interactions.details.annotationType"],
-                "phenotype": row["interactions.details.phenotype"],
-                "role1": row["interactions.details.role1"],
                 "pubMedId": row["interactions.details.experiment.publication.pubMedId"],
-                "citation": row["interactions.details.experiment.publication.citation"],
-                "title": row["interactions.details.experiment.publication.title"],
-                "journal": row["interactions.details.experiment.publication.journal"],
                 "gene2StandardName": row["interactions.participant2.symbol"],
                 "gene2SystematicName": row["interactions.participant2.secondaryIdentifier"],
                 "protein2StandardName": row["interactions.participant2.proteins.symbol"],
