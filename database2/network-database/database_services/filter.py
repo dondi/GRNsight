@@ -58,6 +58,10 @@ class Filter:
                                 "old_standard_name": db_record[col],
                                 "new_standard_name": row[col],
                             })
+                            
+                        if col == "length" or col == "molecular_weight" or col == "pi":
+                            if float(row[col]) == float(db_record[col]):
+                                continue
                         
                         changes_needed = True
                         break
