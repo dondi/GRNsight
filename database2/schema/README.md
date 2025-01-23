@@ -30,13 +30,9 @@ GRNsight requires four schemas, one for each of the following tables:
 3. `gene_regulatory_network`
 4. `protein_protein_interactions`
 
-To create these schemas, run the following commands:
+First, you need to [load database](#load-database)
 
-```
-CREATE SCHEMA <database_namespace>;
-```
-
-Since we have 4 tables, using the following commands to create them:
+To create these schemas, run the following commands inside Postgres:
 
 ```
 CREATE SCHEMA settings;
@@ -54,9 +50,16 @@ CREATE SCHEMA gene_regulatory_network;
 CREATE SCHEMA protein_protein_interactions;
 ```
 
+Once they are created you can exit your database using the command `\q`.
+
+
 ## Adding Table Specifications
 
 Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema:
+
+```
+cd <path to `schema` folder>
+```
 
 ```
 psql -f expression_schema.sql postgresql://localhost/postgres
@@ -109,7 +112,7 @@ To change the default database name, follow these steps:
     ```
     INSERT INTO grnsettings(expression_dataset) VALUES ('<new default database name>');
     ```
-    _Note: The current default database is `dahlquist_2018`._
+    _Note: The current default database is `dahlquist_2018`. Don't forget ''!_
 
 ### 2. Other databases
 

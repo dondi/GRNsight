@@ -1,6 +1,6 @@
 # GRNsight Database
 
-Here are the instructions how to set up the database for GRNsight. 
+Here are the instructions how to set up the database for GRNsight.
 
 ## Setting up a local postgres GRNsight Database
 
@@ -45,7 +45,7 @@ For detailed instructions on setting up the database schema, refer to the `READM
 GRNsight generates Network data (gene regulatory network and protein protein interactions) from SGD through AllianceMine. n order to run the script that generates these Network files, you must pip3 install the dependencies used. If you get an error saying that a module doesn't exist, just run `pip3 install <Module Name>` and it should fix the error. If the error persists and is found in a specific file on your machine, you might have to manually go into that file and alter the naming conventions of the dependencies that are used. _Note: So far this issue has only occured on Ubuntu 22.04.1, and certain MacOS versions so you might be lucky and not have to do it!_
 
 ```
-pip3 install pandas requests intermine tzlocal
+pip3 install pandas requests intermine tzlocal psycopg2
 ```
 
 ### 3. Populate Data into Database
@@ -77,17 +77,19 @@ python3 preprocessing.py
 
 Use the `loader.py` script located in `expression-database/scripts` to load the processed expression data into the database. This script generates SQL statements to populate your relational database with the processed data.
 
-- To move to `expression-database/scripts`
+-   To move to `expression-database/scripts`
+
     ```
     cd <path to GRNsight/database/expression-database/scripts>
     ```
 
-- To load to local database
+-   To load to local database
+
     ```
     python3 loader.py | psql postgresql://localhost/postgres
     ```
 
-- To load to production database
+-   To load to production database
     ```
     python3 loader.py | psql <path to database>
     ```
@@ -95,7 +97,7 @@ Use the `loader.py` script located in `expression-database/scripts` to load the 
 For more details, refer to the `README.md` inside the `expression-database` folder.
 
 #### 2. Network Database for GRN (Gene Regulatory Network) and PPI (Protein-Protein Interactions)
-    
+
 The code for generating and populating the network data (GRN and PPI) is located in the network-folder. The main script for fetching, processing, and loading the data into the database is `main.py`.
 
 ##### Step 1: Navigate to the network-folder
@@ -108,9 +110,9 @@ The code for generating and populating the network data (GRN and PPI) is located
 
 Run the `main.py` script with the appropriate `--network` argument:
 
-- `all`: Fetch and populate both GRN and PPI data.
-- `grn`: Fetch and populate only GRN data.
-- `ppi`: Fetch and populate only PPI data.
+-   `all`: Fetch and populate both GRN and PPI data.
+-   `grn`: Fetch and populate only GRN data.
+-   `ppi`: Fetch and populate only PPI data.
 
 For example, to populate both GRN and PPI data into a local database, run:
 
@@ -118,21 +120,46 @@ For example, to populate both GRN and PPI data into a local database, run:
 python3 main.py --network all --db_url postgresql://localhost/postgres
 ```
 
- **Note:** If you get the following error:
- ImportError: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.1.0h 27 Mar 2018'. See: Drop support for OpenSSL<1.1.1 urllib3/urllib3#2168
- Run `pip install urllib3==1.26.6`
+**Note:** If you get the following error:
+ImportError: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.1.0h 27 Mar 2018'. See: Drop support for OpenSSL<1.1.1 urllib3/urllib3#2168
+Run `pip install urllib3==1.26.6`
 
- **Note:** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
+**Note:** If you get an error similar to the following image where it references the in then you are one of the unlucky few who has to edit the intermine.py file directly.
 
- ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
+![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
 
- - Navigate the referenced file ( \<path specific to your machine>/intermine/webservice.py )
- - The try-catch block should look like this:
+- Navigate the referenced file ( \<path specific to your machine>/intermine/webservice.py). If you have virtual environment set up, you can find the folder using this path:
+    ```
+    cd <path to virtual environment folder/lib/<python folder>/site-packages/intermine/webservice.py>
+    ```
+- The try-catch block should look like this:
 
- - ![image](https://user-images.githubusercontent.com/21343072/213094796-c48f54da-b76c-4266-81fb-6aaef24a36c9.png)
- - Change it to the following, rerun the `generate_network.py` command and it should work! If it doesn't you may need to troubleshoot a bit further (´◕ ᵔ ◕`✿)_ᶜʳᶦᵉˢ_.
+    ```
+    try:
+        from urlparse import urlparse
+        from UserDict import DictMixin
+        from urllib import urlopen
+        from urllib import urlencode
+    except ImportError:
+        from urllib.parse import urlparse
+        from urllib.parse import urlencode
+        from collections.abc import MutableMapping as DictMixin
+        from urllib.request import urlopen
+    ```
 
- - ![image](https://user-images.githubusercontent.com/21343072/213094984-bff2deb3-d26b-4809-83d6-6a6615b6e3cf.png)
+- Replace the try-catch block with this:
+    ```
+    try:
+        from urlparse import urlparse
+        from UserDict import DictMixin
+        from urllib import urlopen
+        from urllib import urlencode
+    except ImportError:
+        from urllib.parse import urlparse
+        from urllib.parse import urlencode
+        from collections.abc import MutableMapping as DictMixin
+        from urllib.request import urlopen
+    ```
+- Rerun the command to run `main.py` file.
 
 For more information, refer to the `README.md` in the `network-folder`.
-
