@@ -6,7 +6,8 @@ class Processor(ABC):
     def __init__(self):
         self.species = "Saccharomyces cerevisiae"
         self.taxon_id = "559292"
-        self.source = "AllianceMine"
+        self.source = "AllianceMine - Saccharomyces Genome Database"
+        self.source_display_name = "AllianceMine - SGD"
 
     @abstractmethod
     def process_data(self, data):
@@ -169,7 +170,7 @@ class SourceProcessor(Processor):
         processed_data.append({
             "time_stamp": self.formatted_time_stamp,
             "source": self.source,
-            "display_name": self.source
+            "display_name": self.source_display_name
         })
 
         processed_df = pd.DataFrame(processed_data)
