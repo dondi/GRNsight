@@ -32,8 +32,6 @@ class DataPopulator(ABC):
         """
         
         # Determine if we need to drop the last column (PPI network type)
-        print("NETWORK TYPE: ", self.network_mode)
-        print("DATA FILEPATH: ", data_filepath)
         if self.network_mode == Constants.PPI_NETWORK_MODE and data_filepath == Constants.MISSING_PPI_GENE_DATA_FILEPATH:
             print("Dropping the last column from the input data...")
             processed_rows = []
@@ -57,6 +55,7 @@ class DataPopulator(ABC):
                 conn.commit()
 
         print(f"Data from {data_filepath} has been successfully populated.")
+        print("===============================================")
     
     def populate_data(self):
         conn = psycopg2.connect(self.db_url)
