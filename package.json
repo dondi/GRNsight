@@ -41,37 +41,40 @@
     "xmlbuilder": "8.2.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/register": "^7.25.9",
     "browser-env": "3.3.0",
     "chai": "4.1.2",
-    "coveralls": "2.13.1",
+    "coveralls": "^3.1.1",
     "eslint": "3.19.0",
     "isomorphic-fetch": "2.2.1",
-    "istanbul": "0.4.5",
     "jquery": "3.6.0",
     "jquery-extend": "2.0.3",
     "jsdom": "13.2.0",
     "markdown-pdf": "8.0.0",
-    "mocha": "2.5.3",
+    "mocha": "^10.8.2",
     "mocha-lcov-reporter": "1.3.0",
     "nock": "10.0.6",
+    "nyc": "^15.1.0",
     "sinon": "5.1.1",
     "w3c-xmlserializer": "1.0.1",
     "webpack-cli": "2.0.14",
     "xmlserializer": "0.6.1"
   },
-  "babel": {
-    "presets": [
-      "es2015"
-    ]
-  },
+ "babel": {
+  "presets": [
+    "@babel/preset-env"
+  ]
+},
   "scripts": {
     "webpack-start": "webpack --watch",
-    "test": "mocha --reporter list --compilers js:babel-core/register",
+    "test": "mocha --reporter list --require @babel/register",
     "start-dev": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
     "start-prod": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
-    "coverage": "istanbul cover _mocha",
+   "coverage": "nyc mocha --reporter list --require @babel/register",
     "lint": "eslint \"**/*.js\"",
-    "coveralls": "npm run coverage -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
