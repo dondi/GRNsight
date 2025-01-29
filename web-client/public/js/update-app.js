@@ -309,8 +309,8 @@ const updateViewportSize = (currentValue) => {
     let container = $(".grnsight-container");
 
     const fitContainer = dimensions => {
-        const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET: container.width();
-        const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET: container.height();
+        const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET : container.width();
+        const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET : container.height();
 
         container.css({
             width: fitWidth,

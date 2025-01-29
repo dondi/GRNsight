@@ -114,8 +114,7 @@ export const setupHandlers = grnState => {
 
         const explicitlySetStyle = element => {
             const cssStyleDeclarationComputed = window.getComputedStyle(element);
-            const computedStyleObj = {};    
-
+            const computedStyleObj = {};
 
             for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
                 const key = cssStyleDeclarationComputed[i];
@@ -134,7 +133,7 @@ export const setupHandlers = grnState => {
             }
 
             if (computedStyleObj) {
-                Object.assign(element.style, computedStyleObj)
+                Object.assign(element.style, computedStyleObj);
             }
         };
 
@@ -575,7 +574,7 @@ export const setupHandlers = grnState => {
             });
         } else {
             window.addEventListener("message", event => {
-                if (event.origin != HOST_SITE) {
+                if (event.origin !== HOST_SITE) {
                     return;
                 }
 
