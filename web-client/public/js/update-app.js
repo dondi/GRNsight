@@ -308,20 +308,14 @@ const updateViewportSize = (currentValue) => {
 
     let container = $(".grnsight-container");
 
-    // from jquery
     const fitContainer = dimensions => {
-        if (!dimensions) {
-            return; // First call; the next one should have dimensions filled in.
-        }
+        const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET : container.width();
+        const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET : container.height();
 
-        const fitWidth = dimensions.width - WIDTH_OFFSET;
-        const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
-        if (fitWidth !== container.width() || fitHeight !== container.height()) {
-            container.css({
-                width: fitWidth,
-                height: fitHeight
-            });
-        }
+        container.css({
+            width: fitWidth,
+            height: fitHeight
+        });
     };
 
     const fitContainerToWindow = () => {
@@ -871,7 +865,7 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Viewport
+    // Viewport
     updateViewportSize(grnState.viewportSize);
 
     // Node Coloring
