@@ -116,6 +116,7 @@ export const setupHandlers = grnState => {
             const cssStyleDeclarationComputed = window.getComputedStyle(element);
             const computedStyleObj = {};
 
+
             for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
                 const key = cssStyleDeclarationComputed[i];
                 const value = cssStyleDeclarationComputed.getPropertyValue(key);

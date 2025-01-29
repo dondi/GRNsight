@@ -1,13 +1,14 @@
 {
   "name": "grnsight",
-  "version": "7.1.9",
+  "version": "7.2.1",
   "description": "Web app and service for visualizing models of gene regulatory networks",
   "directories": {
     "test": "test"
   },
   "dependencies": {
     "body-parser": "1.18.2",
-    "canvg": "2.0.0",
+    "canvas": "^2.11.2",
+    "canvg": "3.0.10",
     "cors": "2.8.1",
     "cytoscape": "2.7.14",
     "d3-v4-grid": "2.0.1",
