@@ -415,6 +415,7 @@ export var drawGraph = function (workbook) {
     const adjustGraphSize = () => {
         var newWidth = $container.width();
         var newHeight = $container.height();
+
         if (adaptive) {
             width = (width < newWidth) ? newWidth : width;
             height = (height < newHeight) ? newHeight : height;
