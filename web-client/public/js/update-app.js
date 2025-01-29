@@ -302,7 +302,6 @@ const synchronizeViewportSizeFit = () => {
 };
 
 const updateViewportSize = (currentValue) => {
-    console.log("********updateViewportSize CALLLED********")
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
     const HEIGHT_OFFSET = 53;
@@ -310,7 +309,6 @@ const updateViewportSize = (currentValue) => {
     let container = $(".grnsight-container");
 
     const fitContainer = dimensions => {
-        console.log("try calling fitContainer. dimensions", dimensions);
         const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET: container.width();
         const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET: container.height();
 
@@ -321,7 +319,6 @@ const updateViewportSize = (currentValue) => {
     };
 
     const fitContainerToWindow = () => {
-        console.log("***************FIT CONTAINER TO WINDOW******************");
         fitContainer({
             width: $(window).width(),
             height: $(window).height(),
@@ -356,15 +353,12 @@ const updateViewportSize = (currentValue) => {
     } else if (currentValue === VIEWPORT_L) {
         synchronizeViewportSizeLarge();
     } else if (currentValue === VIEWPORT_FIT) {
-        console.log("updating viewport size in update-app.js");
         fitContainer(grnState.dimensions);
         synchronizeViewportSizeFit();
     } else if (currentValue === VIEWPORT_INIT) {
         // First time around: initialize.
         requestWindowDimensions();
     }
-
-    console.log("UPDATE VIEWPORT SIZE FINISHED BUT MOVE ON TO RELOADING ALL NODES AND PATHS ON GRAPH")
 };
 
 
@@ -790,7 +784,6 @@ if (!grnState.genePageData.identified) {
 
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
-        console.log("*************UPDATE APP CALLLED*************")
         checkWorkbookModeSettings();
         grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
         displayworkbook(grnState.workbook, grnState.name);

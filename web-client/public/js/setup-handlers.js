@@ -321,7 +321,6 @@ export const setupHandlers = grnState => {
     $(LOG_FOLD_CHANGE_MAX_VALUE_MENU).change(() => {
         var value = logFoldChangeMaxValueValidator($(LOG_FOLD_CHANGE_MAX_VALUE_MENU).val());
         grnState.nodeColoring.logFoldChangeMaxValue = value;
-        console.log("UPDATE APP CALLED WITH GRNSIGHT", grnState.dimensions)
         updateApp(grnState);
     });
 
@@ -367,13 +366,11 @@ export const setupHandlers = grnState => {
     });
 
     $(VIEWPORT_OPTION_CLASS_SIDEBAR).click(function () {
-        console.log("NEW VIEWPORT SIZE SIDEBAR", $(this).val())
         grnState.viewportSize = $(this).val();
         updateApp(grnState);
     });
 
     $(VIEWPORT_OPTION_CLASS).click(function () {
-        console.log("NEW VIEWPORT SIZE OPTION CLASS", $(this).attr("value"), "PREVIOUS VIEWPORT SIZE", grnState.viewportSize)
         grnState.viewportSize = $(this).attr("value");
         updateApp(grnState);
     });
@@ -564,9 +561,7 @@ export const setupHandlers = grnState => {
         if (window === window.top) {
             initializeViewportSize($(window).width());
             $(window).on("resize", () => {
-                console.log("RESIZE EVENT IN SETUP HANDLERS")
                 if (grnState.viewportSize === VIEWPORT_FIT) {
-                    console.log("*************WINDOW RESIZE****************");
                     grnState.dimensions = {
                         width: $(window).width(),
                         height: $(window).height(),
@@ -580,12 +575,9 @@ export const setupHandlers = grnState => {
             });
         } else {
             window.addEventListener("message", event => {
-                console.log("EVENT.ORIGIN IN SETUP HANDLERS", event.origin)
                 if (event.origin != HOST_SITE) {
-                    console.log("WE TRY TO SET UP HOST SITE WITH LISTENER", HOST_SITE)
                     return;
                 }
-                console.log("WE SUCCESSFULLY PROCEED WITH SET UP OF HOST SITE INSTEAD OF RETURNING")
 
                 // Also filter out all but dimensions messages.
                 const { data } = event;
@@ -604,11 +596,9 @@ export const setupHandlers = grnState => {
                     }
 
                     if (grnState.viewportSize === VIEWPORT_FIT) {
-                        console.log("************HAVE DATA, FIT TO VIEWPORT IN SETUP CONTAINER***********")
                         grnState.dimensions = data;
                     }
 
-                    console.log("******************CALL UPDATEAPP AGAIN FROM SETUP-HANDLERS***********")
                     updateApp(grnState);
                 } else {
                     delete grnState.dimensions;

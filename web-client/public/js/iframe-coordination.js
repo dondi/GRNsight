@@ -28,13 +28,6 @@ const FIT_MARGIN = 4;  // A little space so that "fit" isn’t totally flush wit
 
 const sendDimensions = (destination, origin) => {
   const iframeOffset = $("iframe.embedded-demo").offset();
-  // console.log("destination", destination, "origin", origin);
-  console.log("message posted to iframe: ", {
-    width: $(window).width() - iframeOffset.left,
-    height: $(window).height() - FIT_MARGIN,
-    top: iframeOffset.top,
-  }, origin);
- 
   destination.postMessage(
     {
       width: $(window).width() - iframeOffset.left,
@@ -44,21 +37,9 @@ const sendDimensions = (destination, origin) => {
 
     origin
   );
-  console.log("***************DIMENSIONS SENT******************");
-
 };
 
 window.addEventListener("message", event => {
-  // console.log(
-  //   "event.origin: ",
-  //   event.origin,
-  //   "event.data",
-  //   event.data,
-  //   "event.origin.indexOf localhost 8080",
-  //   event.origin.indexOf("http://localhost:8080/"),
-  //   "event.origin.indexOf localhost 5001",
-  //   event.origin.indexOf("http://localhost:5001/")
-  // );
   if (event.origin != "http://localhost:8080" && event.origin != "http://localhost:5001") {
     // Ignore any message that did not originate from the GRNsight web client server.
     console.log("we do not send message from iframe-coordination");
