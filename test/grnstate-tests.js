@@ -1,4 +1,5 @@
-import "chai/register-should";
+const chai = require("chai");
+chai.should(); // Activates "should" style assertions
 import { grnState } from "../web-client/public/js/grnstate";
 
 describe("The grnState model object", () => {

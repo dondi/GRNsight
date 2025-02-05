@@ -21,8 +21,11 @@ const sinon = require("sinon");
 
 
 
-const {XMLSerializer} = require("w3c-xmlserializer");
-global.XMLSerializer = XMLSerializer.expose.Window.XMLSerializer;
+const { XMLSerializer } = require("xmldom");
+global.XMLSerializer = XMLSerializer;
+
+
+
 
 require(__dirname + "/../web-client/public/gene/api.js");
 
