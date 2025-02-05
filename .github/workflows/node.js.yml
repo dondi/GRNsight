@@ -1,13 +1,9 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Node.js CI
 
 on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -15,30 +11,41 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - uses: actions/checkout@v4
-    # install system dependencies needed by the 'canvas' package
-    - name: Install dependencies for canvas
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libcairo2-dev libpango1.0-dev libjpeg62 libgif-dev librsvg2-dev
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        
-    #- run: npm ci
-    #- run: npm run lint 
-    - run: npm run build --if-present
-    - run: npm test
-    
-    # upload coverage to Coveralls after running tests
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2
-      with:
-        github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
-        path-to-lcov: ./coverage/lcov.info
+      # Install system dependencies needed by 'canvas'
+      - name: Install dependencies for canvas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2-dev libpango1.0-dev libjpeg62 libgif-dev librsvg2-dev
 
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    
+      # Install dependencies using npm ci
+      - name: Install dependencies
+        run: npm ci
+
+      # Run ESLint (ensure eslint.config.js exists)
+      - name: Run Linter
+        run: npm run lint
+        continue-on-error: true # Linter failures won't stop the pipeline
+
+      # Run the build step if it exists
+      - name: Run Build
+        run: npm run build --if-present
+
+      # Run Tests
+      - name: Run Tests
+        run: npm test
+
+      # Upload coverage to Coveralls
+      - name: Upload Coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          path-to-lcov: ./coverage/lcov.info
