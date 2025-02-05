@@ -73,9 +73,10 @@
     "test": "mocha --reporter list --require @babel/register",
     "start-dev": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
     "start-prod": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
-    "coverage": "nyc mocha --reporter list --require @babel/register",
+    "coverage": "nyc --reporter=lcov mocha --require @babel/register",
     "lint": "eslint \"**/*.js\"",
-    "coveralls": "COVERALLS_REPO_TOKEN=$COVERALLS_REPO_TOKEN nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "npm run coverage && nyc report --reporter=lcov | coveralls"
+
   },
   "repository": {
     "type": "git",

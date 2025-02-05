@@ -39,13 +39,20 @@ jobs:
       - name: Run Build
         run: npm run build --if-present
 
-      # Run Tests
-      - name: Run Tests
-        run: npm test
+      # Run Tests and Generate Coverage Report
+      - name: Run Tests with Coverage
+        run: npm run coverage
+
+      # Debug: Verify that LCOV coverage file exists
+      - name: Check Coverage File
+        run: |
+          echo "Checking if LCOV file exists..."
+          ls -lh ./coverage/
+          cat ./coverage/lcov.info | head -n 20
 
       # Upload coverage to Coveralls
       - name: Upload Coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./coverage/lcov.info
