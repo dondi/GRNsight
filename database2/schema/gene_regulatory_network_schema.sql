@@ -11,8 +11,12 @@ CREATE TABLE gene_regulatory_network.gene (
   species VARCHAR,
   taxon_id VARCHAR,
   regulator BOOLEAN,
-  PRIMARY KEY(gene_id, taxon_id)
-); 
+  time_stamp TIMESTAMP WITH TIME ZONE,
+  source VARCHAR,
+  PRIMARY KEY(gene_id, taxon_id),
+  FOREIGN KEY (time_stamp, source) REFERENCES gene_regulatory_network.source(time_stamp, source)
+);
+
 CREATE TABLE gene_regulatory_network.network (
   regulator_gene_id VARCHAR,
   target_gene_id VARCHAR,
@@ -21,5 +25,6 @@ CREATE TABLE gene_regulatory_network.network (
   source VARCHAR,
   FOREIGN KEY (regulator_gene_id, taxon_id) REFERENCES gene_regulatory_network.gene(gene_id, taxon_id),
   FOREIGN KEY (target_gene_id, taxon_id) REFERENCES gene_regulatory_network.gene(gene_id, taxon_id),
-  FOREIGN KEY (time_stamp, source) REFERENCES gene_regulatory_network.source(time_stamp, source)
+  FOREIGN KEY (time_stamp, source) REFERENCES gene_regulatory_network.source(time_stamp, source),
+  CONSTRAINT unique_network UNIQUE (regulator_gene_id, target_gene_id, taxon_id, time_stamp, source)
 ); 
