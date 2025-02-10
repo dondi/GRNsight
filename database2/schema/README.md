@@ -5,15 +5,18 @@ This directory contains all the necessary schemas for the databases required by 
 ## Load Database
 
 For Mac:
+
 ```
 psql <address to database>
 ```
 
 For Windows:
+
 ```
-psql -U postgres <address to database> 
+psql -U postgres <address to database>
 ```
-When prompted for the password, use the password you specified earlier during the installation process. For all future commands requiring you to access postgres, you will need to add `-U postgres `
+
+When prompted for the password, use the password you specified earlier during the installation process. For all future commands requiring you to access postgres, you will need to add `-U postgres`
 
 For example, to access your local PostgreSQL database, use the following command:
 
@@ -21,41 +24,16 @@ For example, to access your local PostgreSQL database, use the following command
 psql postgresql://localhost/postgres
 ```
 
-## Creating Schemas
+## Creating Schemas and Adding Table Specifications
 
-GRNsight requires four schemas, one for each of the following tables:
+GRNsight requires four schemas, one for each of the following namespaces:
 
 1. `grnsettings`
 2. `gene_expression`
 3. `gene_regulatory_network`
 4. `protein_protein_interactions`
 
-First, you need to [load database](#load-database)
-
-To create these schemas, run the following commands inside Postgres:
-
-```
-CREATE SCHEMA settings;
-```
-
-```
-CREATE SCHEMA gene_expression;
-```
-
-```
-CREATE SCHEMA gene_regulatory_network;
-```
-
-```
-CREATE SCHEMA protein_protein_interactions;
-```
-
-Once they are created you can exit your database using the command `\q`.
-
-
-## Adding Table Specifications
-
-Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema:
+The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema:
 
 ```
 cd <path to `schema` folder>
@@ -87,12 +65,12 @@ The `settings` table stores the default database name.
 
 To change the default database name, follow these steps:
 
-1. **Log in to the Database**  
-    
+1. **Log in to the Database**
+
     For instructions on how to load the database, refer to the [Load Database](#load-database) section.
 
-2. **Set the Search Path**  
-    
+2. **Set the Search Path**
+
     Set your search path to the `settings` schema with the following command:
 
     ```
@@ -108,7 +86,7 @@ To change the default database name, follow these steps:
     ```
 
 4. **Insert the New Default Database Name**  
-    Insert the new default database name with the following command:
+   Insert the new default database name with the following command:
     ```
     INSERT INTO grnsettings(expression_dataset) VALUES ('<new default database name>');
     ```

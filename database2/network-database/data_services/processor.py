@@ -3,19 +3,20 @@ from datetime import datetime, timezone, timedelta
 import pandas as pd
 
 class Processor(ABC):
-    def __init__(self):
+    def __init__(self, formatted_time_stamp=None):
         self.species = "Saccharomyces cerevisiae"
         self.taxon_id = "559292"
         self.source = "AllianceMine - Saccharomyces Genome Database"
         self.source_display_name = "AllianceMine - SGD"
+        self.formatted_time_stamp = formatted_time_stamp
 
     @abstractmethod
     def process_data(self, data):
         pass
     
 class GeneProcessor(Processor):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, formatted_time_stamp):
+        super().__init__(formatted_time_stamp)
     
     def process_data(self, data, regulators, proteins):
         print("Processing data from GeneProcessor")
@@ -28,19 +29,17 @@ class GeneProcessor(Processor):
         processed_data = []
         for _, row in combine_genes_df.iterrows():
             gene_id = row['systematicName']
-            display_gene_id = row['standardName']
-            species = self.species
-            taxon_id = self.taxon_id
-
             # Check if the gene_id (systematicName) matches any of the regulators
             regulator = gene_id in regulators["regulator_gene_id"].values
 
             processed_data.append({
                 "gene_id": gene_id,
-                "display_gene_id": display_gene_id,
-                "species": species,
-                "taxon_id": taxon_id,
-                "regulator": regulator
+                "display_gene_id": row['standardName'],
+                "species": self.species,
+                "taxon_id": self.taxon_id,
+                "regulator": regulator,
+                "time_stamp": self.formatted_time_stamp,
+                "source": self.source
             })
 
         processed_df = pd.DataFrame(processed_data)
@@ -71,8 +70,7 @@ class GeneProcessor(Processor):
 
 class GeneRegulatoryNetworkProcessor(Processor):
     def __init__(self, formatted_time_stamp):
-        self.formatted_time_stamp = formatted_time_stamp
-        super().__init__()
+        super().__init__(formatted_time_stamp)
     
     def process_data(self, data):
         print("Processing data from GeneRegulatoryNetworkProcessor")
@@ -80,18 +78,13 @@ class GeneRegulatoryNetworkProcessor(Processor):
         processed_data = []
 
         for _, row in data.iterrows():
-            regulator_gene_id = row['regulatorSystematicName']
-            target_gene_id = row['targetSystematicName']
-            taxon_id = self.taxon_id
-            time_stamp = self.formatted_time_stamp
-            source = self.source 
-            
             processed_data.append({
-                "regulator_gene_id": regulator_gene_id,
-                "target_gene_id": target_gene_id,
-                "taxon_id": taxon_id,
-                "time_stamp": time_stamp,
-                "source": source
+                "regulator_gene_id": row['regulatorSystematicName'],
+                "target_gene_id": row['targetSystematicName'],
+                "taxon_id":  self.taxon_id,
+                "annotation_type": row['annotationType'],
+                "time_stamp": self.formatted_time_stamp,
+                "source": self.source 
             })
 
         processed_df = pd.DataFrame(processed_data)
@@ -100,28 +93,23 @@ class GeneRegulatoryNetworkProcessor(Processor):
         return processed_df
 
 class ProteinProcessor(Processor):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, formatted_time_stamp):
+        super().__init__(formatted_time_stamp)
     
     def process_data(self, data):
         print("Processing data from ProteinProcessor")
         
         processed_data = []
         for _, row in data.iterrows():
-            standard_name = row['proteinStandardName']
-            gene_systematic_name = row['proteinSystematicName']
-            length = row['length']
-            molecular_weight = row['molecularWeight']
-            pi = row['pI']
-            taxon_id = self.taxon_id
-
             processed_data.append({
-                "standard_name": standard_name,
-                "gene_systematic_name": gene_systematic_name,
-                "length": length,
-                "molecular_weight": molecular_weight,
-                "pi": pi,
-                "taxon_id": taxon_id
+                "standard_name": row['proteinStandardName'],
+                "gene_systematic_name": row['proteinSystematicName'],
+                "length": row['length'],
+                "molecular_weight": row['molecularWeight'],
+                "pi": row['pI'],
+                "taxon_id": self.taxon_id,
+                "time_stamp": self.formatted_time_stamp,
+                "source": self.source
             })
 
         processed_df = pd.DataFrame(processed_data)
@@ -131,27 +119,20 @@ class ProteinProcessor(Processor):
     
 class ProteinProteinInteractionsProcessor(Processor):
     def __init__(self, formatted_time_stamp):
-        self.formatted_time_stamp = formatted_time_stamp
-        super().__init__()
+        super().__init__(formatted_time_stamp)
     
     def process_data(self, data):
         print("Processing data from ProteinProteinInteractionsProcessor")
         processed_data = []
         for _, row in data.iterrows():
-            protein_1 = row['protein1StandardName']
-            protein_2 = row['protein2StandardName']
-            interaction_detection_methods_identifier = row['interactionDetectionMethodsIdentifier']
-            experiment_name = row['experimentName']
-            time_stamp = self.formatted_time_stamp
-            source = self.source
-            
             processed_data.append({
-                "protein1": protein_1,
-                "protein2": protein_2,
-                "interaction_detection_methods_identifier": interaction_detection_methods_identifier,
-                "experiment_name": experiment_name,
-                "time_stamp": time_stamp,
-                "source": source
+                "protein1": row['protein1StandardName'],
+                "protein2": row['protein2StandardName'],
+                "interaction_detection_methods_identifier": row['interactionDetectionMethodsIdentifier'],
+                "annotation_type": row['annotationType'],
+                "experiment_name": row['experimentName'],
+                "time_stamp": self.formatted_time_stamp,
+                "source": self.source
             })
 
         processed_df = pd.DataFrame(processed_data)
@@ -161,8 +142,7 @@ class ProteinProteinInteractionsProcessor(Processor):
 
 class SourceProcessor(Processor):
     def __init__(self, formatted_time_stamp):
-        self.formatted_time_stamp = formatted_time_stamp
-        super().__init__()
+        super().__init__(formatted_time_stamp)
     
     def process_data(self):
         print("Processing data from SourceProcessor")

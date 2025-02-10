@@ -77,7 +77,14 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
         query.add_constraint("regulatoryRegions.strainBackground", "=", "S288c", code="C")
         
         rows_data = []
+        print("Query length: ", len(query.rows()))
+        networks = set()
         for row in query.rows():
+            network = (row["secondaryIdentifier"], row["regulatoryRegions.regulator.secondaryIdentifier"], row["regulatoryRegions.annotationType"])
+            if network in networks:
+                continue
+            else:
+                networks.add(network)
             rows_data.append({
                 "regulatorStandardName": row["regulatoryRegions.regulator.symbol"],
                 "regulatorSystematicName": row["regulatoryRegions.regulator.secondaryIdentifier"],
@@ -93,10 +100,11 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
                 "pubMedId": row["regulatoryRegions.publications.pubMedId"],
                 "datasource": row["regulatoryRegions.datasource"],
                 "annotationType": row["regulatoryRegions.annotationType"]
-            })
-        
+            })  
+                
         df = pd.DataFrame(rows_data)
         print("Data fetched successfully")
+        print("Number of duplicated networks: ", len(query.rows()) - len(networks))
         print("====================================================================")
         return df
             
@@ -130,7 +138,7 @@ class ProteinProteinInteractionsFetcherService(DataFetcherService):
         count = 0
         print("Query length: ", len(query.rows()))
         for row in query.rows():
-            interaction = (row["secondaryIdentifier"], row["interactions.participant2.secondaryIdentifier"])
+            interaction = (row["secondaryIdentifier"], row["interactions.participant2.secondaryIdentifier"], row["interactions.details.annotationType"])
             if interaction in interactions:
                 count += 1
                 continue

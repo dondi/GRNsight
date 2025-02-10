@@ -33,13 +33,13 @@ class DataPopulator(ABC):
         
         # Determine if we need to drop the last column (PPI network type)
         if self.network_mode == Constants.PPI_NETWORK_MODE and data_filepath == Constants.MISSING_PPI_GENE_DATA_FILEPATH:
-            print("Dropping the last column from the input data...")
+            print("Dropping the regulator column from the input data...")
             processed_rows = []
             
             with open(data_filepath, 'r') as f:
                 for line in f:
                     columns = line.strip().split('\t')
-                    processed_row = columns[:-1]
+                    processed_row = columns[:4] + columns[5:]
                     processed_rows.append('\t'.join(processed_row))
                     
             from io import StringIO
@@ -83,9 +83,9 @@ class GeneDataPopulator(DataPopulator):
     
     def get_copy_statement(self):
         if self.network_mode == Constants.GRN_NETWORK_MODE:
-            return f"COPY {self.database_namespace}.gene (gene_id, display_gene_id, species, taxon_id, regulator) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
+            return f"COPY {self.database_namespace}.gene (gene_id, display_gene_id, species, taxon_id, regulator, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
         elif self.network_mode == Constants.PPI_NETWORK_MODE:
-            return f"COPY {self.database_namespace}.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
+            return f"COPY {self.database_namespace}.gene (gene_id, display_gene_id, species, taxon_id, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
         else:
             raise ValueError(f"Unknown network type: {self.network_mode}")
             
@@ -95,7 +95,7 @@ class ProteinDataPopulator(DataPopulator):
         self.filepath = Constants.MISSING_PROTEIN_DATA_FILEPATH
 
     def get_copy_statement(self):
-        return f"COPY {Constants.PPI_DATABASE_NAMESPACE}.protein (standard_name, gene_systematic_name, length, molecular_weight, PI, taxon_id) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
+        return f"COPY {Constants.PPI_DATABASE_NAMESPACE}.protein (standard_name, gene_systematic_name, length, molecular_weight, PI, taxon_id, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
             
 class GeneRegulatoryNetworkDataPopulator(DataPopulator):
     def __init__(self, db_url):
@@ -103,7 +103,7 @@ class GeneRegulatoryNetworkDataPopulator(DataPopulator):
         self.filepath = Constants.GENE_REGULATORY_NETWORK_DATA_FILEPATH
 
     def get_copy_statement(self):
-        return f"COPY {Constants.GRN_DATABASE_NAMESPACE}.network (regulator_gene_id, target_gene_id, taxon_id, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
+        return f"COPY {Constants.GRN_DATABASE_NAMESPACE}.network (regulator_gene_id, target_gene_id, taxon_id, annotation_type, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
 
 class ProteinProteinInteractionsDataPopulator(DataPopulator):
     def __init__(self, db_url):
@@ -111,7 +111,7 @@ class ProteinProteinInteractionsDataPopulator(DataPopulator):
         self.filepath = Constants.PROTEIN_PROTEIN_INTERACTIONS_DATA_FILEPATH
 
     def get_copy_statement(self):
-        return f"COPY {Constants.PPI_DATABASE_NAMESPACE}.physical_interactions (protein1, protein2, interaction_detection_methods_identifier, experiment_name, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
+        return f"COPY {Constants.PPI_DATABASE_NAMESPACE}.physical_interactions (protein1, protein2, interaction_detection_methods_identifier, annotation_type, experiment_name, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"
 
 class SourceDataPopulator(DataPopulator):
     def __init__(self, db_url, network_mode):
