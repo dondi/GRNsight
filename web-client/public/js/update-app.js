@@ -549,6 +549,11 @@ const updateModeViews = () =>{
     }
 };
 
+const resetDemoDropdown = () =>{
+    $("#demoSourceDropdown option").removeAttr("selected");
+    $("#demoSourceDropdown").val("none");
+};
+
 const checkWorkbookModeSettings = () => {
     const hasExpression = hasExpressionData(grnState.workbook.expression);
 
@@ -589,6 +594,11 @@ $(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
 });
 $(NETWORK_MODE_GRN).on("click", () => {
     grnState.mode = NETWORK_GRN_MODE;
+    checkWorkbookModeSettings();
+    refreshApp();
+});
+$("body").on("click", "#submit-network", function () {
+    resetDemoDropdown();
     checkWorkbookModeSettings();
     refreshApp();
 });
