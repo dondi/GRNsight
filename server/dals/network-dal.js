@@ -18,13 +18,20 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM gene_regulatory_network.source ORDER BY time_stamp DESC;";
+    return `SELECT * FROM gene_regulatory_network.source 
+            UNION ALL 
+            SELECT * FROM gene_regulatory_network_new.source 
+            ORDER BY time_stamp DESC;`;
 };
 
-const buildNetworkGeneFromSourceQuery = function (gene) {
+const buildNetworkGeneFromSourceQuery = function (gene, timestamp) {
+    const namespace =
+      timestamp < new Date("2025-01-01")
+        ? "gene_regulatory_network.gene"
+        : "gene_regulatory_network_new.gene";
     return `SELECT DISTINCT gene_id, display_gene_id FROM 
-    gene_regulatory_network.gene WHERE (gene.gene_id ='${gene}'
-    OR gene.display_gene_id ='${gene}')`;
+    ${namespace} WHERE (gene.gene_id ='${gene}'
+    OR gene.display_gene_id ='${gene}') AND gene.time_stamp ='${timestamp}'`;
 };
 
 const buildNetworkGenesQuery = function (geneString) {
@@ -34,14 +41,18 @@ const buildNetworkGenesQuery = function (geneString) {
     genes = `${genes.substring(0, genes.length - 4)}) AND (`;
     geneList.forEach(x => genes += ( `(network.target_gene_id =\'${x}\') OR `));
     return `${genes.substring(0, genes.length - 4)})`;
-
 };
 
 const buildGenerateNetworkQuery = function (genes, source, timestamp) {
-    return `SELECT DISTINCT regulator_gene_id, target_gene_id FROM
- gene_regulatory_network.network WHERE
- time_stamp='${timestamp}' AND source='${source}' AND
- ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`;
+    const namespace =
+      timestamp < new Date("2025-01-01")
+        ? "gene_regulatory_network.network"
+        : "gene_regulatory_network_new.network";
+    const annotation = timestamp < new Date("2025-01-01") ? "" : ", annotation_type";
+    return `SELECT DISTINCT regulator_gene_id, target_gene_id${annotation} FROM ${namespace} 
+            WHERE time_stamp='${timestamp}' AND source='${source}' AND 
+            ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`;
+    
 };
 
 const buildQueryByType = function (queryType, query) {

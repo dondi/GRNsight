@@ -18,15 +18,22 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return "SELECT * FROM protein_protein_interactions.source ORDER BY time_stamp DESC;";
+    return `SELECT * FROM protein_protein_interactions.source
+            UNION ALL 
+            SELECT * FROM protein_protein_interactions_new.source
+            ORDER BY time_stamp DESC;`;
 };
 
-const buildNetworkFromGeneProteinQuery = function (geneProtein) {
+const buildNetworkFromGeneProteinQuery = function (geneProtein, timestamp) {
+    const namespace =
+      timestamp < new Date("2025-01-01")
+        ? "protein_protein_interactions"
+        : "protein_protein_interactions_new";
     return `SELECT DISTINCT gene_id, display_gene_id, standard_name, length, molecular_weight, PI FROM
- protein_protein_interactions.gene, protein_protein_interactions.protein WHERE
- (LOWER(gene.gene_id)=LOWER('${geneProtein}') OR LOWER(gene.display_gene_id)=LOWER('${geneProtein}') 
- OR LOWER(protein.standard_name) =LOWER('${geneProtein}')) AND
- LOWER(gene.gene_id) = LOWER(protein.gene_systematic_name);`;
+    ${namespace}.gene, ${namespace}.protein WHERE
+    (LOWER(gene.gene_id)=LOWER('${geneProtein}') OR LOWER(gene.display_gene_id)=LOWER('${geneProtein}') 
+    OR LOWER(protein.standard_name) =LOWER('${geneProtein}')) AND
+    LOWER(gene.gene_id) = LOWER(protein.gene_systematic_name) AND gene.time_stamp = ${timestamp};`;
 };
 
 const buildNetworkProteinsQuery = function (proteinString) {
@@ -40,10 +47,15 @@ const buildNetworkProteinsQuery = function (proteinString) {
 };
 
 const buildGenerateProteinNetworkQuery = function (proteins, timestamp, source) {
-    return `SELECT DISTINCT protein1, protein2 FROM
- protein_protein_interactions.physical_interactions WHERE
- physical_interactions.time_stamp='${timestamp}' AND physical_interactions.source='${source}' AND
- ${buildNetworkProteinsQuery(proteins)} ORDER BY protein1 DESC;`;
+    const namespace =
+      timestamp < new Date("2025-01-01")
+        ? "protein_protein_interactions"
+        : "protein_protein_interactions_new";
+    const annotation =
+      timestamp < new Date("2025-01-01") ? "" : ", annotation_type";
+    return `SELECT DISTINCT protein1, protein2${annotation} FROM ${namespace}.physical_interactions 
+            ${namespace}.time_stamp='${timestamp}' AND ${namespace}.source='${source}' AND
+            ${buildNetworkProteinsQuery(proteins)} ORDER BY protein1 DESC;`;
 };
 
 const buildQueryByType = function (query) {
