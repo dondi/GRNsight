@@ -148,4 +148,7 @@ export const grnState = {
 
 // Viewport Size Parameter
     viewportSize: VIEWPORT_INIT,
+
+// Demo Dropdown Selection
+    demoDropdownValue: null,
 };
