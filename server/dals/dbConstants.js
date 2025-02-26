@@ -4,10 +4,11 @@ export const PPI_DATABASE_NAMESPACE = "protein_protein_interactions_new";
 export const PPI_DATABASE_NAMESPACE_OLD = "protein_protein_interactions";
 export const DATABASE_TIMESTAMP_CUTOFF = new Date("2025-01-01");
 
-export const timestampNamespace = function(timestamp, namespace, oldNamespace) {
-  return timestamp < new Date("2025-01-01") ? namespace : oldNamespace;
+export const timestampNamespace = function (timestamp, isGrn) {
+    return new Date(timestamp) > new Date("2025-01-01") ? (isGrn ? GRN_DATABASE_NAMESPACE : PPI_DATABASE_NAMESPACE) :
+        (isGrn ? GRN_DATABASE_NAMESPACE_OLD : PPI_DATABASE_NAMESPACE_OLD);
 };
 
-export const timestampOld = function(timestamp) {
-    return timestamp < DATABASE_TIMESTAMP_CUTOFF;
-}
+export const isTimestampOld = function (timestamp) {
+    return new Date(timestamp) < DATABASE_TIMESTAMP_CUTOFF;
+};
