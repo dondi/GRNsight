@@ -4,22 +4,6 @@ All files pertaining the expression database live within this directory.
 
 ## The basics
 
-#### Schema
-
-All network data is stored within the gene_expression schema on our Postgres database.
-
-The schema is located within this directory at the top level in the file `schema.sql`. It defines the tables located within the gene_expression schema. 
-
-Usage:
-To load to local database
-```
-psql postgresql://localhost/postgres -f schema.sql
-```
-To load to production database 
-```
-psql <address to database> -f schema.sql
-```
-
 ### Scripts
 
 All scripts live within the subdirectory `scripts`, located in the top-level of the network database directory. 
