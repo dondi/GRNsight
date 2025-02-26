@@ -1,3 +1,10 @@
+import {
+    PPI_DATABASE_NAMESPACE,
+    PPI_DATABASE_NAMESPACE_OLD,
+    timestampNamespace,
+    timestampOld,
+} from "./constants";
+
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -18,22 +25,15 @@ var sequelize = new Sequelize(
 );
 
 const buildNetworkSourceQuery = function () {
-    return `SELECT * FROM protein_protein_interactions.source
+    return `SELECT * FROM ${PPI_DATABASE_NAMESPACE_OLD}.source
             UNION ALL
-            SELECT * FROM protein_protein_interactions_new.source
+            SELECT * FROM ${PPI_DATABASE_NAMESPACE}.source
             ORDER BY time_stamp DESC;`;
 };
 
 const buildNetworkFromGeneProteinQuery = function (geneProtein, timestamp) {
-    const namespace =
-      timestamp < new Date("2025-01-01")
-        ? "protein_protein_interactions"
-        : "protein_protein_interactions_new";
-    
-    const timestamp_query =
-      timestamp < new Date("2025-01-01")
-        ? `AND gene.time_stamp ='${timestamp}`
-        : "";
+    const namespace = `${timestampNamespace(timestamp, PPI_DATABASE_NAMESPACE, PPI_DATABASE_NAMESPACE_OLD)}`;
+    const timestamp_query = timestampOld(timestamp) ? "": `AND gene.time_stamp ='${timestamp}`;
     return `SELECT DISTINCT gene_id, display_gene_id, standard_name, length, molecular_weight, PI FROM
     ${namespace}.gene, ${namespace}.protein WHERE
     (LOWER(gene.gene_id)=LOWER('${geneProtein}') OR LOWER(gene.display_gene_id)=LOWER('${geneProtein}')
@@ -48,16 +48,11 @@ const buildNetworkProteinsQuery = function (proteinString) {
     proteins = `${proteins.substring(0, proteins.length - 4)}) AND (`;
     proteinList.forEach(x => proteins += ( `(physical_interactions.protein2 =\'${x}\') OR `));
     return `${proteins.substring(0, proteins.length - 4)})`;
-
 };
 
 const buildGenerateProteinNetworkQuery = function (proteins, timestamp, source) {
-    const namespace =
-      timestamp < new Date("2025-01-01")
-        ? "protein_protein_interactions"
-        : "protein_protein_interactions_new";
-    const annotation =
-      timestamp < new Date("2025-01-01") ? "" : ", annotation_type";
+    const namespace = `${timestampNamespace(timestamp, PPI_DATABASE_NAMESPACE, PPI_DATABASE_NAMESPACE_OLD)}`;
+    const annotation = timestampOld(timestamp) ? "" : ", annotation_type";
     return `SELECT DISTINCT protein1, protein2${annotation} FROM ${namespace}.physical_interactions
             ${namespace}.time_stamp='${timestamp}' AND ${namespace}.source='${source}' AND
             ${buildNetworkProteinsQuery(proteins)} ORDER BY protein1 DESC;`;
@@ -109,7 +104,6 @@ const convertResponseToJSON = function (queryType, totalOutput) {
     default:
         return JSONOutput;
     }
-
 };
 
 module.exports = {
