@@ -20,9 +20,11 @@ const buildNetworkSourceQuery = function () {
             ORDER BY time_stamp DESC;`;
 };
 
-const buildNetworkFromGeneProteinQuery = function (geneProtein, timestamp) {
+const buildNetworkFromGeneProteinQuery = function (geneProtein, source, timestamp) {
     const namespace = timestampNamespace(timestamp, false);
-    const timestampQuery = isTimestampOld(timestamp) ? "" : `AND gene.time_stamp='${timestamp}'`;
+    const timestampQuery = isTimestampOld(timestamp)
+            ? ""
+            : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
     console.log("timestampquery", timestampQuery);
     return `SELECT DISTINCT gene_id, display_gene_id, standard_name, length, molecular_weight, PI FROM
     ${namespace}.gene, ${namespace}.protein WHERE
@@ -54,7 +56,7 @@ const buildGenerateProteinNetworkQuery = function (proteins, timestamp, source) 
 const buildQueryByType = function (query) {
     const networkQueries = {
         NetworkSource: () => buildNetworkSourceQuery(),
-        NetworkFromGeneProtein: () => buildNetworkFromGeneProteinQuery(query.geneProtein),
+        NetworkFromGeneProtein: () => buildNetworkFromGeneProteinQuery(query.geneProtein, query.timestamp, query.source),
         GenerateProteinNetwork: () => buildGenerateProteinNetworkQuery(query.proteins, query.timestamp, query.source),
     };
     if (Object.keys(networkQueries).includes(query.type)) {
