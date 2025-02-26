@@ -56,7 +56,8 @@ const buildGenerateProteinNetworkQuery = function (proteins, timestamp, source) 
 const buildQueryByType = function (query) {
     const networkQueries = {
         NetworkSource: () => buildNetworkSourceQuery(),
-        NetworkFromGeneProtein: () => buildNetworkFromGeneProteinQuery(query.geneProtein, query.timestamp, query.source),
+        NetworkFromGeneProtein: () =>
+            buildNetworkFromGeneProteinQuery(query.geneProtein, query.timestamp, query.source),
         GenerateProteinNetwork: () => buildGenerateProteinNetworkQuery(query.proteins, query.timestamp, query.source),
     };
     if (Object.keys(networkQueries).includes(query.type)) {
