@@ -2,90 +2,55 @@ const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
-var sequelize = new Sequelize(
-    config.databaseName,
-    process.env.DB_USERNAME,
-    process.env.DB_PASSWORD,
-    {
-        host: config.databaseHost,
-        dialect: config.databaseDialect,
-        pool: {
-            max: 5,
-            min: 0,
-            idle: 10000,
-        },
-    }
-);
+var sequelize = new Sequelize(config.databaseName, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+    host: config.databaseHost,
+    dialect: config.databaseDialect,
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000,
+    },
+});
 
-//import { GRN_DATABASE_NAMESPACE, GRN_DATABASE_NAMESPACE_OLD, timestampNamespace, timestampOld } from "./constants";
-const GRN_DATABASE_NAMESPACE = "gene_regulatory_network_new";
-const GRN_DATABASE_NAMESPACE_OLD = "gene_regulatory_network";
-const DATABASE_TIMESTAMP_CUTOFF = new Date("2025-01-01");
-
-const timestampNamespace = function(timestamp, namespace, oldNamespace) {
-    return timestamp < new Date("2025-01-01") ? namespace : oldNamespace;
-};
-
-const timestampOld = function(timestamp) {
-    return timestamp < DATABASE_TIMESTAMP_CUTOFF;
-};
-
-const buildNetworkSourceQuery = function () {
-    return `SELECT * FROM ${GRN_DATABASE_NAMESPACE_OLD}.source
+const buildNetworkSourceQuery = function() {
+    return `SELECT * FROM gene_regulatory_network.source
             UNION ALL
-            SELECT * FROM ${GRN_DATABASE_NAMESPACE}.source
+            SELECT * FROM gene_regulatory_network_new.source
             ORDER BY time_stamp DESC;`;
 };
 
-const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
-    const namespace = `${timestampNamespace(timestamp,
-        GRN_DATABASE_NAMESPACE,
-        GRN_DATABASE_NAMESPACE_OLD
-    )}.gene`;
-    const timestamp_query = timestampOld(timestamp)
-        ? ""
-        : `AND gene.time_stamp ='${timestamp}`;
+const buildNetworkGeneFromSourceQuery = function(gene, source, timestamp) {
+    const namespace =
+        timestamp < new Date("2025-01-01") ? "gene_regulatory_network.gene" : "gene_regulatory_network_new.gene";
+    const timestamp_query = timestamp < new Date("2025-01-01") ? `AND gene.time_stamp ='${timestamp}` : "";
     return `SELECT DISTINCT gene_id, display_gene_id FROM
             ${namespace} WHERE (gene.gene_id ='${gene}'
             OR gene.display_gene_id ='${gene}') ${timestamp_query};`;
 };
 
-const buildNetworkGenesQuery = function (geneString) {
+const buildNetworkGenesQuery = function(geneString) {
     let genes = "(";
     let geneList = geneString.split(",");
-    geneList.forEach(
-        (x) => (genes += `(network.regulator_gene_id =\'${x}\') OR `)
-    );
+    geneList.forEach((x) => (genes += `(network.regulator_gene_id =\'${x}\') OR `));
     genes = `${genes.substring(0, genes.length - 4)}) AND (`;
-    geneList.forEach(
-        (x) => (genes += `(network.target_gene_id =\'${x}\') OR `)
-    );
+    geneList.forEach((x) => (genes += `(network.target_gene_id =\'${x}\') OR `));
     return `${genes.substring(0, genes.length - 4)})`;
 };
 
-const buildGenerateNetworkQuery = function (genes, source, timestamp) {
-    const namespace = `${timestampNamespace(
-        timestamp,
-        GRN_DATABASE_NAMESPACE,
-        GRN_DATABASE_NAMESPACE_OLD
-    )}.network`;
-    const annotation = timestampOld(timestamp) ? "" : ", annotation_type";
+const buildGenerateNetworkQuery = function(genes, source, timestamp) {
+    const namespace =
+        timestamp < new Date("2025-01-01") ? "gene_regulatory_network.network" : "gene_regulatory_network_new.network";
+    const annotation = timestamp < new Date("2025-01-01") ? "" : ", annotation_type";
     return `SELECT DISTINCT regulator_gene_id, target_gene_id${annotation} FROM ${namespace}
             WHERE time_stamp='${timestamp}' AND source='${source}' AND
             ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`;
 };
 
-const buildQueryByType = function (queryType, query) {
+const buildQueryByType = function(queryType, query) {
     const networkQueries = {
         NetworkSource: () => buildNetworkSourceQuery(),
-        NetworkGeneFromSource: () =>
-            buildNetworkGeneFromSourceQuery(query.gene),
-        GenerateNetwork: () =>
-            buildGenerateNetworkQuery(
-                query.genes,
-                query.source,
-                query.timestamp
-            ),
+        NetworkGeneFromSource: () => buildNetworkGeneFromSourceQuery(query.gene),
+        GenerateNetwork: () => buildGenerateNetworkQuery(query.genes, query.source, query.timestamp),
     };
     if (Object.keys(networkQueries).includes(query.type)) {
         return networkQueries[query.type]();
@@ -93,7 +58,7 @@ const buildQueryByType = function (queryType, query) {
 };
 
 // const response = convertResponseToJSON(req.query.type, req.query, stdname);
-const convertResponseToJSON = function (queryType, query, totalOutput) {
+const convertResponseToJSON = function(queryType, query, totalOutput) {
     let JSONOutput = {};
     switch (queryType) {
         case "NetworkSource":
@@ -102,30 +67,20 @@ const convertResponseToJSON = function (queryType, query, totalOutput) {
                 const timestamp = connection.time_stamp;
                 const source = connection.source;
                 const displayName = connection.display_name;
-                JSONOutput.sources[
-                    `${displayName}: ${timestamp.toISOString().split("T")[0]}`
-                ] = { timestamp, source };
+                JSONOutput.sources[`${displayName}: ${timestamp.toISOString().split("T")[0]}`] = { timestamp, source };
             });
             return JSONOutput;
         case "NetworkGeneFromSource":
-            JSONOutput.displayGeneId =
-                totalOutput.length > 0 ? totalOutput[0].display_gene_id : null;
-            JSONOutput.geneId =
-                totalOutput.length > 0 ? totalOutput[0].gene_id : null;
+            JSONOutput.displayGeneId = totalOutput.length > 0 ? totalOutput[0].display_gene_id : null;
+            JSONOutput.geneId = totalOutput.length > 0 ? totalOutput[0].gene_id : null;
             return JSONOutput;
         case "GenerateNetwork":
             JSONOutput.links = {};
             for (let connection of totalOutput) {
-                if (
-                    JSONOutput.links[connection.regulator_gene_id] === undefined
-                ) {
-                    JSONOutput.links[connection.regulator_gene_id] = [
-                        connection.target_gene_id,
-                    ];
+                if (JSONOutput.links[connection.regulator_gene_id] === undefined) {
+                    JSONOutput.links[connection.regulator_gene_id] = [connection.target_gene_id];
                 } else {
-                    JSONOutput.links[connection.regulator_gene_id].push(
-                        connection.target_gene_id
-                    );
+                    JSONOutput.links[connection.regulator_gene_id].push(connection.target_gene_id);
                 }
             }
             return JSONOutput;
@@ -138,15 +93,9 @@ module.exports = {
     buildNetworkSourceQuery: buildNetworkSourceQuery,
     queryNetworkDatabase: function(req, res) {
         sequelize
-            .query(buildQueryByType(req.query.type, req.query), {
-                type: sequelize.QueryTypes.SELECT,
-            })
+            .query(buildQueryByType(req.query.type, req.query), { type: sequelize.QueryTypes.SELECT })
             .then(function(stdname) {
-                const response = convertResponseToJSON(
-                    req.query.type,
-                    req.query,
-                    stdname
-                );
+                const response = convertResponseToJSON(req.query.type, req.query, stdname);
                 return res.send(response);
             });
     },
