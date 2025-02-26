@@ -24,14 +24,15 @@ const buildNetworkSourceQuery = function () {
             ORDER BY time_stamp DESC;`;
 };
 
-const buildNetworkGeneFromSourceQuery = function (gene, timestamp) {
+const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
     const namespace =
       timestamp < new Date("2025-01-01")
         ? "gene_regulatory_network.gene"
         : "gene_regulatory_network_new.gene";
-    return `SELECT DISTINCT gene_id, display_gene_id FROM 
-    ${namespace} WHERE (gene.gene_id ='${gene}'
-    OR gene.display_gene_id ='${gene}') AND gene.time_stamp ='${timestamp}'`;
+    const timestamp_query = timestamp < new Date("2025-01-01") ? `AND gene.time_stamp ='${timestamp}` : "";
+    return `SELECT DISTINCT gene_id, display_gene_id FROM
+            ${namespace} WHERE (gene.gene_id ='${gene}'
+            OR gene.display_gene_id ='${gene}') ${timestamp_query};`;
 };
 
 const buildNetworkGenesQuery = function (geneString) {
