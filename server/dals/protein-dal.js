@@ -1,10 +1,3 @@
-import {
-    PPI_DATABASE_NAMESPACE,
-    PPI_DATABASE_NAMESPACE_OLD,
-    timestampNamespace,
-    timestampOld,
-} from "./constants";
-
 const Sequelize = require("sequelize");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
@@ -23,6 +16,19 @@ var sequelize = new Sequelize(
         }
     }
 );
+
+//import { PPI_DATABASE_NAMESPACE, PPI_DATABASE_NAMESPACE_OLD, timestampNamespace, timestampOld } from "./constants";
+const PPI_DATABASE_NAMESPACE = "protein_protein_interactions_new";
+const PPI_DATABASE_NAMESPACE_OLD = "protein_protein_interactions";
+const DATABASE_TIMESTAMP_CUTOFF = new Date("2025-01-01");
+
+const timestampNamespace = function(timestamp, namespace, oldNamespace) {
+    return timestamp < new Date("2025-01-01") ? namespace : oldNamespace;
+};
+
+const timestampOld = function(timestamp) {
+    return timestamp < DATABASE_TIMESTAMP_CUTOFF;
+};
 
 const buildNetworkSourceQuery = function () {
     return `SELECT * FROM ${PPI_DATABASE_NAMESPACE_OLD}.source
