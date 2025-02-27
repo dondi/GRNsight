@@ -189,14 +189,15 @@ export const setupLoadAndImportHandlers = (grnState) => {
             const selected = event.target.dataset.expression;
             if (`.${selected}` === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
+                grnState.demoDropdownValue = selected;
             }
         });
         $("#demoSourceDropdown").on("change", () => {
             const selected = `.${$("#demoSourceDropdown").val()}`;
             if (selected === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
+                grnState.demoDropdownValue = selected;
             }
-            grnState.demoDropdownValue = selected;
         });
     };
 
