@@ -28,7 +28,6 @@ database/network-database/script-results
 database/network-database/source-files
 database/expression-database/script-results
 database/expression-database/source-files
-database2/network-database/script-results
 
 npm-debug.log
 node_modules
