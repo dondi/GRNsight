@@ -1,7 +1,7 @@
 class Constants:
     # database namespace
-    GRN_DATABASE_NAMESPACE = "gene_regulatory_network_new"
-    PPI_DATABASE_NAMESPACE = "protein_protein_interactions_new"
+    GRN_DATABASE_NAMESPACE = "gene_regulatory_network_with_timestamp"
+    PPI_DATABASE_NAMESPACE = "protein_protein_interactions_with_timestamp"
 
     # network types
     GRN_NETWORK_MODE = "grn"

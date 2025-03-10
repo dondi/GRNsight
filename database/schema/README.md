@@ -30,8 +30,8 @@ GRNsight requires four schemas, one for each of the following namespaces:
 
 1. `grnsettings`
 2. `gene_expression`
-3. `gene_regulatory_network`
-4. `protein_protein_interactions`
+3. `gene_regulatory_network_with_timestamp`
+4. `protein_protein_interactions_with_timestamp`
 
 The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema:
 
