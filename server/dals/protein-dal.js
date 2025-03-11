@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const { isTimestampOld, timestampNamespace } = require("./dbConstants");
+var constants = require(__dirname + "/dbConstants");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
@@ -21,8 +21,8 @@ const buildNetworkSourceQuery = function () {
 };
 
 const buildNetworkFromGeneProteinQuery = function (geneProtein, source, timestamp) {
-    const namespace = timestampNamespace(timestamp, false);
-    const timestampQuery = isTimestampOld(timestamp)
+    const namespace = constants.timestampNamespace(timestamp, false);
+    const timestampQuery = constants.isTimestampOld(timestamp)
             ? ""
             : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
     console.log("timestampquery", timestampQuery);
@@ -45,8 +45,8 @@ const buildNetworkProteinsQuery = function (proteinString) {
 };
 
 const buildGenerateProteinNetworkQuery = function (proteins, timestamp, source) {
-    const namespace = timestampNamespace(timestamp, false);
-    const annotation = isTimestampOld(timestamp) ? "" : ", annotation_type";
+    const namespace = constants.timestampNamespace(timestamp, false);
+    const annotation = constants.isTimestampOld(timestamp) ? "" : ", annotation_type";
     return `SELECT DISTINCT protein1, protein2${annotation} FROM
         ${namespace}.physical_interactions WHERE
         physical_interactions.time_stamp='${timestamp}' AND physical_interactions.source='${source}' AND

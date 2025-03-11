@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const { timestampNamespace, isTimestampOld } = require("./dbConstants");
+var constants = require(__dirname + "/dbConstants");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
@@ -21,8 +21,8 @@ const buildNetworkSourceQuery = function () {
 };
 
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
-    const namespace = `${timestampNamespace(timestamp, true)}.gene`;
-    const timestampQuery = isTimestampOld(timestamp)
+    const namespace = `${constants.timestampNamespace(timestamp, true)}.gene`;
+    const timestampQuery = constants.isTimestampOld(timestamp)
             ?  ""
             : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
 
@@ -41,8 +41,8 @@ const buildNetworkGenesQuery = function (geneString) {
 };
 
 const buildGenerateNetworkQuery = function (genes, source, timestamp) {
-    const namespace = `${timestampNamespace(timestamp, true)}.network`;
-    const annotation = isTimestampOld(timestamp) ? "" : ", annotation_type";
+    const namespace = `${constants.timestampNamespace(timestamp, true)}.network`;
+    const annotation = constants.isTimestampOld(timestamp) ? "" : ", annotation_type";
     return `SELECT DISTINCT regulator_gene_id, target_gene_id${annotation} FROM ${namespace}
             WHERE time_stamp='${timestamp}' AND source='${source}' AND
             ${buildNetworkGenesQuery(genes)} ORDER BY regulator_gene_id DESC;`;
