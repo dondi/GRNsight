@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-var constants = require(__dirname + "./dbConstants");
+var constants = require(__dirname + "/dbConstants");
 require("dotenv").config();
 var env = process.env.NODE_ENV || "development";
 var config = require("../config/config")[env];
