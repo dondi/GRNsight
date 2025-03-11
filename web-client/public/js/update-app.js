@@ -549,6 +549,11 @@ const updateModeViews = () =>{
     }
 };
 
+const resetDemoDropdown = () =>{
+    $("#demoSourceDropdown option").removeAttr("selected");
+    $("#demoSourceDropdown").val("none");
+};
+
 const checkWorkbookModeSettings = () => {
     const hasExpression = hasExpressionData(grnState.workbook.expression);
 
@@ -822,6 +827,10 @@ export const updateApp = grnState => {
                 grnState.nodeColoringEnabled = false;
             }
         }
+        if (!(grnState.demoDropdownValue)) {
+            resetDemoDropdown();
+        }
+
         refreshApp();
 
         // Rare exception to the MVC cycle: right now we have no way of knowing whether the workbook has changed
