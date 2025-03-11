@@ -700,9 +700,7 @@ const resetDatasetDropdownMenus = (workbook) => {
             </li>`;
     };
 
-    grnState.nodeColoring.nodeColoringOptions.workbookExpressions = [];
-    grnState.nodeColoring.nodeColoringOptions.databaseExpressions = [];
-        for (var property in workbook.expression) {
+    for (var property in workbook.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
             grnState.nodeColoring.nodeColoringOptions.workbookExpressions.push({value: property});
         }
@@ -722,25 +720,19 @@ const resetDatasetDropdownMenus = (workbook) => {
     const addOptionsToDropdown = (options, groupLabel) => {
         let topOptgroup = $("<optgroup>").attr("label", groupLabel);
         let bottomOptgroup = $("<optgroup>").attr("label", groupLabel);
-    
         options.forEach(option => {
             var shortenedSheetName = shortenExpressionSheetName(option.value);
-    
             let topOption = $("<option>")
                 .addClass("dataset-option")
                 .attr("value", option.value).text(shortenedSheetName);
-    
             let bottomOption = $("<option>")
                 .addClass("dataset-option")
                 .attr("value", option.value).text(shortenedSheetName);
-    
             topOptgroup.append(topOption);
             bottomOptgroup.append(bottomOption);
-    
             $(TOP_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
             $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
         });
-    
         $(TOP_DATASET_SELECTION_SIDEBAR).append(topOptgroup);
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).append(bottomOptgroup);
     };
