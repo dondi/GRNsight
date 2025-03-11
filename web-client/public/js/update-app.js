@@ -827,7 +827,7 @@ export const updateApp = grnState => {
                 grnState.nodeColoringEnabled = false;
             }
         }
-        if (!(grnState.demoDropdownValue)){
+        if (!(grnState.demoDropdownValue)) {
             resetDemoDropdown();
         }
 

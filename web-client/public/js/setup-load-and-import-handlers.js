@@ -237,6 +237,5 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
         disableUpload(false);
         updateApp(grnState);
         reloader = () => responseCustomWorkbookData(grnState, queryURL, name);
-        
     });
 };
