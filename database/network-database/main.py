@@ -12,7 +12,6 @@ def load_data(network_option):
     print("Generating data.................................................")
     time_stamp = datetime.now(timezone(timedelta(hours=-8)))
     formatted_time_stamp = time_stamp.strftime("%Y-%m-%d %H:%M:%S%z")
-    print("Formatted_time_stamp: ", formatted_time_stamp)
     if network_option in ['all', Constants.GRN_NETWORK_MODE]:
         grnDataGenerator = GeneRegulatoryNetworkDataGenerator(GeneRegulatoryNetworkFetcherService(), GeneRegulatoryNetworkProcessor(formatted_time_stamp), save_service)
 
