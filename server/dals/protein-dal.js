@@ -14,9 +14,9 @@ var sequelize = new Sequelize(config.databaseName, process.env.DB_USERNAME, proc
 });
 
 const buildNetworkSourceQuery = function () {
-    return `SELECT * FROM protein_protein_interactions.source
+    return `SELECT * FROM ${constants.PPI_DATABASE_NAMESPACE}.source
             UNION ALL
-            SELECT * FROM protein_protein_interactions_new.source
+            SELECT * FROM ${constants.PPI_DATABASE_NAMESPACE_WITH_TIMESTAMP}.source
             ORDER BY time_stamp DESC;`;
 };
 
