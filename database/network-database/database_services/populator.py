@@ -32,7 +32,7 @@ class DataPopulator(ABC):
         """
         
         # Determine if we need to drop the last column (PPI network type)
-        if self.network_mode == Constants.PPI_NETWORK_MODE and data_filepath == Constants.MISSING_PPI_GENE_DATA_FILEPATH:
+        if self.network_mode == Constants.PPI_NETWORK_MODE and data_filepath == Constants.GENE_DATA_FILEPATH:
             print("Dropping the regulator column from the input data...")
             processed_rows = []
             
@@ -72,12 +72,11 @@ class GeneDataPopulator(DataPopulator):
     def __init__(self, db_url, network_mode):
         super().__init__(db_url)
         self.network_mode = network_mode
+        self.filepath = Constants.GENE_DATA_FILEPATH
         if network_mode == Constants.GRN_NETWORK_MODE:
             self.database_namespace = Constants.GRN_DATABASE_NAMESPACE
-            self.filepath = Constants.MISSING_GRN_GENE_DATA_FILEPATH
         elif network_mode == Constants.PPI_NETWORK_MODE:
             self.database_namespace = Constants.PPI_DATABASE_NAMESPACE
-            self.filepath = Constants.MISSING_PPI_GENE_DATA_FILEPATH
         else:
             raise ValueError(f"Unknown network type: {network_mode}")
     
@@ -92,7 +91,7 @@ class GeneDataPopulator(DataPopulator):
 class ProteinDataPopulator(DataPopulator):
     def __init__(self, db_url):
         super().__init__(db_url)
-        self.filepath = Constants.MISSING_PROTEIN_DATA_FILEPATH
+        self.filepath = Constants.PROTEIN_DATA_FILEPATH
 
     def get_copy_statement(self):
         return f"COPY {Constants.PPI_DATABASE_NAMESPACE}.protein (standard_name, gene_systematic_name, length, molecular_weight, PI, taxon_id, time_stamp, source) FROM stdin WITH CSV DELIMITER E'\\t' HEADER;"

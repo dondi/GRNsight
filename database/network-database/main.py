@@ -2,7 +2,6 @@ from constants import Constants
 from data_services.data_generator import *
 from data_services.save_service import *
 from database_services.filter import *
-from database_services.updater import *
 from database_services.populator import *
 import argparse
 from datetime import datetime, timezone, timedelta
@@ -13,6 +12,7 @@ def load_data(network_option):
     print("Generating data.................................................")
     time_stamp = datetime.now(timezone(timedelta(hours=-8)))
     formatted_time_stamp = time_stamp.strftime("%Y-%m-%d %H:%M:%S%z")
+    print("Formatted_time_stamp: ", formatted_time_stamp)
     if network_option in ['all', Constants.GRN_NETWORK_MODE]:
         grnDataGenerator = GeneRegulatoryNetworkDataGenerator(GeneRegulatoryNetworkFetcherService(), GeneRegulatoryNetworkProcessor(formatted_time_stamp), save_service)
 
@@ -27,22 +27,12 @@ def load_data(network_option):
     
     SourceDataGenerator(SourceProcessor(formatted_time_stamp), save_service)
 
-def filter_data(network_option, db_url):
-    print("Filtering data.................................................")
-    if network_option in ['all', Constants.GRN_NETWORK_MODE]:
-        GeneFilter(db_url, save_service, network_mode="grn").filter_data()
-    
-    if network_option in ['all', Constants.PPI_NETWORK_MODE]:
-        GeneFilter(db_url, save_service, network_mode="ppi").filter_data()
-        ProteinFilter(db_url, save_service).filter_data()
-
 def adding_data_to_databse(network_option, db_url):
     print("Adding data to database.................................................")
     if network_option in ['all', Constants.GRN_NETWORK_MODE]:
         network_mode = Constants.GRN_NETWORK_MODE
         SourceDataPopulator(db_url, network_mode).populate_data()
         GeneDataPopulator(db_url, network_mode).populate_data()
-        GeneUpdater(db_url, network_mode).update_data()
         GeneRegulatoryNetworkDataPopulator(db_url).populate_data()
     
     if network_option in ['all', Constants.PPI_NETWORK_MODE]:
@@ -50,17 +40,13 @@ def adding_data_to_databse(network_option, db_url):
         SourceDataPopulator(db_url, network_mode).populate_data()
 
         GeneDataPopulator(db_url, network_mode).populate_data()
-        GeneUpdater(db_url, network_mode).update_data()
         
         ProteinDataPopulator(db_url).populate_data()
-        ProteinProteinInteractionsUpdater(db_url).update_data()
-        ProteinUpdater(db_url).update_data()
         
         ProteinProteinInteractionsDataPopulator(db_url).populate_data()
     
 def main(network_option, db_url):
     load_data(network_option)
-    filter_data(network_option, db_url)
     adding_data_to_databse(network_option, db_url)
 
 if __name__ == "__main__":
