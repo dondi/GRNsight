@@ -14,9 +14,9 @@ var sequelize = new Sequelize(config.databaseName, process.env.DB_USERNAME, proc
 });
 
 const buildNetworkSourceQuery = function () {
-    return `SELECT * FROM gene_regulatory_network.source
+    return `SELECT * FROM ${constants.GRN_DATABASE_NAMESPACE}.source
             UNION ALL
-            SELECT * FROM gene_regulatory_network_new.source
+            SELECT * FROM ${constants.GRN_DATABASE_NAMESPACE_WITH_TIMESTAMP}.source
             ORDER BY time_stamp DESC;`;
 };
 
