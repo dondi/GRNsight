@@ -575,7 +575,7 @@ export const setupHandlers = grnState => {
             });
         } else {
             window.addEventListener("message", event => {
-                if (event.origin.indexOf(HOST_SITE) !== 0) {
+                if (event.origin !== HOST_SITE) {
                     return;
                 }
 
