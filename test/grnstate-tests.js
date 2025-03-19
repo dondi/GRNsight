@@ -1,6 +1,7 @@
-const chai = require("chai");
-chai.should(); // Activates "should" style assertions
-import { grnState } from "../web-client/public/js/grnstate";
+(async () => {
+    const chai = await import("chai");
+    chai.should(); // Activates "should" style assertions
+  })();
 
 describe("The grnState model object", () => {
     it("should update the reset normalization maximum correctly", () => {
