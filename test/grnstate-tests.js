@@ -1,3 +1,6 @@
+// dynamically import it inside an async function becauuse this allows
+// This allows us to use Chai as an ES Module without 
+// converting all of GRNsight to an ES Module.
 (async () => {
     const chai = await import("chai");
     chai.should(); // Activates "should" style assertions
