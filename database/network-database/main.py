@@ -1,7 +1,6 @@
 from constants import Constants
 from data_services.data_generator import *
 from data_services.save_service import *
-from database_services.filter import *
 from database_services.populator import *
 import argparse
 from datetime import datetime, timezone, timedelta
