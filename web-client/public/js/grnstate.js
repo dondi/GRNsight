@@ -84,7 +84,10 @@ export const grnState = {
         bottomDataset: undefined,
         lastDataset: null,
         bottomDataSameAsTop: true,
-        nodeColoringOptions: [],
+        nodeColoringOptions: {
+            workbookExpressions: [],
+            databaseExpressions: [],
+        },
         ppiNodeColorWarningDisplayed: false,
     },
 
@@ -148,4 +151,7 @@ export const grnState = {
 
 // Viewport Size Parameter
     viewportSize: VIEWPORT_INIT,
+
+// Demo Dropdown Selection
+    demoDropdownValue: null,
 };

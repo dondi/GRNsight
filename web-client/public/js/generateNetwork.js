@@ -295,7 +295,7 @@ containing "-", "_", and alpha-numeric characters only`);
                         alert(`GRNsight is only capable of handling 100 edges at most. Your proposed network contains
     ${edgesAmount} physical interactions. Please remove some proteins from your proposed network.`);
                     } else {
-                        const name = `Protein-Protein-Physical Interaction Network (${grnState.customWorkbook.source}; ${proteinsAmount} proteins, ${edgesAmount} edges)`;
+                        const name = `PPI (${grnState.customWorkbook.source}; ${proteinsAmount} proteins, ${edgesAmount} edges)`;
                         const l = [];
                         for (let link of links) {
                             const p1 = link[0];

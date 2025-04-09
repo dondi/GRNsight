@@ -82,3 +82,6 @@ Backup of *.doc*
 
 # Misc
 .env
+
+# Ignore Python __pycache__ folder
+__pycache__/

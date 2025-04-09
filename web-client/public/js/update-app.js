@@ -308,20 +308,14 @@ const updateViewportSize = (currentValue) => {
 
     let container = $(".grnsight-container");
 
-    // from jquery
     const fitContainer = dimensions => {
-        if (!dimensions) {
-            return; // First call; the next one should have dimensions filled in.
-        }
+        const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET : container.width();
+        const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET : container.height();
 
-        const fitWidth = dimensions.width - WIDTH_OFFSET;
-        const fitHeight = dimensions.height - dimensions.top - HEIGHT_OFFSET;
-        if (fitWidth !== container.width() || fitHeight !== container.height()) {
-            container.css({
-                width: fitWidth,
-                height: fitHeight
-            });
-        }
+        container.css({
+            width: fitWidth,
+            height: fitHeight
+        });
     };
 
     const fitContainerToWindow = () => {
@@ -512,6 +506,10 @@ const toggleLayout = (on, off) => {
     }
 };
 
+export const hasExpressionData = (sheets) => {
+    return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
+};
+
 const updatetoForceGraph = () => {};
 
 const updatetoGridLayout = () => {};
@@ -551,8 +549,15 @@ const updateModeViews = () =>{
     }
 };
 
+const resetDemoDropdown = () =>{
+    $("#demoSourceDropdown option").removeAttr("selected");
+    $("#demoSourceDropdown").val("none");
+};
+
 const checkWorkbookModeSettings = () => {
-    if (grnState.mode === NETWORK_PPI_MODE) {
+    const hasExpression = hasExpressionData(grnState.workbook.expression);
+
+    if (grnState.mode === NETWORK_PPI_MODE || !hasExpression) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
@@ -596,15 +601,6 @@ $(NETWORK_MODE_GRN).on("click", () => {
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
       (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
-};
-
-const hasExpressionData = (sheets) => {
-    for (var property in sheets) {
-        if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            return true;
-        }
-    }
-    return false;
 };
 
 const updateSpeciesMenu = () => {
@@ -709,16 +705,15 @@ const resetDatasetDropdownMenus = (workbook) => {
             </li>`;
     };
 
-    grnState.nodeColoring.nodeColoringOptions = [];
     for (var property in workbook.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            grnState.nodeColoring.nodeColoringOptions.push({value: property});
+            grnState.nodeColoring.nodeColoringOptions.workbookExpressions.push({value: property});
         }
     }
 
     // Add expression database options
     grnState.database.expressionDatasets.forEach( option =>
-        grnState.nodeColoring.nodeColoringOptions.push({value: [option]}));
+        grnState.nodeColoring.nodeColoringOptions.databaseExpressions.push({value: [option]}));
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
             .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
@@ -727,19 +722,32 @@ const resetDatasetDropdownMenus = (workbook) => {
 
     // $(DATA_SET_SELECT).append($("<option>").attr("value", "Dahlquist").text("Dahlquist"));
 
-    grnState.nodeColoring.nodeColoringOptions.forEach(function (option) {
-        var shortenedSheetName = shortenExpressionSheetName(option.value);
-        $(TOP_DATASET_SELECTION_SIDEBAR).append($("<option>")
-              .addClass("dataset-option")
-              .attr("value", option.value).text(shortenedSheetName));
-        $(TOP_DATASET_SELECTION_MENU)
-              .append(createHTMLforDataset(option.value));
-        $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-              .addClass("dataset-option")
-              .attr("value", option.value).text(shortenedSheetName));
-        $(BOTTOM_DATASET_SELECTION_MENU)
-              .append(createHTMLforDataset(option.value));
-    });
+    const addOptionsToDropdown = (options, groupLabel) => {
+        let topOptgroup = $("<optgroup>").attr("label", groupLabel);
+        let bottomOptgroup = $("<optgroup>").attr("label", groupLabel);
+        options.forEach(option => {
+            var shortenedSheetName = shortenExpressionSheetName(option.value);
+            let topOption = $("<option>")
+                .addClass("dataset-option")
+                .attr("value", option.value).text(shortenedSheetName);
+            let bottomOption = $("<option>")
+                .addClass("dataset-option")
+                .attr("value", option.value).text(shortenedSheetName);
+            topOptgroup.append(topOption);
+            bottomOptgroup.append(bottomOption);
+            $(TOP_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
+            $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
+        });
+        $(TOP_DATASET_SELECTION_SIDEBAR).append(topOptgroup);
+        $(BOTTOM_DATASET_SELECTION_SIDEBAR).append(bottomOptgroup);
+    };
+
+    // Add Workbook Expressions
+    addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
+
+    // Add Database Expressions
+    addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.databaseExpressions, "Expression Database");
+
 
     $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
     $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
@@ -831,6 +839,10 @@ export const updateApp = grnState => {
                 grnState.nodeColoringEnabled = false;
             }
         }
+        if (!(grnState.demoDropdownValue)) {
+            resetDemoDropdown();
+        }
+
         refreshApp();
 
         // Rare exception to the MVC cycle: right now we have no way of knowing whether the workbook has changed
@@ -874,7 +886,7 @@ export const updateApp = grnState => {
         updatetoGridLayout();
     }
 
-// Viewport
+    // Viewport
     updateViewportSize(grnState.viewportSize);
 
     // Node Coloring

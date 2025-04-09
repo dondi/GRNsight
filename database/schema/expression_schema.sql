@@ -1,3 +1,5 @@
+CREATE SCHEMA gene_expression;
+
 CREATE TABLE gene_expression.ref (
   pubmed_id VARCHAR,
   authors VARCHAR,

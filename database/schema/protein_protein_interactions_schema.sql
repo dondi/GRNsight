@@ -1,3 +1,5 @@
+CREATE SCHEMA protein_protein_interactions;
+
 CREATE TABLE protein_protein_interactions.source (
   time_stamp TIMESTAMP WITH TIME ZONE,
   source VARCHAR,

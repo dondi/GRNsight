@@ -1,3 +1,5 @@
+CREATE SCHEMA gene_regulatory_network;
+
 CREATE TABLE gene_regulatory_network.source (
   time_stamp TIMESTAMP WITH TIME ZONE,
   source VARCHAR,
