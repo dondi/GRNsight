@@ -105,7 +105,7 @@ import {
   VIEWPORT_SIZE_FIT_SIDEBAR,
   VIEWPORT_INIT,
   NETWORK_MODE_DROPDOWN,
-  // NETWORK_MODE_CLASS,
+  NETWORK_MODE_CLASS,
   NETWORK_MODE_PROTEIN_PHYS,
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
@@ -542,10 +542,10 @@ const updateModeViews = () =>{
     console.log("grnState.mode in updateMode Views", grnState.mode);
     const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
     $(NETWORK_MODE_DROPDOWN).text(workbookMode);
-    // $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
-    // $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
+    $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
+    $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
     // // Select the correct menu items
-    // $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
+    $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
     if (grnState.mode === NETWORK_GRN_MODE) {
         toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
     } else if (grnState.mode === NETWORK_PPI_MODE) {
@@ -588,25 +588,25 @@ $("body").on("click", () => {
     }
 });
 
-$(NETWORK_MODE_DROPDOWN).on("change", () => {
-    console.log("NETWORK_MODE_DROPDOWN CHANGED");
-    grnState.mode = $(NETWORK_MODE_DROPDOWN).val();
-    console.log("NETWORK MODE CHANGED TO: " + grnState.mode);
-    checkWorkbookModeSettings();
-    refreshApp();
-});
+// $(NETWORK_MODE_DROPDOWN).on("change", () => {
+//     console.log("NETWORK_MODE_DROPDOWN CHANGED");
+//     grnState.mode = $(NETWORK_MODE_DROPDOWN).val();
+//     console.log("NETWORK MODE CHANGED TO: " + grnState.mode);
+//     checkWorkbookModeSettings();
+//     refreshApp();
+// });
 
-$(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
-    grnState.mode = NETWORK_PPI_MODE;
-    checkWorkbookModeSettings();
-    refreshApp();
-});
+// $(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
+//     grnState.mode = NETWORK_PPI_MODE;
+//     checkWorkbookModeSettings();
+//     refreshApp();
+// });
 
-$(NETWORK_MODE_GRN).on("click", () => {
-    grnState.mode = NETWORK_GRN_MODE;
-    checkWorkbookModeSettings();
-    refreshApp();
-});
+// $(NETWORK_MODE_GRN).on("click", () => {
+//     grnState.mode = NETWORK_GRN_MODE;
+//     checkWorkbookModeSettings();
+//     refreshApp();
+// });
 
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
