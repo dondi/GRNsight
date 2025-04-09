@@ -9,10 +9,10 @@ var exportEdges = function (workbook, gene, geneIndex) {
                 gene.name,
                 workbook.sheetType === constants.WEIGHTED ?
                     link.value : (workbook.meta) ?
-                    (workbook.meta.data.workbookType === constants.NETWORK_PPI_MODE ?
-                        "pp" : "pd") :
-                    workbook.workbookType === constants.NETWORK_PPI_MODE ?
-                    "pp" : "pd",
+                        (workbook.meta.data.workbookType === constants.NETWORK_PPI_MODE ?
+                            "pp" : "pd") :
+                        workbook.workbookType === constants.NETWORK_PPI_MODE ?
+                            "pp" : "pd",
                 workbook.genes[link.target].name
             ].join("\t") + "\n";
         }

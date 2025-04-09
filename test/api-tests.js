@@ -31,29 +31,29 @@ require(__dirname + "/../web-client/public/gene/api.js");
 
 describe("The Gene Page", () => {
 
-// final result is a promise
-// call this with known input
-// part of what the function needs is a workbook request, alongside the query -
-// tell fake server "idc who asks, make this response"
-// mocks return the data ONLY IF the correct parameters are supplied
-// set up fake server to only return happy answers with expected URLS and fail everything else
+    // final result is a promise
+    // call this with known input
+    // part of what the function needs is a workbook request, alongside the query -
+    // tell fake server "idc who asks, make this response"
+    // mocks return the data ONLY IF the correct parameters are supplied
+    // set up fake server to only return happy answers with expected URLS and fail everything else
 
     let server;
     beforeEach(() => {
         server = sinon.createFakeServer();
         server.respondImmediately = true;
 
-      // Sinon replaces global.XMLHttpRequest but not the one in document.defaultView.
-      // However, that's where jQuery looks for XMLHttpRequest so we need to manually
-      // "install" it there.
+        // Sinon replaces global.XMLHttpRequest but not the one in document.defaultView.
+        // However, that's where jQuery looks for XMLHttpRequest so we need to manually
+        // "install" it there.
         document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
     });
 
     afterEach(() => {
         server.restore();
 
-      // By the same token, Sinon’s restoration affects global.XMLHttpRequest. We then need
-      // to manually restore this to document.defaultView.
+        // By the same token, Sinon’s restoration affects global.XMLHttpRequest. We then need
+        // to manually restore this to document.defaultView.
         document.defaultView.XMLHttpRequest = global.XMLHttpRequest;
     });
 
@@ -73,7 +73,7 @@ describe("The Gene Page", () => {
 
         server.respondWith([
             200,
-        {"Content-Type": "text/plain" }, testString]);
+            {"Content-Type": "text/plain" }, testString]);
 
 
         global.window.api.getUniProtInfo(query).then((data) => {
@@ -106,7 +106,7 @@ describe("The Gene Page", () => {
 
         server.respondWith([
             200,
-        {"Content-Type": "text/plain" }, testString]);
+            {"Content-Type": "text/plain" }, testString]);
 
 
         global.window.api.getNCBIInfo(query).then((data) => {
@@ -126,7 +126,7 @@ describe("The Gene Page", () => {
 
         server.respondWith([
             200,
-        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+            {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
 
 
         global.window.api.getJasparInfo(query).then((data) => {
@@ -145,14 +145,14 @@ describe("The Gene Page", () => {
                 "description":"Homeobox transcriptional repressor",
                 "geneSummary":null, "primaryIdentifier":"S000002859"}
         ],
-            "wasSuccessful":true,
-            "error":null,
-            "statusCode":200};
+        "wasSuccessful":true,
+        "error":null,
+        "statusCode":200};
 
 
         server.respondWith([
             200,
-        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+            {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
 
 
         global.window.api.getYeastMineInfo(query).then((data) => {
@@ -171,14 +171,14 @@ describe("The Gene Page", () => {
                 "description":"Homeobox transcriptional repressor",
                 "geneSummary":null, "primaryIdentifier":"S000002859"}
         ],
-            "wasSuccessful":true,
-            "error":null,
-            "statusCode":200};
+        "wasSuccessful":true,
+        "error":null,
+        "statusCode":200};
 
 
         server.respondWith([
             200,
-        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+            {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
 
 
         global.window.api.getYeastMineInfo(query).then((data) => {
@@ -203,7 +203,7 @@ describe("The Gene Page", () => {
 
         server.respondWith([
             200,
-        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+            {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
 
 
         global.window.api.getRegulationInfo(query).then((data) => {
@@ -229,7 +229,7 @@ describe("The Gene Page", () => {
 
         server.respondWith([
             200,
-        {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
+            {"Content-Type": "application/json" }, JSON.stringify(testObject)]);
 
 
         global.window.api.getGeneOntologyInfo(query).then((data) => {

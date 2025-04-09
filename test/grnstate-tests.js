@@ -4,7 +4,7 @@
 (async () => {
     const chai = await import("chai");
     chai.should(); // Activates "should" style assertions
-  })();
+})();
 
 describe("The grnState model object", () => {
     it("should update the reset normalization maximum correctly", () => {

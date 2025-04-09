@@ -10,8 +10,8 @@ const timestampNamespace = function (timestamp, isGrn) {
             ? GRN_DATABASE_NAMESPACE_WITH_TIMESTAMP
             : PPI_DATABASE_NAMESPACE_WITH_TIMESTAMP
         : isGrn
-        ? GRN_DATABASE_NAMESPACE
-        : PPI_DATABASE_NAMESPACE;
+            ? GRN_DATABASE_NAMESPACE
+            : PPI_DATABASE_NAMESPACE;
 };
 
 const isTimestampOld = function (timestamp) {
