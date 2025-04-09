@@ -29,7 +29,7 @@ html
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Network
               ul(class='dropdown-menu' role='menu')
-                span(class='menu-subheader') 
+                span(class='menu-subheader')
                   strong Network Source
                 li(class='dropdown-submenu')
                   a(href='#' class='demo')
@@ -43,9 +43,9 @@ html
                       | &nbsp; Open File...
                       i  (.xlsx, .sif, .graphml)
                     input(type='file' name='upload' id="upload-nav" class='upload' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
-                    input(type='hidden' class='service-root' value=`${serviceRoot}`)      
+                    input(type='hidden' class='service-root' value=`${serviceRoot}`)
                 li(class='sub-divider')
-                li 
+                li
                   a(class='create-network' href='#')
                     label(for='create-network' class='create-network-label') Load from Database...
 
@@ -59,7 +59,7 @@ html
 
                 li
                   span(class='menu-subheader') Network Mode
-                  
+
                 li(class='startDisabled disabled')
                   a(href='#' id='network-mode-grn-menu' class="menu-submenu network-mode")
                     span(class='glyphicon')
@@ -144,7 +144,7 @@ html
                     a(href='#' class='nodeOptions with-input')
                       span(class='glyphicon invisible')
                       | &nbsp; Log Fold Change Max Value (0.01 - 100): &nbsp;
-                      input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')                  
+                      input(type='number' min="0.01" max="100" id='log-fold-change-max-value-menu' class='logFoldChangeMaxValue keepopen' aria-describedby='basic-addon1')
 
             li(class='dropdown')
               a(href='#' class='dropdown-toggle' data-toggle='dropdown') Edge
@@ -350,9 +350,9 @@ html
                         option(href='#' id='demoSourceDropdown-ppi' class='ppi' value='ppi') Demo #5: PPI (18 proteins, 81 edges)
                     label(for='upload-network' class='open btn btn-default network-button' data-toggle='tooltip', title='(.xlsx, .sif, .graphml)')
                       span(class='glyphicon glyphicon-folder-open')
-                      | &nbsp; Open File 
+                      | &nbsp; Open File
                     input(type='file' name='upload' id='upload-network' class='upload btn btn-default' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .sif, .graphml')
-                    input(type='hidden' class='service-root' value=`${serviceRoot}`)   
+                    input(type='hidden' class='service-root' value=`${serviceRoot}`)
                     button(id="create-network-button" class="btn btn-default create-network network-button")
                           span(class='glyphicon glyphicon-hdd sidebar-glyphicon')
                           | &nbsp; Load from Database
@@ -363,15 +363,16 @@ html
                   div(class="long-sub-divider")
                     form(class='panelDropdownContainer')
                       label(for='speciesDropdown' class='info') Network Mode
-                      select(class="networkMode panelDropdown btn btn-default startDisabled disabled" id='networkModeDropdown' name="networkModeDropdown" href='#')
-                        option(value="none" selected="true" disabled hidden) Change Network Mode
-                        option(href='#' id='demoSourceDropdown-grn' value='grn') Gene Regulatory Network
-                        option(href='#' id='demoSourceDropdown-protein-protein-physical-interaction' value='protein-protein-physical-interaction') Protein-Protein Physical Interaction Network
+                      //- this is the element that allows network mode to be selected
+                      label(class="networkMode panelDropdown" id='networkModeDropdown' name="networkModeDropdown" href='#') No Network Selected
+                        //- option(value="none" selected="true" disabled hidden) Change Network Mode
+                        //- option(href='#' id='demoSourceDropdown-grn' value='grn') Gene Regulatory Network
+                        //- option(href='#' id='demoSourceDropdown-protein-protein-physical-interaction' value='protein-protein-physical-interaction') Protein-Protein Physical Interaction Network
 
-                  label(for='species-info' class='info') Species: 
+                  label(for='species-info' class='info') Species:
                     span(id='species' class='network-type') Saccharomyces cerevisiae
                   input(type="hidden" id='species-info')
-                  
+
         //- Sliders should have the ID convention of -Name-Val and -Name-Input in order to work properly in the javascript
         div(class="force-graph panel panel-default")
             p(class='panel-title sidebarPanelHeader')
@@ -485,7 +486,7 @@ html
                 br
                 input(type='checkbox' id='viewport' class='viewport' name='viewport' value='viewport')
                 label(for='viewport' class='sideLabel') Restrict graph to viewport
-                
+
     div(class='graph-statistics-container hidden')
       div(class='panel panel-default')
         div(class='panel-heading' role='tab' id='graph-statistics-heading')
@@ -547,7 +548,7 @@ html
             div(id='exportExcelQuestions-containter')
           div(class='modal-footer')
             div(id='exportExcelFooter-container')
-          
+
     div(id='generateNetworkModal' class='modal fade' tab-index='-1' role='dialog' aria-labelledby='mySmallModalLabel' aria-hidden='true' data-backdrop="static")
       div(class='modal-dialog')
         div(class='modal-content')

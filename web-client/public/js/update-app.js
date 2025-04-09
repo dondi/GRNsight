@@ -6,6 +6,7 @@ import { grnState } from "./grnstate";
 
 import {
   HOST_SITE,
+  FILE_NAME,
   FORCE_GRAPH,
   GRID_LAYOUT,
   GREY_EDGES_DASHED_MENU,
@@ -104,7 +105,7 @@ import {
   VIEWPORT_SIZE_FIT_SIDEBAR,
   VIEWPORT_INIT,
   NETWORK_MODE_DROPDOWN,
-  NETWORK_MODE_CLASS,
+  // NETWORK_MODE_CLASS,
   NETWORK_MODE_PROTEIN_PHYS,
   NETWORK_MODE_GRN,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
@@ -140,7 +141,7 @@ const displayworkbook = (workbook, name) => {
         displayWarnings(workbook.warnings);
     }
 
-    $("#fileName").text(name); // Set the name of the file to display in the top bar
+    $(FILE_NAME).text(name); // Set the name of the file to display in the top bar
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 };
 
@@ -538,10 +539,13 @@ const isNewWorkbook = (name) => {
 // Workbook Mode Functions
 const updateModeViews = () =>{
     // Select correct dropdown item
-    $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
-    $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
-    // Select the correct menu items
-    $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
+    console.log("grnState.mode in updateMode Views", grnState.mode);
+    const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
+    $(NETWORK_MODE_DROPDOWN).text(workbookMode);
+    // $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
+    // $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
+    // // Select the correct menu items
+    // $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
     if (grnState.mode === NETWORK_GRN_MODE) {
         toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
     } else if (grnState.mode === NETWORK_PPI_MODE) {
@@ -575,6 +579,8 @@ const checkWorkbookModeSettings = () => {
 };
 
 $("body").on("click", () => {
+    console.log("this click seems to happen whenever elements inside Network sidebar are clicked");
+    console.log("current grnState.mode", grnState.mode);
     if (grnState.mode === NETWORK_PPI_MODE) {
         $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
     } else if (grnState.mode === NETWORK_GRN_MODE) {
@@ -583,15 +589,19 @@ $("body").on("click", () => {
 });
 
 $(NETWORK_MODE_DROPDOWN).on("change", () => {
+    console.log("NETWORK_MODE_DROPDOWN CHANGED");
     grnState.mode = $(NETWORK_MODE_DROPDOWN).val();
+    console.log("NETWORK MODE CHANGED TO: " + grnState.mode);
     checkWorkbookModeSettings();
     refreshApp();
 });
+
 $(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
     grnState.mode = NETWORK_PPI_MODE;
     checkWorkbookModeSettings();
     refreshApp();
 });
+
 $(NETWORK_MODE_GRN).on("click", () => {
     grnState.mode = NETWORK_GRN_MODE;
     checkWorkbookModeSettings();
