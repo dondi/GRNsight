@@ -46,6 +46,7 @@ export const grnState = {
     name: null,
     simulation: undefined,
     newWorkbook: false,
+    workbookType: null,
 
     get workbook () {
         return currentWorkbook;

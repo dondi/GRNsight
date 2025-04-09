@@ -17,6 +17,7 @@ import {
     NETWORK_GRN_MODE
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
+import { updateLocale } from "moment";
 
 
 const demoFiles = [
@@ -122,6 +123,7 @@ const returnUploadRoute = (filename) => {
 export const setupLoadAndImportHandlers = (grnState) => {
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
+        grnState.workbookType = uploadRoute;
         // The presence of formData is taken to indicate a POST.
         getWorkbookFromForm(formData, uploadRoute)
             .done((workbook, textStatus, jqXhr) => {
@@ -146,6 +148,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
                     }
                 }
                 grnState.workbook = workbook;
+                console.log("this is workbook")
 
                 if (grnState.name.includes(".sif")) {
                     grnState.mode = workbook.workbookType;
@@ -227,6 +230,7 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
         }
         grnState.name = name;
         grnState.workbook = workbook;
+        console.log("yep")
         // Reset the node coloring dataset selection
         grnState.nodeColoring.topDataset = grnState.defaultDataset;
         grnState.nodeColoring.bottomDataset = grnState.defaultDataset;

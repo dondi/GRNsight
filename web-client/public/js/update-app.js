@@ -741,8 +741,12 @@ const resetDatasetDropdownMenus = (workbook) => {
     };
 
     // Add Workbook Expressions
-    addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
+    if (grnState.workbookType == "upload"){
+        addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
+    } else {
+        addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "Demo");
 
+    }
     // Add Database Expressions
     addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.databaseExpressions, "Expression Database");
 
