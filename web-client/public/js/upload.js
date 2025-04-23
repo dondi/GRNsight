@@ -179,7 +179,7 @@ export const upload = function () {
                 });
                 if (finalExportSheets["optimization_parameters"] === null) {
                     finalExportSheets[
-                    "optimization_parameters"
+                        "optimization_parameters"
                     ] = updateOptimizationParameters(finalExportSheets);
                 }
                 grnState.workbook.exportSheets = finalExportSheets;
@@ -220,7 +220,7 @@ export const upload = function () {
                         }).join(","),
                         timepoints: timepointsResponse[dataset]
                     }).then((expressionData) => expressionDataHandler(expressionData, sheet, route, extension, sheetType, finalExportSheets))
-                    .catch((error) => expressionExportErrorHandler(error));
+                        .catch((error) => expressionExportErrorHandler(error));
                 }).catch((error) => expressionExportErrorHandler(error));
             }
         }
@@ -309,26 +309,26 @@ export const upload = function () {
                     queryExpressionDatabase({
                         type: twoColumnSheetType[sheet],
                         genes: grnState.workbook.genes
-                        .map((x) => {
-                            return x.name;
-                        })
-                        .join(","),
+                            .map((x) => {
+                                return x.name;
+                            })
+                            .join(","),
                     })
-                    .then(function (response) {
-                        result.data = response;
-                        finalExportSheets.two_column_sheets[sheet] = result;
-                        if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
+                        .then(function (response) {
+                            result.data = response;
+                            finalExportSheets.two_column_sheets[sheet] = result;
+                            if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
                             // if we got all of the two column sheets, then proceed with export
-                            handleExpressionDataAndExport(
-                                route,
-                                extension,
-                                sheetType,
-                                source,
-                                finalExportSheets
-                            );
-                        }
-                    })
-                      .catch(error => expressionExportErrorHandler(error));
+                                handleExpressionDataAndExport(
+                                    route,
+                                    extension,
+                                    sheetType,
+                                    source,
+                                    finalExportSheets
+                                );
+                            }
+                        })
+                        .catch(error => expressionExportErrorHandler(error));
                 }
             }
         } else {

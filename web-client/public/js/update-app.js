@@ -396,8 +396,8 @@ const loadExpressionDatabase = function (isTopDataset) {
             type:"ExpressionData",
             dataset,
             genes: grnState.workbook.genes
-                    .map(adjustGeneNameForExpression)
-                    .join(","),
+                .map(adjustGeneNameForExpression)
+                .join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
@@ -442,12 +442,12 @@ const updateSliderState = slidersLocked => {
 
     if (slidersLocked) {
         $(`${LOCK_SLIDERS_MENU} span`)
-          .removeClass("invisible")
-          .addClass("glyphicon-ok");
+            .removeClass("invisible")
+            .addClass("glyphicon-ok");
     } else {
         $(`${LOCK_SLIDERS_MENU} span`)
-          .removeClass("glyphicon-ok")
-          .addClass("invisible");
+            .removeClass("glyphicon-ok")
+            .addClass("invisible");
     }
 
     $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
@@ -570,7 +570,7 @@ $("body").on("click", () => {
 
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
-      (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+        (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
 };
 
 const updateSpeciesMenu = () => {
@@ -654,7 +654,7 @@ const identifySpeciesOrTaxon = (data) => {
     return false;
 };
 
-    // renderNodeColoring: function () { }, // defined in graph.js
+// renderNodeColoring: function () { }, // defined in graph.js
 
 const clearDropdownMenus = () => {
     $(TOP_DATASET_SELECTION_SIDEBAR).html("");
@@ -686,7 +686,7 @@ const resetDatasetDropdownMenus = (workbook) => {
         grnState.nodeColoring.nodeColoringOptions.databaseExpressions.push({value: [option]}));
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-            .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
+        .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
 
     $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
 
@@ -823,7 +823,7 @@ export const updateApp = grnState => {
     synchronizeNormalizationValues(grnState.normalizationMax);
     synchronizeGrayEdgeValues(grnState.grayEdgeThreshold);
 
-// Dashed Line Synchronization
+    // Dashed Line Synchronization
     if (grnState.dashedLine) {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
@@ -834,7 +834,7 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
     }
 
-// Weights functions
+    // Weights functions
     if (grnState.edgeWeightDisplayOption === SHOW_WEIGHTS_MOUSEOVER) {
         synchronizeShowWeightsMouseover();
     } else if (grnState.edgeWeightDisplayOption === SHOW_ALL_WEIGHTS) {
@@ -843,13 +843,13 @@ export const updateApp = grnState => {
         synchronizeHideAllWeights();
     }
 
-// Enable/Disable Colored edges
+    // Enable/Disable Colored edges
     $(COLOR_EDGES_SIDEBAR).prop("checked", grnState.colorOptimal);
     const classFunction = `${grnState.colorOptimal ? "add" : "remove"}Class`;
     $(COLOR_EDGES_MENU)[classFunction](ACTIVE_COLOR_OPTION);
     $(`${COLOR_EDGES_MENU}>span`)[classFunction]("glyphicon-ok");
 
-// Graph Layout
+    // Graph Layout
     if (grnState.graphLayout === FORCE_GRAPH) {
         updatetoForceGraph();
     } else if (grnState.graphLayout === GRID_LAYOUT) {
@@ -899,9 +899,9 @@ export const updateApp = grnState => {
         }
         grnState.nodeColoring.showMenu = true;
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-        grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
+            grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-        grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
+            grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");

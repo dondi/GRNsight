@@ -88,7 +88,7 @@ export const setupHandlers = grnState => {
         }
     };
 
-// thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
+    // thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
     const setInlineStyles = (svg) => {
         var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
         window.document.body.appendChild(emptySvg);
@@ -224,7 +224,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Image Export
+    // Image Export
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
@@ -243,7 +243,7 @@ export const setupHandlers = grnState => {
         exportPDF(svgContainer, editedName);
     });
 
-// Node Coloring
+    // Node Coloring
     const updateTopDatasetSelection = (selection) => {
         grnState.nodeColoring.topDataset = selection;
         if (grnState.nodeColoring.bottomDataSameAsTop) {
@@ -324,7 +324,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Sliders Code
+    // Sliders Code
     var linkDistValidator = value => {
         return valueValidator(1, 1000, value);
     };
@@ -391,7 +391,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Weights Visualization
+    // Weights Visualization
     $(WEIGHTS_SHOW_ALWAYS_CLASS).click(() => {
         grnState.edgeWeightDisplayOption = SHOW_ALL_WEIGHTS;
         updateApp(grnState);
@@ -423,7 +423,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     });
 
-// Grey Edges
+    // Grey Edges
     $(GREY_EDGES_DASHED_SIDEBAR).change(() => {
         grnState.dashedLine = $(GREY_EDGES_DASHED_SIDEBAR).prop("checked");
         updateApp(grnState);

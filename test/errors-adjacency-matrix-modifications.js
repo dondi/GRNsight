@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 // var assert = require("chai").assert;
 // var xlsx = require("node-xlsx");
 var test = require("./test");

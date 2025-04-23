@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+ 
 var helpers = require(__dirname + "/helpers");
 
 var processCustomWorkbook = function (path, res, app, workbook) {

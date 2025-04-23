@@ -41,8 +41,8 @@ describe("additional-sheet-parser", function () {
                     }
                 }
             },
-                "meta":{},
-                "test":{}
+            "meta":{},
+            "test":{}
             });
     });
 

@@ -1,17 +1,17 @@
 import { max } from "d3-array";
 import {
-  SHOW_WEIGHTS_MOUSEOVER,
-  LINK_DIST_SLIDER_SIDEBAR,
-  LINK_DIST_VALUE,
-  LINK_DIST_DEFAULT_VALUE,
-  CHARGE_SLIDER_SIDEBAR,
-  CHARGE_VALUE,
-  CHARGE_DEFAULT_VALUE,
-  DEFAULT_MAX_LOG_FOLD_CHANGE,
-  DEFAULT_ZOOM_VALUE,
-  FORCE_GRAPH,
-  VIEWPORT_INIT,
-  NETWORK_GRN_MODE
+    SHOW_WEIGHTS_MOUSEOVER,
+    LINK_DIST_SLIDER_SIDEBAR,
+    LINK_DIST_VALUE,
+    LINK_DIST_DEFAULT_VALUE,
+    CHARGE_SLIDER_SIDEBAR,
+    CHARGE_VALUE,
+    CHARGE_DEFAULT_VALUE,
+    DEFAULT_MAX_LOG_FOLD_CHANGE,
+    DEFAULT_ZOOM_VALUE,
+    FORCE_GRAPH,
+    VIEWPORT_INIT,
+    NETWORK_GRN_MODE
 } from "./constants";
 let currentWorkbook = null;
 
@@ -59,7 +59,7 @@ export const grnState = {
         this.newWorkbook = true;
     },
 
-// Edge Display Parameters
+    // Edge Display Parameters
     normalizationMax: null,
     resetNormalizationMax: null,
     edgeWeightDisplayOption: SHOW_WEIGHTS_MOUSEOVER,
@@ -69,10 +69,10 @@ export const grnState = {
 
     annotateLinks: () => annotateLinks(currentWorkbook),
 
-// Zoom Parameter
+    // Zoom Parameter
     zoomValue: DEFAULT_ZOOM_VALUE,
 
-// Node Coloring
+    // Node Coloring
     nodeColoring: {
         showMenu: false,
         nodeColoringEnabled: undefined,
@@ -92,9 +92,9 @@ export const grnState = {
     },
 
 
-// Gene Page data
-// left defaulting to yeast for tests, until a better solution is found
-// Setting base case to yeast
+    // Gene Page data
+    // left defaulting to yeast for tests, until a better solution is found
+    // Setting base case to yeast
     genePageData: {
         commonName: "Yeast",
         species: "Saccharomyces_cerevisiae",
@@ -124,7 +124,7 @@ export const grnState = {
             ensembl: "reg", mine: "yeast"}
     },
 
-// Slider Parameters
+    // Slider Parameters
     slidersLocked: false,
     showUndoReset: false,
     linkDistanceSlider: {
@@ -146,12 +146,12 @@ export const grnState = {
         forceChanged: false,
     },
 
-// Graph Layout Parameter
+    // Graph Layout Parameter
     graphLayout: FORCE_GRAPH,
 
-// Viewport Size Parameter
+    // Viewport Size Parameter
     viewportSize: VIEWPORT_INIT,
 
-// Demo Dropdown Selection
+    // Demo Dropdown Selection
     demoDropdownValue: null,
 };
