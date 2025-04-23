@@ -111,22 +111,22 @@ const TimePointsToJSON = (totalOutput, dataset) => {
 module.exports = {
     queryExpressionDatabase: function (req, res) {
         return sequelize.query(buildExpressionQuery(req.query),
-                { type: sequelize.QueryTypes.SELECT })
-                    .then(function (stdname) {
-                        const convertToJSON = {
-                            "DegradationRates" : () => ProductionDegradationRateToJSON(stdname, "degradation_rate"),
-                            "ProductionRates" : () => ProductionDegradationRateToJSON(stdname, "production_rate"),
-                            "ExpressionData" : () => convertExpressionToJSON(
-                                        stdname,
-                                        req.query.dataset,
-                                        req.query.timepoints.split(",").map(x => Number(x)),
-                                        req.query.genes.split(",")),
-                            "ExpressionDatasets": () => DatasetToJSON(stdname),
-                            "ExpressionTimePoints": () => TimePointsToJSON(stdname, req.query.dataset)
-                        };
-                        const type = req.query.type;
-                        return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) :
-                            res.send(500, { errors: "Something went wrong."});
-                    });
+            { type: sequelize.QueryTypes.SELECT })
+            .then(function (stdname) {
+                const convertToJSON = {
+                    "DegradationRates" : () => ProductionDegradationRateToJSON(stdname, "degradation_rate"),
+                    "ProductionRates" : () => ProductionDegradationRateToJSON(stdname, "production_rate"),
+                    "ExpressionData" : () => convertExpressionToJSON(
+                        stdname,
+                        req.query.dataset,
+                        req.query.timepoints.split(",").map(x => Number(x)),
+                        req.query.genes.split(",")),
+                    "ExpressionDatasets": () => DatasetToJSON(stdname),
+                    "ExpressionTimePoints": () => TimePointsToJSON(stdname, req.query.dataset)
+                };
+                const type = req.query.type;
+                return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) :
+                    res.send(500, { errors: "Something went wrong."});
+            });
     }
 };

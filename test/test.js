@@ -47,7 +47,7 @@ var duplicateGeneError = function (input, frequency) {
         );
     }
 
-  /* TO DO:
+    /* TO DO:
   workbook.errors.forEach(function (error) {
     assert.equal("DUPLICATE_GENE", error.errorCode);
   });

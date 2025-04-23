@@ -324,9 +324,9 @@ var processGRNmap = function (path, res, app) {
 
     return workbook.errors.length === 0
         ? // If all looks well, return the workbook with an all clear
-          res.json(workbook)
+        res.json(workbook)
         : // If all does not look well, return the workbook with an error 400
-          res.status(400).json(workbook);
+        res.status(400).json(workbook);
 };
 
 var grnSightToCytoscape = function (workbook) {
