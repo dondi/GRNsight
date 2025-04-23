@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 10/9/24
+modified: 1/21/25
 description: >-
     About the GRNsight gene regulatory network visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -66,7 +66,42 @@ description: >-
                             <div class="panel-body">
                                 <div class="panel-group">
 
-                                    <div class="panel panel-default"></div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <p class="panel-title aboutHeaders">
+                                                <a href="#v7_2_0Content" data-toggle="collapse">
+                                                    GRNsight v7.2.0
+                                                </a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div id="v7_2_0Content" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                What's Changed in GRNsight v7.2.0:
+                                                <ul>
+                                                  <li>Unnecessary test schema removed.</li>
+                                                  <li>Allowing query for any gene in the gene table even if it's not in the network table.</li>
+                                                  <li>Display warning when node coloring enabled for PPIs.</li>
+                                                  <li>Adding tests and error messages for uploading mixed type relations.</li>
+                                                  <li>Make the node coloring menu for the top bar and side bar consistent.</li>
+                                                  <li>Node Coloring Navbar and Sidebar synced, and PPI warnings display.</li>
+                                                  <li>Fixed path containing NaN and BOUNDARY_MARGIN warning.</li>
+                                                  <li>Fixed issue for exporting SVG modifying the graph itself.</li>
+                                                  <li>Modify alpha value on <code>optimization_parameters</code> from 0.002 to 0.02.</li>
+                                                  <li>Fixing file selector appears twice after importing the wrong file.</li>
+                                                  <li>Allow node coloring for PPI by matching the gene name.</li>
+                                                  <li>When exporting, making network and <code>network_weights</code> sheets identical.</li>
+                                                  <li>Fixing <code>p.length</code> error.</li>
+                                                  <li>Improve current export images (PNG and PDF).</li>
+                                                  <li>GitHub actions implemented to automate testing.</li>
+                                                  <li>Warning string displays correctly.</li>
+                                                  <li>Change environment variable name.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <p class="panel-title aboutHeaders">
                                                 <a href="#v7_1_2Content" data-toggle="collapse">
