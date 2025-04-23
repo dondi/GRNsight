@@ -363,14 +363,10 @@ html
                   button(id="reload-button", class="btn btn-default network-button reload startDisabled disabled")
                     span(class='glyphicon glyphicon-repeat sidebar-glyphicon')
                     | &nbsp; Reload
+                  //- TODO: see if still need for='speciesDropdown' and if connects to anything or if can rename since no longer a dropdown
                   div(class="long-sub-divider")
-                    form(class='panelDropdownContainer')
-                      label(for='speciesDropdown' class='info') Network Mode
-                      //- this is the element that allows network mode to be selected
-                      label(class="networkMode panelDropdown" id='networkModeDropdown' name="networkModeDropdown" href='#') No Network Selected
-                        //- option(value="none" selected="true" disabled hidden) Change Network Mode
-                        //- option(href='#' id='demoSourceDropdown-grn' value='grn') Gene Regulatory Network
-                        //- option(href='#' id='demoSourceDropdown-protein-protein-physical-interaction' value='protein-protein-physical-interaction') Protein-Protein Physical Interaction Network
+                  label(for='speciesDropdown' class='info') Network Mode
+                    span(class="networkMode" id='networkModeInfo' name="networkModeInfo" href='#') No Network Selected
 
                   label(for='species-info' class='info') Species:
                     span(id='species' class='network-type') Saccharomyces cerevisiae

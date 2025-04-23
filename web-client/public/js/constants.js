@@ -39,7 +39,7 @@ export const EXPRESSION_SOURCE                      = "#expressionSource";
 
 export const NETWORK_MODE_GRN           = "#network-mode-grn-menu";
 export const NETWORK_MODE_PROTEIN_PHYS  = "#network-mode-protein-protein-physical-interaction-menu";
-export const NETWORK_MODE_DROPDOWN      = "#networkModeDropdown";
+export const NETWORK_MODE_INFO      = "#networkModeInfo";
 export const NETWORK_MODE_CLASS         = ".network-mode";
 
 
