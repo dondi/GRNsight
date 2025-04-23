@@ -33,7 +33,7 @@ export const generateNetwork = function () {
             for (let source in sources) {
                 result += `
                             <option value=\'${sources[source]}\' ${source === sources[source] ?
-                                "\'selected=\'true" : "" }\'>${sources[source]}</option>
+    "\'selected=\'true" : "" }\'>${sources[source]}</option>
                 `;
             }
         } else {
@@ -184,7 +184,7 @@ containing "-", "_", and alpha-numeric characters only`);
                 geneRegulation: null
             }
         };
-    // get sources from database
+        // get sources from database
         queryProteinProteinDatabase({type:"NetworkSource"}).then(function (response) {
             grnState.customWorkbook.sources.proteinProteinInteractions = response.sources;
         }).catch(function (error) {
@@ -215,12 +215,12 @@ containing "-", "_", and alpha-numeric characters only`);
         grnState.customWorkbook.genes = {};
         if (grnState.customWorkbook.type === NETWORK_PPI_MODE) {
             grnState.customWorkbook.source = Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions).length >= 1 ?
-            Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions)[0] : null;
+                Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions)[0] : null;
             $("#generateNetworkFormContainer").remove();
             $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions), grnState.customWorkbook.source, grnState.customWorkbook.type));
         } else if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
             grnState.customWorkbook.source = Object.keys(grnState.customWorkbook.sources.proteinProteinInteractions).length >= 1 ?
-            Object.keys(grnState.customWorkbook.sources.geneRegulation)[0] : null;
+                Object.keys(grnState.customWorkbook.sources.geneRegulation)[0] : null;
             $("#generateNetworkFormContainer").remove();
             $("#generateNetworkQuestions-container").append(createHTMLforForm(Object.keys(grnState.customWorkbook.sources.geneRegulation), grnState.customWorkbook.source, grnState.customWorkbook.type));
         }
