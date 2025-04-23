@@ -35,7 +35,6 @@ jobs:
       # Run ESLint (ensure eslint.config.js exists)
       - name: Run Linter
         run: npm run lint
-        continue-on-error: true # Linter failures won't stop the pipeline
 
       # Run the build step if it exists
       - name: Run Build

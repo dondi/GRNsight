@@ -6,7 +6,7 @@ module.exports = [
         ],
         languageOptions: {
             ecmaVersion: 2020,
-            sourceType: "module",  // IMPORTANT: Use 'module' not 'commonjs'
+            sourceType: "module",  
             globals: {
                 window: "readonly",
                 document: "readonly",
@@ -25,7 +25,6 @@ module.exports = [
             indent: ["error", 4],
             quotes: ["error", "double"],
             semi: ["error", "always"],
-            // Other rules can remain the same
         }
     }
 ];
