@@ -528,7 +528,6 @@ const isNewWorkbook = (name) => {
 // Workbook Mode Functions
 const updateModeViews = () =>{
     // Select correct dropdown item
-    console.log("grnState.mode in updateMode Views", grnState.mode);
     const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
     $(NETWORK_MODE_MENU).text(workbookMode);
     $(NETWORK_MODE_INFO).text(workbookMode);
@@ -562,8 +561,6 @@ const checkWorkbookModeSettings = () => {
 };
 
 $("body").on("click", () => {
-    console.log("this click seems to happen whenever elements inside Network sidebar are clicked");
-    console.log("current grnState.mode", grnState.mode);
     if (grnState.mode === NETWORK_PPI_MODE) {
         $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
     } else if (grnState.mode === NETWORK_GRN_MODE) {
