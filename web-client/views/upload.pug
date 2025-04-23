@@ -59,18 +59,8 @@ html
 
                 li
                   span(class='menu-subheader') Network Mode
-                //- li(class='disabled')
-                  //- p(href='#' id='network-mode-menu' class="menu-submenu network-mode")
-                  //-     span(class='glyphicon glyphicon-ok')
-                  //-     | &nbsp; No Network Selected
-                li(class='startDisabled disabled')
-                  a(id='network-mode-grn-menu' class="menu-submenu network-mode")
-                    span(class='glyphicon')
-                    | &nbsp; Gene Regulatory Network
-                li(class='startDisabled disabled')
-                  a(id='network-mode-protein-protein-physical-interaction-menu' class="menu-submenu network-mode")
-                    span(class='glyphicon')
-                    | &nbsp; Protein-Protein Physical Interaction Network
+                li
+                  span(id='network-mode-menu' class="menu-submenu network-mode") No Network Selected
                 li
                   span(class='menu-subheader') Species
                 li
@@ -366,7 +356,7 @@ html
                   //- TODO: see if still need for='speciesDropdown' and if connects to anything or if can rename since no longer a dropdown
                   div(class="long-sub-divider")
                   label(for='speciesDropdown' class='info') Network Mode
-                    span(class="networkMode" id='networkModeInfo' name="networkModeInfo" href='#') No Network Selected
+                    span(class="networkMode" id='network-mode-info' name="network-mode-info" href='#') No Network Selected
 
                   label(for='species-info' class='info') Species:
                     span(id='species' class='network-type') Saccharomyces cerevisiae

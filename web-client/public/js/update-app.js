@@ -105,9 +105,7 @@ import {
   VIEWPORT_SIZE_FIT_SIDEBAR,
   VIEWPORT_INIT,
   NETWORK_MODE_INFO,
-  NETWORK_MODE_CLASS,
-  NETWORK_MODE_PROTEIN_PHYS,
-  NETWORK_MODE_GRN,
+  NETWORK_MODE_MENU,
   EXPORT_TO_UNWEIGHTED_GML_MENU,
   NETWORK_GRN_MODE,
   NETWORK_PPI_MODE,
@@ -498,15 +496,6 @@ const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
 };
 
-const toggleLayout = (on, off) => {
-    if (!$(on).prop("checked")) {
-        $(on).prop("checked", true);
-        $(off).prop("checked", false);
-        $(`${off} span`).removeClass("glyphicon-ok");
-        $(`${on} span`).addClass("glyphicon-ok");
-    }
-};
-
 export const hasExpressionData = (sheets) => {
     return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
 };
@@ -541,16 +530,10 @@ const updateModeViews = () =>{
     // Select correct dropdown item
     console.log("grnState.mode in updateMode Views", grnState.mode);
     const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
+    $(NETWORK_MODE_MENU).text(workbookMode);
     $(NETWORK_MODE_INFO).text(workbookMode);
     $(`${NETWORK_MODE_INFO} option`).removeAttr("selected");
     $(`${NETWORK_MODE_INFO} option[value="${grnState.mode}"]`).prop("selected", true);
-    // // Select the correct menu items
-    $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
-    if (grnState.mode === NETWORK_GRN_MODE) {
-        toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
-    } else if (grnState.mode === NETWORK_PPI_MODE) {
-        toggleLayout(NETWORK_MODE_PROTEIN_PHYS, NETWORK_MODE_GRN);
-    }
 };
 
 const resetDemoDropdown = () =>{

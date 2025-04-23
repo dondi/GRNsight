@@ -139,7 +139,7 @@ nav.navbar.navbar-default
   background-color: #dfebe5
   border-color: #dfebe5
 
-.navbar-default .navbar-nav>li>a
+.navbar-default .navbar-nav>li>a, #network-mode-menu
   color: #000000
 
 .navbar-default .navbar-nav>li>a:hover
@@ -488,10 +488,12 @@ path.mousezone
     margin-top: 15 px
     display: none
 
-#Saccharomyces-cerevisiae, #network-mode-menu
+#Saccharomyces-cerevisiae
   color: #AAA
   margin-left: 20px
 
+#network-mode-menu
+  margin-left: 50px
 
 .create-network-label
   font-weight: normal
@@ -594,7 +596,7 @@ path.mousezone
   color: #BBB
   font-size: 12px
 
-.network-type, #networkModeInfo
+.network-type, #network-mode-info
   font-size: 12px
   display: inline-block
   font-style: italic
@@ -627,7 +629,7 @@ path.mousezone
 }
 
 /* TODO: delete styling for network dropdown since going to be a label instead? */
-# networkModeInfo > option {
+# network-mode-info > option {
   font-size: 14px
 }
 

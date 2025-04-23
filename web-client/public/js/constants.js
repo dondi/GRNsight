@@ -37,10 +37,9 @@ export const EXPORT_TO_PDF                          = "#exportAsPdf";
 export const EXPORT_WEIGHTED_CLASS                  = ".weighted.export";
 export const EXPRESSION_SOURCE                      = "#expressionSource";
 
-export const NETWORK_MODE_GRN           = "#network-mode-grn-menu";
-export const NETWORK_MODE_PROTEIN_PHYS  = "#network-mode-protein-protein-physical-interaction-menu";
-export const NETWORK_MODE_INFO      = "#networkModeInfo";
+export const NETWORK_MODE_INFO          = "#network-mode-info";
 export const NETWORK_MODE_CLASS         = ".network-mode";
+export const NETWORK_MODE_MENU          = "#network-mode-menu";
 
 
 export const DEMO_INFORMATION = [
