@@ -1,3 +1,6 @@
+// defining the test suite for the grnState model object
+const { grnState } = require('../web-client/public/js/grnstate');
+
 // dynamically import it inside an async function becauuse this allows
 // This allows us to use Chai as an ES Module without 
 // converting all of GRNsight to an ES Module.
