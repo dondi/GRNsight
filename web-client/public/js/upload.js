@@ -318,38 +318,38 @@ export const upload = function () {
                             })
                             .join(","),
                     })
-                    .then(function (response) {
-                        result.data = response;
+                        .then(function (response) {
+                            result.data = response;
 
-                        const missingGenes = genes.filter(gene => result.data[gene] === undefined);
+                            const missingGenes = genes.filter(gene => result.data[gene] === undefined);
 
-                        if (missingGenes.length > 0) {
-                            const missingGenesStr = missingGenes.join(", ");
+                            if (missingGenes.length > 0) {
+                                const missingGenesStr = missingGenes.join(", ");
 
-                            const warningGenerators = {
-                                "production_rates": warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
-                                "degradation_rates": warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING
-                            };
+                                const warningGenerators = {
+                                    "production_rates": warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
+                                    "degradation_rates": warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING
+                                };
 
-                            const warningGenerator = warningGenerators[sheet];
-                            if (warningGenerator) {
-                                finalExportSheets.warnings.push(warningGenerator(missingGenesStr));
+                                const warningGenerator = warningGenerators[sheet];
+                                if (warningGenerator) {
+                                    finalExportSheets.warnings.push(warningGenerator(missingGenesStr));
+                                }
                             }
-                        }
 
-                        finalExportSheets.two_column_sheets[sheet] = result;
-                        if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
-                            // if we got all of the two column sheets, then proceed with export
-                            handleExpressionDataAndExport(
-                                route,
-                                extension,
-                                sheetType,
-                                source,
-                                finalExportSheets
-                            );
-                        }
-                    })
-                    .catch(error => expressionExportErrorHandler(error));
+                            finalExportSheets.two_column_sheets[sheet] = result;
+                            if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
+                                // if we got all of the two column sheets, then proceed with export
+                                handleExpressionDataAndExport(
+                                    route,
+                                    extension,
+                                    sheetType,
+                                    source,
+                                    finalExportSheets
+                                );
+                            }
+                        })
+                        .catch(error => expressionExportErrorHandler(error));
                 }
             }
         } else {
