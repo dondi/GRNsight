@@ -340,16 +340,16 @@ export const upload = function () {
                         finalExportSheets.two_column_sheets[sheet] = result;
                         if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
                             // if we got all of the two column sheets, then proceed with export
-                                handleExpressionDataAndExport(
-                                    route,
-                                    extension,
-                                    sheetType,
-                                    source,
-                                    finalExportSheets
-                                );
-                            }
-                        })
-                        .catch(error => expressionExportErrorHandler(error));
+                            handleExpressionDataAndExport(
+                                route,
+                                extension,
+                                sheetType,
+                                source,
+                                finalExportSheets
+                            );
+                        }
+                    })
+                    .catch(error => expressionExportErrorHandler(error));
                 }
             }
         } else {
