@@ -23,8 +23,8 @@ const buildNetworkSourceQuery = function () {
 const buildNetworkGeneFromSourceQuery = function (gene, source, timestamp) {
     const namespace = `${constants.timestampNamespace(timestamp, true)}.gene`;
     const timestampQuery = constants.isTimestampOld(timestamp)
-            ?  ""
-            : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
+        ?  ""
+        : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
 
     return `SELECT DISTINCT gene_id, display_gene_id FROM
             ${namespace} WHERE (gene.gene_id ='${gene}'

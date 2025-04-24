@@ -265,18 +265,18 @@ export var drawGraph = function (workbook) {
         // transform attribute of zoomContainer contains translation info about graph
         if (zoomContainer.attr("transform")) {
             xTranslation = Number(
-              zoomContainer
-                .attr("transform")
-                .split("(")[1]
-                .split(",")[0]
+                zoomContainer
+                    .attr("transform")
+                    .split("(")[1]
+                    .split(",")[0]
             );
 
             yTranslation = Number(
-              zoomContainer
-                .attr("transform")
-                .split("(")[1]
-                .split(",")[1]
-                .split(")")[0]
+                zoomContainer
+                    .attr("transform")
+                    .split("(")[1]
+                    .split(",")[1]
+                    .split(")")[0]
             );
         }
     }
@@ -310,9 +310,9 @@ export var drawGraph = function (workbook) {
         } else if (
             !adaptive &&
             flexZoomInBounds(
-            (grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleLeft
-                : zoomScaleRight)(grnState.zoomValue)
+                (grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE
+                    ? zoomScaleLeft
+                    : zoomScaleRight)(grnState.zoomValue)
             )
         ) {
             zoomDisplay = grnState.zoomValue;
@@ -322,8 +322,8 @@ export var drawGraph = function (workbook) {
         }
 
         const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
-          ? zoomScaleLeft
-          : zoomScaleRight)(zoomDisplay);
+            ? zoomScaleLeft
+            : zoomScaleRight)(zoomDisplay);
 
         setGraphZoom(calcGraphZoom);
 
@@ -347,8 +347,8 @@ export var drawGraph = function (workbook) {
 
             $(ZOOM_SLIDER).val(
                 (finalDisplay <= ZOOM_DISPLAY_MIDDLE
-                ? zoomScaleSliderLeft
-                : zoomScaleSliderRight
+                    ? zoomScaleSliderLeft
+                    : zoomScaleSliderRight
                 ).invert(finalDisplay)
             );
         }
@@ -397,8 +397,8 @@ export var drawGraph = function (workbook) {
 
         grnState.zoomValue = Math.floor(
             (sliderValue <= sliderMidpoint
-            ? zoomScaleSliderLeft
-            : zoomScaleSliderRight)(sliderValue)
+                ? zoomScaleSliderLeft
+                : zoomScaleSliderRight)(sliderValue)
         );
 
         updateAppBasedOnZoomValue();
@@ -456,8 +456,8 @@ export var drawGraph = function (workbook) {
             width = $container.width();
             height = $container.height();
             d3.select("rect")
-              .attr("width", width)
-              .attr("height", height);
+                .attr("width", width)
+                .attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
@@ -686,28 +686,28 @@ export var drawGraph = function (workbook) {
                             .attr("refX", function () {
                             // Individual offsets for each possible stroke width
                                 return ((x1 === x2 && y1 === y2) ?
-                                {
-                                    2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
-                                    8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
-                                    14: 8.3
-                                } : {
-                                    2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
-                                    8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
-                                    14: 9
-                                }
+                                    {
+                                        2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
+                                        8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
+                                        14: 8.3
+                                    } : {
+                                        2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
+                                        8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
+                                        14: 9
+                                    }
                                 )[d.strokeWidth];
                             })
                             .attr("refY", function () {
                                 return ((x1 === x2 && y1 === y2) ?
-                                {
-                                    2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
-                                    8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
-                                    14: 6
-                                } : {
-                                    2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
-                                    8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
-                                    13: 5, 14: 5.3
-                                }
+                                    {
+                                        2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
+                                        8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
+                                        14: 6
+                                    } : {
+                                        2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
+                                        8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
+                                        13: 5, 14: 5.3
+                                    }
                                 )[d.strokeWidth];
                             })
                             .attr("markerUnits", "userSpaceOnUse")
@@ -769,7 +769,7 @@ export var drawGraph = function (workbook) {
 
     }
 
-  /* Big thanks to the following for the smart edges
+    /* Big thanks to the following for the smart edges
    * https://github.com/cdc-leeds/PolicyCommons/blob/b0dea2a4171989123cbee377a6ae260b8612138e
    /visualize/conn-net-svg.js#L119
    */
@@ -1440,13 +1440,13 @@ export var drawGraph = function (workbook) {
 
         maxX =
           maxX > -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
-            ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
-            : maxX;
+              ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
+              : maxX;
 
         maxY =
           maxY > -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
-            ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
-            : maxY;
+              ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
+              : maxY;
 
         let flexiBoxWidth = maxX - minX;
         if (maxX < 0 && minX < 0) {
@@ -1459,16 +1459,16 @@ export var drawGraph = function (workbook) {
         }
 
         boundingBoxRect
-          .attr("x", -xTranslation / graphZoom + BOUNDARY_MARGIN / 2)
-          .attr("width", width / graphZoom - BOUNDARY_MARGIN)
-          .attr("y", -yTranslation / graphZoom + BOUNDARY_MARGIN / 2)
-          .attr("height", height / graphZoom - BOUNDARY_MARGIN);
+            .attr("x", -xTranslation / graphZoom + BOUNDARY_MARGIN / 2)
+            .attr("width", width / graphZoom - BOUNDARY_MARGIN)
+            .attr("y", -yTranslation / graphZoom + BOUNDARY_MARGIN / 2)
+            .attr("height", height / graphZoom - BOUNDARY_MARGIN);
 
         flexibleContainerRect
-          .attr("x", minX)
-          .attr("y", minY)
-          .attr("width", flexiBoxWidth)
-          .attr("height", flexiBoxHeight);
+            .attr("x", minX)
+            .attr("y", minY)
+            .attr("width", flexiBoxWidth)
+            .attr("height", flexiBoxHeight);
         return {x: minX, y: minY, maxX: maxX, maxY: maxY, width: flexiBoxWidth, height: flexiBoxHeight};
     }
 
@@ -1545,12 +1545,12 @@ export var drawGraph = function (workbook) {
                         boundingBoxContainer.attr("width", width);
 
                         link
-                        .attr("x1", function (d) {
-                            return d.source.x;
-                        })
-                        .attr("x2", function (d) {
-                            return d.target.x;
-                        });
+                            .attr("x1", function (d) {
+                                return d.source.x;
+                            })
+                            .attr("x2", function (d) {
+                                return d.target.x;
+                            });
 
                         node.attr("x", function (d) {
                             return d.x;
@@ -1581,12 +1581,12 @@ export var drawGraph = function (workbook) {
                         height += OFFSET_VALUE;
                         boundingBoxContainer.attr("height", height);
                         link
-                        .attr("y1", function (d) {
-                            return d.source.y;
-                        })
-                        .attr("y2", function (d) {
-                            return d.target.y;
-                        });
+                            .attr("y1", function (d) {
+                                return d.source.y;
+                            })
+                            .attr("y2", function (d) {
+                                return d.target.y;
+                            });
 
                         node.attr("y", function (d) {
                             return d.y;
@@ -1598,7 +1598,7 @@ export var drawGraph = function (workbook) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
 
-      /* Allows for looping edges.
+            /* Allows for looping edges.
        * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
        */
 
@@ -1731,7 +1731,7 @@ export var drawGraph = function (workbook) {
                 -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 +
                 width / graphZoom -
                 BOUNDARY_MARGIN
-                ) {
+            ) {
                 d.fx = d3.event.x;
             } else {
                 d.fx =

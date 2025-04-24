@@ -23,8 +23,8 @@ const buildNetworkSourceQuery = function () {
 const buildNetworkFromGeneProteinQuery = function (geneProtein, source, timestamp) {
     const namespace = constants.timestampNamespace(timestamp, false);
     const timestampQuery = constants.isTimestampOld(timestamp)
-            ? ""
-            : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
+        ? ""
+        : `AND gene.time_stamp='${timestamp}' AND gene.source='${source}'`;
     return `SELECT DISTINCT gene_id, display_gene_id, standard_name, length, molecular_weight, PI FROM
     ${namespace}.gene, ${namespace}.protein WHERE
     (LOWER(gene.gene_id)=LOWER('${geneProtein}') OR LOWER(gene.display_gene_id)=LOWER('${geneProtein}')

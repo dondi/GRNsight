@@ -6,17 +6,17 @@ var moment = require("moment");
 module.exports = function (app) {
     var gaQuery = function (req, res, options) {
         var jwt = new google.auth.JWT(
-          options.serviceEmail,
-          options.pemFilename,
-          null,
-          ["https://www.googleapis.com/auth/analytics.readonly"],
-          null);
+            options.serviceEmail,
+            options.pemFilename,
+            null,
+            ["https://www.googleapis.com/auth/analytics.readonly"],
+            null);
 
         if (app.get("env") !== "development") {
             res.header("Access-Control-Allow-Origin", options.origin);
         }
 
-        jwt.authorize(function (err, tokens) { // eslint-disable-line no-unused-vars
+        jwt.authorize(function (err, tokens) {  
             if (err) {
                 console.log("jwt error", err);
                 return;
