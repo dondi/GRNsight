@@ -242,6 +242,9 @@ containing "-", "_", and alpha-numeric characters only`);
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
             if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
+                grnState.customWorkbook.genes = Object.fromEntries(
+                    Object.entries(grnState.customWorkbook.genes).sort((a, b) => a[1].localeCompare(b[1]))
+                );
                 const genes = Object.keys(grnState.customWorkbook.genes);
                 const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
                 const source = grnState.customWorkbook.source;
