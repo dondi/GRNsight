@@ -148,8 +148,6 @@ export const setupLoadAndImportHandlers = (grnState) => {
                     }
                 }
                 grnState.workbook = workbook;
-                console.log("this is workbook")
-
                 if (grnState.name.includes(".sif")) {
                     grnState.mode = workbook.workbookType;
                 } else if (grnState.name.includes(".graphml")) {
@@ -230,7 +228,6 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
         }
         grnState.name = name;
         grnState.workbook = workbook;
-        console.log("yep")
         // Reset the node coloring dataset selection
         grnState.nodeColoring.topDataset = grnState.defaultDataset;
         grnState.nodeColoring.bottomDataset = grnState.defaultDataset;
