@@ -527,12 +527,9 @@ const isNewWorkbook = (name) => {
 
 // Workbook Mode Functions
 const updateModeViews = () =>{
-    // Select correct dropdown item
     const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
     $(NETWORK_MODE_MENU).text(workbookMode);
     $(NETWORK_MODE_INFO).text(workbookMode);
-    $(`${NETWORK_MODE_INFO} option`).removeAttr("selected");
-    $(`${NETWORK_MODE_INFO} option[value="${grnState.mode}"]`).prop("selected", true);
 };
 
 const resetDemoDropdown = () =>{
