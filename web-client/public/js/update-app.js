@@ -742,18 +742,15 @@ const resetDatasetDropdownMenus = (workbook) => {
 
     // Add Workbook Expressions
     if (grnState.nodeColoring.nodeColoringOptions.workbookExpressions.length > 0) {
-    
         if (grnState.workbookType === "upload") {
             addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
         } else {
             addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "Demo");
         }
     }
-    
     // Always add database expressions
     addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.databaseExpressions, "Expression Database");
     
-
     $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
     $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
 };
