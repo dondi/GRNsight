@@ -109,7 +109,7 @@ import {
     EXPORT_TO_UNWEIGHTED_GML_MENU,
     NETWORK_GRN_MODE,
     NETWORK_PPI_MODE,
-//   EXPRESSION_SOURCE,
+    //   EXPRESSION_SOURCE,
 } from "./constants";
 
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
@@ -117,13 +117,15 @@ import { queryExpressionDatabase } from "./api/grnsight-api.js";
 // In this transitory state, updateApp might get called before things are completely set up, so for now
 // we define this wrapper function that guards against uninitialized values.
 
-queryExpressionDatabase({type:"ExpressionDatasets"}).then(function (response) {
-    grnState.database = response;
-}).catch(function (error) {
-    console.log(error.stack);
-    console.log(error.name);
-    console.log(error.message);
-});
+queryExpressionDatabase({ type: "ExpressionDatasets" })
+    .then(function (response) {
+        grnState.database = response;
+    })
+    .catch(function (error) {
+        console.log(error.stack);
+        console.log(error.name);
+        console.log(error.message);
+    });
 
 const refreshApp = () => {
     if (uploadState && uploadState.currentWorkbook) {
@@ -133,7 +135,9 @@ const refreshApp = () => {
 
 const displayworkbook = (workbook, name) => {
     uploadState.currentWorkbook = workbook;
-    $("#graph-metadata").html(workbook.genes.length + " nodes<br>" + workbook.links.length + " edges");
+    $("#graph-metadata").html(
+        workbook.genes.length + " nodes<br>" + workbook.links.length + " edges"
+    );
 
     if (workbook.warnings.length > 0) {
         displayWarnings(workbook.warnings);
@@ -149,8 +153,9 @@ export const valueValidator = (min, max, value) => {
 };
 
 const edgeWeightNormalizationInputValidation = value => {
-    return value ===
-    "" ? "" : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
+    return value === ""
+        ? ""
+        : valueValidator(MIN_EDGE_WEIGHT_NORMALIZATION, MAX_EDGE_WEIGHT_NORMALIZATION, value);
 };
 
 const synchronizeNormalizationValues = value => {
@@ -300,7 +305,7 @@ const synchronizeViewportSizeFit = () => {
     $(VIEWPORT_SIZE_FIT_DROPDOWN + " span").addClass("glyphicon-ok");
 };
 
-const updateViewportSize = (currentValue) => {
+const updateViewportSize = currentValue => {
     // These values are bound to the layout dimensions of the GRNsight website.
     const WIDTH_OFFSET = 250;
     const HEIGHT_OFFSET = 53;
@@ -309,11 +314,13 @@ const updateViewportSize = (currentValue) => {
 
     const fitContainer = dimensions => {
         const fitWidth = dimensions ? dimensions.width - WIDTH_OFFSET : container.width();
-        const fitHeight = dimensions ? dimensions.height - dimensions.top - HEIGHT_OFFSET : container.height();
+        const fitHeight = dimensions
+            ? dimensions.height - dimensions.top - HEIGHT_OFFSET
+            : container.height();
 
         container.css({
             width: fitWidth,
-            height: fitHeight
+            height: fitHeight,
         });
     };
 
@@ -321,7 +328,7 @@ const updateViewportSize = (currentValue) => {
         fitContainer({
             width: $(window).width(),
             height: $(window).height(),
-            top: 0
+            top: 0,
         });
     };
 
@@ -360,7 +367,6 @@ const updateViewportSize = (currentValue) => {
     }
 };
 
-
 // Expression DB Functions
 const startLoadingIcon = function () {
     $(EXPRESSION_DB_LOADER).css("display", "block");
@@ -379,47 +385,50 @@ const enableNodeColoringUI = function () {
 
 const adjustGeneNameForExpression = function (gene) {
     const geneName = gene.name;
-    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE &&
-        geneName.endsWith("p")
+    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE && geneName.endsWith("p")
         ? geneName.slice(0, -1)
         : geneName;
 };
 
 const loadExpressionDatabase = function (isTopDataset) {
-    const dataset = isTopDataset ? grnState.nodeColoring.topDataset : grnState.nodeColoring.bottomDataset;
+    const dataset = isTopDataset
+        ? grnState.nodeColoring.topDataset
+        : grnState.nodeColoring.bottomDataset;
     startLoadingIcon();
     queryExpressionDatabase({
         type: "ExpressionTimePoints",
-        dataset
-    }).then(function (timepointsResponse) {
-        queryExpressionDatabase({
-            type:"ExpressionData",
-            dataset,
-            genes: grnState.workbook.genes
-                .map(adjustGeneNameForExpression)
-                .join(","),
-            timepoints: timepointsResponse[dataset]
-        }).then(function (response) {
-            if (isTopDataset) {
-                grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
-            } else {
-                grnState.workbook.expression[grnState.nodeColoring.bottomDataset] = response;
-            }
-            enableNodeColoringUI();
-            stopLoadingIcon();
-            updaters.renderNodeColoring();
-        }).catch(function (error) {
+        dataset,
+    })
+        .then(function (timepointsResponse) {
+            queryExpressionDatabase({
+                type: "ExpressionData",
+                dataset,
+                genes: grnState.workbook.genes.map(adjustGeneNameForExpression).join(","),
+                timepoints: timepointsResponse[dataset],
+            })
+                .then(function (response) {
+                    if (isTopDataset) {
+                        grnState.workbook.expression[grnState.nodeColoring.topDataset] = response;
+                    } else {
+                        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] =
+                            response;
+                    }
+                    enableNodeColoringUI();
+                    stopLoadingIcon();
+                    updaters.renderNodeColoring();
+                })
+                .catch(function (error) {
+                    console.log(error.stack);
+                    console.log(error.name);
+                    console.log(error.message);
+                });
+        })
+        .catch(function (error) {
             console.log(error.stack);
             console.log(error.name);
             console.log(error.message);
         });
-    }).catch(function (error) {
-        console.log(error.stack);
-        console.log(error.name);
-        console.log(error.message);
-    });
 };
-
 
 // Sliders Functions
 const updateSliderState = slidersLocked => {
@@ -441,13 +450,9 @@ const updateSliderState = slidersLocked => {
     $(RESET_SLIDERS_SIDEBAR).prop("disabled", forceGraphDisabled);
 
     if (slidersLocked) {
-        $(`${LOCK_SLIDERS_MENU} span`)
-            .removeClass("invisible")
-            .addClass("glyphicon-ok");
+        $(`${LOCK_SLIDERS_MENU} span`).removeClass("invisible").addClass("glyphicon-ok");
     } else {
-        $(`${LOCK_SLIDERS_MENU} span`)
-            .removeClass("glyphicon-ok")
-            .addClass("invisible");
+        $(`${LOCK_SLIDERS_MENU} span`).removeClass("glyphicon-ok").addClass("invisible");
     }
 
     $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
@@ -457,12 +462,12 @@ const updateSliderState = slidersLocked => {
     }
 };
 
-export const modifyChargeParameter = (value) => {
+export const modifyChargeParameter = value => {
     grnState.simulation.force("charge").strength(value);
     grnState.simulation.alpha(1);
 };
 
-export const modifyLinkDistanceParameter = (value) => {
+export const modifyLinkDistanceParameter = value => {
     grnState.simulation.force("link").distance(value);
     grnState.simulation.alpha(1);
 };
@@ -474,9 +479,13 @@ const updateChargeSliderValues = () => {
     $(CHARGE_VALUE).text(grnState.chargeSlider.currentVal);
     $(CHARGE_MENU).val(grnState.chargeSlider.currentVal);
     $(CHARGE_SLIDER_SIDEBAR).val(grnState.chargeSlider.currentVal);
-    $(CHARGE_SLIDER_SIDEBAR).html(grnState.chargeSlider.currentVal +
-        ((grnState.chargeSlider.needsAppendedZeros &&
-            grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+    $(CHARGE_SLIDER_SIDEBAR).html(
+        grnState.chargeSlider.currentVal +
+            (grnState.chargeSlider.needsAppendedZeros &&
+            grnState.chargeSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO
+                ? "0"
+                : "")
+    );
 };
 
 const updateLinkDistanceSliderValues = () => {
@@ -486,9 +495,13 @@ const updateLinkDistanceSliderValues = () => {
     $(LINK_DIST_VALUE).text(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_MENU).val(grnState.linkDistanceSlider.currentVal);
     $(LINK_DIST_SLIDER_SIDEBAR).val(grnState.linkDistanceSlider.currentVal);
-    $(LINK_DIST_SLIDER_SIDEBAR).html(grnState.linkDistanceSlider.currentVal +
-        ((grnState.linkDistanceSlider.needsAppendedZeros &&
-            grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO) ? "0" : ""));
+    $(LINK_DIST_SLIDER_SIDEBAR).html(
+        grnState.linkDistanceSlider.currentVal +
+            (grnState.linkDistanceSlider.needsAppendedZeros &&
+            grnState.linkDistanceSlider.currentVal.toString().length === GRAVITY_LENGTH_WITHOUT_ZERO
+                ? "0"
+                : "")
+    );
 };
 
 // Grid Layout Functions
@@ -496,7 +509,7 @@ const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
 };
 
-export const hasExpressionData = (sheets) => {
+export const hasExpressionData = sheets => {
     return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
 };
 
@@ -521,21 +534,24 @@ const disableNodeColoringMenus = () => {
     $(NODE_COLORING_SIDEBAR_HEADER_LINK).attr("data-toggle", "");
 };
 
-const isNewWorkbook = (name) => {
+const isNewWorkbook = name => {
     return grnState.nodeColoring.lastDataset === null || grnState.nodeColoring.lastDataset !== name;
 };
 
 // Workbook Mode Functions
-const updateModeViews = () =>{
+const updateModeViews = () => {
     // Select correct dropdown item
-    const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
+    const workbookMode =
+        grnState.mode === NETWORK_GRN_MODE
+            ? "Gene Regulatory Network"
+            : "Protein-Protein Interaction";
     $(NETWORK_MODE_MENU).text(workbookMode);
     $(NETWORK_MODE_INFO).text(workbookMode);
     $(`${NETWORK_MODE_INFO} option`).removeAttr("selected");
     $(`${NETWORK_MODE_INFO} option[value="${grnState.mode}"]`).prop("selected", true);
 };
 
-const resetDemoDropdown = () =>{
+const resetDemoDropdown = () => {
     $("#demoSourceDropdown option").removeAttr("selected");
     $("#demoSourceDropdown").val("none");
 };
@@ -568,9 +584,10 @@ $("body").on("click", () => {
     }
 });
 
-const shortenExpressionSheetName = (name) => {
-    return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
-        (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+const shortenExpressionSheetName = name => {
+    return name.length > MAX_NUM_CHARACTERS_DROPDOWN
+        ? name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "..."
+        : name;
 };
 
 const updateSpeciesMenu = () => {
@@ -603,7 +620,7 @@ const updateSpeciesMenu = () => {
 
 // helper method to check if the given data, a taxon id or a species name
 // is contained within the identified species, if it exists at all.
-export const identifySpeciesMenu = (data) => {
+export const identifySpeciesMenu = data => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
         if (Object.values(nameTax[n]).includes(data.toString())) {
@@ -621,10 +638,11 @@ export const identifySpeciesMenu = (data) => {
     return false;
 };
 
-const identifySpeciesOrTaxon = (data) => {
+const identifySpeciesOrTaxon = data => {
     var nameTax = grnState.nameToTaxon;
     for (var n in nameTax) {
-        if (n === data) { // <-- change if to work
+        if (n === data) {
+            // <-- change if to work
             grnState.genePageData.commonName = n;
             grnState.genePageData.species = nameTax[n].spec;
             grnState.genePageData.taxonJaspar = nameTax[n].jaspar.toString();
@@ -661,7 +679,7 @@ const clearDropdownMenus = () => {
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
 };
 
-const resetDatasetDropdownMenus = (workbook) => {
+const resetDatasetDropdownMenus = workbook => {
     clearDropdownMenus();
     $(".dataset-option").remove(); // clear all menu dataset options
 
@@ -677,16 +695,22 @@ const resetDatasetDropdownMenus = (workbook) => {
 
     for (var property in workbook.expression) {
         if (property.match(ENDS_IN_EXPRESSION_REGEXP)) {
-            grnState.nodeColoring.nodeColoringOptions.workbookExpressions.push({value: property});
+            grnState.nodeColoring.nodeColoringOptions.workbookExpressions.push({
+                value: property,
+            });
         }
     }
 
     // Add expression database options
-    grnState.database.expressionDatasets.forEach( option =>
-        grnState.nodeColoring.nodeColoringOptions.databaseExpressions.push({value: [option]}));
+    grnState.database.expressionDatasets.forEach(option =>
+        grnState.nodeColoring.nodeColoringOptions.databaseExpressions.push({
+            value: [option],
+        })
+    );
 
-    $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-        .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
+    $(BOTTOM_DATASET_SELECTION_SIDEBAR).append(
+        $("<option>").attr("value", "Same as Top Dataset").text("Same as Top Dataset")
+    );
 
     $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
 
@@ -699,10 +723,12 @@ const resetDatasetDropdownMenus = (workbook) => {
             var shortenedSheetName = shortenExpressionSheetName(option.value);
             let topOption = $("<option>")
                 .addClass("dataset-option")
-                .attr("value", option.value).text(shortenedSheetName);
+                .attr("value", option.value)
+                .text(shortenedSheetName);
             let bottomOption = $("<option>")
                 .addClass("dataset-option")
-                .attr("value", option.value).text(shortenedSheetName);
+                .attr("value", option.value)
+                .text(shortenedSheetName);
             topOptgroup.append(topOption);
             bottomOptgroup.append(bottomOption);
             $(TOP_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
@@ -713,11 +739,16 @@ const resetDatasetDropdownMenus = (workbook) => {
     };
 
     // Add Workbook Expressions
-    addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
+    addOptionsToDropdown(
+        grnState.nodeColoring.nodeColoringOptions.workbookExpressions,
+        "User-Uploaded"
+    );
 
     // Add Database Expressions
-    addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.databaseExpressions, "Expression Database");
-
+    addOptionsToDropdown(
+        grnState.nodeColoring.nodeColoringOptions.databaseExpressions,
+        "Expression Database"
+    );
 
     $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
     $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
@@ -730,18 +761,18 @@ const updateLogFoldChangeMaxValue = () => {
     updaters.renderNodeColoring();
 };
 
-const removeAllChecksFromMenuDatasetOptions = (id) => {
-    $(`${id} li a span`).each(
-        function () {
-            $(this).removeClass("glyphicon-ok");
-        }
-    );
+const removeAllChecksFromMenuDatasetOptions = id => {
+    $(`${id} li a span`).each(function () {
+        $(this).removeClass("glyphicon-ok");
+    });
 };
 
 const updateTopDataset = () => {
     $(TOP_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.topDataset);
     removeAllChecksFromMenuDatasetOptions(TOP_DATASET_SELECTION_MENU);
-    $(`${TOP_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.topDataset}'] a span`).addClass("glyphicon-ok");
+    $(
+        `${TOP_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.topDataset}'] a span`
+    ).addClass("glyphicon-ok");
     updaters.renderNodeColoring();
 };
 
@@ -749,14 +780,16 @@ const updateBottomDataset = () => {
     if (grnState.nodeColoring.bottomDataSameAsTop) {
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).val("Same as Top Dataset");
         removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
-        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${"Same as Top Dataset"}'] a span`).addClass("glyphicon-ok");
+        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${"Same as Top Dataset"}'] a span`).addClass(
+            "glyphicon-ok"
+        );
     } else {
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).val(grnState.nodeColoring.bottomDataset);
         removeAllChecksFromMenuDatasetOptions(BOTTOM_DATASET_SELECTION_MENU);
-        /* eslint-disable max-len */
-        $(`${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`)
-            .addClass("glyphicon-ok");
-        /* eslint-enable max-len */
+
+        $(
+            `${BOTTOM_DATASET_SELECTION_MENU} li[value='${grnState.nodeColoring.bottomDataset}'] a span`
+        ).addClass("glyphicon-ok");
     }
 
     updaters.renderNodeColoring();
@@ -769,7 +802,9 @@ if (!grnState.genePageData.identified) {
 export const updateApp = grnState => {
     if (grnState.newWorkbook) {
         checkWorkbookModeSettings();
-        grnState.normalizationMax = max(grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights));
+        grnState.normalizationMax = max(
+            grnState.workbook.positiveWeights.concat(grnState.workbook.negativeWeights)
+        );
         displayworkbook(grnState.workbook, grnState.name);
         expandLayoutSidebar();
         clearDropdownMenus();
@@ -795,13 +830,19 @@ export const updateApp = grnState => {
                 grnState.nodeColoring.lastDataset = name;
                 showNodeColoringMenus();
             }
-            grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
-            if ($(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") === "Same as Top Dataset") {
+            grnState.nodeColoring.topDataset = $(TOP_DATASET_SELECTION_SIDEBAR)
+                .find(":selected")
+                .attr("value");
+            if (
+                $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value") ===
+                "Same as Top Dataset"
+            ) {
                 grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
                 grnState.nodeColoring.bottomDataSameAsTop = true;
             } else {
-                grnState.nodeColoring.bottomDataset =
-                  $(BOTTOM_DATASET_SELECTION_SIDEBAR).find(":selected").attr("value");
+                grnState.nodeColoring.bottomDataset = $(BOTTOM_DATASET_SELECTION_SIDEBAR)
+                    .find(":selected")
+                    .attr("value");
                 grnState.nodeColoring.bottomDataSameAsTop = false;
             }
         } else {
@@ -809,7 +850,7 @@ export const updateApp = grnState => {
                 grnState.nodeColoringEnabled = false;
             }
         }
-        if (!(grnState.demoDropdownValue)) {
+        if (!grnState.demoDropdownValue) {
             resetDemoDropdown();
         }
 
@@ -860,8 +901,11 @@ export const updateApp = grnState => {
     updateViewportSize(grnState.viewportSize);
 
     // Node Coloring
-    if (grnState.workbook !== null && grnState.nodeColoring.nodeColoringEnabled
-    && hasExpressionData(grnState.workbook.expression)) {
+    if (
+        grnState.workbook !== null &&
+        grnState.nodeColoring.nodeColoringEnabled &&
+        hasExpressionData(grnState.workbook.expression)
+    ) {
         grnState.nodeColoring.showMenu = true;
         $(AVG_REPLICATE_VALS_TOP_SIDEBAR).prop("checked", true);
         $(AVG_REPLICATE_VALS_BOTTOM_SIDEBAR).prop("checked", true);
@@ -875,33 +919,44 @@ export const updateApp = grnState => {
             displayPPINodeColorWarning(grnState.ppiNodeColorWarningDisplayed);
             grnState.ppiNodeColorWarningDisplayed = true;
         }
-        if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
-        grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
+        if (
+            grnState.database.expressionDatasets.includes(grnState.nodeColoring.topDataset) &&
+            grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined
+        ) {
             if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
                 loadExpressionDatabase(true);
             }
-        } else if (grnState.database.expressionDatasets.includes(grnState.nodeColoring.bottomDataset) &&
-        !grnState.nodeColoring.bottomDataSameAsTop &&
-        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+        } else if (
+            grnState.database.expressionDatasets.includes(grnState.nodeColoring.bottomDataset) &&
+            !grnState.nodeColoring.bottomDataSameAsTop &&
+            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined
+        ) {
             if (!grnState.nodeColoring.bottomDataSameAsTop) {
                 loadExpressionDatabase(false);
             }
         } else {
             updaters.renderNodeColoring();
         }
-    } else if (grnState.workbook !== null && !hasExpressionData(grnState.workbook.expression)
-    && grnState.nodeColoring.nodeColoringEnabled) {
-        if ((grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) ||
-        (!grnState.nodeColoring.bottomDataSameAsTop &&
-        grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)) {
+    } else if (
+        grnState.workbook !== null &&
+        !hasExpressionData(grnState.workbook.expression) &&
+        grnState.nodeColoring.nodeColoringEnabled
+    ) {
+        if (
+            grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined ||
+            (!grnState.nodeColoring.bottomDataSameAsTop &&
+                grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined)
+        ) {
             updaters.removeNodeColoring();
             resetDatasetDropdownMenus(grnState.workbook);
         }
         grnState.nodeColoring.showMenu = true;
-        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-            grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
-        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-            grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
+        grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset
+            ? grnState.nodeColoring.topDataset
+            : "Dahlquist_2018_wt";
+        grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset
+            ? grnState.nodeColoring.bottomDataset
+            : "Dahlquist_2018_wt";
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");
@@ -914,8 +969,10 @@ export const updateApp = grnState => {
         if ($(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked")) {
             if (grnState.workbook.expression[grnState.nodeColoring.topDataset] === undefined) {
                 loadExpressionDatabase(true);
-            } else if (!grnState.nodeColoring.bottomDataSameAsTop &&
-            grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined) {
+            } else if (
+                !grnState.nodeColoring.bottomDataSameAsTop &&
+                grnState.workbook.expression[grnState.nodeColoring.bottomDataset] === undefined
+            ) {
                 loadExpressionDatabase(false);
             } else {
                 enableNodeColoringUI();
@@ -951,9 +1008,9 @@ export const updateApp = grnState => {
         }
     }
 
-    if (grnState.workbook !== null &&  grnState.workbook.sheetType === "weighted") {
+    if (grnState.workbook !== null && grnState.workbook.sheetType === "weighted") {
         showEdgeWeightOptions();
-    } else if (grnState.workbook !== null &&  grnState.workbook.sheetType === "unweighted") {
+    } else if (grnState.workbook !== null && grnState.workbook.sheetType === "unweighted") {
         hideEdgeWeightOptions();
     } else {
         hideEdgeWeightOptions();
@@ -1015,8 +1072,6 @@ export const updateApp = grnState => {
         $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
     refreshApp();
-
 };
 
-
-export { stopLoadingIcon, startLoadingIcon, adjustGeneNameForExpression};
+export { stopLoadingIcon, startLoadingIcon, adjustGeneNameForExpression };

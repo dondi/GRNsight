@@ -9,11 +9,11 @@ module.exports = {
         corsOrigin: "http://localhost:5001",
         root: rootPath,
         app: {
-            name: "GRNsight"
+            name: "GRNsight",
         },
-        databaseHost: "localhost",  // This will most likely stay as localhost due to tunneling.
+        databaseHost: "localhost", // This will most likely stay as localhost due to tunneling.
         databaseName: "postgres",
-        databaseDialect: "postgres"
+        databaseDialect: "postgres",
     },
 
     production: {
@@ -23,11 +23,11 @@ module.exports = {
         corsOrigin: "//grnsight.lmucs.org",
         root: rootPath,
         app: {
-            name: "GRNsight"
+            name: "GRNsight",
         },
         databaseHost: "grnsight2.cfimp3lu6uob.us-west-1.rds.amazonaws.com",
         databaseName: "postgres",
-        databaseDialect: "postgres"
+        databaseDialect: "postgres",
     },
 
     beta: {
@@ -37,10 +37,10 @@ module.exports = {
         corsOrigin: "//grnsight.lmucs.org",
         root: rootPath,
         app: {
-            name: "GRNsight"
+            name: "GRNsight",
         },
         databaseHost: "grnsight2.cfimp3lu6uob.us-west-1.rds.amazonaws.com",
         databaseName: "postgres",
-        databaseDialect: "postgres"
-    }
+        databaseDialect: "postgres",
+    },
 };

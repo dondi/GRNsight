@@ -1,5 +1,4 @@
-/* eslint-disable func-style */
-import { displayStatistics } from "./graph-statistics"; // eslint-disable-line no-unused-vars
+import { displayStatistics } from "./graph-statistics";
 import { upload } from "./upload";
 import { generateNetwork } from "./generateNetwork";
 
@@ -8,9 +7,9 @@ import { queryDefaultDataset } from "./api/grnsight-api.js";
 import { updateApp } from "./update-app";
 import { setupHandlers } from "./setup-handlers";
 
-async function updateDefaultDataset () {
+async function updateDefaultDataset() {
     try {
-        const response = await queryDefaultDataset({type:"DefaultDataset"});
+        const response = await queryDefaultDataset({ type: "DefaultDataset" });
         grnState.database = response;
         return response.defaultDataset.join();
     } catch (error) {
@@ -20,7 +19,7 @@ async function updateDefaultDataset () {
     }
 }
 
-async function initializeGrnsight () {
+async function initializeGrnsight() {
     const defaultDataset = await updateDefaultDataset();
     grnState.defaultDataset = defaultDataset;
 

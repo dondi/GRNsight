@@ -12,9 +12,12 @@ module.exports = function (app) {
         var performUpload = function (req, res, extension, importer) {
             helpers.attachCorsHeader(res, app);
 
-            (new multiparty.Form()).parse(req, function (error, fields, files) {
+            new multiparty.Form().parse(req, function (error, fields, files) {
                 if (error) {
-                    return res.send(400, "There was a problem uploading your file. Please try again.");
+                    return res.send(
+                        400,
+                        "There was a problem uploading your file. Please try again."
+                    );
                 }
 
                 var input;
@@ -34,7 +37,7 @@ module.exports = function (app) {
                     } else {
                         helpers.attachFileHeaders(res, input);
                         var workbook = importer(data);
-                        return res.status((workbook.errors.length === 0) ? 200 : 400).json(workbook);
+                        return res.status(workbook.errors.length === 0 ? 200 : 400).json(workbook);
                     }
                 });
             });
@@ -51,6 +54,6 @@ module.exports = function (app) {
 
     return {
         sifToGrnsight: sifToGrnsight,
-        graphMlToGrnsight: graphMlToGrnsight
+        graphMlToGrnsight: graphMlToGrnsight,
     };
 };

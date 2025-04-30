@@ -10,19 +10,18 @@ var createEmptyWorkbook = function () {
         negativeWeights: [],
         sheetType: "",
         meta: {},
-        expression:{}
+        expression: {},
     };
 };
 
 // Outside of module.exports because needs too access createEmptyWorkbook
 var initWorkbook = function (net) {
     const workbook = createEmptyWorkbook();
-    Object.assign(workbook, net);    // copies fields without overriding empty ones :)
+    Object.assign(workbook, net); // copies fields without overriding empty ones :)
     return workbook;
 };
 
 module.exports = {
-
     attachCorsHeader: function (res, app) {
         res.header("Access-Control-Allow-Origin", app.get("corsOrigin"));
     },
@@ -34,6 +33,5 @@ module.exports = {
     },
 
     createEmptyWorkbook: createEmptyWorkbook,
-    initWorkbook: initWorkbook
-
+    initWorkbook: initWorkbook,
 };

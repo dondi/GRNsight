@@ -18,14 +18,14 @@ const buildNetworkSheet = function (genes, links, workbookType) {
 
     // Place the gene name in the beginning of the network sheet array.
     // EX: ["CIN5", 0, 0, 1]
-    Object.keys(geneNameArray).forEach(index => networkSheet[index][0] = geneNameArray[index]);
+    Object.keys(geneNameArray).forEach(index => (networkSheet[index][0] = geneNameArray[index]));
     if (workbookType === NETWORK_GRN_MODE) {
         geneNameArray.unshift(CELL_A1_GRN);
     } else {
         geneNameArray.unshift(CELL_A1_PPI);
     }
 
-    links.forEach((link) => {
+    links.forEach(link => {
         networkSheet[link.target][link.source + 1] = link.value;
     });
 
@@ -33,24 +33,27 @@ const buildNetworkSheet = function (genes, links, workbookType) {
     return networkSheet;
 };
 
-
 const convertToSheet = function (name, testSheet) {
-    const singularName = name.toLowerCase().endsWith("s") ? name.substring(0, name.length - 1) : name;
+    const singularName = name.toLowerCase().endsWith("s")
+        ? name.substring(0, name.length - 1)
+        : name;
     const header = singularName.includes("optimized_") ? singularName.substring(10) : singularName;
     return {
         name: name,
-        data: [["id", header], ...Object.keys(testSheet).map(key => [key, testSheet[key]])]
+        data: [["id", header], ...Object.keys(testSheet).map(key => [key, testSheet[key]])],
     };
 };
 
-const buildTestSheets = testSheet => ["production_rates",
-    "degradation_rates",
-    "threshold_b",
-    "optimized_production_rates",
-    "optimized_threshold_b"
-]
-    .filter(name => testSheet[name])
-    .map(name => convertToSheet(name, testSheet[name].data));
+const buildTestSheets = testSheet =>
+    [
+        "production_rates",
+        "degradation_rates",
+        "threshold_b",
+        "optimized_production_rates",
+        "optimized_threshold_b",
+    ]
+        .filter(name => testSheet[name])
+        .map(name => convertToSheet(name, testSheet[name].data));
 
 const buildMeta2Sheet = function (meta2DataContainer) {
     const meta2 = [];
@@ -83,7 +86,7 @@ const buildMetaSheet = function (metaDataContainer) {
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
-const isExpressionSheet = (sheetName) => {
+const isExpressionSheet = sheetName => {
     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
         return sheetName.includes(suffix);
     });
@@ -91,14 +94,14 @@ const isExpressionSheet = (sheetName) => {
 
 const buildExpressionSheets = function (expressions) {
     const builtExpressionSheets = [];
-    Object.keys(expressions).forEach((expression) => {
+    Object.keys(expressions).forEach(expression => {
         if (expressions[expression] !== null) {
             let expressionName = expression;
             if (!isExpressionSheet(expression)) {
                 expressionName = expression + "_expression";
             }
             const builtSheet = { name: expressionName, data: [] };
-            Object.keys(expressions[expression]["data"]).forEach((key) => {
+            Object.keys(expressions[expression]["data"]).forEach(key => {
                 const expressionData = expressions[expression]["data"][key];
                 builtSheet["data"].push([key, ...expressionData]);
             });
@@ -111,50 +114,50 @@ const buildExpressionSheets = function (expressions) {
 const buildXlsxSheet = function (workbook) {
     const resultSheet = [];
 
-    Object.keys(workbook.exportSheets).forEach((type) => {
+    Object.keys(workbook.exportSheets).forEach(type => {
         switch (type) {
-        case "networks":
-            for (let network in workbook.exportSheets.networks) {
-                if (Object.keys(workbook.exportSheets.networks[network]).length > 0) {
-                    resultSheet.push(
-                        {
-                            "name": network,
-                            "data": buildNetworkSheet(workbook.exportSheets.networks[network].genes,
-                                workbook.exportSheets.networks[network].links, workbook.meta.data.workbookType)
-                        }
-                    );
+            case "networks":
+                for (let network in workbook.exportSheets.networks) {
+                    if (Object.keys(workbook.exportSheets.networks[network]).length > 0) {
+                        resultSheet.push({
+                            name: network,
+                            data: buildNetworkSheet(
+                                workbook.exportSheets.networks[network].genes,
+                                workbook.exportSheets.networks[network].links,
+                                workbook.meta.data.workbookType
+                            ),
+                        });
+                    }
                 }
-            }
-            break;
-        case "optimization_parameters":
-            if (workbook.exportSheets[type] !== null && Object.keys(workbook.exportSheets[type]).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": type,
-                        "data": buildMetaSheet(workbook.exportSheets[type])
-                    }
-                );
-            }
-            break;
-        case "optimization_diagnostics":
-            // Optimization Diagnostics sheet not properly  implemented yet.
-            if (Object.keys(workbook.exportSheets[type]).length > 0) {
-                resultSheet.push(
-                    {
-                        "name": "optimization_diagnostics",
-                        "data": buildMeta2Sheet(workbook.exportSheets[type])
-                    }
-                );
-            }
-            break;
-        case "two_column_sheets":
-            resultSheet.push(...buildTestSheets(workbook.exportSheets[type]));
-            break;
-        case "expression":
-            resultSheet.push(...buildExpressionSheets(workbook.exportSheets.expression));
-            break;
-        default:
-            break;
+                break;
+            case "optimization_parameters":
+                if (
+                    workbook.exportSheets[type] !== null &&
+                    Object.keys(workbook.exportSheets[type]).length > 0
+                ) {
+                    resultSheet.push({
+                        name: type,
+                        data: buildMetaSheet(workbook.exportSheets[type]),
+                    });
+                }
+                break;
+            case "optimization_diagnostics":
+                // Optimization Diagnostics sheet not properly  implemented yet.
+                if (Object.keys(workbook.exportSheets[type]).length > 0) {
+                    resultSheet.push({
+                        name: "optimization_diagnostics",
+                        data: buildMeta2Sheet(workbook.exportSheets[type]),
+                    });
+                }
+                break;
+            case "two_column_sheets":
+                resultSheet.push(...buildTestSheets(workbook.exportSheets[type]));
+                break;
+            case "expression":
+                resultSheet.push(...buildExpressionSheets(workbook.exportSheets.expression));
+                break;
+            default:
+                break;
         }
     });
     return resultSheet;

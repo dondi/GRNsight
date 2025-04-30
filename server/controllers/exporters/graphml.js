@@ -10,36 +10,41 @@ var grnsightToGraphMlJson = function (workbook) {
         graphml: {
             "@xmlns": "http://graphml.graphdrawing.org/xmlns",
             "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
-            "@xsi:schemaLocation": "http://graphml.graphdrawing.org/xmlns " +
-              "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd",
+            "@xsi:schemaLocation":
+                "http://graphml.graphdrawing.org/xmlns " +
+                "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd",
 
-            "#comment": "Exported by GRNsight v" + constants.VERSION + "  " +
-              "http://dondi.github.io/GRNsight/  " +
-              "https://github.com/dondi/GRNsight/releases/tag/v" + constants.VERSION,
+            "#comment":
+                "Exported by GRNsight v" +
+                constants.VERSION +
+                "  " +
+                "http://dondi.github.io/GRNsight/  " +
+                "https://github.com/dondi/GRNsight/releases/tag/v" +
+                constants.VERSION,
 
             key: [
                 {
                     "@id": NAME_ID,
                     "@for": "node",
                     "@attr.name": "name",
-                    "@attr.type": "string"
+                    "@attr.type": "string",
                 },
 
                 {
                     "@id": INTERACTION_ID,
                     "@for": "edge",
                     "@attr.name": "interaction",
-                    "@attr.type": "string"
+                    "@attr.type": "string",
                 },
 
                 {
                     "@id": NAME_ID,
                     "@for": "edge",
                     "@attr.name": "name",
-                    "@attr.type": "string"
-                }
-            ]
-        }
+                    "@attr.type": "string",
+                },
+            ],
+        },
     };
 
     if (workbook.sheetType === constants.WEIGHTED) {
@@ -47,7 +52,7 @@ var grnsightToGraphMlJson = function (workbook) {
             "@id": WEIGHT_ID,
             "@for": "edge",
             "@attr.name": "weight",
-            "@attr.type": "double"
+            "@attr.type": "double",
         });
     }
 
@@ -59,8 +64,8 @@ var grnsightToGraphMlJson = function (workbook) {
                 "@id": gene.name,
                 data: {
                     "@key": NAME_ID,
-                    "#text": gene.name
-                }
+                    "#text": gene.name,
+                },
             };
         }),
 
@@ -74,25 +79,25 @@ var grnsightToGraphMlJson = function (workbook) {
                 data: [
                     {
                         "@key": INTERACTION_ID,
-                        "#text": "pd"
+                        "#text": "pd",
                     },
 
                     {
                         "@key": NAME_ID,
-                        "#text": sourceGeneId + " (pd) " + targetGeneId
-                    }
-                ]
+                        "#text": sourceGeneId + " (pd) " + targetGeneId,
+                    },
+                ],
             };
 
             if (workbook.sheetType === constants.WEIGHTED) {
                 edge.data.push({
                     "@key": WEIGHT_ID,
-                    "#text": link.value
+                    "#text": link.value,
                 });
             }
 
             return edge;
-        })
+        }),
     };
 
     if (workbook.filename) {
@@ -103,10 +108,12 @@ var grnsightToGraphMlJson = function (workbook) {
 };
 
 module.exports = function (workbook) {
-    return xmlbuilder.create(grnsightToGraphMlJson(workbook), {
-        version: "1.0",
-        encoding: "UTF-8"
-    }).end({
-        pretty: true
-    });
+    return xmlbuilder
+        .create(grnsightToGraphMlJson(workbook), {
+            version: "1.0",
+            encoding: "UTF-8",
+        })
+        .end({
+            pretty: true,
+        });
 };

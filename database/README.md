@@ -12,11 +12,12 @@ Here are the instructions how to set up the database for GRNsight.
 - > MacOS users: It is recommended to install with homebrew rather than the interactive installation in order to correctly view the `initdb --locale=C -E UTF-8 location-of-cluster` message in the documentation.
 - > Windows users: when prompted for a password at the end of the installation process, save this password. It is the password for the postgres user
 - Initialize the database
-   - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
-   - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
-   - "Cluster" is the PostgreSQL term for the file structure of a PostgreSQL database instance
-   - You will have to modify location-of-cluster to the folder name you want to store the database (you don't need to create a folder, the command will create the folder for you, just create the name)
+    - If your terminal emits a message that looks like `initdb --locale=C -E UTF-8 location-of-cluster` from Step 1B, then your installer has initialized a database for you.
+    - Open the terminal and type the command `initdb --locale=C -E UTF-8 location-of-cluster`
+    - "Cluster" is the PostgreSQL term for the file structure of a PostgreSQL database instance
+    - You will have to modify location-of-cluster to the folder name you want to store the database (you don't need to create a folder, the command will create the folder for you, just create the name)
 - Start and stop the server
+
     - Additionally, your installer may start the server for you upon installation (You can save this command for further reuse).
     - To start the server yourself run `pg_ctl start -D location-of-cluster` (You can save this command for further reuse).
     - To stop the server run `pg_ctl stop -D location-of-cluster`.
@@ -77,19 +78,19 @@ python3 preprocessing.py
 
 Use the `loader.py` script located in `expression-database/scripts` to load the processed expression data into the database. This script generates SQL statements to populate your relational database with the processed data.
 
--   To move to `expression-database/scripts`
+- To move to `expression-database/scripts`
 
     ```
     cd <path to GRNsight/database/expression-database/scripts>
     ```
 
--   To load to local database
+- To load to local database
 
     ```
     python3 loader.py | psql postgresql://localhost/postgres
     ```
 
--   To load to production database
+- To load to production database
     ```
     python3 loader.py | psql <path to database>
     ```
@@ -110,9 +111,9 @@ The code for generating and populating the network data (GRN and PPI) is located
 
 Run the `main.py` script with the appropriate `--network` argument:
 
--   `all`: Fetch and populate both GRN and PPI data.
--   `grn`: Fetch and populate only GRN data.
--   `ppi`: Fetch and populate only PPI data.
+- `all`: Fetch and populate both GRN and PPI data.
+- `grn`: Fetch and populate only GRN data.
+- `ppi`: Fetch and populate only PPI data.
 
 For example, to populate both GRN and PPI data into a local database, run:
 

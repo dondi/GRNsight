@@ -1,23 +1,23 @@
-# Network Database  
+# Network Database
 
-This folder contains scripts for retrieving gene regulatory network (GRN) and protein-protein interaction (PPI) network data and populating it into a database.  
+This folder contains scripts for retrieving gene regulatory network (GRN) and protein-protein interaction (PPI) network data and populating it into a database.
 
-## File Structure  
+## File Structure
 
-- **`main.py`** – Handles the entire workflow: loading, filtering, and populating data into the database.  
-- **`constants.py`** – Defines database namespaces and file directories.  
-- **`data_services/`** – Contains scripts for fetching and processing data from AllianceMine into a TSV file for database import.  
-- **`database_services/`** – Includes scripts for filtering new data from AllianceMine and populating it into the database.  
+- **`main.py`** – Handles the entire workflow: loading, filtering, and populating data into the database.
+- **`constants.py`** – Defines database namespaces and file directories.
+- **`data_services/`** – Contains scripts for fetching and processing data from AllianceMine into a TSV file for database import.
+- **`database_services/`** – Includes scripts for filtering new data from AllianceMine and populating it into the database.
 
-## Running the Script  
+## Running the Script
 
-To fetch and populate data, run `main.py` with the `--network` argument:  
+To fetch and populate data, run `main.py` with the `--network` argument:
 
-- `all` – Fetch and populate both GRN and PPI data.  
-- `grn` – Fetch and populate only GRN data.  
-- `ppi` – Fetch and populate only PPI data.  
+- `all` – Fetch and populate both GRN and PPI data.
+- `grn` – Fetch and populate only GRN data.
+- `ppi` – Fetch and populate only PPI data.
 
-Example command to populate both GRN and PPI data into a local database:  
+Example command to populate both GRN and PPI data into a local database:
 
 ```bash
 python3 main.py --network all --db_url postgresql://localhost/postgres
@@ -65,6 +65,7 @@ cd <path-to-venv>/lib/<python-version>/site-packages/intermine/webservice.py
 ```
 
 3. Replace it with this:
+
 ```
 try:
     from urlparse import urlparse

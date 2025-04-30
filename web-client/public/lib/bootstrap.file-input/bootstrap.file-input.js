@@ -10,12 +10,9 @@
   <a class="btn">Browse</a>
 
 */
-(function($) {
-
-    $.fn.bootstrapFileInput = function() {
-
-        this.each(function(i,elem){
-
+(function ($) {
+    $.fn.bootstrapFileInput = function () {
+        this.each(function (i, elem) {
             var $elem = $(elem);
 
             // Maybe some fields don't need to be standardized.
@@ -38,21 +35,27 @@
 
             // Now we're going to wrap that input field with a Bootstrap button.
             // The input will actually still be there, it will just be float above and transparent (done with the CSS).
-            $elem.wrap("<a class=\"file-input-wrapper btn btn-default " + className + "\"></a>").parent().prepend($("<span></span>").html(buttonWord));
+            $elem
+                .wrap('<a class="file-input-wrapper btn btn-default ' + className + '"></a>')
+                .parent()
+                .prepend($("<span></span>").html(buttonWord));
         })
 
-        // After we have found all of the file inputs let's apply a listener for tracking the mouse movement.
-        // This is important because the in order to give the illusion that this is a button in FF we actually need to move the button from the file input under the cursor. Ugh.
-            .promise().done( function(){
-
+            // After we have found all of the file inputs let's apply a listener for tracking the mouse movement.
+            // This is important because the in order to give the illusion that this is a button in FF we actually need to move the button from the file input under the cursor. Ugh.
+            .promise()
+            .done(function () {
                 // As the cursor moves over our new Bootstrap button we need to adjust the position of the invisible file input Browse button to be under the cursor.
                 // This gives us the pointer cursor that FF denies us
-                $(".file-input-wrapper").mousemove(function(cursor) {
-
-                    var input, wrapper,
-                        wrapperX, wrapperY,
-                        inputWidth, inputHeight,
-                        cursorX, cursorY;
+                $(".file-input-wrapper").mousemove(function (cursor) {
+                    var input,
+                        wrapper,
+                        wrapperX,
+                        wrapperY,
+                        inputWidth,
+                        inputHeight,
+                        cursorX,
+                        cursorY;
 
                     // This wrapper element (the button surround this file input)
                     wrapper = $(this);
@@ -63,9 +66,9 @@
                     // The top-most position of the wrapper
                     wrapperY = wrapper.offset().top;
                     // The with of the browsers input field
-                    inputWidth= input.width();
+                    inputWidth = input.width();
                     // The height of the browsers input field
-                    inputHeight= input.height();
+                    inputHeight = input.height();
                     //The position of the cursor in the wrapper
                     cursorX = cursor.pageX;
                     cursorY = cursor.pageY;
@@ -74,26 +77,28 @@
                     // The 20 at the end is an arbitrary number of pixels that we can shift the input such that cursor is not pointing at the end of the Browse button but somewhere nearer the middle
                     moveInputX = cursorX - wrapperX - inputWidth + 20;
                     // Slides the invisible input Browse button to be positioned middle under the cursor
-                    moveInputY = cursorY- wrapperY - (inputHeight/2);
+                    moveInputY = cursorY - wrapperY - inputHeight / 2;
 
                     // Apply the positioning styles to actually move the invisible file input
                     input.css({
-                        left:moveInputX,
-                        top:moveInputY
+                        left: moveInputX,
+                        top: moveInputY,
                     });
                 });
 
-                $("body").on("change", ".file-input-wrapper input[type=file]", function(){
+                $("body").on("change", ".file-input-wrapper input[type=file]", function () {
                     var fileName;
                     fileName = $(this).val();
 
                     // Remove any previous file names
                     $(this).parent().next(".file-input-name").remove();
                     if (!!$(this).prop("files") && $(this).prop("files").length > 1) {
-                        fileName = $(this)[0].files.length+" files";
-                    }
-                    else {
-                        fileName = fileName.substring(fileName.lastIndexOf("\\") + 1, fileName.length);
+                        fileName = $(this)[0].files.length + " files";
+                    } else {
+                        fileName = fileName.substring(
+                            fileName.lastIndexOf("\\") + 1,
+                            fileName.length
+                        );
                     }
 
                     // Don't try to show the name if there is none
@@ -108,21 +113,21 @@
                         $(this).attr("title", fileName);
                     } else {
                         // Print the fileName aside (right after the the button)
-                        $(this).parent().after("<span class=\"file-input-name\">"+fileName+"</span>");
+                        $(this)
+                            .parent()
+                            .after('<span class="file-input-name">' + fileName + "</span>");
                     }
                 });
-
             });
-
     };
 
     // Add the styles before the first stylesheet
     // This ensures they can be easily overridden with developer styles
-    var cssHtml = "<style>"+
-  ".file-input-wrapper { overflow: hidden; position: relative; cursor: pointer; z-index: 1; }"+
-  ".file-input-wrapper input[type=file], .file-input-wrapper input[type=file]:focus, .file-input-wrapper input[type=file]:hover { position: absolute; top: 0; left: 0; cursor: pointer; opacity: 0; filter: alpha(opacity=0); z-index: 99; outline: 0; }"+
-  ".file-input-name { margin-left: 8px; }"+
-  "</style>";
+    var cssHtml =
+        "<style>" +
+        ".file-input-wrapper { overflow: hidden; position: relative; cursor: pointer; z-index: 1; }" +
+        ".file-input-wrapper input[type=file], .file-input-wrapper input[type=file]:focus, .file-input-wrapper input[type=file]:hover { position: absolute; top: 0; left: 0; cursor: pointer; opacity: 0; filter: alpha(opacity=0); z-index: 99; outline: 0; }" +
+        ".file-input-name { margin-left: 8px; }" +
+        "</style>";
     $("link[rel=stylesheet]").eq(0).before(cssHtml);
-
 })(jQuery);

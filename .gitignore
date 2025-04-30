@@ -84,4 +84,4 @@ Backup of *.doc*
 .env
 
 # Ignore Python __pycache__ folder
-__pycache__/
+__pycache__/.nyc_output/

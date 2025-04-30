@@ -66,7 +66,7 @@ import {
     VIEWPORT_FIT,
     VIEWPORT_INIT,
     VIEWPORT_OPTION_CLASS,
-    VIEWPORT_OPTION_CLASS_SIDEBAR
+    VIEWPORT_OPTION_CLASS_SIDEBAR,
 } from "./constants";
 
 import { setupLoadAndImportHandlers } from "./setup-load-and-import-handlers";
@@ -89,14 +89,14 @@ export const setupHandlers = grnState => {
     };
 
     // thank you for the help https://github.com/nytimes/svg-crowbar/blob/gh-pages/svg-crowbar-2.js
-    const setInlineStyles = (svg) => {
+    const setInlineStyles = svg => {
         var emptySvg = window.document.createElementNS("http://www.w3.org/2000/svg", "svg");
         window.document.body.appendChild(emptySvg);
         var emptySvgDeclarationComputed = getComputedStyle(emptySvg);
 
-        const traverse = (node) => {
+        const traverse = node => {
             const tree = [];
-            const visit = (currentNode) => {
+            const visit = currentNode => {
                 if (currentNode && currentNode.hasChildNodes()) {
                     let child = currentNode.firstChild;
                     while (child) {
@@ -116,16 +116,14 @@ export const setupHandlers = grnState => {
             const cssStyleDeclarationComputed = window.getComputedStyle(element);
             const computedStyleObj = {};
 
-
             for (let i = 0; i < cssStyleDeclarationComputed.length; i++) {
                 const key = cssStyleDeclarationComputed[i];
                 const value = cssStyleDeclarationComputed.getPropertyValue(key);
                 if (value !== emptySvgDeclarationComputed.getPropertyValue(key)) {
                     // Don't set computed style of width and height. Makes SVG elmements disappear.
-                    if ((key !== "height") && (key !== "width")) {
+                    if (key !== "height" && key !== "width") {
                         computedStyleObj[key] = value;
                     }
-
                 }
             }
 
@@ -143,18 +141,26 @@ export const setupHandlers = grnState => {
         allElements.forEach(explicitlySetStyle);
     };
 
-    const sourceAttributeSetter = (svg) => {
+    const sourceAttributeSetter = svg => {
         svg.setAttribute("version", "1.1");
 
         svg.removeAttribute("xmlns");
         svg.removeAttribute("xlink");
 
         if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns")) {
-            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
+            svg.setAttributeNS(
+                "http://www.w3.org/2000/xmlns/",
+                "xmlns",
+                "http://www.w3.org/2000/svg"
+            );
         }
 
         if (!svg.hasAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink")) {
-            svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+            svg.setAttributeNS(
+                "http://www.w3.org/2000/xmlns/",
+                "xmlns:xlink",
+                "http://www.w3.org/1999/xlink"
+            );
         }
     };
 
@@ -164,11 +170,14 @@ export const setupHandlers = grnState => {
         sourceAttributeSetter(source);
         setInlineStyles(source);
 
-        var doctype = "<?xml version=\"1.0\" standalone=\"no\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"; // eslint-disable-line
-        var sourceString = (new XMLSerializer()).serializeToString(source);
+        var doctype =
+            '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+        var sourceString = new XMLSerializer().serializeToString(source);
         const finalSvgString = [doctype + sourceString];
 
-        var svgUrl = window.URL.createObjectURL(new Blob(finalSvgString, { "type" : "image\/svg+xml" }));
+        var svgUrl = window.URL.createObjectURL(
+            new Blob(finalSvgString, { type: "image\/svg+xml" })
+        );
 
         $("#exportAsSvg").attr("href", svgUrl);
         $("#exportAsSvg").attr("download", name);
@@ -228,13 +237,13 @@ export const setupHandlers = grnState => {
     $(EXPORT_TO_PNG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".png";
-        saveSvgAsPng(svgContainer, editedName, { backgroundColor: "white"});
+        saveSvgAsPng(svgContainer, editedName, { backgroundColor: "white" });
     });
 
     $(EXPORT_TO_SVG).click(() => {
         var svgContainer = document.getElementById("exportContainer");
         var editedName = grnState.name.replace(determineFileType(grnState.name), "") + ".svg";
-        exportSVG(svgContainer, editedName );
+        exportSVG(svgContainer, editedName);
     });
 
     $(EXPORT_TO_PDF).click(() => {
@@ -244,7 +253,7 @@ export const setupHandlers = grnState => {
     });
 
     // Node Coloring
-    const updateTopDatasetSelection = (selection) => {
+    const updateTopDatasetSelection = selection => {
         grnState.nodeColoring.topDataset = selection;
         if (grnState.nodeColoring.bottomDataSameAsTop) {
             grnState.nodeColoring.bottomDataset = selection;
@@ -252,7 +261,7 @@ export const setupHandlers = grnState => {
         updateApp(grnState);
     };
 
-    const updateBottomDatasetSelection = (selection) => {
+    const updateBottomDatasetSelection = selection => {
         grnState.nodeColoring.bottomDataset = selection;
         if (selection === "Same as Top Dataset") {
             grnState.nodeColoring.bottomDataset = grnState.nodeColoring.topDataset;
@@ -274,7 +283,7 @@ export const setupHandlers = grnState => {
         updateTopDatasetSelection(selection);
     });
 
-    $(TOP_DATASET_SELECTION_MENU).click((event) => {
+    $(TOP_DATASET_SELECTION_MENU).click(event => {
         const selection = event.target.dataset.expression;
         updateTopDatasetSelection(selection);
     });
@@ -293,7 +302,7 @@ export const setupHandlers = grnState => {
         updateBottomDatasetSelection(selection);
     });
 
-    $(BOTTOM_DATASET_SELECTION_MENU).click((event) => {
+    $(BOTTOM_DATASET_SELECTION_MENU).click(event => {
         const selection = event.target.dataset.expression;
         updateBottomDatasetSelection(selection);
     });
@@ -313,7 +322,9 @@ export const setupHandlers = grnState => {
     };
 
     $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON).click(() => {
-        var value = logFoldChangeMaxValueValidator($(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val());
+        var value = logFoldChangeMaxValueValidator(
+            $(LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT).val()
+        );
         grnState.nodeColoring.logFoldChangeMaxValue = value;
         updateApp(grnState);
     });
@@ -511,19 +522,19 @@ export const setupHandlers = grnState => {
     //
     // We use function syntax so that internal `this` can be used.
     $(".dropdown input.keepopen").parent().attr({
-        draggable: false
+        draggable: false,
     });
 
     // Prevent Bootstrap dropdown from closing on clicks in menu input boxes
     // https://stackoverflow.com/a/27759926
     $(".dropdown").on({
-        "click": function (event) {
+        click: function (event) {
             if ($(event.target).hasClass("keepopen")) {
                 $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
             }
         },
 
-        "mouseup": function (event) {
+        mouseup: function (event) {
             if ($(event.target).find(".keepopen").length > 0) {
                 $(this).data("closable", $(event.target).closest(".dropdown-toggle").length !== 0);
             }
@@ -533,7 +544,7 @@ export const setupHandlers = grnState => {
             var hide = $(this).data("closable");
             $(this).data("closable", true);
             return hide;
-        }
+        },
     });
 
     $(ZOOM_DISPLAY_MAXIMUM_SELECTOR).text(ZOOM_DISPLAY_MAXIMUM_VALUE);
@@ -544,7 +555,7 @@ export const setupHandlers = grnState => {
         const MEDIUM_PAGE_WIDTH = 1500;
         const LARGE_PAGE_WIDTH = 2200;
 
-        const initializeViewportSize = (width) => {
+        const initializeViewportSize = width => {
             if (width < MEDIUM_PAGE_WIDTH) {
                 grnState.viewportSize = "containerS";
             } else if (width > MEDIUM_PAGE_WIDTH && width < LARGE_PAGE_WIDTH) {
@@ -565,7 +576,7 @@ export const setupHandlers = grnState => {
                     grnState.dimensions = {
                         width: $(window).width(),
                         height: $(window).height(),
-                        top: 0
+                        top: 0,
                     };
 
                     updateApp(grnState);
@@ -581,11 +592,12 @@ export const setupHandlers = grnState => {
 
                 // Also filter out all but dimensions messages.
                 const { data } = event;
-                if (typeof(data) !== "object" || (
+                if (
+                    typeof data !== "object" ||
                     data.width === undefined ||
                     data.height === undefined ||
                     data.top === undefined
-                )) {
+                ) {
                     return;
                 }
 
