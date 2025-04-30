@@ -13,6 +13,8 @@ import {
 
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
+import { displayWarnings } from "./warnings.js";
+import { warnings } from "./export-constants.js";
 
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
@@ -93,6 +95,7 @@ export const upload = function () {
     };
 
     const exportExcel = (route, extension, sheetType) => {
+        displayWarnings(uploadState.currentWorkbook.exportSheets.warnings);
         if (!$(this).parent().hasClass("disabled")) {
             var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
             var workbookFilename = filenameWithExtension(sheetType !== uploadState.currentWorkbook.sheetType ?
@@ -251,7 +254,8 @@ export const upload = function () {
         const finalExportSheets = {
             networks: {},
             expression: {},
-            "two_column_sheets": {}
+            "two_column_sheets": {},
+            warnings: []
         };
         const twoColumnSheets = grnState.workbook.twoColumnSheets ? Object.keys(grnState.workbook.twoColumnSheets) : [];
         // Collect all of the Sheets to be exported
@@ -316,9 +320,26 @@ export const upload = function () {
                     })
                         .then(function (response) {
                             result.data = response;
+
+                            const missingGenes = genes.filter(gene => result.data[gene] === undefined);
+
+                            if (missingGenes.length > 0) {
+                                const missingGenesStr = missingGenes.join(", ");
+
+                                const warningGenerators = {
+                                    "production_rates": warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
+                                    "degradation_rates": warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING
+                                };
+
+                                const warningGenerator = warningGenerators[sheet];
+                                if (warningGenerator) {
+                                    finalExportSheets.warnings.push(warningGenerator(missingGenesStr));
+                                }
+                            }
+
                             finalExportSheets.two_column_sheets[sheet] = result;
                             if (!Object.values( finalExportSheets.two_column_sheets).includes(null)) {
-                            // if we got all of the two column sheets, then proceed with export
+                                // if we got all of the two column sheets, then proceed with export
                                 handleExpressionDataAndExport(
                                     route,
                                     extension,
