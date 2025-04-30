@@ -750,7 +750,6 @@ const resetDatasetDropdownMenus = (workbook) => {
     }
     // Always add database expressions
     addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.databaseExpressions, "Expression Database");
-    
     $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
     $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
 };
