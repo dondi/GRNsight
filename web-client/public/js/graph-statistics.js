@@ -1,4 +1,4 @@
-var displayStatistics = function (workbook) { // eslint-disable-line no-unused-vars
+var displayStatistics = function (workbook) {  
     var $container = $(".graph-statistics-container").removeClass("hidden");
     var $thead = $container.find("thead");
     var $tbody = $container.find("tbody").empty();

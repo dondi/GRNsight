@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 var expect = require("chai").expect;
 var fs = require("fs");
 var UTF8 = { encoding: "utf-8" };
@@ -579,25 +579,25 @@ var missingOpeningQuote = [
 describe("Import from GraphML", function () {
     it("should import unweighted workbooks from GraphML correctly", function () {
         expect(
-          importController.graphMlToGrnsight(unweightedTestGraphMl)
+            importController.graphMlToGrnsight(unweightedTestGraphMl)
         ).to.deep.equal(expectedUnweightedWorkbook);
     });
 
     it("should import weighted workbooks from GraphML correctly", function () {
         expect(
-          importController.graphMlToGrnsight(weightedTestGraphMl)
+            importController.graphMlToGrnsight(weightedTestGraphMl)
         ).to.deep.equal(expectedWeightedWorkbook);
     });
 
     it("should import unweighted workbooks with cycles from GraphML correctly", function () {
         expect(
-          importController.graphMlToGrnsight(unweightedTestGraphMlWithCycle)
+            importController.graphMlToGrnsight(unweightedTestGraphMlWithCycle)
         ).to.deep.equal(expectedUnweightedWorkbookWithCycle);
     });
 
     it("should import weighted workbooks with cycles from GraphML correctly", function () {
         expect(
-          importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
+            importController.graphMlToGrnsight(weightedTestGraphMlWithCycle)
         ).to.deep.equal(expectedWeightedWorkbookWithCycle);
     });
 

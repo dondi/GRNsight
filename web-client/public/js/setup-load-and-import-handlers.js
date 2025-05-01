@@ -190,12 +190,14 @@ export const setupLoadAndImportHandlers = (grnState) => {
             const selected = event.target.dataset.expression;
             if (`.${selected}` === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
+                grnState.demoDropdownValue = selected;
             }
         });
         $("#demoSourceDropdown").on("change", () => {
             const selected = `.${$("#demoSourceDropdown").val()}`;
             if (selected === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
+                grnState.demoDropdownValue = selected;
             }
         });
     };
@@ -228,6 +230,7 @@ export const responseCustomWorkbookData = (grnState, queryURL, name) => {
         }
         grnState.name = name;
         grnState.workbook = workbook;
+        grnState.demoDropdownValue = null;
         // Reset the node coloring dataset selection
         grnState.nodeColoring.topDataset = grnState.defaultDataset;
         grnState.nodeColoring.bottomDataset = grnState.defaultDataset;

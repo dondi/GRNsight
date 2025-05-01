@@ -5,111 +5,110 @@ import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
 import {
-  HOST_SITE,
-  FORCE_GRAPH,
-  GRID_LAYOUT,
-  GREY_EDGES_DASHED_MENU,
-  GREY_EDGES_DASHED_SIDEBAR,
-  MIN_EDGE_WEIGHT_NORMALIZATION,
-  MAX_EDGE_WEIGHT_NORMALIZATION,
-  GREY_EDGE_THRESHOLD_MENU,
-  GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR,
-  GREY_EDGE_THRESHOLD_TEXT_SIDEBAR,
-  WEIGHTS_SHOW_MOUSE_OVER_MENU,
-  WEIGHTS_SHOW_ALWAYS_MENU,
-  WEIGHTS_HIDE_MENU,
-  WEIGHTS_SHOW_MOUSE_OVER_SIDE,
-  WEIGHTS_SHOW_ALWAYS_SIDE,
-  WEIGHTS_HIDE_SIDE,
-  WEIGHTS_SHOW_MOUSE_OVER_CLASS,
-  WEIGHTS_SHOW_ALWAYS_CLASS,
-  WEIGHTS_HIDE_CLASS,
-  SHOW_WEIGHTS_MOUSEOVER,
-  SHOW_ALL_WEIGHTS,
-  HIDE_ALL_WEIGHTS,
-  COLOR_EDGES_MENU,
-  COLOR_EDGES_SIDEBAR,
-  ACTIVE_COLOR_OPTION,
-  GRAVITY_LENGTH_WITHOUT_ZERO,
-  LOCK_SLIDERS_MENU,
-  LOCK_SLIDERS_BUTTON,
-  RESET_SLIDERS_SIDEBAR,
-  RESET_SLIDERS_MENU,
-  UNDO_SLIDERS_RESET_SIDEBAR,
-  UNDO_SLIDERS_RESET_MENU,
-  LINK_DIST_CLASS,
-  LINK_DIST_SLIDER_SIDEBAR,
-  LINK_DIST_MENU,
-  LINK_DIST_VALUE,
-  CHARGE_CLASS,
-  CHARGE_SLIDER_SIDEBAR,
-  CHARGE_MENU,
-  CHARGE_VALUE,
-  LAYOUT_SIDEBAR_PANEL,
-  NODE_COLORING_MENU,
-  NODE_COLORING_TOGGLE_MENU,
-  NODE_COLORING_MENU_CLASS,
-  NODE_COLORING_NAVBAR_OPTIONS,
-  NODE_COLORING_SIDEBAR_BODY,
-  NODE_COLORING_SIDEBAR_PANEL,
-  NODE_COLORING_SIDEBAR_HEADER_LINK,
-  NODE_COLORING_TOGGLE_SIDEBAR,
-  AVG_REPLICATE_VALS_TOP_MENU,
-  AVG_REPLICATE_VALS_TOP_SIDEBAR,
-  AVG_REPLICATE_VALS_BOTTOM_MENU,
-  AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
-  LOG_FOLD_CHANGE_MAX_VALUE_MENU,
-  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
-  MINIMUM_MAX_LOG_FOLD_CHANGE,
-  MAXIMUM_MAX_LOG_FOLD_CHANGE,
-  DEFAULT_MAX_LOG_FOLD_CHANGE,
-  TOP_DATASET_SELECTION_SIDEBAR,
-  TOP_DATASET_SELECTION_MENU,
-  BOTTOM_DATASET_SELECTION_SIDEBAR,
-  BOTTOM_DATASET_SELECTION_MENU,
-  LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
-  LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
-  LOG_FOLD_CHANGE_MAX_VALUE_HEADER,
-  MAX_NUM_CHARACTERS_DROPDOWN,
-  ENDS_IN_EXPRESSION_REGEXP,
-  ZOOM_CONTROL,
-  ZOOM_DISPLAY_MIDDLE,
-  ZOOM_ADAPTIVE_MAX_SCALE,
-  ZOOM_INPUT,
-  ZOOM_SLIDER,
-  EXPORT_WEIGHTED_CLASS,
-  EDGE_WEIGHT_MENU_CLASS,
-  EDGE_WEIGHT_SIDEBAR,
-  EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
-  SPECIES_DISPLAY,
-  EXPRESSION_DB_LOADER,
-  EXPRESSION_DB_LOADER_TEXT,
-  SPECIES_BUTTON_CRESS,
-  SPECIES_BUTTON_FLY,
-  SPECIES_BUTTON_HUMAN,
-  SPECIES_BUTTON_MOUSE,
-  SPECIES_BUTTON_NEMATODE,
-  SPECIES_BUTTON_YEAST,
-  VIEWPORT_FIT,
-  VIEWPORT_S,
-  VIEWPORT_M,
-  VIEWPORT_L,
-  VIEWPORT_SIZE_S_DROPDOWN,
-  VIEWPORT_SIZE_M_DROPDOWN,
-  VIEWPORT_SIZE_L_DROPDOWN,
-  VIEWPORT_SIZE_FIT_DROPDOWN,
-  VIEWPORT_SIZE_S_SIDEBAR,
-  VIEWPORT_SIZE_M_SIDEBAR,
-  VIEWPORT_SIZE_L_SIDEBAR,
-  VIEWPORT_SIZE_FIT_SIDEBAR,
-  VIEWPORT_INIT,
-  NETWORK_MODE_DROPDOWN,
-  NETWORK_MODE_CLASS,
-  NETWORK_MODE_PROTEIN_PHYS,
-  NETWORK_MODE_GRN,
-  EXPORT_TO_UNWEIGHTED_GML_MENU,
-  NETWORK_GRN_MODE,
-  NETWORK_PPI_MODE,
+    HOST_SITE,
+    FILE_NAME,
+    FORCE_GRAPH,
+    GRID_LAYOUT,
+    GREY_EDGES_DASHED_MENU,
+    GREY_EDGES_DASHED_SIDEBAR,
+    MIN_EDGE_WEIGHT_NORMALIZATION,
+    MAX_EDGE_WEIGHT_NORMALIZATION,
+    GREY_EDGE_THRESHOLD_MENU,
+    GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR,
+    GREY_EDGE_THRESHOLD_TEXT_SIDEBAR,
+    WEIGHTS_SHOW_MOUSE_OVER_MENU,
+    WEIGHTS_SHOW_ALWAYS_MENU,
+    WEIGHTS_HIDE_MENU,
+    WEIGHTS_SHOW_MOUSE_OVER_SIDE,
+    WEIGHTS_SHOW_ALWAYS_SIDE,
+    WEIGHTS_HIDE_SIDE,
+    WEIGHTS_SHOW_MOUSE_OVER_CLASS,
+    WEIGHTS_SHOW_ALWAYS_CLASS,
+    WEIGHTS_HIDE_CLASS,
+    SHOW_WEIGHTS_MOUSEOVER,
+    SHOW_ALL_WEIGHTS,
+    HIDE_ALL_WEIGHTS,
+    COLOR_EDGES_MENU,
+    COLOR_EDGES_SIDEBAR,
+    ACTIVE_COLOR_OPTION,
+    GRAVITY_LENGTH_WITHOUT_ZERO,
+    LOCK_SLIDERS_MENU,
+    LOCK_SLIDERS_BUTTON,
+    RESET_SLIDERS_SIDEBAR,
+    RESET_SLIDERS_MENU,
+    UNDO_SLIDERS_RESET_SIDEBAR,
+    UNDO_SLIDERS_RESET_MENU,
+    LINK_DIST_CLASS,
+    LINK_DIST_SLIDER_SIDEBAR,
+    LINK_DIST_MENU,
+    LINK_DIST_VALUE,
+    CHARGE_CLASS,
+    CHARGE_SLIDER_SIDEBAR,
+    CHARGE_MENU,
+    CHARGE_VALUE,
+    LAYOUT_SIDEBAR_PANEL,
+    NODE_COLORING_MENU,
+    NODE_COLORING_TOGGLE_MENU,
+    NODE_COLORING_MENU_CLASS,
+    NODE_COLORING_NAVBAR_OPTIONS,
+    NODE_COLORING_SIDEBAR_BODY,
+    NODE_COLORING_SIDEBAR_PANEL,
+    NODE_COLORING_SIDEBAR_HEADER_LINK,
+    NODE_COLORING_TOGGLE_SIDEBAR,
+    AVG_REPLICATE_VALS_TOP_MENU,
+    AVG_REPLICATE_VALS_TOP_SIDEBAR,
+    AVG_REPLICATE_VALS_BOTTOM_MENU,
+    AVG_REPLICATE_VALS_BOTTOM_SIDEBAR,
+    LOG_FOLD_CHANGE_MAX_VALUE_MENU,
+    LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_INPUT,
+    MINIMUM_MAX_LOG_FOLD_CHANGE,
+    MAXIMUM_MAX_LOG_FOLD_CHANGE,
+    DEFAULT_MAX_LOG_FOLD_CHANGE,
+    TOP_DATASET_SELECTION_SIDEBAR,
+    TOP_DATASET_SELECTION_MENU,
+    BOTTOM_DATASET_SELECTION_SIDEBAR,
+    BOTTOM_DATASET_SELECTION_MENU,
+    LOG_FOLD_CHANGE_MAX_VALUE_CLASS,
+    LOG_FOLD_CHANGE_MAX_VALUE_SIDEBAR_BUTTON,
+    LOG_FOLD_CHANGE_MAX_VALUE_HEADER,
+    MAX_NUM_CHARACTERS_DROPDOWN,
+    ENDS_IN_EXPRESSION_REGEXP,
+    ZOOM_CONTROL,
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_ADAPTIVE_MAX_SCALE,
+    ZOOM_INPUT,
+    ZOOM_SLIDER,
+    EXPORT_WEIGHTED_CLASS,
+    EDGE_WEIGHT_MENU_CLASS,
+    EDGE_WEIGHT_SIDEBAR,
+    EDGE_WEIGHT_SIDEBAR_HEADER_LINK,
+    SPECIES_DISPLAY,
+    EXPRESSION_DB_LOADER,
+    EXPRESSION_DB_LOADER_TEXT,
+    SPECIES_BUTTON_CRESS,
+    SPECIES_BUTTON_FLY,
+    SPECIES_BUTTON_HUMAN,
+    SPECIES_BUTTON_MOUSE,
+    SPECIES_BUTTON_NEMATODE,
+    SPECIES_BUTTON_YEAST,
+    VIEWPORT_FIT,
+    VIEWPORT_S,
+    VIEWPORT_M,
+    VIEWPORT_L,
+    VIEWPORT_SIZE_S_DROPDOWN,
+    VIEWPORT_SIZE_M_DROPDOWN,
+    VIEWPORT_SIZE_L_DROPDOWN,
+    VIEWPORT_SIZE_FIT_DROPDOWN,
+    VIEWPORT_SIZE_S_SIDEBAR,
+    VIEWPORT_SIZE_M_SIDEBAR,
+    VIEWPORT_SIZE_L_SIDEBAR,
+    VIEWPORT_SIZE_FIT_SIDEBAR,
+    VIEWPORT_INIT,
+    NETWORK_MODE_INFO,
+    NETWORK_MODE_MENU,
+    EXPORT_TO_UNWEIGHTED_GML_MENU,
+    NETWORK_GRN_MODE,
+    NETWORK_PPI_MODE,
 //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -140,7 +139,7 @@ const displayworkbook = (workbook, name) => {
         displayWarnings(workbook.warnings);
     }
 
-    $("#fileName").text(name); // Set the name of the file to display in the top bar
+    $(FILE_NAME).text(name); // Set the name of the file to display in the top bar
     $("input[type='range']").off("input"); // I have no idea why I do this. Investigate later.
 };
 
@@ -397,8 +396,8 @@ const loadExpressionDatabase = function (isTopDataset) {
             type:"ExpressionData",
             dataset,
             genes: grnState.workbook.genes
-                    .map(adjustGeneNameForExpression)
-                    .join(","),
+                .map(adjustGeneNameForExpression)
+                .join(","),
             timepoints: timepointsResponse[dataset]
         }).then(function (response) {
             if (isTopDataset) {
@@ -443,12 +442,12 @@ const updateSliderState = slidersLocked => {
 
     if (slidersLocked) {
         $(`${LOCK_SLIDERS_MENU} span`)
-          .removeClass("invisible")
-          .addClass("glyphicon-ok");
+            .removeClass("invisible")
+            .addClass("glyphicon-ok");
     } else {
         $(`${LOCK_SLIDERS_MENU} span`)
-          .removeClass("glyphicon-ok")
-          .addClass("invisible");
+            .removeClass("glyphicon-ok")
+            .addClass("invisible");
     }
 
     $(LOCK_SLIDERS_BUTTON).prop("checked", slidersLocked);
@@ -497,15 +496,6 @@ const expandLayoutSidebar = () => {
     $(LAYOUT_SIDEBAR_PANEL).addClass("in");
 };
 
-const toggleLayout = (on, off) => {
-    if (!$(on).prop("checked")) {
-        $(on).prop("checked", true);
-        $(off).prop("checked", false);
-        $(`${off} span`).removeClass("glyphicon-ok");
-        $(`${on} span`).addClass("glyphicon-ok");
-    }
-};
-
 export const hasExpressionData = (sheets) => {
     return Object.keys(sheets).some(property => property.match(ENDS_IN_EXPRESSION_REGEXP));
 };
@@ -537,16 +527,14 @@ const isNewWorkbook = (name) => {
 
 // Workbook Mode Functions
 const updateModeViews = () =>{
-    // Select correct dropdown item
-    $(`${NETWORK_MODE_DROPDOWN} option`).removeAttr("selected");
-    $(`${NETWORK_MODE_DROPDOWN} option[value="${grnState.mode}"]`).prop("selected", true);
-    // Select the correct menu items
-    $(`${NETWORK_MODE_CLASS} option`).removeAttr("checked");
-    if (grnState.mode === NETWORK_GRN_MODE) {
-        toggleLayout(NETWORK_MODE_GRN, NETWORK_MODE_PROTEIN_PHYS);
-    } else if (grnState.mode === NETWORK_PPI_MODE) {
-        toggleLayout(NETWORK_MODE_PROTEIN_PHYS, NETWORK_MODE_GRN);
-    }
+    const workbookMode = grnState.mode === NETWORK_GRN_MODE ? "Gene Regulatory Network" : "Protein-Protein Interaction";
+    $(NETWORK_MODE_MENU).text(workbookMode);
+    $(NETWORK_MODE_INFO).text(workbookMode);
+};
+
+const resetDemoDropdown = () =>{
+    $("#demoSourceDropdown option").removeAttr("selected");
+    $("#demoSourceDropdown").val("none");
 };
 
 const checkWorkbookModeSettings = () => {
@@ -577,25 +565,9 @@ $("body").on("click", () => {
     }
 });
 
-$(NETWORK_MODE_DROPDOWN).on("change", () => {
-    grnState.mode = $(NETWORK_MODE_DROPDOWN).val();
-    checkWorkbookModeSettings();
-    refreshApp();
-});
-$(NETWORK_MODE_PROTEIN_PHYS).on("click", () => {
-    grnState.mode = NETWORK_PPI_MODE;
-    checkWorkbookModeSettings();
-    refreshApp();
-});
-$(NETWORK_MODE_GRN).on("click", () => {
-    grnState.mode = NETWORK_GRN_MODE;
-    checkWorkbookModeSettings();
-    refreshApp();
-});
-
 const shortenExpressionSheetName = (name) => {
     return (name.length > MAX_NUM_CHARACTERS_DROPDOWN) ?
-      (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
+        (name.slice(0, MAX_NUM_CHARACTERS_DROPDOWN) + "...") : name;
 };
 
 const updateSpeciesMenu = () => {
@@ -679,7 +651,7 @@ const identifySpeciesOrTaxon = (data) => {
     return false;
 };
 
-    // renderNodeColoring: function () { }, // defined in graph.js
+// renderNodeColoring: function () { }, // defined in graph.js
 
 const clearDropdownMenus = () => {
     $(TOP_DATASET_SELECTION_SIDEBAR).html("");
@@ -714,7 +686,7 @@ const resetDatasetDropdownMenus = (workbook) => {
         grnState.nodeColoring.nodeColoringOptions.databaseExpressions.push({value: [option]}));
 
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).append($("<option>")
-            .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
+        .attr("value", "Same as Top Dataset").text("Same as Top Dataset"));
 
     $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
 
@@ -838,6 +810,10 @@ export const updateApp = grnState => {
                 grnState.nodeColoringEnabled = false;
             }
         }
+        if (!(grnState.demoDropdownValue)) {
+            resetDemoDropdown();
+        }
+
         refreshApp();
 
         // Rare exception to the MVC cycle: right now we have no way of knowing whether the workbook has changed
@@ -848,7 +824,7 @@ export const updateApp = grnState => {
     synchronizeNormalizationValues(grnState.normalizationMax);
     synchronizeGrayEdgeValues(grnState.grayEdgeThreshold);
 
-// Dashed Line Synchronization
+    // Dashed Line Synchronization
     if (grnState.dashedLine) {
         $(GREY_EDGES_DASHED_MENU + " span").addClass("glyphicon-ok");
         $(GREY_EDGES_DASHED_MENU).prop("checked", "checked");
@@ -859,7 +835,7 @@ export const updateApp = grnState => {
         $(GREY_EDGES_DASHED_SIDEBAR).removeProp("checked");
     }
 
-// Weights functions
+    // Weights functions
     if (grnState.edgeWeightDisplayOption === SHOW_WEIGHTS_MOUSEOVER) {
         synchronizeShowWeightsMouseover();
     } else if (grnState.edgeWeightDisplayOption === SHOW_ALL_WEIGHTS) {
@@ -868,13 +844,13 @@ export const updateApp = grnState => {
         synchronizeHideAllWeights();
     }
 
-// Enable/Disable Colored edges
+    // Enable/Disable Colored edges
     $(COLOR_EDGES_SIDEBAR).prop("checked", grnState.colorOptimal);
     const classFunction = `${grnState.colorOptimal ? "add" : "remove"}Class`;
     $(COLOR_EDGES_MENU)[classFunction](ACTIVE_COLOR_OPTION);
     $(`${COLOR_EDGES_MENU}>span`)[classFunction]("glyphicon-ok");
 
-// Graph Layout
+    // Graph Layout
     if (grnState.graphLayout === FORCE_GRAPH) {
         updatetoForceGraph();
     } else if (grnState.graphLayout === GRID_LAYOUT) {
@@ -924,9 +900,9 @@ export const updateApp = grnState => {
         }
         grnState.nodeColoring.showMenu = true;
         grnState.nodeColoring.topDataset = grnState.nodeColoring.topDataset ?
-        grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
+            grnState.nodeColoring.topDataset : "Dahlquist_2018_wt";
         grnState.nodeColoring.bottomDataset = grnState.nodeColoring.bottomDataset ?
-        grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
+            grnState.nodeColoring.bottomDataset : "Dahlquist_2018_wt";
         $(NODE_COLORING_TOGGLE_SIDEBAR).prop("checked", true);
         $(`${NODE_COLORING_TOGGLE_MENU} span`).addClass("glyphicon-ok");
         $(NODE_COLORING_SIDEBAR_BODY).removeClass("hidden");

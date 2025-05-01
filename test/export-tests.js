@@ -237,9 +237,9 @@ describe("Export to GraphML", function () {
 
     it("should export unweighted workbooks with cycles to GraphML correctly", function () {
         var lines = exportController.grnsightToGraphMl(unweightedTestWorkbookWithCycle).split("\n")
-        .map(function (line) {
-            return line.trim();
-        });
+            .map(function (line) {
+                return line.trim();
+            });
 
         var expectedGraphMlLines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
@@ -932,14 +932,14 @@ describe("Export to spreadsheet", function () {
 
     it("should import a workbook with minor additional sheet warnings," +
     " export the workbook, and import the exported workbook properly",
-        function () {
-            test.importExportReImportNoErrorsOrWarnings(
-                "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx");
-            test.importExportReImportNoErrorsOrWarnings(
-                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx");
-            test.importExportReImportNoErrorsOrWarnings(
-                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx");
-        }
+    function () {
+        test.importExportReImportNoErrorsOrWarnings(
+            "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx");
+        test.importExportReImportNoErrorsOrWarnings(
+            "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx");
+        test.importExportReImportNoErrorsOrWarnings(
+            "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx");
+    }
     );
 
     it("should import a workbook with no warnings, export the workbook, and import the exported workbook properly",

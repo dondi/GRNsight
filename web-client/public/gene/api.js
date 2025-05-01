@@ -185,10 +185,10 @@ let parseRegulators = function (data, symbol) {
     data.filter(word => (word.locus1.display_name === symbol.symbol) ? targs[targs.length] = {
         target:  word.locus2.display_name,
         regulationOf: word.regulation_of }
-      : regs[regs.length] = {
-          regulator: word.locus1.display_name,
-          regulationOf: word.regulation_of,
-          regulationType: word.regulation_type}) ;
+        : regs[regs.length] = {
+            regulator: word.locus1.display_name,
+            regulationOf: word.regulation_of,
+            regulationType: word.regulation_type}) ;
 
     return {
         regulators: regs,
@@ -356,87 +356,87 @@ let parseJaspar = function (data) {
         getJasparInfo,
         getGeneInformation: function (symbol) {
             return $.when(
-             window.api.getNCBIInfo(symbol)
-           ).then(function (ncbiInfo) {
-               defaultValues.ncbi = parseNCBI(ncbiInfo);
-               return window.api.getUniProtInfo(symbol);
-           }).then(function (uniProtInfo) {
+                window.api.getNCBIInfo(symbol)
+            ).then(function (ncbiInfo) {
+                defaultValues.ncbi = parseNCBI(ncbiInfo);
+                return window.api.getUniProtInfo(symbol);
+            }).then(function (uniProtInfo) {
             //    console.log("in uniprot")
-               defaultValues.uniprot = parseUniprot(uniProtInfo);
-               return window.api.getJasparInfo(symbol);
-           }).then(function (jasparInfo) {
+                defaultValues.uniprot = parseUniprot(uniProtInfo);
+                return window.api.getJasparInfo(symbol);
+            }).then(function (jasparInfo) {
             //    console.log("this is jasparInfo: ")
             //    console.log(jasparInfo)
-               defaultValues.jaspar = parseJaspar(jasparInfo);
-               return window.api.getYeastMineInfo(symbol);
-           }).then(function (yeastMineInfo) {
+                defaultValues.jaspar = parseJaspar(jasparInfo);
+                return window.api.getYeastMineInfo(symbol);
+            }).then(function (yeastMineInfo) {
             //    console.log("in yeastmine")
-               defaultValues.sgd = parseYeastmine(yeastMineInfo);
-            //    return window.api.getFlyMineInfo(symbol);
-        //    }).then(function (flyMineInfo) {
-            //    defaultValues.sgd = parseFlymine(flyMineInfo);
-               return window.api.getGeneOntologyInfo(symbol);
-           }).then(function (goInfo) {
+                defaultValues.sgd = parseYeastmine(yeastMineInfo);
+                //    return window.api.getFlyMineInfo(symbol);
+                //    }).then(function (flyMineInfo) {
+                //    defaultValues.sgd = parseFlymine(flyMineInfo);
+                return window.api.getGeneOntologyInfo(symbol);
+            }).then(function (goInfo) {
             //    console.log("inside GO call")
-               defaultValues.geneOntology = parseGeneOntology(goInfo);
-               return window.api.getRegulationInfo(symbol);
-           }).then(function (regulationInfo) {
-               // parseRegulators needs both info and symbol
-               defaultValues.regulators = parseRegulators(regulationInfo, symbol);
-               return defaultValues;
-           }).catch(function () {
+                defaultValues.geneOntology = parseGeneOntology(goInfo);
+                return window.api.getRegulationInfo(symbol);
+            }).then(function (regulationInfo) {
+                // parseRegulators needs both info and symbol
+                defaultValues.regulators = parseRegulators(regulationInfo, symbol);
+                return defaultValues;
+            }).catch(function () {
             //    window.api.getNCBIInfo(symbol);
-               window.api.getUniProtInfo(symbol);
-               window.api.getYeastMineInfo(symbol);
-            //    window.api.getFlyMineInfo(symbol);
-               window.api.getGeneOntologyInfo(symbol);
-               window.api.getRegulationInfo(symbol);
-               window.api.getJasparInfo(symbol);
-               window.api.getNCBIInfo(symbol);
+                window.api.getUniProtInfo(symbol);
+                window.api.getYeastMineInfo(symbol);
+                //    window.api.getFlyMineInfo(symbol);
+                window.api.getGeneOntologyInfo(symbol);
+                window.api.getRegulationInfo(symbol);
+                window.api.getJasparInfo(symbol);
+                window.api.getNCBIInfo(symbol);
 
-               if (
-                 defaultValues.ncbi === defaultNCBI &&
+                if (
+                    defaultValues.ncbi === defaultNCBI &&
                  defaultValues.uniprot === defaultUniprot &&
                  defaultValues.sgd === defaultYeastmine &&
                  defaultValues.geneOntology === defaultGeneOntology &&
                  defaultValues.regulators === defaultRegulators &&
                  defaultValues.jaspar === defaultJaspar
-               ) {
-                   const errorString1 = "No gene information was retrieved for " + symbol.symbol + ".";
+                ) {
+                    const errorString1 = "No gene information was retrieved for " + symbol.symbol + ".";
 
-                   const errorString2 = "This could have happened because:";
-                   const errorString3 = "You can check back later to see if gene information" +
+                    const errorString2 = "This could have happened because:";
+                    const errorString3 = "You can check back later to see if gene information" +
                    " can be retrieved or submit an issue to https://github.com/dondi/GRNsight.";
 
-                   $("#error2").text(errorString2);
-                   var errorString4 = $("<ul/>").appendTo("#error2");
-                   errorString4.append("<li>The wrong species is selected </li>");
-                   errorString4.append("<li>GRNsight could not access the gene information"
+                    $("#error2").text(errorString2);
+                    var errorString4 = $("<ul/>").appendTo("#error2");
+                    errorString4.append("<li>The wrong species is selected </li>");
+                    errorString4.append("<li>GRNsight could not access the gene information"
                    + " from one of the source databases</li>");
-                   errorString4.append("<li>No information exists for the gene in the source databases.</li>");
+                    errorString4.append("<li>No information exists for the gene in the source databases.</li>");
 
-                   $("#error1").text(errorString1);
-                   $("#error3").text(errorString3);
+                    $("#error1").text(errorString1);
+                    $("#error3").text(errorString3);
 
-                   var screenHeight = $(window).height();
-                   var MIN_SCREEN_HEIGHT = 600;
-                   var BORDER = 425;
-                   var setPanel = (screenHeight - BORDER) + "px";
-                   var minPanel = (MIN_SCREEN_HEIGHT - BORDER) + "px";
-                   if (screenHeight > MIN_SCREEN_HEIGHT) {
-                       $("#list-frame").css({ height: setPanel });
-                   } else {
-                       $("#list-frame").css({ height: minPanel });
-                   }
+                    var screenHeight = $(window).height();
+                    var MIN_SCREEN_HEIGHT = 600;
+                    var BORDER = 425;
+                    var setPanel = (screenHeight - BORDER) + "px";
+                    var minPanel = (MIN_SCREEN_HEIGHT - BORDER) + "px";
+                    if (screenHeight > MIN_SCREEN_HEIGHT) {
+                        $("#list-frame").css({ height: setPanel });
+                    } else {
+                        $("#list-frame").css({ height: minPanel });
+                    }
 
-                   $("#errorModal").css({ "font-family": "arial",
-                       "font-size": "14px",
-                       "color": "#333"});
-                   $("#errorModal").modal("show");
-               }
+                    $("#errorModal").css({ "font-family": "arial",
+                        "font-size": "14px",
+                        "color": "#333"});
+                    $("#errorModal").modal("show");
+                }
 
-               return defaultValues;
-           });
+                return defaultValues;
+            });
         }
     };
 })($);
