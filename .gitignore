@@ -85,3 +85,6 @@ Backup of *.doc*
 
 # Ignore Python __pycache__ folder
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
