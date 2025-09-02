@@ -205,6 +205,9 @@ containing "-", "_", and alpha-numeric characters only`);
         $(CREATE_NETWORK_MODAL).modal("show");
     };
 
+    const GRN_STANDARD_NAME_ID = 1;
+    const PPI_STANDARD_NAME_ID = 0;
+
     const sortGenes = function (genes, idToSort) {
         return Object.fromEntries(
             Object.entries(genes).sort((a, b) => a[idToSort].localeCompare(b[idToSort]))
@@ -248,7 +251,7 @@ containing "-", "_", and alpha-numeric characters only`);
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
             if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
-                grnState.customWorkbook.genes = sortGenes(grnState.customWorkbook.genes, 1);
+                grnState.customWorkbook.genes = sortGenes(grnState.customWorkbook.genes, GRN_STANDARD_NAME_ID);
                 const genes = Object.keys(grnState.customWorkbook.genes);
                 const displayGenes = Object.keys(grnState.customWorkbook.genes).map(g => grnState.customWorkbook.genes[g]);
                 const source = grnState.customWorkbook.source;
@@ -285,7 +288,7 @@ containing "-", "_", and alpha-numeric characters only`);
                     console.log(error.message);
                 });
             } else if (grnState.customWorkbook.type === NETWORK_PPI_MODE) {
-                grnState.customWorkbook.genes = sortGenes(grnState.customWorkbook.genes, 0);
+                grnState.customWorkbook.genes = sortGenes(grnState.customWorkbook.genes, PPI_STANDARD_NAME_ID);
                 const proteins = Object.keys(grnState.customWorkbook.genes);
                 const source = grnState.customWorkbook.source;
                 const headers = {
