@@ -662,6 +662,9 @@ const resetDatasetDropdownMenus = (workbook) => {
     clearDropdownMenus();
     $(".dataset-option").remove(); // clear all menu dataset options
 
+    grnState.nodeColoring.nodeColoringOptions.workbookExpressions = [];
+    grnState.nodeColoring.nodeColoringOptions.databaseExpressions = [];
+
     var createHTMLforDataset = function (name) {
         return `
             <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
@@ -710,12 +713,13 @@ const resetDatasetDropdownMenus = (workbook) => {
     };
 
     // Add Workbook Expressions
-    addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
-
-    // Add Database Expressions
+    if (grnState.workbookType === "upload") {
+        addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "User-Uploaded");
+    } else {
+        addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "Demo");
+    }
+    // Always add database expressions
     addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.databaseExpressions, "Expression Database");
-
-
     $("#topDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
     $("#bottomDatasetDropdownMenu li a span").first().addClass("glyphicon-ok");
 };
