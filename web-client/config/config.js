@@ -8,9 +8,9 @@ module.exports = {
         url: "http://" + this.host + "/" + this.port,
         root: rootPath,
         app: {
-            name: "GRNsight"
+            name: "GRNsight",
         },
-        serviceRoot: "//localhost:5000"
+        serviceRoot: "//localhost:5000",
     },
 
     production: {
@@ -19,9 +19,9 @@ module.exports = {
         url: "https://" + this.host + "/client",
         root: rootPath,
         app: {
-            name: "GRNsight"
+            name: "GRNsight",
         },
-        serviceRoot: "//grnsight.lmucs.org/server"
+        serviceRoot: "//grnsight.lmucs.org/server",
     },
 
     beta: {
@@ -30,8 +30,8 @@ module.exports = {
         url: "https://" + this.host + "/beta/client",
         root: rootPath,
         app: {
-            name: "GRNsight"
+            name: "GRNsight",
         },
-        serviceRoot: "//grnsight.lmucs.org/beta/server"
-    }
+        serviceRoot: "//grnsight.lmucs.org/beta/server",
+    },
 };

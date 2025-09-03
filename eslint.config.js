@@ -3,10 +3,15 @@ module.exports = [
         ignores: [
             "node_modules/**",
             "coverage/**",
+            "web-client/public/js/*.min.js",
+            // Add these from your .eslintignore file
+            "coverage/lcov-report/**",
+            "_site/**",
+            ".git/**",
         ],
         languageOptions: {
             ecmaVersion: 2020,
-            sourceType: "module",  
+            sourceType: "module",
             globals: {
                 window: "readonly",
                 document: "readonly",
@@ -19,12 +24,16 @@ module.exports = [
                 afterEach: "readonly",
                 $: "readonly",
                 jQuery: "readonly",
-            }
+            },
+        },
+        plugins: {
+            prettier: require("eslint-plugin-prettier"),
         },
         rules: {
-            indent: ["error", 4],
-            quotes: ["error", "double"],
-            semi: ["error", "always"],
-        }
-    }
+            "prettier/prettier": "error",
+            indent: "off", // Let Prettier handle indentation
+            quotes: "off", // Let Prettier handle quotes
+            semi: "off", // Let Prettier handle semicolons
+        },
+    },
 ];

@@ -1,4 +1,4 @@
-var displayStatistics = function (workbook) {  
+var displayStatistics = function (workbook) {
     var $container = $(".graph-statistics-container").removeClass("hidden");
     var $thead = $container.find("thead");
     var $tbody = $container.find("tbody").empty();
@@ -19,24 +19,31 @@ var displayStatistics = function (workbook) {
     };
 
     var populateHead = function () {
-        $thead.find(".shortest-path-column-headers").empty().append(
-            workbook.genes.map(function (gene) {
-                return $("<th></th>").text(gene.name);
-            })
-        );
+        $thead
+            .find(".shortest-path-column-headers")
+            .empty()
+            .append(
+                workbook.genes.map(function (gene) {
+                    return $("<th></th>").text(gene.name);
+                })
+            );
 
         $thead.find(".shortest-path-header").attr({ colspan: workbook.genes.length });
     };
 
     var populateBody = function () {
-        $tbody.append(workbook.genes.map(function (gene) {
-            return $("<tr></tr>")
-                .append($("<th></th>").text(gene.name))
-                .append($("<td></td>").text(betweennessCentralityFor(gene.name)))
-                .append(workbook.genes.map(function (targetGene) {
-                    return $("<td></td>").text(shortestPath(gene.name, targetGene.name));
-                }));
-        }));
+        $tbody.append(
+            workbook.genes.map(function (gene) {
+                return $("<tr></tr>")
+                    .append($("<th></th>").text(gene.name))
+                    .append($("<td></td>").text(betweennessCentralityFor(gene.name)))
+                    .append(
+                        workbook.genes.map(function (targetGene) {
+                            return $("<td></td>").text(shortestPath(gene.name, targetGene.name));
+                        })
+                    );
+            })
+        );
     };
 
     populateHead();

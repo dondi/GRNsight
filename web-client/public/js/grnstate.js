@@ -11,7 +11,7 @@ import {
     DEFAULT_ZOOM_VALUE,
     FORCE_GRAPH,
     VIEWPORT_INIT,
-    NETWORK_GRN_MODE
+    NETWORK_GRN_MODE,
 } from "./constants";
 let currentWorkbook = null;
 
@@ -30,29 +30,29 @@ const annotateLinks = workbook => {
         if (link.value > 0) {
             link.type = "arrowhead";
             // link.stroke = "MediumVioletRed";   // GRNsight v1 magenta edge color
-            link.stroke = "rgb(195, 61, 61)";     // Node coloring-consistent red edge color
+            link.stroke = "rgb(195, 61, 61)"; // Node coloring-consistent red edge color
             workbook.positiveWeights.push(link.value);
         } else {
             link.type = "repressor";
             // link.stroke = "DarkTurquoise";     // GRNsight v1 cyan edge color
-            link.stroke = "rgb(51, 124, 183)";    // Node coloring-consistent blue edge color
+            link.stroke = "rgb(51, 124, 183)"; // Node coloring-consistent blue edge color
             workbook.negativeWeights.push(link.value);
         }
     });
 };
 
 export const grnState = {
-    mode: NETWORK_GRN_MODE,    // GRNsight will display GRN view unless specified
+    mode: NETWORK_GRN_MODE, // GRNsight will display GRN view unless specified
     name: null,
     simulation: undefined,
     newWorkbook: false,
     workbookType: null,
 
-    get workbook () {
+    get workbook() {
         return currentWorkbook;
     },
 
-    set workbook (workbook) {
+    set workbook(workbook) {
         // console.dir(workbook);
         currentWorkbook = workbook;
         // TODO: add colorOptimal so that the rest of the normalization code can get added
@@ -92,7 +92,6 @@ export const grnState = {
         ppiNodeColorWarningDisplayed: false,
     },
 
-
     // Gene Page data
     // left defaulting to yeast for tests, until a better solution is found
     // Setting base case to yeast
@@ -103,7 +102,7 @@ export const grnState = {
         taxonJaspar: "4932",
         identified: false,
         ensembl: "reg",
-        mine: "yeast"
+        mine: "yeast",
     },
 
     nameToTaxon: {
@@ -111,18 +110,48 @@ export const grnState = {
         // and values being a dictionary of (latin name, Uniprot, Jaspar)
         // some taxon ids are different between the two
         // changed spec names for common english and will have them formatted before calling an api
-        "Arabidopsis thaliana": { spec: "Arabidopsis_thaliana", jaspar: 3702, uniprot: 3702,
-            ensembl: "plant", mine: "thale"},
-        "Caenorhabditis elegans": { spec: "Caenorhabditis_elegans", jaspar: 6293, uniprot: 6293,
-            ensembl: "reg", mine: "worm"},
-        "Drosophila melanogaster": { spec: "Drosophila_melanogaster", jaspar: 7227, uniprot: 7227,
-            ensembl: "reg", mine: "fly"},
-        "Homo sapiens": { spec: "Homo_sapiens", jaspar: 9606, uniprot: 9606, ensembl: "reg",
-            mine: "fly"},
-        "Mus musculus": { spec: "Mus_musculus", jaspar: 10090, uniprot: 10090, ensembl: "reg",
-            mine: "mouse"},
-        "Saccharomyces cerevisiae": { spec: "Saccharomyces_cerevisiae", jaspar: 4932, uniprot: 559292,
-            ensembl: "reg", mine: "yeast"}
+        "Arabidopsis thaliana": {
+            spec: "Arabidopsis_thaliana",
+            jaspar: 3702,
+            uniprot: 3702,
+            ensembl: "plant",
+            mine: "thale",
+        },
+        "Caenorhabditis elegans": {
+            spec: "Caenorhabditis_elegans",
+            jaspar: 6293,
+            uniprot: 6293,
+            ensembl: "reg",
+            mine: "worm",
+        },
+        "Drosophila melanogaster": {
+            spec: "Drosophila_melanogaster",
+            jaspar: 7227,
+            uniprot: 7227,
+            ensembl: "reg",
+            mine: "fly",
+        },
+        "Homo sapiens": {
+            spec: "Homo_sapiens",
+            jaspar: 9606,
+            uniprot: 9606,
+            ensembl: "reg",
+            mine: "fly",
+        },
+        "Mus musculus": {
+            spec: "Mus_musculus",
+            jaspar: 10090,
+            uniprot: 10090,
+            ensembl: "reg",
+            mine: "mouse",
+        },
+        "Saccharomyces cerevisiae": {
+            spec: "Saccharomyces_cerevisiae",
+            jaspar: 4932,
+            uniprot: 559292,
+            ensembl: "reg",
+            mine: "yeast",
+        },
     },
 
     // Slider Parameters

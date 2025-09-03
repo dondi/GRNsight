@@ -17,11 +17,11 @@ import {
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
     NETWORK_GRN_MODE,
-    BOUNDARY_MARGIN
+    BOUNDARY_MARGIN,
 } from "./constants";
 
 /* globals d3 */
-/* eslint-disable no-use-before-define, func-style */
+
 /*
   By D3's nature, it can be a bit difficult to adhere to our given guidelines..
   This file needs to be organized a bit more before it can fully adhere to
@@ -34,7 +34,6 @@ import {
  */
 
 /* eslint no-unused-vars: [2, {"varsIgnorePattern": "text|getMappedValue|manualZoom"}] */
-/* eslint-disable no-unused-vars */
 
 /**
  * Resize detection logic: to avoid "listener leaks," this is set up a single time here, with an assignable
@@ -43,7 +42,7 @@ import {
 
 let mutationCallback = null;
 const resizeObserver = new MutationObserver((mutationsList, observer) => {
-    if (typeof(mutationCallback) === "function") {
+    if (typeof mutationCallback === "function") {
         mutationCallback(mutationsList, observer);
     }
 });
@@ -56,7 +55,6 @@ export var updaters = {
 };
 
 export var drawGraph = function (workbook) {
-/* eslint-enable no-unused-vars */
     var $container = $(".grnsight-container");
     var CURSOR_CLASSES = "cursorGrab cursorGrabbing";
     d3.selectAll("svg").remove();
@@ -70,7 +68,9 @@ export var drawGraph = function (workbook) {
 
     var dashedLine = $("#dashedGrayLineButton").prop("checked");
 
-    $("#warningMessage").html(workbook.warnings.length !== 0 ? "Click here in order to view warnings." : "");
+    $("#warningMessage").html(
+        workbook.warnings.length !== 0 ? "Click here in order to view warnings." : ""
+    );
 
     var getNodeWidth = function (node) {
         return node.name.length * 12 + 5;
@@ -87,32 +87,39 @@ export var drawGraph = function (workbook) {
      * on the zoom slider, even if the numeric ranges to the left and right of the midpoint are asymmetric (as they
      * are here).
      */
-    const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) => d3.scaleLinear()
-        .domain([domainMin, domainMax])
-        .range([rangeMin, rangeMax])
-        .clamp(true);
+    const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
+        d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
 
     const MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM_VALUE;
     const ADAPTIVE_MAX_DISPLAY = ZOOM_DISPLAY_MAXIMUM_VALUE;
     const MIN_SCALE = 0.25;
     const MIDDLE_SCALE = 1;
 
-    const zoomScaleLeft = createZoomScale(MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE, MIN_SCALE, MIDDLE_SCALE);
+    const zoomScaleLeft = createZoomScale(
+        MIN_DISPLAY,
+        ZOOM_DISPLAY_MIDDLE,
+        MIN_SCALE,
+        MIDDLE_SCALE
+    );
     const zoomScaleRight = createZoomScale(
-        ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY, MIDDLE_SCALE, ZOOM_ADAPTIVE_MAX_SCALE);
+        ZOOM_DISPLAY_MIDDLE,
+        ADAPTIVE_MAX_DISPLAY,
+        MIDDLE_SCALE,
+        ZOOM_ADAPTIVE_MAX_SCALE
+    );
 
     // Create an array of all the network weights
     var allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
     // Assign the entire array weights of 1, if color edges turned off
     if (!grnState.colorOptimal) {
         for (var i = 0; i < allWeights.length; i++) {
-            if ( allWeights[i] !== 0 ) {
+            if (allWeights[i] !== 0) {
                 allWeights[i] = 1;
             }
         }
     } else {
-        for (var j = 0; j < allWeights.length; j++ ) {
-            allWeights[j] = Math.abs((allWeights[j]).toPrecision(4));
+        for (var j = 0; j < allWeights.length; j++) {
+            allWeights[j] = Math.abs(allWeights[j].toPrecision(4));
         }
     }
 
@@ -126,7 +133,8 @@ export var drawGraph = function (workbook) {
 
     // Normalize all weights b/w 2-14
     var normMax = +$("#normalization-max").val();
-    var totalScale = d3.scaleLinear()
+    var totalScale = d3
+        .scaleLinear()
         .domain([0, normMax > 0 ? normMax : maxWeight])
         .range([2, 14])
         .clamp(true);
@@ -135,30 +143,33 @@ export var drawGraph = function (workbook) {
 
     // if unweighted, all weights are 2
     if (workbook.sheetType === "unweighted") {
-        totalScale = d3.scaleQuantile()
+        totalScale = d3
+            .scaleQuantile()
             .domain([d3.extent(allWeights)])
             .range(["2"]);
         unweighted = true;
         $(".normalization-form").append("placeholder='unweighted'");
-        document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", "");
+        document
+            .getElementById("edge-weight-normalization-factor-menu")
+            .setAttribute("placeholder", "");
     } else {
         document.getElementById("normalization-max").setAttribute("placeholder", maxWeight);
-        document.getElementById("edge-weight-normalization-factor-menu").setAttribute("placeholder", maxWeight);
+        document
+            .getElementById("edge-weight-normalization-factor-menu")
+            .setAttribute("placeholder", maxWeight);
     }
 
     var getEdgeThickness = function (edge) {
         return Math.floor(totalScale(Math.abs(edge.value)));
     };
 
-    var simulation = d3.forceSimulation()
+    var simulation = d3
+        .forceSimulation()
         .force("link", d3.forceLink())
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    var drag = d3.drag()
-        .on("start", dragstart)
-        .on("drag", dragged)
-        .on("end", dragended);
+    var drag = d3.drag().on("start", dragstart).on("drag", dragged).on("end", dragended);
 
     var dragended = function () {
         d3.event.stopPropagation();
@@ -178,12 +189,14 @@ export var drawGraph = function (workbook) {
         var scale = 1;
         if (zoomContainer.attr("transform")) {
             var string = zoomContainer.attr("transform");
-            scale = 1 / +(string.match(/scale\(([^\)]+)\)/)[1]);
+            scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
         }
 
-        if (adaptive || (!adaptive &&
-            flexZoomInBounds(graphZoom) &&
-            viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
+        if (
+            adaptive ||
+            (!adaptive &&
+                flexZoomInBounds(graphZoom) &&
+                viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
         ) {
             zoom.translateBy(
                 zoomContainer,
@@ -200,19 +213,23 @@ export var drawGraph = function (workbook) {
     };
 
     // zoomDrag and all functions that it calls handles cursor dragging
-    var zoomDrag = d3.drag()
+    var zoomDrag = d3
+        .drag()
         .on("start", zoomDragStarted)
         .on("drag", zoomDragged)
         .on("end", zoomDragEnded);
 
     var manualZoom = false;
 
-    var svg = d3.select($container[0]).append("svg")
+    var svg = d3
+        .select($container[0])
+        .append("svg")
         .attr("width", width)
         .attr("height", height)
         .attr("id", "exportContainer");
 
-    var zoomContainer = svg.append("g") // required for zoom to work
+    var zoomContainer = svg
+        .append("g") // required for zoom to work
         .attr("class", "boundingBox")
         .attr("width", width)
         .attr("height", height);
@@ -221,28 +238,27 @@ export var drawGraph = function (workbook) {
 
     // This rectangle catches all of the mousewheel and pan events, without letting
     // them bubble up to the body.
-    var boundingBoxRect = boundingBoxContainer.append("rect")
+    var boundingBoxRect = boundingBoxContainer
+        .append("rect")
         .attr("width", width)
         .attr("height", height)
         .style("fill", "none")
         .style("pointer-events", "all")
-        .attr("stroke", "none" )
+        .attr("stroke", "none")
         .attr("id", "boundingBoxRect");
 
-    var flexibleContainerRect = boundingBoxContainer.append("rect")
+    var flexibleContainerRect = boundingBoxContainer
+        .append("rect")
         .attr("class", "boundingBox")
         .attr("fill", "none")
         .attr("id", "flexibleContainerRect");
 
-    var zoom = d3.zoom()
-        .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
-        .on("zoom", zoomed);
+    var zoom = d3.zoom().scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE]).on("zoom", zoomed);
 
-    svg.style("pointer-events", "all").call(zoomDrag)
-        .style("font-family", "sans-serif");
+    svg.style("pointer-events", "all").call(zoomDrag).style("font-family", "sans-serif");
 
     // this allows zoomContainer to be zoomed, dragged
-    function zoomed () {
+    function zoomed() {
         zoomContainer.attr("transform", d3.event.transform);
     }
 
@@ -250,7 +266,7 @@ export var drawGraph = function (workbook) {
 
     // this controls the D-pad
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
-    var arrowMovement = [ "Up", "Left", "Right", "Down" ];
+    var arrowMovement = ["Up", "Left", "Right", "Down"];
     arrowMovement.forEach(function (direction) {
         d3.select(".scroll" + direction).on("click", function () {
             move(direction.toLowerCase());
@@ -261,22 +277,13 @@ export var drawGraph = function (workbook) {
     let xTranslation = 0;
     let yTranslation = 0;
 
-    function updateZoomContainerInfo () {
+    function updateZoomContainerInfo() {
         // transform attribute of zoomContainer contains translation info about graph
         if (zoomContainer.attr("transform")) {
-            xTranslation = Number(
-                zoomContainer
-                    .attr("transform")
-                    .split("(")[1]
-                    .split(",")[0]
-            );
+            xTranslation = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
 
             yTranslation = Number(
-                zoomContainer
-                    .attr("transform")
-                    .split("(")[1]
-                    .split(",")[1]
-                    .split(")")[0]
+                zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
             );
         }
     }
@@ -310,9 +317,9 @@ export var drawGraph = function (workbook) {
         } else if (
             !adaptive &&
             flexZoomInBounds(
-                (grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE
-                    ? zoomScaleLeft
-                    : zoomScaleRight)(grnState.zoomValue)
+                (grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
+                    grnState.zoomValue
+                )
             )
         ) {
             zoomDisplay = grnState.zoomValue;
@@ -321,9 +328,9 @@ export var drawGraph = function (workbook) {
             zoomDisplay = grnState.zoomValue;
         }
 
-        const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE
-            ? zoomScaleLeft
-            : zoomScaleRight)(zoomDisplay);
+        const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
+            zoomDisplay
+        );
 
         setGraphZoom(calcGraphZoom);
 
@@ -369,8 +376,18 @@ export var drawGraph = function (workbook) {
         const sliderMax = +$(ZOOM_SLIDER).attr("max");
         sliderMidpoint = (sliderMin + sliderMax) / 2;
 
-        zoomScaleSliderLeft = createZoomScale(sliderMin, sliderMidpoint, MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE);
-        zoomScaleSliderRight = createZoomScale(sliderMidpoint, sliderMax, ZOOM_DISPLAY_MIDDLE, ADAPTIVE_MAX_DISPLAY);
+        zoomScaleSliderLeft = createZoomScale(
+            sliderMin,
+            sliderMidpoint,
+            MIN_DISPLAY,
+            ZOOM_DISPLAY_MIDDLE
+        );
+        zoomScaleSliderRight = createZoomScale(
+            sliderMidpoint,
+            sliderMax,
+            ZOOM_DISPLAY_MIDDLE,
+            ADAPTIVE_MAX_DISPLAY
+        );
 
         // Reset the zoom value to the midpoint whenever we load a new workbook.
         if (grnState.newWorkbook) {
@@ -386,27 +403,32 @@ export var drawGraph = function (workbook) {
         return valueValidator(MIN_DISPLAY, ADAPTIVE_MAX_DISPLAY, value);
     };
 
-    $(ZOOM_INPUT).on("input", () => {
-        grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
-        updateAppBasedOnZoomValue();
-    }).blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
+    $(ZOOM_INPUT)
+        .on("input", () => {
+            grnState.zoomValue = zoomInputValidator(+$(ZOOM_INPUT).val());
+            updateAppBasedOnZoomValue();
+        })
+        .blur(() => $(ZOOM_INPUT).val(grnState.zoomValue));
 
-    d3.select(ZOOM_SLIDER).on("input", function () {
-        const sliderValue = $(this).val();
-        prevGrnstateZoomVal = grnState.zoomValue;
+    d3.select(ZOOM_SLIDER)
+        .on("input", function () {
+            const sliderValue = $(this).val();
+            prevGrnstateZoomVal = grnState.zoomValue;
 
-        grnState.zoomValue = Math.floor(
-            (sliderValue <= sliderMidpoint
-                ? zoomScaleSliderLeft
-                : zoomScaleSliderRight)(sliderValue)
-        );
+            grnState.zoomValue = Math.floor(
+                (sliderValue <= sliderMidpoint ? zoomScaleSliderLeft : zoomScaleSliderRight)(
+                    sliderValue
+                )
+            );
 
-        updateAppBasedOnZoomValue();
-    }).on("mousedown", function () {
-        manualZoom = true;
-    }).on("mouseup", function () {
-        manualZoom = false;
-    });
+            updateAppBasedOnZoomValue();
+        })
+        .on("mousedown", function () {
+            manualZoom = true;
+        })
+        .on("mouseup", function () {
+            manualZoom = false;
+        });
 
     if (!grnState.newWorkbook) {
         updateAppBasedOnZoomValue();
@@ -417,8 +439,8 @@ export var drawGraph = function (workbook) {
         var newHeight = $container.height();
 
         if (adaptive) {
-            width = (width < newWidth) ? newWidth : width;
-            height = (height < newHeight) ? newHeight : height;
+            width = width < newWidth ? newWidth : width;
+            height = height < newHeight ? newHeight : height;
         } else {
             width = newWidth;
             height = newHeight;
@@ -426,8 +448,12 @@ export var drawGraph = function (workbook) {
 
         // Subtract 1 from SVG height if we are fitting to window so as to prevent scrollbars from showing up
         // Is inconsistent, but I'm tired of fighting with it...
-        d3.select("svg").attr("width", newWidth)
-            .attr("height", $(".grnsight-container").hasClass(VIEWPORT_FIT) ? newHeight : newHeight);
+        d3.select("svg")
+            .attr("width", newWidth)
+            .attr(
+                "height",
+                $(".grnsight-container").hasClass(VIEWPORT_FIT) ? newHeight : newHeight
+            );
         d3.select("rect").attr("width", width).attr("height", height);
         d3.select(".boundingBox").attr("width", width).attr("height", height);
     };
@@ -455,9 +481,7 @@ export var drawGraph = function (workbook) {
             }
             width = $container.width();
             height = $container.height();
-            d3.select("rect")
-                .attr("width", width)
-                .attr("height", height);
+            d3.select("rect").attr("width", width).attr("height", height);
             $(".boundingBox").attr("width", width).attr("height", height);
             center();
         }
@@ -474,14 +498,14 @@ export var drawGraph = function (workbook) {
         restrictGraphToViewport(fixed);
     });
 
-    function center () {
+    function center() {
         var viewportWidth = $container.width();
         var viewportHeight = $container.height();
         zoom.translateTo(zoomContainer, viewportWidth / 2, viewportHeight / 2);
     }
 
     // move: Moves graph with D-pad
-    function move (direction) {
+    function move(direction) {
         var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
         var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
         if (adaptive) {
@@ -499,20 +523,21 @@ export var drawGraph = function (workbook) {
     var node = boundingBoxContainer.selectAll(".nodes");
     var weight = boundingBoxContainer.selectAll(".weight");
 
-    simulation
-        .nodes(workbook.genes)
-        .on("tick", tick);
+    simulation.nodes(workbook.genes).on("tick", tick);
 
-    simulation.force("link")
-        .links(workbook.links);
+    simulation.force("link").links(workbook.links);
 
-    link = link.data(workbook.links)
-        .enter().append("g")
+    link = link
+        .data(workbook.links)
+        .enter()
+        .append("g")
         .attr("class", "link")
         .attr("strokeWidth", getEdgeThickness);
 
-    node = node.data(workbook.genes)
-        .enter().append("g")
+    node = node
+        .data(workbook.genes)
+        .enter()
+        .append("g")
         .attr("class", "node")
         .attr("id", function (d) {
             return "node" + d.index;
@@ -536,10 +561,12 @@ export var drawGraph = function (workbook) {
         .attr("class", "main")
         .attr("id", function (d) {
             return "path" + d.source.index + "_" + d.target.index;
-        }).style("stroke-width", function (d) {
+        })
+        .style("stroke-width", function (d) {
             d.strokeWidth = grnState.colorOptimal ? getEdgeThickness(d) : 2;
             return d.strokeWidth;
-        }).style("stroke-dasharray", function (d) {
+        })
+        .style("stroke-dasharray", function (d) {
             if (unweighted || !grnState.colorOptimal) {
                 return "0";
             } else if (normalize(d) <= grayThreshold && dashedLine === true) {
@@ -547,7 +574,8 @@ export var drawGraph = function (workbook) {
             } else {
                 return "0";
             }
-        }).style("stroke", function (d) {
+        })
+        .style("stroke", function (d) {
             if (unweighted || !grnState.colorOptimal) {
                 return "black";
             } else if (normalize(d) <= grayThreshold) {
@@ -555,7 +583,8 @@ export var drawGraph = function (workbook) {
             } else {
                 return d.stroke;
             }
-        }).attr("marker-end", function (d) {
+        })
+        .attr("marker-end", function (d) {
             var x1 = d.source.x;
             var y1 = d.source.y;
             var x2 = d.target.x;
@@ -569,33 +598,57 @@ export var drawGraph = function (workbook) {
             if (normalize(d) <= grayThreshold) {
                 minimum = "gray";
             }
-            if ( x1 === x2 && y1 === y2 ) {
+            if (x1 === x2 && y1 === y2) {
                 selfRef = "_SelfReferential";
             }
             // If the same ID is created twice (usually happens in the unweighted GRNS),
             // it causes unpredictable behavior in the markers.
             // To prevent this, first we check to make sure the ID about to be created doesn't exist.
-            if ( $("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum).length !== 0 ) {
+            if ($("#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum).length !== 0) {
                 return "url(#" + d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
             } else {
-
                 // If negative, you need one bar for horizontal and one for vertical.
                 // If the user is not coloring the weighted
                 // sheets, then we make all of the markers arrowheads.
                 if (d.value < 0 && grnState.colorOptimal) {
                     defs.append("marker")
-                        .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                        .attr(
+                            "id",
+                            "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum
+                        )
                         .attr("refX", function () {
                             xOffsets = {
-                                2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
-                                9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
+                                2: 1,
+                                3: 2,
+                                4: 2,
+                                5: 2,
+                                6: 2.5,
+                                7: 3,
+                                8: 3.5,
+                                9: 4,
+                                10: 4.5,
+                                11: 5,
+                                12: 5,
+                                13: 5.5,
+                                14: 6,
                             };
                             return xOffsets[d.strokeWidth];
                         })
                         .attr("refY", function () {
                             yOffsets = {
-                                2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 17, 8 : 17,
-                                9 : 17, 10 : 17, 11 : 17, 12 : 18.5, 13 : 18, 14 : 19.25
+                                2: 13,
+                                3: 13,
+                                4: 13.5,
+                                5: 14,
+                                6: 15.5,
+                                7: 17,
+                                8: 17,
+                                9: 17,
+                                10: 17,
+                                11: 17,
+                                12: 18.5,
+                                13: 18,
+                                14: 19.25,
                             };
                             return yOffsets[d.strokeWidth];
                         })
@@ -617,7 +670,7 @@ export var drawGraph = function (workbook) {
                         .attr("rx", 10)
                         .attr("ry", 10)
                         .attr("style", function () {
-                            if ( normalize(d) <= grayThreshold) {
+                            if (normalize(d) <= grayThreshold) {
                                 color = "gray";
                             } else {
                                 color = d.stroke;
@@ -626,25 +679,66 @@ export var drawGraph = function (workbook) {
                         });
 
                     defs.append("marker")
-                        .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                        .attr(
+                            "id",
+                            "repressorHorizontal" +
+                                selfRef +
+                                "_StrokeWidth" +
+                                d.strokeWidth +
+                                minimum
+                        )
                         .attr("refX", function () {
-                            if (x1 === x2 && y1 === y2) { // if self referential...
+                            if (x1 === x2 && y1 === y2) {
+                                // if self referential...
                                 xOffsets = {
-                                    2 : 14, 3 : 15, 4 : 15, 5 : 15, 6 : 16, 7 : 16.5, 8 : 16.5,
-                                    9 : 17, 10 : 17.5, 11 : 18, 12 : 19, 13 : 19.5, 14 : 20.5
+                                    2: 14,
+                                    3: 15,
+                                    4: 15,
+                                    5: 15,
+                                    6: 16,
+                                    7: 16.5,
+                                    8: 16.5,
+                                    9: 17,
+                                    10: 17.5,
+                                    11: 18,
+                                    12: 19,
+                                    13: 19.5,
+                                    14: 20.5,
                                 };
                             } else {
                                 xOffsets = {
-                                    2 : 13, 3 : 13, 4 : 13.5, 5 : 14, 6 : 15.5, 7 : 16.5, 8 : 17,
-                                    9 : 16, 10 : 17, 11 : 17, 12 : 18, 13 : 18, 14 : 19
+                                    2: 13,
+                                    3: 13,
+                                    4: 13.5,
+                                    5: 14,
+                                    6: 15.5,
+                                    7: 16.5,
+                                    8: 17,
+                                    9: 16,
+                                    10: 17,
+                                    11: 17,
+                                    12: 18,
+                                    13: 18,
+                                    14: 19,
                                 };
                             }
                             return xOffsets[d.strokeWidth];
                         })
                         .attr("refY", function () {
                             yOffsets = {
-                                2 : 1, 3 : 2, 4 : 2, 5 : 2, 6 : 2.5, 7 : 3, 8 : 3.5,
-                                9 : 4, 10 : 4.5, 11 : 5, 12 : 5, 13 : 5.5, 14 : 6
+                                2: 1,
+                                3: 2,
+                                4: 2,
+                                5: 2,
+                                6: 2.5,
+                                7: 3,
+                                8: 3.5,
+                                9: 4,
+                                10: 4.5,
+                                11: 5,
+                                12: 5,
+                                13: 5.5,
+                                14: 6,
                             };
                             return yOffsets[d.strokeWidth];
                         })
@@ -680,57 +774,121 @@ export var drawGraph = function (workbook) {
                             d.strokeWidth = 4;
                         }
                         defs.append("marker")
-                            .attr("id",  "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+                            .attr(
+                                "id",
+                                "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum
+                            )
                             .attr("viewBox", "0 0 15 15")
                             .attr("preserveAspectRatio", "xMinYMin meet")
                             .attr("refX", function () {
-                            // Individual offsets for each possible stroke width
-                                return ((x1 === x2 && y1 === y2) ?
-                                    {
-                                        2: 2, 3: 10.5, 4: 11, 5: 9, 6: 9, 7: 10,
-                                        8: 9.8, 9: 9.1, 10: 10, 11: 9.5, 12: 9, 13: 8.3,
-                                        14: 8.3
-                                    } : {
-                                        2: 11.75, 3: 11, 4: 9.75, 5: 9.25,  6: 8.5, 7: 10,
-                                        8: 9.75, 9: 9.5, 10: 9, 11: 9.5, 12: 9.5, 13: 9.25,
-                                        14: 9
-                                    }
+                                // Individual offsets for each possible stroke width
+                                return (
+                                    x1 === x2 && y1 === y2
+                                        ? {
+                                              2: 2,
+                                              3: 10.5,
+                                              4: 11,
+                                              5: 9,
+                                              6: 9,
+                                              7: 10,
+                                              8: 9.8,
+                                              9: 9.1,
+                                              10: 10,
+                                              11: 9.5,
+                                              12: 9,
+                                              13: 8.3,
+                                              14: 8.3,
+                                          }
+                                        : {
+                                              2: 11.75,
+                                              3: 11,
+                                              4: 9.75,
+                                              5: 9.25,
+                                              6: 8.5,
+                                              7: 10,
+                                              8: 9.75,
+                                              9: 9.5,
+                                              10: 9,
+                                              11: 9.5,
+                                              12: 9.5,
+                                              13: 9.25,
+                                              14: 9,
+                                          }
                                 )[d.strokeWidth];
                             })
                             .attr("refY", function () {
-                                return ((x1 === x2 && y1 === y2) ?
-                                    {
-                                        2: 6.7, 3: 5.45, 4: 5.3, 5: 5.5, 6: 5, 7: 5.4,
-                                        8: 5.65, 9: 6, 10: 5.7, 11: 5.5, 12: 5.9, 13: 6,
-                                        14: 6
-                                    } : {
-                                        2: 5, 3: 5, 4: 4.8, 5: 5, 6: 5, 7: 4.98,
-                                        8: 4.9, 9: 5.2, 10: 4.85, 11: 4.7, 12: 5.15,
-                                        13: 5, 14: 5.3
-                                    }
+                                return (
+                                    x1 === x2 && y1 === y2
+                                        ? {
+                                              2: 6.7,
+                                              3: 5.45,
+                                              4: 5.3,
+                                              5: 5.5,
+                                              6: 5,
+                                              7: 5.4,
+                                              8: 5.65,
+                                              9: 6,
+                                              10: 5.7,
+                                              11: 5.5,
+                                              12: 5.9,
+                                              13: 6,
+                                              14: 6,
+                                          }
+                                        : {
+                                              2: 5,
+                                              3: 5,
+                                              4: 4.8,
+                                              5: 5,
+                                              6: 5,
+                                              7: 4.98,
+                                              8: 4.9,
+                                              9: 5.2,
+                                              10: 4.85,
+                                              11: 4.7,
+                                              12: 5.15,
+                                              13: 5,
+                                              14: 5.3,
+                                          }
                                 )[d.strokeWidth];
                             })
                             .attr("markerUnits", "userSpaceOnUse")
                             .attr("markerWidth", function () {
-                                return 12 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
+                                return (
+                                    12 +
+                                    (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3)
+                                );
                             })
                             .attr("markerHeight", function () {
-                                return 5 + ((d.strokeWidth < 7) ? d.strokeWidth * 2.25 : d.strokeWidth * 3);
+                                return (
+                                    5 +
+                                    (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3)
+                                );
                             })
                             .attr("orient", function () {
-                                return (x1 === x2 && y1 === y2) ?
-                                    {
-                                        2: 270, 3: 270, 4: 268, 5: 264, 6: 268, 7: 252,
-                                        8: 248, 9: 243, 10: 240, 11: 240, 12: 235, 13: 233,
-                                        14: 232
-                                    }[d.strokeWidth] : "auto";
+                                return x1 === x2 && y1 === y2
+                                    ? {
+                                          2: 270,
+                                          3: 270,
+                                          4: 268,
+                                          5: 264,
+                                          6: 268,
+                                          7: 252,
+                                          8: 248,
+                                          9: 243,
+                                          10: 240,
+                                          11: 240,
+                                          12: 235,
+                                          13: 233,
+                                          14: 232,
+                                      }[d.strokeWidth]
+                                    : "auto";
                             })
                             .append("path")
                             .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
                             .attr("style", function () {
                                 if (unweighted || !grnState.colorOptimal) {
                                     color = "black";
-                                } else if ( normalize(d) <= grayThreshold) {
+                                } else if (normalize(d) <= grayThreshold) {
                                     color = "gray";
                                 } else {
                                     color = d.stroke;
@@ -754,8 +912,10 @@ export var drawGraph = function (workbook) {
                 return d.value.toPrecision(4);
             });
 
-        weight = weight.data(workbook.links)
-            .enter().append("text")
+        weight = weight
+            .data(workbook.links)
+            .enter()
+            .append("text")
             .attr("class", "weight")
             .attr("text-anchor", "middle")
             .attr("fill", "rgb(0,0,0)")
@@ -766,7 +926,6 @@ export var drawGraph = function (workbook) {
             .each(function (d) {
                 d.weightElement = d3.select(this);
             });
-
     }
 
     /* Big thanks to the following for the smart edges
@@ -778,8 +937,8 @@ export var drawGraph = function (workbook) {
         var w = parseFloat(node.attr("width"));
         var h = parseFloat(node.attr("height"));
 
-        d.source.newX = d.source.x + (w / 2);
-        d.source.newY = d.source.y + (h / 2);
+        d.source.newX = d.source.x + w / 2;
+        d.source.newY = d.source.y + h / 2;
 
         return "M" + d.source.newX + "," + d.source.newY + " ";
     };
@@ -795,8 +954,8 @@ export var drawGraph = function (workbook) {
         var x2 = d.target.x;
         var y2 = d.target.y;
 
-        d.target.centerX = d.target.x + (w / 2);
-        d.target.centerY = d.target.y + (h / 2);
+        d.target.centerX = d.target.x + w / 2;
+        d.target.centerY = d.target.y + h / 2;
 
         // This function calculates the newX and newY.
         smartPathEnd(d, w, h);
@@ -819,9 +978,12 @@ export var drawGraph = function (workbook) {
         vy /= vmagnitude;
 
         // Check for vector direction.
-        if (((d.target.newX > d.source.x) && (d.target.newY > d.source.y)) ||
-            ((d.target.newX < d.source.x) && (d.target.newY < d.source.y))) {
-            vx = -vx; vy = -vy;
+        if (
+            (d.target.newX > d.source.x && d.target.newY > d.source.y) ||
+            (d.target.newX < d.source.x && d.target.newY < d.source.y)
+        ) {
+            vx = -vx;
+            vy = -vy;
         }
 
         var curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
@@ -838,17 +1000,18 @@ export var drawGraph = function (workbook) {
         cp2y = Math.min(Math.max(0, cp2y), height);
 
         d.label = {
-            x: Math.min(Math.max((x1 + cp1x + cp2x + x2) / 4, EDGE_OFFSET), width - 2 * EDGE_OFFSET),
-            y: Math.min(Math.max((y1 + cp1y + cp2y + y2) / 4, EDGE_OFFSET), height - EDGE_OFFSET)
+            x: Math.min(
+                Math.max((x1 + cp1x + cp2x + x2) / 4, EDGE_OFFSET),
+                width - 2 * EDGE_OFFSET
+            ),
+            y: Math.min(Math.max((y1 + cp1y + cp2y + y2) / 4, EDGE_OFFSET), height - EDGE_OFFSET),
         };
 
-        return "C" + cp1x + " " + cp1y + ", " +
-            cp2x + " " + cp2y + ", " +
-            x2 + " " + y2;
+        return "C" + cp1x + " " + cp1y + ", " + cp2x + " " + cp2y + ", " + x2 + " " + y2;
     };
 
-    function smartPathEnd (d, w, h) {
-    // For arrowheads when target node is to the left of source node
+    function smartPathEnd(d, w, h) {
+        // For arrowheads when target node is to the left of source node
         var LEFT_ADJUSTMENT = 7;
         var MINIMUM_DISTANCE = 8;
         var NODE_HALF_HEIGHT = 30 / 2;
@@ -883,7 +1046,8 @@ export var drawGraph = function (workbook) {
         // target node and the imaginary line connecting the center of
         // the target node with the center of the source node. This
         // angle changes as the nodes move around the screen.
-        d.tanRatioMoveable = Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
+        d.tanRatioMoveable =
+            Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
         // Note, JavaScript handles division-by-zero by returning
         // Infinity, which in this case is useful, especially
         // since it handles the subsequent Infinity arithmetic
@@ -928,7 +1092,8 @@ export var drawGraph = function (workbook) {
                 // i.e. if target node is to left of the source node
                 // then path intersects right vertical side
                 if (d.type !== "arrowhead") {
-                    d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
+                    d.target.newX =
+                        d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
                     d.target.newX = d.target.x + w + globalOffset + LEFT_ADJUSTMENT;
                 }
@@ -937,13 +1102,13 @@ export var drawGraph = function (workbook) {
             // Now use a bit of trigonometry to work out the y-coord.
 
             // By default assume path intersects towards top of node
-            d.target.newY = d.target.centerY - ((d.target.centerX - d.target.x) * d.tanRatioMoveable);
+            d.target.newY = d.target.centerY - (d.target.centerX - d.target.x) * d.tanRatioMoveable;
 
             // But...
             if (d.target.centerY < d.source.newY) {
                 // i.e. if target node is above the source node
                 // then path intersects towards bottom of the node
-                d.target.newY = (2 * d.target.y) - d.target.newY + h;
+                d.target.newY = 2 * d.target.y - d.target.newY + h;
             }
         }
 
@@ -960,7 +1125,8 @@ export var drawGraph = function (workbook) {
                 // i.e. if target node is above the source node
                 // then path intersects bottom horizontal side
                 if (d.type !== "arrowhead") {
-                    d.target.newY = d.target.y + h + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
+                    d.target.newY =
+                        d.target.y + h + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
                 } else {
                     d.target.newY = d.target.y + h + globalOffset;
                 }
@@ -969,13 +1135,13 @@ export var drawGraph = function (workbook) {
             // Now use a bit of trigonometry to work out the x-coord.
 
             // By default assume path intersects towards lefthand side
-            d.target.newX = d.target.centerX - ((d.target.centerY - d.target.y) / d.tanRatioMoveable);
+            d.target.newX = d.target.centerX - (d.target.centerY - d.target.y) / d.tanRatioMoveable;
 
             // But...
             if (d.target.centerX < d.source.newX) {
                 // i.e. if target node is to left of the source node
                 // then path intersects towards the righthand side
-                d.target.newX = (2 * d.target.x) - d.target.newX + w;
+                d.target.newX = 2 * d.target.x - d.target.newX + w;
             }
         }
     }
@@ -986,11 +1152,12 @@ export var drawGraph = function (workbook) {
     };
 
     var nodeTextDblclick = function (d) {
-    // Relay the double-click to our parent.
+        // Relay the double-click to our parent.
         dblclick.call(this.parentNode, d);
     };
 
-    var rect = node.append("rect")
+    var rect = node
+        .append("rect")
         .attr("width", function () {
             return this.parentNode.getAttribute("width");
         })
@@ -1006,7 +1173,8 @@ export var drawGraph = function (workbook) {
 
     var renderNodeLabels = function () {
         node.selectAll(".nodeText").remove();
-        var text = node.append("text")
+        var text = node
+            .append("text")
             .attr("dy", NODE_HEIGHT)
             .attr("class", "nodeText")
             .attr("fill", "rgb(0, 0, 0)")
@@ -1026,36 +1194,35 @@ export var drawGraph = function (workbook) {
 
             // this function triggers the gene page
             .on("contextmenu", function (gene) {
-                const tempLink = $("<a></a>")
-                    .attr({
-                        href: "info?" + $.param({
+                const tempLink = $("<a></a>").attr({
+                    href:
+                        "info?" +
+                        $.param({
                             symbol: gene.name,
                             species: grnState.genePageData.species,
                             jaspar: grnState.genePageData.taxonJaspar,
                             uniprot: grnState.genePageData.taxonUniprot,
                             ensembl: grnState.genePageData.ensembl,
-                            mine: grnState.genePageData.mine
+                            mine: grnState.genePageData.mine,
                         }),
-                        target: "_blank"
-                    });
+                    target: "_blank",
+                });
                 $("body").append(tempLink);
                 tempLink.get(0).click();
                 tempLink.remove();
                 d3.event.preventDefault();
             });
 
-        rect
-            .attr("width", function (d) {
-                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
-            });
-        node
-            .attr("width", function (d) {
-                return NODE_MARGIN + d.textWidth + NODE_MARGIN;
-            });
+        rect.attr("width", function (d) {
+            return NODE_MARGIN + d.textWidth + NODE_MARGIN;
+        });
+        node.attr("width", function (d) {
+            return NODE_MARGIN + d.textWidth + NODE_MARGIN;
+        });
     };
     renderNodeLabels();
 
-    function onlyUnique (value, index, self) {
+    function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
     }
 
@@ -1078,9 +1245,9 @@ export var drawGraph = function (workbook) {
                 }, 0);
                 avgs.push(sum / length);
             });
-            return {data: avgs, timePoints: uniqueTimePoints};
+            return { data: avgs, timePoints: uniqueTimePoints };
         }
-        return {data: strainData.data[gene], timePoints: strainData.timePoints};
+        return { data: strainData.data[gene], timePoints: strainData.timePoints };
     };
 
     var colorNodes = function (position, dataset, average, logFoldChangeMaxValue) {
@@ -1092,14 +1259,8 @@ export var drawGraph = function (workbook) {
                 .data(function () {
                     if (grnState.workbook.expression[dataset]) {
                         const geneName = adjustGeneNameForExpression(p);
-                        if (
-                            grnState.workbook.expression[dataset].data[geneName]
-                        ) {
-                            const result = getExpressionData(
-                                geneName,
-                                dataset,
-                                average
-                            );
+                        if (grnState.workbook.expression[dataset].data[geneName]) {
+                            const result = getExpressionData(geneName, dataset, average);
                             timePoints = result.timePoints;
                             return result.data || [];
                         }
@@ -1107,17 +1268,18 @@ export var drawGraph = function (workbook) {
                     return [];
                 })
                 .attr("class", "coloring")
-                .enter().append("rect")
+                .enter()
+                .append("rect")
                 .attr("width", function () {
-                    var width = (p.textWidth + (2 * NODE_MARGIN)) / timePoints.length;
+                    var width = (p.textWidth + 2 * NODE_MARGIN) / timePoints.length;
                     return width + "px";
                 })
                 .attr("class", "coloring")
                 .attr("height", rect.attr("height") / 2 + "px")
                 .attr("transform", function (d, i) {
                     var yOffset = position === "top" ? 0 : rect.attr("height") / 2;
-                    var xOffset = i * ((p.textWidth + (2 * NODE_MARGIN)) / timePoints.length);
-                    return "translate(" + xOffset + "," +  yOffset + ")";
+                    var xOffset = i * ((p.textWidth + 2 * NODE_MARGIN) / timePoints.length);
+                    return "translate(" + xOffset + "," + yOffset + ")";
                 })
                 .attr("stroke-width", "0px")
                 .style("fill", function (d) {
@@ -1125,7 +1287,8 @@ export var drawGraph = function (workbook) {
                     if (d === 0) {
                         return "white";
                     }
-                    var scale = d3.scaleLinear()
+                    var scale = d3
+                        .scaleLinear()
                         .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
                         .range([0, 1]);
                     return d3.interpolateRdBu(scale(-d));
@@ -1144,7 +1307,8 @@ export var drawGraph = function (workbook) {
         var height = 10;
         var textYOffset = 10;
 
-        var svg = d3.select($nodeColoringLegend[0])
+        var svg = d3
+            .select($nodeColoringLegend[0])
             .append("svg")
             .attr("width", "100%")
             .attr("height", height + yMargin)
@@ -1155,22 +1319,26 @@ export var drawGraph = function (workbook) {
         // Thank you https://www.visualcinnamon.com/2016/05/smooth-color-legend-d3-svg-gradient.html
         const linearGradientId = "node-coloring-color-scale";
         var defs = svg.append("defs");
-        var linearGradient = defs.append("linearGradient")
+        var linearGradient = defs
+            .append("linearGradient")
             .attr("id", linearGradientId)
             .attr("x1", "0%")
             .attr("y1", "0%")
             .attr("x2", "100%")
             .attr("y2", "0%");
 
-        const increment = Math.abs(logFoldChangeMaxValue) / 50;  // Guarantee 50 steps regardless of the range.
+        const increment = Math.abs(logFoldChangeMaxValue) / 50; // Guarantee 50 steps regardless of the range.
         var gradientValues = d3.range(-logFoldChangeMaxValue, logFoldChangeMaxValue, increment);
-        var scale = d3.scaleLinear()
+        var scale = d3
+            .scaleLinear()
             .domain([-logFoldChangeMaxValue, logFoldChangeMaxValue])
             .range([0, 1]);
 
-        linearGradient.selectAll("stop")
+        linearGradient
+            .selectAll("stop")
             .data(gradientValues)
-            .enter().append("stop")
+            .enter()
+            .append("stop")
             .attr("offset", function (d, i) {
                 return i / (gradientValues.length - 1);
             })
@@ -1187,22 +1355,21 @@ export var drawGraph = function (workbook) {
             left: {
                 textAnchor: "start",
                 textContent: (-logFoldChangeMaxValue).toFixed(2),
-                x: 0
+                x: 0,
             },
             center: {
                 textAnchor: "middle",
                 textContent: "0",
-                x: width / 2
+                x: width / 2,
             },
             right: {
                 textAnchor: "end",
-                textContent: (logFoldChangeMaxValue).toFixed(2),
-                x: width
-            }
+                textContent: logFoldChangeMaxValue.toFixed(2),
+                x: width,
+            },
         };
-        /* eslint-disable max-len */
+
         var g = document.getElementById("nodeColoringLegendId");
-        /* eslint-enable max-len */
 
         for (var key in legendLabels) {
             var label = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -1215,7 +1382,6 @@ export var drawGraph = function (workbook) {
 
             g.appendChild(label);
         }
-
     };
 
     updaters.removeNodeColoring = function () {
@@ -1225,32 +1391,43 @@ export var drawGraph = function (workbook) {
 
     updaters.renderNodeColoring = function () {
         if (grnState.nodeColoring.nodeColoringEnabled) {
-            colorNodes("top", grnState.nodeColoring.topDataset, grnState.nodeColoring.averageTopDataset,
-                grnState.nodeColoring.logFoldChangeMaxValue);
-            colorNodes("bottom", grnState.nodeColoring.bottomDataset, grnState.nodeColoring.averageBottomDataset,
-                grnState.nodeColoring.logFoldChangeMaxValue);
+            colorNodes(
+                "top",
+                grnState.nodeColoring.topDataset,
+                grnState.nodeColoring.averageTopDataset,
+                grnState.nodeColoring.logFoldChangeMaxValue
+            );
+            colorNodes(
+                "bottom",
+                grnState.nodeColoring.bottomDataset,
+                grnState.nodeColoring.averageBottomDataset,
+                grnState.nodeColoring.logFoldChangeMaxValue
+            );
             renderNodeLabels();
             renderNodeColoringLegend(grnState.nodeColoring.logFoldChangeMaxValue);
         }
     };
 
-    if (!$.isEmptyObject(workbook.expression) && hasExpressionData(workbook.expression) &&
-      grnState.nodeColoring.topDataset !== undefined) {
+    if (
+        !$.isEmptyObject(workbook.expression) &&
+        hasExpressionData(workbook.expression) &&
+        grnState.nodeColoring.topDataset !== undefined
+    ) {
         updaters.renderNodeColoring();
     }
 
     $(".node").css({
-        "cursor": "move",
-        "fill": "white",
-        "stroke": "#000",
-        "stroke-width": "1.5px"
+        cursor: "move",
+        fill: "white",
+        stroke: "#000",
+        "stroke-width": "1.5px",
     });
 
     $(".link").css({
-        "stroke": "#000",
-        "fill": "none",
+        stroke: "#000",
+        fill: "none",
         "stroke-dasharray": "0",
-        "stroke-width": "1.5px"
+        "stroke-width": "1.5px",
     });
 
     var currentWeightVisibilitySetting = null;
@@ -1261,20 +1438,21 @@ export var drawGraph = function (workbook) {
         }
         $(".weightedGraphOptionsMenu").removeClass("disabled");
         var setWeightsVisability = function () {
-
             var WEIGHTS_SHOW_MOUSE_OVER_CLASS = ".weightsMouseOver";
-            var WEIGHTS_HIDE_CLASS            = ".weightsNever";
+            var WEIGHTS_HIDE_CLASS = ".weightsNever";
             var WEIGHTS_SHOW_ALWAYS_CLASS = ".weightsAlways";
 
             var WEIGHT_VISIBILITY_SETTINGS = [
                 WEIGHTS_SHOW_MOUSE_OVER_CLASS,
                 WEIGHTS_HIDE_CLASS,
-                WEIGHTS_SHOW_ALWAYS_CLASS
+                WEIGHTS_SHOW_ALWAYS_CLASS,
             ];
 
-            var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(function (setting) {
-                return $(setting).hasClass("selected");
-            })[0];
+            var latestWeightVisibilitySetting = WEIGHT_VISIBILITY_SETTINGS.filter(
+                function (setting) {
+                    return $(setting).hasClass("selected");
+                }
+            )[0];
 
             if (currentWeightVisibilitySetting === latestWeightVisibilitySetting) {
                 return;
@@ -1283,36 +1461,25 @@ export var drawGraph = function (workbook) {
             currentWeightVisibilitySetting = latestWeightVisibilitySetting;
             var showWeight = function (d) {
                 var mouse = d3.mouse(this);
-                d.weightElement
-                    .attr("x", mouse[0])
-                    .attr("y", mouse[1])
-                    .classed("visible", true);
+                d.weightElement.attr("x", mouse[0]).attr("y", mouse[1]).classed("visible", true);
             };
 
             var hideWeight = function (d) {
-                d.weightElement
-                    .attr("x", null)
-                    .attr("y", null)
-                    .classed("visible", false);
+                d.weightElement.attr("x", null).attr("y", null).classed("visible", false);
             };
 
             if (currentWeightVisibilitySetting === WEIGHTS_SHOW_MOUSE_OVER_CLASS) {
-                link.selectAll(".weight")
-                    .classed("visible", false);
+                link.selectAll(".weight").classed("visible", false);
 
                 link.on("mouseover", showWeight).on("mouseout", hideWeight);
                 weight.on("mouseover", showWeight).on("mouseout", hideWeight);
-
             } else if (currentWeightVisibilitySetting === WEIGHTS_HIDE_CLASS) {
-                link.selectAll(".weight")
-                    .classed("visible", false);
+                link.selectAll(".weight").classed("visible", false);
 
                 link.on("mouseover", null).on("mouseout", null);
                 weight.on("mouseover", null).on("mouseout", null);
-
             } else if (currentWeightVisibilitySetting === WEIGHTS_SHOW_ALWAYS_CLASS) {
-                link.selectAll(".weight")
-                    .classed("visible", true);
+                link.selectAll(".weight").classed("visible", true);
 
                 link.on("mouseover", null).on("mouseout", null);
                 weight.on("mouseover", null).on("mouseout", null);
@@ -1356,9 +1523,9 @@ export var drawGraph = function (workbook) {
     };
 
     let nodeGroup = node._groups[0].sort(sortNode);
-    updaters.setNodesToGrid = () => { // eslint-disable-line no-unused-vars
+    updaters.setNodesToGrid = () => {
         const margin = 10;
-        const grid = Grid()  // eslint-disable-line no-undef
+        const grid = Grid()
             .data(workbook.genes)
             .bands(true)
             .padding([0.2, 0])
@@ -1374,23 +1541,20 @@ export var drawGraph = function (workbook) {
         }
     };
 
-    updaters.setNodesToForceGraph = () => { // eslint-disable-line no-unused-vars
+    updaters.setNodesToForceGraph = () => {
         for (var i in nodeGroup) {
             nodeGroup[i].__data__.fx = null;
             nodeGroup[i].__data__.fy = null;
         }
     };
 
-    function viewportBoundsMoveDrag (graphZoom, dx, dy) {
+    function viewportBoundsMoveDrag(graphZoom, dx, dy) {
         updateZoomContainerInfo();
         flexibleContainer = calcFlexiBox();
 
         if (
             flexibleContainer.x + flexibleContainer.width + dx >=
-            -xTranslation / graphZoom +
-            BOUNDARY_MARGIN / 2 +
-            width / graphZoom -
-            BOUNDARY_MARGIN
+            -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
         ) {
             return false;
         }
@@ -1401,10 +1565,7 @@ export var drawGraph = function (workbook) {
 
         if (
             flexibleContainer.y + flexibleContainer.height + dy >=
-            -yTranslation / graphZoom +
-            BOUNDARY_MARGIN / 2 +
-            height / graphZoom -
-            BOUNDARY_MARGIN
+            -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
         ) {
             return false;
         }
@@ -1416,15 +1577,15 @@ export var drawGraph = function (workbook) {
         return true;
     }
 
-    function calcFlexiBox () {
+    function calcFlexiBox() {
         const nodes = simulation.nodes();
         let nodeWidth = 0;
         if (nodes.length > 0) {
             nodeWidth = nodes[0].textWidth + 8;
         }
 
-        const xValuesNodes = nodes.map((node) => node.x);
-        const yValuesNodes = nodes.map((node) => node.y);
+        const xValuesNodes = nodes.map(node => node.x);
+        const yValuesNodes = nodes.map(node => node.y);
 
         let minX = Math.min(...xValuesNodes);
         let maxX = Math.max(...xValuesNodes) + nodeWidth;
@@ -1439,14 +1600,22 @@ export var drawGraph = function (workbook) {
         minY = minY < BOUNDARY_MARGIN_Y_T ? BOUNDARY_MARGIN_Y_T : minY;
 
         maxX =
-          maxX > -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
-              ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
-              : maxX;
+            maxX >
+            -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
+                ? -xTranslation / graphZoom +
+                  BOUNDARY_MARGIN / 2 +
+                  width / graphZoom -
+                  BOUNDARY_MARGIN
+                : maxX;
 
         maxY =
-          maxY > -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
-              ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
-              : maxY;
+            maxY >
+            -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
+                ? -yTranslation / graphZoom +
+                  BOUNDARY_MARGIN / 2 +
+                  height / graphZoom -
+                  BOUNDARY_MARGIN
+                : maxY;
 
         let flexiBoxWidth = maxX - minX;
         if (maxX < 0 && minX < 0) {
@@ -1469,15 +1638,22 @@ export var drawGraph = function (workbook) {
             .attr("y", minY)
             .attr("width", flexiBoxWidth)
             .attr("height", flexiBoxHeight);
-        return {x: minX, y: minY, maxX: maxX, maxY: maxY, width: flexiBoxWidth, height: flexiBoxHeight};
+        return {
+            x: minX,
+            y: minY,
+            maxX: maxX,
+            maxY: maxY,
+            width: flexiBoxWidth,
+            height: flexiBoxHeight,
+        };
     }
 
     // Checks if zoomValue is in bounds when zoom in and out
-    function flexZoomInBounds (zoomValue) {
+    function flexZoomInBounds(zoomValue) {
         if (flexibleContainer) {
             updateZoomContainerInfo();
             flexibleContainer = calcFlexiBox();
-            if (flexibleContainer.width * zoomValue > width ) {
+            if (flexibleContainer.width * zoomValue > width) {
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
                 return false;
@@ -1487,26 +1663,33 @@ export var drawGraph = function (workbook) {
     }
 
     // Only calculate Left and Top boundary margins because calculate rightboundary and bottomboundary in tick
-    function getLeftXBoundaryMargin () {
-        return !adaptive && flexibleContainer ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
+    function getLeftXBoundaryMargin() {
+        return !adaptive && flexibleContainer
+            ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2
+            : BOUNDARY_MARGIN;
     }
 
-    function getTopYBoundaryMargin () {
-        return !adaptive && flexibleContainer ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
+    function getTopYBoundaryMargin() {
+        return !adaptive && flexibleContainer
+            ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2
+            : BOUNDARY_MARGIN;
     }
 
     // Tick only runs while the graph physics are still running.
     // (I.e. when the graph is completely relaxed, tick stops running.)
-    function tick () {
+    function tick() {
         var getSelfReferringEdge = function (node) {
-            return link.select("path")["_groups"][0].map(function (path) {
-                return path.__data__;
-            }).filter(function (pathData) {
-                return pathData.source === node && pathData.source === pathData.target;
-            })[0];
+            return link
+                .select("path")
+                ["_groups"][0].map(function (path) {
+                    return path.__data__;
+                })
+                .filter(function (pathData) {
+                    return pathData.source === node && pathData.source === pathData.target;
+                })[0];
         };
         var getSelfReferringRadius = function (edge) {
-            return edge ? 17 + (getEdgeThickness(edge) / 2) : 0;
+            return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
         };
 
         var SELF_REFERRING_Y_OFFSET = 6;
@@ -1522,85 +1705,97 @@ export var drawGraph = function (workbook) {
         try {
             node.attr("x", function (d) {
                 var selfReferringEdge = getSelfReferringEdge(d);
-                var selfReferringEdgeWidth = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                    selfReferringEdge.strokeWidth + 2 : 0);
-                var rightBoundary = width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+                var selfReferringEdgeWidth = selfReferringEdge
+                    ? getSelfReferringRadius(selfReferringEdge) + selfReferringEdge.strokeWidth + 2
+                    : 0;
+                var rightBoundary =
+                    width - (d.textWidth + OFFSET_VALUE) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
                 if (!adaptive) {
                     rightBoundary =
-                      -xTranslation / graphZoom +
-                      BOUNDARY_MARGIN / 2 +
-                      width / graphZoom -
-                      BOUNDARY_MARGIN -
-                      (d.textWidth + OFFSET_VALUE) -
-                      selfReferringEdgeWidth;
+                        -xTranslation / graphZoom +
+                        BOUNDARY_MARGIN / 2 +
+                        width / graphZoom -
+                        BOUNDARY_MARGIN -
+                        (d.textWidth + OFFSET_VALUE) -
+                        selfReferringEdgeWidth;
                 }
                 // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
                 var currentXPos = Math.max(getLeftXBoundaryMargin(), Math.min(rightBoundary, d.x));
-                if (adaptive && width < MAX_WIDTH &&
-                  (currentXPos === getLeftXBoundaryMargin() ||
-                    currentXPos === rightBoundary)
+                if (
+                    adaptive &&
+                    width < MAX_WIDTH &&
+                    (currentXPos === getLeftXBoundaryMargin() || currentXPos === rightBoundary)
                 ) {
                     if (!d3.select(this).classed("fixed")) {
                         width += OFFSET_VALUE;
                         boundingBoxContainer.attr("width", width);
 
-                        link
-                            .attr("x1", function (d) {
-                                return d.source.x;
-                            })
-                            .attr("x2", function (d) {
-                                return d.target.x;
-                            });
+                        link.attr("x1", function (d) {
+                            return d.source.x;
+                        }).attr("x2", function (d) {
+                            return d.target.x;
+                        });
 
                         node.attr("x", function (d) {
                             return d.x;
                         });
                     }
                 }
-                return d.x = currentXPos;
-            }).attr("y", function (d) {
-                var selfReferringEdge = getSelfReferringEdge(d);
-                var selfReferringEdgeHeight = (selfReferringEdge ? getSelfReferringRadius(selfReferringEdge) +
-                  selfReferringEdge.strokeWidth + SELF_REFERRING_Y_OFFSET + 0.5 : 0);
-                var bottomBoundary = height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
-                if (!adaptive) {
-                    bottomBoundary =
-                      -yTranslation / graphZoom +
-                      BOUNDARY_MARGIN / 2 +
-                      height / graphZoom -
-                      BOUNDARY_MARGIN -
-                      nodeHeight -
-                      selfReferringEdgeHeight;
-                }
-                // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
-                var currentYPos = Math.max(getTopYBoundaryMargin(), Math.min(bottomBoundary, d.y));
+                return (d.x = currentXPos);
+            })
+                .attr("y", function (d) {
+                    var selfReferringEdge = getSelfReferringEdge(d);
+                    var selfReferringEdgeHeight = selfReferringEdge
+                        ? getSelfReferringRadius(selfReferringEdge) +
+                          selfReferringEdge.strokeWidth +
+                          SELF_REFERRING_Y_OFFSET +
+                          0.5
+                        : 0;
+                    var bottomBoundary =
+                        height - nodeHeight - BOUNDARY_MARGIN - selfReferringEdgeHeight;
+                    if (!adaptive) {
+                        bottomBoundary =
+                            -yTranslation / graphZoom +
+                            BOUNDARY_MARGIN / 2 +
+                            height / graphZoom -
+                            BOUNDARY_MARGIN -
+                            nodeHeight -
+                            selfReferringEdgeHeight;
+                    }
+                    // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
+                    var currentYPos = Math.max(
+                        getTopYBoundaryMargin(),
+                        Math.min(bottomBoundary, d.y)
+                    );
 
-                if (adaptive && height < MAX_HEIGHT &&
-                  (currentYPos === getTopYBoundaryMargin() || currentYPos === bottomBoundary)) {
-                    if (!d3.select(this).classed("fixed")) {
-                        height += OFFSET_VALUE;
-                        boundingBoxContainer.attr("height", height);
-                        link
-                            .attr("y1", function (d) {
+                    if (
+                        adaptive &&
+                        height < MAX_HEIGHT &&
+                        (currentYPos === getTopYBoundaryMargin() || currentYPos === bottomBoundary)
+                    ) {
+                        if (!d3.select(this).classed("fixed")) {
+                            height += OFFSET_VALUE;
+                            boundingBoxContainer.attr("height", height);
+                            link.attr("y1", function (d) {
                                 return d.source.y;
-                            })
-                            .attr("y2", function (d) {
+                            }).attr("y2", function (d) {
                                 return d.target.y;
                             });
 
-                        node.attr("y", function (d) {
-                            return d.y;
-                        });
+                            node.attr("y", function (d) {
+                                return d.y;
+                            });
+                        }
                     }
-                }
-                return d.y = currentYPos;
-            }).attr("transform", function (d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            });
+                    return (d.y = currentYPos);
+                })
+                .attr("transform", function (d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
 
             /* Allows for looping edges.
-       * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
-       */
+             * From http://stackoverflow.com/questions/16358905/d3-force-layout-graph-self-linking-node
+             */
 
             link.selectAll("path").attr("d", function (d) {
                 if (d.target === d.source) {
@@ -1616,8 +1811,8 @@ export var drawGraph = function (workbook) {
                     var drx = dr;
                     var dry = dr;
                     var xRotation = 0; // degrees
-                    var largeArc = 0;  // 1 or 0
-                    var sweep = 1;     // 1 or 0
+                    var largeArc = 0; // 1 or 0
+                    var sweep = 1; // 1 or 0
                     var offset = parseFloat(d.strokeWidth);
 
                     // Edge adjustment values when long self-node edges get hidden behind the node.
@@ -1629,8 +1824,8 @@ export var drawGraph = function (workbook) {
                     // Self edge.
                     if (x1 === x2 && y1 === y2) {
                         // Move the position of the loop.
-                        x1 = d.source.x + (d.source.textWidth) * DEFAULT_NODE_SHIFT;
-                        y1 = d.source.y + (nodeHeight / 2) + SELF_REFERRING_Y_OFFSET;
+                        x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
+                        y1 = d.source.y + nodeHeight / 2 + SELF_REFERRING_Y_OFFSET;
 
                         // Fiddle with this angle to get loop oriented.
                         // (Future: This doesn't appear to change anything?)
@@ -1650,7 +1845,9 @@ export var drawGraph = function (workbook) {
                         if (d.source.textWidth > SHORT_NODE_LIMIT) {
                             DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
                         }
-                        x2 = d.source.x + d.source.textWidth / END_POINT_ADJUSTMENT * DEFAULT_NODE_SHIFT;
+                        x2 =
+                            d.source.x +
+                            (d.source.textWidth / END_POINT_ADJUSTMENT) * DEFAULT_NODE_SHIFT;
                         y2 = d.source.y + nodeHeight;
 
                         if (d.value < 0 && grnState.colorOptimal) {
@@ -1658,12 +1855,31 @@ export var drawGraph = function (workbook) {
                         }
                     }
 
-                    d.label = { x: Math.min(width - (13 * offset), x1), // For 4 decimal places
-                        y: Math.min(height - offset, y1 + dry * 3)};
+                    d.label = {
+                        x: Math.min(width - 13 * offset, x1), // For 4 decimal places
+                        y: Math.min(height - offset, y1 + dry * 3),
+                    };
 
-                    return "M" + x1 + "," + y1 +
-                        "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " +
-                        x2  + "," + (y2 + offset);
+                    return (
+                        "M" +
+                        x1 +
+                        "," +
+                        y1 +
+                        "A" +
+                        drx +
+                        "," +
+                        dry +
+                        " " +
+                        xRotation +
+                        "," +
+                        largeArc +
+                        "," +
+                        sweep +
+                        " " +
+                        x2 +
+                        "," +
+                        (y2 + offset)
+                    );
                 } else {
                     return moveTo(d) + lineTo(d);
                 }
@@ -1686,33 +1902,53 @@ export var drawGraph = function (workbook) {
                 }
 
                 if (d.type === "repressor" && grnState.colorOptimal) {
-                    if ((d.tanRatioMoveable > d.tanRatioFixed) || (d.target === d.source)) { // if horizontal repressor
-                        return "url(#repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
-                    } else { // otherwise vertical repressor
-                        return "url(#repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+                    if (d.tanRatioMoveable > d.tanRatioFixed || d.target === d.source) {
+                        // if horizontal repressor
+                        return (
+                            "url(#repressorHorizontal" +
+                            selfRef +
+                            "_StrokeWidth" +
+                            d.strokeWidth +
+                            minimum +
+                            ")"
+                        );
+                    } else {
+                        // otherwise vertical repressor
+                        return (
+                            "url(#repressor" +
+                            selfRef +
+                            "_StrokeWidth" +
+                            d.strokeWidth +
+                            minimum +
+                            ")"
+                        );
                     }
-                } else { // otherwise arrowhead
-                    return "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")";
+                } else {
+                    // otherwise arrowhead
+                    return (
+                        "url(#arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum + ")"
+                    );
                 }
             });
 
-            link.select("text").attr("x", function (d) {
-                return d.label.x;
-            }).attr("y", function (d) {
-                return d.label.y;
-            });
-
+            link.select("text")
+                .attr("x", function (d) {
+                    return d.label.x;
+                })
+                .attr("y", function (d) {
+                    return d.label.y;
+                });
         } catch (e) {
             console.log(e);
             console.warn("Detected invalid node. Moving on to next node.");
         }
     }
 
-    function normalize (d) {
+    function normalize(d) {
         return Math.abs(d.value / maxWeight).toPrecision(4);
     }
 
-    function dragstart (d) {
+    function dragstart(d) {
         if (!d3.event.active) {
             simulation.alphaTarget(0.3).restart();
         }
@@ -1720,7 +1956,7 @@ export var drawGraph = function (workbook) {
         d.fy = d.y;
     }
 
-    function dragged (d) {
+    function dragged(d) {
         if (!adaptive) {
             /* fx and fy stands for fixed x and y which is when node is fixed to a position or
                 to prevent tick from adjusting position of node
@@ -1728,37 +1964,38 @@ export var drawGraph = function (workbook) {
             // prevents nodes from being dragged outside of right boundary
             if (
                 d3.event.x + d.textWidth <=
-                -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 +
-                width / graphZoom -
-                BOUNDARY_MARGIN
+                -xTranslation / graphZoom +
+                    BOUNDARY_MARGIN / 2 +
+                    width / graphZoom -
+                    BOUNDARY_MARGIN
             ) {
                 d.fx = d3.event.x;
             } else {
                 d.fx =
-                  -xTranslation / graphZoom +
-                  BOUNDARY_MARGIN / 2 +
-                  width / graphZoom -
-                  BOUNDARY_MARGIN -
-                  d.textWidth;
+                    -xTranslation / graphZoom +
+                    BOUNDARY_MARGIN / 2 +
+                    width / graphZoom -
+                    BOUNDARY_MARGIN -
+                    d.textWidth;
             }
 
             // prevent nodes from being dragged out of bottom boundary
             if (
                 d3.event.y + nodeHeight <=
                 -yTranslation / graphZoom +
-                BOUNDARY_MARGIN / 2 +
-                height / graphZoom -
-                BOUNDARY_MARGIN
+                    BOUNDARY_MARGIN / 2 +
+                    height / graphZoom -
+                    BOUNDARY_MARGIN
             ) {
                 // fy stands for fixed y
                 d.fy = d3.event.y;
             } else {
                 d.fy =
-                -yTranslation / graphZoom +
-                BOUNDARY_MARGIN / 2 +
-                height / graphZoom -
-                BOUNDARY_MARGIN -
-                nodeHeight;
+                    -yTranslation / graphZoom +
+                    BOUNDARY_MARGIN / 2 +
+                    height / graphZoom -
+                    BOUNDARY_MARGIN -
+                    nodeHeight;
             }
         } else {
             d.fx = d3.event.x;
@@ -1769,7 +2006,7 @@ export var drawGraph = function (workbook) {
     grnState.simulation = simulation;
 
     // The restrict graph state is sometimes carried over across reloads
-    restrictGraphToViewport( $("input[name=viewport]").prop("checked"));
+    restrictGraphToViewport($("input[name=viewport]").prop("checked"));
 
     modifyChargeParameter(grnState.chargeSlider.currentVal);
     modifyLinkDistanceParameter(grnState.linkDistanceSlider.currentVal);

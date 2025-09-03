@@ -14,21 +14,20 @@ import {
     PPI_DEMO_NAME,
     FORCE_GRAPH,
     NETWORK_PPI_MODE,
-    NETWORK_GRN_MODE
+    NETWORK_GRN_MODE,
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
 import { updateLocale } from "moment";
-
 
 const demoFiles = [
     UNWEIGHTED_DEMO_PATH,
     WEIGHTED_DEMO_PATH,
     SCHADE_INPUT_PATH,
     SCHADE_OUTPUT_PATH,
-    PPI_DEMO_PATH
+    PPI_DEMO_PATH,
 ];
 
-const submittedFilename = ($upload) => {
+const submittedFilename = $upload => {
     let path = $upload.val();
     let fakePathCheck = path.search("\\\\") + 1;
 
@@ -40,13 +39,13 @@ const submittedFilename = ($upload) => {
     return path;
 };
 
-const createFileForm = ($upload) => {
+const createFileForm = $upload => {
     const formData = new FormData();
     formData.append("file", $upload[0].files[0]);
     return formData;
 };
 
-const uploadEpilogue = (event) => {
+const uploadEpilogue = event => {
     if (window.ga) {
         window.ga("send", "pageview", {
             page: "/GRNsight/upload",
@@ -57,13 +56,13 @@ const uploadEpilogue = (event) => {
     $("a.upload > input[type=file]").val("");
     event.preventDefault();
 };
-const disableUpload = (state) => {
+const disableUpload = state => {
     $(".upload").attr("disabled", state);
     $(".upload-sif").attr("disabled", state);
     $(".upload-graphml").attr("disabled", state);
 };
 
-const uploadHandler = (uploader) => {
+const uploadHandler = uploader => {
     return function (event) {
         // Must be `function` due to use of `this`.
         const $upload = $(this);
@@ -83,7 +82,7 @@ const uploadHandler = (uploader) => {
     };
 };
 
-const workbookErrorDisplayer = (xhr) => {
+const workbookErrorDisplayer = xhr => {
     // re-enable upload button
     disableUpload(false);
     // Deleted status, error for argument because it was never used
@@ -106,9 +105,9 @@ const workbookErrorDisplayer = (xhr) => {
     $("#errorModal").modal("show");
 };
 
-let reloader = () => { };
+let reloader = () => {};
 
-const returnUploadRoute = (filename) => {
+const returnUploadRoute = filename => {
     if (demoFiles.indexOf(filename) !== -1) {
         return filename;
     } else if (filename.includes(".xlsx")) {
@@ -120,7 +119,7 @@ const returnUploadRoute = (filename) => {
     }
 };
 
-export const setupLoadAndImportHandlers = (grnState) => {
+export const setupLoadAndImportHandlers = grnState => {
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
         grnState.workbookType = uploadRoute;
@@ -130,21 +129,21 @@ export const setupLoadAndImportHandlers = (grnState) => {
                 grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
                 if (demoFiles.indexOf(name) > -1) {
                     switch (name) {
-                    case WEIGHTED_DEMO_PATH:
-                        grnState.name = WEIGHTED_DEMO_NAME;
-                        break;
-                    case UNWEIGHTED_DEMO_PATH:
-                        grnState.name = UNWEIGHTED_DEMO_NAME;
-                        break;
-                    case SCHADE_INPUT_PATH:
-                        grnState.name = SCHADE_INPUT_NAME;
-                        break;
-                    case SCHADE_OUTPUT_PATH:
-                        grnState.name = SCHADE_OUTPUT_NAME;
-                        break;
-                    case PPI_DEMO_PATH:
-                        grnState.name = PPI_DEMO_NAME;
-                        break;
+                        case WEIGHTED_DEMO_PATH:
+                            grnState.name = WEIGHTED_DEMO_NAME;
+                            break;
+                        case UNWEIGHTED_DEMO_PATH:
+                            grnState.name = UNWEIGHTED_DEMO_NAME;
+                            break;
+                        case SCHADE_INPUT_PATH:
+                            grnState.name = SCHADE_INPUT_NAME;
+                            break;
+                        case SCHADE_OUTPUT_PATH:
+                            grnState.name = SCHADE_OUTPUT_NAME;
+                            break;
+                        case PPI_DEMO_PATH:
+                            grnState.name = PPI_DEMO_NAME;
+                            break;
                     }
                 }
                 grnState.workbook = workbook;
@@ -175,10 +174,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
     $("body").on("change", ".upload", uploadHandler(loadGrn));
 
     const loadDemo = (url, value) => {
-        $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop(
-            "selected",
-            true
-        );
+        $("#demoSourceDropdown option[value='" + value.substring(1) + "']").prop("selected", true);
         loadGrn(url);
         reloader = () => loadGrn(url);
         grnState.graphLayout = FORCE_GRAPH;
@@ -186,7 +182,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
     };
 
     const initializeDemoFile = (demoClass, demoPath, demoName) => {
-        $(".dropdown-menu li a").on("click", (event) => {
+        $(".dropdown-menu li a").on("click", event => {
             const selected = event.target.dataset.expression;
             if (`.${selected}` === demoClass) {
                 loadDemo(demoPath, demoClass, demoName);
@@ -202,17 +198,11 @@ export const setupLoadAndImportHandlers = (grnState) => {
         });
     };
 
-    DEMO_INFORMATION.forEach((demoInfo) =>
-        initializeDemoFile.apply(null, demoInfo)
-    );
+    DEMO_INFORMATION.forEach(demoInfo => initializeDemoFile.apply(null, demoInfo));
 
     $("body").on("click", ".reload", function () {
         // Deleted `event` parameter but need `function` because of `this`.
-        if (
-            !$(this)
-                .parent()
-                .hasClass("disabled")
-        ) {
+        if (!$(this).parent().hasClass("disabled")) {
             if ($.isFunction(reloader)) {
                 reloader();
             }
@@ -222,7 +212,7 @@ export const setupLoadAndImportHandlers = (grnState) => {
 
 export const responseCustomWorkbookData = (grnState, queryURL, name) => {
     const uploadRoute = queryURL;
-    getWorkbookFromUrl(uploadRoute).done((workbook) => {
+    getWorkbookFromUrl(uploadRoute).done(workbook => {
         if (workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
             grnState.mode = workbook.meta.data.workbookType;
         } else {
