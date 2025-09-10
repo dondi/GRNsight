@@ -50,7 +50,7 @@ psql -f gene_regulatory_network_schema.sql postgresql://localhost/postgres
 ```
 
 ```
-psql -f gene_regulatory_network_schema_with_timestamp_schema.sql postgresql://localhost/postgres
+psql -f gene_regulatory_network_with_timestamp_schema.sql postgresql://localhost/postgres
 ```
 
 ```
