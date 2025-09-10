@@ -17,8 +17,6 @@ import {
     NETWORK_GRN_MODE
 } from "./constants";
 import { getWorkbookFromForm, getWorkbookFromUrl } from "./api/grnsight-api";
-import { updateLocale } from "moment";
-
 
 const demoFiles = [
     UNWEIGHTED_DEMO_PATH,
