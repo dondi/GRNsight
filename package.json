@@ -74,8 +74,8 @@
     "scripts": {
         "webpack-start": "webpack --watch",
         "test": "mocha --reporter list --require @babel/register",
-        "start-dev": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
-        "start-prod": "parallelshell --wait \"nodemon web-client/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
+        "start-dev": "parallelshell --wait \"nodemon web-client-classic/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
+        "start-prod": "parallelshell --wait \"nodemon web-client-classic/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
         "coverage": "nyc --reporter=lcov mocha --require @babel/register",
         "lint": "eslint \"**/*.js\"",
         "coveralls": "npm run coverage && nyc report --reporter=lcov | coveralls",

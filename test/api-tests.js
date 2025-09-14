@@ -1,8 +1,9 @@
 const jsdom = require("jsdom");
 
 // Our fake document needs a .service-root element so that a fake "host" can be found by the code.
-const { document } = new jsdom.JSDOM("<input type='hidden' id='service-root' value='http://test'>")
-    .window;
+const { document } = new jsdom.JSDOM(
+    "<input type='hidden' id='service-root' value='http://test'>"
+).window;
 global.document = document;
 global.window = document;
 
@@ -22,7 +23,7 @@ const sinon = require("sinon");
 const { XMLSerializer } = require("xmldom");
 global.XMLSerializer = XMLSerializer;
 
-require(__dirname + "/../web-client/public/gene/api.js");
+require(__dirname + "/../web-client-classic/public/gene/api.js");
 
 describe("The Gene Page", () => {
     // final result is a promise
@@ -80,17 +81,17 @@ describe("The Gene Page", () => {
 
     it("makes the correct call to NCBI", done => {
         const testString = `<?xml version="1.0" encoding="UTF-8" ?>
-        <!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN" 
+        <!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN"
         "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd">
         <eSearchResult><Count>1</Count><RetMax>1</RetMax><RetStart>0</RetStart><IdList>
         <Id>852062</Id>
-        </IdList><TranslationSet><Translation>     
-        <From>+Saccharomyces+cerevisiae[Organism]</From>    
-        <To>"Saccharomyces cerevisiae"[Organism]</To>    
-        </Translation></TranslationSet><TranslationStack>   
-        <TermSet>    <Term>YHP1[gene]</Term>    <Field>gene</Field>    <Count>1</Count>    
-        <Explode>N</Explode>   </TermSet>   <TermSet>    <Term>"Saccharomyces cerevisiae"[Organism]</Term>    
-        <Field>Organism</Field>    <Count>7062</Count>    <Explode>Y</Explode>   </TermSet>   <OP>AND</OP>  
+        </IdList><TranslationSet><Translation>
+        <From>+Saccharomyces+cerevisiae[Organism]</From>
+        <To>"Saccharomyces cerevisiae"[Organism]</To>
+        </Translation></TranslationSet><TranslationStack>
+        <TermSet>    <Term>YHP1[gene]</Term>    <Field>gene</Field>    <Count>1</Count>
+        <Explode>N</Explode>   </TermSet>   <TermSet>    <Term>"Saccharomyces cerevisiae"[Organism]</Term>
+        <Field>Organism</Field>    <Count>7062</Count>    <Explode>Y</Explode>   </TermSet>   <OP>AND</OP>
         </TranslationStack><QueryTranslation>YHP1[gene] AND "Saccharomyces cerevisiae"[Organism]</QueryTranslation>
         </eSearchResult>`;
 
