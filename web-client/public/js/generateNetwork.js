@@ -245,8 +245,8 @@ containing "-", "_", and alpha-numeric characters only`);
     const PPI_STANDARD_NAME_ID = 0;
 
     const sortGenes = function (genes, idToSort) {
-        return Object.fromEntries(
-            Object.entries(genes).sort((a, b) => a[idToSort].localeCompare(b[idToSort]))
+        return Object.entries(genes).sort(
+            (a, b) => a[idToSort].localeCompare(b[idToSort])
         );
     };
 
@@ -303,14 +303,12 @@ containing "-", "_", and alpha-numeric characters only`);
  ${genesAmount} genes. Please remove some genes from your proposed network.`);
         } else {
             if (grnState.customWorkbook.type === NETWORK_GRN_MODE) {
-                grnState.customWorkbook.genes = sortGenes(
+                const sortedGenes = sortGenes(
                     grnState.customWorkbook.genes,
                     GRN_STANDARD_NAME_ID
                 );
-                const genes = Object.keys(grnState.customWorkbook.genes);
-                const displayGenes = Object.keys(grnState.customWorkbook.genes).map(
-                    g => grnState.customWorkbook.genes[g]
-                );
+                const genes = sortedGenes.map(([key]) => key);
+                const displayGenes = sortedGenes.map(([_, value]) => value);
                 const source = grnState.customWorkbook.source;
                 const headers = {
                     type: "GenerateNetwork",
@@ -356,11 +354,11 @@ containing "-", "_", and alpha-numeric characters only`);
                         console.log(error.message);
                     });
             } else if (grnState.customWorkbook.type === NETWORK_PPI_MODE) {
-                grnState.customWorkbook.genes = sortGenes(
+                const sortedGenes = sortGenes(
                     grnState.customWorkbook.genes,
                     PPI_STANDARD_NAME_ID
                 );
-                const proteins = Object.keys(grnState.customWorkbook.genes);
+                const proteins = sortedGenes.map(([key]) => key);
                 const source = grnState.customWorkbook.source;
                 const headers = {
                     type: "GenerateProteinNetwork",
