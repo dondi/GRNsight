@@ -43,7 +43,7 @@ const sendDimensions = (destination, origin) => {
 
 window.addEventListener("message", event => {
     if (event.origin !== "https://grnsight.lmucs.org") {
-        // Ignore any message that did not originate from the GRNsight web client server.
+        // Ignore any message that did not originate from the classic GRNsight web client server.
         return;
     }
 
