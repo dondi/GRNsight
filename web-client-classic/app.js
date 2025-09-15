@@ -38,7 +38,11 @@ require("./controllers/main")(app);
 // Don't start the server if this app is run as a child process.
 if (!module.parent) {
     http.createServer(app).listen(app.get("port"), function () {
-        console.log("GRNsight classic web client running on port %s, environment=%s", app.get("port"), env);
+        console.log(
+            "GRNsight classic web client running on port %s, environment=%s",
+            app.get("port"),
+            env
+        );
     });
 } else {
     module.exports = app;
