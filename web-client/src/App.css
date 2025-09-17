@@ -19,6 +19,34 @@
   border-radius: 4px;
 }
 
+.nav-button {
+  border: none;
+}
+
+.nav-button:hover {
+  border: none;
+}
+
+/* .navbar-text > div { */
+  /* font-size: 18px;
+  font-weight: bold;
+  color: black; */
+  /* margin-right: auto; */
+  /* padding-left: 20px; */
+/* } */
+
+.subdivider {
+  border-top: 1px dotted #bbb;
+  width: 95%;
+  margin: auto;
+}
+
+.long-subdivider {
+  border-top: 1px dotted #bbb;
+  width: 100%;
+  margin: auto;
+}
+
 .dropdown {
   margin-right: 15px;
   cursor: pointer;

@@ -1,6 +1,4 @@
 // import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import Navbar from './components/Navbar'
 import Graph from './components/Graph'
 import Sidebar from './components/Sidebar'
@@ -13,21 +11,56 @@ function App() {
     global: {
       colors: {
         text: 'black',
+        control: {
+          "transparent": "transparent"
+        }
       },
-      // font: {
-      //   color: 'white',
-      // }
+      focus: {
+        border: {
+          color: 'transparent'
+        }
+      },
+    },
+    button: {
+      active: {
+        default: {
+          border: {
+            color: 'transparent'
+          }
+        },
+        border: {
+          color: 'transparent'
+        },
+      },
+      border: {
+        radius: '0px',
+        color: 'transparent',
+      },
+    },
+    dropButton: {
+      active: {
+        default: {
+          border: {
+            color: 'transparent'
+          }
+        },
+        border: {
+          color: 'transparent'
+        },
+      },
+      border: {
+        radius: '0px',
+        color: 'transparent',
+      },
     }
   };
 
   return (
-    <div>
-      <Grommet theme={theme}>
-        <Navbar />
-        <Sidebar />
-        <Graph />
-      </Grommet>
-    </div>
+    <Grommet theme={theme} full>
+      <Navbar />
+      <Sidebar />
+      <Graph />
+    </Grommet>
   )
 }
 
