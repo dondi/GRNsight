@@ -20,6 +20,11 @@ function App() {
           color: 'transparent'
         }
       },
+      input: {
+        font: {
+          size: "small"
+        }
+      }
     },
     button: {
       active: {
@@ -28,31 +33,50 @@ function App() {
             color: 'transparent'
           }
         },
-        border: {
-          color: 'transparent'
-        },
+        // border: {
+        //   color: 'transparent'
+        // },
       },
       border: {
         radius: '0px',
         color: 'transparent',
       },
     },
-    dropButton: {
-      active: {
-        default: {
-          border: {
-            color: 'transparent'
-          }
-        },
-        border: {
-          color: 'transparent'
-        },
+    fileInput: {
+      message: {
+        size: 'xsmall'
       },
       border: {
-        radius: '0px',
-        color: 'transparent',
+        style: 'solid',
+        color: 'light-4',
+        radius: '2px'
       },
-    }
+      hover: {
+        background: {
+          color: 'light-1'
+        },
+        border: {
+          style: 'solid',
+          color: 'light-4'
+        },
+      },
+    },
+    // dropButton: {
+    //   active: {
+    //     default: {
+    //       border: {
+    //         color: 'transparent'
+    //       }
+    //     },
+    //     border: {
+    //       color: 'transparent'
+    //     },
+    //   },
+    //   border: {
+    //     radius: '0px',
+    //     color: 'transparent',
+    //   },
+    // }
   };
 
   return (
