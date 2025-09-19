@@ -432,9 +432,9 @@ let parseJaspar = function (data) {
                         var setPanel = screenHeight - BORDER + "px";
                         var minPanel = MIN_SCREEN_HEIGHT - BORDER + "px";
                         if (screenHeight > MIN_SCREEN_HEIGHT) {
-                            $("#list-frame").css({ height: setPanel });
+                            $("#list-frame").css({ height: setPanel, overflow: "auto" });
                         } else {
-                            $("#list-frame").css({ height: minPanel });
+                            $("#list-frame").css({ height: minPanel, overflow: "auto" });
                         }
 
                         $("#errorModal").css({

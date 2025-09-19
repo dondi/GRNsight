@@ -52,18 +52,7 @@ export var displayWarnings = function (warnings) {
 
     $("#warningsList").html(warningsString);
 
-    var screenHeight = $(window).height();
-    var MIN_SCREEN_HEIGHT = 600;
-    var BORDER = 425;
-    var setPanel = screenHeight - BORDER + "px";
-    var minPanel = MIN_SCREEN_HEIGHT - BORDER + "px";
-    if (screenHeight > MIN_SCREEN_HEIGHT) {
-        $("#list-frame").css({ height: setPanel });
-    } else {
-        $("#list-frame").css({ height: minPanel });
-    }
-
-    $("#warningsModal").modal("show");
+    showWarningsModel();
 };
 
 export var displayPPINodeColorWarning = function (warningDisplayed) {
@@ -79,15 +68,19 @@ export var displayPPINodeColorWarning = function (warningDisplayed) {
         ].join(" ")
     );
 
+    showWarningsModel();
+};
+
+var showWarningsModel = function () {
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
     var setPanel = screenHeight - BORDER + "px";
     var minPanel = MIN_SCREEN_HEIGHT - BORDER + "px";
     if (screenHeight > MIN_SCREEN_HEIGHT) {
-        $("#list-frame").css({ height: setPanel });
+        $("#list-frame").css({ height: setPanel, overflow: "auto" });
     } else {
-        $("#list-frame").css({ height: minPanel });
+        $("#list-frame").css({ height: minPanel, overflow: "auto" });
     }
 
     $("#warningsModal").modal("show");
