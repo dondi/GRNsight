@@ -1,1 +1,1 @@
-The web client for GRNsight
+The web client for GRNsight classic
