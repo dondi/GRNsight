@@ -31,7 +31,7 @@ console.log("CORS host: %s", app.get("corsOrigin"));
 require(__dirname + "/controllers/spreadsheet-controller")(app);
 require(__dirname + "/controllers/export-controller")(app);
 require(__dirname + "/controllers/import-controller")(app);
-require(__dirname + "/controllers/ga-controller")(app);
+// require(__dirname + "/controllers/ga-controller")(app);
 require(__dirname + "/controllers/api-controllers")(app);
 require(__dirname + "/controllers/expression-database-controller")(app);
 require(__dirname + "/controllers/network-database-controller")(app);
