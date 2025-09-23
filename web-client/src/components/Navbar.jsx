@@ -2,6 +2,9 @@ import { Nav, DropButton, Box, Text, Button, Tip, TextInput } from 'grommet';
 import { Refresh, Checkmark } from 'grommet-icons';
 export default function Navbar() {
     return (
+        // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
+        // TODO: need to set max-width of nav? or maybe it's okay for now
+        // TOOD: need to make it so that when navbar element clicked, it stays green, and when it is hovered over it turns a shade of gray
         <Nav direction="row" flex="false" background="#dfebe5" pad={{ left:"15px"}} >
             <DropButton
                 label="Network"
