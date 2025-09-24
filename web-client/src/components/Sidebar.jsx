@@ -123,9 +123,9 @@ export default function Sidebar() {
                         label={<Text>Lock Force Parameters</Text>}
                         onChange={(event) => setLockForceParameters(event.target.checked)}
                     />
-                    <Box className="panel-dropdown-container" gap="5px" margin={{ top: "10px" }}>
-                        <Button><Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px"><Text size="14px">Reset Force Parameters</Text></Box></Button>
-                        <Button><Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px"><Text size="14px">Undo Reset</Text></Box></Button>
+                    <Box className="panel-dropdown-container" gap="5px" margin={{ top: "10px" }} >
+                        <Button ><Box pad={{ vertical: "6px", horizontal: "10px" }} alignContent='center'><Text size="14px">Reset Force Parameters</Text></Box></Button>
+                        <Button><Box pad={{ vertical: "6px", horizontal: "10px" }} alignContent='center'><Text size="14px">Undo Reset</Text></Box></Button>
                     </Box>
                 </Box>
             </Box>

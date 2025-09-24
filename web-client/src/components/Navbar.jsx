@@ -64,19 +64,19 @@ export default function Navbar() {
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
                 dropContent={
-                    <Box className="dropdown-menu" direction="column" pad={{ vertical: "5px" }} gap="small" background="white" width="medium">
+                    <Box className="dropdown-menu" direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Box pad={{ left: "12px" }}><Text >Graph Options</Text></Box>
                         {/* TODO: maybe instead do a collapsible instead of a tip */}
-                        <Button margin={{ horizontal: "45px", vertical: "3px" }}><Text>Force Graph</Text></Button>
-                        <Button margin={{ horizontal: "45px", vertical: "3px" }}><Text>Grid Layout</Text></Button>
+                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Force Graph</Text></Button></Box>
+                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Grid Layout</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }}border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
-                        <Button margin={{ horizontal: "45px", vertical: "3px" }}><Text>Lock Force Graph Parameters</Text></Button>
-                        <Button margin={{ horizontal: "45px", vertical: "3px" }}><Text>Reset Force Graph Parameters</Text></Button>
-                        <Button margin={{ horizontal: "45px", vertical: "3px" }}><Text>Undo Reset</Text></Button>
+                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Lock Force Graph Parameters</Text></Button></Box>
+                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Reset Force Graph Parameters</Text></Button></Box>
+                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Undo Reset</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }}border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         {/* TODO: restrict size of text input and restrict to number values only */}
-                        <Box margin={{ horizontal: "45px", vertical: "3px" }} direction='row'><Text>Link Distance (1 - 1000)</Text> <TextInput /></Box>
-                        <Box margin={{ horizontal: "45px", vertical: "3px" }} direction='row'><Text>Charge (-2000 - 0)</Text> <TextInput /></Box>
+                        <Box margin={{ horizontal: "40px", vertical: "3px" }} direction='row'><Text>Link Distance (1 - 1000)</Text> <TextInput /></Box>
+                        <Box margin={{ horizontal: "40px", vertical: "3px" }} direction='row'><Text>Charge (-2000 - 0)</Text> <TextInput /></Box>
                     </Box>
                 }
             />
@@ -87,14 +87,14 @@ export default function Navbar() {
                 pad="15px"
                 dropContent={
                     <Box className="dropdown-menu" direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
-                        <Box pad={{ horizontal: "20px", vertical: "3px" }}><Text margin={{ left: "12px" }}>Enable Node Coloring</Text></Box>
+                        <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small" /><Text margin={{ left: "12px" }}>Enable Node Coloring</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         {/* TODO: maybe instead do a collapsible instead of a tip */}
-                        <Button margin={{ horizontal: "20px", vertical: "3px" }}><Text>Select Top Dataset</Text></Button>
-                        <Button margin={{ horizontal: "20px", vertical: "3px" }}><Text><Checkmark />Average Replicate Values for Top Datset</Text></Button>
+                        <Box pad={{ horizontal: "45px", vertical: "3px" }}><Button><Text>Select Top Dataset</Text></Button></Box>
+                        <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small"/><Text margin={{ left: "12px" }}>Average Replicate Values for Top Datset</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
-                        <Button margin={{ horizontal: "20px", vertical: "3px" }}><Text>Select Bottom Dataset</Text></Button>
-                        <Button margin={{ horizontal: "20px", vertical: "3px" }}><Text><Checkmark />Average Replicate Values for Bottom Datset</Text></Button>
+                        <Box pad={{ horizontal: "45px", vertical: "3px" }}><Button><Text>Select Bottom Dataset</Text></Button></Box>
+                        <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small" /><Text margin={{ left: "12px" }}>Average Replicate Values for Bottom Datset</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         {/* TODO: restrict size of text input and restrict to number values only */}
                         <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Log Fold Change Max Value (0.01 - 100)</Text> <TextInput /></Box>
@@ -108,7 +108,7 @@ export default function Navbar() {
                 pad="15px"
                 dropContent={
                     <Box className="dropdown-menu" direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
-                        <Box pad={{ horizontal: "20px", vertical: "3px" }}><Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values </Text></Box>
+                        <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small" /><Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         <Box pad={{horizontal: "20px", vertical: "3px"}}><Button pad={{ horizontal: "20px", vertical: "3px" }}><Text>Only Show Edge Weights With Mouse Over</Text></Button></Box>
                         <Box pad={{horizontal: "20px", vertical: "3px"}}><Button pad={{ horizontal: "20px", vertical: "3px" }}><Text>Always Show Edge Weights</Text></Button></Box>
