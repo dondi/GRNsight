@@ -88,7 +88,9 @@ export const upload = function () {
     };
 
     const exportExcel = (route, extension, sheetType) => {
-        displayWarnings(uploadState.currentWorkbook.exportSheets.warnings);
+        if (uploadState.currentWorkbook.exportSheets.warnings.length > 0) {
+            displayWarnings(uploadState.currentWorkbook.exportSheets.warnings);
+        }
         if (!$(this).parent().hasClass("disabled")) {
             var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
             var workbookFilename = filenameWithExtension(
