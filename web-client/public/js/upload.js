@@ -359,14 +359,16 @@ export const upload = function () {
         const twoColumnQuerySheets = Object.keys(finalExportSheets.two_column_sheets).filter(
             x =>
                 finalExportSheets.two_column_sheets[x] === null ||
-                Object.keys(finalExportSheets.two_column_sheets[x]?.data).length === 0
+                (finalExportSheets.two_column_sheets[x] &&
+                    Object.keys(finalExportSheets.two_column_sheets[x].data).length === 0)
         );
         if (twoColumnQuerySheets.length > 0) {
             // if we need to query production rates and degradation rates
             for (let sheet of twoColumnQuerySheets) {
                 if (
                     finalExportSheets.two_column_sheets[sheet] === null ||
-                    Object.keys(finalExportSheets.two_column_sheets[sheet]?.data).length === 0
+                    (finalExportSheets.two_column_sheets[sheet] &&
+                        Object.keys(finalExportSheets.two_column_sheets[sheet].data).length === 0)
                 ) {
                     let result = {
                         data: {},
