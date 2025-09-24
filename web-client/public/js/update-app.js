@@ -691,7 +691,7 @@ const resetDatasetDropdownMenus = workbook => {
             <li class="dataset-group-label">
               <strong>${groupLabel}</strong>
             </li>`;
-        items.forEach((name) => {
+        items.forEach(name => {
             html += `
               <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
               <a data-expression=\"${name}\">
@@ -722,15 +722,17 @@ const resetDatasetDropdownMenus = workbook => {
         $("<option>").attr("value", "Same as Top Dataset").text("Same as Top Dataset")
     );
 
-    $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset", ["Same as Top Dataset"]));
+    $(BOTTOM_DATASET_SELECTION_MENU).append(
+        createHTMLforDataset("Same as Top Dataset", ["Same as Top Dataset"])
+    );
 
     // $(DATA_SET_SELECT).append($("<option>").attr("value", "Dahlquist").text("Dahlquist"));
 
     const addOptionsToDropdown = (options, groupLabel) => {
         let topOptgroup = $("<optgroup>").attr("label", groupLabel);
         let bottomOptgroup = $("<optgroup>").attr("label", groupLabel);
-        const datasetValues = options.map((o) => o.value).filter(Boolean);
-        datasetValues.forEach((name) => {
+        const datasetValues = options.map(o => o.value).filter(Boolean);
+        datasetValues.forEach(name => {
             var shortenedSheetName = shortenExpressionSheetName(name);
             let topOption = $("<option>")
                 .addClass("dataset-option")
@@ -742,11 +744,10 @@ const resetDatasetDropdownMenus = workbook => {
                 .text(shortenedSheetName);
             topOptgroup.append(topOption);
             bottomOptgroup.append(bottomOption);
-        
         });
         $(TOP_DATASET_SELECTION_SIDEBAR).append(topOptgroup);
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).append(bottomOptgroup);
-        const groupHTML = createHTMLforDataset(groupLabel, datasetValues)
+        const groupHTML = createHTMLforDataset(groupLabel, datasetValues);
         $(TOP_DATASET_SELECTION_MENU).append(groupHTML);
         $(BOTTOM_DATASET_SELECTION_MENU).append(groupHTML);
     };
