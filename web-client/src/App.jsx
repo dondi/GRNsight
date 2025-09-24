@@ -10,10 +10,13 @@ function App() {
   const theme = {
     global: {
       colors: {
-        text: 'black',
+        text: '#333',
         control: {
           "transparent": "transparent"
         }
+      },
+      font: {
+        family: 'Helvetica Neue, Helvetica, Arial, sans-serif'
       },
       focus: {
         border: {
@@ -26,20 +29,25 @@ function App() {
         }
       }
     },
+    text: {
+      font: {
+        family: 'Helvetica Neue',
+      },
+      medium: {
+        size: '14px',
+        height: '20px',
+      }
+    },
     button: {
       active: {
         default: {
           border: {
-            color: 'transparent'
+            width: '0px',
           }
         },
-        // border: {
-        //   color: 'transparent'
-        // },
       },
       border: {
-        radius: '0px',
-        color: 'transparent',
+        width: '0px',
       },
     },
     fileInput: {
@@ -53,7 +61,7 @@ function App() {
       },
       hover: {
         background: {
-          color: 'light-1'
+          color: 'light-1',
         },
         border: {
           style: 'solid',
@@ -61,26 +69,10 @@ function App() {
         },
       },
     },
-    // dropButton: {
-    //   active: {
-    //     default: {
-    //       border: {
-    //         color: 'transparent'
-    //       }
-    //     },
-    //     border: {
-    //       color: 'transparent'
-    //     },
-    //   },
-    //   border: {
-    //     radius: '0px',
-    //     color: 'transparent',
-    //   },
-    // }
   };
 
   return (
-    <Grommet theme={theme} full>
+    <Grommet theme={theme} background={{ color: "white", dark: false }} full>
       <Navbar />
       <Sidebar />
       <Graph />

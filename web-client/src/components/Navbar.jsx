@@ -4,14 +4,11 @@ export default function Navbar() {
     return (
         // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
         // TODO: need to set max-width of nav? or maybe it's okay for now
-        // TOOD: need to make it so that when navbar element clicked, it stays green, and when it is hovered over it turns a shade of gray
-        <Nav direction="row" flex="false" background="#dfebe5" pad={{ left:"15px"}} >
+        <Nav className="navbar" direction="row" flex="false" background="#dfebe5" pad={{ left:"30px", right: "15px"}} margin={{ bottom: "10px" }} gap="none" >
             <DropButton
                 label="Network"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f', border: 'none'  } }
-                border= {{ color: 'transparent' }}
                 dropContent={
                     <Box pad={{ vertical: "5px" }} background="white" width="medium">
                         <Text weight="bold" margin={{ left: "small" }}>Network Source</Text>
@@ -65,7 +62,6 @@ export default function Navbar() {
                 label="Layout"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box direction="column" pad={{ vertical: "5px" }} gap="small" background="white" width="medium">
                         <Box pad={{ left: "12px" }}><Text >Graph Options</Text></Box>
@@ -88,7 +84,6 @@ export default function Navbar() {
                 label="Node"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Box pad={{ horizontal: "20px", vertical: "3px" }}><Text margin={{ left: "12px" }}>Enable Node Coloring</Text></Box>
@@ -110,7 +105,6 @@ export default function Navbar() {
                 label="Edge"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Box pad={{ horizontal: "20px", vertical: "3px" }}><Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values </Text></Box>
@@ -133,7 +127,6 @@ export default function Navbar() {
                 label="View"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Text margin={{ left: "small" }}>Viewport Size</Text>
@@ -155,7 +148,6 @@ export default function Navbar() {
                 label="Export"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Button margin={{ horizontal: "20px", top: "3px" }}><Checkmark /><Text>Export Data</Text></Button>
@@ -170,7 +162,6 @@ export default function Navbar() {
                 label="Help"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Button margin={{ horizontal: "20px", top: "3px" }}><Text>Getting Started</Text></Button>
@@ -185,7 +176,6 @@ export default function Navbar() {
                 label="Demo"
                 dropAlign={{ top: 'bottom', left: 'left' }}
                 pad="15px"
-                hoverIndicator= {{ color: '#16693f'} }
                 dropContent={
                     <Box
                         pad="small"

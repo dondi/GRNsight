@@ -1,15 +1,35 @@
+/* :root {
+  font-size: 14px;
+  line-height: 20px;
+} */
+body {
+  font-size: 14px;
+  line-height: 1.42857143;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* color: "#333"; */
+}
+
 .navbar {
   top: 1px;
-  /* margin-right: auto; */
+  min-height: 50px;
   margin-bottom: 10px;
   width: 100vw;
-  /* height: 60px; */
-  background-color: #dfebe5;
-  color: black;
-  display: flex;
-  /* align-items: center; */
-  /* padding: 0 20px; */
+  position: relative;
   border-radius: 4px;
+  line-height: 20px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-color: #dfebe5;
+}
+
+.navbar button {
+  color: #000000;
+  border: none;
+}
+
+.navbar button:hover {
+  color: #696969;
+  box-shadow: none;
 }
 
 button {
@@ -115,7 +135,7 @@ button:hover {
 
 .grnsight-container {
   left: 250px;
-  top: 55px;
+  top: 53px;
   border: 2px solid #9A9A9A;
   position: absolute;
   stroke: #fff;
