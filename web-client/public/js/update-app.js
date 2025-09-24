@@ -675,6 +675,8 @@ const identifySpeciesOrTaxon = data => {
 const clearDropdownMenus = () => {
     $(TOP_DATASET_SELECTION_SIDEBAR).html("");
     $(BOTTOM_DATASET_SELECTION_SIDEBAR).html("");
+    $(TOP_DATASET_SELECTION_MENU).html("");
+    $(BOTTOM_DATASET_SELECTION_MENU).html("");
 };
 
 const resetDatasetDropdownMenus = workbook => {
@@ -684,14 +686,21 @@ const resetDatasetDropdownMenus = workbook => {
     grnState.nodeColoring.nodeColoringOptions.workbookExpressions = [];
     grnState.nodeColoring.nodeColoringOptions.databaseExpressions = [];
 
-    var createHTMLforDataset = function (name) {
-        return `
-            <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
-              <a data-expression=\"${name}\">
-                <span class=\"glyphicon\"></span>
-                &nbsp;${name}
-              </a>
+    var createHTMLforDataset = function (groupLabel, items) {
+        let html = `
+            <li class="dataset-group-label">
+              <strong>${groupLabel}</strong>
             </li>`;
+        items.forEach((name) => {
+            html += `
+              <li class=\"dataset-option node-coloring-menu\" value=\"${name}\">
+              <a data-expression=\"${name}\">
+                  <span class=\"glyphicon\"></span>
+                  &nbsp;${name}
+              </a>
+              </li>`;
+        });
+        return html;
     };
 
     for (var property in workbook.expression) {
@@ -713,30 +722,33 @@ const resetDatasetDropdownMenus = workbook => {
         $("<option>").attr("value", "Same as Top Dataset").text("Same as Top Dataset")
     );
 
-    $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset"));
+    $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset("Same as Top Dataset", ["Same as Top Dataset"]));
 
     // $(DATA_SET_SELECT).append($("<option>").attr("value", "Dahlquist").text("Dahlquist"));
 
     const addOptionsToDropdown = (options, groupLabel) => {
         let topOptgroup = $("<optgroup>").attr("label", groupLabel);
         let bottomOptgroup = $("<optgroup>").attr("label", groupLabel);
-        options.forEach(option => {
-            var shortenedSheetName = shortenExpressionSheetName(option.value);
+        const datasetValues = options.map((o) => o.value).filter(Boolean);
+        datasetValues.forEach((name) => {
+            var shortenedSheetName = shortenExpressionSheetName(name);
             let topOption = $("<option>")
                 .addClass("dataset-option")
-                .attr("value", option.value)
+                .attr("value", name)
                 .text(shortenedSheetName);
             let bottomOption = $("<option>")
                 .addClass("dataset-option")
-                .attr("value", option.value)
+                .attr("value", name)
                 .text(shortenedSheetName);
             topOptgroup.append(topOption);
             bottomOptgroup.append(bottomOption);
-            $(TOP_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
-            $(BOTTOM_DATASET_SELECTION_MENU).append(createHTMLforDataset(option.value));
+        
         });
         $(TOP_DATASET_SELECTION_SIDEBAR).append(topOptgroup);
         $(BOTTOM_DATASET_SELECTION_SIDEBAR).append(bottomOptgroup);
+        const groupHTML = createHTMLforDataset(groupLabel, datasetValues)
+        $(TOP_DATASET_SELECTION_MENU).append(groupHTML);
+        $(BOTTOM_DATASET_SELECTION_MENU).append(groupHTML);
     };
 
     // Add Workbook Expressions
