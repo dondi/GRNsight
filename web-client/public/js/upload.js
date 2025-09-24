@@ -355,12 +355,17 @@ export const upload = function () {
             degradation_rates: "DegradationRates",
         };
         const twoColumnQuerySheets = Object.keys(finalExportSheets.two_column_sheets).filter(
-            x => finalExportSheets.two_column_sheets[x] === null
+            x =>
+                finalExportSheets.two_column_sheets[x] === null ||
+                Object.keys(finalExportSheets.two_column_sheets[x]?.data).length === 0
         );
         if (twoColumnQuerySheets.length > 0) {
             // if we need to query production rates and degradation rates
             for (let sheet of twoColumnQuerySheets) {
-                if (finalExportSheets.two_column_sheets[sheet] === null) {
+                if (
+                    finalExportSheets.two_column_sheets[sheet] === null ||
+                    Object.keys(finalExportSheets.two_column_sheets[sheet]?.data).length === 0
+                ) {
                     let result = {
                         data: {},
                         errors: [],
