@@ -16,7 +16,8 @@ function App() {
         }
       },
       font: {
-        family: 'Helvetica Neue, Helvetica, Arial, sans-serif'
+        family: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+        height: 1.42857143,
       },
       focus: {
         border: {
@@ -25,13 +26,22 @@ function App() {
       },
       input: {
         font: {
-          size: "small"
+          size: "14px"
         }
       }
+    },
+    rangeInput: {
+      thumb: {
+        color: 'blue',
+      },
     },
     text: {
       font: {
         family: 'Helvetica Neue',
+        height: 1.42857143,
+      },
+      small: {
+        height: 1.42857143,
       },
       medium: {
         size: '14px',
