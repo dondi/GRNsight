@@ -743,7 +743,7 @@ const resetDatasetDropdownMenus = workbook => {
     if (grnState.workbookType === "upload") {
         addOptionsToDropdown(
             grnState.nodeColoring.nodeColoringOptions.workbookExpressions,
-            "User-Uploaded"
+            "User-uploaded"
         );
     } else {
         addOptionsToDropdown(grnState.nodeColoring.nodeColoringOptions.workbookExpressions, "Demo");
