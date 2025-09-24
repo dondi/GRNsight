@@ -222,16 +222,26 @@ button:hover {
   width: 100%;
 }
 
+.file-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
 .sidebarPanelHeaderID {
   margin: 0px 5px 5px;
   font-weight: bold;
   font-size: 12px;
   width: 100%;
-
 }
 
 .nodeColoringSidebarBody {
   margin-top: 6px;
+}
+
+.edge-weight-radio-buttons {
+  accent-color: blue;
+  font-size: 14px;
 }
 
 /* .data-sidebar select {

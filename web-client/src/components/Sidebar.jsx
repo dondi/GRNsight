@@ -1,4 +1,4 @@
-import { Box, Text, Button, Select, FileInput, Stack, RangeInput, CheckBox, TextInput } from 'grommet';
+import { Box, Text, Button, Select, FileInput, Stack, RangeInput, CheckBox, TextInput, RadioButtonGroup } from 'grommet';
 import { Refresh, Checkmark, FolderOpen, Database } from 'grommet-icons';
 import { useState, useRef } from 'react'
 import '../App.css'
@@ -6,7 +6,7 @@ import e from 'cors';
 
 export default function Sidebar() {
     const [value, setValue] = useState('Demo #1: Unweighted GRN');
-    const [networkMode, setNetworkMode] = useState('Gene regulatory Network');
+    const [networkMode, setNetworkMode] = useState('Gene Regulatory Network');
     const fileInputRef = useRef();
     const [linkDistance, setLinkDistance] = useState(500);
     const [charge, setCharge] = useState(-50);
@@ -16,6 +16,13 @@ export default function Sidebar() {
     const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] = useState(false);
     const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
     const [enableEdgeColoring, setEnableEdgeColoring] = useState(false);
+    const [edgeWeightVisibility, setEdgeWeightVisibility] = useState('Show With Mouse Over');
+    const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
+    const [grayThreshold, setGrayThreshold] = useState(5);
+    const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
+    const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
+    // TODO: make viewSize dynamic to user's screen size
+    const [viewSize, setViewSize] = useState('Small (1104 X 648 pixels)');
 
     return (
         <Box className="sidebar">
@@ -44,7 +51,9 @@ export default function Sidebar() {
                             />
                             {/* TODO: remove browse message */}
                             <Stack anchor="center" margin={{ vertical: "6px" }}>
+                                {/* Do a border radius, access the div that contains this FileInput */}
                                 <FileInput
+                                    className="file-input"
                                     ref={fileInputRef}
                                     name="file"
                                     size="small"
@@ -72,20 +81,10 @@ export default function Sidebar() {
                     <Box margin={{ vertical: "9px" }} width="95%" alignSelf="center" border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                     <Button margin={{ left: "small" }} justify="between"><Refresh /><Text>Reload</Text></Button>
                     <Box margin={{ vertical: "9px" }} width="95%" alignSelf="center" border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
-                    <Text weight="bold" size="xsmall">Network Mode</Text>
-                    <Select
-                        plain
-                        options={[
-                            <Text>Gene regulatory Network</Text>,
-                            <Text>Protein-protein Interaction Network</Text>
-                        ]}
-                        value={networkMode}
-                        placeholder={<Text>Select a Network Mode</Text>}
-                        onChange={({ option }) => setNetworkMode(option)}
-                        size="small"
-                    />
-                    <Text size="small" weight="bold" >Species</Text>
-                    <Box direction="row"  ><Checkmark /><Text size="small">Saccharomyces cerevisiae</Text></Box>
+                    <Text weight="bold" size="13px">Network Mode:</Text>
+                    <Box margin={{"bottom": "5px"}}><Text className="italics" weight="bold" size="12px">{networkMode}</Text></Box>
+                    <Text weight="bold" size="13px">Species:</Text>
+                    <Box direction="row"><Text className="italics" weight="bold" size="12px">Saccharomyces cerevisiae</Text></Box>
                 </Box>
             </Box>
 
@@ -204,9 +203,63 @@ export default function Sidebar() {
                         label={<Text>Enable Edge Coloring</Text>}
                         onChange={(event) => setEnableEdgeColoring(event.target.checked)}
                     />
+                    <Box>
+                        <Text weight="bold">Hide/Show Edge Weights</Text>
+                        <RadioButtonGroup className="edge-weight-radio-buttons"
+                            gap="0px"
+                            options={['Show With Mouse Over', 'Always Show Edge Weights', 'Never Show Edge Weights']}
+                            size="small"
+                            value={edgeWeightVisibility}
+                            onChange={(event) => setEdgeWeightVisibility(event.target.value)}
+                        />
+                    </Box>
+                    <Box>
+                        <Text weight="bold">Edge Weight Normalization Factor (0.0001-1000):</Text>
+                        <TextInput
+                            value={edgeWeightNormalization}
+                        />
+                    </Box>
+                    {/* TODO: need to center buttons and make the same size */}
+                    <Box className="panel-dropdown-container" direction="row" gap="5px">
+                        <Button><Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px"><Text size="14px">Set Factor</Text></Box></Button>
+                        <Button ><Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px"><Text size="14px">Reset Factor</Text></Box></Button>
+                    </Box>
+                    <Box>
+                        <Text weight="bold">Gray Threshold (0-100%): <Text weight="normal">{grayThreshold}%</Text></Text>
+                        <RangeInput
+                            color="blue"
+                            value={grayThreshold}
+                            onChange={event => setGrayThreshold(event.target.value)}
+                            min={0}
+                            max={100}
+                        />
+                    </Box>
+                    <CheckBox
+                        checked={showGrayEdgesDashed}
+                        label={<Text>Show Gray Edges as Dashed</Text>}
+                        onChange={(event) => setShowGrayEdgesDashed(event.target.checked)}
+                    />
                 </Box>
             </Box>
             {/* View */}
+            <Box className="panel" margin={{ top: "5px" }}>
+                <Box margin="10px"><Text size="18px" weight="bold">View</Text></Box>
+                <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} gap="5px" >
+                    <RadioButtonGroup className="edge-weight-radio-buttons"
+                        gap="0px"
+                        options={['Small (1104 X 648 pixels)', 'Medium (1414 X 840 pixels)', 'Large (1920 X 1080 pixels)']}
+                        size="small"
+                        value={viewSize}
+                        onChange={(event) => setViewSize(event.target.value)}
+                    />
+                    <CheckBox
+                        checked={restrictGraphToViewport}
+                        label={<Text>Restrict Graph to Viewport</Text>}
+                        onChange={(event) => setRestrictGraphToViewport(event.target.checked)}
+                    />
+
+                </Box>
+            </Box>
         </Box>
     )
 }
