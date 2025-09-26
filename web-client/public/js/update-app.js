@@ -1,6 +1,6 @@
 import { drawGraph, updaters } from "./graph";
 import { uploadState } from "./upload";
-import { displayWarnings, displayPPINodeColorWarning } from "./warnings";
+import { displayGraphWarnings, displayPPINodeColorWarning } from "./warnings";
 import { max } from "d3-array";
 import { grnState } from "./grnstate";
 
@@ -140,7 +140,7 @@ const displayworkbook = (workbook, name) => {
     );
 
     if (workbook.warnings.length > 0) {
-        displayWarnings(workbook.warnings);
+        displayGraphWarnings(workbook.warnings);
     }
 
     $(FILE_NAME).text(name); // Set the name of the file to display in the top bar
