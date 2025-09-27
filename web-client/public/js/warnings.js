@@ -52,7 +52,7 @@ export var displayWarnings = function (warnings) {
 
     $("#warningsList").html(warningsString);
 
-    showWarningsModel();
+    showWarningsModal();
 };
 
 export var displayPPINodeColorWarning = function (warningDisplayed) {
@@ -68,10 +68,10 @@ export var displayPPINodeColorWarning = function (warningDisplayed) {
         ].join(" ")
     );
 
-    showWarningsModel();
+    showWarningsModal();
 };
 
-var showWarningsModel = function () {
+var showWarningsModal = function () {
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
