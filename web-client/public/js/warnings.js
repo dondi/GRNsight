@@ -1,13 +1,17 @@
-export var displayWarnings = function (warnings) {
-    $("#warningIntro").html(
-        "There were " +
-            warnings.length +
-            " warning(s) detected in this file. " +
-            "The graph will be loaded, but may not be displayed accurately. Please note that" +
-            " this file may not export properly if this error remains in the workbook. " +
-            "We recommend you review your file and ensure that it is formatted correctly. " +
-            'To view the details of the warning(s), please click on the "Warnings List" below.'
-    );
+export var displayExportWarnings = function (warnings) {
+    displayWarnings(warnings);
+};
+
+export var displayGraphWarnings = function (warnings) {
+    var additionalWarningIntro =
+        "The graph will be loaded, but may not be displayed accurately. Please note that this file may not export properly if this error remains in the workbook. We recommend you review your file and ensure that it is formatted correctly. ";
+    displayWarnings(warnings, additionalWarningIntro);
+};
+
+export var displayWarnings = function (warnings, additionalWarningIntro = "") {
+    $("#warningIntro").html(`
+        There were ${warnings.length} warning(s) detected in this file. ${additionalWarningIntro}To view the details of the warning(s), please click on the "Warnings List" below.
+    `);
     var warningsString = "";
     var NUM_POSSIBLE_WARNINGS = 11;
     var warningCounts = {};
