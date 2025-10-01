@@ -8,7 +8,7 @@ import { stopLoadingIcon, startLoadingIcon } from "./update-app";
 
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
-import { displayWarnings } from "./warnings.js";
+import { displayExportWarnings } from "./warnings.js";
 import { warnings } from "./export-constants.js";
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
@@ -88,7 +88,9 @@ export const upload = function () {
     };
 
     const exportExcel = (route, extension, sheetType) => {
-        displayWarnings(uploadState.currentWorkbook.exportSheets.warnings);
+        if (uploadState.currentWorkbook.exportSheets.warnings.length > 0) {
+            displayExportWarnings(uploadState.currentWorkbook.exportSheets.warnings);
+        }
         if (!$(this).parent().hasClass("disabled")) {
             var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
             var workbookFilename = filenameWithExtension(
@@ -355,12 +357,19 @@ export const upload = function () {
             degradation_rates: "DegradationRates",
         };
         const twoColumnQuerySheets = Object.keys(finalExportSheets.two_column_sheets).filter(
-            x => finalExportSheets.two_column_sheets[x] === null
+            x =>
+                finalExportSheets.two_column_sheets[x] === null ||
+                (finalExportSheets.two_column_sheets[x] &&
+                    Object.keys(finalExportSheets.two_column_sheets[x].data).length === 0)
         );
         if (twoColumnQuerySheets.length > 0) {
             // if we need to query production rates and degradation rates
             for (let sheet of twoColumnQuerySheets) {
-                if (finalExportSheets.two_column_sheets[sheet] === null) {
+                if (
+                    finalExportSheets.two_column_sheets[sheet] === null ||
+                    (finalExportSheets.two_column_sheets[sheet] &&
+                        Object.keys(finalExportSheets.two_column_sheets[sheet].data).length === 0)
+                ) {
                     let result = {
                         data: {},
                         errors: [],

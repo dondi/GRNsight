@@ -6,8 +6,8 @@ module.exports = {
             errorDescription:
                 "GRNsight has detected that there are missing degradation rates in the exported" +
                 " workbook's 'degradation_rates' sheet. These degradation rates are missing in our database." +
-                " A degradation rate will need to be supplied to run this workbook in GRNmap." +
-                " The missing genes are: " +
+                " A degradation rate will need to be supplied to use this workbook as an input file for GRNmap." +
+                " The missing values are for the genes: " +
                 missingGenes,
         }),
 
@@ -16,8 +16,8 @@ module.exports = {
             errorDescription:
                 "GRNsight has detected that there are missing production rates in the exported" +
                 " workbook's 'production_rates' sheet. These production rates are missing in our database." +
-                " A production rate will need to be supplied to run this workbook in GRNmap." +
-                " The missing genes are: " +
+                " A production rate will need to be supplied to use this workbook as an input file for GRNmap." +
+                " The missing values are for the genes: " +
                 missingGenes,
         }),
     },
