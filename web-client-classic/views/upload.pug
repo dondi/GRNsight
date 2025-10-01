@@ -74,7 +74,7 @@ html
                 li
                   a(href='#' id='forceGraph' class='layout')
                     | &nbsp; &nbsp; &nbsp;Force Graph
-                  a(href='#' id='gridLayout' class='layout')
+                  a(href='#' id='gridLayout' class='layout disabled')
                     | &nbsp; &nbsp; &nbsp;Grid Layout
                 li(class='divider')
                 li
@@ -367,7 +367,7 @@ html
                   form(class='buttonPairContainer')
                     //- Value is set to empty to ensure that the MVC cycle takes care of the button’s label.
                     input(id='forceGraphButton' type='button' class='btn btn-default' value='Force Graph')
-                    input(id='gridLayoutButton' type='button' class='btn btn-default' value='Grid Layout')
+                    input(id='gridLayoutButton' type='button' class='btn btn-default disabled' value='Grid Layout')
                   form(class='forceParameterContainer')
                     div(class='labelWithValueContainer')
                       label(for='linkDistInput', class='info', data-toggle='tooltip', title='Increases/decreases the length of the edges that connect the nodes.') Link Distance (1-1000):

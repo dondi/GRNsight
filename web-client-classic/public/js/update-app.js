@@ -1088,6 +1088,11 @@ export const updateApp = grnState => {
         $(ZOOM_INPUT).val(ZOOM_DISPLAY_MIDDLE);
         $(ZOOM_SLIDER).val(ZOOM_ADAPTIVE_MAX_SCALE);
     }
+
+    if (grnState.workbook != null) {
+        $("#gridLayout").removeClass("disabled");
+        $("#gridLayoutButton").removeClass("disabled");
+    }
     refreshApp();
 };
 
