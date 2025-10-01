@@ -2,27 +2,41 @@ import { Box, Text, Button, Select, FileInput, Stack, RangeInput, CheckBox, Text
 import { Refresh, Checkmark, FolderOpen, Database } from 'grommet-icons';
 import { useState, useRef } from 'react'
 import '../App.css'
-import e from 'cors';
 
-export default function Sidebar() {
-    const [value, setValue] = useState('Demo #1: Unweighted GRN');
-    const [networkMode, setNetworkMode] = useState('Gene Regulatory Network');
+export default function Sidebar({
+    networkMode,
+    enableNodeColoring,
+    setEnableNodeColoring,
+    enableEdgeColoring,
+    setEnableEdgeColoring,
+    linkDistance,
+    setLinkDistance,
+    charge,
+    setCharge,
+    lockForceParameters,
+    setLockForceParameters,
+    averageReplicateValuesTop,
+    setAverageReplicateValuesTop,
+    averageReplicateValuesBottom,
+    setAverageReplicateValuesBottom,
+    logFoldChangeMax,
+    setLogFoldChangeMax,
+    edgeWeightVisibility,
+    setEdgeWeightVisibility,
+    edgeWeightNormalization,
+    setEdgeWeightNormalization,
+    grayThreshold,
+    setGrayThreshold,
+    showGrayEdgesDashed,
+    setShowGrayEdgesDashed,
+    restrictGraphToViewport,
+    setRestrictGraphToViewport,
+    viewSize,
+    setViewSize,
+    demoValue,
+    setDemoValue,
+}) {
     const fileInputRef = useRef();
-    const [linkDistance, setLinkDistance] = useState(500);
-    const [charge, setCharge] = useState(-50);
-    const [lockForceParameters, setLockForceParameters] = useState(false);
-    const [enableNodeColoring, setEnableNodeColoring] = useState(false);
-    const [averageReplicateValuesTop, setAverageReplicateValuesTop] = useState(false);
-    const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] = useState(false);
-    const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
-    const [enableEdgeColoring, setEnableEdgeColoring] = useState(false);
-    const [edgeWeightVisibility, setEdgeWeightVisibility] = useState('Show With Mouse Over');
-    const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
-    const [grayThreshold, setGrayThreshold] = useState(5);
-    const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
-    const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
-    // TODO: make viewSize dynamic to user's screen size
-    const [viewSize, setViewSize] = useState('Small (1104 X 648 pixels)');
 
     return (
         <Box className="sidebar">
@@ -44,9 +58,9 @@ export default function Sidebar() {
                                     <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
                                     <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>
                                 ]}
-                                value={value}
+                                value={demoValue}
                                 placeholder={<Text>Select a Demo</Text>}
-                                onChange={({ option }) => setValue(option)}
+                                onChange={({ option }) => setDemoValue(option)}
                                 size="small"
                             />
                             {/* TODO: remove browse message */}
@@ -151,9 +165,9 @@ export default function Sidebar() {
                             <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
                             <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>
                         ]}
-                        value={value}
+                        value={demoValue}
                         placeholder={<Text>Select a Demo</Text>}
-                        onChange={({ option }) => setValue(option)}
+                        onChange={({ option }) => setDemoValue(option)}
                         size="small"
                     />
                     <CheckBox
@@ -173,7 +187,7 @@ export default function Sidebar() {
                             <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
                             <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>
                         ]}
-                        value={value}
+                        value={demoValue}
                         placeholder={<Text>Select a Demo</Text>}
                         onChange={({ option }) => setValue(option)}
                         size="small"
