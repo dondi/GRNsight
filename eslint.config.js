@@ -3,7 +3,7 @@ module.exports = [
         ignores: [
             "node_modules/**",
             "coverage/**",
-            "web-client/public/js/*.min.js",
+            "web-client-classic/public/js/*.min.js",
             // Add these from your .eslintignore file
             "coverage/lcov-report/**",
             "_site/**",
