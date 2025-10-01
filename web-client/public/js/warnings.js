@@ -1,13 +1,17 @@
-export var displayWarnings = function (warnings) {
-    $("#warningIntro").html(
-        "There were " +
-            warnings.length +
-            " warning(s) detected in this file. " +
-            "The graph will be loaded, but may not be displayed accurately. Please note that" +
-            " this file may not export properly if this error remains in the workbook. " +
-            "We recommend you review your file and ensure that it is formatted correctly. " +
-            'To view the details of the warning(s), please click on the "Warnings List" below.'
-    );
+export var displayExportWarnings = function (warnings) {
+    displayWarnings(warnings);
+};
+
+export var displayGraphWarnings = function (warnings) {
+    var additionalWarningIntro =
+        "The graph will be loaded, but may not be displayed accurately. Please note that this file may not export properly if this error remains in the workbook. We recommend you review your file and ensure that it is formatted correctly. ";
+    displayWarnings(warnings, additionalWarningIntro);
+};
+
+export var displayWarnings = function (warnings, additionalWarningIntro = "") {
+    $("#warningIntro").html(`
+        There were ${warnings.length} warning(s) detected in this file. ${additionalWarningIntro}To view the details of the warning(s), please click on the "Warnings List" below.
+    `);
     var warningsString = "";
     var NUM_POSSIBLE_WARNINGS = 11;
     var warningCounts = {};
@@ -52,18 +56,7 @@ export var displayWarnings = function (warnings) {
 
     $("#warningsList").html(warningsString);
 
-    var screenHeight = $(window).height();
-    var MIN_SCREEN_HEIGHT = 600;
-    var BORDER = 425;
-    var setPanel = screenHeight - BORDER + "px";
-    var minPanel = MIN_SCREEN_HEIGHT - BORDER + "px";
-    if (screenHeight > MIN_SCREEN_HEIGHT) {
-        $("#list-frame").css({ height: setPanel });
-    } else {
-        $("#list-frame").css({ height: minPanel });
-    }
-
-    $("#warningsModal").modal("show");
+    showWarningsModal();
 };
 
 export var displayPPINodeColorWarning = function (warningDisplayed) {
@@ -79,15 +72,19 @@ export var displayPPINodeColorWarning = function (warningDisplayed) {
         ].join(" ")
     );
 
+    showWarningsModal();
+};
+
+var showWarningsModal = function () {
     var screenHeight = $(window).height();
     var MIN_SCREEN_HEIGHT = 600;
     var BORDER = 425;
     var setPanel = screenHeight - BORDER + "px";
     var minPanel = MIN_SCREEN_HEIGHT - BORDER + "px";
     if (screenHeight > MIN_SCREEN_HEIGHT) {
-        $("#list-frame").css({ height: setPanel });
+        $("#list-frame").css({ height: setPanel, overflow: "auto" });
     } else {
-        $("#list-frame").css({ height: minPanel });
+        $("#list-frame").css({ height: minPanel, overflow: "auto" });
     }
 
     $("#warningsModal").modal("show");
