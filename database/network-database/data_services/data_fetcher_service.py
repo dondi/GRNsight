@@ -60,13 +60,7 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
         query.add_view(
             "regulatoryRegions.regulator.symbol",
             "regulatoryRegions.regulator.secondaryIdentifier", "symbol",
-            "secondaryIdentifier", "regulatoryRegions.regEvidence.ontologyTerm.name",
-            "regulatoryRegions.regEvidence.ontologyTerm.identifier",
-            "regulatoryRegions.experimentCondition",
             "regulatoryRegions.strainBackground",
-            "regulatoryRegions.regulationDirection", "regulatoryRegions.regulationType",
-            "regulatoryRegions.regulatorType",
-            "regulatoryRegions.publications.pubMedId", "regulatoryRegions.datasource",
             "regulatoryRegions.annotationType", "featureType",
             "regulatoryRegions.regulator.featureType"
         )
@@ -90,15 +84,6 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
                 "regulatorSystematicName": row["regulatoryRegions.regulator.secondaryIdentifier"],
                 "targetStandardName": row["symbol"],
                 "targetSystematicName": row["secondaryIdentifier"],
-                "ontologyTermName": row["regulatoryRegions.regEvidence.ontologyTerm.name"],
-                "ontologyTermIdentifier": row["regulatoryRegions.regEvidence.ontologyTerm.identifier"],
-                "experimentCondition": row["regulatoryRegions.experimentCondition"],
-                "strainBackground": row["regulatoryRegions.strainBackground"],
-                "regulationDirection": row["regulatoryRegions.regulationDirection"],
-                "regulatoryRegionsRegulationType": row["regulatoryRegions.regulationType"],
-                "regulatoryRegionsRegulatorType": row["regulatoryRegions.regulatorType"],
-                "pubMedId": row["regulatoryRegions.publications.pubMedId"],
-                "datasource": row["regulatoryRegions.datasource"],
                 "annotationType": row["regulatoryRegions.annotationType"]
             })  
                 
@@ -117,12 +102,10 @@ class ProteinProteinInteractionsFetcherService(DataFetcherService):
         query.add_view(
             "primaryIdentifier", "secondaryIdentifier", "symbol", "name", "sgdAlias",
             "interactions.details.annotationType",
-            "interactions.details.experiment.publication.pubMedId",
             "interactions.participant2.symbol",
             "interactions.participant2.secondaryIdentifier",
             "interactions.details.experiment.interactionDetectionMethods.identifier",
-            "interactions.details.experiment.name",
-            "interactions.details.relationshipType", "featureType",
+            "interactions.details.experiment.name", "featureType",
             "interactions.participant2.featureType", "proteins.symbol",
             "interactions.participant2.proteins.symbol"
         )
@@ -152,13 +135,11 @@ class ProteinProteinInteractionsFetcherService(DataFetcherService):
                 "name   ": row["name"],
                 "sgdAlias": row["sgdAlias"],
                 "annotationType": row["interactions.details.annotationType"],
-                "pubMedId": row["interactions.details.experiment.publication.pubMedId"],
                 "gene2StandardName": row["interactions.participant2.symbol"],
                 "gene2SystematicName": row["interactions.participant2.secondaryIdentifier"],
                 "protein2StandardName": row["interactions.participant2.proteins.symbol"],
                 "interactionDetectionMethodsIdentifier": row["interactions.details.experiment.interactionDetectionMethods.identifier"],
                 "experimentName": row["interactions.details.experiment.name"],
-                "relationshipType": row["interactions.details.relationshipType"]
             })
 
         df = pd.DataFrame(rows_data)
