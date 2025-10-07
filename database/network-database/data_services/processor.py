@@ -58,11 +58,12 @@ class GeneProcessor(Processor):
         proteins_diff = proteins[proteins['gene_systematic_name'].isin(diff_systematic_names)]
 
         # Protein standard names are in the format of lowercase + "p" but for gene standard name, all letters should be uppercase and remove the trailing "p"
-        proteins_diff['standard_name'] = proteins_diff['standard_name'].str.rstrip('p').str.upper()
+        proteins_diff_with_correct_gene_standard_name = proteins_diff.copy()
+        proteins_diff_with_correct_gene_standard_name['standard_name'] = proteins_diff_with_correct_gene_standard_name['standard_name'].str.rstrip('p').str.upper()
         # Combine the differences from both genes and proteins
         diff_combined = pd.concat([
             genes_diff[['systematicName', 'standardName']], 
-            proteins_diff[['gene_systematic_name', 'standard_name']].rename(
+            proteins_diff_with_correct_gene_standard_name[['gene_systematic_name', 'standard_name']].rename(
                 columns={'gene_systematic_name': 'systematicName', 'standard_name': 'standardName'}
             )
         ], ignore_index=True)
