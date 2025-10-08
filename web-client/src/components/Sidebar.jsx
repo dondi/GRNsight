@@ -198,12 +198,12 @@ export default function Sidebar({
                         onChange={(event) => setAverageReplicateValuesBottom(event.target.checked)}
                     />
                     <Text>Log Fold Change Max Value (0.01-100):</Text>
-                    <Box className="panel-dropdown-container" direction="row" gap="40px">
+                    <Box className="panel-dropdown-container" direction="row" gap="5px">
                         <TextInput
                             value={logFoldChangeMax}
                             placeholder="Enter max value"
                         />
-                        <Button onClick={() => setLogFoldChangeMax(logFoldChangeMax)}><Text>Set</Text></Button>
+                        <Button onClick={() => setLogFoldChangeMax(logFoldChangeMax)}><Box pad={{horizontal: "12px", vertical: "0px"}}><Text>Set</Text></Box></Button>
                     </Box>
 
                 </Box>
@@ -219,7 +219,7 @@ export default function Sidebar({
                     />
                     <Box>
                         <Text weight="bold">Hide/Show Edge Weights</Text>
-                        <RadioButtonGroup className="edge-weight-radio-buttons"
+                        <RadioButtonGroup className="sidebar-radio-buttons"
                             gap="0px"
                             options={['Show With Mouse Over', 'Always Show Edge Weights', 'Never Show Edge Weights']}
                             size="small"
@@ -258,8 +258,9 @@ export default function Sidebar({
             {/* View */}
             <Box className="panel" margin={{ top: "5px" }}>
                 <Box margin="10px"><Text size="18px" weight="bold">View</Text></Box>
+                <Box margin="10px"><Text size="13px" weight="bold">Size</Text></Box>
                 <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} gap="5px" >
-                    <RadioButtonGroup className="edge-weight-radio-buttons"
+                    <RadioButtonGroup className="sidebar-radio-buttons"
                         gap="0px"
                         options={['Small (1104 X 648 pixels)', 'Medium (1414 X 840 pixels)', 'Large (1920 X 1080 pixels)']}
                         size="small"

@@ -103,13 +103,13 @@ export default function Navbar({
                         <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Force Graph</Text></Button></Box>
                         <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Grid Layout</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }}border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
-                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Lock Force Graph Parameters</Text></Button></Box>
+                        <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button onClick={() => setLockForceParameters(!lockForceParameters)}>{lockForceParameters && <Checkmark />}<Text>Lock Force Graph Parameters</Text></Button></Box>
                         <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Reset Force Graph Parameters</Text></Button></Box>
                         <Box pad={{ horizontal: "40px", vertical: "3px" }}><Button ><Text>Undo Reset</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }}border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         {/* TODO: restrict size of text input and restrict to number values only */}
-                        <Box margin={{ horizontal: "40px", vertical: "3px" }} direction='row'><Text>Link Distance (1 - 1000)</Text> <TextInput /></Box>
-                        <Box margin={{ horizontal: "40px", vertical: "3px" }} direction='row'><Text>Charge (-2000 - 0)</Text> <TextInput /></Box>
+                        <Box margin={{ horizontal: "40px", vertical: "3px" }} direction='row'><Text>Link Distance (1 - 1000)</Text> <TextInput value={linkDistance} onChange={event => setLinkDistance(event.target.value)} /></Box>
+                        <Box margin={{ horizontal: "40px", vertical: "3px" }} direction='row'><Text>Charge (-2000 - 0)</Text> <TextInput value={charge} onChange={event => setCharge(event.target.value)} /></Box>
                     </Box>
                 }
             />
@@ -127,10 +127,10 @@ export default function Navbar({
                                 <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                                 {/* TODO: maybe instead do a collapsible instead of a tip */}
                                 <Box pad={{ horizontal: "45px", vertical: "3px" }}><Button><Text>Select Top Dataset</Text></Button></Box>
-                                <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small"/><Text margin={{ left: "12px" }}>Average Replicate Values for Top Datset</Text></Button></Box>
+                                <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small"/>{averageReplicateValuesTop && <Checkmark />}<Text margin={{ left: "12px" }}>Average Replicate Values for Top Datset</Text></Button></Box>
                                 <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                                 <Box pad={{ horizontal: "45px", vertical: "3px" }}><Button><Text>Select Bottom Dataset</Text></Button></Box>
-                                <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small" /><Text margin={{ left: "12px" }}>Average Replicate Values for Bottom Datset</Text></Button></Box>
+                                <Box pad={{ horizontal: "20px", vertical: "3px" }}><Button><Checkmark size="small" />{averageReplicateValuesBottom && <Checkmark />}<Text margin={{ left: "12px" }}>Average Replicate Values for Bottom Datset</Text></Button></Box>
                                 <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                                 {/* TODO: restrict size of text input and restrict to number values only */}
                                 <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Log Fold Change Max Value (0.01 - 100)</Text> <TextInput /></Box>
@@ -158,11 +158,11 @@ export default function Navbar({
                         <Box pad={{horizontal: "20px", vertical: "3px"}}><Button pad={{ horizontal: "20px", vertical: "3px" }}><Text>Always Show Edge Weights</Text></Button></Box>
                         <Box pad={{horizontal: "20px", vertical: "3px"}}><Button pad={{ horizontal: "20px", vertical: "3px" }}><Text>Never Show Edge Weights</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
-                        <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Edge Weight Normalization Factor (0.0001 - 1000)</Text> <TextInput /></Box>
+                        <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Edge Weight Normalization Factor (0.0001 - 1000)</Text> <TextInput value={edgeWeightNormalization} onChange={event => setEdgeWeightNormalization(event.target.value)} /></Box>
                         <Box pad={{horizontal: "20px", vertical: "3px"}}><Button pad={{ horizontal: "20px", vertical: "3px" }}><Text>Reset Edge Weight Normalization Factor</Text></Button></Box>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         {/* TODO: restrict size of text input and restrict to number values only */}
-                        <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Gray Edge Threshold (0 - 100%)</Text> <TextInput /></Box>
+                        <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Gray Edge Threshold (0 - 100%)</Text> <TextInput value={grayThreshold} onChange={event => setGrayThreshold(event.target.value)} /></Box>
                         <Box pad={{horizontal: "20px", vertical: "3px"}}><Button pad={{ horizontal: "20px", vertical: "3px" }}><Text>Show Gray Edges as Dashed</Text></Button></Box>
                     </Box>
                 }
@@ -175,13 +175,14 @@ export default function Navbar({
                 dropContent={
                     <Box className="dropdown-menu" direction="column" pad={{ vertical: "5px" }} background="white" width="medium">
                         <Text margin={{ left: "small" }}>Viewport Size</Text>
-                        <Button margin={{ horizontal: "20px", top: "3px" }}><Checkmark /><Text>Small</Text></Button>
-                        <Button margin={{ horizontal: "20px", top: "3px" }}><Text>Medium</Text></Button>
-                        <Button margin={{ horizontal: "20px", top: "3px" }}><Text>Large</Text></Button>
-                        <Button margin={{ horizontal: "20px", top: "3px" }}><Text>Fit To Window</Text></Button>
+                        {/* only display the checkmark for the selected view size */}
+                        <Button margin={{ horizontal: "20px", top: "3px" }} onClick={() => setViewSize('Small (1104 X 648 pixels)')}><Checkmark /><Text>Small</Text></Button>
+                        <Button margin={{ horizontal: "20px", top: "3px" }} onClick={() => setViewSize('Medium (1414 X 768 pixels)')}><Checkmark /><Text>Medium</Text></Button>
+                        <Button margin={{ horizontal: "20px", top: "3px" }} onClick={() => setViewSize('Large (1920 X 1080 pixels)')}><Checkmark /><Text>Large</Text></Button>
+                        <Button margin={{ horizontal: "20px", top: "3px" }} onClick={() => setViewSize('Fit To Window')}><Checkmark /><Text>Fit To Window</Text></Button>
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
 
-                        <Button margin={{ horizontal: "20px", top: "3px" }}><Text>Restrict Graph to Viewport</Text></Button>
+                        <Button margin={{ horizontal: "20px", top: "3px" }} onClick={() => setRestrictGraphToViewport(!restrictGraphToViewport)}><Text>Restrict Graph to Viewport</Text></Button>
 
                         <Box margin={{ vertical: "9px" }} border={{ color: "#bbb", "side": "top", "style": "dotted", size: "1px" }} ></Box>
                         <Box margin={{ horizontal: "20px", vertical: "3px" }} direction='row'><Text>Zoom (25 - 200%)</Text> <TextInput /></Box>

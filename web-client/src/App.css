@@ -161,10 +161,8 @@ button:hover {
 .sidebar {
   width: 225px;
 	margin-left: 10px;
-}
-
-.sidebar * {
-  font-size: 18px;
+  position: relative;
+  overflow: visible;
 }
 
 .panel {
@@ -239,9 +237,13 @@ button:hover {
   margin-top: 6px;
 }
 
-.edge-weight-radio-buttons {
-  accent-color: blue;
+.sidebar-radio-buttons {
   font-size: 14px;
+}
+
+/* TODO: is this being used correctly? */
+input[type="radio"]:checked {
+  border: 2px solid #333;
 }
 
 /* .data-sidebar select {
@@ -253,7 +255,7 @@ button:hover {
   pointer-events: none;
 } */
 
-.edge-weight-sidebar.disabled {
+.sidebar-radio.disabled {
   color: #AAA;
 }
 
@@ -265,6 +267,7 @@ button:hover {
   left: 250px;
   top: 53px;
   border: 2px solid #9A9A9A;
+  /* TODO: need to change this from absolute so that whole page can be scrollable? */
   position: absolute;
   stroke: #fff;
   stroke-width: 0.5px;

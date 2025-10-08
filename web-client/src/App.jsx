@@ -46,12 +46,51 @@ function App() {
         font: {
           size: "14px"
         }
-      }
+      },
+    },
+    radioButton: {
+      border: {
+        color: '#333',
+        width: '1px',
+      },
+      check: {
+        color: 'blue',
+        border: {
+          color: 'blue',
+        }
+      },
+      hover: {
+        border: {
+          color: '#333',
+        }
+      },
+      size: '13px',
     },
     rangeInput: {
       thumb: {
         color: 'blue',
       },
+    },
+    checkBox: {
+      border: {
+        color: '#333',
+        width: '1px',
+      },
+      check: {
+        color: '#333',
+        border: {
+          color: '#333',
+        }
+      },
+      hover: {
+        border: {
+          color: '#333',
+        }
+      },
+      stroke: {
+        color: '#333'
+      },
+      size: '13px',
     },
     text: {
       font: {
@@ -134,40 +173,43 @@ function App() {
         demoValue={demoValue}
         setDemoValue={setDemoValue}
       />
-      <Sidebar
-        networkMode={networkMode}
-        enableNodeColoring={enableNodeColoring}
-        setEnableNodeColoring={setEnableNodeColoring}
-        enableEdgeColoring={enableEdgeColoring}
-        setEnableEdgeColoring={setEnableEdgeColoring}
-        linkDistance={linkDistance}
-        setLinkDistance={setLinkDistance}
-        charge={charge}
-        setCharge={setCharge}
-        lockForceParameters={lockForceParameters}
-        setLockForceParameters={setLockForceParameters}
-        averageReplicateValuesTop={averageReplicateValuesTop}
-        setAverageReplicateValuesTop={setAverageReplicateValuesTop}
-        averageReplicateValuesBottom={averageReplicateValuesBottom}
-        setAverageReplicateValuesBottom={setAverageReplicateValuesBottom}
-        logFoldChangeMax={logFoldChangeMax}
-        setLogFoldChangeMax={setLogFoldChangeMax}
-        edgeWeightVisibility={edgeWeightVisibility}
-        setEdgeWeightVisibility={setEdgeWeightVisibility}
-        edgeWeightNormalization={edgeWeightNormalization}
-        setEdgeWeightNormalization={setEdgeWeightNormalization}
-        grayThreshold={grayThreshold}
-        setGrayThreshold={setGrayThreshold}
-        showGrayEdgesDashed={showGrayEdgesDashed}
-        setShowGrayEdgesDashed={setShowGrayEdgesDashed}
-        restrictGraphToViewport={restrictGraphToViewport}
-        setRestrictGraphToViewport={setRestrictGraphToViewport}
-        viewSize={viewSize}
-        setViewSize={setViewSize}
-        demoValue={demoValue}
-        setDemoValue={setDemoValue}
-      />
-      <Graph />
+      <div>
+        <Sidebar
+          networkMode={networkMode}
+          enableNodeColoring={enableNodeColoring}
+          setEnableNodeColoring={setEnableNodeColoring}
+          enableEdgeColoring={enableEdgeColoring}
+          setEnableEdgeColoring={setEnableEdgeColoring}
+          linkDistance={linkDistance}
+          setLinkDistance={setLinkDistance}
+          charge={charge}
+          setCharge={setCharge}
+          lockForceParameters={lockForceParameters}
+          setLockForceParameters={setLockForceParameters}
+          averageReplicateValuesTop={averageReplicateValuesTop}
+          setAverageReplicateValuesTop={setAverageReplicateValuesTop}
+          averageReplicateValuesBottom={averageReplicateValuesBottom}
+          setAverageReplicateValuesBottom={setAverageReplicateValuesBottom}
+          logFoldChangeMax={logFoldChangeMax}
+          setLogFoldChangeMax={setLogFoldChangeMax}
+          edgeWeightVisibility={edgeWeightVisibility}
+          setEdgeWeightVisibility={setEdgeWeightVisibility}
+          edgeWeightNormalization={edgeWeightNormalization}
+          setEdgeWeightNormalization={setEdgeWeightNormalization}
+          grayThreshold={grayThreshold}
+          setGrayThreshold={setGrayThreshold}
+          showGrayEdgesDashed={showGrayEdgesDashed}
+          setShowGrayEdgesDashed={setShowGrayEdgesDashed}
+          restrictGraphToViewport={restrictGraphToViewport}
+          setRestrictGraphToViewport={setRestrictGraphToViewport}
+          viewSize={viewSize}
+          setViewSize={setViewSize}
+          demoValue={demoValue}
+          setDemoValue={setDemoValue}
+        />
+        <Graph />
+      </div>
+
     </Grommet>
   )
 }
