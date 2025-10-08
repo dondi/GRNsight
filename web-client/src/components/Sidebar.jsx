@@ -40,8 +40,15 @@ export default function Sidebar({
 
     return (
         <Box className="sidebar">
-             {/* Network */}
-            <Box plain className="panel">
+            {/* Disclaimer */}
+            <Box className="panel">
+                <Box margin="10px"><Text size="18px" weight="bold">Disclaimer</Text></Box>
+                <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} >
+                    <Text size="12px">This version of GRNsight is currently in development and unstable. Please refer to the Home page for more reliable performance.</Text>
+                </Box>
+            </Box>
+            {/* Network */}
+            <Box plain className="panel" margin={{ top: "5px" }}>
                 <Box margin="10px"><Text size="18px" weight="bold">Network</Text></Box>
                 <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} >
                     <Box className="panel-dropdown-container">
