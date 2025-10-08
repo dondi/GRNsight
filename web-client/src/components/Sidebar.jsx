@@ -1,42 +1,29 @@
 import { Box, Text, Button, Select, FileInput, Stack, RangeInput, CheckBox, TextInput, RadioButtonGroup } from 'grommet';
-import { Refresh, Checkmark, FolderOpen, Database } from 'grommet-icons';
-import { useState, useRef } from 'react'
+import { Refresh, FolderOpen, Database } from 'grommet-icons';
+import { useRef, useContext } from 'react'
+import { GrnState } from '../GrnStateContextValues';
 import '../App.css'
 
-export default function Sidebar({
-    networkMode,
-    enableNodeColoring,
-    setEnableNodeColoring,
-    enableEdgeColoring,
-    setEnableEdgeColoring,
-    linkDistance,
-    setLinkDistance,
-    charge,
-    setCharge,
-    lockForceParameters,
-    setLockForceParameters,
-    averageReplicateValuesTop,
-    setAverageReplicateValuesTop,
-    averageReplicateValuesBottom,
-    setAverageReplicateValuesBottom,
-    logFoldChangeMax,
-    setLogFoldChangeMax,
-    edgeWeightVisibility,
-    setEdgeWeightVisibility,
-    edgeWeightNormalization,
-    setEdgeWeightNormalization,
-    grayThreshold,
-    setGrayThreshold,
-    showGrayEdgesDashed,
-    setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
-    viewSize,
-    setViewSize,
-    demoValue,
-    setDemoValue,
-}) {
+export default function Sidebar() {
     const fileInputRef = useRef();
+    const {
+        networkMode, setNetworkMode,
+        enableNodeColoring, setEnableNodeColoring,
+        enableEdgeColoring, setEnableEdgeColoring,
+        linkDistance, setLinkDistance,
+        charge, setCharge,
+        lockForceParameters, setLockForceParameters,
+        averageReplicateValuesTop, setAverageReplicateValuesTop,
+        averageReplicateValuesBottom, setAverageReplicateValuesBottom,
+        logFoldChangeMax, setLogFoldChangeMax,
+        edgeWeightVisibility, setEdgeWeightVisibility,
+        edgeWeightNormalization, setEdgeWeightNormalization,
+        grayThreshold, setGrayThreshold,
+        showGrayEdgesDashed, setShowGrayEdgesDashed,
+        restrictGraphToViewport, setRestrictGraphToViewport,
+        demoValue, setDemoValue,
+        viewSize, setViewSize
+    } = useContext(GrnState);
 
     return (
         <Box className="sidebar">

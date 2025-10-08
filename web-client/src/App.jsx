@@ -1,30 +1,12 @@
-import { useState } from 'react'
 import Navbar from './components/Navbar'
 import Graph from './components/Graph'
 import Sidebar from './components/Sidebar'
+import { GrnStateContextProvider } from './GrnstateContextProvider';
 import { Grommet } from 'grommet';
 import './App.css'
 
 function App() {
-  const [networkMode, setNetworkMode] = useState('Protein-Protein Interaction');
-  const [enableNodeColoring, setEnableNodeColoring] = useState(false);
-  const [enableEdgeColoring, setEnableEdgeColoring] = useState(false);
-  const [linkDistance, setLinkDistance] = useState(500);
-  const [charge, setCharge] = useState(-50);
-  const [lockForceParameters, setLockForceParameters] = useState(false);
-  const [averageReplicateValuesTop, setAverageReplicateValuesTop] = useState(false);
-  const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] = useState(false);
-  const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
-  const [edgeWeightVisibility, setEdgeWeightVisibility] = useState('Show With Mouse Over');
-  const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
-  const [grayThreshold, setGrayThreshold] = useState(5);
-  const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
-  const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
-  const [demoValue, setDemoValue] = useState('Demo #1: Unweighted GRN');
-
-  // TODO: make viewSize dynamic to user's screen size
-  const [viewSize, setViewSize] = useState('Small (1104 X 648 pixels)');
-
+  // All state variables moved into context
   const theme = {
     global: {
       colors: {
@@ -139,79 +121,14 @@ function App() {
   };
 
   return (
-    <Grommet theme={theme} background={{ color: "white", dark: false }} full>
-      <Navbar
-        networkMode={networkMode}
-        enableNodeColoring={enableNodeColoring}
-        setEnableNodeColoring={setEnableNodeColoring}
-        enableEdgeColoring={enableEdgeColoring}
-        setEnableEdgeColoring={setEnableEdgeColoring}
-        linkDistance={linkDistance}
-        setLinkDistance={setLinkDistance}
-        charge={charge}
-        setCharge={setCharge}
-        lockForceParameters={lockForceParameters}
-        setLockForceParameters={setLockForceParameters}
-        averageReplicateValuesTop={averageReplicateValuesTop}
-        setAverageReplicateValuesTop={setAverageReplicateValuesTop}
-        averageReplicateValuesBottom={averageReplicateValuesBottom}
-        setAverageReplicateValuesBottom={setAverageReplicateValuesBottom}
-        logFoldChangeMax={logFoldChangeMax}
-        setLogFoldChangeMax={setLogFoldChangeMax}
-        edgeWeightVisibility={edgeWeightVisibility}
-        setEdgeWeightVisibility={setEdgeWeightVisibility}
-        edgeWeightNormalization={edgeWeightNormalization}
-        setEdgeWeightNormalization={setEdgeWeightNormalization}
-        grayThreshold={grayThreshold}
-        setGrayThreshold={setGrayThreshold}
-        showGrayEdgesDashed={showGrayEdgesDashed}
-        setShowGrayEdgesDashed={setShowGrayEdgesDashed}
-        restrictGraphToViewport={restrictGraphToViewport}
-        setRestrictGraphToViewport={setRestrictGraphToViewport}
-        viewSize={viewSize}
-        setViewSize={setViewSize}
-        demoValue={demoValue}
-        setDemoValue={setDemoValue}
-      />
-      <div>
-        <Sidebar
-          networkMode={networkMode}
-          enableNodeColoring={enableNodeColoring}
-          setEnableNodeColoring={setEnableNodeColoring}
-          enableEdgeColoring={enableEdgeColoring}
-          setEnableEdgeColoring={setEnableEdgeColoring}
-          linkDistance={linkDistance}
-          setLinkDistance={setLinkDistance}
-          charge={charge}
-          setCharge={setCharge}
-          lockForceParameters={lockForceParameters}
-          setLockForceParameters={setLockForceParameters}
-          averageReplicateValuesTop={averageReplicateValuesTop}
-          setAverageReplicateValuesTop={setAverageReplicateValuesTop}
-          averageReplicateValuesBottom={averageReplicateValuesBottom}
-          setAverageReplicateValuesBottom={setAverageReplicateValuesBottom}
-          logFoldChangeMax={logFoldChangeMax}
-          setLogFoldChangeMax={setLogFoldChangeMax}
-          edgeWeightVisibility={edgeWeightVisibility}
-          setEdgeWeightVisibility={setEdgeWeightVisibility}
-          edgeWeightNormalization={edgeWeightNormalization}
-          setEdgeWeightNormalization={setEdgeWeightNormalization}
-          grayThreshold={grayThreshold}
-          setGrayThreshold={setGrayThreshold}
-          showGrayEdgesDashed={showGrayEdgesDashed}
-          setShowGrayEdgesDashed={setShowGrayEdgesDashed}
-          restrictGraphToViewport={restrictGraphToViewport}
-          setRestrictGraphToViewport={setRestrictGraphToViewport}
-          viewSize={viewSize}
-          setViewSize={setViewSize}
-          demoValue={demoValue}
-          setDemoValue={setDemoValue}
-        />
-        <Graph />
-      </div>
-
-    </Grommet>
-  )
+      <Grommet theme={theme} background={{ color: "white", dark: false }} full>
+        {/* <GrnStateContextProvider> */}
+          <Navbar />
+          <Sidebar />
+          <Graph />
+        {/* </GrnStateContextProvider> */}
+      </Grommet>
+  );
 }
 
 export default App
