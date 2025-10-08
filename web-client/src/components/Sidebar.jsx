@@ -4,26 +4,58 @@ import { useRef, useContext } from 'react'
 import { GrnState } from '../GrnStateContextValues';
 import '../App.css'
 
-export default function Sidebar() {
+export default function Sidebar({
+    networkMode,
+    enableNodeColoring,
+    setEnableNodeColoring,
+    enableEdgeColoring,
+    setEnableEdgeColoring,
+    linkDistance,
+    setLinkDistance,
+    charge,
+    setCharge,
+    lockForceParameters,
+    setLockForceParameters,
+    averageReplicateValuesTop,
+    setAverageReplicateValuesTop,
+    averageReplicateValuesBottom,
+    setAverageReplicateValuesBottom,
+    logFoldChangeMax,
+    setLogFoldChangeMax,
+    edgeWeightVisibility,
+    setEdgeWeightVisibility,
+    edgeWeightNormalization,
+    setEdgeWeightNormalization,
+    grayThreshold,
+    setGrayThreshold,
+    showGrayEdgesDashed,
+    setShowGrayEdgesDashed,
+    restrictGraphToViewport,
+    setRestrictGraphToViewport,
+    viewSize,
+    setViewSize,
+    demoValue,
+    setDemoValue,
+}) {
     const fileInputRef = useRef();
-    const {
-        networkMode, setNetworkMode,
-        enableNodeColoring, setEnableNodeColoring,
-        enableEdgeColoring, setEnableEdgeColoring,
-        linkDistance, setLinkDistance,
-        charge, setCharge,
-        lockForceParameters, setLockForceParameters,
-        averageReplicateValuesTop, setAverageReplicateValuesTop,
-        averageReplicateValuesBottom, setAverageReplicateValuesBottom,
-        logFoldChangeMax, setLogFoldChangeMax,
-        edgeWeightVisibility, setEdgeWeightVisibility,
-        edgeWeightNormalization, setEdgeWeightNormalization,
-        grayThreshold, setGrayThreshold,
-        showGrayEdgesDashed, setShowGrayEdgesDashed,
-        restrictGraphToViewport, setRestrictGraphToViewport,
-        demoValue, setDemoValue,
-        viewSize, setViewSize
-    } = useContext(GrnState);
+    // const {
+    //     networkMode, setNetworkMode,
+    //     enableNodeColoring, setEnableNodeColoring,
+    //     enableEdgeColoring, setEnableEdgeColoring,
+    //     linkDistance, setLinkDistance,
+    //     charge, setCharge,
+    //     lockForceParameters, setLockForceParameters,
+    //     averageReplicateValuesTop, setAverageReplicateValuesTop,
+    //     averageReplicateValuesBottom, setAverageReplicateValuesBottom,
+    //     logFoldChangeMax, setLogFoldChangeMax,
+    //     edgeWeightVisibility, setEdgeWeightVisibility,
+    //     edgeWeightNormalization, setEdgeWeightNormalization,
+    //     grayThreshold, setGrayThreshold,
+    //     showGrayEdgesDashed, setShowGrayEdgesDashed,
+    //     restrictGraphToViewport, setRestrictGraphToViewport,
+    //     demoValue, setDemoValue,
+    //     viewSize, setViewSize
+    // } = useContext(GrnState);
 
     return (
         <Box className="sidebar">
