@@ -1,5 +1,8 @@
 "use client";
 import {
+  require_react_dom
+} from "./chunk-ZXRC6STD.js";
+import {
   dt,
   et,
   ft,
@@ -8,9 +11,6 @@ import {
   mt,
   styled_components_browser_esm_exports
 } from "./chunk-A7D6YQXP.js";
-import {
-  require_react_dom
-} from "./chunk-ZXRC6STD.js";
 import {
   __commonJS,
   __toCommonJS,
