@@ -1,57 +1,26 @@
 import { Nav, DropButton, Box, Text, Button, Tip, TextInput } from 'grommet';
 import { Refresh, Checkmark, FolderOpen, Edge } from 'grommet-icons';
-import { GrnState } from '../GrnStateContextValues';
-export default function Navbar({
-    networkMode,
-    enableNodeColoring,
-    setEnableNodeColoring,
-    enableEdgeColoring,
-    setEnableEdgeColoring,
-    linkDistance,
-    setLinkDistance,
-    charge,
-    setCharge,
-    lockForceParameters,
-    setLockForceParameters,
-    averageReplicateValuesTop,
-    setAverageReplicateValuesTop,
-    averageReplicateValuesBottom,
-    setAverageReplicateValuesBottom,
-    logFoldChangeMax,
-    setLogFoldChangeMax,
-    edgeWeightVisibility,
-    setEdgeWeightVisibility,
-    edgeWeightNormalization,
-    setEdgeWeightNormalization,
-    grayThreshold,
-    setGrayThreshold,
-    showGrayEdgesDashed,
-    setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
-    viewSize,
-    setViewSize,
-    demoValue,
-    setDemoValue,
-}) {
-    // const {
-    //     networkMode, setNetworkMode,
-    //     enableNodeColoring, setEnableNodeColoring,
-    //     enableEdgeColoring, setEnableEdgeColoring,
-    //     linkDistance, setLinkDistance,
-    //     charge, setCharge,
-    //     lockForceParameters, setLockForceParameters,
-    //     averageReplicateValuesTop, setAverageReplicateValuesTop,
-    //     averageReplicateValuesBottom, setAverageReplicateValuesBottom,
-    //     logFoldChangeMax, setLogFoldChangeMax,
-    //     edgeWeightVisibility, setEdgeWeightVisibility,
-    //     edgeWeightNormalization, setEdgeWeightNormalization,
-    //     grayThreshold, setGrayThreshold,
-    //     showGrayEdgesDashed, setShowGrayEdgesDashed,
-    //     restrictGraphToViewport, setRestrictGraphToViewport,
-    //     demoValue, setDemoValue,
-    //     viewSize, setViewSize
-    // } = useContext(GrnState);
+import { GrnStateContext } from '../App';
+import { useContext } from 'react';
+export default function Navbar({}) {
+    const {
+        networkMode, setNetworkMode,
+        enableNodeColoring, setEnableNodeColoring,
+        enableEdgeColoring, setEnableEdgeColoring,
+        linkDistance, setLinkDistance,
+        charge, setCharge,
+        lockForceParameters, setLockForceParameters,
+        averageReplicateValuesTop, setAverageReplicateValuesTop,
+        averageReplicateValuesBottom, setAverageReplicateValuesBottom,
+        logFoldChangeMax, setLogFoldChangeMax,
+        edgeWeightVisibility, setEdgeWeightVisibility,
+        edgeWeightNormalization, setEdgeWeightNormalization,
+        grayThreshold, setGrayThreshold,
+        showGrayEdgesDashed, setShowGrayEdgesDashed,
+        restrictGraphToViewport, setRestrictGraphToViewport,
+        demoValue, setDemoValue,
+        viewSize, setViewSize
+    } = useContext(GrnStateContext);
 
     return (
         // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
