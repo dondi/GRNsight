@@ -1,14 +1,20 @@
-import { getDemoWorkbook } from '../services/api'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { getDemoWorkbook, getDemoEndpoint } from '../services/api'
+import { GrnStateContext } from '../App';
+import '../App.css'
+
 export default function Graph() {
     const [workbook, setWorkbook] = useState(null)
     // const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const { demoValue } = useContext(GrnStateContext)
 
     useEffect(() => {
+        if (!demoValue) return;
+        const demoEndpoint = getDemoEndpoint(demoValue);
+        console.log('demoEndpoint:', demoEndpoint)
         // setLoading(true)
-        // hardcode demo first
-        getDemoWorkbook('unweighted')
+        getDemoWorkbook(demoEndpoint)
             .then(data => {
                 setWorkbook(data)
                 console.log(data)
@@ -18,7 +24,7 @@ export default function Graph() {
                 setError(error)
                 // setLoading(false)
             })
-    }, [])
+    }, [demoValue])
 
     return (
         <div className="grnsight-container"></div>

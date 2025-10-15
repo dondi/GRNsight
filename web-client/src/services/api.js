@@ -1,3 +1,10 @@
+import {
+    UNWEIGHTED_DEMO_NAME,
+    WEIGHTED_DEMO_NAME,
+    SCHADE_INPUT_NAME,
+    SCHADE_OUTPUT_NAME,
+    PPI_DEMO_NAME,
+} from "../constants";
 // TODO: make this port dynamic in the future based on environment
 const API_URL = "http://localhost:5000";
 
@@ -12,7 +19,6 @@ export async function getDemoWorkbook(demoType) {
             if (!response.ok) {
                 throw new Error(`Network response failed: ${response.status}`);
             }
-            console.log("Fetched demo workbook successfully");
             return response.json();
         })
         .catch(error => {
@@ -22,15 +28,28 @@ export async function getDemoWorkbook(demoType) {
 }
 
 /**
+ * Map from demo display names to API endpoint names
+ * @param {string} demoValue - React element representing the selected demo
+ * @returns {string|null} Returns the corresponding endpoint name (unweighted, weighted, schadeInput, schadeOutput, ppi) or error if not found
+ */
+export const getDemoEndpoint = demoValue => {
+    console.log("demoValue:", demoValue);
+    const mapping = Object.entries(DEMO_TYPES).find(
+        ([_, value]) => value === demoValue.props.children
+    );
+    console.log("mapping:", mapping);
+    return mapping ? mapping[0] : Error("Demo not found");
+};
+
+/**
  * Available demo types with their descriptions
  */
+// TODO: Should I point to the constants in web-client-classic instead?
+
 export const DEMO_TYPES = {
-    unweighted:
-        "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)",
-    weighted:
-        "Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)",
-    schadeInput: "Demo #3: Unweighted GRN (21 genes, 31 edges)",
-    schadeOutput:
-        "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)",
-    ppi: "Demo #5: Protein-Protein Interaction (18 proteins, 81 edges)",
+    unweighted: UNWEIGHTED_DEMO_NAME,
+    weighted: WEIGHTED_DEMO_NAME,
+    schadeInput: SCHADE_INPUT_NAME,
+    schadeOutput: SCHADE_OUTPUT_NAME,
+    ppi: PPI_DEMO_NAME,
 };

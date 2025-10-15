@@ -1,7 +1,14 @@
+import { useRef, useContext } from 'react'
 import { Box, Text, Button, Select, FileInput, Stack, RangeInput, CheckBox, TextInput, RadioButtonGroup } from 'grommet';
 import { Refresh, FolderOpen, Database } from 'grommet-icons';
-import { useRef, useContext } from 'react'
 import { GrnStateContext } from '../App';
+import {
+    UNWEIGHTED_DEMO_NAME,
+    WEIGHTED_DEMO_NAME,
+    SCHADE_INPUT_NAME,
+    SCHADE_OUTPUT_NAME,
+    PPI_DEMO_NAME,
+} from "../constants";
 import '../App.css'
 
 export default function Sidebar({}) {
@@ -46,11 +53,11 @@ export default function Sidebar({}) {
                                 className="demo-source-dropdown"
                                 pad="0px"
                                 options={[
-                                    <Text>Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</Text>,
-                                    <Text>Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</Text>,
-                                    <Text>Demo #3: Unweighted GRN (21 genes, 31 edges)</Text>,
-                                    <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
-                                    <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>
+                                    <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
+                                    <Text>{WEIGHTED_DEMO_NAME}</Text>,
+                                    <Text>{SCHADE_INPUT_NAME}</Text>,
+                                    <Text>{SCHADE_OUTPUT_NAME}</Text>,
+                                    <Text>{PPI_DEMO_NAME}</Text>
                                 ]}
                                 value={demoValue}
                                 placeholder={<Text>Select a Demo</Text>}

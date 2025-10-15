@@ -1,7 +1,16 @@
+import { useContext } from 'react';
 import { Nav, DropButton, Box, Text, Button, Tip, TextInput } from 'grommet';
 import { Refresh, Checkmark, FolderOpen, Edge } from 'grommet-icons';
 import { GrnStateContext } from '../App';
-import { useContext } from 'react';
+import {
+    UNWEIGHTED_DEMO_NAME,
+    WEIGHTED_DEMO_NAME,
+    SCHADE_INPUT_NAME,
+    SCHADE_OUTPUT_NAME,
+    PPI_DEMO_NAME,
+} from "../constants";
+import '../App.css'
+
 export default function Navbar({}) {
     const {
         networkMode, setNetworkMode,
