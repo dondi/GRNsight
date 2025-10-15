@@ -25,6 +25,41 @@ app.use(cors());
 app.set("env", env);
 app.set("corsOrigin", config.corsOrigin);
 
+const allowedOrigins = Array.isArray(app.get("corsOrigin"))
+    ? app.get("corsOrigin")
+    : [app.get("corsOrigin")];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            // Allow requests with no origin (e.g., Postman, curl)
+            console.log("Request origin:", origin);
+            console.log("!origin value:", !origin);
+            if (!origin) return callback(null, true);
+
+            console.log("Allowed origins:", allowedOrigins);
+            console.log("alloed origins includes origin:", allowedOrigins.includes(origin));
+            if (allowedOrigins.includes(origin)) {
+                // Allow this specific origin
+                console.log("CORS allowed for origin:", origin);
+                return callback(null, true);
+            } else {
+                console.warn(`CORS blocked for origin: ${origin}`);
+                return callback(new Error("Not allowed by CORS"));
+            }
+        },
+        credentials: true, // Optional: allow cookies/auth headers
+    })
+);
+
+// debug logging for incoming requests
+app.use((req, res, next) => {
+    if (req.headers.origin) {
+        console.log(`-> Incoming request from: ${req.headers.origin}`);
+    }
+    next();
+});
+
 console.log("CORS host: %s", app.get("corsOrigin"));
 
 // Load controllers.
