@@ -4,39 +4,7 @@ import { useRef, useContext } from 'react'
 import { GrnStateContext } from '../App';
 import '../App.css'
 
-export default function Sidebar({
-    // networkMode,
-    // enableNodeColoring,
-    // setEnableNodeColoring,
-    // enableEdgeColoring,
-    // setEnableEdgeColoring,
-    // linkDistance,
-    // setLinkDistance,
-    // charge,
-    // setCharge,
-    // lockForceParameters,
-    // setLockForceParameters,
-    // averageReplicateValuesTop,
-    // setAverageReplicateValuesTop,
-    // averageReplicateValuesBottom,
-    // setAverageReplicateValuesBottom,
-    // logFoldChangeMax,
-    // setLogFoldChangeMax,
-    // edgeWeightVisibility,
-    // setEdgeWeightVisibility,
-    // edgeWeightNormalization,
-    // setEdgeWeightNormalization,
-    // grayThreshold,
-    // setGrayThreshold,
-    // showGrayEdgesDashed,
-    // setShowGrayEdgesDashed,
-    // restrictGraphToViewport,
-    // setRestrictGraphToViewport,
-    // viewSize,
-    // setViewSize,
-    // demoValue,
-    // setDemoValue,
-}) {
+export default function Sidebar({}) {
     const fileInputRef = useRef();
     const {
         networkMode, setNetworkMode,

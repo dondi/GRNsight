@@ -1,9 +1,7 @@
 import Navbar from "./components/Navbar";
 import Graph from "./components/Graph";
 import Sidebar from "./components/Sidebar";
-import NetworkLoader from "./components/NetworkLoader";
 import { useState, createContext } from "react";
-// import { GrnState } from '../GrnStateContextValues';
 
 import { Grommet } from "grommet";
 import "./App.css";
@@ -34,7 +32,7 @@ function App() {
     const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
     const [restrictGraphToViewport, setRestrictGraphToViewport] =
         useState(false);
-    const [demoValue, setDemoValue] = useState("Demo #1: Unweighted GRN");
+    const [demoValue, setDemoValue] = useState(null);
     // TODO: make viewSize dynamic to user's screen size
     const [viewSize, setViewSize] = useState("Small (1104 X 648 pixels)");
 
@@ -185,89 +183,12 @@ function App() {
             >
                 <Navbar />
                 <div className="main-content">
-                    <NetworkLoader />
                     <Sidebar />
                     <Graph />
                 </div>
             </Grommet>
         </GrnStateContext.Provider>
     );
-
-
-//   return (
-//     <Grommet theme={theme} background={{ color: "white", dark: false }} full>
-//       <Navbar
-//         networkMode={networkMode}
-//         enableNodeColoring={enableNodeColoring}
-//         setEnableNodeColoring={setEnableNodeColoring}
-//         enableEdgeColoring={enableEdgeColoring}
-//         setEnableEdgeColoring={setEnableEdgeColoring}
-//         linkDistance={linkDistance}
-//         setLinkDistance={setLinkDistance}
-//         charge={charge}
-//         setCharge={setCharge}
-//         lockForceParameters={lockForceParameters}
-//         setLockForceParameters={setLockForceParameters}
-//         averageReplicateValuesTop={averageReplicateValuesTop}
-//         setAverageReplicateValuesTop={setAverageReplicateValuesTop}
-//         averageReplicateValuesBottom={averageReplicateValuesBottom}
-//         setAverageReplicateValuesBottom={setAverageReplicateValuesBottom}
-//         logFoldChangeMax={logFoldChangeMax}
-//         setLogFoldChangeMax={setLogFoldChangeMax}
-//         edgeWeightVisibility={edgeWeightVisibility}
-//         setEdgeWeightVisibility={setEdgeWeightVisibility}
-//         edgeWeightNormalization={edgeWeightNormalization}
-//         setEdgeWeightNormalization={setEdgeWeightNormalization}
-//         grayThreshold={grayThreshold}
-//         setGrayThreshold={setGrayThreshold}
-//         showGrayEdgesDashed={showGrayEdgesDashed}
-//         setShowGrayEdgesDashed={setShowGrayEdgesDashed}
-//         restrictGraphToViewport={restrictGraphToViewport}
-//         setRestrictGraphToViewport={setRestrictGraphToViewport}
-//         viewSize={viewSize}
-//         setViewSize={setViewSize}
-//         demoValue={demoValue}
-//         setDemoValue={setDemoValue}
-//       />
-//       <div>
-//         <Sidebar
-//           networkMode={networkMode}
-//           enableNodeColoring={enableNodeColoring}
-//           setEnableNodeColoring={setEnableNodeColoring}
-//           enableEdgeColoring={enableEdgeColoring}
-//           setEnableEdgeColoring={setEnableEdgeColoring}
-//           linkDistance={linkDistance}
-//           setLinkDistance={setLinkDistance}
-//           charge={charge}
-//           setCharge={setCharge}
-//           lockForceParameters={lockForceParameters}
-//           setLockForceParameters={setLockForceParameters}
-//           averageReplicateValuesTop={averageReplicateValuesTop}
-//           setAverageReplicateValuesTop={setAverageReplicateValuesTop}
-//           averageReplicateValuesBottom={averageReplicateValuesBottom}
-//           setAverageReplicateValuesBottom={setAverageReplicateValuesBottom}
-//           logFoldChangeMax={logFoldChangeMax}
-//           setLogFoldChangeMax={setLogFoldChangeMax}
-//           edgeWeightVisibility={edgeWeightVisibility}
-//           setEdgeWeightVisibility={setEdgeWeightVisibility}
-//           edgeWeightNormalization={edgeWeightNormalization}
-//           setEdgeWeightNormalization={setEdgeWeightNormalization}
-//           grayThreshold={grayThreshold}
-//           setGrayThreshold={setGrayThreshold}
-//           showGrayEdgesDashed={showGrayEdgesDashed}
-//           setShowGrayEdgesDashed={setShowGrayEdgesDashed}
-//           restrictGraphToViewport={restrictGraphToViewport}
-//           setRestrictGraphToViewport={setRestrictGraphToViewport}
-//           viewSize={viewSize}
-//           setViewSize={setViewSize}
-//           demoValue={demoValue}
-//           setDemoValue={setDemoValue}
-//         />
-//         <Graph />
-//       </div>
-
-//     </Grommet>
-//   )
 }
 
 export default App;

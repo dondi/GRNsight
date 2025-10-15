@@ -1,4 +1,4 @@
-// TODO: make this port dynamic in the future or load from env vars
+// TODO: make this port dynamic in the future based on environment
 const API_URL = "http://localhost:5000";
 
 /**
@@ -13,7 +13,7 @@ export async function getDemoWorkbook(demoType) {
                 throw new Error(`Network response failed: ${response.status}`);
             }
             console.log("Fetched demo workbook successfully");
-            // return response.json();
+            return response.json();
         })
         .catch(error => {
             console.error("Error fetching demo workbook:", error);
@@ -22,41 +22,15 @@ export async function getDemoWorkbook(demoType) {
 }
 
 /**
- * Uploads a workbook file to the server
- * @param {File} file - The Excel file to upload
- * @returns {Promise<Object>} The parsed workbook data
- */
-export async function uploadWorkbook(file) {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    return fetch(`${API_URL}/upload`, {
-        method: "POST",
-        body: formData,
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    throw new Error(
-                        errorData || `Upload failed: ${response.status}`
-                    );
-                });
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error("Error uploading workbook:", error);
-            throw error;
-        });
-}
-
-/**
  * Available demo types with their descriptions
  */
 export const DEMO_TYPES = {
-    unweighted: "Demo #1: Unweighted GRN",
-    weighted: "Demo #2: Weighted GRN",
-    schadeInput: "Demo #3: Schade Input",
-    schadeOutput: "Demo #4: Schade Output",
-    ppi: "Demo #5: Protein-Protein Interaction",
+    unweighted:
+        "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)",
+    weighted:
+        "Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)",
+    schadeInput: "Demo #3: Unweighted GRN (21 genes, 31 edges)",
+    schadeOutput:
+        "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)",
+    ppi: "Demo #5: Protein-Protein Interaction (18 proteins, 81 edges)",
 };

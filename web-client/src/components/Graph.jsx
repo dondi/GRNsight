@@ -8,7 +8,7 @@ export default function Graph() {
     useEffect(() => {
         // setLoading(true)
         // hardcode demo first
-        getDemoWorkbook('test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx')
+        getDemoWorkbook('unweighted')
             .then(data => {
                 setWorkbook(data)
                 console.log(data)
