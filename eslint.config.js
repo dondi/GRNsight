@@ -8,6 +8,10 @@ module.exports = [
             "coverage/lcov-report/**",
             "_site/**",
             ".git/**",
+            ".vite/",
+            "web-client/.vite/",
+            "dist/",
+            "build/",
         ],
         languageOptions: {
             ecmaVersion: 2020,
