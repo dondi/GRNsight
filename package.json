@@ -78,7 +78,7 @@
         "start-dev": "parallelshell --wait \"nodemon web-client-classic/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=development\"",
         "start-prod": "parallelshell --wait \"nodemon web-client-classic/app.js\" \"nodemon server/app.js\" \"webpack --watch --mode=production\"",
         "coverage": "nyc --reporter=lcov mocha --require @babel/register",
-        "lint": "eslint \"**/*.js\"",
+        "lint": "eslint \"**/*.js\" --ignore-pattern 'web-client/.vite/deps/grommet.js'",
         "coveralls": "npm run coverage && nyc report --reporter=lcov | coveralls",
         "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
         "format:check": "prettier --check \"**/*.{js,jsx,json,md}\"",
