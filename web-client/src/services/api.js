@@ -33,11 +33,9 @@ export async function getDemoWorkbook(demoType) {
  * @returns {string|null} Returns the corresponding endpoint name (unweighted, weighted, schadeInput, schadeOutput, ppi) or error if not found
  */
 export const getDemoEndpoint = demoValue => {
-    console.log("demoValue:", demoValue);
     const mapping = Object.entries(DEMO_TYPES).find(
         ([_, value]) => value === demoValue.props.children
     );
-    console.log("mapping:", mapping);
     return mapping ? mapping[0] : Error("Demo not found");
 };
 
