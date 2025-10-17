@@ -6,7 +6,6 @@ module.exports = {
         host: "localhost",
         port: 5000,
         url: "http://" + this.host + "/" + this.port,
-        // corsOrigin: "http://localhost:5173",
         corsOrigin: ["http://localhost:5173", "http://localhost:5001"],
         root: rootPath,
         app: {
