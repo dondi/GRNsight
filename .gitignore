@@ -82,6 +82,8 @@ Backup of *.doc*
 
 # Misc
 .env
+web-client/.vite/deps/
+dist/
 
 # Ignore Python __pycache__ folder
 __pycache__/.nyc_output/
