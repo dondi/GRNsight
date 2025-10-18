@@ -23,7 +23,14 @@ var initWorkbook = function (net) {
 
 module.exports = {
     attachCorsHeader: function (res, app) {
-        res.header("Access-Control-Allow-Origin", app.get("corsOrigin"));
+        const allowedOrigins = Array.isArray(app.get("corsOrigin"))
+            ? app.get("corsOrigin")
+            : [app.get("corsOrigin")];
+
+        const origin = app.get("corsOrigin");
+        if (origin && allowedOrigins.includes(origin)) {
+            res.header("Access-Control-Allow-Origin", origin);
+        }
     },
 
     attachFileHeaders: function (res, path) {
