@@ -47,7 +47,7 @@ export const upload = function () {
     styleLabelTooltips();
 
     $("#printGraph").click(function () {
-        if (!$(".startDisabled").hasClass("disabled")) {
+        if (uploadState.currentWorkbook) {
             window.print();
         }
     });
