@@ -22,6 +22,7 @@ var initWorkbook = function (net) {
 };
 
 module.exports = {
+    // Allow more than 1 CORS origin so can serve web-client and web-client-classic
     attachCorsHeader: function (res, app) {
         const allowedOrigins = Array.isArray(app.get("corsOrigin"))
             ? app.get("corsOrigin")
