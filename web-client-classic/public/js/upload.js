@@ -557,17 +557,11 @@ export const upload = function () {
             "degradation_rates",
             "threshold_b",
         ];
-        console.log(
-            "grnState.workbook.networkOptimzedWeights",
-            grnState.workbook.networkOptimizedWeights
-        );
-        console.log("workbook", grnState.workbook);
         let networks = [
             [isDataValid(grnState.workbook.network), "network"],
             [isDataValid(grnState.workbook.networkOptimizedWeights), "network_optimized_weights"],
             [isDataValid(grnState.workbook.networkWeights), "network_weights"],
         ]; // network_weights is always available if network is available
-        console.log("networks sheets", networks);
         // networks = networks.filter(x => x !== false);
         let additionalsheets = grnState.workbook.twoColumnSheets
             ? [
