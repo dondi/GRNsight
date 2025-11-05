@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "d3": "^7.9.0",
+    "d3-v4-grid": "^2.0.2",
     "grommet": "^2.49.0",
     "grommet-icons": "^4.14.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-force-graph-2d": "^1.29.0",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {

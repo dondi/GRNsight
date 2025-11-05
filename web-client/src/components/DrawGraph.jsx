@@ -1,4 +1,4 @@
-import Grid from "d3-v4-grid";
+import { Grid } from "d3-grid";
 import { grnState } from "./grnstate";
 import {
     modifyChargeParameter,

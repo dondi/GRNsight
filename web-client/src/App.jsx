@@ -35,6 +35,7 @@ function App() {
     const [demoValue, setDemoValue] = useState(null);
     // TODO: make viewSize dynamic to user's screen size
     const [viewSize, setViewSize] = useState("Small (1104 X 648 pixels)");
+    const [adaptive, setAdaptive] = useState(true);
 
     // Add state for network data
     const [networkData, setNetworkData] = useState(null);

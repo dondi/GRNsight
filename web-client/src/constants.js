@@ -7,3 +7,13 @@ export const SCHADE_INPUT_NAME = "Demo #3: Unweighted GRN (21 genes, 31 edges)";
 export const SCHADE_OUTPUT_NAME =
     "Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)";
 export const PPI_DEMO_NAME = "Demo #5: PPI (18 proteins, 81 edges)";
+export const BOUNDARY_MARGIN = 5;
+export const ZOOM_DISPLAY_MINIMUM_VALUE = 25;
+export const ZOOM_DISPLAY_MAXIMUM_VALUE = 200;
+export const ZOOM_DISPLAY_MIDDLE = 100;
+export const ZOOM_ADAPTIVE_MAX_SCALE = 4;
+export const MINIMUM_NODE_WIDTH = 68.5625;
+export const NODE_MARGIN = 3;
+export const NODE_HEIGHT = 22;
+export const MIN_SCALE = 0.25;
+export const MIDDLE_SCALE = 1;
