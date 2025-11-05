@@ -14,6 +14,7 @@ export const ZOOM_DISPLAY_MIDDLE = 100;
 export const ZOOM_ADAPTIVE_MAX_SCALE = 4;
 export const MINIMUM_NODE_WIDTH = 68.5625;
 export const NODE_MARGIN = 3;
-export const NODE_HEIGHT = 22;
+// node_height is 22 in web-client-classic, but 30 in this. may need to fix later
+export const NODE_HEIGHT = 30;
 export const MIN_SCALE = 0.25;
 export const MIDDLE_SCALE = 1;

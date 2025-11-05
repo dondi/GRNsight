@@ -1,6 +1,5 @@
 import { useEffect, useRef, useContext, useState } from 'react';
 import * as d3 from 'd3';
-// import { Grid } from 'd3-grid';
 import { GrnStateContext } from '../App';
 import { getDemoWorkbook, getDemoEndpoint } from '../services/api';
 import {
@@ -9,12 +8,20 @@ import {
     ZOOM_DISPLAY_MAXIMUM_VALUE,
     ZOOM_DISPLAY_MIDDLE,
     ZOOM_ADAPTIVE_MAX_SCALE,
-    NODE_HEIGHT,
     MINIMUM_NODE_WIDTH,
-    NODE_MARGIN
+    NODE_MARGIN,
+    NODE_HEIGHT,
+    MIN_SCALE,
+    MIDDLE_SCALE
 } from '../constants';
-// import { getEdgeColor, getEdgeThickness
-// } from '../constants';
+import {
+    getNodeWidth,
+    getEdgeThickness,
+    getEdgeColor,
+    createPath,
+    createSelfLoop,
+} from './GraphHelpers';
+
 import '../App.css';
 
 export default function Graph() {
@@ -23,7 +30,7 @@ export default function Graph() {
     const simulationRef = useRef(null);
 
     const [workbook, setWorkbook] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const {
@@ -33,15 +40,9 @@ export default function Graph() {
         enableNodeColoring,
         enableEdgeColoring,
         logFoldChangeMax,
-        edgeWeightVisibility
+        edgeWeightVisibility,
+        adaptive
     } = useContext(GrnStateContext);
-
-    // Constants
-    const NODE_HEIGHT = 30;
-    const MINIMUM_NODE_WIDTH = 68.5625;
-    const NODE_MARGIN = 3;
-    const MIN_SCALE = 0.25;
-    const MIDDLE_SCALE = 1;
 
     // Load workbook data
     useEffect(() => {
@@ -63,6 +64,7 @@ export default function Graph() {
 
     // Main D3 rendering effect
     useEffect(() => {
+        // TODO: put this code in a separate function/file so that easier to read
         if (!workbook || !svgRef.current || !containerRef.current) return;
 
         // Clear previous content
@@ -119,8 +121,8 @@ export default function Graph() {
 
         link.append('path')
             .attr('class', 'link-path')
-            .style('stroke', d => enableEdgeColoring ? getEdgeColor(d) : '#000')
-            .style('stroke-width', d => getEdgeThickness(d))
+            .style('stroke', d => enableEdgeColoring ? getEdgeColor(workbook, d) : '#000')
+            .style('stroke-width', d => getEdgeThickness(workbook, enableEdgeColoring, d))
             .style('fill', 'none')
             .attr('marker-end', 'url(#arrowhead)');
 
@@ -145,9 +147,9 @@ export default function Graph() {
             .append('g')
             .attr('class', 'node')
             .call(d3.drag()
-                .on('start', dragstarted)
+                .on('start', dragStarted)
                 .on('drag', dragged)
-                .on('end', dragended));
+                .on('end', dragEnded));
 
         // Add rectangles for nodes
         node.append('rect')
@@ -174,7 +176,25 @@ export default function Graph() {
                 .attr('width', NODE_MARGIN + d.textWidth + NODE_MARGIN);
         });
 
-        // Tick function
+        // Helper functions for drag events. Try to move to GraphHelpers.jsx later, but keep for now since these access simulation
+        function dragStarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragEnded(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Tick function to update graph
         simulation.on('tick', () => {
             // Update link positions
             link.select('path')
@@ -193,64 +213,7 @@ export default function Graph() {
             });
         });
 
-        // Helper functions
-        function getNodeWidth(node) {
-            return NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN;
-        }
-
-        function getEdgeThickness(edge) {
-            if (!enableEdgeColoring || workbook.sheetType === 'unweighted') {
-                return 2;
-            }
-            const maxWeight = Math.max(...workbook.positiveWeights.concat(workbook.negativeWeights).map(Math.abs));
-            const scale = d3.scaleLinear()
-                .domain([0, maxWeight])
-                .range([2, 14])
-                .clamp(true);
-            return Math.floor(scale(Math.abs(edge.value)));
-        }
-
-        function getEdgeColor(edge) {
-            if (workbook.sheetType === 'unweighted') return '#000';
-            return edge.value < 0 ? 'blue' : 'red';
-        }
-
-        function createPath(d) {
-            const sourceX = d.source.x + getNodeWidth(d.source) / 2;
-            const sourceY = d.source.y + NODE_HEIGHT / 2;
-            const targetX = d.target.x + getNodeWidth(d.target) / 2;
-            const targetY = d.target.y + NODE_HEIGHT / 2;
-
-            return `M${sourceX},${sourceY} L${targetX},${targetY}`;
-        }
-
-        function createSelfLoop(d) {
-            const x = d.source.x + getNodeWidth(d.source);
-            const y = d.source.y + NODE_HEIGHT / 2;
-            const radius = 20;
-
-            return `M${x},${y}
-                    A${radius},${radius} 0 1,1 ${x},${y + 0.1}`;
-        }
-
-        function dragstarted(event, d) {
-            if (!event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-        }
-
-        function dragged(event, d) {
-            d.fx = event.x;
-            d.fy = event.y;
-        }
-
-        function dragended(event, d) {
-            if (!event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        }
-
-        // Cleanup
+        // Cleanup and stop simulation on unmount
         return () => {
             simulation.stop();
         };
