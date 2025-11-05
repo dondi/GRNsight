@@ -24,7 +24,6 @@ class GeneFetcherService(DataFetcherService):
             "featureType", "symbol", "secondaryIdentifier"
         )
         query.add_constraint("organism.shortName", "=", "S. cerevisiae", code="A")
-        query.add_constraint("featureType", "=", "ORF", code="B")
         query.add_sort_order("Gene.primaryIdentifier", "ASC")
         
         rows_data = []
@@ -66,9 +65,7 @@ class GeneRegulatoryNetworkFetcherService(DataFetcherService):
         )
 
         query.add_sort_order("Gene.secondaryIdentifier", "ASC")
-        query.add_constraint("featureType", "=", "ORF", code="A")
-        query.add_constraint("regulatoryRegions.regulator.featureType", "=", "ORF", code="B")
-        query.add_constraint("regulatoryRegions.strainBackground", "=", "S288c", code="C")
+        query.add_constraint("regulatoryRegions.strainBackground", "=", "S288c", code="A")
         
         rows_data = []
         print("Query length: ", len(query.rows()))
@@ -112,16 +109,13 @@ class ProteinProteinInteractionsFetcherService(DataFetcherService):
         
         query.add_sort_order("Gene.primaryIdentifier", "ASC")
         query.add_constraint("interactions.details.relationshipType", "=", "physical", code="A")
-        query.add_constraint("interactions.participant2.featureType", "=", "ORF", code="C")
-        query.add_constraint("featureType", "=", "ORF", code="B")
-        query.set_logic("A and B and C")
         
         rows_data = []
         interactions = set()
         count = 0
         print("Query length: ", len(query.rows()))
         for row in query.rows():
-            interaction = (row["secondaryIdentifier"], row["interactions.participant2.secondaryIdentifier"], row["interactions.details.annotationType"])
+            interaction = (row["secondaryIdentifier"], row["interactions.participant2.secondaryIdentifier"], row["interactions.details.annotationType"], row["interactions.details.experiment.interactionDetectionMethods.identifier"], row["interactions.details.experiment.name"])
             if interaction in interactions:
                 count += 1
                 continue
@@ -169,8 +163,7 @@ class ProteinFetcherService(DataFetcherService):
             "proteins.allCysHalf", "proteins.noCysHalf", "proteins.aliphaticIndex", "symbol"
         )
         
-        query.add_constraint("organism.shortName", "=", "S. cerevisiae", code="B")
-        query.add_constraint("featureType", "=", "ORF", code="A")
+        query.add_constraint("organism.shortName", "=", "S. cerevisiae", code="A")
         query.add_sort_order("Gene.secondaryIdentifier", "ASC")
         
         rows_data = []
