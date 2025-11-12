@@ -20,7 +20,7 @@ import {
     getEdgeColor,
     createPath,
     createSelfLoop,
-} from './GraphHelpers';
+} from '../helpers/graphHelpers';
 
 import '../App.css';
 
