@@ -37,45 +37,58 @@ function App() {
     const [viewSize, setViewSize] = useState("Small (1104 X 648 pixels)");
     const [adaptive, setAdaptive] = useState(true);
 
-    // Add state for network data
-    const [networkData, setNetworkData] = useState(null);
+  // Add state for network data
+  const [networkData, setNetworkData] = useState(null);
 
-    // All state and setters bundled into a single value for context
-    const grnStateValue = {
-        networkMode, setNetworkMode,
-        enableNodeColoring, setEnableNodeColoring,
-        enableEdgeColoring, setEnableEdgeColoring,
-        linkDistance, setLinkDistance,
-        charge, setCharge,
-        lockForceParameters, setLockForceParameters,
-        averageReplicateValuesTop, setAverageReplicateValuesTop,
-        averageReplicateValuesBottom, setAverageReplicateValuesBottom,
-        logFoldChangeMax, setLogFoldChangeMax,
-        edgeWeightVisibility, setEdgeWeightVisibility,
-        edgeWeightNormalization, setEdgeWeightNormalization,
-        grayThreshold, setGrayThreshold,
-        showGrayEdgesDashed, setShowGrayEdgesDashed,
-        restrictGraphToViewport, setRestrictGraphToViewport,
-        viewSize, setViewSize,
-        demoValue, setDemoValue,
-        networkData, setNetworkData
-    };
+  // All state and setters bundled into a single value for context
+  const grnStateValue = {
+    networkMode,
+    setNetworkMode,
+    enableNodeColoring,
+    setEnableNodeColoring,
+    enableEdgeColoring,
+    setEnableEdgeColoring,
+    linkDistance,
+    setLinkDistance,
+    charge,
+    setCharge,
+    lockForceParameters,
+    setLockForceParameters,
+    averageReplicateValuesTop,
+    setAverageReplicateValuesTop,
+    averageReplicateValuesBottom,
+    setAverageReplicateValuesBottom,
+    logFoldChangeMax,
+    setLogFoldChangeMax,
+    edgeWeightVisibility,
+    setEdgeWeightVisibility,
+    edgeWeightNormalization,
+    setEdgeWeightNormalization,
+    grayThreshold,
+    setGrayThreshold,
+    showGrayEdgesDashed,
+    setShowGrayEdgesDashed,
+    restrictGraphToViewport,
+    setRestrictGraphToViewport,
+    viewSize,
+    setViewSize,
+    demoValue,
+    setDemoValue,
+    networkData,
+    setNetworkData,
+  };
 
-    return (
-        <GrnStateContext.Provider value={grnStateValue}>
-            <Grommet
-                theme={theme}
-                background={{ color: "white", dark: false }}
-                full
-            >
-                <Navbar />
-                <div className="main-content">
-                    <Sidebar />
-                    <Graph />
-                </div>
-            </Grommet>
-        </GrnStateContext.Provider>
-    );
+  return (
+    <GrnStateContext.Provider value={grnStateValue}>
+      <Grommet theme={theme} background={{ color: "white", dark: false }} full>
+        <Navbar />
+        <div className="main-content">
+          <Sidebar />
+          <Graph />
+        </div>
+      </Grommet>
+    </GrnStateContext.Provider>
+  );
 }
 
 export default App;
