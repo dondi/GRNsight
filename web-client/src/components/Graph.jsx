@@ -15,12 +15,12 @@ export default function Graph() {
     console.log("demoEndpoint:", demoEndpoint);
     // setLoading(true)
     getDemoWorkbook(demoEndpoint)
-      .then((data) => {
+      .then(data => {
         setWorkbook(data);
         console.log(data);
         // setLoading(false)
       })
-      .catch((error) => {
+      .catch(error => {
         setError(error);
         // setLoading(false)
       });

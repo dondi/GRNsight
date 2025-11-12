@@ -78,10 +78,7 @@ export default function Navbar({}) {
             </Text>
             {/* TODO: maybe instead do a collapsible instead of a tip */}
             {/* TODO: something with pad or margin here is not working since content in tip displaying with wrong position */}
-            <Box
-              pad={{ top: "7px", bottom: "5px", left: "30px" }}
-              align="start"
-            >
+            <Box pad={{ top: "7px", bottom: "5px", left: "30px" }} align="start">
               <Tip
                 plain
                 dropProps={{
@@ -116,20 +113,11 @@ export default function Navbar({}) {
                       label="Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)"
                       onClick={() => {}}
                     />
-                    <Button
-                      plain
-                      label="Demo #5: PPI (18 proteins, 81 edges)"
-                      onClick={() => {}}
-                    />
+                    <Button plain label="Demo #5: PPI (18 proteins, 81 edges)" onClick={() => {}} />
                   </Box>
                 }
               >
-                <Button
-                  plain
-                  className="demo-button"
-                  label="Demo"
-                  fill="horizontal"
-                />
+                <Button plain className="demo-button" label="Demo" fill="horizontal" />
               </Tip>
             </Box>
             <Box
@@ -145,8 +133,7 @@ export default function Navbar({}) {
             <Box>
               <Button margin={{ left: "32px", top: "7px", bottom: "5px" }}>
                 <FolderOpen className="folder-icon" size="14px" />
-                <Text>Open File...</Text>{" "}
-                <Text className="italics">(.xlsx, .sif, .graphml)</Text>
+                <Text>Open File...</Text> <Text className="italics">(.xlsx, .sif, .graphml)</Text>
               </Button>
             </Box>
             <Box
@@ -243,9 +230,7 @@ export default function Navbar({}) {
               }}
             ></Box>
             <Box pad={{ horizontal: "40px", vertical: "3px" }}>
-              <Button
-                onClick={() => setLockForceParameters(!lockForceParameters)}
-              >
+              <Button onClick={() => setLockForceParameters(!lockForceParameters)}>
                 {lockForceParameters && <Checkmark />}
                 <Text>Lock Force Graph Parameters</Text>
               </Button>
@@ -270,25 +255,16 @@ export default function Navbar({}) {
               }}
             ></Box>
             {/* TODO: restrict size of text input and restrict to number values only */}
-            <Box
-              margin={{ horizontal: "40px", vertical: "3px" }}
-              direction="row"
-            >
+            <Box margin={{ horizontal: "40px", vertical: "3px" }} direction="row">
               <Text>Link Distance (1 - 1000)</Text>{" "}
               <TextInput
                 value={linkDistance}
-                onChange={(event) => setLinkDistance(event.target.value)}
+                onChange={event => setLinkDistance(event.target.value)}
               />
             </Box>
-            <Box
-              margin={{ horizontal: "40px", vertical: "3px" }}
-              direction="row"
-            >
+            <Box margin={{ horizontal: "40px", vertical: "3px" }} direction="row">
               <Text>Charge (-2000 - 0)</Text>{" "}
-              <TextInput
-                value={charge}
-                onChange={(event) => setCharge(event.target.value)}
-              />
+              <TextInput value={charge} onChange={event => setCharge(event.target.value)} />
             </Box>
           </Box>
         }
@@ -334,9 +310,7 @@ export default function Navbar({}) {
                   <Button>
                     <Checkmark size="small" />
                     {averageReplicateValuesTop && <Checkmark />}
-                    <Text margin={{ left: "12px" }}>
-                      Average Replicate Values for Top Datset
-                    </Text>
+                    <Text margin={{ left: "12px" }}>Average Replicate Values for Top Datset</Text>
                   </Button>
                 </Box>
                 <Box
@@ -372,12 +346,8 @@ export default function Navbar({}) {
                   }}
                 ></Box>
                 {/* TODO: restrict size of text input and restrict to number values only */}
-                <Box
-                  margin={{ horizontal: "20px", vertical: "3px" }}
-                  direction="row"
-                >
-                  <Text>Log Fold Change Max Value (0.01 - 100)</Text>{" "}
-                  <TextInput />
+                <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
+                  <Text>Log Fold Change Max Value (0.01 - 100)</Text> <TextInput />
                 </Box>
               </Box>
             ) : (
@@ -412,13 +382,9 @@ export default function Navbar({}) {
             width="medium"
           >
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button
-                onClick={() => setEnableEdgeColoring(!enableEdgeColoring)}
-              >
+              <Button onClick={() => setEnableEdgeColoring(!enableEdgeColoring)}>
                 {enableEdgeColoring && <Checkmark size="small" />}
-                <Text margin={{ left: "12px" }}>
-                  Enable Edge Coloring Based on Weight Values
-                </Text>
+                <Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values</Text>
               </Button>
             </Box>
             <Box
@@ -454,16 +420,11 @@ export default function Navbar({}) {
                 size: "1px",
               }}
             ></Box>
-            <Box
-              margin={{ horizontal: "20px", vertical: "3px" }}
-              direction="row"
-            >
+            <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Edge Weight Normalization Factor (0.0001 - 1000)</Text>{" "}
               <TextInput
                 value={edgeWeightNormalization}
-                onChange={(event) =>
-                  setEdgeWeightNormalization(event.target.value)
-                }
+                onChange={event => setEdgeWeightNormalization(event.target.value)}
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
@@ -481,14 +442,11 @@ export default function Navbar({}) {
               }}
             ></Box>
             {/* TODO: restrict size of text input and restrict to number values only */}
-            <Box
-              margin={{ horizontal: "20px", vertical: "3px" }}
-              direction="row"
-            >
+            <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Gray Edge Threshold (0 - 100%)</Text>{" "}
               <TextInput
                 value={grayThreshold}
-                onChange={(event) => setGrayThreshold(event.target.value)}
+                onChange={event => setGrayThreshold(event.target.value)}
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
@@ -554,9 +512,7 @@ export default function Navbar({}) {
 
             <Button
               margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() =>
-                setRestrictGraphToViewport(!restrictGraphToViewport)
-              }
+              onClick={() => setRestrictGraphToViewport(!restrictGraphToViewport)}
             >
               <Text>Restrict Graph to Viewport</Text>
             </Button>
@@ -570,10 +526,7 @@ export default function Navbar({}) {
                 size: "1px",
               }}
             ></Box>
-            <Box
-              margin={{ horizontal: "20px", vertical: "3px" }}
-              direction="row"
-            >
+            <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Zoom (25 - 200%)</Text> <TextInput />
             </Box>
           </Box>

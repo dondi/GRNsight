@@ -70,8 +70,8 @@ export default function Sidebar({}) {
         </Box>
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }}>
           <Text size="12px">
-            This version of GRNsight is currently in development and unstable.
-            Please refer to the Home page for more reliable performance.
+            This version of GRNsight is currently in development and unstable. Please refer to the
+            Home page for more reliable performance.
           </Text>
         </Box>
       </Box>
@@ -117,7 +117,7 @@ export default function Sidebar({}) {
                   name="file"
                   size="small"
                   messages={{ browse: " ", dropPrompt: "Open File" }}
-                  onChange={(event) => {
+                  onChange={event => {
                     const fileList = event.target.files;
                     for (let i = 0; i < fileList.length; i += 1) {
                       const file = fileList[i];
@@ -135,11 +135,7 @@ export default function Sidebar({}) {
                 </Box>
               </Stack>
               <Button className="load-from-database">
-                <Box
-                  pad={{ vertical: "6px", horizontal: "12px" }}
-                  direction="row"
-                  gap="4px"
-                >
+                <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
                   <Database size="14px" />
                   <Text size="14px">Load from Database</Text>
                 </Box>
@@ -201,20 +197,12 @@ export default function Sidebar({}) {
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }}>
           <Box className="panel-dropdown-container" direction="row" gap="5px">
             <Button>
-              <Box
-                pad={{ vertical: "6px", horizontal: "10px" }}
-                direction="row"
-                gap="4px"
-              >
+              <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
                 <Text size="14px">Force Graph</Text>
               </Box>
             </Button>
             <Button>
-              <Box
-                pad={{ vertical: "6px", horizontal: "10px" }}
-                direction="row"
-                gap="4px"
-              >
+              <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
                 <Text size="14px">Grid Layout</Text>
               </Box>
             </Button>
@@ -227,7 +215,7 @@ export default function Sidebar({}) {
               <RangeInput
                 color="blue"
                 value={linkDistance}
-                onChange={(event) => setLinkDistance(event.target.value)}
+                onChange={event => setLinkDistance(event.target.value)}
                 min={1}
                 max={1000}
               />
@@ -239,7 +227,7 @@ export default function Sidebar({}) {
               <RangeInput
                 color="blue"
                 value={charge}
-                onChange={(event) => setCharge(event.target.value)}
+                onChange={event => setCharge(event.target.value)}
                 min={-2000}
                 max={0}
               />
@@ -248,26 +236,16 @@ export default function Sidebar({}) {
           <CheckBox
             checked={lockForceParameters}
             label={<Text>Lock Force Parameters</Text>}
-            onChange={(event) => setLockForceParameters(event.target.checked)}
+            onChange={event => setLockForceParameters(event.target.checked)}
           />
-          <Box
-            className="panel-dropdown-container"
-            gap="5px"
-            margin={{ top: "10px" }}
-          >
+          <Box className="panel-dropdown-container" gap="5px" margin={{ top: "10px" }}>
             <Button>
-              <Box
-                pad={{ vertical: "6px", horizontal: "10px" }}
-                alignContent="center"
-              >
+              <Box pad={{ vertical: "6px", horizontal: "10px" }} alignContent="center">
                 <Text size="14px">Reset Force Parameters</Text>
               </Box>
             </Button>
             <Button>
-              <Box
-                pad={{ vertical: "6px", horizontal: "10px" }}
-                alignContent="center"
-              >
+              <Box pad={{ vertical: "6px", horizontal: "10px" }} alignContent="center">
                 <Text size="14px">Undo Reset</Text>
               </Box>
             </Button>
@@ -286,11 +264,10 @@ export default function Sidebar({}) {
           <CheckBox
             checked={enableNodeColoring}
             label={<Text>Enable Node Coloring</Text>}
-            onChange={(event) => setEnableNodeColoring(event.target.checked)}
+            onChange={event => setEnableNodeColoring(event.target.checked)}
           />
           <Text weight="bold">
-            Select from user-uploaded expression data, or use data from our
-            Expression Database
+            Select from user-uploaded expression data, or use data from our Expression Database
           </Text>
           <Text weight="bold">Top Dataset</Text>
           {/* TODO: replace with datasets from database */}
@@ -298,18 +275,13 @@ export default function Sidebar({}) {
             className="demo-source-dropdown"
             options={[
               <Text>
-                Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab
-                unpublished data)
+                Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
               </Text>,
               <Text>
-                Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab
-                unpublished data)
+                Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
               </Text>,
               <Text>Demo #3: Unweighted GRN (21 genes, 31 edges)</Text>,
-              <Text>
-                Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004
-                data)
-              </Text>,
+              <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
               <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>,
             ]}
             value={demoValue}
@@ -320,9 +292,7 @@ export default function Sidebar({}) {
           <CheckBox
             checked={averageReplicateValuesTop}
             label={<Text>Average Replicate Values</Text>}
-            onChange={(event) =>
-              setAverageReplicateValuesTop(event.target.checked)
-            }
+            onChange={event => setAverageReplicateValuesTop(event.target.checked)}
           />
           <Text weight="bold">Bottom Dataset</Text>
           {/* TODO: replace with datasets from database */}
@@ -331,18 +301,13 @@ export default function Sidebar({}) {
             pad="0px"
             options={[
               <Text>
-                Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab
-                unpublished data)
+                Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
               </Text>,
               <Text>
-                Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab
-                unpublished data)
+                Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
               </Text>,
               <Text>Demo #3: Unweighted GRN (21 genes, 31 edges)</Text>,
-              <Text>
-                Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004
-                data)
-              </Text>,
+              <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
               <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>,
             ]}
             value={demoValue}
@@ -353,9 +318,7 @@ export default function Sidebar({}) {
           <CheckBox
             checked={averageReplicateValuesBottom}
             label={<Text>Average Replicate Values</Text>}
-            onChange={(event) =>
-              setAverageReplicateValuesBottom(event.target.checked)
-            }
+            onChange={event => setAverageReplicateValuesBottom(event.target.checked)}
           />
           <Text>Log Fold Change Max Value (0.01-100):</Text>
           <Box className="panel-dropdown-container" direction="row" gap="5px">
@@ -379,7 +342,7 @@ export default function Sidebar({}) {
           <CheckBox
             checked={enableEdgeColoring}
             label={<Text>Enable Edge Coloring</Text>}
-            onChange={(event) => setEnableEdgeColoring(event.target.checked)}
+            onChange={event => setEnableEdgeColoring(event.target.checked)}
           />
           <Box>
             <Text weight="bold">Hide/Show Edge Weights</Text>
@@ -393,45 +356,34 @@ export default function Sidebar({}) {
               ]}
               size="small"
               value={edgeWeightVisibility}
-              onChange={(event) => setEdgeWeightVisibility(event.target.value)}
+              onChange={event => setEdgeWeightVisibility(event.target.value)}
             />
           </Box>
           <Box>
-            <Text weight="bold">
-              Edge Weight Normalization Factor (0.0001-1000):
-            </Text>
+            <Text weight="bold">Edge Weight Normalization Factor (0.0001-1000):</Text>
             <TextInput value={edgeWeightNormalization} />
           </Box>
           {/* TODO: need to center buttons and make the same size */}
           <Box className="panel-dropdown-container" direction="row" gap="5px">
             <Button>
-              <Box
-                pad={{ vertical: "6px", horizontal: "10px" }}
-                direction="row"
-                gap="4px"
-              >
+              <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
                 <Text size="14px">Set Factor</Text>
               </Box>
             </Button>
             <Button>
-              <Box
-                pad={{ vertical: "6px", horizontal: "10px" }}
-                direction="row"
-                gap="4px"
-              >
+              <Box pad={{ vertical: "6px", horizontal: "10px" }} direction="row" gap="4px">
                 <Text size="14px">Reset Factor</Text>
               </Box>
             </Button>
           </Box>
           <Box>
             <Text weight="bold">
-              Gray Threshold (0-100%):{" "}
-              <Text weight="normal">{grayThreshold}%</Text>
+              Gray Threshold (0-100%): <Text weight="normal">{grayThreshold}%</Text>
             </Text>
             <RangeInput
               color="blue"
               value={grayThreshold}
-              onChange={(event) => setGrayThreshold(event.target.value)}
+              onChange={event => setGrayThreshold(event.target.value)}
               min={0}
               max={100}
             />
@@ -439,7 +391,7 @@ export default function Sidebar({}) {
           <CheckBox
             checked={showGrayEdgesDashed}
             label={<Text>Show Gray Edges as Dashed</Text>}
-            onChange={(event) => setShowGrayEdgesDashed(event.target.checked)}
+            onChange={event => setShowGrayEdgesDashed(event.target.checked)}
           />
         </Box>
       </Box>
@@ -466,14 +418,12 @@ export default function Sidebar({}) {
             ]}
             size="small"
             value={viewSize}
-            onChange={(event) => setViewSize(event.target.value)}
+            onChange={event => setViewSize(event.target.value)}
           />
           <CheckBox
             checked={restrictGraphToViewport}
             label={<Text>Restrict Graph to Viewport</Text>}
-            onChange={(event) =>
-              setRestrictGraphToViewport(event.target.checked)
-            }
+            onChange={event => setRestrictGraphToViewport(event.target.checked)}
           />
         </Box>
       </Box>

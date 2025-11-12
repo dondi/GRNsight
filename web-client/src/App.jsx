@@ -16,14 +16,10 @@ function App() {
   const [linkDistance, setLinkDistance] = useState(500);
   const [charge, setCharge] = useState(-50);
   const [lockForceParameters, setLockForceParameters] = useState(false);
-  const [averageReplicateValuesTop, setAverageReplicateValuesTop] =
-    useState(false);
-  const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] =
-    useState(false);
+  const [averageReplicateValuesTop, setAverageReplicateValuesTop] = useState(false);
+  const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] = useState(false);
   const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
-  const [edgeWeightVisibility, setEdgeWeightVisibility] = useState(
-    "Show With Mouse Over",
-  );
+  const [edgeWeightVisibility, setEdgeWeightVisibility] = useState("Show With Mouse Over");
   const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
   const [grayThreshold, setGrayThreshold] = useState(5);
   const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
