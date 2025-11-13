@@ -6,7 +6,9 @@ import {
   PPI_DEMO_NAME,
 } from "../constants";
 // TODO: make this port dynamic in the future based on environment
-const API_URL = `http://localhost:${import.meta.env.VITE_PORT}`;
+const API_URL = import.meta.env.DEV
+  ? `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`
+  : `https://${import.meta.env.VITE_HOST}`;
 
 /**
  * Fetches a demo workbook from the server
