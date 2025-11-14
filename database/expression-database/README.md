@@ -90,13 +90,13 @@ Similar to `preprocessing.py`, the loading script supports command-line flags to
 If no arguments are specificed:
 
 ```
-python3 loader.py
+python3 loader.py | psql postgresql://localhost/postgres
 ```
 
 Or explicitly:
 
 ```
-python3 loader.py --all
+python3 loader.py --all | psql postgresql://localhost/postgres
 ```
 
 This runs every loading step and poplulate all data into database.
@@ -117,5 +117,5 @@ You can load individual sections using falgs:
 Example of loading data into database for production rates and degradation rates:
 
 ```
-python3 loader.py --prod --deg
+python3 loader.py --prod --deg | psql postgresql://localhost/postgres
 ```
