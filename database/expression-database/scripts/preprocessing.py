@@ -15,6 +15,13 @@ BASE_OUT = "../script-results/processed-expression"
 
 def ensure_dirs():
   os.makedirs(BASE_OUT, exist_ok=True)
+  
+def write_to_file(dest, header, data):
+    print(f'Creating {dest}\n')
+    with open(dest, 'w', newline='') as out:
+        out.write(header + "\n")
+        for d in data:
+            out.write("\t".join(d) + "\n")
 
 def process_expression_data(source_dir):
   src = os.path.join(source_dir, 'ExpressionData.csv')
@@ -45,11 +52,8 @@ def process_expression_data(source_dir):
                 expression, time_points, dataset
             ])
   
-  print(f'Creating {dest}\n')
-  with open(dest, 'w', newline='') as out:
-        out.write("Gene ID\tTaxon ID\tSort Index\tSample ID\tExpression\tTime Points\tDataset\n")
-        for d in expression_data:
-            out.write("\t".join(d) + "\n")
+  header = "Gene ID\tTaxon ID\tSort Index\tSample ID\tExpression\tTime Point\tDataset"
+  write_to_file(dest, header, expression_data)
   
   return genes
 
@@ -85,15 +89,13 @@ def process_expression_metadata(source_dir):
                 row[7], row[8], row[9], row[10], row[11]
             ])
 
+    header = (
+        "NCBI GEO ID\tPubmed ID\tControl Yeast Strain\tTreatment Yeast Strain\t"
+        "Control\tTreatment\tConcentration Value\tConcentration Unit\t"
+        "Time Value\tTime Units\tNumber of Replicates\tExpression Table"
+    )
     print(f"Creating {dst}")
-    with open(dst, 'w', newline='') as out:
-        out.write(
-            "NCBI GEO ID\tPubmed ID\tControl Yeast Strain\tTreatment Yeast Strain\t"
-            "Control\tTreatment\tConcentration Value\tConcentration Unit\t"
-            "Time Value\tTime Units\tNumber of Replicates\tExpression Table\n"
-        )
-        for m in expression_metadata:
-            out.write("\t".join(m) + "\n")
+    write_to_file(dst, header, expression_metadata)
 
 def process_refs():
     dst = f"{BASE_OUT}/refs.csv"
@@ -112,10 +114,8 @@ def process_refs():
          'Determination of in vivo RNA kinetics...', '10.1261/rna.045104.114', '']
     ]
 
-    with open(dst, 'w', newline='') as out:
-        out.write("Pubmed ID\tAuthors\tPublication Year\tTitle\tDOI\tNCBI GEO ID\n")
-        for r in refs:
-            out.write("\t".join(r) + "\n")
+    header = "Pubmed ID\tAuthors\tPublication Year\tTitle\tDOI\tNCBI GEO ID"
+    write_to_file(dst, header, refs)
 
 def process_degradation_rates(source_dir, genes):
     src = os.path.join(source_dir, 'DegradationRates.csv')
@@ -138,11 +138,8 @@ def process_degradation_rates(source_dir, genes):
             if gene not in genes:
                 genes[gene] = [display, species, taxon_id]
 
-    print(f"Creating {dst}")
-    with open(dst, 'w', newline='') as out:
-        out.write("Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tDegradation Rate\n")
-        for r in degradation:
-            out.write("\t".join(r) + "\n")
+    header = "Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tDegradation Rate"
+    write_to_file(dst, header, degradation)
 
 def process_production_rates(source_dir, genes):
     src = os.path.join(source_dir, 'ProductionRates.csv')
@@ -165,11 +162,8 @@ def process_production_rates(source_dir, genes):
             if gene not in genes:
                 genes[gene] = [display, species, taxon_id]
 
-    print(f"Creating {dst}")
-    with open(dst, 'w', newline='') as out:
-        out.write("Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tProduction Rate\n")
-        for r in production:
-            out.write("\t".join(r) + "\n")
+    header = "Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tProduction Rate"
+    write_to_file(dst, header, production)
 
 def write_genes(genes):
     dst = f"{BASE_OUT}/genes.csv"
@@ -190,11 +184,11 @@ if __name__ == "__main__":
     parser.add_argument("--prod", action="store_true", help="Process production rates.")
     parser.add_argument("--deg", action="store_true", help="Process degradation rates.")
     parser.add_argument("--genes", action="store_true", help="Write genes file.")
-    parser.add_argument("--source_dir", type=str, default="../source-files/Expression 2020",
-                        help="Directory containing source CSV files.")
+    parser.add_argument("--source_folder", type=str, default="Expression 2020",
+                        help="Folder in source-files folder containing source CSV files.")
 
     args = parser.parse_args()
-
+    source_dir = os.path.join("../source-files", args.source_folder)
     # Default: run all if no flags used
     if not any(vars(args).values()):
         args.all = True
@@ -205,25 +199,24 @@ if __name__ == "__main__":
 
     # Expression data must run first if other modules need gene list
     if args.all or args.expr:
-        genes = process_expression_data(args.source_dir)
-
+        genes = process_expression_data(source_dir)
     if args.all or args.meta:
-        process_expression_metadata(args.source_dir)
+        process_expression_metadata(source_dir)
 
     if args.all or args.refs:
         process_refs()
 
     if args.all or args.deg:
         if not genes:
-            genes = process_expression_data(args.source_dir)
-        process_degradation_rates(args.source_dir, genes)
+            genes = process_expression_data(source_dir)
+        process_degradation_rates(source_dir, genes)
 
     if args.all or args.prod:
         if not genes:
-            genes = process_expression_data(args.source_dir)
-        process_production_rates(args.source_dir, genes)
+            genes = process_expression_data(source_dir)
+        process_production_rates(source_dir, genes)
 
     if args.all or args.genes:
         if not genes:
-            genes = process_expression_data(args.source_dir)
+            genes = process_expression_data(source_dir)
         write_genes(genes)
