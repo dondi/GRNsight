@@ -59,6 +59,8 @@ class GeneProcessor(Processor):
         
         combined_genes = pd.concat([genes_subset, proteins_subset], ignore_index=True)
         unique_combined_genes = combined_genes.drop_duplicates(subset=['systematicName'], keep="first")
+        # Remove empty row with gene_systematic_name
+        unique_combined_genes = unique_combined_genes[unique_combined_genes['systematicName'].notna()]
         return unique_combined_genes
 
 
