@@ -183,20 +183,20 @@ def LOAD_DEGRADATION_RATES():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Load expression data into the database.")
-
+    
     load_actions = {
-        "load_refs": LOAD_REFS,
-        "load_genes": LOAD_GENES,
-        "load_expression_metadata": LOAD_EXPRESSION_METADATA,
-        "load_expression_data": LOAD_EXPRESSION_DATA,
-        "load_production_rates": LOAD_PRODUCTION_RATES,
-        "load_degradation_rates": LOAD_DEGRADATION_RATES,
+        "expr": (LOAD_EXPRESSION_DATA, "Load expression data into the database."),
+        "meta": (LOAD_EXPRESSION_METADATA, "Load expression metadata into the database."),
+        "refs": (LOAD_REFS, "Load references into the database."),
+        "prod": (LOAD_PRODUCTION_RATES, "Load production rates into the database."),
+        "deg": (LOAD_DEGRADATION_RATES, "Load degradation rates into the database."),
+        "genes": (LOAD_GENES, "Load gene ID mappings into the database."),
     }
 
     parser.add_argument("--all", action="store_true", help="Load all data into the database.")
 
     for flag in load_actions:
-        parser.add_argument(f"--{flag}", action="store_true", help=f"Load {flag[5:].replace('_', ' ')}.")
+        parser.add_argument(f"--{flag}", action="store_true", help=load_actions[flag][1])
 
     args = parser.parse_args()
     args_dict = vars(args)
@@ -205,6 +205,6 @@ if __name__ == "__main__":
     if not any(args_dict.values()):
         args.all = True
 
-    for flag, func in load_actions.items():
+    for flag, _ in load_actions.items():
         if args.all or args_dict.get(flag):
-            func()
+            load_actions[flag][0]()
