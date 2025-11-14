@@ -1,9 +1,9 @@
 import {
-    UNWEIGHTED_DEMO_NAME,
-    WEIGHTED_DEMO_NAME,
-    SCHADE_INPUT_NAME,
-    SCHADE_OUTPUT_NAME,
-    PPI_DEMO_NAME,
+  UNWEIGHTED_DEMO_NAME,
+  WEIGHTED_DEMO_NAME,
+  SCHADE_INPUT_NAME,
+  SCHADE_OUTPUT_NAME,
+  PPI_DEMO_NAME,
 } from "../constants";
 // TODO: make this port dynamic in the future based on environment
 const API_URL = "http://localhost:5000";
@@ -14,17 +14,17 @@ const API_URL = "http://localhost:5000";
  * @returns {Promise<Object>} The workbook data
  */
 export async function getDemoWorkbook(demoType) {
-    return fetch(`${API_URL}/demo/${demoType}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response failed: ${response.status}`);
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error("Error fetching demo workbook:", error);
-            throw error; // Re-throw to allow handling by the calling function
-        });
+  return fetch(`${API_URL}/demo/${demoType}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Network response failed: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error("Error fetching demo workbook:", error);
+      throw error; // Re-throw to allow handling by the calling function
+    });
 }
 
 /**
@@ -33,10 +33,10 @@ export async function getDemoWorkbook(demoType) {
  * @returns {string|null} Returns the corresponding endpoint name (unweighted, weighted, schadeInput, schadeOutput, ppi) or error if not found
  */
 export const getDemoEndpoint = demoValue => {
-    const mapping = Object.entries(DEMO_TYPES).find(
-        ([_, value]) => value === demoValue.props.children
-    );
-    return mapping ? mapping[0] : Error("Demo not found");
+  const mapping = Object.entries(DEMO_TYPES).find(
+    ([_, value]) => value === demoValue.props.children
+  );
+  return mapping ? mapping[0] : Error("Demo not found");
 };
 
 /**
@@ -45,9 +45,9 @@ export const getDemoEndpoint = demoValue => {
 // TODO: Should I point to the constants in web-client-classic instead?
 
 export const DEMO_TYPES = {
-    unweighted: UNWEIGHTED_DEMO_NAME,
-    weighted: WEIGHTED_DEMO_NAME,
-    schadeInput: SCHADE_INPUT_NAME,
-    schadeOutput: SCHADE_OUTPUT_NAME,
-    ppi: PPI_DEMO_NAME,
+  unweighted: UNWEIGHTED_DEMO_NAME,
+  weighted: WEIGHTED_DEMO_NAME,
+  schadeInput: SCHADE_INPUT_NAME,
+  schadeOutput: SCHADE_OUTPUT_NAME,
+  ppi: PPI_DEMO_NAME,
 };
