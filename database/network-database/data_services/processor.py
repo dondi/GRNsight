@@ -23,7 +23,7 @@ class GeneProcessor(Processor):
 
         genes_df = data[['systematicName', 'standardName']]
         if proteins is not None:
-            combine_genes_df = pd.concat([genes_df, self._combine_with_protein_genes(genes=data, proteins=proteins)])
+            combine_genes_df = self._combine_with_protein_genes(genes_df, proteins)
         else:
             combine_genes_df = genes_df
         processed_data = []
@@ -49,26 +49,19 @@ class GeneProcessor(Processor):
     
 
     def _combine_with_protein_genes(self, genes, proteins):
-        genes_systematic_names = set(genes['systematicName'])
-        proteins_systematic_names = set(proteins['gene_systematic_name'])
-        diff_systematic_names = genes_systematic_names.symmetric_difference(proteins_systematic_names)
+        proteins_correct_gene_standard_name = proteins.copy()
+        proteins_correct_gene_standard_name['standard_name'] = proteins_correct_gene_standard_name['standard_name'].str.rstrip('p').str.upper()
 
-        # Filter the rows in genes and proteins where their first element is in the difference
-        genes_diff = genes[genes['systematicName'].isin(diff_systematic_names)]
-        proteins_diff = proteins[proteins['gene_systematic_name'].isin(diff_systematic_names)]
-
-        # Protein standard names are in the format of lowercase + "p" but for gene standard name, all letters should be uppercase and remove the trailing "p"
-        proteins_diff_with_correct_gene_standard_name = proteins_diff.copy()
-        proteins_diff_with_correct_gene_standard_name['standard_name'] = proteins_diff_with_correct_gene_standard_name['standard_name'].str.rstrip('p').str.upper()
-        # Combine the differences from both genes and proteins
-        diff_combined = pd.concat([
-            genes_diff[['systematicName', 'standardName']], 
-            proteins_diff_with_correct_gene_standard_name[['gene_systematic_name', 'standard_name']].rename(
-                columns={'gene_systematic_name': 'systematicName', 'standard_name': 'standardName'}
-            )
-        ], ignore_index=True)
-
-        return diff_combined
+        genes_subset = genes[['systematicName', 'standardName']]
+        proteins_subset = proteins_correct_gene_standard_name[['gene_systematic_name', 'standard_name']].rename(
+            columns={'gene_systematic_name': 'systematicName', 'standard_name': 'standardName'}
+        )
+        
+        combined_genes = pd.concat([genes_subset, proteins_subset], ignore_index=True)
+        unique_combined_genes = combined_genes.drop_duplicates(subset=['systematicName'], keep="first")
+        # Remove empty row with gene_systematic_name
+        unique_combined_genes = unique_combined_genes[unique_combined_genes['systematicName'].notna()]
+        return unique_combined_genes
 
 
 class GeneRegulatoryNetworkProcessor(Processor):
