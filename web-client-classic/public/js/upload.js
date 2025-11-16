@@ -452,7 +452,10 @@ export const upload = function () {
     };
 
     var performExport = function (route, extension, sheetType, source) {
-        return function () {
+        return function (e) {
+            if (e) {
+                e.preventDefault();
+            }
             // Deleted event parameter
             if (route === "export-to-excel" && source) {
                 handleExportExcelButtonExport(route, extension, determineWorkbookType(), source);
@@ -712,6 +715,7 @@ export const upload = function () {
     const handleExpressionSheetsFromSource = function (source) {
         $("#export-excel-workbook-sheet-list").append(createHTMLforSheets(source));
         handleWorkbookSheetCheckboxBehaviour();
+        $("#Export-Excel-Button").off("click");
         $("#Export-Excel-Button").on(
             "click",
             performExport("export-to-excel", "xlsx", null, source)
@@ -748,6 +752,7 @@ export const upload = function () {
             $("#Export-Excel-Button").prop("value", "Export Workbook");
             $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");
             handleWorkbookSheetCheckboxBehaviour();
+            $("#Export-Excel-Button").off("click");
             $("#Export-Excel-Button").on(
                 "click",
                 performExport("export-to-excel", "xlsx", null, source)
