@@ -453,7 +453,6 @@ export const upload = function () {
 
     var performExport = function (route, extension, sheetType, source) {
         return function (e) {
-            console.log("Perform Export Called");
             if (e) {
                 e.preventDefault();
             }
