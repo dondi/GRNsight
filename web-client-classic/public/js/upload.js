@@ -581,7 +581,7 @@ export const upload = function () {
                 result +
                 `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' ${state && 'checked="true"'} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${!state && "disabled"}/>
+                <input type=\'checkbox\' name=\'workbookSheets\' ${state ? 'checked="true"' : ""} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${state ? "" : "disabled"}/>
                 <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
                     ${network}
                 </label>
