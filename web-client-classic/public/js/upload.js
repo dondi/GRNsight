@@ -27,6 +27,18 @@ const removeExpressionSuffix = sheetName => {
     return sheet;
 };
 
+const isDataValid = data => {
+    if (data === undefined || data === null) {
+        return false;
+    }
+
+    if (typeof data === "object" && !Array.isArray(data) && Object.keys(data).length === 0) {
+        return false;
+    }
+
+    return true;
+};
+
 export const uploadState = {
     currentWorkbook: null,
 };
@@ -549,9 +561,9 @@ export const upload = function () {
             "threshold_b",
         ];
         let networks = [
-            [grnState.workbook.network !== undefined, "network"],
-            [grnState.workbook.networkOptimizedWeights !== undefined, "network_optimized_weights"],
-            [grnState.workbook.network !== undefined, "network_weights"],
+            [isDataValid(grnState.workbook.network), "network"],
+            [isDataValid(grnState.workbook.networkOptimizedWeights), "network_optimized_weights"],
+            [isDataValid(grnState.workbook.networkWeights), "network_weights"],
         ]; // network_weights is always available if network is available
         // networks = networks.filter(x => x !== false);
         let additionalsheets = grnState.workbook.twoColumnSheets
@@ -572,7 +584,7 @@ export const upload = function () {
                 result +
                 `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' checked=\"${state}\" value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${!state && "disabled"}/>
+                <input type=\'checkbox\' name=\'workbookSheets\' ${state ? 'checked="true"' : ""} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${state ? "" : "disabled"}/>
                 <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
                     ${network}
                 </label>
@@ -702,7 +714,7 @@ export const upload = function () {
                 }
             });
         $("#exportExcelWorkbookSheet-All").on("click", () => {
-            const allSheets = $("input[name=workbookSheets]");
+            const allSheets = $("input[name=workbookSheets]").not(":disabled");
             const selectAll = $("#exportExcelWorkbookSheet-All");
             for (let i in allSheets) {
                 if (typeof allSheets[i] === "object") {
