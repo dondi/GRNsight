@@ -1,5 +1,6 @@
 import csv
 import re
+import argparse
 # Usage
 # python3 loader.py | psql postgresql://localhost/postgres
 """
@@ -140,6 +141,7 @@ def LOAD_EXPRESSION_DATA():
 This program Loads Production Rates into the database
 """
 def LOAD_PRODUCTION_RATES():
+    print('TRUNCATE TABLE gene_expression.production_rate;')
     print('COPY gene_expression.production_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, production_rate) FROM stdin;')
     PRODUCTION_RATES_SOURCE = '../script-results/processed-expression/production-rates.csv'
     with open(PRODUCTION_RATES_SOURCE, 'r+') as f:
@@ -161,6 +163,7 @@ def LOAD_PRODUCTION_RATES():
 This program Loads Degradation Rates into the database
 """
 def LOAD_DEGRADATION_RATES():
+    print('TRUNCATE TABLE gene_expression.degradation_rate;')
     print('COPY gene_expression.degradation_rate (gene_id, taxon_id, ncbi_geo_id, pubmed_id, degradation_rate) FROM stdin;')
     DEGRADATION_RATES_SOURCE = '../script-results/processed-expression/degradation-rates.csv'
     with open(DEGRADATION_RATES_SOURCE, 'r+') as f:
@@ -178,9 +181,30 @@ def LOAD_DEGRADATION_RATES():
             row_num += 1
     print('\\.')
 
-LOAD_REFS()
-LOAD_GENES()
-LOAD_EXPRESSION_METADATA()
-LOAD_EXPRESSION_DATA()
-LOAD_PRODUCTION_RATES()
-LOAD_DEGRADATION_RATES()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Load expression data into the database.")
+    
+    load_actions = {
+        "expr": (LOAD_EXPRESSION_DATA, "Load expression data into the database."),
+        "meta": (LOAD_EXPRESSION_METADATA, "Load expression metadata into the database."),
+        "refs": (LOAD_REFS, "Load references into the database."),
+        "prod": (LOAD_PRODUCTION_RATES, "Load production rates into the database."),
+        "deg": (LOAD_DEGRADATION_RATES, "Load degradation rates into the database."),
+        "genes": (LOAD_GENES, "Load gene ID mappings into the database."),
+    }
+
+    parser.add_argument("--all", action="store_true", help="Load all data into the database.")
+
+    for flag in load_actions:
+        parser.add_argument(f"--{flag}", action="store_true", help=load_actions[flag][1])
+
+    args = parser.parse_args()
+    args_dict = vars(args)
+
+    # If no flags were provided, default to --all
+    if not any(args_dict.values()):
+        args.all = True
+
+    for flag, _ in load_actions.items():
+        if args.all or args_dict.get(flag):
+            load_actions[flag][0]()
