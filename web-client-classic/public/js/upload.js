@@ -524,7 +524,8 @@ export const upload = function () {
         for (let [index, source] of sources.entries()) {
             if (grnState.nodeColoring.topDataset){
                 const isChecked = grnState.nodeColoring.topDataset
-                .toLowerCase().startsWith(source.toLowerCase())
+                .toLowerCase().startsWith(source
+                .toLowerCase())
                 ? `checked="true"` 
                 : "";
                 result += `
