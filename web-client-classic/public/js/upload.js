@@ -245,7 +245,17 @@ export const upload = function () {
         source,
         finalExportSheets
     ) => {
-        if (source === "userInput" && grnState.workbook.expression) {
+        const hasExpressionData = Object.keys(finalExportSheets.expression).length > 0;
+        if (!hasExpressionData) {
+            // No expression sheets selected - proceed directly to export
+            if (finalExportSheets["optimization_parameters"]) {
+                finalExportSheets["optimization_parameters"] =
+                    updateOptimizationParameters(finalExportSheets);
+            }
+            grnState.workbook.exportSheets = finalExportSheets;
+            exportExcel(route, extension, sheetType);
+            return;
+        } else if (source === "userInput" && grnState.workbook.expression) {
             // make sure that the optimization parameters sheet is actually properly formatted
             if (finalExportSheets["optimization_parameters"]) {
                 finalExportSheets["optimization_parameters"] =
@@ -514,30 +524,58 @@ export const upload = function () {
             ),
         ];
         let result = `
-        <form id=\'exportExcelForm\'>
-            <div class=\'form-group export-form-group\'>
-                <p id=\'exportExcelExpressionSources\'> </p>
-                <ul class=\'export-radio-group\' id=\'export-excel-expression-source-list\' style=\"list-style-type:none;\">
+            <form id='exportExcelForm'>
+                <div class='form-group export-form-group'>
+                    <p id='exportExcelExpressionSources'></p>
+                    <ul class='export-radio-group' id='export-excel-expression-source-list' style="list-style-type:none;">
+                    
+        `;
+        // Add "None" option
+        result += `
                     <li>
-                        <input type=\'radio\' name=\'expressionSource\' checked=\"true\" value=\"userInput\" id=\'exportExcelExpressionSource-userInputRadio\' class=\'export-radio\' />
-                        <label for=\'exportExcelExpressionSource-userInputRadio\' id=\'exportExcelExpressionSource-userInput\' class=\'export-radio-label\'> </label>
-                    </li>`;
-        for (let source of sources) {
+                        <input type='radio' name='expressionSource' checked="true" value="none" id='exportExcelExpressionSource-noneRadio' class='export-radio' />
+                        <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
+                    </li>
+    `;
+        if (Object.keys(grnState.workbook.expression).length > 0) {
             result += `
-            <li>
-                <input type=\'radio\' name=\'expressionSource\' value=\"${source}\" id=\'exportExcelExpressionSource-${source}Radio\' class=\'export-radio\' />
-                <label for=\'exportExcelExpressionSource-${source}Radio\' id=\'exportExcelExpressionSource-${source}\' class=\'export-radio-label\'>${source}</label>
-            </li>`;
+                        <li>
+                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
+                        </li>
+            `;
         }
-
-        result += `</ul>
-            </div>
-            <div class=\'form-group export-form-group\'>
-                <p id=\'exportExcelWorkbookSheets\'></p>
-                <ul class=\'exportExcelWorkbookSheets\' id=\'export-excel-workbook-sheet-list\' style=\"list-style-type:none;\"> </ul>
-            </div>
-        </form>`;
-
+        for (let [index, source] of sources.entries()) {
+            if (grnState.nodeColoring.topDataset) {
+                const isChecked = grnState.nodeColoring.topDataset
+                    .toLowerCase()
+                    .startsWith(source.toLowerCase())
+                    ? `checked="true"`
+                    : "";
+                result += `
+                            <li>
+                                <input type='radio' name='expressionSource' ${isChecked} value="${source}" id='exportExcelExpressionSource-${source}Radio' class='export-radio' />
+                                <label for='exportExcelExpressionSource-${source}Radio' id='exportExcelExpressionSource-${source}' class='export-radio-label'>${source}</label>
+                            </li>
+                `;
+            } else {
+                result += `
+                            <li>
+                                <input type='radio' name='expressionSource' value="${source}" id='exportExcelExpressionSource-${source}Radio' class='export-radio' />
+                                <label for='exportExcelExpressionSource-${source}Radio' id='exportExcelExpressionSource-${source}' class='export-radio-label'>${source}</label>
+                            </li>
+                `;
+            }
+        }
+        result += `
+                    </ul>
+                </div>
+                <div class='form-group export-form-group'>
+                    <p id='exportExcelWorkbookSheets'></p>
+                    <ul class='exportExcelWorkbookSheets' id='export-excel-workbook-sheet-list' style="list-style-type:none;"></ul>
+                </div>
+            </form>
+        `;
         return result;
     };
 
@@ -711,6 +749,22 @@ export const upload = function () {
                             }
                         }
                     }
+                }
+                let anyExpressionChecked = false;
+                for (let i in allSheets) {
+                    if (
+                        typeof allSheets[i] === "object" &&
+                        allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
+                        allSheets[i].value &&
+                        allSheets[i].value.includes("expression") &&
+                        allSheets[i].checked
+                    ) {
+                        anyExpressionChecked = true;
+                        break;
+                    }
+                }
+                if (!anyExpressionChecked) {
+                    $("#exportExcelExpressionSource-noneRadio").prop("checked", true);
                 }
             });
         $("#exportExcelWorkbookSheet-All").on("click", () => {
