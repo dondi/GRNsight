@@ -522,19 +522,19 @@ export const upload = function () {
             `;
         }
         for (let [index, source] of sources.entries()) {
-            if (grnState.nodeColoring.topDataset){
+            if (grnState.nodeColoring.topDataset) {
                 const isChecked = grnState.nodeColoring.topDataset
-                .toLowerCase().startsWith(source
-                .toLowerCase())
-                ? `checked="true"` 
-                : "";
+                    .toLowerCase()
+                    .startsWith(source.toLowerCase())
+                    ? `checked="true"`
+                    : "";
                 result += `
                             <li>
                                 <input type='radio' name='expressionSource' ${isChecked} value="${source}" id='exportExcelExpressionSource-${source}Radio' class='export-radio' />
                                 <label for='exportExcelExpressionSource-${source}Radio' id='exportExcelExpressionSource-${source}' class='export-radio-label'>${source}</label>
                             </li>
                 `;
-            } else{
+            } else {
                 result += `
                             <li>
                                 <input type='radio' name='expressionSource' value="${source}" id='exportExcelExpressionSource-${source}Radio' class='export-radio' />
@@ -733,7 +733,8 @@ export const upload = function () {
                         allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
                         allSheets[i].value &&
                         allSheets[i].value.includes("expression") &&
-                        allSheets[i].checked) {
+                        allSheets[i].checked
+                    ) {
                         anyExpressionChecked = true;
                         break;
                     }
@@ -750,7 +751,6 @@ export const upload = function () {
                     allSheets[i].checked = selectAll[0].checked;
                 }
             }
-            
         });
     };
 
@@ -771,7 +771,7 @@ export const upload = function () {
             $("#Export-Excel-Button").prop("value", "Export Workbook");
             $("#exportExcelExpressionSources").html("Select the Expression Data Source:");
             $("#exportExcelExpressionSource-userInput").html(grnState.name);
-            $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");            
+            $("#exportExcelWorkbookSheets").html("Select Workbook Sheets to Export:");
             let source = $("input[name=expressionSource]:checked")[0].value;
             $("#exportExcelForm").on("change", function () {
                 const selectedValue = $("input[name=expressionSource]:checked")[0].value;
