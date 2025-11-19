@@ -28,7 +28,7 @@ const removeExpressionSuffix = sheetName => {
 };
 
 const isDataValid = data => {
-    if (data == undefined || data == null) {
+    if (data === undefined || data === null) {
         return false;
     }
 
