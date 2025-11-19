@@ -219,6 +219,9 @@ export const upload = function () {
 
     // helper method for handleExpressionDataAndExport and handleExportExcelButtonExport to avoid redundant code
     const expressionExportErrorHandler = error => {
+        console.log(error.stack);
+        console.log(error.name);
+        console.log(error.message);
     };
 
     const handleExpressionDataAndExport = (
@@ -439,8 +442,8 @@ export const upload = function () {
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
                 if (
-                    value.value === "network_weights" //||
-                    // value.value === "network_optimized_weights"
+                    value.value === "network_weights" ||
+                    value.value === "network_optimized_weights"
                 ) {
                     return "weighted";
                 }
@@ -511,7 +514,6 @@ export const upload = function () {
                     </li>
     `;
         if (Object.keys(grnState.workbook.expression).length > 0) {
-    
             result += `
                         <li>
                             <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
@@ -521,15 +523,17 @@ export const upload = function () {
         }
         for (let [index, source] of sources.entries()) {
             if (grnState.nodeColoring.topDataset){
-                const isChecked = grnState.nodeColoring.topDataset.toLowerCase().startsWith(source.toLowerCase()) ? 'checked="true"' : "";
+                const isChecked = grnState.nodeColoring.topDataset
+                .toLowerCase().startsWith(source.toLowerCase())
+                ? `checked="true"` 
+                : "";
                 result += `
                             <li>
                                 <input type='radio' name='expressionSource' ${isChecked} value="${source}" id='exportExcelExpressionSource-${source}Radio' class='export-radio' />
                                 <label for='exportExcelExpressionSource-${source}Radio' id='exportExcelExpressionSource-${source}' class='export-radio-label'>${source}</label>
                             </li>
                 `;
-            }
-            else{
+            } else{
                 result += `
                             <li>
                                 <input type='radio' name='expressionSource' value="${source}" id='exportExcelExpressionSource-${source}Radio' class='export-radio' />
@@ -537,12 +541,7 @@ export const upload = function () {
                             </li>
                 `;
             }
-            
-
-            
         }
-        
-
         result += `
                     </ul>
                 </div>
@@ -552,7 +551,6 @@ export const upload = function () {
                 </div>
             </form>
         `;
-
         return result;
     };
 
@@ -729,10 +727,11 @@ export const upload = function () {
                 }
                 let anyExpressionChecked = false;
                 for (let i in allSheets) {
-                    if (typeof allSheets[i] === "object" && 
-                        allSheets[i].id !== "exportExcelWorkbookSheet-All" && 
-                        allSheets[i].value && 
-                        allSheets[i].value.includes("expression") && 
+                    if (
+                        typeof allSheets[i] === "object" &&
+                        allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
+                        allSheets[i].value &&
+                        allSheets[i].value.includes("expression") &&
                         allSheets[i].checked) {
                         anyExpressionChecked = true;
                         break;
