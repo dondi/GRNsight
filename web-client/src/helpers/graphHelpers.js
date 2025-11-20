@@ -1,70 +1,64 @@
-import { NODE_HEIGHT, NODE_MARGIN, MINIMUM_NODE_WIDTH } from "../constants.js";
+import {
+  NODE_HEIGHT,
+  NODE_MARGIN,
+  MINIMUM_NODE_WIDTH,
+  EDGE_BLACK,
+  EDGE_BLUE,
+  EDGE_RED,
+} from "../constants.js";
 
 export function getNodeWidth(node) {
   return NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN;
 }
 
 /**
- * Calculate the intersection point of a line with a rectangle
- * @param {number} x1 - Source x coordinate
- * @param {number} y1 - Source y coordinate
- * @param {number} x2 - Target x coordinate (center of target node)
- * @param {number} y2 - Target y coordinate (center of target node)
- * @param {number} boxWidth - Width of target node
- * @param {number} boxHeight - Height of target node
- * @returns {{x: number, y: number}} Intersection point on box perimeter
- */
-function getBoxIntersection(x1, y1, x2, y2, boxWidth, boxHeight) {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-
-  if (dx === 0 && dy === 0) {
-    return { x: x2, y: y2 };
-  }
-
-  const halfWidth = boxWidth / 2;
-  const halfHeight = boxHeight / 2;
-
-  // Calculate which edge of the box the line intersects
-  const angle = Math.atan2(dy, dx);
-  const tanAngle = Math.abs(Math.tan(angle));
-
-  let intersectX, intersectY;
-
-  if (tanAngle < halfHeight / halfWidth) {
-    // Intersects with left or right edge
-    intersectX = x2 + (dx > 0 ? -halfWidth : halfWidth);
-    intersectY = y2 + (intersectX - x2) * (dy / dx);
-  } else {
-    // Intersects with top or bottom edge
-    intersectY = y2 + (dy > 0 ? -halfHeight : halfHeight);
-    intersectX = x2 + (intersectY - y2) * (dx / dy);
-  }
-
-  return { x: intersectX, y: intersectY };
-}
-
-/**
  * Calculate point along a quadratic Bézier curve at parameter t (0 to 1)
+ * @param {number} t - Value from 0 to 1, where 0 is the start point of the bezier curve and 1 is the end point
+ * @param {Object} p0 - Starting point of the Bézier curve
+ * @param {number} p0.x - X coordinate of the starting point
+ * @param {number} p0.y - Y coordinate of the starting point
+ * @param {Object} p1 - Control point of the quadratic Bézier curve
+ * @param {number} p1.x - X coordinate of the control point
+ * @param {number} p1.y - Y coordinate of the control point
+ * @param {Object} p2 - End point of the Bézier curve
+ * @param {number} p2.x - X coordinate of the end point
+ * @param {number} p2.y - Y coordinate of the end point
+ *
+ * @returns {Object} Point on the Bézier curve at parameter t
+ * @returns {number} return.x - X coordinate of the calculated point
+ * @returns {number} return.y - Y coordinate of the calculated point
+ *
  */
-function getQuadraticBezierPoint(t, p0, p1, p2) {
-  const x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * p2.x;
-  const y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * p1.y + Math.pow(t, 2) * p2.y;
+function getQuadraticBezierPoint(intersection, p0, p1, p2) {
+  const x =
+    Math.pow(1 - intersection, 2) * p0.x +
+    2 * (1 - intersection) * intersection * p1.x +
+    Math.pow(intersection, 2) * p2.x;
+  const y =
+    Math.pow(1 - intersection, 2) * p0.y +
+    2 * (1 - intersection) * intersection * p1.y +
+    Math.pow(intersection, 2) * p2.y;
   return { x, y };
-}
-
-/**
- * Calculate the derivative (tangent) of a quadratic Bézier curve at parameter t
- */
-function getQuadraticBezierDerivative(t, p0, p1, p2) {
-  const dx = 2 * (1 - t) * (p1.x - p0.x) + 2 * t * (p2.x - p1.x);
-  const dy = 2 * (1 - t) * (p1.y - p0.y) + 2 * t * (p2.y - p1.y);
-  return { dx, dy };
 }
 
 /**
  * Find the intersection of a Bézier curve with a target box
  * Uses binary search to find the t value where the curve intersects the box perimeter
+ * @param {Object} source - Starting point of the Bézier curve
+ * @param {number} source.x - X coordinate of the source point
+ * @param {number} source.y - Y coordinate of the source point
+ * @param {Object} control - Control point of the quadratic Bézier curve
+ * @param {number} control.x - X coordinate of the control point
+ * @param {number} control.y - Y coordinate of the control point
+ * @param {Object} target - End point of the Bézier curve (center of target box)
+ * @param {number} target.x - X coordinate of the target point (box center)
+ * @param {number} target.y - Y coordinate of the target point (box center)
+ * @param {number} boxWidth - Width of the target node's bounding box
+ * @param {number} boxHeight - Height of the target node's bounding box
+ *
+ * @returns {Object} Intersection point on the box perimeter
+ * @returns {number} return.x - X coordinate of intersection point
+ * @returns {number} return.y - Y coordinate of intersection point
  */
 function findBezierBoxIntersection(source, control, target, boxWidth, boxHeight) {
   const p0 = source;
@@ -72,13 +66,15 @@ function findBezierBoxIntersection(source, control, target, boxWidth, boxHeight)
   const p2 = target;
 
   // Binary search to find intersection point
-  let tMin = 0;
-  let tMax = 1;
-  let iterations = 20; // Number of binary search iterations
+  // intersection = 0 is the start of the bezier curve, intersection = 1 is the end of the bezier curve
+  // intersectionMin and intersectionMax define the current search interval for intersection
+  let intersectionMin = 0;
+  let intersectionMax = 1;
 
-  while (iterations > 0) {
-    const tMid = (tMin + tMax) / 2;
-    const point = getQuadraticBezierPoint(tMid, p0, p1, p2);
+  // Complete 20 binary search iterations for sufficient precision
+  for (let iteration = 0; iteration < 20; iteration++) {
+    const intersectionMid = (intersectionMin + intersectionMax) / 2;
+    const point = getQuadraticBezierPoint(intersectionMid, p0, p1, p2);
 
     // Check if point is inside the box
     const dx = Math.abs(point.x - target.x);
@@ -86,16 +82,14 @@ function findBezierBoxIntersection(source, control, target, boxWidth, boxHeight)
 
     if (dx < boxWidth / 2 && dy < boxHeight / 2) {
       // Point is inside box, search earlier part of curve
-      tMax = tMid;
+      intersectionMax = intersectionMid;
     } else {
       // Point is outside box, search later part of curve
-      tMin = tMid;
+      intersectionMin = intersectionMid;
     }
-
-    iterations--;
   }
 
-  return getQuadraticBezierPoint(tMax, p0, p1, p2);
+  return getQuadraticBezierPoint(intersectionMax, p0, p1, p2);
 }
 
 export function createPath(d) {
@@ -152,6 +146,6 @@ export function getEdgeThickness(workbook, enableEdgeColoring, edge) {
 }
 
 export function getEdgeColor(workbook, edge) {
-  if (workbook.sheetType === "unweighted") return "#000";
-  return edge.value < 0 ? "blue" : "red";
+  if (workbook.sheetType === "unweighted") return EDGE_BLACK;
+  return edge.value < 0 ? EDGE_BLUE : EDGE_RED;
 }

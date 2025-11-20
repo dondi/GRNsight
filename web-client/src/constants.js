@@ -18,3 +18,6 @@ export const NODE_MARGIN = 3;
 export const NODE_HEIGHT = 30;
 export const MIN_SCALE = 0.25;
 export const MIDDLE_SCALE = 1;
+export const EDGE_RED = "rgb(195,61,61)";
+export const EDGE_BLUE = "rgb(51,124,183)";
+export const EDGE_BLACK = "rgb(0,0,0)";

@@ -13,6 +13,9 @@ import {
   NODE_HEIGHT,
   MIN_SCALE,
   MIDDLE_SCALE,
+  EDGE_RED,
+  EDGE_BLACK,
+  EDGE_BLUE,
 } from "../constants";
 import {
   getNodeWidth,
@@ -81,9 +84,9 @@ export default function Graph() {
 
     // Define arrowhead markers for different colors
     const arrowColors = [
-      { id: "arrowhead-black", color: "#000" },
-      { id: "arrowhead-red", color: "red" },
-      { id: "arrowhead-blue", color: "blue" },
+      { id: "arrowhead-black", color: EDGE_BLACK },
+      { id: "arrowhead-red", color: EDGE_RED },
+      { id: "arrowhead-blue", color: EDGE_BLUE },
     ];
 
     arrowColors.forEach(({ id, color }) => {
