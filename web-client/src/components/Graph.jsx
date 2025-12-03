@@ -101,7 +101,7 @@ export default function Graph() {
         .attr("markerHeight", 6)
         .attr("orient", "auto") // Auto-rotate to match path direction
         .append("path")
-        .attr("d", "M 0 0 L 10 5 L 0 10 z")
+        .attr("d", "M 0 0 L 10 5 L 0 10 z") // TODO: explain what this does
         .style("fill", color);
     });
 
