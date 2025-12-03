@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Publications
-modified: 4/14/21
+modified: 12/3/25
 description: Papers, talks, and posters about GRNsight, a web application and service for visualizing models of small- to medium-scale gene regulatory networks.
 ---
             <p id="pageTitle">Publications</p>
@@ -49,6 +49,15 @@ description: Papers, talks, and posters about GRNsight, a web application and se
 
                         <div id="presentations" class="panel-collapse collapse">
                             <div class="panel-body">
+
+                                <p class="abstract">
+                                    <b><a href="https://www.sccur.org/">Southern California Conference for Undergraduate Research (SCCUR) 2025, Camarillo, CA</a></b><br><br>
+                                    November 22, 2025<br>
+                                    GRNsight v7: a web application for visualizing gene regulatory networks and protein-protein interactions<br>
+                                    <b>Ngoc K. Tran, Milka Zekarias</b>, Cecilia J. Zaragoza, A'Kaia Phelps, Amelie Dinh, John David N. Dionisio, Kam D. Dahlquist<br><br>
+
+                                    Abstract: GRNsight is an open-source web application for visualizing models of gene regulatory networks (GRNs) and protein-protein physical interaction networks (PPIs) either uploaded by the user or obtained from our backend yeast database. Models are displayed as graphs where genes/proteins are rectangular nodes with edges between them. GRNs have directed edges to indicate regulatory relationships (activation or repression), and PPIs have undirected edges to indicate physical binding. For v7, we improved our PPI support, transitioned our database loading scripts from YeastMine to AllianceMine, enhanced viewport functionality, and migrated continuous integration (CI) to GitHub Actions. As was previously implemented for GRNs, users can now color nodes in PPIs with expression data, either provided by the user or from our backend database. Different datasets can be displayed on the top and bottom of the nodes. For database loading, our scripts were ported to AllianceMine because YeastMine was discontinued. New graph functionality has been implemented that allows users to restrict the graph to viewport so that they can drag, zoom, and move the graph with the nodes staying within the application’s bounding box. Finally, the project’s CI pipeline has been migrated from Travis CI to GitHub Actions, integrating workflows for automated builds, unit tests, and linting to streamline development processes and improve maintainability. Ongoing efforts prioritize bug resolution, user interface enhancements, and improved documentation. GRNsight is now positioned to comprehensively address GRNs and PPIs, offering a unified platform for visualizing diverse molecular interaction models. GRNsight is available at <a href="https://dondi.github.io/GRNsight/">https://dondi.github.io/GRNsight/</a>.
+                                </p>
                                 
                                 <p class="abstract">
                                     <b>LMU Department of Biology Seminar Series</b><br><br>
