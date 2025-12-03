@@ -10,23 +10,32 @@ import "./App.css";
 export const GrnStateContext = createContext();
 
 function App() {
-  const [networkMode, setNetworkMode] = useState("Protein-Protein Interaction");
-  const [enableNodeColoring, setEnableNodeColoring] = useState(false);
-  const [enableEdgeColoring, setEnableEdgeColoring] = useState(false);
-  const [linkDistance, setLinkDistance] = useState(500);
-  const [charge, setCharge] = useState(-50);
-  const [lockForceParameters, setLockForceParameters] = useState(false);
-  const [averageReplicateValuesTop, setAverageReplicateValuesTop] = useState(false);
-  const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] = useState(false);
-  const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
-  const [edgeWeightVisibility, setEdgeWeightVisibility] = useState("Show With Mouse Over");
-  const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
-  const [grayThreshold, setGrayThreshold] = useState(5);
-  const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
-  const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
-  const [demoValue, setDemoValue] = useState(null);
-  // TODO: make viewSize dynamic to user's screen size
-  const [viewSize, setViewSize] = useState("Small (1104 X 648 pixels)");
+    const [networkMode, setNetworkMode] = useState(
+        "Protein-Protein Interaction"
+    );
+    const [enableNodeColoring, setEnableNodeColoring] = useState(false);
+    const [enableEdgeColoring, setEnableEdgeColoring] = useState(false);
+    const [linkDistance, setLinkDistance] = useState(500);
+    const [charge, setCharge] = useState(-50);
+    const [lockForceParameters, setLockForceParameters] = useState(false);
+    const [averageReplicateValuesTop, setAverageReplicateValuesTop] =
+        useState(false);
+    const [averageReplicateValuesBottom, setAverageReplicateValuesBottom] =
+        useState(false);
+    const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
+    const [edgeWeightVisibility, setEdgeWeightVisibility] = useState(
+        "Show With Mouse Over"
+    );
+    const [edgeWeightNormalization, setEdgeWeightNormalization] =
+        useState(2.971);
+    const [grayThreshold, setGrayThreshold] = useState(5);
+    const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
+    const [restrictGraphToViewport, setRestrictGraphToViewport] =
+        useState(false);
+    const [demoValue, setDemoValue] = useState(null);
+    // TODO: make viewSize dynamic to user's screen size
+    const [viewSize, setViewSize] = useState("Small (1104 X 648 pixels)");
+    const [adaptive, setAdaptive] = useState(true);
 
   // Add state for network data
   const [networkData, setNetworkData] = useState(null);
