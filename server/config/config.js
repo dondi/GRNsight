@@ -20,7 +20,7 @@ module.exports = {
         host: "grnsight.lmucs.org",
         port: 3000,
         url: "https://" + this.host + "/server",
-        corsOrigin: "//grnsight.lmucs.org",
+        corsOrigin: ["//grnsight.lmucs.org", "//dondi.github.io"],
         root: rootPath,
         app: {
             name: "GRNsight",
@@ -34,7 +34,7 @@ module.exports = {
         host: "grnsight.lmucs.org",
         port: 4000,
         url: "https://" + this.host + "/beta/server/",
-        corsOrigin: "//grnsight.lmucs.org",
+        corsOrigin: ["//grnsight.lmucs.org", "//dondi.github.io"],
         root: rootPath,
         app: {
             name: "GRNsight",
