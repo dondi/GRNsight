@@ -11,6 +11,7 @@ import {
   MINIMUM_NODE_WIDTH,
   NODE_MARGIN,
   NODE_HEIGHT,
+  NODE_TEXT_HEIGHT,
   MIN_SCALE,
   MIDDLE_SCALE,
   EDGE_RED,
@@ -179,10 +180,13 @@ export default function Graph() {
     node
       .append("text")
       .attr("class", "node-text")
-      .attr("dy", 22)
+      .attr("dy", NODE_TEXT_HEIGHT)
       .attr("dx", d => getNodeWidth(d) / 2)
+      .attr("fill", "rgb(0, 0, 0)")
       .style("text-anchor", "middle")
       .style("font-size", "18px")
+      .style("stroke-width", "0")
+      .style("font-family", "sans-serif")
       .text(d => d.name);
 
     // Update node widths based on text
