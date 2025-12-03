@@ -6,7 +6,6 @@ import {
   EDGE_BLUE,
   EDGE_RED,
   CURVE_THRESHOLD,
-  CURVE_FACTOR,
 } from "../constants.js";
 
 export function getNodeWidth(node) {
@@ -123,15 +122,6 @@ export function createPath(d, width, height) {
   uy /= umagnitude;
   vx /= vmagnitude;
   vy /= vmagnitude;
-
-  // Check for vector direction.
-  // if (
-  //   (d.target.newX > d.source.x && d.target.newY > d.source.y) ||
-  //   (d.target.newX < d.source.x && d.target.newY < d.source.y)
-  // ) {
-  //   vx = -vx;
-  //   vy = -vy;
-  // }
 
   // Calculate control points between nodes
   const curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
