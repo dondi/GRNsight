@@ -7,10 +7,14 @@ export default defineConfig({
   plugins: [react()],
   base: "/GRNsight/react-thesis-4081/",
   test: {
+    environment: "jsdom", // use this so that have access to document, window, etc. for testing components
+    setupFiles: "./test/setup.js",
+    globals: true, // use this to avoid having to import 'describe', 'it', etc. in every test file
     coverage: {
       enabled: true,
       provider: "v8",
       include: ["src/**/*.{js,jsx}"],
+      exclude: ["src/main.jsx"],
     },
   },
 });

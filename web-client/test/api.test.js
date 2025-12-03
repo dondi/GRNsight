@@ -1,4 +1,5 @@
-import { expect, test } from "vitest";
+import { describe, it, expect, test } from "vitest";
+import { render, screen } from "@testing-library/react";
 import { getDemoWorkbook, getDemoEndpoint, DEMO_TYPES } from "../src/services/api.js";
 
 test("getDemoEndpoint maps demoValue to correct endpoint", () => {
