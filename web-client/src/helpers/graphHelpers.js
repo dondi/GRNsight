@@ -14,7 +14,7 @@ export function getNodeWidth(node) {
 }
 
 /**
- * Calculate point along the full quadratic Bézier curve that goes behind the perimeter of the target box
+ * Calculate point along the full cubic Bézier curve that goes behind the perimeter of the target box
  * Can be used to find the intersection point of the Bézier curve with the box perimeter
  * @param {number} percentAcrossFullBezierCurve - Value from 0 to 1, where 0 is the start point of the full bezier curve and 1 is the end point of the full bezier curve
  * @param {Object} source - Starting point of the Bézier curve
@@ -32,18 +32,25 @@ export function getNodeWidth(node) {
  * @returns {number} return.y - Y coordinate of the calculated point
  *
  */
-function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control, target) {
-  // Bernstein basis polynomial can be used for quadratic Bézier curves
-  // B(t) = (1 - t)^2 * p0 + (2(1 - t) * t) * p1 + t^2 * p2
-  // multiply control point by 2, which makes the function quadratic
+function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control1, control2, target) {
+  // Bernstein basis polynomial can be used to draw cubic Bézier curves
+  // B(t) = (1 - t)^3 * p0 + 3(1 - t)^2 * t * p1 + 3(1 - t) * t^2 * p2 + t^3 * p3
   const x =
-    Math.pow(1 - percentAcrossFullBezierCurve, 2) * source.x +
-    2 * (1 - percentAcrossFullBezierCurve) * percentAcrossFullBezierCurve * control.x +
-    Math.pow(percentAcrossFullBezierCurve, 2) * target.x;
+    Math.pow(1 - percentAcrossFullBezierCurve, 3) * source.x +
+    3 * Math.pow(1 - percentAcrossFullBezierCurve, 2) * percentAcrossFullBezierCurve * control1.x +
+    3 *
+      (1 - percentAcrossFullBezierCurve) *
+      Math.pow(percentAcrossFullBezierCurve, 2) *
+      control2.x +
+    Math.pow(percentAcrossFullBezierCurve, 3) * target.x;
   const y =
-    Math.pow(1 - percentAcrossFullBezierCurve, 2) * source.y +
-    2 * (1 - percentAcrossFullBezierCurve) * percentAcrossFullBezierCurve * control.y +
-    Math.pow(percentAcrossFullBezierCurve, 2) * target.y;
+    Math.pow(1 - percentAcrossFullBezierCurve, 3) * source.y +
+    3 * Math.pow(1 - percentAcrossFullBezierCurve, 2) * percentAcrossFullBezierCurve * control1.y +
+    3 *
+      (1 - percentAcrossFullBezierCurve) *
+      Math.pow(percentAcrossFullBezierCurve, 2) *
+      control2.y +
+    Math.pow(percentAcrossFullBezierCurve, 3) * target.y;
   return { x, y };
 }
 
@@ -66,7 +73,7 @@ function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control, 
  * @returns {number} return.x - X coordinate of intersection point
  * @returns {number} return.y - Y coordinate of intersection point
  */
-function findBezierBoxIntersection(source, control, target, boxWidth, boxHeight) {
+function findBezierBoxIntersection(source, control1, control2, target, boxWidth, boxHeight) {
   // Binary search to find intersection point
   // intersection = 0 is the start of the bezier curve, intersection = 1 is the end of the bezier curve
   // intersectionMin and intersectionMax define the current search interval for intersection
@@ -76,7 +83,7 @@ function findBezierBoxIntersection(source, control, target, boxWidth, boxHeight)
   // Complete 10 binary search iterations for sufficient precision
   for (let iteration = 0; iteration < 10; iteration++) {
     const intersectionMid = (intersectionMin + intersectionMax) / 2;
-    const point = getQuadraticBezierPoint(intersectionMid, source, control, target);
+    const point = getQuadraticBezierPoint(intersectionMid, source, control1, control2, target);
 
     // Check if point is inside the box
     const deltaX = Math.abs(point.x - target.x);
@@ -91,10 +98,10 @@ function findBezierBoxIntersection(source, control, target, boxWidth, boxHeight)
     }
   }
 
-  return getQuadraticBezierPoint(intersectionMax, source, control, target);
+  return getQuadraticBezierPoint(intersectionMax, source, control1, control2, target);
 }
 
-export function createPath(d) {
+export function createPath(d, width, height) {
   const sourceX = d.source.x + getNodeWidth(d.source) / 2;
   const sourceY = d.source.y + NODE_HEIGHT / 2;
   const targetX = d.target.x + getNodeWidth(d.target) / 2;
@@ -103,30 +110,122 @@ export function createPath(d) {
   const targetWidth = getNodeWidth(d.target);
   const targetHeight = NODE_HEIGHT;
 
-  // Calculate control point from source to target
+  // Calculate control points from source to target
+  let ux = targetX - sourceX;
+  let uy = targetY - sourceY;
+
+  const umagnitude = Math.sqrt(ux * ux + uy * uy);
+  let vx = -uy; // Perpendicular vector.
+  let vy = ux;
+  const vmagnitude = Math.sqrt(vx * vx + vy * vy);
+
+  ux /= umagnitude;
+  uy /= umagnitude;
+  vx /= vmagnitude;
+  vy /= vmagnitude;
+
+  // Check for vector direction.
+  // if (
+  //   (d.target.newX > d.source.x && d.target.newY > d.source.y) ||
+  //   (d.target.newX < d.source.x && d.target.newY < d.source.y)
+  // ) {
+  //   vx = -vx;
+  //   vy = -vy;
+  // }
+
+  // Calculate control points between nodes
+  const curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
+  const inlineOffset = Math.max(umagnitude / 4, curveToStraight);
+  const orthoOffset = Math.max(0, curveToStraight);
+
+  // Check if this is effectively a straight line since curve offset is small
+  // However, this values means that nodes are within 202 pixels of each other, so will need to adjust this
+  // When set orthOffset to 0, then creates issues with paths going through border of boudning box
+  const isStraightLine = orthoOffset < 0.5;
+
+  if (isStraightLine) {
+    const endPoint = straightLineBoxIntersection(
+      sourceX,
+      sourceY,
+      targetX,
+      targetY,
+      targetWidth,
+      targetHeight
+    );
+
+    return `M${sourceX},${sourceY} L${endPoint.x},${endPoint.y}`;
+  } else {
+    let cp1x = sourceX + inlineOffset * ux + vx * orthoOffset;
+    let cp1y = sourceY + inlineOffset * uy + vy * orthoOffset;
+    let cp2x = targetX - inlineOffset * ux + vx * orthoOffset;
+    let cp2y = targetY - inlineOffset * uy + vy * orthoOffset;
+
+    cp1x = Math.min(Math.max(0, cp1x), width);
+    cp1y = Math.min(Math.max(0, cp1y), height);
+    cp2x = Math.min(Math.max(0, cp2x), width);
+    cp2y = Math.min(Math.max(0, cp2y), height);
+
+    // Find where the curve intersects the perimeter of the target box
+    const intersection = findBezierBoxIntersection(
+      { x: sourceX, y: sourceY },
+      { x: cp1x, y: cp1y },
+      { x: cp2x, y: cp2y },
+      { x: targetX, y: targetY },
+      targetWidth,
+      targetHeight
+    );
+
+    // Create quadratic Bézier curve ending at the box perimeter
+    return `M${sourceX},${sourceY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${intersection.x},${intersection.y}`;
+  }
+}
+
+/**
+ * Calculate the intersection point of a straight line with a rectangle
+ * @param {number} x1 - Source x coordinate
+ * @param {number} y1 - Source y coordinate
+ * @param {number} x2 - Target x coordinate (center of target box)
+ * @param {number} y2 - Target y coordinate (center of target box)
+ * @param {number} boxWidth - Width of the target box
+ * @param {number} boxHeight - Height of the target box
+ * @returns {Object} Intersection point on box perimeter
+ * @returns {number} return.x - X coordinate of intersection
+ * @returns {number} return.y - Y coordinate of intersection
+ */
+function straightLineBoxIntersection(
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  targetWidth,
+  targetHeight
+) {
   const deltaX = targetX - sourceX;
   const deltaY = targetY - sourceY;
 
-  // Calculate distance between nodes
-  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  if (deltaX === 0 && deltaY === 0) {
+    return { x: targetX, y: targetY };
+  }
 
-  const curveToStraight = (distance - CURVE_THRESHOLD) / 4;
-  const curveFactor = distance < CURVE_THRESHOLD ? 0 : CURVE_FACTOR; // Normalize by distance. Curve factor gets closer to 0 as distance increases
+  const halfWidth = targetWidth / 2;
+  const halfHeight = targetHeight / 2;
+  // Calculate angle of approach
+  const angle = Math.atan2(deltaY, deltaX);
+  const tanAngle = Math.abs(Math.tan(angle));
 
-  const cx = (sourceX + targetX) / 2 - deltaY * curveFactor;
-  const cy = (sourceY + targetY) / 2 + deltaX * curveFactor;
+  let intersectX, intersectY;
 
-  // Find where the curve intersects the perimeter of the target box
-  const intersection = findBezierBoxIntersection(
-    { x: sourceX, y: sourceY },
-    { x: cx, y: cy },
-    { x: targetX, y: targetY },
-    targetWidth,
-    targetHeight
-  );
+  if (tanAngle < halfHeight / halfWidth) {
+    // Intersects with left or right edge
+    intersectX = targetX + (deltaX > 0 ? -halfWidth : halfWidth);
+    intersectY = targetY + (intersectX - targetX) * (deltaY / deltaX);
+  } else {
+    // Intersects with top or bottom edge
+    intersectY = targetY + (deltaY > 0 ? -halfHeight : halfHeight);
+    intersectX = targetX + (intersectY - targetY) * (deltaX / deltaY);
+  }
 
-  // Create quadratic Bézier curve ending at the box perimeter
-  return `M${sourceX},${sourceY} Q${cx},${cy} ${intersection.x},${intersection.y}`;
+  return { x: intersectX, y: intersectY };
 }
 
 export function createSelfLoop(d) {

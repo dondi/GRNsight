@@ -223,7 +223,7 @@ export default function Graph() {
         if (d.source === d.target) {
           return createSelfLoop(d);
         }
-        return createPath(d);
+        return createPath(d, width, height);
       });
 
       // Update node positions
