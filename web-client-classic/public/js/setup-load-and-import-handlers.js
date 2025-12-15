@@ -121,7 +121,58 @@ const returnUploadRoute = filename => {
     }
 };
 
+export const getAllGeneNames = workbook => (workbook.genes ?? []).map(g => g?.name).filter(Boolean);
+
+export const getTwoColumnSheetGenes = (workbook, sheetName) =>
+    Object.keys(workbook.twoColumnSheets?.[sheetName]?.data ?? {});
+
+export const computeMissingGenes = ({ allGenes, sheetGenes }) => {
+    const sheetSet = new Set(sheetGenes);
+    return allGenes.filter(g => !sheetSet.has(g));
+};
+
+export const buildTwoColumnWarnings = ({
+    workbook,
+    warnings,
+    twoColumnSheets = ["degradation_rates", "production_rates"],
+}) => {
+    const allGenes = getAllGeneNames(workbook);
+    const messages = [];
+
+    for (const sheetName of twoColumnSheets) {
+        const sheet = workbook.twoColumnSheets?.[sheetName];
+        if (!sheet) continue;
+
+        const sheetGenes = getTwoColumnSheetGenes(workbook, sheetName);
+        const missing = computeMissingGenes({ allGenes, sheetGenes });
+        if (missing.length === 0) continue;
+
+        const missingStr = missing.join(", ");
+        if (sheetName === "degradation_rates") {
+            messages.push(warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(missingStr));
+        } else if (sheetName === "production_rates") {
+            messages.push(warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(missingStr));
+        }
+    }
+
+    return messages;
+};
+
+export const buildWarningsWhenSheetMissing = ({ workbook, warnings }) => {
+    const allGenesStr = getAllGeneNames(workbook).join(", ");
+    return [
+        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(allGenesStr),
+        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(allGenesStr),
+    ];
+};
+
 export const setupLoadAndImportHandlers = grnState => {
+    const applyWarnings = (workbook, msgs) => {
+        if (!msgs.length) return;
+        workbook.warnings.push(...msgs);
+        displayExportWarnings(workbook.warnings);
+    };
+
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
         grnState.workbookType = uploadRoute;
@@ -158,56 +209,11 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
 
-                let warningMessages = [];
-                if (grnState.workbook.twoColumnSheets) {
-                    const twoColumnSheets = ["degradation_rates", "production_rates"];
+                const warningMessages = workbook.twoColumnSheets
+                    ? buildTwoColumnWarnings({ workbook, warnings })
+                    : buildWarningsWhenSheetMissing({ workbook, warnings });
 
-                    // Check for missing genes in two-column sheets
-                    twoColumnSheets.forEach(sheetName => {
-                        if (grnState.workbook.twoColumnSheets[sheetName]) {
-                            const sheetGenes = Object.keys(
-                                grnState.workbook.twoColumnSheets[sheetName].data
-                            );
-
-                            const allGenes = grnState.workbook.genes.map(gene => gene.name);
-                            console.log("All Genes", allGenes);
-                            const missing = allGenes.filter(gene => !sheetGenes.includes(gene));
-                            if (missing.length > 0) {
-                                const missingGenesStr = missing.join(", ");
-                                if (sheetName === "degradation_rates") {
-                                    warningMessages.push(
-                                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(
-                                            missingGenesStr
-                                        )
-                                    );
-                                } else if (sheetName === "production_rates") {
-                                    warningMessages.push(
-                                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(
-                                            missingGenesStr
-                                        )
-                                    );
-                                }
-                            }
-                        }
-                    });
-                } else {
-                    const allGenes = grnState.workbook.genes;
-                    const missingGenesStr = allGenes.join(", ");
-                    warningMessages.push(
-                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(missingGenesStr)
-                    );
-                    warningMessages.push(
-                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(missingGenesStr)
-                    );
-                }
-
-                if (warningMessages.length > 0) {
-                    for (let warningMessage of warningMessages) {
-                        grnState.workbook.warnings.push(warningMessage);
-                    }
-
-                    displayExportWarnings(grnState.workbook.warnings);
-                }
+                applyWarnings(workbook, warningMessages);
 
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
