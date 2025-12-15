@@ -50,6 +50,30 @@ def copy_to_staging_then_upsert(
     update_cols: list[str] | None,
     select_exprs: list[str] | None = None,
 ):
+    """
+    Loads data from a source file into a temporary staging table, then inserts or upserts the data into a target table.
+    This function is intended for bulk loading data into a database using SQL statements. It first creates a temporary
+    staging table with the specified columns, loads data from the given source file (tab-delimited), and then inserts
+    the data into the target table. If conflict columns are specified, it performs an upsert (insert or update on conflict).
+    Parameters:
+        staging_table (str): Name of the temporary staging table to create.
+        target_table (str): Name of the target table to insert/upsert data into.
+        columns (list[str]): List of column names for both the staging and target tables.
+        source_path (str): Path to the source file containing data to load (tab-delimited, with header).
+        conflict_cols (list[str] | None): List of columns to check for conflicts (used in ON CONFLICT clause).
+            If None, a simple insert is performed with no conflict handling.
+        update_cols (list[str] | None): List of columns to update if a conflict occurs. If provided, an upsert is performed
+            (ON CONFLICT DO UPDATE SET ...). If None, conflicts are ignored (ON CONFLICT DO NOTHING).
+        select_exprs (list[str] | None): Optional list of SQL expressions to use in the SELECT statement when inserting
+            from the staging table. If None, all columns are selected as-is.
+    Behavior:
+        - Creates a temporary staging table with all columns as text.
+        - Loads data from the source file into the staging table using COPY.
+        - If conflict_cols is None, performs a simple INSERT INTO target_table SELECT ... FROM staging_table.
+        - If conflict_cols is provided and update_cols is provided, performs an upsert (ON CONFLICT DO UPDATE SET ...).
+        - If conflict_cols is provided and update_cols is None, performs an insert with ON CONFLICT DO NOTHING.
+        - select_exprs can be used to transform or cast columns during the insert/upsert.
+    """
     cols_sql = ", ".join([f"{c} text" for c in columns])
     print(f"CREATE TEMP TABLE {staging_table} ({cols_sql});")
 
