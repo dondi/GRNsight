@@ -10,6 +10,7 @@ import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 import { displayExportWarnings } from "./warnings.js";
 import { warnings } from "./export-constants.js";
+import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
@@ -384,6 +385,7 @@ export const upload = function () {
                 (finalExportSheets.two_column_sheets[x] &&
                     Object.keys(finalExportSheets.two_column_sheets[x].data).length === 0)
         );
+        console.log("Two column Query Sheets", twoColumnQuerySheets);
         if (twoColumnQuerySheets.length > 0) {
             // if we need to query production rates and degradation rates
             for (let sheet of twoColumnQuerySheets) {
@@ -392,6 +394,7 @@ export const upload = function () {
                     (finalExportSheets.two_column_sheets[sheet] &&
                         Object.keys(finalExportSheets.two_column_sheets[sheet].data).length === 0)
                 ) {
+                    console.log("FinalExportSheets", finalExportSheets);
                     let result = {
                         data: {},
                         errors: [],
@@ -402,6 +405,8 @@ export const upload = function () {
                         genes.push(g.name);
                     }
 
+                    console.log("Querying for sheet: ", sheet);
+                    console.log("Genes", genes);
                     queryExpressionDatabase({
                         type: twoColumnSheetType[sheet],
                         genes: grnState.workbook.genes
@@ -413,33 +418,63 @@ export const upload = function () {
                         .then(function (response) {
                             result.data = response;
 
-                            const missingGenes = genes.filter(
-                                gene => result.data[gene] === undefined
-                            );
+                            // const missingGenes = genes.filter(
+                            //     gene => result.data[gene] === undefined
+                            // );
 
-                            if (missingGenes.length > 0) {
-                                const missingGenesStr = missingGenes.join(", ");
+                            // if (missingGenes.length > 0) {
+                            //     const missingGenesStr = missingGenes.join(", ");
 
-                                const warningGenerators = {
-                                    production_rates:
-                                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
-                                    degradation_rates:
-                                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING,
-                                };
+                            //     const warningGenerators = {
+                            //         production_rates:
+                            //             warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
+                            //         degradation_rates:
+                            //             warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING,
+                            //     };
 
-                                const warningGenerator = warningGenerators[sheet];
-                                if (warningGenerator) {
-                                    finalExportSheets.warnings.push(
-                                        warningGenerator(missingGenesStr)
-                                    );
-                                }
-                            }
+                            //     const warningGenerator = warningGenerators[sheet];
+                            //     if (warningGenerator) {
+                            //         finalExportSheets.warnings.push(
+                            //             warningGenerator(missingGenesStr)
+                            //         );
+                            //     }
+                            // }
 
+                            // finalExportSheets.two_column_sheets[sheet] = result;
+                            // if (
+                            //     !Object.values(finalExportSheets.two_column_sheets).includes(null)
+                            // ) {
+                            //     // if we got all of the two column sheets, then proceed with export
+                            //     handleExpressionDataAndExport(
+                            //         route,
+                            //         extension,
+                            //         sheetType,
+                            //         source,
+                            //         finalExportSheets
+                            //     );
+                            // }
+                            console.log("Result.data", result.data);
                             finalExportSheets.two_column_sheets[sheet] = result;
+
+
                             if (
                                 !Object.values(finalExportSheets.two_column_sheets).includes(null)
                             ) {
-                                // if we got all of the two column sheets, then proceed with export
+                                console.log("All two column sheets are present");
+                                const exportWorkbookView = {
+                                    genes: grnState.workbook.genes,
+                                    twoColumnSheets: finalExportSheets.two_column_sheets,
+                                };
+
+                                const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+                                    exportWorkbookView,
+                                    warnings
+                                );
+                                console.log("Export Warnings: ", exportWarnings);
+                                finalExportSheets.warnings.push(...exportWarnings);
+
+                                console.log("Process with export");
+                                // Proceed with export
                                 handleExpressionDataAndExport(
                                     route,
                                     extension,
@@ -454,6 +489,22 @@ export const upload = function () {
             }
         } else {
             // you already have all of your two column sheet, so move through expressi5on
+            // handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
+
+            console.log("You have all of your two column sheets already");
+            const exportWorkbookView = {
+                genes: grnState.workbook.genes,
+                twoColumnSheets: finalExportSheets.two_column_sheets,
+            };
+
+            const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+                exportWorkbookView,
+                warnings
+            );
+            finalExportSheets.warnings.push(...exportWarnings);
+            console.log("Export Warinings: ", exportWarnings);
+            console.log("Process with export");
+
             handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
         }
     };

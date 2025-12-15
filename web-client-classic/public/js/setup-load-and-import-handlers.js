@@ -28,6 +28,7 @@ const demoFiles = [
 
 import { displayExportWarnings } from "./warnings.js";
 import { warnings } from "./export-constants.js";
+import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
 
 const submittedFilename = $upload => {
     let path = $upload.val();
@@ -121,51 +122,6 @@ const returnUploadRoute = filename => {
     }
 };
 
-export const getAllGeneNames = workbook => (workbook.genes ?? []).map(g => g?.name).filter(Boolean);
-
-export const getTwoColumnSheetGenes = (workbook, sheetName) =>
-    Object.keys(workbook.twoColumnSheets?.[sheetName]?.data ?? {});
-
-export const computeMissingGenes = ({ allGenes, sheetGenes }) => {
-    const sheetSet = new Set(sheetGenes);
-    return allGenes.filter(g => !sheetSet.has(g));
-};
-
-export const buildTwoColumnWarnings = ({
-    workbook,
-    warnings,
-    twoColumnSheets = ["degradation_rates", "production_rates"],
-}) => {
-    const allGenes = getAllGeneNames(workbook);
-    const messages = [];
-
-    for (const sheetName of twoColumnSheets) {
-        const sheet = workbook.twoColumnSheets?.[sheetName];
-        if (!sheet) continue;
-
-        const sheetGenes = getTwoColumnSheetGenes(workbook, sheetName);
-        const missing = computeMissingGenes({ allGenes, sheetGenes });
-        if (missing.length === 0) continue;
-
-        const missingStr = missing.join(", ");
-        if (sheetName === "degradation_rates") {
-            messages.push(warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(missingStr));
-        } else if (sheetName === "production_rates") {
-            messages.push(warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(missingStr));
-        }
-    }
-
-    return messages;
-};
-
-export const buildWarningsWhenSheetMissing = ({ workbook, warnings }) => {
-    const allGenesStr = getAllGeneNames(workbook).join(", ");
-    return [
-        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(allGenesStr),
-        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(allGenesStr),
-    ];
-};
-
 export const setupLoadAndImportHandlers = grnState => {
     const applyWarnings = (workbook, msgs) => {
         if (!msgs.length) return;
@@ -209,9 +165,10 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
 
-                const warningMessages = workbook.twoColumnSheets
-                    ? buildTwoColumnWarnings({ workbook, warnings })
-                    : buildWarningsWhenSheetMissing({ workbook, warnings });
+                const warningMessages = buildWorkbookTwoColumnMissingGenesWarnings(
+                    workbook,
+                    warnings
+                );
 
                 applyWarnings(workbook, warningMessages);
 
