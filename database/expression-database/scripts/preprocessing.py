@@ -212,4 +212,4 @@ if __name__ == "__main__":
         if args.all or args.prod:
             genes = process_production_rates(source_dir, genes)
 
-    write_genes(genes)
+        write_genes(genes)
