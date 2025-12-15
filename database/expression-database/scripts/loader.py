@@ -41,102 +41,151 @@ Created out of necessity
 def convert_int(potential_int):
     return int("".join(potential_int.split()).replace(" ", "")) if check_int("".join(potential_int.split()).replace(" ", "")) else -1111111
 
+def copy_to_staging_then_upsert(
+    staging_table: str,
+    target_table: str,
+    columns: list[str],
+    source_path: str,
+    conflict_cols: list[str] | None,
+    update_cols: list[str] | None,
+    select_exprs: list[str] | None = None,
+):
+    cols_sql = ", ".join([f"{c} text" for c in columns])
+    print(f"CREATE TEMP TABLE {staging_table} ({cols_sql});")
+
+    col_list = ", ".join(columns)
+    print(f"COPY {staging_table} ({col_list}) FROM STDIN WITH (FORMAT text);")
+
+    with open(source_path, "r", newline="") as f:
+        reader = csv.reader(f, delimiter="\t")
+        next(reader, None)
+
+        for row in reader:
+            print("\t".join(row))
+    print("\\.")
+
+    select_sql = col_list if select_exprs is None else ", ".join(select_exprs)
+
+    # If no possible conflicts, do a straight insert
+    if conflict_cols is None:
+        print(f"""
+            INSERT INTO {target_table} ({col_list})
+            SELECT {select_sql} FROM {staging_table};
+            """
+        )
+        return
+
+    # If there are possible updates, do an upsert
+    # else do insert on conflict do nothing
+    conflict = ", ".join(conflict_cols)
+    if update_cols:
+        set_sql = ", ".join([f"{c} = EXCLUDED.{c}" for c in update_cols])
+        print(f"""
+            INSERT INTO {target_table} ({col_list})
+            SELECT {select_sql} FROM {staging_table}
+            ON CONFLICT ({conflict}) DO UPDATE SET {set_sql};
+            """
+        )
+    else:
+        print(f"""
+            INSERT INTO {target_table} ({col_list})
+            SELECT {select_sql} FROM {staging_table}
+            ON CONFLICT ({conflict}) DO NOTHING;
+            """
+        )
+
 
 """
 This program Loads Refs into the database
 """
 def LOAD_REFS():
-    print('COPY gene_expression.ref (pubmed_id, authors, publication_year, title, doi, ncbi_geo_id) FROM stdin;')
-    REFS_SOURCE = '../script-results/processed-expression/refs.csv'
-    with open(REFS_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                pubmed_id = r[0]
-                authors = r[1]
-                publication_year = r[2]
-                title = r[3]
-                doi = r[4]
-                ncbi_geo_id = r[5]
-                print(f'{pubmed_id}\t{authors}\t{publication_year}\t{title}\t{doi}\t{ncbi_geo_id}')
-            row_num += 1
-    print('\\.')
+    copy_to_staging_then_upsert(
+        staging_table="staging_refs",
+        target_table="gene_expression.ref",
+        columns=["pubmed_id", "authors", "publication_year", "title", "doi", "ncbi_geo_id"],
+        source_path="../script-results/processed-expression/refs.csv",
+        conflict_cols=["ncbi_geo_id", "pubmed_id"],
+        update_cols=["authors", "publication_year", "title", "doi"]
+    )
 
 
 """
 This program Loads ID Mapping into the database
 """
 def LOAD_GENES():
-    print('COPY gene_expression.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
-    GENE_SOURCE = '../script-results/processed-expression/genes.csv'
-    with open(GENE_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                gene_id = r[0]
-                display_gene_id= r[1]
-                species = r[2]
-                taxon_id = r[3]
-                print(f'{gene_id}\t{display_gene_id}\t{species}\t{taxon_id}')
-            row_num += 1
-    print('\\.')
+    copy_to_staging_then_upsert(
+        staging_table="staging_genes",
+        target_table="gene_expression.gene",
+        columns=["gene_id", "display_gene_id", "species", "taxon_id"],
+        source_path="../script-results/processed-expression/genes.csv",
+        conflict_cols=["gene_id", "taxon_id"],
+        update_cols=["display_gene_id", "species"],
+        select_exprs=[
+            "NULLIF(gene_id,'')",
+            "NULLIF(display_gene_id,'')",
+            "NULLIF(species,'')",
+            "NULLIF(taxon_id,'')",
+        ],
+    )
 
 """
 This program Loads Expression Metadata into the database
 """
 def LOAD_EXPRESSION_METADATA():
-    print('COPY gene_expression.expression_metadata (ncbi_geo_id, pubmed_id, control_yeast_strain, treatment_yeast_strain, control, treatment, concentration_value, concentration_unit, time_value, time_unit, number_of_replicates, expression_table) FROM stdin;')
-    EXPRESSION_METADATA_SOURCE = '../script-results/processed-expression/expression-metadata.csv'
-    with open(EXPRESSION_METADATA_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                ncbi_geo_id = r[0]
-                pubmed_id =r[1]
-                control_yeast_strain = r[2]
-                treatment_yeast_strain = r[3]
-                control = r[4]
-                treatment = r[5]
-                concentration_value = float(r[6])
-                concentration_unit = r[7]
-                time_value = float(r[8])
-                time_unit = r[9]
-                number_of_replicates = int(r[10])
-                expression_table = r[11]
+    copy_to_staging_then_upsert(
+        staging_table="staging_expr_meta",
+        target_table="gene_expression.expression_metadata",
+        columns=[
+            "ncbi_geo_id","pubmed_id","control_yeast_strain","treatment_yeast_strain",
+            "control","treatment","concentration_value","concentration_unit",
+            "time_value","time_unit","number_of_replicates","expression_table"
+        ],
+        source_path="../script-results/processed-expression/expression-metadata.csv",
+        conflict_cols=["ncbi_geo_id","pubmed_id","time_value"],
+        update_cols=[
+            "control_yeast_strain","treatment_yeast_strain","control","treatment",
+            "concentration_value","concentration_unit","time_unit","number_of_replicates",
+            "expression_table"
+        ],
+        select_exprs=[
+            "NULLIF(ncbi_geo_id,'')",
+            "NULLIF(pubmed_id,'')",
+            "NULLIF(control_yeast_strain,'')",
+            "NULLIF(treatment_yeast_strain,'')",
+            "NULLIF(control,'')",
+            "NULLIF(treatment,'')",
+            "NULLIF(NULLIF(concentration_value,''),'NaN')::double precision",
+            "NULLIF(concentration_unit,'')",
+            "NULLIF(NULLIF(time_value,''),'NaN')::double precision",
+            "NULLIF(time_unit,'')",
+            "NULLIF(number_of_replicates,'')::int",
+            "NULLIF(expression_table,'')"
+        ],
+    )
 
-                print(f'{ncbi_geo_id}\t{pubmed_id}\t{control_yeast_strain}\t{treatment_yeast_strain}\t{control}\t{treatment}\t{concentration_value}\t{concentration_unit}\t{time_value}\t{time_unit}\t{number_of_replicates}\t{expression_table}')
-            row_num += 1
-    print('\\.')
 
 """
 This program Loads Expression Data into the database
 """
 def LOAD_EXPRESSION_DATA():
-    print('COPY gene_expression.expression (gene_id, taxon_id, sort_index, sample_id, expression, time_point, dataset) FROM stdin;')
-    EXPRESSION_DATA_SOURCE = '../script-results/processed-expression/expression-data.csv'
-    with open(EXPRESSION_DATA_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                gene_id = r[0]
-                taxon_id = r[1]
-                sort_index = int(r[2])
-                sample_id = r[3]
-                expression = float(r[4]) if r[4] != "" else "NaN"
+    copy_to_staging_then_upsert(
+        staging_table="staging_expr",
+        target_table="gene_expression.expression",
+        columns=["gene_id","taxon_id","sort_index","sample_id","expression","time_point","dataset"],
+        source_path="../script-results/processed-expression/expression-data.csv",
+        conflict_cols=["gene_id","sample_id"],
+        update_cols=["taxon_id","sort_index","expression","time_point","dataset"],
+        select_exprs=[
+            "NULLIF(gene_id,'')",
+            "NULLIF(taxon_id,'')",
+            "NULLIF(sort_index,'')::int",
+            "NULLIF(sample_id,'')",
+            "NULLIF(NULLIF(expression,''),'NaN')::double precision",
+            "NULLIF(NULLIF(time_point,''),'NaN')::double precision",
+            "NULLIF(dataset,'')",
+        ],
+    )
 
-                time_point = float(r[5])
-                data_set = r[6]
-                print(f'{gene_id}\t{taxon_id}\t{sort_index}\t{sample_id}\t{expression}\t{time_point}\t{data_set}')
-            row_num += 1
-    print('\\.')
 
 """
 This program Loads Production Rates into the database
