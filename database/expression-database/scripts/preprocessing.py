@@ -140,6 +140,7 @@ def process_degradation_rates(source_dir, genes):
 
     header = "Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tDegradation Rate"
     write_to_file(dst, header, degradation)
+    return genes
 
 def process_production_rates(source_dir, genes):
     src = os.path.join(source_dir, 'ProductionRates.csv')
@@ -164,6 +165,7 @@ def process_production_rates(source_dir, genes):
 
     header = "Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tProduction Rate"
     write_to_file(dst, header, production)
+    return genes
 
 def write_genes(genes):
     dst = f"{BASE_OUT}/genes.csv"
@@ -183,40 +185,31 @@ if __name__ == "__main__":
     parser.add_argument("--refs", action="store_true", help="Generate refs file.")
     parser.add_argument("--prod", action="store_true", help="Process production rates.")
     parser.add_argument("--deg", action="store_true", help="Process degradation rates.")
-    parser.add_argument("--genes", action="store_true", help="Write genes file.")
     parser.add_argument("--source_folder", type=str, default="Expression 2020",
                         help="Folder in source-files folder containing source CSV files.")
 
     args = parser.parse_args()
     source_dir = os.path.join("../source-files", args.source_folder)
     # Default: run all if no flags used
-    if not any(vars(args).values()):
+    if not any([args.expr, args.meta, args.refs, args.prod, args.deg, args.all]):
         args.all = True
 
+
     ensure_dirs()
-
-    genes = {}
-
-    # Expression data must run first if other modules need gene list
-    if args.all or args.expr:
-        genes = process_expression_data(source_dir)
+    
+    if args.all or args.refs:
+        process_refs()
+    
     if args.all or args.meta:
         process_expression_metadata(source_dir)
 
-    if args.all or args.refs:
-        process_refs()
+    if args.all or args.expr or args.prod or args.deg:
+        genes = process_expression_data(source_dir)
 
-    if args.all or args.deg:
-        if not genes:
-            genes = process_expression_data(source_dir)
-        process_degradation_rates(source_dir, genes)
+        if args.all or args.deg:
+            genes = process_degradation_rates(source_dir, genes)
 
-    if args.all or args.prod:
-        if not genes:
-            genes = process_expression_data(source_dir)
-        process_production_rates(source_dir, genes)
+        if args.all or args.prod:
+            genes = process_production_rates(source_dir, genes)
 
-    if args.all or args.genes:
-        if not genes:
-            genes = process_expression_data(source_dir)
-        write_genes(genes)
+    write_genes(genes)

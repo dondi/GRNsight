@@ -64,6 +64,7 @@ def LOAD_REFS():
             row_num += 1
     print('\\.')
 
+
 """
 This program Loads ID Mapping into the database
 """
@@ -185,12 +186,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Load expression data into the database.")
     
     load_actions = {
-        "expr": (LOAD_EXPRESSION_DATA, "Load expression data into the database."),
-        "meta": (LOAD_EXPRESSION_METADATA, "Load expression metadata into the database."),
         "refs": (LOAD_REFS, "Load references into the database."),
+        "genes": (LOAD_GENES, "Load gene ID mappings into the database."),
+        "meta": (LOAD_EXPRESSION_METADATA, "Load expression metadata into the database."),
+        "expr": (LOAD_EXPRESSION_DATA, "Load expression data into the database."),
         "prod": (LOAD_PRODUCTION_RATES, "Load production rates into the database."),
         "deg": (LOAD_DEGRADATION_RATES, "Load degradation rates into the database."),
-        "genes": (LOAD_GENES, "Load gene ID mappings into the database."),
     }
 
     parser.add_argument("--all", action="store_true", help="Load all data into the database.")
@@ -205,6 +206,9 @@ if __name__ == "__main__":
     if not any(args_dict.values()):
         args.all = True
 
+    # Always make the genes load first if asking for expression, production, or degradation
+    if args.all or args.expr or args.prod or args.deg:
+        args.genes = True
     for flag, _ in load_actions.items():
         if args.all or args_dict.get(flag):
             load_actions[flag][0]()
