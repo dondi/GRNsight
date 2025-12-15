@@ -26,6 +26,9 @@ const demoFiles = [
     PPI_DEMO_PATH,
 ];
 
+import { displayExportWarnings } from "./warnings.js";
+import { warnings } from "./export-constants.js";
+
 const submittedFilename = $upload => {
     let path = $upload.val();
     let fakePathCheck = path.search("\\\\") + 1;
@@ -154,6 +157,58 @@ export const setupLoadAndImportHandlers = grnState => {
                     grnState.mode = workbook.meta.data.workbookType;
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
+
+                let warningMessages = [];
+                if (grnState.workbook.twoColumnSheets) {
+                    const twoColumnSheets = ["degradation_rates", "production_rates"];
+
+                    // Check for missing genes in two-column sheets
+                    twoColumnSheets.forEach(sheetName => {
+                        if (grnState.workbook.twoColumnSheets[sheetName]) {
+                            const sheetGenes = Object.keys(
+                                grnState.workbook.twoColumnSheets[sheetName].data
+                            );
+
+                            const allGenes = grnState.workbook.genes.map(gene => gene.name);
+                            console.log("All Genes", allGenes);
+                            const missing = allGenes.filter(gene => !sheetGenes.includes(gene));
+                            if (missing.length > 0) {
+                                const missingGenesStr = missing.join(", ");
+                                if (sheetName === "degradation_rates") {
+                                    warningMessages.push(
+                                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(
+                                            missingGenesStr
+                                        )
+                                    );
+                                } else if (sheetName === "production_rates") {
+                                    warningMessages.push(
+                                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(
+                                            missingGenesStr
+                                        )
+                                    );
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    const allGenes = grnState.workbook.genes;
+                    const missingGenesStr = allGenes.join(", ");
+                    warningMessages.push(
+                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING(missingGenesStr)
+                    );
+                    warningMessages.push(
+                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING(missingGenesStr)
+                    );
+                }
+
+                if (warningMessages.length > 0) {
+                    for (let warningMessage of warningMessages) {
+                        grnState.workbook.warnings.push(warningMessage);
+                    }
+
+                    displayExportWarnings(grnState.workbook.warnings);
+                }
+
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }
