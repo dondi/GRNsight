@@ -341,11 +341,6 @@ html {
     z-index: 999;
 }
 
-.cookie-action-container {
-    display: flex;
-    justify-content: space-between;
-}
-
 .cookie-action {
     background: none;
     border: none;
