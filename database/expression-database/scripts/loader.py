@@ -41,101 +41,175 @@ Created out of necessity
 def convert_int(potential_int):
     return int("".join(potential_int.split()).replace(" ", "")) if check_int("".join(potential_int.split()).replace(" ", "")) else -1111111
 
+def copy_to_staging_then_upsert(
+    staging_table: str,
+    target_table: str,
+    columns: list[str],
+    source_path: str,
+    conflict_cols: list[str] | None,
+    update_cols: list[str] | None,
+    select_exprs: list[str] | None = None,
+):
+    """
+    Loads data from a source file into a temporary staging table, then inserts or upserts the data into a target table.
+    This function is intended for bulk loading data into a database using SQL statements. It first creates a temporary
+    staging table with the specified columns, loads data from the given source file (tab-delimited), and then inserts
+    the data into the target table. If conflict columns are specified, it performs an upsert (insert or update on conflict).
+    Parameters:
+        staging_table (str): Name of the temporary staging table to create.
+        target_table (str): Name of the target table to insert/upsert data into.
+        columns (list[str]): List of column names for both the staging and target tables.
+        source_path (str): Path to the source file containing data to load (tab-delimited, with header).
+        conflict_cols (list[str] | None): List of columns to check for conflicts (used in ON CONFLICT clause).
+            If None, a simple insert is performed with no conflict handling.
+        update_cols (list[str] | None): List of columns to update if a conflict occurs. If provided, an upsert is performed
+            (ON CONFLICT DO UPDATE SET ...). If None, conflicts are ignored (ON CONFLICT DO NOTHING).
+        select_exprs (list[str] | None): Optional list of SQL expressions to use in the SELECT statement when inserting
+            from the staging table. If None, all columns are selected as-is.
+    Behavior:
+        - Creates a temporary staging table with all columns as text.
+        - Loads data from the source file into the staging table using COPY.
+        - If conflict_cols is None, performs a simple INSERT INTO target_table SELECT ... FROM staging_table.
+        - If conflict_cols is provided and update_cols is provided, performs an upsert (ON CONFLICT DO UPDATE SET ...).
+        - If conflict_cols is provided and update_cols is None, performs an insert with ON CONFLICT DO NOTHING.
+        - select_exprs can be used to transform or cast columns during the insert/upsert.
+    """
+    cols_sql = ", ".join([f"{c} text" for c in columns])
+    print(f"CREATE TEMP TABLE {staging_table} ({cols_sql});")
+
+    col_list = ", ".join(columns)
+    print(f"COPY {staging_table} ({col_list}) FROM STDIN WITH (FORMAT text);")
+
+    with open(source_path, "r", newline="") as f:
+        reader = csv.reader(f, delimiter="\t")
+        next(reader, None)
+
+        for row in reader:
+            print("\t".join(row))
+    print("\\.")
+
+    select_sql = col_list if select_exprs is None else ", ".join(select_exprs)
+
+    # If no possible conflicts, do a straight insert
+    if conflict_cols is None:
+        print(f"""
+            INSERT INTO {target_table} ({col_list})
+            SELECT {select_sql} FROM {staging_table};
+            """
+        )
+        return
+
+    # If there are possible updates, do an upsert
+    # else do insert on conflict do nothing
+    conflict = ", ".join(conflict_cols)
+    if update_cols:
+        set_sql = ", ".join([f"{c} = EXCLUDED.{c}" for c in update_cols])
+        print(f"""
+            INSERT INTO {target_table} ({col_list})
+            SELECT {select_sql} FROM {staging_table}
+            ON CONFLICT ({conflict}) DO UPDATE SET {set_sql};
+            """
+        )
+    else:
+        print(f"""
+            INSERT INTO {target_table} ({col_list})
+            SELECT {select_sql} FROM {staging_table}
+            ON CONFLICT ({conflict}) DO NOTHING;
+            """
+        )
+
 
 """
 This program Loads Refs into the database
 """
 def LOAD_REFS():
-    print('COPY gene_expression.ref (pubmed_id, authors, publication_year, title, doi, ncbi_geo_id) FROM stdin;')
-    REFS_SOURCE = '../script-results/processed-expression/refs.csv'
-    with open(REFS_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                pubmed_id = r[0]
-                authors = r[1]
-                publication_year = r[2]
-                title = r[3]
-                doi = r[4]
-                ncbi_geo_id = r[5]
-                print(f'{pubmed_id}\t{authors}\t{publication_year}\t{title}\t{doi}\t{ncbi_geo_id}')
-            row_num += 1
-    print('\\.')
+    copy_to_staging_then_upsert(
+        staging_table="staging_refs",
+        target_table="gene_expression.ref",
+        columns=["pubmed_id", "authors", "publication_year", "title", "doi", "ncbi_geo_id"],
+        source_path="../script-results/processed-expression/refs.csv",
+        conflict_cols=["ncbi_geo_id", "pubmed_id"],
+        update_cols=["authors", "publication_year", "title", "doi"]
+    )
+
 
 """
 This program Loads ID Mapping into the database
 """
 def LOAD_GENES():
-    print('COPY gene_expression.gene (gene_id, display_gene_id, species, taxon_id) FROM stdin;')
-    GENE_SOURCE = '../script-results/processed-expression/genes.csv'
-    with open(GENE_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                gene_id = r[0]
-                display_gene_id= r[1]
-                species = r[2]
-                taxon_id = r[3]
-                print(f'{gene_id}\t{display_gene_id}\t{species}\t{taxon_id}')
-            row_num += 1
-    print('\\.')
+    copy_to_staging_then_upsert(
+        staging_table="staging_genes",
+        target_table="gene_expression.gene",
+        columns=["gene_id", "display_gene_id", "species", "taxon_id"],
+        source_path="../script-results/processed-expression/genes.csv",
+        conflict_cols=["gene_id", "taxon_id"],
+        update_cols=["display_gene_id", "species"],
+        select_exprs=[
+            "NULLIF(gene_id,'')",
+            "NULLIF(display_gene_id,'')",
+            "NULLIF(species,'')",
+            "NULLIF(taxon_id,'')",
+        ],
+    )
 
 """
 This program Loads Expression Metadata into the database
 """
 def LOAD_EXPRESSION_METADATA():
-    print('COPY gene_expression.expression_metadata (ncbi_geo_id, pubmed_id, control_yeast_strain, treatment_yeast_strain, control, treatment, concentration_value, concentration_unit, time_value, time_unit, number_of_replicates, expression_table) FROM stdin;')
-    EXPRESSION_METADATA_SOURCE = '../script-results/processed-expression/expression-metadata.csv'
-    with open(EXPRESSION_METADATA_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                ncbi_geo_id = r[0]
-                pubmed_id =r[1]
-                control_yeast_strain = r[2]
-                treatment_yeast_strain = r[3]
-                control = r[4]
-                treatment = r[5]
-                concentration_value = float(r[6])
-                concentration_unit = r[7]
-                time_value = float(r[8])
-                time_unit = r[9]
-                number_of_replicates = int(r[10])
-                expression_table = r[11]
+    copy_to_staging_then_upsert(
+        staging_table="staging_expr_meta",
+        target_table="gene_expression.expression_metadata",
+        columns=[
+            "ncbi_geo_id","pubmed_id","control_yeast_strain","treatment_yeast_strain",
+            "control","treatment","concentration_value","concentration_unit",
+            "time_value","time_unit","number_of_replicates","expression_table"
+        ],
+        source_path="../script-results/processed-expression/expression-metadata.csv",
+        conflict_cols=["ncbi_geo_id","pubmed_id","time_value"],
+        update_cols=[
+            "control_yeast_strain","treatment_yeast_strain","control","treatment",
+            "concentration_value","concentration_unit","time_unit","number_of_replicates",
+            "expression_table"
+        ],
+        select_exprs=[
+            "NULLIF(ncbi_geo_id,'')",
+            "NULLIF(pubmed_id,'')",
+            "NULLIF(control_yeast_strain,'')",
+            "NULLIF(treatment_yeast_strain,'')",
+            "NULLIF(control,'')",
+            "NULLIF(treatment,'')",
+            "NULLIF(NULLIF(concentration_value,''),'NaN')::double precision",
+            "NULLIF(concentration_unit,'')",
+            "NULLIF(NULLIF(time_value,''),'NaN')::double precision",
+            "NULLIF(time_unit,'')",
+            "NULLIF(number_of_replicates,'')::int",
+            "NULLIF(expression_table,'')"
+        ],
+    )
 
-                print(f'{ncbi_geo_id}\t{pubmed_id}\t{control_yeast_strain}\t{treatment_yeast_strain}\t{control}\t{treatment}\t{concentration_value}\t{concentration_unit}\t{time_value}\t{time_unit}\t{number_of_replicates}\t{expression_table}')
-            row_num += 1
-    print('\\.')
 
 """
 This program Loads Expression Data into the database
 """
 def LOAD_EXPRESSION_DATA():
-    print('COPY gene_expression.expression (gene_id, taxon_id, sort_index, sample_id, expression, time_point, dataset) FROM stdin;')
-    EXPRESSION_DATA_SOURCE = '../script-results/processed-expression/expression-data.csv'
-    with open(EXPRESSION_DATA_SOURCE, 'r+') as f:
-        reader = csv.reader(f)
-        row_num = 0
-        for row in reader:
-            if row_num != 0:
-                r=  ','.join(row).split('\t')
-                gene_id = r[0]
-                taxon_id = r[1]
-                sort_index = int(r[2])
-                sample_id = r[3]
-                expression = float(r[4]) if r[4] != "" else "NaN"
+    copy_to_staging_then_upsert(
+        staging_table="staging_expr",
+        target_table="gene_expression.expression",
+        columns=["gene_id","taxon_id","sort_index","sample_id","expression","time_point","dataset"],
+        source_path="../script-results/processed-expression/expression-data.csv",
+        conflict_cols=["gene_id","sample_id"],
+        update_cols=["taxon_id","sort_index","expression","time_point","dataset"],
+        select_exprs=[
+            "NULLIF(gene_id,'')",
+            "NULLIF(taxon_id,'')",
+            "NULLIF(sort_index,'')::int",
+            "NULLIF(sample_id,'')",
+            "NULLIF(NULLIF(expression,''),'NaN')::double precision",
+            "NULLIF(NULLIF(time_point,''),'NaN')::double precision",
+            "NULLIF(dataset,'')",
+        ],
+    )
 
-                time_point = float(r[5])
-                data_set = r[6]
-                print(f'{gene_id}\t{taxon_id}\t{sort_index}\t{sample_id}\t{expression}\t{time_point}\t{data_set}')
-            row_num += 1
-    print('\\.')
 
 """
 This program Loads Production Rates into the database
@@ -185,12 +259,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Load expression data into the database.")
     
     load_actions = {
-        "expr": (LOAD_EXPRESSION_DATA, "Load expression data into the database."),
-        "meta": (LOAD_EXPRESSION_METADATA, "Load expression metadata into the database."),
         "refs": (LOAD_REFS, "Load references into the database."),
+        "genes": (LOAD_GENES, "Load gene ID mappings into the database."),
+        "meta": (LOAD_EXPRESSION_METADATA, "Load expression metadata into the database."),
+        "expr": (LOAD_EXPRESSION_DATA, "Load expression data into the database."),
         "prod": (LOAD_PRODUCTION_RATES, "Load production rates into the database."),
         "deg": (LOAD_DEGRADATION_RATES, "Load degradation rates into the database."),
-        "genes": (LOAD_GENES, "Load gene ID mappings into the database."),
     }
 
     parser.add_argument("--all", action="store_true", help="Load all data into the database.")
@@ -205,6 +279,9 @@ if __name__ == "__main__":
     if not any(args_dict.values()):
         args.all = True
 
+    # Always make the genes load first if asking for expression, production, or degradation
+    if args.all or args.expr or args.prod or args.deg:
+        args.genes = True
     for flag, _ in load_actions.items():
         if args.all or args_dict.get(flag):
             load_actions[flag][0]()
