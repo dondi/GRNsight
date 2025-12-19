@@ -341,10 +341,14 @@ html {
     z-index: 999;
 }
 
+.cookie-action-container {
+    display: flex;
+    justify-content: space-between;
+}
+
 .cookie-action {
     background: none;
     border: none;
-    float: right;
     margin-left: 1em;
     margin-top: 1em;
     padding: 0;
