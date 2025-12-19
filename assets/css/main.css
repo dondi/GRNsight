@@ -25,6 +25,7 @@ iframe.embedded-demo {
 #title-container {
 	background-color: #16693F;
 	display:flex;
+	flex-grow:1;
 }
 
 #title-and-subtext {
@@ -35,7 +36,6 @@ iframe.embedded-demo {
 #GRNsightLogo {
 	width: 200px;
 	height: 118px;
-	padding-right:10px;
 }
 
 #header p {
@@ -60,11 +60,10 @@ iframe.embedded-demo {
 
 #lmu {
 	position: relative;
-	width:400px;
 }
 
 #subtextLMU {
-	align-self:bottom;
+	align-self:flex-end;
 	font-size: 15px;
 	line-height: 1;
 	font-style: italic;
@@ -75,8 +74,6 @@ iframe.embedded-demo {
 
 #lmuLogo {
 	position:relative;
-	float:right;
-	padding-left:10px;
 }
 
 #version {
