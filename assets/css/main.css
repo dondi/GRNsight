@@ -19,16 +19,22 @@ iframe.embedded-demo {
 }
 
 #header {
-	right:0;
-	left:0;
+	display:flex;
+}
+
+#title-container {
 	background-color: #16693F;
-	height:118px;
+	display:flex;
+}
+
+#title-and-subtext {
+  display:flex;
+	flex-direction:column;
 }
 
 #GRNsightLogo {
 	width: 200px;
 	height: 118px;
-	float:left;
 	padding-right:10px;
 }
 
@@ -54,11 +60,11 @@ iframe.embedded-demo {
 
 #lmu {
 	position: relative;
-	float:right;
 	width:400px;
 }
 
 #subtextLMU {
+	align-self:bottom;
 	font-size: 15px;
 	line-height: 1;
 	font-style: italic;
