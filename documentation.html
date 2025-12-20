@@ -33,7 +33,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                     You can load a network from one of our available Demo files, as explained in <a href="#demo">Section 1a</a>. 
                                 </li>
                                 <li>
-                                    You can create and load a GRNsight-compatible Input Workbook, as explained in <a href="#input_workbook">Section 1b</a>. 
+                                    You can create and load a GRNsight-compatible Input workbook, as explained in <a href="#input_workbook">Section 1b</a>. 
                                 </li>
                                 <li>
                                     You can create and load a network for <i>Saccharomyces cerevisiae</i> from genes/proteins stored in our Network Database, as detailed in <a href="#network_database">Section 1c</a>. 
@@ -109,9 +109,9 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                         </p>
                                                         <ul>
                                                             <li>
-                                                                GRNsight accepts Microsoft Excel Workbook (*.xlsx) files as its native format.
+                                                                GRNsight accepts Microsoft Excel workbook (*.xlsx) files as its native format.
                                                                 <ul>
-                                                                    <li>Note that Excel 97-2003 Workbook (*.xls) files are not able to be read by GRNsight.</li>
+                                                                    <li>Note that Excel 97-2003 workbook (*.xls) files are not able to be read by GRNsight.</li>
                                                                     <li>If you have a SIF (*.sif) or GraphML (*.graphml) file, please see <a href="#cytoscape_sif_instructions" data-toggle="collapse"> Section 1b-i.c</a> or <a href="#graphml_instructions" data-toggle="collapse">Section 1b-i.d</a>, respectively, to verify that your files are formatted correctly for import into GRNsight.</li>
                                                                 </ul>
                                                             </li>
@@ -119,7 +119,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                                 GRNsight reads gene regulatory network information that is in the form of an adjacency matrix to generate the nodes and edges of the graph.
                                                                 <ul>
                                                                     <li>
-                                                                        There must be one worksheet in your Excel Workbook entitled “network” or “network_optimized_weights”. Generally, the “network” worksheet describes an unweighted network and the “network_optimized_weights” worksheet describes a weighted network.  If the Workbook contains worksheets with both names, the display of the “network_optimized_weights” data will take precedence.
+                                                                        There must be one worksheet in your Excel workbook entitled “network” or “network_optimized_weights”. Generally, the “network” worksheet describes an unweighted network and the “network_optimized_weights” worksheet describes a weighted network.  If the workbook contains worksheets with both names, the display of the “network_optimized_weights” data will take precedence.
                                                                     </li>
                                                                     <li>
                                                                         In the “network” and “network_optimized_weights” worksheets, the upper-left cell (A1) should contain the text “cols regulators/rows targets”.  This text is there as a reminder of the direction of the regulatory relationships specified by the adjacency matrix.
@@ -157,7 +157,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                                 Starting in v3.0.0, GRNsight reads time series expression data in the form of an adjacency matrix, and displays this data as a node coloring visualization.
                                                                 <ul>
                                                                     <li>
-                                                                        Excel Workbook with names ending with "_expression" are processed as expression time series data. The upper-left cell (A1) should contain the text “id”.
+                                                                        Excel worksheets with names ending with "_expression" are processed as expression time series data. The upper-left cell (A1) should contain the text “id”.
                                                                     </li>
                                                                     <li>
                                                                         The rest of the first row should contain the names of the transcription factors under test, one transcription factor name per column. Transcription factor names must be unique for each column and must be 12 characters or fewer.
@@ -221,7 +221,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                             <li>Select the menu item, Data &gt; Text to Columns...</li>
                                                             <li>In the first window of the wizard that appears, select the radio button for "Delimited" and click Next.</li>
                                                             <li>In the second window of the wizard that appears, check the box for "Other" under "Delimiters" and type a semicolon in the field to the right and click Finish.</li>
-                                                            <li>Select the menu item, File &gt; Save As... and save the file as an Excel Workbook (.xlsx).</li>
+                                                            <li>Select the menu item, File &gt; Save As... and save the file as an Excel workbook (.xlsx).</li>
                                                             <li>YEASTRACT organizes the adjacency matrix with the transcription factors as rows and the target genes as columns, which is opposite to the format that GRNmap and GRNsight expects.  To flip this orientation, first create a new worksheet by clicking on the new worksheet icon at the bottom of the screen.  Name this new worksheet "network".</li>
                                                             <li>Select the adjacency matrix from the first worksheet and copy it to the clipboard.  Go to the "network" worksheet and click on cell A1.  Select the menu item Edit &gt; Paste Special.  In the window that appears, check the box "Transpose" and click OK.</li>
                                                             <li>The labels for the genes in the columns and rows needs to match.  Thus, delete the "p" from each of the gene names in the columns.</li>
@@ -414,7 +414,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                     <div class="panel-body">
                                                         <ul>
                                                             <li>
-                                                                Once you have your appropriately formatted Excel Workbook file (*.xlsx), you can load it into GRNsight.
+                                                                Once you have your appropriately formatted Excel workbook file (*.xlsx), you can load it into GRNsight.
                                                             </li>
                                                             <li>
                                                                 Go to the GRNsight home page.  Select the menu option File > Open.  A dialog box will open for you to select your file.  Clicking the Open button will load your file.  Clicking the Cancel button will return you to the GRNsight home page.
