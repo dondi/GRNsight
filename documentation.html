@@ -846,7 +846,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 <br>
                                 <ul>
                                     <li>
-                                        As shown in the figure on the left, the color scheme for edges was changed in GRNsight v3.0.0 to red and blue from magenta and cyan, respectively. The color scheme was changed to provide consistency with the node coloring visualization and to provide more visual contrast over the original coloring scheme for color-blind users.
+                                        As shown in the figure on the left, the color scheme for edges was changed in GRNsight v3.0.0 to red and blue from magenta and cyan, respectively. The color scheme was changed to to provide more visual contrast over the original coloring scheme for color-blind users.
                                     </li>
                                     <li>
                                         Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) contains expression sheets formatted for node coloring. Nodes in the graph are colored in the middle and left figure to visualize the level of expression of transcription factors over time. Two different datasets are selected for the top and bottom nodes to facilitate visual comparision between the expression values in the datasets. The top half of the nodes are colored using data from the sheet "wt_log2_expression" of Demo #2 and the bottom half of the nodes are colored using data from the sheet "wt_log2_optimized_expression" of Demo #2. The number of vertical node coloring slices in each half of the node correspond to the number of data points in the data set. The color of each vertical slice correspond to the color that the expression value at that time point maps to on the node coloring color scale, located in the sidebar menu of the user interface. By default, -3 maps to the darkest blue shade, while 3 maps to the darkest red shade.
@@ -869,7 +869,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                         <div id="gene_pages" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <p>
-                                    In GRNsight v3.1.0, the gene pages feature was added. To access the gene pages, right-click on the text of any given node when a graph is loaded. A page should load similar to the one seen in the leftmost figure below, similar to the one in the browser. Meanwhile, a "page is loading" message should appear, as shown in the figure on the left.
+                                    In GRNsight v3.1.0, the gene page feature was added. To access a gene page, right-click on the label of any given node when a graph is displayed. A "page is loading" message should appear while data is being retrieved from the source databases, as shown in the figure on the left.
                                 </p>
                                 <br>
                                 <table style="width:100%">
@@ -882,14 +882,14 @@ description: Learn how to format and upload files to GRNsight, a web application
                                 <br>
                                 <ul>
                                     <li>
-                                        The figure in the center shows the gene page when it is loaded. The gene name is displayed on the left. he species that the data is collected from is displayed on the GRNSight. Presently, the gene page pulls data from the <a href="http://www.uniprot.org">Uniprot</a>, <a href="https://www.ncbi.nlm.nih.gov/gene">NCBI Gene</a>, <a href="https://uswest.ensembl.org/index.html">Ensembl</a>, <a href="http://jaspar.genereg.net">JASPAR</a>, and <a href="https://yeastmine.yeastgenome.org/yeastmine/begin.do">Saccharomyces Geneome</a> databases.
+                                        The figure in the center shows the gene page when it is loaded. The gene name is displayed at top left. The species that the data is collected from is displayed at top right. Currently, this feature is limited to genes from <i>Saccharomyces cerevisiae</i>. The gene page pulls data from the <a href="http://www.uniprot.org" target="_blank">UniProt</a>, <a href="https://www.ncbi.nlm.nih.gov/gene" target="_blank">NCBI Gene</a>, <a href="https://www.ensembl.org/index.html?redirect=no" target="_blank">Ensembl</a>, <a href="http://jaspar.genereg.net" target="_blank">JASPAR</a>, and the <a href="https://yeastgenome.org"><i>Saccharomyces</i> Genome Database (SGD)</a>. Note, there is a known bug in GRNsight v7 where data from UniProt, Ensembl, JASPAR, SGD, and Gene Ontology are not displaying due to changes in the syntax in the API calls.
                                     </li>
                                     <li>
-                                        The figure on the right displays that after clicking on a button corresponding to a certain section, the page is directed to that section and displays information about the specified information about the gene in the species. In this instance, a sequence logo, frequency matrix, and a list of gene ontology values are displayed.
+                                        The figure on the right displays that after clicking on a button corresponding to a certain section, the page is directed to that section and displays information about the specified information about the gene in the species. In this instance, a sequence logo and frequency matrix from the JASPAR database, and a list of Gene Ontology terms are displayed.
                                     </li>
                                 </ul>
                                 <p>
-                                    In GRNsight v5.0.0, the species feature was added. GRNsight now supports the following species: “Arabidopsis thaliana”, “Caenorhabditis elegans”, “Drosophila melanogaster”, “Homo sapiens”, “Mus musculus”, and “Saccharomyces cerevisiae.”
+                                <!--    In GRNsight v5.0.0, the species feature was added. GRNsight now supports the following species: “Arabidopsis thaliana”, “Caenorhabditis elegans”, “Drosophila melanogaster”, “Homo sapiens”, “Mus musculus”, and “Saccharomyces cerevisiae.”
                                 </p>
                                 <ul>
                                     <li>
@@ -898,7 +898,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                     <li>
                                         You can change the species in the GRNsight web application under Node > Current Species.
                                     </li>
-                                </ul>
+                                </ul> -->
                             </div>
                         </div>
                     </div>
@@ -946,8 +946,8 @@ description: Learn how to format and upload files to GRNsight, a web application
                                     <li>
                                         To export your data to SIF format, select the menu option Export > Export Data > To Unweighted SIF or File > Export Data > To Weighted SIF. A dialog box will open for you to Save your file. Clicking the Cancel button will return you to the GRNsight web page.
                                         <ul>
-                                            <li>When an unweighted network is loaded, exporting to an unweighted SIF file will be the only option available.</li>
-                                            <li>When a weighted network is loaded, you have the option to export to an unweighted or weighted SIF file.  The difference between the unweighted and weighted SIF file is described below.</li>
+                                            <li>When an unweighted GRN or PPI network is loaded, exporting to an unweighted SIF file will be the only option available.</li>
+                                            <li>When a weighted GRN is displayed, you have the option to export to an unweighted or weighted SIF file.  The difference between the unweighted and weighted SIF file is described below.</li>
                                         </ul>
                                     </li>
                                     <li>
@@ -958,8 +958,8 @@ description: Learn how to format and upload files to GRNsight, a web application
                                             <ul>
                                                 <li>If you are exporting a weighted network as an unweighted SIF file, the text "_unweighted" will be appended to the suggested filename before the file extension to denote this.</li>
                                             </ul>
-                                            <li>For unweighted networks, the relationship type “pd” will be used.  The relationship type of “pd” is used because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community.  This default value cannot be changed from within GRNsight, but the exported SIF file could be edited in another program to do so.</li>
-                                            <li>For weighted networks, if the user has selected the option of exporting the data as an unweighted network, the relationship type “pd” will be used.</li>
+                                            <li>For unweighted GRNs, the relationship type “pd” will be used.  The relationship type of “pd” is used because it commonly means protein -> DNA (e.g. a regulatory transcription factor binding upstream of a target gene) in the systems biology community.  For PPIs, the relationship type "pp" will be used.  This default value cannot be changed from within GRNsight, but the exported SIF file could be edited in another program to do so.</li>
+                                            <li>For weighted GRNs, if the user has selected the option of exporting the data as an unweighted network, the relationship type “pd” will be used.</li>
                                             <li>If the user has selected the option to export a weighted network as a weighted network, the numerical weight value for each edge is given as the relationship type.</li>
                                             <li>In each case, each line will consist of source node, relationship type, and target node, separated by tab characters.  If a particular source node has multiple targets, they will be listed on separate lines.  If a particular source node has no targets, it will still be listed on a separate line.  The screenshots shown below are examples of how GRNsight exports <a href="https://github.com/dondi/GRNsight/raw/import-export/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.sif">Demo #3: Unweighted GRN"</a> and <a href="https://github.com/dondi/GRNsight/raw/import-export/test-files/demo-files/21-genes_31-edges_Schade-data_estimation_output.sif">Demo #4: Weighted GRN"</a>, respectively, to SIF files.  (The screenshots display a tab-delimited text file as it would be displayed in Microsoft Excel.)  Follow the links to download the sample SIF files.
                                                 <br><br>
@@ -988,11 +988,11 @@ description: Learn how to format and upload files to GRNsight, a web application
                         <div id="graphml_export" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <ul>
-                                    <li>To export your data to GraphML format, select the menu option Export > Export Data > To Unweighted GraphML or File > Export Data > To Weighted GraphML. A dialog box will open for you to Save your file. Clicking the Cancel button will return you to the GRNsight web page.
+                                    <li>To export a GRN to GraphML format, select the menu option Export > Export Data > To Unweighted GraphML or File > Export Data > To Weighted GraphML. A dialog box will open for you to Save your file. Clicking the Cancel button will return you to the GRNsight web page. (Note that exporting PPI data to GraphML is not currently supported by GRNsight).
                                     </li>
                                     <ul>
-                                        <li>When an unweighted network is loaded, exporting to an unweighted GraphML file will be the only option available.</li>
-                                        <li>When a weighted network is loaded, you have the option to export to an unweighted or weighted GraphML file.</li>
+                                        <li>When an unweighted GRN is loaded, exporting to an unweighted GraphML file will be the only option available.</li>
+                                        <li>When a weighted GRN is loaded, you have the option to export to an unweighted or weighted GraphML file.</li>
                                     </ul>
                                     <li>The unweighted and weighted GraphML files will be formatted according to the description in <a href="#graphml_instructions" data-toggle="collapse">Section 1b-i.d</a>.
                                     </li>
