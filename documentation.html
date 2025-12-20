@@ -177,22 +177,28 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                                 </ul>
                                                             </li>
                                                             <li>
-                                                                Starting in v4.0.0 GRNsight reads metadata from a sheet entitled “optimization_parameters.” The “optimization_parameters” sheet is used for compatibility with the GRNmap MATLAB modeling software and is not required for GRNsight to function.  The format of this worksheet is included here for reference.  The meaning of the parameters is discussed further on the GRNmap documentation site.
+                                                                Starting in v4.0.0 GRNsight reads metadata from a sheet entitled “optimization_parameters.” The “optimization_parameters” sheet is used for compatibility with the <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a> MATLAB modeling software and is not required for GRNsight to function.  The format of this worksheet is included here for reference.  The meaning of the parameters is discussed further on the <a href="http://kdahlquist.github.io/GRNmap/documentation/" target="blank">GRNmap Documentation</a> site.
                                                                 <ul>
                                                                     <li>
-                                                                        The header should contain “optimization” cell A1 and “value” in cell B1.
+                                                                        The first row should contain the headers should contain “optimization_parameter” in cell A1 and “value” in cell B1.
                                                                     </li>
                                                                     <li>
-                                                                        The following optimization parameters can be a number: “alpha”, “kk_max”, “MaxIter”, “TolFun”, “MaxFunEval”, “TolX”, “L_curve”, “estimate_params”, “make_graphs”, “fix_P”, “fix_b”, “taxon_id”, and “b_or_tau”.
+                                                                        In the first column, the following optimization parameters appear in this order: “alpha”, “kk_max”, “MaxIter”, “TolFun”, “MaxFunEval”, “TolX”, “production_function”, “L_curve”, “estimate_params”, “make_graphs”, “fix_P”, “fix_b”, “expression_timepoints”, “Strain”, “simulation_timepoints”, “species”, “taxon_id”, and “workbookType”.
                                                                     </li>
                                                                     <li>
-                                                                        The following optimization parameters can be a string: “production_function” and “species”.
+                                                                        The value in column B for the following parameters is a real number: “alpha”, “kk_max”, “MaxIter”, “TolFun”, “MaxFunEval”, and “TolX”.
                                                                     </li>
                                                                     <li>
-                                                                        The following optimization parameters can be a list of numbers: “expression_timepoints” and “simulation_timepoints”.
+                                                                        The value in column B for the following parameters is an integer, either “0” or “1”: “L_curve”, “estimate_params”, “make_graphs”, “fix_P”, and “fix_b”.
                                                                     </li>
                                                                     <li>
-                                                                        The following optimization parameters can be a list of numbers: “expression_timepoints” and “simulation_timepoints”.
+                                                                        The value in column B for the following paramters is a string: “production_function” and “species”.
+                                                                    </li>
+                                                                    <li>
+                                                                        The following optimization parameters can be a list of numbers: “expression_timepoints” and “simulation_timepoints”, one number per column to the right starting in column B. The “expression_timepoints” should correspond to the timepoints in the “_log2_expression” sheets.
+                                                                    </li>
+                                                                    <li>
+                                                                        The following optimization parameter can be a list of strings, one string per column to the right starting in column B: “Strain”.  These correspond to the prefix to the worksheet names containing the timecourse expression data.  For example, if your workbook contains sheets named “wt_log2_expression” and “dcin5_log2_expression”, the values would be “wt” and “dcin5”.
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -210,7 +216,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                 </div>
                                                 <div id="yeastract_instructions" class="panel-collapse collapse">
                                                     <div class="panel-body">
-                                                        This section has instructions for formatting a gene regulation matrix downloaded from <a href="http://www.yeastract.com">YEASTRACT</a> as a .xlsx file in the native GRNsight format.
+                                                        This section has instructions for how to format a gene regulation matrix downloaded from <a href="http://www.yeastract.com">YEASTRACT</a> as a .xlsx file in the native GRNsight format.
                                                         <ul>
                                                             <li>Navigate to <a href="http://www.yeastract.com/formgenerateregulationmatrix.php">Generate Regulation Matrix</a> on the YEASTRACT site.</li>
                                                             <li>Select the appropriate radio buttons/check boxes for the filters.</li>
