@@ -721,32 +721,32 @@ description: Learn how to format and upload files to GRNsight, a web application
                         <div id="node_coloring" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <p>
-                                    By default, when a user uploads an Excel workbook which contains correctly formatted expression sheets, nodes are colored with a heat map overlay to visualize time series expression data. Expression values of a transcription factor at a given time point are mapped to corresponding vertical slices on the node, and colored according to the node coloring legend located in the sidebar. Blue slices represent negative expression values (indicating a decrease in mRNA), while red slices represent positive expression values (indicating an increase in mRNA). The greater the magnitude of the expression value, the darker the shade of red or blue.
+                                    By default, when a user uploads an Excel workbook which contains correctly formatted expression sheets, nodes are colored with a heat map overlay to visualize time series expression data. Expression values of a gene at a given time point are mapped to corresponding vertical slices (stripes) on the node, and colored according to the node coloring legend located in the sidebar Node panel. Blue slices represent negative log<sub>2</sub> fold change expression values (indicating a decrease in mRNA), while red slices represent positive log<sub>2</sub> fold change expression values (indicating an increase in mRNA). The greater the magnitude of the expression value, the darker the shade of red or blue.
                                 </p>
                                 <p>
-                                    Users may adjust the following node coloring parameters, located in both the sidebar and dropdown menus:
+                                    Users may adjust the following node coloring parameters, located in both the Node sidebar and top menus:
                                 </p>
                                 <ul>
                                     <li>
-                                        <b>Node Coloring Toggle Button</b><br>Turns node coloring on or off.
+                                        <b>Enable Node Coloring check box</b><br>Turns node coloring on or off.
                                     </li>
                                     <li>
-                                        <b>Top Dataset</b><br>Users may select the dataset used to generate the top half of the node coloring visualization. Options in the dropdown list are automatically populated with names of detected expression sheets. In GRNsight v5.0.0, users may also select an expression sheet from our Expression Database.
+                                        <b>Top Dataset</b><br>Users may select the dataset used to generate the top half of the node coloring visualization. Options in the dropdown list are automatically populated with names of detected expression sheets from the user-uploaded Excel workbook. Beginning with GRNsight v5.0.0, users may also select an expression dataset from our backend yeast Expression Database.  Currently five datasets from the NCBI GEO database are available: Apweiler et al. 2012, <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE33098" target="_blank">GSE33098</a>, Barreto et al. 2012, <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE24712" target="_blank">GSE24712</a>, Dahlquist et al. 2018, <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE83656" target="_blank">GSE83656</a>, Kitagawa et al. 2002, <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE9336" target="_blank">GSE9336</a>, and Thorsen et al. 2007, <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE6068" target="_blank">GSE6068</a>.
                                     </li>
                                     <li>
-                                        <b>Average Replicate Values (Top Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the top half of node coloring.
+                                        <b>Average Replicate Values (Top Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the top half of the node.
                                     </li>
                                     <li>
-                                        <b>Bottom Dataset</b><br>Users may select the dataset used to generate the bottom half of the node coloring visualization. Options in the dropdown list are automatically populated with names of detected expression sheets. In GRNsight v5.0.0, users may also select an expression sheet from our Expression Database.
+                                        <b>Bottom Dataset</b><br>Users may select the dataset used to generate the bottom half of the node coloring visualization. Options in the dropdown list are automatically populated with names of detected expression sheets from the user-uploaded Excel workbook and from our backend yeast Expression Database as described for the Top Dataset above.
                                     </li>
                                     <li>
-                                        <b>Average Replicate Values (Bottom Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the bottom half of node coloring.
+                                        <b>Average Replicate Values (Bottom Dataset)</b><br>If this option is checked, GRNsight will average replicate expression values taken at the same timepoint for the bottom half of the node.
                                     </li>
                                     <li>
-                                        <b>Log Fold Change Max Value</b><br>Indicates the value that will map to the darkest red/blue, and changes the node coloring legend accordingly. A negative log fold change max value will flip the red/blue scale. The default log fold change max value is 3.
+                                        <b>Log Fold Change Max Value</b><br>Indicates the absolute value that will map to the darkest red and blue stripes, and changes the node coloring heat map legend accordingly. The default log fold change max value is 3.  Values can be adjusted between 0.01 and 100.
                                     </li>
                                     <li>
-                                        <b>Node Coloring for PPI</b><br> If a PPI network file is loaded and includes valid gene names, node coloring can be toggled and color the nodes according to the expression data. <em>Note:</em> We are overlaying mRNA-level data onto a PPI network.
+                                        <b>Node Coloring for PPI</b><br> If a PPI network is displayed and includes gene names that correspond to data in our backend database, node coloring can be enabled. <em>Note:</em> This display is overlaying mRNA-level data onto a protein-level network, and a warning will be given to the user.
                                     </li>
                                 </ul>
                             </div>
