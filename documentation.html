@@ -1,14 +1,14 @@
 ---
 layout: default
 title: Documentation
-modified: 12/9/2025
+modified: 12/19/2025
 description: Learn how to format and upload files to GRNsight, a web application for visualizing small- to medium-scale gene regulatory networks.
 ---
 <p id="pageTitle">Documentation</p>
 <div id="pageContent">
     <h3>Getting Started</h3>
     <p>
-        GRNsight is a web application for visualizing models of small- to medium-scale gene regulatory networks (GRNs). GRNsight was created to work with the input and output spreadsheets used by <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any medium-scale GRN that is specified by the appropriate spreadsheet format.  GRNsight is best-suited for visualizing networks of fewer than 35 genes (nodes) and 70 regulatory relationships (edges), but can display networks of up to 75 nodes and 150 edges. Although originally designed for gene regulatory networks, we believe that GRNsight has general applicability for displaying any small, unweighted or weighted network with directed edges for systems biology or other application domains. The following sections describe how to use GRNsight.
+        GRNsight is a web application for visualizing models of small-scale gene regulatory networks (GRNs) or protein-protein interaction networks (PPIs). GRNsight was originally created to work with the input and output spreadsheets used by <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a>, a MATLAB program that estimates the parameters and performs forward simulations of a differential equations model of a GRN.  However, GRNsight can be used to visualize any small-scale GRN or PPI that is specified by the appropriate Excel workbook format.  GRNsight is best-suited for visualizing networks of fewer than 35 nodes (genes/proteins) and 70 edges (regulatory relationships/binding interactions), but can display networks of up to 75 nodes and 150 edges. Although originally designed for gene regulatory networks, we believe that GRNsight has general applicability for displaying any small, unweighted or weighted network with directed or undirected edges for systems biology or other application domains. The following sections describe how to use GRNsight.
     </p>
     <p>
         GRNsight has been tested with and confirmed to be working in Chrome version 143.0.7499.41 or higher and Firefox version 146.0 or higher on Windows 11 and macOS 26 Tahoe operating systems. It may not work with other browsers, versions, or operating systems.
@@ -33,10 +33,10 @@ description: Learn how to format and upload files to GRNsight, a web application
                                     You can load a network from one of our available Demo files, as explained in <a href="#demo">Section 1a</a>. 
                                 </li>
                                 <li>
-                                    You can create and load a GRNsight Compatible Input Workbook, as explained in <a href="#input_workbook">Section 1b</a>. 
+                                    You can create and load a GRNsight-compatible Input Workbook, as explained in <a href="#input_workbook">Section 1b</a>. 
                                 </li>
                                 <li>
-                                    You can create and load a Network from genes stored in our Network Database, as detailed in <a href="#network_database">Section 1c</a>. 
+                                    You can create and load a network for <i>Saccharomyces cerevisiae</i> from genes/proteins stored in our Network Database, as detailed in <a href="#network_database">Section 1c</a>. 
                                 </li>
                             </ol>
                         </li>
