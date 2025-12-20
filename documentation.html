@@ -662,7 +662,10 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         The force graph parameter sliders, lock force graph parameter sliders check box and menu item, and reset force graph parameter button and menu item are all active before a spreadsheet is loaded. The values set before loading will be used when a graph is loaded.
                                     </li>
                                     <li>
-                                        Note that reloading the input file with the same Force Graph Parameter settings (even the defaults) will not necessarily lead to the exact same layout of the graph due to some randomness in D3’s layout algorithm.
+                                        A graph will always load first using the Force Graph option.  Click the Grid Layout button in the Layout side bar panel or select the top menu item Layout > Graph Options > Grid Layout to have GRNsight automatically arrange the nodes in a grid, sorted alphabetically. 
+                                    </li>
+                                    <li>
+                                        Note that reloading the network with the same Force Graph Parameter settings (even the defaults) will not necessarily lead to the exact same layout of the graph due to some randomness in D3’s layout algorithm. Also, reloading the network after Grid Layout has been selected will return it to the Force Graph layout.
                                     </li>
                                 </ul>
                             </div>
