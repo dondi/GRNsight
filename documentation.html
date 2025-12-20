@@ -1012,22 +1012,22 @@ description: Learn how to format and upload files to GRNsight, a web application
                             <div class="panel-body">
                                 <ul>
                                     <li>
-                                        To export your data to Excel format, select the menu option Export > Export Data > To Excel. A selector modal should appear allowing you to set the specifications of your workbook file before exporting it. Once specifications are selected, a dialog box will open for you to Save your workbook. Clicking the Cancel button will return you to the GRNsight web page.
+                                        To export your data to Excel format (.xlsx), select the top menu option Export > Export Data > To Excel. A modal window will appear allowing you to choose which data will be exported. The options are different for a GRN and a PPI.  The goals of the GRN options are to create an Excel workbook that is compatible with the <a href="http://kdahlquist.github.io/GRNmap/" target="_blank">GRNmap</a> MATLAB modeling software and also to be able to export a mirror of the user-uploaded data.  Once you have made your selections, click the Export Workbook button. A dialog box will open for you to Save your workbook. Clicking the Cancel button will return you to the GRNsight web page.
                                     </li>
                                     <ul>
                                         <li>
-                                            Selector Modal:
+                                            GRN:
                                         </li>
                                         <ul>
                                             <li>
-                                                You can select the workbooks expression data source. You can choose to export expression data from the original workbook or you can choose from data sources within the Expression Database.
+                                                First, you can select the source of expression data.  You have the option to export any of the expression datasets stored in the backend Expression database, your user-uploaded data, or none.
                                             </li>
                                             <li>
-                                                From there you can select which particular network sheets and expression sheets you would like to export from the chosen expression data source or expand upon the workbook by selecting particular additional sheets from the selector modal. By default all available network sheets, expression sheets, and additional sheets are selected to be exported into the workbook file.
+                                                From there you can select which particular worksheets you will export.  Network sheets contain an adjacency matrix specifying the network as described in Section 1b-i.a. The network worksheet describes an adjancency matrix of 1's and 0's.  The network_optimized_weights sheet contains the edge weight values.  The network_weights sheet is a special worksheet required by the GRNmap modeling software that is described in the <a href="http://kdahlquist.github.io/GRNmap/documentation/" target="_blank">GRNmap documentation</a>.  The Expression Sheets contain the timecourse gene expression data from the Expression Data source selcted above.  Additional sheets that can be exported are degradation_rates, optimization_parameters, production_rates, and threshold_b, which are all specific to the GRNmap software.  mRNA degradation rates are derived from data published in Neymotin et al. (2014).  mRNA production rates are supplied as double the degradation rates as initial guesses for the GRNmap modeling.  The optimization_parameters and threshold_b are also used by GRNmap.
                                             </li>
                                         </ul>
                                     </ul>
-                                    <li>The unweighted and weighted Excel workbooks will be formatted according to the description in <a href="#excel_instructions" data-toggle="collapse">Section 1b-i.a</a>.
+                                    <li>The Excel workbooks will be formatted according to the description in <a href="#excel_instructions" data-toggle="collapse">Section 1b-i.a</a>.
                                     </li>
                                 </ul>
                             </div>
@@ -1048,7 +1048,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         To export your data as an image, select the menu option Export > Export Image > To [PNG, SVG, PDF]. A dialog box will appear, allowing you to save your file. Selecting Cancel will return you to the GRNsight web page.
                                     </li>
                                     <li>
-                                        <i>Notes: If you plan to view an SVG file in Adobe Illustrator, follow these steps:</i>
+                                        <i>Notes: it is known that when an GRNsight-exported SVG file is opened in Adobe Illustrator, it does not display properly.  If you plan to use Adobe Illustrator, follow these steps:</i>
                                     </li>
                                     <ul>
                                         <li>Download the graph as an SVG.</li>
@@ -1100,4 +1100,3 @@ description: Learn how to format and upload files to GRNsight, a web application
         </div>
     </div>
 </div>
-<!--This is a test to see if commits can be made from my computer -John -->
