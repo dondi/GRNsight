@@ -12,26 +12,41 @@ const getSheetHeader = (sheetName, column, row) => {
         } else if (sheetName === "threshold_b" || sheetName === "optimized_threshold_b") {
             return "threshold_b";
         } else if (sheetName === "optimization_parameters") {
-            return (column === 0) ? "optimization_parameter" : "value";
+            return column === 0 ? "optimization_parameter" : "value";
         } else if (sheetName === "optimization_diagnostics") {
-            return (column === 0) ? "Parameter" : "Value";
+            return column === 0 ? "Parameter" : "Value";
         }
     }
 };
 
 const optimizationParametersTypeKey = {
-    alpha: "number", "kk_max": "number", MaxIter: "number", TolFun: "number", MaxFunEval: "number",
-    TolX: "number", "production_function": "string", "L_curve": "number", "estimate_params": "number",
-    "make_graphs": "number", "fix_P": "number", "fix_b": "number", "expression_timepoints": "object",
-    Strain: "object", species: "string", "taxon_id": "number", workbookType: "string",
-    "simulation_timepoints": "object", "b_or_tau" : "number"
-
+    alpha: "number",
+    kk_max: "number",
+    MaxIter: "number",
+    TolFun: "number",
+    MaxFunEval: "number",
+    TolX: "number",
+    production_function: "string",
+    L_curve: "number",
+    estimate_params: "number",
+    make_graphs: "number",
+    fix_P: "number",
+    fix_b: "number",
+    expression_timepoints: "object",
+    Strain: "object",
+    species: "string",
+    taxon_id: "number",
+    workbookType: "string",
+    simulation_timepoints: "object",
+    b_or_tau: "number",
 };
 
 const optimizationDiagnosticsParameters = ["LSE", "Penalty", "min LSE", "iteration count"];
 
 const optimizationParametersObectKey = {
-    "expression_timepoints": "number", Strain: "string", "simulation_timepoints": "number"
+    expression_timepoints: "number",
+    Strain: "string",
+    simulation_timepoints: "number",
 };
 
 const addWarning = (workbook, message) => {
@@ -67,7 +82,7 @@ const TWO_COL_SHEET_NAMES = [
     "degradation_rates",
     "threshold_b",
     "optimized_production_rates",
-    "optimized_threshold_b"
+    "optimized_threshold_b",
 ];
 
 const validGeneName = (output, sheetName, gene, row) => {
@@ -86,26 +101,50 @@ const validGeneName = (output, sheetName, gene, row) => {
     return true;
 };
 // Optimization Parameters Parser
-const parseMetaDataSheet = (sheet) => {
+const parseMetaDataSheet = sheet => {
     let meta = {
         data: {},
         errors: [],
-        warnings: []
+        warnings: [],
     };
     let paramType;
     if (sheet.data[0][0] === undefined) {
-        addError(meta, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[0],
-            getSheetHeader(sheet.name, 0, 0)));
+        addError(
+            meta,
+            constants.errors.missingColumnHeaderError(
+                sheet.name,
+                constants.numbersToLetters[0],
+                getSheetHeader(sheet.name, 0, 0)
+            )
+        );
     } else if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-        addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[0],
-            getSheetHeader(sheet.name, 0, 0)));
+        addError(
+            meta,
+            constants.errors.incorrectColumnHeaderError(
+                sheet.name,
+                constants.numbersToLetters[0],
+                getSheetHeader(sheet.name, 0, 0)
+            )
+        );
     }
     if (sheet.data[0][1] === undefined) {
-        addError(meta, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[1],
-            getSheetHeader(sheet.name, 1, 0)));
+        addError(
+            meta,
+            constants.errors.missingColumnHeaderError(
+                sheet.name,
+                constants.numbersToLetters[1],
+                getSheetHeader(sheet.name, 1, 0)
+            )
+        );
     } else if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-        addError(meta, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[1],
-            getSheetHeader(sheet.name, 1, 0)));
+        addError(
+            meta,
+            constants.errors.incorrectColumnHeaderError(
+                sheet.name,
+                constants.numbersToLetters[1],
+                getSheetHeader(sheet.name, 1, 0)
+            )
+        );
     }
 
     sheet.data.forEach(function (element, index) {
@@ -123,15 +162,23 @@ const parseMetaDataSheet = (sheet) => {
         if (meta.data[key] === undefined) {
             addWarning(meta, constants.warnings.unknownOptimizationParameter(sheet.name, key));
         } else if (typeof meta.data[key] !== optimizationParametersTypeKey[key]) {
-            if (optimizationParametersTypeKey[key] !== "object" ||
-                typeof meta.data[key] !== optimizationParametersObectKey[key]) {
-                addWarning(meta, constants.warnings.invalidOptimizationParameter(sheet.name, key, paramType));
+            if (
+                optimizationParametersTypeKey[key] !== "object" ||
+                typeof meta.data[key] !== optimizationParametersObectKey[key]
+            ) {
+                addWarning(
+                    meta,
+                    constants.warnings.invalidOptimizationParameter(sheet.name, key, paramType)
+                );
             }
         } else if (optimizationParametersTypeKey[key] === "object") {
             for (let val of meta.data[key]) {
                 if (typeof val !== optimizationParametersObectKey[key]) {
                     // throw error once per object. Makes sure that errors list is not flooded
-                    addWarning(meta, constants.warnings.invalidOptimizationParameter(sheet.name, key, paramType));
+                    addWarning(
+                        meta,
+                        constants.warnings.invalidOptimizationParameter(sheet.name, key, paramType)
+                    );
                     break;
                 }
             }
@@ -140,13 +187,13 @@ const parseMetaDataSheet = (sheet) => {
     return meta;
 };
 
-const parseOptimizationDiagnosticsSheet = (sheet) => {
+const parseOptimizationDiagnosticsSheet = sheet => {
     let output = {
         data: {
             Parameters: {},
             MSE: {
                 "column-headers": [],
-                Genes: {}
+                Genes: {},
             },
         },
         errors: [],
@@ -159,18 +206,36 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
     // Check Headers
     if (sheet.data[0].length > 1) {
         if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-            addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[0],
-                getSheetHeader(sheet.name, 0, 0)));
+            addError(
+                output,
+                constants.errors.incorrectColumnHeaderError(
+                    sheet.name,
+                    constants.numbersToLetters[0],
+                    getSheetHeader(sheet.name, 0, 0)
+                )
+            );
         }
         if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-            addError(output, constants.errors.incorrectColumnHeaderError(sheet.name, constants.numbersToLetters[1],
-                getSheetHeader(sheet.name, 1, 0)));
+            addError(
+                output,
+                constants.errors.incorrectColumnHeaderError(
+                    sheet.name,
+                    constants.numbersToLetters[1],
+                    getSheetHeader(sheet.name, 1, 0)
+                )
+            );
         }
     } else {
         // seems a bit sus, but we'll see if this works properly during testing :\
         for (let col = 1; col >= sheet.data[0].length; col--) {
-            addError(output, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[col],
-                getSheetHeader(sheet.name, col, 0)));
+            addError(
+                output,
+                constants.errors.missingColumnHeaderError(
+                    sheet.name,
+                    constants.numbersToLetters[col],
+                    getSheetHeader(sheet.name, col, 0)
+                )
+            );
         }
     }
     // Check Parameter Section
@@ -189,15 +254,23 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
         if (sheet.data[row].length > 2) {
             addWarning(output, constants.warnings.extraneousDataWarning(sheet.name, row + 1));
         }
-        if (! optimizationDiagnosticsParameters.includes(currentParameter)) {
+        if (!optimizationDiagnosticsParameters.includes(currentParameter)) {
             if (currentParameter === "Gene") {
                 row--;
                 break;
             }
-            addWarning(output, constants.warnings.unknownOptimizationDiagnosticsParameter(sheet.name,
-                currentParameter));
+            addWarning(
+                output,
+                constants.warnings.unknownOptimizationDiagnosticsParameter(
+                    sheet.name,
+                    currentParameter
+                )
+            );
         } else if (typeof currentValue !== "number") {
-            addWarning(output, constants.warnings.invalidOptimizationDiagnosticsValue(sheet.name, currentParameter));
+            addWarning(
+                output,
+                constants.warnings.invalidOptimizationDiagnosticsValue(sheet.name, currentParameter)
+            );
         } else {
             output.data.Parameters[currentParameter] = currentValue;
         }
@@ -210,12 +283,22 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
     // Check Gene section MSE's
     if (sheet.data[row].length > 1) {
         if (sheet.data[row][0] !== "Gene") {
-            addWarning(output, constants.warnings.incorrectMSEGeneHeaderWarning(sheet.name, row + 1));
+            addWarning(
+                output,
+                constants.warnings.incorrectMSEGeneHeaderWarning(sheet.name, row + 1)
+            );
         }
         for (let col = 1; col < sheet.data[row].length; col++) {
             if (!sheet.data[row][col].includes("MSE")) {
-                addWarning(output, constants.warnings.incorrectMSEHeaderWarning(sheet.name, sheet.data[row][col],
-                    row + 1, constants.numbersToLetters[col]));
+                addWarning(
+                    output,
+                    constants.warnings.incorrectMSEHeaderWarning(
+                        sheet.name,
+                        sheet.data[row][col],
+                        row + 1,
+                        constants.numbersToLetters[col]
+                    )
+                );
             }
             // we still push the header (even tho it's sus) because the gene MSE's are
             // dependent on the order of the column headers
@@ -234,11 +317,23 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
                     if (typeof sheet.data[row][col] === "number") {
                         currentMSE.push(sheet.data[row][col]);
                     } else if (sheet.data[row][col] === undefined) {
-                        addWarning(output, constants.warnings.missingMSEDataWarning(sheet.name, row + 1,
-                            constants.numbersToLetters[col]));
+                        addWarning(
+                            output,
+                            constants.warnings.missingMSEDataWarning(
+                                sheet.name,
+                                row + 1,
+                                constants.numbersToLetters[col]
+                            )
+                        );
                     } else {
-                        addWarning(output, constants.warnings.invalidMSEDataWarning(sheet.name, row + 1,
-                            constants.numbersToLetters[col]));
+                        addWarning(
+                            output,
+                            constants.warnings.invalidMSEDataWarning(
+                                sheet.name,
+                                row + 1,
+                                constants.numbersToLetters[col]
+                            )
+                        );
                     }
                 }
                 output.data.MSE.Genes[currentGene] = currentMSE;
@@ -250,9 +345,9 @@ const parseOptimizationDiagnosticsSheet = (sheet) => {
     return output;
 };
 
-const parseTwoColumnSheet = (sheet) => {
+const parseTwoColumnSheet = sheet => {
     let output = {
-        data : {},
+        data: {},
         errors: [],
         warnings: [],
     };
@@ -274,13 +369,24 @@ const parseTwoColumnSheet = (sheet) => {
             }
             if (sheet.data[row].length > 1) {
                 if (sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)) {
-                    addError(output, constants.errors.incorrectColumnHeaderError(sheet.name,
-                        constants.numbersToLetters[1],
-                        getSheetHeader(sheet.name, 1, row)));
+                    addError(
+                        output,
+                        constants.errors.incorrectColumnHeaderError(
+                            sheet.name,
+                            constants.numbersToLetters[1],
+                            getSheetHeader(sheet.name, 1, row)
+                        )
+                    );
                 }
             } else {
-                addError(output, constants.errors.missingColumnHeaderError(sheet.name, constants.numbersToLetters[1],
-                    getSheetHeader(sheet.name, 1, row)));
+                addError(
+                    output,
+                    constants.errors.missingColumnHeaderError(
+                        sheet.name,
+                        constants.numbersToLetters[1],
+                        getSheetHeader(sheet.name, 1, row)
+                    )
+                );
             }
         } else {
             currentGene = sheet.data[row][0];
@@ -290,8 +396,15 @@ const parseTwoColumnSheet = (sheet) => {
                 if (typeof currentValue === "number") {
                     output.data[currentGene] = currentValue;
                 } else {
-                    addError(output, constants.errors.invalidValueError(sheet.name, currentValue, row + 1,
-                        getSheetHeader(sheet.name, 1, row)));
+                    addError(
+                        output,
+                        constants.errors.invalidValueError(
+                            sheet.name,
+                            currentValue,
+                            row + 1,
+                            getSheetHeader(sheet.name, 1, row)
+                        )
+                    );
                 }
             }
         }
@@ -305,10 +418,10 @@ module.exports = function (workbookFile) {
         meta: {
             data: {},
             errors: [],
-            warnings: []
+            warnings: [],
         }, // optimization_parameters only
         twoColumnSheets: {}, // 2-column data
-        meta2: {} // optimation_diagnostics only //temporary until where it goes is decided
+        meta2: {}, // optimation_diagnostics only //temporary until where it goes is decided
     };
     workbookFile.forEach(function (sheet) {
         if (sheet.name === "optimization_parameters") {

@@ -1,9 +1,7 @@
-/* eslint-disable max-len */
 // var assert = require("chai").assert;
 // var xlsx = require("node-xlsx");
 var test = require("./test");
 // var spreadsheetController = require(__dirname + "/../server/controllers" + "/spreadsheet-controller")();
-
 
 describe("errors-graph-tests", function () {
     describe("asymmetrical-graphs", function () {
@@ -29,15 +27,27 @@ describe("errors-graph-tests", function () {
     describe("over-75-genes-or-150-nodes", function () {
         it("should return invalid workbook size error", function () {
             this.timeout(10000);
-            test.workbookSizeError("test-files/graph-tests/different-sized-networks/134-genes-0-edges.xlsx", 1);
-            test.workbookSizeError("test-files/graph-tests/different-sized-networks/44-source-genes-45-target-genes-max-edges.xlsx", 1);
+            test.workbookSizeError(
+                "test-files/graph-tests/different-sized-networks/134-genes-0-edges.xlsx",
+                1
+            );
+            test.workbookSizeError(
+                "test-files/graph-tests/different-sized-networks/44-source-genes-45-target-genes-max-edges.xlsx",
+                1
+            );
         });
     });
 
     describe("over-50-genes-or-100-nodes", function () {
         it("should return invalid workbook size warning", function () {
-            test.invalidNetworkSizeWarning("test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx", 1);
-            test.invalidNetworkSizeWarning("test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx", 1);
+            test.invalidNetworkSizeWarning(
+                "test-files/graph-tests/different-sized-networks/52-genes-0-edges.xlsx",
+                1
+            );
+            test.invalidNetworkSizeWarning(
+                "test-files/graph-tests/different-sized-networks/34-genes-111-edges.xlsx",
+                1
+            );
         });
     });
 

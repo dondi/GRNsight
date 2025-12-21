@@ -11,7 +11,7 @@ var convertResponse = function (app, req, res, converter) {
 
 var exportResponse = function (app, req, res, converter) {
     helpers.attachCorsHeader(res, app);
-    res.header("Content-Disposition", "attachment;filename=\"" + req.body.filename + "\"");
+    res.header("Content-Disposition", 'attachment;filename="' + req.body.filename + '"');
     return res.status(200).send(converter(JSON.parse(req.body.workbook)));
 };
 
@@ -21,8 +21,8 @@ var generalExportError = function (res, error) {
         message: "Invalid GRNsight format.",
         details: {
             name: error.name,
-            message: error.message
-        }
+            message: error.message,
+        },
     });
 };
 
@@ -83,12 +83,11 @@ module.exports = function (app) {
                 return generalExportError(res, error);
             }
         });
-
     }
 
     return {
         grnsightToSif: grnsightToSif,
         grnsightToGraphMl: grnsightToGraphMl,
-        grnsightToXlsx: grnsightToXlsx
+        grnsightToXlsx: grnsightToXlsx,
     };
 };

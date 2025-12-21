@@ -22,10 +22,7 @@ var SPECIES = [
     "Saccharomyces cerevisiae",
 ];
 
-const WORKBOOK_TYPES = [
-    NETWORK_GRN_MODE,
-    NETWORK_PPI_MODE
-];
+const WORKBOOK_TYPES = [NETWORK_GRN_MODE, NETWORK_PPI_MODE];
 
 var TAXON_ID = ["3702", "6293", "7227", "9606", "10090", "4932", "559292"];
 
@@ -106,7 +103,7 @@ var deepClone = function (object, isArray) {
         }
     } else {
         for (let i in object) {
-            if (object[i] !== null && typeof (object[i]) === "object") {
+            if (object[i] !== null && typeof object[i] === "object") {
                 clone[i] = deepClone(object[i], Array.isArray(object[i]));
             } else {
                 clone[i] = object[i];
@@ -130,14 +127,20 @@ var crossSheetInteractions = function (workbookFile) {
 
     var expressionData = parseExpressionSheets(workbookFile);
 
-    if (networks &&
+    if (
+        networks &&
         networks.networkOptimizedWeights &&
         typeof networks.networkOptimizedWeights === "object" &&
-        Object.keys(networks.networkOptimizedWeights).length > 0) {
+        Object.keys(networks.networkOptimizedWeights).length > 0
+    ) {
         // Base workbook is a clone of the prefered Optimized weights sheet
         workbook = deepClone(networks.networkOptimizedWeights, false);
         // Add errors from network sheet if it exists
-        if (networks.network && typeof networks.network === "object" && Object.keys(networks.network).length > 0) {
+        if (
+            networks.network &&
+            typeof networks.network === "object" &&
+            Object.keys(networks.network).length > 0
+        ) {
             if (networks.network.errors !== undefined) {
                 networks.network.errors.forEach(data => workbook.errors.push(data));
             }
@@ -151,9 +154,11 @@ var crossSheetInteractions = function (workbookFile) {
         workbook = deepClone(networks.network, false);
     }
     // Add errors and warnings from network weights to preserve the sheet
-    if (networks.networkWeights &&
+    if (
+        networks.networkWeights &&
         typeof networks.networkWeights === "object" &&
-        Object.keys(networks.networkWeights).length > 0) {
+        Object.keys(networks.networkWeights).length > 0
+    ) {
         if (networks.networkWeights.errors !== undefined) {
             networks.networkWeights.errors.forEach(data => workbook.errors.push(data));
         }
@@ -177,11 +182,15 @@ var crossSheetInteractions = function (workbookFile) {
     if (additionalData && additionalData.twoColumnSheets) {
         // Add errors and warnings from two column sheets
         for (let sheet in additionalData.twoColumnSheets) {
-            additionalData.twoColumnSheets[sheet].errors.forEach(data => workbook.errors.push(data));
+            additionalData.twoColumnSheets[sheet].errors.forEach(data =>
+                workbook.errors.push(data)
+            );
         }
 
         for (let sheet in additionalData.twoColumnSheets) {
-            additionalData.twoColumnSheets[sheet].warnings.forEach(data => workbook.warnings.push(data));
+            additionalData.twoColumnSheets[sheet].warnings.forEach(data =>
+                workbook.warnings.push(data)
+            );
         }
     }
 
@@ -210,7 +219,10 @@ var crossSheetInteractions = function (workbookFile) {
         additionalData.meta.data.workbookType = NETWORK_GRN_MODE;
     }
 
-    if (additionalData.meta.data.species === undefined && additionalData.meta.data.taxon_id === undefined) {
+    if (
+        additionalData.meta.data.species === undefined &&
+        additionalData.meta.data.taxon_id === undefined
+    ) {
         addWarning(workbook, constants.warnings.noSpeciesInformationDetected);
         additionalData.meta.data.species = "Saccharomyces cerevisiae";
         additionalData.meta.data["taxon_id"] = "559292";
@@ -234,7 +246,10 @@ var crossSheetInteractions = function (workbookFile) {
     // We need to account for all the different possible expression sheet names.
     if (expressionData) {
         if (additionalData.meta.data.workbookType === constants.NETWORK_GRN_MODE) {
-            if (expressionData["expression"] && Object.keys(expressionData["expression"]).length === 0) {
+            if (
+                expressionData["expression"] &&
+                Object.keys(expressionData["expression"]).length === 0
+            ) {
                 addWarning(expressionData, constants.warnings.missingExpressionWarning());
             }
         }
@@ -256,13 +271,21 @@ var crossSheetInteractions = function (workbookFile) {
         }
     }
 
-    if (expressionData && expressionData.expression && expressionData.expression.wt_log2_expression) {
+    if (
+        expressionData &&
+        expressionData.expression &&
+        expressionData.expression.wt_log2_expression
+    ) {
         if (expressionData.expression.wt_log2_expression.errors !== undefined) {
-            expressionData.expression.wt_log2_expression.errors.forEach(data => workbook.errors.push(data));
+            expressionData.expression.wt_log2_expression.errors.forEach(data =>
+                workbook.errors.push(data)
+            );
         }
 
         if (expressionData.expression.wt_log2_expression.warnings !== undefined) {
-            expressionData.expression.wt_log2_expression.warnings.forEach(data => workbook.warnings.push(data));
+            expressionData.expression.wt_log2_expression.warnings.forEach(data =>
+                workbook.warnings.push(data)
+            );
         }
     }
 
@@ -274,13 +297,18 @@ var crossSheetInteractions = function (workbookFile) {
             for (let i = 0; i < workbook.genes.length; i++) {
                 tempWorkbookGenes.add(workbook.genes[i].name);
             }
-            var tempExpressionGenes = new Set(expressionData.expression[sheet.name].columnGeneNames);
+            var tempExpressionGenes = new Set(
+                expressionData.expression[sheet.name].columnGeneNames
+            );
             var extraExpressionGenes = difference(tempExpressionGenes, tempWorkbookGenes);
             var extraWorkbookGenes = difference(tempWorkbookGenes, tempExpressionGenes);
 
             if (extraExpressionGenes.size === 0 && extraWorkbookGenes.size === 0) {
                 for (var i = 0; i < workbook.genes.length; i++) {
-                    if (workbook.genes[i].name !== expressionData.expression[sheet.name].columnGeneNames[i]) {
+                    if (
+                        workbook.genes[i].name !==
+                        expressionData.expression[sheet.name].columnGeneNames[i]
+                    ) {
                         addError(workbook, constants.errors.geneMismatchError(sheet.name));
                         break;
                     }
@@ -394,7 +422,10 @@ module.exports = function (app) {
             // TODO: Add file validation (make sure that file is an Excel file)
             new multiparty.Form().parse(req, function (err, fields, files) {
                 if (err) {
-                    return res.json(400, "There was a problem uploading your file. Please try again.");
+                    return res.json(
+                        400,
+                        "There was a problem uploading your file. Please try again."
+                    );
                 }
                 var input;
                 try {
@@ -424,7 +455,11 @@ module.exports = function (app) {
 
         // Load the demos
         app.get("/demo/unweighted", function (req, res) {
-            return demoWorkbooks("test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx", res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx",
+                res,
+                app
+            );
         });
 
         app.get("/demo/weighted", function (req, res) {
@@ -436,7 +471,11 @@ module.exports = function (app) {
         });
 
         app.get("/demo/schadeInput", function (req, res) {
-            return demoWorkbooks("test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx", res, app);
+            return demoWorkbooks(
+                "test-files/demo-files/21-genes_31-edges_Schade-data_input.xlsx",
+                res,
+                app
+            );
         });
 
         app.get("/demo/schadeOutput", function (req, res) {
@@ -448,11 +487,7 @@ module.exports = function (app) {
         });
 
         app.get("/demo/ppi", function (req, res) {
-            return demoWorkbooks(
-                "test-files/demo-files/18_proteins_81_edges_PPI.xlsx",
-                res,
-                app
-            );
+            return demoWorkbooks("test-files/demo-files/18_proteins_81_edges_PPI.xlsx", res, app);
         });
     }
 

@@ -7,9 +7,7 @@ var GENE_NAME = 0;
 var RELATIONSHIP = 1;
 var TARGET = 2;
 
-
 module.exports = function (sif) {
-
     var warnings = [];
     var errors = [];
 
@@ -85,7 +83,7 @@ module.exports = function (sif) {
             workbookType: workbookType,
             sheetType: allNumbers ? constants.WEIGHTED : constants.UNWEIGHTED,
             warnings: hasNumbers && !allNumbers ? constants.warnings.EDGES_WITHOUT_WEIGHTS : null,
-            errors: errors
+            errors: errors,
         };
     };
 
@@ -105,7 +103,11 @@ module.exports = function (sif) {
         errors.push(sifConstants.errors.SIF_STRAY_DATA_ERROR);
     } else {
         entries.forEach(function (entry) {
-            if (entry.length && entry[GENE_NAME] && genes.indexOf(entry[GENE_NAME]) === constants.NOT_FOUND) {
+            if (
+                entry.length &&
+                entry[GENE_NAME] &&
+                genes.indexOf(entry[GENE_NAME]) === constants.NOT_FOUND
+            ) {
                 genes.push(entry[GENE_NAME]);
             }
         });
@@ -133,7 +135,7 @@ module.exports = function (sif) {
                     }
                     var link = {
                         source: sourceIndex,
-                        target: targetIndex
+                        target: targetIndex,
                     };
                     if (workbookMeta.sheetType === constants.WEIGHTED) {
                         link.value = +entry[RELATIONSHIP];
@@ -145,9 +147,11 @@ module.exports = function (sif) {
     }
 
     var workbook = initWorkbook({
-        genes: emptySifFile ? [] : genes.map(function (geneName) {
-            return { name: geneName };
-        }),
+        genes: emptySifFile
+            ? []
+            : genes.map(function (geneName) {
+                  return { name: geneName };
+              }),
         links: links,
         errors: errors,
         warnings: warnings,
@@ -156,9 +160,8 @@ module.exports = function (sif) {
         positiveWeights: [],
         negativeWeights: [],
         meta: {},
-        expression: {}
+        expression: {},
     });
 
-    return (workbook.errors.length === 0) ? semanticChecker(workbook) : workbook;
-
+    return workbook.errors.length === 0 ? semanticChecker(workbook) : workbook;
 };

@@ -14,7 +14,7 @@ lib-cov
 ~$*.xls
 
 documents/developer_documents/testing_script_generator/GRNsightTestingDocument.pdf
-web-client/public/js/grnsight.min.js
+web-client-classic/public/js/grnsight.min.js
 
 
 pids
@@ -82,3 +82,12 @@ Backup of *.doc*
 
 # Misc
 .env
+web-client/.vite/deps/
+dist/
+
+# Ignore Python __pycache__ folder
+__pycache__/.nyc_output/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

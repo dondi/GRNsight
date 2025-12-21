@@ -110,10 +110,7 @@ var parseNetworkSheet = function (sheet, network) {
     // Depending on the value of cellA1, we want to make a new property `networkType` which
     // will indicate the network type. THe web app then reads this to decide what to do next.
     if (cellA1 !== CELL_A1_GRN && cellA1 !== CELL_A1_PPI) {
-        addWarning(
-            network,
-            constants.warnings.incorrectCellA1WorkbookWarning(sheet.name)
-        );
+        addWarning(network, constants.warnings.incorrectCellA1WorkbookWarning(sheet.name));
     }
 
     // Get Source Genes
@@ -135,27 +132,31 @@ var parseNetworkSheet = function (sheet, network) {
     columnChecker = new Array(sheet.data[0].length).fill(0);
 
     for (var row = 0, column = 1; row < sheet.data.length; row++) {
-        if (sheet.data[row].length === 0) { // if the current row is empty
+        if (sheet.data[row].length === 0) {
+            // if the current row is empty
             if (addError(network, constants.errors.emptyRowError(row)) === false) {
                 return network;
             }
         } else if (sheet.data[row].length === 1) {
             addTargetGene(network, sheet, row, targetGenes, genesList);
             rowData.push(row);
-        } else { // if the row has data...
+        } else {
+            // if the row has data...
             // Genes found when row = 0 are targets. Genes found when column = 0 are source genes.
             // We set column = 1 in the for loop so it skips row 0 column 0, since that contains no matrix data.
             // Yes, the rows and columns use array numbering. That is, they start at 0, not 1.
-            try { // This prevents the server from crashing if something goes wrong anywhere in here
+            try {
+                // This prevents the server from crashing if something goes wrong anywhere in here
                 if (sheet.data[row].length < sheet.data[0].length) {
-                    for (let i = sheet.data[row].length - 1; i < sheet.data[0].length  - 1; i++) {
+                    for (let i = sheet.data[row].length - 1; i < sheet.data[0].length - 1; i++) {
                         columnChecker[i]++;
                         addWarning(network, constants.warnings.invalidMatrixDataWarning(row, i));
                     }
                 }
                 while (column < sheet.data[row].length) {
                     // While we haven't gone through all of the columns in this row...
-                    if (row !== 0) { // skip the source genes
+                    if (row !== 0) {
+                        // skip the source genes
                         if (column === 0) {
                             // These genes are the target genes
                             try {
@@ -166,36 +167,62 @@ var parseNetworkSheet = function (sheet, network) {
                                 addError(network, constants.errors.corruptGeneError(row, column));
                                 return network;
                             }
-                        } else { // If we're within the matrix and lookin' at the data...
+                        } else {
+                            // If we're within the matrix and lookin' at the data...
                             try {
                                 if (sheet.data[row][column] === undefined) {
                                     // SHOULD BE: addError(network, constants.errors.missingValueError(row, column));
                                     columnChecker[column - 1]++;
-                                    addWarning(network, constants.warnings.invalidMatrixDataWarning(row, column));
-                                } else if (isNaN(+("" + sheet.data[row][column])) ||
-                                    typeof sheet.data[row][column] !== "number") {
+                                    addWarning(
+                                        network,
+                                        constants.warnings.invalidMatrixDataWarning(row, column)
+                                    );
+                                } else if (
+                                    isNaN(+("" + sheet.data[row][column])) ||
+                                    typeof sheet.data[row][column] !== "number"
+                                ) {
                                     addError(network, constants.errors.dataTypeError(row, column));
                                     return network;
                                 } else {
                                     // columnChecker[column - 1] = columnChecker[column - 1]++;
-                                    if (sheet.data[row][column] !== 0) { // We only care about non-zero values
+                                    if (sheet.data[row][column] !== 0) {
+                                        // We only care about non-zero values
                                         // Grab the source and target genes' names
                                         sourceGene = sheet.data[0][column];
                                         targetGene = sheet.data[row][0];
                                         if (sourceGene === undefined || targetGene === undefined) {
-                                            addWarning(network, constants.warnings.randomDataWarning("undefined",
-                                                row, column));
-                                        } else if ((isNaN(sourceGene) && typeof sourceGene !== "string") ||
-                                            (isNaN(targetGene) && typeof targetGene !== "string")) {
-                                            addWarning(network, constants.warnings.randomDataWarning(
-                                                "NaN", row, column));
+                                            addWarning(
+                                                network,
+                                                constants.warnings.randomDataWarning(
+                                                    "undefined",
+                                                    row,
+                                                    column
+                                                )
+                                            );
+                                        } else if (
+                                            (isNaN(sourceGene) && typeof sourceGene !== "string") ||
+                                            (isNaN(targetGene) && typeof targetGene !== "string")
+                                        ) {
+                                            addWarning(
+                                                network,
+                                                constants.warnings.randomDataWarning(
+                                                    "NaN",
+                                                    row,
+                                                    column
+                                                )
+                                            );
                                         } else {
                                             // Grab the source and target genes' numbers
-                                            sourceGeneNumber = genesList.indexOf(sourceGene.toString().toUpperCase());
-                                            targetGeneNumber = genesList.indexOf(targetGene.toString().toUpperCase());
+                                            sourceGeneNumber = genesList.indexOf(
+                                                sourceGene.toString().toUpperCase()
+                                            );
+                                            targetGeneNumber = genesList.indexOf(
+                                                targetGene.toString().toUpperCase()
+                                            );
                                             currentLink = {
-                                                source: sourceGeneNumber, target: targetGeneNumber,
-                                                value: sheet.data[row][column]
+                                                source: sourceGeneNumber,
+                                                target: targetGeneNumber,
+                                                value: sheet.data[row][column],
                                             };
                                             // Here we set the properties of the current link
                                             // before we push them to the network
@@ -208,7 +235,8 @@ var parseNetworkSheet = function (sheet, network) {
                                                     // Node coloring-consistent red edge color
                                                     currentLink.stroke = "rgb(195, 61, 61)";
                                                     network.positiveWeights.push(currentLink.value);
-                                                } else { // if it's a negative number, mark it as a repressor
+                                                } else {
+                                                    // if it's a negative number, mark it as a repressor
                                                     currentLink.type = "repressor";
                                                     // currentLink.stroke = "DarkTurquoise";
                                                     // GRNsight v1 cyan edge color
@@ -220,8 +248,10 @@ var parseNetworkSheet = function (sheet, network) {
                                                 currentLink.type = "arrowhead";
                                                 currentLink.stroke = "black";
                                                 if (currentLink.value !== 1) {
-                                                    addWarning(network, constants.warnings.
-                                                        incorrectlyNamedSheetWarning());
+                                                    addWarning(
+                                                        network,
+                                                        constants.warnings.incorrectlyNamedSheetWarning()
+                                                    );
                                                     currentLink.value = 1;
                                                 }
                                                 network.positiveWeights.push(currentLink.value);
@@ -230,7 +260,6 @@ var parseNetworkSheet = function (sheet, network) {
                                         }
                                     }
                                 }
-
                             } catch (err) {
                                 addError(network, constants.errors.missingValueError(row, column));
                                 // SHOULD BE: addError(network, constants.errors.unknownFileError);
@@ -274,7 +303,6 @@ var parseNetworkSheet = function (sheet, network) {
 
     // Move on to semanticChecker.
 
-
     // We sort them here because gene order is not relevant before this point
     // Sorting them now means duplicates will be right next to each other
     sourceGenes.sort();
@@ -297,7 +325,7 @@ var parseNetworkSheet = function (sheet, network) {
  * If cellA1 = "cols regulators/ row targets" -> workbookType = grn
  * If cellA1 = "cols protein1/ rows protein2" -> workbookType = "protein-protein-physical-interaction"
  * else undefined
-*/
+ */
 
 exports.workbookType = function (workbookFile) {
     let workbookType;
@@ -330,18 +358,29 @@ exports.networks = function (workbookFile) {
         if (element.name.toLowerCase() === "network") {
             // Here we have found a network sheet containing simple data. We keep looking
             // in case there is also a network sheet with optimized weights
-            networks.network = parseNetworkSheet(element, initWorkbook({ sheetType: "unweighted" }));
-        } else if (element.name.toLowerCase() === "network_optimized_weights" ) {
+            networks.network = parseNetworkSheet(
+                element,
+                initWorkbook({ sheetType: "unweighted" })
+            );
+        } else if (element.name.toLowerCase() === "network_optimized_weights") {
             // We found a network sheet with optimized weights, which is the ideal data source.
-            networks.networkOptimizedWeights = parseNetworkSheet(element,
-                initWorkbook({ sheetType: "weighted" }));
+            networks.networkOptimizedWeights = parseNetworkSheet(
+                element,
+                initWorkbook({ sheetType: "weighted" })
+            );
         } else if (element.name.toLowerCase() === "network_weights") {
             // We found a network_weights sheet to preserve existing network type sheet data
-            networks.networkWeights = parseNetworkSheet(element, initWorkbook({ sheetType: "weighted" }));
+            networks.networkWeights = parseNetworkSheet(
+                element,
+                initWorkbook({ sheetType: "weighted" })
+            );
         }
     }
 
-    if (Object.keys(networks.network).length === 0 && Object.keys(networks.networkOptimizedWeights).length === 0) {
+    if (
+        Object.keys(networks.network).length === 0 &&
+        Object.keys(networks.networkOptimizedWeights).length === 0
+    ) {
         networks.network = initWorkbook({ sheetType: "unweighted" });
         addError(networks.network, constants.errors.missingNetworkError);
     }

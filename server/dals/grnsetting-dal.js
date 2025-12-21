@@ -12,8 +12,8 @@ var sequelize = new Sequelize(
         pool: {
             max: 5,
             min: 0,
-            idle: 10000
-        }
+            idle: 10000,
+        },
     }
 );
 
@@ -22,9 +22,9 @@ const buildGetDefaultDataset = function () {
     SELECT grnsettings.expression_dataset FROM settings.grnsettings;`;
 };
 
-const DefaultDatasetToJSON = (totalOutput) => {
+const DefaultDatasetToJSON = totalOutput => {
     const JSONOutput = {
-        defaultDataset : []
+        defaultDataset: [],
     };
     for (let dataset of totalOutput) {
         JSONOutput.defaultDataset.push(dataset.expression_dataset);
@@ -32,18 +32,18 @@ const DefaultDatasetToJSON = (totalOutput) => {
     return JSONOutput;
 };
 
-
 module.exports = {
     queryDefaultDataset: function (req, res) {
-        return sequelize.query(buildGetDefaultDataset(),
-            { type: sequelize.QueryTypes.SELECT })
+        return sequelize
+            .query(buildGetDefaultDataset(), { type: sequelize.QueryTypes.SELECT })
             .then(function (stdname) {
                 const convertToJSON = {
-                    "DefaultDataset" : () => DefaultDatasetToJSON(stdname)
+                    DefaultDataset: () => DefaultDatasetToJSON(stdname),
                 };
                 const type = req.query.type;
-                return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) :
-                    res.status(500).send({ errors: "Something went wrong." });
+                return Object.keys(convertToJSON).includes(type)
+                    ? res.send(convertToJSON[type]())
+                    : res.status(500).send({ errors: "Something went wrong." });
             });
-    }
+    },
 };

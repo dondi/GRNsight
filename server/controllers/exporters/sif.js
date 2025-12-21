@@ -5,20 +5,24 @@ var exportEdges = function (workbook, gene, geneIndex) {
 
     workbook.links.forEach(function (link) {
         if (link.source === geneIndex) {
-            result += [
-                gene.name,
-                workbook.sheetType === constants.WEIGHTED ?
-                    link.value : (workbook.meta) ?
-                    (workbook.meta.data.workbookType === constants.NETWORK_PPI_MODE ?
-                        "pp" : "pd") :
-                    workbook.workbookType === constants.NETWORK_PPI_MODE ?
-                    "pp" : "pd",
-                workbook.genes[link.target].name
-            ].join("\t") + "\n";
+            result +=
+                [
+                    gene.name,
+                    workbook.sheetType === constants.WEIGHTED
+                        ? link.value
+                        : workbook.meta
+                          ? workbook.meta.data.workbookType === constants.NETWORK_PPI_MODE
+                              ? "pp"
+                              : "pd"
+                          : workbook.workbookType === constants.NETWORK_PPI_MODE
+                            ? "pp"
+                            : "pd",
+                    workbook.genes[link.target].name,
+                ].join("\t") + "\n";
         }
     });
 
-    return result || (gene.name + "\t\t\n");
+    return result || gene.name + "\t\t\n";
 };
 
 module.exports = function (workbook) {

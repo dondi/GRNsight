@@ -33,14 +33,15 @@ const addExpError = (workbook, message) => {
     }
 };
 
-const fillArray = (value, array, length) => { // mutator
+const fillArray = (value, array, length) => {
+    // mutator
     while (array.length < length) {
         array.push(value);
     }
     return array;
 };
 
-const isExpressionSheet = (sheetName) => {
+const isExpressionSheet = sheetName => {
     return EXPRESSION_SHEET_SUFFIXES.some(function (suffix) {
         return sheetName.includes(suffix);
     });
@@ -48,13 +49,12 @@ const isExpressionSheet = (sheetName) => {
 
 // Going to continue basing this section off of the parseWorkbookSheet function in spreadsheet-controller.js
 var parseExpressionSheet = function (sheet) {
-
     var geneData = {};
     var expressionData = {
         errors: [],
         warnings: [],
         timePoints: [],
-        columnGeneNames: []
+        columnGeneNames: [],
     };
 
     // Check that id label is correct. Throw error if not.
@@ -67,20 +67,24 @@ var parseExpressionSheet = function (sheet) {
     let compareTimePoint = 0;
     for (let i = 0; i < numberOfDataPoints; i++) {
         if (isNaN(expressionData.timePoints[i]) && expressionData.timePoints[i] !== undefined) {
-            addExpError(expressionData, constants.errors.nonNumericalTimePointsError(i + 1, sheet.name));
+            addExpError(
+                expressionData,
+                constants.errors.nonNumericalTimePointsError(i + 1, sheet.name)
+            );
         } else if (expressionData.timePoints[i] < 0) {
             addExpError(expressionData, constants.errors.negativeTimePointError(i + 1, sheet.name));
         } else if (expressionData.timePoints[i] < compareTimePoint) {
-            addExpError(expressionData, constants.errors.nonMonotonicTimePointsError(i + 1, sheet.name));
+            addExpError(
+                expressionData,
+                constants.errors.nonMonotonicTimePointsError(i + 1, sheet.name)
+            );
             break;
         } else {
             compareTimePoint = expressionData.timePoints[i];
         }
-
     }
     let geneNames = [];
     sheet.data.forEach(function (sheet) {
-
         const geneName = sheet[0];
         if (geneName) {
             geneNames.push(geneName);
@@ -104,13 +108,19 @@ var parseExpressionSheet = function (sheet) {
         let columnChecker = new Array(rowLength).fill(0);
         Object.values(expressionData.data).forEach(function (row) {
             if (row.length !== rowLength) {
-                addExpWarning(expressionData, constants.warnings.extraneousDataWarning(sheet.name, row));
+                addExpWarning(
+                    expressionData,
+                    constants.warnings.extraneousDataWarning(sheet.name, row)
+                );
             }
             // Check for missing Column Headers
             if (rowCounter === 0) {
                 for (let i = 0; i < rowLength; i++) {
                     if (sheet.data[0][i] === undefined) {
-                        addExpError(expressionData, constants.errors.missingColumnHeaderError(sheet.name));
+                        addExpError(
+                            expressionData,
+                            constants.errors.missingColumnHeaderError(sheet.name)
+                        );
                     }
                 }
             } else {
@@ -126,7 +136,10 @@ var parseExpressionSheet = function (sheet) {
             for (let i = 0; i <= rowLength; i++) {
                 if (i === rowLength) {
                     if (nonnullCount === 0) {
-                        addExpError(expressionData, constants.errors.emptyExpressionRowError(i, sheet.name));
+                        addExpError(
+                            expressionData,
+                            constants.errors.emptyExpressionRowError(i, sheet.name)
+                        );
                         break;
                     }
                 } else {
@@ -140,7 +153,10 @@ var parseExpressionSheet = function (sheet) {
         // check for empty columns
         for (var i = 0; i < columnChecker.length; i++) {
             if (columnChecker[i] === 0) {
-                addExpError(expressionData, constants.errors.emptyExpressionColumnError(i, sheet.name));
+                addExpError(
+                    expressionData,
+                    constants.errors.emptyExpressionColumnError(i, sheet.name)
+                );
             }
         }
     }
@@ -152,7 +168,7 @@ module.exports = function (workbook) {
     const output = {
         expression: {},
         warnings: [],
-        errors: []
+        errors: [],
     };
 
     workbook.forEach(function (sheet) {

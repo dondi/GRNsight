@@ -10,21 +10,28 @@ var createEmptyWorkbook = function () {
         negativeWeights: [],
         sheetType: "",
         meta: {},
-        expression:{}
+        expression: {},
     };
 };
 
 // Outside of module.exports because needs too access createEmptyWorkbook
 var initWorkbook = function (net) {
     const workbook = createEmptyWorkbook();
-    Object.assign(workbook, net);    // copies fields without overriding empty ones :)
+    Object.assign(workbook, net); // copies fields without overriding empty ones :)
     return workbook;
 };
 
 module.exports = {
-
+    // Allow more than 1 CORS origin so can serve web-client and web-client-classic
     attachCorsHeader: function (res, app) {
-        res.header("Access-Control-Allow-Origin", app.get("corsOrigin"));
+        const allowedOrigins = Array.isArray(app.get("corsOrigin"))
+            ? app.get("corsOrigin")
+            : [app.get("corsOrigin")];
+
+        const origin = app.get("corsOrigin");
+        if (origin && allowedOrigins.includes(origin)) {
+            res.header("Access-Control-Allow-Origin", origin);
+        }
     },
 
     attachFileHeaders: function (res, path) {
@@ -34,6 +41,5 @@ module.exports = {
     },
 
     createEmptyWorkbook: createEmptyWorkbook,
-    initWorkbook: initWorkbook
-
+    initWorkbook: initWorkbook,
 };

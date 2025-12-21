@@ -8,7 +8,7 @@ module.exports = function (graphml) {
     var graph;
     var key;
 
-    var workbook = initWorkbook({sheetType: constants.UNWEIGHTED});
+    var workbook = initWorkbook({ sheetType: constants.UNWEIGHTED });
 
     // These warnings don't exist. They are a TODO
     // workbook.warnings.push(constants.warnings.noSpeciesInformationDetected);
@@ -21,7 +21,7 @@ module.exports = function (graphml) {
         var column = err.slice(err.indexOf("Column: ") + 8, err.indexOf(" Char: "));
         var char = err.slice(err.indexOf("Char: ") + 6, err.length);
         // There seems to be a one-off-error with the line value, so this below was a workaround
-        return {error: error, line: +line + 1, column: column, char:char};
+        return { error: error, line: +line + 1, column: column, char: char };
     };
 
     var pushRelevantError = function (err) {
@@ -45,17 +45,33 @@ module.exports = function (graphml) {
     }
 
     var findKeyId = function (attrName, attrFor) {
-        return key && key.reduce(function (keyId, keyElement) {
-            return keyId || (keyElement.$["attr.name"] === attrName &&
-              (attrFor ? keyElement.$.for === attrFor : true) ? keyElement.$.id : null);
-        }, "");
+        return (
+            key &&
+            key.reduce(function (keyId, keyElement) {
+                return (
+                    keyId ||
+                    (keyElement.$["attr.name"] === attrName &&
+                    (attrFor ? keyElement.$.for === attrFor : true)
+                        ? keyElement.$.id
+                        : null)
+                );
+            }, "")
+        );
     };
 
     var findYFilesKeyId = function (yFilesType, attrFor) {
-        return key && key.reduce(function (keyId, keyElement) {
-            return keyId || (keyElement.$["yfiles.type"] === yFilesType &&
-              (attrFor ? keyElement.$.for === attrFor : true) ? keyElement.$.id : null);
-        }, "");
+        return (
+            key &&
+            key.reduce(function (keyId, keyElement) {
+                return (
+                    keyId ||
+                    (keyElement.$["yfiles.type"] === yFilesType &&
+                    (attrFor ? keyElement.$.for === attrFor : true)
+                        ? keyElement.$.id
+                        : null)
+                );
+            }, "")
+        );
     };
 
     var findKey = function (element, keyId) {
@@ -82,18 +98,25 @@ module.exports = function (graphml) {
         return keyMatch.length ? keyMatch[0] : null;
     };
 
-
     // We will only consider GraphML data to be weighted if:
     // (a) A key for the weight attribute is present, AND
     // (b) Every edge in the file has a data element with that key
-    var weightId = findKeyId("weight"/* , "edge"*/);
+    var weightId = findKeyId("weight" /* , "edge"*/);
     // Edge condition temporarily commented out pending Cytoscape GraphML export bug fix.
 
-    if (weightId && graph.edge && graph.edge.every(function (edge) { // What
-        return edge.data && edge.data.some(function (data) {
-            return data.$.key === weightId && !isNaN(+data._);
-        });
-    })) {
+    if (
+        weightId &&
+        graph.edge &&
+        graph.edge.every(function (edge) {
+            // What
+            return (
+                edge.data &&
+                edge.data.some(function (data) {
+                    return data.$.key === weightId && !isNaN(+data._);
+                })
+            );
+        })
+    ) {
         workbook.sheetType = constants.WEIGHTED;
     } else if (weightId) {
         workbook.warnings.push(constants.warnings.EDGES_WITHOUT_WEIGHTS);
@@ -147,7 +170,7 @@ module.exports = function (graphml) {
         graph.edge.forEach(function (edge) {
             var link = {
                 source: geneIds.indexOf(edge.$.source),
-                target: geneIds.indexOf(edge.$.target)
+                target: geneIds.indexOf(edge.$.target),
             };
 
             if (link.source === constants.NOT_FOUND || link.target === constants.NOT_FOUND) {
@@ -164,6 +187,5 @@ module.exports = function (graphml) {
         });
     }
 
-    return (workbook.errors.length === 0) ? semanticChecker(workbook) : workbook;
-
+    return workbook.errors.length === 0 ? semanticChecker(workbook) : workbook;
 };

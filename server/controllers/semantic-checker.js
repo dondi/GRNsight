@@ -34,7 +34,13 @@ var addWarning = function (workbook, message) {
 };
 */
 
-var checkWorkbookSize = function (errorArray, warningArray, genesList, positiveWeights, negativeWeights) {
+var checkWorkbookSize = function (
+    errorArray,
+    warningArray,
+    genesList,
+    positiveWeights,
+    negativeWeights
+) {
     var genesLength = genesList.length;
     var edgesLength = positiveWeights.length + negativeWeights.length;
     var GENE_MAX_WARNING = 50;
@@ -42,8 +48,10 @@ var checkWorkbookSize = function (errorArray, warningArray, genesList, positiveW
     var GENE_MAX_ERROR = 75;
     var EDGE_MAX_ERROR = 150;
 
-    if ((genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR) ||
-      (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)) {
+    if (
+        (genesLength >= GENE_MAX_WARNING && genesLength < GENE_MAX_ERROR) ||
+        (edgesLength >= EDGE_MAX_WARNING && edgesLength < EDGE_MAX_ERROR)
+    ) {
         warningArray.push(constants.warnings.workbookSizeWarning(genesLength, edgesLength));
     } else if (genesLength >= GENE_MAX_ERROR || edgesLength >= EDGE_MAX_ERROR) {
         errorArray.push(constants.errors.workbookSizeError(genesLength, edgesLength));
@@ -88,7 +96,9 @@ var checkSpecialCharacter = function (errorArray, genesList, sheetName, row) {
     var regex = /[^a-z0-9\_\-]/gi;
     for (var i = 0; i < genesList.length; i++) {
         if (genesList[i].name.match(regex) !== null) {
-            errorArray.push(constants.errors.specialCharacterError(sheetName, genesList[i].name, row));
+            errorArray.push(
+                constants.errors.specialCharacterError(sheetName, genesList[i].name, row)
+            );
         }
     }
 };
@@ -107,8 +117,13 @@ module.exports = function (workbook) {
     checkSpecialCharacter(workbook.errors, workbook.genes);
     checkDuplicates(workbook.errors, workbook.genes);
     checkGeneLength(workbook.errors, workbook.genes);
-    checkWorkbookSize(workbook.errors, workbook.warnings, workbook.genes,
-                    workbook.positiveWeights, workbook.negativeWeights);
+    checkWorkbookSize(
+        workbook.errors,
+        workbook.warnings,
+        workbook.genes,
+        workbook.positiveWeights,
+        workbook.negativeWeights
+    );
     checkIfEmptyWorkbook(workbook.errors, workbook.genes);
     // We're done. Return the workbook.
     return workbook;

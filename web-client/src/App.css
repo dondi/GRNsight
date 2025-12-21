@@ -1,0 +1,282 @@
+body {
+  font-size: 14px;
+  line-height: 1.42857143;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  transition: none;
+  transition-property: none;
+  transition-duration: none;
+  transition-timing-function: none;
+}
+
+.navbar {
+  top: 1px;
+  min-height: 50px;
+  margin-bottom: 10px;
+  position: relative;
+  border-radius: 4px;
+  line-height: 20px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-color: #dfebe5;
+}
+
+.navbar button {
+  color: #000000;
+  border: none;
+}
+
+.navbar button span {
+  font-size: 14px;
+}
+
+.italics {
+  font-style: italic;
+}
+
+.dropdown-menu {
+  /* position: absolute; */
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background-color: white;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+
+.dropdown-menu button {
+  border-radius: 0px;
+}
+
+.dropdown-menu button:hover {
+  background-color: #dfebe5;
+}
+
+.dropdown-menu div:has(button) {
+  border-radius: 0px;
+}
+
+.dropdown-menu div:has(button):hover {
+  background-color: #dfebe5;
+}
+
+.folder-icon {
+  margin-right: 5px;
+}
+
+.navbar button:hover {
+  color: #696969;
+  box-shadow: none;
+}
+
+button {
+  border: none;
+  box-shadow: none;
+}
+
+button:hover {
+  border: none;
+  box-shadow: none;
+}
+
+.demo-button {
+  text-align: start;
+  padding: 0px;
+  padding-inline: 0px;
+  padding-block: 0px;
+  border: none;
+  box-shadow: none;
+  transition: none;
+  transition-property: none;
+  transition-duration: none;
+  transition-timing-function: none;
+}
+
+.demo-button:hover {
+  border: none;
+  border-radius: 0px;
+  box-shadow: none;
+  transition: none;
+  transition-property: none;
+  transition-duration: none;
+  transition-timing-function: none;
+}
+
+/* .iXPGmp {
+  padding: 0px;
+  border: none;
+  all: unset;
+  box-shadow: none;
+} */
+
+/* .iXPGmp:hover {
+  padding: 0px;
+  border: none;
+  box-shadow: none;
+} */
+
+.subdivider {
+  border-top: 1px dotted #bbb;
+  width: 95%;
+  margin: auto;
+}
+
+.long-subdivider {
+  border-top: 1px dotted #bbb;
+  width: 100%;
+  margin: auto;
+}
+
+.dropdown {
+  margin-right: 15px;
+  cursor: pointer;
+  padding: 15px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  /* z-index: 1; */
+}
+
+/* .dropdown:hover {
+  background-color: #16693F;
+  color: #FFFFFF;
+} */
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.sidebar {
+  width: 225px;
+  margin-left: 10px;
+  position: relative;
+  overflow: visible;
+}
+
+.panel {
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  line-height: 1.42857143;
+}
+
+.panel-dropdown-container {
+  margin-top: 0px;
+  padding: 0px, 10px, 10px, 10px;
+  text-align: left;
+}
+
+.panel-dropdown-container button,
+.panel-dropdown-container select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-overflow: hidden;
+}
+
+.load-from-database {
+  padding: 6px 12px;
+}
+
+.panel-dropdown-container input {
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.network-source-section {
+  margin-left: 10px;
+}
+
+.demo-source-dropdown {
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+}
+
+.btnSidebar {
+  width: 100%;
+}
+
+.sidebarPanelHeader {
+  margin: 10px 10px 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.sidebarPanelHeaderSpecies {
+  border-color: #ddd;
+  font-weight: bold;
+  font-size: 12px;
+  width: 100%;
+}
+
+.file-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
+.sidebarPanelHeaderID {
+  margin: 0px 5px 5px;
+  font-weight: bold;
+  font-size: 12px;
+  width: 100%;
+}
+
+.nodeColoringSidebarBody {
+  margin-top: 6px;
+}
+
+.sidebar-radio-buttons {
+  font-size: 14px;
+}
+
+/* TODO: is this being used correctly? */
+input[type="radio"]:checked {
+  border: 2px solid #333;
+}
+
+/* .data-sidebar select {
+  width: 100%;
+} */
+
+/* .data-sidebar.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+} */
+
+.sidebar-radio.disabled {
+  color: #aaa;
+}
+
+.sidebar-glyphicon {
+  margin-right: 0px;
+}
+
+.grnsight-container {
+  left: 250px;
+  top: 53px;
+  border: 2px solid #9a9a9a;
+  /* TODO: need to change this from absolute so that whole page can be scrollable? */
+  position: absolute;
+  stroke: #fff;
+  stroke-width: 0.5px;
+  width: 1100px;
+  height: 644px;
+  /* transition: opacity 0.25s; */
+}
+
+.load-from-database {
+  border: 2px solid red;
+}

@@ -12,15 +12,17 @@ var sequelize = new Sequelize(
         pool: {
             max: 5,
             min: 0,
-            idle: 10000
-        }
+            idle: 10000,
+        },
     }
 );
 
 const buildExpressionGenesQuery = function (geneString) {
     let genes = "";
     let geneList = geneString.split(",");
-    geneList.forEach(x => genes += ( `(LOWER(gene_expression.gene.display_gene_id) = LOWER(\'${x}\')) OR `));
+    geneList.forEach(
+        x => (genes += `(LOWER(gene_expression.gene.display_gene_id) = LOWER(\'${x}\')) OR `)
+    );
     return genes.substring(0, genes.length - 4);
 };
 
@@ -44,15 +46,16 @@ const buildExpressionDataQuery = function (dataset, genes) {
     AND gene_expression.gene.gene_id = gene_expression.expression.gene_id) ORDER BY sort_index;`;
 };
 
-
-
 const buildExpressionQuery = function (query) {
     const expressionQueries = {
-        "DegradationRates": () => buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
-        "ProductionRates" : () => buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
-        "ExpressionData" : () => buildExpressionDataQuery(query.dataset, query.genes),
-        "ExpressionDatasets" : () => "SELECT DISTINCT dataset FROM gene_expression.expression ORDER BY dataset ASC;",
-        "ExpressionTimePoints": () => buildExpressionTimepointsFromDatasetQuery(query.dataset)
+        DegradationRates: () =>
+            buildExpressionProductionDegradationRatesQuery("degradation_rate", query.genes),
+        ProductionRates: () =>
+            buildExpressionProductionDegradationRatesQuery("production_rate", query.genes),
+        ExpressionData: () => buildExpressionDataQuery(query.dataset, query.genes),
+        ExpressionDatasets: () =>
+            "SELECT DISTINCT dataset FROM gene_expression.expression ORDER BY dataset ASC;",
+        ExpressionTimePoints: () => buildExpressionTimepointsFromDatasetQuery(query.dataset),
     };
     if (Object.keys(expressionQueries).includes(query.type)) {
         return expressionQueries[query.type]();
@@ -73,25 +76,24 @@ const convertExpressionToJSON = function (totalOutput, dataset, timePoints, allG
     let JSONOutput = {
         timePoints,
         data: {
-            id: timePoints
-        }
+            id: timePoints,
+        },
     };
-    allGenes.forEach(x => JSONOutput.data[x.toString()] = listExpressionGeneData(x, totalOutput));
+    allGenes.forEach(x => (JSONOutput.data[x.toString()] = listExpressionGeneData(x, totalOutput)));
     return JSONOutput;
 };
 
 const ProductionDegradationRateToJSON = (totalOutput, rateType) => {
-    const JSONOutput = {
-    };
+    const JSONOutput = {};
     for (let gene of totalOutput) {
         JSONOutput[gene.display_gene_id] = gene[rateType];
     }
     return JSONOutput;
 };
 
-const DatasetToJSON = (totalOutput) => {
+const DatasetToJSON = totalOutput => {
     const JSONOutput = {
-        expressionDatasets : []
+        expressionDatasets: [],
     };
     for (let dataset of totalOutput) {
         JSONOutput.expressionDatasets.push(dataset.dataset);
@@ -110,23 +112,30 @@ const TimePointsToJSON = (totalOutput, dataset) => {
 
 module.exports = {
     queryExpressionDatabase: function (req, res) {
-        return sequelize.query(buildExpressionQuery(req.query),
-                { type: sequelize.QueryTypes.SELECT })
-                    .then(function (stdname) {
-                        const convertToJSON = {
-                            "DegradationRates" : () => ProductionDegradationRateToJSON(stdname, "degradation_rate"),
-                            "ProductionRates" : () => ProductionDegradationRateToJSON(stdname, "production_rate"),
-                            "ExpressionData" : () => convertExpressionToJSON(
-                                        stdname,
-                                        req.query.dataset,
-                                        req.query.timepoints.split(",").map(x => Number(x)),
-                                        req.query.genes.split(",")),
-                            "ExpressionDatasets": () => DatasetToJSON(stdname),
-                            "ExpressionTimePoints": () => TimePointsToJSON(stdname, req.query.dataset)
-                        };
-                        const type = req.query.type;
-                        return (Object.keys(convertToJSON).includes(type)) ? res.send(convertToJSON[type]()) :
-                            res.send(500, { errors: "Something went wrong."});
-                    });
-    }
+        return sequelize
+            .query(buildExpressionQuery(req.query), {
+                type: sequelize.QueryTypes.SELECT,
+            })
+            .then(function (stdname) {
+                const convertToJSON = {
+                    DegradationRates: () =>
+                        ProductionDegradationRateToJSON(stdname, "degradation_rate"),
+                    ProductionRates: () =>
+                        ProductionDegradationRateToJSON(stdname, "production_rate"),
+                    ExpressionData: () =>
+                        convertExpressionToJSON(
+                            stdname,
+                            req.query.dataset,
+                            req.query.timepoints.split(",").map(x => Number(x)),
+                            req.query.genes.split(",")
+                        ),
+                    ExpressionDatasets: () => DatasetToJSON(stdname),
+                    ExpressionTimePoints: () => TimePointsToJSON(stdname, req.query.dataset),
+                };
+                const type = req.query.type;
+                return Object.keys(convertToJSON).includes(type)
+                    ? res.send(convertToJSON[type]())
+                    : res.send(500, { errors: "Something went wrong." });
+            });
+    },
 };

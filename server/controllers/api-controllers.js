@@ -10,7 +10,10 @@ module.exports = function (app) {
     const relay = (req, res, host) => {
         const url = host + req.url;
         res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.header(
+            "Access-Control-Allow-Headers",
+            "Origin, X-Requested-With, Content-Type, Accept"
+        );
         req.pipe(request(url)).pipe(res);
     };
 

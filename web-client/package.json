@@ -1,0 +1,31 @@
+{
+  "name": "web-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "d3-v4-grid": "^2.0.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "grommet": "^2.49.0",
+    "grommet-icons": "^4.14.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "globals": "^16.3.0",
+    "parallelshell": "^3.0.1",
+    "prettier": "3.6.2",
+    "vite": "^7.1.2"
+  }
+}

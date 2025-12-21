@@ -1,3 +1,4 @@
+import argparse
 import csv
 import re
 import sys
@@ -9,189 +10,206 @@ import os
 species = "Saccharomyces cerevisiae"
 taxon_id = "559292"
 
+BASE_OUT = "../script-results/processed-expression"
 # Gene Id Generation and Expression Data Generation
 
-# Create folder paths 
-if not os.path.exists('../script-results'):
-    os.makedirs('../script-results')
+def ensure_dirs():
+  os.makedirs(BASE_OUT, exist_ok=True)
+  
+def write_to_file(dest, header, data):
+    print(f'Creating {dest}\n')
+    with open(dest, 'w', newline='') as out:
+        out.write(header + "\n")
+        for d in data:
+            out.write("\t".join(d) + "\n")
 
-if not os.path.exists('../script-results/processed-expression/'):
-    os.makedirs('../script-results/processed-expression')
+def process_expression_data(source_dir):
+  src = os.path.join(source_dir, 'ExpressionData.csv')
+  dest = os.path.join(BASE_OUT, 'expression-data.csv')
+  
+  genes = {}
+  expression_data = []
+  
+  print(f'Processing file {src}')
+  with open(src, 'r', encoding="UTF-8") as f:
+        reader = csv.reader(f)
+        next(reader)  # skip header
 
-# For simplicity, we assume that the program runs in the expression-database-folder.
-EXPRESSION_DATA_SOURCE = '../source-files/Expression 2020/ExpressionData.csv'
-EXPRESSION_DATA_DESTINATION = '../script-results/processed-expression/expression-data.csv'
-EXPRESSION_SHEET_DESTINATION = '../script-results/processed-expression/expression-sheet.csv'
-GENES_DESTINATION = '../script-results/processed-expression/genes.csv'
+        for row in reader:
+            display_gene_id = row[2].replace('\t', '')
+            gene_id = row[1].replace('\t', '')
+            sort_index = row[0]
+            sample_id = row[4]
+            expression = row[5]
+            time_points = row[6]
+            dataset = row[7]
 
-genes = {}
-expression_data = []
-expression_sheets = {}
-print(f'Processing file {EXPRESSION_DATA_SOURCE}')
-with open(EXPRESSION_DATA_SOURCE, 'r+', encoding="UTF-8") as f:
-  i = 0
-  replicate_count = 0
-  prev_dataset = ""
-  reader = csv.reader(f)
-  for row in reader:
-    if i != 0:
-      col_num = 0
-      display_gene_id = row[2].replace('\t','')
-      gene_id = row[1].replace('\t','')
-      sort_index = row[0]
-      sample_id = row[4]
-      expression = row[5]
-      time_points = row[6]
-      dataset = row[7]
-      # update the objects
-      if gene_id not in genes:
-        genes.update({gene_id : [display_gene_id, species, taxon_id]})
-      expression_data.append([gene_id, taxon_id, sort_index, sample_id, expression, time_points, dataset])
-    i+=1
-print(f'Creating {EXPRESSION_DATA_DESTINATION}\n')
-expression_data_file = open(EXPRESSION_DATA_DESTINATION, 'w')
-expression_data_file.write(f'Gene ID\tTaxon ID\tSort Index\tSample ID\tExpression\tTime Points\tDataset\n')
-for d in expression_data:
-  result = '{}\t{}\t{}\t{}\t{}\t{}\t{}'.format(d[0], d[1], d[2], d[3], d[4], d[5], d[6])
-  expression_data_file.write(f'{result}\n')
-expression_data_file.close()
+            if gene_id not in genes:
+                genes[gene_id] = [display_gene_id, species, taxon_id]
 
-# Expression Metadata
-EXPRESSION_METADATA_SOURCE = '../source-files/Expression 2020/ExpressionMetadata.csv'
-EXPRESSION_METADATA_DESTINATION = '../script-results/processed-expression/expression-metadata.csv'
-# Add Dalquist Data Here
-expression_metadata = [
-  # [1, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
-  # [3, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
-  # [2, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
-  # [4, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
-]
+            expression_data.append([
+                gene_id, taxon_id, sort_index, sample_id,
+                expression, time_points, dataset
+            ])
+  
+  header = "Gene ID\tTaxon ID\tSort Index\tSample ID\tExpression\tTime Point\tDataset"
+  write_to_file(dest, header, expression_data)
+  
+  return genes
 
-pubmed_to_geo_conversion = {
-  '12269742': 'GSE9336',
-  '17327492': 'GSE6129',
-  '23039231': 'GSE24712'
-}
+def process_expression_metadata(source_dir):
+    src = os.path.join(source_dir, 'ExpressionMetadata.csv')
+    dst = f"{BASE_OUT}/expression-metadata.csv"
 
-print(f'Processing file {EXPRESSION_METADATA_SOURCE}')
-with open(EXPRESSION_METADATA_SOURCE, 'r+', encoding="UTF-8") as f:
-  i = 0
-  reader = csv.reader(f)
-  for row in reader:
-    if i != 0:
-      # replicate_index = row[0][-1]
-      pubmed_id = row[1]
-      geo_id = pubmed_to_geo_conversion[pubmed_id]
-      control_yeast_strain = row[2]
-      treatment_yeast_strain = row[3]
-      control = row[4]
-      treatment = row[5]
-      concentration_value = row[6]
-      concentration_unit = row[7]
-      time_value = row[8]
-      time_unit = row[9]
-      number_of_replicates = row[10]
-      expression_table = row[11]
-      
-      expression_metadata.append([geo_id, pubmed_id, control_yeast_strain, treatment_yeast_strain, control, treatment, concentration_value, concentration_unit, time_value, time_unit, number_of_replicates, expression_table])
-    # next row
-    i+= 1
+    # Add Dalquist Data Here
+    expression_metadata = [
+      # [1, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
+      # [3, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
+      # [2, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
+      # [4, 'GSE83656', '', 'control_yeast_strain', 'treatment_yeast_strain', 'control', 'treatment', 'concentration_value', 'concentration_unit', 'time_value', 'time_unit', 'number_of_replicates,', 'expression_table'],
+    ]
 
-print(f'Creating {EXPRESSION_METADATA_DESTINATION}\n')
-expression_metadata_file = open(EXPRESSION_METADATA_DESTINATION, 'w')
-expression_metadata_file.write(f'NCBI GEO ID\tPubmed ID\tControl Yeast Strain\tTreatment Yeast Strain\tControl\tTreatment\tConcentration Value\tConcentration Unit\tTime Value\tTime Units\tNumber of Replicates\tExpression Table\n')
-for m in expression_metadata:
-  expression_metadata_file.write(f'{m[0]}\t{m[1]}\t{m[2]}\t{m[3]}\t{m[4]}\t{m[5]}\t{m[6]}\t{m[7]}\t{m[8]}\t{m[9]}\t{m[10]}\t{m[11]}\n')
-expression_metadata_file.close()
+    pubmed_to_geo = {
+        '12269742': 'GSE9336',
+        '17327492': 'GSE6129',
+        '23039231': 'GSE24712'
+    }
 
+    print(f"Processing file: {src}")
+    with open(src, 'r', encoding="UTF-8") as f:
+        reader = csv.reader(f)
+        next(reader)
 
-# Refs csv file generation (She is smol so we write her ourselves)
-refs = [
-  # [pubmed_id, authors, publication_year, title, doi, ncbi_geo_id]
-  ['12269742', 'Kitagawa E., Takahashi J., Momose Y., Iwahashi H.', '2002', 'Effects of the Pesticide Thiuram: Genome-wide Screening of Indicator Genes by Yeast DNA Microarray', '10.1021/es015705v', 'GSE9336'],
-  ['17327492', 'Thorsen, M., Lagniel, G., Kristiansson, E., Junot, C., Nerman, O., Labarre, J., & Tamás, M. J.', '2007', 'Quantitative transcriptome, proteome, and sulfur metabolite profiling of the Saccharomyces cerevisiae response to arsenite.', '10.1152/physiolgenomics.00236.2006', 'GSE6129'],
-  ['23039231', 'Barreto, L., Canadell, D., Valverde‐Saubí, D., Casamayor, A., & Ariño, J.', '2012', 'The short‐term response of yeast to potassium starvation', '10.1111/j.1462-2920.2012.02887.x', 'GSE24712'],
-  ['', 'Dahlquist KD, Abdulla H, Arnell AJ, Arsan C, Baker JM, Carson RM, Citti WT, De Las Casas SE, Ellis LG, Entzminger KC, Entzminger SD, Fitzpatrick BG, Flores SP, Harmon NS, Hennessy KP, Herman AF, Hong MV, King HL, Kubeck LN, La-Anyane OM, Land DL, Leon Guerrero MJ, Liu EM, Luu MD, McGee KP, Mejia MR, Melone SN, Pepe NT, Rodriguez KR, Rohacz NA, Rovetti RJ, Sakhon OS, Sampana JT, Sherbina K, Terada LH, Vega AJ, Wavrin AJ, Wyllie KW, Zapata BB',
-   '2018', 'Global transcriptional response of wild type and transcription factor deletion strains of Saccharomyces cerevisiae to the environmental stress of cold shock and subsequent recovery', 
-   '', 'GSE83656'],
-  ['25161313', 'Neymotin, B., Athanasiadou R., and Gresham D.', '2014', ' Determination of in vivo RNA kinetics using RATE-seq. RNA, 20, 1645-1652.', '10.1261/rna.045104.114', '']
-]
+        for row in reader:
+            pubmed = row[1]
+            geo_id = pubmed_to_geo.get(pubmed, "")
 
-REFS_DESTINATION = '../script-results/processed-expression/refs.csv'
-print(f'Creating {REFS_DESTINATION}\n')
-refs_file = open(REFS_DESTINATION, 'w')
-refs_file.write(f'Pubmed ID\tAuthors\tPublication Year\tTitle\tDOI\tNCBI GEO ID\n')
-for r in refs:
-  result = '{}\t{}\t{}\t{}\t{}\t{}'.format(r[0], r[1], r[2], r[3], r[4], r[5])
-  refs_file.write(f'{result}\n')
-refs_file.close()
+            expression_metadata.append([
+                geo_id, pubmed, row[2], row[3], row[4], row[5], row[6],
+                row[7], row[8], row[9], row[10], row[11]
+            ])
 
-# Degradation Rates
-DEGRADATION_RATES_SOURCE = '../source-files/Expression 2020/DegradationRates.csv'
-DEGRADATION_RATES_DESTINATION = '../script-results/processed-expression/degradation-rates.csv'
+    header = (
+        "NCBI GEO ID\tPubmed ID\tControl Yeast Strain\tTreatment Yeast Strain\t"
+        "Control\tTreatment\tConcentration Value\tConcentration Unit\t"
+        "Time Value\tTime Units\tNumber of Replicates\tExpression Table"
+    )
+    print(f"Creating {dst}")
+    write_to_file(dst, header, expression_metadata)
 
-degradation_rates = []
+def process_refs():
+    dst = f"{BASE_OUT}/refs.csv"
+    print(f"Creating {dst}")
 
-print(f'Processing file {DEGRADATION_RATES_SOURCE}')
-with open(DEGRADATION_RATES_SOURCE, 'r+', encoding="UTF-8") as f:
-  i = 0
-  reader = csv.reader(f)
-  for row in reader:
-    if i != 0:
-      gene_id = row[0]
-      display_gene_id = row[1]
-      degradation_rate = row[2]
-      pubmed_id = "25161313" 
-      geo_id = ""
-      degradation_rates.append([gene_id, taxon_id, geo_id, pubmed_id, degradation_rate])
-      if gene_id not in genes:
-        genes.update({gene_id : [display_gene_id, species, taxon_id]})
-    i+= 1
+    refs = [
+        ['12269742', 'Kitagawa E., Takahashi J., Momose Y., Iwahashi H.', '2002',
+         'Effects of the Pesticide Thiuram...', '10.1021/es015705v', 'GSE9336'],
+        ['17327492', 'Thorsen M., et al.', '2007',
+         'Quantitative transcriptome...', '10.1152/physiolgenomics.00236.2006', 'GSE6129'],
+        ['23039231', 'Barreto L., et al.', '2012',
+         'The short-term response of yeast...', '10.1111/j.1462-2920.2012.02887.x', 'GSE24712'],
+        ['', 'Dahlquist KD, et al.', '2018',
+         'Global transcriptional response...', '', 'GSE83656'],
+        ['25161313', 'Neymotin B., et al.', '2014',
+         'Determination of in vivo RNA kinetics...', '10.1261/rna.045104.114', '']
+    ]
 
-print(f'Creating {DEGRADATION_RATES_DESTINATION}\n')
-degradation_rates_file = open(DEGRADATION_RATES_DESTINATION, 'w')
-degradation_rates_file.write(f'Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tDegradation Rate\n')
-for r in degradation_rates:
-  result = '{}\t{}\t{}\t{}\t{}'.format(r[0], r[1], r[2], r[3], r[4])
-  degradation_rates_file.write(f'{result}\n')
-degradation_rates_file.close()
+    header = "Pubmed ID\tAuthors\tPublication Year\tTitle\tDOI\tNCBI GEO ID"
+    write_to_file(dst, header, refs)
 
-# Production Rates
-PRODUCTION_RATES_SOURCE = '../source-files/Expression 2020/ProductionRates.csv'
-PRODUCTION_RATES_DESTINATION = '../script-results/processed-expression/production-rates.csv'
+def process_degradation_rates(source_dir, genes):
+    src = os.path.join(source_dir, 'DegradationRates.csv')
+    dst = f"{BASE_OUT}/degradation-rates.csv"
 
-production_rates = []
+    degradation = []
+    print(f"Processing file: {src}")
 
-print(f'Processing file {PRODUCTION_RATES_SOURCE}')
-with open(PRODUCTION_RATES_SOURCE, 'r+', encoding="UTF-8") as f:
-  i = 0
-  reader = csv.reader(f)
-  for row in reader:
-    if i != 0:
-      gene_id = row[0]
-      display_gene_id = row[1]
-      production_rate = row[2]
-      pubmed_id = "25161313" 
-      geo_id = ""
-      production_rates.append([gene_id, taxon_id, geo_id, pubmed_id, production_rate])
-      if gene_id not in genes:
-        genes.update({gene_id : [display_gene_id, species, taxon_id]})
-    # next row
-    i+= 1
+    with open(src, 'r', encoding="UTF-8") as f:
+        reader = csv.reader(f)
+        next(reader)
 
-print(f'Creating {PRODUCTION_RATES_DESTINATION}\n')
-production_rates_file = open(PRODUCTION_RATES_DESTINATION, 'w')
-production_rates_file.write(f'Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tProduction Rate\n')
-for r in production_rates:
-  result = '{}\t{}\t{}\t{}\t{}'.format(r[0], r[1], r[2], r[3], r[4])
-  production_rates_file.write(f'{result}\n')
-production_rates_file.close()
+        for row in reader:
+            gene = row[0]
+            display = row[1]
+            rate = row[2]
+
+            degradation.append([gene, taxon_id, "", "25161313", rate])
+
+            if gene not in genes:
+                genes[gene] = [display, species, taxon_id]
+
+    header = "Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tDegradation Rate"
+    write_to_file(dst, header, degradation)
+    return genes
+
+def process_production_rates(source_dir, genes):
+    src = os.path.join(source_dir, 'ProductionRates.csv')
+    dst = f"{BASE_OUT}/production-rates.csv"
+
+    production = []
+    print(f"Processing file: {src}")
+
+    with open(src, 'r', encoding="UTF-8") as f:
+        reader = csv.reader(f)
+        next(reader)
+
+        for row in reader:
+            gene = row[0]
+            display = row[1]
+            rate = row[2]
+
+            production.append([gene, taxon_id, "", "25161313", rate])
+
+            if gene not in genes:
+                genes[gene] = [display, species, taxon_id]
+
+    header = "Gene ID\tTaxon ID\tNCBI GEO ID\tPubmed ID\tProduction Rate"
+    write_to_file(dst, header, production)
+    return genes
+
+def write_genes(genes):
+    dst = f"{BASE_OUT}/genes.csv"
+    print(f"Creating {dst}")
+
+    with open(dst, 'w', newline='') as out:
+        out.write("Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\n")
+        for gid, vals in genes.items():
+            out.write(f"{gid}\t{vals[0]}\t{vals[1]}\t{vals[2]}\n")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Preprocess expression dataset components.")
+
+    parser.add_argument("--all", action="store_true", help="Run all preprocessing steps.")
+    parser.add_argument("--expr", action="store_true", help="Process expression data.")
+    parser.add_argument("--meta", action="store_true", help="Process expression metadata.")
+    parser.add_argument("--refs", action="store_true", help="Generate refs file.")
+    parser.add_argument("--prod", action="store_true", help="Process production rates.")
+    parser.add_argument("--deg", action="store_true", help="Process degradation rates.")
+    parser.add_argument("--source_folder", type=str, default="Expression 2020",
+                        help="Folder in source-files folder containing source CSV files.")
+
+    args = parser.parse_args()
+    source_dir = os.path.join("../source-files", args.source_folder)
+    # Default: run all if no flags used
+    if not any([args.expr, args.meta, args.refs, args.prod, args.deg, args.all]):
+        args.all = True
 
 
-print(f'Creating {GENES_DESTINATION}\n')
-genes_file = open(GENES_DESTINATION, 'w')
-genes_file.write(f'Gene ID\tDisplay Gene ID\tSpecies\tTaxon ID\n')
-for g in genes:
-  result = '{}\t{}\t{}\t{}'.format(g, genes[g][0], genes[g][1], genes[g][2],)
-  genes_file.write(f'{result}\n')
-genes_file.close()
+    ensure_dirs()
+    
+    if args.all or args.refs:
+        process_refs()
+    
+    if args.all or args.meta:
+        process_expression_metadata(source_dir)
+
+    if args.all or args.expr or args.prod or args.deg:
+        genes = process_expression_data(source_dir)
+
+        if args.all or args.deg:
+            genes = process_degradation_rates(source_dir, genes)
+
+        if args.all or args.prod:
+            genes = process_production_rates(source_dir, genes)
+
+        write_genes(genes)
