@@ -6,7 +6,7 @@ $(function () {
     var LOGO_HOVER = "/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg";
 
     var PRIVACY_COOKIE = "_grnsight_privacy_";
-    const EXPIRATION_DURATION = 30000; // 14 * 24 * 60 * 60 * 1000
+    const EXPIRATION_DURATION = 14 * 24 * 60 * 60 * 1000;
 
     const setupGoogleAnalytics = () => {
         (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
