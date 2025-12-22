@@ -20,7 +20,7 @@ $(function () {
 
     const clearGoogleAnalytics = () => {
         document.cookie = "_ga=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.dondi.github.io"
-        document.cookie = "_gid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.dondi.github.io"
+        document.cookie = "_ga_BTK62R1KEX=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.dondi.github.io";
     }
 
     var checkForPrivacyCookie = function () {
