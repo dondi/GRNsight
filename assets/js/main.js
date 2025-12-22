@@ -6,7 +6,7 @@ $(function () {
     var LOGO_HOVER = "/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg";
 
     var PRIVACY_COOKIE = "_grnsight_privacy_";
-    const EXPIRATION_DURATION = 14 * 24 * 60 * 60 * 1000
+    const EXPIRATION_DURATION = 30000; // 14 * 24 * 60 * 60 * 1000
 
     const setupGoogleAnalytics = () => {
         (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
@@ -26,8 +26,8 @@ $(function () {
     var checkForPrivacyCookie = function () {
         // Thank you http://stackoverflow.com/questions/4825683/how-do-i-create-and-read-a-value-from-cookie
         var createCookie = function (name, decision) {
-            window.localStorage.setItem(`${name}-decision`, decision)
-            window.localStorage.setItem(`${name}-expiration`, Date.now() + EXPIRATION_DURATION)
+            window.localStorage.setItem(`${name}-decision`, decision);
+            window.localStorage.setItem(`${name}-expiration`, Date.now() + EXPIRATION_DURATION);
         };
 
         var getCookie = function (name) {
@@ -39,7 +39,7 @@ $(function () {
                     return null;
                 } else {
                     // Someone who keeps coming back will get renewed.
-                    window.localStorage.setItem(`${name}-expiration`) = Date.now() + EXPIRATION_DURATION
+                    window.localStorage.setItem(`${name}-expiration`, Date.now() + EXPIRATION_DURATION);
                     return decision;
                 }
             } else {
