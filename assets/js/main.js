@@ -6,38 +6,36 @@ $(function () {
     var LOGO_HOVER = "/GRNsight/assets/images/GRNsight_logo_20140710_rollover_resized.jpg";
 
     var PRIVACY_COOKIE = "_grnsight_privacy_";
+    const EXPIRATION_DURATION = 14 * 24 * 60 * 60 * 1000
+
     var checkForPrivacyCookie = function () {
         // Thank you http://stackoverflow.com/questions/4825683/how-do-i-create-and-read-a-value-from-cookie
-        var createCookie = function (name, value, days) {
-            var expires = "";
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toGMTString();
-            }
-
-            document.cookie = name + "=" + value + expires + "; path=/";
+        var createCookie = function (name, decision) {
+            window.localStorage.setItem(name, { decision, expiration: Date.now() + EXPIRATION_DURATION })
         };
 
         var getCookie = function (name) {
-            if (document.cookie.length > 0) {
-                var cookieStart = document.cookie.indexOf(name + "=");
-                if (cookieStart !== -1) {
-                    cookieStart = cookieStart + name.length + 1;
-                    var cookieEnd = document.cookie.indexOf(";", cookieStart);
-                    if (cookieEnd === -1) {
-                        cookieEnd = document.cookie.length;
-                    }
-                    return unescape(document.cookie.substring(cookieStart, cookieEnd));
+            const decisionContainer = window.localStorage.getItem(name)
+            if (decisionContainer) {
+                // We start over if we haven’t visited in 2 weeks.
+                if (Date.now() - decisionContainer.expiration > EXPIRATION_DURATION) {
+                    return null;
+                } else {
+                    // Someone who keeps coming back will get renewed.
+                    decisionContainer.expiration = Date.now() + EXPIRATION_DURATION
+                    return decisionContainer;
                 }
+            } else {
+                return null;
             }
-
-            return "";
         };
 
-        if (!getCookie(PRIVACY_COOKIE)) {
+        const cookieSetting = getCookie(PRIVACY_COOKIE)
+        if (!cookieSetting) {
             $("#cookie-notice").removeClass("hidden");
-            createCookie(PRIVACY_COOKIE, "shown", 3650);
+
+            $("#accept-cookies").on("click", () => createCookie(PRIVACY_COOKIE, "accept"));
+            $("#decline-cookies").on("click", () => createCookie(PRIVACY_COOKIE, "decline"));
         }
     };
 

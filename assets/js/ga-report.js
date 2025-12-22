@@ -1,6 +1,6 @@
 $(function () {
     var getCount = function (path, callback) {
-        $.getJSON("https://grnsight.cs.lmu.edu/server/ga?path=" + path).done(callback);
+        $.getJSON("https://grnsight.lmucs.org/server/ga?path=" + path).done(callback);
     };
 
     var setReportResult = function (count) {
