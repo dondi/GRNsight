@@ -8,22 +8,39 @@ $(function () {
     var PRIVACY_COOKIE = "_grnsight_privacy_";
     const EXPIRATION_DURATION = 14 * 24 * 60 * 60 * 1000
 
+    const setupGoogleAnalytics = () => {
+        (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,"script","//www.google-analytics.com/analytics.js","ga");
+
+        ga("create", "UA-54882218-1", "auto");
+        ga("send", "pageview");
+    }
+
+    const clearGoogleAnalytics = () => {
+        document.cookie = "_ga=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.dondi.github.io"
+        document.cookie = "_gid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.dondi.github.io"
+    }
+
     var checkForPrivacyCookie = function () {
         // Thank you http://stackoverflow.com/questions/4825683/how-do-i-create-and-read-a-value-from-cookie
         var createCookie = function (name, decision) {
-            window.localStorage.setItem(name, { decision, expiration: Date.now() + EXPIRATION_DURATION })
+            window.localStorage.setItem(`${name}-decision`, decision)
+            window.localStorage.setItem(`${name}-expiration`, Date.now() + EXPIRATION_DURATION)
         };
 
         var getCookie = function (name) {
-            const decisionContainer = window.localStorage.getItem(name)
-            if (decisionContainer) {
+            const decision = window.localStorage.getItem(`${name}-decision`)
+            const expiration = window.localStorage.getItem(`${name}-expiration`);
+            if (decision) {
                 // We start over if we haven’t visited in 2 weeks.
-                if (Date.now() - decisionContainer.expiration > EXPIRATION_DURATION) {
+                if (Date.now() - Number(expiration) > EXPIRATION_DURATION) {
                     return null;
                 } else {
                     // Someone who keeps coming back will get renewed.
-                    decisionContainer.expiration = Date.now() + EXPIRATION_DURATION
-                    return decisionContainer;
+                    window.localStorage.setItem(`${name}-expiration`) = Date.now() + EXPIRATION_DURATION
+                    return decision;
                 }
             } else {
                 return null;
@@ -31,11 +48,23 @@ $(function () {
         };
 
         const cookieSetting = getCookie(PRIVACY_COOKIE)
-        if (!cookieSetting) {
+        if (cookieSetting === "accept") {
+            setupGoogleAnalytics();
+        } else if (cookieSetting === "decline") {
+            clearGoogleAnalytics();
+        } else {
             $("#cookie-notice").removeClass("hidden");
 
-            $("#accept-cookies").on("click", () => createCookie(PRIVACY_COOKIE, "accept"));
-            $("#decline-cookies").on("click", () => createCookie(PRIVACY_COOKIE, "decline"));
+            $("#accept-cookies").on("click", () => {
+                createCookie(PRIVACY_COOKIE, "accept");
+                setupGoogleAnalytics();
+            });
+
+            $("#decline-cookies").on("click", () => {
+                createCookie(PRIVACY_COOKIE, "decline");
+                clearGoogleAnalytics();
+            });
+
         }
     };
 
