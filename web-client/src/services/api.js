@@ -6,7 +6,9 @@ import {
   PPI_DEMO_NAME,
 } from "../constants";
 // TODO: make this port dynamic in the future based on environment
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.DEV
+  ? `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`
+  : `https://${import.meta.env.VITE_HOST}`;
 
 /**
  * Fetches a demo workbook from the server
@@ -42,8 +44,6 @@ export const getDemoEndpoint = demoValue => {
 /**
  * Available demo types with their descriptions
  */
-// TODO: Should I point to the constants in web-client-classic instead?
-
 export const DEMO_TYPES = {
   unweighted: UNWEIGHTED_DEMO_NAME,
   weighted: WEIGHTED_DEMO_NAME,

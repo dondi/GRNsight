@@ -1548,6 +1548,14 @@ export var drawGraph = function (workbook) {
         }
     };
 
+    /**
+     * Checks that drag movement keeps the graph within viewport bounds
+     * @function viewportBoundsMoveDrag
+     * @param {number} graphZoom - Current zoom level of the graph
+     * @param {number} dx - Change in x position of the drag
+     * @param {number} dy - Change in y position of the drag
+     * @return {boolean} - True if the drag movement is within bounds, false otherwise
+     */
     function viewportBoundsMoveDrag(graphZoom, dx, dy) {
         updateZoomContainerInfo();
         flexibleContainer = calcFlexiBox();
@@ -1577,6 +1585,18 @@ export var drawGraph = function (workbook) {
         return true;
     }
 
+    /**
+     * Calculate a flexible bounding box around all nodes. Use the bounding box to find the most extreme
+     * positions of nodes to determine whether drag movements are within bounds.
+     * @function calcFlexiBox
+     * @return {object} - Flexible bounding box around all nodes
+     * x: leftmost x position (x-value where the box begins being drawn)
+     * y: topmost y position (y-value where the box begins being drawn)
+     * maxX: rightmost x position (x-value where the box ends)
+     * maxY: bottommost y position (y-value where the box ends)
+     * width: width of the box
+     * height: height of the box
+     */
     function calcFlexiBox() {
         const nodes = simulation.nodes();
         let nodeWidth = 0;

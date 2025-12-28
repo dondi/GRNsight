@@ -575,10 +575,12 @@ const checkWorkbookModeSettings = () => {
 };
 
 $("body").on("click", () => {
-    if (grnState.mode === NETWORK_PPI_MODE) {
-        $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
-    } else if (grnState.mode === NETWORK_GRN_MODE) {
-        $(EXPORT_TO_UNWEIGHTED_GML_MENU).removeClass("disabled");
+    if (grnState.workbook) {
+        if (grnState.mode === NETWORK_PPI_MODE) {
+            $(EXPORT_TO_UNWEIGHTED_GML_MENU).addClass("disabled");
+        } else if (grnState.mode === NETWORK_GRN_MODE) {
+            $(EXPORT_TO_UNWEIGHTED_GML_MENU).removeClass("disabled");
+        }
     }
 });
 
