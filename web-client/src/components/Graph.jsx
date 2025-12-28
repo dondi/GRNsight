@@ -1,7 +1,7 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
-import { getDemoWorkbook, getDemoEndpoint } from "../services/api";
+import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
 import {
   BOUNDARY_MARGIN,
   ZOOM_DISPLAY_MINIMUM_VALUE,
@@ -46,6 +46,8 @@ export default function Graph() {
     logFoldChangeMax,
     edgeWeightVisibility,
     adaptive,
+    networkMode,
+    setNetworkMode,
   } = useContext(GrnStateContext);
 
   // Load workbook data
@@ -58,6 +60,8 @@ export default function Graph() {
     getDemoWorkbook(demoEndpoint)
       .then(data => {
         setWorkbook(data);
+        console.log("data", data);
+        setNetworkMode(getNetworkMode(data.meta.data.workbookType));
         setError(null);
       })
       .catch(err => {
@@ -85,9 +89,8 @@ export default function Graph() {
 
     // Define arrowhead markers for different colors
     const arrowColors = [
-      { id: "arrowhead-black", color: EDGE_BLACK },
       { id: "arrowhead-red", color: EDGE_RED },
-      { id: "arrowhead-blue", color: EDGE_BLUE },
+      { id: "repressor-blue", color: EDGE_BLUE },
     ];
 
     arrowColors.forEach(({ id, color }) => {
@@ -151,11 +154,9 @@ export default function Graph() {
       .style("stroke-width", d => getEdgeThickness(workbook, enableEdgeColoring, d))
       .style("fill", "none")
       .attr("marker-end", d => {
-        // Return the appropriate marker based on edge color
-        if (workbook.sheetType === "unweighted") {
-          return "url(#arrowhead-black)";
+        if (workbook.sheetType !== "unweighted") {
+          return d.value < 0 ? "url(#repressor-blue)" : "url(#arrowhead-red)";
         }
-        return d.value < 0 ? "url(#arrowhead-blue)" : "url(#arrowhead-red)";
       });
 
     // Create nodes
