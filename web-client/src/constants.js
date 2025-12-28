@@ -23,3 +23,7 @@ export const CURVE_THRESHOLD = 200;
 export const EDGE_RED = "rgb(195,61,61)";
 export const EDGE_BLUE = "rgb(51,124,183)";
 export const EDGE_BLACK = "rgb(0,0,0)";
+export const NETWORK_GRN_MODE_FULL = "Gene Regulatory Network";
+export const NETWORK_PPI_MODE_FULL = "Protein-Protein Interaction";
+export const NETWORK_GRN_MODE_SHORT = "grn";
+export const NETWORK_PPI_MODE_SHORT = "protein-protein-physical-interaction";
