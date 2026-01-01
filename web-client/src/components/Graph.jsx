@@ -168,7 +168,10 @@ export default function Graph() {
       .append("path")
       .attr("class", "link-path")
       .style("stroke", d => getEdgeColor(workbook, d))
-      .style("stroke-width", d => getEdgeThickness(workbook, colorOptimal, d))
+      .style("stroke-width", d => {
+        d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
+        return d.strokeWidth;
+      })
       .style("fill", "none")
       .attr("marker-end", d => {
         return createEdgeMarker({

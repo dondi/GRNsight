@@ -128,11 +128,11 @@ function createRepressorMarker({ defs, d, selfRef, minimum, grayThreshold, maxWe
     .attr("refY", yOffsets[d.strokeWidth])
     .attr("markerUnits", "userSpaceOnUse")
     .attr("markerWidth", d.strokeWidth)
-    // .attr("markerHeight", 25 + d.strokeWidth)
+    .attr("markerHeight", 25 + d.strokeWidth)
     .attr("orient", 180)
     .append("rect")
     .attr("width", d.strokeWidth)
-    // .attr("height", 25 + d.strokeWidth)
+    .attr("height", 25 + d.strokeWidth)
     .attr("rx", 10)
     .attr("ry", 10)
     .attr("style", "stroke:" + color + "; fill: " + color + "; stroke-width: 0");
@@ -211,17 +211,23 @@ function createRepressorHorizontalMarker({
     color = d.stroke;
   }
 
+  console.log("Creating horizontal repressor marker. d printout:", d);
+
   defs
     .append("marker")
     .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
     .attr("refX", xOffsets[d.strokeWidth])
     .attr("refY", yOffsets[d.strokeWidth])
+    .attr("markerWidth", function () {
+      return d.strokeWidth;
+    })
+    .attr("markerHeight", function () {
+      return 25 + d.strokeWidth;
+    })
     .attr("markerUnits", "userSpaceOnUse")
-    // .attr("markerWidth", 25 + d.strokeWidth)
-    .attr("markerHeight", d.strokeWidth)
     .attr("orient", 180)
     .append("rect")
-    // .attr("width", 25 + d.strokeWidth)
+    .attr("width", 25 + d.strokeWidth)
     .attr("height", d.strokeWidth)
     .attr("rx", 10)
     .attr("ry", 10)
@@ -348,8 +354,8 @@ function createArrowheadMarker({
     .attr("refX", refXOffsets[d.strokeWidth])
     .attr("refY", refYOffsets[d.strokeWidth])
     .attr("markerUnits", "userSpaceOnUse")
-    // .attr("markerWidth", 12 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3))
-    // .attr("markerHeight", 5 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3))
+    .attr("markerWidth", 12 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3))
+    .attr("markerHeight", 5 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3))
     .attr("orient", x1 === x2 && y1 === y2 ? orientOffsets[d.strokeWidth] : "auto")
     .append("path")
     .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
