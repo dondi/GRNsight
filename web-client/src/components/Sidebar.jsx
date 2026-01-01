@@ -29,8 +29,8 @@ export default function Sidebar({}) {
     setNetworkMode,
     enableNodeColoring,
     setEnableNodeColoring,
-    enableEdgeColoring,
-    setEnableEdgeColoring,
+    colorOptimal,
+    setColorOptimal,
     linkDistance,
     setLinkDistance,
     charge,
@@ -340,9 +340,9 @@ export default function Sidebar({}) {
         </Box>
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} gap="5px">
           <CheckBox
-            checked={enableEdgeColoring}
+            checked={colorOptimal}
             label={<Text>Enable Edge Coloring</Text>}
-            onChange={event => setEnableEdgeColoring(event.target.checked)}
+            onChange={event => setColorOptimal(event.target.checked)}
           />
           <Box>
             <Text weight="bold">Hide/Show Edge Weights</Text>

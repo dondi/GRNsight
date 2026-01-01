@@ -17,8 +17,8 @@ export default function Navbar({}) {
     setNetworkMode,
     enableNodeColoring,
     setEnableNodeColoring,
-    enableEdgeColoring,
-    setEnableEdgeColoring,
+    colorOptimal,
+    setColorOptimal,
     linkDistance,
     setLinkDistance,
     charge,
@@ -382,8 +382,8 @@ export default function Navbar({}) {
             width="medium"
           >
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button onClick={() => setEnableEdgeColoring(!enableEdgeColoring)}>
-                {enableEdgeColoring && <Checkmark size="small" />}
+              <Button onClick={() => setColorOptimal(!colorOptimal)}>
+                {colorOptimal && <Checkmark size="small" />}
                 <Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values</Text>
               </Button>
             </Box>

@@ -31,7 +31,7 @@ describe("Graph", () => {
 
   //   const mockContextValue = {
   //     demoValue: mockDemoValue,
-  //     enableEdgeColoring: false,
+  //     colorOptimal: false,
   //     enableNodeColoring: false,
   //     linkDistance: 500,
   //     charge: -50,
@@ -65,7 +65,7 @@ describe("Graph", () => {
 
   //   const mockContextValue = {
   //     demoValue: mockDemoValue,
-  //     enableEdgeColoring: false,
+  //     colorOptimal: false,
   //     enableNodeColoring: false,
   //     linkDistance: 500,
   //     charge: -50,
@@ -89,7 +89,7 @@ describe("Graph", () => {
   it("does not fetch workbook when demoValue is null", () => {
     const mockContextValue = {
       demoValue: null,
-      enableEdgeColoring: false,
+      colorOptimal: false,
       enableNodeColoring: false,
       linkDistance: 500,
       charge: -50,
@@ -127,7 +127,7 @@ describe("Graph", () => {
 
   //   const mockContextValue = {
   //     demoValue: mockDemoValue1,
-  //     enableEdgeColoring: false,
+  //     colorOptimal: false,
   //     enableNodeColoring: false,
   //     linkDistance: 500,
   //     charge: -50,
