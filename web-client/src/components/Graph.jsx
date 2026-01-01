@@ -24,7 +24,10 @@ import {
   getEdgeColor,
   createPath,
   createSelfLoop,
+  calcAllWeights,
+  calcMaxWeight,
 } from "../helpers/graphHelpers";
+import { createEdgeMarker } from "../helpers/markerHelpers";
 
 import "../App.css";
 
@@ -33,21 +36,32 @@ export default function Graph() {
   const containerRef = useRef(null);
   const simulationRef = useRef(null);
 
+  // The workbook or sheetType are not needed in global state outside of Graph, so keep them local
   const [workbook, setWorkbook] = useState(null);
+  const [sheetType, setSheetType] = useState(null);
+  const [allWeights, setAllWeights] = useState([]);
+  const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const {
-    demoValue,
+    colorOptimal,
+    setColorOptimal,
     linkDistance,
+    setLinkDistance,
     charge,
     enableNodeColoring,
-    enableEdgeColoring,
+    setEnableNodeColoring,
     logFoldChangeMax,
     edgeWeightVisibility,
+    demoValue,
+    setDemoValue,
     adaptive,
+    setAdaptive,
     networkMode,
     setNetworkMode,
+    grayThreshold,
+    setGrayThreshold,
   } = useContext(GrnStateContext);
 
   // Load workbook data
@@ -60,8 +74,11 @@ export default function Graph() {
     getDemoWorkbook(demoEndpoint)
       .then(data => {
         setWorkbook(data);
+        setSheetType(data.sheetType);
         console.log("data", data);
         setNetworkMode(getNetworkMode(data.meta.data.workbookType));
+        setAllWeights(calcAllWeights(data, colorOptimal));
+        setMaxWeight(calcMaxWeight(allWeights));
         setError(null);
       })
       .catch(err => {
@@ -151,12 +168,18 @@ export default function Graph() {
       .append("path")
       .attr("class", "link-path")
       .style("stroke", d => getEdgeColor(workbook, d))
-      .style("stroke-width", d => getEdgeThickness(workbook, enableEdgeColoring, d))
+      .style("stroke-width", d => getEdgeThickness(workbook, colorOptimal, d))
       .style("fill", "none")
       .attr("marker-end", d => {
-        if (workbook.sheetType !== "unweighted") {
-          return d.value < 0 ? "url(#repressor-blue)" : "url(#arrowhead-red)";
-        }
+        return createEdgeMarker({
+          defs,
+          d,
+          grayThreshold,
+          sheetType,
+          maxWeight,
+          colorOptimal,
+          networkMode,
+        });
       });
 
     // Create nodes
@@ -242,7 +265,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, enableEdgeColoring, enableNodeColoring]);
+  }, [workbook, linkDistance, charge, colorOptimal, enableNodeColoring]);
   if (loading) {
     return <div className="grnsight-container">Loading graph...</div>;
   }

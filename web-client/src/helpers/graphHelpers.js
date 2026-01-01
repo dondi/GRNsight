@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {
   NODE_HEIGHT,
   NODE_MARGIN,
@@ -228,8 +229,8 @@ export function createSelfLoop(d) {
           A${radius},${radius} 0 1,1 ${x},${y + 0.1}`;
 }
 
-export function getEdgeThickness(workbook, enableEdgeColoring, edge) {
-  if (!enableEdgeColoring || workbook.sheetType === "unweighted") {
+export function getEdgeThickness(workbook, colorOptimal, edge) {
+  if (!colorOptimal || workbook.sheetType === "unweighted") {
     return 2;
   }
 
@@ -244,4 +245,27 @@ export function getEdgeThickness(workbook, enableEdgeColoring, edge) {
 export function getEdgeColor(workbook, edge) {
   if (workbook.sheetType === "unweighted") return EDGE_BLACK;
   return edge.value < 0 ? EDGE_BLUE : EDGE_RED;
+}
+
+export function calcAllWeights(data, colorOptimal) {
+  // Create an array of all the network weights
+  const allWeights = data.positiveWeights.concat(data.negativeWeights);
+  // Assign the entire array weights of 1, if color edges turned off
+  if (!colorOptimal) {
+    for (var i = 0; i < allWeights.length; i++) {
+      if (allWeights[i] !== 0) {
+        allWeights[i] = 1;
+      }
+    }
+  } else {
+    for (var j = 0; j < allWeights.length; j++) {
+      allWeights[j] = Math.abs(allWeights[j].toPrecision(4));
+    }
+  }
+
+  return allWeights;
+}
+
+export function calcMaxWeight(allWeights) {
+  return Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 }
