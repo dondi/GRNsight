@@ -1,6 +1,6 @@
 import { NETWORK_GRN_MODE_FULL } from "../constants";
 // TODO: add description from web-client-classic
-function normalize(d, maxWeight) {
+export function normalize(d, maxWeight) {
   return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 
@@ -23,7 +23,6 @@ export function createEdgeMarker(params) {
   const y2 = d.target.y;
   let minimum = "";
   let selfRef = "";
-  let color;
 
   if (normalize(d, maxWeight) <= grayThreshold) {
     minimum = "gray";
@@ -204,13 +203,6 @@ function createRepressorHorizontalMarker({
     14: 6,
   };
 
-  let color;
-  if (normalize(d, maxWeight) <= grayThreshold) {
-    color = "gray";
-  } else {
-    color = d.stroke;
-  }
-
   console.log("Creating horizontal repressor marker. d printout:", d);
 
   defs
@@ -231,7 +223,7 @@ function createRepressorHorizontalMarker({
     .attr("height", d.strokeWidth)
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr("style", "stroke:" + color + "; fill: " + color + "; stroke-width: 0");
+    .attr("style", "stroke:" + d.stroke + "; fill: " + d.stroke + "; stroke-width: 0");
 }
 
 /**
@@ -337,15 +329,6 @@ function createArrowheadMarker({
     14: 232,
   };
 
-  let color;
-  if (sheetType || colorOptimal) {
-    color = "black";
-  } else if (normalize(d, maxWeight) <= grayThreshold) {
-    color = "gray";
-  } else {
-    color = d.stroke;
-  }
-
   defs
     .append("marker")
     .attr("id", "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
@@ -359,5 +342,5 @@ function createArrowheadMarker({
     .attr("orient", x1 === x2 && y1 === y2 ? orientOffsets[d.strokeWidth] : "auto")
     .append("path")
     .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
-    .attr("style", "stroke: " + color + "; fill: " + color);
+    .attr("style", "stroke: " + d.stroke + "; fill: " + d.stroke);
 }

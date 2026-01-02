@@ -13,6 +13,11 @@ export function getNodeWidth(node) {
   return NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN;
 }
 
+// TODO: add description from web-client-classic
+export function normalize(d, maxWeight) {
+  return Math.abs(d.value / maxWeight).toPrecision(4);
+}
+
 /**
  * Calculate point along the full cubic Bézier curve that goes behind the perimeter of the target box
  * Can be used to find the intersection point of the Bézier curve with the box perimeter
@@ -242,8 +247,11 @@ export function getEdgeThickness(workbook, colorOptimal, edge) {
   return Math.floor(scale(Math.abs(edge.value)));
 }
 
-export function getEdgeColor(workbook, edge) {
+export function getEdgeColor(workbook, edge, grayThreshold, maxWeight) {
   if (workbook.sheetType === "unweighted") return EDGE_BLACK;
+  if (normalize(edge, maxWeight) <= grayThreshold) {
+    return "gray";
+  }
   return edge.value < 0 ? EDGE_BLUE : EDGE_RED;
 }
 
