@@ -27,18 +27,24 @@ description: Learn how to format and upload files to GRNsight, a web application
                 <div class="panel-body">
                     <ul>
                         <li>
-                            There are three ways to load a network into GRNsight: 
+                            The Network menu or sidebar panel are used to load a network into GRNsight. There are three ways to load a network into GRNsight: 
                             <ol>
                                 <li>
                                     You can load a network from one of our available Demo files, as explained in <a href="#demo">Section 1a</a>. 
                                 </li>
                                 <li>
-                                    You can create and load a GRNsight-compatible Input workbook, as explained in <a href="#input_workbook">Section 1b</a>. 
+                                    You can create and load a GRNsight-compatible input workbook, as explained in <a href="#input_workbook">Section 1b</a>. 
                                 </li>
                                 <li>
                                     You can create and load a network for <i>Saccharomyces cerevisiae</i> from genes/proteins stored in our Network Database, as detailed in <a href="#network_database">Section 1c</a>. 
                                 </li>
                             </ol>
+                        </li>
+                        <li>
+                            Once a network is loaded, the Network Mode shown in the Network menu or sidebar panel will change from <b><i>No Network Selected</i></b> to either <b><i>Gene Regulatory Network</i></b> or <b><i>Protein-Protein Interaction</i></b>, depending on the type of network loaded.
+                        </li>
+                        <li>
+                            The Species displayed in the Network menu or sidebar panel will show <b><i>Saccharomyces cerevisiae</i></b> to remind the user that GRNsight defaults to displaying networks from budding yeast. However, a user that uploads their own network can display data from any species (see <a href="#input_workbook">Section 1b</a>).
                         </li>
                     </ul>
 
@@ -69,19 +75,19 @@ description: Learn how to format and upload files to GRNsight, a web application
                                         You can select from among five demo networks:
                                         <ul>
                                             <li>
-                                              Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) is a gene regulatory network that displays black edges with pointy arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 13&#176;C for 15, 30, and 60 minutes (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE83656" target="_blank">GSE83656</a>).
+                                              <b>Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</b> is a gene regulatory network that displays black edges with pointy arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 13&#176;C for 15, 30, and 60 minutes (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE83656" target="_blank">GSE83656</a>).
                                             </li>
                                             <li>
-                                              Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data) is a gene regulatory network that displays colored edges of varied thickness with pointy or blunt arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 13&#176;C for 15, 30, and 60 minutes (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE83656" target="_blank">GSE83656</a>). Edge weights were modeled with the <a href="https://kdahlquist.github.io/GRNmap/" target="_blank">GRNmap software</a>.
+                                              <b>Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</b> is a gene regulatory network that displays colored edges of varied thickness with pointy or blunt arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 13&#176;C for 15, 30, and 60 minutes (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE83656" target="_blank">GSE83656</a>). Edge weights were modeled with the <a href="https://kdahlquist.github.io/GRNmap/" target="_blank">GRNmap software</a>.
                                             </li>
                                             <li>
-                                              Demo #3: Unweighted GRN (21 genes, 31 edges) is a gene regulatory network that displays black edges with pointy arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 10&#176;C for 0, 10, 30, and 120 minutes. (<a href="https://doi.org/10.1091/mbc.e04-03-0167" target=_blank">https://doi.org/10.1091/mbc.e04-03-0167</a>)
+                                              <b>Demo #3: Unweighted GRN (21 genes, 31 edges)</b> is a gene regulatory network that displays black edges with pointy arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 10&#176;C for 0, 10, 30, and 120 minutes. (<a href="https://doi.org/10.1091/mbc.e04-03-0167" target=_blank">https://doi.org/10.1091/mbc.e04-03-0167</a>)
                                             </li>
                                             <li>
-                                              Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data) is a gene regulatory network that displays colored edges of varied thickness with pointy or blunt arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 10&#176;C for 0, 10, 30, and 120 minutes. (<a href="https://doi.org/10.1091/mbc.e04-03-0167" target=_blank">https://doi.org/10.1091/mbc.e04-03-0167</a>). Edge weights were modeled with the <a href="https://kdahlquist.github.io/GRNmap/" target="_blank">GRNmap software</a>, as reported in <a href="https://doi.org/10.1007/s11538-015-0092-6" target="_blank">Dahlquist et al. (2015)</a>.
+                                              <b>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</b> is a gene regulatory network that displays colored edges of varied thickness with pointy or blunt arrowheads. Nodes are colored with timecourse gene expression data for budding yeast subjected to cold shock at 10&#176;C for 0, 10, 30, and 120 minutes. (<a href="https://doi.org/10.1091/mbc.e04-03-0167" target=_blank">https://doi.org/10.1091/mbc.e04-03-0167</a>). Edge weights were modeled with the <a href="https://kdahlquist.github.io/GRNmap/" target="_blank">GRNmap software</a>, as reported in <a href="https://doi.org/10.1007/s11538-015-0092-6" target="_blank">Dahlquist et al. (2015)</a>.
                                             </li>
                                             <li>
-                                              Demo #5: PPI (18 proteins, 81 edges) is a protein-protein physical interaction network that displays black, undirected edges.  It represents interactions with the budding yeast gene Aim32p derived from the <a ref="https://yeastgenome.org/locus/S000004514/interaction" target="_blank">Saccharomyces Genome Database</a>.
+                                              <b>Demo #5: PPI (18 proteins, 81 edges)</b> is a protein-protein physical interaction network that displays black, undirected edges.  It represents interactions with the budding yeast gene Aim32p derived from the <a href="https://yeastgenome.org/locus/S000004514/interaction" target="_blank"><i></i>Saccharomyces</i> Genome Database</a>.
                                             </li>
                                         </ul>
                                     </li>
