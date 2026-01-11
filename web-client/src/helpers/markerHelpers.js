@@ -12,6 +12,8 @@ export function normalize(d, maxWeight) {
  * @param {number} params.grayThreshold - Threshold for gray coloring
  * @param {string} params.sheetType - Type of the sheet (e.g., "weighted" or "unweighted")
  * @param {number} params.maxWeight - Maximum weight value for normalization
+ * @param {boolean} params.colorOptimal - Whether optimal coloring is enabled or not for edges
+ * @param {string} params.networkMode - Network mode (e.g., "Gene Regulatory Network" or "Protein-Protein Interaction")
  * @returns {string} The marker ID to be used in marker-end attribute
  */
 export function createEdgeMarker(params) {
@@ -41,7 +43,7 @@ export function createEdgeMarker(params) {
 
   // Create repressor markers (negative edges)
   if (d.value < 0 && colorOptimal) {
-    createRepressorMarker({ defs, d, selfRef, minimum, grayThreshold, maxWeight });
+    createRepressorMarker({ defs, d, selfRef, minimum });
     createRepressorHorizontalMarker({
       defs,
       d,
@@ -51,8 +53,6 @@ export function createEdgeMarker(params) {
       y2,
       selfRef,
       minimum,
-      grayThreshold,
-      maxWeight,
     });
   } else {
     // Create arrowhead markers (positive edges)
@@ -68,8 +68,6 @@ export function createEdgeMarker(params) {
         minimum,
         sheetType,
         colorOptimal,
-        grayThreshold,
-        maxWeight,
       });
     }
   }
@@ -80,7 +78,7 @@ export function createEdgeMarker(params) {
 /**
  * Creates a vertical repressor marker (bar)
  */
-function createRepressorMarker({ defs, d, selfRef, minimum, grayThreshold, maxWeight }) {
+function createRepressorMarker({ defs, d, selfRef, minimum }) {
   const xOffsets = {
     2: 1,
     3: 2,
@@ -113,13 +111,6 @@ function createRepressorMarker({ defs, d, selfRef, minimum, grayThreshold, maxWe
     14: 19.25,
   };
 
-  let color;
-  if (normalize(d, maxWeight) <= grayThreshold) {
-    color = "gray";
-  } else {
-    color = d.stroke;
-  }
-
   defs
     .append("marker")
     .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
@@ -134,7 +125,7 @@ function createRepressorMarker({ defs, d, selfRef, minimum, grayThreshold, maxWe
     .attr("height", 25 + d.strokeWidth)
     .attr("rx", 10)
     .attr("ry", 10)
-    .attr("style", "stroke:" + color + "; fill: " + color + "; stroke-width: 0");
+    .attr("style", "stroke:" + d.stroke + "; fill: " + d.stroke + "; stroke-width: 0");
 }
 
 /**
@@ -148,9 +139,7 @@ function createRepressorHorizontalMarker({
   x2,
   y2,
   selfRef,
-  minimum,
-  grayThreshold,
-  maxWeight,
+  minimum
 }) {
   let xOffsets;
   if (x1 === x2 && y1 === y2) {
@@ -238,10 +227,7 @@ function createArrowheadMarker({
   y2,
   selfRef,
   minimum,
-  sheetType,
   colorOptimal,
-  grayThreshold,
-  maxWeight,
 }) {
   if (d.strokeWidth === 2) {
     d.strokeWidth = 4;
