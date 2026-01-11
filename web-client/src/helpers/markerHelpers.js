@@ -1,4 +1,4 @@
-import { NETWORK_GRN_MODE_FULL } from "../constants";
+import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "../constants";
 // TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
   // console.log("normalize value", Math.abs(d.value / maxWeight).toPrecision(4));
@@ -34,53 +34,67 @@ export function createEdgeMarker(params) {
   if (d.stroke == "gray") {
     minimum = "gray";
   }
-  console.log("d.type", d.type);
-
-  // const markerId = d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-
-  // Check if marker already exists using D3
-  // if (!defs.select(`#${markerId}`).empty()) {
-  //   return `url(#${markerId})`;
-  // }
+  // console.log("d.type", d.type);
+  console.log("d in createEdgeMarker", d);
 
   // Create repressor markers (negative edges)
   if (d.value < 0 && colorOptimal) {
-    createRepressorMarker({ defs, d, selfRef, minimum });
-    createRepressorHorizontalMarker({
-      defs,
-      d,
-      x1,
-      y1,
-      x2,
-      y2,
-      selfRef,
-      minimum,
-    });
-    // Determine which marker to use based on approach angle
-    const dx = x2 - x1;
-    const dy = y2 - y1;
+    // Get node dimensions
+    const nodeWidth = NODE_MARGIN + (d.target.textWidth || 100) + NODE_MARGIN;
 
-    // Calculate the ratio to determine orientation
-    // If the edge is more horizontal than vertical, use horizontal marker
-    const tanRatio = Math.abs(dy / dx);
+    // Calculate node centers
+    const sourceCenterX =
+      d.source.x + NODE_MARGIN + (d.source.textWidth || 100) / 2 + NODE_MARGIN / 2;
+    const sourceCenterY = d.source.y + NODE_HEIGHT / 2;
+    const targetCenterX =
+      d.target.x + NODE_MARGIN + (d.target.textWidth || 100) / 2 + NODE_MARGIN / 2;
+    const targetCenterY = d.target.y + NODE_HEIGHT / 2;
+
+    // Determine which marker to use based on approach angle
+    const dx = targetCenterX - sourceCenterX;
+    const dy = targetCenterY - sourceCenterY;
+
+    // Calculate the angle that defines the corner of the node
+    // This is the angle from center to corner
+    const cornerAngle = Math.atan2(NODE_HEIGHT / 2, nodeWidth / 2);
+
+    // Calculate the actual angle of approach
+    const approachAngle = Math.atan2(Math.abs(dy), Math.abs(dx));
 
     let markerType;
     if (x1 === x2 && y1 === y2) {
       // Self-referential always uses horizontal
       markerType = "repressorHorizontal";
-    } else if (tanRatio > 1) {
-      // More vertical (dy > dx), use vertical marker
-      markerType = "repressor";
-    } else {
-      // More horizontal (dx > dy), use horizontal marker
+    } else if (approachAngle > cornerAngle) {
+      // Approaching from top or bottom → use HORIZONTAL marker
       markerType = "repressorHorizontal";
+    } else {
+      // Approaching from left or right → use VERTICAL marker
+      markerType = "repressor";
     }
 
     const markerId = markerType + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
+
+    if (defs.select(`#${markerId}`).empty()) {
+      createRepressorMarker({ defs, d, selfRef, minimum });
+      createRepressorHorizontalMarker({
+        defs,
+        d,
+        x1,
+        y1,
+        x2,
+        y2,
+        selfRef,
+        minimum,
+      });
+    }
+
     return `url(#${markerId})`;
   } else {
+    const arrowMarkerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
+
     // Create arrowhead markers (positive edges)
-    if (networkMode === NETWORK_GRN_MODE_FULL) {
+    if (networkMode === NETWORK_GRN_MODE_FULL && defs.select(`#${arrowMarkerId}`).empty()) {
       createArrowheadMarker({
         defs,
         d,
@@ -93,9 +107,9 @@ export function createEdgeMarker(params) {
         sheetType,
       });
     }
+
+    return `url(#${arrowMarkerId})`;
   }
-  const markerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-  return `url(#${markerId})`;
 }
 
 /**

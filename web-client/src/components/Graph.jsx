@@ -102,27 +102,6 @@ export default function Graph() {
 
     const defs = svg.append("defs");
 
-    // Define arrowhead markers for different colors
-    const arrowColors = [
-      { id: "arrowhead-red", color: EDGE_RED },
-      { id: "repressor-blue", color: EDGE_BLUE },
-    ];
-
-    arrowColors.forEach(({ id, color }) => {
-      defs
-        .append("marker")
-        .attr("id", id)
-        .attr("viewBox", "0 0 10 10")
-        .attr("refX", 9) // Position at arrow tip
-        .attr("refY", 5) // Center vertically
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto") // Auto-rotate to match path direction
-        .append("path")
-        .attr("d", "M 0 0 L 10 5 L 0 10 z") // TODO: explain what this does
-        .style("fill", color);
-    });
-
     // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
 
@@ -173,18 +152,18 @@ export default function Graph() {
         d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
         return d.strokeWidth;
       })
-      .style("fill", "none")
-      .attr("marker-end", d => {
-        return createEdgeMarker({
-          defs,
-          d,
-          grayThreshold,
-          sheetType,
-          maxWeight,
-          colorOptimal,
-          networkMode,
-        });
-      });
+      .style("fill", "none");
+    // .attr("marker-end", d => {
+    //   return createEdgeMarker({
+    //     defs,
+    //     d,
+    //     grayThreshold,
+    //     sheetType,
+    //     maxWeight,
+    //     colorOptimal,
+    //     networkMode,
+    //   });
+    // });
 
     // Create nodes
     const node = boundingBoxContainer
@@ -247,12 +226,25 @@ export default function Graph() {
     // Tick function
     simulation.on("tick", () => {
       // Update link positions with Bézier curves
-      link.select("path").attr("d", d => {
-        if (d.source === d.target) {
-          return createSelfLoop(d);
-        }
-        return createPath(d, width, height);
-      });
+      link
+        .select("path")
+        .attr("d", d => {
+          if (d.source === d.target) {
+            return createSelfLoop(d);
+          }
+          return createPath(d, width, height);
+        })
+        .attr("marker-end", d => {
+          return createEdgeMarker({
+            defs,
+            d,
+            grayThreshold,
+            sheetType,
+            maxWeight,
+            colorOptimal,
+            networkMode,
+          });
+        });
 
       // Update node positions
       node.attr("transform", d => {

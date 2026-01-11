@@ -47,13 +47,10 @@ export const getDemoEndpoint = demoValue => {
 
 export const getNetworkMode = workbookType => {
   if (workbookType === NETWORK_GRN_MODE_SHORT) {
-    console.log("workbook type is grn");
     return NETWORK_GRN_MODE_FULL;
   } else if (workbookType === NETWORK_PPI_MODE_SHORT) {
-    console.log("workbook type is ppi");
     return NETWORK_PPI_MODE_FULL;
   } else {
-    console.log("workbookType", workbookType);
     throw new Error("Unknown workbook type");
   }
 };
