@@ -382,8 +382,8 @@ export default function Sidebar({}) {
             </Text>
             <RangeInput
               color="blue"
-              value={grayThreshold}
-              onChange={event => setGrayThreshold(event.target.value)}
+              value={grayThreshold * 100}
+              onChange={event => setGrayThreshold(event.target.value / 100)}
               min={0}
               max={100}
             />

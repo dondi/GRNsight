@@ -98,10 +98,8 @@ export default function Graph() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // Create SVG
     const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
 
-    // Create defs for arrowhead markers
     const defs = svg.append("defs");
 
     // Define arrowhead markers for different colors
@@ -271,7 +269,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, enableNodeColoring]);
+  }, [workbook, linkDistance, charge, colorOptimal]);
   if (loading) {
     return <div className="grnsight-container">Loading graph...</div>;
   }

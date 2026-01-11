@@ -21,7 +21,7 @@ function App() {
   const [logFoldChangeMax, setLogFoldChangeMax] = useState(3);
   const [edgeWeightVisibility, setEdgeWeightVisibility] = useState("Show With Mouse Over");
   const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
-  const [grayThreshold, setGrayThreshold] = useState(5);
+  const [grayThreshold, setGrayThreshold] = useState(0.05);
   const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
   const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
   const [demoValue, setDemoValue] = useState(null);
