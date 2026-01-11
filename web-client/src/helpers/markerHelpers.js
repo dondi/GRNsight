@@ -214,10 +214,10 @@ function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, min
     .attr("refX", xOffsets[d.strokeWidth])
     .attr("refY", yOffsets[d.strokeWidth])
     .attr("markerWidth", function () {
-      return d.strokeWidth;
+      return 25 + d.strokeWidth;
     })
     .attr("markerHeight", function () {
-      return 25 + d.strokeWidth;
+      return d.strokeWidth;
     })
     .attr("markerUnits", "userSpaceOnUse")
     .attr("orient", 180)
