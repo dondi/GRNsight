@@ -166,7 +166,7 @@ export default function Graph() {
       .append("path")
       .attr("class", "link-path")
       .style("stroke", d => {
-        d.stroke = getEdgeColor(workbook, d, grayThreshold, maxWeight);
+        d.stroke = getEdgeColor(workbook, d, grayThreshold, maxWeight, colorOptimal);
         return d.stroke;
       })
       .style("stroke-width", d => {

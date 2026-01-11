@@ -78,7 +78,26 @@ function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control1,
  * @returns {number} return.x - X coordinate of intersection point
  * @returns {number} return.y - Y coordinate of intersection point
  */
-function findBezierBoxIntersection(source, control1, control2, target, boxWidth, boxHeight) {
+function findBezierBoxIntersection(
+  source,
+  control1,
+  control2,
+  target,
+  boxWidth,
+  boxHeight,
+  strokeWidth,
+  isRepressor
+) {
+  // Calculate minimum distance to ensure marker visibility
+  const MINIMUM_DISTANCE = 8;
+
+  // Apply the same logic as classic: use max of strokeWidth and MINIMUM_DISTANCE
+  const globalOffset = Math.max(strokeWidth, MINIMUM_DISTANCE);
+
+  // Expand the box by the offset amount so markers render outside the boundary
+  const expandedWidth = boxWidth + 2 * globalOffset;
+  const expandedHeight = boxHeight + 2 * globalOffset;
+
   // Binary search to find intersection point
   // intersection = 0 is the start of the bezier curve, intersection = 1 is the end of the bezier curve
   // intersectionMin and intersectionMax define the current search interval for intersection
@@ -94,7 +113,7 @@ function findBezierBoxIntersection(source, control1, control2, target, boxWidth,
     const deltaX = Math.abs(point.x - target.x);
     const deltaY = Math.abs(point.y - target.y);
 
-    if (deltaX < boxWidth / 2 && deltaY < boxHeight / 2) {
+    if (deltaX < expandedWidth / 2 && deltaY < expandedHeight / 2) {
       // Point is inside box, search earlier part of curve
       intersectionMax = intersectionMid;
     } else {
@@ -138,6 +157,8 @@ export function createPath(d, width, height) {
   // However, this values means that nodes are within 202 pixels of each other, so will need to adjust this
   // When set orthOffset to 0, then creates issues with paths going through border of boudning box
   const isStraightLine = orthoOffset < 0.5;
+  const isRepressor = d.value < 0;
+  const strokeWidth = d.strokeWidth || 2;
 
   if (isStraightLine) {
     const endPoint = straightLineBoxIntersection(
@@ -146,7 +167,9 @@ export function createPath(d, width, height) {
       targetX,
       targetY,
       targetWidth,
-      targetHeight
+      targetHeight,
+      strokeWidth,
+      isRepressor
     );
 
     return `M${sourceX},${sourceY} L${endPoint.x},${endPoint.y}`;
@@ -168,7 +191,9 @@ export function createPath(d, width, height) {
       { x: cp2x, y: cp2y },
       { x: targetX, y: targetY },
       targetWidth,
-      targetHeight
+      targetHeight,
+      strokeWidth,
+      isRepressor
     );
 
     // Create quadratic Bézier curve ending at the box perimeter
@@ -194,7 +219,9 @@ function straightLineBoxIntersection(
   targetX,
   targetY,
   targetWidth,
-  targetHeight
+  targetHeight,
+  strokeWidth,
+  isRepressor
 ) {
   const deltaX = targetX - sourceX;
   const deltaY = targetY - sourceY;
@@ -203,8 +230,16 @@ function straightLineBoxIntersection(
     return { x: targetX, y: targetY };
   }
 
-  const halfWidth = targetWidth / 2;
-  const halfHeight = targetHeight / 2;
+  // Calculate minimum distance to ensure marker visibility
+  const MINIMUM_DISTANCE = 8;
+  const globalOffset = Math.max(strokeWidth, MINIMUM_DISTANCE);
+
+  // Expand the box by the offset amount
+  const expandedWidth = targetWidth + 2 * globalOffset;
+  const expandedHeight = targetHeight + 2 * globalOffset;
+
+  const halfWidth = expandedWidth / 2;
+  const halfHeight = expandedHeight / 2;
   // Calculate angle of approach
   const angle = Math.atan2(deltaY, deltaX);
   const tanAngle = Math.abs(Math.tan(angle));
@@ -247,8 +282,8 @@ export function getEdgeThickness(workbook, colorOptimal, edge) {
   return Math.floor(scale(Math.abs(edge.value)));
 }
 
-export function getEdgeColor(workbook, edge, grayThreshold, maxWeight) {
-  if (workbook.sheetType === "unweighted") return EDGE_BLACK;
+export function getEdgeColor(workbook, edge, grayThreshold, maxWeight, colorOptimal) {
+  if (!colorOptimal || workbook.sheetType === "unweighted") return EDGE_BLACK;
   if (normalize(edge, maxWeight) <= grayThreshold) {
     return "gray";
   }

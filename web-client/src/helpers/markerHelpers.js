@@ -1,6 +1,7 @@
 import { NETWORK_GRN_MODE_FULL } from "../constants";
 // TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
+  // console.log("normalize value", Math.abs(d.value / maxWeight).toPrecision(4));
   return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 
@@ -26,20 +27,21 @@ export function createEdgeMarker(params) {
   let minimum = "";
   let selfRef = "";
 
-  if (normalize(d, maxWeight) <= grayThreshold) {
-    minimum = "gray";
-  }
-
   if (x1 === x2 && y1 === y2) {
     selfRef = "_SelfReferential";
   }
 
-  const markerId = d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
+  if (d.stroke == "gray") {
+    minimum = "gray";
+  }
+  console.log("d.type", d.type);
+
+  // const markerId = d.type + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
 
   // Check if marker already exists using D3
-  if (!defs.select(`#${markerId}`).empty()) {
-    return `url(#${markerId})`;
-  }
+  // if (!defs.select(`#${markerId}`).empty()) {
+  //   return `url(#${markerId})`;
+  // }
 
   // Create repressor markers (negative edges)
   if (d.value < 0 && colorOptimal) {
@@ -54,6 +56,28 @@ export function createEdgeMarker(params) {
       selfRef,
       minimum,
     });
+    // Determine which marker to use based on approach angle
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+
+    // Calculate the ratio to determine orientation
+    // If the edge is more horizontal than vertical, use horizontal marker
+    const tanRatio = Math.abs(dy / dx);
+
+    let markerType;
+    if (x1 === x2 && y1 === y2) {
+      // Self-referential always uses horizontal
+      markerType = "repressorHorizontal";
+    } else if (tanRatio > 1) {
+      // More vertical (dy > dx), use vertical marker
+      markerType = "repressor";
+    } else {
+      // More horizontal (dx > dy), use horizontal marker
+      markerType = "repressorHorizontal";
+    }
+
+    const markerId = markerType + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
+    return `url(#${markerId})`;
   } else {
     // Create arrowhead markers (positive edges)
     if (networkMode === NETWORK_GRN_MODE_FULL) {
@@ -67,12 +91,11 @@ export function createEdgeMarker(params) {
         selfRef,
         minimum,
         sheetType,
-        colorOptimal,
       });
     }
   }
-
-  return "url(#" + markerId + ")";
+  const markerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
+  return `url(#${markerId})`;
 }
 
 /**
@@ -131,16 +154,7 @@ function createRepressorMarker({ defs, d, selfRef, minimum }) {
 /**
  * Creates a horizontal repressor marker (bar)
  */
-function createRepressorHorizontalMarker({
-  defs,
-  d,
-  x1,
-  y1,
-  x2,
-  y2,
-  selfRef,
-  minimum
-}) {
+function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, minimum }) {
   let xOffsets;
   if (x1 === x2 && y1 === y2) {
     xOffsets = {
@@ -218,17 +232,7 @@ function createRepressorHorizontalMarker({
 /**
  * Creates an arrowhead marker
  */
-function createArrowheadMarker({
-  defs,
-  d,
-  x1,
-  y1,
-  x2,
-  y2,
-  selfRef,
-  minimum,
-  colorOptimal,
-}) {
+function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, minimum }) {
   if (d.strokeWidth === 2) {
     d.strokeWidth = 4;
   }
