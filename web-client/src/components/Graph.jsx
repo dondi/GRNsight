@@ -77,8 +77,9 @@ export default function Graph() {
         setSheetType(data.sheetType);
         console.log("data", data);
         setNetworkMode(getNetworkMode(data.meta.data.workbookType));
-        setAllWeights(calcAllWeights(data, colorOptimal));
-        setMaxWeight(calcMaxWeight(allWeights));
+        const weights = calcAllWeights(data, colorOptimal);
+        setAllWeights(weights);
+        setMaxWeight(calcMaxWeight(weights));
         setError(null);
       })
       .catch(err => {
@@ -261,7 +262,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold]);
   if (loading) {
     return <div className="grnsight-container">Loading graph...</div>;
   }
