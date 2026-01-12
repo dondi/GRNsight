@@ -62,6 +62,8 @@ function App() {
     setRestrictGraphToViewport,
     viewSize,
     setViewSize,
+    adaptive,
+    setAdaptive,
     demoValue,
     setDemoValue,
     networkData,
