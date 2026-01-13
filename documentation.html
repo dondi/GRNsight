@@ -193,12 +193,14 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                                 <ul>
                                                                     <li>
                                                                         See <a href="https://github.com/dondi/GRNsight/raw/refs/heads/beta/test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx">Demo #1 Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</a> and <a href="https://github.com/dondi/GRNsight/raw/refs/heads/beta/test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx">Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</a> for more details on how these worksheets should be formatted.  Follow the links to download the files.
-                                                                    <li>  <li>
+                                                                    </li>
+                                                                    <li>
                                                                         In brief, Excel worksheets with names ending with "_log2_expression" are processed as time series expression data. Multiple expression worksheets with unique names can be included in the workbook.  For example "wt_log2_expression" or "dcin5_log2_expression".
+                                                                    </li>
                                                                     <li>    
                                                                         The upper-left cell (A1) should contain the text “id”.
                                                                     </li>
-                                                                    </li>
+                                                             </li>
                                                                     <li>
                                                                         The rest of the first column should contain the names of the genes, one gene name per column. Gene names must be unique for each column and must be 12 characters or fewer.  These names must be identical to the names contained on the "network" and/or "network_optimized_weights" sheets and in the same order.
                                                                     </li>
