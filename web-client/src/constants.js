@@ -15,6 +15,7 @@ export const ZOOM_ADAPTIVE_MAX_SCALE = 4;
 export const MINIMUM_NODE_WIDTH = 68.5625;
 export const NODE_MARGIN = 3;
 // node_height is 22 in web-client-classic, but 30 in this. may need to fix later
+// Alternatively, var nodeHeight = 30 in graph.js, so this value may be accurate
 export const NODE_HEIGHT = 30;
 export const NODE_TEXT_HEIGHT = 22;
 export const MIN_SCALE = 0.25;
@@ -27,3 +28,8 @@ export const NETWORK_GRN_MODE_FULL = "Gene Regulatory Network";
 export const NETWORK_PPI_MODE_FULL = "Protein-Protein Interaction";
 export const NETWORK_GRN_MODE_SHORT = "grn";
 export const NETWORK_PPI_MODE_SHORT = "protein-protein-physical-interaction";
+export const SELF_REFERRING_Y_OFFSET = 6;
+// export const DEFAULT_NODE_SHIFT = 1.033;
+export const SHORT_NODE_LIMIT = 135;
+export const ADDITIONAL_SHIFT = 0.07;
+export const END_POINT_ADJUSTMENT = 1.2;

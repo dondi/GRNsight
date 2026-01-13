@@ -378,7 +378,8 @@ export default function Sidebar({}) {
           </Box>
           <Box>
             <Text weight="bold">
-              Gray Threshold (0-100%): <Text weight="normal">{grayThreshold}%</Text>
+              Gray Threshold (0-100%):{" "}
+              <Text weight="normal">{(grayThreshold * 100).toFixed()}%</Text>
             </Text>
             <RangeInput
               color="blue"
