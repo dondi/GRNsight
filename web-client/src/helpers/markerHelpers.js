@@ -34,8 +34,6 @@ export function createEdgeMarker(params) {
   if (d.stroke == "gray") {
     minimum = "gray";
   }
-  // console.log("d.type", d.type);
-  console.log("d in createEdgeMarker", d);
 
   // Create repressor markers (negative edges)
   if (d.value < 0 && colorOptimal) {

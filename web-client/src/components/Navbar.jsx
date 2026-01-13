@@ -445,7 +445,7 @@ export default function Navbar({}) {
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Gray Edge Threshold (0 - 100%)</Text>{" "}
               <TextInput
-                value={grayThreshold * 100}
+                value={(grayThreshold * 100).toFixed()}
                 onChange={event => setGrayThreshold(event.target.value / 100)}
               />
             </Box>

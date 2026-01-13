@@ -154,17 +154,6 @@ export default function Graph() {
         return d.strokeWidth;
       })
       .style("fill", "none");
-    // .attr("marker-end", d => {
-    //   return createEdgeMarker({
-    //     defs,
-    //     d,
-    //     grayThreshold,
-    //     sheetType,
-    //     maxWeight,
-    //     colorOptimal,
-    //     networkMode,
-    //   });
-    // });
 
     // Create nodes
     const node = boundingBoxContainer
@@ -231,7 +220,7 @@ export default function Graph() {
         .select("path")
         .attr("d", d => {
           if (d.source === d.target) {
-            return createSelfLoop(d);
+            return createSelfLoop(d, width, height, colorOptimal);
           }
           return createPath(d, width, height);
         })

@@ -7,6 +7,10 @@ import {
   EDGE_BLUE,
   EDGE_RED,
   CURVE_THRESHOLD,
+  SELF_REFERRING_Y_OFFSET,
+  SHORT_NODE_LIMIT,
+  ADDITIONAL_SHIFT,
+  END_POINT_ADJUSTMENT,
 } from "../constants.js";
 
 export function getNodeWidth(node) {
@@ -259,14 +263,86 @@ function straightLineBoxIntersection(
   return { x: intersectX, y: intersectY };
 }
 
-export function createSelfLoop(d) {
-  const nodeWidth = getNodeWidth(d.source);
-  const x = d.source.x + nodeWidth;
-  const y = d.source.y + NODE_HEIGHT / 2;
-  const radius = 25;
+function getSelfReferringRadius(edge) {
+  return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
+}
 
-  return `M${x},${y}
-          A${radius},${radius} 0 1,1 ${x},${y + 0.1}`;
+export function createSelfLoop(d, width, height, colorOptimal) {
+  let x1 = d.source.x;
+  let y1 = d.source.y;
+  let x2 = d.target.x;
+  let y2 = d.target.y;
+  let dx = x2 - x1;
+  let dy = y2 - y1;
+  let dr = Math.sqrt(dx * dx + dy * dy);
+
+  // Defaults for normal edge.
+  let drx = dr;
+  let dry = dr;
+  let xRotation = 0; // degrees
+  let largeArc = 0; // 1 or 0
+  let sweep = 1; // 1 or 0
+  let offset = parseFloat(d.strokeWidth);
+
+  // Edge adjustment values when long self-node edges get hidden behind the node.
+  let DEFAULT_NODE_SHIFT = 1.033;
+
+  // Self edge.
+  if (x1 === x2 && y1 === y2) {
+    // Move the position of the loop.
+    x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
+    y1 = d.source.y + NODE_HEIGHT / 2 + SELF_REFERRING_Y_OFFSET;
+
+    // This angle creates the loop.
+    xRotation = 45;
+
+    // Needs to be 1.
+    largeArc = 1;
+
+    // Change sweep to change orientation of loop.
+    sweep = 1;
+
+    drx = getSelfReferringRadius(d);
+    dry = getSelfReferringRadius(d);
+
+    // For whatever reason, the arc collapses to a point if the beginning
+    // and ending points of the arc are the same, so kludge it.
+    if (d.source.textWidth > SHORT_NODE_LIMIT) {
+      DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
+    }
+    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * DEFAULT_NODE_SHIFT;
+    y2 = d.source.y + NODE_HEIGHT;
+
+    if (d.value < 0 && colorOptimal) {
+      offset = Math.max(10, parseFloat(d.strokeWidth));
+    }
+  }
+
+  d.label = {
+    x: Math.min(width - 13 * offset, x1), // For 4 decimal places
+    y: Math.min(height - offset, y1 + dry * 3),
+  };
+
+  return (
+    "M" +
+    x1 +
+    "," +
+    y1 +
+    "A" +
+    drx +
+    "," +
+    dry +
+    " " +
+    xRotation +
+    "," +
+    largeArc +
+    "," +
+    sweep +
+    " " +
+    x2 +
+    "," +
+    (y2 + offset)
+  );
 }
 
 export function getEdgeThickness(workbook, colorOptimal, edge) {
