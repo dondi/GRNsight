@@ -209,7 +209,7 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                                         See <a href="https://github.com/dondi/GRNsight/raw/refs/heads/beta/test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx">Demo #1 Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</a> and <a href="https://github.com/dondi/GRNsight/raw/refs/heads/beta/test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx">Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</a> for an example of how these worksheets should be formatted.  Follow the links to download the files and see the image below.
                                                                         <br><br>
                                                                         <img src="{{ site.baseurl }}/assets/images/wt_log2_expression-worksheet.png" alt="wt_log2_expression worksheet" height="311" width="924" />
-                                                            <br><br>
+                                                                        <br><br>
                                                                     </li>
                                                                     <li>
                                                                         In brief, Excel worksheets with names ending with "_log2_expression" are processed as time series expression data. Multiple expression worksheets with unique names can be included in the workbook.  For example "wt_log2_expression" or "dcin5_log2_expression".
@@ -234,9 +234,12 @@ description: Learn how to format and upload files to GRNsight, a web application
                                                             </li>
                                                             <li>
                                                                 Starting in v4.0.0 GRNsight reads metadata from a sheet entitled “optimization_parameters.” The “optimization_parameters” sheet is used for compatibility with the <a href="http://kdahlquist.github.io/GRNmap/index.html" target="blank">GRNmap</a> MATLAB modeling software and is not required for GRNsight to function.  The format of this worksheet is included here for reference.  The meaning of the parameters is discussed further on the <a href="http://kdahlquist.github.io/GRNmap/documentation/" target="blank">GRNmap Documentation</a> site. See <a href="https://github.com/dondi/GRNsight/raw/refs/heads/beta/test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_input.xlsx">Demo #1 Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</a> and <a href="https://github.com/dondi/GRNsight/raw/refs/heads/beta/test-files/demo-files/15-genes_28-edges_db5_Dahlquist-data_estimation_output.xlsx">Demo #2 Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)</a> for more details on how this worksheet should be formatted.  Follow the links to download the files.
+                                                                <br><br>
+                                                                        <img src="{{ site.baseurl }}/assets/images/optimization-parameters-worksheet.png" alt="optimization_parameters worksheet" height="311" width="554" />
+                                                                <br><br>
                                                                 <ul>
                                                                     <li>
-                                                                        In brief, the first row should contain the headers should contain “optimization_parameter” in cell A1 and “value” in cell B1.
+                                                                        In brief, the first row should contain the headers “optimization_parameter” in cell A1 and “value” in cell B1.
                                                                     </li>
                                                                     <li>
                                                                         In the first column, the following optimization parameters appear in this order: “alpha”, “kk_max”, “MaxIter”, “TolFun”, “MaxFunEval”, “TolX”, “production_function”, “L_curve”, “estimate_params”, “make_graphs”, “fix_P”, “fix_b”, “expression_timepoints”, “Strain”, “simulation_timepoints”, “species”, “taxon_id”, and “workbookType”.
