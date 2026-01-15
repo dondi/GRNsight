@@ -36,6 +36,7 @@ export function createEdgeMarker(params) {
   }
 
   // Create repressor markers (negative edges)
+  // TODO: can create copy of d here
   if (d.value < 0 && colorOptimal) {
     // Get node dimensions
     const nodeWidth = NODE_MARGIN + (d.target.textWidth || 100) + NODE_MARGIN;

@@ -130,6 +130,7 @@ function findBezierBoxIntersection(
 }
 
 export function createPath(d, width, height) {
+  // Calculate adjusted source and target positions to be at center of nodes
   const sourceX = d.source.x + getNodeWidth(d.source) / 2;
   const sourceY = d.source.y + NODE_HEIGHT / 2;
   const targetX = d.target.x + getNodeWidth(d.target) / 2;
@@ -151,6 +152,12 @@ export function createPath(d, width, height) {
   uy /= umagnitude;
   vx /= vmagnitude;
   vy /= vmagnitude;
+
+  // Check for vector direction to ensure consistent curve direction
+  if ((targetX > sourceX && targetY > sourceY) || (targetX < sourceX && targetY < sourceY)) {
+    vx = -vx;
+    vy = -vy;
+  }
 
   // Calculate control points between nodes
   const curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
