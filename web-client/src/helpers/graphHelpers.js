@@ -13,7 +13,10 @@ import {
   END_POINT_ADJUSTMENT,
 } from "../constants.js";
 
+// TODO: resolve issue where node.textWidth is initially calculated with undefined value
 export function getNodeWidth(node) {
+  // console.log("node.textWidth", node.textWidth, "MINIMUM_NODE_WIDTH", MINIMUM_NODE_WIDTH);
+  // console.log("calculated node width:", NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN);
   return NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN;
 }
 
@@ -131,6 +134,8 @@ function findBezierBoxIntersection(
 
 export function createPath(d, width, height) {
   // Calculate adjusted source and target positions to be at center of nodes
+  // TODO: resolve issue where node.textWidth is initially calculated with undefined value
+  // TODO: confirm whether node textWidth is defined before this function is called
   const sourceX = d.source.x + getNodeWidth(d.source) / 2;
   const sourceY = d.source.y + NODE_HEIGHT / 2;
   const targetX = d.target.x + getNodeWidth(d.target) / 2;

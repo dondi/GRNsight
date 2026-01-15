@@ -1,4 +1,7 @@
+import { get } from "jquery";
 import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "../constants";
+import { getNodeWidth } from "./graphHelpers";
+
 // TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
   // console.log("normalize value", Math.abs(d.value / maxWeight).toPrecision(4));
@@ -39,14 +42,12 @@ export function createEdgeMarker(params) {
   // TODO: can create copy of d here
   if (d.value < 0 && colorOptimal) {
     // Get node dimensions
-    const nodeWidth = NODE_MARGIN + (d.target.textWidth || 100) + NODE_MARGIN;
+    const targetNodeWidth = getNodeWidth(d.target);
 
     // Calculate node centers
-    const sourceCenterX =
-      d.source.x + NODE_MARGIN + (d.source.textWidth || 100) / 2 + NODE_MARGIN / 2;
+    const sourceCenterX = d.source.x + getNodeWidth(d.source) / 2;
     const sourceCenterY = d.source.y + NODE_HEIGHT / 2;
-    const targetCenterX =
-      d.target.x + NODE_MARGIN + (d.target.textWidth || 100) / 2 + NODE_MARGIN / 2;
+    const targetCenterX = d.target.x + targetNodeWidth / 2;
     const targetCenterY = d.target.y + NODE_HEIGHT / 2;
 
     // Determine which marker to use based on approach angle
@@ -55,17 +56,15 @@ export function createEdgeMarker(params) {
 
     // Calculate the angle that defines the corner of the node
     // This is the angle from center to corner
-    const cornerAngle = Math.atan2(NODE_HEIGHT / 2, nodeWidth / 2);
+    const cornerAngle = Math.atan2(NODE_HEIGHT / 2, targetNodeWidth / 2);
 
     // Calculate the actual angle of approach
     const approachAngle = Math.atan2(Math.abs(dy), Math.abs(dx));
-
+    // const tanRatioMoveable = Math.abs(targetCenterY - sourceY) / Math.abs(targetCenterX - sourceX);
+    // const tanRatioFixed = (targetCenterY - y2) / (targetCenterX - x2);
     let markerType;
-    if (x1 === x2 && y1 === y2) {
+    if ((x1 === x2 && y1 === y2) || approachAngle > cornerAngle) {
       // Self-referential always uses horizontal
-      markerType = "repressorHorizontal";
-    } else if (approachAngle > cornerAngle) {
-      // Approaching from top or bottom → use HORIZONTAL marker
       markerType = "repressorHorizontal";
     } else {
       // Approaching from left or right → use VERTICAL marker
