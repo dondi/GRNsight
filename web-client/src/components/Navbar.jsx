@@ -95,25 +95,39 @@ export default function Navbar({}) {
                   >
                     <Button
                       plain
-                      label="Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)"
-                      onClick={() => {}}
+                      label={UNWEIGHTED_DEMO_NAME}
+                      onClick={() => {
+                        setDemoValue(UNWEIGHTED_DEMO_NAME);
+                      }}
                     />
                     <Button
                       plain
-                      label="Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)"
-                      onClick={() => {}}
+                      label={WEIGHTED_DEMO_NAME}
+                      onClick={() => {
+                        setDemoValue(WEIGHTED_DEMO_NAME);
+                      }}
                     />
                     <Button
                       plain
-                      label="Demo #3: Unweighted GRN (21 genes, 31 edges)"
-                      onClick={() => {}}
+                      label={SCHADE_INPUT_NAME}
+                      onClick={() => {
+                        setDemoValue(SCHADE_INPUT_NAME);
+                      }}
                     />
                     <Button
                       plain
-                      label="Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)"
-                      onClick={() => {}}
+                      label={SCHADE_OUTPUT_NAME}
+                      onClick={() => {
+                        setDemoValue(SCHADE_OUTPUT_NAME);
+                      }}
                     />
-                    <Button plain label="Demo #5: PPI (18 proteins, 81 edges)" onClick={() => {}} />
+                    <Button
+                      plain
+                      label={PPI_DEMO_NAME}
+                      onClick={() => {
+                        setDemoValue(PPI_DEMO_NAME);
+                      }}
+                    />
                   </Box>
                 }
               >

@@ -40,7 +40,7 @@ export async function getDemoWorkbook(demoType) {
  */
 export const getDemoEndpoint = demoValue => {
   const mapping = Object.entries(DEMO_TYPES).find(
-    ([_, value]) => value === demoValue.props.children
+    ([_, value]) => value === demoValue.props?.children || value === demoValue
   );
   return mapping ? mapping[0] : Error("Demo not found");
 };
