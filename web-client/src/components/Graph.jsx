@@ -171,7 +171,7 @@ export default function Graph() {
       .attr("height", NODE_HEIGHT)
       .style("fill", "white")
       .style("stroke", "#000")
-      .style("stroke-width", "2px");
+      .style("stroke-width", "1.5px");
 
     // Add text labels
     node
