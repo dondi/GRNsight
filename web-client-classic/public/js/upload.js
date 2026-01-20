@@ -392,7 +392,6 @@ export const upload = function () {
             }
         }
 
-        finalExportSheets.warnings = grnState.workbook.warnings;
         return finalExportSheets;
     };
 
