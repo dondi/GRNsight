@@ -401,51 +401,59 @@ export const upload = function () {
             degradation_rates: "DegradationRates",
         };
 
-        const twoColumnQuerySheets = Object.keys(twoColumnSheetType).filter(sheet => {
-            if (!chosenSheets.includes(sheet)) return false;
-            const sheetData = finalExportSheets.two_column_sheets[sheet];
-            return !(
-                sheetData === null ||
-                (sheetData && Object.keys(sheetData.data || {}).length === 0)
-            );
+        const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet => {
+            return chosenSheets.includes(sheet);
         });
 
-        if (twoColumnQuerySheets.length === 0) {
-            return finalExportSheets;
+        let missingTwoColumnSheets = [];
+
+        for (let sheet of chosenTwoColumnSheets) {
+            const sheetData = finalExportSheets.two_column_sheets[sheet];
+            if (
+                sheetData === null ||
+                (sheetData && Object.keys(sheetData.data || {}).length === 0)
+            ) {
+                missingTwoColumnSheets.push(sheet);
+            } else {
+                finalExportSheets.two_column_sheets[sheet] = sheetData;
+            }
         }
 
-        await Promise.all(
-            twoColumnQuerySheets.map(async sheet => {
-                const genes = grnState.workbook.genes.map(g => g.name).join(",");
-                try {
-                    const response = await queryExpressionDatabase({
-                        type: twoColumnSheetType[sheet],
-                        genes,
-                    });
-                    finalExportSheets.two_column_sheets[sheet] = {
-                        data: response,
-                        errors: [],
-                        warnings: [],
-                    };
-                } catch (error) {
-                    expressionExportErrorHandler(error);
-                    finalExportSheets.two_column_sheets[sheet] = {
-                        data: {},
-                        errors: [error],
-                        warnings: [],
-                    };
-                }
-            })
-        );
+        if (missingTwoColumnSheets.length > 0) {
+            await Promise.all(
+                missingTwoColumnSheets.map(async sheet => {
+                    const genes = grnState.workbook.genes.map(g => g.name).join(",");
+                    try {
+                        const response = await queryExpressionDatabase({
+                            type: twoColumnSheetType[sheet],
+                            genes,
+                        });
+                        finalExportSheets.two_column_sheets[sheet] = {
+                            data: response,
+                            errors: [],
+                            warnings: [],
+                        };
+                    } catch (error) {
+                        expressionExportErrorHandler(error);
+                        finalExportSheets.two_column_sheets[sheet] = {
+                            data: {},
+                            errors: [error],
+                            warnings: [],
+                        };
+                    }
+                })
+            );
+        }
 
         const exportWorkbookView = {
             genes: grnState.workbook.genes,
             twoColumnSheets: finalExportSheets.two_column_sheets,
         };
-        console.log("Need to buildWorkbook Two column missing genes warnings");
+
         const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
             exportWorkbookView,
-            warnings
+            warnings,
+            chosenTwoColumnSheets
         );
 
         const existingDescriptions = new Set(

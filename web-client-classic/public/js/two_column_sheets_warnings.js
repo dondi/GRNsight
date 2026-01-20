@@ -16,20 +16,14 @@ const buildMissingGenesWarning = ({ sheetName, missingGenes, warnings }) => {
     return gen ? gen(missingGenes.join(", ")) : null;
 };
 
-export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings) => {
+export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings, chosenSheets) => {
     const genes = getGeneNames(workbook);
-    const allGenesStr = genes.join(", ");
-
-    if (!workbook.twoColumnSheets) {
-        return [
-            warnings.MISSING_DEGRADATION_RATES(allGenesStr),
-            warnings.MISSING_PRODUCTION_RATES(allGenesStr),
-        ];
-    }
-
     const messages = [];
 
     for (const sheetName of TWO_COLUMN_SHEETS) {
+        if (chosenSheets && !chosenSheets.includes(sheetName)) {
+            continue;
+        }
         const data = workbook.twoColumnSheets?.[sheetName]?.data;
 
         const missingGenes =

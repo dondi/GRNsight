@@ -168,7 +168,8 @@ export const setupLoadAndImportHandlers = grnState => {
                 if (grnState.mode === NETWORK_GRN_MODE) {
                     const warningMessages = buildWorkbookTwoColumnMissingGenesWarnings(
                         workbook,
-                        warnings
+                        warnings,
+                        ["production_rates", "degradation_rates"] // chosenSheets (include both two column sheets when importing GRN workbooks)
                     );
 
                     applyWarnings(workbook, warningMessages);
