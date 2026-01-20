@@ -100,10 +100,10 @@ export const upload = function () {
         return filename + "." + extension;
     };
 
-    const download = (route, extension, sheetType) => {
-        var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
+    const download = (workbook, route, extension, sheetType) => {
+        var workbookToExport = flattenWorkbook(workbook, sheetType);
         var workbookFilename = filenameWithExtension(
-            sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
+            sheetType !== workbook.sheetType ? sheetType : "",
             extension
         );
         workbookToExport.filename = workbookFilename;
@@ -140,10 +140,10 @@ export const upload = function () {
             if (warnings.length > 0) {
                 displayExportWarnings(warnings);
                 $("#warningsModal").one("hidden.bs.modal", () => {
-                    download(route, extension, sheetType);
+                    download(uploadState.currentWorkbook, route, extension, sheetType);
                 });
             } else {
-                download(route, extension, sheetType);
+                download(uploadState.currentWorkbook, route, extension, sheetType);
             }
         }
 
@@ -488,35 +488,7 @@ export const upload = function () {
                 handleExportExcelButtonExport(route, extension, determineWorkbookType(), source);
             } else {
                 if (!$(this).parent().hasClass("disabled")) {
-                    var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-                    var workbookFilename = filenameWithExtension(
-                        sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
-                        extension
-                    );
-                    workbookToExport.filename = workbookFilename;
-
-                    var exportForm = $("<form></form>")
-                        .attr({
-                            method: "POST",
-                            action: $(".service-root").val() + "/" + route,
-                        })
-                        .append(
-                            $("<input></input>").attr({
-                                type: "hidden",
-                                name: "filename",
-                                value: workbookFilename,
-                            })
-                        )
-                        .append(
-                            $("<input></input>").attr({
-                                type: "hidden",
-                                name: "workbook",
-                                value: JSON.stringify(workbookToExport),
-                            })
-                        );
-                    $("body").append(exportForm);
-                    exportForm.submit();
-                    exportForm.remove();
+                    download(uploadState.currentWorkbook, route, extension, sheetType);
                 }
             }
         };
