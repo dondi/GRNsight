@@ -396,18 +396,23 @@ export const upload = function () {
         return finalExportSheets;
     };
 
-    const fetchTwoColumnSheets = async finalExportSheets => {
+    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets) => {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
         };
 
-        const twoColumnQuerySheets = Object.keys(finalExportSheets.two_column_sheets).filter(
-            x =>
-                finalExportSheets.two_column_sheets[x] === null ||
-                (finalExportSheets.two_column_sheets[x] &&
-                    Object.keys(finalExportSheets.two_column_sheets[x].data).length === 0)
-        );
+        const twoColumnQuerySheets = Object.keys(twoColumnSheetType).filter(sheet => {
+            if (!chosenSheets.includes(sheet)) return false;
+            const sheetData = finalExportSheets.two_column_sheets[sheet];
+            return (
+                sheetData === null || (sheetData && Object.keys(sheetData.data || {}).length === 0)
+            );
+        });
+
+        if (twoColumnQuerySheets.length === 0) {
+            return finalExportSheets;
+        }
 
         await Promise.all(
             twoColumnQuerySheets.map(async sheet => {
@@ -458,7 +463,7 @@ export const upload = function () {
 
         const chosenSheets = determineChosenSheets();
         let finalExportSheets = prepareFinalExportSheets(chosenSheets, source);
-        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets);
+        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets);
 
         handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
     };

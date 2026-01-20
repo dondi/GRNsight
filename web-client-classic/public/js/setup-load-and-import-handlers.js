@@ -165,12 +165,14 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
 
-                const warningMessages = buildWorkbookTwoColumnMissingGenesWarnings(
-                    workbook,
-                    warnings
-                );
+                if (grnState.mode === NETWORK_GRN_MODE) {
+                    const warningMessages = buildWorkbookTwoColumnMissingGenesWarnings(
+                        workbook,
+                        warnings
+                    );
 
-                applyWarnings(workbook, warningMessages);
+                    applyWarnings(workbook, warningMessages);
+                }
 
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
