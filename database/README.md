@@ -35,7 +35,7 @@ Here are the instructions how to set up the database for GRNsight.
     /opt/homebrew/var/postgresql@<version>
     ```
 
-    ![homebrew's cluster](image.png)
+    <img width="436" height="55" alt="image" src="https://github.com/user-attachments/assets/224dc931-1a0c-4858-a242-013ba197fbd8" />
 
 3. **Start and Stop the Server**
 
@@ -65,10 +65,12 @@ Here are the instructions how to set up the database for GRNsight.
     SELECT version();   # confirm server version is <version>
     ```
 
-    If start the PostgreSQL with Homebrew, the first line you can see is psql (<version> (Homebrew))
-    ![postgres default database](image-1.png)
+    If you start the PostgreSQL with Homebrew, the first line you can see is psql (<version> (Homebrew))
+   
+    <img width="310" height="49" alt="image-1" src="https://github.com/user-attachments/assets/cfa7386e-46db-4bde-9a4e-3c16af1fbcb6" />
 
-5. **Troubleshooting**
+
+6. **Troubleshooting**
 
     **PostgreSQL fails to start after Homebrew installation (macOS)**
 
