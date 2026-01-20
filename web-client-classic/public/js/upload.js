@@ -100,40 +100,53 @@ export const upload = function () {
         return filename + "." + extension;
     };
 
-    const exportExcel = (route, extension, sheetType) => {
-        if (uploadState.currentWorkbook.exportSheets.warnings.length > 0) {
-            displayExportWarnings(uploadState.currentWorkbook.exportSheets.warnings);
-        }
-        if (!$(this).parent().hasClass("disabled")) {
-            var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-            var workbookFilename = filenameWithExtension(
-                sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
-                extension
-            );
-            workbookToExport.filename = workbookFilename;
-            var exportForm = $("<form></form>")
-                .attr({
-                    method: "POST",
-                    action: $(".service-root").val() + "/" + route,
+    const download = (route, extension, sheetType) => {
+        var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
+        var workbookFilename = filenameWithExtension(
+            sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
+            extension
+        );
+        workbookToExport.filename = workbookFilename;
+
+        const exportForm = $("<form></form>")
+            .attr({
+                method: "POST",
+                action: $(".service-root").val() + "/" + route,
+            })
+            .append(
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "filename",
+                    value: workbookFilename,
                 })
-                .append(
-                    $("<input></input>").attr({
-                        type: "hidden",
-                        name: "filename",
-                        value: workbookFilename,
-                    })
-                )
-                .append(
-                    $("<input></input>").attr({
-                        type: "hidden",
-                        name: "workbook",
-                        value: JSON.stringify(workbookToExport),
-                    })
-                );
-            $("body").append(exportForm);
-            exportForm.submit();
-            exportForm.remove();
+            )
+            .append(
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "workbook",
+                    value: JSON.stringify(workbookToExport),
+                })
+            );
+
+        $("body").append(exportForm);
+        exportForm.submit();
+        exportForm.remove();
+    };
+
+    const exportExcel = (route, extension, sheetType) => {
+        const warnings = uploadState.currentWorkbook.exportSheets.warnings;
+
+        if (!$(this).parent().hasClass("disabled")) {
+            if (warnings.length > 0) {
+                displayExportWarnings(warnings);
+                $("#warningsModal").one("hidden.bs.modal", () => {
+                    download(route, extension, sheetType);
+                });
+            } else {
+                download(route, extension, sheetType);
+            }
         }
+
         $("#exportExcelModal").modal("hide");
     };
 
