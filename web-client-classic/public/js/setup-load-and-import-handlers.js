@@ -27,7 +27,7 @@ const demoFiles = [
 ];
 
 import { displayExportWarnings } from "./warnings.js";
-import { warnings } from "./export-constants.js";
+import { warnings } from "./import-warning-constants.js";
 import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
 
 const submittedFilename = $upload => {
