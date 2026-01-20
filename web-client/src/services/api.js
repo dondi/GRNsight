@@ -31,7 +31,7 @@ export async function getDemoWorkbook(demoType) {
 
 /**
  * Map from demo display names to API endpoint names
- * @param {string} demoValue - React element representing the selected demo
+ * @param {Object} demoValue - Grommet Text component representing the selected demo
  * @returns {string|null} Returns the corresponding endpoint name (unweighted, weighted, schadeInput, schadeOutput, ppi) or error if not found
  */
 export const getDemoEndpoint = demoValue => {
