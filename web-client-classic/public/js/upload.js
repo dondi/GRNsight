@@ -404,8 +404,9 @@ export const upload = function () {
         const twoColumnQuerySheets = Object.keys(twoColumnSheetType).filter(sheet => {
             if (!chosenSheets.includes(sheet)) return false;
             const sheetData = finalExportSheets.two_column_sheets[sheet];
-            return (
-                sheetData === null || (sheetData && Object.keys(sheetData.data || {}).length === 0)
+            return !(
+                sheetData === null ||
+                (sheetData && Object.keys(sheetData.data || {}).length === 0)
             );
         });
 
@@ -441,6 +442,7 @@ export const upload = function () {
             genes: grnState.workbook.genes,
             twoColumnSheets: finalExportSheets.two_column_sheets,
         };
+        console.log("Need to buildWorkbook Two column missing genes warnings");
         const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
             exportWorkbookView,
             warnings
@@ -483,13 +485,18 @@ export const upload = function () {
     };
 
     var performExport = function (route, extension, sheetType, source) {
-        return function (e) {
+        return async function (e) {
             if (e) {
                 e.preventDefault();
             }
             // Deleted event parameter
             if (route === "export-to-excel" && source) {
-                handleExportExcelButtonExport(route, extension, determineWorkbookType(), source);
+                await handleExportExcelButtonExport(
+                    route,
+                    extension,
+                    determineWorkbookType(),
+                    source
+                );
             } else {
                 if (!$(this).parent().hasClass("disabled")) {
                     download(uploadState.currentWorkbook, route, extension, sheetType);
