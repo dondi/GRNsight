@@ -441,7 +441,14 @@ export const upload = function () {
             exportWorkbookView,
             warnings
         );
-        finalExportSheets.warnings.push(...exportWarnings);
+
+        const existingDescriptions = new Set(
+            finalExportSheets.warnings.map(w => w.errorDescription)
+        );
+        const uniqueWarnings = exportWarnings.filter(
+            w => !existingDescriptions.has(w.errorDescription)
+        );
+        finalExportSheets.warnings.push(...uniqueWarnings);
 
         return finalExportSheets;
     };
