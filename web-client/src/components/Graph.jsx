@@ -109,14 +109,14 @@ export default function Graph() {
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
     // Setup zoom behavior
-    const zoom = d3
-      .zoom()
-      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
-      .on("zoom", event => {
-        zoomContainer.attr("transform", event.transform);
-      });
+    // const zoom = d3
+    //   .zoom()
+    //   .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+    //   .on("zoom", event => {
+    //     zoomContainer.attr("transform", event.transform);
+    //   });
 
-    svg.call(zoom);
+    // svg.call(zoom);
 
     // Create force simulation
     const simulation = d3
@@ -155,6 +155,8 @@ export default function Graph() {
       })
       .style("fill", "none");
 
+    const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
+
     // Create nodes
     const node = boundingBoxContainer
       .selectAll(".node")
@@ -162,7 +164,8 @@ export default function Graph() {
       .enter()
       .append("g")
       .attr("class", "node")
-      .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+      .call(drag)
+      .on("dblclick", dblclick);
 
     // Add rectangles for nodes
     node
@@ -195,6 +198,7 @@ export default function Graph() {
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
 
+    // TODO: for issue #1309, this is a good place to investigate to lock nodes. compare dragended to web-client-classic behavior
     // Helper functions
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -208,7 +212,10 @@ export default function Graph() {
     }
 
     function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
+      event.stopPropagation();
+    }
+
+    function dblclick(event, d) {
       d.fx = null;
       d.fy = null;
     }
