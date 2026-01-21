@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { Nav, DropButton, Box, Text, Button, Tip, TextInput } from "grommet";
-import { Refresh, Checkmark, FolderOpen, Edge } from "grommet-icons";
+import { Nav, DropButton, Box, Text, Button, Tip, TextInput, Menu, Select } from "grommet";
+import { Refresh, Checkmark, FolderOpen, Edge, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   UNWEIGHTED_DEMO_NAME,
@@ -76,64 +76,28 @@ export default function Navbar({}) {
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Source
             </Text>
-            {/* TODO: maybe instead do a collapsible instead of a tip */}
-            {/* TODO: something with pad or margin here is not working since content in tip displaying with wrong position */}
-            <Box pad={{ top: "7px", bottom: "5px", left: "30px" }} align="start">
-              <Tip
-                plain
-                dropProps={{
-                  align: { left: "right", top: "top" }, // attach menu to the right side
-                  plain: true,
-                }}
-                content={
-                  <Box
-                    className="dropdown-menu"
-                    pad="small"
-                    background="white"
-                    fill="true"
-                    align="start"
-                  >
-                    <Button
-                      plain
-                      label={UNWEIGHTED_DEMO_NAME}
-                      onClick={() => {
-                        setDemoValue(UNWEIGHTED_DEMO_NAME);
-                      }}
-                    />
-                    <Button
-                      plain
-                      label={WEIGHTED_DEMO_NAME}
-                      onClick={() => {
-                        setDemoValue(WEIGHTED_DEMO_NAME);
-                      }}
-                    />
-                    <Button
-                      plain
-                      label={SCHADE_INPUT_NAME}
-                      onClick={() => {
-                        setDemoValue(SCHADE_INPUT_NAME);
-                      }}
-                    />
-                    <Button
-                      plain
-                      label={SCHADE_OUTPUT_NAME}
-                      onClick={() => {
-                        setDemoValue(SCHADE_OUTPUT_NAME);
-                      }}
-                    />
-                    <Button
-                      plain
-                      label={PPI_DEMO_NAME}
-                      onClick={() => {
-                        setDemoValue(PPI_DEMO_NAME);
-                      }}
-                    />
-                  </Box>
-                }
-              >
-                <Button plain className="demo-button" label="Demo" fill="horizontal" />
-              </Tip>
+            {/* TODO: put color for CaretRightFill as constant instead of hardcoded color */}
+            {/* TODO: need to make sure there is a top margin, but adding a 7px top margin causes the buttons to display 7px shifted down */}
+            {/* TODO: need to style options to have no padding/margin */}
+            <Box pad={{ left: "30px", bottom: "5px" }}>
+              <Select
+                className="demo-dropdown-navbar"
+                icon={<CaretRightFill color="#ccc" />}
+                dropAlign={{ top: "top", bottom: "top", left: "right", right: "left" }}
+                options={[
+                  <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
+                  <Text>{WEIGHTED_DEMO_NAME}</Text>,
+                  <Text>{SCHADE_INPUT_NAME}</Text>,
+                  <Text>{SCHADE_OUTPUT_NAME}</Text>,
+                  <Text>{PPI_DEMO_NAME}</Text>,
+                ]}
+                value={<Text>Demo</Text>}
+                placeholder={<Text>Demo</Text>}
+                onChange={({ option }) => setDemoValue(option)}
+                size="small"
+              />
             </Box>
+
             <Box
               width="95%"
               alignSelf="center"
@@ -144,8 +108,8 @@ export default function Navbar({}) {
                 size: "1px",
               }}
             ></Box>
-            <Box>
-              <Button margin={{ left: "32px", top: "7px", bottom: "5px" }}>
+            <Box pad={{ left: "30px", top: "7px", bottom: "5px" }}>
+              <Button>
                 <FolderOpen className="folder-icon" size="14px" />
                 <Text>Open File...</Text> <Text className="italics">(.xlsx, .sif, .graphml)</Text>
               </Button>
@@ -599,20 +563,22 @@ export default function Navbar({}) {
         }
       />
 
-      <DropButton
-        className="nav-button"
-        label="Demo"
-        dropAlign={{ top: "bottom", left: "left" }}
-        pad="15px"
-        dropContent={
-          <Box pad="small" className="dropdown-menu" background="white">
-            <Button label="Demo #1: Unweighted GRN" onClick={() => {}} />
-            <Button label="Demo #2: Weighted GRN" onClick={() => {}} />
-            <Button label="Demo #3: Unweighted GRN" onClick={() => {}} />
-            <Button label="Demo #4: Weighted GRN" onClick={() => {}} />
-            <Button label="Demo #5: PPI" onClick={() => {}} />
-          </Box>
-        }
+      {/* TODO: set width so that shorter and wider window like web-client-classic */}
+      <Select
+        // className="demo-source-dropdown"
+        pad="0px"
+        icon={false}
+        options={[
+          <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
+          <Text>{WEIGHTED_DEMO_NAME}</Text>,
+          <Text>{SCHADE_INPUT_NAME}</Text>,
+          <Text>{SCHADE_OUTPUT_NAME}</Text>,
+          <Text>{PPI_DEMO_NAME}</Text>,
+        ]}
+        value={demoValue}
+        placeholder={<Text> Demo</Text>}
+        onChange={({ option }) => setDemoValue(option)}
+        size="small"
       />
     </Nav>
   );
