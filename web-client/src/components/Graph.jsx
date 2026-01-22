@@ -124,8 +124,7 @@ export default function Graph() {
         move(direction.toLowerCase());
       });
     });
-    // TODO: need to recenter graph when window resizes
-    // d3.select(".center").on("click", center);
+    d3.select(".center").on("click", center);
 
     // Create force simulation
     const simulation = d3
