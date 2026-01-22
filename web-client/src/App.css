@@ -259,9 +259,70 @@ input[type="radio"]:checked {
   stroke-width: 0.5px;
   width: 1100px;
   height: 644px;
-  /* transition: opacity 0.25s; */
+  transition: opacity 0.25s;
 }
 
 .load-from-database {
   border: 2px solid red;
+}
+
+.scale-and-scroll {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
+  cursor: default;
+  margin-left: 15px;
+}
+
+.scrollTable {
+  text-align: center;
+  table-layout: fixed;
+  margin-bottom: 10px;
+}
+
+.scrollTable td {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.scrollBtn {
+  border: 1px solid #aaa;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.scrollBtn p {
+  margin: 0;
+}
+
+.movementArrow {
+  font-weight: bolder;
+  font-size: 24px;
+}
+
+.zoomTable {
+  margin-bottom: 5px;
+  text-align: center;
+  table-layout: fixed;
+}
+
+.zoomTable td {
+  height: 20px;
+  width: 120px;
+}
+
+.zoomCenter {
+  position: absolute;
+  width: 2px;
+  z-index: -1;
+  background-color: #aaa;
+  height: 25.5px;
+  left: 59.5px;
+  top: 148.5px;
 }

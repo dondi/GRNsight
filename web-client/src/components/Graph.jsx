@@ -2,6 +2,7 @@ import { useEffect, useRef, useContext, useState } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
 import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
+import ScaleAndScroll from "./ScaleAndScroll";
 import {
   BOUNDARY_MARGIN,
   ZOOM_DISPLAY_MINIMUM_VALUE,
@@ -28,8 +29,8 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
-
 import "../App.css";
+import { event } from "jquery";
 
 export default function Graph() {
   const svgRef = useRef(null);
@@ -105,18 +106,26 @@ export default function Graph() {
 
     // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
+    const zoom = d3
+      .zoom()
+      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+      .on("zoom", event => {
+        zoomContainer.attr("transform", event.transform);
+      });
+    // this allows zoomContainer to be zoomed, dragged
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
-    // Setup zoom behavior
-    // const zoom = d3
-    //   .zoom()
-    //   .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
-    //   .on("zoom", event => {
-    //     zoomContainer.attr("transform", event.transform);
-    //   });
-
-    // svg.call(zoom);
+    // this controls the D-pad
+    d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
+    var arrowMovement = ["Up", "Left", "Right", "Down"];
+    arrowMovement.forEach(function (direction) {
+      d3.select(".scroll" + direction).on("click", function () {
+        move(direction.toLowerCase());
+      });
+    });
+    // TODO: need to recenter graph when window resizes
+    // d3.select(".center").on("click", center);
 
     // Create force simulation
     const simulation = d3
@@ -220,6 +229,27 @@ export default function Graph() {
       d.fy = null;
     }
 
+    // TODO: may need to change this when have dymanic viewport width
+    function center() {
+      var viewportWidth = width;
+      var viewportHeight = height;
+      zoom.translateTo(zoomContainer, width / 2, height / 2);
+    }
+
+    // move: Moves graph with D-pad
+    // TODO: will need to update with adaptive
+    function move(direction) {
+      var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
+      var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
+      // if (adaptive) {
+      zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+      // } else if (!adaptive) {
+      //   if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
+      //     zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+      //   }
+      // }
+    }
+
     // Tick function
     simulation.on("tick", () => {
       // Update link positions with Bézier curves
@@ -274,6 +304,7 @@ export default function Graph() {
       style={{ width: "100%", height: "600px" }}
     >
       <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />
+      <ScaleAndScroll />
     </div>
   );
 }

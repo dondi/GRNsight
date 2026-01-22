@@ -400,3 +400,5 @@ export function calcAllWeights(data, colorOptimal) {
 export function calcMaxWeight(allWeights) {
   return Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 }
+
+
