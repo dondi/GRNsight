@@ -51,10 +51,18 @@ const buildNetworkProteinsQuery = function (proteinString) {
 const buildGenerateProteinNetworkQuery = function (proteins, source, timestamp) {
     const namespace = constants.timestampNamespace(timestamp, false);
     const annotation = constants.isTimestampOld(timestamp) ? "" : ", annotation_type";
-    return `SELECT DISTINCT protein1, protein2${annotation} FROM
-        ${namespace}.physical_interactions WHERE
-        physical_interactions.time_stamp='${timestamp}' AND physical_interactions.source='${source}' AND
-        ${buildNetworkProteinsQuery(proteins)} ORDER BY protein1 DESC;`;
+    return `
+        SELECT DISTINCT
+            LEAST(protein1, protein2) AS protein1,
+            GREATEST(protein1, protein2) AS protein2
+            ${annotation}
+        FROM ${namespace}.physical_interactions
+        WHERE
+            physical_interactions.time_stamp='${timestamp}'
+            AND physical_interactions.source='${source}'
+            AND ${buildNetworkProteinsQuery(proteins)}
+        ORDER BY protein1 DESC;
+    `;
 };
 
 const buildQueryByType = function (query) {
