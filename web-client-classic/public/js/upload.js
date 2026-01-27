@@ -101,8 +101,8 @@ export const upload = function () {
     };
 
     const download = (workbook, route, extension, sheetType) => {
-        var workbookToExport = flattenWorkbook(workbook, sheetType);
-        var workbookFilename = filenameWithExtension(
+        const workbookToExport = flattenWorkbook(workbook, sheetType);
+        const workbookFilename = filenameWithExtension(
             sheetType !== workbook.sheetType ? sheetType : "",
             extension
         );
