@@ -405,7 +405,7 @@ export const upload = function () {
             sheet => chosenSheets.includes(sheet)
         );
 
-        let missingTwoColumnSheets = [];
+        const missingTwoColumnSheets = [];
 
         for (let sheet of chosenTwoColumnSheets) {
             const sheetData = finalExportSheets.two_column_sheets[sheet];
