@@ -318,22 +318,21 @@ export const upload = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         let chosenSheets = [];
 
-        for (const [key, value] of Object.entries(workbookSheets)) {
-            if (!isNaN(parseInt(key, 10))) {
-                if (value.value === "select all") {
-                    const allWorkbookSheets = $("input[name=workbookSheets]");
-                    chosenSheets = [];
-                    for (const [k, v] of Object.entries(allWorkbookSheets)) {
-                        if (!isNaN(parseInt(k, 10)) && v.value !== "select all") {
-                            chosenSheets.push(v.value);
-                        }
+        workbookSheets.each(function () {
+            const value = $(this).val();
+
+            if (value === "select all") {
+                chosenSheets = [];
+                $("input[name=workbookSheets]").each(function () {
+                    const sheetValue = $(this).val();
+                    if (sheetValue !== "select all") {
+                        chosenSheets.push(sheetValue);
                     }
-                    break;
-                } else {
-                    chosenSheets.push(value.value);
-                }
+                });
+                return false;
             }
-        }
+            chosenSheets.push(value);
+        });
         return chosenSheets;
     };
 
