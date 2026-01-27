@@ -401,9 +401,9 @@ export const upload = function () {
             degradation_rates: "DegradationRates",
         };
 
-        const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet => {
-            return chosenSheets.includes(sheet);
-        });
+        const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(
+            sheet => chosenSheets.includes(sheet)
+        );
 
         let missingTwoColumnSheets = [];
 
