@@ -1,6 +1,6 @@
 const TWO_COLUMN_SHEETS = ["production_rates", "degradation_rates"];
 
-const getGeneNames = workbook => (workbook.genes ?? []).map(g => g?.name).filter(Boolean);
+const getGeneNames = workbook => (workbook.genes ?? []).map(g => g?.name).filter(g => Boolean(g));
 
 const computePartialMissingGeneNames = (geneNames, dataByGene) =>
     geneNames.filter(g => dataByGene?.[g] === undefined);
