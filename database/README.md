@@ -2,7 +2,7 @@
 
 Here are the instructions how to set up the database for GRNsight.
 
-## Setting up a local postgres GRNsight Database
+## Setting up a local PostgreSQL GRNsight Database
 
 ### Installing PostgreSQL on your computer
 
