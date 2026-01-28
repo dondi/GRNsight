@@ -127,7 +127,15 @@ Here are the instructions how to set up the database for GRNsight.
 - Download PostgreSQL from https://www.postgresql.org/download/windows/
 - Follow the installer instructions and **save the password** when prompted — this is the password for the default `postgres` user.
 
-2. **Initialize the Database**
+
+2. **Ensure that you can invoke Postgres commands on the command line**
+
+- Depending on the installer, this may have already been done for you:
+- If not, search "Edit the system environment variables" from the Windows taskbar. From there open Environment Variables and edit the Path variable. 
+    - Within this variable use New to add `C:\Program Files\PostgresSQL\{postgres_version}\bin` and `C:\Program Files\PostgresSQL\{postgres_version}\lib`
+
+
+3. **Initialize the Database**
 
 - The installer will typically initialize a default cluster automatically.
 - If not, open a terminal (Command Prompt or PowerShell) and run:
@@ -138,7 +146,8 @@ Here are the instructions how to set up the database for GRNsight.
 
 - Replace `"C:\path\to\cluster"` with your desired folder for the database (you don't need to create a folder, the command will create the folder for you, just create the name).
 
-3. **Start and Stop the Server**
+
+4. **Start and Stop the Server**
 
 - Start PostgreSQL via terminal:
 
@@ -152,7 +161,7 @@ Here are the instructions how to set up the database for GRNsight.
     pg_ctl stop -D "C:\path\to\cluster"
     ```
 
-4. Verify Installation
+5. **Verify Installation**
 
 - Open terminal and run
 
@@ -165,16 +174,6 @@ Here are the instructions how to set up the database for GRNsight.
 
 - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
 - Linux users can try these [instructions](https://www.geeksforgeeks.org/install-postgresql-on-linux/) and that should work for you (...maybe...). If it doesn't try googling instructions with your specific operating system. Sorry!
-
-
-
-#### Ensure that you can invoke Postgres commands on the command line
-
-Depending on the installer, this may have already been done for you:
-
-For Windows Users: search "Edit the system environment variables" from the Windows taskbar. From there open environment variables and edit the Path variable. 
-Within this variable use new to add `C:\Program Files\PostgresSQL\{postgres_version}\bin` and `C:\Program Files\PostgresSQL\{postgres_version}\lib`
-
 
 ### Loading data to your database
 
