@@ -179,7 +179,7 @@ Here are the instructions how to set up the database for GRNsight.
 
 #### 1. Set Up Database Schema
 
-For detailed instructions on setting up the database schema, refer to the `README.md` file located in the `schema` folder.
+For detailed instructions on setting up the database schema, refer to the `README.md` file located in the `schema` folder [here](https://github.com/dondi/GRNsight/blob/main/database/schema/README.md).
 
 #### 2. Install Python Dependencies
 
