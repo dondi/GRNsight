@@ -166,6 +166,16 @@ Here are the instructions how to set up the database for GRNsight.
 - The MacOS and Windows instructions will _probably_ not work for you. You can try at your own risk to check.
 - Linux users can try these [instructions](https://www.geeksforgeeks.org/install-postgresql-on-linux/) and that should work for you (...maybe...). If it doesn't try googling instructions with your specific operating system. Sorry!
 
+
+
+#### Ensure that you can invoke Postgres commands on the command line
+
+Depending on the installer, this may have already been done for you:
+
+For Windows Users: search "Edit the system environment variables" from the Windows taskbar. From there open environment variables and edit the Path variable. 
+Within this variable use new to add `C:\Program Files\PostgresSQL\{postgres_version}\bin` and `C:\Program Files\PostgresSQL\{postgres_version}\lib`
+
+
 ### Loading data to your database
 
 #### 1. Set Up Database Schema
