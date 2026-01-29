@@ -353,6 +353,8 @@ table {
 #zoomSlider {
   margin: 0;
   width: 120px;
+  /* enforce light mode */
+  color-scheme: light;
 }
 
 .minimum-zoom-display {
