@@ -35,10 +35,16 @@ GRNsight requires six schemas, one for each of the following namespaces:
 5. `gene_regulatory_network` (this is the old schema for gene regulatory network before 2025 - this namepsace can be empty because we no longer load data into this namespace)
 6. `protein_protein_interactions` (this is the old schema for protein protein interactions before 2025 - this namepsace can be empty because we no longer load data into this namespace)
 
-The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema:
+The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema.
 
+First, outside of postgres, navigate to the `schema` folder in your local copy of the GRNsight repository:
 ```
 cd <path to `schema` folder>
+```
+
+Then run the following commands:
+```
+psql -f grnsettings_schema.sql postgresql://localhost/postgres
 ```
 
 ```
@@ -46,15 +52,7 @@ psql -f expression_schema.sql postgresql://localhost/postgres
 ```
 
 ```
-psql -f gene_regulatory_network_schema.sql postgresql://localhost/postgres
-```
-
-```
 psql -f gene_regulatory_network_with_timestamp_schema.sql postgresql://localhost/postgres
-```
-
-```
-psql -f protein_protein_interactions_schema.sql postgresql://localhost/postgres
 ```
 
 ```
@@ -62,7 +60,11 @@ psql -f protein_protein_interactions_with_timestamp_schema.sql postgresql://loca
 ```
 
 ```
-psql -f grnsettings_schema.sql postgresql://localhost/postgres
+psql -f gene_regulatory_network_schema.sql postgresql://localhost/postgres
+```
+
+```
+psql -f protein_protein_interactions_schema.sql postgresql://localhost/postgres
 ```
 
 Once these steps are completed, your database will be set up and ready to accept expression and network data.
