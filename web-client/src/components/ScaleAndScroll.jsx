@@ -1,6 +1,13 @@
+import { useContext, useState } from "react";
+import { GrnStateContext } from "../App";
+import { ZOOM_DISPLAY_MINIMUM_VALUE, ZOOM_DISPLAY_MAXIMUM_VALUE } from "../constants";
 import "../App.css";
+import { zoom } from "d3";
 
 export default function ScaleAndScroll() {
+  const [zoomValue, setZoomValue] = useState(null);
+  const { zoomPercent, setZoomPercent } = useContext(GrnStateContext);
+
   return (
     <div className="scale-and-scroll">
       <table className="scrollTable">
@@ -32,7 +39,19 @@ export default function ScaleAndScroll() {
           </tr>
         </tbody>
       </table>
-      {/* <table className="zoomTable">
+      <span className="pull-left zoomLabel">
+        <b>
+          Zoom (<span className="minimum-zoom-display">{ZOOM_DISPLAY_MINIMUM_VALUE}</span>
+          &ndash;
+          <span className="maximum-zoom-display">{ZOOM_DISPLAY_MAXIMUM_VALUE}</span>
+          %):&nbsp;
+        </b>
+      </span>
+      <span className="pull-right zoomLabel" id="zoomPercent">
+        {zoomPercent}%
+      </span>
+      <br />
+      <table className="zoomTable">
         <tbody>
           <tr>
             <td>
@@ -42,16 +61,22 @@ export default function ScaleAndScroll() {
                 className="zoom"
                 type="range"
                 min="0"
-                max="8"
-                defaultValue="4"
-                step="0.25"
+                max="200"
+                value={zoomPercent}
+                // defaultValue="100"
+                onChange={e => {
+                  const sliderValue = parseInt(e.target.value);
+                  setZoomPercent(sliderValue);
+                }}
+                step="1"
                 // TODO: will need to set a state to make this dynamic
-                disabled={true}
+                // TODO: make sure that this always stays blue even when computer in dark mode
+                disabled={false}
               />
             </td>
           </tr>
         </tbody>
-      </table> */}
+      </table>
     </div>
   );
 }

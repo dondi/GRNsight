@@ -30,12 +30,14 @@ import {
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
 import "../App.css";
-import { event } from "jquery";
+import { ZOOM_PERCENT } from "../../../web-client-classic/public/js/constants";
 
 export default function Graph() {
   const svgRef = useRef(null);
   const containerRef = useRef(null);
   const simulationRef = useRef(null);
+  const zoomRef = useRef(null);
+  const zoomContainerRef = useRef(null);
 
   // The workbook or sheetType are not needed in global state outside of Graph, so keep them local
   const [workbook, setWorkbook] = useState(null);
@@ -47,22 +49,13 @@ export default function Graph() {
 
   const {
     colorOptimal,
-    setColorOptimal,
     linkDistance,
-    setLinkDistance,
     charge,
-    enableNodeColoring,
-    setEnableNodeColoring,
-    logFoldChangeMax,
-    edgeWeightVisibility,
     demoValue,
-    setDemoValue,
-    adaptive,
-    setAdaptive,
     networkMode,
     setNetworkMode,
     grayThreshold,
-    setGrayThreshold,
+    zoomPercent,
   } = useContext(GrnStateContext);
 
   // Load workbook data
@@ -89,6 +82,63 @@ export default function Graph() {
       .finally(() => setLoading(false));
   }, [demoValue]);
 
+  useEffect(() => {
+    if (!zoomRef.current || !svgRef.current || !containerRef.current) return;
+    const scale = zoomPercent / 100;
+    const svg = d3.select(svgRef.current);
+    const transform = d3.zoomIdentity.scale(scale);
+    svg.call(zoomRef.current.transform, transform);
+    // console.log("zoomPercent changed:", zoomPercent);
+    // let zoomDisplay;
+
+    // // If the zoom value is out of bounds, reset it to the previous value.
+    // // if (adaptive) {
+    // zoomDisplay = zoomPercent;
+    // } else if (
+    //   !adaptive &&
+    //   flexZoomInBounds(
+    //     (grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
+    //       grnState.zoomValue
+    //     )
+    //   )
+    // ) {
+    //   zoomDisplay = grnState.zoomValue;
+    // } else {
+    //   grnState.zoomValue = prevGrnstateZoomVal;
+    //   zoomDisplay = grnState.zoomValue;
+    // }
+
+    // const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
+    //   zoomDisplay
+    // );
+
+    // setGraphZoom(calcGraphZoom);
+
+    // const finalDisplay = zoomPercent;
+
+    // Special handling for zoom input field: the user might be in the middle of typing a value that is
+    // _temporarily_ out of range (e.g., "1" while typing "100") and we don’t want to overwrite that.
+    // The special case can be detected if the input element currently has focus.
+    // if (document.activeElement !== document.querySelector(ZOOM_INPUT)) {
+    //   $(ZOOM_INPUT).val(finalDisplay);
+    // }
+
+    // This controls movement of slider and is where the zoomSlider can be restricted
+    // if (adaptive || (!adaptive && flexZoomInBounds(calcGraphZoom))) {
+    //   if (!adaptive) {
+    //     // Recenter graph when zooming to ensure that graph stays in viewport
+    //     center();
+    //     updateZoomContainerInfo();
+    //   }
+
+    //   $(ZOOM_SLIDER).val(
+    //     (finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight).invert(
+    //       finalDisplay
+    //     )
+    //   );
+    // }
+  }, [zoomPercent]);
+
   // Main D3 rendering effect
   useEffect(() => {
     if (!workbook || !svgRef.current || !containerRef.current) return;
@@ -106,13 +156,17 @@ export default function Graph() {
 
     // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
+    zoomContainerRef.current = zoomContainer.node(); // Store reference
+
     const zoom = d3
       .zoom()
       .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
       .on("zoom", event => {
         zoomContainer.attr("transform", event.transform);
       });
-    // this allows zoomContainer to be zoomed, dragged
+
+    zoomRef.current = zoom;
+    svg.call(zoom);
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
