@@ -1,3 +1,7 @@
+p {
+  margin: 0;
+}
+
 body {
   font-size: 14px;
   line-height: 1.42857143;
@@ -20,7 +24,8 @@ body {
   border: 1px solid #dfebe5;
 }
 
-.navbar button {
+.navbar button,
+.filename {
   color: #000000;
   border: none;
 }
@@ -273,12 +278,24 @@ input[type="radio"]:checked {
   z-index: 1;
   cursor: default;
   margin-left: 15px;
+  width: 121px;
+  /* height: 1px; */
 }
 
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-vertical-spacing: 0px;
+}
+
+/* For some reason, scrollTable is 124px instead of 121px */
 .scrollTable {
   text-align: center;
   table-layout: fixed;
   margin-bottom: 10px;
+  border-collapse: collapse;
+  /* height: 121px; */
 }
 
 .scrollTable td {
@@ -297,26 +314,56 @@ input[type="radio"]:checked {
   user-select: none;
 }
 
-.scrollBtn p {
-  margin: 0;
-}
-
 .movementArrow {
   font-weight: bolder;
   font-size: 24px;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
 }
 
 .zoomTable {
   margin-bottom: 5px;
   text-align: center;
   table-layout: fixed;
+  height: 20px;
 }
 
 .zoomTable td {
+  padding: 0;
   height: 20px;
   width: 120px;
 }
 
+.zoomLabel {
+  font-size: 9px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#zoomSlider {
+  margin: 0;
+  width: 120px;
+}
+
+.minimum-zoom-display {
+  margin-right: 0.25rem;
+}
+
+.maximum-zoom-display {
+  margin-left: 0.25rem;
+}
+
+/* TODO: investigate why the top is off by 10px from classic */
 .zoomCenter {
   position: absolute;
   width: 2px;
@@ -324,5 +371,5 @@ input[type="radio"]:checked {
   background-color: #aaa;
   height: 25.5px;
   left: 59.5px;
-  top: 148.5px;
+  top: 158.5px;
 }
