@@ -538,7 +538,6 @@ export default function Navbar({}) {
       />
 
       <DropButton
-        // className="nav-button"
         label="Help"
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
