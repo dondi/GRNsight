@@ -1,7 +1,7 @@
 module.exports = {
     warnings: {
         // ADDITIONAL SHEET WARNINGS
-        MISSING_DEGRADATION_RATES_EXPORT_WARNING: (missingGenes = "") => ({
+        MISSING_DEGRADATION_RATES: (missingGenes = "") => ({
             warningCode: "MISSING_DEGRADATION_RATES_EXPORT_WARNING",
             errorDescription:
                 "GRNsight has detected that there are missing degradation rates in the exported" +
@@ -11,7 +11,7 @@ module.exports = {
                 missingGenes,
         }),
 
-        MISSING_PRODUCTION_RATES_EXPORT_WARNING: (missingGenes = "") => ({
+        MISSING_PRODUCTION_RATES: (missingGenes = "") => ({
             warningCode: "MISSING_PRODUCTION_RATES_EXPORT_WARNING",
             errorDescription:
                 "GRNsight has detected that there are missing production rates in the exported" +
