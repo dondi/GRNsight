@@ -105,7 +105,6 @@ export default function Graph() {
 
     const defs = svg.append("defs");
 
-    // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
     zoomContainerRef.current = zoomContainer.node();
 
@@ -247,7 +246,6 @@ export default function Graph() {
 
     // Tick function
     simulation.on("tick", () => {
-      // Update link positions with Bézier curves
       link
         .select("path")
         .attr("d", d => {
@@ -268,7 +266,6 @@ export default function Graph() {
           });
         });
 
-      // Update node positions
       node.attr("transform", d => {
         d.x = Math.max(
           BOUNDARY_MARGIN,
@@ -279,7 +276,6 @@ export default function Graph() {
       });
     });
 
-    // Cleanup
     return () => {
       simulation.stop();
     };
