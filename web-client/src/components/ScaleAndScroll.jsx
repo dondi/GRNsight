@@ -60,7 +60,7 @@ export default function ScaleAndScroll() {
                 id="zoomSlider"
                 className="zoom"
                 type="range"
-                min="0"
+                min="25"
                 max="200"
                 value={zoomPercent}
                 // defaultValue="100"
