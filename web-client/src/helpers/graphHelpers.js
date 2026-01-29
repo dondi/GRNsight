@@ -1,3 +1,4 @@
+import * as d3 from "d3";
 import {
   NODE_HEIGHT,
   NODE_MARGIN,
@@ -6,10 +7,22 @@ import {
   EDGE_BLUE,
   EDGE_RED,
   CURVE_THRESHOLD,
+  SELF_REFERRING_Y_OFFSET,
+  SHORT_NODE_LIMIT,
+  ADDITIONAL_SHIFT,
+  END_POINT_ADJUSTMENT,
 } from "../constants.js";
 
+// TODO: resolve issue where node.textWidth is initially calculated with undefined value
 export function getNodeWidth(node) {
+  // console.log("node.textWidth", node.textWidth, "MINIMUM_NODE_WIDTH", MINIMUM_NODE_WIDTH);
+  // console.log("calculated node width:", NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN);
   return NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN;
+}
+
+// TODO: add description from web-client-classic
+export function normalize(d, maxWeight) {
+  return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 
 /**
@@ -72,7 +85,26 @@ function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control1,
  * @returns {number} return.x - X coordinate of intersection point
  * @returns {number} return.y - Y coordinate of intersection point
  */
-function findBezierBoxIntersection(source, control1, control2, target, boxWidth, boxHeight) {
+function findBezierBoxIntersection(
+  source,
+  control1,
+  control2,
+  target,
+  boxWidth,
+  boxHeight,
+  strokeWidth,
+  isRepressor
+) {
+  // Calculate minimum distance to ensure marker visibility
+  const MINIMUM_DISTANCE = 8;
+
+  // Apply the same logic as classic: use max of strokeWidth and MINIMUM_DISTANCE
+  const globalOffset = Math.max(strokeWidth, MINIMUM_DISTANCE);
+
+  // Expand the box by the offset amount so markers render outside the boundary
+  const expandedWidth = boxWidth + 2 * globalOffset;
+  const expandedHeight = boxHeight + 2 * globalOffset;
+
   // Binary search to find intersection point
   // intersection = 0 is the start of the bezier curve, intersection = 1 is the end of the bezier curve
   // intersectionMin and intersectionMax define the current search interval for intersection
@@ -88,7 +120,7 @@ function findBezierBoxIntersection(source, control1, control2, target, boxWidth,
     const deltaX = Math.abs(point.x - target.x);
     const deltaY = Math.abs(point.y - target.y);
 
-    if (deltaX < boxWidth / 2 && deltaY < boxHeight / 2) {
+    if (deltaX < expandedWidth / 2 && deltaY < expandedHeight / 2) {
       // Point is inside box, search earlier part of curve
       intersectionMax = intersectionMid;
     } else {
@@ -101,6 +133,9 @@ function findBezierBoxIntersection(source, control1, control2, target, boxWidth,
 }
 
 export function createPath(d, width, height) {
+  // Calculate adjusted source and target positions to be at center of nodes
+  // TODO: resolve issue where node.textWidth is initially calculated with undefined value
+  // TODO: confirm whether node textWidth is defined before this function is called
   const sourceX = d.source.x + getNodeWidth(d.source) / 2;
   const sourceY = d.source.y + NODE_HEIGHT / 2;
   const targetX = d.target.x + getNodeWidth(d.target) / 2;
@@ -123,6 +158,12 @@ export function createPath(d, width, height) {
   vx /= vmagnitude;
   vy /= vmagnitude;
 
+  // Check for vector direction to ensure consistent curve direction
+  if ((targetX > sourceX && targetY > sourceY) || (targetX < sourceX && targetY < sourceY)) {
+    vx = -vx;
+    vy = -vy;
+  }
+
   // Calculate control points between nodes
   const curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
   const inlineOffset = Math.max(umagnitude / 4, curveToStraight);
@@ -132,6 +173,8 @@ export function createPath(d, width, height) {
   // However, this values means that nodes are within 202 pixels of each other, so will need to adjust this
   // When set orthOffset to 0, then creates issues with paths going through border of boudning box
   const isStraightLine = orthoOffset < 0.5;
+  const isRepressor = d.value < 0;
+  const strokeWidth = d.strokeWidth || 2;
 
   if (isStraightLine) {
     const endPoint = straightLineBoxIntersection(
@@ -140,7 +183,9 @@ export function createPath(d, width, height) {
       targetX,
       targetY,
       targetWidth,
-      targetHeight
+      targetHeight,
+      strokeWidth,
+      isRepressor
     );
 
     return `M${sourceX},${sourceY} L${endPoint.x},${endPoint.y}`;
@@ -162,7 +207,9 @@ export function createPath(d, width, height) {
       { x: cp2x, y: cp2y },
       { x: targetX, y: targetY },
       targetWidth,
-      targetHeight
+      targetHeight,
+      strokeWidth,
+      isRepressor
     );
 
     // Create quadratic Bézier curve ending at the box perimeter
@@ -188,7 +235,9 @@ function straightLineBoxIntersection(
   targetX,
   targetY,
   targetWidth,
-  targetHeight
+  targetHeight,
+  strokeWidth,
+  isRepressor
 ) {
   const deltaX = targetX - sourceX;
   const deltaY = targetY - sourceY;
@@ -197,8 +246,16 @@ function straightLineBoxIntersection(
     return { x: targetX, y: targetY };
   }
 
-  const halfWidth = targetWidth / 2;
-  const halfHeight = targetHeight / 2;
+  // Calculate minimum distance to ensure marker visibility
+  const MINIMUM_DISTANCE = 8;
+  const globalOffset = Math.max(strokeWidth, MINIMUM_DISTANCE);
+
+  // Expand the box by the offset amount
+  const expandedWidth = targetWidth + 2 * globalOffset;
+  const expandedHeight = targetHeight + 2 * globalOffset;
+
+  const halfWidth = expandedWidth / 2;
+  const halfHeight = expandedHeight / 2;
   // Calculate angle of approach
   const angle = Math.atan2(deltaY, deltaX);
   const tanAngle = Math.abs(Math.tan(angle));
@@ -218,18 +275,90 @@ function straightLineBoxIntersection(
   return { x: intersectX, y: intersectY };
 }
 
-export function createSelfLoop(d) {
-  const nodeWidth = getNodeWidth(d.source);
-  const x = d.source.x + nodeWidth;
-  const y = d.source.y + NODE_HEIGHT / 2;
-  const radius = 25;
-
-  return `M${x},${y}
-          A${radius},${radius} 0 1,1 ${x},${y + 0.1}`;
+function getSelfReferringRadius(edge) {
+  return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
 }
 
-export function getEdgeThickness(workbook, enableEdgeColoring, edge) {
-  if (!enableEdgeColoring || workbook.sheetType === "unweighted") {
+export function createSelfLoop(d, width, height, colorOptimal) {
+  let x1 = d.source.x;
+  let y1 = d.source.y;
+  let x2 = d.target.x;
+  let y2 = d.target.y;
+  let dx = x2 - x1;
+  let dy = y2 - y1;
+  let dr = Math.sqrt(dx * dx + dy * dy);
+
+  // Defaults for normal edge.
+  let drx = dr;
+  let dry = dr;
+  let xRotation = 0; // degrees
+  let largeArc = 0; // 1 or 0
+  let sweep = 1; // 1 or 0
+  let offset = parseFloat(d.strokeWidth);
+
+  // Edge adjustment values when long self-node edges get hidden behind the node.
+  let DEFAULT_NODE_SHIFT = 1.033;
+
+  // Self edge.
+  if (x1 === x2 && y1 === y2) {
+    // Move the position of the loop.
+    x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
+    y1 = d.source.y + NODE_HEIGHT / 2 + SELF_REFERRING_Y_OFFSET;
+
+    // This angle creates the loop.
+    xRotation = 45;
+
+    // Needs to be 1.
+    largeArc = 1;
+
+    // Change sweep to change orientation of loop.
+    sweep = 1;
+
+    drx = getSelfReferringRadius(d);
+    dry = getSelfReferringRadius(d);
+
+    // For whatever reason, the arc collapses to a point if the beginning
+    // and ending points of the arc are the same, so kludge it.
+    if (d.source.textWidth > SHORT_NODE_LIMIT) {
+      DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
+    }
+    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * DEFAULT_NODE_SHIFT;
+    y2 = d.source.y + NODE_HEIGHT;
+
+    if (d.value < 0 && colorOptimal) {
+      offset = Math.max(10, parseFloat(d.strokeWidth));
+    }
+  }
+
+  d.label = {
+    x: Math.min(width - 13 * offset, x1), // For 4 decimal places
+    y: Math.min(height - offset, y1 + dry * 3),
+  };
+
+  return (
+    "M" +
+    x1 +
+    "," +
+    y1 +
+    "A" +
+    drx +
+    "," +
+    dry +
+    " " +
+    xRotation +
+    "," +
+    largeArc +
+    "," +
+    sweep +
+    " " +
+    x2 +
+    "," +
+    (y2 + offset)
+  );
+}
+
+export function getEdgeThickness(workbook, colorOptimal, edge) {
+  if (!colorOptimal || workbook.sheetType === "unweighted") {
     return 2;
   }
 
@@ -241,7 +370,33 @@ export function getEdgeThickness(workbook, enableEdgeColoring, edge) {
   return Math.floor(scale(Math.abs(edge.value)));
 }
 
-export function getEdgeColor(workbook, edge) {
-  if (workbook.sheetType === "unweighted") return EDGE_BLACK;
+export function getEdgeColor(workbook, edge, grayThreshold, maxWeight, colorOptimal) {
+  if (!colorOptimal || workbook.sheetType === "unweighted") return EDGE_BLACK;
+  if (normalize(edge, maxWeight) <= grayThreshold) {
+    return "gray";
+  }
   return edge.value < 0 ? EDGE_BLUE : EDGE_RED;
+}
+
+export function calcAllWeights(data, colorOptimal) {
+  // Create an array of all the network weights
+  const allWeights = data.positiveWeights.concat(data.negativeWeights);
+  // Assign the entire array weights of 1, if color edges turned off
+  if (!colorOptimal) {
+    for (var i = 0; i < allWeights.length; i++) {
+      if (allWeights[i] !== 0) {
+        allWeights[i] = 1;
+      }
+    }
+  } else {
+    for (var j = 0; j < allWeights.length; j++) {
+      allWeights[j] = Math.abs(allWeights[j].toPrecision(4));
+    }
+  }
+
+  return allWeights;
+}
+
+export function calcMaxWeight(allWeights) {
+  return Math.max(Math.abs(d3.max(allWeights)), Math.abs(d3.min(allWeights)));
 }

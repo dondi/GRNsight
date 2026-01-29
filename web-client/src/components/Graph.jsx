@@ -1,7 +1,7 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
-import { getDemoWorkbook, getDemoEndpoint } from "../services/api";
+import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
 import {
   BOUNDARY_MARGIN,
   ZOOM_DISPLAY_MINIMUM_VALUE,
@@ -24,7 +24,10 @@ import {
   getEdgeColor,
   createPath,
   createSelfLoop,
+  calcAllWeights,
+  calcMaxWeight,
 } from "../helpers/graphHelpers";
+import { createEdgeMarker } from "../helpers/markerHelpers";
 
 import "../App.css";
 
@@ -33,19 +36,32 @@ export default function Graph() {
   const containerRef = useRef(null);
   const simulationRef = useRef(null);
 
+  // The workbook or sheetType are not needed in global state outside of Graph, so keep them local
   const [workbook, setWorkbook] = useState(null);
+  const [sheetType, setSheetType] = useState(null);
+  const [allWeights, setAllWeights] = useState([]);
+  const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const {
-    demoValue,
+    colorOptimal,
+    setColorOptimal,
     linkDistance,
+    setLinkDistance,
     charge,
     enableNodeColoring,
-    enableEdgeColoring,
+    setEnableNodeColoring,
     logFoldChangeMax,
     edgeWeightVisibility,
+    demoValue,
+    setDemoValue,
     adaptive,
+    setAdaptive,
+    networkMode,
+    setNetworkMode,
+    grayThreshold,
+    setGrayThreshold,
   } = useContext(GrnStateContext);
 
   // Load workbook data
@@ -58,6 +74,12 @@ export default function Graph() {
     getDemoWorkbook(demoEndpoint)
       .then(data => {
         setWorkbook(data);
+        setSheetType(data.sheetType);
+        console.log("data", data);
+        setNetworkMode(getNetworkMode(data.meta.data.workbookType));
+        const weights = calcAllWeights(data, colorOptimal);
+        setAllWeights(weights);
+        setMaxWeight(calcMaxWeight(weights));
         setError(null);
       })
       .catch(err => {
@@ -77,48 +99,23 @@ export default function Graph() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // Create SVG
     const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
 
-    // Create defs for arrowhead markers
     const defs = svg.append("defs");
 
-    // Define arrowhead markers for different colors
-    const arrowColors = [
-      { id: "arrowhead-black", color: EDGE_BLACK },
-      { id: "arrowhead-red", color: EDGE_RED },
-      { id: "arrowhead-blue", color: EDGE_BLUE },
-    ];
-
-    arrowColors.forEach(({ id, color }) => {
-      defs
-        .append("marker")
-        .attr("id", id)
-        .attr("viewBox", "0 0 10 10")
-        .attr("refX", 9) // Position at arrow tip
-        .attr("refY", 5) // Center vertically
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto") // Auto-rotate to match path direction
-        .append("path")
-        .attr("d", "M 0 0 L 10 5 L 0 10 z") // TODO: explain what this does
-        .style("fill", color);
-    });
-
-    // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
+    // TODO: Temporarily disabled zoom to allow node locking behavior. Will revisit later.
     // Setup zoom behavior
-    const zoom = d3
-      .zoom()
-      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
-      .on("zoom", event => {
-        zoomContainer.attr("transform", event.transform);
-      });
-
-    svg.call(zoom);
+    // const zoom = d3
+    //   .zoom()
+    //   .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+    //   .on("zoom", event => {
+    //     zoomContainer.attr("transform", event.transform);
+    //   });
+    // svg.call(zoom);
 
     // Create force simulation
     const simulation = d3
@@ -147,16 +144,17 @@ export default function Graph() {
     link
       .append("path")
       .attr("class", "link-path")
-      .style("stroke", d => getEdgeColor(workbook, d))
-      .style("stroke-width", d => getEdgeThickness(workbook, enableEdgeColoring, d))
-      .style("fill", "none")
-      .attr("marker-end", d => {
-        // Return the appropriate marker based on edge color
-        if (workbook.sheetType === "unweighted") {
-          return "url(#arrowhead-black)";
-        }
-        return d.value < 0 ? "url(#arrowhead-blue)" : "url(#arrowhead-red)";
-      });
+      .style("stroke", d => {
+        d.stroke = getEdgeColor(workbook, d, grayThreshold, maxWeight, colorOptimal);
+        return d.stroke;
+      })
+      .style("stroke-width", d => {
+        d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
+        return d.strokeWidth;
+      })
+      .style("fill", "none");
+
+    const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 
     // Create nodes
     const node = boundingBoxContainer
@@ -165,7 +163,8 @@ export default function Graph() {
       .enter()
       .append("g")
       .attr("class", "node")
-      .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+      .call(drag)
+      .on("dblclick", dblclick);
 
     // Add rectangles for nodes
     node
@@ -174,7 +173,7 @@ export default function Graph() {
       .attr("height", NODE_HEIGHT)
       .style("fill", "white")
       .style("stroke", "#000")
-      .style("stroke-width", "2px");
+      .style("stroke-width", "1.5px");
 
     // Add text labels
     node
@@ -198,7 +197,6 @@ export default function Graph() {
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
 
-    // Helper functions
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
@@ -211,22 +209,35 @@ export default function Graph() {
     }
 
     function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
+      event.stopPropagation();
+    }
+
+    function dblclick(event, d) {
       d.fx = null;
       d.fy = null;
     }
 
-    // Tick function
     simulation.on("tick", () => {
-      // Update link positions with Bézier curves
-      link.select("path").attr("d", d => {
-        if (d.source === d.target) {
-          return createSelfLoop(d);
-        }
-        return createPath(d, width, height);
-      });
+      link
+        .select("path")
+        .attr("d", d => {
+          if (d.source === d.target) {
+            return createSelfLoop(d, width, height, colorOptimal);
+          }
+          return createPath(d, width, height);
+        })
+        .attr("marker-end", d => {
+          return createEdgeMarker({
+            defs,
+            d,
+            grayThreshold,
+            sheetType,
+            maxWeight,
+            colorOptimal,
+            networkMode,
+          });
+        });
 
-      // Update node positions
       node.attr("transform", d => {
         d.x = Math.max(
           BOUNDARY_MARGIN,
@@ -237,11 +248,10 @@ export default function Graph() {
       });
     });
 
-    // Cleanup
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, enableEdgeColoring, enableNodeColoring]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold]);
   if (loading) {
     return <div className="grnsight-container">Loading graph...</div>;
   }

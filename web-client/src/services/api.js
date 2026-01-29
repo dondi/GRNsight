@@ -4,6 +4,10 @@ import {
   SCHADE_INPUT_NAME,
   SCHADE_OUTPUT_NAME,
   PPI_DEMO_NAME,
+  NETWORK_GRN_MODE_FULL,
+  NETWORK_PPI_MODE_FULL,
+  NETWORK_GRN_MODE_SHORT,
+  NETWORK_PPI_MODE_SHORT,
 } from "../constants";
 // TODO: make this port dynamic in the future based on environment
 const API_URL = import.meta.env.DEV
@@ -36,9 +40,19 @@ export async function getDemoWorkbook(demoType) {
  */
 export const getDemoEndpoint = demoValue => {
   const mapping = Object.entries(DEMO_TYPES).find(
-    ([_, value]) => value === demoValue.props.children
+    ([_, value]) => value === demoValue.props?.children || value === demoValue
   );
   return mapping ? mapping[0] : Error("Demo not found");
+};
+
+export const getNetworkMode = workbookType => {
+  if (workbookType === NETWORK_GRN_MODE_SHORT) {
+    return NETWORK_GRN_MODE_FULL;
+  } else if (workbookType === NETWORK_PPI_MODE_SHORT) {
+    return NETWORK_PPI_MODE_FULL;
+  } else {
+    throw new Error("Unknown workbook type");
+  }
 };
 
 /**
