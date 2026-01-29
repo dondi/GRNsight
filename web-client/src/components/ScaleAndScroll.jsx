@@ -1,12 +1,12 @@
 import { useContext, useState } from "react";
 import { GrnStateContext } from "../App";
 import { ZOOM_DISPLAY_MINIMUM_VALUE, ZOOM_DISPLAY_MAXIMUM_VALUE } from "../constants";
+import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../constants";
 import "../App.css";
-import { zoom } from "d3";
 
 export default function ScaleAndScroll() {
   const [zoomValue, setZoomValue] = useState(null);
-  const { zoomPercent, setZoomPercent } = useContext(GrnStateContext);
+  const { zoomPercent, setZoomPercent, networkMode } = useContext(GrnStateContext);
 
   return (
     <div className="scale-and-scroll">
@@ -71,7 +71,9 @@ export default function ScaleAndScroll() {
                 step="0.1"
                 // TODO: will need to set a state to make this dynamic
                 // TODO: make sure that this always stays blue even when computer in dark mode
-                disabled={false}
+                disabled={
+                  networkMode !== NETWORK_GRN_MODE_FULL && networkMode !== NETWORK_PPI_MODE_FULL
+                }
               />
             </td>
           </tr>
