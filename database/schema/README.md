@@ -32,8 +32,8 @@ GRNsight requires six schemas, one for each of the following namespaces:
 2. `gene_expression`
 3. `gene_regulatory_network_with_timestamp`
 4. `protein_protein_interactions_with_timestamp`
-5. `gene_regulatory_network` (this is the old schema for gene regulatory network before 2025 - this namepsace can be empty because we no longer load data into this namespace)
-6. `protein_protein_interactions` (this is the old schema for protein protein interactions before 2025 - this namepsace can be empty because we no longer load data into this namespace)
+5. `gene_regulatory_network` (this is the old schema for the gene regulatory network database before 2025 - this namepsace can be empty because we no longer load data into this namespace)
+6. `protein_protein_interactions` (this is the old schema for the protein protein interactions database before 2025 - this namepsace can be empty because we no longer load data into this namespace)
 
 The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema.
 
