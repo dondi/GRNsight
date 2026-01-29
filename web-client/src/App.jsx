@@ -70,6 +70,7 @@ function App() {
     setNetworkData,
     zoomPercent,
     setZoomPercent,
+
   };
 
   return (
