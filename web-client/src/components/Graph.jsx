@@ -46,6 +46,7 @@ export default function Graph() {
   const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [zoomScale, setZoomScale] = useState(null);
 
   const {
     colorOptimal,
@@ -82,12 +83,22 @@ export default function Graph() {
       .finally(() => setLoading(false));
   }, [demoValue]);
 
+  // TODO: need to update with adaptive (restrict to viewport)
   useEffect(() => {
-    if (!zoomRef.current || !svgRef.current || !containerRef.current) return;
+    if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
     const scale = zoomPercent / 100;
-    const svg = d3.select(svgRef.current);
-    const transform = d3.zoomIdentity.scale(scale);
-    svg.call(zoomRef.current.transform, transform);
+    const zoomContainer = d3.select(zoomContainerRef.current);
+
+    // Use scaleTo which preserves translation while changing scale
+    zoomRef.current.scaleTo(zoomContainer, scale);
+    // const scale = zoomPercent / 100;
+    // const svg = d3.select(svgRef.current);
+    // const currentTransform = d3.zoomTransform(svg.node());
+    // const newTransform = d3.zoomIdentity
+    //   .translate(currentTransform.x, currentTransform.y)
+    //   .scale(scale);
+
+    // svg.call(zoomRef.current.transform, newTransform);
   }, [zoomPercent]);
 
   // Main D3 rendering effect
@@ -244,13 +255,7 @@ export default function Graph() {
     function move(direction) {
       var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
       var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
-      // if (adaptive) {
       zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-      // } else if (!adaptive) {
-      //   if (viewportBoundsMoveDrag(graphZoom, moveWidth, moveHeight)) {
-      //     zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-      //   }
-      // }
     }
 
     // Tick function
