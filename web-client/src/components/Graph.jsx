@@ -88,55 +88,6 @@ export default function Graph() {
     const svg = d3.select(svgRef.current);
     const transform = d3.zoomIdentity.scale(scale);
     svg.call(zoomRef.current.transform, transform);
-    // console.log("zoomPercent changed:", zoomPercent);
-    // let zoomDisplay;
-
-    // // If the zoom value is out of bounds, reset it to the previous value.
-    // // if (adaptive) {
-    // zoomDisplay = zoomPercent;
-    // } else if (
-    //   !adaptive &&
-    //   flexZoomInBounds(
-    //     (grnState.zoomValue <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
-    //       grnState.zoomValue
-    //     )
-    //   )
-    // ) {
-    //   zoomDisplay = grnState.zoomValue;
-    // } else {
-    //   grnState.zoomValue = prevGrnstateZoomVal;
-    //   zoomDisplay = grnState.zoomValue;
-    // }
-
-    // const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
-    //   zoomDisplay
-    // );
-
-    // setGraphZoom(calcGraphZoom);
-
-    // const finalDisplay = zoomPercent;
-
-    // Special handling for zoom input field: the user might be in the middle of typing a value that is
-    // _temporarily_ out of range (e.g., "1" while typing "100") and we don’t want to overwrite that.
-    // The special case can be detected if the input element currently has focus.
-    // if (document.activeElement !== document.querySelector(ZOOM_INPUT)) {
-    //   $(ZOOM_INPUT).val(finalDisplay);
-    // }
-
-    // This controls movement of slider and is where the zoomSlider can be restricted
-    // if (adaptive || (!adaptive && flexZoomInBounds(calcGraphZoom))) {
-    //   if (!adaptive) {
-    //     // Recenter graph when zooming to ensure that graph stays in viewport
-    //     center();
-    //     updateZoomContainerInfo();
-    //   }
-
-    //   $(ZOOM_SLIDER).val(
-    //     (finalDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight).invert(
-    //       finalDisplay
-    //     )
-    //   );
-    // }
   }, [zoomPercent]);
 
   // Main D3 rendering effect
@@ -166,7 +117,6 @@ export default function Graph() {
       });
 
     zoomRef.current = zoom;
-    svg.call(zoom);
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 

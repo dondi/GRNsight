@@ -65,10 +65,10 @@ export default function ScaleAndScroll() {
                 value={zoomPercent}
                 // defaultValue="100"
                 onChange={e => {
-                  const sliderValue = parseInt(e.target.value);
-                  setZoomPercent(sliderValue);
+                  const sliderValue = parseFloat(e.target.value);
+                  setZoomPercent(Math.round(sliderValue));
                 }}
-                step="1"
+                step="0.1"
                 // TODO: will need to set a state to make this dynamic
                 // TODO: make sure that this always stays blue even when computer in dark mode
                 disabled={false}
