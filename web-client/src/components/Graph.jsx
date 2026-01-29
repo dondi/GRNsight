@@ -103,20 +103,19 @@ export default function Graph() {
 
     const defs = svg.append("defs");
 
-    // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
+    // TODO: Temporarily disabled zoom to allow node locking behavior. Will revisit later.
     // Setup zoom behavior
-    const zoom = d3
-      .zoom()
-      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
-      .on("zoom", event => {
-        zoomContainer.attr("transform", event.transform);
-      });
-
-    svg.call(zoom);
+    // const zoom = d3
+    //   .zoom()
+    //   .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+    //   .on("zoom", event => {
+    //     zoomContainer.attr("transform", event.transform);
+    //   });
+    // svg.call(zoom);
 
     // Create force simulation
     const simulation = d3
@@ -155,6 +154,8 @@ export default function Graph() {
       })
       .style("fill", "none");
 
+    const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
+
     // Create nodes
     const node = boundingBoxContainer
       .selectAll(".node")
@@ -162,7 +163,8 @@ export default function Graph() {
       .enter()
       .append("g")
       .attr("class", "node")
-      .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+      .call(drag)
+      .on("dblclick", dblclick);
 
     // Add rectangles for nodes
     node
@@ -195,7 +197,6 @@ export default function Graph() {
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
 
-    // Helper functions
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
@@ -208,14 +209,15 @@ export default function Graph() {
     }
 
     function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
+      event.stopPropagation();
+    }
+
+    function dblclick(event, d) {
       d.fx = null;
       d.fy = null;
     }
 
-    // Tick function
     simulation.on("tick", () => {
-      // Update link positions with Bézier curves
       link
         .select("path")
         .attr("d", d => {
@@ -236,7 +238,6 @@ export default function Graph() {
           });
         });
 
-      // Update node positions
       node.attr("transform", d => {
         d.x = Math.max(
           BOUNDARY_MARGIN,
@@ -247,7 +248,6 @@ export default function Graph() {
       });
     });
 
-    // Cleanup
     return () => {
       simulation.stop();
     };
