@@ -5,12 +5,13 @@ import { useState, createContext } from "react";
 import { Grommet } from "grommet";
 import { theme } from "./theme";
 import "./App.css";
+import { ZOOM_DISPLAY_MIDDLE } from "./constants";
 
 // Create a context for the GRN state
 export const GrnStateContext = createContext();
 
 function App() {
-  const [networkMode, setNetworkMode] = useState("Protein-Protein Interaction");
+  const [networkMode, setNetworkMode] = useState("No Network Selected");
   const [enableNodeColoring, setEnableNodeColoring] = useState(false);
   const [colorOptimal, setColorOptimal] = useState(true);
   const [linkDistance, setLinkDistance] = useState(500);
@@ -29,7 +30,7 @@ function App() {
   const [viewSize, setViewSize] = useState("Small (1104 X 648 pixels)");
   const [adaptive, setAdaptive] = useState(true);
   const [networkData, setNetworkData] = useState(null);
-
+  const [zoomPercent, setZoomPercent] = useState(ZOOM_DISPLAY_MIDDLE);
   // All state and setters bundled into a single value for context
   const grnStateValue = {
     networkMode,
@@ -68,6 +69,8 @@ function App() {
     setDemoValue,
     networkData,
     setNetworkData,
+    zoomPercent,
+    setZoomPercent,
   };
 
   return (

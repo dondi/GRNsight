@@ -538,7 +538,6 @@ export default function Navbar({}) {
       />
 
       <DropButton
-        className="nav-button"
         label="Help"
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
@@ -575,11 +574,15 @@ export default function Navbar({}) {
           <Text>{SCHADE_OUTPUT_NAME}</Text>,
           <Text>{PPI_DEMO_NAME}</Text>,
         ]}
-        value={demoValue}
+        value={"Demo"}
         placeholder={<Text> Demo</Text>}
         onChange={({ option }) => setDemoValue(option)}
         size="small"
       />
+
+      <Box className="file-name">
+        <Text>{demoValue}</Text>
+      </Box>
     </Nav>
   );
 }
