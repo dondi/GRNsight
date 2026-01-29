@@ -2,7 +2,7 @@
 
 This directory contains all the necessary schemas for the databases required by GRNsight.
 
-## Load Database
+## Verify Your Connection to the Server
 
 For Mac:
 
