@@ -103,11 +103,11 @@ export default function Graph() {
 
     const defs = svg.append("defs");
 
-    // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
+    // TODO: Temporarily disabled zoom to allow node locking behavior. Will revisit later.
     // Setup zoom behavior
     // const zoom = d3
     //   .zoom()
@@ -115,7 +115,6 @@ export default function Graph() {
     //   .on("zoom", event => {
     //     zoomContainer.attr("transform", event.transform);
     //   });
-
     // svg.call(zoom);
 
     // Create force simulation
@@ -198,8 +197,6 @@ export default function Graph() {
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
 
-    // TODO: for issue #1309, this is a good place to investigate to lock nodes. compare dragended to web-client-classic behavior
-    // Helper functions
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
@@ -220,9 +217,7 @@ export default function Graph() {
       d.fy = null;
     }
 
-    // Tick function
     simulation.on("tick", () => {
-      // Update link positions with Bézier curves
       link
         .select("path")
         .attr("d", d => {
@@ -243,7 +238,6 @@ export default function Graph() {
           });
         });
 
-      // Update node positions
       node.attr("transform", d => {
         d.x = Math.max(
           BOUNDARY_MARGIN,
@@ -254,7 +248,6 @@ export default function Graph() {
       });
     });
 
-    // Cleanup
     return () => {
       simulation.stop();
     };
