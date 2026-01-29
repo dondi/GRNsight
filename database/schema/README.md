@@ -79,7 +79,7 @@ To change the default database name, follow these steps:
 
 1. **Log in to the Database**
 
-    For instructions on how to load the database, refer to the [Load Database](#load-database) section.
+    For instructions on how to connect to the database server, refer to the [Verify Your Connection to the Server](#verify-your-connection-to-the-server) section.
 
 2. **Set the Search Path**
 
