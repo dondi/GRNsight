@@ -279,7 +279,6 @@ input[type="radio"]:checked {
   cursor: default;
   margin-left: 15px;
   width: 121px;
-  /* height: 1px; */
 }
 
 table {
@@ -289,13 +288,12 @@ table {
   -webkit-border-vertical-spacing: 0px;
 }
 
-/* For some reason, scrollTable is 124px instead of 121px */
+/* For some reason, scrollTable is 124px tall instead of 121px */
 .scrollTable {
   text-align: center;
   table-layout: fixed;
   margin-bottom: 10px;
   border-collapse: collapse;
-  /* height: 121px; */
 }
 
 .scrollTable td {

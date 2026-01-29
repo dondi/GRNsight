@@ -30,7 +30,6 @@ import {
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
 import "../App.css";
-import { ZOOM_PERCENT } from "../../../web-client-classic/public/js/constants";
 
 export default function Graph() {
   const svgRef = useRef(null);
@@ -88,17 +87,7 @@ export default function Graph() {
     if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
     const scale = zoomPercent / 100;
     const zoomContainer = d3.select(zoomContainerRef.current);
-
-    // Use scaleTo which preserves translation while changing scale
     zoomRef.current.scaleTo(zoomContainer, scale);
-    // const scale = zoomPercent / 100;
-    // const svg = d3.select(svgRef.current);
-    // const currentTransform = d3.zoomTransform(svg.node());
-    // const newTransform = d3.zoomIdentity
-    //   .translate(currentTransform.x, currentTransform.y)
-    //   .scale(scale);
-
-    // svg.call(zoomRef.current.transform, newTransform);
   }, [zoomPercent]);
 
   // Main D3 rendering effect
@@ -118,7 +107,7 @@ export default function Graph() {
 
     // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
-    zoomContainerRef.current = zoomContainer.node(); // Store reference
+    zoomContainerRef.current = zoomContainer.node();
 
     const zoom = d3
       .zoom()
@@ -221,8 +210,6 @@ export default function Graph() {
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
 
-    // TODO: for issue #1309, this is a good place to investigate to lock nodes. compare dragended to web-client-classic behavior
-    // Helper functions
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
