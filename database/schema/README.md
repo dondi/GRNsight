@@ -71,7 +71,7 @@ Once these steps are completed, your database will be set up and ready to accept
 
 ### 1. Settings Database
 
-The `settings` table stores the default database name.
+The `settings` table stores the default database name for the node coloring dropdown menu. Question: is this optional?
 
 To change the default database name, follow these steps:
 
