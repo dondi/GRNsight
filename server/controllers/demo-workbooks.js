@@ -3035,8 +3035,7 @@ var demoWorkbook3 = function (path, res, app) {
             },
         },
         twoColumnSheets: {},
-        expression: {
-        },
+        expression: {},
     };
     return processDemo(path, res, app, workbook3);
 };
