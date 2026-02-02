@@ -2,6 +2,7 @@ import { useEffect, useRef, useContext, useState } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
 import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
+import ScaleAndScroll from "./ScaleAndScroll";
 import {
   BOUNDARY_MARGIN,
   ZOOM_DISPLAY_MINIMUM_VALUE,
@@ -28,13 +29,14 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
-
 import "../App.css";
 
 export default function Graph() {
   const svgRef = useRef(null);
   const containerRef = useRef(null);
   const simulationRef = useRef(null);
+  const zoomRef = useRef(null);
+  const zoomContainerRef = useRef(null);
 
   // The workbook or sheetType are not needed in global state outside of Graph, so keep them local
   const [workbook, setWorkbook] = useState(null);
@@ -43,25 +45,17 @@ export default function Graph() {
   const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [zoomScale, setZoomScale] = useState(null);
 
   const {
     colorOptimal,
-    setColorOptimal,
     linkDistance,
-    setLinkDistance,
     charge,
-    enableNodeColoring,
-    setEnableNodeColoring,
-    logFoldChangeMax,
-    edgeWeightVisibility,
     demoValue,
-    setDemoValue,
-    adaptive,
-    setAdaptive,
     networkMode,
     setNetworkMode,
     grayThreshold,
-    setGrayThreshold,
+    zoomPercent,
   } = useContext(GrnStateContext);
 
   // Load workbook data
@@ -88,6 +82,14 @@ export default function Graph() {
       .finally(() => setLoading(false));
   }, [demoValue]);
 
+  // TODO: need to update with adaptive (restrict to viewport)
+  useEffect(() => {
+    if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
+    const scale = zoomPercent / 100;
+    const zoomContainer = d3.select(zoomContainerRef.current);
+    zoomRef.current.scaleTo(zoomContainer, scale);
+  }, [zoomPercent]);
+
   // Main D3 rendering effect
   useEffect(() => {
     if (!workbook || !svgRef.current || !containerRef.current) return;
@@ -104,18 +106,28 @@ export default function Graph() {
     const defs = svg.append("defs");
 
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
+    zoomContainerRef.current = zoomContainer.node();
+
+    const zoom = d3
+      .zoom()
+      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+      .on("zoom", event => {
+        zoomContainer.attr("transform", event.transform);
+      });
+
+    zoomRef.current = zoom;
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
-    // TODO: Temporarily disabled zoom to allow node locking behavior. Will revisit later.
-    // Setup zoom behavior
-    // const zoom = d3
-    //   .zoom()
-    //   .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
-    //   .on("zoom", event => {
-    //     zoomContainer.attr("transform", event.transform);
-    //   });
-    // svg.call(zoom);
+    // this controls the D-pad
+    d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
+    var arrowMovement = ["Up", "Left", "Right", "Down"];
+    arrowMovement.forEach(function (direction) {
+      d3.select(".scroll" + direction).on("click", function () {
+        move(direction.toLowerCase());
+      });
+    });
+    d3.select(".center").on("click", center);
 
     // Create force simulation
     const simulation = d3
@@ -217,6 +229,22 @@ export default function Graph() {
       d.fy = null;
     }
 
+    // TODO: may need to change this when have dymanic viewport width
+    function center() {
+      var viewportWidth = width;
+      var viewportHeight = height;
+      zoom.translateTo(zoomContainer, width / 2, height / 2);
+    }
+
+    // move: Moves graph with D-pad
+    // TODO: will need to update with adaptive
+    function move(direction) {
+      var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
+      var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
+      zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+    }
+
+    // Tick function
     simulation.on("tick", () => {
       link
         .select("path")
@@ -267,6 +295,7 @@ export default function Graph() {
       style={{ width: "100%", height: "600px" }}
     >
       <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />
+      <ScaleAndScroll />
     </div>
   );
 }
