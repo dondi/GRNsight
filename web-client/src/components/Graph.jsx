@@ -18,7 +18,7 @@ import {
   EDGE_RED,
   EDGE_BLACK,
   EDGE_BLUE,
-} from "../constants";
+} from "../helpers/constants";
 import {
   getNodeWidth,
   getEdgeThickness,

@@ -194,38 +194,16 @@ button:hover {
   line-height: 1.42857143;
 }
 
-.btnSidebar {
-  width: 100%;
-}
-
-.sidebarPanelHeader {
-  margin: 10px 10px 10px;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.sidebarPanelHeaderSpecies {
-  border-color: #ddd;
-  font-weight: bold;
+#sidebar-toggle {
+  padding: 10px;
   font-size: 12px;
-  width: 100%;
+  border: 1px solid #ccc;
 }
 
 .file-input {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 6px 12px;
-}
-
-.sidebarPanelHeaderID {
-  margin: 0px 5px 5px;
-  font-weight: bold;
-  font-size: 12px;
-  width: 100%;
-}
-
-.nodeColoringSidebarBody {
-  margin-top: 6px;
 }
 
 .sidebar-radio-buttons {
@@ -236,15 +214,6 @@ button:hover {
 input[type="radio"]:checked {
   border: 2px solid #333;
 }
-
-/* .data-sidebar select {
-  width: 100%;
-} */
-
-/* .data-sidebar.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-} */
 
 .sidebar-radio.disabled {
   color: #aaa;

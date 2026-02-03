@@ -8,7 +8,7 @@ import {
   NETWORK_PPI_MODE_FULL,
   NETWORK_GRN_MODE_SHORT,
   NETWORK_PPI_MODE_SHORT,
-} from "../constants";
+} from "../helpers/constants";
 // TODO: make this port dynamic in the future based on environment
 const API_URL = import.meta.env.DEV
   ? `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`

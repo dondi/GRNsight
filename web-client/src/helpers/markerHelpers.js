@@ -1,5 +1,5 @@
 import { get } from "jquery";
-import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "../constants";
+import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "./constants";
 import { getNodeWidth } from "./graphHelpers";
 
 // TODO: add description from web-client-classic
