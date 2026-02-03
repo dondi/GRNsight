@@ -207,7 +207,7 @@ var crossSheetInteractions = function (workbookFile) {
     }
 
     if (additionalData && additionalData.warnings) {
-        additionalData.warnings.push(...additionalData.warnings);
+        workbook.warnings.push(...additionalData.warnings);
     }
 
     additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
