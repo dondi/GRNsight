@@ -136,7 +136,6 @@ button:hover {
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  /* z-index: 1; */
 }
 
 .dropdown:hover .dropdown-content {
@@ -236,9 +235,7 @@ input[type="radio"]:checked {
 }
 
 .grnsight-container {
-  display: grid;
-  align-items: end;
-  justify-content: start;
+  position: relative;
   border: 2px solid #9a9a9a;
   stroke: #fff;
   stroke-width: 0.5px;
@@ -253,7 +250,7 @@ input[type="radio"]:checked {
 }
 
 .scale-and-scroll {
-  position: relative;
+  position: absolute;
   bottom: 0px;
   left: 0px;
   z-index: 1;
