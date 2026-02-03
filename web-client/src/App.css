@@ -13,10 +13,17 @@ body {
   transition-timing-function: none;
 }
 
+/* TODO: do something here so that can display elements with grid or flex */
+#sidebar-graph-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
 .navbar {
   top: 1px;
   min-height: 50px;
-  margin-bottom: 10px;
+  margin-bottom: 1px;
   position: relative;
   border-radius: 4px;
   line-height: 20px;
@@ -39,7 +46,6 @@ body {
 }
 
 .dropdown-menu {
-  /* position: absolute; */
   top: 100%;
   left: 0;
   z-index: 1000;
@@ -224,11 +230,9 @@ input[type="radio"]:checked {
 }
 
 .grnsight-container {
-  left: 250px;
-  top: 53px;
   border: 2px solid #9a9a9a;
   /* TODO: need to change this from absolute so that whole page can be scrollable? */
-  position: absolute;
+  /* position: absolute; */
   stroke: #fff;
   stroke-width: 0.5px;
   width: 1100px;
