@@ -529,7 +529,6 @@ export var drawGraph = function (workbook) {
     simulation.force("link").links(workbook.links);
 
     function getLinkEndpointId(endpoint) {
-        console.log("Endpoint", endpoint)
         if (endpoint == null) {
             return endpoint;
         }
