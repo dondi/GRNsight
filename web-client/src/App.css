@@ -1,3 +1,7 @@
+p {
+  margin: 0;
+}
+
 body {
   font-size: 14px;
   line-height: 1.42857143;
@@ -17,11 +21,11 @@ body {
   border-radius: 4px;
   line-height: 20px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-color: #dfebe5;
+  border: 1px solid #dfebe5;
 }
 
-.navbar button {
+.navbar button,
+.filename {
   color: #000000;
   border: none;
 }
@@ -48,7 +52,7 @@ body {
 }
 
 .dropdown-menu button {
-  border-radius: 0px;
+  border: none;
 }
 
 .dropdown-menu button:hover {
@@ -61,6 +65,10 @@ body {
 
 .dropdown-menu div:has(button):hover {
   background-color: #dfebe5;
+}
+
+.demo-dropdown-navbar {
+  border: none;
 }
 
 .folder-icon {
@@ -105,19 +113,6 @@ button:hover {
   transition-timing-function: none;
 }
 
-/* .iXPGmp {
-  padding: 0px;
-  border: none;
-  all: unset;
-  box-shadow: none;
-} */
-
-/* .iXPGmp:hover {
-  padding: 0px;
-  border: none;
-  box-shadow: none;
-} */
-
 .subdivider {
   border-top: 1px dotted #bbb;
   width: 95%;
@@ -144,11 +139,6 @@ button:hover {
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   /* z-index: 1; */
 }
-
-/* .dropdown:hover {
-  background-color: #16693F;
-  color: #FFFFFF;
-} */
 
 .dropdown:hover .dropdown-content {
   display: block;
@@ -274,9 +264,112 @@ input[type="radio"]:checked {
   stroke-width: 0.5px;
   width: 1100px;
   height: 644px;
-  /* transition: opacity 0.25s; */
+  transition: opacity 0.25s;
 }
 
 .load-from-database {
   border: 2px solid red;
+}
+
+.scale-and-scroll {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
+  cursor: default;
+  margin-left: 15px;
+  width: 121px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-vertical-spacing: 0px;
+}
+
+/* For some reason, scrollTable is 124px tall instead of 121px */
+.scrollTable {
+  text-align: center;
+  table-layout: fixed;
+  margin-bottom: 10px;
+  border-collapse: collapse;
+}
+
+.scrollTable td {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.scrollBtn {
+  border: 1px solid #aaa;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.movementArrow {
+  font-weight: bolder;
+  font-size: 24px;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.zoomTable {
+  margin-bottom: 5px;
+  text-align: center;
+  table-layout: fixed;
+  height: 20px;
+}
+
+.zoomTable td {
+  padding: 0;
+  height: 20px;
+  width: 120px;
+}
+
+.zoomLabel {
+  font-size: 9px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#zoomSlider {
+  margin: 0;
+  width: 120px;
+  /* enforce light mode */
+  color-scheme: light;
+}
+
+.minimum-zoom-display {
+  margin-right: 0.25rem;
+}
+
+.maximum-zoom-display {
+  margin-left: 0.25rem;
+}
+
+/* TODO: investigate why the top is off by 10px from classic */
+.zoomCenter {
+  position: absolute;
+  width: 2px;
+  z-index: -1;
+  background-color: #aaa;
+  height: 25.5px;
+  left: 59.5px;
+  top: 158.5px;
 }
