@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar";
 import Graph from "./components/Graph";
 import Sidebar from "./components/Sidebar";
 import { useState, createContext } from "react";
-import { Grommet } from "grommet";
+import { Grommet, Collapsible, Button } from "grommet";
 import { theme } from "./theme";
 import "./App.css";
 import { ZOOM_DISPLAY_MIDDLE } from "./constants";
@@ -11,6 +11,8 @@ import { ZOOM_DISPLAY_MIDDLE } from "./constants";
 export const GrnStateContext = createContext();
 
 function App() {
+  const [open, setOpen] = useState(false);
+  // State variables for GRN settings
   const [networkMode, setNetworkMode] = useState("No Network Selected");
   const [enableNodeColoring, setEnableNodeColoring] = useState(false);
   const [colorOptimal, setColorOptimal] = useState(true);
@@ -31,6 +33,7 @@ function App() {
   const [adaptive, setAdaptive] = useState(true);
   const [networkData, setNetworkData] = useState(null);
   const [zoomPercent, setZoomPercent] = useState(ZOOM_DISPLAY_MIDDLE);
+
   // All state and setters bundled into a single value for context
   const grnStateValue = {
     networkMode,
@@ -78,7 +81,10 @@ function App() {
       <Grommet theme={theme} background={{ color: "white", dark: false }} full>
         <Navbar />
         <div className="main-content">
-          <Sidebar />
+          <Button onClick={() => setOpen(!open)}>{open ? "Close Sidebar" : "Open Sidebar"}</Button>
+          <Collapsible direction="horizontal" open={open}>
+            <Sidebar />
+          </Collapsible>
           <Graph />
         </div>
       </Grommet>
