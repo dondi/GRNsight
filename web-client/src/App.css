@@ -13,13 +13,6 @@ body {
   transition-timing-function: none;
 }
 
-/* TODO: do something here so that can display elements with grid or flex */
-#sidebar-graph-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-}
-
 .navbar {
   top: 1px;
   min-height: 50px;
@@ -200,10 +193,23 @@ button:hover {
   line-height: 1.42857143;
 }
 
+#sidebar-graph-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+#sidebar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
 #sidebar-toggle {
-  padding: 10px;
-  font-size: 12px;
+  display: flex;
+  font-size: 14px;
   border: 1px solid #ccc;
+  padding: 5px;
 }
 
 .file-input {
