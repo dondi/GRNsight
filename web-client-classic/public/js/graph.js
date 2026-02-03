@@ -18,6 +18,7 @@ import {
     ZOOM_ADAPTIVE_MAX_SCALE,
     NETWORK_GRN_MODE,
     BOUNDARY_MARGIN,
+    NETWORK_PPI_MODE,
 } from "./constants";
 
 /* globals d3 */
@@ -527,8 +528,24 @@ export var drawGraph = function (workbook) {
 
     simulation.force("link").links(workbook.links);
 
+    let uniqueLinks = [];
+    if (workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
+        const seenLinks = {};
+        workbook.links.forEach(function (link) {
+            const sourceGene = Math.min(link.source, link.target);
+            const targetGene = Math.max(link.source, link.target);
+            const linkKey = `${sourceGene}-${targetGene}`;
+
+            if (!seenLinks[linkKey]) {
+                uniqueLinks.push(link);
+                seenLinks[linkKey] = true;
+            }
+        });
+    } else {
+        uniqueLinks = workbook.links;
+    }
     link = link
-        .data(workbook.links)
+        .data(uniqueLinks)
         .enter()
         .append("g")
         .attr("class", "link")
