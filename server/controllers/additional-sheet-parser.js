@@ -345,7 +345,7 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     return output;
 };
 
-const parseTwoColumnSheet = sheet => {
+const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let output = {
         data: {},
         errors: [],
@@ -354,6 +354,8 @@ const parseTwoColumnSheet = sheet => {
 
     let currentGene;
     let currentValue;
+
+    const genesInSheet = [];
 
     // check to see if the genes are strings and the values are numbers
 
@@ -395,6 +397,7 @@ const parseTwoColumnSheet = sheet => {
             if (validGeneName(output, sheet.name, currentGene, row + 1)) {
                 if (typeof currentValue === "number") {
                     output.data[currentGene] = currentValue;
+                    genesInSheet.push(currentGene);
                 } else {
                     addError(
                         output,
@@ -410,10 +413,24 @@ const parseTwoColumnSheet = sheet => {
         }
     }
 
+    // Check for missing genes in sheet
+    if (genesInNetwork) {
+        const missingGenes = genesInNetwork.filter(g => !genesInSheet.includes(g));
+        if (missingGenes.length > 0) {
+            addWarning(
+                output,
+                constants.warnings.missingGenesInTwoColumnSheetWarningWhenImporting(
+                    sheet.name,
+                    missingGenes.join(", ")
+                )
+            );
+        }
+    }
+
     return output;
 };
 
-module.exports = function (workbookFile) {
+module.exports = function (workbookFile, genesInNetwork) {
     let output = {
         meta: {
             data: {},
@@ -429,9 +446,16 @@ module.exports = function (workbookFile) {
             // above line creates an object from the optimization paramerters sheet
             // these are part of the "meta" property
         } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
-            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet);
+            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet, genesInNetwork);
         } else if (sheet.name === "optimization_diagnostics") {
             output.meta2 = parseOptimizationDiagnosticsSheet(sheet);
+        } else if (
+            sheet.name !== "network" &&
+            sheet.name !== "network_optimized_weights" &&
+            sheet.name !== "network_weights" &&
+            !sheet.name.toLowerCase().includes("expression")
+        ) {
+            addWarning(output, constants.warnings.unrecognizedSheetWarning(sheet.name));
         }
     });
     return output;

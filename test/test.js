@@ -467,6 +467,29 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
+var unrecognizedSheetWarning = function (input, frequency) {
+    const sheet = xlsx.parse(input);
+    const workbook = parseAdditionalSheet(sheet);
+    const unrecognizedSheetWarningCount = workbook.warnings.filter(function (x) {
+        return x.warningCode === "UNRECOGNIZED_SHEET";
+    });
+
+    assert.equal(frequency, unrecognizedSheetWarningCount.length);
+};
+
+var missingGenesInTwoColumnSheetsWarning = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+    const workbook = parseAdditionalSheet(sheet, genes);
+    const warnings = workbook.twoColumnSheets[sheetName].warnings || [];
+    const missingGenesInTwoColumnSheetsWarningCount = warnings.filter(function (x) {
+        return x.warningCode === `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    });
+
+    assert.equal(frequency, missingGenesInTwoColumnSheetsWarningCount.length);
+};
+
 // GRAPH STATISTICS
 /*
 var shortestPath = function (input, directed, source, target, length) {
@@ -835,6 +858,8 @@ exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
+exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
+exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;

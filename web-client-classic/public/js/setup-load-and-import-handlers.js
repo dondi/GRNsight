@@ -28,7 +28,10 @@ const demoFiles = [
 
 import { displayExportWarnings } from "./warnings.js";
 import { warnings } from "./import-warning-constants.js";
-import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
+import {
+    buildImportWorkbookTwoColumnMissingGenesWarnings,
+    buildWorkbookTwoColumnMissingGenesWarnings,
+} from "./two_column_sheets_warnings.js";
 
 const submittedFilename = $upload => {
     let path = $upload.val();
@@ -125,7 +128,6 @@ const returnUploadRoute = filename => {
 export const setupLoadAndImportHandlers = grnState => {
     const applyWarnings = (workbook, msgs) => {
         if (!msgs.length) return;
-        workbook.warnings.push(...msgs);
         displayExportWarnings(workbook.warnings);
     };
 
@@ -135,6 +137,8 @@ export const setupLoadAndImportHandlers = grnState => {
         // The presence of formData is taken to indicate a POST.
         getWorkbookFromForm(formData, uploadRoute)
             .done((workbook, textStatus, jqXhr) => {
+                console.log("Workbook loaded via", uploadRoute);
+                console.log("Workbook after load:", workbook);
                 grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
                 if (demoFiles.indexOf(name) > -1) {
                     switch (name) {
@@ -165,15 +169,18 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
 
-                if (grnState.mode === NETWORK_GRN_MODE) {
-                    const warningMessages = buildWorkbookTwoColumnMissingGenesWarnings(
-                        workbook,
-                        warnings,
-                        ["production_rates", "degradation_rates"] // chosenSheets (include both two column sheets when importing GRN workbooks)
-                    );
+                // if (grnState.mode === NETWORK_GRN_MODE) {
+                //     const warningMessages = buildImportWorkbookTwoColumnMissingGenesWarnings(
+                //         workbook,
+                //         warnings
+                //     );
 
-                    applyWarnings(workbook, warningMessages);
+                //     applyWarnings(workbook, warningMessages);
+                // }
+                if (grnState.workbook.warnings && grnState.workbook.warnings.length > 0) {
+                    applyWarnings(workbook, grnState.workbook.warnings);
                 }
+                console.log("Loaded workbook:", workbook);
 
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
