@@ -11,7 +11,7 @@ import {
   SHORT_NODE_LIMIT,
   ADDITIONAL_SHIFT,
   END_POINT_ADJUSTMENT,
-} from "../constants.js";
+} from "./constants.js";
 
 // TODO: resolve issue where node.textWidth is initially calculated with undefined value
 export function getNodeWidth(node) {

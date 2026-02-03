@@ -19,7 +19,7 @@ import {
   SCHADE_INPUT_NAME,
   SCHADE_OUTPUT_NAME,
   PPI_DEMO_NAME,
-} from "../constants";
+} from "../helpers/constants";
 import "../App.css";
 
 export default function Sidebar({}) {

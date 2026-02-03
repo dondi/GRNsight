@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { GrnStateContext } from "../App";
-import { ZOOM_DISPLAY_MINIMUM_VALUE, ZOOM_DISPLAY_MAXIMUM_VALUE } from "../constants";
-import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../constants";
+import { ZOOM_DISPLAY_MINIMUM_VALUE, ZOOM_DISPLAY_MAXIMUM_VALUE } from "../helpers/constants";
+import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constants";
 import "../App.css";
 
 export default function ScaleAndScroll() {
