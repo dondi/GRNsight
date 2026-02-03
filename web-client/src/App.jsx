@@ -3,6 +3,7 @@ import Graph from "./components/Graph";
 import Sidebar from "./components/Sidebar";
 import { useState, createContext } from "react";
 import { Grommet, Collapsible, Button } from "grommet";
+import { CaretRightFill, CaretLeftFill } from "grommet-icons";
 import { theme } from "./helpers/theme";
 import "./App.css";
 import { ZOOM_DISPLAY_MIDDLE } from "./helpers/constants";
@@ -82,12 +83,12 @@ function App() {
         <Navbar />
         <div id="sidebar-graph-container">
           <div id="sidebar-container">
-            <Button id="sidebar-toggle" onClick={() => setOpen(!open)}>
-              {open ? "Close Sidebar" : "Open Sidebar"}
-            </Button>
             <Collapsible direction="horizontal" open={open}>
               <Sidebar />
             </Collapsible>
+            <Button id="sidebar-toggle" onClick={() => setOpen(!open)}>
+              {open ? <CaretLeftFill /> : <CaretRightFill />}
+            </Button>
           </div>
           <Graph />
         </div>
