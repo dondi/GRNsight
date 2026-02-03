@@ -18,6 +18,7 @@ import {
     ZOOM_ADAPTIVE_MAX_SCALE,
     NETWORK_GRN_MODE,
     BOUNDARY_MARGIN,
+    NETWORK_PPI_MODE,
 } from "./constants";
 
 /* globals d3 */
@@ -527,8 +528,42 @@ export var drawGraph = function (workbook) {
 
     simulation.force("link").links(workbook.links);
 
+    function getLinkEndpointId(endpoint) {
+        if (endpoint === null) {
+            return endpoint;
+        }
+        if (typeof endpoint === "object") {
+            if ("id" in endpoint) {
+                return endpoint.id;
+            }
+            if ("index" in endpoint) {
+                return endpoint.index;
+            }
+        }
+        return endpoint;
+    }
+
+    let uniqueLinks = [];
+    if (workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
+        const seenLinks = {};
+        workbook.links.forEach(function (link) {
+            const sourceId = getLinkEndpointId(link.source);
+            const targetId = getLinkEndpointId(link.target);
+            const minId = sourceId <= targetId ? sourceId : targetId;
+            const maxId = sourceId <= targetId ? targetId : sourceId;
+            const linkKey = `${minId}-${maxId}`;
+
+            if (!seenLinks[linkKey]) {
+                uniqueLinks.push(link);
+                seenLinks[linkKey] = true;
+            }
+        });
+    } else {
+        uniqueLinks = workbook.links;
+    }
+
     link = link
-        .data(workbook.links)
+        .data(uniqueLinks)
         .enter()
         .append("g")
         .attr("class", "link")
