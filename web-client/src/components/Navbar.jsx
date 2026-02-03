@@ -56,7 +56,6 @@ export default function Navbar({}) {
       flex="false"
       background="#dfebe5"
       pad={{ left: "30px", right: "15px" }}
-      margin={{ bottom: "10px" }}
       gap="none"
     >
       <DropButton

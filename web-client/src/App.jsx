@@ -80,13 +80,15 @@ function App() {
     <GrnStateContext.Provider value={grnStateValue}>
       <Grommet theme={theme} background={{ color: "white", dark: false }} full>
         <Navbar />
-        <div className="main-content">
-          <Button id="sidebar-toggle" onClick={() => setOpen(!open)}>
-            {open ? "Close Sidebar" : "Open Sidebar"}
-          </Button>
-          <Collapsible direction="horizontal" open={open}>
-            <Sidebar />
-          </Collapsible>
+        <div id="sidebar-graph-container">
+          <div id="sidebar-container">
+            <Button id="sidebar-toggle" onClick={() => setOpen(!open)}>
+              {open ? "Close Sidebar" : "Open Sidebar"}
+            </Button>
+            <Collapsible direction="horizontal" open={open}>
+              <Sidebar />
+            </Collapsible>
+          </div>
           <Graph />
         </div>
       </Grommet>
