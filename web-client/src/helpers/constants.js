@@ -40,3 +40,7 @@ export const SELF_REFERRING_Y_OFFSET = 6;
 export const SHORT_NODE_LIMIT = 135;
 export const ADDITIONAL_SHIFT = 0.07;
 export const END_POINT_ADJUSTMENT = 1.2;
+export const LIGHT_GREEN = "#dfebe5";
+export const LIGHT_GRAY = "#ccc";
+export const MEDIUM_GRAY = "#bbb";
+export const DARK_GRAY = "#999";
