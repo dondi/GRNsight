@@ -395,7 +395,7 @@ export default function Navbar({}) {
           </div>
         }
         size="small"
-      />``
+      />
 
       <Box id="file-name" pad="15px">
         <Text>{demoValue}</Text>
