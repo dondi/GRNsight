@@ -1,9 +1,5 @@
 import {
-  UNWEIGHTED_DEMO_NAME,
-  WEIGHTED_DEMO_NAME,
-  SCHADE_INPUT_NAME,
-  SCHADE_OUTPUT_NAME,
-  PPI_DEMO_NAME,
+  DEMO_TYPES,
   NETWORK_GRN_MODE_FULL,
   NETWORK_PPI_MODE_FULL,
   NETWORK_GRN_MODE_SHORT,
@@ -53,15 +49,4 @@ export const getNetworkMode = workbookType => {
   } else {
     throw new Error("Unknown workbook type");
   }
-};
-
-/**
- * Available demo types with their descriptions
- */
-export const DEMO_TYPES = {
-  unweighted: UNWEIGHTED_DEMO_NAME,
-  weighted: WEIGHTED_DEMO_NAME,
-  schadeInput: SCHADE_INPUT_NAME,
-  schadeOutput: SCHADE_OUTPUT_NAME,
-  ppi: PPI_DEMO_NAME,
 };

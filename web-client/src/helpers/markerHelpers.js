@@ -218,8 +218,6 @@ function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, min
     14: 6,
   };
 
-  console.log("Creating horizontal repressor marker. d printout:", d);
-
   defs
     .append("marker")
     .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)

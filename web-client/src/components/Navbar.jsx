@@ -1,14 +1,8 @@
 import { useContext } from "react";
-import { Nav, DropButton, Box, Text, Button, Tip, TextInput, Menu, Select } from "grommet";
+import { Nav, DropButton, Box, Text, Button, Tip, TextInput, Menu, Select, Drop } from "grommet";
 import { Refresh, Checkmark, FolderOpen, Edge, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
-import {
-  UNWEIGHTED_DEMO_NAME,
-  WEIGHTED_DEMO_NAME,
-  SCHADE_INPUT_NAME,
-  SCHADE_OUTPUT_NAME,
-  PPI_DEMO_NAME,
-} from "../helpers/constants";
+import { DEMO_TYPES } from "../helpers/constants";
 import "../App.css";
 
 export default function Navbar({}) {
@@ -83,13 +77,9 @@ export default function Navbar({}) {
                 className="demo-dropdown-navbar"
                 icon={<CaretRightFill color="#ccc" />}
                 dropAlign={{ top: "top", bottom: "top", left: "right", right: "left" }}
-                options={[
-                  <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-                  <Text>{WEIGHTED_DEMO_NAME}</Text>,
-                  <Text>{SCHADE_INPUT_NAME}</Text>,
-                  <Text>{SCHADE_OUTPUT_NAME}</Text>,
-                  <Text>{PPI_DEMO_NAME}</Text>,
-                ]}
+                options={Object.values(DEMO_TYPES).map(name => (
+                  <Text key={name}>{name}</Text>
+                ))}
                 value={<Text>Demo</Text>}
                 placeholder={<Text>Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
@@ -562,26 +552,32 @@ export default function Navbar({}) {
       />
 
       {/* TODO: set width so that shorter and wider window like web-client-classic */}
-      <Select
-        // className="demo-source-dropdown"
-        pad="0px"
+      <DropButton
+        label="Demo"
+        dropAlign={{ top: "bottom", left: "left" }}
+        pad="15px"
         icon={false}
-        options={[
-          <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-          <Text>{WEIGHTED_DEMO_NAME}</Text>,
-          <Text>{SCHADE_INPUT_NAME}</Text>,
-          <Text>{SCHADE_OUTPUT_NAME}</Text>,
-          <Text>{PPI_DEMO_NAME}</Text>,
-        ]}
-        value={"Demo"}
-        placeholder={<Text> Demo</Text>}
-        onChange={({ option }) => setDemoValue(option)}
+        dropContent={
+          <Box
+            className="dropdown-menu"
+            direction="column"
+            pad={{ vertical: "5px" }}
+            background="white"
+            width="medium"
+          >
+            {Object.values(DEMO_TYPES).map(demo => (
+              <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
+                <Text>{demo}</Text>
+              </Button>
+            ))}
+          </Box>
+        }
         size="small"
       />
 
-      <div id="file-name">
+      <Box id="file-name" pad="15px">
         <Text>{demoValue}</Text>
-      </div>
+      </Box>
     </Nav>
   );
 }
