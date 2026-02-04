@@ -58,16 +58,8 @@ export default function Navbar({}) {
         label="Network"
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
-        onOpen={() => {
-          console.log("dropButton opened");
-        }}
         dropContent={
-          <Box
-            className="dropdown-menu"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Source
             </Text>
@@ -122,7 +114,7 @@ export default function Navbar({}) {
             <Box direction="row" margin={{ left: "50px" }}>
               <Text color={DARK_GRAY}>Saccharomyces cerevisiae</Text>
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -131,13 +123,7 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Box pad={{ left: "12px" }}>
               <Text>Graph Options</Text>
             </Box>
@@ -181,7 +167,7 @@ export default function Navbar({}) {
               <Text>Charge (-2000 - 0)</Text>{" "}
               <TextInput value={charge} onChange={event => setCharge(event.target.value)} />
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -190,16 +176,9 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box>
+          <div>
             {enableNodeColoring ? (
-              <Box
-                className="dropdown-menu"
-                direction="column"
-                pad={{ vertical: "5px" }}
-                background="white"
-                width="medium"
-              >
-                {/* <Box> */}
+              <div className="dropdown-menu">
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(false)}>
                     <Checkmark size="small" />
@@ -240,23 +219,17 @@ export default function Navbar({}) {
                 <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
                   <Text>Log Fold Change Max Value (0.01 - 100)</Text> <TextInput />
                 </Box>
-              </Box>
+              </div>
             ) : (
-              <Box
-                className="dropdown-menu"
-                direction="column"
-                pad={{ vertical: "5px" }}
-                background="white"
-                width="medium"
-              >
+              <div className="dropdown-menu">
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(true)}>
                     <Text margin={{ left: "12px" }}>Enable Node Coloring</Text>
                   </Button>
                 </Box>
-              </Box>
+              </div>
             )}
-          </Box>
+          </div>
         }
       />
 
@@ -265,13 +238,7 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
               <Button onClick={() => setColorOptimal(!colorOptimal)}>
                 {colorOptimal && <Checkmark size="small" />}
@@ -329,7 +296,7 @@ export default function Navbar({}) {
                 <Text>Show Gray Edges as Dashed</Text>
               </Button>
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -338,13 +305,7 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Text margin={{ left: "small" }}>Viewport Size</Text>
             {/* only display the checkmark for the selected view size */}
             <Button
@@ -388,7 +349,7 @@ export default function Navbar({}) {
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Zoom (25 - 200%)</Text> <TextInput />
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -397,17 +358,11 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <DropdownMenuButton text="Export Data" />
             <DropdownMenuButton text="Export Image" />
             <DropdownMenuButton text="Print" />
-          </Box>
+          </div>
         }
       />
 
@@ -416,17 +371,11 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <DropdownMenuButton text="Getting Started" />
             <DropdownMenuButton text="GRNsight Wiki" />
             <DropdownMenuButton text="About GRNsight" />
-          </Box>
+          </div>
         }
       />
 
@@ -437,22 +386,16 @@ export default function Navbar({}) {
         pad="15px"
         icon={false}
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             {Object.values(DEMO_TYPES).map(demo => (
               <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
                 <Text>{demo}</Text>
               </Button>
             ))}
-          </Box>
+          </div>
         }
         size="small"
-      />
+      />``
 
       <Box id="file-name">
         <Text>{demoValue}</Text>
