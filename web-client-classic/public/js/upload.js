@@ -87,14 +87,31 @@ export const upload = function () {
         return result;
     };
 
-    var filenameWithExtension = function (suffix, extension) {
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (suffix) {
-            filename = filename + "_" + suffix;
+        var source = $("input[name=expressionSource]:checked")[0].value;
+        if (source === "userInput") {
+            source = "user-data";
+        }
+
+        if ((mode, genes, edges, type)) {
+            filename =
+                mode.toUpperCase() +
+                "_" +
+                genes +
+                "-genes" +
+                "_" +
+                edges +
+                "-edges" +
+                "_" +
+                type +
+                "_" +
+                source;
         }
 
         return filename + "." + extension;
@@ -471,10 +488,7 @@ export const upload = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
-                if (
-                    value.value === "network_weights" ||
-                    value.value === "network_optimized_weights"
-                ) {
+                if (value.value === "network_optimized_weights") {
                     return "weighted";
                 }
             }
@@ -584,6 +598,7 @@ export const upload = function () {
             "degradation_rates",
             "threshold_b",
         ];
+        //COME BACK TO THIS
         let networks = [
             [isDataValid(grnState.workbook.network), "network"],
             [isDataValid(grnState.workbook.networkOptimizedWeights), "network_optimized_weights"],
