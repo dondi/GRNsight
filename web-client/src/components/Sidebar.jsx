@@ -60,7 +60,7 @@ export default function Sidebar({}) {
   } = useContext(GrnStateContext);
 
   return (
-    <Box className="sidebar">
+    <Box id="sidebar">
       {/* Disclaimer */}
       <Box className="panel">
         <Box margin="10px">
