@@ -42,7 +42,7 @@ First, outside of postgres, navigate to the `schema` folder in your local copy o
 cd <path to `schema` folder>
 ```
 
-Then run the following commands. Note that for any command that begins with `psql`, you need to be _outside_ of postgres to run it. So, in between running each of the commands you will need to quit postgres using `\q`.  Also, you may need to specify the database username in front of localhost, i.e., use `postgresql://postgres@localhost/postgres` for each of the following commands.
+Then run the following commands. Note that for any command that begins with `psql`, you need to be _outside_ of postgres to run it. Also, you may need to specify the database username in front of localhost, i.e., use `postgresql://postgres@localhost/postgres` for each of the following commands.
 ```
 psql -f grnsettings_schema.sql postgresql://localhost/postgres
 ```
