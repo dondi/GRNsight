@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { smartPathEnd } from "./markerHelpers";
 import {
   NODE_HEIGHT,
   NODE_MARGIN,
@@ -11,6 +12,7 @@ import {
   SHORT_NODE_LIMIT,
   ADDITIONAL_SHIFT,
   END_POINT_ADJUSTMENT,
+  EDGE_OFFSET,
 } from "./constants.js";
 
 // TODO: resolve issue where node.textWidth is initially calculated with undefined value
@@ -142,69 +144,73 @@ export function createPath(d, width, height) {
   // Calculate adjusted source and target positions to be at center of nodes
   // TODO: resolve issue where node.textWidth is initially calculated with undefined value
   // TODO: confirm whether node textWidth is defined before this function is called
-  const sourceX = d.source.x + getNodeWidth(d.source) / 2;
-  const sourceY = d.source.y + NODE_HEIGHT / 2;
-  const targetX = d.target.x + getNodeWidth(d.target) / 2;
-  const targetY = d.target.y + NODE_HEIGHT / 2;
+  const w = getNodeWidth(d.target);
+  const h = NODE_HEIGHT;
+  d.source.newX = d.source.x + w / 2;
+  d.source.newY = d.source.y + h / 2;
 
-  const targetWidth = getNodeWidth(d.target);
-  const targetHeight = NODE_HEIGHT;
+  let x1 = d.source.x;
+  let y1 = d.source.y;
+  let x2 = d.target.x;
+  let y2 = d.target.y;
 
-  // Calculate control points from source to target
-  let ux = targetX - sourceX;
-  let uy = targetY - sourceY;
+  d.target.centerX = d.target.x + w / 2;
+  d.target.centerY = d.target.y + h / 2;
 
-  const umagnitude = Math.sqrt(ux * ux + uy * uy);
+  console.log("d.target.centerX, d.target.centerY", d.target.centerX, d.target.centerY);
+
+  // This function calculates the newX and newY.
+  smartPathEnd(d, w, h);
+  console.log("d.source.newX, d.source.newY", d.source.newX, d.source.newY);
+  x1 = d.source.newX;
+  y1 = d.source.newY;
+  x2 = d.target.newX;
+  y2 = d.target.newY;
+
+  // Unit vectors.
+  let ux = x2 - x1;
+  let uy = y2 - y1;
+  let umagnitude = Math.sqrt(ux * ux + uy * uy);
   let vx = -uy; // Perpendicular vector.
   let vy = ux;
-  const vmagnitude = Math.sqrt(vx * vx + vy * vy);
-
+  let vmagnitude = Math.sqrt(vx * vx + vy * vy);
   ux /= umagnitude;
   uy /= umagnitude;
   vx /= vmagnitude;
   vy /= vmagnitude;
 
-  // Check for vector direction to ensure consistent curve direction
-  if ((targetX > sourceX && targetY > sourceY) || (targetX < sourceX && targetY < sourceY)) {
+  // Check for vector direction.
+  if (
+    (d.target.newX > d.source.x && d.target.newY > d.source.y) ||
+    (d.target.newX < d.source.x && d.target.newY < d.source.y)
+  ) {
     vx = -vx;
     vy = -vy;
   }
-
   // Calculate control points between nodes
-  const curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
-  const inlineOffset = Math.max(umagnitude / 4, curveToStraight);
-  const orthoOffset = Math.max(0, curveToStraight);
-
-  // const tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
-  // const tanRatioMoveable =
-  //   Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
-
-  let cp1x = sourceX + inlineOffset * ux + vx * orthoOffset;
-  let cp1y = sourceY + inlineOffset * uy + vy * orthoOffset;
-  let cp2x = targetX - inlineOffset * ux + vx * orthoOffset;
-  let cp2y = targetY - inlineOffset * uy + vy * orthoOffset;
+  let curveToStraight = (umagnitude - CURVE_THRESHOLD) / 4;
+  let inlineOffset = Math.max(umagnitude / 4, curveToStraight);
+  let orthoOffset = Math.max(0, curveToStraight);
+  let cp1x = x1 + inlineOffset * ux + vx * orthoOffset;
+  let cp1y = y1 + inlineOffset * uy + vy * orthoOffset;
+  let cp2x = x2 - inlineOffset * ux + vx * orthoOffset;
+  let cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
 
   cp1x = Math.min(Math.max(0, cp1x), width);
   cp1y = Math.min(Math.max(0, cp1y), height);
   cp2x = Math.min(Math.max(0, cp2x), width);
   cp2y = Math.min(Math.max(0, cp2y), height);
 
-  const strokeWidth = d.strokeWidth || 2;
-  const isRepressor = d.value < 0;
+  d.label = {
+    x: Math.min(Math.max((x1 + cp1x + cp2x + x2) / 4, EDGE_OFFSET), width - 2 * EDGE_OFFSET),
+    y: Math.min(Math.max((y1 + cp1y + cp2y + y2) / 4, EDGE_OFFSET), height - EDGE_OFFSET),
+  };
 
-  // Always find Bézier curve intersection
-  const intersection = findBezierBoxIntersection(
-    { x: sourceX, y: sourceY },
-    { x: cp1x, y: cp1y },
-    { x: cp2x, y: cp2y },
-    { x: targetX, y: targetY },
-    targetWidth,
-    targetHeight,
-    strokeWidth,
-    isRepressor
-  );
-
-  return `M${sourceX},${sourceY} C${cp1x},${cp1y} ${cp2x},${cp2y} ${intersection.x},${intersection.y}`;
+  // const dx = intersection.x - cp2x;
+  // const dy = intersection.y - cp2y;
+  // d.markerAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+  // "C" + cp1x + " " + cp1y + ", " + cp2x + " " + cp2y + ", " + x2 + " " + y2;
+  return `M${d.source.newX},${d.source.newY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
 }
 
 function getSelfReferringRadius(edge) {
