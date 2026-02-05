@@ -27,120 +27,7 @@ export function normalize(d, maxWeight) {
   return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 
-/**
- * Calculate point along the full cubic Bézier curve that goes behind the perimeter of the target box
- * Can be used to find the intersection point of the Bézier curve with the box perimeter
- * @param {number} percentAcrossFullBezierCurve - Value from 0 to 1, where 0 is the start point of the full bezier curve and 1 is the end point of the full bezier curve
- * @param {Object} source - Starting point of the Bézier curve
- * @param {number} source.x - X coordinate of the starting point
- * @param {number} source.y - Y coordinate of the starting point
- * @param {Object} control1 - First control point of the cubic Bézier curve
- * @param {number} control1.x - X coordinate of the first control point
- * @param {number} control1.y - Y coordinate of the first control point
- * @param {Object} control2 - Second control point of the cubic Bézier curve
- * @param {number} control2.x - X coordinate of the second control point
- * @param {number} control2.y - Y coordinate of the second control point
- * @param {Object} target - End point of the Bézier curve
- * @param {number} target.x - X coordinate of the end point
- * @param {number} target.y - Y coordinate of the end point
- *
- * @returns {Object} Point on the Bézier curve at parameter t
- * @returns {number} return.x - X coordinate of the calculated point
- * @returns {number} return.y - Y coordinate of the calculated point
- *
- */
-function getCubicBezierPoint(percentAcrossFullBezierCurve, source, control1, control2, target) {
-  // Bernstein basis polynomial can be used to draw cubic Bézier curves
-  // B(t) = (1 - t)^3 * p0 + 3(1 - t)^2 * t * p1 + 3(1 - t) * t^2 * p2 + t^3 * p3
-  const x =
-    Math.pow(1 - percentAcrossFullBezierCurve, 3) * source.x +
-    3 * Math.pow(1 - percentAcrossFullBezierCurve, 2) * percentAcrossFullBezierCurve * control1.x +
-    3 *
-      (1 - percentAcrossFullBezierCurve) *
-      Math.pow(percentAcrossFullBezierCurve, 2) *
-      control2.x +
-    Math.pow(percentAcrossFullBezierCurve, 3) * target.x;
-  const y =
-    Math.pow(1 - percentAcrossFullBezierCurve, 3) * source.y +
-    3 * Math.pow(1 - percentAcrossFullBezierCurve, 2) * percentAcrossFullBezierCurve * control1.y +
-    3 *
-      (1 - percentAcrossFullBezierCurve) *
-      Math.pow(percentAcrossFullBezierCurve, 2) *
-      control2.y +
-    Math.pow(percentAcrossFullBezierCurve, 3) * target.y;
-  return { x, y };
-}
-
-/**
- * Find the intersection of a Bézier curve with a target box
- * Uses binary search to find the t value where the curve intersects the box perimeter
- * @param {Object} source - Starting point of the Bézier curve
- * @param {number} source.x - X coordinate of the source point
- * @param {number} source.y - Y coordinate of the source point
- * @param {Object} control1 - First control point of the cubic Bézier curve
- * @param {number} control1.x - X coordinate of the first control point
- * @param {number} control1.y - Y coordinate of the first control point
- * @param {Object} control2 - Second control point of the cubic Bézier curve
- * @param {number} control2.x - X coordinate of the second control point
- * @param {number} control2.y - Y coordinate of the second control point
- * @param {Object} target - End point of the Bézier curve (center of target box)
- * @param {number} target.x - X coordinate of the target point (box center)
- * @param {number} target.y - Y coordinate of the target point (box center)
- * @param {number} boxWidth - Width of the target node's bounding box
- * @param {number} boxHeight - Height of the target node's bounding box
- *
- * @returns {Object} Intersection point on the box perimeter
- * @returns {number} return.x - X coordinate of intersection point
- * @returns {number} return.y - Y coordinate of intersection point
- */
-function findBezierBoxIntersection(
-  source,
-  control1,
-  control2,
-  target,
-  boxWidth,
-  boxHeight,
-  strokeWidth,
-  isRepressor
-) {
-  // Calculate minimum distance to ensure marker visibility
-  const MINIMUM_DISTANCE = 8;
-
-  // Apply the same logic as classic: use max of strokeWidth and MINIMUM_DISTANCE
-  const globalOffset = Math.max(strokeWidth, MINIMUM_DISTANCE);
-
-  // Expand the box by the offset amount so markers render outside the boundary
-  const expandedWidth = boxWidth + 2 * globalOffset;
-  const expandedHeight = boxHeight + 2 * globalOffset;
-
-  // Binary search to find intersection point
-  // intersection = 0 is the start of the bezier curve, intersection = 1 is the end of the bezier curve
-  // intersectionMin and intersectionMax define the current search interval for intersection
-  let intersectionMin = 0;
-  let intersectionMax = 1;
-
-  // Complete 10 binary search iterations for sufficient precision
-  for (let iteration = 0; iteration < 10; iteration++) {
-    const intersectionMid = (intersectionMin + intersectionMax) / 2;
-    const point = getCubicBezierPoint(intersectionMid, source, control1, control2, target);
-
-    // Check if point is inside the box
-    const deltaX = Math.abs(point.x - target.x);
-    const deltaY = Math.abs(point.y - target.y);
-
-    if (deltaX < expandedWidth / 2 && deltaY < expandedHeight / 2) {
-      // Point is inside box, search earlier part of curve
-      intersectionMax = intersectionMid;
-    } else {
-      // Point is outside box, search later part of curve
-      intersectionMin = intersectionMid;
-    }
-  }
-
-  return getCubicBezierPoint(intersectionMax, source, control1, control2, target);
-}
-
-export function createPath(d, width, height) {
+export function createPath(d, width, height, colorOptimal) {
   // Calculate adjusted source and target positions to be at center of nodes
   // TODO: resolve issue where node.textWidth is initially calculated with undefined value
   // TODO: confirm whether node textWidth is defined before this function is called
@@ -158,7 +45,7 @@ export function createPath(d, width, height) {
   d.target.centerY = d.target.y + h / 2;
 
   // This function calculates the newX and newY.
-  smartPathEnd(d, w, h);
+  smartPathEnd(d, w, h, colorOptimal);
   x1 = d.source.newX;
   y1 = d.source.newY;
   x2 = d.target.newX;

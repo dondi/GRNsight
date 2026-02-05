@@ -1,4 +1,4 @@
-import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "./constants";
+import { NETWORK_GRN_MODE_FULL, NODE_HEIGHT } from "./constants";
 import { getNodeWidth } from "./graphHelpers";
 
 // TODO: add description from web-client-classic
@@ -340,29 +340,28 @@ function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, minimum }) {
     .attr("style", "stroke: " + d.stroke + "; fill: " + d.stroke);
 }
 
-export function smartPathEnd(d, w, h) {
+export function smartPathEnd(d, w, h, colorOptimal) {
   // For arrowheads when target node is to the left of source node
-  var LEFT_ADJUSTMENT = 7;
-  var MINIMUM_DISTANCE = 8;
-  var NODE_HALF_HEIGHT = 30 / 2;
+  let minimumDistance = 8;
+  const NODE_HALF_HEIGHT = NODE_HEIGHT / 2;
 
-  var targetStartX = d.target.centerX + d.target.textWidth / 2;
-  var currentPointX = (targetStartX - d.target.centerX) / (d.source.newX - d.target.centerX);
-  var currentPointY = (1 - currentPointX) * d.target.centerY + currentPointX * d.source.newY;
-  var upperBound = d.target.centerY + NODE_HALF_HEIGHT;
-  var lowerBound = d.target.centerY - NODE_HALF_HEIGHT;
+  const targetStartX = d.target.centerX + d.target.textWidth / 2;
+  const currentPointX = (targetStartX - d.target.centerX) / (d.source.newX - d.target.centerX);
+  const currentPointY = (1 - currentPointX) * d.target.centerY + currentPointX * d.source.newY;
+  const upperBound = d.target.centerY + NODE_HALF_HEIGHT;
+  const lowerBound = d.target.centerY - NODE_HALF_HEIGHT;
   if (currentPointX > 0 && currentPointY >= lowerBound && currentPointY <= upperBound) {
-    MINIMUM_DISTANCE = d.strokeWidth > 11 ? 16.5 : 15;
+    minimumDistance = d.strokeWidth > 11 ? 16.5 : 15;
   }
 
   // Set an offset if the edge is a repressor to make room for the flat arrowhead
-  var globalOffset = parseFloat(d.strokeWidth);
+  let globalOffset = parseFloat(d.strokeWidth);
 
-  if (d.value < 0 && grnState.colorOptimal) {
-    globalOffset = Math.max(globalOffset, MINIMUM_DISTANCE);
+  if (d.value < 0 && colorOptimal) {
+    globalOffset = Math.max(globalOffset, minimumDistance);
   }
 
-  var thicknessAdjustment = globalOffset > MINIMUM_DISTANCE ? 1 : 0;
+  let thicknessAdjustment = globalOffset > minimumDistance ? 1 : 0;
 
   // We need to work out the (tan of the) angle between the
   // imaginary horizontal line running through the center of the
@@ -409,9 +408,7 @@ export function smartPathEnd(d, w, h) {
   }
 
   if (d.tanRatioMoveable < d.tanRatioFixed) {
-    // Then path is intersecting on a vertical side of the
-    // textbox, which means we know the x-coordinate of the
-    // path endpoint but we need to work out the y-coordinate
+    // Then path is intersecting on a vertical side of the textbox
 
     // By default assume path intersects left vertical side
     d.target.newX = d.target.x - globalOffset;
@@ -420,22 +417,13 @@ export function smartPathEnd(d, w, h) {
     if (d.target.centerX < d.source.newX) {
       // i.e. if target node is to left of the source node
       // then path intersects right vertical side
-      if (d.type !== "arrowhead") {
-        d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
-      } else {
-        d.target.newX = d.target.x + w + globalOffset + LEFT_ADJUSTMENT;
-      }
+      d.target.newX = d.target.x + w + globalOffset + 0.25 * d.strokeWidth - thicknessAdjustment;
     }
 
     // Now use a bit of trigonometry to work out the y-coord.
-
-    // By default assume path intersects towards top of node
     d.target.newY = d.target.centerY - (d.target.centerX - d.target.x) * d.tanRatioMoveable;
 
-    // But...
     if (d.target.centerY < d.source.newY) {
-      // i.e. if target node is above the source node
-      // then path intersects towards bottom of the node
       d.target.newY = 2 * d.target.y - d.target.newY + h;
     }
   }
