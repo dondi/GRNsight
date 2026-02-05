@@ -347,7 +347,6 @@ export function smartPathEnd(d, w, h) {
   var NODE_HALF_HEIGHT = 30 / 2;
 
   var targetStartX = d.target.centerX + d.target.textWidth / 2;
-  console.log("targetStartX", targetStartX);
   var currentPointX = (targetStartX - d.target.centerX) / (d.source.newX - d.target.centerX);
   var currentPointY = (1 - currentPointX) * d.target.centerY + currentPointX * d.source.newY;
   var upperBound = d.target.centerY + NODE_HALF_HEIGHT;
@@ -371,8 +370,6 @@ export function smartPathEnd(d, w, h) {
   // the target node with the top-left corner of the same
   // node. Of course, this angle is fixed.
   d.tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
-  console.log("d.target.centerY, d.target.y", d.target.centerY, d.target.y);
-  console.log("d.tanRatioFixed", d.tanRatioFixed);
   // We also need to work out the (tan of the) angle between the
   // imaginary horizontal line running through the center of the
   // target node and the imaginary line connecting the center of
@@ -384,9 +381,6 @@ export function smartPathEnd(d, w, h) {
   // Infinity, which in this case is useful, especially
   // since it handles the subsequent Infinity arithmetic
   // correctly.
-  console.log("d.target.centerY, d.source.newY", d.target.centerY, d.source.newY);
-  console.log("d.target.centerX, d.source.newX", d.target.centerX, d.source.newX);
-  console.log("d.tanRatioMoveable", d.tanRatioMoveable);
 
   // Now work out the intersection point
   if (d.tanRatioMoveable === d.tanRatioFixed) {
