@@ -169,52 +169,39 @@ export function createPath(d, width, height) {
   const inlineOffset = Math.max(umagnitude / 4, curveToStraight);
   const orthoOffset = Math.max(0, curveToStraight);
 
+  // const tanRatioFixed = (d.target.centerY - d.target.y) / (d.target.centerX - d.target.x);
+  // const tanRatioMoveable =
+  //   Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
+
   // Check if this is effectively a straight line since curve offset is small
   // However, this values means that nodes are within 202 pixels of each other, so will need to adjust this
   // When set orthOffset to 0, then creates issues with paths going through border of boudning box
-  const isStraightLine = orthoOffset < 0.5;
-  const isRepressor = d.value < 0;
+  let cp1x = sourceX + inlineOffset * ux + vx * orthoOffset;
+  let cp1y = sourceY + inlineOffset * uy + vy * orthoOffset;
+  let cp2x = targetX - inlineOffset * ux + vx * orthoOffset;
+  let cp2y = targetY - inlineOffset * uy + vy * orthoOffset;
+
+  cp1x = Math.min(Math.max(0, cp1x), width);
+  cp1y = Math.min(Math.max(0, cp1y), height);
+  cp2x = Math.min(Math.max(0, cp2x), width);
+  cp2y = Math.min(Math.max(0, cp2y), height);
+
   const strokeWidth = d.strokeWidth || 2;
+  const isRepressor = d.value < 0;
 
-  if (isStraightLine) {
-    const endPoint = straightLineBoxIntersection(
-      sourceX,
-      sourceY,
-      targetX,
-      targetY,
-      targetWidth,
-      targetHeight,
-      strokeWidth,
-      isRepressor
-    );
+  // Always find Bézier curve intersection
+  const intersection = findBezierBoxIntersection(
+    { x: sourceX, y: sourceY },
+    { x: cp1x, y: cp1y },
+    { x: cp2x, y: cp2y },
+    { x: targetX, y: targetY },
+    targetWidth,
+    targetHeight,
+    strokeWidth,
+    isRepressor
+  );
 
-    return `M${sourceX},${sourceY} L${endPoint.x},${endPoint.y}`;
-  } else {
-    let cp1x = sourceX + inlineOffset * ux + vx * orthoOffset;
-    let cp1y = sourceY + inlineOffset * uy + vy * orthoOffset;
-    let cp2x = targetX - inlineOffset * ux + vx * orthoOffset;
-    let cp2y = targetY - inlineOffset * uy + vy * orthoOffset;
-
-    cp1x = Math.min(Math.max(0, cp1x), width);
-    cp1y = Math.min(Math.max(0, cp1y), height);
-    cp2x = Math.min(Math.max(0, cp2x), width);
-    cp2y = Math.min(Math.max(0, cp2y), height);
-
-    // Find where the curve intersects the perimeter of the target box
-    const intersection = findBezierBoxIntersection(
-      { x: sourceX, y: sourceY },
-      { x: cp1x, y: cp1y },
-      { x: cp2x, y: cp2y },
-      { x: targetX, y: targetY },
-      targetWidth,
-      targetHeight,
-      strokeWidth,
-      isRepressor
-    );
-
-    // Create quadratic Bézier curve ending at the box perimeter
-    return `M${sourceX},${sourceY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${intersection.x},${intersection.y}`;
-  }
+  return `M${sourceX},${sourceY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${intersection.x},${intersection.y}`;
 }
 
 /**
