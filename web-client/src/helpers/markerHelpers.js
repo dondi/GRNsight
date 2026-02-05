@@ -39,12 +39,8 @@ export function createEdgeMarker(params) {
   }
 
   // Create repressor markers (negative edges)
-  // TODO: can create copy of d here
   if (d.value < 0 && colorOptimal) {
-    // Get node dimensions
     const targetNodeWidth = getNodeWidth(d.target);
-
-    // Calculate node centers
     const sourceCenterX = d.source.x + getNodeWidth(d.source) / 2;
     const sourceCenterY = d.source.y + NODE_HEIGHT / 2;
     const targetCenterX = d.target.x + targetNodeWidth / 2;
