@@ -13,6 +13,16 @@ body {
   transition-timing-function: none;
 }
 
+#disclaimer {
+  padding: 14px 5px;
+  font-family: "Georgia", serif;
+  font-size: 14px;
+}
+
+#disclaimer a {
+  color: #16693f;
+}
+
 .navbar {
   top: 1px;
   min-height: 50px;
