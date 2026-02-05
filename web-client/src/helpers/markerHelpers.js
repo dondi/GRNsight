@@ -1,5 +1,5 @@
 import { get } from "jquery";
-import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "../constants";
+import { NETWORK_GRN_MODE_FULL, NODE_MARGIN, NODE_HEIGHT } from "./constants";
 import { getNodeWidth } from "./graphHelpers";
 
 // TODO: add description from web-client-classic
@@ -217,8 +217,6 @@ function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, min
     13: 5.5,
     14: 6,
   };
-
-  console.log("Creating horizontal repressor marker. d printout:", d);
 
   defs
     .append("marker")

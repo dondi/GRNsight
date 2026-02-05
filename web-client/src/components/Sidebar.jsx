@@ -19,7 +19,7 @@ import {
   SCHADE_INPUT_NAME,
   SCHADE_OUTPUT_NAME,
   PPI_DEMO_NAME,
-} from "../constants";
+} from "../helpers/constants";
 import "../App.css";
 
 export default function Sidebar({}) {
@@ -60,21 +60,7 @@ export default function Sidebar({}) {
   } = useContext(GrnStateContext);
 
   return (
-    <Box className="sidebar">
-      {/* Disclaimer */}
-      <Box className="panel">
-        <Box margin="10px">
-          <Text size="18px" weight="bold">
-            Disclaimer
-          </Text>
-        </Box>
-        <Box pad={{ right: "10px", left: "10px", bottom: "10px" }}>
-          <Text size="12px">
-            This version of GRNsight is currently in development and unstable. Please refer to the
-            Home page for more reliable performance.
-          </Text>
-        </Box>
-      </Box>
+    <Box id="sidebar">
       {/* Network */}
       <Box plain className="panel" margin={{ top: "5px" }}>
         <Box margin="10px">

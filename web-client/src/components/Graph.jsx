@@ -18,7 +18,7 @@ import {
   EDGE_RED,
   EDGE_BLACK,
   EDGE_BLUE,
-} from "../constants";
+} from "../helpers/constants";
 import {
   getNodeWidth,
   getEdgeThickness,
@@ -69,7 +69,6 @@ export default function Graph() {
       .then(data => {
         setWorkbook(data);
         setSheetType(data.sheetType);
-        console.log("data", data);
         setNetworkMode(getNetworkMode(data.meta.data.workbookType));
         const weights = calcAllWeights(data, colorOptimal);
         setAllWeights(weights);
