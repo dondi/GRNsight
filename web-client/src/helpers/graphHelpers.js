@@ -157,11 +157,8 @@ export function createPath(d, width, height) {
   d.target.centerX = d.target.x + w / 2;
   d.target.centerY = d.target.y + h / 2;
 
-  console.log("d.target.centerX, d.target.centerY", d.target.centerX, d.target.centerY);
-
   // This function calculates the newX and newY.
   smartPathEnd(d, w, h);
-  console.log("d.source.newX, d.source.newY", d.source.newX, d.source.newY);
   x1 = d.source.newX;
   y1 = d.source.newY;
   x2 = d.target.newX;
@@ -206,10 +203,6 @@ export function createPath(d, width, height) {
     y: Math.min(Math.max((y1 + cp1y + cp2y + y2) / 4, EDGE_OFFSET), height - EDGE_OFFSET),
   };
 
-  // const dx = intersection.x - cp2x;
-  // const dy = intersection.y - cp2y;
-  // d.markerAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-  // "C" + cp1x + " " + cp1y + ", " + cp2x + " " + cp2y + ", " + x2 + " " + y2;
   return `M${d.source.newX},${d.source.newY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
 }
 
