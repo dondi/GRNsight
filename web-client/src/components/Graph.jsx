@@ -251,7 +251,7 @@ export default function Graph() {
           if (d.source === d.target) {
             return createSelfLoop(d, width, height, colorOptimal);
           }
-          return createPath(d, width, height);
+          return createPath(d, width, height, colorOptimal);
         })
         .attr("marker-end", d => {
           return createEdgeMarker({
