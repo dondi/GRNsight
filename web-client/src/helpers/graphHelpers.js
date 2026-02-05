@@ -32,9 +32,12 @@ export function normalize(d, maxWeight) {
  * @param {Object} source - Starting point of the Bézier curve
  * @param {number} source.x - X coordinate of the starting point
  * @param {number} source.y - Y coordinate of the starting point
- * @param {Object} control - Control point of the quadratic Bézier curve
- * @param {number} control.x - X coordinate of the control point
- * @param {number} control.y - Y coordinate of the control point
+ * @param {Object} control1 - First control point of the cubic Bézier curve
+ * @param {number} control1.x - X coordinate of the first control point
+ * @param {number} control1.y - Y coordinate of the first control point
+ * @param {Object} control2 - Second control point of the cubic Bézier curve
+ * @param {number} control2.x - X coordinate of the second control point
+ * @param {number} control2.y - Y coordinate of the second control point
  * @param {Object} target - End point of the Bézier curve
  * @param {number} target.x - X coordinate of the end point
  * @param {number} target.y - Y coordinate of the end point
@@ -44,7 +47,7 @@ export function normalize(d, maxWeight) {
  * @returns {number} return.y - Y coordinate of the calculated point
  *
  */
-function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control1, control2, target) {
+function getCubicBezierPoint(percentAcrossFullBezierCurve, source, control1, control2, target) {
   // Bernstein basis polynomial can be used to draw cubic Bézier curves
   // B(t) = (1 - t)^3 * p0 + 3(1 - t)^2 * t * p1 + 3(1 - t) * t^2 * p2 + t^3 * p3
   const x =
@@ -72,9 +75,12 @@ function getQuadraticBezierPoint(percentAcrossFullBezierCurve, source, control1,
  * @param {Object} source - Starting point of the Bézier curve
  * @param {number} source.x - X coordinate of the source point
  * @param {number} source.y - Y coordinate of the source point
- * @param {Object} control - Control point of the quadratic Bézier curve
- * @param {number} control.x - X coordinate of the control point
- * @param {number} control.y - Y coordinate of the control point
+ * @param {Object} control1 - First control point of the cubic Bézier curve
+ * @param {number} control1.x - X coordinate of the first control point
+ * @param {number} control1.y - Y coordinate of the first control point
+ * @param {Object} control2 - Second control point of the cubic Bézier curve
+ * @param {number} control2.x - X coordinate of the second control point
+ * @param {number} control2.y - Y coordinate of the second control point
  * @param {Object} target - End point of the Bézier curve (center of target box)
  * @param {number} target.x - X coordinate of the target point (box center)
  * @param {number} target.y - Y coordinate of the target point (box center)
@@ -114,7 +120,7 @@ function findBezierBoxIntersection(
   // Complete 10 binary search iterations for sufficient precision
   for (let iteration = 0; iteration < 10; iteration++) {
     const intersectionMid = (intersectionMin + intersectionMax) / 2;
-    const point = getQuadraticBezierPoint(intersectionMid, source, control1, control2, target);
+    const point = getCubicBezierPoint(intersectionMid, source, control1, control2, target);
 
     // Check if point is inside the box
     const deltaX = Math.abs(point.x - target.x);
@@ -129,7 +135,7 @@ function findBezierBoxIntersection(
     }
   }
 
-  return getQuadraticBezierPoint(intersectionMax, source, control1, control2, target);
+  return getCubicBezierPoint(intersectionMax, source, control1, control2, target);
 }
 
 export function createPath(d, width, height) {
@@ -173,9 +179,6 @@ export function createPath(d, width, height) {
   // const tanRatioMoveable =
   //   Math.abs(d.target.centerY - d.source.newY) / Math.abs(d.target.centerX - d.source.newX);
 
-  // Check if this is effectively a straight line since curve offset is small
-  // However, this values means that nodes are within 202 pixels of each other, so will need to adjust this
-  // When set orthOffset to 0, then creates issues with paths going through border of boudning box
   let cp1x = sourceX + inlineOffset * ux + vx * orthoOffset;
   let cp1y = sourceY + inlineOffset * uy + vy * orthoOffset;
   let cp2x = targetX - inlineOffset * ux + vx * orthoOffset;
@@ -201,65 +204,7 @@ export function createPath(d, width, height) {
     isRepressor
   );
 
-  return `M${sourceX},${sourceY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${intersection.x},${intersection.y}`;
-}
-
-/**
- * Calculate the intersection point of a straight line with a rectangle
- * @param {number} x1 - Source x coordinate
- * @param {number} y1 - Source y coordinate
- * @param {number} x2 - Target x coordinate (center of target box)
- * @param {number} y2 - Target y coordinate (center of target box)
- * @param {number} boxWidth - Width of the target box
- * @param {number} boxHeight - Height of the target box
- * @returns {Object} Intersection point on box perimeter
- * @returns {number} return.x - X coordinate of intersection
- * @returns {number} return.y - Y coordinate of intersection
- */
-function straightLineBoxIntersection(
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  targetWidth,
-  targetHeight,
-  strokeWidth,
-  isRepressor
-) {
-  const deltaX = targetX - sourceX;
-  const deltaY = targetY - sourceY;
-
-  if (deltaX === 0 && deltaY === 0) {
-    return { x: targetX, y: targetY };
-  }
-
-  // Calculate minimum distance to ensure marker visibility
-  const MINIMUM_DISTANCE = 8;
-  const globalOffset = Math.max(strokeWidth, MINIMUM_DISTANCE);
-
-  // Expand the box by the offset amount
-  const expandedWidth = targetWidth + 2 * globalOffset;
-  const expandedHeight = targetHeight + 2 * globalOffset;
-
-  const halfWidth = expandedWidth / 2;
-  const halfHeight = expandedHeight / 2;
-  // Calculate angle of approach
-  const angle = Math.atan2(deltaY, deltaX);
-  const tanAngle = Math.abs(Math.tan(angle));
-
-  let intersectX, intersectY;
-
-  if (tanAngle < halfHeight / halfWidth) {
-    // Intersects with left or right edge
-    intersectX = targetX + (deltaX > 0 ? -halfWidth : halfWidth);
-    intersectY = targetY + (intersectX - targetX) * (deltaY / deltaX);
-  } else {
-    // Intersects with top or bottom edge
-    intersectY = targetY + (deltaY > 0 ? -halfHeight : halfHeight);
-    intersectX = targetX + (intersectY - targetY) * (deltaX / deltaY);
-  }
-
-  return { x: intersectX, y: intersectY };
+  return `M${sourceX},${sourceY} C${cp1x},${cp1y} ${cp2x},${cp2y} ${intersection.x},${intersection.y}`;
 }
 
 function getSelfReferringRadius(edge) {

@@ -220,12 +220,12 @@ export default function Graph() {
     }
 
     function dragended(event, d) {
-      event.stopPropagation();
+      if (!event.active) simulation.alphaTarget(0);
     }
 
     function dblclick(event, d) {
       d.fx = null;
-      d.fy = null;
+      d.fy = null;``
     }
 
     // TODO: may need to change this when have dymanic viewport width
