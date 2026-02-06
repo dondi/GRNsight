@@ -1,3 +1,7 @@
+p {
+  margin: 0;
+}
+
 body {
   font-size: 14px;
   line-height: 1.42857143;
@@ -9,19 +13,30 @@ body {
   transition-timing-function: none;
 }
 
+#disclaimer {
+  padding: 14px 5px;
+  font-family: "Georgia", serif;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+#disclaimer a {
+  color: #16693f;
+}
+
 .navbar {
   top: 1px;
   min-height: 50px;
-  margin-bottom: 10px;
+  margin-bottom: 1px;
   position: relative;
   border-radius: 4px;
   line-height: 20px;
   font-size: 14px;
-  border: 1px solid #ccc;
-  border-color: #dfebe5;
+  border: 1px solid #dfebe5;
 }
 
-.navbar button {
+.navbar button,
+.filename {
   color: #000000;
   border: none;
 }
@@ -35,7 +50,6 @@ body {
 }
 
 .dropdown-menu {
-  /* position: absolute; */
   top: 100%;
   left: 0;
   z-index: 1000;
@@ -48,7 +62,7 @@ body {
 }
 
 .dropdown-menu button {
-  border-radius: 0px;
+  border: none;
 }
 
 .dropdown-menu button:hover {
@@ -61,6 +75,10 @@ body {
 
 .dropdown-menu div:has(button):hover {
   background-color: #dfebe5;
+}
+
+.demo-dropdown-navbar {
+  border: none;
 }
 
 .folder-icon {
@@ -105,19 +123,6 @@ button:hover {
   transition-timing-function: none;
 }
 
-/* .iXPGmp {
-  padding: 0px;
-  border: none;
-  all: unset;
-  box-shadow: none;
-} */
-
-/* .iXPGmp:hover {
-  padding: 0px;
-  border: none;
-  box-shadow: none;
-} */
-
 .subdivider {
   border-top: 1px dotted #bbb;
   width: 95%;
@@ -142,13 +147,7 @@ button:hover {
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  /* z-index: 1; */
 }
-
-/* .dropdown:hover {
-  background-color: #16693F;
-  color: #FFFFFF;
-} */
 
 .dropdown:hover .dropdown-content {
   display: block;
@@ -158,11 +157,40 @@ button:hover {
   position: relative;
 }
 
-.sidebar {
+#sidebar {
   width: 225px;
   margin-left: 10px;
+  margin-right: 15px;
   position: relative;
   overflow: visible;
+}
+
+#sidebar-graph-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+#sidebar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  width: 225px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  margin-left: 10px;
+  padding: 5px;
+}
+
+#sidebar-toggle.collapsed {
+  width: auto;
+  padding: 5px;
 }
 
 .panel {
@@ -204,38 +232,10 @@ button:hover {
   line-height: 1.42857143;
 }
 
-.btnSidebar {
-  width: 100%;
-}
-
-.sidebarPanelHeader {
-  margin: 10px 10px 10px;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.sidebarPanelHeaderSpecies {
-  border-color: #ddd;
-  font-weight: bold;
-  font-size: 12px;
-  width: 100%;
-}
-
 .file-input {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 6px 12px;
-}
-
-.sidebarPanelHeaderID {
-  margin: 0px 5px 5px;
-  font-weight: bold;
-  font-size: 12px;
-  width: 100%;
-}
-
-.nodeColoringSidebarBody {
-  margin-top: 6px;
 }
 
 .sidebar-radio-buttons {
@@ -247,15 +247,6 @@ input[type="radio"]:checked {
   border: 2px solid #333;
 }
 
-/* .data-sidebar select {
-  width: 100%;
-} */
-
-/* .data-sidebar.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-} */
-
 .sidebar-radio.disabled {
   color: #aaa;
 }
@@ -265,18 +256,119 @@ input[type="radio"]:checked {
 }
 
 .grnsight-container {
-  left: 250px;
-  top: 53px;
+  position: relative;
   border: 2px solid #9a9a9a;
-  /* TODO: need to change this from absolute so that whole page can be scrollable? */
-  position: absolute;
   stroke: #fff;
   stroke-width: 0.5px;
+  flex-shrink: 0;
   width: 1100px;
   height: 644px;
-  /* transition: opacity 0.25s; */
+  transition: opacity 0.25s;
 }
 
 .load-from-database {
   border: 2px solid red;
+}
+
+.scale-and-scroll {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
+  cursor: default;
+  margin-left: 15px;
+  width: 121px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  -webkit-border-horizontal-spacing: 0px;
+  -webkit-border-vertical-spacing: 0px;
+}
+
+/* For some reason, scrollTable is 124px tall instead of 121px */
+.scrollTable {
+  text-align: center;
+  table-layout: fixed;
+  margin-bottom: 10px;
+  border-collapse: collapse;
+}
+
+.scrollTable td {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.scrollBtn {
+  border: 1px solid #aaa;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.movementArrow {
+  font-weight: bolder;
+  font-size: 24px;
+}
+
+.pull-left {
+  float: left !important;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.zoomTable {
+  margin-bottom: 5px;
+  text-align: center;
+  table-layout: fixed;
+  height: 20px;
+}
+
+.zoomTable td {
+  padding: 0;
+  height: 20px;
+  width: 120px;
+}
+
+.zoomLabel {
+  font-size: 9px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#zoomSlider {
+  margin: 0;
+  width: 120px;
+  /* enforce light mode */
+  color-scheme: light;
+}
+
+.minimum-zoom-display {
+  margin-right: 0.25rem;
+}
+
+.maximum-zoom-display {
+  margin-left: 0.25rem;
+}
+
+/* TODO: investigate why the top is off by 10px from classic */
+.zoomCenter {
+  position: absolute;
+  width: 2px;
+  z-index: -1;
+  background-color: #aaa;
+  height: 25.5px;
+  left: 59.5px;
+  top: 158.5px;
 }

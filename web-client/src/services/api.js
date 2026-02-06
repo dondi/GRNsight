@@ -1,10 +1,10 @@
 import {
-  UNWEIGHTED_DEMO_NAME,
-  WEIGHTED_DEMO_NAME,
-  SCHADE_INPUT_NAME,
-  SCHADE_OUTPUT_NAME,
-  PPI_DEMO_NAME,
-} from "../constants";
+  DEMO_TYPES,
+  NETWORK_GRN_MODE_FULL,
+  NETWORK_PPI_MODE_FULL,
+  NETWORK_GRN_MODE_SHORT,
+  NETWORK_PPI_MODE_SHORT,
+} from "../helpers/constants";
 // TODO: make this port dynamic in the future based on environment
 const API_URL = import.meta.env.DEV
   ? `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`
@@ -36,18 +36,17 @@ export async function getDemoWorkbook(demoType) {
  */
 export const getDemoEndpoint = demoValue => {
   const mapping = Object.entries(DEMO_TYPES).find(
-    ([_, value]) => value === demoValue.props.children
+    ([_, value]) => value === demoValue.props?.children || value === demoValue
   );
   return mapping ? mapping[0] : Error("Demo not found");
 };
 
-/**
- * Available demo types with their descriptions
- */
-export const DEMO_TYPES = {
-  unweighted: UNWEIGHTED_DEMO_NAME,
-  weighted: WEIGHTED_DEMO_NAME,
-  schadeInput: SCHADE_INPUT_NAME,
-  schadeOutput: SCHADE_OUTPUT_NAME,
-  ppi: PPI_DEMO_NAME,
+export const getNetworkMode = workbookType => {
+  if (workbookType === NETWORK_GRN_MODE_SHORT) {
+    return NETWORK_GRN_MODE_FULL;
+  } else if (workbookType === NETWORK_PPI_MODE_SHORT) {
+    return NETWORK_PPI_MODE_FULL;
+  } else {
+    throw new Error("Unknown workbook type");
+  }
 };
