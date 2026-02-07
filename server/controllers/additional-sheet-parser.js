@@ -361,8 +361,6 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let currentGene;
     let currentValue;
 
-    const genesInSheet = [];
-
     // check to see if the genes are strings and the values are numbers
 
     for (let row = 0; row < sheet.data.length; row++) {
@@ -403,7 +401,6 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             if (validGeneName(output, sheet.name, currentGene, row + 1)) {
                 if (typeof currentValue === "number") {
                     output.data[currentGene] = currentValue;
-                    genesInSheet.push(currentGene);
                 } else {
                     addError(
                         output,
@@ -421,7 +418,8 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
 
     // Check for missing genes in sheet
     if (genesInNetwork) {
-        const missingGenes = genesInNetwork.filter(g => !genesInSheet.includes(g));
+        //  Check if the output data keys (genes in sheet) include all genes in the network
+        const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
         if (missingGenes.length > 0) {
             console.log("Adding warning for missing genes in two column sheet", missingGenes);
             addWarning(
