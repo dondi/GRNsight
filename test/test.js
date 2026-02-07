@@ -365,6 +365,16 @@ var noWarnings = function (input) {
     assert.equal(0, workbook.warnings.length);
 };
 
+const noWarningsForAdditionalSheet = function (input, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.equal(0, workbook.twoColumnSheets[sheetName].warnings.length);
+};
+
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -860,6 +870,7 @@ exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
 exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
 exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
+exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;

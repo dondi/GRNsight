@@ -241,9 +241,18 @@ describe("additional-sheet-parser", function () {
         });
 
         it("should not return any warnings when two-column sheets are blank", function () {
-            test.noWarnings("test-files/additional-sheet-test-files/deg-rates-sheet-blank.xlsx");
-            test.noWarnings("test-files/additional-sheet-test-files/prod-rates-sheet-blank.xlsx");
-            test.noWarnings("test-files/additional-sheet-test-files/threshold_b-sheet-blank.xlsx");
+            test.noWarningsForAdditionalSheet(
+                "test-files/additional-sheet-test-files/deg-rates-sheet-blank.xlsx",
+                "degradation_rates"
+            );
+            test.noWarningsForAdditionalSheet(
+                "test-files/additional-sheet-test-files/prod-rates-sheet-blank.xlsx",
+                "production_rates"
+            );
+            test.noWarningsForAdditionalSheet(
+                "test-files/additional-sheet-test-files/threshold_b-sheet-blank.xlsx",
+                "threshold_b"
+            );
         });
 
         it("should return missingGenesInTwoColumnSheetsWarning when sheets are present and not empty but missing all genes and values", function () {
@@ -296,7 +305,7 @@ describe("additional-sheet-parser", function () {
                 1,
                 "threshold_b"
             );
-    
+
             test.missingGenesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-middle-gene-and-deg-rate-value.xlsx",
                 1,

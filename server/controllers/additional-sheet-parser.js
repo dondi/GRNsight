@@ -346,11 +346,17 @@ const parseOptimizationDiagnosticsSheet = sheet => {
 };
 
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
+    console.log("parseTwoColumnSheet > sheet", sheet);
+
     let output = {
         data: {},
         errors: [],
         warnings: [],
     };
+
+    if (sheet.data.length == 0) {
+        return output;
+    }
 
     let currentGene;
     let currentValue;
@@ -417,6 +423,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     if (genesInNetwork) {
         const missingGenes = genesInNetwork.filter(g => !genesInSheet.includes(g));
         if (missingGenes.length > 0) {
+            console.log("Adding warning for missing genes in two column sheet", missingGenes);
             addWarning(
                 output,
                 constants.warnings.missingGenesInTwoColumnSheetWarningWhenImporting(
