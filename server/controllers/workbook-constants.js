@@ -319,6 +319,24 @@ module.exports = {
                 from data in GRNsight's Expression Database, found in the Node menu or panel.",
             };
         },
+
+        unrecognizedSheetWarning: function (sheetName) {
+            return {
+                warningCode: "UNRECOGNIZED_SHEET",
+                errorDescription:
+                    `The sheet named '${sheetName}' is unrecognized by GRNsight. ` +
+                    "Please ensure that all sheets in the workbook are named correctly.",
+            };
+        },
+
+        missingGenesInTwoColumnSheetWarningWhenImporting: function (sheetName, missingGenes) {
+            return {
+                warningCode: `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription:
+                    `GRNsight has detected that the imported workbook has missing genes in the ${sheetName} sheet. ` +
+                    `The missing genes are: ${missingGenes}. Please ensure that all genes in the network are included in the sheet.`,
+            };
+        },
     },
 
     errors: {

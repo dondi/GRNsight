@@ -21,7 +21,44 @@ const buildMissingGenesWarning = ({ sheetName, missingGenes, warnings }) => {
     return gen ? gen(missingGenes.join(", ")) : null;
 };
 
+export const buildImportWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings) => {
+    // If there is no degradation_rates sheet, no warning because this sheet is not needed to display a graph.
+    // If there is no production_rates sheet, no warning because this sheet is not needed to display a graph.
+
+    const message = [];
+
+    for (const sheetName of TWO_COLUMN_SHEETS) {
+        // The workbook contain object twoColumnSheets
+        if (workbook.twoColumnSheets) {
+            const sheet = workbook.twoColumnSheets[sheetName];
+            if (!sheet) {
+                continue;
+            }
+
+            const data = sheet.data || null;
+            const genes = getGeneNames(workbook);
+            const missingGenes =
+                !data || Object.keys(data).length === 0
+                    ? genes
+                    : computePartialMissingGeneNames(genes, data);
+
+            const msg = buildMissingGenesWarning({
+                sheetName,
+                missingGenes,
+                warnings,
+            });
+
+            if (msg) {
+                message.push(msg);
+            }
+        }
+    }
+
+    return message;
+};
+
 export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings, chosenSheets) => {
+    console.log("Building two-column sheet warnings {export}...");
     const genes = getGeneNames(workbook);
     const messages = [];
 
@@ -38,6 +75,8 @@ export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings, c
             !data || Object.keys(data).length === 0
                 ? genes
                 : computePartialMissingGeneNames(genes, data);
+        console.log("Data for sheet " + sheetName + ": " + JSON.stringify(data));
+        console.log("Missing genes for sheet " + sheetName + ": " + missingGenes);
 
         const msg = buildMissingGenesWarning({
             sheetName,

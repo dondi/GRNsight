@@ -345,12 +345,18 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     return output;
 };
 
-const parseTwoColumnSheet = sheet => {
+const parseTwoColumnSheet = (sheet, genesInNetwork) => {
+    console.log("parseTwoColumnSheet > sheet", sheet);
+
     let output = {
         data: {},
         errors: [],
         warnings: [],
     };
+
+    if (sheet.data.length == 0) {
+        return output;
+    }
 
     let currentGene;
     let currentValue;
@@ -410,10 +416,26 @@ const parseTwoColumnSheet = sheet => {
         }
     }
 
+    // Check for missing genes in sheet
+    if (genesInNetwork) {
+        //  Check if the output data keys (genes in sheet) include all genes in the network
+        const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
+        if (missingGenes.length > 0) {
+            console.log("Adding warning for missing genes in two column sheet", missingGenes);
+            addWarning(
+                output,
+                constants.warnings.missingGenesInTwoColumnSheetWarningWhenImporting(
+                    sheet.name,
+                    missingGenes.join(", ")
+                )
+            );
+        }
+    }
+
     return output;
 };
 
-module.exports = function (workbookFile) {
+module.exports = function (workbookFile, genesInNetwork) {
     let output = {
         meta: {
             data: {},
@@ -429,9 +451,16 @@ module.exports = function (workbookFile) {
             // above line creates an object from the optimization paramerters sheet
             // these are part of the "meta" property
         } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
-            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet);
+            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet, genesInNetwork);
         } else if (sheet.name === "optimization_diagnostics") {
             output.meta2 = parseOptimizationDiagnosticsSheet(sheet);
+        } else if (
+            sheet.name !== "network" &&
+            sheet.name !== "network_optimized_weights" &&
+            sheet.name !== "network_weights" &&
+            !sheet.name.toLowerCase().includes("expression")
+        ) {
+            addWarning(output, constants.warnings.unrecognizedSheetWarning(sheet.name));
         }
     });
     return output;
