@@ -372,3 +372,8 @@ table {
   left: 59.5px;
   top: 158.5px;
 }
+
+#file-name {
+  white-space: nowrap;
+  padding: 15px;
+}

@@ -575,7 +575,7 @@ export default function Navbar({}) {
         size="small"
       />
 
-      <Box id="file-name" pad="15px">
+      <Box id="file-name">
         <Text>{demoValue}</Text>
       </Box>
     </Nav>
