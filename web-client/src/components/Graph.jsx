@@ -225,7 +225,7 @@ export default function Graph() {
 
     function dblclick(event, d) {
       d.fx = null;
-      d.fy = null;``
+      d.fy = null;
     }
 
     // TODO: may need to change this when have dymanic viewport width
