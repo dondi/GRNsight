@@ -101,17 +101,11 @@ export const upload = function () {
 
         if ((mode, genes, edges, type)) {
             filename =
-                mode.toUpperCase() +
-                "_" +
-                genes +
-                "-genes" +
-                "_" +
-                edges +
-                "-edges" +
-                "_" +
-                type +
-                "_" +
-                source;
+                `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+
+        if (source) {
+            filename += "_" + source;
         }
 
         return filename + "." + extension;
