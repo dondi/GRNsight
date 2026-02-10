@@ -346,8 +346,6 @@ const parseOptimizationDiagnosticsSheet = sheet => {
 };
 
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
-    console.log("parseTwoColumnSheet > sheet", sheet);
-
     let output = {
         data: {},
         errors: [],
@@ -428,7 +426,9 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         }
     }
 
-    if (genesMissingValue === genesInNetwork) {
+    const allMissing =
+        genesInNetwork && genesInNetwork.every(gene => genesMissingValue.includes(gene));
+    if (allMissing) {
         addWarning(
             output,
             constants.warnings.missingAllValuesForGenes(sheet.name, genesMissingValue)

@@ -110,10 +110,19 @@ const missingAllValuesForGenes = function (input, frequency, sheetName) {
 
     const workbook = parseAdditionalSheet(sheet, genes);
 
-    assert.equal(frequency, workbook.warnings.length());
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
     assert.equal(
         `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
-        workbook.warnings[0].warningCode
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
     );
 };
 
