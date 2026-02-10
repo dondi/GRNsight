@@ -479,12 +479,13 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
 
 var unrecognizedSheetWarning = function (input, frequency) {
     const sheet = xlsx.parse(input);
-    const workbook = parseAdditionalSheet(sheet);
-    const unrecognizedSheetWarningCount = workbook.warnings.filter(function (x) {
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+    const warnings = workbook.warnings || [];
+    const unrecognizedSheetWarningCount = warnings.filter(function (x) {
         return x.warningCode === "UNRECOGNIZED_SHEET";
-    });
+    }).length;
 
-    assert.equal(frequency, unrecognizedSheetWarningCount.length);
+    assert.equal(frequency, unrecognizedSheetWarningCount);
 };
 
 var missingGenesInTwoColumnSheetsWarning = function (input, frequency, sheetName) {
@@ -495,9 +496,9 @@ var missingGenesInTwoColumnSheetsWarning = function (input, frequency, sheetName
     const warnings = workbook.twoColumnSheets[sheetName].warnings || [];
     const missingGenesInTwoColumnSheetsWarningCount = warnings.filter(function (x) {
         return x.warningCode === `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
-    });
+    }).length;
 
-    assert.equal(frequency, missingGenesInTwoColumnSheetsWarningCount.length);
+    assert.equal(frequency, missingGenesInTwoColumnSheetsWarningCount);
 };
 
 // GRAPH STATISTICS

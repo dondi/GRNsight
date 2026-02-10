@@ -79,8 +79,23 @@ var numbersToLetters = {
     76: "BY",
 };
 
+const TWO_COL_SHEET_NAMES = [
+    "production_rates",
+    "degradation_rates",
+    "threshold_b",
+    "optimized_production_rates",
+    "optimized_threshold_b",
+];
+
+const OPTIONAL_TWO_COL_SHEET_NAMES = ["optimization_parameters", "optimization_diagnostics"];
+
+const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights", "network_weights"];
+
 module.exports = {
     numbersToLetters,
+    TWO_COL_SHEET_NAMES,
+    OPTIONAL_TWO_COL_SHEET_NAMES,
+    NETWORK_SHEET_NAMES,
 
     warnings: {
         extraneousDataWarning: function (sheetName, row) {

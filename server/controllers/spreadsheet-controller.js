@@ -329,6 +329,20 @@ var crossSheetInteractions = function (workbookFile) {
         }
     });
 
+    const validSheetNames = [
+        ...constants.TWO_COL_SHEET_NAMES,
+        ...constants.NETWORK_SHEET_NAMES,
+        ...constants.OPTIONAL_TWO_COL_SHEET_NAMES,
+    ];
+
+    workbookFile.forEach(function (sheet) {
+        const isRecognizedSheet =
+            validSheetNames.includes(sheet.name) || isExpressionSheet(sheet.name);
+        if (!isRecognizedSheet) {
+            addWarning(workbook, constants.warnings.unrecognizedSheetWarning(sheet.name));
+        }
+    });
+
     // Integrate the desired properties from the other objects.
     workbook.network = networks.network;
     workbook.networkOptimizedWeights = networks.networkOptimizedWeights;
