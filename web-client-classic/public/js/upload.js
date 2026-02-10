@@ -104,14 +104,12 @@ export const upload = function () {
             mode = "PPI";
         }
         if (mode !== null && genes !== null && edges !== null && type !== null) {
-            filename =
-                `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
         }
-
         if (source) {
-            filename += "_" + source;
+            filename = `${filename}_${source}`;
         }
-        return filename + "." + extension;
+        return `${filename}.${extension}`;
     };
 
     const download = (workbook, route, extension, sheetType) => {
@@ -607,7 +605,6 @@ export const upload = function () {
             "degradation_rates",
             "threshold_b",
         ];
-        //COME BACK TO THIS
         let networks = [
             [isDataValid(grnState.workbook.network), "network"],
             [isDataValid(grnState.workbook.networkOptimizedWeights), "network_optimized_weights"],
