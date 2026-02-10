@@ -365,6 +365,16 @@ var noWarnings = function (input) {
     assert.equal(0, workbook.warnings.length);
 };
 
+const noWarningsForAdditionalSheet = function (input, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.equal(0, workbook.twoColumnSheets[sheetName].warnings.length);
+};
+
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -465,6 +475,30 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
     });
 
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
+};
+
+var unrecognizedSheetWarning = function (input, frequency) {
+    const sheet = xlsx.parse(input);
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+    const warnings = workbook.warnings || [];
+    const unrecognizedSheetWarningCount = warnings.filter(function (x) {
+        return x.warningCode === "UNRECOGNIZED_SHEET";
+    }).length;
+
+    assert.equal(frequency, unrecognizedSheetWarningCount);
+};
+
+var missingGenesInTwoColumnSheetsWarning = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+    const workbook = parseAdditionalSheet(sheet, genes);
+    const warnings = workbook.twoColumnSheets[sheetName].warnings || [];
+    const missingGenesInTwoColumnSheetsWarningCount = warnings.filter(function (x) {
+        return x.warningCode === `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    }).length;
+
+    assert.equal(frequency, missingGenesInTwoColumnSheetsWarningCount);
 };
 
 // GRAPH STATISTICS
@@ -835,6 +869,9 @@ exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
+exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
+exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
+exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
