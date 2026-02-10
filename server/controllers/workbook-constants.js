@@ -337,6 +337,15 @@ module.exports = {
                     `The missing genes are: ${missingGenes}. Please ensure that all genes in the network are included in the sheet.`,
             };
         },
+
+        missingAllValuesForGenes: function (sheetName, genesMissingValue) {
+            return {
+                warningCode: `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription:
+                    `GRNsight has detected that the imported workbook is missing all values in the ${sheetName} sheet. ` +
+                    `The genes with the missing values are: ${genesMissingValue}. Please ensure that all genes in the workbook have a value.`,
+            };
+        },
     },
 
     errors: {

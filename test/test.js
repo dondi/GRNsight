@@ -103,6 +103,20 @@ var missingValueError = function (input, frequency) {
     }
 };
 
+const missingAllValuesForGenes = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.equal(frequency, workbook.warnings.length());
+    assert.equal(
+        `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        workbook.warnings[0].warningCode
+    );
+};
+
 var missingNetworkError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -871,6 +885,7 @@ exports.invalidMSEDataWarning = invalidMSEDataWarning;
 exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
 exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
 exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
+exports.missingAllValuesForGenes = missingAllValuesForGenes;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;

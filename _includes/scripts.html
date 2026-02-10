@@ -1,0 +1,13 @@
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="{{ site.baseurl }}/assets/js/main.js"></script>
+        <!-- Disabled while Google Analytics is broken. Reinstate in a script tag when ready.
+        src="{{ site.baseurl }}/assets/js/ga-report.js"
+        -->
+        <script src="{{ site.baseurl }}/assets/js/iframeResizer.min.js"></script>
+    {% if page.title == 'Home' %}
+        <script src="https://grnsight.lmucs.org/client/js/iframe-coordination.js"></script>
+    {% endif %}
+    {% if page.title == 'Beta' %}
+        <script src="https://grnsight.lmucs.org/beta/client/js/iframe-coordination.js"></script>
+    {% endif %}

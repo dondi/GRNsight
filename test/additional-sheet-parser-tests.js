@@ -273,6 +273,26 @@ describe("additional-sheet-parser", function () {
             );
         });
 
+        it("should return missingAllValuesForGenes when all of the values of genes are missing", function () {
+            test.missingAllValuesForGenes(
+                "test-files/additional-sheet-test-files/missing-all-deg-rate-values.xlsx",
+                1,
+                "degradation_rates"
+            );
+
+            test.missingAllValuesForGenes(
+                "test-files/additional-sheet-test-files/missing-all-prod-rate-values.xlsx",
+                1,
+                "production_rates"
+            );
+
+            test.missingAllValuesForGenes(
+                "test-files/additional-sheet-test-files/missing-all-threshold_b-values.xlsx",
+                1,
+                "threshold_b"
+            );
+        });
+
         it("should return missingGenesInTwoColumnSheetsWarning when sheets are present and not empty but missing some genes and values", function () {
             test.missingGenesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-first-gene-and-deg-rate-value.xlsx",

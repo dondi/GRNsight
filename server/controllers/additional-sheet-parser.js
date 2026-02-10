@@ -87,7 +87,7 @@ const TWO_COL_SHEET_NAMES = [
 
 const validGeneName = (output, sheetName, gene, row) => {
     var maxGeneLength = 12;
-    var regex = /[^a-z0-9\_\-]/gi;
+    var regex = /[^a-z0-9_\-]/gi;
     if (typeof gene !== "string") {
         addError(output, constants.errors.invalidGeneTypeError(sheetName, gene, row));
         return false;
@@ -354,12 +354,14 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         warnings: [],
     };
 
-    if (sheet.data.length == 0) {
+    if (sheet.data.length === 0) {
         return output;
     }
 
     let currentGene;
     let currentValue;
+
+    const genesMissingValue = [];
 
     // check to see if the genes are strings and the values are numbers
 
@@ -399,21 +401,38 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             currentValue = sheet.data[row][1];
 
             if (validGeneName(output, sheet.name, currentGene, row + 1)) {
-                if (typeof currentValue === "number") {
-                    output.data[currentGene] = currentValue;
+                if (!currentValue) {
+                    genesMissingValue.push(currentGene);
+                    output.data[currentGene] = null;
                 } else {
-                    addError(
-                        output,
-                        constants.errors.invalidValueError(
-                            sheet.name,
-                            currentValue,
-                            row + 1,
-                            getSheetHeader(sheet.name, 1, row)
-                        )
-                    );
+                    if (typeof currentValue === "number") {
+                        output.data[currentGene] = currentValue;
+                    } else {
+                        if (typeof currentValue === "number") {
+                            output.data[currentGene] = currentValue;
+                            genesInSheet.push(currentGene);
+                        } else {
+                            addError(
+                                output,
+                                constants.errors.invalidValueError(
+                                    sheet.name,
+                                    currentValue,
+                                    row + 1,
+                                    getSheetHeader(sheet.name, 1, row)
+                                )
+                            );
+                        }
+                    }
                 }
             }
         }
+    }
+
+    if (genesMissingValue === genesInNetwork) {
+        addWarning(
+            output,
+            constants.warnings.missingAllValuesForGenes(sheet.name, genesMissingValue)
+        );
     }
 
     // Check for missing genes in sheet
