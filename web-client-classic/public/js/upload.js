@@ -105,7 +105,7 @@ export const upload = function () {
         }
         if (mode !== null && genes !== null && edges !== null && type !== null) {
             filename =
-                mode.toUpperCase() + "_" + genes + "-genes" + "_" + edges + "-edges" + "_" + type;
+                `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
         }
 
         if (source) {
