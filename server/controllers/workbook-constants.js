@@ -180,8 +180,8 @@ module.exports = {
             return {
                 warningCode: "MISLABELED_NETWORK_CELL_A1",
                 errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-                Replace the incorrect label with \'cols regulators/ rows targets\' or \'cols 
-                protein1/ rows protein2'\ exactly.`,
+                Replace the incorrect label with \'cols regulators/rows targets\' or \' 
+                cols protein1/rows protein2'\ exactly.`,
             };
         },
 

@@ -42,7 +42,7 @@ module.exports = {
             errorDescription:
                 "GRNsight has detected that the 'network' sheet or the 'network_optimized_weights'" +
                 " sheet is improperly formattedPlease look over your exported workbook and ensure that network" +
-                " sheets have cell A1 as 'cols regulators/rows targets' or 'cols protein1/ rows protein2' exactly" +
+                " sheets have cell A1 as 'cols regulators/rows targets' or 'cols protein1/rows protein2' exactly" +
                 " and all gene are using the  naming conventions listed at:" +
                 " \nhttps://dondi.github.io/GRNsight/documentation.html.",
         },
