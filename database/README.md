@@ -201,7 +201,7 @@ pip3 install pandas requests intermine tzlocal psycopg2
 
 **Step 2: Download Expression Data**
 
-Download the _"Current Database"_ folder from Box located in `[GRNsight > GRNsight Expression > Current Database](https://lmu.box.com/s/n3vebjp6fcrjlinsq5qmmuer9qi4sfke)` to your newly created `source-files` folder. Your the path should look like this: GRNsight > database > expression-database > source-files > Current Database > [the actual csv files are here!]
+Download the _"Current Database"_ folder from Box located in [`GRNsight > GRNsight Expression > Current Database`](https://lmu.box.com/s/n3vebjp6fcrjlinsq5qmmuer9qi4sfke) to your newly created `source-files` folder. Your the path should look like this: GRNsight > database > expression-database > source-files > Current Database > [the actual csv files are here!]
 
 **Step 3: Run the Pre-Processing script**
 
