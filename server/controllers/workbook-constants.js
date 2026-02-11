@@ -1,3 +1,4 @@
+const { CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
 // Currently only going to number 76 because currently the workbook errors out at 75+ genes.
 var numbersToLetters = {
     0: "A",
@@ -180,8 +181,7 @@ module.exports = {
             return {
                 warningCode: "MISLABELED_NETWORK_CELL_A1",
                 errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-                Replace the incorrect label with \'cols regulators/rows targets\' or \' 
-                cols protein1/rows protein2'\ exactly.`,
+                Replace the incorrect label with \'${CELL_A1_GRN}\' or \'${CELL_A1_PPI}'\ exactly.`,
             };
         },
 
