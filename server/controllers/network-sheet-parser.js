@@ -322,8 +322,8 @@ var parseNetworkSheet = function (sheet, network) {
 
 /*
  * This method detect the network type of the workbook file either grn or protein-protein-physical-interactions
- * If cellA1 = "cols regulators/ row targets" -> workbookType = grn
- * If cellA1 = "cols protein1/ rows protein2" -> workbookType = "protein-protein-physical-interaction"
+ * If cellA1 = "cols regulators/rows targets" -> workbookType = grn
+ * If cellA1 = "cols protein1/rows protein2" -> workbookType = "protein-protein-physical-interaction"
  * else undefined
  */
 
