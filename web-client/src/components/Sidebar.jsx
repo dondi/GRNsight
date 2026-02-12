@@ -21,6 +21,7 @@ import {
   PPI_DEMO_NAME,
 } from "../helpers/constants";
 import "../App.css";
+import DottedLine from "./helper-components/DottedLine";
 
 export default function Sidebar({}) {
   const fileInputRef = useRef();
@@ -129,32 +130,12 @@ export default function Sidebar({}) {
               </Button>
             </Box>
           </Box>
-          <Box
-            margin={{ vertical: "9px" }}
-            width="95%"
-            alignSelf="center"
-            border={{
-              color: "#bbb",
-              side: "top",
-              style: "dotted",
-              size: "1px",
-            }}
-          ></Box>
+          <DottedLine width="95%" />
           <Button margin={{ left: "small" }} justify="between">
             <Refresh />
             <Text>Reload</Text>
           </Button>
-          <Box
-            margin={{ vertical: "9px" }}
-            width="95%"
-            alignSelf="center"
-            border={{
-              color: "#bbb",
-              side: "top",
-              style: "dotted",
-              size: "1px",
-            }}
-          ></Box>
+          <DottedLine width="95%" />
           <Text weight="bold" size="13px">
             Network Mode:
           </Text>
