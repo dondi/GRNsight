@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar";
 import Graph from "./components/Graph";
 import Sidebar from "./components/Sidebar";
 import { useState, createContext } from "react";
-import { Grommet, Collapsible, Button } from "grommet";
+import { Grommet, Collapsible, Button, Text } from "grommet";
 import { LinkNext } from "grommet-icons";
 import { theme } from "./helpers/theme";
 import "./App.css";
@@ -76,10 +76,18 @@ function App() {
     zoomPercent,
     setZoomPercent,
   };
-
   return (
     <GrnStateContext.Provider value={grnStateValue}>
       <Grommet theme={theme} background={{ color: "white", dark: false }} full>
+        <div id="disclaimer">
+          <span style={{ fontWeight: "bold" }}>Disclaimer:</span>
+          <span>
+            {" "}
+            This version of GRNsight is currently under development and is unstable. For the most
+            stable version, please go to the{" "}
+            <a href="https://dondi.github.io/GRNsight/">GRNsight home page</a>.
+          </span>
+        </div>
         <Navbar />
         <div id="sidebar-graph-container">
           <div id="sidebar-container">

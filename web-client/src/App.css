@@ -13,6 +13,17 @@ body {
   transition-timing-function: none;
 }
 
+#disclaimer {
+  padding: 14px 5px;
+  font-family: "Georgia", serif;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+#disclaimer a {
+  color: #16693f;
+}
+
 .navbar {
   top: 1px;
   min-height: 50px;
@@ -178,6 +189,7 @@ button:hover {
   font-size: 14px;
   width: 225px;
   border: 1px solid #ccc;
+  margin-top: 5px;
   margin-left: 10px;
   padding: 5px;
 }
