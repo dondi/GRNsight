@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   base: "/GRNsight/react-thesis-4081/",
   define: {
-    __BUILD_DATE__: JSON.stringify(new Date().toISOString())
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
   },
   test: {
     environment: "jsdom", // use this so that have access to document, window, etc. for testing components
