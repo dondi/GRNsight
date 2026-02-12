@@ -71,7 +71,7 @@ export default function Sidebar({}) {
         </Box>
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }}>
           <Box className="panel-dropdown-container">
-            <Text weight="bold" size="small" height={1.42857143}>
+            <Text weight="bold" size="small">
               Network Source
             </Text>
             <Box className="network-source-section" fill={false}>
@@ -96,9 +96,7 @@ export default function Sidebar({}) {
                 onChange={({ option }) => setDemoValue(option)}
                 size="small"
               />
-              {/* TODO: remove browse message */}
               <Stack anchor="center" margin={{ vertical: "6px" }}>
-                {/* Do a border radius, access the div that contains this FileInput */}
                 <FileInput
                   className="file-input"
                   ref={fileInputRef}
@@ -122,7 +120,7 @@ export default function Sidebar({}) {
                   <FolderOpen />
                 </Box>
               </Stack>
-              <Button className="load-from-database">
+              <Button margin={{ bottom: "15px" }} className="load-from-database">
                 <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
                   <Database size="14px" />
                   <Text size="14px">Load from Database</Text>
@@ -131,14 +129,26 @@ export default function Sidebar({}) {
             </Box>
           </Box>
           <DottedLine width="95%" />
-          <Button margin={{ left: "small" }} justify="between">
-            <Refresh />
-            <Text>Reload</Text>
-          </Button>
+          <Box className="panel-dropdown-container">
+            <Button margin={{ top: "15px", bottom: "5px" }} justify="between">
+              <Box
+                pad={{ vertical: "6px", horizontal: "12px" }}
+                direction="row"
+                align="center"
+                justify="center"
+                gap="4px"
+              >
+                <Refresh size="14px" />
+                <Text>Reload</Text>
+              </Box>
+            </Button>
+          </Box>
           <DottedLine width="95%" />
-          <Text weight="bold" size="13px">
-            Network Mode:
-          </Text>
+          <Box margin={{ top: "10px" }}>
+            <Text weight="bold" size="13px">
+              Network Mode:
+            </Text>
+          </Box>
           <Box margin={{ bottom: "5px" }}>
             <Text className="italics" weight="bold" size="12px">
               {networkMode}
