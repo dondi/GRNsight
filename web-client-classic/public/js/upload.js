@@ -403,7 +403,13 @@ export const upload = function () {
             const isMissing = sheetData === null;
             const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
 
-            if (isMissing || isEmpty) {
+            // Check if all genes are available but missing values
+            const partialMissingCode = `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
+            const hasExistingWarning = finalExportSheets.warnings.some(
+                w => w.warningCode === partialMissingCode
+            );
+
+            if (isMissing || isEmpty || hasExistingWarning) {
                 const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
                 finalExportSheets.warnings.push(warnings[warningKey](isMissing));
 
