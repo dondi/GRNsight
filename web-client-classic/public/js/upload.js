@@ -89,13 +89,14 @@ export const upload = function () {
 
     var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+        var source = null;
 
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
         if (Object.keys(grnState.workbook.expression).length > 0) {
-            var source = $("input[name=expressionSource]:checked")[0].value;
+            source = $("input[name=expressionSource]:checked")[0].value;
             if (source === "userInput") {
                 source = "user-data";
             }
