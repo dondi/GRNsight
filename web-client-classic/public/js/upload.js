@@ -87,23 +87,39 @@ export const upload = function () {
         return result;
     };
 
-    var filenameWithExtension = function (suffix, extension) {
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+        var source = null;
+
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (suffix) {
-            filename = filename + "_" + suffix;
+        if (Object.keys(grnState.workbook.expression).length > 0) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "userInput") {
+                source = "user-data";
+            }
         }
-
-        return filename + "." + extension;
+        if (mode !== "grn") {
+            mode = "PPI";
+        }
+        if (mode !== null && genes !== null && edges !== null && type !== null) {
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+        if (source) {
+            filename = `${filename}_${source}`;
+        }
+        return `${filename}.${extension}`;
     };
 
     const download = (workbook, route, extension, sheetType) => {
         const workbookToExport = flattenWorkbook(workbook, sheetType);
-        const workbookFilename = filenameWithExtension(
-            sheetType !== workbook.sheetType ? sheetType : "",
+        var workbookFilename = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            sheetType,
             extension
         );
         workbookToExport.filename = workbookFilename;
@@ -480,10 +496,7 @@ export const upload = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
-                if (
-                    value.value === "network_weights" ||
-                    value.value === "network_optimized_weights"
-                ) {
+                if (value.value === "network_optimized_weights") {
                     return "weighted";
                 }
             }
