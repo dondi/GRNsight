@@ -357,8 +357,9 @@ module.exports = {
             return {
                 warningCode: `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
                 errorDescription:
-                    `GRNsight has detected that the imported workbook is missing all values in the ${sheetName} sheet. ` +
-                    `The genes with the missing values are: ${genesMissingValue}. Please ensure that all genes in the workbook have a value.`,
+                    `GRNsight has detected that there are missing values for ${sheetName.replace("_", " ")} rates in the imported workbook's ${sheetName} sheet. ` +
+                    `A degradation rate will need to be supplied to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
+                    `The genes with missing values are: ${genesMissingValue}.`,
             };
         },
     },

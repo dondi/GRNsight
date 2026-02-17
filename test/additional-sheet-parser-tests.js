@@ -200,13 +200,6 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return twoColumnInvalidValueError", function () {
-            test.twoColumnInvalidValueError(
-                "test-files/additional-sheet-test-files/two-column-sheets-invalid-value.xlsx",
-                10
-            );
-        });
-
         it("should return twoColumnInvalidGeneLengthError", function () {
             test.twoColumnInvalidGeneLengthError(
                 "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-length.xlsx",

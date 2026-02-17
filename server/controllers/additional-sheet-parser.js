@@ -399,9 +399,9 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             currentValue = sheet.data[row][1];
 
             if (validGeneName(output, sheet.name, currentGene, row + 1)) {
-                if (!currentValue) {
+                if (currentValue === null || currentValue === undefined) {
                     genesMissingValue.push(currentGene);
-                    output.data[currentGene] = null;
+                    output.data[currentGene] = undefined;
                 } else {
                     if (typeof currentValue === "number") {
                         output.data[currentGene] = currentValue;

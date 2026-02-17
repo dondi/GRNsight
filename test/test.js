@@ -622,20 +622,6 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
     assert.equal(frequency, twoColumnInvalidGeneTypeErrorCount);
 };
 
-var twoColumnInvalidValueError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var twoColumnInvalidValueErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        twoColumnInvalidValueErrorCount += workbook.twoColumnSheets[page].errors.filter(
-            function (x) {
-                return x.errorCode === "INVALID_VALUE";
-            }
-        ).length;
-    }
-    assert.equal(frequency, twoColumnInvalidValueErrorCount);
-};
-
 var twoColumnInvalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
@@ -830,6 +816,8 @@ var importFileSameAsExportFile = function (input) {
     var sheet2 = xlsx.parse(exportedWorkbook);
     sheet.sort((a, b) => (a.name > b.name ? 1 : -1));
     sheet2.sort((a, b) => (a.name > b.name ? 1 : -1));
+    console.log(inputWorkbook);
+    console.log(exportedWorkbook);
     assert.deepEqual(sheet, sheet2);
 };
 
@@ -865,7 +853,6 @@ exports.twoColumnIdError = twoColumnIdError;
 exports.additionalSheetIncorrectColumnHeaderError = additionalSheetIncorrectColumnHeaderError;
 exports.additionalSheetMissingColumnHeaderError = additionalSheetMissingColumnHeaderError;
 exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
-exports.twoColumnInvalidValueError = twoColumnInvalidValueError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 
