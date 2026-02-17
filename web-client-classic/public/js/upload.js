@@ -439,24 +439,14 @@ export const upload = function () {
             );
         }
 
-        const exportWorkbookView = {
-            genes: grnState.workbook.genes,
-            twoColumnSheets: finalExportSheets.two_column_sheets,
-        };
-
-        const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
-            exportWorkbookView,
+        const uniqueMissingGenesWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+            grnState.workbook.genes,
+            finalExportSheets.two_column_sheets,
+            chosenTwoColumnSheets,
             warnings,
-            chosenTwoColumnSheets
+            finalExportSheets.warnings
         );
-
-        const existingDescriptions = new Set(
-            finalExportSheets.warnings.map(w => w.errorDescription)
-        );
-        const uniqueWarnings = exportWarnings.filter(
-            w => !existingDescriptions.has(w.errorDescription)
-        );
-        finalExportSheets.warnings.push(...uniqueWarnings);
+        finalExportSheets.warnings.push(...uniqueMissingGenesWarnings);
 
         return finalExportSheets;
     };
