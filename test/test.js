@@ -816,8 +816,6 @@ var importFileSameAsExportFile = function (input) {
     var sheet2 = xlsx.parse(exportedWorkbook);
     sheet.sort((a, b) => (a.name > b.name ? 1 : -1));
     sheet2.sort((a, b) => (a.name > b.name ? 1 : -1));
-    console.log(inputWorkbook);
-    console.log(exportedWorkbook);
     assert.deepEqual(sheet, sheet2);
 };
 
