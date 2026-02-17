@@ -2,7 +2,7 @@
 
 Here are the instructions how to set up the database for GRNsight.
 
-## Setting up a local postgres GRNsight Database
+## Setting up a local PostgreSQL GRNsight Database
 
 ### Installing PostgreSQL on your computer
 
@@ -66,7 +66,7 @@ Here are the instructions how to set up the database for GRNsight.
     ```
 
     If you start the PostgreSQL with Homebrew, the first line you can see is psql (<version> (Homebrew))
-   
+
     <img width="310" height="49" alt="image-1" src="https://github.com/user-attachments/assets/cfa7386e-46db-4bde-9a4e-3c16af1fbcb6" />
 
 
@@ -78,7 +78,7 @@ Here are the instructions how to set up the database for GRNsight.
 
     - Starting the server fails with an error
     - Stopping the server reports that no server is running
-    
+
     This usually means PostgreSQL is already running in the background and the port is in use.
 
     **Fix**:
@@ -111,7 +111,7 @@ Here are the instructions how to set up the database for GRNsight.
         If PostgreSQL is running, this command will return the **PID** of the process using the port.
 
     4. Terminate the conflicting process (if needed)
-    
+
         If the port is being held by an unwanted or stale PostgreSQL process, terminate it using:
 
         ```
@@ -127,7 +127,15 @@ Here are the instructions how to set up the database for GRNsight.
 - Download PostgreSQL from https://www.postgresql.org/download/windows/
 - Follow the installer instructions and **save the password** when prompted — this is the password for the default `postgres` user.
 
-2. **Initialize the Database**
+
+2. **Ensure that you can invoke Postgres commands on the command line**
+
+- Depending on the installer, this may have already been done for you:
+- If not, search "Edit the system environment variables" from the Windows taskbar. From there open Environment Variables and edit the Path variable.
+    - Within this variable use New to add `C:\Program Files\PostgresSQL\{postgres_version}\bin` and `C:\Program Files\PostgresSQL\{postgres_version}\lib`
+
+
+3. **Initialize the Database**
 
 - The installer will typically initialize a default cluster automatically.
 - If not, open a terminal (Command Prompt or PowerShell) and run:
@@ -138,7 +146,8 @@ Here are the instructions how to set up the database for GRNsight.
 
 - Replace `"C:\path\to\cluster"` with your desired folder for the database (you don't need to create a folder, the command will create the folder for you, just create the name).
 
-3. **Start and Stop the Server**
+
+4. **Start and Stop the Server**
 
 - Start PostgreSQL via terminal:
 
@@ -152,7 +161,7 @@ Here are the instructions how to set up the database for GRNsight.
     pg_ctl stop -D "C:\path\to\cluster"
     ```
 
-4. Verify Installation
+5. **Verify Installation**
 
 - Open terminal and run
 
@@ -170,7 +179,7 @@ Here are the instructions how to set up the database for GRNsight.
 
 #### 1. Set Up Database Schema
 
-For detailed instructions on setting up the database schema, refer to the `README.md` file located in the `schema` folder.
+For detailed instructions on setting up the database schema, refer to the `README.md` file located in the `schema` folder [here](https://github.com/dondi/GRNsight/blob/main/database/schema/README.md).
 
 #### 2. Install Python Dependencies
 
@@ -192,7 +201,7 @@ pip3 install pandas requests intermine tzlocal psycopg2
 
 **Step 2: Download Expression Data**
 
-Download the _"Current Database"_ folder from Box located in `GRNsight > GRNsight Expression > Current Database` to your newly created `source-files` folder. Your the path should look like this: GRNsight > database > expression-database > source-files > Current Database > [the actual csv files are here!]
+Download the _"Current Database"_ folder from Box located in [`GRNsight > GRNsight Expression > Current Database`](https://lmu.box.com/s/n3vebjp6fcrjlinsq5qmmuer9qi4sfke) to your newly created `source-files` folder. Your the path should look like this: GRNsight > database > expression-database > source-files > Current Database > [the actual csv files are here!]
 
 **Step 3: Run the Pre-Processing script**
 
@@ -273,7 +282,7 @@ python3 main.py --network all --db_url postgresql://localhost/postgres
 
     If you encounter an error similar to the image below when running `main.py`, you may need to manually edit the intermine library.
     ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
-    
+
     This typically happens due to changes in Python’s standard library imports.
 
     **Fix**:
@@ -281,7 +290,7 @@ python3 main.py --network all --db_url postgresql://localhost/postgres
     1. Navigate to the `intermine/webservice.py` file.
 
         If you are using a virtual environment, it is usually located at:
-        
+
         ```
         <path-to-venv>/lib/<python-version>/site-packages/intermine/webservice.py
         ```
