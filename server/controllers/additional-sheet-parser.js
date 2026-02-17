@@ -77,14 +77,6 @@ const addError = (output, message) => {
     }
 };
 
-const TWO_COL_SHEET_NAMES = [
-    "production_rates",
-    "degradation_rates",
-    "threshold_b",
-    "optimized_production_rates",
-    "optimized_threshold_b",
-];
-
 const validGeneName = (output, sheetName, gene, row) => {
     var maxGeneLength = 12;
     var regex = /[^a-z0-9_\-]/gi;
