@@ -127,8 +127,6 @@ export const setupLoadAndImportHandlers = grnState => {
         // The presence of formData is taken to indicate a POST.
         getWorkbookFromForm(formData, uploadRoute)
             .done((workbook, textStatus, jqXhr) => {
-                console.log("Workbook loaded via", uploadRoute);
-                console.log("Workbook after load:", workbook);
                 grnState.name = name || jqXhr.getResponseHeader("X-GRNsight-Filename");
                 if (demoFiles.indexOf(name) > -1) {
                     switch (name) {
@@ -159,11 +157,9 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
 
-                console.log("Workbook warnings:", grnState.workbook.warnings);
                 if (grnState.workbook.warnings && grnState.workbook.warnings.length > 0) {
                     displayExportWarnings(workbook.warnings);
                 }
-                console.log("Loaded workbook:", workbook);
 
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
