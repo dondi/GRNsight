@@ -375,15 +375,6 @@ export const upload = function () {
                     ) {
                         finalExportSheets.two_column_sheets[sheet] =
                             grnState.workbook.two_column_sheets[sheet];
-                    } else if (sheet === "threshold_b") {
-                        finalExportSheets.two_column_sheets[sheet] = {
-                            data: {},
-                            errors: [],
-                            warnings: [],
-                        };
-                        for (let g of grnState.workbook.genes) {
-                            finalExportSheets.two_column_sheets[sheet].data[g.name] = 0;
-                        }
                     } else {
                         finalExportSheets.two_column_sheets[sheet] = null;
                     }
@@ -398,6 +389,7 @@ export const upload = function () {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
+            threshold_b: "ThresholdB",
         };
 
         const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet =>
@@ -408,10 +400,13 @@ export const upload = function () {
 
         for (let sheet of chosenTwoColumnSheets) {
             const sheetData = finalExportSheets.two_column_sheets[sheet];
-            if (
-                sheetData === null ||
-                (sheetData && Object.keys(sheetData.data || {}).length === 0)
-            ) {
+            const isMissing = sheetData === null;
+            const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
+
+            if (isMissing || isEmpty) {
+                const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
+                finalExportSheets.warnings.push(warnings[warningKey](isMissing));
+
                 missingTwoColumnSheets.push(sheet);
             } else {
                 finalExportSheets.two_column_sheets[sheet] = sheetData;
