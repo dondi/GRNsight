@@ -66,7 +66,7 @@ Here are the instructions how to set up the database for GRNsight.
     ```
 
     If you start the PostgreSQL with Homebrew, the first line you can see is psql (<version> (Homebrew))
-   
+
     <img width="310" height="49" alt="image-1" src="https://github.com/user-attachments/assets/cfa7386e-46db-4bde-9a4e-3c16af1fbcb6" />
 
 
@@ -78,7 +78,7 @@ Here are the instructions how to set up the database for GRNsight.
 
     - Starting the server fails with an error
     - Stopping the server reports that no server is running
-    
+
     This usually means PostgreSQL is already running in the background and the port is in use.
 
     **Fix**:
@@ -111,7 +111,7 @@ Here are the instructions how to set up the database for GRNsight.
         If PostgreSQL is running, this command will return the **PID** of the process using the port.
 
     4. Terminate the conflicting process (if needed)
-    
+
         If the port is being held by an unwanted or stale PostgreSQL process, terminate it using:
 
         ```
@@ -131,7 +131,7 @@ Here are the instructions how to set up the database for GRNsight.
 2. **Ensure that you can invoke Postgres commands on the command line**
 
 - Depending on the installer, this may have already been done for you:
-- If not, search "Edit the system environment variables" from the Windows taskbar. From there open Environment Variables and edit the Path variable. 
+- If not, search "Edit the system environment variables" from the Windows taskbar. From there open Environment Variables and edit the Path variable.
     - Within this variable use New to add `C:\Program Files\PostgresSQL\{postgres_version}\bin` and `C:\Program Files\PostgresSQL\{postgres_version}\lib`
 
 
@@ -282,7 +282,7 @@ python3 main.py --network all --db_url postgresql://localhost/postgres
 
     If you encounter an error similar to the image below when running `main.py`, you may need to manually edit the intermine library.
     ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
-    
+
     This typically happens due to changes in Python’s standard library imports.
 
     **Fix**:
@@ -290,7 +290,7 @@ python3 main.py --network all --db_url postgresql://localhost/postgres
     1. Navigate to the `intermine/webservice.py` file.
 
         If you are using a virtual environment, it is usually located at:
-        
+
         ```
         <path-to-venv>/lib/<python-version>/site-packages/intermine/webservice.py
         ```
