@@ -3992,6 +3992,7 @@ var demoWorkbook4 = function (path, res, app) {
                     YAP6: 0.158463148,
                 },
             },
+
             optimized_production_rates: {
                 data: {
                     ABF1: 0.442886576,
@@ -4040,8 +4041,10 @@ var demoWorkbook4 = function (path, res, app) {
                     SKN7: 0,
                     YAP1: 1.514573422,
                     YAP6: 0.352754595,
+                },
+            },    
         },
-        expression: {
+            expression: {
             wt_log2_expression: {
                 errors: [],
                 warnings: [],
