@@ -4062,7 +4062,7 @@ var demoWorkbook4 = function (path, res, app) {
                     ],
                 },
             },
-            concentration_sigmas: {
+            wt_sigmas: {
                 errors: [],
                 warnings: [],
                 timePoints: [0, 10, 30, 120],
