@@ -5,19 +5,12 @@ import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/ap
 import ScaleAndScroll from "./ScaleAndScroll";
 import {
   BOUNDARY_MARGIN,
-  ZOOM_DISPLAY_MINIMUM_VALUE,
-  ZOOM_DISPLAY_MAXIMUM_VALUE,
-  ZOOM_DISPLAY_MIDDLE,
   ZOOM_ADAPTIVE_MAX_SCALE,
   MINIMUM_NODE_WIDTH,
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
-  MIN_SCALE,
-  MIDDLE_SCALE,
-  EDGE_RED,
-  EDGE_BLACK,
-  EDGE_BLUE,
+  MIN_SCALE
 } from "../helpers/constants";
 import {
   getNodeWidth,

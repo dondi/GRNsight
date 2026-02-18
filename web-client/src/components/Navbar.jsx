@@ -43,6 +43,14 @@ export default function Navbar({}) {
     setViewSize,
   } = useContext(GrnStateContext);
 
+  const zoomInputValidator = value => {
+    return valueValidator(ZOOM_DISPLAY_MINIMUM, ZOOM_DISPLAY_MAXIMUM, value);
+  };
+
+  const valueValidator = (min, max, value) => {
+    return Math.min(max, Math.max(min, value));
+  };
+
   return (
     // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
     // TODO: need to set max-width of nav? or maybe it's okay for now
