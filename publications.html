@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Publications
-modified: 2/13/2026
-description: Papers, talks, and posters about GRNsight, a web application and service for visualizing models of small- to medium-scale gene regulatory networks.
+modified: 2/19/2026
+description: Papers, talks, and posters about GRNsight, a web application and service for visualizing models of small-scale gene regulatory and protein-protein interaction networks.
 ---
             <p id="pageTitle">Publications</p>
 
@@ -82,6 +82,17 @@ description: Papers, talks, and posters about GRNsight, a web application and se
                                     <b>Kam D. Dahlquist</b><br><br>
                                 </p>
 
+                                <p class="abstract">
+                                    <b>12<sub>th</sub> Annual Loyola Marymount University Undergraduate Research Conference (virtual)</b><br><br>
+                                    April 2020<br>
+                                    An Expression Database for Node Coloring and Expansion of Species for Gene Pages for GRNsight<br>
+                                    <b>Alexia M. Filler, Kevin B. Patterson</b>, John David N. Dionisio, Kam D. Dahlquist,<br><br>
+
+                                    Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRNs). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN, can mathematically model GRNs. Using a GRNmap output workbook, GRNsight automatically visualizes the network as a graph. GRNsight uses the model output to color-code the edges based on the activation and repression relationships between the transcription factors and colors the nodes based on time course gene expression data. We have added a feature to store expression data in a database, so that users of GRNsight can view and interact with already-existing expression data pulled from the Dahlquist lab and other publicly available datasets. The database is hosted by Amazon Web Services (AWS) Relational Database Service (RDS) and uses a PostgreSQL engine, from which GRNsight performs dynamic queries in response to user requests. Additionally, we have expanded the availability of gene-specific data to a greater number of species. The feature allows user to specify the species of interest either based on a GRNmap workbook or direct user input, and save it for the remainder of the user's session. With the species indicated, the gene page can query the appropriate databases and return information relevant only to species-specific genes. GRNsight is available at <a href="https://dondi.github.io/GRNsight/">https://dondi.github.io/GRNsight/</a><br>
+
+                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Filler_Patterson_LMU-Symposium_20200418_talk.pdf" target="_blank">here</a> to view the slides. 
+                                </p>
+                                        
                                 <p class="abstract">
                                     <b>Department of Biology, Loyola Marymount University, Los Angeles, California</b><br><br>
                                     September 2018<br>
