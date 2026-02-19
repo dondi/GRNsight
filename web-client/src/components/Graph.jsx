@@ -50,6 +50,7 @@ export default function Graph() {
     setNetworkMode,
     grayThreshold,
     zoomPercent,
+    setZoomPercent,
   } = useContext(GrnStateContext);
 
   // Load workbook data

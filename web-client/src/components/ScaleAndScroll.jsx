@@ -111,7 +111,7 @@ export default function ScaleAndScroll() {
                 type="range"
                 min={ZOOM_SLIDER_MIN}
                 max={ZOOM_SLIDER_MAX}
-                value={zoomSliderValue ? zoomSliderValue : ZOOM_SLIDER_MIDDLE}
+                value={zoomSliderValue ?? ZOOM_SLIDER_MIDDLE}
                 onChange={handleSliderChange}
                 step="0.25"
                 disabled={
