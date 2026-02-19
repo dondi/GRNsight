@@ -1,8 +1,16 @@
 import { useContext } from "react";
-import { Nav, DropButton, Box, Text, Button, Tip, TextInput, Menu, Select, Drop } from "grommet";
-import { Refresh, Checkmark, FolderOpen, Edge, CaretRightFill } from "grommet-icons";
+import { Nav, DropButton, Box, Text, Button, TextInput, Select } from "grommet";
+import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
-import { DEMO_TYPES, LIGHT_GREEN, LIGHT_GRAY, MEDIUM_GRAY, DARK_GRAY } from "../helpers/constants";
+import {
+  DEMO_TYPES,
+  LIGHT_GREEN,
+  LIGHT_GRAY,
+  MEDIUM_GRAY,
+  DARK_GRAY,
+  ZOOM_DISPLAY_MINIMUM,
+  ZOOM_DISPLAY_MAXIMUM,
+} from "../helpers/constants";
 import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import "../App.css";
@@ -355,7 +363,10 @@ export default function Navbar({}) {
 
             <DottedLine />
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text>Zoom (25 - 200%)</Text> <TextInput />
+              <Text>
+                Zoom ({ZOOM_DISPLAY_MINIMUM} - {{ ZOOM_DISPLAY_MAXIMUM }})
+              </Text>{" "}
+              <TextInput />
             </Box>
           </div>
         }

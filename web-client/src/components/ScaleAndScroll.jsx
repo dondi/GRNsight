@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import { GrnStateContext } from "../App";
 import {
   ZOOM_DISPLAY_MINIMUM,
@@ -19,18 +19,26 @@ export default function ScaleAndScroll() {
   const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
     d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
 
-  const zoomScaleSliderLeft = createZoomScale(
-    ZOOM_SLIDER_MIN,
-    ZOOM_SLIDER_MIDDLE,
-    ZOOM_DISPLAY_MINIMUM,
-    ZOOM_DISPLAY_MIDDLE
+  const zoomScaleSliderLeft = useMemo(
+    () =>
+      createZoomScale(
+        ZOOM_SLIDER_MIN,
+        ZOOM_SLIDER_MIDDLE,
+        ZOOM_DISPLAY_MINIMUM,
+        ZOOM_DISPLAY_MIDDLE
+      ),
+    []
   );
 
-  const zoomScaleSliderRight = createZoomScale(
-    ZOOM_SLIDER_MIDDLE,
-    ZOOM_SLIDER_MAX,
-    ZOOM_DISPLAY_MIDDLE,
-    ZOOM_DISPLAY_MAXIMUM
+  const zoomScaleSliderRight = useMemo(
+    () =>
+      createZoomScale(
+        ZOOM_SLIDER_MIDDLE,
+        ZOOM_SLIDER_MAX,
+        ZOOM_DISPLAY_MIDDLE,
+        ZOOM_DISPLAY_MAXIMUM
+      ),
+    []
   );
 
   const handleSliderChange = e => {
