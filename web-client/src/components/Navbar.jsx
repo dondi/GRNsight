@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Nav, DropButton, Box, Text, Button, TextInput, Select } from "grommet";
 import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
@@ -10,12 +10,14 @@ import {
   DARK_GRAY,
   ZOOM_DISPLAY_MINIMUM,
   ZOOM_DISPLAY_MAXIMUM,
+  ZOOM_DISPLAY_MIDDLE,
 } from "../helpers/constants";
 import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import "../App.css";
 
 export default function Navbar({}) {
+  const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
   const {
     networkMode,
     setNetworkMode,
@@ -49,14 +51,21 @@ export default function Navbar({}) {
     setDemoValue,
     viewSize,
     setViewSize,
+    zoomPercent,
+    setZoomPercent,
   } = useContext(GrnStateContext);
+
+  const valueValidator = (min, max, value) => {
+    return Math.min(max, Math.max(min, value));
+  };
 
   const zoomInputValidator = value => {
     return valueValidator(ZOOM_DISPLAY_MINIMUM, ZOOM_DISPLAY_MAXIMUM, value);
   };
 
-  const valueValidator = (min, max, value) => {
-    return Math.min(max, Math.max(min, value));
+  const handleZoomInputChange = event => {
+    setZoomPercent(zoomInputValidator(event.target.value));
+    setZoomTextInput(event.target.value);
   };
 
   return (
@@ -364,9 +373,9 @@ export default function Navbar({}) {
             <DottedLine />
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>
-                Zoom ({ZOOM_DISPLAY_MINIMUM} - {{ ZOOM_DISPLAY_MAXIMUM }})
+                Zoom ({ZOOM_DISPLAY_MINIMUM} - {ZOOM_DISPLAY_MAXIMUM})
               </Text>{" "}
-              <TextInput />
+              <TextInput value={zoomTextInput} onChange={event => handleZoomInputChange(event)} />
             </Box>
           </div>
         }
