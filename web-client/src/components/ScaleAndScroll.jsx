@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { useContext, useState, useMemo } from "react";
+import { useContext, useState, useMemo, useRef } from "react";
 import { GrnStateContext } from "../App";
 import {
   ZOOM_DISPLAY_MINIMUM,
@@ -13,6 +13,7 @@ import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constan
 import "../App.css";
 
 export default function ScaleAndScroll() {
+  const frame = useRef(null);
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode } = useContext(GrnStateContext);
   // Supports non-linear zoom scale so that 100% in the middle of slider
@@ -48,7 +49,12 @@ export default function ScaleAndScroll() {
     const finalDisplay = Math.floor(
       (sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)(sliderInput)
     );
-    setZoomPercent(finalDisplay);
+
+    if (frame.current) cancelAnimationFrame(frame.current); // Cancel any pending animation frame to prevent queuing up too many frames
+
+    frame.current = requestAnimationFrame(() => {
+      setZoomPercent(finalDisplay);
+    });
   };
 
   return (
