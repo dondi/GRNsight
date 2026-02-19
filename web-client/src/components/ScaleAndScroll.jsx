@@ -15,7 +15,7 @@ import "../App.css";
 export default function ScaleAndScroll() {
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode } = useContext(GrnStateContext);
-  // Makes zoom scale non-linear so that 100% in the middle of slider
+  // Supports non-linear zoom scale so that 100% in the middle of slider
   const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
     d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
 
@@ -25,6 +25,7 @@ export default function ScaleAndScroll() {
     ZOOM_DISPLAY_MINIMUM,
     ZOOM_DISPLAY_MIDDLE
   );
+
   const zoomScaleSliderRight = createZoomScale(
     ZOOM_SLIDER_MIDDLE,
     ZOOM_SLIDER_MAX,
@@ -32,16 +33,14 @@ export default function ScaleAndScroll() {
     ZOOM_DISPLAY_MAXIMUM
   );
 
-  const handleZoomChange = e => {
+  const handleSliderChange = e => {
     const sliderInput = parseFloat(e.target.value);
-    // TODO: add Restrict Graph to Viewport support
-    // flexZoomInBounds(
+    setZoomSliderValue(sliderInput);
+    // TODO: add Restrict Graph to Viewport support like flexZoomInBounds in classic
     const finalDisplay = Math.floor(
       (sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)(sliderInput)
     );
-    // );
     setZoomPercent(finalDisplay);
-    setZoomSliderValue(sliderInput);
   };
 
   return (
@@ -99,7 +98,7 @@ export default function ScaleAndScroll() {
                 min={ZOOM_SLIDER_MIN}
                 max={ZOOM_SLIDER_MAX}
                 value={zoomSliderValue ? zoomSliderValue : ZOOM_SLIDER_MIDDLE}
-                onChange={handleZoomChange}
+                onChange={handleSliderChange}
                 step="0.25"
                 disabled={
                   networkMode !== NETWORK_GRN_MODE_FULL && networkMode !== NETWORK_PPI_MODE_FULL

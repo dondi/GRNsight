@@ -10,7 +10,8 @@ import {
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
-  MIN_SCALE
+  MIN_SCALE,
+  ZOOM_DISPLAY_MIDDLE,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -71,7 +72,10 @@ export default function Graph() {
       .catch(err => {
         setError(err.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setZoomPercent(ZOOM_DISPLAY_MIDDLE);
+      });
   }, [demoValue]);
 
   // TODO: need to update with adaptive (restrict to viewport)
@@ -111,7 +115,7 @@ export default function Graph() {
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
-    // this controls the D-pad
+    // D-pad controls
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = ["Up", "Left", "Right", "Down"];
     arrowMovement.forEach(function (direction) {
