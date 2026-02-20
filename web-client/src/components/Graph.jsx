@@ -5,19 +5,13 @@ import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/ap
 import ScaleAndScroll from "./ScaleAndScroll";
 import {
   BOUNDARY_MARGIN,
-  ZOOM_DISPLAY_MINIMUM_VALUE,
-  ZOOM_DISPLAY_MAXIMUM_VALUE,
-  ZOOM_DISPLAY_MIDDLE,
   ZOOM_ADAPTIVE_MAX_SCALE,
   MINIMUM_NODE_WIDTH,
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
   MIN_SCALE,
-  MIDDLE_SCALE,
-  EDGE_RED,
-  EDGE_BLACK,
-  EDGE_BLUE,
+  ZOOM_DISPLAY_MIDDLE,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -56,6 +50,7 @@ export default function Graph() {
     setNetworkMode,
     grayThreshold,
     zoomPercent,
+    setZoomPercent,
   } = useContext(GrnStateContext);
 
   // Load workbook data
@@ -78,7 +73,10 @@ export default function Graph() {
       .catch(err => {
         setError(err.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setZoomPercent(ZOOM_DISPLAY_MIDDLE);
+      });
   }, [demoValue]);
 
   // TODO: need to update with adaptive (restrict to viewport)
@@ -118,7 +116,7 @@ export default function Graph() {
 
     const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
-    // this controls the D-pad
+    // D-pad controls
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = ["Up", "Left", "Right", "Down"];
     arrowMovement.forEach(function (direction) {
