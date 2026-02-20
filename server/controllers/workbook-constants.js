@@ -79,8 +79,23 @@ var numbersToLetters = {
     76: "BY",
 };
 
+const TWO_COL_SHEET_NAMES = [
+    "production_rates",
+    "degradation_rates",
+    "threshold_b",
+    "optimized_production_rates",
+    "optimized_threshold_b",
+];
+
+const OPTIONAL_TWO_COL_SHEET_NAMES = ["optimization_parameters", "optimization_diagnostics"];
+
+const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights", "network_weights"];
+
 module.exports = {
     numbersToLetters,
+    TWO_COL_SHEET_NAMES,
+    OPTIONAL_TWO_COL_SHEET_NAMES,
+    NETWORK_SHEET_NAMES,
 
     warnings: {
         extraneousDataWarning: function (sheetName, row) {
@@ -317,6 +332,34 @@ module.exports = {
                 the nodes to be colored with expression data, you can upload your own expression \
                 data by adding one or more of those worksheets to your Excel network or select \
                 from data in GRNsight's Expression Database, found in the Node menu or panel.",
+            };
+        },
+
+        unrecognizedSheetWarning: function (sheetName) {
+            return {
+                warningCode: "UNRECOGNIZED_SHEET",
+                errorDescription:
+                    `The sheet named '${sheetName}' is unrecognized by GRNsight. ` +
+                    "Please ensure that all sheets in the workbook are named correctly.",
+            };
+        },
+
+        missingGenesInTwoColumnSheetWarningWhenImporting: function (sheetName, missingGenes) {
+            return {
+                warningCode: `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription:
+                    `GRNsight has detected that the imported workbook has missing genes in the ${sheetName} sheet. ` +
+                    `The missing genes are: ${missingGenes}. Please ensure that all genes in the network are included in the sheet.`,
+            };
+        },
+
+        missingAllValuesForGenes: function (sheetName, genesMissingValue) {
+            return {
+                warningCode: `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription:
+                    `GRNsight has detected that there are missing values for ${sheetName.replace("_", " ")} rates in the imported workbook's ${sheetName} sheet. ` +
+                    `A degradation rate will need to be supplied to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
+                    `The genes with missing values are: ${genesMissingValue}.`,
             };
         },
     },

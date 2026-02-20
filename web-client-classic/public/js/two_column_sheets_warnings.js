@@ -1,7 +1,7 @@
-const TWO_COLUMN_SHEETS = ["production_rates", "degradation_rates"];
+const TWO_COLUMN_SHEETS = ["production_rates", "degradation_rates", "threshold_b"];
 
-const getGeneNames = function (workbook) {
-    const genes = workbook && workbook.genes ? workbook.genes : [];
+const getGeneNames = function (workbookGenes) {
+    const genes = workbookGenes ? workbookGenes : [];
     return genes.map(g => g.name).filter(g => Boolean(g));
 };
 
@@ -15,14 +15,20 @@ const warningGeneratorBySheet = warnings => ({
     degradation_rates: warnings.MISSING_DEGRADATION_RATES,
 });
 
-const buildMissingGenesWarning = ({ sheetName, missingGenes, warnings }) => {
+const buildMissingGenesWarning = ({ sheetName, missingGenes, warningsConstants }) => {
     if (!missingGenes.length) return null;
-    const gen = warningGeneratorBySheet(warnings)[sheetName];
+    const gen = warningGeneratorBySheet(warningsConstants)[sheetName];
     return gen ? gen(missingGenes.join(", ")) : null;
 };
 
-export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings, chosenSheets) => {
-    const genes = getGeneNames(workbook);
+export const buildWorkbookTwoColumnMissingGenesWarnings = (
+    workbookGenes,
+    workbookTwoColumnSheets,
+    chosenSheets,
+    warningsConstants,
+    workbookWarnings
+) => {
+    const genes = getGeneNames(workbookGenes);
     const messages = [];
 
     for (const sheetName of TWO_COLUMN_SHEETS) {
@@ -30,7 +36,7 @@ export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings, c
             continue;
         }
 
-        const twoColumnSheets = workbook.twoColumnSheets || {};
+        const twoColumnSheets = workbookTwoColumnSheets || {};
         const sheet = twoColumnSheets[sheetName] || {};
         const data = sheet.data || null;
 
@@ -42,11 +48,14 @@ export const buildWorkbookTwoColumnMissingGenesWarnings = (workbook, warnings, c
         const msg = buildMissingGenesWarning({
             sheetName,
             missingGenes,
-            warnings,
+            warningsConstants,
         });
 
         if (msg) messages.push(msg);
     }
 
-    return messages;
+    const exisitingWarnings = new Set(workbookWarnings.map(w => w.errorDescription));
+
+    const uniqueWarnings = messages.filter(w => !exisitingWarnings.has(w.errorDescription));
+    return uniqueWarnings;
 };

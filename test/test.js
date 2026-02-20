@@ -103,6 +103,29 @@ var missingValueError = function (input, frequency) {
     }
 };
 
+const missingAllValuesForGenes = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(
+        `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
+    );
+};
+
 var missingNetworkError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -365,6 +388,16 @@ var noWarnings = function (input) {
     assert.equal(0, workbook.warnings.length);
 };
 
+const noWarningsForAdditionalSheet = function (input, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.equal(0, workbook.twoColumnSheets[sheetName].warnings.length);
+};
+
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -467,6 +500,30 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
+var unrecognizedSheetWarning = function (input, frequency) {
+    const sheet = xlsx.parse(input);
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+    const warnings = workbook.warnings || [];
+    const unrecognizedSheetWarningCount = warnings.filter(function (x) {
+        return x.warningCode === "UNRECOGNIZED_SHEET";
+    }).length;
+
+    assert.equal(frequency, unrecognizedSheetWarningCount);
+};
+
+var missingGenesInTwoColumnSheetsWarning = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+    const workbook = parseAdditionalSheet(sheet, genes);
+    const warnings = workbook.twoColumnSheets[sheetName].warnings || [];
+    const missingGenesInTwoColumnSheetsWarningCount = warnings.filter(function (x) {
+        return x.warningCode === `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    }).length;
+
+    assert.equal(frequency, missingGenesInTwoColumnSheetsWarningCount);
+};
+
 // GRAPH STATISTICS
 /*
 var shortestPath = function (input, directed, source, target, length) {
@@ -563,20 +620,6 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
         ).length;
     }
     assert.equal(frequency, twoColumnInvalidGeneTypeErrorCount);
-};
-
-var twoColumnInvalidValueError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var twoColumnInvalidValueErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        twoColumnInvalidValueErrorCount += workbook.twoColumnSheets[page].errors.filter(
-            function (x) {
-                return x.errorCode === "INVALID_VALUE";
-            }
-        ).length;
-    }
-    assert.equal(frequency, twoColumnInvalidValueErrorCount);
 };
 
 var twoColumnInvalidGeneLengthError = function (input, frequency) {
@@ -808,7 +851,6 @@ exports.twoColumnIdError = twoColumnIdError;
 exports.additionalSheetIncorrectColumnHeaderError = additionalSheetIncorrectColumnHeaderError;
 exports.additionalSheetMissingColumnHeaderError = additionalSheetMissingColumnHeaderError;
 exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
-exports.twoColumnInvalidValueError = twoColumnInvalidValueError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 
@@ -835,6 +877,10 @@ exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
+exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
+exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
+exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
+exports.missingAllValuesForGenes = missingAllValuesForGenes;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;

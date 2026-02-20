@@ -112,6 +112,17 @@ const TimePointsToJSON = (totalOutput, dataset) => {
 
 module.exports = {
     queryExpressionDatabase: function (req, res) {
+        const type = req.query.type;
+
+        // Return a default of 0 for threshold b
+        if (type === "ThresholdB") {
+            const genes = req.query.genes.split(",");
+            const JSONOutput = {};
+            genes.forEach(gene => {
+                JSONOutput[gene] = 0;
+            });
+            return res.send(JSONOutput);
+        }
         return sequelize
             .query(buildExpressionQuery(req.query), {
                 type: sequelize.QueryTypes.SELECT,
