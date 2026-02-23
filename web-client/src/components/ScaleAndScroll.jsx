@@ -1,13 +1,13 @@
-import * as d3 from "d3";
 import { useContext, useState, useMemo, useRef } from "react";
 import { GrnStateContext } from "../App";
 import {
   ZOOM_DISPLAY_MINIMUM,
   ZOOM_DISPLAY_MAXIMUM,
-  ZOOM_DISPLAY_MIDDLE,
   ZOOM_SLIDER_MIN,
   ZOOM_SLIDER_MIDDLE,
   ZOOM_SLIDER_MAX,
+  zoomScaleSliderLeft,
+  zoomScaleSliderRight,
 } from "../helpers/constants";
 import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constants";
 import "../App.css";
@@ -16,39 +16,14 @@ export default function ScaleAndScroll() {
   const frame = useRef(null);
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode } = useContext(GrnStateContext);
-  // Supports non-linear zoom scale so that 100% in the middle of slider
-  const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
-    d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
 
-  const zoomScaleSliderLeft = useMemo(
-    () =>
-      createZoomScale(
-        ZOOM_SLIDER_MIN,
-        ZOOM_SLIDER_MIDDLE,
-        ZOOM_DISPLAY_MINIMUM,
-        ZOOM_DISPLAY_MIDDLE
-      ),
-    []
-  );
-
-  const zoomScaleSliderRight = useMemo(
-    () =>
-      createZoomScale(
-        ZOOM_SLIDER_MIDDLE,
-        ZOOM_SLIDER_MAX,
-        ZOOM_DISPLAY_MIDDLE,
-        ZOOM_DISPLAY_MAXIMUM
-      ),
-    []
-  );
-
-  const handleSliderChange = e => {
-    const sliderInput = parseFloat(e.target.value);
+  const handleSliderChange = event => {
+    const sliderInput = parseFloat(event.target.value);
     setZoomSliderValue(sliderInput);
     // TODO: add Restrict Graph to Viewport support like flexZoomInBounds in classic
-    const finalDisplay = Math.floor(
-      (sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft : zoomScaleSliderRight)(sliderInput)
-    );
+    const scaleToUse =
+      sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft() : zoomScaleSliderRight();
+    const finalDisplay = Math.floor(scaleToUse(sliderInput));
 
     if (frame.current) cancelAnimationFrame(frame.current); // Cancel any pending animation frame to prevent queuing up too many frames
 

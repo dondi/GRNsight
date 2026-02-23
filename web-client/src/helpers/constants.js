@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 // TODO: Should I point to the constants in web-client-classic instead?
 export const UNWEIGHTED_DEMO_NAME =
   "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
@@ -48,3 +50,25 @@ export const LIGHT_GREEN = "#dfebe5";
 export const LIGHT_GRAY = "#ccc";
 export const MEDIUM_GRAY = "#bbb";
 export const DARK_GRAY = "#999";
+
+// Supports non-linear zoom scale so that 100% in the middle of slider
+const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
+  d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
+
+export const zoomScaleSliderLeft = () => {
+  return createZoomScale(
+    ZOOM_SLIDER_MIN,
+    ZOOM_SLIDER_MIDDLE,
+    ZOOM_DISPLAY_MINIMUM,
+    ZOOM_DISPLAY_MIDDLE
+  );
+};
+
+export const zoomScaleSliderRight = () => {
+  return createZoomScale(
+    ZOOM_SLIDER_MIDDLE,
+    ZOOM_SLIDER_MAX,
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_DISPLAY_MAXIMUM
+  );
+};
