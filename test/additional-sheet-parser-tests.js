@@ -173,6 +173,10 @@ describe("additional-sheet-parser", function () {
                 "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
                 0
             );
+            test.additionalSheetMissingColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-missing-header.xlsx",
+                0
+            );
         });
 
         it("should return incorrectColumnHeaderWarning", function () {
@@ -180,9 +184,10 @@ describe("additional-sheet-parser", function () {
                 "test-files/additional-sheet-test-files/missing-deg-rate-headers-deg-rates-sheet.xlsx",
                 0
             );
-        });
-
-        it("should return incorrectColumnHeaderWarning", function () {
+            test.additionalSheetIncorrectColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-header.xlsx",
+                0
+            );
             test.additionalSheetIncorrectColumnHeaderWarning(
                 "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx",
                 0

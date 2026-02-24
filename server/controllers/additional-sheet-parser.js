@@ -193,8 +193,9 @@ const parseMetaDataSheet = sheet => {
 
 // check header method
 const checkValidHeaderAndAddWarnings = (output, sheet) => {
-    const expectedCellA1 = getSheetHeader(sheet, 0, 0);
-    const expectedCellB1 = getSheetHeader(sheet, 1, 0);
+    const sheetName = sheet.name;
+    const expectedCellA1 = getSheetHeader(sheetName, 0, 0);
+    const expectedCellB1 = getSheetHeader(sheetName, 1, 0);
 
     // check incorrect header
     if (sheet.data[0].length >= 0) {
@@ -207,7 +208,7 @@ const checkValidHeaderAndAddWarnings = (output, sheet) => {
             addWarning(
                 output,
                 constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                    sheet.name,
+                    sheetName,
                     expectedCellA1,
                     expectedCellB1
                 )
@@ -217,7 +218,7 @@ const checkValidHeaderAndAddWarnings = (output, sheet) => {
         addWarning(
             output,
             constants.warnings.additionalSheetMissingColumnHeaderWarning(
-                sheet.name,
+                sheetName,
                 expectedCellA1,
                 expectedCellB1
             )
