@@ -1,3 +1,5 @@
+import * as d3 from "d3";
+
 // TODO: Should I point to the constants in web-client-classic instead?
 export const UNWEIGHTED_DEMO_NAME =
   "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
@@ -15,10 +17,13 @@ export const DEMO_TYPES = {
   ppi: PPI_DEMO_NAME,
 };
 export const BOUNDARY_MARGIN = 5;
-export const ZOOM_DISPLAY_MINIMUM_VALUE = 25;
-export const ZOOM_DISPLAY_MAXIMUM_VALUE = 200;
+export const ZOOM_DISPLAY_MINIMUM = 25;
+export const ZOOM_DISPLAY_MAXIMUM = 200;
 export const ZOOM_DISPLAY_MIDDLE = 100;
 export const ZOOM_ADAPTIVE_MAX_SCALE = 100;
+export const ZOOM_SLIDER_MIN = 0;
+export const ZOOM_SLIDER_MIDDLE = 4;
+export const ZOOM_SLIDER_MAX = 8;
 export const MINIMUM_NODE_WIDTH = 68.5625;
 export const NODE_MARGIN = 3;
 // node_height is 22 in web-client-classic, but 30 in this. may need to fix later
@@ -45,3 +50,25 @@ export const LIGHT_GREEN = "#dfebe5";
 export const LIGHT_GRAY = "#ccc";
 export const MEDIUM_GRAY = "#bbb";
 export const DARK_GRAY = "#999";
+
+// Supports non-linear zoom scale so that 100% in the middle of slider
+const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
+  d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
+
+export const zoomScaleSliderLeft = () => {
+  return createZoomScale(
+    ZOOM_SLIDER_MIN,
+    ZOOM_SLIDER_MIDDLE,
+    ZOOM_DISPLAY_MINIMUM,
+    ZOOM_DISPLAY_MIDDLE
+  );
+};
+
+export const zoomScaleSliderRight = () => {
+  return createZoomScale(
+    ZOOM_SLIDER_MIDDLE,
+    ZOOM_SLIDER_MAX,
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_DISPLAY_MAXIMUM
+  );
+};
