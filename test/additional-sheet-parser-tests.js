@@ -248,25 +248,25 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return missingGenesInTwoColumnSheetsWarning when sheets are present and not empty but missing all genes and values", function () {
-            test.missingGenesInTwoColumnSheetsWarning(
+        it("should return MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but missing all genes and values", function () {
+            test.missingAllGenesInTwoColumnSheetWarning(
                 "test-files/additional-sheet-test-files/missing-all-deg-rate-genes-and-values.xlsx",
                 1,
                 "degradation_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingAllGenesInTwoColumnSheetWarning(
                 "test-files/additional-sheet-test-files/missing-all-prod-rate-genes-and-values.xlsx",
                 1,
                 "production_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingAllGenesInTwoColumnSheetWarning(
                 "test-files/additional-sheet-test-files/missing-all-threshold_b-genes-and-values.xlsx",
                 1,
                 "threshold_b"
             );
         });
 
-        it("should return missingAllValuesForGenes when all of the values of genes are missing", function () {
+        it("should return MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET warning when all of the values of genes are missing", function () {
             test.missingAllValuesForGenes(
                 "test-files/additional-sheet-test-files/missing-all-deg-rate-values.xlsx",
                 1,
@@ -286,7 +286,7 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return missingGenesInTwoColumnSheetsWarning when sheets are present and not empty but missing some genes and values", function () {
+        it("should return MISSING_GENES_IN_TWO_COLUMN_SHEET when sheets are present and not empty but missing some genes and values", function () {
             test.missingGenesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-first-gene-and-deg-rate-value.xlsx",
                 1,

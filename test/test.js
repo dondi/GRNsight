@@ -121,7 +121,7 @@ const missingAllValuesForGenes = function (input, frequency, sheetName) {
     );
     assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
     assert.equal(
-        `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
         workbook.twoColumnSheets[sheetName].warnings[0].warningCode
     );
 };
@@ -511,17 +511,50 @@ var unrecognizedSheetWarning = function (input, frequency) {
     assert.equal(frequency, unrecognizedSheetWarningCount);
 };
 
-var missingGenesInTwoColumnSheetsWarning = function (input, frequency, sheetName) {
+const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
     const sheet = xlsx.parse(input);
     const networks = parseNetworkSheet(sheet);
     const genes = networks.genes.map(gene => gene.name);
-    const workbook = parseAdditionalSheet(sheet, genes);
-    const warnings = workbook.twoColumnSheets[sheetName].warnings || [];
-    const missingGenesInTwoColumnSheetsWarningCount = warnings.filter(function (x) {
-        return x.warningCode === `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
-    }).length;
 
-    assert.equal(frequency, missingGenesInTwoColumnSheetsWarningCount);
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(
+        `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
+    );
+};
+
+const missingGenesInTwoColumnSheetsWarning = (input, frequency, sheetName) => {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(
+        `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
+    );
 };
 
 // GRAPH STATISTICS
@@ -881,6 +914,7 @@ exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
 exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
 exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
 exports.missingAllValuesForGenes = missingAllValuesForGenes;
+exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheetWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;

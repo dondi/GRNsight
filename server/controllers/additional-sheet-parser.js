@@ -398,32 +398,31 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
                     if (typeof currentValue === "number") {
                         output.data[currentGene] = currentValue;
                     } else {
-                        if (typeof currentValue === "number") {
-                            output.data[currentGene] = currentValue;
-                            genesInSheet.push(currentGene);
-                        } else {
-                            addError(
-                                output,
-                                constants.errors.invalidValueError(
-                                    sheet.name,
-                                    currentValue,
-                                    row + 1,
-                                    getSheetHeader(sheet.name, 1, row)
-                                )
-                            );
-                        }
+                        addError(
+                            output,
+                            constants.errors.invalidValueError(
+                                sheet.name,
+                                currentValue,
+                                row + 1,
+                                getSheetHeader(sheet.name, 1, row)
+                            )
+                        );
                     }
                 }
             }
         }
     }
 
-    const allMissing =
+    // Check whether all genes are missing values
+    const isAllGenesMissingValues =
         genesInNetwork && genesInNetwork.every(gene => genesMissingValue.includes(gene));
-    if (allMissing) {
+    if (isAllGenesMissingValues) {
         addWarning(
             output,
-            constants.warnings.missingAllValuesForGenes(sheet.name, genesMissingValue)
+            constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
+                sheet.name,
+                /*isAllGenesMissing=*/ false
+            )
         );
     }
 
@@ -432,13 +431,23 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         //  Check if the output data keys (genes in sheet) include all genes in the network
         const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
         if (missingGenes.length > 0) {
-            addWarning(
-                output,
-                constants.warnings.missingGenesInTwoColumnSheetWarningWhenImporting(
-                    sheet.name,
-                    missingGenes.join(", ")
-                )
-            );
+            if (missingGenes.length === genesInNetwork.length) {
+                addWarning(
+                    output,
+                    constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
+                        sheet.name,
+                        /*isAllGenesMissing=*/ true
+                    )
+                );
+            } else {
+                addWarning(
+                    output,
+                    constants.warnings.missingGenesInTwoColumnSheetWarningWhenImporting(
+                        sheet.name,
+                        missingGenes.join(", ")
+                    )
+                );
+            }
         }
     }
 

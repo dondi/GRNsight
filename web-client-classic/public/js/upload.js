@@ -420,7 +420,7 @@ export const upload = function () {
             const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
 
             // Check if all genes are available but missing values
-            const partialMissingCode = `MISSING_ALL_VALUES_OF_GENES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
+            const partialMissingCode = `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
             const hasExistingWarning = finalExportSheets.warnings.some(
                 w => w.warningCode === partialMissingCode
             );
