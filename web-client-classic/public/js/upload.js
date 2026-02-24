@@ -617,7 +617,10 @@ export const upload = function () {
         additionalsheets = [...new Set(additionalsheets)];
         for (let n of networks) {
             const state = n[0];
+//added 
             const network = n[1];
+            console.log(state)
+            console.log(network)
             result =
                 result +
                 `
