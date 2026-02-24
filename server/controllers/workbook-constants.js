@@ -350,11 +350,13 @@ module.exports = {
             sheetName,
             missingGenes
         ) {
+            const singularName = sheetName.replace(/_/g, " ").replace(/s$/, "");
             return {
-                warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
                 errorDescription: [
                     `GRNsight has detected that the imported workbook has missing genes and values in the ${sheetName} sheet.`,
-                    `The missing genes are: ${missingGenes}. Please ensure that all genes in the network are included in the sheet.`,
+                    `A ${singularName} will need to be supplied to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. `,
+                    `The missing genes are: ${missingGenes}. The genes with missing values are: ${missingGenes}.`,
                 ].join(" "),
             };
         },

@@ -551,7 +551,7 @@ const missingGenesAndValuesInTwoColumnSheetsWarning = (input, frequency, sheetNa
     );
     assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.equal(
-        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
         workbook.twoColumnSheets[sheetName].warnings[0].warningCode
     );
 };
