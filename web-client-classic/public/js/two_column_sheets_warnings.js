@@ -10,15 +10,13 @@ const computePartialMissingGeneNames = (geneNames, dataByGene) => {
     return geneNames.filter(g => dataByGene[g] === undefined);
 };
 
-const warningGeneratorBySheet = warnings => ({
-    production_rates: warnings.MISSING_PRODUCTION_RATES,
-    degradation_rates: warnings.MISSING_DEGRADATION_RATES,
-});
-
 const buildMissingGenesWarning = ({ sheetName, missingGenes, warningsConstants }) => {
     if (!missingGenes.length) return null;
-    const gen = warningGeneratorBySheet(warningsConstants)[sheetName];
-    return gen ? gen(missingGenes.join(", ")) : null;
+    const warnings = warningsConstants.MISSING_DATABASE_RATES_FOR_TWO_COLUMN_SHEET(
+        sheetName,
+        missingGenes.join(", ")
+    );
+    return warnings;
 };
 
 export const buildWorkbookTwoColumnMissingGenesWarnings = (
