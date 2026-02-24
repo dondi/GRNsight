@@ -286,50 +286,50 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return MISSING_GENES_IN_TWO_COLUMN_SHEET when sheets are present and not empty but missing some genes and values", function () {
-            test.missingGenesInTwoColumnSheetsWarning(
+        it("should return MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET when sheets are present and not empty but missing some genes and values", function () {
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-first-gene-and-deg-rate-value.xlsx",
                 1,
                 "degradation_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-first-gene-and-prod-rate-value.xlsx",
                 1,
                 "production_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-first-gene-and-threshold_b-value.xlsx",
                 1,
                 "threshold_b"
             );
 
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-last-gene-and-deg-rate-value.xlsx",
                 1,
                 "degradation_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-last-gene-and-prod-rate-value.xlsx",
                 1,
                 "production_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-last-gene-and-threshold_b-value.xlsx",
                 1,
                 "threshold_b"
             );
 
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-middle-gene-and-deg-rate-value.xlsx",
                 1,
                 "degradation_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-middle-gene-and-prod-rate-value.xlsx",
                 1,
                 "production_rates"
             );
-            test.missingGenesInTwoColumnSheetsWarning(
+            test.missingGenesAndValuesInTwoColumnSheetsWarning(
                 "test-files/additional-sheet-test-files/missing-middle-gene-and-threshold_b-value.xlsx",
                 1,
                 "threshold_b"

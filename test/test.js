@@ -533,7 +533,7 @@ const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => 
     );
 };
 
-const missingGenesInTwoColumnSheetsWarning = (input, frequency, sheetName) => {
+const missingGenesAndValuesInTwoColumnSheetsWarning = (input, frequency, sheetName) => {
     const sheet = xlsx.parse(input);
     const networks = parseNetworkSheet(sheet);
     const genes = networks.genes.map(gene => gene.name);
@@ -551,7 +551,7 @@ const missingGenesInTwoColumnSheetsWarning = (input, frequency, sheetName) => {
     );
     assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
     assert.equal(
-        `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
         workbook.twoColumnSheets[sheetName].warnings[0].warningCode
     );
 };
@@ -910,7 +910,8 @@ exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
 exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
-exports.missingGenesInTwoColumnSheetsWarning = missingGenesInTwoColumnSheetsWarning;
+exports.missingGenesAndValuesInTwoColumnSheetsWarning =
+    missingGenesAndValuesInTwoColumnSheetsWarning;
 exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
 exports.missingAllValuesForGenes = missingAllValuesForGenes;
 exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheetWarning;

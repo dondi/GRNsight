@@ -346,11 +346,14 @@ module.exports = {
             };
         },
 
-        missingGenesInTwoColumnSheetWarningWhenImporting: function (sheetName, missingGenes) {
+        missingGenesAndValuesInTwoColumnSheetWarningWhenImporting: function (
+            sheetName,
+            missingGenes
+        ) {
             return {
-                warningCode: `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
                 errorDescription: [
-                    `GRNsight has detected that the imported workbook has missing genes in the ${sheetName} sheet.`,
+                    `GRNsight has detected that the imported workbook has missing genes and values in the ${sheetName} sheet.`,
                     `The missing genes are: ${missingGenes}. Please ensure that all genes in the network are included in the sheet.`,
                 ].join(" "),
             };

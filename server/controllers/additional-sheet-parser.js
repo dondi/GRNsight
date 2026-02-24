@@ -442,7 +442,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             } else {
                 addWarning(
                     output,
-                    constants.warnings.missingGenesInTwoColumnSheetWarningWhenImporting(
+                    constants.warnings.missingGenesAndValuesInTwoColumnSheetWarningWhenImporting(
                         sheet.name,
                         missingGenes.join(", ")
                     )
