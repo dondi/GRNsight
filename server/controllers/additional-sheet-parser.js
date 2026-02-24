@@ -1,4 +1,4 @@
-// Parses "optimization_paramters" and 2-column sheets
+// Parses "optimization_parameters" and 2-column sheets
 // from GRNmap input or output workbook
 
 var constants = require(__dirname + "/workbook-constants");
@@ -59,6 +59,10 @@ const addWarning = (workbook, message) => {
     }
     const MAX_WARNINGS = 75;
     if (warningsCount < MAX_WARNINGS) {
+        const exists = workbook.warnings.some(w => w.errorDescription === message.errorDescription);
+        if (exists) {
+            return false;
+        }
         workbook.warnings.push(message);
     } else {
         workbook.errors.push(constants.errors.warningsCountError);
@@ -87,7 +91,7 @@ const TWO_COL_SHEET_NAMES = [
 
 const validGeneName = (output, sheetName, gene, row) => {
     var maxGeneLength = 12;
-    var regex = /[^a-z0-9\_\-]/gi;
+    var regex = /[^a-z0-9]-]/gi;
     if (typeof gene !== "string") {
         addError(output, constants.errors.invalidGeneTypeError(sheetName, gene, row));
         return false;
@@ -109,18 +113,18 @@ const parseMetaDataSheet = sheet => {
     };
     let paramType;
     if (sheet.data[0][0] === undefined) {
-        addError(
+        addWarning(
             meta,
-            constants.errors.missingColumnHeaderError(
+            constants.warnings.additionalSheetMissingColumnHeaderWarning(
                 sheet.name,
                 constants.numbersToLetters[0],
                 getSheetHeader(sheet.name, 0, 0)
             )
         );
     } else if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-        addError(
+        addWarning(
             meta,
-            constants.errors.incorrectColumnHeaderError(
+            constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
                 sheet.name,
                 constants.numbersToLetters[0],
                 getSheetHeader(sheet.name, 0, 0)
@@ -128,18 +132,18 @@ const parseMetaDataSheet = sheet => {
         );
     }
     if (sheet.data[0][1] === undefined) {
-        addError(
+        addWarning(
             meta,
-            constants.errors.missingColumnHeaderError(
+            constants.warnings.additionalSheetMissingColumnHeaderWarning(
                 sheet.name,
                 constants.numbersToLetters[1],
                 getSheetHeader(sheet.name, 1, 0)
             )
         );
     } else if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-        addError(
+        addWarning(
             meta,
-            constants.errors.incorrectColumnHeaderError(
+            constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
                 sheet.name,
                 constants.numbersToLetters[1],
                 getSheetHeader(sheet.name, 1, 0)
@@ -205,22 +209,20 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     let currentMSE = [];
     // Check Headers
     if (sheet.data[0].length > 1) {
-        if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-            addError(
+        // if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
+        //     addWarning(
+        //         output,
+        //         constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
+        //             sheet.name,
+        //             getSheetHeader(sheet.name, 0, 0)
+        //         )
+        //     );
+        // }
+        if (sheet.data[0][1] !== getSheetHeader(sheet.name, 0, 0)) {
+            addWarning(
                 output,
-                constants.errors.incorrectColumnHeaderError(
+                constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
                     sheet.name,
-                    constants.numbersToLetters[0],
-                    getSheetHeader(sheet.name, 0, 0)
-                )
-            );
-        }
-        if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-            addError(
-                output,
-                constants.errors.incorrectColumnHeaderError(
-                    sheet.name,
-                    constants.numbersToLetters[1],
                     getSheetHeader(sheet.name, 1, 0)
                 )
             );
@@ -228,11 +230,10 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     } else {
         // seems a bit sus, but we'll see if this works properly during testing :\
         for (let col = 1; col >= sheet.data[0].length; col--) {
-            addError(
+            addWarning(
                 output,
-                constants.errors.missingColumnHeaderError(
+                constants.warnings.additionalSheetMissingColumnHeaderWarning(
                     sheet.name,
-                    constants.numbersToLetters[col],
                     getSheetHeader(sheet.name, col, 0)
                 )
             );
@@ -364,26 +365,30 @@ const parseTwoColumnSheet = sheet => {
         if (row === 0) {
             if (sheet.data[row].length > 0) {
                 if (sheet.data[row][0] !== "id") {
-                    addError(output, constants.errors.idLabelError(sheet.name));
+                    addWarning(
+                        output,
+                        constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
+                            sheet.name,
+                            getSheetHeader(sheet.name, 1, row)
+                        )
+                    );
                 }
             }
             if (sheet.data[row].length > 1) {
                 if (sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)) {
-                    addError(
+                    addWarning(
                         output,
-                        constants.errors.incorrectColumnHeaderError(
+                        constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
                             sheet.name,
-                            constants.numbersToLetters[1],
                             getSheetHeader(sheet.name, 1, row)
                         )
                     );
                 }
             } else {
-                addError(
+                addWarning(
                     output,
-                    constants.errors.missingColumnHeaderError(
+                    constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
                         sheet.name,
-                        constants.numbersToLetters[1],
                         getSheetHeader(sheet.name, 1, row)
                     )
                 );

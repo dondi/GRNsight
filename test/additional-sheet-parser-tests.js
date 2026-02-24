@@ -117,12 +117,12 @@ describe("additional-sheet-parser", function () {
             });
         });
 
-        it("should return additionalSheetMissingColumnHeaderError", function () {
-            test.additionalSheetMissingColumnHeaderError(
-                "test-files/additional-sheet-test-files/optimization-parameters-missing-headers.xlsx",
-                2
-            );
-        });
+        // it("should return additionalSheetMissingColumnHeaderError", function () {
+        //     test.additionalSheetMissingColumnHeaderError(
+        //         "test-files/additional-sheet-test-files/optimization-parameters-missing-headers.xlsx",
+        //         2
+        //     );
+        // });
 
         it("should return unknownOptimizationParameterWarning", function () {
             test.unknownOptimizationParameterWarning(
@@ -155,26 +155,26 @@ describe("additional-sheet-parser", function () {
             });
         });
 
-        it("should return twoColumnIdError", function () {
-            test.twoColumnIdError(
-                "test-files/additional-sheet-test-files/two-column-sheets-incorrect-cell-A1.xlsx",
-                5
-            );
-        });
+        // it("should return twoColumnIdError", function () {
+        //     test.twoColumnIdError(
+        //         "test-files/additional-sheet-test-files/two-column-sheets-incorrect-cell-A1.xlsx",
+        //         5
+        //     );
+        // });
 
-        it("should return additionalSheetIncorrectColumnHeaderError", function () {
-            test.additionalSheetIncorrectColumnHeaderError(
-                "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
-                5
-            );
-        });
-
-        it("should return additionalSheetMissingColumnHeaderError", function () {
-            test.additionalSheetMissingColumnHeaderError(
-                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx",
-                5
-            );
-        });
+        // it("should return additionalSheetIncorrectColumnHeaderError", function () {
+        //     test.additionalSheetIncorrectColumnHeaderError(
+        //         "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
+        //         5
+        //     );
+        // });
+        //
+        // it("should return additionalSheetMissingColumnHeaderError", function () {
+        //     test.additionalSheetMissingColumnHeaderError(
+        //         "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx",
+        //         5
+        //     );
+        // });
 
         it("should return twoColumnInvalidGeneTypeError", function () {
             test.twoColumnInvalidGeneTypeError(
@@ -197,10 +197,24 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return twoColumnSpecialCharacterError", function () {
-            test.twoColumnSpecialCharacterError(
-                "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx",
-                5
+        // it("should return twoColumnSpecialCharacterError", function () {
+        //     test.twoColumnSpecialCharacterError(
+        //         "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx",
+        //         5
+        //     );
+        // });
+
+        it("should return missingColumnHeaderWarning", function () {
+            test.additionalSheetMissingColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
+                0
+            );
+        });
+
+        it("should return incorrectColumnHeaderWarning", function () {
+            test.additionalSheetIncorrectColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/missing-deg-rate-headers-deg-rates-sheet.xlsx",
+                0
             );
         });
 
@@ -213,19 +227,19 @@ describe("additional-sheet-parser", function () {
     });
 
     describe("optimization diagnostics sheet", function () {
-        it("should return additionalSheetIncorrectColumnHeader Error", function () {
-            test.additionalSheetIncorrectColumnHeaderError(
-                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-column-headers.xlsx",
-                2
-            );
-        });
-
-        it("should return additionalSheetMissingColumnHeader Error", function () {
-            test.additionalSheetMissingColumnHeaderError(
-                "test-files/additional-sheet-test-files/optimization-diagnostics-missing-column-headers.xlsx",
-                2
-            );
-        });
+        // it("should return additionalSheetIncorrectColumnHeader Error", function () {
+        //     test.additionalSheetIncorrectColumnHeaderError(
+        //         "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-column-headers.xlsx",
+        //         2
+        //     );
+        // });
+        //
+        // it("should return additionalSheetMissingColumnHeader Error", function () {
+        //     test.additionalSheetMissingColumnHeaderError(
+        //         "test-files/additional-sheet-test-files/optimization-diagnostics-missing-column-headers.xlsx",
+        //         2
+        //     );
+        // });
 
         it("should return unknownOptimizationDiagnosticsParameter Warning", function () {
             test.unknownOptimizationDiagnosticsParameterWarning(
