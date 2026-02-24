@@ -52,8 +52,8 @@ export const buildWorkbookTwoColumnMissingGenesWarnings = (
         if (msg) messages.push(msg);
     }
 
-    const exisitingWarnings = new Set(workbookWarnings.map(w => w.errorDescription));
+    const existingWarnings = new Set(workbookWarnings.map(w => w.errorDescription));
 
-    const uniqueWarnings = messages.filter(w => !exisitingWarnings.has(w.errorDescription));
+    const uniqueWarnings = messages.filter(w => !existingWarnings.has(w.errorDescription));
     return uniqueWarnings;
 };
