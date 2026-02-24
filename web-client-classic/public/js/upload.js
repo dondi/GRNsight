@@ -122,7 +122,7 @@ export const upload = function () {
             sheetType,
             extension
         );
-        
+
         workbookToExport.filename = workbookFilename;
 
         const exportForm = $("<form></form>")
@@ -546,9 +546,11 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
-    
+
         if (Object.keys(grnState.workbook.expression).length > 0) {
-            const value = grnState.workbook.expression.source ? grnState.workbook.expression.source :"userInput";
+            const value = grnState.workbook.expression.source
+                ? grnState.workbook.expression.source
+                : "userInput";
             result += `
                         <li>
                             <input type='radio' name='expressionSource' checked="true" value="${value}" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
