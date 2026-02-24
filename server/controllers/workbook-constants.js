@@ -338,18 +338,21 @@ module.exports = {
         unrecognizedSheetWarning: function (sheetName) {
             return {
                 warningCode: "UNRECOGNIZED_SHEET",
-                errorDescription:
-                    `The sheet named '${sheetName}' is unrecognized by GRNsight. ` +
+                errorDescription: [
+                    `The sheet named '${sheetName}' is unrecognized by GRNsight.`,
                     "Please ensure that all sheets in the workbook are named correctly.",
+                    'See the <a href="https://dondi.github.io/GRNsight/documentation.html">GRNsight Documentation page</a> for allowable sheet names.',
+                ].join(" "),
             };
         },
 
         missingGenesInTwoColumnSheetWarningWhenImporting: function (sheetName, missingGenes) {
             return {
                 warningCode: `MISSING_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
-                errorDescription:
-                    `GRNsight has detected that the imported workbook has missing genes in the ${sheetName} sheet. ` +
+                errorDescription: [
+                    `GRNsight has detected that the imported workbook has missing genes in the ${sheetName} sheet.`,
                     `The missing genes are: ${missingGenes}. Please ensure that all genes in the network are included in the sheet.`,
+                ].join(" "),
             };
         },
 

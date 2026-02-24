@@ -500,15 +500,14 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
-var unrecognizedSheetWarning = function (input, frequency) {
+const unrecognizedSheetWarning = (input, frequency) => {
     const sheet = xlsx.parse(input);
-    const workbook = spreadsheetController.crossSheetInteractions(sheet);
-    const warnings = workbook.warnings || [];
-    const unrecognizedSheetWarningCount = warnings.filter(function (x) {
-        return x.warningCode === "UNRECOGNIZED_SHEET";
-    }).length;
 
-    assert.equal(frequency, unrecognizedSheetWarningCount);
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.exists(workbook.warnings, "Expected warnings array to exist on workbook");
+    assert.equal(frequency, workbook.warnings.length);
+    assert.equal(`UNRECOGNIZED_SHEET`, workbook.warnings[0].warningCode);
 };
 
 const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
