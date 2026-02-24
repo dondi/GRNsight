@@ -40,16 +40,13 @@ module.exports = {
         // Make sure genes are semantically fine and that cell A1 is correct
         IMPROPERLY_FORMATTED_NETWORK_SHEET_EXPORT_WARNING: {
             warningCode: "INCORRECT_NETWORK_SHEET_EXPORT_WARNING",
-            errorDescription:
-                "GRNsight has detected that the 'network' sheet or the 'network_optimized_weights'" +
-                " sheet is improperly formattedPlease look over your exported workbook and ensure that network" +
-                " sheets have cell A1 as '" +
-                CELL_A1_GRN +
-                "' or '" +
-                CELL_A1_PPI +
-                "' exactly" +
-                " and all gene are using the  naming conventions listed at:" +
-                " \nhttps://dondi.github.io/GRNsight/documentation.html.",
+            errorDescription: [
+                "GRNsight has detected that the 'network' sheet or the 'network_optimized_weights'",
+                "sheet is improperly formattedPlease look over your exported workbook and ensure that network",
+                `sheets have cell A1 as '${CELL_A1_GRN}' or '${CELL_A1_PPI}' exactly`,
+                "and all gene are using the  naming conventions listed at:",
+                " \nhttps://dondi.github.io/GRNsight/documentation.html."
+            ].join(' '),
         },
         // Missing Source Genes
         MISSING_SOURCE_GENES_EXPORT_WARNING: {
