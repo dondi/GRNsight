@@ -209,15 +209,15 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     let currentMSE = [];
     // Check Headers
     if (sheet.data[0].length > 1) {
-        // if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-        //     addWarning(
-        //         output,
-        //         constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-        //             sheet.name,
-        //             getSheetHeader(sheet.name, 0, 0)
-        //         )
-        //     );
-        // }
+        if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
+            addWarning(
+                output,
+                constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
+                    sheet.name,
+                    getSheetHeader(sheet.name, 0, 0)
+                )
+            );
+        }
         if (sheet.data[0][1] !== getSheetHeader(sheet.name, 0, 0)) {
             addWarning(
                 output,
@@ -363,28 +363,10 @@ const parseTwoColumnSheet = sheet => {
             addWarning(output, constants.warnings.extraneousDataWarning(sheet.name, row + 1));
         }
         if (row === 0) {
-            if (sheet.data[row].length > 0) {
-                if (sheet.data[row][0] !== "id") {
-                    addWarning(
-                        output,
-                        constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                            sheet.name,
-                            getSheetHeader(sheet.name, 1, row)
-                        )
-                    );
-                }
-            }
-            if (sheet.data[row].length > 1) {
-                if (sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)) {
-                    addWarning(
-                        output,
-                        constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                            sheet.name,
-                            getSheetHeader(sheet.name, 1, row)
-                        )
-                    );
-                }
-            } else {
+            if (
+                sheet.data[row][0] !== "id" ||
+                sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)
+            ) {
                 addWarning(
                     output,
                     constants.warnings.additionalSheetIncorrectColumnHeaderWarning(

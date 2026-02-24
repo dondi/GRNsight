@@ -385,18 +385,6 @@ var invalidMatrixDataWarning = function (input, frequency) {
     assert.equal(frequency, invalidDataCount.length);
 };
 
-// var missingColumnHeaderWarning = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var exp = parseExpressionSheet(sheet);
-//     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["warnings"].length);
-//     for (var i = 0; i < frequency; i++) {
-//         assert.equal(
-//             "MISSING_COLUMN_HEADER",
-//             exp["expression"]["wt_log2_expression"]["warnings"][i].errorCode
-//         );
-//     }
-// };
-
 var missingTargetWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -511,57 +499,6 @@ var betweennessCentrality = function (input, directed, node, centrality) {
 */
 
 // Additional Sheets Error Tests
-// var twoColumnIdError = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var workbook = parseAdditionalSheet(sheet);
-//     var twoColumnIdErrorCount = 0;
-//     for (let page in workbook.twoColumnSheets) {
-//         twoColumnIdErrorCount += workbook.twoColumnSheets[page].errors.filter(function (x) {
-//             return x.errorCode === "MISLABELED_ID_CELL";
-//         }).length;
-//     }
-//     assert.equal(frequency, twoColumnIdErrorCount);
-// };
-
-// var additionalSheetIncorrectColumnHeaderError = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var workbook = parseAdditionalSheet(sheet);
-//     var additionalSheetIncorrectColumnHeaderErrorCount = 0;
-//     for (let page in workbook.twoColumnSheets) {
-//         additionalSheetIncorrectColumnHeaderErrorCount += workbook.twoColumnSheets[
-//             page
-//         ].errors.filter(x => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
-//     }
-//     additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta.errors.filter(
-//         x => x.errorCode === "INCORRECT_COLUMN_HEADER"
-//     ).length;
-//     if (workbook.meta2.errors !== undefined) {
-//         additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta2.errors.filter(
-//             x => x.errorCode === "INCORRECT_COLUMN_HEADER"
-//         ).length;
-//     }
-//     assert.equal(frequency, additionalSheetIncorrectColumnHeaderErrorCount);
-// };
-//
-// var additionalSheetMissingColumnHeaderError = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var workbook = parseAdditionalSheet(sheet);
-//     var additionalSheetMissingColumnHeaderErrorCount = 0;
-//     for (let page in workbook.twoColumnSheets) {
-//         additionalSheetMissingColumnHeaderErrorCount += workbook.twoColumnSheets[
-//             page
-//         ].errors.filter(x => x.errorCode === "MISSING_COLUMN_HEADER").length;
-//     }
-//     additionalSheetMissingColumnHeaderErrorCount += workbook.meta.errors.filter(
-//         x => x.errorCode === "MISSING_COLUMN_HEADER"
-//     ).length;
-//     if (workbook.meta2.warnings !== undefined) {
-//         additionalSheetMissingColumnHeaderErrorCount += workbook.meta2.errors.filter(
-//             x => x.errorCode === "MISSING_COLUMN_HEADER"
-//         ).length;
-//     }
-//     assert.equal(frequency, additionalSheetMissingColumnHeaderErrorCount);
-// };
 
 var twoColumnInvalidGeneTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
@@ -604,22 +541,6 @@ var twoColumnInvalidGeneLengthError = function (input, frequency) {
     }
     assert.equal(frequency, twoColumnInvalidGeneLengthErrorCount);
 };
-
-// var twoColumnSpecialCharacterError = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var workbook = parseAdditionalSheet(sheet);
-//     var twoColumnSpecialCharacterErrorCount = 0;
-//     for (let page in workbook.twoColumnSheets) {
-//         twoColumnSpecialCharacterErrorCount += workbook.twoColumnSheets[page].errors.filter(
-//             function (x) {
-//                 return x.errorCode === "INVALID_CHARACTER";
-//             }
-//         ).length;
-//     }
-//     assert.equal(frequency, twoColumnSpecialCharacterErrorCount);
-// };
-
-// Additional Sheets Warning Tests
 
 var additionalSheetExtraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
@@ -704,30 +625,6 @@ var incorrectMSEHeaderWarning = function (input, frequency) {
     ).length;
     assert.equal(frequency, incorrectMSEHeaderWarningCount);
 };
-
-// var incorrectColumnHeaderWarning = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var exp = parseExpressionSheet(sheet);
-//     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["warnings"].length);
-//     for (var i = 0; i < frequency; i++) {
-//         assert.equal(
-//             "INCORRECT_COLUMN_HEADER",
-//             exp["expression"]["wt_log2_expression"]["warnings"][i].warningCode
-//         );
-//     }
-// };
-//
-// var missingColumnHeaderWarning = function (input, frequency) {
-//     var sheet = xlsx.parse(input);
-//     var exp = parseExpressionSheet(sheet);
-//     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["warnings"].length);
-//     for (var i = 0; i < frequency; i++) {
-//         assert.equal(
-//             "MISSING_COLUMN_HEADER",
-//             exp["expression"]["wt_log2_expression"]["warnings"][i].warningCode
-//         );
-//     }
-// };
 
 var additionalSheetIncorrectColumnHeaderWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
@@ -815,15 +712,9 @@ var importExportReImportNoErrorsOrWarnings = function (input) {
     if (inputWorkbook.meta2) {
         inputWorkbook.exportSheets["optimization_diagnostics"] = inputWorkbook.meta2;
     }
-    console.log("Input Workbook warnings:", inputWorkbook.warnings);
-    console.log("Input Workbook errors:", inputWorkbook.errors);
-    console.log("Input Workbook two column sheets", inputWorkbook.two_column_sheets);
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
-    // console.log("Exported workbook:", reImportedWorkbook);
-    console.log("The warnings for the exported workbook:", reImportedWorkbook.warnings);
-    console.log("The two column sheets for the exported workbooks:", reImportedWorkbook.two_column_sheets);
     assert.equal(0, reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length);
 };
 
@@ -886,13 +777,9 @@ exports.emptyRowDataError = emptyRowDataError;
 exports.emptyMatrixDataError = emptyMatrixDataError;
 exports.emptyColumnDataError = emptyColumnDataError;
 exports.emptyColumnError = emptyColumnError;
-//exports.twoColumnIdError = twoColumnIdError;
-// exports.additionalSheetIncorrectColumnHeaderError = additionalSheetIncorrectColumnHeaderError;
-// exports.additionalSheetMissingColumnHeaderError = additionalSheetMissingColumnHeaderError;
 exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
 exports.twoColumnInvalidValueError = twoColumnInvalidValueError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
-//exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

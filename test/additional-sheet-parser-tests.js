@@ -116,14 +116,6 @@ describe("additional-sheet-parser", function () {
                 simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
             });
         });
-
-        // it("should return additionalSheetMissingColumnHeaderError", function () {
-        //     test.additionalSheetMissingColumnHeaderError(
-        //         "test-files/additional-sheet-test-files/optimization-parameters-missing-headers.xlsx",
-        //         2
-        //     );
-        // });
-
         it("should return unknownOptimizationParameterWarning", function () {
             test.unknownOptimizationParameterWarning(
                 "test-files/additional-sheet-test-files/optimization-parameters-unknown-parameter.xlsx",
@@ -155,27 +147,6 @@ describe("additional-sheet-parser", function () {
             });
         });
 
-        // it("should return twoColumnIdError", function () {
-        //     test.twoColumnIdError(
-        //         "test-files/additional-sheet-test-files/two-column-sheets-incorrect-cell-A1.xlsx",
-        //         5
-        //     );
-        // });
-
-        // it("should return additionalSheetIncorrectColumnHeaderError", function () {
-        //     test.additionalSheetIncorrectColumnHeaderError(
-        //         "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
-        //         5
-        //     );
-        // });
-        //
-        // it("should return additionalSheetMissingColumnHeaderError", function () {
-        //     test.additionalSheetMissingColumnHeaderError(
-        //         "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx",
-        //         5
-        //     );
-        // });
-
         it("should return twoColumnInvalidGeneTypeError", function () {
             test.twoColumnInvalidGeneTypeError(
                 "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-type.xlsx",
@@ -197,13 +168,6 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        // it("should return twoColumnSpecialCharacterError", function () {
-        //     test.twoColumnSpecialCharacterError(
-        //         "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx",
-        //         5
-        //     );
-        // });
-
         it("should return missingColumnHeaderWarning", function () {
             test.additionalSheetMissingColumnHeaderWarning(
                 "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
@@ -218,6 +182,13 @@ describe("additional-sheet-parser", function () {
             );
         });
 
+        it("should return incorrectColumnHeaderWarning", function () {
+            test.additionalSheetIncorrectColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx",
+                0
+            );
+        });
+
         it("should return additionalSheetExtraneousDataWarning", function () {
             test.additionalSheetExtraneousDataWarning(
                 "test-files/additional-sheet-test-files/two-column-sheets-extraneous-data.xlsx",
@@ -227,20 +198,6 @@ describe("additional-sheet-parser", function () {
     });
 
     describe("optimization diagnostics sheet", function () {
-        // it("should return additionalSheetIncorrectColumnHeader Error", function () {
-        //     test.additionalSheetIncorrectColumnHeaderError(
-        //         "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-column-headers.xlsx",
-        //         2
-        //     );
-        // });
-        //
-        // it("should return additionalSheetMissingColumnHeader Error", function () {
-        //     test.additionalSheetMissingColumnHeaderError(
-        //         "test-files/additional-sheet-test-files/optimization-diagnostics-missing-column-headers.xlsx",
-        //         2
-        //     );
-        // });
-
         it("should return unknownOptimizationDiagnosticsParameter Warning", function () {
             test.unknownOptimizationDiagnosticsParameterWarning(
                 "test-files/additional-sheet-test-files/optimization-diagnostics-unknown-parameter.xlsx",

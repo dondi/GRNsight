@@ -396,15 +396,6 @@ module.exports = {
                     " special characters except for '-' and '_'.",
             };
         },
-
-        // incorrectColumnHeaderError: function (sheetName, columnLetter, header) {
-        //     return {
-        //         errorCode: "INCORRECT_COLUMN_HEADER",
-        //         possibleCause: `Column ${columnLetter} in the ${sheetName} sheet has an incorrect header.`,
-        //         suggestedFix: `Replace the incorrect label with '${header}' exactly.`,
-        //     };
-        // },
-        //
         missingColumnHeaderError: function (sheetName, columnLetter, header) {
             if (sheetName && columnLetter && header) {
                 return {
