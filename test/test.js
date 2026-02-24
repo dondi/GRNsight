@@ -119,10 +119,10 @@ const missingAllValuesForGenes = function (input, frequency, sheetName) {
         workbook.twoColumnSheets[sheetName].warnings,
         `Expected warnings array to exist on ${sheetName} sheet of workbook`
     );
-    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.equal(
-        `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
-        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
+        `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`
     );
 };
 
@@ -395,7 +395,7 @@ const noWarningsForAdditionalSheet = function (input, sheetName) {
 
     const workbook = parseAdditionalSheet(sheet, genes);
 
-    assert.equal(0, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, 0);
 };
 
 var missingSourceWarning = function (input, frequency) {
@@ -506,8 +506,8 @@ const unrecognizedSheetWarning = (input, frequency) => {
     const workbook = spreadsheetController.crossSheetInteractions(sheet);
 
     assert.exists(workbook.warnings, "Expected warnings array to exist on workbook");
-    assert.equal(frequency, workbook.warnings.length);
-    assert.equal(`UNRECOGNIZED_SHEET`, workbook.warnings[0].warningCode);
+    assert.equal(workbook.warnings.length, frequency);
+    assert.equal(workbook.warnings[0].warningCode, "UNRECOGNIZED_SHEET");
 };
 
 const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
@@ -526,10 +526,10 @@ const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => 
         workbook.twoColumnSheets[sheetName].warnings,
         `Expected warnings array to exist on ${sheetName} sheet of workbook`
     );
-    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.equal(
-        `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
-        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
+        `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`
     );
 };
 
@@ -549,7 +549,7 @@ const missingGenesAndValuesInTwoColumnSheetsWarning = (input, frequency, sheetNa
         workbook.twoColumnSheets[sheetName].warnings,
         `Expected warnings array to exist on ${sheetName} sheet of workbook`
     );
-    assert.equal(frequency, workbook.twoColumnSheets[sheetName].warnings.length);
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.equal(
         `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
         workbook.twoColumnSheets[sheetName].warnings[0].warningCode
