@@ -90,7 +90,6 @@ export const upload = function () {
     var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
         var source = null;
-
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
@@ -101,6 +100,7 @@ export const upload = function () {
                 source = "user-data";
             }
         }
+
         if (mode !== "grn") {
             mode = "PPI";
         }
@@ -122,6 +122,7 @@ export const upload = function () {
             sheetType,
             extension
         );
+        
         workbookToExport.filename = workbookFilename;
 
         const exportForm = $("<form></form>")
@@ -545,10 +546,12 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
+    
         if (Object.keys(grnState.workbook.expression).length > 0) {
+            const value = grnState.workbook.expression.source ? grnState.workbook.expression.source :"userInput";
             result += `
                         <li>
-                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <input type='radio' name='expressionSource' checked="true" value="${value}" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
                             <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
                         </li>
             `;
