@@ -274,23 +274,23 @@ module.exports = {
                 " GRNsight defaults to Saccharomyces cerevisiae.",
         },
 
-        additionalSheetIncorrectColumnHeaderWarning: function (sheetName, sheetHeader) {
+        additionalSheetIncorrectColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
             return {
                 warningCode: "INCORRECT_COLUMN_HEADER",
                 errorDescription:
                     `GRNsight has detected that the headers are incorrect in the imported workbook's ${sheetName} sheet. ` +
                     `The headers will need to be corrected to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
-                    `Cell A1 should contain the text "id", and cell A2 should contain the text ${sheetHeader}, exactly.`,
+                    `Cell A1 should contain the text ${expectedA1}, and cell B1 should contain the text ${expectedB1}, exactly.`,
             };
         },
 
-        additionalSheetMissingColumnHeaderWarning: function (sheetName, sheetHeader) {
+        additionalSheetMissingColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
             return {
                 warningCode: "MISSING_COLUMN_HEADER",
                 errorDescription:
                     `GRNsight has detected that the headers are missing in the imported workbook's ${sheetName} sheet. ` +
                     `The headers will need to be corrected to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
-                    `Cell A1 should contain the text "id", and cell A2 should contain the text ${sheetHeader}, exactly.`,
+                    `Cell A1 should contain the text ${expectedA1}, and cell B1 should contain the text ${expectedB1}, exactly.`,
             };
         },
 

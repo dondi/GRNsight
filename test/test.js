@@ -643,7 +643,7 @@ var additionalSheetIncorrectColumnHeaderWarning = function (input, frequency) {
             x => x.errorCode === "INCORRECT_COLUMN_HEADER"
         ).length;
     }
-    assert.equal(frequency, additionalSheetIncorrectColumnHeaderWarningCount);
+    assert.equal(additionalSheetIncorrectColumnHeaderWarningCount, frequency);
 };
 
 var additionalSheetMissingColumnHeaderWarning = function (input, frequency) {
@@ -663,7 +663,7 @@ var additionalSheetMissingColumnHeaderWarning = function (input, frequency) {
             x => x.errorCode === "MISSING_COLUMN_HEADER"
         ).length;
     }
-    assert.equal(frequency, additionalSheetMissingColumnHeaderWarningCount);
+    assert.equal(additionalSheetMissingColumnHeaderWarningCount, frequency);
 };
 
 var missingMSEDataWarning = function (input, frequency) {

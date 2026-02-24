@@ -6,11 +6,11 @@ var constants = require(__dirname + "/workbook-constants");
 const getSheetHeader = (sheetName, column, row) => {
     if (row === 0) {
         if (sheetName === "production_rates" || sheetName === "optimized_production_rates") {
-            return "production_rate";
+            return column === 0 ? "id" : "production_rate";
         } else if (sheetName === "degradation_rates") {
-            return "degradation_rate";
+            return column === 0 ? "id" : "degradation_rate";
         } else if (sheetName === "threshold_b" || sheetName === "optimized_threshold_b") {
-            return "threshold_b";
+            return column === 0 ? "id" : "threshold_b";
         } else if (sheetName === "optimization_parameters") {
             return column === 0 ? "optimization_parameter" : "value";
         } else if (sheetName === "optimization_diagnostics") {
@@ -43,7 +43,7 @@ const optimizationParametersTypeKey = {
 
 const optimizationDiagnosticsParameters = ["LSE", "Penalty", "min LSE", "iteration count"];
 
-const optimizationParametersObectKey = {
+const optimizationParametersObjectKey = {
     expression_timepoints: "number",
     Strain: "string",
     simulation_timepoints: "number",
@@ -161,14 +161,14 @@ const parseMetaDataSheet = sheet => {
     for (let key in meta.data) {
         paramType = optimizationParametersTypeKey[key];
         if (paramType === "object") {
-            paramType = `list of ${optimizationParametersObectKey[key]}s`;
+            paramType = `list of ${optimizationParametersObjectKey[key]}s`;
         }
         if (meta.data[key] === undefined) {
             addWarning(meta, constants.warnings.unknownOptimizationParameter(sheet.name, key));
         } else if (typeof meta.data[key] !== optimizationParametersTypeKey[key]) {
             if (
                 optimizationParametersTypeKey[key] !== "object" ||
-                typeof meta.data[key] !== optimizationParametersObectKey[key]
+                typeof meta.data[key] !== optimizationParametersObjectKey[key]
             ) {
                 addWarning(
                     meta,
@@ -177,7 +177,7 @@ const parseMetaDataSheet = sheet => {
             }
         } else if (optimizationParametersTypeKey[key] === "object") {
             for (let val of meta.data[key]) {
-                if (typeof val !== optimizationParametersObectKey[key]) {
+                if (typeof val !== optimizationParametersObjectKey[key]) {
                     // throw error once per object. Makes sure that errors list is not flooded
                     addWarning(
                         meta,
@@ -189,6 +189,40 @@ const parseMetaDataSheet = sheet => {
         }
     }
     return meta;
+};
+
+// check header method
+const checkValidHeaderAndAddWarnings = (output, sheet) => {
+    const expectedCellA1 = getSheetHeader(sheet, 0, 0);
+    const expectedCellB1 = getSheetHeader(sheet, 1, 0);
+
+    // check incorrect header
+    if (sheet.data[0].length >= 0) {
+        const isCellA1HeaderCorrect = sheet.data[0][0] === expectedCellA1;
+        const isCellB1HeaderCorrect =
+            sheet.data[0].length > 1 && sheet.data[0][1] === expectedCellB1;
+        const isHeaderCorrect = isCellA1HeaderCorrect && isCellB1HeaderCorrect;
+
+        if (!isHeaderCorrect) {
+            addWarning(
+                output,
+                constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
+                    sheet.name,
+                    expectedCellA1,
+                    expectedCellB1
+                )
+            );
+        }
+    } else {
+        addWarning(
+            output,
+            constants.warnings.additionalSheetMissingColumnHeaderWarning(
+                sheet.name,
+                expectedCellA1,
+                expectedCellB1
+            )
+        );
+    }
 };
 
 const parseOptimizationDiagnosticsSheet = sheet => {
@@ -208,37 +242,7 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     let currentGene;
     let currentMSE = [];
     // Check Headers
-    if (sheet.data[0].length > 1) {
-        if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-            addWarning(
-                output,
-                constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                    sheet.name,
-                    getSheetHeader(sheet.name, 0, 0)
-                )
-            );
-        }
-        if (sheet.data[0][1] !== getSheetHeader(sheet.name, 0, 0)) {
-            addWarning(
-                output,
-                constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                    sheet.name,
-                    getSheetHeader(sheet.name, 1, 0)
-                )
-            );
-        }
-    } else {
-        // seems a bit sus, but we'll see if this works properly during testing :\
-        for (let col = 1; col >= sheet.data[0].length; col--) {
-            addWarning(
-                output,
-                constants.warnings.additionalSheetMissingColumnHeaderWarning(
-                    sheet.name,
-                    getSheetHeader(sheet.name, col, 0)
-                )
-            );
-        }
-    }
+    checkValidHeaderAndAddWarnings(output, sheet);
     // Check Parameter Section
     let row = 1;
     // a missing row is the indicator to move onto the MSE
@@ -363,18 +367,7 @@ const parseTwoColumnSheet = sheet => {
             addWarning(output, constants.warnings.extraneousDataWarning(sheet.name, row + 1));
         }
         if (row === 0) {
-            if (
-                sheet.data[row][0] !== "id" ||
-                sheet.data[row][1] !== getSheetHeader(sheet.name, 1, row)
-            ) {
-                addWarning(
-                    output,
-                    constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                        sheet.name,
-                        getSheetHeader(sheet.name, 1, row)
-                    )
-                );
-            }
+            checkValidHeaderAndAddWarnings(output, sheet);
         } else {
             currentGene = sheet.data[row][0];
             currentValue = sheet.data[row][1];
