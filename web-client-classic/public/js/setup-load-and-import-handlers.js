@@ -27,8 +27,6 @@ const demoFiles = [
 ];
 
 import { displayExportWarnings } from "./warnings.js";
-import { warnings } from "./import-warning-constants.js";
-import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
 
 const submittedFilename = $upload => {
     let path = $upload.val();
@@ -123,12 +121,6 @@ const returnUploadRoute = filename => {
 };
 
 export const setupLoadAndImportHandlers = grnState => {
-    const applyWarnings = (workbook, msgs) => {
-        if (!msgs.length) return;
-        workbook.warnings.push(...msgs);
-        displayExportWarnings(workbook.warnings);
-    };
-
     const loadGrn = (name, formData) => {
         const uploadRoute = returnUploadRoute(name);
         grnState.workbookType = uploadRoute;
@@ -165,14 +157,8 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
 
-                if (grnState.mode === NETWORK_GRN_MODE) {
-                    const warningMessages = buildWorkbookTwoColumnMissingGenesWarnings(
-                        workbook,
-                        warnings,
-                        ["production_rates", "degradation_rates"] // chosenSheets (include both two column sheets when importing GRN workbooks)
-                    );
-
-                    applyWarnings(workbook, warningMessages);
+                if (grnState.workbook.warnings && grnState.workbook.warnings.length > 0) {
+                    displayExportWarnings(workbook.warnings);
                 }
 
                 if (uploadRoute !== "upload") {
