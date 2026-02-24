@@ -196,8 +196,6 @@ const checkValidHeaderAndAddWarnings = (output, sheet) => {
     const sheetName = sheet.name;
     const expectedCellA1 = getSheetHeader(sheetName, 0, 0);
     const expectedCellB1 = getSheetHeader(sheetName, 1, 0);
-
-    // check incorrect header
     if (sheet.data[0].length >= 0) {
         const isCellA1HeaderCorrect = sheet.data[0][0] === expectedCellA1;
         const isCellB1HeaderCorrect =
