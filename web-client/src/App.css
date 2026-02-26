@@ -287,21 +287,6 @@ input[type="radio"]:checked {
   transition: opacity 0.25s;
 }
 
-.containerS {
-  width: 1104px;
-  height: 648px;
-}
-
-.containerM {
-  width: 1414px;
-  height: 840px;
-}
-
-.containerL {
-  width: 1920px;
-  height: 1080px;
-}
-
 .load-from-database {
   border: 2px solid red;
 }

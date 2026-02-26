@@ -13,11 +13,10 @@ import {
   MIN_SCALE,
   ZOOM_DISPLAY_MIDDLE,
   VIEW_SIZE_SMALL,
-  VIEW_SIZE_MEDIUM,
-  VIEW_SIZE_LARGE,
   FIT_TO_WINDOW,
   VIEW_SIZE_DIMENSIONS,
-  VIEW_SIZE_CONTAINER_DIMENSIONS,
+  HEIGHT_OFFSET,
+  WIDTH_OFFSET,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -49,7 +48,11 @@ export default function Graph() {
   const [zoomScale, setZoomScale] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
-  const [containerDimensions, setContainerDimensions] = useState(null);
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  const [grnsightContainerDimensions, setGrnsightContainerDimensions] = useState(null);
 
   const {
     colorOptimal,
@@ -98,18 +101,35 @@ export default function Graph() {
   }, [zoomPercent]);
 
   useEffect(() => {
+    if (viewSize !== FIT_TO_WINDOW) return;
+
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [viewSize]);
+
+  useEffect(() => {
     console.log("viewSize in Graph useEffect", viewSize);
-    if (viewSize && viewSize !== FIT_TO_WINDOW) {
+    if (!viewSize) {
+      setWidth(VIEW_SIZE_SMALL);
+      setHeight(VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL].height);
+      setGrnsightContainerDimensions(VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL].size);
+    } else if (viewSize === FIT_TO_WINDOW) {
+      setWidth(windowDimensions.width - WIDTH_OFFSET);
+      setHeight(windowDimensions.height - HEIGHT_OFFSET);
+      setGrnsightContainerDimensions(VIEW_SIZE_DIMENSIONS[viewSize].size);
+    } else {
       setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
       setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
-      console.log(
-        "width and height set in Graph useEffect",
-        VIEW_SIZE_DIMENSIONS[viewSize].width,
-        VIEW_SIZE_DIMENSIONS[viewSize].height
-      );
-      setContainerDimensions(VIEW_SIZE_CONTAINER_DIMENSIONS[viewSize]);
+      setGrnsightContainerDimensions(VIEW_SIZE_DIMENSIONS[viewSize].size);
     }
-  }, [viewSize]);
+  }, [viewSize, windowDimensions]);
 
   // Main D3 rendering effect
   useEffect(() => {
@@ -250,10 +270,7 @@ export default function Graph() {
       d.fy = null;
     }
 
-    // TODO: may need to change this when have dymanic viewport width
     function center() {
-      var viewportWidth = width;
-      var viewportHeight = height;
       zoom.translateTo(zoomContainer, width / 2, height / 2);
     }
 
@@ -300,18 +317,17 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize]);
-  if (loading) {
-    return <div className="grnsight-container">Loading graph...</div>;
-  }
-
-  if (error) {
-    return <div className="grnsight-container">Error: {error}</div>;
-  }
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize, windowDimensions]);
 
   return (
-    <div ref={containerRef} className={`grnsight-container ${containerDimensions}`}>
-      <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />
+    <div
+      ref={containerRef}
+      className={`grnsight-container`}
+      style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
+    >
+      {loading && <div>Loading graph...</div>}
+      {error && <div>Error: {error}</div>}
+      <svg ref={svgRef} />
       <ScaleAndScroll />
     </div>
   );

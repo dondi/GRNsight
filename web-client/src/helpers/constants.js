@@ -55,12 +55,10 @@ export const VIEW_SIZE_DIMENSIONS = {
   [VIEW_SIZE_SMALL]: { width: 1104, height: 648 },
   [VIEW_SIZE_MEDIUM]: { width: 1414, height: 768 },
   [VIEW_SIZE_LARGE]: { width: 1920, height: 1080 },
+  [FIT_TO_WINDOW]: { width: null, height: null },
 };
-export const VIEW_SIZE_CONTAINER_DIMENSIONS = {
-  [VIEW_SIZE_SMALL]: "containerS",
-  [VIEW_SIZE_MEDIUM]: "containerM",
-  [VIEW_SIZE_LARGE]: "containerL",
-};
+export const WIDTH_OFFSET = 255;
+export const HEIGHT_OFFSET = 53;
 
 // Zoom
 export const ZOOM_DISPLAY_MINIMUM = 25;
