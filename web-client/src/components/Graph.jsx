@@ -52,7 +52,6 @@ export default function Graph() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  const [grnsightContainerDimensions, setGrnsightContainerDimensions] = useState(null);
 
   const {
     colorOptimal,
@@ -100,6 +99,7 @@ export default function Graph() {
     zoomRef.current.scaleTo(zoomContainer, scale);
   }, [zoomPercent]);
 
+  // Handle window resize for Fit to Window
   useEffect(() => {
     if (viewSize !== FIT_TO_WINDOW) return;
 
@@ -115,19 +115,15 @@ export default function Graph() {
   }, [viewSize]);
 
   useEffect(() => {
-    console.log("viewSize in Graph useEffect", viewSize);
     if (!viewSize) {
       setWidth(VIEW_SIZE_SMALL);
       setHeight(VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL].height);
-      setGrnsightContainerDimensions(VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL].size);
     } else if (viewSize === FIT_TO_WINDOW) {
       setWidth(windowDimensions.width - WIDTH_OFFSET);
       setHeight(windowDimensions.height - HEIGHT_OFFSET);
-      setGrnsightContainerDimensions(VIEW_SIZE_DIMENSIONS[viewSize].size);
     } else {
       setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
       setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
-      setGrnsightContainerDimensions(VIEW_SIZE_DIMENSIONS[viewSize].size);
     }
   }, [viewSize, windowDimensions]);
 
@@ -137,10 +133,6 @@ export default function Graph() {
 
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
-
-    // const container = containerRef.current;
-    // const width = container.clientWidth;
-    // const height = container.clientHeight;
 
     const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
 
