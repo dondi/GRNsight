@@ -1,4 +1,4 @@
-import { useEffect, useRef, useContext, useState } from "react";
+import { useEffect, useRef, useContext, useState, use } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
 import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
@@ -15,6 +15,9 @@ import {
   VIEW_SIZE_SMALL,
   VIEW_SIZE_MEDIUM,
   VIEW_SIZE_LARGE,
+  FIT_TO_WINDOW,
+  VIEW_SIZE_DIMENSIONS,
+  VIEW_SIZE_CONTAINER_DIMENSIONS,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -26,6 +29,7 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
+import { initialViewportSize } from "../helpers/viewportHelpers";
 import "../App.css";
 
 export default function Graph() {
@@ -43,6 +47,9 @@ export default function Graph() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [zoomScale, setZoomScale] = useState(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  const [containerDimensions, setContainerDimensions] = useState(null);
 
   const {
     colorOptimal,
@@ -90,16 +97,30 @@ export default function Graph() {
     zoomRef.current.scaleTo(zoomContainer, scale);
   }, [zoomPercent]);
 
+  useEffect(() => {
+    console.log("viewSize in Graph useEffect", viewSize);
+    if (viewSize && viewSize !== FIT_TO_WINDOW) {
+      setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
+      setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
+      console.log(
+        "width and height set in Graph useEffect",
+        VIEW_SIZE_DIMENSIONS[viewSize].width,
+        VIEW_SIZE_DIMENSIONS[viewSize].height
+      );
+      setContainerDimensions(VIEW_SIZE_CONTAINER_DIMENSIONS[viewSize]);
+    }
+  }, [viewSize]);
+
   // Main D3 rendering effect
   useEffect(() => {
-    if (!workbook || !svgRef.current || !containerRef.current) return;
+    if (!workbook || !svgRef.current || !containerRef.current || !width || !height) return;
 
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
 
-    const container = containerRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    // const container = containerRef.current;
+    // const width = container.clientWidth;
+    // const height = container.clientHeight;
 
     const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
 
@@ -279,7 +300,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize]);
   if (loading) {
     return <div className="grnsight-container">Loading graph...</div>;
   }
@@ -289,11 +310,7 @@ export default function Graph() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="grnsight-container"
-      style={{ width: "100%", height: "600px" }}
-    >
+    <div ref={containerRef} className={`grnsight-container ${containerDimensions}`}>
       <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />
       <ScaleAndScroll />
     </div>

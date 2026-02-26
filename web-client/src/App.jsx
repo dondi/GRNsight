@@ -7,7 +7,7 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { theme } from "./helpers/theme";
 import { ZOOM_DISPLAY_MIDDLE } from "./helpers/constants";
-import initialViewportSize from "./helpers/viewportHelpers";
+import { initialViewportSize } from "./helpers/viewportHelpers";
 import "./App.css";
 
 // Create a context for the GRN state

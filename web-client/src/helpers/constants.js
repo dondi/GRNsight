@@ -52,9 +52,14 @@ export const FIT_TO_WINDOW = "Fit to Window";
 export const MEDIUM_PAGE_WIDTH = 1500;
 export const LARGE_PAGE_WIDTH = 2200;
 export const VIEW_SIZE_DIMENSIONS = {
-  VIEW_SIZE_SMALL: { width: 1104, height: 648 },
-  VIEW_SIZE_MEDIUM: { width: 1414, height: 768 },
-  VIEW_SIZE_LARGE: { width: 1920, height: 1080 },
+  [VIEW_SIZE_SMALL]: { width: 1104, height: 648 },
+  [VIEW_SIZE_MEDIUM]: { width: 1414, height: 768 },
+  [VIEW_SIZE_LARGE]: { width: 1920, height: 1080 },
+};
+export const VIEW_SIZE_CONTAINER_DIMENSIONS = {
+  [VIEW_SIZE_SMALL]: "containerS",
+  [VIEW_SIZE_MEDIUM]: "containerM",
+  [VIEW_SIZE_LARGE]: "containerL",
 };
 
 // Zoom

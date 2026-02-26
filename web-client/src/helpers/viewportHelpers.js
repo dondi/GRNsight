@@ -6,7 +6,7 @@ import {
   LARGE_PAGE_WIDTH,
 } from "./constants";
 
-export default function initialViewportSize(width) {
+export function initialViewportSize(width) {
   if (width < MEDIUM_PAGE_WIDTH) {
     console.log("initializing viewport size as small", VIEW_SIZE_SMALL);
     return VIEW_SIZE_SMALL;
