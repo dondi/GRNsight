@@ -1,4 +1,4 @@
-import { useEffect, useRef, useContext, useState, use } from "react";
+import { useEffect, useRef, useContext, useState } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
 import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
@@ -28,7 +28,6 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
-import { initialViewportSize } from "../helpers/viewportHelpers";
 import "../App.css";
 
 export default function Graph() {
