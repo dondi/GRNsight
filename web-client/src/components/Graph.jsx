@@ -12,6 +12,9 @@ import {
   NODE_TEXT_HEIGHT,
   MIN_SCALE,
   ZOOM_DISPLAY_MIDDLE,
+  VIEW_SIZE_SMALL,
+  VIEW_SIZE_MEDIUM,
+  VIEW_SIZE_LARGE,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -51,12 +54,12 @@ export default function Graph() {
     grayThreshold,
     zoomPercent,
     setZoomPercent,
+    viewSize,
   } = useContext(GrnStateContext);
 
   // Load workbook data
   useEffect(() => {
     if (!demoValue) return;
-
     const demoEndpoint = getDemoEndpoint(demoValue);
     setLoading(true);
 

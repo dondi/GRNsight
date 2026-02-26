@@ -11,6 +11,10 @@ import {
   ZOOM_DISPLAY_MINIMUM,
   ZOOM_DISPLAY_MAXIMUM,
   ZOOM_DISPLAY_MIDDLE,
+  VIEW_SIZE_SMALL,
+  VIEW_SIZE_MEDIUM,
+  VIEW_SIZE_LARGE,
+  FIT_TO_WINDOW,
 } from "../helpers/constants";
 import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
@@ -335,28 +339,28 @@ export default function Navbar({}) {
             {/* only display the checkmark for the selected view size */}
             <Button
               margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize("Small (1104 X 648 pixels)")}
+              onClick={() => setViewSize(VIEW_SIZE_SMALL)}
             >
               <Checkmark />
               <Text>Small</Text>
             </Button>
             <Button
               margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize("Medium (1414 X 768 pixels)")}
+              onClick={() => setViewSize(VIEW_SIZE_MEDIUM)}
             >
               <Checkmark />
               <Text>Medium</Text>
             </Button>
             <Button
               margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize("Large (1920 X 1080 pixels)")}
+              onClick={() => setViewSize(VIEW_SIZE_LARGE)}
             >
               <Checkmark />
               <Text>Large</Text>
             </Button>
             <Button
               margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize("Fit To Window")}
+              onClick={() => setViewSize(FIT_TO_WINDOW)}
             >
               <Checkmark />
               <Text>Fit To Window</Text>

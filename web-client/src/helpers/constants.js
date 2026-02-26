@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-// TODO: Should I point to the constants in web-client-classic instead?
+// Demo Names
 export const UNWEIGHTED_DEMO_NAME =
   "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
 export const WEIGHTED_DEMO_NAME =
@@ -16,18 +16,11 @@ export const DEMO_TYPES = {
   schadeOutput: SCHADE_OUTPUT_NAME,
   ppi: PPI_DEMO_NAME,
 };
+
+// Graph
 export const BOUNDARY_MARGIN = 5;
-export const ZOOM_DISPLAY_MINIMUM = 25;
-export const ZOOM_DISPLAY_MAXIMUM = 200;
-export const ZOOM_DISPLAY_MIDDLE = 100;
-export const ZOOM_ADAPTIVE_MAX_SCALE = 100;
-export const ZOOM_SLIDER_MIN = 0;
-export const ZOOM_SLIDER_MIDDLE = 4;
-export const ZOOM_SLIDER_MAX = 8;
 export const MINIMUM_NODE_WIDTH = 68.5625;
 export const NODE_MARGIN = 3;
-// node_height is 22 in web-client-classic, but 30 in this. may need to fix later
-// Alternatively, var nodeHeight = 30 in graph.js, so this value may be accurate
 export const NODE_HEIGHT = 30;
 export const NODE_TEXT_HEIGHT = 22;
 export const MIN_SCALE = 0.25;
@@ -51,6 +44,27 @@ export const LIGHT_GRAY = "#ccc";
 export const MEDIUM_GRAY = "#bbb";
 export const DARK_GRAY = "#999";
 
+// Viewport Size
+export const VIEW_SIZE_SMALL = "Small (1104 X 648 pixels)";
+export const VIEW_SIZE_MEDIUM = "Medium (1414 X 768 pixels)";
+export const VIEW_SIZE_LARGE = "Large (1920 X 1080 pixels)";
+export const FIT_TO_WINDOW = "Fit to Window";
+export const MEDIUM_PAGE_WIDTH = 1500;
+export const LARGE_PAGE_WIDTH = 2200;
+export const VIEW_SIZE_DIMENSIONS = {
+  VIEW_SIZE_SMALL: { width: 1104, height: 648 },
+  VIEW_SIZE_MEDIUM: { width: 1414, height: 768 },
+  VIEW_SIZE_LARGE: { width: 1920, height: 1080 },
+};
+
+// Zoom
+export const ZOOM_DISPLAY_MINIMUM = 25;
+export const ZOOM_DISPLAY_MAXIMUM = 200;
+export const ZOOM_DISPLAY_MIDDLE = 100;
+export const ZOOM_ADAPTIVE_MAX_SCALE = 100;
+export const ZOOM_SLIDER_MIN = 0;
+export const ZOOM_SLIDER_MIDDLE = 4;
+export const ZOOM_SLIDER_MAX = 8;
 // Supports non-linear zoom scale so that 100% in the middle of slider
 const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
   d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
