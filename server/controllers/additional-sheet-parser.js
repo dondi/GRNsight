@@ -113,44 +113,15 @@ const parseMetaDataSheet = sheet => {
     };
     let paramType;
     if (sheet.data[0][0] === undefined) {
-        addWarning(
-            meta,
-            constants.warnings.additionalSheetMissingColumnHeaderWarning(
-                sheet.name,
-                constants.numbersToLetters[0],
-                getSheetHeader(sheet.name, 0, 0)
-            )
-        );
+        checkValidHeaderAndAddWarnings(meta, sheet);
     } else if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-        addWarning(
-            meta,
-            constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                sheet.name,
-                constants.numbersToLetters[0],
-                getSheetHeader(sheet.name, 0, 0)
-            )
-        );
+        checkValidHeaderAndAddWarnings(meta, sheet);
     }
     if (sheet.data[0][1] === undefined) {
-        addWarning(
-            meta,
-            constants.warnings.additionalSheetMissingColumnHeaderWarning(
-                sheet.name,
-                constants.numbersToLetters[1],
-                getSheetHeader(sheet.name, 1, 0)
-            )
-        );
+        checkValidHeaderAndAddWarnings(meta, sheet);
     } else if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-        addWarning(
-            meta,
-            constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                sheet.name,
-                constants.numbersToLetters[1],
-                getSheetHeader(sheet.name, 1, 0)
-            )
-        );
+        checkValidHeaderAndAddWarnings(meta, sheet);
     }
-
     sheet.data.forEach(function (element, index) {
         if (index !== 0) {
             const value = element.slice(1);
@@ -405,7 +376,7 @@ module.exports = function (workbookFile) {
     workbookFile.forEach(function (sheet) {
         if (sheet.name === "optimization_parameters") {
             output.meta = parseMetaDataSheet(sheet);
-            // above line creates an object from the optimization paramerters sheet
+            // above line creates an object from the optimization parameters sheet
             // these are part of the "meta" property
         } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
             output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet);

@@ -626,44 +626,46 @@ var incorrectMSEHeaderWarning = function (input, frequency) {
     assert.equal(frequency, incorrectMSEHeaderWarningCount);
 };
 
-var additionalSheetIncorrectColumnHeaderWarning = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var additionalSheetIncorrectColumnHeaderWarningCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        additionalSheetIncorrectColumnHeaderWarningCount += workbook.twoColumnSheets[
-            page
-        ].errors.filter(x => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
-    }
-    additionalSheetIncorrectColumnHeaderWarningCount += workbook.meta.errors.filter(
-        x => x.errorCode === "INCORRECT_COLUMN_HEADER"
-    ).length;
-    if (workbook.meta2.errors !== undefined) {
-        additionalSheetIncorrectColumnHeaderWarningCount += workbook.meta2.errors.filter(
-            x => x.errorCode === "INCORRECT_COLUMN_HEADER"
-        ).length;
-    }
-    assert.equal(additionalSheetIncorrectColumnHeaderWarningCount, frequency);
+const additionalSheetIncorrectColumnHeaderWarning = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook.`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.isTrue(workbook.twoColumnSheets[sheetName].warnings.some(
+        warning =>
+            warning.warningCode ===
+            `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`
+        )
+    );
 };
 
-var additionalSheetMissingColumnHeaderWarning = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var additionalSheetMissingColumnHeaderWarningCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        additionalSheetMissingColumnHeaderWarningCount += workbook.twoColumnSheets[
-            page
-        ].errors.filter(x => x.errorCode === "MISSING_COLUMN_HEADER").length;
-    }
-    additionalSheetMissingColumnHeaderWarningCount += workbook.meta.errors.filter(
-        x => x.errorCode === "MISSING_COLUMN_HEADER"
-    ).length;
-    if (workbook.meta2.warnings !== undefined) {
-        additionalSheetMissingColumnHeaderWarningCount += workbook.meta2.errors.filter(
-            x => x.errorCode === "MISSING_COLUMN_HEADER"
-        ).length;
-    }
-    assert.equal(additionalSheetMissingColumnHeaderWarningCount, frequency);
+const additionalSheetMissingColumnHeaderWarning = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook.`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.isTrue(
+        workbook.twoColumnSheets[sheetName].warnings.some(
+            warning => warning.warningCode === `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`
+        )
+    );
 };
 
 var missingMSEDataWarning = function (input, frequency) {
