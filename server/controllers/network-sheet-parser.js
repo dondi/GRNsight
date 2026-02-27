@@ -322,7 +322,6 @@ var parseNetworkSheet = function (sheet, network) {
     if (a1IsIncorrect) {
         addError(network, constants.errors.incorrectCellA1WorkbookError(sheet.name));
     }
-    
     return semanticChecker(network);
 };
 
