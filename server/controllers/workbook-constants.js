@@ -177,13 +177,13 @@ module.exports = {
             };
         },
 
-        incorrectCellA1WorkbookWarning: function (sheetName) {
-            return {
-                warningCode: "MISLABELED_NETWORK_CELL_A1",
-                errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-                Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN) or '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
-            };
-        },
+        // incorrectCellA1WorkbookWarning: function (sheetName) {
+        //     return {
+        //         warningCode: "MISLABELED_NETWORK_CELL_A1",
+        //         errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
+        //         Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN) or '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
+        //     };
+        // },
 
         missingTargetGeneWarning: function (row, column) {
             var colLetter = numbersToLetters[column];
@@ -649,6 +649,16 @@ module.exports = {
                 suggestedFix:
                     "Change the non-numerical time point to a positive number and ensure expression data \
                 is correct.",
+            };
+        },
+
+        incorrectCellA1WorkbookError: function (sheetName) {
+            return {
+                errorCode: "MISLABELED_NETWORK_CELL_A1",
+                possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
+                suggestedFix:
+                    `Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN) or \
+                '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
             };
         },
     },
