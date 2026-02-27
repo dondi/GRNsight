@@ -656,8 +656,7 @@ module.exports = {
             return {
                 errorCode: "MISLABELED_NETWORK_CELL_A1",
                 possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
-                suggestedFix:
-                    `Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN) or \
+                suggestedFix: `Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN) or \
                 '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
             };
         },
