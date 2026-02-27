@@ -177,14 +177,6 @@ module.exports = {
             };
         },
 
-        // incorrectCellA1WorkbookWarning: function (sheetName) {
-        //     return {
-        //         warningCode: "MISLABELED_NETWORK_CELL_A1",
-        //         errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-        //         Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN) or '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
-        //     };
-        // },
-
         missingTargetGeneWarning: function (row, column) {
             var colLetter = numbersToLetters[column];
             var rowNum = row + 1;
