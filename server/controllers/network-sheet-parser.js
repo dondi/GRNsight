@@ -109,8 +109,9 @@ var parseNetworkSheet = function (sheet, network) {
 
     // Depending on the value of cellA1, we want to make a new property `networkType` which
     // will indicate the network type. THe web app then reads this to decide what to do next.
+    let a1IsIncorrect = false;
     if (cellA1 !== CELL_A1_GRN && cellA1 !== CELL_A1_PPI) {
-        addError(network, constants.errors.incorrectCellA1WorkbookError(sheet.name));
+        a1IsIncorrect = true;
     }
 
     // Get Source Genes
@@ -317,6 +318,11 @@ var parseNetworkSheet = function (sheet, network) {
     // } catch (err) {
     //   console.log ("Graph statistics report failed to be complete.");
     // }
+
+    if (a1IsIncorrect) {
+        addError(network, constants.errors.incorrectCellA1WorkbookError(sheet.name));
+    }
+    
     return semanticChecker(network);
 };
 
