@@ -716,7 +716,6 @@ const additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning
     assert.exists(workbook.meta, "Expected meta to exist on workbook");
     assert.exists(workbook.meta.warnings, "Expected warnings array to exist on meta of workbook");
     assert.equal(workbook.meta.warnings.length, frequency);
-    console.log(workbook.meta.warnings);
     assert.isTrue(
         workbook.meta.warnings.some(warning => warning.warningCode === expectedWarningCode)
     );
@@ -821,7 +820,7 @@ var importExportReImportNoErrorsOrWarnings = function (input) {
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
-    assert.equal(0, reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length);
+    assert.equal(reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length, 0);
 };
 
 var importFileSameAsExportFile = function (input) {

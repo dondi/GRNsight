@@ -320,6 +320,37 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     return output;
 };
 
+const checkValidGenesAndValuesInTwoColumnSheet = (output, sheet, row, genesMissingValue) => {
+    if (!sheet.data[row]) return;
+
+    const currentGene = sheet.data[row][0];
+    const currentValue = sheet.data[row][1];
+
+    if (validGeneName(output, sheet.name, currentGene, row + 1)) {
+        const isEmpty =
+            currentValue == null ||
+            (typeof currentValue === "string" && currentValue.trim() === "");
+        if (isEmpty) {
+            genesMissingValue.push(currentGene);
+            output.data[currentGene] = undefined;
+        } else {
+            if (typeof currentValue === "number") {
+                output.data[currentGene] = currentValue;
+            } else {
+                addError(
+                    output,
+                    constants.errors.invalidValueError(
+                        sheet.name,
+                        currentValue,
+                        row + 1,
+                        getSheetHeader(sheet.name, 1, 0)
+                    )
+                );
+            }
+        }
+    }
+};
+
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let output = {
         data: {},
@@ -331,9 +362,6 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         return output;
     }
 
-    let currentGene;
-    let currentValue;
-
     const genesMissingValue = [];
 
     // check to see if the genes are strings and the values are numbers
@@ -344,30 +372,23 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         }
         if (row === 0) {
             checkValidHeaderAndAddWarnings(output, sheet);
-        } else {
-            currentGene = sheet.data[row][0];
-            currentValue = sheet.data[row][1];
 
-            if (validGeneName(output, sheet.name, currentGene, row + 1)) {
-                if (currentValue === null || currentValue === undefined) {
-                    genesMissingValue.push(currentGene);
-                    output.data[currentGene] = undefined;
+            const hasMissingHeader = output.warnings.some(
+                w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
+            );
+
+            if (hasMissingHeader) {
+                const cellA1 = sheet.data[row][0];
+                const cellB1 = sheet.data[row][1];
+
+                if (cellA1 == null && cellB1 == null) {
+                    continue;
                 } else {
-                    if (typeof currentValue === "number") {
-                        output.data[currentGene] = currentValue;
-                    } else {
-                        addError(
-                            output,
-                            constants.errors.invalidValueError(
-                                sheet.name,
-                                currentValue,
-                                row + 1,
-                                getSheetHeader(sheet.name, 1, row)
-                            )
-                        );
-                    }
+                    checkValidGenesAndValuesInTwoColumnSheet(output, sheet, row, genesMissingValue);
                 }
             }
+        } else {
+            checkValidGenesAndValuesInTwoColumnSheet(output, sheet, row, genesMissingValue);
         }
     }
 
