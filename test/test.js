@@ -59,6 +59,16 @@ var duplicateGeneError = function (input, frequency) {
   */
 };
 
+const wrongCellA1Error = function (input, frequency) {
+    const sheet = xlsx.parse(input);
+
+    const workbook = parseNetworkSheet(sheet);
+
+    assert.exists(workbook.errors, "Expected errors array to exist in workbook");
+    assert.equal(workbook.errors.length, frequency);
+    assert.isTrue(workbook.errors.some(error => error.errorCode === "MISLABELED_NETWORK_CELL_A1"));
+};
+
 var invalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -918,3 +928,5 @@ exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheet
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
+
+exports.wrongCellA1Error = wrongCellA1Error;

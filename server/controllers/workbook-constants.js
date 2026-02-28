@@ -1,3 +1,4 @@
+const { CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
 // Currently only going to number 76 because currently the workbook errors out at 75+ genes.
 var numbersToLetters = {
     0: "A",
@@ -188,15 +189,6 @@ module.exports = {
                 warningCode: "MISSING_SOURCE",
                 errorDescription:
                     "A source gene name is missing in cell " + colLetter + rowNum + ".",
-            };
-        },
-
-        incorrectCellA1WorkbookWarning: function (sheetName) {
-            return {
-                warningCode: "MISLABELED_NETWORK_CELL_A1",
-                errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-                Replace the incorrect label with \'cols regulators/ rows targets\' or \'cols 
-                protein1/ rows protein2'\ exactly.`,
             };
         },
 
@@ -708,6 +700,17 @@ module.exports = {
                 suggestedFix:
                     "Change the non-numerical time point to a positive number and ensure expression data \
                 is correct.",
+            };
+        },
+
+        incorrectCellA1WorkbookError: function (sheetName) {
+            return {
+                errorCode: "MISLABELED_NETWORK_CELL_A1",
+                possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
+                suggestedFix: [
+                    `Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN)`,
+                    `or '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
+                ].join(" "),
             };
         },
     },
