@@ -626,29 +626,58 @@ var incorrectMSEHeaderWarning = function (input, frequency) {
     assert.equal(frequency, incorrectMSEHeaderWarningCount);
 };
 
-const additionalSheetIncorrectColumnHeaderWarning = function (input, frequency, sheetName) {
+const additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning = function (
+    input,
+    frequency,
+    isMissingOptimizationDiagnosticsSheet = false
+) {
     const sheet = xlsx.parse(input);
+    const expectedWarningCode = isMissingOptimizationDiagnosticsSheet
+        ? "MISSING_COLUMN_HEADER_OPTIMIZATION_PARAMETERS"
+        : "INCORRECT_COLUMN_HEADER_OPTIMIZATION_PARAMETERS";
+
     const workbook = parseAdditionalSheet(sheet);
 
-    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
-    assert.exists(workbook.twoColumnSheets[sheetName],
-        `Expected ${sheetName} sheet to exist on workbook.`
-    );
-    assert.exists(
-        workbook.twoColumnSheets[sheetName].warnings,
-        `Expected warnings array to exist on ${sheetName} sheet of workbook`
-    );
-    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
-    assert.isTrue(workbook.twoColumnSheets[sheetName].warnings.some(
-        warning =>
-            warning.warningCode ===
-            `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`
-        )
+    assert.exists(workbook.meta, "Expected meta to exist on workbook");
+    assert.exists(workbook.meta.warnings, "Expected warnings array to exist on meta of workbook");
+    assert.equal(workbook.meta.warnings.length, frequency);
+    console.log(workbook.meta.warnings);
+    assert.isTrue(
+        workbook.meta.warnings.some(warning => warning.warningCode === expectedWarningCode)
     );
 };
 
-const additionalSheetMissingColumnHeaderWarning = function (input, frequency, sheetName) {
+const additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning = function (
+    input,
+    frequency,
+    isMissingOptimizationDiagnosticsSheet = false
+) {
     const sheet = xlsx.parse(input);
+    const expectedWarningCode = isMissingOptimizationDiagnosticsSheet
+        ? "MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS"
+        : "INCORRECT_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS";
+
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.meta2, "Expected meta to exist on workbook");
+    assert.exists(workbook.meta2.warnings, "Expected warnings array to exist on meta of workbook");
+    assert.equal(workbook.meta2.warnings.length, frequency);
+    assert.isTrue(
+        workbook.meta2.warnings.some(warning => warning.warningCode === expectedWarningCode)
+    );
+};
+
+const additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning = function (
+    input,
+    frequency,
+    sheetName,
+    isMissingSheet = false
+) {
+    const sheet = xlsx.parse(input);
+    const expectedWarningCode = isMissingSheet
+        ? `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`
+        : `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`;
+
     const workbook = parseAdditionalSheet(sheet);
 
     assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
@@ -663,7 +692,7 @@ const additionalSheetMissingColumnHeaderWarning = function (input, frequency, sh
     assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.isTrue(
         workbook.twoColumnSheets[sheetName].warnings.some(
-            warning => warning.warningCode === `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`
+            warning => warning.warningCode === expectedWarningCode
         )
     );
 };
@@ -801,8 +830,12 @@ exports.invalidOptimizationParameterWarning = invalidOptimizationParameterWarnin
 exports.unknownOptimizationDiagnosticsParameterWarning =
     unknownOptimizationDiagnosticsParameterWarning;
 exports.invalidOptimizationDiagnosticsValueWarning = invalidOptimizationDiagnosticsValueWarning;
-exports.additionalSheetIncorrectColumnHeaderWarning = additionalSheetIncorrectColumnHeaderWarning;
-exports.additionalSheetMissingColumnHeaderWarning = additionalSheetMissingColumnHeaderWarning;
+exports.additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning =
+    additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning;
+exports.additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning =
+    additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning;
+exports.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning =
+    additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning;
 exports.optimizationDiagnosticsExtraneousDataWarning = optimizationDiagnosticsExtraneousDataWarning;
 exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;

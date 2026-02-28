@@ -167,26 +167,34 @@ const checkValidHeaderAndAddWarnings = (output, sheet) => {
     const sheetName = sheet.name;
     const expectedCellA1 = getSheetHeader(sheetName, 0, 0);
     const expectedCellB1 = getSheetHeader(sheetName, 1, 0);
-    if (sheet.data[0].length >= 0) {
-        const isCellA1HeaderCorrect = sheet.data[0][0] === expectedCellA1;
-        const isCellB1HeaderCorrect =
-            sheet.data[0].length > 1 && sheet.data[0][1] === expectedCellB1;
-        const isHeaderCorrect = isCellA1HeaderCorrect && isCellB1HeaderCorrect;
 
-        if (!isHeaderCorrect) {
-            addWarning(
-                output,
-                constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                    sheetName,
-                    expectedCellA1,
-                    expectedCellB1
-                )
-            );
-        }
-    } else {
+    const hasData = sheet.data && sheet.data[0];
+    const cellA1 = hasData ? sheet.data[0][0] : undefined;
+    const cellB1 = hasData && sheet.data[0].length > 1 ? sheet.data[0][1] : undefined;
+
+    const isMissing =
+        cellA1 == null ||
+        cellB1 == null ||
+        String(cellA1).trim() === "" ||
+        String(cellB1).trim() === "" ||
+        (validGeneName(output, sheetName, cellA1, 0) && typeof cellB1 === "number");
+
+    if (isMissing) {
         addWarning(
             output,
             constants.warnings.additionalSheetMissingColumnHeaderWarning(
+                sheetName,
+                expectedCellA1,
+                expectedCellB1
+            )
+        );
+        return;
+    }
+
+    if (cellA1 !== expectedCellA1 || cellB1 !== expectedCellB1) {
+        addWarning(
+            output,
+            constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
                 sheetName,
                 expectedCellA1,
                 expectedCellB1

@@ -286,7 +286,7 @@ module.exports = {
 
         additionalSheetMissingColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
             return {
-                warningCode: `MISSING_COLUMN_HEADER${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
                 errorDescription:
                     `GRNsight has detected that the headers are missing in the imported workbook's ${sheetName} sheet. ` +
                     `The headers will need to be corrected to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
