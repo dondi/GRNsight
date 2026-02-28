@@ -767,6 +767,7 @@ var demoWorkbook1 = function (path, res, app) {
 
         expression: {
             //expression data source is Dahlquist_2018
+            source: { Dahlquist_2018 },
             wt_log2_expression: {
                 errors: [],
                 warnings: [],
@@ -2383,6 +2384,7 @@ var demoWorkbook2 = function (path, res, app) {
         },
         expression: {
             //expression data source is Dahlquist_2018
+            source: { Dahlquist_2018 },
             wt_log2_expression: {
                 errors: [],
                 warnings: [],
@@ -5709,6 +5711,7 @@ var demoWorkbook4 = function (path, res, app) {
         },
         expression: {
             //expression data source is Schade_2004
+            source: { Schade_2004 },
             wt_log2_expression: {
                 errors: [],
                 warnings: [],
