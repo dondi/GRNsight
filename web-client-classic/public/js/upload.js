@@ -9,7 +9,8 @@ import { stopLoadingIcon, startLoadingIcon } from "./update-app";
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 import { displayExportWarnings } from "./warnings.js";
-import { warnings } from "./export-constants.js";
+import { warnings } from "./export-warning-constants.js";
+import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
@@ -86,53 +87,83 @@ export const upload = function () {
         return result;
     };
 
-    var filenameWithExtension = function (suffix, extension) {
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+        var source = null;
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (suffix) {
-            filename = filename + "_" + suffix;
+        if (Object.keys(grnState.workbook.expression).length > 0) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "userInput") {
+                source = "user-data";
+            }
         }
 
-        return filename + "." + extension;
+        if (mode !== "grn") {
+            mode = "PPI";
+        }
+        if (mode !== null && genes !== null && edges !== null && type !== null) {
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+        if (source) {
+            filename = `${filename}_${source}`;
+        }
+        return `${filename}.${extension}`;
+    };
+
+    const download = (workbook, route, extension, sheetType) => {
+        const workbookToExport = flattenWorkbook(workbook, sheetType);
+        var workbookFilename = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            sheetType,
+            extension
+        );
+
+        workbookToExport.filename = workbookFilename;
+
+        const exportForm = $("<form></form>")
+            .attr({
+                method: "POST",
+                action: $(".service-root").val() + "/" + route,
+            })
+            .append(
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "filename",
+                    value: workbookFilename,
+                })
+            )
+            .append(
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "workbook",
+                    value: JSON.stringify(workbookToExport),
+                })
+            );
+
+        $("body").append(exportForm);
+        exportForm.submit();
+        exportForm.remove();
     };
 
     const exportExcel = (route, extension, sheetType) => {
-        if (uploadState.currentWorkbook.exportSheets.warnings.length > 0) {
-            displayExportWarnings(uploadState.currentWorkbook.exportSheets.warnings);
-        }
+        const warnings = uploadState.currentWorkbook.exportSheets.warnings;
+
         if (!$(this).parent().hasClass("disabled")) {
-            var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-            var workbookFilename = filenameWithExtension(
-                sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
-                extension
-            );
-            workbookToExport.filename = workbookFilename;
-            var exportForm = $("<form></form>")
-                .attr({
-                    method: "POST",
-                    action: $(".service-root").val() + "/" + route,
-                })
-                .append(
-                    $("<input></input>").attr({
-                        type: "hidden",
-                        name: "filename",
-                        value: workbookFilename,
-                    })
-                )
-                .append(
-                    $("<input></input>").attr({
-                        type: "hidden",
-                        name: "workbook",
-                        value: JSON.stringify(workbookToExport),
-                    })
-                );
-            $("body").append(exportForm);
-            exportForm.submit();
-            exportForm.remove();
+            if (warnings.length > 0) {
+                displayExportWarnings(warnings);
+                $("#warningsModal").one("hidden.bs.modal", () => {
+                    download(uploadState.currentWorkbook, route, extension, sheetType);
+                });
+            } else {
+                download(uploadState.currentWorkbook, route, extension, sheetType);
+            }
         }
+
         $("#exportExcelModal").modal("hide");
     };
 
@@ -300,38 +331,40 @@ export const upload = function () {
         }
     };
 
-    const handleExportExcelButtonExport = (route, extension, sheetType, source) => {
-        grnState.workbook.exportNetworkType = sheetType;
+    const determineChosenSheets = () => {
         const workbookSheets = $("input[name=workbookSheets]:checked");
-        var chosenSheets = [];
-        for (const [key, value] of Object.entries(workbookSheets)) {
-            if (!isNaN(parseInt(key, 10))) {
-                if (value.value === "select all") {
-                    const allWorkbookSheets = $("input[name=workbookSheets]");
-                    chosenSheets = [];
-                    for (const [k, v] of Object.entries(allWorkbookSheets)) {
-                        if (!isNaN(parseInt(k, 10))) {
-                            if (v.value !== "select all") {
-                                chosenSheets.push(v.value);
-                            }
-                        }
+        let chosenSheets = [];
+
+        workbookSheets.each(function () {
+            const value = $(this).val();
+
+            if (value === "select all") {
+                chosenSheets = [];
+                $("input[name=workbookSheets]").each(function () {
+                    const sheetValue = $(this).val();
+                    if (sheetValue !== "select all") {
+                        chosenSheets.push(sheetValue);
                     }
-                    break;
-                } else {
-                    chosenSheets.push(value.value);
-                }
+                });
+                return false;
             }
-        }
+            chosenSheets.push(value);
+        });
+        return chosenSheets;
+    };
+
+    const prepareFinalExportSheets = (chosenSheets, source) => {
         const finalExportSheets = {
             networks: {},
             expression: {},
             two_column_sheets: {},
-            warnings: [],
+            warnings: [...grnState.workbook.warnings],
         };
+
         const twoColumnSheets = grnState.workbook.twoColumnSheets
             ? Object.keys(grnState.workbook.twoColumnSheets)
             : [];
-        // Collect all of the Sheets to be exported
+
         for (let sheet of chosenSheets) {
             if (sheet === "network_optimized_weights") {
                 finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
@@ -359,113 +392,103 @@ export const upload = function () {
                     ) {
                         finalExportSheets.two_column_sheets[sheet] =
                             grnState.workbook.two_column_sheets[sheet];
-                    } else if (sheet === "threshold_b") {
-                        finalExportSheets.two_column_sheets[sheet] = {
-                            data: {},
-                            errors: [],
-                            warnings: [],
-                        };
-                        for (let g of grnState.workbook.genes) {
-                            finalExportSheets.two_column_sheets[sheet].data[g.name] = 0;
-                        }
                     } else {
                         finalExportSheets.two_column_sheets[sheet] = null;
                     }
                 }
             }
         }
+
+        return finalExportSheets;
+    };
+
+    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets) => {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
+            threshold_b: "ThresholdB",
         };
-        const twoColumnQuerySheets = Object.keys(finalExportSheets.two_column_sheets).filter(
-            x =>
-                finalExportSheets.two_column_sheets[x] === null ||
-                (finalExportSheets.two_column_sheets[x] &&
-                    Object.keys(finalExportSheets.two_column_sheets[x].data).length === 0)
+
+        const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet =>
+            chosenSheets.includes(sheet)
         );
-        if (twoColumnQuerySheets.length > 0) {
-            // if we need to query production rates and degradation rates
-            for (let sheet of twoColumnQuerySheets) {
-                if (
-                    finalExportSheets.two_column_sheets[sheet] === null ||
-                    (finalExportSheets.two_column_sheets[sheet] &&
-                        Object.keys(finalExportSheets.two_column_sheets[sheet].data).length === 0)
-                ) {
-                    let result = {
-                        data: {},
-                        errors: [],
-                        warnings: [],
-                    };
-                    let genes = [];
-                    for (let g of grnState.workbook.genes) {
-                        genes.push(g.name);
-                    }
 
-                    queryExpressionDatabase({
-                        type: twoColumnSheetType[sheet],
-                        genes: grnState.workbook.genes
-                            .map(x => {
-                                return x.name;
-                            })
-                            .join(","),
-                    })
-                        .then(function (response) {
-                            result.data = response;
+        const missingTwoColumnSheets = [];
 
-                            const missingGenes = genes.filter(
-                                gene => result.data[gene] === undefined
-                            );
+        for (let sheet of chosenTwoColumnSheets) {
+            const sheetData = finalExportSheets.two_column_sheets[sheet];
+            const isMissing = sheetData === null;
+            const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
 
-                            if (missingGenes.length > 0) {
-                                const missingGenesStr = missingGenes.join(", ");
+            // Check if all genes are available but missing values
+            const partialMissingCode = `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
+            const hasExistingWarning = finalExportSheets.warnings.some(
+                w => w.warningCode === partialMissingCode
+            );
 
-                                const warningGenerators = {
-                                    production_rates:
-                                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
-                                    degradation_rates:
-                                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING,
-                                };
+            if (isMissing || isEmpty || hasExistingWarning) {
+                const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
+                finalExportSheets.warnings.push(warnings[warningKey](isMissing));
 
-                                const warningGenerator = warningGenerators[sheet];
-                                if (warningGenerator) {
-                                    finalExportSheets.warnings.push(
-                                        warningGenerator(missingGenesStr)
-                                    );
-                                }
-                            }
-
-                            finalExportSheets.two_column_sheets[sheet] = result;
-                            if (
-                                !Object.values(finalExportSheets.two_column_sheets).includes(null)
-                            ) {
-                                // if we got all of the two column sheets, then proceed with export
-                                handleExpressionDataAndExport(
-                                    route,
-                                    extension,
-                                    sheetType,
-                                    source,
-                                    finalExportSheets
-                                );
-                            }
-                        })
-                        .catch(error => expressionExportErrorHandler(error));
-                }
+                missingTwoColumnSheets.push(sheet);
+            } else {
+                finalExportSheets.two_column_sheets[sheet] = sheetData;
             }
-        } else {
-            // you already have all of your two column sheet, so move through expressi5on
-            handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
         }
+
+        if (missingTwoColumnSheets.length > 0) {
+            await Promise.all(
+                missingTwoColumnSheets.map(async sheet => {
+                    const genes = grnState.workbook.genes.map(g => g.name).join(",");
+                    try {
+                        const response = await queryExpressionDatabase({
+                            type: twoColumnSheetType[sheet],
+                            genes,
+                        });
+                        finalExportSheets.two_column_sheets[sheet] = {
+                            data: response,
+                            errors: [],
+                            warnings: [],
+                        };
+                    } catch (error) {
+                        expressionExportErrorHandler(error);
+                        finalExportSheets.two_column_sheets[sheet] = {
+                            data: {},
+                            errors: [error],
+                            warnings: [],
+                        };
+                    }
+                })
+            );
+        }
+
+        const uniqueMissingGenesWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+            grnState.workbook.genes,
+            finalExportSheets.two_column_sheets,
+            chosenTwoColumnSheets,
+            warnings,
+            finalExportSheets.warnings
+        );
+        finalExportSheets.warnings.push(...uniqueMissingGenesWarnings);
+
+        return finalExportSheets;
+    };
+
+    const handleExportExcelButtonExport = async (route, extension, sheetType, source) => {
+        grnState.workbook.exportNetworkType = sheetType;
+
+        const chosenSheets = determineChosenSheets();
+        let finalExportSheets = prepareFinalExportSheets(chosenSheets, source);
+        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets);
+
+        handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
     };
 
     const determineWorkbookType = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
-                if (
-                    value.value === "network_weights" ||
-                    value.value === "network_optimized_weights"
-                ) {
+                if (value.value === "network_optimized_weights") {
                     return "weighted";
                 }
             }
@@ -474,44 +497,21 @@ export const upload = function () {
     };
 
     var performExport = function (route, extension, sheetType, source) {
-        return function (e) {
+        return async function (e) {
             if (e) {
                 e.preventDefault();
             }
             // Deleted event parameter
             if (route === "export-to-excel" && source) {
-                handleExportExcelButtonExport(route, extension, determineWorkbookType(), source);
+                await handleExportExcelButtonExport(
+                    route,
+                    extension,
+                    determineWorkbookType(),
+                    source
+                );
             } else {
                 if (!$(this).parent().hasClass("disabled")) {
-                    var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-                    var workbookFilename = filenameWithExtension(
-                        sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
-                        extension
-                    );
-                    workbookToExport.filename = workbookFilename;
-
-                    var exportForm = $("<form></form>")
-                        .attr({
-                            method: "POST",
-                            action: $(".service-root").val() + "/" + route,
-                        })
-                        .append(
-                            $("<input></input>").attr({
-                                type: "hidden",
-                                name: "filename",
-                                value: workbookFilename,
-                            })
-                        )
-                        .append(
-                            $("<input></input>").attr({
-                                type: "hidden",
-                                name: "workbook",
-                                value: JSON.stringify(workbookToExport),
-                            })
-                        );
-                    $("body").append(exportForm);
-                    exportForm.submit();
-                    exportForm.remove();
+                    download(uploadState.currentWorkbook, route, extension, sheetType);
                 }
             }
         };
@@ -537,10 +537,14 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
+
         if (Object.keys(grnState.workbook.expression).length > 0) {
+            const value = grnState.workbook.expression.source
+                ? grnState.workbook.expression.source
+                : "userInput";
             result += `
                         <li>
-                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <input type='radio' name='expressionSource' checked="true" value="${value}" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
                             <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
                         </li>
             `;

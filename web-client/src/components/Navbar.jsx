@@ -1,24 +1,30 @@
-import { useContext } from "react";
-import { Nav, DropButton, Box, Text, Button, Tip, TextInput } from "grommet";
-import { Refresh, Checkmark, FolderOpen, Edge } from "grommet-icons";
+import { useContext, useState } from "react";
+import { Nav, DropButton, Box, Text, Button, TextInput, Select } from "grommet";
+import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
-  UNWEIGHTED_DEMO_NAME,
-  WEIGHTED_DEMO_NAME,
-  SCHADE_INPUT_NAME,
-  SCHADE_OUTPUT_NAME,
-  PPI_DEMO_NAME,
-} from "../constants";
+  DEMO_TYPES,
+  LIGHT_GREEN,
+  LIGHT_GRAY,
+  MEDIUM_GRAY,
+  DARK_GRAY,
+  ZOOM_DISPLAY_MINIMUM,
+  ZOOM_DISPLAY_MAXIMUM,
+  ZOOM_DISPLAY_MIDDLE,
+} from "../helpers/constants";
+import DottedLine from "./helper-components/DottedLine";
+import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import "../App.css";
 
 export default function Navbar({}) {
+  const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
   const {
     networkMode,
     setNetworkMode,
     enableNodeColoring,
     setEnableNodeColoring,
-    enableEdgeColoring,
-    setEnableEdgeColoring,
+    colorOptimal,
+    setColorOptimal,
     linkDistance,
     setLinkDistance,
     charge,
@@ -45,7 +51,22 @@ export default function Navbar({}) {
     setDemoValue,
     viewSize,
     setViewSize,
+    zoomPercent,
+    setZoomPercent,
   } = useContext(GrnStateContext);
+
+  const valueValidator = (min, max, value) => {
+    return Math.min(max, Math.max(min, value));
+  };
+
+  const zoomInputValidator = value => {
+    return valueValidator(ZOOM_DISPLAY_MINIMUM, ZOOM_DISPLAY_MAXIMUM, value);
+  };
+
+  const handleZoomInputChange = event => {
+    setZoomPercent(zoomInputValidator(event.target.value));
+    setZoomTextInput(event.target.value);
+  };
 
   return (
     // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
@@ -54,143 +75,71 @@ export default function Navbar({}) {
       className="navbar"
       direction="row"
       flex="false"
-      background="#dfebe5"
+      background={LIGHT_GREEN}
       pad={{ left: "30px", right: "15px" }}
-      margin={{ bottom: "10px" }}
       gap="none"
     >
       <DropButton
         label="Network"
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
-        onOpen={() => {
-          console.log("dropButton opened");
-        }}
         dropContent={
-          <Box
-            className="dropdown-menu"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Source
             </Text>
-            {/* TODO: maybe instead do a collapsible instead of a tip */}
-            {/* TODO: something with pad or margin here is not working since content in tip displaying with wrong position */}
-            <Box pad={{ top: "7px", bottom: "5px", left: "30px" }} align="start">
-              <Tip
-                plain
-                dropProps={{
-                  align: { left: "right", top: "top" }, // attach menu to the right side
-                  plain: true,
-                }}
-                content={
-                  <Box
-                    className="dropdown-menu"
-                    pad="small"
-                    background="white"
-                    fill="true"
-                    align="start"
-                  >
-                    <Button
-                      plain
-                      label="Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)"
-                      onClick={() => {}}
-                    />
-                    <Button
-                      plain
-                      label="Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)"
-                      onClick={() => {}}
-                    />
-                    <Button
-                      plain
-                      label="Demo #3: Unweighted GRN (21 genes, 31 edges)"
-                      onClick={() => {}}
-                    />
-                    <Button
-                      plain
-                      label="Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)"
-                      onClick={() => {}}
-                    />
-                    <Button plain label="Demo #5: PPI (18 proteins, 81 edges)" onClick={() => {}} />
-                  </Box>
-                }
-              >
-                <Button plain className="demo-button" label="Demo" fill="horizontal" />
-              </Tip>
+            {/* TODO: need to make sure there is a top margin, but adding a 7px top margin causes the buttons to display 7px shifted down */}
+            {/* TODO: need to style options to have no padding/margin */}
+            <Box pad={{ left: "30px", bottom: "5px" }}>
+              <Select
+                className="demo-dropdown-navbar"
+                icon={<CaretRightFill color={LIGHT_GRAY} />}
+                dropAlign={{ top: "top", bottom: "top", left: "right", right: "left" }}
+                options={Object.values(DEMO_TYPES).map(name => (
+                  <Text key={name}>{name}</Text>
+                ))}
+                value={<Text>Demo</Text>}
+                placeholder={<Text>Demo</Text>}
+                onChange={({ option }) => setDemoValue(option)}
+                size="small"
+              />
             </Box>
-            <Box
-              width="95%"
-              alignSelf="center"
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
-            <Box>
-              <Button margin={{ left: "32px", top: "7px", bottom: "5px" }}>
+            <DottedLine width="95%" />
+            <Box pad={{ left: "30px", top: "7px", bottom: "5px" }}>
+              <Button>
                 <FolderOpen className="folder-icon" size="14px" />
                 <Text>Open File...</Text> <Text className="italics">(.xlsx, .sif, .graphml)</Text>
               </Button>
             </Box>
-            <Box
-              width="95%"
-              alignSelf="center"
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine width="95%" />
             <Box>
               <Button margin={{ top: "7px", right: "20px", left: "30px" }}>
                 <Text>Load from Database...</Text>
               </Button>
             </Box>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             <Box>
               <Button margin={{ left: "20px" }} justify="between">
                 <Refresh />
                 <Text>Reload</Text>
               </Button>
             </Box>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Mode
             </Text>
             {/* TODO: only display checkmark if selected view */}
             {/* TODO: need to display text in gray when disabled */}
-            {/* TODO: confirm that networkMode changes when graph updates */}
             <Box margin={{ left: "50px" }}>
-              <Text color="#999">{networkMode}</Text>
+              <Text color={DARK_GRAY}>{networkMode}</Text>
             </Box>
             <Text weight="bold" margin={{ left: "12px" }}>
               Species
             </Text>
             <Box direction="row" margin={{ left: "50px" }}>
-              <Text color="#999">Saccharomyces cerevisiae</Text>
+              <Text color={DARK_GRAY}>Saccharomyces cerevisiae</Text>
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -199,17 +148,10 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Box pad={{ left: "12px" }}>
               <Text>Graph Options</Text>
             </Box>
-            {/* TODO: maybe instead do a collapsible instead of a tip */}
             <Box pad={{ horizontal: "40px", vertical: "3px" }}>
               <Button>
                 <Text>Force Graph</Text>
@@ -220,15 +162,7 @@ export default function Navbar({}) {
                 <Text>Grid Layout</Text>
               </Button>
             </Box>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             <Box pad={{ horizontal: "40px", vertical: "3px" }}>
               <Button onClick={() => setLockForceParameters(!lockForceParameters)}>
                 {lockForceParameters && <Checkmark />}
@@ -245,15 +179,7 @@ export default function Navbar({}) {
                 <Text>Undo Reset</Text>
               </Button>
             </Box>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             {/* TODO: restrict size of text input and restrict to number values only */}
             <Box margin={{ horizontal: "40px", vertical: "3px" }} direction="row">
               <Text>Link Distance (1 - 1000)</Text>{" "}
@@ -266,7 +192,7 @@ export default function Navbar({}) {
               <Text>Charge (-2000 - 0)</Text>{" "}
               <TextInput value={charge} onChange={event => setCharge(event.target.value)} />
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -275,31 +201,16 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box>
+          <div>
             {enableNodeColoring ? (
-              <Box
-                className="dropdown-menu"
-                direction="column"
-                pad={{ vertical: "5px" }}
-                background="white"
-                width="medium"
-              >
-                {/* <Box> */}
+              <div className="dropdown-menu">
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(false)}>
                     <Checkmark size="small" />
                     <Text margin={{ left: "12px" }}>Enable Node Coloring</Text>
                   </Button>
                 </Box>
-                <Box
-                  margin={{ vertical: "9px" }}
-                  border={{
-                    color: "#bbb",
-                    side: "top",
-                    style: "dotted",
-                    size: "1px",
-                  }}
-                ></Box>
+                <DottedLine />
                 {/* TODO: maybe instead do a collapsible instead of a tip */}
                 <Box pad={{ horizontal: "45px", vertical: "3px" }}>
                   <Button>
@@ -313,15 +224,7 @@ export default function Navbar({}) {
                     <Text margin={{ left: "12px" }}>Average Replicate Values for Top Datset</Text>
                   </Button>
                 </Box>
-                <Box
-                  margin={{ vertical: "9px" }}
-                  border={{
-                    color: "#bbb",
-                    side: "top",
-                    style: "dotted",
-                    size: "1px",
-                  }}
-                ></Box>
+                <DottedLine />
                 <Box pad={{ horizontal: "45px", vertical: "3px" }}>
                   <Button>
                     <Text>Select Bottom Dataset</Text>
@@ -336,36 +239,22 @@ export default function Navbar({}) {
                     </Text>
                   </Button>
                 </Box>
-                <Box
-                  margin={{ vertical: "9px" }}
-                  border={{
-                    color: "#bbb",
-                    side: "top",
-                    style: "dotted",
-                    size: "1px",
-                  }}
-                ></Box>
+                <DottedLine />
                 {/* TODO: restrict size of text input and restrict to number values only */}
                 <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
                   <Text>Log Fold Change Max Value (0.01 - 100)</Text> <TextInput />
                 </Box>
-              </Box>
+              </div>
             ) : (
-              <Box
-                className="dropdown-menu"
-                direction="column"
-                pad={{ vertical: "5px" }}
-                background="white"
-                width="medium"
-              >
+              <div className="dropdown-menu">
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(true)}>
                     <Text margin={{ left: "12px" }}>Enable Node Coloring</Text>
                   </Button>
                 </Box>
-              </Box>
+              </div>
             )}
-          </Box>
+          </div>
         }
       />
 
@@ -374,28 +263,14 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
-              <Button onClick={() => setEnableEdgeColoring(!enableEdgeColoring)}>
-                {enableEdgeColoring && <Checkmark size="small" />}
+              <Button onClick={() => setColorOptimal(!colorOptimal)}>
+                {colorOptimal && <Checkmark size="small" />}
                 <Text margin={{ left: "12px" }}>Enable Edge Coloring Based on Weight Values</Text>
               </Button>
             </Box>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
               <Button pad={{ horizontal: "20px", vertical: "3px" }}>
                 <Text>Only Show Edge Weights With Mouse Over</Text>
@@ -411,15 +286,7 @@ export default function Navbar({}) {
                 <Text>Never Show Edge Weights</Text>
               </Button>
             </Box>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Edge Weight Normalization Factor (0.0001 - 1000)</Text>{" "}
               <TextInput
@@ -435,7 +302,7 @@ export default function Navbar({}) {
             <Box
               margin={{ vertical: "9px" }}
               border={{
-                color: "#bbb",
+                color: MEDIUM_GRAY,
                 side: "top",
                 style: "dotted",
                 size: "1px",
@@ -445,8 +312,8 @@ export default function Navbar({}) {
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>Gray Edge Threshold (0 - 100%)</Text>{" "}
               <TextInput
-                value={grayThreshold}
-                onChange={event => setGrayThreshold(event.target.value)}
+                value={(grayThreshold * 100).toFixed()}
+                onChange={event => setGrayThreshold(event.target.value / 100)}
               />
             </Box>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
@@ -454,7 +321,7 @@ export default function Navbar({}) {
                 <Text>Show Gray Edges as Dashed</Text>
               </Button>
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -463,13 +330,7 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
+          <div className="dropdown-menu">
             <Text margin={{ left: "small" }}>Viewport Size</Text>
             {/* only display the checkmark for the selected view size */}
             <Button
@@ -500,15 +361,7 @@ export default function Navbar({}) {
               <Checkmark />
               <Text>Fit To Window</Text>
             </Button>
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
 
             <Button
               margin={{ horizontal: "20px", top: "3px" }}
@@ -517,19 +370,14 @@ export default function Navbar({}) {
               <Text>Restrict Graph to Viewport</Text>
             </Button>
 
-            <Box
-              margin={{ vertical: "9px" }}
-              border={{
-                color: "#bbb",
-                side: "top",
-                style: "dotted",
-                size: "1px",
-              }}
-            ></Box>
+            <DottedLine />
             <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text>Zoom (25 - 200%)</Text> <TextInput />
+              <Text>
+                Zoom ({ZOOM_DISPLAY_MINIMUM} - {ZOOM_DISPLAY_MAXIMUM})
+              </Text>{" "}
+              <TextInput value={zoomTextInput} onChange={event => handleZoomInputChange(event)} />
             </Box>
-          </Box>
+          </div>
         }
       />
 
@@ -538,68 +386,48 @@ export default function Navbar({}) {
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
-            <Button margin={{ horizontal: "20px", top: "3px" }}>
-              <Checkmark />
-              <Text>Export Data</Text>
-            </Button>
-            <Button margin={{ horizontal: "20px", top: "3px" }}>
-              <Text>Export Image</Text>
-            </Button>
-            <Button margin={{ horizontal: "20px", top: "3px" }}>
-              <Text>Print</Text>
-            </Button>
-          </Box>
+          <div className="dropdown-menu">
+            <DropdownMenuButton text="Export Data" />
+            <DropdownMenuButton text="Export Image" />
+            <DropdownMenuButton text="Print" />
+          </div>
         }
       />
 
       <DropButton
-        className="nav-button"
         label="Help"
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <Box
-            className="dropdown-menu"
-            direction="column"
-            pad={{ vertical: "5px" }}
-            background="white"
-            width="medium"
-          >
-            <Button margin={{ horizontal: "20px", top: "3px" }}>
-              <Text>Getting Started</Text>
-            </Button>
-            <Button margin={{ horizontal: "20px", top: "3px" }}>
-              <Text>GRNsight Wiki</Text>
-            </Button>
-            <Button margin={{ horizontal: "20px", top: "3px" }}>
-              <Text>About GRNsight</Text>
-            </Button>
-          </Box>
+          <div className="dropdown-menu">
+            <DropdownMenuButton text="Getting Started" />
+            <DropdownMenuButton text="GRNsight Wiki" />
+            <DropdownMenuButton text="About GRNsight" />
+          </div>
         }
       />
 
+      {/* TODO: set width so that shorter and wider window like web-client-classic */}
       <DropButton
-        className="nav-button"
         label="Demo"
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
+        icon={false}
         dropContent={
-          <Box pad="small" className="dropdown-menu" background="white">
-            <Button label="Demo #1: Unweighted GRN" onClick={() => {}} />
-            <Button label="Demo #2: Weighted GRN" onClick={() => {}} />
-            <Button label="Demo #3: Unweighted GRN" onClick={() => {}} />
-            <Button label="Demo #4: Weighted GRN" onClick={() => {}} />
-            <Button label="Demo #5: PPI" onClick={() => {}} />
-          </Box>
+          <div className="dropdown-menu">
+            {Object.values(DEMO_TYPES).map(demo => (
+              <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
+                <Text>{demo}</Text>
+              </Button>
+            ))}
+          </div>
         }
+        size="small"
       />
+
+      <Box id="file-name">
+        <Text>{demoValue}</Text>
+      </Box>
     </Nav>
   );
 }

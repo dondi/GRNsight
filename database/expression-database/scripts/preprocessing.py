@@ -185,7 +185,7 @@ if __name__ == "__main__":
     parser.add_argument("--refs", action="store_true", help="Generate refs file.")
     parser.add_argument("--prod", action="store_true", help="Process production rates.")
     parser.add_argument("--deg", action="store_true", help="Process degradation rates.")
-    parser.add_argument("--source_folder", type=str, default="Expression 2020",
+    parser.add_argument("--source_folder", type=str, default="Current Database",
                         help="Folder in source-files folder containing source CSV files.")
 
     args = parser.parse_args()

@@ -113,7 +113,6 @@ class ProteinProteinInteractionsFetcherService(DataFetcherService):
         rows_data = []
         interactions = set()
         count = 0
-        print("Query length: ", len(query.rows()))
         for row in query.rows():
             interaction = (row["secondaryIdentifier"], row["interactions.participant2.secondaryIdentifier"], row["interactions.details.annotationType"], row["interactions.details.experiment.interactionDetectionMethods.identifier"], row["interactions.details.experiment.name"])
             if interaction in interactions:

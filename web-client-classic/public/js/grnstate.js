@@ -58,6 +58,15 @@ export const grnState = {
         // TODO: add colorOptimal so that the rest of the normalization code can get added
         this.resetNormalizationMax = max(workbook.positiveWeights.concat(workbook.negativeWeights));
         this.newWorkbook = true;
+
+        // Resetting nodeColoring values leftover from when you display a GRN
+        this.nodeColoring.showMenu = false;
+        this.nodeColoring.nodeColoringEnabled = undefined;
+        this.nodeColoring.topDataset = "";
+        this.nodeColoring.bottomDataset = "";
+        this.nodeColoring.lastDataset = "";
+        this.nodeColoring.nodeColoringOptions.workbookExpressions = [];
+        this.nodeColoring.nodeColoringOptions.databaseExpressions = [];
     },
 
     // Edge Display Parameters

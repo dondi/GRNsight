@@ -26,6 +26,8 @@ const demoFiles = [
     PPI_DEMO_PATH,
 ];
 
+import { displayExportWarnings } from "./warnings.js";
+
 const submittedFilename = $upload => {
     let path = $upload.val();
     let fakePathCheck = path.search("\\\\") + 1;
@@ -154,6 +156,11 @@ export const setupLoadAndImportHandlers = grnState => {
                     grnState.mode = workbook.meta.data.workbookType;
                 }
                 grnState.workbook.expressionNames = Object.keys(workbook.expression);
+
+                if (grnState.workbook.warnings && grnState.workbook.warnings.length > 0) {
+                    displayExportWarnings(workbook.warnings);
+                }
+
                 if (uploadRoute !== "upload") {
                     grnState.annotateLinks();
                 }

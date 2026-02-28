@@ -11,7 +11,7 @@ import {
   TextInput,
   RadioButtonGroup,
 } from "grommet";
-import { Refresh, FolderOpen, Database } from "grommet-icons";
+import { Refresh, FolderOpen, Database, FormDown } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   UNWEIGHTED_DEMO_NAME,
@@ -19,8 +19,9 @@ import {
   SCHADE_INPUT_NAME,
   SCHADE_OUTPUT_NAME,
   PPI_DEMO_NAME,
-} from "../constants";
+} from "../helpers/constants";
 import "../App.css";
+import DottedLine from "./helper-components/DottedLine";
 
 export default function Sidebar({}) {
   const fileInputRef = useRef();
@@ -29,8 +30,8 @@ export default function Sidebar({}) {
     setNetworkMode,
     enableNodeColoring,
     setEnableNodeColoring,
-    enableEdgeColoring,
-    setEnableEdgeColoring,
+    colorOptimal,
+    setColorOptimal,
     linkDistance,
     setLinkDistance,
     charge,
@@ -60,21 +61,7 @@ export default function Sidebar({}) {
   } = useContext(GrnStateContext);
 
   return (
-    <Box className="sidebar">
-      {/* Disclaimer */}
-      <Box className="panel">
-        <Box margin="10px">
-          <Text size="18px" weight="bold">
-            Disclaimer
-          </Text>
-        </Box>
-        <Box pad={{ right: "10px", left: "10px", bottom: "10px" }}>
-          <Text size="12px">
-            This version of GRNsight is currently in development and unstable. Please refer to the
-            Home page for more reliable performance.
-          </Text>
-        </Box>
-      </Box>
+    <Box id="sidebar">
       {/* Network */}
       <Box plain className="panel" margin={{ top: "5px" }}>
         <Box margin="10px">
@@ -84,7 +71,7 @@ export default function Sidebar({}) {
         </Box>
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }}>
           <Box className="panel-dropdown-container">
-            <Text weight="bold" size="small" height={1.42857143}>
+            <Text weight="bold" size="small">
               Network Source
             </Text>
             <Box className="network-source-section" fill={false}>
@@ -96,6 +83,7 @@ export default function Sidebar({}) {
               <Select
                 className="demo-source-dropdown"
                 pad="0px"
+                icon={<FormDown color="black" size="small" />}
                 options={[
                   <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
                   <Text>{WEIGHTED_DEMO_NAME}</Text>,
@@ -108,9 +96,7 @@ export default function Sidebar({}) {
                 onChange={({ option }) => setDemoValue(option)}
                 size="small"
               />
-              {/* TODO: remove browse message */}
               <Stack anchor="center" margin={{ vertical: "6px" }}>
-                {/* Do a border radius, access the div that contains this FileInput */}
                 <FileInput
                   className="file-input"
                   ref={fileInputRef}
@@ -134,7 +120,7 @@ export default function Sidebar({}) {
                   <FolderOpen />
                 </Box>
               </Stack>
-              <Button className="load-from-database">
+              <Button margin={{ bottom: "15px" }} className="load-from-database">
                 <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
                   <Database size="14px" />
                   <Text size="14px">Load from Database</Text>
@@ -142,35 +128,27 @@ export default function Sidebar({}) {
               </Button>
             </Box>
           </Box>
-          <Box
-            margin={{ vertical: "9px" }}
-            width="95%"
-            alignSelf="center"
-            border={{
-              color: "#bbb",
-              side: "top",
-              style: "dotted",
-              size: "1px",
-            }}
-          ></Box>
-          <Button margin={{ left: "small" }} justify="between">
-            <Refresh />
-            <Text>Reload</Text>
-          </Button>
-          <Box
-            margin={{ vertical: "9px" }}
-            width="95%"
-            alignSelf="center"
-            border={{
-              color: "#bbb",
-              side: "top",
-              style: "dotted",
-              size: "1px",
-            }}
-          ></Box>
-          <Text weight="bold" size="13px">
-            Network Mode:
-          </Text>
+          <DottedLine width="95%" />
+          <Box className="panel-dropdown-container">
+            <Button margin={{ top: "15px", bottom: "5px" }} justify="between">
+              <Box
+                pad={{ vertical: "6px", horizontal: "12px" }}
+                direction="row"
+                align="center"
+                justify="center"
+                gap="4px"
+              >
+                <Refresh size="14px" />
+                <Text>Reload</Text>
+              </Box>
+            </Button>
+          </Box>
+          <DottedLine width="95%" />
+          <Box margin={{ top: "10px" }}>
+            <Text weight="bold" size="13px">
+              Network Mode:
+            </Text>
+          </Box>
           <Box margin={{ bottom: "5px" }}>
             <Text className="italics" weight="bold" size="12px">
               {networkMode}
@@ -274,15 +252,11 @@ export default function Sidebar({}) {
           <Select
             className="demo-source-dropdown"
             options={[
-              <Text>
-                Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
-              </Text>,
-              <Text>
-                Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
-              </Text>,
-              <Text>Demo #3: Unweighted GRN (21 genes, 31 edges)</Text>,
-              <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
-              <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>,
+              <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
+              <Text>{WEIGHTED_DEMO_NAME}</Text>,
+              <Text>{SCHADE_INPUT_NAME}</Text>,
+              <Text>{SCHADE_OUTPUT_NAME}</Text>,
+              <Text>{PPI_DEMO_NAME}</Text>,
             ]}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
@@ -300,15 +274,11 @@ export default function Sidebar({}) {
             className="demo-source-dropdown"
             pad="0px"
             options={[
-              <Text>
-                Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
-              </Text>,
-              <Text>
-                Demo #2: Weighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)
-              </Text>,
-              <Text>Demo #3: Unweighted GRN (21 genes, 31 edges)</Text>,
-              <Text>Demo #4: Weighted GRN (21 genes, 31 edges, Schade et al. 2004 data)</Text>,
-              <Text>Demo #5: PPI (18 proteins, 81 edges)</Text>,
+              <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
+              <Text>{WEIGHTED_DEMO_NAME}</Text>,
+              <Text>{SCHADE_INPUT_NAME}</Text>,
+              <Text>{SCHADE_OUTPUT_NAME}</Text>,
+              <Text>{PPI_DEMO_NAME}</Text>,
             ]}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
@@ -340,9 +310,9 @@ export default function Sidebar({}) {
         </Box>
         <Box pad={{ right: "10px", left: "10px", bottom: "10px" }} gap="5px">
           <CheckBox
-            checked={enableEdgeColoring}
+            checked={colorOptimal}
             label={<Text>Enable Edge Coloring</Text>}
-            onChange={event => setEnableEdgeColoring(event.target.checked)}
+            onChange={event => setColorOptimal(event.target.checked)}
           />
           <Box>
             <Text weight="bold">Hide/Show Edge Weights</Text>
@@ -378,12 +348,13 @@ export default function Sidebar({}) {
           </Box>
           <Box>
             <Text weight="bold">
-              Gray Threshold (0-100%): <Text weight="normal">{grayThreshold}%</Text>
+              Gray Threshold (0-100%):{" "}
+              <Text weight="normal">{(grayThreshold * 100).toFixed()}%</Text>
             </Text>
             <RangeInput
               color="blue"
-              value={grayThreshold}
-              onChange={event => setGrayThreshold(event.target.value)}
+              value={grayThreshold * 100}
+              onChange={event => setGrayThreshold(event.target.value / 100)}
               min={0}
               max={100}
             />
