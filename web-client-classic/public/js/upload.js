@@ -87,25 +87,42 @@ export const upload = function () {
         return result;
     };
 
-    var filenameWithExtension = function (suffix, extension) {
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+        var source = null;
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (suffix) {
-            filename = filename + "_" + suffix;
+        if (Object.keys(grnState.workbook.expression).length > 0) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "userInput") {
+                source = "user-data";
+            }
         }
 
-        return filename + "." + extension;
+        if (mode !== "grn") {
+            mode = "PPI";
+        }
+        if (mode !== null && genes !== null && edges !== null && type !== null) {
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+        if (source) {
+            filename = `${filename}_${source}`;
+        }
+        return `${filename}.${extension}`;
     };
 
     const download = (workbook, route, extension, sheetType) => {
         const workbookToExport = flattenWorkbook(workbook, sheetType);
-        const workbookFilename = filenameWithExtension(
-            sheetType !== workbook.sheetType ? sheetType : "",
+        var workbookFilename = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            sheetType,
             extension
         );
+
         workbookToExport.filename = workbookFilename;
 
         const exportForm = $("<form></form>")
@@ -375,15 +392,6 @@ export const upload = function () {
                     ) {
                         finalExportSheets.two_column_sheets[sheet] =
                             grnState.workbook.two_column_sheets[sheet];
-                    } else if (sheet === "threshold_b") {
-                        finalExportSheets.two_column_sheets[sheet] = {
-                            data: {},
-                            errors: [],
-                            warnings: [],
-                        };
-                        for (let g of grnState.workbook.genes) {
-                            finalExportSheets.two_column_sheets[sheet].data[g.name] = 0;
-                        }
                     } else {
                         finalExportSheets.two_column_sheets[sheet] = null;
                     }
@@ -398,6 +406,7 @@ export const upload = function () {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
+            threshold_b: "ThresholdB",
         };
 
         const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet =>
@@ -408,10 +417,19 @@ export const upload = function () {
 
         for (let sheet of chosenTwoColumnSheets) {
             const sheetData = finalExportSheets.two_column_sheets[sheet];
-            if (
-                sheetData === null ||
-                (sheetData && Object.keys(sheetData.data || {}).length === 0)
-            ) {
+            const isMissing = sheetData === null;
+            const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
+
+            // Check if all genes are available but missing values
+            const partialMissingCode = `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
+            const hasExistingWarning = finalExportSheets.warnings.some(
+                w => w.warningCode === partialMissingCode
+            );
+
+            if (isMissing || isEmpty || hasExistingWarning) {
+                const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
+                finalExportSheets.warnings.push(warnings[warningKey](isMissing));
+
                 missingTwoColumnSheets.push(sheet);
             } else {
                 finalExportSheets.two_column_sheets[sheet] = sheetData;
@@ -444,24 +462,14 @@ export const upload = function () {
             );
         }
 
-        const exportWorkbookView = {
-            genes: grnState.workbook.genes,
-            twoColumnSheets: finalExportSheets.two_column_sheets,
-        };
-
-        const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
-            exportWorkbookView,
+        const uniqueMissingGenesWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+            grnState.workbook.genes,
+            finalExportSheets.two_column_sheets,
+            chosenTwoColumnSheets,
             warnings,
-            chosenTwoColumnSheets
+            finalExportSheets.warnings
         );
-
-        const existingDescriptions = new Set(
-            finalExportSheets.warnings.map(w => w.errorDescription)
-        );
-        const uniqueWarnings = exportWarnings.filter(
-            w => !existingDescriptions.has(w.errorDescription)
-        );
-        finalExportSheets.warnings.push(...uniqueWarnings);
+        finalExportSheets.warnings.push(...uniqueMissingGenesWarnings);
 
         return finalExportSheets;
     };
@@ -480,10 +488,7 @@ export const upload = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
-                if (
-                    value.value === "network_weights" ||
-                    value.value === "network_optimized_weights"
-                ) {
+                if (value.value === "network_optimized_weights") {
                     return "weighted";
                 }
             }
@@ -532,10 +537,14 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
+
         if (Object.keys(grnState.workbook.expression).length > 0) {
+            const value = grnState.workbook.expression.source
+                ? grnState.workbook.expression.source
+                : "userInput";
             result += `
                         <li>
-                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <input type='radio' name='expressionSource' checked="true" value="${value}" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
                             <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
                         </li>
             `;

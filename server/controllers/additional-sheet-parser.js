@@ -81,14 +81,6 @@ const addError = (output, message) => {
     }
 };
 
-const TWO_COL_SHEET_NAMES = [
-    "production_rates",
-    "degradation_rates",
-    "threshold_b",
-    "optimized_production_rates",
-    "optimized_threshold_b",
-];
-
 const validGeneName = (output, sheetName, gene, row) => {
     var maxGeneLength = 12;
     var regex = /[^a-z0-9]-]/gi;
@@ -328,15 +320,21 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     return output;
 };
 
-const parseTwoColumnSheet = sheet => {
+const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let output = {
         data: {},
         errors: [],
         warnings: [],
     };
 
+    if (sheet.data.length === 0) {
+        return output;
+    }
+
     let currentGene;
     let currentValue;
+
+    const genesMissingValue = [];
 
     // check to see if the genes are strings and the values are numbers
 
@@ -351,19 +349,62 @@ const parseTwoColumnSheet = sheet => {
             currentValue = sheet.data[row][1];
 
             if (validGeneName(output, sheet.name, currentGene, row + 1)) {
-                if (typeof currentValue === "number") {
-                    output.data[currentGene] = currentValue;
+                if (currentValue === null || currentValue === undefined) {
+                    genesMissingValue.push(currentGene);
+                    output.data[currentGene] = undefined;
                 } else {
-                    addError(
-                        output,
-                        constants.errors.invalidValueError(
-                            sheet.name,
-                            currentValue,
-                            row + 1,
-                            getSheetHeader(sheet.name, 1, row)
-                        )
-                    );
+                    if (typeof currentValue === "number") {
+                        output.data[currentGene] = currentValue;
+                    } else {
+                        addError(
+                            output,
+                            constants.errors.invalidValueError(
+                                sheet.name,
+                                currentValue,
+                                row + 1,
+                                getSheetHeader(sheet.name, 1, row)
+                            )
+                        );
+                    }
                 }
+            }
+        }
+    }
+
+    // Check whether all genes are missing values
+    const isAllGenesMissingValues =
+        genesInNetwork && genesInNetwork.every(gene => genesMissingValue.includes(gene));
+    if (isAllGenesMissingValues) {
+        addWarning(
+            output,
+            constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
+                sheet.name,
+                /*isAllGenesMissing=*/ false
+            )
+        );
+    }
+
+    // Check for missing genes in sheet
+    if (genesInNetwork) {
+        //  Check if the output data keys (genes in sheet) include all genes in the network
+        const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
+        if (missingGenes.length > 0) {
+            if (missingGenes.length === genesInNetwork.length) {
+                addWarning(
+                    output,
+                    constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
+                        sheet.name,
+                        /*isAllGenesMissing=*/ true
+                    )
+                );
+            } else {
+                addWarning(
+                    output,
+                    constants.warnings.missingGenesAndValuesInTwoColumnSheetWarningWhenImporting(
+                        sheet.name,
+                        missingGenes.join(", ")
+                    )
+                );
             }
         }
     }
@@ -371,7 +412,7 @@ const parseTwoColumnSheet = sheet => {
     return output;
 };
 
-module.exports = function (workbookFile) {
+module.exports = function (workbookFile, genesInNetwork) {
     let output = {
         meta: {
             data: {},
@@ -386,8 +427,8 @@ module.exports = function (workbookFile) {
             output.meta = parseMetaDataSheet(sheet);
             // above line creates an object from the optimization parameters sheet
             // these are part of the "meta" property
-        } else if (TWO_COL_SHEET_NAMES.includes(sheet.name)) {
-            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet);
+        } else if (constants.TWO_COL_SHEET_NAMES.includes(sheet.name)) {
+            output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet, genesInNetwork);
         } else if (sheet.name === "optimization_diagnostics") {
             output.meta2 = parseOptimizationDiagnosticsSheet(sheet);
         }

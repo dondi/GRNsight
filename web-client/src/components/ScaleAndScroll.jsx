@@ -1,12 +1,36 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo, useRef } from "react";
 import { GrnStateContext } from "../App";
-import { ZOOM_DISPLAY_MINIMUM_VALUE, ZOOM_DISPLAY_MAXIMUM_VALUE } from "../helpers/constants";
+import {
+  ZOOM_DISPLAY_MINIMUM,
+  ZOOM_DISPLAY_MAXIMUM,
+  ZOOM_SLIDER_MIN,
+  ZOOM_SLIDER_MIDDLE,
+  ZOOM_SLIDER_MAX,
+  zoomScaleSliderLeft,
+  zoomScaleSliderRight,
+} from "../helpers/constants";
 import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constants";
 import "../App.css";
 
 export default function ScaleAndScroll() {
-  const [zoomValue, setZoomValue] = useState(null);
+  const frame = useRef(null);
+  const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode } = useContext(GrnStateContext);
+
+  const handleSliderChange = event => {
+    const sliderInput = parseFloat(event.target.value);
+    setZoomSliderValue(sliderInput);
+    // TODO: add Restrict Graph to Viewport support like flexZoomInBounds in classic
+    const scaleToUse =
+      sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft() : zoomScaleSliderRight();
+    const finalDisplay = Math.floor(scaleToUse(sliderInput));
+
+    if (frame.current) cancelAnimationFrame(frame.current); // Cancel any pending animation frame to prevent queuing up too many frames
+
+    frame.current = requestAnimationFrame(() => {
+      setZoomPercent(finalDisplay);
+    });
+  };
 
   return (
     <div className="scale-and-scroll">
@@ -41,9 +65,9 @@ export default function ScaleAndScroll() {
       </table>
       <span className="pull-left zoomLabel">
         <b>
-          Zoom (<span className="minimum-zoom-display">{ZOOM_DISPLAY_MINIMUM_VALUE}</span>
+          Zoom (<span className="minimum-zoom-display">{ZOOM_DISPLAY_MINIMUM}</span>
           &ndash;
-          <span className="maximum-zoom-display">{ZOOM_DISPLAY_MAXIMUM_VALUE}</span>
+          <span className="maximum-zoom-display">{ZOOM_DISPLAY_MAXIMUM}</span>
           %):&nbsp;
         </b>
       </span>
@@ -60,17 +84,11 @@ export default function ScaleAndScroll() {
                 id="zoomSlider"
                 className="zoom"
                 type="range"
-                min="25"
-                max="200"
-                value={zoomPercent}
-                // defaultValue="100"
-                onChange={e => {
-                  const sliderValue = parseFloat(e.target.value);
-                  setZoomPercent(Math.round(sliderValue));
-                }}
-                step="0.1"
-                // TODO: will need to set a state to make this dynamic
-                // TODO: make sure that this always stays blue even when computer in dark mode
+                min={ZOOM_SLIDER_MIN}
+                max={ZOOM_SLIDER_MAX}
+                value={zoomSliderValue ?? ZOOM_SLIDER_MIDDLE}
+                onChange={handleSliderChange}
+                step="0.25"
                 disabled={
                   networkMode !== NETWORK_GRN_MODE_FULL && networkMode !== NETWORK_PPI_MODE_FULL
                 }
