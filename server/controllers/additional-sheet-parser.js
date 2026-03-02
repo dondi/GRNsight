@@ -83,7 +83,7 @@ const addError = (output, message) => {
 
 const validGeneName = (output, sheetName, gene, row) => {
     var maxGeneLength = 12;
-    var regex = /[^a-z0-9]-]/gi;
+    var regex = /[^a-z0-9\_\-]/gi;
     if (typeof gene !== "string") {
         addError(output, constants.errors.invalidGeneTypeError(sheetName, gene, row));
         return false;

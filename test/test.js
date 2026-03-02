@@ -603,6 +603,21 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
     assert.equal(frequency, twoColumnInvalidGeneTypeErrorCount);
 };
 
+var twoColumnSpecialCharacterError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var twoColumnSpecialCharacterErrorCount = 0;
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnSpecialCharacterErrorCount += workbook.twoColumnSheets[page].errors.filter(
+            function (x) {
+                return x.errorCode === "INVALID_CHARACTER";
+            }
+        ).length;
+    }
+
+    assert.equal(twoColumnSpecialCharacterErrorCount, frequency);
+};
+
 var twoColumnInvalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
@@ -884,6 +899,7 @@ exports.emptyColumnDataError = emptyColumnDataError;
 exports.emptyColumnError = emptyColumnError;
 exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
+exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

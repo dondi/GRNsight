@@ -178,6 +178,13 @@ describe("additional-sheet-parser", function () {
             );
         });
 
+        it("should return twoColumnSpecialCharacterError", function () {
+            test.twoColumnSpecialCharacterError(
+                "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx",
+                5
+            );
+        });
+
         describe("missing column header warnings", function () {
             it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS", function () {
                 test.additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning(
