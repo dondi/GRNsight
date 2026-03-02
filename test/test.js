@@ -603,6 +603,20 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
     assert.equal(frequency, twoColumnInvalidGeneTypeErrorCount);
 };
 
+var twoColumnInvalidGeneLengthError = function (input, frequency) {
+    var sheet = xlsx.parse(input);
+    var workbook = parseAdditionalSheet(sheet);
+    var twoColumnInvalidGeneLengthErrorCount = 0;
+    for (let page in workbook.twoColumnSheets) {
+        twoColumnInvalidGeneLengthErrorCount += workbook.twoColumnSheets[page].errors.filter(
+            function (x) {
+                return x.errorCode === "INVALID_GENE_LENGTH";
+            }
+        ).length;
+    }
+    assert.equal(frequency, twoColumnInvalidGeneLengthErrorCount);
+};
+
 var twoColumnSpecialCharacterError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
@@ -618,18 +632,22 @@ var twoColumnSpecialCharacterError = function (input, frequency) {
     assert.equal(twoColumnSpecialCharacterErrorCount, frequency);
 };
 
-var twoColumnInvalidGeneLengthError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var twoColumnInvalidGeneLengthErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        twoColumnInvalidGeneLengthErrorCount += workbook.twoColumnSheets[page].errors.filter(
-            function (x) {
-                return x.errorCode === "INVALID_GENE_LENGTH";
-            }
-        ).length;
-    }
-    assert.equal(frequency, twoColumnInvalidGeneLengthErrorCount);
+const twoColumnInvalidDataTypeError = function (input, sheetName, frequency) {
+    const sheet = xlsx.parse(input);
+
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].errors,
+        `Expected errors array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].errors.length, frequency);
+    assert.equal(workbook.twoColumnSheets[sheetName].errors[0].errorCode, "INVALID_VALUE");
 };
 
 var additionalSheetExtraneousDataWarning = function (input, frequency) {
@@ -900,6 +918,7 @@ exports.emptyColumnError = emptyColumnError;
 exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
+exports.twoColumnInvalidDataTypeError = twoColumnInvalidDataTypeError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;

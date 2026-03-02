@@ -297,6 +297,32 @@ describe("additional-sheet-parser", function () {
             // TODO: Add test for optimization diagnostics and optimization parameters incorrect column headers
         });
 
+        describe("wrong data type error", function () {
+            it("should return invalidvalueError when there are invalid data types in two-column sheets - degradation_rates sheet", function () {
+                test.twoColumnInvalidDataTypeError(
+                    "test-files/additional-sheet-test-files/wrong-datatype-deg.xlsx",
+                    "degradation_rates",
+                    1
+                );
+            });
+
+            it("should return invalidvalueError when there are invalid data types in two-column sheets - production_rates sheet", function () {
+                test.twoColumnInvalidDataTypeError(
+                    "test-files/additional-sheet-test-files/wrong-datatype-prod.xlsx",
+                    "production_rates",
+                    1
+                );
+            });
+
+            it("should return invalidvalueError when there are invalid data types in two-column sheets - threshold_b sheet", function () {
+                test.twoColumnInvalidDataTypeError(
+                    "test-files/additional-sheet-test-files/wrong-datatype-threshold_b.xlsx",
+                    "threshold_b",
+                    1
+                );
+            });
+        });
+
         it("should return additionalSheetExtraneousDataWarning", function () {
             test.additionalSheetExtraneousDataWarning(
                 "test-files/additional-sheet-test-files/two-column-sheets-extraneous-data.xlsx",
