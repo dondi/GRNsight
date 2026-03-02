@@ -161,8 +161,10 @@ const checkValidHeaderAndAddWarnings = (output, sheet) => {
     const cellB1 = hasData && sheet.data[0].length > 1 ? sheet.data[0][1] : undefined;
 
     const isMissing =
-        cellA1 == null ||
-        cellB1 == null ||
+        cellA1 === null ||
+        cellA1 === undefined ||
+        cellB1 === null ||
+        cellB1 === undefined ||
         String(cellA1).trim() === "" ||
         String(cellB1).trim() === "" ||
         (typeof cellA1 === "string" && typeof cellB1 === "number");
@@ -324,7 +326,8 @@ const checkValidGenesAndValuesInTwoColumnSheet = (output, sheet, row, genesMissi
 
     if (validGeneName(output, sheet.name, currentGene, row + 1)) {
         const isEmpty =
-            currentValue == null ||
+            currentValue === null ||
+            currentValue === undefined ||
             (typeof currentValue === "string" && currentValue.trim() === "");
         if (isEmpty) {
             genesMissingValue.push(currentGene);
@@ -369,23 +372,16 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         if (row === 0) {
             checkValidHeaderAndAddWarnings(output, sheet);
 
-            const hasMissingHeader = output.warnings.some(
+            const isHeaderMissing = output.warnings.some(
                 w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
             );
 
-            if (hasMissingHeader) {
-                const cellA1 = sheet.data[row][0];
-                const cellB1 = sheet.data[row][1];
-
-                if (cellA1 == null && cellB1 == null) {
-                    continue;
-                } else {
-                    checkValidGenesAndValuesInTwoColumnSheet(output, sheet, row, genesMissingValue);
-                }
+            if (!isHeaderMissing) {
+                continue;
             }
-        } else {
-            checkValidGenesAndValuesInTwoColumnSheet(output, sheet, row, genesMissingValue);
         }
+
+        checkValidGenesAndValuesInTwoColumnSheet(output, sheet, row, genesMissingValue);
     }
 
     // Check whether all genes are missing values
