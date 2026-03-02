@@ -104,22 +104,18 @@ const parseMetaDataSheet = sheet => {
         warnings: [],
     };
     let paramType;
-    if (sheet.data[0][0] === undefined) {
-        checkValidHeaderAndAddWarnings(meta, sheet);
-    } else if (sheet.data[0][0] !== getSheetHeader(sheet.name, 0, 0)) {
-        checkValidHeaderAndAddWarnings(meta, sheet);
-    }
-    if (sheet.data[0][1] === undefined) {
-        checkValidHeaderAndAddWarnings(meta, sheet);
-    } else if (sheet.data[0][1] !== getSheetHeader(sheet.name, 1, 0)) {
-        checkValidHeaderAndAddWarnings(meta, sheet);
-    }
+    checkValidHeaderAndAddWarnings(meta, sheet);
+
+    const isHeaderMissing = meta.warnings.some(
+        w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
+    );
     sheet.data.forEach(function (element, index) {
-        if (index !== 0) {
-            const value = element.slice(1);
-            // Extract element from array if array contains only 1 value
-            meta.data[element[0]] = value.length > 1 ? value : value[0];
+        if (!isHeaderMissing && index === 0) {
+            return;
         }
+        const value = element.slice(1);
+        // Extract element from array if array contains only 1 value
+        meta.data[element[0]] = value.length > 1 ? value : value[0];
     });
     for (let key in meta.data) {
         paramType = optimizationParametersTypeKey[key];
@@ -169,7 +165,7 @@ const checkValidHeaderAndAddWarnings = (output, sheet) => {
         cellB1 == null ||
         String(cellA1).trim() === "" ||
         String(cellB1).trim() === "" ||
-        (validGeneName(output, sheetName, cellA1, 0) && typeof cellB1 === "number");
+        (typeof cellA1 === "string" && typeof cellB1 === "number");
 
     if (isMissing) {
         addWarning(
