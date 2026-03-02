@@ -290,22 +290,39 @@ module.exports = {
         },
 
         additionalSheetIncorrectColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
-            return {
-                warningCode: `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`,
-                errorDescription:
-                    `GRNsight has detected that the headers are incorrect in the imported workbook's ${sheetName} sheet. ` +
-                    `The headers will need to be corrected to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
-                    `Cell A1 should contain the text ${expectedA1}, and cell B1 should contain the text ${expectedB1}, exactly.`,
-            };
+            return this.additionSheetMissingOrIncorrectColumnHeaderWarning(
+                sheetName,
+                expectedA1,
+                expectedB1,
+                /*isMissing*/ false
+            );
         },
 
         additionalSheetMissingColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
+            return this.additionSheetMissingOrIncorrectColumnHeaderWarning(
+                sheetName,
+                expectedA1,
+                expectedB1,
+                /*isMissing*/ true
+            );
+        },
+
+        additionSheetMissingOrIncorrectColumnHeaderWarning: function (
+            sheetName,
+            expectedA1,
+            expectedB1,
+            isMissing
+        ) {
+            const headerStatus = isMissing ? "missing" : "incorrect";
             return {
-                warningCode: `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`,
-                errorDescription:
-                    `GRNsight has detected that the headers are missing in the imported workbook's ${sheetName} sheet. ` +
-                    `The headers will need to be corrected to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. ` +
-                    `Cell A1 should contain the text ${expectedA1}, and cell B1 should contain the text ${expectedB1}, exactly.`,
+                warningCode: `${headerStatus.toUpperCase()}_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that the headers are ${headerStatus} in the imported workbook's ${sheetName} sheet.`,
+                    "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
+                    "but will not affect the display of the graph in GRNsight.",
+                    `Cell A1 should contain the text ${expectedA1},`,
+                    `and cell B1 should contain the text ${expectedB1}, exactly.`,
+                ].join(" "),
             };
         },
 
