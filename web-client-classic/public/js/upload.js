@@ -405,7 +405,7 @@ export const upload = function () {
 
         for (let sheet of chosenTwoColumnSheets) {
             const sheetData = finalExportSheets.two_column_sheets[sheet];
-            const isMissing = sheetData == null;
+            const isMissing = sheetData === null || sheetData === undefined;
             const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
 
             // Check if all genes are available but missing values
