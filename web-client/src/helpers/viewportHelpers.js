@@ -8,7 +8,6 @@ import {
 
 export function initialViewportSize(width) {
   if (width < MEDIUM_PAGE_WIDTH) {
-    console.log("initializing viewport size as small", VIEW_SIZE_SMALL);
     return VIEW_SIZE_SMALL;
   } else if (width > MEDIUM_PAGE_WIDTH && width < LARGE_PAGE_WIDTH) {
     return VIEW_SIZE_MEDIUM;

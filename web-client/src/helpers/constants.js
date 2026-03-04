@@ -45,9 +45,9 @@ export const MEDIUM_GRAY = "#bbb";
 export const DARK_GRAY = "#999";
 
 // Viewport Size
-export const VIEW_SIZE_SMALL = "Small (1104 X 648 pixels)";
-export const VIEW_SIZE_MEDIUM = "Medium (1414 X 768 pixels)";
-export const VIEW_SIZE_LARGE = "Large (1920 X 1080 pixels)";
+export const VIEW_SIZE_SMALL = "Small (1104 x 648 pixels)";
+export const VIEW_SIZE_MEDIUM = "Medium (1414 x 768 pixels)";
+export const VIEW_SIZE_LARGE = "Large (1920 x 1080 pixels)";
 export const FIT_TO_WINDOW = "Fit to Window";
 export const MEDIUM_PAGE_WIDTH = 1500;
 export const LARGE_PAGE_WIDTH = 2200;

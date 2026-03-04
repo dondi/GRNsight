@@ -263,6 +263,7 @@ button:hover {
 
 .sidebar-radio-buttons {
   font-size: 14px;
+  /* border: 1px solid "green"; */
 }
 
 /* TODO: is this being used correctly? */
@@ -397,4 +398,16 @@ table {
 #file-name {
   white-space: nowrap;
   padding: 15px;
+}
+
+.checkmark-container {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.empty-checkmark {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
 }

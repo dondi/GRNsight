@@ -313,7 +313,7 @@ export default function Graph() {
   return (
     <div
       ref={containerRef}
-      className={`grnsight-container`}
+      className="grnsight-container"
       style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
       {loading && <div>Loading graph...</div>}

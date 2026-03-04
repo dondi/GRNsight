@@ -18,6 +18,7 @@ import {
 } from "../helpers/constants";
 import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
+import OptionalCheckmark from "./helper-components/OptionalCheckmark";
 import "../App.css";
 
 export default function Navbar({}) {
@@ -336,46 +337,39 @@ export default function Navbar({}) {
         dropContent={
           <div className="dropdown-menu">
             <Text margin={{ left: "small" }}>Viewport Size</Text>
-            {/* only display the checkmark for the selected view size */}
-            <Button
-              margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize(VIEW_SIZE_SMALL)}
-            >
-              <Checkmark />
-              <Text>Small</Text>
-            </Button>
-            <Button
-              margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize(VIEW_SIZE_MEDIUM)}
-            >
-              <Checkmark />
-              <Text>Medium</Text>
-            </Button>
-            <Button
-              margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize(VIEW_SIZE_LARGE)}
-            >
-              <Checkmark />
-              <Text>Large</Text>
-            </Button>
-            <Button
-              margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setViewSize(FIT_TO_WINDOW)}
-            >
-              <Checkmark />
-              <Text>Fit To Window</Text>
-            </Button>
+            <Box pad={{ horizontal: "20px", top: "3px" }}>
+              <Button onClick={() => setViewSize(VIEW_SIZE_SMALL)}>
+                <OptionalCheckmark chosenViewSize={VIEW_SIZE_SMALL} viewSize={viewSize} />
+                <Text>Small (1104 x 648 pixels)</Text>
+              </Button>
+            </Box>
+            <Box pad={{ horizontal: "20px", top: "3px" }}>
+              <Button onClick={() => setViewSize(VIEW_SIZE_MEDIUM)}>
+                <OptionalCheckmark chosenViewSize={VIEW_SIZE_MEDIUM} viewSize={viewSize} />
+                <Text>Medium (1414 x 840 pixels)</Text>
+              </Button>
+            </Box>
+            <Box pad={{ horizontal: "20px", top: "3px" }}>
+              <Button onClick={() => setViewSize(VIEW_SIZE_LARGE)}>
+                <OptionalCheckmark chosenViewSize={VIEW_SIZE_LARGE} viewSize={viewSize} />
+                <Text>Large (1920 x 1080 pixels)</Text>
+              </Button>
+            </Box>
+            <Box pad={{ horizontal: "20px", top: "3px" }}>
+              <Button onClick={() => setViewSize(FIT_TO_WINDOW)}>
+                <OptionalCheckmark chosenViewSize={FIT_TO_WINDOW} viewSize={viewSize} />
+                <Text>Fit To Window</Text>
+              </Button>
+            </Box>
             <DottedLine />
-
-            <Button
-              margin={{ horizontal: "20px", top: "3px" }}
-              onClick={() => setRestrictGraphToViewport(!restrictGraphToViewport)}
-            >
-              <Text>Restrict Graph to Viewport</Text>
-            </Button>
+            <Box pad={{ horizontal: "20px", top: "3px" }}>
+              <Button onClick={() => setRestrictGraphToViewport(!restrictGraphToViewport)}>
+                <Text>Restrict Graph to Viewport</Text>
+              </Button>
+            </Box>
 
             <DottedLine />
-            <Box margin={{ horizontal: "20px", vertical: "3px" }} direction="row">
+            <Box pad={{ horizontal: "20px", vertical: "3px" }} direction="row">
               <Text>
                 Zoom ({ZOOM_DISPLAY_MINIMUM} - {ZOOM_DISPLAY_MAXIMUM})
               </Text>{" "}
