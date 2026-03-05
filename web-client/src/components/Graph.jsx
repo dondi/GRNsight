@@ -185,6 +185,10 @@ export default function Graph() {
       .attr("height", height)
       .attr("id", "exportContainer");
 
+    svg.style("pointer-events", "all").call(zoomDrag).style("font-family", "sans-serif");
+
+    d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
+
     const defs = svg.append("defs");
 
     const zoomContainer = svg
@@ -220,10 +224,6 @@ export default function Graph() {
       });
 
     zoomRef.current = zoom;
-
-    svg.style("pointer-events", "all").call(zoomDrag).style("font-family", "sans-serif");
-
-    d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
     // D-pad controls
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -387,7 +387,6 @@ export default function Graph() {
   return (
     <div
       ref={containerRef}
-      // className="grnsight-container"
       className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
       style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
