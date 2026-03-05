@@ -2,8 +2,6 @@ import { Box } from "grommet";
 import { Checkmark } from "grommet-icons";
 import "../../App.css";
 export default function OptionalCheckmark({ chosenViewSize, viewSize }) {
-  console.log("chosenViewSize: ", chosenViewSize);
-  console.log("viewSize: ", viewSize);
   return chosenViewSize === viewSize ? (
     <div className="checkmark-container">
       <Checkmark size="14px" />
