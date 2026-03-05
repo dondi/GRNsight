@@ -116,14 +116,6 @@ describe("additional-sheet-parser", function () {
                 simulation_timepoints: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
             });
         });
-
-        it("should return additionalSheetMissingColumnHeaderError", function () {
-            test.additionalSheetMissingColumnHeaderError(
-                "test-files/additional-sheet-test-files/optimization-parameters-missing-headers.xlsx",
-                2
-            );
-        });
-
         it("should return unknownOptimizationParameterWarning", function () {
             test.unknownOptimizationParameterWarning(
                 "test-files/additional-sheet-test-files/optimization-parameters-unknown-parameter.xlsx",
@@ -172,27 +164,6 @@ describe("additional-sheet-parser", function () {
             });
         });
 
-        it("should return twoColumnIdError", function () {
-            test.twoColumnIdError(
-                "test-files/additional-sheet-test-files/two-column-sheets-incorrect-cell-A1.xlsx",
-                5
-            );
-        });
-
-        it("should return additionalSheetIncorrectColumnHeaderError", function () {
-            test.additionalSheetIncorrectColumnHeaderError(
-                "test-files/additional-sheet-test-files/two-column-sheets-incorrect-column-header.xlsx",
-                5
-            );
-        });
-
-        it("should return additionalSheetMissingColumnHeaderError", function () {
-            test.additionalSheetMissingColumnHeaderError(
-                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx",
-                5
-            );
-        });
-
         it("should return twoColumnInvalidGeneTypeError", function () {
             test.twoColumnInvalidGeneTypeError(
                 "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-type.xlsx",
@@ -212,6 +183,144 @@ describe("additional-sheet-parser", function () {
                 "test-files/additional-sheet-test-files/two-column-sheets-special-character.xlsx",
                 5
             );
+        });
+
+        describe("missing column header warnings", function () {
+            it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS", function () {
+                test.additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/optimization-diagnostics-missing-header.xlsx",
+                    1,
+                    "optimization_diagnostics"
+                );
+            });
+
+            it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_PARAMETERS", function () {
+                test.additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/optimization-parameters-missing-header.xlsx",
+                    1,
+                    "optimization_parameters"
+                );
+            });
+
+            it("should contain MISSING_COLUMN_HEADER_DEGRADATION_RATES", function () {
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/missing-deg-rate-headers-deg-rates-sheet.xlsx",
+                    1,
+                    "degradation_rates",
+                    /*isMissingSheet=*/ true
+                );
+
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/blank-deg-rate-headers-deg-rates-sheet.xlsx",
+                    1,
+                    "degradation_rates",
+                    /*isMissingSheet=*/ true
+                );
+            });
+
+            it("should contain MISSING_COLUMN_HEADER_PRODUCTION_RATES", function () {
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/missing-prod-rate-headers-prod-rates-sheet.xlsx",
+                    1,
+                    "production_rates",
+                    /*isMissingSheet=*/ true
+                );
+
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/blank-prod-rate-headers-prod-rates-sheet.xlsx",
+                    1,
+                    "production_rates",
+                    /*isMissingSheet=*/ true
+                );
+            });
+
+            it("should contain MISSING_COLUMN_THRESHOLD_B", function () {
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/missing-threshold_b-headers-threshold_b-sheet.xlsx",
+                    1,
+                    "threshold_b",
+                    /*isMissingSheet=*/ true
+                );
+
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/blank-threshold_b-headers-threshold_b-sheet.xlsx",
+                    1,
+                    "threshold_b",
+                    /*isMissingSheet=*/ true
+                );
+            });
+        });
+
+        describe("incorrect column header warnings", function () {
+            it("should contain INCORRECT_COLUMN_HEADER_DEGRADATION_RATES", function () {
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/wrong-deg-rate-header-deg-rates-sheet.xlsx",
+                    1,
+                    "degradation_rates"
+                );
+
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/wrong-id-header-deg-rates-sheet.xlsx",
+                    1,
+                    "degradation_rates"
+                );
+            });
+
+            it("should contain INCORRECT_COLUMN_HEADER_PRODUCTION_RATES", function () {
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/wrong-prod-rate-header-prod-rates-sheet.xlsx",
+                    1,
+                    "production_rates"
+                );
+
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/wrong-id-header-prod-rates-sheet.xlsx",
+                    1,
+                    "production_rates"
+                );
+            });
+
+            it("should contain INCORRECT_COLUMN_HEADER_THRESHOLD_B", function () {
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/wrong-threshold_b-header-threshold_b-sheet.xlsx",
+                    1,
+                    "threshold_b"
+                );
+
+                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                    "test-files/additional-sheet-test-files/wrong-id-header-threshold_b-sheet.xlsx",
+                    1,
+                    "threshold_b"
+                );
+            });
+
+            // TODO: Add test for optimization diagnostics and optimization parameters incorrect column headers
+        });
+
+        describe("wrong data type error", function () {
+            it("should return invalidvalueError when there are invalid data types in two-column sheets - degradation_rates sheet", function () {
+                test.twoColumnInvalidDataTypeError(
+                    "test-files/additional-sheet-test-files/wrong-datatype-deg.xlsx",
+                    "degradation_rates",
+                    1
+                );
+            });
+
+            it("should return invalidvalueError when there are invalid data types in two-column sheets - production_rates sheet", function () {
+                test.twoColumnInvalidDataTypeError(
+                    "test-files/additional-sheet-test-files/wrong-datatype-prod.xlsx",
+                    "production_rates",
+                    1
+                );
+            });
+
+            it("should return invalidvalueError when there are invalid data types in two-column sheets - threshold_b sheet", function () {
+                test.twoColumnInvalidDataTypeError(
+                    "test-files/additional-sheet-test-files/wrong-datatype-threshold_b.xlsx",
+                    "threshold_b",
+                    1
+                );
+            });
         });
 
         it("should return additionalSheetExtraneousDataWarning", function () {
@@ -338,20 +447,6 @@ describe("additional-sheet-parser", function () {
     });
 
     describe("optimization diagnostics sheet", function () {
-        it("should return additionalSheetIncorrectColumnHeader Error", function () {
-            test.additionalSheetIncorrectColumnHeaderError(
-                "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-column-headers.xlsx",
-                2
-            );
-        });
-
-        it("should return additionalSheetMissingColumnHeader Error", function () {
-            test.additionalSheetMissingColumnHeaderError(
-                "test-files/additional-sheet-test-files/optimization-diagnostics-missing-column-headers.xlsx",
-                2
-            );
-        });
-
         it("should return unknownOptimizationDiagnosticsParameter Warning", function () {
             test.unknownOptimizationDiagnosticsParameterWarning(
                 "test-files/additional-sheet-test-files/optimization-diagnostics-unknown-parameter.xlsx",

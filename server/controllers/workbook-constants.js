@@ -281,6 +281,43 @@ module.exports = {
                 " GRNsight defaults to Saccharomyces cerevisiae.",
         },
 
+        additionalSheetIncorrectColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
+            return this.additionSheetMissingOrIncorrectColumnHeaderWarning(
+                sheetName,
+                expectedA1,
+                expectedB1,
+                /*isMissing*/ false
+            );
+        },
+
+        additionalSheetMissingColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
+            return this.additionSheetMissingOrIncorrectColumnHeaderWarning(
+                sheetName,
+                expectedA1,
+                expectedB1,
+                /*isMissing*/ true
+            );
+        },
+
+        additionSheetMissingOrIncorrectColumnHeaderWarning: function (
+            sheetName,
+            expectedA1,
+            expectedB1,
+            isMissing
+        ) {
+            const headerStatus = isMissing ? "missing" : "incorrect";
+            return {
+                warningCode: `${headerStatus.toUpperCase()}_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that the headers are ${headerStatus} in the imported workbook's ${sheetName} sheet.`,
+                    "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
+                    "but will not affect the display of the graph in GRNsight.",
+                    `Cell A1 should contain the text ${expectedA1},`,
+                    `and cell B1 should contain the text ${expectedB1}, exactly.`,
+                ].join(" "),
+            };
+        },
+
         unknownSpeciesDetected: function (workbookSpecies, workbookTaxon) {
             return {
                 warningCode: "UNKNOWN_SPECIES_DETECTED",
@@ -377,7 +414,7 @@ module.exports = {
             errorCode: "ERRORS_OVERLOAD",
             possibleCause: "This workbook has over 20 errors.",
             suggestedFix:
-                "Please check the format of your spreadsheet with the guidlines outlined on the" +
+                "Please check the format of your spreadsheet with the guidelines outlined on the" +
                 "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
                 "further errors detected. As a general approach for fixing the errors, consider copying and " +
                 "pasting just your adjacency matrix into a fresh Excel Workbook and saving it.",
@@ -387,7 +424,7 @@ module.exports = {
             errorCode: "WARNINGS_OVERLOAD",
             possibleCause: "This workbook has over 75 warnings.",
             suggestedFix:
-                "Please check the format of your spreadsheet with the guidlines outlined on the" +
+                "Please check the format of your spreadsheet with the guidelines outlined on the" +
                 "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
                 "further errors detected. As a general approach for fixing the errors, consider copying and " +
                 "pasting just your adjacency matrix into a fresh Excel Workbook and saving it.",
@@ -427,15 +464,6 @@ module.exports = {
                     " special characters except for '-' and '_'.",
             };
         },
-
-        incorrectColumnHeaderError: function (sheetName, columnLetter, header) {
-            return {
-                errorCode: "INCORRECT_COLUMN_HEADER",
-                possibleCause: `Column ${columnLetter} in the ${sheetName} sheet has an incorrect header.`,
-                suggestedFix: `Replace the incorrect label with '${header}' exactly.`,
-            };
-        },
-
         missingColumnHeaderError: function (sheetName, columnLetter, header) {
             if (sheetName && columnLetter && header) {
                 return {
