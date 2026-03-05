@@ -50,14 +50,14 @@ export default function Navbar({}) {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
     demoValue,
     setDemoValue,
     viewSize,
     setViewSize,
     zoomPercent,
     setZoomPercent,
+    adaptive,
+    setAdaptive,
   } = useContext(GrnStateContext);
 
   const valueValidator = (min, max, value) => {
@@ -363,7 +363,7 @@ export default function Navbar({}) {
             </Box>
             <DottedLine />
             <Box pad={{ horizontal: "20px", top: "3px" }}>
-              <Button onClick={() => setRestrictGraphToViewport(!restrictGraphToViewport)}>
+              <Button onClick={() => setAdaptive(!adaptive)}>
                 <Text>Restrict Graph to Viewport</Text>
               </Button>
             </Box>

@@ -56,12 +56,12 @@ export default function Sidebar({}) {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
     demoValue,
     setDemoValue,
     viewSize,
     setViewSize,
+    adaptive,
+    setAdaptive,
   } = useContext(GrnStateContext);
 
   return (
@@ -392,9 +392,9 @@ export default function Sidebar({}) {
             onChange={event => setViewSize(event.target.value)}
           />
           <CheckBox
-            checked={restrictGraphToViewport}
+            checked={adaptive}
             label={<Text>Restrict Graph to Viewport</Text>}
-            onChange={event => setRestrictGraphToViewport(event.target.checked)}
+            onChange={event => setAdaptive(event.target.checked)}
           />
         </Box>
       </Box>

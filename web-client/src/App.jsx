@@ -29,9 +29,7 @@ function App() {
   const [edgeWeightNormalization, setEdgeWeightNormalization] = useState(2.971);
   const [grayThreshold, setGrayThreshold] = useState(0.05);
   const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
-  const [restrictGraphToViewport, setRestrictGraphToViewport] = useState(false);
   const [demoValue, setDemoValue] = useState(null);
-  // TODO: make viewSize dynamic to user's screen size
   const [viewSize, setViewSize] = useState(null);
   const [adaptive, setAdaptive] = useState(true);
   const [networkData, setNetworkData] = useState(null);
@@ -65,8 +63,6 @@ function App() {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
     viewSize,
     setViewSize,
     adaptive,

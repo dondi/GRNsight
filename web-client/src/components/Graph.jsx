@@ -66,6 +66,7 @@ export default function Graph() {
     zoomPercent,
     setZoomPercent,
     viewSize,
+    adaptive,
   } = useContext(GrnStateContext);
 
   // Load workbook data
