@@ -51,6 +51,8 @@ export default function Graph() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const zoomDragPrevX = useRef(0);
+  const zoomDragPrevY = useRef(0);
 
   const {
     colorOptimal,
@@ -113,6 +115,7 @@ export default function Graph() {
     return () => window.removeEventListener("resize", handleResize);
   }, [viewSize]);
 
+  // Change viewport size based on selection
   useEffect(() => {
     if (!viewSize) {
       setWidth(VIEW_SIZE_SMALL);
@@ -133,12 +136,80 @@ export default function Graph() {
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
 
-    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
+    // Setup cursor styling for drag of graph
+    const zoomDragStarted = function (event, d) {
+      zoomDragPrevX.current = event.x;
+      zoomDragPrevY.current = event.y;
+      // $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+    };
+
+    const zoomDragged = function (event, d) {
+      let scale = 1;
+      if (zoomContainer.attr("transform")) {
+        let string = zoomContainer.attr("transform");
+        scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+      }
+
+      // TODO: add Restrict Graph to Viewport support like flexZoomInBounds and viewportBoundsMoveDrag in classic
+      // if (
+      //   adaptive ||
+      //   (!adaptive &&
+      //     flexZoomInBounds(graphZoom) &&
+      //     viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
+      // ) {
+      zoom.translateBy(
+        zoomContainer,
+        scale * (event.x - zoomDragPrevX.current),
+        scale * (event.y - zoomDragPrevY.current)
+      );
+      // }
+      zoomDragPrevX.current = event.x;
+      zoomDragPrevY.current = event.y;
+    };
+
+    const zoomDragEnded = function (event, d) {
+      // $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+    };
+
+    // zoomDrag and all functions that it calls handles cursor dragging
+    const zoomDrag = d3
+      .drag()
+      .on("start", zoomDragStarted)
+      .on("drag", zoomDragged)
+      .on("end", zoomDragEnded);
+
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("id", "exportContainer");
 
     const defs = svg.append("defs");
 
-    const zoomContainer = svg.append("g").attr("class", "zoom-container");
+    const zoomContainer = svg
+      .append("g")
+      .attr("class", "boundingBox")
+      .attr("width", width)
+      .attr("height", height);
+
     zoomContainerRef.current = zoomContainer.node();
+
+    const boundingBoxContainer = zoomContainer.append("g");
+
+    const boundingBoxRect = boundingBoxContainer
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .attr("stroke", "none")
+      .attr("id", "boundingBoxRect");
+
+    const flexibleContainerRect = boundingBoxContainer
+      .append("rect")
+      .attr("class", "boundingBox")
+      .attr("fill", "none")
+      .attr("id", "flexibleContainerRect");
 
     const zoom = d3
       .zoom()
@@ -149,7 +220,9 @@ export default function Graph() {
 
     zoomRef.current = zoom;
 
-    const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
+    svg.style("pointer-events", "all").call(zoomDrag).style("font-family", "sans-serif");
+
+    d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
     // D-pad controls
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -314,6 +387,7 @@ export default function Graph() {
     <div
       ref={containerRef}
       className="grnsight-container"
+      // className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
       style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
       {loading && <div>Loading graph...</div>}
