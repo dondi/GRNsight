@@ -411,3 +411,11 @@ table {
   height: 14px;
   margin-right: 5px;
 }
+
+.draggable {
+  cursor: grab;
+}
+
+.dragging {
+  cursor: grabbing;
+}

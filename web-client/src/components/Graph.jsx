@@ -51,6 +51,7 @@ export default function Graph() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [isDragging, setIsDragging] = useState(false);
   const zoomDragPrevX = useRef(0);
   const zoomDragPrevY = useRef(0);
 
@@ -140,7 +141,7 @@ export default function Graph() {
     const zoomDragStarted = function (event, d) {
       zoomDragPrevX.current = event.x;
       zoomDragPrevY.current = event.y;
-      // $container.removeClass(CURSOR_CLASSES).addClass("cursorGrabbing");
+      setIsDragging(true);
     };
 
     const zoomDragged = function (event, d) {
@@ -168,7 +169,7 @@ export default function Graph() {
     };
 
     const zoomDragEnded = function (event, d) {
-      // $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
+      setIsDragging(false);
     };
 
     // zoomDrag and all functions that it calls handles cursor dragging
@@ -386,8 +387,8 @@ export default function Graph() {
   return (
     <div
       ref={containerRef}
-      className="grnsight-container"
-      // className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
+      // className="grnsight-container"
+      className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
       style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
       {loading && <div>Loading graph...</div>}
