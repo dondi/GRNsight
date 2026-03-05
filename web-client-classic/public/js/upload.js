@@ -381,28 +381,16 @@ export const upload = function () {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
             } else {
-                if (source === "userInput" && twoColumnSheets.indexOf(sheet) !== -1) {
-                    finalExportSheets.two_column_sheets[sheet] =
-                        grnState.workbook.twoColumnSheets[sheet];
-                } else {
-                    // Generate the two column sheet specified
-                    if (
-                        source === "userInput" &&
-                        Object.keys(finalExportSheets.two_column_sheets).includes(sheet)
-                    ) {
-                        finalExportSheets.two_column_sheets[sheet] =
-                            grnState.workbook.two_column_sheets[sheet];
-                    } else {
-                        finalExportSheets.two_column_sheets[sheet] = null;
-                    }
-                }
+                finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
+                    ? grnState.workbook.twoColumnSheets[sheet]
+                    : null;
             }
         }
 
         return finalExportSheets;
     };
 
-    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets) => {
+    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets, source) => {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
@@ -417,7 +405,7 @@ export const upload = function () {
 
         for (let sheet of chosenTwoColumnSheets) {
             const sheetData = finalExportSheets.two_column_sheets[sheet];
-            const isMissing = sheetData === null;
+            const isMissing = sheetData === null || sheetData === undefined;
             const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
 
             // Check if all genes are available but missing values
@@ -428,7 +416,9 @@ export const upload = function () {
 
             if (isMissing || isEmpty || hasExistingWarning) {
                 const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
-                finalExportSheets.warnings.push(warnings[warningKey](isMissing));
+                if (source === "userInput") {
+                    finalExportSheets.warnings.push(warnings[warningKey](isMissing));
+                }
 
                 missingTwoColumnSheets.push(sheet);
             } else {
@@ -479,7 +469,7 @@ export const upload = function () {
 
         const chosenSheets = determineChosenSheets();
         let finalExportSheets = prepareFinalExportSheets(chosenSheets, source);
-        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets);
+        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets, source);
 
         handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
     };
