@@ -149,16 +149,22 @@ export default function Graph() {
 
     const zoomDragged = function (event, d) {
       let scale = 1;
+      let xTranslation = 0;
+      let yTranslation = 0;
       if (zoomContainer.attr("transform")) {
         let string = zoomContainer.attr("transform");
         scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+        xTranslation = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
+        yTranslation = Number(
+          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
+        );
       }
 
       if (
         adaptive ||
         (!adaptive &&
-          flexZoomInBounds(zoomScale.current) &&
-          viewportBoundsMoveDrag(zoomScale.current, d3.event.dx, d3.event.dy))
+          flexZoomInBounds(zoomScale.current, simulation.nodes(), width, height, xTranslation, yTranslation) &&
+          viewportBoundsMoveDrag(zoomScale.current, d3.event.dx, d3.event.dy, simulation.nodes(), width, height, xTranslation, yTranslation))
       ) {
         zoom.translateBy(
           zoomContainer,

@@ -13,7 +13,7 @@ import {
   ADDITIONAL_SHIFT,
   END_POINT_ADJUSTMENT,
   EDGE_OFFSET,
-} from "./constants.js";
+} from "./constants";
 
 // TODO: resolve issue where node.textWidth is initially calculated with undefined value
 export function getNodeWidth(node) {
