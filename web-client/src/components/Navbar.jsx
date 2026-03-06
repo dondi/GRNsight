@@ -20,7 +20,6 @@ import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import OptionalCheckmark from "./helper-components/OptionalCheckmark";
 import "../App.css";
-import { Op } from "sequelize";
 
 export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
