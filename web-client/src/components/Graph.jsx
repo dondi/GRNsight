@@ -28,6 +28,7 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
+import { flexZoomInBounds, viewportBoundsMoveDrag } from "../helpers/restrictGraphToViewportHelper";
 import "../App.css";
 
 export default function Graph() {
@@ -44,7 +45,6 @@ export default function Graph() {
   const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [zoomScale, setZoomScale] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
   const [windowDimensions, setWindowDimensions] = useState({
@@ -54,6 +54,7 @@ export default function Graph() {
   const [isDragging, setIsDragging] = useState(false);
   const zoomDragPrevX = useRef(0);
   const zoomDragPrevY = useRef(0);
+  const zoomScale = useRef(1);
 
   const {
     colorOptimal,
@@ -100,6 +101,7 @@ export default function Graph() {
     const scale = zoomPercent / 100;
     const zoomContainer = d3.select(zoomContainerRef.current);
     zoomRef.current.scaleTo(zoomContainer, scale);
+    zoomScale.current = scale;
   }, [zoomPercent]);
 
   // Handle window resize for Fit to Window
@@ -152,19 +154,18 @@ export default function Graph() {
         scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
       }
 
-      // TODO: add Restrict Graph to Viewport support like flexZoomInBounds and viewportBoundsMoveDrag in classic
-      // if (
-      //   adaptive ||
-      //   (!adaptive &&
-      //     flexZoomInBounds(graphZoom) &&
-      //     viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
-      // ) {
-      zoom.translateBy(
-        zoomContainer,
-        scale * (event.x - zoomDragPrevX.current),
-        scale * (event.y - zoomDragPrevY.current)
-      );
-      // }
+      if (
+        adaptive ||
+        (!adaptive &&
+          flexZoomInBounds(zoomScale.current) &&
+          viewportBoundsMoveDrag(zoomScale.current, d3.event.dx, d3.event.dy))
+      ) {
+        zoom.translateBy(
+          zoomContainer,
+          scale * (event.x - zoomDragPrevX.current),
+          scale * (event.y - zoomDragPrevY.current)
+        );
+      }
       zoomDragPrevX.current = event.x;
       zoomDragPrevY.current = event.y;
     };

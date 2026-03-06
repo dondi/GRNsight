@@ -392,7 +392,7 @@ export default function Sidebar({}) {
             onChange={event => setViewSize(event.target.value)}
           />
           <CheckBox
-            checked={adaptive}
+            checked={!adaptive}
             label={<Text>Restrict Graph to Viewport</Text>}
             onChange={event => setAdaptive(event.target.checked)}
           />

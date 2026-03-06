@@ -20,6 +20,7 @@ import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import OptionalCheckmark from "./helper-components/OptionalCheckmark";
 import "../App.css";
+import { Op } from "sequelize";
 
 export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
@@ -339,31 +340,32 @@ export default function Navbar({}) {
             <Text margin={{ left: "small" }}>Viewport Size</Text>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_SMALL)}>
-                <OptionalCheckmark chosenViewSize={VIEW_SIZE_SMALL} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={VIEW_SIZE_SMALL} currentValue={viewSize} />
                 <Text>Small (1104 x 648 pixels)</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_MEDIUM)}>
-                <OptionalCheckmark chosenViewSize={VIEW_SIZE_MEDIUM} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={VIEW_SIZE_MEDIUM} currentValue={viewSize} />
                 <Text>Medium (1414 x 840 pixels)</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_LARGE)}>
-                <OptionalCheckmark chosenViewSize={VIEW_SIZE_LARGE} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={VIEW_SIZE_LARGE} currentValue={viewSize} />
                 <Text>Large (1920 x 1080 pixels)</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(FIT_TO_WINDOW)}>
-                <OptionalCheckmark chosenViewSize={FIT_TO_WINDOW} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={FIT_TO_WINDOW} currentValue={viewSize} />
                 <Text>Fit To Window</Text>
               </Button>
             </Box>
             <DottedLine />
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setAdaptive(!adaptive)}>
+                <OptionalCheckmark desiredValue={false} currentValue={adaptive} />
                 <Text>Restrict Graph to Viewport</Text>
               </Button>
             </Box>
