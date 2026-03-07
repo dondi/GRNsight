@@ -55,6 +55,9 @@ export default function Graph() {
     height: window.innerHeight,
   });
   const [isDragging, setIsDragging] = useState(false);
+  const [nodes, setNodes] = useState([]);
+  const [xTranslation, setXTranslation] = useState(0);
+  const [yTranslation, setYTranslation] = useState(0);
   const zoomDragPrevX = useRef(0);
   const zoomDragPrevY = useRef(0);
   const zoomScale = useRef(1);
@@ -82,6 +85,7 @@ export default function Graph() {
     getDemoWorkbook(demoEndpoint)
       .then(data => {
         setWorkbook(data);
+        setNodes(data.genes);
         setSheetType(data.sheetType);
         setNetworkMode(getNetworkMode(data.meta.data.workbookType));
         const weights = calcAllWeights(data, colorOptimal);
@@ -105,6 +109,10 @@ export default function Graph() {
     const zoomContainer = d3.select(zoomContainerRef.current);
     zoomRef.current.scaleTo(zoomContainer, scale);
     zoomScale.current = scale;
+    setXTranslation(Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]));
+    setYTranslation(
+      Number(zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0])
+    );
   }, [zoomPercent]);
 
   // Handle window resize for Fit to Window
@@ -152,15 +160,9 @@ export default function Graph() {
 
     const zoomDragged = function (event, d) {
       let scale = 1;
-      let xTranslation = 0;
-      let yTranslation = 0;
       if (zoomContainer.attr("transform")) {
         let string = zoomContainer.attr("transform");
         scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
-        xTranslation = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
-        yTranslation = Number(
-          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
-        );
       }
 
       if (
@@ -367,23 +369,19 @@ export default function Graph() {
     }
 
     // move: Moves graph with D-pad
-    // TODO: will need to update with adaptive
     function move(direction) {
       var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
       var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
-      // TODO: may want to make xTranslation and yTranslation refs if they are needed in multiple places
-      let xTranslation = 0;
-      let yTranslation = 0;
+      // TODO: may make xTranslation and yTranslation refs if they are needed in multiple places
       if (zoomContainer.attr("transform")) {
-        xTranslation = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
-        yTranslation = Number(
-          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
+        setXTranslation(Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]));
+        setYTranslation(
+          Number(zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0])
         );
       }
-      if (adaptive) {
-        zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-      } else if (!adaptive) {
-        if (
+      if (
+        adaptive ||
+        (!adaptive &&
           viewportBoundsMoveDrag(
             zoomScale.current,
             moveWidth,
@@ -393,10 +391,9 @@ export default function Graph() {
             height,
             xTranslation,
             yTranslation
-          )
-        ) {
-          zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-        }
+          ))
+      ) {
+        zoom.translateBy(zoomContainer, moveWidth, moveHeight);
       }
     }
 
@@ -446,7 +443,13 @@ export default function Graph() {
       {loading && <div>Loading graph...</div>}
       {error && <div>Error: {error}</div>}
       <svg ref={svgRef} />
-      <ScaleAndScroll />
+      <ScaleAndScroll
+        nodes={nodes}
+        width={width}
+        height={height}
+        xTranslation={xTranslation}
+        yTranslation={yTranslation}
+      />
     </div>
   );
 }

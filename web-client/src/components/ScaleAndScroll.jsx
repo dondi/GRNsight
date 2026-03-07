@@ -9,27 +9,47 @@ import {
   zoomScaleSliderLeft,
   zoomScaleSliderRight,
 } from "../helpers/constants";
+import {
+  flexZoomInBounds,
+  viewportBoundsMoveDrag,
+} from "../helpers/restrictGraphToViewportHelpers";
 import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constants";
 import "../App.css";
 
-export default function ScaleAndScroll() {
+export default function ScaleAndScroll(nodes, width, height, xTranslation, yTranslation) {
   const frame = useRef(null);
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
-  const { zoomPercent, setZoomPercent, networkMode } = useContext(GrnStateContext);
+  const { zoomPercent, setZoomPercent, networkMode, adaptive } = useContext(GrnStateContext);
 
   const handleSliderChange = event => {
     const sliderInput = parseFloat(event.target.value);
-    setZoomSliderValue(sliderInput);
+    console.log("sliderInput: ", sliderInput);
+
     // TODO: add Restrict Graph to Viewport support like flexZoomInBounds in classic
     const scaleToUse =
       sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft() : zoomScaleSliderRight();
-    const finalDisplay = Math.floor(scaleToUse(sliderInput));
+    if (
+      adaptive ||
+      (!adaptive &&
+        flexZoomInBounds(
+          sliderInput,
+          nodes,
+          width,
+          height,
+          xTranslation,
+          yTranslation
+        ))
+    ) {
+      const finalDisplay = Math.floor(scaleToUse(sliderInput));
+      console.log("finalDisplay: ", finalDisplay);
+      setZoomSliderValue(sliderInput);
 
-    if (frame.current) cancelAnimationFrame(frame.current); // Cancel any pending animation frame to prevent queuing up too many frames
+      if (frame.current) cancelAnimationFrame(frame.current); // Cancel any pending animation frame to prevent queuing up too many frames
 
-    frame.current = requestAnimationFrame(() => {
-      setZoomPercent(finalDisplay);
-    });
+      frame.current = requestAnimationFrame(() => {
+        setZoomPercent(finalDisplay);
+      });
+    }
   };
 
   return (
