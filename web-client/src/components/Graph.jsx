@@ -164,7 +164,7 @@ export default function Graph() {
         adaptive ||
         (!adaptive &&
           flexZoomInBounds(zoomScale.current, simulation.nodes(), width, height, xTranslation, yTranslation) &&
-          viewportBoundsMoveDrag(zoomScale.current, d3.event.dx, d3.event.dy, simulation.nodes(), width, height, xTranslation, yTranslation))
+          viewportBoundsMoveDrag(zoomScale.current, event.dx, event.dy, simulation.nodes(), width, height, xTranslation, yTranslation))
       ) {
         zoom.translateBy(
           zoomContainer,

@@ -135,10 +135,13 @@ export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, 
     xTranslation,
     yTranslation
   );
-  if (flexibleContainer.width * graphZoom > width) {
+  if (
+    flexibleContainer.width * graphZoom > width ||
+    flexibleContainer.height * graphZoom > height
+  ) {
     return false;
-  } else if (flexibleContainer.height * graphZoom > height) {
-    return false;
+  } else {
+    return true;
   }
   //   }
   //   return true;
