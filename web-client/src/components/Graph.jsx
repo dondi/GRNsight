@@ -28,10 +28,7 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
-import {
-  flexZoomInBounds,
-  viewportBoundsMoveDrag,
-} from "../helpers/restrictGraphToViewportHelpers";
+import { flexZoomInBounds, viewportBoundsMoveDrag } from "../helpers/restrictGraphToViewportHelper";
 import "../App.css";
 
 export default function Graph() {
@@ -168,24 +165,8 @@ export default function Graph() {
       if (
         adaptive ||
         (!adaptive &&
-          flexZoomInBounds(
-            zoomScale.current,
-            simulation.nodes(),
-            width,
-            height,
-            xTranslation,
-            yTranslation
-          ) &&
-          viewportBoundsMoveDrag(
-            zoomScale.current,
-            event.dx,
-            event.dy,
-            simulation.nodes(),
-            width,
-            height,
-            xTranslation,
-            yTranslation
-          ))
+          flexZoomInBounds(zoomScale.current, simulation.nodes(), width, height, xTranslation, yTranslation) &&
+          viewportBoundsMoveDrag(zoomScale.current, event.dx, event.dy, simulation.nodes(), width, height, xTranslation, yTranslation))
       ) {
         zoom.translateBy(
           zoomContainer,
@@ -372,29 +353,7 @@ export default function Graph() {
     function move(direction) {
       var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
       var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
-      // TODO: may make xTranslation and yTranslation refs if they are needed in multiple places
-      if (zoomContainer.attr("transform")) {
-        setXTranslation(Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]));
-        setYTranslation(
-          Number(zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0])
-        );
-      }
-      if (
-        adaptive ||
-        (!adaptive &&
-          viewportBoundsMoveDrag(
-            zoomScale.current,
-            moveWidth,
-            moveHeight,
-            simulation.nodes(),
-            width,
-            height,
-            xTranslation,
-            yTranslation
-          ))
-      ) {
-        zoom.translateBy(zoomContainer, moveWidth, moveHeight);
-      }
+      zoom.translateBy(zoomContainer, moveWidth, moveHeight);
     }
 
     // Tick function
