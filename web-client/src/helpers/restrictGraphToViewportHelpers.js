@@ -126,7 +126,6 @@ export function viewportBoundsMoveDrag(
 
 // Checks if zoomValue is in bounds when zoom in and out
 export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, yTranslation) {
-  //   if (flexibleContainer) {
   const flexibleContainer = calcFlexiBox(
     nodes,
     width,
@@ -135,6 +134,7 @@ export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, 
     xTranslation,
     yTranslation
   );
+
   if (
     flexibleContainer.width * graphZoom > width ||
     flexibleContainer.height * graphZoom > height
@@ -143,8 +143,6 @@ export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, 
   } else {
     return true;
   }
-  //   }
-  //   return true;
 }
 
 // Only calculate Left and Top boundary margins because calculate rightboundary and bottomboundary in tick

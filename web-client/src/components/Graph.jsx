@@ -28,7 +28,10 @@ import {
   calcMaxWeight,
 } from "../helpers/graphHelpers";
 import { createEdgeMarker } from "../helpers/markerHelpers";
-import { flexZoomInBounds, viewportBoundsMoveDrag } from "../helpers/restrictGraphToViewportHelper";
+import {
+  flexZoomInBounds,
+  viewportBoundsMoveDrag,
+} from "../helpers/restrictGraphToViewportHelpers";
 import "../App.css";
 
 export default function Graph() {
@@ -53,8 +56,8 @@ export default function Graph() {
   });
   const [isDragging, setIsDragging] = useState(false);
   const [nodes, setNodes] = useState([]);
-  const [xTranslation, setXTranslation] = useState(0);
-  const [yTranslation, setYTranslation] = useState(0);
+  const xTranslation = useRef(0);
+  const yTranslation = useRef(0);
   const zoomDragPrevX = useRef(0);
   const zoomDragPrevY = useRef(0);
   const zoomScale = useRef(1);
@@ -106,10 +109,6 @@ export default function Graph() {
     const zoomContainer = d3.select(zoomContainerRef.current);
     zoomRef.current.scaleTo(zoomContainer, scale);
     zoomScale.current = scale;
-    setXTranslation(Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]));
-    setYTranslation(
-      Number(zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0])
-    );
   }, [zoomPercent]);
 
   // Handle window resize for Fit to Window
@@ -160,13 +159,33 @@ export default function Graph() {
       if (zoomContainer.attr("transform")) {
         let string = zoomContainer.attr("transform");
         scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+        xTranslation.current = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
+        yTranslation.current = Number(
+          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
+        );
       }
 
       if (
         adaptive ||
         (!adaptive &&
-          flexZoomInBounds(zoomScale.current, simulation.nodes(), width, height, xTranslation, yTranslation) &&
-          viewportBoundsMoveDrag(zoomScale.current, event.dx, event.dy, simulation.nodes(), width, height, xTranslation, yTranslation))
+          flexZoomInBounds(
+            zoomScale.current,
+            simulation.nodes(),
+            width,
+            height,
+            xTranslation.current,
+            yTranslation.current
+          ) &&
+          viewportBoundsMoveDrag(
+            zoomScale.current,
+            event.dx,
+            event.dy,
+            simulation.nodes(),
+            width,
+            height,
+            xTranslation.current,
+            yTranslation.current
+          ))
       ) {
         zoom.translateBy(
           zoomContainer,
@@ -353,7 +372,29 @@ export default function Graph() {
     function move(direction) {
       var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
       var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
-      zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+
+      if (zoomContainer.attr("transform")) {
+        xTranslation.current = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
+        yTranslation.current = Number(
+          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
+        );
+      }
+      if (
+        adaptive ||
+        (!adaptive &&
+          viewportBoundsMoveDrag(
+            zoomScale.current,
+            moveWidth,
+            moveHeight,
+            simulation.nodes(),
+            width,
+            height,
+            xTranslation.current,
+            yTranslation.current
+          ))
+      ) {
+        zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+      }
     }
 
     // Tick function
@@ -406,8 +447,8 @@ export default function Graph() {
         nodes={nodes}
         width={width}
         height={height}
-        xTranslation={xTranslation}
-        yTranslation={yTranslation}
+        xTranslation={xTranslation.current}
+        yTranslation={yTranslation.current}
       />
     </div>
   );
