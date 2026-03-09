@@ -15,9 +15,15 @@ import { NODE_HEIGHT, BOUNDARY_MARGIN } from "./constants";
  */
 export function calcFlexiBox(nodes, width, height, graphZoom, xTranslation, yTranslation) {
   const nodeWidth = getNodeWidth(nodes[0]);
+  console.log("nodes: ", nodes);
 
   const xValuesNodes = nodes.map(node => node.x);
   const yValuesNodes = nodes.map(node => node.y);
+  // console.log("xValuesNodes: ", xValuesNodes);
+  // console.log("yValuesNodes: ", yValuesNodes);
+  console.log("width: ", width);
+  console.log("height: ", height);
+  console.log("graphZoom: ", graphZoom);
 
   let minX = Math.min(...xValuesNodes);
   let maxX = Math.max(...xValuesNodes) + nodeWidth;
@@ -99,25 +105,33 @@ export function viewportBoundsMoveDrag(
     yTranslation
   );
 
+  // right boundary
   if (
     flexibleContainer.x + flexibleContainer.width + dx >=
     -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
   ) {
+    console.log("exceeds right boundary");
     return false;
   }
 
+  // left boundary
   if (flexibleContainer.x + dx <= getLeftXBoundaryMargin(false, graphZoom, xTranslation)) {
+    console.log("exceeds left boundary");
     return false;
   }
 
+  // bottom boundary
   if (
     flexibleContainer.y + flexibleContainer.height + dy >=
     -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
   ) {
+    console.log("exceeds bottom boundary");
     return false;
   }
 
+  // top boundary
   if (flexibleContainer.y + dy <= getTopYBoundaryMargin(false, graphZoom, yTranslation)) {
+    console.log("exceeds top boundary");
     return false;
   }
 
@@ -135,12 +149,44 @@ export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, 
     yTranslation
   );
 
+  console.log("flexibleContainer: ", flexibleContainer);
+  // console.log("graphZoom: ", graphZoom);
+  // console.log("width: ", width);
+  // console.log(
+  //   "flexibleContainer.width * graphZoom > width: ",
+  //   flexibleContainer.width * graphZoom > width
+  // );
+  // console.log("height: ", height);
+  // console.log(
+  //   "flexibleContainer.height * graphZoom > height: ",
+  //   flexibleContainer.height * graphZoom > height
+  // );
+  // console.log("zoomPercent: ", graphZoom);
+
+  // console.log(
+  //   "flexibleContainer.width * graphZoom > width + xTranslation: ",
+  //   flexibleContainer.width * graphZoom + xTranslation * graphZoom > width
+  // );
+  // console.log("flexibleContainer.width * graphZoom: ", flexibleContainer.width * graphZoom);
+
+  // console.log("width: ", width);
+  // console.log(
+  //   "flexibleContainer.height * graphZoom > height + yTranslation: ",
+  //   flexibleContainer.height * graphZoom + yTranslation * graphZoom > height
+  // );
+  // console.log("flexibleContainer.height * graphZoom: ", flexibleContainer.height * graphZoom);
+  // console.log("height: ", height);
+  // console.log("yTranslation: ", yTranslation);
+  // console.log(" ");
+
   if (
     flexibleContainer.width * graphZoom > width ||
     flexibleContainer.height * graphZoom > height
   ) {
+    console.log("flexZoomInBounds: false");
     return false;
   } else {
+    console.log("flexZoomInBounds: true");
     return true;
   }
 }

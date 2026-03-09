@@ -445,6 +445,7 @@ export default function Graph() {
       <svg ref={svgRef} />
       <ScaleAndScroll
         nodes={nodes}
+        zoomScale={zoomScale.current}
         width={width}
         height={height}
         xTranslation={xTranslation.current}

@@ -16,38 +16,50 @@ import {
 import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constants";
 import "../App.css";
 
-export default function ScaleAndScroll(nodes, width, height, xTranslation, yTranslation) {
+export default function ScaleAndScroll({
+  nodes,
+  zoomScale,
+  width,
+  height,
+  xTranslation,
+  yTranslation,
+}) {
   const frame = useRef(null);
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode, adaptive } = useContext(GrnStateContext);
 
   const handleSliderChange = event => {
     const sliderInput = parseFloat(event.target.value);
-    console.log("sliderInput: ", sliderInput);
-
     // TODO: add Restrict Graph to Viewport support like flexZoomInBounds in classic
     const scaleToUse =
       sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft() : zoomScaleSliderRight();
+    console.log("sliderInput: ", sliderInput);
+    console.log("scaleToUse(sliderInput): ", scaleToUse(sliderInput));
+    const newZoomPercent = Math.floor(scaleToUse(sliderInput));
+
+    // console.log("zoomPercent: ", zoomPercent);
     if (
       adaptive ||
       (!adaptive &&
-        flexZoomInBounds(
-          sliderInput,
-          nodes,
-          width,
-          height,
-          xTranslation,
-          yTranslation
-        ))
+        flexZoomInBounds(newZoomPercent / 100, nodes, width, height, xTranslation, yTranslation))
+      // &&
+      // viewportBoundsMoveDrag(
+      //   sliderInput,
+      //   xTranslation,
+      //   yTranslation,
+      //   nodes,
+      //   width,
+      //   height,
+      //   xTranslation,
+      //   yTranslation
+      // )
     ) {
-      const finalDisplay = Math.floor(scaleToUse(sliderInput));
-      console.log("finalDisplay: ", finalDisplay);
       setZoomSliderValue(sliderInput);
 
       if (frame.current) cancelAnimationFrame(frame.current); // Cancel any pending animation frame to prevent queuing up too many frames
 
       frame.current = requestAnimationFrame(() => {
-        setZoomPercent(finalDisplay);
+        setZoomPercent(newZoomPercent);
       });
     }
   };
