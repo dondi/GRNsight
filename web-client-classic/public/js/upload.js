@@ -364,15 +364,16 @@ export const upload = function () {
         const twoColumnSheets = grnState.workbook.twoColumnSheets
             ? Object.keys(grnState.workbook.twoColumnSheets)
             : [];
-        // is this where exports get created?
+        // network, network weights, network optimized sheets are created for export
         for (let sheet of chosenSheets) {
             if (sheet === "network_optimized_weights") {
                 finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
+                // if network weights does not exist, new network_weights sheet is created from network sheet
                 if (!grnState.workbook.networkWeights) {
-                    finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
+                    finalExportSheets.networks[sheet] = grnState.workbook.network;
                 } else {
                     finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
                 }
