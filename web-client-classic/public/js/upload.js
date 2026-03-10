@@ -371,13 +371,11 @@ export const upload = function () {
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                if(!grnState.workbook.networkWeights){
+                if (!grnState.workbook.networkWeights) {
                     finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
-                }
-                else{
+                } else {
                     finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
                 }
-                
             } else if (sheet === "optimization_diagnostics") {
                 // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
