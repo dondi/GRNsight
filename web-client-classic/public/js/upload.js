@@ -107,8 +107,10 @@ export const upload = function () {
         if (mode !== null && genes !== null && edges !== null && type !== null) {
             filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
         }
-        if (source) {
-            filename = `${filename}_${source}`;
+        const { source: expressionSource } = grnState.workbook.expression; // Only demos will have this.
+        if (expressionSource || source) {
+            // In almost all cases, we will use source. But some demos will pre-empt this choice.
+            filename = `${filename}_${expressionSource || source}`;
         }
         return `${filename}.${extension}`;
     };
@@ -529,12 +531,9 @@ export const upload = function () {
     `;
 
         if (Object.keys(grnState.workbook.expression).length > 0) {
-            const value = grnState.workbook.expression.source
-                ? grnState.workbook.expression.source
-                : "userInput";
             result += `
                         <li>
-                            <input type='radio' name='expressionSource' checked="true" value="${value}" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
                             <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
                         </li>
             `;
@@ -605,7 +604,7 @@ export const upload = function () {
               ]
             : [grnState.workbook.meta2 !== undefined && "optimization_diagnostics"];
         additionalsheets = additionalsheets.filter(
-            sheet => sheet && -1 !== optionalAdditionalSheets.indexOf(sheet)
+            sheet => Boolean(sheet) && sheet !== "optimization_diagnostics"
         );
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...new Set(additionalsheets)];

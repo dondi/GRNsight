@@ -155,7 +155,9 @@ export const setupLoadAndImportHandlers = grnState => {
                 } else {
                     grnState.mode = workbook.meta.data.workbookType;
                 }
-                grnState.workbook.expressionNames = Object.keys(workbook.expression);
+                grnState.workbook.expressionNames = Object.keys(workbook.expression).filter(
+                    key => key !== "source"
+                );
 
                 if (grnState.workbook.warnings && grnState.workbook.warnings.length > 0) {
                     displayExportWarnings(workbook.warnings);
