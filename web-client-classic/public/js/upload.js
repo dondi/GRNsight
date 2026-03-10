@@ -364,14 +364,20 @@ export const upload = function () {
         const twoColumnSheets = grnState.workbook.twoColumnSheets
             ? Object.keys(grnState.workbook.twoColumnSheets)
             : [];
-
+        // is this where exports get created?
         for (let sheet of chosenSheets) {
             if (sheet === "network_optimized_weights") {
                 finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
+                if(!grnState.workbook.networkWeights){
+                    finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
+                }
+                else{
+                    finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
+                }
+                
             } else if (sheet === "optimization_diagnostics") {
                 // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
@@ -609,20 +615,40 @@ export const upload = function () {
         );
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...new Set(additionalsheets)];
-        for (let n of networks) {
-            const state = n[0];
-            const network = n[1];
-            result =
-                result +
-                `
+        // append each network sheet individually for unique handling
+        let network = networks[0];
+        result =
+            result +
+            `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' ${state ? 'checked="true"' : ""} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${state ? "" : "disabled"}/>
-                <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
-                    ${network}
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${network[1]}\" id=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox\' disabled/>
+                <label for=\'exportExcelWorkbookSheet-${network[1]}\' id=\'exportExcelWorkbookSheet-${network[1]}-label\' class=\'export-checkbox-label\' >
+                    ${network[1]}
                 </label>
             </li>
             `;
-        }
+        let networkOptimizedWeights = networks[1];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' ${networkOptimizedWeights[0] ? 'checked="true"' : ""} value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\' ${networkOptimizedWeights[0] ? "" : "disabled"}/>
+                <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkOptimizedWeights[1]}
+                </label>
+            </li>
+            `;
+        let networkWeights = networks[2];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
+                <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkWeights[1]}
+                </label>
+            </li>
+            `;
         if (source === "userInput") {
             result += grnState.workbook.expressionNames
                 ? "<p class=\'export-excel-workbook-sheet-option-subheader\'> Expression Sheets </p>"
