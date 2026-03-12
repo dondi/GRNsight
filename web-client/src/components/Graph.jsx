@@ -22,7 +22,7 @@ import {
   calcAllWeights,
   calcMaxWeight,
 } from "../helpers/graphHelpers";
-import { createEdgeMarker } from "../helpers/markerHelpers";
+import { createEdgeMarker, createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import "../App.css";
 
 export default function Graph() {
@@ -87,6 +87,14 @@ export default function Graph() {
     zoomRef.current.scaleTo(zoomContainer, scale);
   }, [zoomPercent]);
 
+  // useEffect(() => {
+  //   if (!workbook) return;
+  //   workbook.links.forEach(link => {
+  //     link.stroke = getEdgeColor(workbook, link, grayThreshold, maxWeight, colorOptimal);
+  //     link.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, link) : 2;
+  //   });
+  // }, [workbook]);
+
   // Main D3 rendering effect
   useEffect(() => {
     if (!workbook || !svgRef.current || !containerRef.current) return;
@@ -101,6 +109,13 @@ export default function Graph() {
     const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
 
     const defs = svg.append("defs");
+
+    // workbook.links.forEach(link => {
+    //   link.stroke = getEdgeColor(workbook, link, grayThreshold, maxWeight, colorOptimal);
+    //   link.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, link) : 2;
+    // });
+
+    createAllMarkers({ defs, links: workbook.links, networkMode });
 
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
     zoomContainerRef.current = zoomContainer.node();
@@ -161,7 +176,15 @@ export default function Graph() {
         d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
         return d.strokeWidth;
       })
-      .style("fill", "none");
+      .style("fill", "none")
+      .attr("marker-end", d => {
+        // Set ONCE - Safari needs this to be static after markers exist
+        return getEdgeMarkerId({
+          d,
+          colorOptimal,
+          networkMode,
+        });
+      });
 
     const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 
@@ -241,27 +264,20 @@ export default function Graph() {
       zoom.translateBy(zoomContainer, moveWidth, moveHeight);
     }
 
-    // Tick function
     simulation.on("tick", () => {
-      link
-        .select("path")
-        .attr("d", d => {
-          if (d.source === d.target) {
-            return createSelfLoop(d, width, height, colorOptimal);
-          }
-          return createPath(d, width, height, colorOptimal);
-        })
-        .attr("marker-end", d => {
-          return createEdgeMarker({
-            defs,
-            d,
-            grayThreshold,
-            sheetType,
-            maxWeight,
-            colorOptimal,
-            networkMode,
-          });
-        });
+      link.select("path").attr("d", d => {
+        if (d.source === d.target) {
+          return createSelfLoop(d, width, height, colorOptimal);
+        }
+        return createPath(d, width, height, colorOptimal);
+      });
+      // .attr("marker-end", d => {
+      //   return getEdgeMarkerId({
+      //     d,
+      //     colorOptimal,
+      //     networkMode,
+      //   });
+      // });
 
       node.attr("transform", d => {
         d.x = Math.max(
