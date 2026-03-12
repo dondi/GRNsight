@@ -1,6 +1,6 @@
 import { NETWORK_GRN_MODE_FULL, NODE_HEIGHT } from "./constants";
 import { getNodeWidth } from "./graphHelpers";
-
+import { EDGE_RED, EDGE_BLUE, EDGE_BLACK } from "./constants";
 // TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
   // console.log("normalize value", Math.abs(d.value / maxWeight).toPrecision(4));
@@ -477,15 +477,20 @@ export function createAllMarkers({ defs, links, networkMode }) {
   // Create markers for all possible stroke widths (2-14) and variations
   const strokeWidths = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const selfRefVariations = ["", "_SelfReferential"];
-  const colorVariations = ["", "gray"];
+  const colorVariations = [
+    { key: "", color: EDGE_BLACK }, // black (default)
+    { key: "gray", color: "gray" }, // gray (below threshold)
+    { key: "red", color: EDGE_RED }, // red (activation/positive)
+    { key: "blue", color: EDGE_BLUE }, // blue (repression/negative)
+  ];
 
   strokeWidths.forEach(strokeWidth => {
     selfRefVariations.forEach(selfRef => {
-      colorVariations.forEach(minimum => {
+      colorVariations.forEach(({ key, color }) => {
         // Create a dummy edge object with the required properties
         const dummyEdge = {
           strokeWidth,
-          stroke: minimum === "gray" ? "gray" : "#000",
+          stroke: color,
         };
 
         // Create repressor markers (for negative edges)
@@ -493,7 +498,7 @@ export function createAllMarkers({ defs, links, networkMode }) {
           defs,
           d: dummyEdge,
           selfRef,
-          minimum,
+          minimum: key,
         });
         createRepressorHorizontalMarker({
           defs,
@@ -503,7 +508,7 @@ export function createAllMarkers({ defs, links, networkMode }) {
           x2: selfRef === "_SelfReferential" ? 0 : 100,
           y2: selfRef === "_SelfReferential" ? 0 : 100,
           selfRef,
-          minimum,
+          minimum: key,
         });
 
         // Create arrowhead markers (for positive edges)
@@ -516,7 +521,7 @@ export function createAllMarkers({ defs, links, networkMode }) {
             x2: selfRef === "_SelfReferential" ? 0 : 100,
             y2: selfRef === "_SelfReferential" ? 0 : 100,
             selfRef,
-            minimum,
+            minimum: key,
           });
         }
       });
@@ -547,9 +552,15 @@ export function getEdgeMarkerId(params) {
     selfRef = "_SelfReferential";
   }
 
-  if (d.stroke == "gray") {
+  // Determine color key based on actual stroke color
+  if (d.stroke === "gray") {
     minimum = "gray";
+  } else if (d.stroke === EDGE_RED) {
+    minimum = "red";
+  } else if (d.stroke === EDGE_BLUE) {
+    minimum = "blue";
   }
+  // else minimum stays "" for black
 
   // Get repressor marker ID (negative edges)
   if (d.value < 0 && colorOptimal) {
@@ -572,11 +583,9 @@ export function getEdgeMarkerId(params) {
     }
 
     const markerId = markerType + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-    // Use absolute URL for Safari compatibility
     return `url(${window.location.href.split("#")[0]}#${markerId})`;
   } else {
     const arrowMarkerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-    // Use absolute URL for Safari compatibility
     return `url(${window.location.href.split("#")[0]}#${arrowMarkerId})`;
   }
 }

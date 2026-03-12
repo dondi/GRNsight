@@ -271,13 +271,6 @@ export default function Graph() {
         }
         return createPath(d, width, height, colorOptimal);
       });
-      // .attr("marker-end", d => {
-      //   return getEdgeMarkerId({
-      //     d,
-      //     colorOptimal,
-      //     networkMode,
-      //   });
-      // });
 
       node.attr("transform", d => {
         d.x = Math.max(
