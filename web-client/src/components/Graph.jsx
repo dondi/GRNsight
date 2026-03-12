@@ -27,7 +27,7 @@ import {
   calcAllWeights,
   calcMaxWeight,
 } from "../helpers/graphHelpers";
-import { createEdgeMarker, createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
+import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import "../App.css";
 
 export default function Graph() {
@@ -190,11 +190,6 @@ export default function Graph() {
     d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
     const defs = svg.append("defs");
-
-    // workbook.links.forEach(link => {
-    //   link.stroke = getEdgeColor(workbook, link, grayThreshold, maxWeight, colorOptimal);
-    //   link.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, link) : 2;
-    // });
 
     createAllMarkers({ defs, links: workbook.links, networkMode });
 
