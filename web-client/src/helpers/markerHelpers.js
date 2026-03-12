@@ -583,9 +583,9 @@ export function getEdgeMarkerId(params) {
     }
 
     const markerId = markerType + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-    return `url(${window.location.href.split("#")[0]}#${markerId})`;
+    return `url(#${markerId})`; // Simple relative URL
   } else {
     const arrowMarkerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-    return `url(${window.location.href.split("#")[0]}#${arrowMarkerId})`;
+    return `url(#${arrowMarkerId})`;
   }
 }

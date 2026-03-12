@@ -265,12 +265,22 @@ export default function Graph() {
     }
 
     simulation.on("tick", () => {
-      link.select("path").attr("d", d => {
-        if (d.source === d.target) {
-          return createSelfLoop(d, width, height, colorOptimal);
-        }
-        return createPath(d, width, height, colorOptimal);
-      });
+      link
+        .select("path")
+        .attr("d", d => {
+          if (d.source === d.target) {
+            return createSelfLoop(d, width, height, colorOptimal);
+          }
+          return createPath(d, width, height, colorOptimal);
+        })
+        .attr("marker-end", d => {
+          // Update marker-end during tick so repressors can switch between horizontal/vertical
+          return getEdgeMarkerId({
+            d,
+            colorOptimal,
+            networkMode,
+          });
+        });
 
       node.attr("transform", d => {
         d.x = Math.max(
