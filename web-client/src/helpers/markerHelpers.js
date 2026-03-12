@@ -1,6 +1,6 @@
 import { NETWORK_GRN_MODE_FULL, NODE_HEIGHT } from "./constants";
 import { getNodeWidth } from "./graphHelpers";
-
+import { EDGE_RED, EDGE_BLUE, EDGE_BLACK } from "./constants";
 // TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
   // console.log("normalize value", Math.abs(d.value / maxWeight).toPrecision(4));
@@ -8,107 +8,9 @@ export function normalize(d, maxWeight) {
 }
 
 /**
- * Creates SVG markers (arrowheads and repressor bars) for graph edges
- * @param {Object} params - Parameters for marker creation
- * @param {Object} params.defs - D3 selection of SVG defs element
- * @param {Object} params.d - Edge data object
- * @param {number} params.grayThreshold - Threshold for gray coloring
- * @param {string} params.sheetType - Type of the sheet (e.g., "weighted" or "unweighted")
- * @param {number} params.maxWeight - Maximum weight value for normalization
- * @param {boolean} params.colorOptimal - Whether optimal coloring is enabled or not for edges
- * @param {string} params.networkMode - Network mode (e.g., "Gene Regulatory Network" or "Protein-Protein Interaction")
- * @returns {string} The marker ID to be used in marker-end attribute
- */
-export function createEdgeMarker(params) {
-  const { defs, d, grayThreshold, sheetType, maxWeight, colorOptimal, networkMode } = params;
-
-  const x1 = d.source.x;
-  const y1 = d.source.y;
-  const x2 = d.target.x;
-  const y2 = d.target.y;
-  let minimum = "";
-  let selfRef = "";
-
-  if (x1 === x2 && y1 === y2) {
-    selfRef = "_SelfReferential";
-  }
-
-  if (d.stroke == "gray") {
-    minimum = "gray";
-  }
-
-  // Create repressor markers (negative edges)
-  if (d.value < 0 && colorOptimal) {
-    const targetNodeWidth = getNodeWidth(d.target);
-    const sourceCenterX = d.source.x + getNodeWidth(d.source) / 2;
-    const sourceCenterY = d.source.y + NODE_HEIGHT / 2;
-    const targetCenterX = d.target.x + targetNodeWidth / 2;
-    const targetCenterY = d.target.y + NODE_HEIGHT / 2;
-
-    // Determine which marker to use based on approach angle
-    const dx = targetCenterX - sourceCenterX;
-    const dy = targetCenterY - sourceCenterY;
-
-    // Calculate the angle that defines the corner of the node
-    // This is the angle from center to corner
-    const cornerAngle = Math.atan2(NODE_HEIGHT / 2, targetNodeWidth / 2);
-
-    // Calculate the actual angle of approach
-    const approachAngle = Math.atan2(Math.abs(dy), Math.abs(dx));
-    // const tanRatioMoveable = Math.abs(targetCenterY - sourceY) / Math.abs(targetCenterX - sourceX);
-    // const tanRatioFixed = (targetCenterY - y2) / (targetCenterX - x2);
-    let markerType;
-    if ((x1 === x2 && y1 === y2) || approachAngle > cornerAngle) {
-      // Self-referential always uses horizontal
-      markerType = "repressorHorizontal";
-    } else {
-      // Approaching from left or right → use VERTICAL marker
-      markerType = "repressor";
-    }
-
-    const markerId = markerType + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-
-    if (defs.select(`#${markerId}`).empty()) {
-      createRepressorMarker({ defs, d, selfRef, minimum });
-      createRepressorHorizontalMarker({
-        defs,
-        d,
-        x1,
-        y1,
-        x2,
-        y2,
-        selfRef,
-        minimum,
-      });
-    }
-
-    return `url(#${markerId})`;
-  } else {
-    const arrowMarkerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum;
-
-    // Create arrowhead markers (positive edges)
-    if (networkMode === NETWORK_GRN_MODE_FULL && defs.select(`#${arrowMarkerId}`).empty()) {
-      createArrowheadMarker({
-        defs,
-        d,
-        x1,
-        y1,
-        x2,
-        y2,
-        selfRef,
-        minimum,
-        sheetType,
-      });
-    }
-
-    return `url(#${arrowMarkerId})`;
-  }
-}
-
-/**
  * Creates a vertical repressor marker (bar)
  */
-function createRepressorMarker({ defs, d, selfRef, minimum }) {
+function createRepressorMarker({ defs, d, selfRef, color }) {
   const xOffsets = {
     2: 1,
     3: 2,
@@ -143,7 +45,7 @@ function createRepressorMarker({ defs, d, selfRef, minimum }) {
 
   defs
     .append("marker")
-    .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+    .attr("id", "repressor" + selfRef + "_StrokeWidth" + d.strokeWidth + color)
     .attr("refX", xOffsets[d.strokeWidth])
     .attr("refY", yOffsets[d.strokeWidth])
     .attr("markerUnits", "userSpaceOnUse")
@@ -161,7 +63,7 @@ function createRepressorMarker({ defs, d, selfRef, minimum }) {
 /**
  * Creates a horizontal repressor marker (bar)
  */
-function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, minimum }) {
+function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, color }) {
   let xOffsets;
   if (x1 === x2 && y1 === y2) {
     xOffsets = {
@@ -215,7 +117,7 @@ function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, min
 
   defs
     .append("marker")
-    .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+    .attr("id", "repressorHorizontal" + selfRef + "_StrokeWidth" + d.strokeWidth + color)
     .attr("refX", xOffsets[d.strokeWidth])
     .attr("refY", yOffsets[d.strokeWidth])
     .attr("markerWidth", function () {
@@ -237,10 +139,8 @@ function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, min
 /**
  * Creates an arrowhead marker
  */
-function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, minimum }) {
-  if (d.strokeWidth === 2) {
-    d.strokeWidth = 4;
-  }
+function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, color }) {
+  const effectiveStrokeWidth = d.strokeWidth === 2 ? 4 : d.strokeWidth;
 
   const refXOffsets =
     x1 === x2 && y1 === y2
@@ -326,14 +226,20 @@ function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, minimum }) {
 
   defs
     .append("marker")
-    .attr("id", "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + minimum)
+    .attr("id", "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + color)
     .attr("viewBox", "0 0 15 15")
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("refX", refXOffsets[d.strokeWidth])
     .attr("refY", refYOffsets[d.strokeWidth])
     .attr("markerUnits", "userSpaceOnUse")
-    .attr("markerWidth", 12 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3))
-    .attr("markerHeight", 5 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3))
+    .attr(
+      "markerWidth",
+      12 + (effectiveStrokeWidth < 7 ? effectiveStrokeWidth * 2.25 : effectiveStrokeWidth * 3)
+    )
+    .attr(
+      "markerHeight",
+      5 + (effectiveStrokeWidth < 7 ? effectiveStrokeWidth * 2.25 : effectiveStrokeWidth * 3)
+    )
     .attr("orient", x1 === x2 && y1 === y2 ? orientOffsets[d.strokeWidth] : "auto")
     .append("path")
     .attr("d", "M 0 0 L 14 5 L 0 10 Q 6 5 0 0")
@@ -458,5 +364,130 @@ export function smartPathEnd(d, w, h, colorOptimal) {
       // then path intersects towards the righthand side
       d.target.newX = 2 * d.target.x - d.target.newX + w;
     }
+  }
+}
+
+/**
+ * Creates all possible SVG markers upfront for graph edges
+ * This ensures Safari can properly reference markers that already exist in the DOM
+ * @param {Object} params - Parameters for marker creation
+ * @param {Object} params.defs - D3 selection of SVG defs element
+ * @param {Array} params.links - Array of link/edge data objects
+ * @param {string} params.networkMode - Network mode (e.g., "Gene Regulatory Network" or "Protein-Protein Interaction")
+ */
+export function createAllMarkers({ defs, links, networkMode }) {
+  // Create markers for all possible stroke widths (2-14) and variations
+  const strokeWidths = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const selfRefVariations = ["", "_SelfReferential"];
+  const colorVariations = [
+    { key: "", color: EDGE_BLACK }, // black (default)
+    { key: "gray", color: "gray" }, // gray (below threshold)
+    { key: "red", color: EDGE_RED }, // red (activation/positive)
+    { key: "blue", color: EDGE_BLUE }, // blue (repression/negative)
+  ];
+
+  strokeWidths.forEach(strokeWidth => {
+    selfRefVariations.forEach(selfRef => {
+      colorVariations.forEach(({ key, color }) => {
+        // Create a dummy edge object with the required properties
+        const dummyEdge = {
+          strokeWidth,
+          stroke: color,
+        };
+
+        // Create repressor markers (for negative edges)
+        createRepressorMarker({
+          defs,
+          d: dummyEdge,
+          selfRef,
+          color: key,
+        });
+        createRepressorHorizontalMarker({
+          defs,
+          d: dummyEdge,
+          x1: 0,
+          y1: 0,
+          x2: selfRef === "_SelfReferential" ? 0 : 100,
+          y2: selfRef === "_SelfReferential" ? 0 : 100,
+          selfRef,
+          color: key,
+        });
+
+        // Create arrowhead markers (for positive edges)
+        if (networkMode === NETWORK_GRN_MODE_FULL) {
+          createArrowheadMarker({
+            defs,
+            d: dummyEdge,
+            x1: 0,
+            y1: 0,
+            x2: selfRef === "_SelfReferential" ? 0 : 100,
+            y2: selfRef === "_SelfReferential" ? 0 : 100,
+            selfRef,
+            color: key,
+          });
+        }
+      });
+    });
+  });
+}
+
+/**
+ * Gets the appropriate marker ID for a given edge
+ * Markers must already exist in the DOM (created via createAllMarkers)
+ * @param {Object} params - Parameters for marker selection
+ * @param {Object} params.d - Edge data object
+ * @param {boolean} params.colorOptimal - Whether optimal coloring is enabled or not for edges
+ * @param {string} params.networkMode - Network mode (e.g., "Gene Regulatory Network" or "Protein-Protein Interaction")
+ * @returns {string} The marker ID to be used in marker-end attribute
+ */
+export function getEdgeMarkerId(params) {
+  const { d, colorOptimal, networkMode } = params;
+
+  const x1 = d.source.x;
+  const y1 = d.source.y;
+  const x2 = d.target.x;
+  const y2 = d.target.y;
+  let color = "";
+  let selfRef = "";
+
+  if (x1 === x2 && y1 === y2) {
+    selfRef = "_SelfReferential";
+  }
+
+  // Determine color key based on actual stroke color
+  if (d.stroke === "gray") {
+    color = "gray";
+  } else if (d.stroke === EDGE_RED) {
+    color = "red";
+  } else if (d.stroke === EDGE_BLUE) {
+    color = "blue";
+  }
+  // else color stays "" for black
+
+  // Get repressor marker ID (negative edges)
+  if (d.value < 0 && colorOptimal) {
+    const targetNodeWidth = getNodeWidth(d.target);
+    const sourceCenterX = d.source.x + getNodeWidth(d.source) / 2;
+    const sourceCenterY = d.source.y + NODE_HEIGHT / 2;
+    const targetCenterX = d.target.x + targetNodeWidth / 2;
+    const targetCenterY = d.target.y + NODE_HEIGHT / 2;
+
+    const dx = targetCenterX - sourceCenterX;
+    const dy = targetCenterY - sourceCenterY;
+    const cornerAngle = Math.atan2(NODE_HEIGHT / 2, targetNodeWidth / 2);
+    const approachAngle = Math.atan2(Math.abs(dy), Math.abs(dx));
+
+    let markerType;
+    if ((x1 === x2 && y1 === y2) || approachAngle > cornerAngle) {
+      markerType = "repressorHorizontal";
+    } else {
+      markerType = "repressor";
+    }
+
+    const markerId = markerType + selfRef + "_StrokeWidth" + d.strokeWidth + color;
+    return `url(#${markerId})`; // Simple relative URL
+  } else {
+    const arrowMarkerId = "arrowhead" + selfRef + "_StrokeWidth" + d.strokeWidth + color;
+    return `url(#${arrowMarkerId})`;
   }
 }

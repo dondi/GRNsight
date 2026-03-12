@@ -27,7 +27,7 @@ import {
   calcAllWeights,
   calcMaxWeight,
 } from "../helpers/graphHelpers";
-import { createEdgeMarker } from "../helpers/markerHelpers";
+import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import "../App.css";
 
 export default function Graph() {
@@ -191,12 +191,9 @@ export default function Graph() {
 
     const defs = svg.append("defs");
 
-    const zoomContainer = svg
-      .append("g")
-      .attr("class", "boundingBox")
-      .attr("width", width)
-      .attr("height", height);
+    createAllMarkers({ defs, links: workbook.links, networkMode });
 
+    const zoomContainer = svg.append("g").attr("class", "zoom-container");
     zoomContainerRef.current = zoomContainer.node();
 
     const boundingBoxContainer = zoomContainer.append("g");
@@ -270,7 +267,15 @@ export default function Graph() {
         d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
         return d.strokeWidth;
       })
-      .style("fill", "none");
+      .style("fill", "none")
+      .attr("marker-end", d => {
+        // Set ONCE - Safari needs this to be static after markers exist
+        return getEdgeMarkerId({
+          d,
+          colorOptimal,
+          networkMode,
+        });
+      });
 
     const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 
@@ -347,7 +352,6 @@ export default function Graph() {
       zoom.translateBy(zoomContainer, moveWidth, moveHeight);
     }
 
-    // Tick function
     simulation.on("tick", () => {
       link
         .select("path")
@@ -358,12 +362,9 @@ export default function Graph() {
           return createPath(d, width, height, colorOptimal);
         })
         .attr("marker-end", d => {
-          return createEdgeMarker({
-            defs,
+          // Update marker-end during tick so repressors can switch between horizontal/vertical
+          return getEdgeMarkerId({
             d,
-            grayThreshold,
-            sheetType,
-            maxWeight,
             colorOptimal,
             networkMode,
           });
