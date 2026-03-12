@@ -63,17 +63,17 @@ export default function Graph() {
   const zoomScale = useRef(1);
 
   const {
+    demoValue,
+    viewSize,
+    adaptive,
     colorOptimal,
     linkDistance,
     charge,
-    demoValue,
     networkMode,
     setNetworkMode,
     grayThreshold,
     zoomPercent,
     setZoomPercent,
-    viewSize,
-    adaptive,
   } = useContext(GrnStateContext);
 
   // Load workbook data
