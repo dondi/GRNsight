@@ -263,6 +263,7 @@ button:hover {
 
 .sidebar-radio-buttons {
   font-size: 14px;
+  /* border: 1px solid "green"; */
 }
 
 /* TODO: is this being used correctly? */
@@ -284,8 +285,6 @@ input[type="radio"]:checked {
   stroke: #fff;
   stroke-width: 0.5px;
   flex-shrink: 0;
-  width: 1100px;
-  height: 644px;
   transition: opacity 0.25s;
 }
 
@@ -399,4 +398,24 @@ table {
 #file-name {
   white-space: nowrap;
   padding: 15px;
+}
+
+.checkmark-container {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.empty-checkmark {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+}
+
+.draggable {
+  cursor: grab;
+}
+
+.dragging {
+  cursor: grabbing;
 }

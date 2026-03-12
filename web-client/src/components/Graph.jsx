@@ -12,6 +12,11 @@ import {
   NODE_TEXT_HEIGHT,
   MIN_SCALE,
   ZOOM_DISPLAY_MIDDLE,
+  VIEW_SIZE_SMALL,
+  FIT_TO_WINDOW,
+  VIEW_SIZE_DIMENSIONS,
+  HEIGHT_OFFSET,
+  WIDTH_OFFSET,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -40,6 +45,15 @@ export default function Graph() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [zoomScale, setZoomScale] = useState(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  const [isDragging, setIsDragging] = useState(false);
+  const zoomDragPrevX = useRef(0);
+  const zoomDragPrevY = useRef(0);
 
   const {
     colorOptimal,
@@ -51,12 +65,12 @@ export default function Graph() {
     grayThreshold,
     zoomPercent,
     setZoomPercent,
+    viewSize,
   } = useContext(GrnStateContext);
 
   // Load workbook data
   useEffect(() => {
     if (!demoValue) return;
-
     const demoEndpoint = getDemoEndpoint(demoValue);
     setLoading(true);
 
@@ -87,26 +101,93 @@ export default function Graph() {
     zoomRef.current.scaleTo(zoomContainer, scale);
   }, [zoomPercent]);
 
-  // useEffect(() => {
-  //   if (!workbook) return;
-  //   workbook.links.forEach(link => {
-  //     link.stroke = getEdgeColor(workbook, link, grayThreshold, maxWeight, colorOptimal);
-  //     link.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, link) : 2;
-  //   });
-  // }, [workbook]);
+  // Handle window resize for Fit to Window
+  useEffect(() => {
+    if (viewSize !== FIT_TO_WINDOW) return;
+
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [viewSize]);
+
+  // Change viewport size based on selection
+  useEffect(() => {
+    if (!viewSize) {
+      setWidth(VIEW_SIZE_SMALL);
+      setHeight(VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL].height);
+    } else if (viewSize === FIT_TO_WINDOW) {
+      setWidth(windowDimensions.width - WIDTH_OFFSET);
+      setHeight(windowDimensions.height - HEIGHT_OFFSET);
+    } else {
+      setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
+      setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
+    }
+  }, [viewSize, windowDimensions]);
 
   // Main D3 rendering effect
   useEffect(() => {
-    if (!workbook || !svgRef.current || !containerRef.current) return;
+    if (!workbook || !svgRef.current || !containerRef.current || !width || !height) return;
 
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
 
-    const container = containerRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    // Setup cursor styling for drag of graph
+    const zoomDragStarted = function (event, d) {
+      zoomDragPrevX.current = event.x;
+      zoomDragPrevY.current = event.y;
+      setIsDragging(true);
+    };
 
-    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
+    const zoomDragged = function (event, d) {
+      let scale = 1;
+      if (zoomContainer.attr("transform")) {
+        let string = zoomContainer.attr("transform");
+        scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+      }
+
+      // TODO: add Restrict Graph to Viewport support like flexZoomInBounds and viewportBoundsMoveDrag in classic
+      // if (
+      //   adaptive ||
+      //   (!adaptive &&
+      //     flexZoomInBounds(graphZoom) &&
+      //     viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
+      // ) {
+      zoom.translateBy(
+        zoomContainer,
+        scale * (event.x - zoomDragPrevX.current),
+        scale * (event.y - zoomDragPrevY.current)
+      );
+      // }
+      zoomDragPrevX.current = event.x;
+      zoomDragPrevY.current = event.y;
+    };
+
+    const zoomDragEnded = function (event, d) {
+      setIsDragging(false);
+    };
+
+    // zoomDrag and all functions that it calls handles cursor dragging
+    const zoomDrag = d3
+      .drag()
+      .on("start", zoomDragStarted)
+      .on("drag", zoomDragged)
+      .on("end", zoomDragEnded);
+
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("id", "exportContainer");
+
+    svg.style("pointer-events", "all").call(zoomDrag).style("font-family", "sans-serif");
+
+    d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
 
     const defs = svg.append("defs");
 
@@ -120,6 +201,23 @@ export default function Graph() {
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
     zoomContainerRef.current = zoomContainer.node();
 
+    const boundingBoxContainer = zoomContainer.append("g");
+
+    const boundingBoxRect = boundingBoxContainer
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .attr("stroke", "none")
+      .attr("id", "boundingBoxRect");
+
+    const flexibleContainerRect = boundingBoxContainer
+      .append("rect")
+      .attr("class", "boundingBox")
+      .attr("fill", "none")
+      .attr("id", "flexibleContainerRect");
+
     const zoom = d3
       .zoom()
       .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -128,8 +226,6 @@ export default function Graph() {
       });
 
     zoomRef.current = zoom;
-
-    const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
 
     // D-pad controls
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
@@ -249,10 +345,7 @@ export default function Graph() {
       d.fy = null;
     }
 
-    // TODO: may need to change this when have dymanic viewport width
     function center() {
-      var viewportWidth = width;
-      var viewportHeight = height;
       zoom.translateTo(zoomContainer, width / 2, height / 2);
     }
 
@@ -295,22 +388,17 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold]);
-  if (loading) {
-    return <div className="grnsight-container">Loading graph...</div>;
-  }
-
-  if (error) {
-    return <div className="grnsight-container">Error: {error}</div>;
-  }
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize, windowDimensions]);
 
   return (
     <div
       ref={containerRef}
-      className="grnsight-container"
-      style={{ width: "100%", height: "600px" }}
+      className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
+      style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
-      <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />
+      {loading && <div>Loading graph...</div>}
+      {error && <div>Error: {error}</div>}
+      <svg ref={svgRef} />
       <ScaleAndScroll />
     </div>
   );

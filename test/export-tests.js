@@ -836,21 +836,25 @@ describe("Export to spreadsheet", function () {
         );
     });
 
-    it(
-        "should import a workbook with minor additional sheet warnings," +
-            " export the workbook, and import the exported workbook properly",
-        function () {
+    describe("Importing, exporting, and re-importing workbooks with additional sheet warnings", function () {
+        it("should import a workbook with incorrect headers in the optimization parameters sheet, export it, and re-import it without errors or warnings", function () {
             test.importExportReImportNoErrorsOrWarnings(
                 "test-files/additional-sheet-test-files/optimization-parameters-incorrect-headers.xlsx"
             );
-            test.importExportReImportNoErrorsOrWarnings(
-                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx"
-            );
+        });
+
+        it("should import a workbook with incorrect headers in the optimization diagnostics sheet, export it, and re-import it without errors or warnings", function () {
             test.importExportReImportNoErrorsOrWarnings(
                 "test-files/additional-sheet-test-files/optimization-diagnostics-incorrect-MSE-gene-header.xlsx"
             );
-        }
-    );
+        });
+
+        it("should import a workbook with missing column headers in the two column sheets, export it, and re-import it without errors or warnings", function () {
+            test.importExportReImportNoErrorsOrWarnings(
+                "test-files/additional-sheet-test-files/two-column-sheets-missing-column-header.xlsx"
+            );
+        });
+    });
 
     it("should import a workbook with no warnings, export the workbook, and import the exported workbook properly", function () {
         test.importExportReImportNoErrorsOrWarnings(

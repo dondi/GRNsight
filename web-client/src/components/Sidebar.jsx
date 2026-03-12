@@ -19,6 +19,10 @@ import {
   SCHADE_INPUT_NAME,
   SCHADE_OUTPUT_NAME,
   PPI_DEMO_NAME,
+  VIEW_SIZE_SMALL,
+  VIEW_SIZE_MEDIUM,
+  VIEW_SIZE_LARGE,
+  FIT_TO_WINDOW,
 } from "../helpers/constants";
 import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
@@ -382,11 +386,7 @@ export default function Sidebar({}) {
           <RadioButtonGroup
             className="sidebar-radio-buttons"
             gap="0px"
-            options={[
-              "Small (1104 X 648 pixels)",
-              "Medium (1414 X 840 pixels)",
-              "Large (1920 X 1080 pixels)",
-            ]}
+            options={[VIEW_SIZE_SMALL, VIEW_SIZE_MEDIUM, VIEW_SIZE_LARGE, FIT_TO_WINDOW]}
             size="small"
             value={viewSize}
             onChange={event => setViewSize(event.target.value)}

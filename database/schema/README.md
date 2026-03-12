@@ -2,7 +2,7 @@
 
 This directory contains all the necessary schemas for the databases required by GRNsight.
 
-## Load Database
+## Verify Your Connection to the Server
 
 For Mac:
 
@@ -32,13 +32,19 @@ GRNsight requires six schemas, one for each of the following namespaces:
 2. `gene_expression`
 3. `gene_regulatory_network_with_timestamp`
 4. `protein_protein_interactions_with_timestamp`
-5. `gene_regulatory_network` (this is the old schema for gene regulatory network before 2025 - this namepsace can be empty because we no longer load data into this namespace)
-6. `protein_protein_interactions` (this is the old schema for protein protein interactions before 2025 - this namepsace can be empty because we no longer load data into this namespace)
+5. `gene_regulatory_network` (this is the old schema for the gene regulatory network database before 2025 - this namepsace can be empty because we no longer load data into this namespace)
+6. `protein_protein_interactions` (this is the old schema for the protein protein interactions database before 2025 - this namepsace can be empty because we no longer load data into this namespace)
 
-The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema:
+The scripts already contain the command to create the schema for you. Each schema requires a set of table definitions. You can add these by running the following commands, each corresponding to an SQL file that defines the structure for each schema.
 
+First, outside of postgres, navigate to the `schema` folder in your local copy of the GRNsight repository:
 ```
 cd <path to `schema` folder>
+```
+
+Then run the following commands. Note that for any command that begins with `psql`, you need to be _outside_ of postgres to run it. Also, you may need to specify the database username in front of localhost, i.e., use `postgresql://postgres@localhost/postgres` for each of the following commands.
+```
+psql -f grnsettings_schema.sql postgresql://localhost/postgres
 ```
 
 ```
@@ -46,15 +52,7 @@ psql -f expression_schema.sql postgresql://localhost/postgres
 ```
 
 ```
-psql -f gene_regulatory_network_schema.sql postgresql://localhost/postgres
-```
-
-```
 psql -f gene_regulatory_network_with_timestamp_schema.sql postgresql://localhost/postgres
-```
-
-```
-psql -f protein_protein_interactions_schema.sql postgresql://localhost/postgres
 ```
 
 ```
@@ -62,7 +60,11 @@ psql -f protein_protein_interactions_with_timestamp_schema.sql postgresql://loca
 ```
 
 ```
-psql -f grnsettings_schema.sql postgresql://localhost/postgres
+psql -f gene_regulatory_network_schema.sql postgresql://localhost/postgres
+```
+
+```
+psql -f protein_protein_interactions_schema.sql postgresql://localhost/postgres
 ```
 
 Once these steps are completed, your database will be set up and ready to accept expression and network data.
@@ -71,13 +73,13 @@ Once these steps are completed, your database will be set up and ready to accept
 
 ### 1. Settings Database
 
-The `settings` table stores the default database name.
+The `settings` table stores the default database name for the node coloring dropdown menu. Question: is this optional?
 
 To change the default database name, follow these steps:
 
 1. **Log in to the Database**
 
-    For instructions on how to load the database, refer to the [Load Database](#load-database) section.
+    For instructions on how to connect to the database server, refer to the [Verify Your Connection to the Server](#verify-your-connection-to-the-server) section.
 
 2. **Set the Search Path**
 

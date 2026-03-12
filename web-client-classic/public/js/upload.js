@@ -87,25 +87,44 @@ export const upload = function () {
         return result;
     };
 
-    var filenameWithExtension = function (suffix, extension) {
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+        var source = null;
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (suffix) {
-            filename = filename + "_" + suffix;
+        if (Object.keys(grnState.workbook.expression).length > 0) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "userInput") {
+                source = "user-data";
+            }
         }
 
-        return filename + "." + extension;
+        if (mode !== "grn") {
+            mode = "PPI";
+        }
+        if (mode !== null && genes !== null && edges !== null && type !== null) {
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+        const { source: expressionSource } = grnState.workbook.expression; // Only demos will have this.
+        if (expressionSource || source) {
+            // In almost all cases, we will use source. But some demos will pre-empt this choice.
+            filename = `${filename}_${expressionSource || source}`;
+        }
+        return `${filename}.${extension}`;
     };
 
     const download = (workbook, route, extension, sheetType) => {
         const workbookToExport = flattenWorkbook(workbook, sheetType);
-        const workbookFilename = filenameWithExtension(
-            sheetType !== workbook.sheetType ? sheetType : "",
+        var workbookFilename = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            sheetType,
             extension
         );
+
         workbookToExport.filename = workbookFilename;
 
         const exportForm = $("<form></form>")
@@ -347,14 +366,19 @@ export const upload = function () {
         const twoColumnSheets = grnState.workbook.twoColumnSheets
             ? Object.keys(grnState.workbook.twoColumnSheets)
             : [];
-
+        // network, network weights, network optimized sheets are created for export
         for (let sheet of chosenSheets) {
             if (sheet === "network_optimized_weights") {
                 finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
+                // if network weights does not exist, new network_weights sheet is created from network sheet
+                if (!grnState.workbook.networkWeights) {
+                    finalExportSheets.networks[sheet] = grnState.workbook.network;
+                } else {
+                    finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
+                }
             } else if (sheet === "optimization_diagnostics") {
                 // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
@@ -364,40 +388,20 @@ export const upload = function () {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
             } else {
-                if (source === "userInput" && twoColumnSheets.indexOf(sheet) !== -1) {
-                    finalExportSheets.two_column_sheets[sheet] =
-                        grnState.workbook.twoColumnSheets[sheet];
-                } else {
-                    // Generate the two column sheet specified
-                    if (
-                        source === "userInput" &&
-                        Object.keys(finalExportSheets.two_column_sheets).includes(sheet)
-                    ) {
-                        finalExportSheets.two_column_sheets[sheet] =
-                            grnState.workbook.two_column_sheets[sheet];
-                    } else if (sheet === "threshold_b") {
-                        finalExportSheets.two_column_sheets[sheet] = {
-                            data: {},
-                            errors: [],
-                            warnings: [],
-                        };
-                        for (let g of grnState.workbook.genes) {
-                            finalExportSheets.two_column_sheets[sheet].data[g.name] = 0;
-                        }
-                    } else {
-                        finalExportSheets.two_column_sheets[sheet] = null;
-                    }
-                }
+                finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
+                    ? grnState.workbook.twoColumnSheets[sheet]
+                    : null;
             }
         }
 
         return finalExportSheets;
     };
 
-    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets) => {
+    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets, source) => {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
+            threshold_b: "ThresholdB",
         };
 
         const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet =>
@@ -408,10 +412,21 @@ export const upload = function () {
 
         for (let sheet of chosenTwoColumnSheets) {
             const sheetData = finalExportSheets.two_column_sheets[sheet];
-            if (
-                sheetData === null ||
-                (sheetData && Object.keys(sheetData.data || {}).length === 0)
-            ) {
+            const isMissing = sheetData === null || sheetData === undefined;
+            const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
+
+            // Check if all genes are available but missing values
+            const partialMissingCode = `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
+            const hasExistingWarning = finalExportSheets.warnings.some(
+                w => w.warningCode === partialMissingCode
+            );
+
+            if (isMissing || isEmpty || hasExistingWarning) {
+                const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
+                if (source === "userInput") {
+                    finalExportSheets.warnings.push(warnings[warningKey](isMissing));
+                }
+
                 missingTwoColumnSheets.push(sheet);
             } else {
                 finalExportSheets.two_column_sheets[sheet] = sheetData;
@@ -444,24 +459,14 @@ export const upload = function () {
             );
         }
 
-        const exportWorkbookView = {
-            genes: grnState.workbook.genes,
-            twoColumnSheets: finalExportSheets.two_column_sheets,
-        };
-
-        const exportWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
-            exportWorkbookView,
+        const uniqueMissingGenesWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+            grnState.workbook.genes,
+            finalExportSheets.two_column_sheets,
+            chosenTwoColumnSheets,
             warnings,
-            chosenTwoColumnSheets
+            finalExportSheets.warnings
         );
-
-        const existingDescriptions = new Set(
-            finalExportSheets.warnings.map(w => w.errorDescription)
-        );
-        const uniqueWarnings = exportWarnings.filter(
-            w => !existingDescriptions.has(w.errorDescription)
-        );
-        finalExportSheets.warnings.push(...uniqueWarnings);
+        finalExportSheets.warnings.push(...uniqueMissingGenesWarnings);
 
         return finalExportSheets;
     };
@@ -471,7 +476,7 @@ export const upload = function () {
 
         const chosenSheets = determineChosenSheets();
         let finalExportSheets = prepareFinalExportSheets(chosenSheets, source);
-        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets);
+        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets, source);
 
         handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
     };
@@ -480,10 +485,7 @@ export const upload = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
-                if (
-                    value.value === "network_weights" ||
-                    value.value === "network_optimized_weights"
-                ) {
+                if (value.value === "network_optimized_weights") {
                     return "weighted";
                 }
             }
@@ -532,6 +534,7 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
+
         if (Object.keys(grnState.workbook.expression).length > 0) {
             result += `
                         <li>
@@ -606,24 +609,44 @@ export const upload = function () {
               ]
             : [grnState.workbook.meta2 !== undefined && "optimization_diagnostics"];
         additionalsheets = additionalsheets.filter(
-            sheet => sheet && -1 !== optionalAdditionalSheets.indexOf(sheet)
+            sheet => Boolean(sheet) && sheet !== "optimization_diagnostics"
         );
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...new Set(additionalsheets)];
-        for (let n of networks) {
-            const state = n[0];
-            const network = n[1];
-            result =
-                result +
-                `
+        // append each network sheet individually for unique handling
+        let network = networks[0];
+        result =
+            result +
+            `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' ${state ? 'checked="true"' : ""} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${state ? "" : "disabled"}/>
-                <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
-                    ${network}
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${network[1]}\" id=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox\' disabled/>
+                <label for=\'exportExcelWorkbookSheet-${network[1]}\' id=\'exportExcelWorkbookSheet-${network[1]}-label\' class=\'export-checkbox-label\' >
+                    ${network[1]}
                 </label>
             </li>
             `;
-        }
+        let networkOptimizedWeights = networks[1];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' ${networkOptimizedWeights[0] ? 'checked="true"' : ""} value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\' ${networkOptimizedWeights[0] ? "" : "disabled"}/>
+                <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkOptimizedWeights[1]}
+                </label>
+            </li>
+            `;
+        let networkWeights = networks[2];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
+                <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkWeights[1]}
+                </label>
+            </li>
+            `;
         if (source === "userInput") {
             result += grnState.workbook.expressionNames
                 ? "<p class=\'export-excel-workbook-sheet-option-subheader\'> Expression Sheets </p>"
