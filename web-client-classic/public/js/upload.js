@@ -10,7 +10,10 @@ import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 import { displayExportWarnings } from "./warnings.js";
 import { warnings } from "./export-warning-constants.js";
-import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
+import {
+    buildPostFetchTwoColumnWarnings,
+    buildPreFetchTwoColumnWarnings,
+} from "./two_column_sheets_warnings.js";
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
@@ -360,7 +363,7 @@ export const upload = function () {
             networks: {},
             expression: {},
             two_column_sheets: {},
-            warnings: [...grnState.workbook.warnings],
+            warnings: [],
         };
 
         const twoColumnSheets = grnState.workbook.twoColumnSheets
@@ -404,38 +407,20 @@ export const upload = function () {
             threshold_b: "ThresholdB",
         };
 
-        const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet =>
-            chosenSheets.includes(sheet)
-        );
+        const { chosenTwoColumnSheets, sheetsToFetch, warningsToAdd } =
+            buildPreFetchTwoColumnWarnings({
+                workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
+                chosenSheets,
+                source,
+                warningsConstants: warnings,
+                workbookWarnings: grnState.workbook.warnings,
+            });
 
-        const missingTwoColumnSheets = [];
+        finalExportSheets.warnings.push(...warningsToAdd);
 
-        for (let sheet of chosenTwoColumnSheets) {
-            const sheetData = finalExportSheets.two_column_sheets[sheet];
-            const isMissing = sheetData === null || sheetData === undefined;
-            const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
-
-            // Check if all genes are available but missing values
-            const partialMissingCode = `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
-            const hasExistingWarning = finalExportSheets.warnings.some(
-                w => w.warningCode === partialMissingCode
-            );
-
-            if (isMissing || isEmpty || hasExistingWarning) {
-                const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
-                if (source === "userInput") {
-                    finalExportSheets.warnings.push(warnings[warningKey](isMissing));
-                }
-
-                missingTwoColumnSheets.push(sheet);
-            } else {
-                finalExportSheets.two_column_sheets[sheet] = sheetData;
-            }
-        }
-
-        if (missingTwoColumnSheets.length > 0) {
+        if (sheetsToFetch.length > 0) {
             await Promise.all(
-                missingTwoColumnSheets.map(async sheet => {
+                sheetsToFetch.map(async sheet => {
                     const genes = grnState.workbook.genes.map(g => g.name).join(",");
                     try {
                         const response = await queryExpressionDatabase({
@@ -459,7 +444,7 @@ export const upload = function () {
             );
         }
 
-        const uniqueMissingGenesWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+        const uniqueMissingGenesWarnings = buildPostFetchTwoColumnWarnings(
             grnState.workbook.genes,
             finalExportSheets.two_column_sheets,
             chosenTwoColumnSheets,
