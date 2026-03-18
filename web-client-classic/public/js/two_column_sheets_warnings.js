@@ -20,14 +20,14 @@ const buildMissingGenesWarning = ({ sheetName, missingGenes, warningsConstants }
 };
 
 const getChosenTwoColumnSheets = chosenSheets => {
-    if (!chosenSheets) return [...TWO_COLUMN_SHEETS];
+    if (!chosenSheets) return [];
     return TWO_COLUMN_SHEETS.filter(sheetName => chosenSheets.includes(sheetName));
 };
 
 const hasWarningCode = (warningsList, code) => warningsList.some(w => w.warningCode === code);
+
 const getMissingAllGenesAndValuesCode = sheetName =>
     `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
-
 const getMissingAllValuesCode = sheetName =>
     `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
 
@@ -41,7 +41,6 @@ const buildMissingOrEmptyWarning = ({
         workbookWarnings,
         getMissingAllGenesAndValuesCode(sheetName)
     );
-
     const hasMissingAllValuesWarning = hasWarningCode(
         workbookWarnings,
         getMissingAllValuesCode(sheetName)
