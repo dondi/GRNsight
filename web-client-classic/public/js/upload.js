@@ -447,7 +447,7 @@ export const upload = function () {
         const uniqueMissingGenesWarnings = buildPostFetchTwoColumnWarnings(
             grnState.workbook.genes,
             finalExportSheets.two_column_sheets,
-            chosenTwoColumnSheets,
+            sheetsToFetch,
             warnings,
             finalExportSheets.warnings
         );

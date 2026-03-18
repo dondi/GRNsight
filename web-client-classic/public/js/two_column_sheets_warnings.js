@@ -30,6 +30,18 @@ const getMissingAllGenesAndValuesCode = sheetName =>
     `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
 const getMissingAllValuesCode = sheetName =>
     `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+const getMissingGenesAndValuesWhenImportingCode = sheetName =>
+    `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`;
+
+const findWarningbyCode = (warningsList, code) => warningsList.find(w => w.warningCode === code);
+const toExportWarningFromImportWarning = importWarning => {
+    if (!importWarning) return null;
+
+    return {
+        warningCode: importWarning.warningCode.replace(/_WHEN_IMPORTING$/, "_WHEN_EXPORTING"),
+        errorDescription: importWarning.errorDescription.replace(/\bimported\b/gi, "exported"),
+    };
+};
 
 const buildMissingOrEmptyWarning = ({
     sheetName,
@@ -90,7 +102,20 @@ export const buildPreFetchTwoColumnWarnings = ({
             }
             sheetsToFetch.push(sheetName);
         }
+
+        // Carry import warning to export warning if applicable
+        const missingGenesAndValuesWhenImportingCode =
+            getMissingGenesAndValuesWhenImportingCode(sheetName);
+        if (hasWarningCode(workbookWarnings, missingGenesAndValuesWhenImportingCode)) {
+            const importWarning = findWarningbyCode(
+                workbookWarnings,
+                missingGenesAndValuesWhenImportingCode
+            );
+            const exportWarning = toExportWarningFromImportWarning(importWarning);
+            warningsToAdd.push(exportWarning);
+        }
     }
+    console.log("Pre-fetch warnings to add:", warningsToAdd);
 
     return {
         chosenTwoColumnSheets,
