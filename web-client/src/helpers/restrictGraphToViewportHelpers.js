@@ -158,11 +158,30 @@ export function flexZoomInBounds(
   }
 }
 
-// Only calculate Left and Top boundary margins because calculate rightboundary and bottomboundary in tick
-function getLeftXBoundaryMargin(adaptive, graphZoom, xTranslation) {
+export function getLeftXBoundaryMargin(adaptive, graphZoom, xTranslation) {
   return !adaptive ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
 }
 
-function getTopYBoundaryMargin(adaptive, graphZoom, yTranslation) {
+export function getTopYBoundaryMargin(adaptive, graphZoom, yTranslation) {
   return !adaptive ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
+}
+
+export function getRightXBoundaryMargin(adaptive, graphZoom, xTranslation, width, nodeWidth) {
+  return !adaptive
+    ? -xTranslation.current / graphZoom +
+        BOUNDARY_MARGIN / 2 +
+        width / graphZoom -
+        BOUNDARY_MARGIN -
+        nodeWidth
+    : width - BOUNDARY_MARGIN - nodeWidth;
+}
+
+export function getBottomYBoundaryMargin(adaptive, graphZoom, yTranslation, height) {
+  return !adaptive
+    ? -yTranslation.current / graphZoom +
+        BOUNDARY_MARGIN / 2 +
+        height / graphZoom -
+        BOUNDARY_MARGIN -
+        NODE_HEIGHT
+    : height - BOUNDARY_MARGIN - NODE_HEIGHT;
 }

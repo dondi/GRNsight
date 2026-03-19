@@ -31,8 +31,13 @@ import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import {
   flexZoomInBounds,
   viewportBoundsMoveDrag,
+  getLeftXBoundaryMargin,
+  getTopYBoundaryMargin,
+  getRightXBoundaryMargin,
+  getBottomYBoundaryMargin,
 } from "../helpers/restrictGraphToViewportHelpers";
 import "../App.css";
+import { get } from "jquery";
 
 export default function Graph() {
   const svgRef = useRef(null);
@@ -123,7 +128,7 @@ export default function Graph() {
 
   // Handle window resize for Fit to Window
   useEffect(() => {
-    if (viewSize !== FIT_TO_WINDOW) return;
+    if (viewSize !== FIT_TO_WINDOW || !adaptive) return;
 
     const handleResize = () => {
       setWindowDimensions({
@@ -134,7 +139,7 @@ export default function Graph() {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [viewSize]);
+  }, [viewSize, adaptive]);
 
   // Change viewport size based on selection
   useEffect(() => {
@@ -148,7 +153,7 @@ export default function Graph() {
       setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
       setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
     }
-  }, [viewSize, windowDimensions]);
+  }, [viewSize, windowDimensions, adaptive]);
 
   // Main D3 rendering effect
   useEffect(() => {
@@ -427,11 +432,43 @@ export default function Graph() {
         });
 
       node.attr("transform", d => {
-        d.x = Math.max(
-          BOUNDARY_MARGIN,
-          Math.min(width - BOUNDARY_MARGIN - (d.textWidth || MINIMUM_NODE_WIDTH), d.x)
-        );
-        d.y = Math.max(BOUNDARY_MARGIN, Math.min(height - BOUNDARY_MARGIN - NODE_HEIGHT, d.y));
+        const nodeWidth = d.textWidth || MINIMUM_NODE_WIDTH;
+        const currentZoom = zoomScale.current || 1;
+
+        const leftBoundary = getLeftXBoundaryMargin(adaptive, currentZoom, xTranslation.current);
+        const topBoundary = getTopYBoundaryMargin(adaptive, currentZoom, yTranslation.current);
+
+        const rightBoundary = !adaptive
+          ? -xTranslation.current / currentZoom +
+            BOUNDARY_MARGIN / 2 +
+            width / currentZoom -
+            BOUNDARY_MARGIN -
+            nodeWidth
+          : width - BOUNDARY_MARGIN - nodeWidth;
+        const bottomBoundary = !adaptive
+          ? -yTranslation.current / currentZoom +
+            BOUNDARY_MARGIN / 2 +
+            height / currentZoom -
+            BOUNDARY_MARGIN -
+            NODE_HEIGHT
+          : height - BOUNDARY_MARGIN - NODE_HEIGHT;
+
+        // const rightBoundary = getRightXBoundaryMargin(
+        //   adaptive,
+        //   currentZoom,
+        //   xTranslation.current,
+        //   width,
+        //   nodeWidth
+        // );
+        // const bottomBoundary = getBottomYBoundaryMargin(
+        //   adaptive,
+        //   currentZoom,
+        //   yTranslation.current,
+        //   height
+        // );
+
+        d.x = Math.max(leftBoundary, Math.min(rightBoundary, d.x));
+        d.y = Math.max(topBoundary, Math.min(bottomBoundary, d.y));
         return `translate(${d.x},${d.y})`;
       });
     });
