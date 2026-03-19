@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-modified: 2/19/2026
+modified: 3/19/2026
 description: >-
     About the GRNsight gene regulatory network and protein-protein interaction visualization web app: availability, compatibility, release notes, funding, privacy statement.
 ---
@@ -82,10 +82,33 @@ description: >-
                                                 GRNsight v7.6.0 includes enhancements and bug fixes in these areas of functionality:
                                                 <ul>
                                                   <li>Clean-up of Demo network behavior</li>
+                                                    <ul>
+                                                        <li> Loading demos no longer triggers warnings</li>
+                                                        <li> Demos #2 and #4 now can color nodes with log2_optimized_expression data</li>
+                                                        <li> Demo #3 no longer displays node coloring</li>
+                                                        <li> Demos #3 and #4 have been updated to the current GRNmap input and output format</li>
+                                                        <li> optimization_diagnostics worksheet has been added to Demo #2 (although it is not seen by the user)</li>
+                                                    </ul>   
                                                   <li>Open Excel workbook</li>
+                                                    <ul>
+                                                        <li> The nomenclature for cell A1 of the network, network_weights, and network_optimized_weights worksheets in an Excel workbook has been standardized for both GRNs (cols regulators/rows targets) and PPIs (cols protein1/rows protein2), and error messages have been updated</li>
+                                                        <li> Errors/warnings implemented for import of malformed two-column worksheets</li>
+                                                    </ul>        
                                                   <li>Export data</li>
+                                                    <ul>
+                                                        <li> File naming of the exported Excel, SIF, or GraphML file has been standardized</li>
+                                                        <li> The export of the network_weights sheet defaults to unselected, but it can always be selected</li>
+                                                        <li> Warnings implemented for Export to Excel of malformed two-column worksheets </li>
+                                                    </ul>
                                                   <li>Node coloring behavior</li>
+                                                    <ul>
+                                                        <li> Node coloring restored for log2_optimized_expression worksheets</li>
+                                                        <li> Bugs related to node coloring for PPI networks fixed</li>
+                                                    </ul>
                                                   <li>Graph display</li>
+                                                    <ul>
+                                                        <li>Duplicate edges on the display of a PPI network removed</li>
+                                                    </ul>
                                                 </ul>
                                             </div>
                                         </div>
