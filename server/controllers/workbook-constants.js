@@ -92,6 +92,12 @@ const OPTIONAL_TWO_COL_SHEET_NAMES = ["optimization_parameters", "optimization_d
 
 const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights", "network_weights"];
 
+const valuesForEachTwoColSheet = {
+    production_rates: "production rates",
+    degradation_rates: "degradation rates",
+    threshold_b: "threshold b values",
+};
+
 module.exports = {
     numbersToLetters,
     TWO_COL_SHEET_NAMES,
@@ -379,31 +385,27 @@ module.exports = {
             sheetName,
             missingGenes
         ) {
-            const singularName = sheetName.replace(/_/g, " ").replace(/s$/, "");
             return {
                 warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
                 errorDescription: [
-                    `GRNsight has detected that the imported workbook has missing genes and values in the ${sheetName} sheet.`,
-                    `A ${singularName} will need to be supplied to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. `,
-                    `The missing genes are: ${missingGenes}. The genes with missing values are: ${missingGenes}.`,
+                    `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
+                    `in the imported workbook's ${sheetName} sheet.`,
+                    `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")} will need to be supplied to use this workbook as an input file for GRNmap,`,
+                    `but will not affect the display of the graph in GRNsight.`,
+                    `The missing genes and values are: ${missingGenes}.`,
                 ].join(" "),
             };
         },
 
         missingAllGenesAndValuesInTwoColumnSheet: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
-            const valueForEachSheet = {
-                production_rates: "production rates",
-                degradation_rates: "degradation rates",
-                threshold_b: "threshold b values",
-            };
 
             return {
                 warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `There were no ${missingType} supplied in the "${sheetName}" sheet in the imported workbook.`,
                     "This will not affect the display of the graph in GRNsight, but",
-                    `${valueForEachSheet[sheetName]} will need to be supplied to use this workbook as an input file for GRNmap.`,
+                    `${valuesForEachTwoColSheet[sheetName]} will need to be supplied to use this workbook as an input file for GRNmap.`,
                 ].join(" "),
             };
         },
