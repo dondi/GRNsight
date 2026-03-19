@@ -2,10 +2,13 @@ import { useContext, useState, useMemo, useRef } from "react";
 import { GrnStateContext } from "../App";
 import {
   ZOOM_DISPLAY_MINIMUM,
+  ZOOM_DISPLAY_MIDDLE,
   ZOOM_DISPLAY_MAXIMUM,
   ZOOM_SLIDER_MIN,
   ZOOM_SLIDER_MIDDLE,
   ZOOM_SLIDER_MAX,
+  zoomScaleLeft,
+  zoomScaleRight,
   zoomScaleSliderLeft,
   zoomScaleSliderRight,
 } from "../helpers/constants";
@@ -16,43 +19,36 @@ import {
 import { NETWORK_GRN_MODE_FULL, NETWORK_PPI_MODE_FULL } from "../helpers/constants";
 import "../App.css";
 
-export default function ScaleAndScroll({
-  nodes,
-  zoomScale,
-  width,
-  height,
-  xTranslation,
-  yTranslation,
-}) {
+export default function ScaleAndScroll({ getViewportBoundsData }) {
   const frame = useRef(null);
   const [zoomSliderValue, setZoomSliderValue] = useState(null);
   const { zoomPercent, setZoomPercent, networkMode, adaptive } = useContext(GrnStateContext);
 
   const handleSliderChange = event => {
     const sliderInput = parseFloat(event.target.value);
-    // TODO: add Restrict Graph to Viewport support like flexZoomInBounds in classic
-    const scaleToUse =
+    const viewportBoundsData = getViewportBoundsData();
+    // 1) slider position -> display percent
+    const displayMapper =
       sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft() : zoomScaleSliderRight();
-    console.log("sliderInput: ", sliderInput);
-    console.log("scaleToUse(sliderInput): ", scaleToUse(sliderInput));
-    const newZoomPercent = Math.floor(scaleToUse(sliderInput));
+    const newZoomPercent = Math.floor(displayMapper(sliderInput));
 
-    // console.log("zoomPercent: ", zoomPercent);
+    // 2) display percent -> graph scale
+    const graphMapper = newZoomPercent <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft() : zoomScaleRight();
+    const newGraphZoom = graphMapper(newZoomPercent);
+
     if (
       adaptive ||
       (!adaptive &&
-        flexZoomInBounds(newZoomPercent / 100, nodes, width, height, xTranslation, yTranslation))
-      // &&
-      // viewportBoundsMoveDrag(
-      //   sliderInput,
-      //   xTranslation,
-      //   yTranslation,
-      //   nodes,
-      //   width,
-      //   height,
-      //   xTranslation,
-      //   yTranslation
-      // )
+        viewportBoundsData?.nodes?.length > 0 &&
+        flexZoomInBounds(
+          newGraphZoom,
+          viewportBoundsData.zoomScale,
+          viewportBoundsData.nodes,
+          viewportBoundsData.width,
+          viewportBoundsData.height,
+          viewportBoundsData.xTranslation,
+          viewportBoundsData.yTranslation
+        ))
     ) {
       setZoomSliderValue(sliderInput);
 

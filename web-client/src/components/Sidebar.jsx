@@ -394,7 +394,7 @@ export default function Sidebar({}) {
           <CheckBox
             checked={!adaptive}
             label={<Text>Restrict Graph to Viewport</Text>}
-            onChange={event => setAdaptive(event.target.checked)}
+            onChange={event => setAdaptive(!event.target.checked)}
           />
         </Box>
       </Box>

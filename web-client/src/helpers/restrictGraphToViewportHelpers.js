@@ -2,8 +2,8 @@ import { getNodeWidth } from "./graphHelpers";
 import { NODE_HEIGHT, BOUNDARY_MARGIN } from "./constants";
 
 /**
- * Calculate a flexible bounding box around all nodes. Use the bounding box to find the most extreme
- * positions of nodes to determine whether drag movements are within bounds.
+ * Calculate a flexible bounding box around all nodes using CURRENT graph zoom. Use the bounding box to find the most extreme
+ * positions of nodes to determine whether drag movements are within bounds for NEW GRAPH ZOOM.
  * @function calcFlexiBox
  * @return {object} - Flexible bounding box around all nodes
  * x: leftmost x position (x-value where the box begins being drawn)
@@ -14,16 +14,22 @@ import { NODE_HEIGHT, BOUNDARY_MARGIN } from "./constants";
  * height: height of the box
  */
 export function calcFlexiBox(nodes, width, height, graphZoom, xTranslation, yTranslation) {
+  if (
+    !Array.isArray(nodes) ||
+    nodes.length === 0 ||
+    width == null ||
+    height == null ||
+    graphZoom == null ||
+    graphZoom <= 0 ||
+    xTranslation == null ||
+    yTranslation == null
+  ) {
+    return { x: 0, y: 0, maxX: 0, maxY: 0, width: 0, height: 0 };
+  }
   const nodeWidth = getNodeWidth(nodes[0]);
-  console.log("nodes: ", nodes);
 
   const xValuesNodes = nodes.map(node => node.x);
   const yValuesNodes = nodes.map(node => node.y);
-  // console.log("xValuesNodes: ", xValuesNodes);
-  // console.log("yValuesNodes: ", yValuesNodes);
-  console.log("width: ", width);
-  console.log("height: ", height);
-  console.log("graphZoom: ", graphZoom);
 
   let minX = Math.min(...xValuesNodes);
   let maxX = Math.max(...xValuesNodes) + nodeWidth;
@@ -57,17 +63,6 @@ export function calcFlexiBox(nodes, width, height, graphZoom, xTranslation, yTra
     flexiBoxHeight = Math.abs(maxY) - Math.abs(minY);
   }
 
-  //   boundingBoxRect
-  //     .attr("x", -xTranslation / graphZoom + BOUNDARY_MARGIN / 2)
-  //     .attr("width", width / graphZoom - BOUNDARY_MARGIN)
-  //     .attr("y", -yTranslation / graphZoom + BOUNDARY_MARGIN / 2)
-  //     .attr("height", height / graphZoom - BOUNDARY_MARGIN);
-
-  //   flexibleContainerRect
-  //     .attr("x", minX)
-  //     .attr("y", minY)
-  //     .attr("width", flexiBoxWidth)
-  //     .attr("height", flexiBoxHeight);
   return {
     x: minX,
     y: minY,
@@ -139,49 +134,27 @@ export function viewportBoundsMoveDrag(
 }
 
 // Checks if zoomValue is in bounds when zoom in and out
-export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, yTranslation) {
+export function flexZoomInBounds(
+  newGraphZoom,
+  currentGraphZoom,
+  nodes,
+  width,
+  height,
+  xTranslation,
+  yTranslation
+) {
   const flexibleContainer = calcFlexiBox(
     nodes,
     width,
     height,
-    graphZoom,
+    currentGraphZoom,
     xTranslation,
     yTranslation
   );
 
-  console.log("flexibleContainer: ", flexibleContainer);
-  // console.log("graphZoom: ", graphZoom);
-  // console.log("width: ", width);
-  // console.log(
-  //   "flexibleContainer.width * graphZoom > width: ",
-  //   flexibleContainer.width * graphZoom > width
-  // );
-  // console.log("height: ", height);
-  // console.log(
-  //   "flexibleContainer.height * graphZoom > height: ",
-  //   flexibleContainer.height * graphZoom > height
-  // );
-  // console.log("zoomPercent: ", graphZoom);
-
-  // console.log(
-  //   "flexibleContainer.width * graphZoom > width + xTranslation: ",
-  //   flexibleContainer.width * graphZoom + xTranslation * graphZoom > width
-  // );
-  // console.log("flexibleContainer.width * graphZoom: ", flexibleContainer.width * graphZoom);
-
-  // console.log("width: ", width);
-  // console.log(
-  //   "flexibleContainer.height * graphZoom > height + yTranslation: ",
-  //   flexibleContainer.height * graphZoom + yTranslation * graphZoom > height
-  // );
-  // console.log("flexibleContainer.height * graphZoom: ", flexibleContainer.height * graphZoom);
-  // console.log("height: ", height);
-  // console.log("yTranslation: ", yTranslation);
-  // console.log(" ");
-
   if (
-    flexibleContainer.width * graphZoom > width ||
-    flexibleContainer.height * graphZoom > height
+    flexibleContainer.width * newGraphZoom > width ||
+    flexibleContainer.height * newGraphZoom > height
   ) {
     console.log("flexZoomInBounds: false");
     return false;
@@ -193,15 +166,9 @@ export function flexZoomInBounds(graphZoom, nodes, width, height, xTranslation, 
 
 // Only calculate Left and Top boundary margins because calculate rightboundary and bottomboundary in tick
 function getLeftXBoundaryMargin(adaptive, graphZoom, xTranslation) {
-  //   return !adaptive && flexibleContainer
-  //     ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2
-  //     : BOUNDARY_MARGIN;
   return !adaptive ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
 }
 
 function getTopYBoundaryMargin(adaptive, graphZoom, yTranslation) {
-  //   return !adaptive && flexibleContainer
-  //     ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2
-  //     : BOUNDARY_MARGIN;
   return !adaptive ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 : BOUNDARY_MARGIN;
 }

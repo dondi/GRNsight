@@ -10,7 +10,7 @@ import {
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
-  MIN_SCALE,
+  ZOOM_MIN_SCALE,
   ZOOM_DISPLAY_MIDDLE,
   VIEW_SIZE_SMALL,
   FIT_TO_WINDOW,
@@ -56,6 +56,7 @@ export default function Graph() {
   });
   const [isDragging, setIsDragging] = useState(false);
   const [nodes, setNodes] = useState([]);
+  const [transformState, setTransformState] = useState({ x: 0, y: 0, k: 1 });
   const xTranslation = useRef(0);
   const yTranslation = useRef(0);
   const zoomDragPrevX = useRef(0);
@@ -75,6 +76,15 @@ export default function Graph() {
     zoomPercent,
     setZoomPercent,
   } = useContext(GrnStateContext);
+
+  const getViewportBoundsData = () => ({
+    nodes: simulationRef.current ? simulationRef.current.nodes() : [],
+    width,
+    height,
+    xTranslation: transformState.x,
+    yTranslation: transformState.y,
+    zoomScale: transformState.k,
+  });
 
   // Load workbook data
   useEffect(() => {
@@ -230,26 +240,30 @@ export default function Graph() {
 
     const boundingBoxContainer = zoomContainer.append("g");
 
-    const boundingBoxRect = boundingBoxContainer
-      .append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .attr("stroke", "none")
-      .attr("id", "boundingBoxRect");
+    // const boundingBoxRect = boundingBoxContainer
+    //   .append("rect")
+    //   .attr("width", width)
+    //   .attr("height", height)
+    //   .style("fill", "none")
+    //   .style("pointer-events", "all")
+    //   .attr("stroke", "none")
+    //   .attr("id", "boundingBoxRect");
 
-    const flexibleContainerRect = boundingBoxContainer
-      .append("rect")
-      .attr("class", "boundingBox")
-      .attr("fill", "none")
-      .attr("id", "flexibleContainerRect");
+    // const flexibleContainerRect = boundingBoxContainer
+    //   .append("rect")
+    //   .attr("class", "boundingBox")
+    //   .attr("fill", "none")
+    //   .attr("id", "flexibleContainerRect");
 
     const zoom = d3
       .zoom()
-      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+      .scaleExtent([ZOOM_MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
       .on("zoom", event => {
         zoomContainer.attr("transform", event.transform);
+        xTranslation.current = event.transform.x;
+        yTranslation.current = event.transform.y;
+        zoomScale.current = event.transform.k;
+        setTransformState({ x: event.transform.x, y: event.transform.y, k: event.transform.k });
       });
 
     zoomRef.current = zoom;
@@ -432,7 +446,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize, windowDimensions]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height]);
 
   return (
     <div
@@ -443,14 +457,7 @@ export default function Graph() {
       {loading && <div>Loading graph...</div>}
       {error && <div>Error: {error}</div>}
       <svg ref={svgRef} />
-      <ScaleAndScroll
-        nodes={nodes}
-        zoomScale={zoomScale.current}
-        width={width}
-        height={height}
-        xTranslation={xTranslation.current}
-        yTranslation={yTranslation.current}
-      />
+      <ScaleAndScroll getViewportBoundsData={getViewportBoundsData} />
     </div>
   );
 }
