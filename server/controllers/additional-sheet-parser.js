@@ -86,7 +86,7 @@ const validGeneName = (output, sheetName, gene, row) => {
     var regex = /[^a-z0-9\_\-]/gi;
 
     // Allow missing gene id
-    if (gene === undefined || gene === null) {
+    if (gene === undefined || gene === null || (typeof gene === "string" && gene.trim() === "")) {
         return false;
     }
 
