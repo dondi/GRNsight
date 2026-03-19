@@ -414,13 +414,34 @@ export default function Graph() {
     }
 
     simulation.on("tick", () => {
+      const currentZoom = zoomScale.current || 1;
+      const edgeBounds = {
+        left: getLeftXBoundaryMargin(adaptive, currentZoom, xTranslation.current),
+        top: getTopYBoundaryMargin(adaptive, currentZoom, yTranslation.current),
+        right: getRightXBoundaryMargin(
+          adaptive,
+          currentZoom,
+          xTranslation.current,
+          width,
+          nodes[0]?.textWidth || MINIMUM_NODE_WIDTH
+        ),
+        bottom: getBottomYBoundaryMargin(adaptive, currentZoom, yTranslation.current, height),
+      };
+
+      link.select("path").attr("d", d => {
+        if (d.source === d.target) {
+          return createSelfLoop(d, width, height, colorOptimal, edgeBounds);
+        }
+        return createPath(d, width, height, colorOptimal, edgeBounds);
+      });
+
       link
         .select("path")
         .attr("d", d => {
           if (d.source === d.target) {
-            return createSelfLoop(d, width, height, colorOptimal);
+            return createSelfLoop(d, width, height, colorOptimal, edgeBounds);
           }
-          return createPath(d, width, height, colorOptimal);
+          return createPath(d, width, height, colorOptimal, edgeBounds);
         })
         .attr("marker-end", d => {
           // Update marker-end during tick so repressors can switch between horizontal/vertical
