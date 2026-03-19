@@ -103,7 +103,7 @@ export function viewportBoundsMoveDrag(
   // right boundary
   if (
     flexibleContainer.x + flexibleContainer.width + dx >=
-    -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
+    getRightXBoundaryMargin(false, graphZoom, xTranslation, width, getNodeWidth(nodes[0]))
   ) {
     return false;
   }
@@ -116,7 +116,7 @@ export function viewportBoundsMoveDrag(
   // bottom boundary
   if (
     flexibleContainer.y + flexibleContainer.height + dy >=
-    -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
+    getBottomYBoundaryMargin(false, graphZoom, yTranslation, height)
   ) {
     return false;
   }
@@ -168,7 +168,7 @@ export function getTopYBoundaryMargin(adaptive, graphZoom, yTranslation) {
 
 export function getRightXBoundaryMargin(adaptive, graphZoom, xTranslation, width, nodeWidth) {
   return !adaptive
-    ? -xTranslation.current / graphZoom +
+    ? -xTranslation / graphZoom +
         BOUNDARY_MARGIN / 2 +
         width / graphZoom -
         BOUNDARY_MARGIN -
@@ -178,7 +178,7 @@ export function getRightXBoundaryMargin(adaptive, graphZoom, xTranslation, width
 
 export function getBottomYBoundaryMargin(adaptive, graphZoom, yTranslation, height) {
   return !adaptive
-    ? -yTranslation.current / graphZoom +
+    ? -yTranslation / graphZoom +
         BOUNDARY_MARGIN / 2 +
         height / graphZoom -
         BOUNDARY_MARGIN -

@@ -438,34 +438,19 @@ export default function Graph() {
         const leftBoundary = getLeftXBoundaryMargin(adaptive, currentZoom, xTranslation.current);
         const topBoundary = getTopYBoundaryMargin(adaptive, currentZoom, yTranslation.current);
 
-        const rightBoundary = !adaptive
-          ? -xTranslation.current / currentZoom +
-            BOUNDARY_MARGIN / 2 +
-            width / currentZoom -
-            BOUNDARY_MARGIN -
-            nodeWidth
-          : width - BOUNDARY_MARGIN - nodeWidth;
-        const bottomBoundary = !adaptive
-          ? -yTranslation.current / currentZoom +
-            BOUNDARY_MARGIN / 2 +
-            height / currentZoom -
-            BOUNDARY_MARGIN -
-            NODE_HEIGHT
-          : height - BOUNDARY_MARGIN - NODE_HEIGHT;
-
-        // const rightBoundary = getRightXBoundaryMargin(
-        //   adaptive,
-        //   currentZoom,
-        //   xTranslation.current,
-        //   width,
-        //   nodeWidth
-        // );
-        // const bottomBoundary = getBottomYBoundaryMargin(
-        //   adaptive,
-        //   currentZoom,
-        //   yTranslation.current,
-        //   height
-        // );
+        const rightBoundary = getRightXBoundaryMargin(
+          adaptive,
+          currentZoom,
+          xTranslation.current,
+          width,
+          nodeWidth
+        );
+        const bottomBoundary = getBottomYBoundaryMargin(
+          adaptive,
+          currentZoom,
+          yTranslation.current,
+          height
+        );
 
         d.x = Math.max(leftBoundary, Math.min(rightBoundary, d.x));
         d.y = Math.max(topBoundary, Math.min(bottomBoundary, d.y));
