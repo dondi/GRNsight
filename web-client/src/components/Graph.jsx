@@ -236,8 +236,6 @@ export default function Graph() {
 
     createAllMarkers({ defs, links: workbook.links, networkMode });
 
-    // createAllMarkers({ defs, links: workbook.links, networkMode });
-
     const zoomContainer = svg
       .append("g")
       .attr("class", "boundingBox")
