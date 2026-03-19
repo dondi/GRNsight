@@ -1,3 +1,10 @@
+const dataSourceForTwoColumnSheet = {
+    degradation_rates: "degradation rates from the backend database from Neymotin et al. (2014)",
+    production_rates:
+        "production rates from the backend database which are 2X the degradation rates reported in Neymotin et al. (2014)",
+    threshold_b: "the default value of 0 for each gene",
+};
+
 module.exports = {
     warnings: {
         // ADDITIONAL SHEET WARNINGS
@@ -16,34 +23,28 @@ module.exports = {
             };
         },
 
-        MISSING_OR_EMPTY_DEGRADATION_RATES_SHEET: isMissing => ({
-            warningCode: "MISSING_OR_EMPTY_DEGRADATION_RATES_SHEET",
-            errorDescription: [
-                isMissing
-                    ? 'There was no "degradation_rates" sheet in the imported workbook.'
-                    : 'The "degradation_rates" sheet was empty in the imported workbook.',
-                " GRNsight has supplied degradation rates from the backend database from Neymotin et al. (2014).",
-            ].join(" "),
-        }),
+        MISSING_OR_EMPTY_TWO_COLUMN_SHEET: function (sheetName, isMissing) {
+            return {
+                warningCode: `MISSING_OR_EMPTY_${sheetName.toUpperCase()}_SHEET`,
+                errorDescription: [
+                    isMissing
+                        ? `There was no "${sheetName}" sheet in the imported workbook.`
+                        : `The "${sheetName}" sheet was empty in the imported workbook.`,
+                    `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                ].join(" "),
+            };
+        },
 
-        MISSING_OR_EMPTY_PRODUCTION_RATES_SHEET: isMissing => ({
-            warningCode: "MISSING_OR_EMPTY_PRODUCTION_RATES_SHEET",
-            errorDescription: [
-                isMissing
-                    ? 'There was no "production_rates" sheet in the imported workbook.'
-                    : 'The "production_rates" sheet was empty in the imported workbook.',
-                " GRNsight has supplied production rates from the backend database which are 2X the degradation rates reported in Neymotin et al. (2014).",
-            ].join(" "),
-        }),
-
-        MISSING_OR_EMPTY_THRESHOLD_B_SHEET: isMissing => ({
-            warningCode: "MISSING_OR_EMPTY_THRESHOLD_B_SHEET",
-            errorDescription: [
-                isMissing
-                    ? 'There was no "threshold_b" sheet in the imported workbook.'
-                    : 'The "threshold_b" sheet was empty in the imported workbook.',
-                "GRNsight has supplied the default value of 0 for each gene.",
-            ].join(" "),
-        }),
+        MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET: function (sheetName, isAllGenesMissing) {
+            const missingType = isAllGenesMissing ? "genes and values" : "values";
+            return {
+                warningCode: `MISSING_ALL_${missingType.toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `There were no ${missingType} supplied`,
+                    `in the ${sheetName} sheet in the imported workbook`,
+                    `GRNsight has supplied ${dataSourceForTwoColumnSheet[sheetName]}.`,
+                ].join(" "),
+            };
+        },
     },
 };

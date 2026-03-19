@@ -1,3 +1,4 @@
+const { CELL_A1_GRN, CELL_A1_PPI } = require("./constants");
 // Currently only going to number 76 because currently the workbook errors out at 75+ genes.
 var numbersToLetters = {
     0: "A",
@@ -90,6 +91,12 @@ const TWO_COL_SHEET_NAMES = [
 const OPTIONAL_TWO_COL_SHEET_NAMES = ["optimization_parameters", "optimization_diagnostics"];
 
 const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights", "network_weights"];
+
+const valuesForEachTwoColSheet = {
+    production_rates: "production rates",
+    degradation_rates: "degradation rates",
+    threshold_b: "threshold b values",
+};
 
 module.exports = {
     numbersToLetters,
@@ -191,15 +198,6 @@ module.exports = {
             };
         },
 
-        incorrectCellA1WorkbookWarning: function (sheetName) {
-            return {
-                warningCode: "MISLABELED_NETWORK_CELL_A1",
-                errorDescription: `The top left cell of the ${sheetName} sheet is mislabeled.
-                Replace the incorrect label with \'cols regulators/ rows targets\' or \'cols 
-                protein1/ rows protein2'\ exactly.`,
-            };
-        },
-
         missingTargetGeneWarning: function (row, column) {
             var colLetter = numbersToLetters[column];
             var rowNum = row + 1;
@@ -289,6 +287,43 @@ module.exports = {
                 " GRNsight defaults to Saccharomyces cerevisiae.",
         },
 
+        additionalSheetIncorrectColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
+            return this.additionSheetMissingOrIncorrectColumnHeaderWarning(
+                sheetName,
+                expectedA1,
+                expectedB1,
+                /*isMissing*/ false
+            );
+        },
+
+        additionalSheetMissingColumnHeaderWarning: function (sheetName, expectedA1, expectedB1) {
+            return this.additionSheetMissingOrIncorrectColumnHeaderWarning(
+                sheetName,
+                expectedA1,
+                expectedB1,
+                /*isMissing*/ true
+            );
+        },
+
+        additionSheetMissingOrIncorrectColumnHeaderWarning: function (
+            sheetName,
+            expectedA1,
+            expectedB1,
+            isMissing
+        ) {
+            const headerStatus = isMissing ? "missing" : "incorrect";
+            return {
+                warningCode: `${headerStatus.toUpperCase()}_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that the headers are ${headerStatus} in the imported workbook's ${sheetName} sheet.`,
+                    "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
+                    "but will not affect the display of the graph in GRNsight.",
+                    `Cell A1 should contain the text ${expectedA1},`,
+                    `and cell B1 should contain the text ${expectedB1}, exactly.`,
+                ].join(" "),
+            };
+        },
+
         unknownSpeciesDetected: function (workbookSpecies, workbookTaxon) {
             return {
                 warningCode: "UNKNOWN_SPECIES_DETECTED",
@@ -350,31 +385,27 @@ module.exports = {
             sheetName,
             missingGenes
         ) {
-            const singularName = sheetName.replace(/_/g, " ").replace(/s$/, "");
             return {
                 warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
                 errorDescription: [
-                    `GRNsight has detected that the imported workbook has missing genes and values in the ${sheetName} sheet.`,
-                    `A ${singularName} will need to be supplied to use this workbook as an input file for GRNmap, but will not affect the display of the graph in GRNsight. `,
-                    `The missing genes are: ${missingGenes}. The genes with missing values are: ${missingGenes}.`,
+                    `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
+                    `in the imported workbook's ${sheetName} sheet.`,
+                    `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")} will need to be supplied to use this workbook as an input file for GRNmap,`,
+                    `but will not affect the display of the graph in GRNsight.`,
+                    `The missing genes and values are: ${missingGenes}.`,
                 ].join(" "),
             };
         },
 
         missingAllGenesAndValuesInTwoColumnSheet: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
-            const valueForEachSheet = {
-                production_rates: "production rates",
-                degradation_rates: "degradation rates",
-                threshold_b: "threshold b values",
-            };
 
             return {
                 warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `There were no ${missingType} supplied in the "${sheetName}" sheet in the imported workbook.`,
                     "This will not affect the display of the graph in GRNsight, but",
-                    `${valueForEachSheet[sheetName]} will need to be supplied to use this workbook as an input file for GRNmap.`,
+                    `${valuesForEachTwoColSheet[sheetName]} will need to be supplied to use this workbook as an input file for GRNmap.`,
                 ].join(" "),
             };
         },
@@ -385,7 +416,7 @@ module.exports = {
             errorCode: "ERRORS_OVERLOAD",
             possibleCause: "This workbook has over 20 errors.",
             suggestedFix:
-                "Please check the format of your spreadsheet with the guidlines outlined on the" +
+                "Please check the format of your spreadsheet with the guidelines outlined on the" +
                 "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
                 "further errors detected. As a general approach for fixing the errors, consider copying and " +
                 "pasting just your adjacency matrix into a fresh Excel Workbook and saving it.",
@@ -395,7 +426,7 @@ module.exports = {
             errorCode: "WARNINGS_OVERLOAD",
             possibleCause: "This workbook has over 75 warnings.",
             suggestedFix:
-                "Please check the format of your spreadsheet with the guidlines outlined on the" +
+                "Please check the format of your spreadsheet with the guidelines outlined on the" +
                 "Documentation page and try again. If you fix these errors and try to upload again, there may be " +
                 "further errors detected. As a general approach for fixing the errors, consider copying and " +
                 "pasting just your adjacency matrix into a fresh Excel Workbook and saving it.",
@@ -435,15 +466,6 @@ module.exports = {
                     " special characters except for '-' and '_'.",
             };
         },
-
-        incorrectColumnHeaderError: function (sheetName, columnLetter, header) {
-            return {
-                errorCode: "INCORRECT_COLUMN_HEADER",
-                possibleCause: `Column ${columnLetter} in the ${sheetName} sheet has an incorrect header.`,
-                suggestedFix: `Replace the incorrect label with '${header}' exactly.`,
-            };
-        },
-
         missingColumnHeaderError: function (sheetName, columnLetter, header) {
             if (sheetName && columnLetter && header) {
                 return {
@@ -708,6 +730,17 @@ module.exports = {
                 suggestedFix:
                     "Change the non-numerical time point to a positive number and ensure expression data \
                 is correct.",
+            };
+        },
+
+        incorrectCellA1WorkbookError: function (sheetName) {
+            return {
+                errorCode: "MISLABELED_NETWORK_CELL_A1",
+                possibleCause: `The top left cell of the ${sheetName} sheet is mislabeled.`,
+                suggestedFix: [
+                    `Replace the incorrect label with '${CELL_A1_GRN}' for a gene regulatory network (GRN)`,
+                    `or '${CELL_A1_PPI}' for a protein-protein interaction network (PPI) exactly.`,
+                ].join(" "),
             };
         },
     },

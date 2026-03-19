@@ -10,7 +10,10 @@ import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 import { displayExportWarnings } from "./warnings.js";
 import { warnings } from "./export-warning-constants.js";
-import { buildWorkbookTwoColumnMissingGenesWarnings } from "./two_column_sheets_warnings.js";
+import {
+    buildPostFetchTwoColumnWarnings,
+    buildPreFetchTwoColumnWarnings,
+} from "./two_column_sheets_warnings.js";
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
@@ -107,8 +110,10 @@ export const upload = function () {
         if (mode !== null && genes !== null && edges !== null && type !== null) {
             filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
         }
-        if (source) {
-            filename = `${filename}_${source}`;
+        const { source: expressionSource } = grnState.workbook.expression; // Only demos will have this.
+        if (expressionSource || source) {
+            // In almost all cases, we will use source. But some demos will pre-empt this choice.
+            filename = `${filename}_${expressionSource || source}`;
         }
         return `${filename}.${extension}`;
     };
@@ -358,20 +363,25 @@ export const upload = function () {
             networks: {},
             expression: {},
             two_column_sheets: {},
-            warnings: [...grnState.workbook.warnings],
+            warnings: [],
         };
 
         const twoColumnSheets = grnState.workbook.twoColumnSheets
             ? Object.keys(grnState.workbook.twoColumnSheets)
             : [];
-
+        // network, network weights, network optimized sheets are created for export
         for (let sheet of chosenSheets) {
             if (sheet === "network_optimized_weights") {
                 finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
+                // if network weights does not exist, new network_weights sheet is created from network sheet
+                if (!grnState.workbook.networkWeights) {
+                    finalExportSheets.networks[sheet] = grnState.workbook.network;
+                } else {
+                    finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
+                }
             } else if (sheet === "optimization_diagnostics") {
                 // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
@@ -381,64 +391,36 @@ export const upload = function () {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
             } else {
-                if (source === "userInput" && twoColumnSheets.indexOf(sheet) !== -1) {
-                    finalExportSheets.two_column_sheets[sheet] =
-                        grnState.workbook.twoColumnSheets[sheet];
-                } else {
-                    // Generate the two column sheet specified
-                    if (
-                        source === "userInput" &&
-                        Object.keys(finalExportSheets.two_column_sheets).includes(sheet)
-                    ) {
-                        finalExportSheets.two_column_sheets[sheet] =
-                            grnState.workbook.two_column_sheets[sheet];
-                    } else {
-                        finalExportSheets.two_column_sheets[sheet] = null;
-                    }
-                }
+                finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
+                    ? grnState.workbook.twoColumnSheets[sheet]
+                    : null;
             }
         }
 
         return finalExportSheets;
     };
 
-    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets) => {
+    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets, source) => {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
             threshold_b: "ThresholdB",
         };
 
-        const chosenTwoColumnSheets = Object.keys(twoColumnSheetType).filter(sheet =>
-            chosenSheets.includes(sheet)
-        );
+        const { chosenTwoColumnSheets, sheetsToFetch, warningsToAdd } =
+            buildPreFetchTwoColumnWarnings({
+                workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
+                chosenSheets,
+                source,
+                warningsConstants: warnings,
+                workbookWarnings: grnState.workbook.warnings,
+            });
 
-        const missingTwoColumnSheets = [];
+        finalExportSheets.warnings.push(...warningsToAdd);
 
-        for (let sheet of chosenTwoColumnSheets) {
-            const sheetData = finalExportSheets.two_column_sheets[sheet];
-            const isMissing = sheetData === null;
-            const isEmpty = !isMissing && Object.keys(sheetData.data || {}).length === 0;
-
-            // Check if all genes are available but missing values
-            const partialMissingCode = `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheet.toUpperCase()}`;
-            const hasExistingWarning = finalExportSheets.warnings.some(
-                w => w.warningCode === partialMissingCode
-            );
-
-            if (isMissing || isEmpty || hasExistingWarning) {
-                const warningKey = `MISSING_OR_EMPTY_${sheet.toUpperCase()}_SHEET`;
-                finalExportSheets.warnings.push(warnings[warningKey](isMissing));
-
-                missingTwoColumnSheets.push(sheet);
-            } else {
-                finalExportSheets.two_column_sheets[sheet] = sheetData;
-            }
-        }
-
-        if (missingTwoColumnSheets.length > 0) {
+        if (sheetsToFetch.length > 0) {
             await Promise.all(
-                missingTwoColumnSheets.map(async sheet => {
+                sheetsToFetch.map(async sheet => {
                     const genes = grnState.workbook.genes.map(g => g.name).join(",");
                     try {
                         const response = await queryExpressionDatabase({
@@ -462,10 +444,10 @@ export const upload = function () {
             );
         }
 
-        const uniqueMissingGenesWarnings = buildWorkbookTwoColumnMissingGenesWarnings(
+        const uniqueMissingGenesWarnings = buildPostFetchTwoColumnWarnings(
             grnState.workbook.genes,
             finalExportSheets.two_column_sheets,
-            chosenTwoColumnSheets,
+            sheetsToFetch,
             warnings,
             finalExportSheets.warnings
         );
@@ -479,7 +461,7 @@ export const upload = function () {
 
         const chosenSheets = determineChosenSheets();
         let finalExportSheets = prepareFinalExportSheets(chosenSheets, source);
-        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets);
+        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets, source);
 
         handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
     };
@@ -539,12 +521,9 @@ export const upload = function () {
     `;
 
         if (Object.keys(grnState.workbook.expression).length > 0) {
-            const value = grnState.workbook.expression.source
-                ? grnState.workbook.expression.source
-                : "userInput";
             result += `
                         <li>
-                            <input type='radio' name='expressionSource' checked="true" value="${value}" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
                             <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
                         </li>
             `;
@@ -615,24 +594,44 @@ export const upload = function () {
               ]
             : [grnState.workbook.meta2 !== undefined && "optimization_diagnostics"];
         additionalsheets = additionalsheets.filter(
-            sheet => sheet && -1 !== optionalAdditionalSheets.indexOf(sheet)
+            sheet => Boolean(sheet) && sheet !== "optimization_diagnostics"
         );
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...new Set(additionalsheets)];
-        for (let n of networks) {
-            const state = n[0];
-            const network = n[1];
-            result =
-                result +
-                `
+        // append each network sheet individually for unique handling
+        let network = networks[0];
+        result =
+            result +
+            `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' ${state ? 'checked="true"' : ""} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${state ? "" : "disabled"}/>
-                <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
-                    ${network}
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${network[1]}\" id=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox\' disabled/>
+                <label for=\'exportExcelWorkbookSheet-${network[1]}\' id=\'exportExcelWorkbookSheet-${network[1]}-label\' class=\'export-checkbox-label\' >
+                    ${network[1]}
                 </label>
             </li>
             `;
-        }
+        let networkOptimizedWeights = networks[1];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' ${networkOptimizedWeights[0] ? 'checked="true"' : ""} value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\' ${networkOptimizedWeights[0] ? "" : "disabled"}/>
+                <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkOptimizedWeights[1]}
+                </label>
+            </li>
+            `;
+        let networkWeights = networks[2];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
+                <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkWeights[1]}
+                </label>
+            </li>
+            `;
         if (source === "userInput") {
             result += grnState.workbook.expressionNames
                 ? "<p class=\'export-excel-workbook-sheet-option-subheader\'> Expression Sheets </p>"
