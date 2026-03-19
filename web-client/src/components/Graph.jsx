@@ -244,55 +244,6 @@ export default function Graph() {
 
     const boundingBoxContainer = zoomContainer.append("g");
 
-    // const boundingBoxRect = boundingBoxContainer
-    //   .append("rect")
-    //   .attr("width", width)
-    //   .attr("height", height)
-    //   .style("fill", "none")
-    //   .style("pointer-events", "all")
-    //   .attr("stroke", "none")
-    //   .attr("id", "boundingBoxRect");
-
-    // const flexibleContainerRect = boundingBoxContainer
-    //   .append("rect")
-    //   .attr("class", "boundingBox")
-    //   .attr("fill", "none")
-    //   .attr("id", "flexibleContainerRect");
-
-    const boundingBoxContainer = zoomContainer.append("g");
-
-    // const boundingBoxRect = boundingBoxContainer
-    //   .append("rect")
-    //   .attr("width", width)
-    //   .attr("height", height)
-    //   .style("fill", "none")
-    //   .style("pointer-events", "all")
-    //   .attr("stroke", "none")
-    //   .attr("id", "boundingBoxRect");
-
-    // const flexibleContainerRect = boundingBoxContainer
-    //   .append("rect")
-    //   .attr("class", "boundingBox")
-    //   .attr("fill", "none")
-    //   .attr("id", "flexibleContainerRect");
-
-    // const boundingBoxContainer = zoomContainer.append("g");
-
-    // const boundingBoxRect = boundingBoxContainer
-    //   .append("rect")
-    //   .attr("width", width)
-    //   .attr("height", height)
-    //   .style("fill", "none")
-    //   .style("pointer-events", "all")
-    //   .attr("stroke", "none")
-    //   .attr("id", "boundingBoxRect");
-
-    // const flexibleContainerRect = boundingBoxContainer
-    //   .append("rect")
-    //   .attr("class", "boundingBox")
-    //   .attr("fill", "none")
-    //   .attr("id", "flexibleContainerRect");
-
     const zoom = d3
       .zoom()
       .scaleExtent([ZOOM_MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
