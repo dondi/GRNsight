@@ -409,6 +409,19 @@ module.exports = {
                 ].join(" "),
             };
         },
+
+        missingGeneIdsWithValuesInTwoColumnSheet: function (sheetName, valuesMissingGenes) {
+            return {
+                warningCode: `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    "GRNsight has detected that there are missing gene IDs",
+                    `in the imported workbook's ${sheetName} sheet.`,
+                    "The missing gene IDs will need to be supplied to use this workbook as an input file for GRNmap,",
+                    "but will not affect the display of the graph in GRNsight.",
+                    `The values with missing gene IDs are ${valuesMissingGenes.join(", ")}.`,
+                ].join(" "),
+            };
+        },
     },
 
     errors: {
