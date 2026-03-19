@@ -475,7 +475,6 @@ module.exports = function (workbookFile, genesInNetwork) {
             // these are part of the "meta" property
         } else if (constants.TWO_COL_SHEET_NAMES.includes(sheet.name)) {
             output.twoColumnSheets[sheet.name] = parseTwoColumnSheet(sheet, genesInNetwork);
-            console.log("output.twoColumnSheets[sheet.name]", output.twoColumnSheets[sheet.name]);
         } else if (sheet.name === "optimization_diagnostics") {
             output.meta2 = parseOptimizationDiagnosticsSheet(sheet);
         }
