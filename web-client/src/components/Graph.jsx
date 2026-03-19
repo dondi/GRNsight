@@ -37,7 +37,6 @@ import {
   getBottomYBoundaryMargin,
 } from "../helpers/restrictGraphToViewportHelpers";
 import "../App.css";
-import { get } from "jquery";
 
 export default function Graph() {
   const svgRef = useRef(null);
