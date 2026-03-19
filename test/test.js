@@ -136,6 +136,29 @@ const missingAllValuesForGenes = function (input, frequency, sheetName) {
     );
 };
 
+const missingGenesAndValuesInTwoColumnSheet = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.equal(
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
+        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}WHEN_IMPORTING`
+    );
+};
+
 var missingNetworkError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -965,6 +988,8 @@ exports.missingGenesAndValuesInTwoColumnSheetsWarning =
 exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
 exports.missingAllValuesForGenes = missingAllValuesForGenes;
 exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheetWarning;
+exports.missingGenesAndValuesInTwoColumnSheetsWarning =
+    missingGenesAndValuesInTwoColumnSheetsWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
