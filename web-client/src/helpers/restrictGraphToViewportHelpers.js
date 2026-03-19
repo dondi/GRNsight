@@ -105,13 +105,11 @@ export function viewportBoundsMoveDrag(
     flexibleContainer.x + flexibleContainer.width + dx >=
     -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
   ) {
-    console.log("exceeds right boundary");
     return false;
   }
 
   // left boundary
   if (flexibleContainer.x + dx <= getLeftXBoundaryMargin(false, graphZoom, xTranslation)) {
-    console.log("exceeds left boundary");
     return false;
   }
 
@@ -120,13 +118,11 @@ export function viewportBoundsMoveDrag(
     flexibleContainer.y + flexibleContainer.height + dy >=
     -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
   ) {
-    console.log("exceeds bottom boundary");
     return false;
   }
 
   // top boundary
   if (flexibleContainer.y + dy <= getTopYBoundaryMargin(false, graphZoom, yTranslation)) {
-    console.log("exceeds top boundary");
     return false;
   }
 
@@ -156,10 +152,8 @@ export function flexZoomInBounds(
     flexibleContainer.width * newGraphZoom > width ||
     flexibleContainer.height * newGraphZoom > height
   ) {
-    console.log("flexZoomInBounds: false");
     return false;
   } else {
-    console.log("flexZoomInBounds: true");
     return true;
   }
 }

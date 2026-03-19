@@ -295,12 +295,9 @@ export var drawGraph = function (workbook) {
             $container.removeClass(CURSOR_CLASSES).addClass("cursorGrab");
         }
         var container = zoomContainer;
-        console.log("zoomScale: ", zoomScale);
-        console.log("old graphZoom: ", graphZoom);
         if (adaptive || (!adaptive && flexZoomInBounds(graphZoom))) {
             zoom.scaleTo(container, zoomScale);
             graphZoom = zoomScale;
-            console.log("new graphZoom: ", graphZoom);
         }
     };
 
@@ -314,8 +311,6 @@ export var drawGraph = function (workbook) {
 
     const updateAppBasedOnZoomValue = () => {
         let zoomDisplay;
-        console.log("grnState.zoomValue: ", grnState.zoomValue);
-        console.log("prevGrnstateZoomVal: ", prevGrnstateZoomVal);
 
         // If the zoom value is out of bounds, reset it to the previous value.
         if (adaptive) {
@@ -334,19 +329,14 @@ export var drawGraph = function (workbook) {
             zoomDisplay = grnState.zoomValue;
         }
 
-        console.log("zoomDisplay: ", zoomDisplay);
-        console.log("updated grnState.zoomValue: ", grnState.zoomValue);
-
         const calcGraphZoom = (zoomDisplay <= ZOOM_DISPLAY_MIDDLE ? zoomScaleLeft : zoomScaleRight)(
             zoomDisplay
         );
-        console.log("calcGraphZoom: ", calcGraphZoom);
 
         setGraphZoom(calcGraphZoom);
 
         const finalDisplay = grnState.zoomValue;
         $(ZOOM_PERCENT).text(`${finalDisplay}%`);
-        console.log("finalDisplay: ", finalDisplay);
 
         // Special handling for zoom input field: the user might be in the middle of typing a value that is
         // _temporarily_ out of range (e.g., "1" while typing "100") and we don’t want to overwrite that.
@@ -1648,10 +1638,6 @@ export var drawGraph = function (workbook) {
         if (nodes.length > 0) {
             nodeWidth = nodes[0].textWidth + 8;
         }
-        console.log("nodes: ", nodes);
-        console.log("width: ", width);
-        console.log("height: ", height);
-        console.log("graphZoom: ", graphZoom);
 
         const xValuesNodes = nodes.map(node => node.x);
         const yValuesNodes = nodes.map(node => node.y);
@@ -1722,12 +1708,9 @@ export var drawGraph = function (workbook) {
         if (flexibleContainer) {
             updateZoomContainerInfo();
             flexibleContainer = calcFlexiBox();
-            console.log("flexibleContainer: ", flexibleContainer);
             if (flexibleContainer.width * zoomValue > width) {
-                console.log("flexZoomInBounds: false - exceeds width");
                 return false;
             } else if (flexibleContainer.height * zoomValue > height) {
-                console.log("flexZoomInBounds: false - exceeds height");
                 return false;
             }
         }
