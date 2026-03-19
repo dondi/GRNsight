@@ -500,6 +500,32 @@ describe("additional-sheet-parser", function () {
                 );
             });
         });
+
+        describe("should return WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but the order of genes is not the same as the network sheet", function () {
+            it("for degradation_rates sheet", function () {
+                test.wrongGeneOrderInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-deg-rates-sheet.xlsx",
+                    1,
+                    "degradation_rates"
+                );
+            });
+
+            it("for production_rates sheet", function () {
+                test.wrongGeneOrderInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-prod-rates-sheet.xlsx",
+                    1,
+                    "production_rates"
+                );
+            });
+
+            it("for threshold_b sheet", function () {
+                test.wrongGeneOrderInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-threshold_b-sheet.xlsx",
+                    1,
+                    "threshold_b"
+                );
+            });
+        });
     });
 
     describe("optimization diagnostics sheet", function () {
