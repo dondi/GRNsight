@@ -500,6 +500,32 @@ describe("additional-sheet-parser", function () {
                 );
             });
         });
+
+        describe("should return EXTRA_GENES_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but contain extra genes", function () {
+            it("for degradation_rates sheet", function () {
+                test.extraGenesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/extra-genes/extra-row-deg-rates-sheet.xlsx",
+                    1,
+                    "degradation_rates"
+                );
+            });
+
+            it("for production_rates sheet", function () {
+                test.extraGenesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/extra-genes/extra-row-prod-rates-sheet.xlsx",
+                    1,
+                    "production_rates"
+                );
+            });
+
+            it("for threshold_b sheet", function () {
+                test.extraGenesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/extra-genes/extra-row-threshold_b-sheet.xlsx",
+                    1,
+                    "threshold_b"
+                );
+            });
+        });
     });
 
     describe("optimization diagnostics sheet", function () {
