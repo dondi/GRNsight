@@ -383,7 +383,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize, windowDimensions]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height]);
 
   return (
     <div
