@@ -129,7 +129,6 @@ export const buildPreFetchTwoColumnWarnings = ({
             warningsToAdd.push(exportWarning);
         }
     }
-    console.log("Pre-fetch warnings to add:", warningsToAdd);
 
     return {
         chosenTwoColumnSheets,
