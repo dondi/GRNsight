@@ -350,6 +350,17 @@ const checkValidGenesAndValuesInTwoColumnSheet = (output, sheet, row, genesMissi
     }
 };
 
+const checkExtraGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) => {
+    const extraGenes = Object.keys(output.data).filter(g => !genesInNetwork.includes(g));
+
+    if (extraGenes.length > 0) {
+        addWarning(
+            output,
+            constants.warnings.extraGenesInTwoColumnSheetWarning(sheetName, extraGenes.join(", "))
+        );
+    }
+};
+
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let output = {
         data: {},
@@ -401,7 +412,6 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     if (genesInNetwork) {
         //  Check if the output data keys (genes in sheet) include all genes in the network
         const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
-        const extraGenes = Object.keys(output.data).filter(g => !genesInNetwork.includes(g));
         if (missingGenes.length > 0) {
             if (missingGenes.length === genesInNetwork.length) {
                 addWarning(
@@ -422,15 +432,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             }
         }
 
-        if (extraGenes.length > 0) {
-            addWarning(
-                output,
-                constants.warnings.extraGenesInTwoColumnSheetWarning(
-                    sheet.name,
-                    extraGenes.join(", ")
-                )
-            );
-        }
+        checkExtraGenesInTwoColumnSheet(output, genesInNetwork, sheet.name);
     }
 
     return output;
