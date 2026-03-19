@@ -59,6 +59,16 @@ var duplicateGeneError = function (input, frequency) {
   */
 };
 
+const wrongCellA1Error = function (input, frequency) {
+    const sheet = xlsx.parse(input);
+
+    const workbook = parseNetworkSheet(sheet);
+
+    assert.exists(workbook.errors, "Expected errors array to exist in workbook");
+    assert.equal(workbook.errors.length, frequency);
+    assert.isTrue(workbook.errors.some(error => error.errorCode === "MISLABELED_NETWORK_CELL_A1"));
+};
+
 var invalidGeneLengthError = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -101,6 +111,52 @@ var missingValueError = function (input, frequency) {
     for (var i = 0; i < frequency; i++) {
         assert.equal("MISSING_VALUE", workbook.errors[i].errorCode);
     }
+};
+
+const missingAllValuesForGenes = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.equal(
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
+        `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`
+    );
+};
+
+const missingGenesAndValuesInTwoColumnSheet = function (input, frequency, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.equal(
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
+        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}WHEN_IMPORTING`
+    );
 };
 
 var missingNetworkError = function (input, frequency) {
@@ -365,6 +421,16 @@ var noWarnings = function (input) {
     assert.equal(0, workbook.warnings.length);
 };
 
+const noWarningsForAdditionalSheet = function (input, sheetName) {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, 0);
+};
+
 var missingSourceWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseNetworkSheet(sheet);
@@ -467,6 +533,62 @@ var incorrectlyNamedSheetWarning = function (input, frequency) {
     assert.equal(frequency, incorrectlyNamedSheetCount.length);
 };
 
+const unrecognizedSheetWarning = (input, frequency) => {
+    const sheet = xlsx.parse(input);
+
+    const workbook = spreadsheetController.crossSheetInteractions(sheet);
+
+    assert.exists(workbook.warnings, "Expected warnings array to exist on workbook");
+    assert.equal(workbook.warnings.length, frequency);
+    assert.equal(workbook.warnings[0].warningCode, "UNRECOGNIZED_SHEET");
+};
+
+const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.equal(
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
+        `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`
+    );
+};
+
+const missingGenesAndValuesInTwoColumnSheetsWarning = (input, frequency, sheetName) => {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.equal(
+        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
+        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
+    );
+};
+
 // GRAPH STATISTICS
 /*
 var shortestPath = function (input, directed, source, target, length) {
@@ -499,57 +621,6 @@ var betweennessCentrality = function (input, directed, node, centrality) {
 */
 
 // Additional Sheets Error Tests
-var twoColumnIdError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var twoColumnIdErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        twoColumnIdErrorCount += workbook.twoColumnSheets[page].errors.filter(function (x) {
-            return x.errorCode === "MISLABELED_ID_CELL";
-        }).length;
-    }
-    assert.equal(frequency, twoColumnIdErrorCount);
-};
-
-var additionalSheetIncorrectColumnHeaderError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var additionalSheetIncorrectColumnHeaderErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        additionalSheetIncorrectColumnHeaderErrorCount += workbook.twoColumnSheets[
-            page
-        ].errors.filter(x => x.errorCode === "INCORRECT_COLUMN_HEADER").length;
-    }
-    additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta.errors.filter(
-        x => x.errorCode === "INCORRECT_COLUMN_HEADER"
-    ).length;
-    if (workbook.meta2.errors !== undefined) {
-        additionalSheetIncorrectColumnHeaderErrorCount += workbook.meta2.errors.filter(
-            x => x.errorCode === "INCORRECT_COLUMN_HEADER"
-        ).length;
-    }
-    assert.equal(frequency, additionalSheetIncorrectColumnHeaderErrorCount);
-};
-
-var additionalSheetMissingColumnHeaderError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var additionalSheetMissingColumnHeaderErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        additionalSheetMissingColumnHeaderErrorCount += workbook.twoColumnSheets[
-            page
-        ].errors.filter(x => x.errorCode === "MISSING_COLUMN_HEADER").length;
-    }
-    additionalSheetMissingColumnHeaderErrorCount += workbook.meta.errors.filter(
-        x => x.errorCode === "MISSING_COLUMN_HEADER"
-    ).length;
-    if (workbook.meta2.warnings !== undefined) {
-        additionalSheetMissingColumnHeaderErrorCount += workbook.meta2.errors.filter(
-            x => x.errorCode === "MISSING_COLUMN_HEADER"
-        ).length;
-    }
-    assert.equal(frequency, additionalSheetMissingColumnHeaderErrorCount);
-};
 
 var twoColumnInvalidGeneTypeError = function (input, frequency) {
     var sheet = xlsx.parse(input);
@@ -563,20 +634,6 @@ var twoColumnInvalidGeneTypeError = function (input, frequency) {
         ).length;
     }
     assert.equal(frequency, twoColumnInvalidGeneTypeErrorCount);
-};
-
-var twoColumnInvalidValueError = function (input, frequency) {
-    var sheet = xlsx.parse(input);
-    var workbook = parseAdditionalSheet(sheet);
-    var twoColumnInvalidValueErrorCount = 0;
-    for (let page in workbook.twoColumnSheets) {
-        twoColumnInvalidValueErrorCount += workbook.twoColumnSheets[page].errors.filter(
-            function (x) {
-                return x.errorCode === "INVALID_VALUE";
-            }
-        ).length;
-    }
-    assert.equal(frequency, twoColumnInvalidValueErrorCount);
 };
 
 var twoColumnInvalidGeneLengthError = function (input, frequency) {
@@ -604,10 +661,27 @@ var twoColumnSpecialCharacterError = function (input, frequency) {
             }
         ).length;
     }
-    assert.equal(frequency, twoColumnSpecialCharacterErrorCount);
+
+    assert.equal(twoColumnSpecialCharacterErrorCount, frequency);
 };
 
-// Additional Sheets Warning Tests
+const twoColumnInvalidDataTypeError = function (input, sheetName, frequency) {
+    const sheet = xlsx.parse(input);
+
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].errors,
+        `Expected errors array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].errors.length, frequency);
+    assert.equal(workbook.twoColumnSheets[sheetName].errors[0].errorCode, "INVALID_VALUE");
+};
 
 var additionalSheetExtraneousDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
@@ -693,6 +767,76 @@ var incorrectMSEHeaderWarning = function (input, frequency) {
     assert.equal(frequency, incorrectMSEHeaderWarningCount);
 };
 
+const additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning = function (
+    input,
+    frequency,
+    isMissingOptimizationDiagnosticsSheet = false
+) {
+    const sheet = xlsx.parse(input);
+    const expectedWarningCode = isMissingOptimizationDiagnosticsSheet
+        ? "MISSING_COLUMN_HEADER_OPTIMIZATION_PARAMETERS"
+        : "INCORRECT_COLUMN_HEADER_OPTIMIZATION_PARAMETERS";
+
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.meta, "Expected meta to exist on workbook");
+    assert.exists(workbook.meta.warnings, "Expected warnings array to exist on meta of workbook");
+    assert.equal(workbook.meta.warnings.length, frequency);
+    assert.isTrue(
+        workbook.meta.warnings.some(warning => warning.warningCode === expectedWarningCode)
+    );
+};
+
+const additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning = function (
+    input,
+    frequency,
+    isMissingOptimizationDiagnosticsSheet = false
+) {
+    const sheet = xlsx.parse(input);
+    const expectedWarningCode = isMissingOptimizationDiagnosticsSheet
+        ? "MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS"
+        : "INCORRECT_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS";
+
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.meta2, "Expected meta to exist on workbook");
+    assert.exists(workbook.meta2.warnings, "Expected warnings array to exist on meta of workbook");
+    assert.equal(workbook.meta2.warnings.length, frequency);
+    assert.isTrue(
+        workbook.meta2.warnings.some(warning => warning.warningCode === expectedWarningCode)
+    );
+};
+
+const additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning = function (
+    input,
+    frequency,
+    sheetName,
+    isMissingSheet = false
+) {
+    const sheet = xlsx.parse(input);
+    const expectedWarningCode = isMissingSheet
+        ? `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`
+        : `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`;
+
+    const workbook = parseAdditionalSheet(sheet);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook.`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.isTrue(
+        workbook.twoColumnSheets[sheetName].warnings.some(
+            warning => warning.warningCode === expectedWarningCode
+        )
+    );
+};
+
 var missingMSEDataWarning = function (input, frequency) {
     var sheet = xlsx.parse(input);
     var workbook = parseAdditionalSheet(sheet);
@@ -742,7 +886,7 @@ var importExportReImportNoErrorsOrWarnings = function (input) {
     var exportedWorkbook = exportController.grnsightToXlsx(inputWorkbook);
     var sheet2 = xlsx.parse(exportedWorkbook);
     var reImportedWorkbook = spreadsheetController.crossSheetInteractions(sheet2);
-    assert.equal(0, reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length);
+    assert.equal(reImportedWorkbook.errors.length + reImportedWorkbook.warnings.length, 0);
 };
 
 var importFileSameAsExportFile = function (input) {
@@ -804,13 +948,10 @@ exports.emptyRowDataError = emptyRowDataError;
 exports.emptyMatrixDataError = emptyMatrixDataError;
 exports.emptyColumnDataError = emptyColumnDataError;
 exports.emptyColumnError = emptyColumnError;
-exports.twoColumnIdError = twoColumnIdError;
-exports.additionalSheetIncorrectColumnHeaderError = additionalSheetIncorrectColumnHeaderError;
-exports.additionalSheetMissingColumnHeaderError = additionalSheetMissingColumnHeaderError;
 exports.twoColumnInvalidGeneTypeError = twoColumnInvalidGeneTypeError;
-exports.twoColumnInvalidValueError = twoColumnInvalidValueError;
 exports.twoColumnInvalidGeneLengthError = twoColumnInvalidGeneLengthError;
 exports.twoColumnSpecialCharacterError = twoColumnSpecialCharacterError;
+exports.twoColumnInvalidDataTypeError = twoColumnInvalidDataTypeError;
 
 exports.checkForGene = checkForGene;
 exports.noWarnings = noWarnings;
@@ -830,11 +971,27 @@ exports.invalidOptimizationParameterWarning = invalidOptimizationParameterWarnin
 exports.unknownOptimizationDiagnosticsParameterWarning =
     unknownOptimizationDiagnosticsParameterWarning;
 exports.invalidOptimizationDiagnosticsValueWarning = invalidOptimizationDiagnosticsValueWarning;
+exports.additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning =
+    additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning;
+exports.additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning =
+    additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning;
+exports.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning =
+    additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning;
 exports.optimizationDiagnosticsExtraneousDataWarning = optimizationDiagnosticsExtraneousDataWarning;
 exports.incorrectMSEGeneHeaderWarning = incorrectMSEGeneHeaderWarning;
 exports.incorrectMSEHeaderWarning = incorrectMSEHeaderWarning;
 exports.missingMSEDataWarning = missingMSEDataWarning;
 exports.invalidMSEDataWarning = invalidMSEDataWarning;
+exports.unrecognizedSheetWarning = unrecognizedSheetWarning;
+exports.missingGenesAndValuesInTwoColumnSheetsWarning =
+    missingGenesAndValuesInTwoColumnSheetsWarning;
+exports.noWarningsForAdditionalSheet = noWarningsForAdditionalSheet;
+exports.missingAllValuesForGenes = missingAllValuesForGenes;
+exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheetWarning;
+exports.missingGenesAndValuesInTwoColumnSheetsWarning =
+    missingGenesAndValuesInTwoColumnSheetsWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
+
+exports.wrongCellA1Error = wrongCellA1Error;

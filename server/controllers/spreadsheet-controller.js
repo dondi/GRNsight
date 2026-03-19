@@ -120,10 +120,11 @@ var crossSheetInteractions = function (workbookFile) {
     // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
 
     var networks = parseNetworkSheet.networks(workbookFile);
+    const genes = networks.network.genes.map(gene => gene.name);
 
     // Parse expression and 2-column data, then add to workbook object
     // Eventually, will split this up into parsing for each type of sheet.
-    var additionalData = parseAdditionalSheets(workbookFile);
+    const additionalData = parseAdditionalSheets(workbookFile, genes);
 
     var expressionData = parseExpressionSheets(workbookFile);
 
@@ -203,6 +204,10 @@ var crossSheetInteractions = function (workbookFile) {
         if (additionalData.meta2.warnings !== undefined) {
             additionalData.meta2.warnings.forEach(data => workbook.warnings.push(data));
         }
+    }
+
+    if (additionalData && additionalData.warnings) {
+        workbook.warnings.push(...additionalData.warnings);
     }
 
     additionalData.meta.data.workbookType = parseNetworkSheet.workbookType(workbookFile);
@@ -321,6 +326,20 @@ var crossSheetInteractions = function (workbookFile) {
                     addError(workbook, constants.errors.extraGeneNamesError(sheet.name));
                 }
             }
+        }
+    });
+
+    const validSheetNames = [
+        ...constants.TWO_COL_SHEET_NAMES,
+        ...constants.NETWORK_SHEET_NAMES,
+        ...constants.OPTIONAL_TWO_COL_SHEET_NAMES,
+    ];
+
+    workbookFile.forEach(function (sheet) {
+        const isRecognizedSheet =
+            validSheetNames.includes(sheet.name) || isExpressionSheet(sheet.name);
+        if (!isRecognizedSheet) {
+            addWarning(workbook, constants.warnings.unrecognizedSheetWarning(sheet.name));
         }
     });
 

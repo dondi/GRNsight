@@ -1,116 +1,218 @@
 import { useEffect, useRef, useContext, useState } from "react";
 import * as d3 from "d3";
 import { GrnStateContext } from "../App";
-import { getDemoWorkbook, getDemoEndpoint } from "../services/api";
+import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../services/api";
+import ScaleAndScroll from "./ScaleAndScroll";
 import {
   BOUNDARY_MARGIN,
-  ZOOM_DISPLAY_MINIMUM_VALUE,
-  ZOOM_DISPLAY_MAXIMUM_VALUE,
-  ZOOM_DISPLAY_MIDDLE,
   ZOOM_ADAPTIVE_MAX_SCALE,
   MINIMUM_NODE_WIDTH,
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
   MIN_SCALE,
-  MIDDLE_SCALE,
-  EDGE_RED,
-  EDGE_BLACK,
-  EDGE_BLUE,
-} from "../constants";
+  ZOOM_DISPLAY_MIDDLE,
+  VIEW_SIZE_SMALL,
+  FIT_TO_WINDOW,
+  VIEW_SIZE_DIMENSIONS,
+  HEIGHT_OFFSET,
+  WIDTH_OFFSET,
+} from "../helpers/constants";
 import {
   getNodeWidth,
   getEdgeThickness,
   getEdgeColor,
   createPath,
   createSelfLoop,
+  calcAllWeights,
+  calcMaxWeight,
 } from "../helpers/graphHelpers";
-
+import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
 import "../App.css";
 
 export default function Graph() {
   const svgRef = useRef(null);
   const containerRef = useRef(null);
   const simulationRef = useRef(null);
+  const zoomRef = useRef(null);
+  const zoomContainerRef = useRef(null);
 
+  // The workbook or sheetType are not needed in global state outside of Graph, so keep them local
   const [workbook, setWorkbook] = useState(null);
+  const [sheetType, setSheetType] = useState(null);
+  const [allWeights, setAllWeights] = useState([]);
+  const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [zoomScale, setZoomScale] = useState(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  const [isDragging, setIsDragging] = useState(false);
+  const zoomDragPrevX = useRef(0);
+  const zoomDragPrevY = useRef(0);
 
   const {
-    demoValue,
+    colorOptimal,
     linkDistance,
     charge,
-    enableNodeColoring,
-    enableEdgeColoring,
-    logFoldChangeMax,
-    edgeWeightVisibility,
-    adaptive,
+    demoValue,
+    networkMode,
+    setNetworkMode,
+    grayThreshold,
+    zoomPercent,
+    setZoomPercent,
+    viewSize,
   } = useContext(GrnStateContext);
 
   // Load workbook data
   useEffect(() => {
     if (!demoValue) return;
-
     const demoEndpoint = getDemoEndpoint(demoValue);
     setLoading(true);
 
     getDemoWorkbook(demoEndpoint)
       .then(data => {
         setWorkbook(data);
+        setSheetType(data.sheetType);
+        setNetworkMode(getNetworkMode(data.meta.data.workbookType));
+        const weights = calcAllWeights(data, colorOptimal);
+        setAllWeights(weights);
+        setMaxWeight(calcMaxWeight(weights));
         setError(null);
       })
       .catch(err => {
         setError(err.message);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setZoomPercent(ZOOM_DISPLAY_MIDDLE);
+      });
   }, [demoValue]);
+
+  // TODO: need to update with adaptive (restrict to viewport)
+  useEffect(() => {
+    if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
+    const scale = zoomPercent / 100;
+    const zoomContainer = d3.select(zoomContainerRef.current);
+    zoomRef.current.scaleTo(zoomContainer, scale);
+  }, [zoomPercent]);
+
+  // Handle window resize for Fit to Window
+  useEffect(() => {
+    if (viewSize !== FIT_TO_WINDOW) return;
+
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [viewSize]);
+
+  // Change viewport size based on selection
+  useEffect(() => {
+    if (!viewSize) {
+      setWidth(VIEW_SIZE_SMALL);
+      setHeight(VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL].height);
+    } else if (viewSize === FIT_TO_WINDOW) {
+      setWidth(windowDimensions.width - WIDTH_OFFSET);
+      setHeight(windowDimensions.height - HEIGHT_OFFSET);
+    } else {
+      setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
+      setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
+    }
+  }, [viewSize, windowDimensions]);
 
   // Main D3 rendering effect
   useEffect(() => {
-    if (!workbook || !svgRef.current || !containerRef.current) return;
+    if (!workbook || !svgRef.current || !containerRef.current || !width || !height) return;
 
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
 
-    const container = containerRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    // Setup cursor styling for drag of graph
+    const zoomDragStarted = function (event, d) {
+      zoomDragPrevX.current = event.x;
+      zoomDragPrevY.current = event.y;
+      setIsDragging(true);
+    };
 
-    // Create SVG
-    const svg = d3.select(svgRef.current).attr("width", width).attr("height", height);
+    const zoomDragged = function (event, d) {
+      let scale = 1;
+      if (zoomContainer.attr("transform")) {
+        let string = zoomContainer.attr("transform");
+        scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+      }
 
-    // Create defs for arrowhead markers
+      // TODO: add Restrict Graph to Viewport support like flexZoomInBounds and viewportBoundsMoveDrag in classic
+      // if (
+      //   adaptive ||
+      //   (!adaptive &&
+      //     flexZoomInBounds(graphZoom) &&
+      //     viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
+      // ) {
+      zoom.translateBy(
+        zoomContainer,
+        scale * (event.x - zoomDragPrevX.current),
+        scale * (event.y - zoomDragPrevY.current)
+      );
+      // }
+      zoomDragPrevX.current = event.x;
+      zoomDragPrevY.current = event.y;
+    };
+
+    const zoomDragEnded = function (event, d) {
+      setIsDragging(false);
+    };
+
+    // zoomDrag and all functions that it calls handles cursor dragging
+    const zoomDrag = d3
+      .drag()
+      .on("start", zoomDragStarted)
+      .on("drag", zoomDragged)
+      .on("end", zoomDragEnded);
+
+    const svg = d3
+      .select(svgRef.current)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("id", "exportContainer");
+
+    svg.style("pointer-events", "all").call(zoomDrag).style("font-family", "sans-serif");
+
+    d3.select("svg").on("dblclick.zoom", null); // disables double click zooming
+
     const defs = svg.append("defs");
 
-    // Define arrowhead markers for different colors
-    const arrowColors = [
-      { id: "arrowhead-black", color: EDGE_BLACK },
-      { id: "arrowhead-red", color: EDGE_RED },
-      { id: "arrowhead-blue", color: EDGE_BLUE },
-    ];
+    createAllMarkers({ defs, links: workbook.links, networkMode });
 
-    arrowColors.forEach(({ id, color }) => {
-      defs
-        .append("marker")
-        .attr("id", id)
-        .attr("viewBox", "0 0 10 10")
-        .attr("refX", 9) // Position at arrow tip
-        .attr("refY", 5) // Center vertically
-        .attr("markerWidth", 6)
-        .attr("markerHeight", 6)
-        .attr("orient", "auto") // Auto-rotate to match path direction
-        .append("path")
-        .attr("d", "M 0 0 L 10 5 L 0 10 z") // TODO: explain what this does
-        .style("fill", color);
-    });
-
-    // Create zoom container
     const zoomContainer = svg.append("g").attr("class", "zoom-container");
+    zoomContainerRef.current = zoomContainer.node();
 
-    const boundingBoxContainer = zoomContainer.append("g").attr("class", "bounding-box-container");
+    const boundingBoxContainer = zoomContainer.append("g");
 
-    // Setup zoom behavior
+    const boundingBoxRect = boundingBoxContainer
+      .append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .style("fill", "none")
+      .style("pointer-events", "all")
+      .attr("stroke", "none")
+      .attr("id", "boundingBoxRect");
+
+    const flexibleContainerRect = boundingBoxContainer
+      .append("rect")
+      .attr("class", "boundingBox")
+      .attr("fill", "none")
+      .attr("id", "flexibleContainerRect");
+
     const zoom = d3
       .zoom()
       .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
@@ -118,7 +220,17 @@ export default function Graph() {
         zoomContainer.attr("transform", event.transform);
       });
 
-    svg.call(zoom);
+    zoomRef.current = zoom;
+
+    // D-pad controls
+    d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
+    var arrowMovement = ["Up", "Left", "Right", "Down"];
+    arrowMovement.forEach(function (direction) {
+      d3.select(".scroll" + direction).on("click", function () {
+        move(direction.toLowerCase());
+      });
+    });
+    d3.select(".center").on("click", center);
 
     // Create force simulation
     const simulation = d3
@@ -147,16 +259,25 @@ export default function Graph() {
     link
       .append("path")
       .attr("class", "link-path")
-      .style("stroke", d => getEdgeColor(workbook, d))
-      .style("stroke-width", d => getEdgeThickness(workbook, enableEdgeColoring, d))
+      .style("stroke", d => {
+        d.stroke = getEdgeColor(workbook, d, grayThreshold, maxWeight, colorOptimal);
+        return d.stroke;
+      })
+      .style("stroke-width", d => {
+        d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
+        return d.strokeWidth;
+      })
       .style("fill", "none")
       .attr("marker-end", d => {
-        // Return the appropriate marker based on edge color
-        if (workbook.sheetType === "unweighted") {
-          return "url(#arrowhead-black)";
-        }
-        return d.value < 0 ? "url(#arrowhead-blue)" : "url(#arrowhead-red)";
+        // Set ONCE - Safari needs this to be static after markers exist
+        return getEdgeMarkerId({
+          d,
+          colorOptimal,
+          networkMode,
+        });
       });
+
+    const drag = d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
 
     // Create nodes
     const node = boundingBoxContainer
@@ -165,7 +286,8 @@ export default function Graph() {
       .enter()
       .append("g")
       .attr("class", "node")
-      .call(d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended));
+      .call(drag)
+      .on("dblclick", dblclick);
 
     // Add rectangles for nodes
     node
@@ -174,7 +296,7 @@ export default function Graph() {
       .attr("height", NODE_HEIGHT)
       .style("fill", "white")
       .style("stroke", "#000")
-      .style("stroke-width", "2px");
+      .style("stroke-width", "1.5px");
 
     // Add text labels
     node
@@ -198,7 +320,6 @@ export default function Graph() {
         .attr("width", NODE_MARGIN + d.textWidth + NODE_MARGIN);
     });
 
-    // Helper functions
     function dragstarted(event, d) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
@@ -212,21 +333,43 @@ export default function Graph() {
 
     function dragended(event, d) {
       if (!event.active) simulation.alphaTarget(0);
+    }
+
+    function dblclick(event, d) {
       d.fx = null;
       d.fy = null;
     }
 
-    // Tick function
-    simulation.on("tick", () => {
-      // Update link positions with Bézier curves
-      link.select("path").attr("d", d => {
-        if (d.source === d.target) {
-          return createSelfLoop(d);
-        }
-        return createPath(d, width, height);
-      });
+    function center() {
+      zoom.translateTo(zoomContainer, width / 2, height / 2);
+    }
 
-      // Update node positions
+    // move: Moves graph with D-pad
+    // TODO: will need to update with adaptive
+    function move(direction) {
+      var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
+      var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
+      zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+    }
+
+    simulation.on("tick", () => {
+      link
+        .select("path")
+        .attr("d", d => {
+          if (d.source === d.target) {
+            return createSelfLoop(d, width, height, colorOptimal);
+          }
+          return createPath(d, width, height, colorOptimal);
+        })
+        .attr("marker-end", d => {
+          // Update marker-end during tick so repressors can switch between horizontal/vertical
+          return getEdgeMarkerId({
+            d,
+            colorOptimal,
+            networkMode,
+          });
+        });
+
       node.attr("transform", d => {
         d.x = Math.max(
           BOUNDARY_MARGIN,
@@ -237,26 +380,21 @@ export default function Graph() {
       });
     });
 
-    // Cleanup
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, enableEdgeColoring, enableNodeColoring]);
-  if (loading) {
-    return <div className="grnsight-container">Loading graph...</div>;
-  }
-
-  if (error) {
-    return <div className="grnsight-container">Error: {error}</div>;
-  }
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, viewSize, windowDimensions]);
 
   return (
     <div
       ref={containerRef}
-      className="grnsight-container"
-      style={{ width: "100%", height: "600px" }}
+      className={`grnsight-container ${isDragging ? "dragging" : "draggable"}`}
+      style={width && height ? { width, height } : { ...VIEW_SIZE_DIMENSIONS[VIEW_SIZE_SMALL] }}
     >
-      <svg ref={svgRef} style={{ width: "100%", height: "100%" }} />
+      {loading && <div>Loading graph...</div>}
+      {error && <div>Error: {error}</div>}
+      <svg ref={svgRef} />
+      <ScaleAndScroll />
     </div>
   );
 }

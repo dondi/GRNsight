@@ -2,9 +2,7 @@ export const theme = {
   global: {
     colors: {
       text: "#333",
-      control: {
-        transparent: "transparent",
-      },
+      control: "blue",
     },
     font: {
       family: "Helvetica Neue, Helvetica, Arial, sans-serif",
@@ -23,7 +21,7 @@ export const theme = {
   },
   radioButton: {
     border: {
-      color: "#333",
+      color: "#777",
       width: "1px",
     },
     check: {
@@ -38,6 +36,7 @@ export const theme = {
       },
     },
     size: "13px",
+    color: "blue",
   },
   rangeInput: {
     thumb: {

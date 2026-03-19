@@ -9,7 +9,11 @@ import { stopLoadingIcon, startLoadingIcon } from "./update-app";
 import { queryExpressionDatabase } from "./api/grnsight-api.js";
 import { NETWORK_PPI_MODE, NETWORK_GRN_MODE } from "./constants.js";
 import { displayExportWarnings } from "./warnings.js";
-import { warnings } from "./export-constants.js";
+import { warnings } from "./export-warning-constants.js";
+import {
+    buildPostFetchTwoColumnWarnings,
+    buildPreFetchTwoColumnWarnings,
+} from "./two_column_sheets_warnings.js";
 
 const EXPRESSION_SHEET_SUFFIXES = ["_expression", "_optimized_expression", "_sigmas"];
 
@@ -86,53 +90,85 @@ export const upload = function () {
         return result;
     };
 
-    var filenameWithExtension = function (suffix, extension) {
+    var filenameWithExtension = function (mode, genes, edges, type, extension) {
         var filename = $("#fileName").text();
+        var source = null;
         var currentExtension = filename.match(/\.[^\.]+$/);
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (suffix) {
-            filename = filename + "_" + suffix;
+        if (Object.keys(grnState.workbook.expression).length > 0) {
+            source = $("input[name=expressionSource]:checked")[0].value;
+            if (source === "userInput") {
+                source = "user-data";
+            }
         }
 
-        return filename + "." + extension;
+        if (mode !== "grn") {
+            mode = "PPI";
+        }
+        if (mode !== null && genes !== null && edges !== null && type !== null) {
+            filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
+        }
+        const { source: expressionSource } = grnState.workbook.expression; // Only demos will have this.
+        if (expressionSource || source) {
+            // In almost all cases, we will use source. But some demos will pre-empt this choice.
+            filename = `${filename}_${expressionSource || source}`;
+        }
+        return `${filename}.${extension}`;
+    };
+
+    const download = (workbook, route, extension, sheetType) => {
+        const workbookToExport = flattenWorkbook(workbook, sheetType);
+        var workbookFilename = filenameWithExtension(
+            grnState.mode,
+            grnState.workbook.genes.length,
+            grnState.workbook.links.length,
+            sheetType,
+            extension
+        );
+
+        workbookToExport.filename = workbookFilename;
+
+        const exportForm = $("<form></form>")
+            .attr({
+                method: "POST",
+                action: $(".service-root").val() + "/" + route,
+            })
+            .append(
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "filename",
+                    value: workbookFilename,
+                })
+            )
+            .append(
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "workbook",
+                    value: JSON.stringify(workbookToExport),
+                })
+            );
+
+        $("body").append(exportForm);
+        exportForm.submit();
+        exportForm.remove();
     };
 
     const exportExcel = (route, extension, sheetType) => {
-        if (uploadState.currentWorkbook.exportSheets.warnings.length > 0) {
-            displayExportWarnings(uploadState.currentWorkbook.exportSheets.warnings);
-        }
+        const warnings = uploadState.currentWorkbook.exportSheets.warnings;
+
         if (!$(this).parent().hasClass("disabled")) {
-            var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-            var workbookFilename = filenameWithExtension(
-                sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
-                extension
-            );
-            workbookToExport.filename = workbookFilename;
-            var exportForm = $("<form></form>")
-                .attr({
-                    method: "POST",
-                    action: $(".service-root").val() + "/" + route,
-                })
-                .append(
-                    $("<input></input>").attr({
-                        type: "hidden",
-                        name: "filename",
-                        value: workbookFilename,
-                    })
-                )
-                .append(
-                    $("<input></input>").attr({
-                        type: "hidden",
-                        name: "workbook",
-                        value: JSON.stringify(workbookToExport),
-                    })
-                );
-            $("body").append(exportForm);
-            exportForm.submit();
-            exportForm.remove();
+            if (warnings.length > 0) {
+                displayExportWarnings(warnings);
+                $("#warningsModal").one("hidden.bs.modal", () => {
+                    download(uploadState.currentWorkbook, route, extension, sheetType);
+                });
+            } else {
+                download(uploadState.currentWorkbook, route, extension, sheetType);
+            }
         }
+
         $("#exportExcelModal").modal("hide");
     };
 
@@ -300,45 +336,52 @@ export const upload = function () {
         }
     };
 
-    const handleExportExcelButtonExport = (route, extension, sheetType, source) => {
-        grnState.workbook.exportNetworkType = sheetType;
+    const determineChosenSheets = () => {
         const workbookSheets = $("input[name=workbookSheets]:checked");
-        var chosenSheets = [];
-        for (const [key, value] of Object.entries(workbookSheets)) {
-            if (!isNaN(parseInt(key, 10))) {
-                if (value.value === "select all") {
-                    const allWorkbookSheets = $("input[name=workbookSheets]");
-                    chosenSheets = [];
-                    for (const [k, v] of Object.entries(allWorkbookSheets)) {
-                        if (!isNaN(parseInt(k, 10))) {
-                            if (v.value !== "select all") {
-                                chosenSheets.push(v.value);
-                            }
-                        }
+        let chosenSheets = [];
+
+        workbookSheets.each(function () {
+            const value = $(this).val();
+
+            if (value === "select all") {
+                chosenSheets = [];
+                $("input[name=workbookSheets]").each(function () {
+                    const sheetValue = $(this).val();
+                    if (sheetValue !== "select all") {
+                        chosenSheets.push(sheetValue);
                     }
-                    break;
-                } else {
-                    chosenSheets.push(value.value);
-                }
+                });
+                return false;
             }
-        }
+            chosenSheets.push(value);
+        });
+        return chosenSheets;
+    };
+
+    const prepareFinalExportSheets = (chosenSheets, source) => {
         const finalExportSheets = {
             networks: {},
             expression: {},
             two_column_sheets: {},
             warnings: [],
         };
+
         const twoColumnSheets = grnState.workbook.twoColumnSheets
             ? Object.keys(grnState.workbook.twoColumnSheets)
             : [];
-        // Collect all of the Sheets to be exported
+        // network, network weights, network optimized sheets are created for export
         for (let sheet of chosenSheets) {
             if (sheet === "network_optimized_weights") {
                 finalExportSheets.networks[sheet] = grnState.workbook.networkOptimizedWeights;
             } else if (sheet === "network") {
                 finalExportSheets.networks[sheet] = grnState.workbook.network;
             } else if (sheet === "network_weights") {
-                finalExportSheets.networks[sheet] = grnState.workbook.network; // network_weights is identical to network
+                // if network weights does not exist, new network_weights sheet is created from network sheet
+                if (!grnState.workbook.networkWeights) {
+                    finalExportSheets.networks[sheet] = grnState.workbook.network;
+                } else {
+                    finalExportSheets.networks[sheet] = grnState.workbook.networkWeights;
+                }
             } else if (sheet === "optimization_diagnostics") {
                 // Get the additional Sheets
                 finalExportSheets[sheet] = grnState.workbook.meta2;
@@ -348,124 +391,86 @@ export const upload = function () {
                 finalExportSheets.expression[sheet] =
                     source === "userInput" ? grnState.workbook.expression[sheet] : null;
             } else {
-                if (source === "userInput" && twoColumnSheets.indexOf(sheet) !== -1) {
-                    finalExportSheets.two_column_sheets[sheet] =
-                        grnState.workbook.twoColumnSheets[sheet];
-                } else {
-                    // Generate the two column sheet specified
-                    if (
-                        source === "userInput" &&
-                        Object.keys(finalExportSheets.two_column_sheets).includes(sheet)
-                    ) {
-                        finalExportSheets.two_column_sheets[sheet] =
-                            grnState.workbook.two_column_sheets[sheet];
-                    } else if (sheet === "threshold_b") {
-                        finalExportSheets.two_column_sheets[sheet] = {
-                            data: {},
-                            errors: [],
-                            warnings: [],
-                        };
-                        for (let g of grnState.workbook.genes) {
-                            finalExportSheets.two_column_sheets[sheet].data[g.name] = 0;
-                        }
-                    } else {
-                        finalExportSheets.two_column_sheets[sheet] = null;
-                    }
-                }
+                finalExportSheets.two_column_sheets[sheet] = grnState.workbook.twoColumnSheets
+                    ? grnState.workbook.twoColumnSheets[sheet]
+                    : null;
             }
         }
+
+        return finalExportSheets;
+    };
+
+    const fetchTwoColumnSheets = async (finalExportSheets, chosenSheets, source) => {
         const twoColumnSheetType = {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
+            threshold_b: "ThresholdB",
         };
-        const twoColumnQuerySheets = Object.keys(finalExportSheets.two_column_sheets).filter(
-            x =>
-                finalExportSheets.two_column_sheets[x] === null ||
-                (finalExportSheets.two_column_sheets[x] &&
-                    Object.keys(finalExportSheets.two_column_sheets[x].data).length === 0)
-        );
-        if (twoColumnQuerySheets.length > 0) {
-            // if we need to query production rates and degradation rates
-            for (let sheet of twoColumnQuerySheets) {
-                if (
-                    finalExportSheets.two_column_sheets[sheet] === null ||
-                    (finalExportSheets.two_column_sheets[sheet] &&
-                        Object.keys(finalExportSheets.two_column_sheets[sheet].data).length === 0)
-                ) {
-                    let result = {
-                        data: {},
-                        errors: [],
-                        warnings: [],
-                    };
-                    let genes = [];
-                    for (let g of grnState.workbook.genes) {
-                        genes.push(g.name);
+
+        const { chosenTwoColumnSheets, sheetsToFetch, warningsToAdd } =
+            buildPreFetchTwoColumnWarnings({
+                workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
+                chosenSheets,
+                source,
+                warningsConstants: warnings,
+                workbookWarnings: grnState.workbook.warnings,
+            });
+
+        finalExportSheets.warnings.push(...warningsToAdd);
+
+        if (sheetsToFetch.length > 0) {
+            await Promise.all(
+                sheetsToFetch.map(async sheet => {
+                    const genes = grnState.workbook.genes.map(g => g.name).join(",");
+                    try {
+                        const response = await queryExpressionDatabase({
+                            type: twoColumnSheetType[sheet],
+                            genes,
+                        });
+                        finalExportSheets.two_column_sheets[sheet] = {
+                            data: response,
+                            errors: [],
+                            warnings: [],
+                        };
+                    } catch (error) {
+                        expressionExportErrorHandler(error);
+                        finalExportSheets.two_column_sheets[sheet] = {
+                            data: {},
+                            errors: [error],
+                            warnings: [],
+                        };
                     }
-
-                    queryExpressionDatabase({
-                        type: twoColumnSheetType[sheet],
-                        genes: grnState.workbook.genes
-                            .map(x => {
-                                return x.name;
-                            })
-                            .join(","),
-                    })
-                        .then(function (response) {
-                            result.data = response;
-
-                            const missingGenes = genes.filter(
-                                gene => result.data[gene] === undefined
-                            );
-
-                            if (missingGenes.length > 0) {
-                                const missingGenesStr = missingGenes.join(", ");
-
-                                const warningGenerators = {
-                                    production_rates:
-                                        warnings.MISSING_PRODUCTION_RATES_EXPORT_WARNING,
-                                    degradation_rates:
-                                        warnings.MISSING_DEGRADATION_RATES_EXPORT_WARNING,
-                                };
-
-                                const warningGenerator = warningGenerators[sheet];
-                                if (warningGenerator) {
-                                    finalExportSheets.warnings.push(
-                                        warningGenerator(missingGenesStr)
-                                    );
-                                }
-                            }
-
-                            finalExportSheets.two_column_sheets[sheet] = result;
-                            if (
-                                !Object.values(finalExportSheets.two_column_sheets).includes(null)
-                            ) {
-                                // if we got all of the two column sheets, then proceed with export
-                                handleExpressionDataAndExport(
-                                    route,
-                                    extension,
-                                    sheetType,
-                                    source,
-                                    finalExportSheets
-                                );
-                            }
-                        })
-                        .catch(error => expressionExportErrorHandler(error));
-                }
-            }
-        } else {
-            // you already have all of your two column sheet, so move through expressi5on
-            handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
+                })
+            );
         }
+
+        const uniqueMissingGenesWarnings = buildPostFetchTwoColumnWarnings(
+            grnState.workbook.genes,
+            finalExportSheets.two_column_sheets,
+            sheetsToFetch,
+            warnings,
+            finalExportSheets.warnings
+        );
+        finalExportSheets.warnings.push(...uniqueMissingGenesWarnings);
+
+        return finalExportSheets;
+    };
+
+    const handleExportExcelButtonExport = async (route, extension, sheetType, source) => {
+        grnState.workbook.exportNetworkType = sheetType;
+
+        const chosenSheets = determineChosenSheets();
+        let finalExportSheets = prepareFinalExportSheets(chosenSheets, source);
+        finalExportSheets = await fetchTwoColumnSheets(finalExportSheets, chosenSheets, source);
+
+        handleExpressionDataAndExport(route, extension, sheetType, source, finalExportSheets);
     };
 
     const determineWorkbookType = function () {
         const workbookSheets = $("input[name=workbookSheets]:checked");
         for (const [key, value] of Object.entries(workbookSheets)) {
             if (!isNaN(parseInt(key, 10))) {
-                if (
-                    value.value === "network_weights" ||
-                    value.value === "network_optimized_weights"
-                ) {
+                if (value.value === "network_optimized_weights") {
                     return "weighted";
                 }
             }
@@ -474,44 +479,21 @@ export const upload = function () {
     };
 
     var performExport = function (route, extension, sheetType, source) {
-        return function (e) {
+        return async function (e) {
             if (e) {
                 e.preventDefault();
             }
             // Deleted event parameter
             if (route === "export-to-excel" && source) {
-                handleExportExcelButtonExport(route, extension, determineWorkbookType(), source);
+                await handleExportExcelButtonExport(
+                    route,
+                    extension,
+                    determineWorkbookType(),
+                    source
+                );
             } else {
                 if (!$(this).parent().hasClass("disabled")) {
-                    var workbookToExport = flattenWorkbook(uploadState.currentWorkbook, sheetType);
-                    var workbookFilename = filenameWithExtension(
-                        sheetType !== uploadState.currentWorkbook.sheetType ? sheetType : "",
-                        extension
-                    );
-                    workbookToExport.filename = workbookFilename;
-
-                    var exportForm = $("<form></form>")
-                        .attr({
-                            method: "POST",
-                            action: $(".service-root").val() + "/" + route,
-                        })
-                        .append(
-                            $("<input></input>").attr({
-                                type: "hidden",
-                                name: "filename",
-                                value: workbookFilename,
-                            })
-                        )
-                        .append(
-                            $("<input></input>").attr({
-                                type: "hidden",
-                                name: "workbook",
-                                value: JSON.stringify(workbookToExport),
-                            })
-                        );
-                    $("body").append(exportForm);
-                    exportForm.submit();
-                    exportForm.remove();
+                    download(uploadState.currentWorkbook, route, extension, sheetType);
                 }
             }
         };
@@ -537,6 +519,7 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
+
         if (Object.keys(grnState.workbook.expression).length > 0) {
             result += `
                         <li>
@@ -611,24 +594,44 @@ export const upload = function () {
               ]
             : [grnState.workbook.meta2 !== undefined && "optimization_diagnostics"];
         additionalsheets = additionalsheets.filter(
-            sheet => sheet && -1 !== optionalAdditionalSheets.indexOf(sheet)
+            sheet => Boolean(sheet) && sheet !== "optimization_diagnostics"
         );
         additionalsheets = [...optionalAdditionalSheets, ...additionalsheets].sort();
         additionalsheets = [...new Set(additionalsheets)];
-        for (let n of networks) {
-            const state = n[0];
-            const network = n[1];
-            result =
-                result +
-                `
+        // append each network sheet individually for unique handling
+        let network = networks[0];
+        result =
+            result +
+            `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' ${state ? 'checked="true"' : ""} value=\"${network}\" id=\'exportExcelWorkbookSheet-${network}\' class=\'export-checkbox\' ${state ? "" : "disabled"}/>
-                <label for=\'exportExcelWorkbookSheet-${network}\' id=\'exportExcelWorkbookSheet-${network}-label\' class=\'export-checkbox-label\' >
-                    ${network}
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${network[1]}\" id=\'exportExcelWorkbookSheet-${network[1]}\' class=\'export-checkbox\' disabled/>
+                <label for=\'exportExcelWorkbookSheet-${network[1]}\' id=\'exportExcelWorkbookSheet-${network[1]}-label\' class=\'export-checkbox-label\' >
+                    ${network[1]}
                 </label>
             </li>
             `;
-        }
+        let networkOptimizedWeights = networks[1];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' ${networkOptimizedWeights[0] ? 'checked="true"' : ""} value=\"${networkOptimizedWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' class=\'export-checkbox\' ${networkOptimizedWeights[0] ? "" : "disabled"}/>
+                <label for=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkOptimizedWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkOptimizedWeights[1]}
+                </label>
+            </li>
+            `;
+        let networkWeights = networks[2];
+        result =
+            result +
+            `
+            <li class=\'export-excel-workbook-sheet-option\'>
+                <input type=\'checkbox\' name=\'workbookSheets\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
+                <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkWeights[1]}-label\' class=\'export-checkbox-label\' >
+                    ${networkWeights[1]}
+                </label>
+            </li>
+            `;
         if (source === "userInput") {
             result += grnState.workbook.expressionNames
                 ? "<p class=\'export-excel-workbook-sheet-option-subheader\'> Expression Sheets </p>"
