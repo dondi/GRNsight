@@ -10,7 +10,7 @@ export const CREATE_NETWORK_MODAL = "#generateNetworkModal";
 
 export const UNWEIGHTED_DEMO_ID = ".unweighted";
 export const UNWEIGHTED_DEMO_PATH = "demo/unweighted";
-export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (15 genes, 28 edges)";
+export const UNWEIGHTED_DEMO_NAME = "Demo #1: Unweighted GRN (15 genes, 28 edges, Dahlquist Lab unpublished data)";
 export const WEIGHTED_DEMO_ID = ".weighted";
 export const WEIGHTED_DEMO_PATH = "demo/weighted";
 export const WEIGHTED_DEMO_NAME =
