@@ -16,19 +16,19 @@ import {
   EDGE_OFFSET,
 } from "./constants";
 
-function getClampBounds(edgeBounds, width, height) {
-  return {
-    minX: edgeBounds?.left ?? BOUNDARY_MARGIN,
-    maxX: edgeBounds?.right ?? width - BOUNDARY_MARGIN,
-    minY: edgeBounds?.top ?? BOUNDARY_MARGIN,
-    maxY: edgeBounds?.bottom ?? height - BOUNDARY_MARGIN,
-  };
-}
+// function getClampBounds(edgeBounds, width, height) {
+//   return {
+//     minX: edgeBounds?.left ?? BOUNDARY_MARGIN,
+//     maxX: edgeBounds?.right ?? width - BOUNDARY_MARGIN,
+//     minY: edgeBounds?.top ?? BOUNDARY_MARGIN,
+//     maxY: edgeBounds?.bottom ?? height - BOUNDARY_MARGIN,
+//   };
+// }
 
-function clampToGraphBounds(value, minBound, maxBound) {
-  const resolvedMax = Math.max(minBound, maxBound);
-  return Math.max(minBound, Math.min(resolvedMax, value));
-}
+// function clampToGraphBounds(value, minBound, maxBound) {
+//   const resolvedMax = Math.max(minBound, maxBound);
+//   return Math.max(minBound, Math.min(resolvedMax, value));
+// }
 
 export function getNodeWidth(node) {
   // console.log("node.textWidth", node.textWidth, "MINIMUM_NODE_WIDTH", MINIMUM_NODE_WIDTH);
@@ -40,39 +40,37 @@ export function normalize(d, maxWeight) {
   return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 
-export function createPath(d, width, height, colorOptimal, edgeBounds) {
-  const clampBounds = getClampBounds(edgeBounds, width, height);
-
-  const sourceW = getNodeWidth(d.source);
-  const targetW = getNodeWidth(d.target);
+export function createPath(d, width, height, colorOptimal) {
+  // Calculate adjusted source and target positions to be at center of nodes
+  // TODO: resolve issue where node.textWidth is initially calculated with undefined value
+  // TODO: confirm whether node textWidth is defined before this function is called
+  const w = getNodeWidth(d.target);
   const h = NODE_HEIGHT;
-
-  d.source.newX = d.source.x + sourceW / 2;
+  d.source.newX = d.source.x + w / 2;
   d.source.newY = d.source.y + h / 2;
 
-  let x1 = d.source.newX;
-  let y1 = d.source.newY;
+  let x1 = d.source.x;
+  let y1 = d.source.y;
+  let x2 = d.target.x;
+  let y2 = d.target.y;
 
-  d.target.centerX = d.target.x + targetW / 2;
+  d.target.centerX = d.target.x + w / 2;
   d.target.centerY = d.target.y + h / 2;
 
-  smartPathEnd(d, targetW, h, colorOptimal);
+  // This function calculates the newX and newY.
+  smartPathEnd(d, w, h, colorOptimal);
+  x1 = d.source.newX;
+  y1 = d.source.newY;
+  x2 = d.target.newX;
+  y2 = d.target.newY;
 
-  let x2 = d.target.newX;
-  let y2 = d.target.newY;
-
-  x1 = clampToGraphBounds(x1, clampBounds.minX, clampBounds.maxX);
-  y1 = clampToGraphBounds(y1, clampBounds.minY, clampBounds.maxY);
-  x2 = clampToGraphBounds(x2, clampBounds.minX, clampBounds.maxX);
-  y2 = clampToGraphBounds(y2, clampBounds.minY, clampBounds.maxY);
-
+  // Unit vectors.
   let ux = x2 - x1;
   let uy = y2 - y1;
-  const umagnitude = Math.sqrt(ux * ux + uy * uy) || 1;
-  let vx = -uy;
+  let umagnitude = Math.sqrt(ux * ux + uy * uy);
+  let vx = -uy; // Perpendicular vector.
   let vy = ux;
-  const vmagnitude = Math.sqrt(vx * vx + vy * vy) || 1;
-
+  let vmagnitude = Math.sqrt(vx * vx + vy * vy);
   ux /= umagnitude;
   uy /= umagnitude;
   vx /= vmagnitude;
@@ -95,45 +93,47 @@ export function createPath(d, width, height, colorOptimal, edgeBounds) {
   let cp2x = x2 - inlineOffset * ux + vx * orthoOffset;
   let cp2y = y2 - inlineOffset * uy + vy * orthoOffset;
 
-  cp1x = clampToGraphBounds(cp1x, clampBounds.minX, clampBounds.maxX);
-  cp1y = clampToGraphBounds(cp1y, clampBounds.minY, clampBounds.maxY);
-  cp2x = clampToGraphBounds(cp2x, clampBounds.minX, clampBounds.maxX);
-  cp2y = clampToGraphBounds(cp2y, clampBounds.minY, clampBounds.maxY);
+  cp1x = Math.min(Math.max(0, cp1x), width);
+  cp1y = Math.min(Math.max(0, cp1y), height);
+  cp2x = Math.min(Math.max(0, cp2x), width);
+  cp2y = Math.min(Math.max(0, cp2y), height);
 
   d.label = {
     x: Math.min(Math.max((x1 + cp1x + cp2x + x2) / 4, EDGE_OFFSET), width - 2 * EDGE_OFFSET),
     y: Math.min(Math.max((y1 + cp1y + cp2y + y2) / 4, EDGE_OFFSET), height - EDGE_OFFSET),
   };
 
-  return `M${x1},${y1} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
+  return `M${d.source.newX},${d.source.newY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
 }
 
 function getSelfReferringRadius(edge) {
   return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
 }
 
-export function createSelfLoop(d, width, height, colorOptimal, edgeBounds) {
-  const clampBounds = getClampBounds(edgeBounds, width, height);
-
+export function createSelfLoop(d, width, height, colorOptimal) {
   let x1 = d.source.x;
   let y1 = d.source.y;
   let x2 = d.target.x;
   let y2 = d.target.y;
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const dr = Math.sqrt(dx * dx + dy * dy);
+  let dx = x2 - x1;
+  let dy = y2 - y1;
+  let dr = Math.sqrt(dx * dx + dy * dy);
 
+  // Defaults for normal edge.
   let drx = dr;
   let dry = dr;
   let xRotation = 0; // degrees
   let largeArc = 0; // 1 or 0
   let sweep = 1; // 1 or 0
   let offset = parseFloat(d.strokeWidth);
-  let defaultNodeShift = 1.033;
 
-  // Self edge
+  // Edge adjustment values when long self-node edges get hidden behind the node.
+  let DEFAULT_NODE_SHIFT = 1.033;
+
+  // Self edge.
   if (x1 === x2 && y1 === y2) {
-    x1 = d.source.x + d.source.textWidth * defaultNodeShift;
+    // Move the position of the loop.
+    x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
     y1 = d.source.y + NODE_HEIGHT / 2 + SELF_REFERRING_Y_OFFSET;
 
     // This angle creates the loop.
@@ -148,11 +148,12 @@ export function createSelfLoop(d, width, height, colorOptimal, edgeBounds) {
     drx = getSelfReferringRadius(d);
     dry = getSelfReferringRadius(d);
 
+    // For whatever reason, the arc collapses to a point if the beginning
+    // and ending points of the arc are the same, so kludge it.
     if (d.source.textWidth > SHORT_NODE_LIMIT) {
-      defaultNodeShift += ADDITIONAL_SHIFT;
+      DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
     }
-
-    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * defaultNodeShift;
+    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * DEFAULT_NODE_SHIFT;
     y2 = d.source.y + NODE_HEIGHT;
 
     if (d.value < 0 && colorOptimal) {
@@ -160,13 +161,8 @@ export function createSelfLoop(d, width, height, colorOptimal, edgeBounds) {
     }
   }
 
-  x1 = clampToGraphBounds(x1, clampBounds.minX, clampBounds.maxX);
-  y1 = clampToGraphBounds(y1, clampBounds.minY, clampBounds.maxY);
-  x2 = clampToGraphBounds(x2, clampBounds.minX, clampBounds.maxX);
-  y2 = clampToGraphBounds(y2, clampBounds.minY, clampBounds.maxY);
-
   d.label = {
-    x: Math.min(width - 13 * offset, x1),
+    x: Math.min(width - 13 * offset, x1), // For 4 decimal places
     y: Math.min(height - offset, y1 + dry * 3),
   };
 
@@ -214,16 +210,17 @@ export function getEdgeColor(workbook, edge, grayThreshold, maxWeight, colorOpti
 }
 
 export function calcAllWeights(data, colorOptimal) {
+  // Create an array of all the network weights
   const allWeights = data.positiveWeights.concat(data.negativeWeights);
   // Assign the entire array weights of 1, if color edges turned off
   if (!colorOptimal) {
-    for (let i = 0; i < allWeights.length; i++) {
+    for (var i = 0; i < allWeights.length; i++) {
       if (allWeights[i] !== 0) {
         allWeights[i] = 1;
       }
     }
   } else {
-    for (let j = 0; j < allWeights.length; j++) {
+    for (var j = 0; j < allWeights.length; j++) {
       allWeights[j] = Math.abs(allWeights[j].toPrecision(4));
     }
   }
