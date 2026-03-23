@@ -18,6 +18,9 @@ export const DEMO_TYPES = {
 };
 
 // Graph
+export const MAX_GRAPH_HEIGHT = 5000;
+export const MAX_GRAPH_WIDTH = 5000;
+export const NODE_POS_OFFSET = 5;
 export const BOUNDARY_MARGIN = 5;
 export const MINIMUM_NODE_WIDTH = 68.5625;
 export const NODE_MARGIN = 4;

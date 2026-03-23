@@ -106,7 +106,7 @@ export function createPath(d, width, height, colorOptimal) {
   return `M${d.source.newX},${d.source.newY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
 }
 
-function getSelfReferringRadius(edge) {
+export function getSelfReferringRadius(edge) {
   return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
 }
 

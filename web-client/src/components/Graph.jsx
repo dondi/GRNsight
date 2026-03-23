@@ -17,6 +17,10 @@ import {
   VIEW_SIZE_DIMENSIONS,
   HEIGHT_OFFSET,
   WIDTH_OFFSET,
+  MAX_GRAPH_HEIGHT,
+  NODE_POS_OFFSET,
+  MAX_GRAPH_WIDTH,
+  SELF_REFERRING_Y_OFFSET,
 } from "../helpers/constants";
 import {
   getNodeWidth,
@@ -26,8 +30,17 @@ import {
   createSelfLoop,
   calcAllWeights,
   calcMaxWeight,
+  getSelfReferringRadius,
 } from "../helpers/graphHelpers";
 import { createAllMarkers, getEdgeMarkerId } from "../helpers/markerHelpers";
+import {
+  flexZoomInBounds,
+  viewportBoundsMoveDrag,
+  getLeftXBoundaryMargin,
+  getTopYBoundaryMargin,
+  getRightXBoundaryMargin,
+  getBottomYBoundaryMargin,
+} from "../helpers/restrictGraphToViewportHelpers";
 import "../App.css";
 
 export default function Graph() {
@@ -44,7 +57,6 @@ export default function Graph() {
   const [maxWeight, setMaxWeight] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [zoomScale, setZoomScale] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
   const [windowDimensions, setWindowDimensions] = useState({
@@ -52,21 +64,36 @@ export default function Graph() {
     height: window.innerHeight,
   });
   const [isDragging, setIsDragging] = useState(false);
+  const [nodes, setNodes] = useState([]);
+  const [transformState, setTransformState] = useState({ x: 0, y: 0, k: 1 });
+  const xTranslation = useRef(0);
+  const yTranslation = useRef(0);
   const zoomDragPrevX = useRef(0);
   const zoomDragPrevY = useRef(0);
+  const zoomScale = useRef(1);
 
   const {
+    demoValue,
+    viewSize,
+    adaptive,
     colorOptimal,
     linkDistance,
     charge,
-    demoValue,
     networkMode,
     setNetworkMode,
     grayThreshold,
     zoomPercent,
     setZoomPercent,
-    viewSize,
   } = useContext(GrnStateContext);
+
+  const getViewportBoundsData = () => ({
+    nodes: simulationRef.current ? simulationRef.current.nodes() : [],
+    width,
+    height,
+    xTranslation: transformState.x,
+    yTranslation: transformState.y,
+    zoomScale: transformState.k,
+  });
 
   // Load workbook data
   useEffect(() => {
@@ -77,6 +104,7 @@ export default function Graph() {
     getDemoWorkbook(demoEndpoint)
       .then(data => {
         setWorkbook(data);
+        setNodes(data.genes);
         setSheetType(data.sheetType);
         setNetworkMode(getNetworkMode(data.meta.data.workbookType));
         const weights = calcAllWeights(data, colorOptimal);
@@ -95,10 +123,11 @@ export default function Graph() {
 
   // TODO: need to update with adaptive (restrict to viewport)
   useEffect(() => {
-    if (!zoomRef.current || !svgRef.current || !zoomContainerRef.current) return;
+    if (!zoomRef.current || !zoomContainerRef.current) return;
     const scale = zoomPercent / 100;
     const zoomContainer = d3.select(zoomContainerRef.current);
     zoomRef.current.scaleTo(zoomContainer, scale);
+    zoomScale.current = scale;
   }, [zoomPercent]);
 
   // Handle window resize for Fit to Window
@@ -114,7 +143,7 @@ export default function Graph() {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [viewSize]);
+  }, [viewSize, adaptive]);
 
   // Change viewport size based on selection
   useEffect(() => {
@@ -137,6 +166,21 @@ export default function Graph() {
     // Clear previous content
     d3.select(svgRef.current).selectAll("*").remove();
 
+    // Create force simulation
+    const simulation = d3
+      .forceSimulation(workbook.genes)
+      .force(
+        "link",
+        d3
+          .forceLink(workbook.links)
+          .id(d => d.index)
+          .distance(linkDistance)
+      )
+      .force("charge", d3.forceManyBody().strength(charge))
+      .force("center", d3.forceCenter(width / 2, height / 2));
+
+    simulationRef.current = simulation;
+
     // Setup cursor styling for drag of graph
     const zoomDragStarted = function (event, d) {
       zoomDragPrevX.current = event.x;
@@ -149,21 +193,41 @@ export default function Graph() {
       if (zoomContainer.attr("transform")) {
         let string = zoomContainer.attr("transform");
         scale = 1 / +string.match(/scale\(([^\)]+)\)/)[1];
+        xTranslation.current = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
+        yTranslation.current = Number(
+          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
+        );
       }
 
-      // TODO: add Restrict Graph to Viewport support like flexZoomInBounds and viewportBoundsMoveDrag in classic
-      // if (
-      //   adaptive ||
-      //   (!adaptive &&
-      //     flexZoomInBounds(graphZoom) &&
-      //     viewportBoundsMoveDrag(graphZoom, d3.event.dx, d3.event.dy))
-      // ) {
-      zoom.translateBy(
-        zoomContainer,
-        scale * (event.x - zoomDragPrevX.current),
-        scale * (event.y - zoomDragPrevY.current)
-      );
-      // }
+      if (
+        adaptive ||
+        (!adaptive &&
+          flexZoomInBounds(
+            zoomScale.current,
+            simulation.nodes(),
+            width,
+            height,
+            xTranslation.current,
+            yTranslation.current
+          ) &&
+          viewportBoundsMoveDrag(
+            zoomScale.current,
+            event.dx,
+            event.dy,
+            simulation.nodes(),
+            width,
+            height,
+            xTranslation.current,
+            yTranslation.current
+          ))
+      ) {
+        console.log("allow move");
+        zoom.translateBy(
+          zoomContainer,
+          scale * (event.x - zoomDragPrevX.current),
+          scale * (event.y - zoomDragPrevY.current)
+        );
+      }
       zoomDragPrevX.current = event.x;
       zoomDragPrevY.current = event.y;
     };
@@ -193,31 +257,25 @@ export default function Graph() {
 
     createAllMarkers({ defs, links: workbook.links, networkMode });
 
-    const zoomContainer = svg.append("g").attr("class", "zoom-container");
+    const zoomContainer = svg
+      .append("g")
+      .attr("class", "boundingBox")
+      .attr("width", width)
+      .attr("height", height);
+
     zoomContainerRef.current = zoomContainer.node();
 
     const boundingBoxContainer = zoomContainer.append("g");
-
-    const boundingBoxRect = boundingBoxContainer
-      .append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .attr("stroke", "none")
-      .attr("id", "boundingBoxRect");
-
-    const flexibleContainerRect = boundingBoxContainer
-      .append("rect")
-      .attr("class", "boundingBox")
-      .attr("fill", "none")
-      .attr("id", "flexibleContainerRect");
 
     const zoom = d3
       .zoom()
       .scaleExtent([ZOOM_MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
       .on("zoom", event => {
         zoomContainer.attr("transform", event.transform);
+        xTranslation.current = event.transform.x;
+        yTranslation.current = event.transform.y;
+        zoomScale.current = event.transform.k;
+        setTransformState({ x: event.transform.x, y: event.transform.y, k: event.transform.k });
       });
 
     zoomRef.current = zoom;
@@ -231,21 +289,6 @@ export default function Graph() {
       });
     });
     d3.select(".center").on("click", center);
-
-    // Create force simulation
-    const simulation = d3
-      .forceSimulation(workbook.genes)
-      .force(
-        "link",
-        d3
-          .forceLink(workbook.links)
-          .id(d => d.index)
-          .distance(linkDistance)
-      )
-      .force("charge", d3.forceManyBody().strength(charge))
-      .force("center", d3.forceCenter(width / 2, height / 2));
-
-    simulationRef.current = simulation;
 
     // Create links
     const link = boundingBoxContainer
@@ -329,6 +372,45 @@ export default function Graph() {
     function dragged(event, d) {
       d.fx = event.x;
       d.fy = event.y;
+      // TODO: copy over this logic from classic
+      // if (!adaptive) {
+      //   /* fx and fy stands for fixed x and y which is when node is fixed to a position or
+      //                 to prevent tick from adjusting position of node
+      //             */
+      //   // prevents nodes from being dragged outside of right boundary
+      //   if (
+      //     d3.event.x + d.textWidth <=
+      //     -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
+      //   ) {
+      //     d.fx = d3.event.x;
+      //   } else {
+      //     d.fx =
+      //       -xTranslation / graphZoom +
+      //       BOUNDARY_MARGIN / 2 +
+      //       width / graphZoom -
+      //       BOUNDARY_MARGIN -
+      //       d.textWidth;
+      //   }
+
+      //   // prevent nodes from being dragged out of bottom boundary
+      //   if (
+      //     d3.event.y + nodeHeight <=
+      //     -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
+      //   ) {
+      //     // fy stands for fixed y
+      //     d.fy = d3.event.y;
+      //   } else {
+      //     d.fy =
+      //       -yTranslation / graphZoom +
+      //       BOUNDARY_MARGIN / 2 +
+      //       height / graphZoom -
+      //       BOUNDARY_MARGIN -
+      //       nodeHeight;
+      //   }
+      // } else {
+      //   d.fx = d3.event.x;
+      //   d.fy = d3.event.y;
+      // }
     }
 
     function dragended(event, d) {
@@ -345,14 +427,46 @@ export default function Graph() {
     }
 
     // move: Moves graph with D-pad
-    // TODO: will need to update with adaptive
     function move(direction) {
       var moveWidth = direction === "left" ? -50 : direction === "right" ? 50 : 0;
       var moveHeight = direction === "up" ? -50 : direction === "down" ? 50 : 0;
-      zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+
+      if (zoomContainer.attr("transform")) {
+        xTranslation.current = Number(zoomContainer.attr("transform").split("(")[1].split(",")[0]);
+        yTranslation.current = Number(
+          zoomContainer.attr("transform").split("(")[1].split(",")[1].split(")")[0]
+        );
+      }
+      if (
+        adaptive ||
+        (!adaptive &&
+          viewportBoundsMoveDrag(
+            zoomScale.current,
+            moveWidth,
+            moveHeight,
+            simulation.nodes(),
+            width,
+            height,
+            xTranslation.current,
+            yTranslation.current
+          ))
+      ) {
+        zoom.translateBy(zoomContainer, moveWidth, moveHeight);
+      }
     }
 
     simulation.on("tick", () => {
+      const getSelfReferringEdge = function (node) {
+        return link
+          .select("path")
+          ["_groups"][0].map(function (path) {
+            return path.__data__;
+          })
+          .filter(function (pathData) {
+            return pathData.source === node && pathData.source === pathData.target;
+          })[0];
+      };
+      const currentZoom = zoomScale.current || 1;
       link
         .select("path")
         .attr("d", d => {
@@ -370,14 +484,100 @@ export default function Graph() {
           });
         });
 
-      node.attr("transform", d => {
-        d.x = Math.max(
-          BOUNDARY_MARGIN,
-          Math.min(width - BOUNDARY_MARGIN - (d.textWidth || MINIMUM_NODE_WIDTH), d.x)
-        );
-        d.y = Math.max(BOUNDARY_MARGIN, Math.min(height - BOUNDARY_MARGIN - NODE_HEIGHT, d.y));
-        return `translate(${d.x},${d.y})`;
-      });
+      node
+        .attr("x", function (d) {
+          console.log("tick", "node", d.name, "d.x", d.x, "d.y", d.y);
+          const selfReferringEdge = getSelfReferringEdge(d);
+          const selfReferringEdgeWidth = selfReferringEdge
+            ? getSelfReferringRadius(selfReferringEdge) + selfReferringEdge.strokeWidth + 2
+            : 0;
+          let rightBoundary =
+            width - (d.textWidth + NODE_POS_OFFSET) - BOUNDARY_MARGIN - selfReferringEdgeWidth;
+          if (!adaptive) {
+            // TODO: call function here instead of calculating this value
+            rightBoundary =
+              -xTranslation / graphZoom +
+              BOUNDARY_MARGIN / 2 +
+              width / graphZoom -
+              BOUNDARY_MARGIN -
+              (d.textWidth + NODE_POS_OFFSET) -
+              selfReferringEdgeWidth;
+          }
+          // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
+          let leftBoundary = getLeftXBoundaryMargin(adaptive, currentZoom, xTranslation.current);
+          let currentXPos = Math.max(leftBoundary, Math.min(rightBoundary, d.x ?? rightBoundary));
+          // if (
+          //   adaptive &&
+          //   width < MAX_GRAPH_WIDTH &&
+          //   (currentXPos === leftBoundary || currentXPos === rightBoundary)
+          // ) {
+          //   if (!adaptive) {
+          //     width += NODE_POS_OFFSET;
+          //     boundingBoxContainer.attr("width", width);
+
+          //     link
+          //       .attr("x1", function (d) {
+          //         return d.source.x;
+          //       })
+          //       .attr("x2", function (d) {
+          //         return d.target.x;
+          //       });
+
+          //     node.attr("x", function (d) {
+          //       return d.x;
+          //     });
+          //   }
+          // }
+          return (d.x = currentXPos);
+        })
+        .attr("y", function (d) {
+          const selfReferringEdge = getSelfReferringEdge(d);
+          const selfReferringEdgeHeight = selfReferringEdge
+            ? getSelfReferringRadius(selfReferringEdge) +
+              selfReferringEdge.strokeWidth +
+              SELF_REFERRING_Y_OFFSET +
+              0.5
+            : 0;
+          let bottomBoundary = height - NODE_HEIGHT - BOUNDARY_MARGIN - selfReferringEdgeHeight;
+          if (!adaptive) {
+            bottomBoundary =
+              -yTranslation / graphZoom +
+              BOUNDARY_MARGIN / 2 +
+              height / graphZoom -
+              BOUNDARY_MARGIN -
+              NODE_HEIGHT -
+              selfReferringEdgeHeight;
+          }
+          // currentYPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
+          let topBoundary = getTopYBoundaryMargin(adaptive, currentZoom, yTranslation.current);
+          let currentYPos = Math.max(topBoundary, Math.min(bottomBoundary, d.y ?? bottomBoundary));
+
+          // if (
+          //   adaptive &&
+          //   height < MAX_GRAPH_HEIGHT &&
+          //   (currentYPos === topBoundary || currentYPos === bottomBoundary)
+          // ) {
+          //   if (!d3.select(this).classed("fixed")) {
+          //     height += NODE_POS_OFFSET;
+          //     boundingBoxContainer.attr("height", height);
+          //     link
+          //       .attr("y1", function (d) {
+          //         return d.source.y;
+          //       })
+          //       .attr("y2", function (d) {
+          //         return d.target.y;
+          //       });
+
+          //     node.attr("y", function (d) {
+          //       return d.y;
+          //     });
+          //   }
+          // }
+          return (d.y = currentYPos);
+        })
+        .attr("transform", function (d) {
+          return "translate(" + d.x + "," + d.y + ")";
+        });
     });
 
     return () => {
@@ -394,7 +594,7 @@ export default function Graph() {
       {loading && <div>Loading graph...</div>}
       {error && <div>Error: {error}</div>}
       <svg ref={svgRef} />
-      <ScaleAndScroll />
+      <ScaleAndScroll getViewportBoundsData={getViewportBoundsData} />
     </div>
   );
 }
