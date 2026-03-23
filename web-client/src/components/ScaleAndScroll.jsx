@@ -26,7 +26,7 @@ export default function ScaleAndScroll({ getViewportBoundsData }) {
 
   const handleSliderChange = event => {
     const sliderInput = parseFloat(event.target.value);
-    const viewportBoundsData = getViewportBoundsData();
+    const viewportBoundsData = !adaptive ? getViewportBoundsData() : undefined;
     // 1) slider position -> display percent
     const displayMapper =
       sliderInput <= ZOOM_SLIDER_MIDDLE ? zoomScaleSliderLeft() : zoomScaleSliderRight();

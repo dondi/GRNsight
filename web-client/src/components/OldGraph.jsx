@@ -10,7 +10,7 @@ import {
   NODE_MARGIN,
   NODE_HEIGHT,
   NODE_TEXT_HEIGHT,
-  ZOOM_MIN_SCALE,
+  MIN_SCALE,
   ZOOM_DISPLAY_MIDDLE,
   VIEW_SIZE_SMALL,
   FIT_TO_WINDOW,
@@ -215,7 +215,7 @@ export default function Graph() {
 
     const zoom = d3
       .zoom()
-      .scaleExtent([ZOOM_MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
+      .scaleExtent([MIN_SCALE, ZOOM_ADAPTIVE_MAX_SCALE])
       .on("zoom", event => {
         zoomContainer.attr("transform", event.transform);
       });
