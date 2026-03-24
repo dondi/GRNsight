@@ -20,10 +20,9 @@ export const DEMO_TYPES = {
 // Graph
 export const BOUNDARY_MARGIN = 5;
 export const MINIMUM_NODE_WIDTH = 68.5625;
-export const NODE_MARGIN = 3;
+export const NODE_MARGIN = 4;
 export const NODE_HEIGHT = 30;
 export const NODE_TEXT_HEIGHT = 22;
-export const MIN_SCALE = 0.25;
 export const MIDDLE_SCALE = 1;
 export const CURVE_THRESHOLD = 200;
 export const EDGE_OFFSET = 20;
@@ -62,16 +61,35 @@ export const HEIGHT_OFFSET = 53;
 
 // Zoom
 export const ZOOM_DISPLAY_MINIMUM = 25;
+export const ZOOM_MIN_DISPLAY = ZOOM_DISPLAY_MINIMUM;
 export const ZOOM_DISPLAY_MAXIMUM = 200;
 export const ZOOM_DISPLAY_MIDDLE = 100;
-export const ZOOM_ADAPTIVE_MAX_SCALE = 100;
+export const ZOOM_ADAPTIVE_MAX_DISPLAY = ZOOM_DISPLAY_MAXIMUM;
+export const ZOOM_ADAPTIVE_MAX_SCALE = 4;
 export const ZOOM_SLIDER_MIN = 0;
+export const ZOOM_MIN_SCALE = 0.25;
+export const ZOOM_MIDDLE_SCALE = 1;
 export const ZOOM_SLIDER_MIDDLE = 4;
 export const ZOOM_SLIDER_MAX = 8;
 // Supports non-linear zoom scale so that 100% in the middle of slider
 const createZoomScale = (domainMin, domainMax, rangeMin, rangeMax) =>
   d3.scaleLinear().domain([domainMin, domainMax]).range([rangeMin, rangeMax]).clamp(true);
 
+// Converting from zoom percentage to graph zoom scale
+export const zoomScaleLeft = () => {
+  return createZoomScale(ZOOM_MIN_DISPLAY, ZOOM_DISPLAY_MIDDLE, ZOOM_MIN_SCALE, ZOOM_MIDDLE_SCALE);
+};
+
+export const zoomScaleRight = () => {
+  return createZoomScale(
+    ZOOM_DISPLAY_MIDDLE,
+    ZOOM_ADAPTIVE_MAX_DISPLAY,
+    ZOOM_MIDDLE_SCALE,
+    ZOOM_ADAPTIVE_MAX_SCALE
+  );
+};
+
+// Converting from slider input to zoom percentage
 export const zoomScaleSliderLeft = () => {
   return createZoomScale(
     ZOOM_SLIDER_MIN,
@@ -86,6 +104,6 @@ export const zoomScaleSliderRight = () => {
     ZOOM_SLIDER_MIDDLE,
     ZOOM_SLIDER_MAX,
     ZOOM_DISPLAY_MIDDLE,
-    ZOOM_DISPLAY_MAXIMUM
+    ZOOM_ADAPTIVE_MAX_DISPLAY
   );
 };
