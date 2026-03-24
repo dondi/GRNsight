@@ -53,7 +53,7 @@ module.exports = {
                 errorDescription: [
                     `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
                     `were not in the same order as the genes in the 'network' sheet.`,
-                    `GRNsight has automatically reordered them to match`,
+                    `GRNsight has automatically reordered them to match.`,
                 ].join(" "),
             };
         },
