@@ -365,6 +365,26 @@ const checkValidGenesAndValuesInTwoColumnSheet = (
     }
 };
 
+const checkOrderOfGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) => {
+    const genesInSheet = Object.keys(output.data);
+    const presentNetworkGenesInSheet = genesInNetwork.filter(gene => genesInSheet.includes(gene));
+
+    const isWrongGeneOrder =
+        genesInSheet.length > 0 &&
+        !presentNetworkGenesInSheet.every((gene, index) => gene === genesInSheet[index]);
+
+    if (isWrongGeneOrder) {
+        addWarning(output, constants.warnings.wrongGeneOrderInTwoColumnSheet(sheetName));
+
+        // Matching order with genes in network
+        const sortedData = {};
+        genesInNetwork.forEach(gene => {
+            sortedData[gene] = output.data[gene];
+        });
+        output.data = sortedData;
+    }
+};
+
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let output = {
         data: {},
@@ -453,6 +473,8 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
                 );
             }
         }
+
+        checkOrderOfGenesInTwoColumnSheet(output, genesInNetwork, sheet.name);
     }
 
     return output;

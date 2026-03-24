@@ -46,5 +46,16 @@ module.exports = {
                 ].join(" "),
             };
         },
+
+        WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_WHEN_EXPORTING: function (sheetName) {
+            return {
+                warningCode: `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
+                    `were not in the same order as the genes in the 'network' sheet.`,
+                    `GRNsight has automatically reordered them to match`,
+                ].join(" "),
+            };
+        },
     },
 };

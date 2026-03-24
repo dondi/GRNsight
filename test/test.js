@@ -594,6 +594,11 @@ const missingGeneIdsWithValuesInTwoColumnSheetWarning = (input, frequency, sheet
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
 };
 
+const wrongGeneOrderInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+    const expectedWarningCode = `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+};
+
 const testWarningsForTwoColumnSheet = (input, frequency, sheetName, expectedWarningCode) => {
     const sheet = xlsx.parse(input);
     const networks = parseNetworkSheet(sheet);
@@ -613,6 +618,7 @@ const testWarningsForTwoColumnSheet = (input, frequency, sheetName, expectedWarn
     assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.equal(workbook.twoColumnSheets[sheetName].warnings[0].warningCode, expectedWarningCode);
 };
+
 // GRAPH STATISTICS
 /*
 var shortestPath = function (input, directed, source, target, length) {
@@ -1016,6 +1022,7 @@ exports.missingGenesAndValuesInTwoColumnSheetsWarning =
     missingGenesAndValuesInTwoColumnSheetsWarning;
 exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
     missingGeneIdsWithValuesInTwoColumnSheetWarning;
+exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
