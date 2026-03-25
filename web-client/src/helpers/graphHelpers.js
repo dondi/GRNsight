@@ -47,17 +47,12 @@ for self-loop calculation and marker ids, then line rendered with stroke-width =
 */
 export function getEffectiveStrokeWidth({ baseStrokeWidth, edge, colorOptimal, networkMode }) {
   const isRepressor = edge.value < 0 && colorOptimal;
-  const isArrowheadCase = !isRepressor;
-  const shouldPromoteThinArrowhead =
-    networkMode === NETWORK_GRN_MODE_FULL && isArrowheadCase && baseStrokeWidth === 2;
-
-  return shouldPromoteThinArrowhead ? 4 : baseStrokeWidth;
+  const unweightedArrowhead = !isRepressor && baseStrokeWidth === 2;
+  return unweightedArrowhead ? 4 : baseStrokeWidth;
 }
 
 export function createPath(d, width, height, colorOptimal) {
   // Calculate adjusted source and target positions to be at center of nodes
-  // TODO: resolve issue where node.textWidth is initially calculated with undefined value
-  // TODO: confirm whether node textWidth is defined before this function is called
   const w = getNodeWidth(d.target);
   const h = NODE_HEIGHT;
   d.source.newX = d.source.x + w / 2;

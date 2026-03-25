@@ -421,15 +421,6 @@ export default function Graph() {
         }
 
         // prevent nodes from being dragged out of bottom boundary
-        console.log(
-          "bottom boundary",
-          getBottomYBoundaryMargin(
-            adaptive,
-            zoomScale.current,
-            yTranslation.current,
-            heightBoundingBox.current
-          )
-        );
         const selfReferringEdge = getSelfReferringEdge(d);
         const edgeHeight = selfReferringEdge
           ? getSelfReferringRadius(selfReferringEdge) +
@@ -444,10 +435,12 @@ export default function Graph() {
           yTranslation.current,
           heightBoundingBox.current
         );
-        if (event.y + NODE_HEIGHT <= bottomBoundary) {
+
+        if (selfReferringEdge && event.y + NODE_HEIGHT <= bottomBoundary - NODE_HEIGHT) {
+          d.fy = event.y;
+        } else if (!selfReferringEdge && event.y + NODE_HEIGHT <= bottomBoundary) {
           d.fy = event.y;
         } else {
-          // if self referring edge, allow dragging further down so edge doesn't get hidden behind node
           d.fy = bottomBoundary - edgeHeight; // subtracting edgeHeight ensures links don't get detached from node when dragged to boundary
         }
       }
