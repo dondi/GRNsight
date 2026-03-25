@@ -406,14 +406,12 @@ export default function Graph() {
         d.fy = event.y;
       } else {
         // fx and fy stands for fixed x and y which is when node is fixed to a position
-        const topBoundary = getTopYBoundaryMargin(false, zoomScale.current, yTranslation.current);
-        // if (event.y >= topBoundary) {
-        //   d.fy = event.y;
-        // } else {
-        //   d.fy = topBoundary; // prevents nodes from being dragged outside of top boundary
-        // }
-
-        // prevents nodes from being dragged outside of right boundary
+        // calculate boundaries to prevent nodes and edges from being dragged outside of viewport
+        const leftBoundary = getLeftXBoundaryMargin(
+          adaptive,
+          zoomScale.current,
+          xTranslation.current
+        );
         const rightBoundary = getRightXBoundaryMargin(
           adaptive,
           zoomScale.current,
@@ -421,13 +419,8 @@ export default function Graph() {
           widthBoundingBox.current,
           nodeWidth
         );
-        if (event.x + nodeWidth <= rightBoundary) {
-          d.fx = event.x;
-        } else {
-          d.fx = rightBoundary - nodeWidth; // subtracting nodeWidth ensures links don't get detached from node when dragged to boundary
-        }
 
-        // prevent nodes from being dragged out of bottom boundary
+        const topBoundary = getTopYBoundaryMargin(false, zoomScale.current, yTranslation.current);
         const selfReferringEdge = getSelfReferringEdge(d);
         const edgeHeight = selfReferringEdge
           ? getSelfReferringRadius(selfReferringEdge) +
@@ -443,10 +436,8 @@ export default function Graph() {
           heightBoundingBox.current
         );
 
-        // max allowed y for node top-left
+        d.fx = Math.max(leftBoundary, Math.min(rightBoundary - nodeWidth, event.x));
         const maxY = selfReferringEdge ? bottomBoundary - edgeHeight : bottomBoundary - NODE_HEIGHT;
-
-        // single clamp so top and bottom both hold
         d.fy = Math.max(topBoundary, Math.min(maxY, event.y));
       }
     }
