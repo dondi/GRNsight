@@ -140,8 +140,6 @@ function createRepressorHorizontalMarker({ defs, d, x1, y1, x2, y2, selfRef, col
  * Creates an arrowhead marker
  */
 function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, color }) {
-  const effectiveStrokeWidth = d.strokeWidth === 2 ? 4 : d.strokeWidth;
-
   const refXOffsets =
     x1 === x2 && y1 === y2
       ? {
@@ -234,11 +232,11 @@ function createArrowheadMarker({ defs, d, x1, y1, x2, y2, selfRef, color }) {
     .attr("markerUnits", "userSpaceOnUse")
     .attr(
       "markerWidth",
-      12 + (effectiveStrokeWidth < 7 ? effectiveStrokeWidth * 2.25 : effectiveStrokeWidth * 3)
+      12 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3)
     )
     .attr(
       "markerHeight",
-      5 + (effectiveStrokeWidth < 7 ? effectiveStrokeWidth * 2.25 : effectiveStrokeWidth * 3)
+      5 + (d.strokeWidth < 7 ? d.strokeWidth * 2.25 : d.strokeWidth * 3)
     )
     .attr("orient", x1 === x2 && y1 === y2 ? orientOffsets[d.strokeWidth] : "auto")
     .append("path")

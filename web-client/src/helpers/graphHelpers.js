@@ -5,7 +5,6 @@ import {
   NODE_MARGIN,
   MINIMUM_NODE_WIDTH,
   BOUNDARY_MARGIN,
-  DEFAULT_NODE_SHIFT,
   EDGE_BLACK,
   EDGE_BLUE,
   EDGE_RED,
@@ -15,6 +14,7 @@ import {
   ADDITIONAL_SHIFT,
   END_POINT_ADJUSTMENT,
   EDGE_OFFSET,
+  NETWORK_GRN_MODE_FULL,
 } from "./constants";
 
 // function getClampBounds(edgeBounds, width, height) {
@@ -39,6 +39,19 @@ export function getNodeWidth(node) {
 
 export function normalize(d, maxWeight) {
   return Math.abs(d.value / maxWeight).toPrecision(4);
+}
+
+/*
+* For unweighted edges, this func in tandem with baseStrokeWidth allows d.strokeWidth = 4
+for self-loop calculation and marker ids, then line rendered with stroke-width = 2
+*/
+export function getEffectiveStrokeWidth({ baseStrokeWidth, edge, colorOptimal, networkMode }) {
+  const isRepressor = edge.value < 0 && colorOptimal;
+  const isArrowheadCase = !isRepressor;
+  const shouldPromoteThinArrowhead =
+    networkMode === NETWORK_GRN_MODE_FULL && isArrowheadCase && baseStrokeWidth === 2;
+
+  return shouldPromoteThinArrowhead ? 4 : baseStrokeWidth;
 }
 
 export function createPath(d, width, height, colorOptimal) {
@@ -108,7 +121,7 @@ export function createPath(d, width, height, colorOptimal) {
 }
 
 export function getSelfReferringRadius(edge) {
-  return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
+  return edge ? 17 + edge.strokeWidth / 2 : 0;
 }
 
 export function createSelfLoop(d, width, height, colorOptimal) {
@@ -127,12 +140,13 @@ export function createSelfLoop(d, width, height, colorOptimal) {
   let largeArc = 0; // 1 or 0
   let sweep = 1; // 1 or 0
   let offset = parseFloat(d.strokeWidth);
+  let nodeShift = 1.033;
 
   // Self edge.
   if (x1 === x2 && y1 === y2) {
     // Move the position of the loop.
     // DEFAULT_NODE_SHIFT is the edge adjustment values when long self-node edges get hidden behind the node.
-    x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
+    x1 = d.source.x + d.source.textWidth * nodeShift;
     y1 = d.source.y + NODE_HEIGHT / 2 + SELF_REFERRING_Y_OFFSET;
 
     // This angle creates the loop.
@@ -150,9 +164,9 @@ export function createSelfLoop(d, width, height, colorOptimal) {
     // For whatever reason, the arc collapses to a point if the beginning
     // and ending points of the arc are the same, so kludge it.
     if (d.source.textWidth > SHORT_NODE_LIMIT) {
-      DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
+      nodeShift += ADDITIONAL_SHIFT;
     }
-    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * DEFAULT_NODE_SHIFT;
+    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * nodeShift;
     y2 = d.source.y + NODE_HEIGHT;
 
     if (d.value < 0 && colorOptimal) {
@@ -195,6 +209,13 @@ export function getEdgeThickness(workbook, colorOptimal, edge) {
   const allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
   const maxWeight = Math.max(...allWeights.map(Math.abs));
 
+  // TODO: total scale should consider normMax
+  /*
+  const totalScale = d3.scaleLinear()
+  .domain([0, normMax > 0 ? normMax : maxWeight])
+  .range([2, 14])
+  .clamp(true);
+  */
   const scale = d3.scaleLinear().domain([0, maxWeight]).range([2, 14]).clamp(true);
 
   return Math.floor(scale(Math.abs(edge.value)));

@@ -25,6 +25,7 @@ import {
 import {
   getNodeWidth,
   getEdgeThickness,
+  getEffectiveStrokeWidth,
   getEdgeColor,
   createPath,
   createSelfLoop,
@@ -329,8 +330,15 @@ export default function Graph() {
         return d.stroke;
       })
       .style("stroke-width", d => {
-        d.strokeWidth = colorOptimal ? getEdgeThickness(workbook, colorOptimal, d) : 2;
-        return d.strokeWidth;
+        const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
+        d.baseStrokeWidth = baseStrokeWidth;
+        d.strokeWidth = getEffectiveStrokeWidth({
+          baseStrokeWidth,
+          edge: d,
+          colorOptimal,
+          networkMode,
+        });
+        return baseStrokeWidth;
       })
       .style("fill", "none")
       .attr("marker-end", d => {
@@ -422,6 +430,14 @@ export default function Graph() {
             heightBoundingBox.current
           )
         );
+        const selfReferringEdge = getSelfReferringEdge(d);
+        const edgeHeight = selfReferringEdge
+          ? getSelfReferringRadius(selfReferringEdge) +
+            selfReferringEdge.strokeWidth +
+            SELF_REFERRING_Y_OFFSET +
+            0.5 +
+            NODE_HEIGHT
+          : NODE_HEIGHT;
         const bottomBoundary = getBottomYBoundaryMargin(
           adaptive,
           zoomScale.current,
@@ -432,13 +448,6 @@ export default function Graph() {
           d.fy = event.y;
         } else {
           // if self referring edge, allow dragging further down so edge doesn't get hidden behind node
-          const selfReferringEdge = getSelfReferringEdge(d);
-          const edgeHeight = selfReferringEdge
-            ? getSelfReferringRadius(selfReferringEdge) +
-              selfReferringEdge.strokeWidth +
-              SELF_REFERRING_Y_OFFSET +
-              0.5
-            : NODE_HEIGHT;
           d.fy = bottomBoundary - edgeHeight; // subtracting edgeHeight ensures links don't get detached from node when dragged to boundary
         }
       }
@@ -502,6 +511,14 @@ export default function Graph() {
       link
         .select("path")
         .attr("d", d => {
+          const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
+          d.strokeWidth = getEffectiveStrokeWidth({
+            baseStrokeWidth,
+            edge: d,
+            colorOptimal,
+            networkMode,
+          });
+
           if (d.source === d.target) {
             return createSelfLoop(d, width, height, colorOptimal);
           }
