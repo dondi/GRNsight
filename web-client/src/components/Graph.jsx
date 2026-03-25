@@ -167,7 +167,7 @@ export default function Graph() {
       widthBoundingBox.current = VIEW_SIZE_DIMENSIONS[viewSize].width;
       heightBoundingBox.current = VIEW_SIZE_DIMENSIONS[viewSize].height;
     }
-  }, [viewSize, windowDimensions]);
+  }, [viewSize, windowDimensions, adaptive]);
 
   // Main D3 rendering effect
   useEffect(() => {
@@ -275,7 +275,10 @@ export default function Graph() {
 
     zoomContainerRef.current = zoomContainer.node();
 
-    const boundingBoxContainer = zoomContainer.append("g");
+    const boundingBoxContainer = zoomContainer
+      .append("g")
+      .attr("width", widthBoundingBox.current)
+      .attr("height", heightBoundingBox.current);
 
     const zoom = d3
       .zoom()
@@ -380,48 +383,54 @@ export default function Graph() {
     }
 
     function dragged(event, d) {
-      console.log("dragged", "node", d.name, "event.x", event.x, "event.y", event.y);
-      d.fx = event.x;
-      d.fy = event.y;
+      console.log("dragged node", d.name, "event.x", event.x, "event.y", event.y);
+      // d.fx = event.x;
+      // d.fy = event.y;
       // TODO: copy over this logic from classic
-      // if (!adaptive) {
-      //   /* fx and fy stands for fixed x and y which is when node is fixed to a position or
-      //                 to prevent tick from adjusting position of node
-      //             */
-      //   // prevents nodes from being dragged outside of right boundary
-      //   if (
-      //     d3.event.x + d.textWidth <=
-      //     -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
-      //   ) {
-      //     d.fx = d3.event.x;
-      //   } else {
-      //     d.fx =
-      //       -xTranslation / graphZoom +
-      //       BOUNDARY_MARGIN / 2 +
-      //       width / graphZoom -
-      //       BOUNDARY_MARGIN -
-      //       d.textWidth;
-      //   }
+      if (!adaptive) {
+        /* fx and fy stands for fixed x and y which is when node is fixed to a position or
+                      to prevent tick from adjusting position of node
+                  */
+        // prevents nodes from being dragged outside of right boundary
+        if (
+          event.x + d.textWidth <=
+          -xTranslation / zoomScale.current +
+            BOUNDARY_MARGIN / 2 +
+            width / zoomScale.current -
+            BOUNDARY_MARGIN
+        ) {
+          d.fx = event.x;
+        } else {
+          d.fx =
+            -xTranslation / zoomScale.current +
+            BOUNDARY_MARGIN / 2 +
+            width / zoomScale.current -
+            BOUNDARY_MARGIN -
+            d.textWidth;
+        }
 
-      //   // prevent nodes from being dragged out of bottom boundary
-      //   if (
-      //     d3.event.y + nodeHeight <=
-      //     -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
-      //   ) {
-      //     // fy stands for fixed y
-      //     d.fy = d3.event.y;
-      //   } else {
-      //     d.fy =
-      //       -yTranslation / graphZoom +
-      //       BOUNDARY_MARGIN / 2 +
-      //       height / graphZoom -
-      //       BOUNDARY_MARGIN -
-      //       nodeHeight;
-      //   }
-      // } else {
-      //   d.fx = d3.event.x;
-      //   d.fy = d3.event.y;
-      // }
+        // prevent nodes from being dragged out of bottom boundary
+        if (
+          event.y + NODE_HEIGHT <=
+          -yTranslation / zoomScale.current +
+            BOUNDARY_MARGIN / 2 +
+            height / zoomScale.current -
+            BOUNDARY_MARGIN
+        ) {
+          // fy stands for fixed y
+          d.fy = event.y;
+        } else {
+          d.fy =
+            -yTranslation / zoomScale.current +
+            BOUNDARY_MARGIN / 2 +
+            height / zoomScale.current -
+            BOUNDARY_MARGIN -
+            NODE_HEIGHT;
+        }
+      } else {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
     }
 
     function dragended(event, d) {
@@ -510,9 +519,9 @@ export default function Graph() {
           if (!adaptive) {
             // TODO: call function here instead of calculating this value
             rightBoundary =
-              -xTranslation / graphZoom +
+              -xTranslation / zoomScale.current +
               BOUNDARY_MARGIN / 2 +
-              width / graphZoom -
+              width / zoomScale.current -
               BOUNDARY_MARGIN -
               (d.textWidth + NODE_POS_OFFSET) -
               selfReferringEdgeWidth;
@@ -525,15 +534,6 @@ export default function Graph() {
             widthBoundingBox.current < MAX_GRAPH_WIDTH &&
             (currentXPos === leftBoundary || currentXPos === rightBoundary)
           ) {
-            console.log(
-              "adjusting width bounding box",
-              "currentXPos",
-              currentXPos,
-              "leftBoundary",
-              leftBoundary,
-              "rightBoundary",
-              rightBoundary
-            );
             widthBoundingBox.current += NODE_POS_OFFSET;
             boundingBoxContainer.attr("width", widthBoundingBox.current);
 
@@ -563,9 +563,9 @@ export default function Graph() {
             heightBoundingBox.current - NODE_HEIGHT - BOUNDARY_MARGIN - selfReferringEdgeHeight;
           if (!adaptive) {
             bottomBoundary =
-              -yTranslation / graphZoom +
+              -yTranslation / zoomScale.current +
               BOUNDARY_MARGIN / 2 +
-              height / graphZoom -
+              height / zoomScale.current -
               BOUNDARY_MARGIN -
               NODE_HEIGHT -
               selfReferringEdgeHeight;
@@ -580,15 +580,6 @@ export default function Graph() {
             (currentYPos === topBoundary || currentYPos === bottomBoundary)
           ) {
             if (!d3.select(this).classed("fixed")) {
-              console.log(
-                "adjusting height bounding box",
-                "currentYPos",
-                currentYPos,
-                "topBoundary",
-                topBoundary,
-                "bottomBoundary",
-                bottomBoundary
-              );
               heightBoundingBox.current += NODE_POS_OFFSET;
               boundingBoxContainer.attr("height", heightBoundingBox.current);
               link
