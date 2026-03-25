@@ -392,71 +392,55 @@ export default function Graph() {
     }
 
     function dragged(event, d) {
-      // console.log("dragged node", d.name, "event.x", event.x, "event.y", event.y);
-      // d.fx = event.x;
-      // d.fy = event.y;
-      // TODO: copy over this logic from classic
-      console.log("adaptive", adaptive);
-      console.log(
-        "right boundary",
-        -xTranslation.current / zoomScale.current +
-          BOUNDARY_MARGIN / 2 +
-          width / zoomScale.current -
-          BOUNDARY_MARGIN
-      );
-      console.log(
-        "right boundar function output",
-        getRightXBoundaryMargin(
+      const nodeWidth = getNodeWidth(d);
+      if (adaptive) {
+        d.fx = event.x;
+        d.fy = event.y;
+      } else {
+        // fx and fy stands for fixed x and y which is when node is fixed to a position
+        // prevents nodes from being dragged outside of right boundary
+        const rightBoundary = getRightXBoundaryMargin(
           adaptive,
           zoomScale.current,
           xTranslation.current,
-          width,
-          getNodeWidth(d)
-        )
-      );
-      if (!adaptive) {
-        /* fx and fy stands for fixed x and y which is when node is fixed to a position or
-                      to prevent tick from adjusting position of node
-                  */
-        // prevents nodes from being dragged outside of right boundary
-        if (
-          event.x + getNodeWidth(d) <=
-          -xTranslation.current / zoomScale.current +
-            BOUNDARY_MARGIN / 2 +
-            widthBoundingBox.current / zoomScale.current -
-            BOUNDARY_MARGIN
-        ) {
+          widthBoundingBox.current,
+          nodeWidth
+        );
+        if (event.x + nodeWidth <= rightBoundary) {
           d.fx = event.x;
         } else {
-          d.fx =
-            -xTranslation.current / zoomScale.current +
-            BOUNDARY_MARGIN / 2 +
-            widthBoundingBox.current / zoomScale.current -
-            BOUNDARY_MARGIN -
-            getNodeWidth(d);
+          d.fx = rightBoundary - nodeWidth; // subtracting nodeWidth ensures links don't get detached from node when dragged to boundary
         }
 
         // prevent nodes from being dragged out of bottom boundary
-        if (
-          event.y + NODE_HEIGHT <=
-          -yTranslation.current / zoomScale.current +
-            BOUNDARY_MARGIN / 2 +
-            height / zoomScale.current -
-            BOUNDARY_MARGIN
-        ) {
-          // fy stands for fixed y
+        console.log(
+          "bottom boundary",
+          getBottomYBoundaryMargin(
+            adaptive,
+            zoomScale.current,
+            yTranslation.current,
+            heightBoundingBox.current
+          )
+        );
+        const bottomBoundary = getBottomYBoundaryMargin(
+          adaptive,
+          zoomScale.current,
+          yTranslation.current,
+          heightBoundingBox.current
+        );
+        if (event.y + NODE_HEIGHT <= bottomBoundary) {
           d.fy = event.y;
         } else {
-          d.fy =
-            -yTranslation.current / zoomScale.current +
-            BOUNDARY_MARGIN / 2 +
-            height / zoomScale.current -
-            BOUNDARY_MARGIN -
-            NODE_HEIGHT;
+          // if self referring edge, allow dragging further down so edge doesn't get hidden behind node
+          const selfReferringEdge = getSelfReferringEdge(d);
+          const edgeHeight = selfReferringEdge
+            ? getSelfReferringRadius(selfReferringEdge) +
+              selfReferringEdge.strokeWidth +
+              SELF_REFERRING_Y_OFFSET +
+              0.5
+            : NODE_HEIGHT;
+          d.fy = bottomBoundary - edgeHeight; // subtracting edgeHeight ensures links don't get detached from node when dragged to boundary
         }
-      } else {
-        d.fx = event.x;
-        d.fy = event.y;
       }
     }
 
@@ -502,18 +486,18 @@ export default function Graph() {
       }
     }
 
-    simulation.on("tick", () => {
-      const getSelfReferringEdge = function (node) {
-        return link
-          .select("path")
-          ["_groups"][0].map(function (path) {
-            return path.__data__;
-          })
-          .filter(function (pathData) {
-            return pathData.source === node && pathData.source === pathData.target;
-          })[0];
-      };
+    function getSelfReferringEdge(node) {
+      return link
+        .select("path")
+        ["_groups"][0].map(function (path) {
+          return path.__data__;
+        })
+        .filter(function (pathData) {
+          return pathData.source === node && pathData.source === pathData.target;
+        })[0];
+    }
 
+    simulation.on("tick", () => {
       const currentZoom = zoomScale.current || 1;
       link
         .select("path")
@@ -555,7 +539,6 @@ export default function Graph() {
           }
           // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
           let leftBoundary = getLeftXBoundaryMargin(adaptive, currentZoom, xTranslation.current);
-          console.log("left boundary", leftBoundary);
           let currentXPos = Math.max(leftBoundary, Math.min(rightBoundary, d.x ?? rightBoundary));
           if (
             adaptive &&
