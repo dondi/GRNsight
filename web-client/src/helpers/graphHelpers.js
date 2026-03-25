@@ -5,6 +5,7 @@ import {
   NODE_MARGIN,
   MINIMUM_NODE_WIDTH,
   BOUNDARY_MARGIN,
+  DEFAULT_NODE_SHIFT,
   EDGE_BLACK,
   EDGE_BLUE,
   EDGE_RED,
@@ -127,12 +128,10 @@ export function createSelfLoop(d, width, height, colorOptimal) {
   let sweep = 1; // 1 or 0
   let offset = parseFloat(d.strokeWidth);
 
-  // Edge adjustment values when long self-node edges get hidden behind the node.
-  let DEFAULT_NODE_SHIFT = 1.033;
-
   // Self edge.
   if (x1 === x2 && y1 === y2) {
     // Move the position of the loop.
+    // DEFAULT_NODE_SHIFT is the edge adjustment values when long self-node edges get hidden behind the node.
     x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
     y1 = d.source.y + NODE_HEIGHT / 2 + SELF_REFERRING_Y_OFFSET;
 

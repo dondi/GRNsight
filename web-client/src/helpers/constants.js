@@ -22,6 +22,7 @@ export const MAX_GRAPH_HEIGHT = 5000;
 export const MAX_GRAPH_WIDTH = 5000;
 export const NODE_POS_OFFSET = 5;
 export const BOUNDARY_MARGIN = 5;
+export const DEFAULT_NODE_SHIFT = 1.033;
 export const MINIMUM_NODE_WIDTH = 68.5625;
 export const NODE_MARGIN = 4;
 export const NODE_HEIGHT = 30;

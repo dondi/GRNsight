@@ -161,11 +161,20 @@ export default function Graph() {
       setHeight(windowDimensions.height - HEIGHT_OFFSET);
       widthBoundingBox.current = windowDimensions.width - WIDTH_OFFSET;
       heightBoundingBox.current = windowDimensions.height - HEIGHT_OFFSET;
+      console.log("adaptive", adaptive);
     } else {
       setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
       setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
       widthBoundingBox.current = VIEW_SIZE_DIMENSIONS[viewSize].width;
       heightBoundingBox.current = VIEW_SIZE_DIMENSIONS[viewSize].height;
+      console.log("adaptive", adaptive);
+      console.log(
+        "set width and height",
+        "width",
+        VIEW_SIZE_DIMENSIONS[viewSize].width,
+        "height",
+        VIEW_SIZE_DIMENSIONS[viewSize].height
+      );
     }
   }, [viewSize, windowDimensions, adaptive]);
 
@@ -383,36 +392,54 @@ export default function Graph() {
     }
 
     function dragged(event, d) {
-      console.log("dragged node", d.name, "event.x", event.x, "event.y", event.y);
+      // console.log("dragged node", d.name, "event.x", event.x, "event.y", event.y);
       // d.fx = event.x;
       // d.fy = event.y;
       // TODO: copy over this logic from classic
+      console.log("adaptive", adaptive);
+      console.log(
+        "right boundary",
+        -xTranslation.current / zoomScale.current +
+          BOUNDARY_MARGIN / 2 +
+          width / zoomScale.current -
+          BOUNDARY_MARGIN
+      );
+      console.log(
+        "right boundar function output",
+        getRightXBoundaryMargin(
+          adaptive,
+          zoomScale.current,
+          xTranslation.current,
+          width,
+          getNodeWidth(d)
+        )
+      );
       if (!adaptive) {
         /* fx and fy stands for fixed x and y which is when node is fixed to a position or
                       to prevent tick from adjusting position of node
                   */
         // prevents nodes from being dragged outside of right boundary
         if (
-          event.x + d.textWidth <=
-          -xTranslation / zoomScale.current +
+          event.x + getNodeWidth(d) <=
+          -xTranslation.current / zoomScale.current +
             BOUNDARY_MARGIN / 2 +
-            width / zoomScale.current -
+            widthBoundingBox.current / zoomScale.current -
             BOUNDARY_MARGIN
         ) {
           d.fx = event.x;
         } else {
           d.fx =
-            -xTranslation / zoomScale.current +
+            -xTranslation.current / zoomScale.current +
             BOUNDARY_MARGIN / 2 +
-            width / zoomScale.current -
+            widthBoundingBox.current / zoomScale.current -
             BOUNDARY_MARGIN -
-            d.textWidth;
+            getNodeWidth(d);
         }
 
         // prevent nodes from being dragged out of bottom boundary
         if (
           event.y + NODE_HEIGHT <=
-          -yTranslation / zoomScale.current +
+          -yTranslation.current / zoomScale.current +
             BOUNDARY_MARGIN / 2 +
             height / zoomScale.current -
             BOUNDARY_MARGIN
@@ -421,7 +448,7 @@ export default function Graph() {
           d.fy = event.y;
         } else {
           d.fy =
-            -yTranslation / zoomScale.current +
+            -yTranslation.current / zoomScale.current +
             BOUNDARY_MARGIN / 2 +
             height / zoomScale.current -
             BOUNDARY_MARGIN -
@@ -519,15 +546,16 @@ export default function Graph() {
           if (!adaptive) {
             // TODO: call function here instead of calculating this value
             rightBoundary =
-              -xTranslation / zoomScale.current +
+              -xTranslation.current / zoomScale.current +
               BOUNDARY_MARGIN / 2 +
-              width / zoomScale.current -
+              widthBoundingBox.current / zoomScale.current -
               BOUNDARY_MARGIN -
               (d.textWidth + NODE_POS_OFFSET) -
               selfReferringEdgeWidth;
           }
           // currentXPos bounds the graph when toggle to !adaptive and moves each of the nodes to be in bounds
           let leftBoundary = getLeftXBoundaryMargin(adaptive, currentZoom, xTranslation.current);
+          console.log("left boundary", leftBoundary);
           let currentXPos = Math.max(leftBoundary, Math.min(rightBoundary, d.x ?? rightBoundary));
           if (
             adaptive &&
@@ -563,7 +591,7 @@ export default function Graph() {
             heightBoundingBox.current - NODE_HEIGHT - BOUNDARY_MARGIN - selfReferringEdgeHeight;
           if (!adaptive) {
             bottomBoundary =
-              -yTranslation / zoomScale.current +
+              -yTranslation.current / zoomScale.current +
               BOUNDARY_MARGIN / 2 +
               height / zoomScale.current -
               BOUNDARY_MARGIN -
@@ -605,7 +633,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height, adaptive]);
 
   return (
     <div
