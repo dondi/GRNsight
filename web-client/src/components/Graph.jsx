@@ -406,6 +406,13 @@ export default function Graph() {
         d.fy = event.y;
       } else {
         // fx and fy stands for fixed x and y which is when node is fixed to a position
+        const topBoundary = getTopYBoundaryMargin(false, zoomScale.current, yTranslation.current);
+        // if (event.y >= topBoundary) {
+        //   d.fy = event.y;
+        // } else {
+        //   d.fy = topBoundary; // prevents nodes from being dragged outside of top boundary
+        // }
+
         // prevents nodes from being dragged outside of right boundary
         const rightBoundary = getRightXBoundaryMargin(
           adaptive,
@@ -436,13 +443,11 @@ export default function Graph() {
           heightBoundingBox.current
         );
 
-        if (selfReferringEdge && event.y + NODE_HEIGHT <= bottomBoundary - NODE_HEIGHT) {
-          d.fy = event.y;
-        } else if (!selfReferringEdge && event.y + NODE_HEIGHT <= bottomBoundary) {
-          d.fy = event.y;
-        } else {
-          d.fy = bottomBoundary - edgeHeight; // subtracting edgeHeight ensures links don't get detached from node when dragged to boundary
-        }
+        // max allowed y for node top-left
+        const maxY = selfReferringEdge ? bottomBoundary - edgeHeight : bottomBoundary - NODE_HEIGHT;
+
+        // single clamp so top and bottom both hold
+        d.fy = Math.max(topBoundary, Math.min(maxY, event.y));
       }
     }
 
