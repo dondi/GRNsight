@@ -167,7 +167,7 @@ describe("additional-sheet-parser", function () {
         it("should return twoColumnInvalidGeneTypeError", function () {
             test.twoColumnInvalidGeneTypeError(
                 "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-type.xlsx",
-                10
+                5
             );
         });
 
@@ -445,7 +445,7 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_WHEN_IMPORTING warning when sheets are present and not empty but missing some genes and values", function () {
+        describe("should return MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_WHEN_IMPORTING warning when sheets are present and not empty but missing some genes and values", function () {
             it("for degradation_rates sheet", function () {
                 test.missingGenesAndValuesInTwoColumnSheetsWarning(
                     "test-files/additional-sheet-test-files/missing-first-gene-and-deg-rate-value.xlsx",
@@ -496,6 +496,62 @@ describe("additional-sheet-parser", function () {
                 test.missingGenesAndValuesInTwoColumnSheetsWarning(
                     "test-files/additional-sheet-test-files/missing-last-gene-and-threshold_b-value.xlsx",
                     1,
+                    "threshold_b"
+                );
+            });
+        });
+
+        describe("should return MISSING_GENE_IDS_FOR_VALUES_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but missing gene IDs for values", function () {
+            it("for degradation_rates sheet", function () {
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-first-geneID-on-deg-rates-sheet.xlsx",
+                    2,
+                    "degradation_rates"
+                );
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-middle-geneID-on-deg-rates-sheet.xlsx",
+                    2,
+                    "degradation_rates"
+                );
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-last-geneID-on-deg-rates-sheet.xlsx",
+                    2,
+                    "degradation_rates"
+                );
+            });
+
+            it("for production_rates sheet", function () {
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-first-geneID-on-prod-rates-sheet.xlsx",
+                    2,
+                    "production_rates"
+                );
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-middle-geneID-on-prod-rates-sheet.xlsx",
+                    2,
+                    "production_rates"
+                );
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-last-geneID-on-prod-rates-sheet.xlsx",
+                    2,
+                    "production_rates"
+                );
+            });
+
+            it("for threshold_b sheet", function () {
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-first-geneID-on-threshold_b-sheet.xlsx",
+                    2,
+                    "threshold_b"
+                );
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-middle-geneID-on-threshold_b-sheet.xlsx",
+                    2,
+                    "threshold_b"
+                );
+                test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                    "test-files/additional-sheet-test-files/missing-geneId-with-values/missing-last-geneID-on-threshold_b-sheet.xlsx",
+                    2,
                     "threshold_b"
                 );
             });

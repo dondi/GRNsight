@@ -84,6 +84,12 @@ const addError = (output, message) => {
 const validGeneName = (output, sheetName, gene, row) => {
     var maxGeneLength = 12;
     var regex = /[^a-z0-9\_\-]/gi;
+
+    // Allow missing gene id
+    if (gene === undefined || gene === null || (typeof gene === "string" && gene.trim() === "")) {
+        return false;
+    }
+
     if (typeof gene !== "string") {
         addError(output, constants.errors.invalidGeneTypeError(sheetName, gene, row));
         return false;
@@ -318,18 +324,25 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     return output;
 };
 
-const checkValidGenesAndValuesInTwoColumnSheet = (output, sheet, row, genesMissingValue) => {
+const checkValidGenesAndValuesInTwoColumnSheet = (
+    output,
+    sheet,
+    row,
+    genesMissingValue,
+    valuesMissingGene
+) => {
     if (!sheet.data[row]) return;
 
     const currentGene = sheet.data[row][0];
     const currentValue = sheet.data[row][1];
 
+    const isValueEmpty =
+        currentValue === null ||
+        currentValue === undefined ||
+        (typeof currentValue === "string" && currentValue.trim() === "");
+
     if (validGeneName(output, sheet.name, currentGene, row + 1)) {
-        const isEmpty =
-            currentValue === null ||
-            currentValue === undefined ||
-            (typeof currentValue === "string" && currentValue.trim() === "");
-        if (isEmpty) {
+        if (isValueEmpty) {
             genesMissingValue.push(currentGene);
             output.data[currentGene] = undefined;
         } else {
@@ -347,6 +360,8 @@ const checkValidGenesAndValuesInTwoColumnSheet = (output, sheet, row, genesMissi
                 );
             }
         }
+    } else if (!isValueEmpty) {
+        valuesMissingGene.push(currentValue);
     }
 };
 
@@ -382,6 +397,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     }
 
     const genesMissingValue = [];
+    const valuesMissingGene = [];
 
     // check to see if the genes are strings and the values are numbers
 
@@ -401,7 +417,13 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             }
         }
 
-        checkValidGenesAndValuesInTwoColumnSheet(output, sheet, row, genesMissingValue);
+        checkValidGenesAndValuesInTwoColumnSheet(
+            output,
+            sheet,
+            row,
+            genesMissingValue,
+            valuesMissingGene
+        );
     }
 
     // Check whether all genes are missing values
@@ -413,6 +435,17 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
                 sheet.name,
                 /*isAllGenesMissing=*/ false
+            )
+        );
+    }
+
+    // Check for values that are missing genes
+    if (valuesMissingGene.length > 0) {
+        addWarning(
+            output,
+            constants.warnings.missingGeneIdsWithValuesInTwoColumnSheet(
+                sheet.name,
+                valuesMissingGene
             )
         );
     }
