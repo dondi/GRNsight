@@ -97,7 +97,8 @@ describe("graphHelpers targeted behaviors", () => {
 
   it("createPath keeps perpendicular vector when target is to the right and above source", () => {
     vi.mocked(smartPathEnd).mockImplementationOnce((d, w, h) => {
-      // target.newX is to the right while target.newY is above source -> condition at line 73 is false
+      // target.newX is to the right while target.newY is above source
+      // In createPath, (x2 > x1 && y2 > y1) is false here because x2 > x1 but y2 < y1.
       d.target.newX = d.target.x + w;
       d.target.newY = d.target.y - h;
     });

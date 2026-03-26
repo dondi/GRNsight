@@ -77,7 +77,7 @@ describe("api service", () => {
     expect(result).toBeInstanceOf(Error);
   });
 
-  it("getDemoEndpoint returns endpoint key for a known demo label (line 41 true branch)", () => {
+  it("getDemoEndpoint returns the endpoint key when the demo label is recognized", () => {
     const [expectedEndpoint, demoLabel] = Object.entries(DEMO_TYPES)[0];
     const demoValue = { props: { children: demoLabel } };
 
@@ -85,7 +85,7 @@ describe("api service", () => {
     expect(getDemoEndpoint(demoLabel)).toBe(expectedEndpoint);
   });
 
-  it("builds development API URL when import.meta.env.DEV is true (line 9 dev branch)", async () => {
+  it("builds development API URL when import.meta.env.DEV is true", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       status: 200,

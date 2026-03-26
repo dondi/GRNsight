@@ -351,7 +351,7 @@ describe("Graph", () => {
       );
     });
 
-    // Trigger node drag callbacks in !adaptive branch.
+    // Trigger node drag callbacks when !adaptive
     await act(async () => {
       node.dispatchEvent(
         new MouseEventCtor("mousedown", {

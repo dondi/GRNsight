@@ -96,7 +96,7 @@ describe("Navbar", () => {
     vi.clearAllMocks();
   });
 
-  it("renders dropdown sections and runs handlers in the default node-coloring branch", () => {
+  it("renders dropdown sections and runs handlers in the default node-coloring state", () => {
     const context = buildContext();
     const { getByTestId, getByText, getByDisplayValue, getAllByRole } = render(
       <GrnStateContext.Provider value={context}>
@@ -118,7 +118,7 @@ describe("Navbar", () => {
     fireEvent.change(getByDisplayValue("-50"), { target: { value: "-125" } });
     expect(context.setCharge).toHaveBeenCalledWith("-125");
 
-    // Node false-branch toggle
+    // Node-coloring disabled-state toggle
     fireEvent.click(getByText("Enable Node Coloring"));
     expect(context.setEnableNodeColoring).toHaveBeenCalledWith(true);
 
@@ -162,7 +162,7 @@ describe("Navbar", () => {
     expect(getAllByRole("button").length).toBeGreaterThan(20);
   });
 
-  it("renders the node-coloring enabled branch and toggles it off", () => {
+  it("renders the node-coloring enabled state and toggles it off", () => {
     const context = buildContext({
       enableNodeColoring: true,
       averageReplicateValuesTop: true,
@@ -175,7 +175,7 @@ describe("Navbar", () => {
       </GrnStateContext.Provider>
     );
 
-    // In enabled branch, the same label appears and clicking it disables node coloring.
+    // In the enabled state, the same label appears and clicking it disables node coloring.
     fireEvent.click(getAllByText("Enable Node Coloring")[0]);
     expect(context.setEnableNodeColoring).toHaveBeenCalledWith(false);
   });

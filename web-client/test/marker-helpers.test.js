@@ -56,7 +56,7 @@ function buildEdge(overrides = {}) {
   };
 }
 
-describe("markerHelpers targeted lines", () => {
+describe("marker helper geometry and marker-id behavior tests", () => {
   it("normalizes edge value precision", () => {
     expect(normalize({ value: -2 }, 8)).toBe("0.2500");
   });
@@ -100,7 +100,7 @@ describe("markerHelpers targeted lines", () => {
     expect(d.target.newY).toBe(0 + 50 + 10);
   });
 
-  it("smartPathEnd keeps left/top corner defaults when source is left and above in corner intersections", () => {
+  it("smartPathEnd keeps top-left corner when source is upper-left", () => {
     const d = buildEdge({
       strokeWidth: 10,
       source: { newX: 0, newY: 0, x: 0, y: 0, textWidth: 80 },
@@ -125,7 +125,7 @@ describe("markerHelpers targeted lines", () => {
     expect(d.target.newY).toBeGreaterThan(0);
   });
 
-  it("smartPathEnd keeps left-side x in vertical intersections when source is not to the right", () => {
+  it("smartPathEnd keeps left x when source is on the left", () => {
     const d = buildEdge({
       strokeWidth: 8,
       source: { newX: 0, newY: 40, x: 0, y: 40, textWidth: 80 },
@@ -136,7 +136,7 @@ describe("markerHelpers targeted lines", () => {
     expect(d.target.newX).toBe(-8);
   });
 
-  it("smartPathEnd handles horizontal-side intersection for non-arrowhead and arrowhead types", () => {
+  it("smartPathEnd handles horizontal-side intersection for repressors and arrowheads", () => {
     const nonArrow = buildEdge({
       strokeWidth: 8,
       type: "repressor",
@@ -232,7 +232,7 @@ describe("markerHelpers targeted lines", () => {
     expect(arrow10red.child.attrs.style).toContain(EDGE_RED);
   });
 
-  it("createAllMarkers skips arrowheads outside GRN full mode", () => {
+  it("createAllMarkers only makes repressor markers in Protein-Protein Interaction mode", () => {
     const { defs, markers } = makeDefsRecorder();
 
     createAllMarkers({ defs, links: [], networkMode: "Protein-Protein Interaction" });
@@ -290,7 +290,7 @@ describe("markerHelpers targeted lines", () => {
     expect(marker).toContain("_SelfReferential");
   });
 
-  it("getEdgeMarkerId returns repressor marker for non-self negative edges with shallow approach", () => {
+  it("getEdgeMarkerId selects vertical repressor marker for non-self negative edges when source and target are nearly on the same y-level", () => {
     const d = {
       source: { x: 0, y: 0, textWidth: 80 },
       target: { x: 300, y: 10, textWidth: 80 },
