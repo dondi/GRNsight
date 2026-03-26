@@ -165,6 +165,7 @@ describe("Navbar", () => {
   it("renders the node-coloring enabled state and toggles it off", () => {
     const context = buildContext({
       enableNodeColoring: true,
+      lockForceParameters: true,
       averageReplicateValuesTop: true,
       averageReplicateValuesBottom: true,
     });
@@ -174,6 +175,9 @@ describe("Navbar", () => {
         <Navbar />
       </GrnStateContext.Provider>
     );
+
+    // lockForceParameters=true should render the checkmark icon in Layout menu.
+    expect(getAllByText("CheckmarkIcon").length).toBeGreaterThan(0);
 
     // In the enabled state, the same label appears and clicking it disables node coloring.
     fireEvent.click(getAllByText("Enable Node Coloring")[0]);
