@@ -3,11 +3,7 @@ import { render, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import Sidebar from "../src/components/Sidebar";
 import { GrnStateContext } from "../src/App";
-import {
-  DEMO_TYPES,
-  VIEW_SIZE_SMALL,
-  VIEW_SIZE_MEDIUM,
-} from "../src/helpers/constants";
+import { DEMO_TYPES, VIEW_SIZE_SMALL, VIEW_SIZE_MEDIUM } from "../src/helpers/constants";
 
 vi.mock("../src/components/helper-components/DottedLine", () => ({
   default: ({ width }) => <div data-testid="dotted-line">{width}</div>,
@@ -131,7 +127,14 @@ describe("Sidebar", () => {
   it("covers network, layout, node, edge, and view interactions", () => {
     const context = buildContext();
 
-    const { getAllByTestId, getByTestId, getByText, getByLabelText, getAllByRole, getAllByLabelText } = render(
+    const {
+      getAllByTestId,
+      getByTestId,
+      getByText,
+      getByLabelText,
+      getAllByRole,
+      getAllByLabelText,
+    } = render(
       <GrnStateContext.Provider value={context}>
         <Sidebar />
       </GrnStateContext.Provider>
