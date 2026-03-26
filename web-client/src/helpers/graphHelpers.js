@@ -213,13 +213,13 @@ export function calcAllWeights(data, colorOptimal) {
   const allWeights = data.positiveWeights.concat(data.negativeWeights);
   // Assign the entire array weights of 1, if color edges turned off
   if (!colorOptimal) {
-    for (var i = 0; i < allWeights.length; i++) {
+    for (let i = 0; i < allWeights.length; i++) {
       if (allWeights[i] !== 0) {
         allWeights[i] = 1;
       }
     }
   } else {
-    for (var j = 0; j < allWeights.length; j++) {
+    for (let j = 0; j < allWeights.length; j++) {
       allWeights[j] = Math.abs(allWeights[j].toPrecision(4));
     }
   }
