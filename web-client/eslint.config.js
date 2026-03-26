@@ -1,5 +1,13 @@
 import prettierPlugin from "eslint-plugin-prettier";
-import prettierConfig from "./.prettierrc.json";
+// Using a longer way of importing prettier config to avoid linting issues from classic eslint
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const prettierConfig = JSON.parse(
+  fs.readFileSync(path.join(__dirname, ".prettierrc.json"), "utf8")
+);
 
 export default [
   {
@@ -16,6 +24,11 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
       globals: {
         window: "readonly",
         document: "readonly",
