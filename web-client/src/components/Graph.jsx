@@ -292,6 +292,13 @@ export default function Graph() {
 
     zoomRef.current = zoom;
 
+    // Re-apply current zoom value to the newly created zoom container so bounds math
+    // stays in sync after viewport-size changes.
+    // Helps to ensure that nodes stay within viewport after viewport size changes, especially when toggling to !adaptive
+    const initialScale = zoomPercent / 100;
+    zoomScale.current = initialScale;
+    zoom.scaleTo(zoomContainer, initialScale);
+
     // D-pad controls
     d3.selectAll(".scrollBtn").on("click", null); // Remove event handlers, if there were any.
     var arrowMovement = ["Up", "Left", "Right", "Down"];
@@ -534,6 +541,9 @@ export default function Graph() {
               return d.x;
             });
           }
+          if (!adaptive && d.fx != null) {
+            d.fx = currentXPos;
+          }
           return (d.x = currentXPos);
         })
         .attr("y", function (d) {
@@ -581,6 +591,9 @@ export default function Graph() {
                 return d.y;
               });
             }
+          }
+          if (!adaptive && d.fy != null) {
+            d.fy = currentYPos;
           }
           return (d.y = currentYPos);
         })
