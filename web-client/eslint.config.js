@@ -1,5 +1,5 @@
 import prettierPlugin from "eslint-plugin-prettier";
-import prettierConfig from "./.prettierrc";
+import prettierConfig from "./.prettierrc.json" with { type: "json" };
 
 export default [
   {
