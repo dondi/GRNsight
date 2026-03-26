@@ -488,39 +488,6 @@ export default function Graph() {
 
     simulation.on("tick", () => {
       const currentZoom = zoomScale.current || 1;
-      link
-        .select("path")
-        .attr("d", d => {
-          const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
-          d.strokeWidth = getEffectiveStrokeWidth({
-            baseStrokeWidth,
-            edge: d,
-            colorOptimal,
-            networkMode,
-          });
-
-          if (d.source === d.target) {
-            return createSelfLoop(d, width, height, colorOptimal);
-          }
-          return createPath(d, width, height, colorOptimal);
-        })
-        .attr("marker-end", d => {
-          // Update marker-end during tick so repressors can switch between horizontal/vertical
-          return getEdgeMarkerId({
-            d,
-            colorOptimal,
-            networkMode,
-          });
-        });
-
-      link
-        .select("text")
-        .attr("x", function (d) {
-          return d.label.x;
-        })
-        .attr("y", function (d) {
-          return d.label.y;
-        });
 
       node
         .attr("x", function (d) {
@@ -621,6 +588,40 @@ export default function Graph() {
         })
         .attr("transform", function (d) {
           return "translate(" + d.x + "," + d.y + ")";
+        });
+
+      link
+        .select("path")
+        .attr("d", d => {
+          const baseStrokeWidth = getEdgeThickness(workbook, colorOptimal, d);
+          d.strokeWidth = getEffectiveStrokeWidth({
+            baseStrokeWidth,
+            edge: d,
+            colorOptimal,
+            networkMode,
+          });
+
+          if (d.source === d.target) {
+            return createSelfLoop(d, width, height, colorOptimal);
+          }
+          return createPath(d, width, height, colorOptimal);
+        })
+        .attr("marker-end", d => {
+          // Update marker-end during tick so repressors can switch between horizontal/vertical
+          return getEdgeMarkerId({
+            d,
+            colorOptimal,
+            networkMode,
+          });
+        });
+
+      link
+        .select("text")
+        .attr("x", function (d) {
+          return d.label.x;
+        })
+        .attr("y", function (d) {
+          return d.label.y;
         });
     });
 
