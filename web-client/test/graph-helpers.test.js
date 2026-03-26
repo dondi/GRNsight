@@ -95,7 +95,7 @@ describe("graphHelpers targeted behaviors", () => {
     expect(edge.label).toBeDefined();
   });
 
-  it("createPath keeps perpendicular vector direction for mixed quadrants", () => {
+  it("createPath keeps perpendicular vector when target is to the right and above source", () => {
     vi.mocked(smartPathEnd).mockImplementationOnce((d, w, h) => {
       // target.newX is to the right while target.newY is above source -> condition at line 73 is false
       d.target.newX = d.target.x + w;
