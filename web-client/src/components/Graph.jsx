@@ -215,6 +215,7 @@ export default function Graph() {
         (!adaptive &&
           flexZoomInBounds(
             zoomScale.current,
+            zoomScale.current,
             simulation.nodes(),
             width,
             height,
@@ -626,7 +627,17 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height, adaptive, windowDimensions]);
+  }, [
+    workbook,
+    linkDistance,
+    charge,
+    colorOptimal,
+    grayThreshold,
+    width,
+    height,
+    adaptive,
+    windowDimensions,
+  ]);
 
   return (
     <div
