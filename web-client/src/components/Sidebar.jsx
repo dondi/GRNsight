@@ -14,11 +14,7 @@ import {
 import { Refresh, FolderOpen, Database, FormDown } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
-  UNWEIGHTED_DEMO_NAME,
-  WEIGHTED_DEMO_NAME,
-  SCHADE_INPUT_NAME,
-  SCHADE_OUTPUT_NAME,
-  PPI_DEMO_NAME,
+  DEMO_TYPES,
   VIEW_SIZE_SMALL,
   VIEW_SIZE_MEDIUM,
   VIEW_SIZE_LARGE,
@@ -86,15 +82,10 @@ export default function Sidebar({}) {
               </Box>
               <Select
                 className="demo-source-dropdown"
-                pad="0px"
                 icon={<FormDown color="black" size="small" />}
-                options={[
-                  <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-                  <Text>{WEIGHTED_DEMO_NAME}</Text>,
-                  <Text>{SCHADE_INPUT_NAME}</Text>,
-                  <Text>{SCHADE_OUTPUT_NAME}</Text>,
-                  <Text>{PPI_DEMO_NAME}</Text>,
-                ]}
+                options={Object.values(DEMO_TYPES).map(name => (
+                  <Text key={name}>{name}</Text>
+                ))}
                 value={demoValue}
                 placeholder={<Text>Select a Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
@@ -255,13 +246,9 @@ export default function Sidebar({}) {
           {/* TODO: replace with datasets from database */}
           <Select
             className="demo-source-dropdown"
-            options={[
-              <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-              <Text>{WEIGHTED_DEMO_NAME}</Text>,
-              <Text>{SCHADE_INPUT_NAME}</Text>,
-              <Text>{SCHADE_OUTPUT_NAME}</Text>,
-              <Text>{PPI_DEMO_NAME}</Text>,
-            ]}
+            options={Object.values(DEMO_TYPES).map(name => (
+              <Text key={name}>{name}</Text>
+            ))}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
             onChange={({ option }) => setDemoValue(option)}
@@ -277,13 +264,9 @@ export default function Sidebar({}) {
           <Select
             className="demo-source-dropdown"
             pad="0px"
-            options={[
-              <Text>{UNWEIGHTED_DEMO_NAME}</Text>,
-              <Text>{WEIGHTED_DEMO_NAME}</Text>,
-              <Text>{SCHADE_INPUT_NAME}</Text>,
-              <Text>{SCHADE_OUTPUT_NAME}</Text>,
-              <Text>{PPI_DEMO_NAME}</Text>,
-            ]}
+            options={Object.values(DEMO_TYPES).map(name => (
+              <Text key={name}>{name}</Text>
+            ))}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
             onChange={({ option }) => setValue(option)}
