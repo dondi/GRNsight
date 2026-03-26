@@ -409,6 +409,32 @@ module.exports = {
                 ].join(" "),
             };
         },
+
+        missingGeneIdsWithValuesInTwoColumnSheet: function (sheetName, valuesMissingGenes) {
+            return {
+                warningCode: `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    "GRNsight has detected that there are missing gene IDs",
+                    `in the imported workbook's ${sheetName} sheet.`,
+                    "The missing gene IDs will need to be supplied to use this workbook as an input file for GRNmap,",
+                    "but will not affect the display of the graph in GRNsight.",
+                    `The values with missing gene IDs are ${valuesMissingGenes.join(", ")}.`,
+                ].join(" "),
+            };
+        },
+
+        wrongGeneOrderInTwoColumnSheet: function (sheetName) {
+            return {
+                warningCode: `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
+                    `were not in the same order as the genes in the 'network' sheet.`,
+                    `The order of the genes in the '${sheetName}' sheet needs to match the gene order in the 'network' sheet`,
+                    `to use this workbook as an input file for GRNmap,`,
+                    `but will not affect the display of the graph in GRNsight.`,
+                ].join(" "),
+            };
+        },
     },
 
     errors: {
