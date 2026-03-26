@@ -126,12 +126,35 @@ export default function Graph() {
 
   // TODO: need to update with adaptive (restrict to viewport)
   useEffect(() => {
-    if (!zoomRef.current || !zoomContainerRef.current) return;
-    const scale = zoomPercent / 100;
+    if (!zoomRef.current || !zoomContainerRef.current || !width || !height) return;
+    const newScale = zoomPercent / 100;
+    const currentScale = zoomScale.current || 1;
+    const nodes = simulationRef.current ? simulationRef.current.nodes() : [];
+
+    if (
+      !adaptive &&
+      !flexZoomInBounds(
+        newScale,
+        currentScale,
+        nodes,
+        width,
+        height,
+        xTranslation.current,
+        yTranslation.current
+      )
+    ) {
+      // Reset zoom back to current zoomPercent if newScale is out of bounds to prevent zooming outside of viewport when !adaptive
+      const currentPercent = Math.round(currentScale * 100);
+      if (zoomPercent !== currentPercent) {
+        setZoomPercent(currentPercent);
+      }
+      return;
+    }
+
     const zoomContainer = d3.select(zoomContainerRef.current);
-    zoomRef.current.scaleTo(zoomContainer, scale);
-    zoomScale.current = scale;
-  }, [zoomPercent]);
+    zoomRef.current.scaleTo(zoomContainer, newScale);
+    zoomScale.current = newScale;
+  }, [zoomPercent, adaptive, width, height, setZoomPercent]);
 
   // Handle window resize for Fit to Window
   useEffect(() => {
@@ -649,6 +672,7 @@ export default function Graph() {
     height,
     adaptive,
     windowDimensions,
+    zoomPercent,
   ]);
 
   return (
