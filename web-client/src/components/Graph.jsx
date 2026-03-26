@@ -162,20 +162,11 @@ export default function Graph() {
       setHeight(windowDimensions.height - HEIGHT_OFFSET);
       widthBoundingBox.current = windowDimensions.width - WIDTH_OFFSET;
       heightBoundingBox.current = windowDimensions.height - HEIGHT_OFFSET;
-      console.log("adaptive", adaptive);
     } else {
       setWidth(VIEW_SIZE_DIMENSIONS[viewSize].width);
       setHeight(VIEW_SIZE_DIMENSIONS[viewSize].height);
       widthBoundingBox.current = VIEW_SIZE_DIMENSIONS[viewSize].width;
       heightBoundingBox.current = VIEW_SIZE_DIMENSIONS[viewSize].height;
-      console.log("adaptive", adaptive);
-      console.log(
-        "set width and height",
-        "width",
-        VIEW_SIZE_DIMENSIONS[viewSize].width,
-        "height",
-        VIEW_SIZE_DIMENSIONS[viewSize].height
-      );
     }
   }, [viewSize, windowDimensions, adaptive]);
 
@@ -241,7 +232,6 @@ export default function Graph() {
             yTranslation.current
           ))
       ) {
-        console.log("allow move");
         zoom.translateBy(
           zoomContainer,
           scale * (event.x - zoomDragPrevX.current),
@@ -522,8 +512,18 @@ export default function Graph() {
           });
         });
 
+      link
+        .select("text")
+        .attr("x", function (d) {
+          return d.label.x;
+        })
+        .attr("y", function (d) {
+          return d.label.y;
+        });
+
       node
         .attr("x", function (d) {
+          const nodeWidth = getNodeWidth(d);
           const selfReferringEdge = getSelfReferringEdge(d);
           const selfReferringEdgeWidth = selfReferringEdge
             ? getSelfReferringRadius(selfReferringEdge) + selfReferringEdge.strokeWidth + 2
@@ -534,12 +534,14 @@ export default function Graph() {
             BOUNDARY_MARGIN -
             selfReferringEdgeWidth;
           if (!adaptive) {
-            // TODO: call function here instead of calculating this value
             rightBoundary =
-              -xTranslation.current / zoomScale.current +
-              BOUNDARY_MARGIN / 2 +
-              widthBoundingBox.current / zoomScale.current -
-              BOUNDARY_MARGIN -
+              getRightXBoundaryMargin(
+                adaptive,
+                zoomScale.current,
+                xTranslation.current,
+                widthBoundingBox.current,
+                nodeWidth
+              ) -
               (d.textWidth + NODE_POS_OFFSET) -
               selfReferringEdgeWidth;
           }
@@ -580,10 +582,12 @@ export default function Graph() {
             heightBoundingBox.current - NODE_HEIGHT - BOUNDARY_MARGIN - selfReferringEdgeHeight;
           if (!adaptive) {
             bottomBoundary =
-              -yTranslation.current / zoomScale.current +
-              BOUNDARY_MARGIN / 2 +
-              height / zoomScale.current -
-              BOUNDARY_MARGIN -
+              getBottomYBoundaryMargin(
+                adaptive,
+                zoomScale.current,
+                yTranslation.current,
+                heightBoundingBox.current
+              ) -
               NODE_HEIGHT -
               selfReferringEdgeHeight;
           }
@@ -622,7 +626,7 @@ export default function Graph() {
     return () => {
       simulation.stop();
     };
-  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height, adaptive]);
+  }, [workbook, linkDistance, charge, colorOptimal, grayThreshold, width, height, adaptive, windowDimensions]);
 
   return (
     <div

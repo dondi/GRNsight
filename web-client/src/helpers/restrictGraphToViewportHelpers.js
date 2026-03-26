@@ -14,21 +14,6 @@ import { NODE_HEIGHT, BOUNDARY_MARGIN } from "./constants";
  * height: height of the box
  */
 export function calcFlexiBox(nodes, width, height, graphZoom, xTranslation, yTranslation) {
-  console.log(
-    "calcFlexiBox",
-    "nodes",
-    nodes,
-    "width",
-    width,
-    "height",
-    height,
-    "graphZoom",
-    graphZoom,
-    "xTranslation",
-    xTranslation,
-    "yTranslation",
-    yTranslation
-  );
   if (
     !Array.isArray(nodes) ||
     nodes.length === 0 ||
