@@ -82,7 +82,6 @@ export default function Sidebar({}) {
               </Box>
               <Select
                 className="demo-source-dropdown"
-                // pad="0px"
                 icon={<FormDown color="black" size="small" />}
                 options={Object.values(DEMO_TYPES).map(name => (
                   <Text key={name}>{name}</Text>

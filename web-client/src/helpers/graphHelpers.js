@@ -4,7 +4,6 @@ import {
   NODE_HEIGHT,
   NODE_MARGIN,
   MINIMUM_NODE_WIDTH,
-  BOUNDARY_MARGIN,
   EDGE_BLACK,
   EDGE_BLUE,
   EDGE_RED,
@@ -14,22 +13,7 @@ import {
   ADDITIONAL_SHIFT,
   END_POINT_ADJUSTMENT,
   EDGE_OFFSET,
-  NETWORK_GRN_MODE_FULL,
 } from "./constants";
-
-// function getClampBounds(edgeBounds, width, height) {
-//   return {
-//     minX: edgeBounds?.left ?? BOUNDARY_MARGIN,
-//     maxX: edgeBounds?.right ?? width - BOUNDARY_MARGIN,
-//     minY: edgeBounds?.top ?? BOUNDARY_MARGIN,
-//     maxY: edgeBounds?.bottom ?? height - BOUNDARY_MARGIN,
-//   };
-// }
-
-// function clampToGraphBounds(value, minBound, maxBound) {
-//   const resolvedMax = Math.max(minBound, maxBound);
-//   return Math.max(minBound, Math.min(resolvedMax, value));
-// }
 
 export function getNodeWidth(node) {
   // console.log("node.textWidth", node.textWidth, "MINIMUM_NODE_WIDTH", MINIMUM_NODE_WIDTH);

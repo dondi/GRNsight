@@ -64,10 +64,8 @@ export default function Graph() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  // const [widthBoundingBox, setWidthBoundingBox] = useState(null);
   const widthBoundingBox = useRef(null);
   const heightBoundingBox = useRef(null);
-  // const [heightBoundingBox, setHeightBoundingBox] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [nodes, setNodes] = useState([]);
   const [transformState, setTransformState] = useState({ x: 0, y: 0, k: 1 });
