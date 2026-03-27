@@ -572,8 +572,6 @@ const checkWorkbookModeSettings = () => {
     }
 };
 
-
-
 $("body").on("click", () => {
     if (grnState.workbook) {
         if (grnState.mode === NETWORK_PPI_MODE) {

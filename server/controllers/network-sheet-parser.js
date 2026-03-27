@@ -331,7 +331,7 @@ exports.workbookType = function (workbookFile) {
     let workbookType;
     for (const sheet of workbookFile) {
         if (
-            sheet.name.toLowerCase() === "network" || 
+            sheet.name.toLowerCase() === "network" ||
             sheet.name.toLowerCase() === "network_optimized_weights"
         ) {
             const cellA1 = sheet.data[0][0];
@@ -350,7 +350,6 @@ exports.workbookType = function (workbookFile) {
 };
 
 exports.networks = function (workbookFile) {
-    console.log("Made ittt")
     const networks = {
         network: {},
         networkOptimizedWeights: {},
