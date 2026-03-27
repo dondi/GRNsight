@@ -555,7 +555,6 @@ const resetDemoDropdown = () => {
 };
 
 const checkWorkbookModeSettings = () => {
-
     if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
