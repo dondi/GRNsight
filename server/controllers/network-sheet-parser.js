@@ -363,23 +363,19 @@ exports.networks = function (workbookFile) {
                 element,
                 initWorkbook({ sheetType: "unweighted" })
             );
-            console.log("network")
         } else if (element.name.toLowerCase() === "network_optimized_weights") {
             // We found a network sheet with optimized weights, which is the ideal data source.
             networks.networkOptimizedWeights = parseNetworkSheet(
                 element,
                 initWorkbook({ sheetType: "weighted" })
             );
-            console.log("network_optimized_weights")
         } else if (element.name.toLowerCase() === "network_weights") {
             // We found a network_weights sheet to preserve existing network type sheet data
             networks.networkWeights = parseNetworkSheet(
                 element,
                 initWorkbook({ sheetType: "weighted" })
             );
-            console.log("network_weights")
         }
-        console.log("I am here!")
     }
 
     if (
