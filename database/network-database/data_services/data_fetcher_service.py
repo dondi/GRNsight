@@ -6,7 +6,7 @@ from io import StringIO
 
 class DataFetcherService(ABC):
     def __init__(self):
-        self.service = Service("https://www.alliancegenome.org/alliancemine/service")
+        self.service = Service("https://alliancemine.alliancegenome.org/alliancemine/service")
     
     @abstractmethod
     def fetch_data(self):
