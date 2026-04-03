@@ -132,7 +132,7 @@ Here are the instructions how to set up the database for GRNsight.
 
 - Depending on the installer, this may have already been done for you:
 - If not, search "Edit the system environment variables" from the Windows taskbar. From there open Environment Variables and edit the Path variable.
-    - Within this variable use New to add `C:\Program Files\PostgresSQL\{postgres_version}\bin` and `C:\Program Files\PostgresSQL\{postgres_version}\lib`
+    - Within this variable use New to add `C:\Program Files\PostgreSQL\{postgres_version}\bin` and `C:\Program Files\PostgreSQL\{postgres_version}\lib`
 
 
 3. **Initialize the Database**
