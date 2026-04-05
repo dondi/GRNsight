@@ -315,11 +315,11 @@ module.exports = {
             return {
                 warningCode: `${headerStatus.toUpperCase()}_COLUMN_HEADER_${sheetName.toUpperCase()}`,
                 errorDescription: [
-                    `GRNsight has detected that the headers are ${headerStatus} in the imported workbook's ${sheetName} sheet.`,
+                    `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet.`,
                     "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
                     "but will not affect the display of the graph in GRNsight.",
-                    `Cell A1 should contain the text ${expectedA1},`,
-                    `and cell B1 should contain the text ${expectedB1}, exactly.`,
+                    `Cell A1 should contain the text <b>${expectedA1}</b>,`,
+                    `and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
                 ].join(" "),
             };
         },
