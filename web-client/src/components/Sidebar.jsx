@@ -1,10 +1,9 @@
-import { useRef, useContext } from "react";
+import { useContext } from "react";
 import {
   Box,
   Text,
   Button,
   Select,
-  FileInput,
   Stack,
   RangeInput,
   CheckBox,
@@ -24,7 +23,6 @@ import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
 
 export default function Sidebar({}) {
-  const fileInputRef = useRef();
   const {
     networkMode,
     setNetworkMode,
@@ -92,27 +90,23 @@ export default function Sidebar({}) {
                 size="small"
               />
               <Stack anchor="center" margin={{ vertical: "6px" }}>
-                <FileInput
-                  className="file-input"
-                  ref={fileInputRef}
-                  name="file"
-                  size="small"
-                  messages={{ browse: " ", dropPrompt: "Open File" }}
-                  onChange={event => {
-                    const fileList = event.target.files;
-                    for (let i = 0; i < fileList.length; i += 1) {
-                      const file = fileList[i];
-                    }
-                  }}
-                />
                 <Box
+                  className="file-input file-input-trigger"
                   direction="row"
-                  align="center"
-                  gap="small"
-                  pad="medium"
-                  onClick={() => fileInputRef.current.click()} // Trigger the hidden file input
                 >
-                  <FolderOpen />
+                  <input
+                    className="file-input-native"
+                    type="file"
+                    name="file"
+                    onChange={event => {
+                      const fileList = event.target.files;
+                      for (let i = 0; i < fileList.length; i += 1) {
+                        const file = fileList[i];
+                      }
+                    }}
+                  />
+                  <FolderOpen size="14px" style={{ marginRight: "4px" }} />
+                  <Text size="14px">Open File</Text>
                 </Box>
               </Stack>
               <Button margin={{ bottom: "15px" }} className="load-from-database">
