@@ -120,7 +120,9 @@ var crossSheetInteractions = function (workbookFile) {
     // "network_optimized_weights",and "network_weights" restructuring workbook object as a result
 
     var networks = parseNetworkSheet.networks(workbookFile);
-    const genes = networks.network.genes.map(gene => gene.name);
+    const { network, networkOptimizedWeights, networkWeights } = networks;
+    const genesSource = network.genes || networkOptimizedWeights.genes || networkWeights.genes;
+    const genes = genesSource.map(gene => gene.name);
 
     // Parse expression and 2-column data, then add to workbook object
     // Eventually, will split this up into parsing for each type of sheet.
@@ -130,42 +132,38 @@ var crossSheetInteractions = function (workbookFile) {
 
     if (
         networks &&
-        networks.networkOptimizedWeights &&
-        typeof networks.networkOptimizedWeights === "object" &&
-        Object.keys(networks.networkOptimizedWeights).length > 0
+        networkOptimizedWeights &&
+        typeof networkOptimizedWeights === "object" &&
+        Object.keys(networkOptimizedWeights).length > 0
     ) {
         // Base workbook is a clone of the prefered Optimized weights sheet
-        workbook = deepClone(networks.networkOptimizedWeights, false);
+        workbook = deepClone(networkOptimizedWeights, false);
         // Add errors from network sheet if it exists
-        if (
-            networks.network &&
-            typeof networks.network === "object" &&
-            Object.keys(networks.network).length > 0
-        ) {
-            if (networks.network.errors !== undefined) {
-                networks.network.errors.forEach(data => workbook.errors.push(data));
+        if (network && typeof network === "object" && Object.keys(network).length > 0) {
+            if (network.errors !== undefined) {
+                network.errors.forEach(data => workbook.errors.push(data));
             }
 
-            if (networks.network.warnings !== undefined) {
-                networks.network.warnings.forEach(data => workbook.warnings.push(data));
+            if (network.warnings !== undefined) {
+                network.warnings.forEach(data => workbook.warnings.push(data));
             }
         }
     } else {
         // Set base workbook to a deep copy of the default network if network optimized weights does not exist
-        workbook = deepClone(networks.network, false);
+        workbook = deepClone(network, false);
     }
     // Add errors and warnings from network weights to preserve the sheet
     if (
-        networks.networkWeights &&
-        typeof networks.networkWeights === "object" &&
-        Object.keys(networks.networkWeights).length > 0
+        networkWeights &&
+        typeof networkWeights === "object" &&
+        Object.keys(networkWeights).length > 0
     ) {
-        if (networks.networkWeights.errors !== undefined) {
-            networks.networkWeights.errors.forEach(data => workbook.errors.push(data));
+        if (networkWeights.errors !== undefined) {
+            networkWeights.errors.forEach(data => workbook.errors.push(data));
         }
 
-        if (networks.networkWeights.warnings !== undefined) {
-            networks.networkWeights.warnings.forEach(data => workbook.warnings.push(data));
+        if (networkWeights.warnings !== undefined) {
+            networkWeights.warnings.forEach(data => workbook.warnings.push(data));
         }
     }
 
@@ -344,9 +342,9 @@ var crossSheetInteractions = function (workbookFile) {
     });
 
     // Integrate the desired properties from the other objects.
-    workbook.network = networks.network;
-    workbook.networkOptimizedWeights = networks.networkOptimizedWeights;
-    workbook.networkWeights = networks.networkWeights;
+    workbook.network = network;
+    workbook.networkOptimizedWeights = networkOptimizedWeights;
+    workbook.networkWeights = networkWeights;
     workbook.meta = additionalData.meta;
     workbook.twoColumnSheets = additionalData.twoColumnSheets;
     workbook.meta2 = additionalData.meta2;
