@@ -5,10 +5,34 @@ import {
   NETWORK_GRN_MODE_SHORT,
   NETWORK_PPI_MODE_SHORT,
 } from "../helpers/constants";
+import { createFileForm } from "./upload";
+
 // TODO: make this port dynamic in the future based on environment
 const API_URL = import.meta.env.DEV
   ? `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`
   : `https://${import.meta.env.VITE_HOST}`;
+
+const buildApiUrl = path => `${API_URL}/${path}`;
+
+const parseResponse = async response => {
+  const rawText = await response.text();
+  let parsed;
+
+  try {
+    parsed = rawText ? JSON.parse(rawText) : null;
+  } catch {
+    parsed = rawText;
+  }
+
+  if (!response.ok) {
+    const error = new Error(`Network response failed: ${response.status}`);
+    error.status = response.status;
+    error.data = parsed;
+    throw error;
+  }
+
+  return parsed;
+};
 
 /**
  * Fetches a demo workbook from the server
@@ -16,16 +40,11 @@ const API_URL = import.meta.env.DEV
  * @returns {Promise<Object>} The workbook data
  */
 export async function getDemoWorkbook(demoType) {
-  return fetch(`${API_URL}/demo/${demoType}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Network response failed: ${response.status}`);
-      }
-      return response.json();
-    })
+  return fetch(buildApiUrl(`demo/${demoType}`))
+    .then(parseResponse)
     .catch(error => {
       console.error("Error fetching demo workbook:", error);
-      throw error; // Re-throw to allow handling by the calling function
+      throw error;
     });
 }
 
@@ -50,3 +69,26 @@ export const getNetworkMode = workbookType => {
     throw new Error("Unknown workbook type");
   }
 };
+
+export async function getWorkbookFromForm(formData, queryURL) {
+  const fullUrl = buildApiUrl(queryURL);
+
+  if (!formData) {
+    return await fetch(fullUrl).then(parseResponse);
+  }
+
+  return fetch(fullUrl, {
+    method: "POST",
+    body: formData,
+  }).then(parseResponse);
+}
+
+export const uploadWorkbook = (file, queryURL) => {
+  const formData = createFileForm(file);
+  return getWorkbookFromForm(formData, queryURL);
+};
+
+export async function getWorkbookFromUrl(queryURL) {
+  const fullUrl = buildApiUrl(queryURL);
+  return await fetch(fullUrl).then(parseResponse);
+}
