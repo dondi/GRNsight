@@ -101,9 +101,11 @@ const valuesForEachTwoColSheet = {
 };
 
 const grnMapInputSuppliedWarningMessage = (sheetName, value) => {
+    const stringValue = String(value);
+
     const prefix = sheetName.includes("optimized")
-        ? `GRNsight is checking because ${value} `
-        : `${value}`.chartAt(0).toUpperCase() + value.slice(1);
+        ? `GRNsight is checking because ${stringValue} `
+        : stringValue.charAt(0).toUpperCase() + stringValue.slice(1);
 
     return [
         prefix,
