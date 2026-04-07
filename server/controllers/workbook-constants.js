@@ -435,6 +435,33 @@ module.exports = {
                 ].join(" "),
             };
         },
+
+        wrongGeneIdsWarning: function (sheetName, wrongIds) {
+            return {
+                warningCode: `WRONG_GENE_IDS_IN_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that there are gene IDs in the imported workbook's '${sheetName}' sheet`,
+                    `that do not match the gene IDs in the "network" sheet.`,
+                    `The gene IDs in the '${sheetName}' sheet need to match the gene IDs in the 'network' sheet`,
+                    `to use this workbook as an input file for GRNmap,`,
+                    `but will not affect the display of the graph in GRNsight.`,
+                    `The mismatched IDs are for genes: ${wrongIds.join(", ")}.`,
+                ].join(" "),
+            };
+        },
+
+        extraGenesWarning: function (sheetName, extraGenes) {
+            return {
+                warningCode: `EXTRA_GENES_IN_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
+                    `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
+                    `to use this workbook as an input file for GRNmap,`,
+                    `but will not affect the display of the graph in GRNsight.`,
+                    `The extra genes are: ${extraGenes.join(", ")}.`,
+                ].join(" "),
+            };
+        }
     },
 
     errors: {

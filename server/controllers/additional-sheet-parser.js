@@ -367,20 +367,25 @@ const checkValidGenesAndValuesInTwoColumnSheet = (
 
 const checkOrderOfGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) => {
     const genesInSheet = Object.keys(output.data);
-    const presentNetworkGenesInSheet = genesInNetwork.filter(gene => genesInSheet.includes(gene));
+
+    const commonGenes = genesInNetwork.filter(gene => genesInSheet.includes(gene));
+    const actualOrderInSheet = genesInSheet.filter(gene => genesInNetwork.includes(gene));
 
     const isWrongGeneOrder =
-        genesInSheet.length > 0 &&
-        !presentNetworkGenesInSheet.every((gene, index) => gene === genesInSheet[index]);
+        commonGenes.length !== actualOrderInSheet.length ||
+        !commonGenes.every((gene, index) => gene === actualOrderInSheet[index]);
 
     if (isWrongGeneOrder) {
         addWarning(output, constants.warnings.wrongGeneOrderInTwoColumnSheet(sheetName));
 
-        // Matching order with genes in network
+        // 4. Re-sort output.data to be in alphabetical order of genes, network when export also sort in alphabetical order, so that they match when re-importing
         const sortedData = {};
-        genesInNetwork.forEach(gene => {
-            sortedData[gene] = output.data[gene];
-        });
+
+        Object.keys(output.data)
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+            .forEach(gene => {
+                sortedData[gene] = output.data[gene];
+            });
         output.data = sortedData;
     }
 };
@@ -450,9 +455,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         );
     }
 
-    // Check for missing genes in sheet
     if (genesInNetwork) {
-        //  Check if the output data keys (genes in sheet) include all genes in the network
         const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
         if (missingGenes.length > 0) {
             if (missingGenes.length === genesInNetwork.length) {
