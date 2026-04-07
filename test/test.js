@@ -599,16 +599,6 @@ const wrongGeneOrderInTwoColumnSheetWarning = (input, frequency, sheetName) => {
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
 };
 
-const wrongGeneIdsInTwoColumnSheetWarning = (input, frequency, sheetName) => {
-    const expectedWarningCode = `WRONG_GENE_IDS_IN_${sheetName.toUpperCase()}`;
-    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
-};
-
-const extraGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
-    const expectedWarningCode = `EXTRA_GENES_IN_${sheetName.toUpperCase()}`;
-    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
-};
-
 const testWarningsForTwoColumnSheet = (input, frequency, sheetName, expectedWarningCode) => {
     const sheet = xlsx.parse(input);
     const networks = parseNetworkSheet(sheet);
@@ -1033,8 +1023,6 @@ exports.missingGenesAndValuesInTwoColumnSheetsWarning =
 exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
     missingGeneIdsWithValuesInTwoColumnSheetWarning;
 exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;
-exports.wrongGeneIdsInTwoColumnSheetWarning = wrongGeneIdsInTwoColumnSheetWarning;
-exports.extraGenesInTwoColumnSheetWarning = extraGenesInTwoColumnSheetWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
