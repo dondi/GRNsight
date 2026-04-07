@@ -519,17 +519,17 @@ export const upload = function () {
                         <label for='exportExcelExpressionSource-noneRadio' id='exportExcelExpressionSource-none' class='export-radio-label'>None</label>
                     </li>
     `;
-
         if (Object.keys(grnState.workbook.expression).length > 0) {
+            const isChecked = grnState.nodeColoring.nodeColoringEnabled ? `checked="true"` : "";
             result += `
                         <li>
-                            <input type='radio' name='expressionSource' checked="true" value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
+                            <input type='radio' name='expressionSource' ${isChecked} value="userInput" id='exportExcelExpressionSource-userInputRadio' class='export-radio' />
                             <label for='exportExcelExpressionSource-userInputRadio' id='exportExcelExpressionSource-userInput' class='export-radio-label'></label>
                         </li>
             `;
         }
         for (let [index, source] of sources.entries()) {
-            if (grnState.nodeColoring.topDataset) {
+            if (grnState.nodeColoring.nodeColoringEnabled) {
                 const isChecked = grnState.nodeColoring.topDataset
                     .toLowerCase()
                     .startsWith(source.toLowerCase())

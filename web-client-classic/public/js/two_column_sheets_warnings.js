@@ -35,6 +35,9 @@ const getMissingGenesAndValuesWhenImportingCode = sheetName =>
 const getExtraGenesInTwoColumnSheetCode = sheetName =>
     `EXTRA_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
 
+const getWrongGeneOrderInTwoColumnSheetCode = sheetName =>
+    `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+
 const findWarningbyCode = (warningsList, code) => warningsList.find(w => w.warningCode === code);
 const toExportWarningFromImportWarning = importWarning => {
     if (!importWarning) return null;
@@ -73,6 +76,16 @@ const buildMissingOrEmptyWarning = ({
         );
     } else {
         return warningsConstants.MISSING_OR_EMPTY_TWO_COLUMN_SHEET(sheetName, isMissing);
+    }
+};
+
+const wrongGeneOrderWarning = (sheetName, workbookWarnings, warningsToAdd, warningsConstants) => {
+    const wrongGeneOrderInTwoColumnSheetCode = getWrongGeneOrderInTwoColumnSheetCode(sheetName);
+
+    if (hasWarningCode(workbookWarnings, wrongGeneOrderInTwoColumnSheetCode)) {
+        warningsToAdd.push(
+            warningsConstants.WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_WHEN_EXPORTING(sheetName)
+        );
     }
 };
 
@@ -128,6 +141,7 @@ export const buildPreFetchTwoColumnWarnings = ({
             const exportWarning = toExportWarningFromImportWarning(importWarning);
             warningsToAdd.push(exportWarning);
         }
+        wrongGeneOrderWarning(sheetName, workbookWarnings, warningsToAdd, warningsConstants);
     }
 
     return {

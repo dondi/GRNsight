@@ -330,7 +330,10 @@ var parseNetworkSheet = function (sheet, network) {
 exports.workbookType = function (workbookFile) {
     let workbookType;
     for (const sheet of workbookFile) {
-        if (sheet.name.toLowerCase() === "network") {
+        if (
+            sheet.name.toLowerCase() === "network" ||
+            sheet.name.toLowerCase() === "network_optimized_weights"
+        ) {
             const cellA1 = sheet.data[0][0];
 
             if (cellA1 === CELL_A1_GRN) {

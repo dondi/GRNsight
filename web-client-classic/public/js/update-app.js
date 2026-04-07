@@ -555,9 +555,7 @@ const resetDemoDropdown = () => {
 };
 
 const checkWorkbookModeSettings = () => {
-    const hasExpression = hasExpressionData(grnState.workbook.expression);
-
-    if (grnState.mode === NETWORK_PPI_MODE || !hasExpression) {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = false;
@@ -567,7 +565,7 @@ const checkWorkbookModeSettings = () => {
     } else if (grnState.mode === NETWORK_GRN_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = true;
         grnState.nodeColoring.showMenu = true;
-        grnState.colorOptimal = true;
+        grnState.colorOptimal = grnState.workbook.sheetType === "weighted";
         showNodeColoringMenus();
         showEdgeWeightOptions();
         updateModeViews();

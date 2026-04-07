@@ -13,24 +13,30 @@ import {
   ADDITIONAL_SHIFT,
   END_POINT_ADJUSTMENT,
   EDGE_OFFSET,
-} from "./constants.js";
+} from "./constants";
 
-// TODO: resolve issue where node.textWidth is initially calculated with undefined value
 export function getNodeWidth(node) {
   // console.log("node.textWidth", node.textWidth, "MINIMUM_NODE_WIDTH", MINIMUM_NODE_WIDTH);
   // console.log("calculated node width:", NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN);
   return NODE_MARGIN + (node.textWidth || MINIMUM_NODE_WIDTH) + NODE_MARGIN;
 }
 
-// TODO: add description from web-client-classic
 export function normalize(d, maxWeight) {
   return Math.abs(d.value / maxWeight).toPrecision(4);
 }
 
+/*
+* For unweighted edges, this func in tandem with baseStrokeWidth allows d.strokeWidth = 4
+for self-loop calculation and marker ids, then line rendered with stroke-width = 2
+*/
+export function getEffectiveStrokeWidth({ baseStrokeWidth, edge, colorOptimal, networkMode }) {
+  const isRepressor = edge.value < 0 && colorOptimal;
+  const unweightedArrowhead = !isRepressor && baseStrokeWidth === 2;
+  return unweightedArrowhead ? 4 : baseStrokeWidth;
+}
+
 export function createPath(d, width, height, colorOptimal) {
   // Calculate adjusted source and target positions to be at center of nodes
-  // TODO: resolve issue where node.textWidth is initially calculated with undefined value
-  // TODO: confirm whether node textWidth is defined before this function is called
   const w = getNodeWidth(d.target);
   const h = NODE_HEIGHT;
   d.source.newX = d.source.x + w / 2;
@@ -93,8 +99,8 @@ export function createPath(d, width, height, colorOptimal) {
   return `M${d.source.newX},${d.source.newY} C${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
 }
 
-function getSelfReferringRadius(edge) {
-  return edge ? 17 + getEdgeThickness(edge) / 2 : 0;
+export function getSelfReferringRadius(edge) {
+  return edge ? 17 + edge.strokeWidth / 2 : 0;
 }
 
 export function createSelfLoop(d, width, height, colorOptimal) {
@@ -113,14 +119,13 @@ export function createSelfLoop(d, width, height, colorOptimal) {
   let largeArc = 0; // 1 or 0
   let sweep = 1; // 1 or 0
   let offset = parseFloat(d.strokeWidth);
-
-  // Edge adjustment values when long self-node edges get hidden behind the node.
-  let DEFAULT_NODE_SHIFT = 1.033;
+  let nodeShift = 1.033;
 
   // Self edge.
   if (x1 === x2 && y1 === y2) {
     // Move the position of the loop.
-    x1 = d.source.x + d.source.textWidth * DEFAULT_NODE_SHIFT;
+    // DEFAULT_NODE_SHIFT is the edge adjustment values when long self-node edges get hidden behind the node.
+    x1 = d.source.x + d.source.textWidth * nodeShift;
     y1 = d.source.y + NODE_HEIGHT / 2 + SELF_REFERRING_Y_OFFSET;
 
     // This angle creates the loop.
@@ -138,9 +143,9 @@ export function createSelfLoop(d, width, height, colorOptimal) {
     // For whatever reason, the arc collapses to a point if the beginning
     // and ending points of the arc are the same, so kludge it.
     if (d.source.textWidth > SHORT_NODE_LIMIT) {
-      DEFAULT_NODE_SHIFT += ADDITIONAL_SHIFT;
+      nodeShift += ADDITIONAL_SHIFT;
     }
-    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * DEFAULT_NODE_SHIFT;
+    x2 = d.source.x + (d.source.textWidth / END_POINT_ADJUSTMENT) * nodeShift;
     y2 = d.source.y + NODE_HEIGHT;
 
     if (d.value < 0 && colorOptimal) {
@@ -183,6 +188,13 @@ export function getEdgeThickness(workbook, colorOptimal, edge) {
   const allWeights = workbook.positiveWeights.concat(workbook.negativeWeights);
   const maxWeight = Math.max(...allWeights.map(Math.abs));
 
+  // TODO: total scale should consider normMax
+  /*
+  const totalScale = d3.scaleLinear()
+  .domain([0, normMax > 0 ? normMax : maxWeight])
+  .range([2, 14])
+  .clamp(true);
+  */
   const scale = d3.scaleLinear().domain([0, maxWeight]).range([2, 14]).clamp(true);
 
   return Math.floor(scale(Math.abs(edge.value)));
@@ -201,13 +213,13 @@ export function calcAllWeights(data, colorOptimal) {
   const allWeights = data.positiveWeights.concat(data.negativeWeights);
   // Assign the entire array weights of 1, if color edges turned off
   if (!colorOptimal) {
-    for (var i = 0; i < allWeights.length; i++) {
+    for (let i = 0; i < allWeights.length; i++) {
       if (allWeights[i] !== 0) {
         allWeights[i] = 1;
       }
     }
   } else {
-    for (var j = 0; j < allWeights.length; j++) {
+    for (let j = 0; j < allWeights.length; j++) {
       allWeights[j] = Math.abs(allWeights[j].toPrecision(4));
     }
   }
