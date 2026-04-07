@@ -169,15 +169,6 @@ export default function Sidebar({}) {
                   <Text size="14px">Open File</Text>
                 </Box>
               </Stack>
-              {uploadError ? (
-                <Text color="status-critical" size="12px" margin={{ top: "4px", bottom: "8px" }}>
-                  {uploadError}
-                </Text>
-              ) : (
-                <Text size="12px" margin={{ top: "4px", bottom: "8px" }}>
-                  No errors
-                </Text>
-              )}
               <Button margin={{ bottom: "15px" }} className="load-from-database">
                 <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
                   <Database size="14px" />
