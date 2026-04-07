@@ -378,7 +378,7 @@ const checkOrderOfGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) =>
     if (isWrongGeneOrder) {
         addWarning(output, constants.warnings.wrongGeneOrderInTwoColumnSheet(sheetName));
 
-        // 4. Re-sort output.data to be in alphabetical order of genes, network when export also sort in alphabetical order, so that they match when re-importing
+        // Re-sort output.data to be in alphabetical order of genes, network when export also sort in alphabetical order, so that they match when re-importing
         const sortedData = {};
 
         Object.keys(output.data)
