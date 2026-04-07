@@ -32,6 +32,8 @@ const getMissingAllValuesCode = sheetName =>
     `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
 const getMissingGenesAndValuesWhenImportingCode = sheetName =>
     `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`;
+const getExtraGenesInTwoColumnSheetCode = sheetName =>
+    `EXTRA_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
 
 const getWrongGeneOrderInTwoColumnSheetCode = sheetName =>
     `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
@@ -42,6 +44,7 @@ const toExportWarningFromImportWarning = importWarning => {
 
     return {
         warningCode: importWarning.warningCode.replace(/_WHEN_IMPORTING$/, "_WHEN_EXPORTING"),
+        // TODO: Need to also include that the warning is there because of the imported workbook
         errorDescription: importWarning.errorDescription.replace(/\bimported\b/gi, "exported"),
     };
 };
@@ -116,6 +119,7 @@ export const buildPreFetchTwoColumnWarnings = ({
             sheetsToFetch.push(sheetName);
         }
 
+        // TODO: Add a helper function to determine if we should carry an import warning to an export warning, to avoid repeating code
         // Carry import warning to export warning if applicable
         const missingGenesAndValuesWhenImportingCode =
             getMissingGenesAndValuesWhenImportingCode(sheetName);
@@ -128,6 +132,15 @@ export const buildPreFetchTwoColumnWarnings = ({
             warningsToAdd.push(exportWarning);
         }
 
+        const extraGenesInTwoColumnSheetCode = getExtraGenesInTwoColumnSheetCode(sheetName);
+        if (hasWarningCode(workbookWarnings, extraGenesInTwoColumnSheetCode)) {
+            const importWarning = findWarningbyCode(
+                workbookWarnings,
+                extraGenesInTwoColumnSheetCode
+            );
+            const exportWarning = toExportWarningFromImportWarning(importWarning);
+            warningsToAdd.push(exportWarning);
+        }
         wrongGeneOrderWarning(sheetName, workbookWarnings, warningsToAdd, warningsConstants);
     }
 
