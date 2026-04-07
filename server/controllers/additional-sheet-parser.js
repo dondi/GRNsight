@@ -113,7 +113,7 @@ const parseMetaDataSheet = sheet => {
     checkValidHeaderAndAddWarnings(meta, sheet);
 
     const isHeaderMissing = meta.warnings.some(
-        w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
+        w => w.warningCode === `MISSING_HEADER_COLUMN_${sheet.name.toUpperCase()}`
     );
     sheet.data.forEach(function (element, index) {
         if (!isHeaderMissing && index === 0) {
@@ -409,7 +409,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             checkValidHeaderAndAddWarnings(output, sheet);
 
             const isHeaderMissing = output.warnings.some(
-                w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
+                w => w.warningCode === `MISSING_HEADER_COLUMN_${sheet.name.toUpperCase()}`
             );
 
             if (!isHeaderMissing) {

@@ -275,7 +275,7 @@ var missingColumnHeaderError = function (input, frequency) {
     assert.equal(frequency, exp["expression"]["wt_log2_expression"]["errors"].length);
     for (var i = 0; i < frequency; i++) {
         assert.equal(
-            "MISSING_COLUMN_HEADER",
+            "MISSING_HEADER_COLUMN",
             exp["expression"]["wt_log2_expression"]["errors"][i].errorCode
         );
     }
@@ -804,8 +804,8 @@ const additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning
 ) {
     const sheet = xlsx.parse(input);
     const expectedWarningCode = isMissingOptimizationDiagnosticsSheet
-        ? "MISSING_COLUMN_HEADER_OPTIMIZATION_PARAMETERS"
-        : "INCORRECT_COLUMN_HEADER_OPTIMIZATION_PARAMETERS";
+        ? "MISSING_HEADER_COLUMN_OPTIMIZATION_PARAMETERS"
+        : "INCORRECT_HEADER_COLUMN_OPTIMIZATION_PARAMETERS";
 
     const workbook = parseAdditionalSheet(sheet);
 
@@ -824,8 +824,8 @@ const additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning
 ) {
     const sheet = xlsx.parse(input);
     const expectedWarningCode = isMissingOptimizationDiagnosticsSheet
-        ? "MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS"
-        : "INCORRECT_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS";
+        ? "MISSING_HEADER_COLUMN_OPTIMIZATION_DIAGNOSTICS"
+        : "INCORRECT_HEADER_COLUMN_OPTIMIZATION_DIAGNOSTICS";
 
     const workbook = parseAdditionalSheet(sheet);
 
@@ -845,8 +845,8 @@ const additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning = func
 ) {
     const sheet = xlsx.parse(input);
     const expectedWarningCode = isMissingSheet
-        ? `MISSING_COLUMN_HEADER_${sheetName.toUpperCase()}`
-        : `INCORRECT_COLUMN_HEADER_${sheetName.toUpperCase()}`;
+        ? `MISSING_HEADER_COLUMN_${sheetName.toUpperCase()}`
+        : `INCORRECT_HEADER_COLUMN_${sheetName.toUpperCase()}`;
 
     const workbook = parseAdditionalSheet(sheet);
 

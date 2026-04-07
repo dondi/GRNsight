@@ -313,9 +313,9 @@ module.exports = {
         ) {
             const headerStatus = isMissing ? "missing" : "incorrect";
             return {
-                warningCode: `${headerStatus.toUpperCase()}_COLUMN_HEADER_${sheetName.toUpperCase()}`,
+                warningCode: `${headerStatus.toUpperCase()}_HEADER_COLUMN_${sheetName.toUpperCase()}`,
                 errorDescription: [
-                    `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet.`,
+                    `GRNsight has detected that the headers are ${headerStatus} in the imported workbook's <b>${sheetName}</b> sheet.`,
                     "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
                     "but will not affect the display of the graph in GRNsight.",
                     `Cell A1 should contain the text <b>${expectedA1}</b>,`,
@@ -495,7 +495,7 @@ module.exports = {
         missingColumnHeaderError: function (sheetName, columnLetter, header) {
             if (sheetName && columnLetter && header) {
                 return {
-                    errorCode: "MISSING_COLUMN_HEADER",
+                    errorCode: "MISSING_HEADER_COLUMN",
                     possibleCause:
                         `Column ${columnLetter} in the ${sheetName}` +
                         ` sheet is missing the header '${header}'.`,
@@ -503,7 +503,7 @@ module.exports = {
                 };
             } else {
                 return {
-                    errorCode: "MISSING_COLUMN_HEADER",
+                    errorCode: "MISSING_HEADER_COLUMN",
                     possibleCause: `A column in the ${sheetName} sheet is missing a header.`,
                     suggestedFix: "Add headers to all columns.",
                 };
