@@ -369,11 +369,16 @@ describe("additional-sheet-parser", function () {
             };
 
             for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
                 it(`for ${sheetName} sheet`, function () {
                     test.missingAllGenesInTwoColumnSheetWarning(
                         `${folder}${cases[sheetName]}`,
                         1,
-                        sheetName
+                        sheetName,
+                        expectedText
                     );
                 });
             }
@@ -391,8 +396,17 @@ describe("additional-sheet-parser", function () {
             };
 
             for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
                 it(`for ${sheetName} sheet`, function () {
-                    test.missingAllValuesForGenes(`${folder}${cases[sheetName]}`, 1, sheetName);
+                    test.missingAllValuesForGenes(
+                        `${folder}${cases[sheetName]}`,
+                        1,
+                        sheetName,
+                        expectedText
+                    );
                 });
             }
         });
@@ -429,12 +443,17 @@ describe("additional-sheet-parser", function () {
             };
 
             for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
                 it(`for ${sheetName} sheet`, function () {
                     for (const fileName of cases[sheetName]) {
                         test.missingGenesAndValuesInTwoColumnSheetsWarning(
                             `${folder}${fileName}`,
                             1,
-                            sheetName
+                            sheetName,
+                            expectedText
                         );
                     }
                 });
@@ -473,12 +492,17 @@ describe("additional-sheet-parser", function () {
             };
 
             for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
                 it(`for ${sheetName} sheet`, function () {
                     for (const fileName of cases[sheetName]) {
                         test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
                             `${folder}${fileName}`,
                             2,
-                            sheetName
+                            sheetName,
+                            expectedText
                         );
                     }
                 });

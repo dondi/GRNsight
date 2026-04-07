@@ -104,14 +104,13 @@ const grnMapInputSuppliedWarningMessage = (sheetName, value) => {
     const stringValue = String(value);
 
     const prefix = sheetName.includes("optimized")
-        ? `GRNsight is checking because ${stringValue} `
-        : stringValue.charAt(0).toUpperCase() + stringValue.slice(1);
+        ? `GRNsight is checking because ${stringValue} should have been provided as GRNmap output,`
+        : [
+              stringValue.charAt(0).toUpperCase() + stringValue.slice(1),
+              " will need to be supplied to use this workbook as an input file for GRNmap,",
+          ].join("");
 
-    return [
-        prefix,
-        "will need to be supplied to use this workbook as an input file for GRNmap,",
-        "but will not affect the display of the graph in GRNsight.",
-    ].join(" ");
+    return [prefix, "but will not affect the display of the graph in GRNsight."].join(" ");
 };
 
 module.exports = {

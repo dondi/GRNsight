@@ -543,63 +543,43 @@ const unrecognizedSheetWarning = (input, frequency) => {
     assert.equal(workbook.warnings[0].warningCode, "UNRECOGNIZED_SHEET");
 };
 
-const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
-    const sheet = xlsx.parse(input);
-    const networks = parseNetworkSheet(sheet);
-    const genes = networks.genes.map(gene => gene.name);
-
-    const workbook = parseAdditionalSheet(sheet, genes);
-
-    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
-    assert.exists(
-        workbook.twoColumnSheets[sheetName],
-        `Expected ${sheetName} sheet to exist on workbook`
-    );
-    assert.exists(
-        workbook.twoColumnSheets[sheetName].warnings,
-        `Expected warnings array to exist on ${sheetName} sheet of workbook`
-    );
-    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
-    assert.equal(
-        workbook.twoColumnSheets[sheetName].warnings[0].warningCode,
-        `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`
-    );
+const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName, expectedText) => {
+    const expectedWarningCode = `MISSING_ALL_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
-const missingGenesAndValuesInTwoColumnSheetsWarning = (input, frequency, sheetName) => {
-    const sheet = xlsx.parse(input);
-    const networks = parseNetworkSheet(sheet);
-    const genes = networks.genes.map(gene => gene.name);
-
-    const workbook = parseAdditionalSheet(sheet, genes);
-
-    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
-    assert.exists(
-        workbook.twoColumnSheets[sheetName],
-        `Expected ${sheetName} sheet to exist on workbook`
-    );
-    assert.exists(
-        workbook.twoColumnSheets[sheetName].warnings,
-        `Expected warnings array to exist on ${sheetName} sheet of workbook`
-    );
-    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
-    assert.equal(
-        `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
-        workbook.twoColumnSheets[sheetName].warnings[0].warningCode
-    );
+const missingGenesAndValuesInTwoColumnSheetsWarning = (
+    input,
+    frequency,
+    sheetName,
+    expectedText
+) => {
+    const expectedWarningCode = `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
-const missingGeneIdsWithValuesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+const missingGeneIdsWithValuesInTwoColumnSheetWarning = (
+    input,
+    frequency,
+    sheetName,
+    expectedText
+) => {
     const expectedWarningCode = `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
-    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
-const wrongGeneOrderInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+const wrongGeneOrderInTwoColumnSheetWarning = (input, frequency, sheetName, expectedText) => {
     const expectedWarningCode = `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
-    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
-const testWarningsForTwoColumnSheet = (input, frequency, sheetName, expectedWarningCode) => {
+const testWarningsForTwoColumnSheet = (
+    input,
+    frequency,
+    sheetName,
+    expectedWarningCode,
+    expectedText
+) => {
     const sheet = xlsx.parse(input);
     const networks = parseNetworkSheet(sheet);
     const genes = networks.genes.map(gene => gene.name);
@@ -617,6 +597,12 @@ const testWarningsForTwoColumnSheet = (input, frequency, sheetName, expectedWarn
     );
     assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
     assert.equal(workbook.twoColumnSheets[sheetName].warnings[0].warningCode, expectedWarningCode);
+    if (expectedText) {
+        assert.include(
+            workbook.twoColumnSheets[sheetName].warnings[0].errorDescription,
+            expectedText
+        );
+    }
 };
 
 // GRAPH STATISTICS
