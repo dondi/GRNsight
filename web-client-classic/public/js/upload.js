@@ -97,14 +97,14 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (Object.keys(grnState.workbook.expression).length > 0 && mode === "grn") {
+        if (Object.keys(grnState.workbook.expression).length > 0 && mode === NETWORK_GRN_MODE) {
             source = $("input[name=expressionSource]:checked")[0].value;
             if (source === "userInput") {
                 source = "user-data";
             }
         }
 
-        if (mode !== "grn") {
+        if (mode !== NETWORK_GRN_MODE) {
             mode = "PPI";
         }
         if (mode !== null && genes !== null && edges !== null && type !== null) {
