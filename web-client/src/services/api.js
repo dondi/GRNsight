@@ -14,13 +14,30 @@ const API_URL = import.meta.env.DEV
 const buildApiUrl = path => `${API_URL}/${path}`;
 
 const parseResponse = async response => {
-  const rawText = await response.text();
-  let parsed;
+  let parsed = null;
 
+  // Attempt to parse as JSON, but if that fails, try to get text
+  // Account for JSON and text responses so that can accomodate unit tests that may use mocked fetch responses that don't have a json() method
   try {
-    parsed = rawText ? JSON.parse(rawText) : null;
+    if (typeof response.json === "function") {
+      parsed = await response.json();
+    } else if (typeof response.text === "function") {
+      const rawText = await response.text();
+      try {
+        parsed = rawText ? JSON.parse(rawText) : null;
+      } catch {
+        parsed = rawText;
+      }
+    }
   } catch {
-    parsed = rawText;
+    if (typeof response.text === "function") {
+      try {
+        const rawText = await response.text();
+        parsed = rawText || null;
+      } catch {
+        parsed = null;
+      }
+    }
   }
 
   if (!response.ok) {
