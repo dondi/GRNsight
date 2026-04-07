@@ -103,7 +103,7 @@ const valuesForEachTwoColSheet = {
 const grnMapInputSuppliedWarningMessage = (sheetName, value) => {
     const prefix = sheetName.includes("optimized")
         ? `GRNsight is checking because ${value} `
-        : `${value} `;
+        : `${value}`.chartAt(0).toUpperCase() + value.slice(1);
 
     return [
         prefix,
@@ -399,7 +399,7 @@ module.exports = {
             sheetName,
             missingGenes
         ) {
-            const value = `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
 
             return {
                 warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
@@ -414,7 +414,7 @@ module.exports = {
 
         missingAllGenesAndValuesInTwoColumnSheet: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
-            const value = `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
 
             return {
                 warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
@@ -426,7 +426,7 @@ module.exports = {
         },
 
         missingGeneIdsWithValuesInTwoColumnSheet: function (sheetName, valuesMissingGenes) {
-            const value = "The missing gene IDs";
+            const value = "the missing gene IDs";
             return {
                 warningCode: `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
                 errorDescription: [
