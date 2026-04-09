@@ -1,7 +1,15 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import Navbar from "../src/components/Navbar";
 import { GrnStateContext } from "../src/App";
+import { getNetworkMode, uploadWorkbook } from "../src/services/api";
+import {
+  annotateWorkbookLinks,
+  extractWorkbookErrorMessage,
+  returnUploadRoute,
+  trackUploadAnalytics,
+  validateUploadFile,
+} from "../src/services/upload";
 import {
   ZOOM_DISPLAY_MINIMUM,
   ZOOM_DISPLAY_MAXIMUM,
@@ -12,6 +20,19 @@ import {
   FIT_TO_WINDOW,
   DEMO_TYPES,
 } from "../src/helpers/constants";
+
+vi.mock("../src/services/api", () => ({
+  getNetworkMode: vi.fn(),
+  uploadWorkbook: vi.fn(),
+}));
+
+vi.mock("../src/services/upload", () => ({
+  annotateWorkbookLinks: vi.fn(),
+  extractWorkbookErrorMessage: vi.fn(),
+  returnUploadRoute: vi.fn(),
+  trackUploadAnalytics: vi.fn(),
+  validateUploadFile: vi.fn(),
+}));
 
 vi.mock("grommet", () => {
   const toArray = value => (Array.isArray(value) ? value : [value]);
@@ -80,6 +101,7 @@ const buildContext = overrides => ({
   setGrayThreshold: vi.fn(),
   showGrayEdgesDashed: false,
   setShowGrayEdgesDashed: vi.fn(),
+  setNetworkData: vi.fn(),
   demoValue: null,
   setDemoValue: vi.fn(),
   viewSize: VIEW_SIZE_SMALL,
@@ -94,6 +116,16 @@ const buildContext = overrides => ({
 describe("Navbar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    validateUploadFile.mockReturnValue(null);
+    returnUploadRoute.mockReturnValue("upload");
+    uploadWorkbook.mockResolvedValue({
+      meta: { data: { workbookType: "grn" } },
+      positiveWeights: [1],
+      negativeWeights: [-1],
+    });
+    annotateWorkbookLinks.mockImplementation(workbook => workbook);
+    getNetworkMode.mockReturnValue("Gene Regulatory Network");
+    extractWorkbookErrorMessage.mockReturnValue("upload failed");
   });
 
   it("renders dropdown sections and runs handlers in the default node-coloring state", () => {
@@ -182,5 +214,88 @@ describe("Navbar", () => {
     // In the enabled state, the same label appears and clicking it disables node coloring.
     fireEvent.click(getAllByText("Enable Node Coloring")[0]);
     expect(context.setEnableNodeColoring).toHaveBeenCalledWith(false);
+  });
+
+  it("covers upload success path and inner getNetworkMode catch", async () => {
+    const context = buildContext();
+    const normalizedWorkbook = {
+      meta: { data: { workbookType: "grn" } },
+      workbookType: "grn",
+      positiveWeights: [1],
+      negativeWeights: [-1],
+    };
+
+    returnUploadRoute.mockReturnValue("upload-graphml");
+    uploadWorkbook.mockResolvedValue({ meta: { data: {} } });
+    annotateWorkbookLinks.mockReturnValue(normalizedWorkbook);
+    getNetworkMode.mockImplementation(() => {
+      throw new Error("unknown workbook type");
+    });
+
+    const { container } = render(
+      <GrnStateContext.Provider value={context}>
+        <Navbar />
+      </GrnStateContext.Provider>
+    );
+
+    const fileInput = container.querySelector("#navbar-file-upload");
+    expect(fileInput).toBeTruthy();
+    fireEvent.change(fileInput, {
+      target: { files: [{ name: "graph.graphml", size: 123 }] },
+    });
+
+    await waitFor(() => {
+      expect(uploadWorkbook).toHaveBeenCalledWith(expect.any(Object), "upload-graphml");
+      expect(annotateWorkbookLinks).toHaveBeenCalled();
+      expect(context.setDemoValue).toHaveBeenCalledWith(null);
+      expect(context.setNetworkData).toHaveBeenCalledWith(normalizedWorkbook);
+      expect(trackUploadAnalytics).toHaveBeenCalled();
+      expect(fileInput.value).toBe("");
+    });
+  });
+
+  it("covers upload error path", async () => {
+    const context = buildContext();
+    const uploadError = new Error("request failed");
+    uploadError.data = { errors: [{ possibleCause: "bad", suggestedFix: "retry" }] };
+    uploadWorkbook.mockRejectedValue(uploadError);
+    extractWorkbookErrorMessage.mockReturnValue("Your graph failed to load");
+
+    const { container } = render(
+      <GrnStateContext.Provider value={context}>
+        <Navbar />
+      </GrnStateContext.Provider>
+    );
+
+    const fileInput = container.querySelector("#navbar-file-upload");
+    expect(fileInput).toBeTruthy();
+    fireEvent.change(fileInput, {
+      target: { files: [{ name: "graph.xlsx", size: 123 }] },
+    });
+
+    await waitFor(() => {
+      expect(extractWorkbookErrorMessage).toHaveBeenCalled();
+      expect(fileInput.value).toBe("");
+    });
+  });
+
+  it("covers upload validation short-circuit", () => {
+    const context = buildContext();
+    validateUploadFile.mockReturnValue("Unsupported file type");
+
+    const { container } = render(
+      <GrnStateContext.Provider value={context}>
+        <Navbar />
+      </GrnStateContext.Provider>
+    );
+
+    const fileInput = container.querySelector("#navbar-file-upload");
+    expect(fileInput).toBeTruthy();
+    fireEvent.change(fileInput, {
+      target: { files: [{ name: "bad.txt", size: 123 }] },
+    });
+
+    expect(uploadWorkbook).not.toHaveBeenCalled();
+    expect(fileInput.value).toBe("");
   });
 });

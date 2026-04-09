@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { getDemoWorkbook, getDemoEndpoint, getNetworkMode } from "../src/services/api.js";
+import {
+  getDemoWorkbook,
+  getDemoEndpoint,
+  getNetworkMode,
+  getWorkbookFromForm,
+  uploadWorkbook,
+  getWorkbookFromUrl,
+} from "../src/services/api.js";
 import {
   NETWORK_GRN_MODE_FULL,
   NETWORK_PPI_MODE_FULL,
@@ -71,6 +78,41 @@ describe("api service", () => {
     await expect(getDemoWorkbook("ppi")).rejects.toThrow("network down");
   });
 
+  it("getDemoWorkbook falls back to text parsing when json parsing fails", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: vi.fn().mockRejectedValue(new Error("bad json")),
+      text: vi.fn().mockResolvedValue("plain-text-response"),
+    });
+
+    const result = await getDemoWorkbook("unweighted");
+    expect(result).toBe("plain-text-response");
+  });
+
+  it("getWorkbookFromUrl returns raw text when text response is not valid JSON", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: vi.fn().mockResolvedValue("not-json"),
+    });
+
+    const result = await getWorkbookFromUrl("demo/unweighted");
+    expect(result).toBe("not-json");
+  });
+
+  it("getDemoWorkbook returns null when both json and text parsing fail", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: vi.fn().mockRejectedValue(new Error("json broken")),
+      text: vi.fn().mockRejectedValue(new Error("text broken")),
+    });
+
+    const result = await getDemoWorkbook("weighted");
+    expect(result).toBeNull();
+  });
+
   it("getDemoEndpoint returns Error for unknown demoValue", () => {
     const unknownDemoValue = { props: { children: "Unknown Demo" } };
     const result = getDemoEndpoint(unknownDemoValue);
@@ -134,6 +176,65 @@ describe("api service", () => {
 
   it("getNetworkMode throws for unknown workbook type", () => {
     expect(() => getNetworkMode("unknown-type")).toThrow("Unknown workbook type");
+  });
+
+  it("getWorkbookFromForm uses POST when formData is present", async () => {
+    const payload = { ok: true };
+    const formData = new FormData();
+    formData.append("file", new Blob(["a"]), "file.xlsx");
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: vi.fn().mockResolvedValue(payload),
+    });
+
+    const result = await getWorkbookFromForm(formData, "upload");
+
+    expect(result).toEqual(payload);
+    expect(fetchSpy).toHaveBeenCalledWith(expect.stringContaining("/upload"), {
+      method: "POST",
+      body: formData,
+    });
+  });
+
+  it("uploadWorkbook creates form data and delegates to POST path", async () => {
+    const payload = { ok: true };
+    const file = new File(["abc"], "network.xlsx", {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: vi.fn().mockResolvedValue(payload),
+    });
+
+    const result = await uploadWorkbook(file, "upload");
+
+    expect(result).toEqual(payload);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy.mock.calls[0][0]).toContain("/upload");
+    expect(fetchSpy.mock.calls[0][1].method).toBe("POST");
+    expect(fetchSpy.mock.calls[0][1].body).toBeInstanceOf(FormData);
+  });
+
+  it("getWorkbookFromForm and getWorkbookFromUrl use GET when no formData is provided", async () => {
+    const payload = { genes: [], links: [] };
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: vi.fn().mockResolvedValue(JSON.stringify(payload)),
+    });
+
+    const resultFromForm = await getWorkbookFromForm(undefined, "demo/unweighted");
+    const resultFromUrl = await getWorkbookFromUrl("demo/weighted");
+
+    expect(resultFromForm).toEqual(payload);
+    expect(resultFromUrl).toEqual(payload);
+    expect(fetchSpy.mock.calls[0][0]).toContain("/demo/unweighted");
+    expect(fetchSpy.mock.calls[0][1]).toBeUndefined();
+    expect(fetchSpy.mock.calls[1][0]).toContain("/demo/weighted");
   });
 });
 
