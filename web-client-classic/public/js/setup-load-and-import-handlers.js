@@ -148,13 +148,12 @@ export const setupLoadAndImportHandlers = grnState => {
                     }
                 }
                 grnState.workbook = workbook;
-                if (grnState.name.includes(".sif")) {
-                    grnState.mode = workbook.workbookType;
-                } else if (grnState.name.includes(".graphml")) {
+
+                grnState.mode = workbook.meta.data.workbookType;
+                if (grnState.name.includes(".graphml")) {
                     grnState.mode = NETWORK_GRN_MODE;
-                } else {
-                    grnState.mode = workbook.meta.data.workbookType;
                 }
+
                 grnState.workbook.expressionNames = Object.keys(workbook.expression).filter(
                     key => key !== "source"
                 );
