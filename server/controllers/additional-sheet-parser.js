@@ -385,6 +385,17 @@ const checkOrderOfGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) =>
     }
 };
 
+const checkExtraGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) => {
+    const extraGenes = Object.keys(output.data).filter(g => !genesInNetwork.includes(g));
+
+    if (extraGenes.length > 0) {
+        addWarning(
+            output,
+            constants.warnings.extraGenesInTwoColumnSheetWarning(sheetName, extraGenes.join(", "))
+        );
+    }
+};
+
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
     let output = {
         data: {},
@@ -474,6 +485,7 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
             }
         }
 
+        checkExtraGenesInTwoColumnSheet(output, genesInNetwork, sheet.name);
         checkOrderOfGenesInTwoColumnSheet(output, genesInNetwork, sheet.name);
     }
 
