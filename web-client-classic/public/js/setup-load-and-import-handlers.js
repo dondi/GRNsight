@@ -149,9 +149,10 @@ export const setupLoadAndImportHandlers = grnState => {
                 }
                 grnState.workbook = workbook;
 
-                grnState.mode = workbook.meta.data.workbookType;
                 if (grnState.name.includes(".graphml")) {
                     grnState.mode = NETWORK_GRN_MODE;
+                } else {
+                    grnState.mode = workbook.meta.data.workbookType;
                 }
 
                 grnState.workbook.expressionNames = Object.keys(workbook.expression).filter(
