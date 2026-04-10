@@ -385,7 +385,7 @@ const enableNodeColoringUI = function () {
 
 const adjustGeneNameForExpression = function (gene) {
     const geneName = gene.name;
-    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE && geneName.endsWith("p")
+    return grnState.mode === NETWORK_PPI_MODE && geneName.endsWith("p")
         ? geneName.slice(0, -1)
         : geneName;
 };
