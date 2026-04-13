@@ -35,10 +35,10 @@ module.exports = {
             };
         },
 
-        MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET: function (sheetName, isAllGenesMissing) {
+        MISSING_ALL_GENES_AND_VALUES: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
             return {
-                warningCode: `MISSING_ALL_${missingType.toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_ALL_${missingType.toUpperCase()}_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `There were no ${missingType} supplied`,
                     `in the ${sheetName} sheet in the imported workbook`,
@@ -47,9 +47,9 @@ module.exports = {
             };
         },
 
-        WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_WHEN_EXPORTING: function (sheetName) {
+        WRONG_GENE_ORDER_WHEN_EXPORTING: function (sheetName) {
             return {
-                warningCode: `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `WRONG_GENE_ORDER_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
                     `were not in the same order as the genes in the 'network' sheet.`,

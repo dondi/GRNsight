@@ -88,6 +88,8 @@ const TWO_COL_SHEET_NAMES = [
     "optimized_threshold_b",
 ];
 
+const MAX_WARNINGS = 75;
+const MAX_ERRORS = 20;
 const OPTIONAL_TWO_COL_SHEET_NAMES = ["optimization_parameters", "optimization_diagnostics"];
 
 const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights", "network_weights"];
@@ -118,7 +120,8 @@ module.exports = {
     TWO_COL_SHEET_NAMES,
     OPTIONAL_TWO_COL_SHEET_NAMES,
     NETWORK_SHEET_NAMES,
-
+    MAX_WARNINGS,
+    MAX_ERRORS,
     warnings: {
         extraneousDataWarning: function (sheetName, row) {
             return {
@@ -396,14 +399,11 @@ module.exports = {
             };
         },
 
-        missingGenesAndValuesInTwoColumnSheetWarningWhenImporting: function (
-            sheetName,
-            missingGenes
-        ) {
+        missingGenesAndValuesWarningWhenImporting: function (sheetName, missingGenes) {
             const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
 
             return {
-                warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
+                warningCode: `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
                 errorDescription: [
                     `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
                     `in the imported workbook's ${sheetName} sheet.`,
@@ -413,12 +413,12 @@ module.exports = {
             };
         },
 
-        missingAllGenesAndValuesInTwoColumnSheet: function (sheetName, isAllGenesMissing) {
+        missingAllGenesAndValues: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
             const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
 
             return {
-                warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `There were no ${missingType} supplied in the "${sheetName}" sheet in the imported workbook.`,
                     grnMapInputSuppliedWarningMessage(sheetName, value),
@@ -426,22 +426,22 @@ module.exports = {
             };
         },
 
-        missingGeneIdsWithValuesInTwoColumnSheet: function (sheetName, valuesMissingGenes) {
+        missingGeneIdsWithValues: function (sheetName, valuesMissingGenes) {
             const value = "the missing gene IDs";
             return {
-                warningCode: `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_GENE_IDS_WITH_VALUES_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     "GRNsight has detected that there are missing gene IDs",
                     `in the imported workbook's ${sheetName} sheet.`,
                     grnMapInputSuppliedWarningMessage(sheetName, value),
-                    `The values with missing gene IDs are ${valuesMissingGenes.join(", ")}.`,
+                    `The values with missing gene IDs are ${valuesMissingGenes}.`,
                 ].join(" "),
             };
         },
 
-        wrongGeneOrderInTwoColumnSheet: function (sheetName) {
+        wrongGeneOrder: function (sheetName) {
             return {
-                warningCode: `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `WRONG_GENE_ORDER_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
                     `were not in the same order as the genes in the 'network' sheet.`,

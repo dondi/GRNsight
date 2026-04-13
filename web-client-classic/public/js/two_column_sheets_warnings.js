@@ -27,14 +27,13 @@ const getChosenTwoColumnSheets = chosenSheets => {
 const hasWarningCode = (warningsList, code) => warningsList.some(w => w.warningCode === code);
 
 const getMissingAllGenesAndValuesCode = sheetName =>
-    `MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
-const getMissingAllValuesCode = sheetName =>
-    `MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    `MISSING_ALL_GENES_AND_VALUES_${sheetName.toUpperCase()}`;
+const getMissingAllValuesCode = sheetName => `MISSING_ALL_VALUES_${sheetName.toUpperCase()}`;
 const getMissingGenesAndValuesWhenImportingCode = sheetName =>
-    `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`;
+    `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}_WHEN_IMPORTING`;
 
 const getWrongGeneOrderInTwoColumnSheetCode = sheetName =>
-    `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    `WRONG_GENE_ORDER_${sheetName.toUpperCase()}`;
 
 const findWarningbyCode = (warningsList, code) => warningsList.find(w => w.warningCode === code);
 const toExportWarningFromImportWarning = importWarning => {
@@ -62,12 +61,12 @@ const buildMissingOrEmptyWarning = ({
     );
 
     if (hasMissingAllGenesAndValuesWarning) {
-        return warningsConstants.MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET(
+        return warningsConstants.MISSING_ALL_GENES_AND_VALUES(
             sheetName,
             /* isAllGenesMissing= */ true
         );
     } else if (hasMissingAllValuesWarning) {
-        return warningsConstants.MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET(
+        return warningsConstants.MISSING_ALL_GENES_AND_VALUES(
             sheetName,
             /* isAllGenesMissing= */ false
         );
@@ -80,9 +79,7 @@ const wrongGeneOrderWarning = (sheetName, workbookWarnings, warningsToAdd, warni
     const wrongGeneOrderInTwoColumnSheetCode = getWrongGeneOrderInTwoColumnSheetCode(sheetName);
 
     if (hasWarningCode(workbookWarnings, wrongGeneOrderInTwoColumnSheetCode)) {
-        warningsToAdd.push(
-            warningsConstants.WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_WHEN_EXPORTING(sheetName)
-        );
+        warningsToAdd.push(warningsConstants.WRONG_GENE_ORDER_WHEN_EXPORTING(sheetName));
     }
 };
 
