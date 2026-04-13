@@ -517,6 +517,11 @@ const missingGenesAndValuesInTwoColumnSheetsWarning = (
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
+const extraGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+    const expectedWarningCode = `EXTRA_GENES_${sheetName.toUpperCase()}`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+};
+
 const missingGeneIdsWithValuesInTwoColumnSheetWarning = (
     input,
     frequency,
@@ -965,6 +970,7 @@ exports.missingAllValuesForGenes = missingAllValuesForGenes;
 exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheetWarning;
 exports.missingGenesAndValuesInTwoColumnSheetsWarning =
     missingGenesAndValuesInTwoColumnSheetsWarning;
+exports.extraGenesInTwoColumnSheetWarning = extraGenesInTwoColumnSheetWarning;
 exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
     missingGeneIdsWithValuesInTwoColumnSheetWarning;
 exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;

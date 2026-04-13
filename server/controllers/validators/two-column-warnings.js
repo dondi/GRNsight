@@ -176,6 +176,18 @@ const checkOrderOfGenes = (genesInNetwork, genesInSheet, sheetName) => {
     return { isValid: true };
 };
 
+const areExtraGenesInTwoColumnSheet = (genesInNetwork, genesInSheet, sheetName) => {
+    const extraGenes = genesInSheet.filter(g => !genesInNetwork.includes(g));
+
+    if (extraGenes.length > 0) {
+        return {
+            isValid: false,
+            warning: constants.warnings.extraGenesWarning(sheetName, extraGenes.join(", ")),
+        };
+    }
+    return { isValid: true };
+};
+
 export const applyTwoColumnSheetWarnings = (
     workbook,
     sheetName,
@@ -219,6 +231,16 @@ export const applyTwoColumnSheetWarnings = (
         warningsToAdd.push(
             constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ false)
         );
+    }
+
+    // Check extra genes
+    const extraGenesCheckResult = areExtraGenesInTwoColumnSheet(
+        genesInNetwork,
+        genesInSheet,
+        sheetName
+    );
+    if (!extraGenesCheckResult.isValid) {
+        warningsToAdd.push(extraGenesCheckResult.warning);
     }
 
     // Check order
