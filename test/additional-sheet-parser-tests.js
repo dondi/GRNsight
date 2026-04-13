@@ -357,7 +357,7 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but missing all genes and values", function () {
+        describe("should return MISSING_ALL_GENES_AND_VALUES warning when sheets are present and not empty but missing all genes and values", function () {
             const folder = "test-files/additional-sheet-test-files/missing-all-genes/";
 
             const cases = {
@@ -384,7 +384,7 @@ describe("additional-sheet-parser", function () {
             }
         });
 
-        it("should return MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET warning when all of the values of genes are missing", function () {
+        describe("should return MISSING_ALL_VALUES warning when all of the values of genes are missing", function () {
             const folder = "test-files/additional-sheet-test-files/missing-all-values/";
 
             const cases = {
@@ -411,7 +411,7 @@ describe("additional-sheet-parser", function () {
             }
         });
 
-        it("should return MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET when sheets are present and not empty but missing some genes and values", function () {
+        describe("should return MISSING_GENES_AND_VALUES when sheets are present and not empty but missing some genes and values", function () {
             const folder = "test-files/additional-sheet-test-files/missing-some-genes-and-values/";
 
             const cases = {
@@ -431,14 +431,14 @@ describe("additional-sheet-parser", function () {
                     "missing-last-gene-and-threshold_b-value.xlsx",
                 ],
                 optimized_production_rates: [
-                    "missing-first-gene-and-optimized-prod-rate-value.xlsx",
-                    "missing-middle-gene-and-optimized-prod-rate-value.xlsx",
-                    "missing-last-gene-and-optimized-prod-rate-value.xlsx",
+                    "missing-first-opt-prod-rate-gene-and-value.xlsx",
+                    "missing-middle-opt-prod-rate-gene-and-value.xlsx",
+                    "missing-last-opt-prod-rate-gene-and-value.xlsx",
                 ],
                 optimized_threshold_b: [
-                    "missing-first-gene-and-optimized_threshold_b-value.xlsx",
-                    "missing-middle-gene-and-optimized_threshold_b-value.xlsx",
-                    "missing-last-gene-and-optimized_threshold_b-value.xlsx",
+                    "missing-first-opt-threshold_b-gene-and-value.xlsx",
+                    "missing-middle-opt-threshold_b-gene-and-value.xlsx",
+                    "missing-last-opt-threshold_b-gene-and-value.xlsx",
                 ],
             };
 
@@ -460,7 +460,7 @@ describe("additional-sheet-parser", function () {
             }
         });
 
-        describe("should return MISSING_GENE_IDS_FOR_VALUES_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but missing gene IDs for values", function () {
+        describe("should return MISSING_GENE_IDS_FOR_VALUES warning when sheets are present and not empty but missing gene IDs for values", function () {
             const folder = "test-files/additional-sheet-test-files/missing-geneId-with-values/";
 
             const cases = {
@@ -509,7 +509,7 @@ describe("additional-sheet-parser", function () {
             }
         });
 
-        describe("should return WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but the order of genes is not the same as the network sheet", function () {
+        describe("should return WRONG_GENE_ORDER warning when sheets are present and not empty but the order of genes is not the same as the network sheet", function () {
             it("for degradation_rates sheet", function () {
                 test.wrongGeneOrderInTwoColumnSheetWarning(
                     "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-deg-rates-sheet.xlsx",

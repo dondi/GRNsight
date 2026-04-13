@@ -180,14 +180,15 @@ export const applyTwoColumnSheetWarnings = (
     workbook,
     sheetName,
     genesInNetwork,
-    valuesMissingGenes
+    valuesMissingGene,
+    genesMissingValue
 ) => {
     const warningsToAdd = [];
 
     // Check for values that are missing gene IDs
-    if (valuesMissingGenes.length > 0) {
+    if (valuesMissingGene.length > 0) {
         warningsToAdd.push(
-            constants.warnings.missingGeneIdsWithValues(sheetName, valuesMissingGenes.join(", "))
+            constants.warnings.missingGeneIdsWithValues(sheetName, valuesMissingGene.join(", "))
         );
     }
 
@@ -198,7 +199,6 @@ export const applyTwoColumnSheetWarnings = (
 
     const genesInSheet = Object.keys(workbook.data);
     const missingGenes = genesInNetwork.filter(g => !genesInSheet.includes(g));
-    const genesWithData = genesInSheet.filter(g => workbook.data[g] !== undefined);
 
     // Check missing genes
     if (missingGenes.length === genesInNetwork.length) {
@@ -215,7 +215,7 @@ export const applyTwoColumnSheetWarnings = (
     }
 
     // Check missing values
-    if (genesInSheet.length > 0 && genesWithData.length === 0) {
+    if (genesInSheet.length > 0 && genesMissingValue.length === genesInSheet.length) {
         warningsToAdd.push(
             constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ false)
         );

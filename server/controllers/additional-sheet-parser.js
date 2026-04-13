@@ -3,28 +3,13 @@
 const {
     applyTwoColumnSheetWarnings,
     isValidHeader,
+    isValidGeneName,
     validateRowEntry,
     addWarning,
     addError,
 } = require("./validators/two-column-warnings");
 
 var constants = require(__dirname + "/workbook-constants");
-
-const getSheetHeader = (sheetName, column, row) => {
-    if (row === 0) {
-        if (sheetName === "production_rates" || sheetName === "optimized_production_rates") {
-            return column === 0 ? "id" : "production_rate";
-        } else if (sheetName === "degradation_rates") {
-            return column === 0 ? "id" : "degradation_rate";
-        } else if (sheetName === "threshold_b" || sheetName === "optimized_threshold_b") {
-            return column === 0 ? "id" : "threshold_b";
-        } else if (sheetName === "optimization_parameters") {
-            return column === 0 ? "optimization_parameter" : "value";
-        } else if (sheetName === "optimization_diagnostics") {
-            return column === 0 ? "Parameter" : "Value";
-        }
-    }
-};
 
 const optimizationParametersTypeKey = {
     alpha: "number",
@@ -56,27 +41,6 @@ const optimizationParametersObjectKey = {
     simulation_timepoints: "number",
 };
 
-const validGeneName = (output, sheetName, gene, row) => {
-    var maxGeneLength = 12;
-    var regex = /[^a-z0-9\_\-]/gi;
-
-    // Allow missing gene id
-    if (gene === undefined || gene === null || (typeof gene === "string" && gene.trim() === "")) {
-        return false;
-    }
-
-    if (typeof gene !== "string") {
-        addError(output, constants.errors.invalidGeneTypeError(sheetName, gene, row));
-        return false;
-    } else if (gene.length > maxGeneLength) {
-        addError(output, constants.errors.invalidGeneLengthError(sheetName, gene, row));
-        return false;
-    } else if (gene.match(regex) !== null) {
-        addError(output, constants.errors.specialCharacterError(sheetName, gene, row));
-        return false;
-    }
-    return true;
-};
 // Optimization Parameters Parser
 const parseMetaDataSheet = sheet => {
     let meta = {
@@ -227,7 +191,8 @@ const parseOptimizationDiagnosticsSheet = sheet => {
             }
             currentGene = sheet.data[row][0];
             // if it's a valid gene set the key = MSE value
-            if (validGeneName(output, sheet.name, currentGene, row)) {
+            const isValidGeneNameResult = isValidGeneName(currentGene, sheet.name, row);
+            if (isValidGeneNameResult.isValid) {
                 for (let col = 1; col <= output.data.MSE["column-headers"].length; col++) {
                     if (typeof sheet.data[row][col] === "number") {
                         currentMSE.push(sheet.data[row][col]);
@@ -324,7 +289,13 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         }
     }
 
-    applyTwoColumnSheetWarnings(output, sheet.name, genesInNetwork, valuesMissingGene);
+    applyTwoColumnSheetWarnings(
+        output,
+        sheet.name,
+        genesInNetwork,
+        valuesMissingGene,
+        genesMissingValue
+    );
 
     return output;
 };

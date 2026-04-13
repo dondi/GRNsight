@@ -498,7 +498,7 @@ const unrecognizedSheetWarning = (input, frequency) => {
 };
 
 const missingAllGenesInTwoColumnSheetWarning = (input, frequency, sheetName, expectedText) => {
-    const expectedWarningCode = `MISSING_ALL_GENES_${sheetName.toUpperCase()}`;
+    const expectedWarningCode = `MISSING_ALL_GENES_AND_VALUES_${sheetName.toUpperCase()}`;
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
