@@ -537,6 +537,17 @@ const wrongGeneOrderInTwoColumnSheetWarning = (input, frequency, sheetName, expe
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
+const wrongGeneIdsWarning = (input, sheetName) => {
+    const expectedWarningCodes = [
+        `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}`,
+        `EXTRA_GENES_${sheetName.toUpperCase()}`,
+    ];
+
+    for (const expectedWarningCode of expectedWarningCodes) {
+        testWarningsForTwoColumnSheet(input, 2, sheetName, expectedWarningCode);
+    }
+};
+
 const testWarningsForTwoColumnSheet = (
     input,
     frequency,
@@ -560,7 +571,15 @@ const testWarningsForTwoColumnSheet = (
         `Expected warnings array to exist on ${sheetName} sheet of workbook`
     );
     assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
-    assert.equal(workbook.twoColumnSheets[sheetName].warnings[0].warningCode, expectedWarningCode);
+    const warningCodes = workbook.twoColumnSheets[sheetName].warnings.map(
+        warning => warning.warningCode
+    );
+    assert.include(
+        warningCodes,
+        expectedWarningCode,
+        `Expected warning code ${expectedWarningCode} to be included in warnings for ${sheetName} sheet`
+    );
+
     if (expectedText) {
         assert.include(
             workbook.twoColumnSheets[sheetName].warnings[0].errorDescription,
@@ -974,6 +993,7 @@ exports.extraGenesInTwoColumnSheetWarning = extraGenesInTwoColumnSheetWarning;
 exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
     missingGeneIdsWithValuesInTwoColumnSheetWarning;
 exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;
+exports.wrongGeneIdsWarning = wrongGeneIdsWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
