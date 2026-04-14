@@ -513,7 +513,7 @@ const missingGenesAndValuesInTwoColumnSheetsWarning = (
     sheetName,
     expectedText
 ) => {
-    const expectedWarningCode = `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}_WHEN_IMPORTING`;
+    const expectedWarningCode = `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}`;
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
