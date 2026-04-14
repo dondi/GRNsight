@@ -412,7 +412,7 @@ export const upload = function () {
                 workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
                 chosenSheets,
                 source,
-                warningsConstants: warnings,
+                exportWarningsConstants: warnings,
                 workbookWarnings: grnState.workbook.warnings,
             });
 

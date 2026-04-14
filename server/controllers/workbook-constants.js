@@ -403,7 +403,7 @@ module.exports = {
             const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
 
             return {
-                warningCode: `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
+                warningCode: `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
                     `in the imported workbook's ${sheetName} sheet.`,
