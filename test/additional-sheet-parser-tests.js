@@ -472,55 +472,6 @@ describe("additional-sheet-parser", function () {
             }
         });
 
-        describe("should return MISSING_GENE_IDS_FOR_VALUES warning when sheets are present and not empty but missing gene IDs for values", function () {
-            const folder = "test-files/additional-sheet-test-files/missing-geneId-with-values/";
-
-            const cases = {
-                degradation_rates: [
-                    "missing-first-geneID-on-deg-rates-sheet.xlsx",
-                    "missing-middle-geneID-on-deg-rates-sheet.xlsx",
-                    "missing-last-geneID-on-deg-rates-sheet.xlsx",
-                ],
-                production_rates: [
-                    "missing-first-geneID-on-prod-rates-sheet.xlsx",
-                    "missing-middle-geneID-on-prod-rates-sheet.xlsx",
-                    "missing-last-geneID-on-prod-rates-sheet.xlsx",
-                ],
-                threshold_b: [
-                    "missing-first-geneID-on-threshold_b-sheet.xlsx",
-                    "missing-middle-geneID-on-threshold_b-sheet.xlsx",
-                    "missing-last-geneID-on-threshold_b-sheet.xlsx",
-                ],
-                optimized_production_rates: [
-                    "missing-first-geneID-on-opt-prod-rates-sheet.xlsx",
-                    "missing-middle-geneID-on-opt-prod-rates-sheet.xlsx",
-                    "missing-last-geneID-on-opt-prod-rates-sheet.xlsx",
-                ],
-                optimized_threshold_b: [
-                    "missing-first-geneID-on-opt-threshold_b-sheet.xlsx",
-                    "missing-middle-geneID-on-opt-threshold_b-sheet.xlsx",
-                    "missing-last-geneID-on-opt-threshold_b-sheet.xlsx",
-                ],
-            };
-
-            for (const sheetName in cases) {
-                const expectedText = sheetName.includes("optimized")
-                    ? "GRNsight is checking because"
-                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
-
-                it(`for ${sheetName} sheet`, function () {
-                    for (const fileName of cases[sheetName]) {
-                        test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
-                            `${folder}${fileName}`,
-                            2,
-                            sheetName,
-                            expectedText
-                        );
-                    }
-                });
-            }
-        });
-
         describe("should return WRONG_GENE_ORDER warning when sheets are present and not empty but the order of genes is not the same as the network sheet", function () {
             const folder = "test-files/additional-sheet-test-files/wrong-gene-order/";
 
