@@ -199,10 +199,4 @@ export const VIEWPORT_OPTION_CLASS_SIDEBAR = ".boundBoxSize";
 export const NETWORK_PPI_MODE = "protein-protein-physical-interaction";
 export const NETWORK_GRN_MODE = "grn";
 
-export const TWO_COLUMN_SHEETS = [
-    "production_rates",
-    "degradation_rates",
-    "threshold_b",
-    "optimized_production_rates",
-    "optimized_threshold_b",
-];
+export const TWO_COLUMN_SHEETS = ["production_rates", "degradation_rates", "threshold_b"];
