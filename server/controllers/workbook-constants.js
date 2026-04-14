@@ -426,6 +426,19 @@ module.exports = {
             };
         },
 
+        someGenesMissingValuesWarning: function (sheetName, genes) {
+            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+
+            return {
+                warningCode: `MISSING_VALUES_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that there are missing values for ${value} in the imported workbook's "${sheetName}" sheet.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
+                    `The genes with missing values are: ${genes}.`,
+                ].join(" "),
+            };
+        },
+
         extraGenesWarning: function (sheetName, extraGenes) {
             return {
                 warningCode: `EXTRA_GENES_${sheetName.toUpperCase()}`,

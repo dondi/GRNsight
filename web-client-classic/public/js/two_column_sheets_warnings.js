@@ -104,6 +104,7 @@ export const buildPreFetchTwoColumnWarnings = ({
         const importWarningCodesToMigrate = [
             `MISSING_GENES_AND_VALUES_${sheetUpperName}`,
             `EXTRA_GENES_${sheetUpperName}`,
+            `MISSING_VALUES_${sheetUpperName}`,
         ];
         warningsToAdd.push(...migrateImportWarnings(workbookWarnings, importWarningCodesToMigrate));
 
