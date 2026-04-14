@@ -1,4 +1,4 @@
-var constants = require("../workbook-constants");
+const constants = require("../workbook-constants");
 
 const addWarnings = (workbook, warningsToAdd) => {
     let warningsCount;
@@ -17,14 +17,13 @@ const addWarnings = (workbook, warningsToAdd) => {
     }
 };
 
-export const addWarning = (workbook, warning) => {
+const addWarning = (workbook, warning) => {
     const warningToAdd = [warning];
     addWarnings(workbook, warningToAdd);
 };
 
-export const addError = (output, message) => {
+const addError = (output, message) => {
     const errorsCount = output.errors.length;
-    const MAX_ERRORS = 20;
     if (errorsCount < constants.MAX_ERRORS) {
         output.errors.push(message);
     } else {
@@ -45,11 +44,10 @@ const getSheetHeader = sheetName => {
     return ["id", "value"]; // Default
 };
 
-export const isValidGeneName = (geneName, sheetName, rowNum) => {
+const isValidGeneName = (geneName, sheetName, rowNum) => {
     const maxGeneNameLength = 12;
     const geneNameRegex = /[^a-z0-9\_\-]/gi;
 
-    // If type of gene is not string, then return a type error, or if string
     if (
         geneName === undefined ||
         geneName === null ||
@@ -78,7 +76,7 @@ export const isValidGeneName = (geneName, sheetName, rowNum) => {
     }
 };
 
-export const isValidHeader = (header, sheetName) => {
+const isValidHeader = (header, sheetName) => {
     const expectedHeader = getSheetHeader(sheetName);
     const expectedA1 = expectedHeader[0];
     const expectedB1 = expectedHeader[1];
@@ -121,7 +119,7 @@ export const isValidHeader = (header, sheetName) => {
     return { isValid: true };
 };
 
-export const validateRowEntry = (sheetName, geneName, geneValue, rowNum) => {
+const validateRowEntry = (sheetName, geneName, geneValue, rowNum) => {
     const isValueEmpty =
         geneValue === null || geneValue === undefined || String(geneValue).trim() === "";
 
@@ -176,7 +174,7 @@ const checkOrderOfGenes = (genesInNetwork, genesInSheet, sheetName) => {
     return { isValid: true };
 };
 
-const areExtraGenesInTwoColumnSheet = (genesInNetwork, genesInSheet, sheetName) => {
+const areExtraGenesInSheet = (genesInNetwork, genesInSheet, sheetName) => {
     const extraGenes = genesInSheet.filter(g => !genesInNetwork.includes(g));
 
     if (extraGenes.length > 0) {
@@ -188,7 +186,7 @@ const areExtraGenesInTwoColumnSheet = (genesInNetwork, genesInSheet, sheetName) 
     return { isValid: true };
 };
 
-export const applyTwoColumnSheetWarnings = (
+const applyTwoColumnSheetWarnings = (
     workbook,
     sheetName,
     genesInNetwork,
@@ -234,11 +232,7 @@ export const applyTwoColumnSheetWarnings = (
     }
 
     // Check extra genes
-    const extraGenesCheckResult = areExtraGenesInTwoColumnSheet(
-        genesInNetwork,
-        genesInSheet,
-        sheetName
-    );
+    const extraGenesCheckResult = areExtraGenesInSheet(genesInNetwork, genesInSheet, sheetName);
     if (!extraGenesCheckResult.isValid) {
         warningsToAdd.push(extraGenesCheckResult.warning);
     }
@@ -247,8 +241,24 @@ export const applyTwoColumnSheetWarnings = (
     const orderCheckResult = checkOrderOfGenes(genesInNetwork, genesInSheet, sheetName);
     if (!orderCheckResult.isValid) {
         warningsToAdd.push(orderCheckResult.warning);
-        genesInSheet.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+        const sortedData = {};
+        genesInSheet
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+            .forEach(gene => {
+                sortedData[gene] = workbook.data[gene];
+            });
+        workbook.data = sortedData;
     }
 
     addWarnings(workbook, warningsToAdd);
+};
+
+module.exports = {
+    applyTwoColumnSheetWarnings,
+    isValidGeneName,
+    isValidHeader,
+    validateRowEntry,
+    addWarning,
+    addError,
 };
