@@ -78,29 +78,6 @@ describe("api service", () => {
     await expect(getDemoWorkbook("ppi")).rejects.toThrow("network down");
   });
 
-  it("getDemoWorkbook falls back to text parsing when json parsing fails", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue({
-      ok: true,
-      status: 200,
-      json: vi.fn().mockRejectedValue(new Error("bad json")),
-      text: vi.fn().mockResolvedValue("plain-text-response"),
-    });
-
-    const result = await getDemoWorkbook("unweighted");
-    expect(result).toBe("plain-text-response");
-  });
-
-  it("getWorkbookFromUrl returns raw text when text response is not valid JSON", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue({
-      ok: true,
-      status: 200,
-      text: vi.fn().mockResolvedValue("not-json"),
-    });
-
-    const result = await getWorkbookFromUrl("demo/unweighted");
-    expect(result).toBe("not-json");
-  });
-
   it("getDemoWorkbook returns null when both json and text parsing fail", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
@@ -110,6 +87,17 @@ describe("api service", () => {
     });
 
     const result = await getDemoWorkbook("weighted");
+    expect(result).toBeNull();
+  });
+
+  it("getDemoWorkbook returns null when response.json is not a function", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: "not-a-function",
+    });
+
+    const result = await getDemoWorkbook("unweighted");
     expect(result).toBeNull();
   });
 
@@ -224,7 +212,7 @@ describe("api service", () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       status: 200,
-      text: vi.fn().mockResolvedValue(JSON.stringify(payload)),
+      json: vi.fn().mockResolvedValue(payload),
     });
 
     const resultFromForm = await getWorkbookFromForm(undefined, "demo/unweighted");
@@ -235,6 +223,7 @@ describe("api service", () => {
     expect(fetchSpy.mock.calls[0][0]).toContain("/demo/unweighted");
     expect(fetchSpy.mock.calls[0][1]).toBeUndefined();
     expect(fetchSpy.mock.calls[1][0]).toContain("/demo/weighted");
+    expect(fetchSpy.mock.calls[1][1]).toBeUndefined();
   });
 });
 
