@@ -19,7 +19,7 @@ description: Papers, talks, and posters about GRNsight, a web application and se
 
                         <div id="papers" class="panel-collapse collapse in">
                             <div class="panel-body">
-                                
+
                                 <p class="publication">
                                     <b>September 12, 2016</b><br>
                                     Kam D. Dahlquist, John David N. Dionisio, Ben G. Fitzpatrick, Nicole A. Anguiano, Anindita Varshneya, Britain J. Southwick, Mihir Samdarshi. (2016) GRNsight: a web application and service for visualizing models of small- to medium-scale gene regulatory networks. <em>PeerJ Computer Science</em> 2:e85 <a href="https://doi.org/10.7717/peerj-cs.85" target="_blank">https://doi.org/10.7717/peerj-cs.85</a><br><br>
@@ -27,7 +27,7 @@ description: Papers, talks, and posters about GRNsight, a web application and se
                                     <a href="https://doi.org/10.7717/peerj-cs.85" target="_blank">View HTML with embedded PDF</a><br>
                                     <a href="https://peerj.com/articles/cs-85.pdf" target="_blank">Download PDF (2.7 MB)</a><br>
                                     <a href="https://peerj.com/articles/cs-85/reviews/" target="_blank">See peer review history</a><br><br>
-                                    
+
                                     <i>Note that preprints of this article were posted in PeerJ Preprints on <a href="https://peerj.com/preprints/2068v1/" target="_blank">May 23</a> and <a href="https://peerj.com/preprints/2068v2/" target="_blank">August 18</a>, 2016.</i><br><br>
 
                                     <b>Abstract</b><br>
@@ -51,15 +51,28 @@ description: Papers, talks, and posters about GRNsight, a web application and se
                             <div class="panel-body">
 
                                 <p class="abstract">
+                                    <b><a href="https://biology.sonoma.edu/wcbsurc" target="_blank">West Coast Biological Sciences Undergraduate Research Conference (WCBSURC) , Sonoma State University, Sonoma County, CA</a></b><br>
+
+                                    Major Front-End Migration for GRNsight, a Web Application for Visualizing Gene Regulatory and Protein-Protein Interaction Network Models
+
+                                    <b></b>Cecilia J. Zaragoza</b>, John David N. Dionisio, Kam D. Dahlquist<br><br>
+
+                                    Abstract: A gene regulatory network (GRN) consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. A protein-protein physical interaction network (PPI) represents a set of proteins that bind to each other. A specialized software tool would help biologists better view and analyze such networks, so we created GRNsight, an open-source web application for visualizing models of GRNs and PPIs, either uploaded by a user or obtained from our backend budding yeast database. Graph models display rectangular nodes, representing genes/proteins, with edges connecting them. GRNs have directed red edges with pointed end markers or blue edges with blunt end markers to indicate regulatory relationships (activation or repression, respectively), with edge thickness indicating regulation strength. PPIs have undirected black edges to indicate physical binding. Time-course expression data can be displayed on GRN nodes to facilitate understanding of the regulatory relationships that generated that pattern of expression, creating new insights. GRNsight has been in development for over a decade, during which time both biological datasets and web technologies have advanced significantly. While the original implementation successfully supports the core functionality, it relies on older tools that make long-term maintenance and the addition of new features increasingly difficult. To address this challenge, GRNsight's JavaScript codebase has been migrated from a jQuery/Bootstrap/Pug framework to a modern React-based front-end which improves code readability, state management, and allows for more advanced interactive features. By modernizing the underlying framework, GRNsight is now positioned to continue expanding its functionality as new visualization needs arise for researchers to gain deeper insights into complex molecular systems. GRNsight React is available at <a href="https://dondi.github.io/GRNsight/react-thesis-4081" target="_blank">https://dondi.github.io/GRNsight/react-thesis-4081</a>. <br><br>
+
+                                    Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Zaragoza_WCBSURC_20260411.pdf" target="_blank">here</a> to view the slides.
+                                </p>
+
+
+                                <p class="abstract">
                                     <b><a href="https://academics.lmu.edu/orca/symposium/" target="_blank">Undergraduate Research Symposium (URS) , Loyola Marymount University, Los Angeles, CA</a></b><br>
-                                    
+
                                     Major Code and Data Migrations for GRNsight, a Web Application for Visualizing Gene Regulatory and Protein-Protein Interaction Network Models<br>
 
                                     <b></b>Cecilia J. Zaragoza, Ngoc K. Tran</b>, John David N. Dionisio, Kam D. Dahlquist<br><br>
 
                                     Abstract: GRNsight is an open-source web application for visualizing models of gene regulatory networks (GRNs) and protein-protein physical interaction networks (PPIs), either uploaded by the user or retrieved from our back-end database. A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them that govern expression levels of mRNA and proteins. A protein-protein physical interaction network represents the binding relationships between proteins. GRNsight displays graph models where rectangular nodes represent genes or proteins with edges connecting them. While GRNs have directed edges to indicate regulatory relationships with edge thickness indicating regulation strength, PPIs have undirected edges to indicate physical binding. Timecourse gene expression data can be displayed as a heatmap on the individual nodes. As its core, GRNsight integrates a PostgreSQL backend that serves as a centralized repository for molecular interaction and expression data for Saccharomyces cerevisiae. Due to the discontinuation of YeastMine, we migrated the data source to AllianceMine, ensuring continuity of high-quality data. In addition, the GRNsight codebase has been migrated from Express JS to a React Vite front-end with Grommet UI styling. Improved state management across the web application and the separation of code into reusable components result in better code maintainability. By combining a durable data backend with a modernized, responsive frontend, GRNsight provides a performant and maintainable framework that allows biologists to gain deeper insights into complex molecular systems. GRNsight Classic v7.4.0 is available at <a href="https://dondi.github.io/GRNsight/" target="_blank">https://dondi.github.io/GRNsight/</a>; GRNsight React is available at <a href="https://dondi.github.io/GRNsight/react-thesis-4081" target="_blank">https://dondi.github.io/GRNsight/react-thesis-4081</a>. <br><br>
-                                    
-                                    Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Zaragoza_Tran_LMU_Symposium_20260320.pdf" target="_blank">here</a> to view the slides.      
+
+                                    Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Zaragoza_Tran_LMU_Symposium_20260320.pdf" target="_blank">here</a> to view the slides.
                                 </p>
 
                                 <p class="abstract">
@@ -69,7 +82,7 @@ description: Papers, talks, and posters about GRNsight, a web application and se
                                     <b>Ngoc K. Tran, Milka Zekarias</b>, Cecilia J. Zaragoza, A'Kaia Phelps, Amelie Dinh, John David N. Dionisio, Kam D. Dahlquist<br><br>
 
                                     Abstract: GRNsight is an open-source web application for visualizing models of gene regulatory networks (GRNs) and protein-protein physical interaction networks (PPIs) either uploaded by the user or obtained from our backend yeast database. Models are displayed as graphs where genes/proteins are rectangular nodes with edges between them. GRNs have directed edges to indicate regulatory relationships (activation or repression), and PPIs have undirected edges to indicate physical binding. For v7, we improved our PPI support, transitioned our database loading scripts from YeastMine to AllianceMine, enhanced viewport functionality, and migrated continuous integration (CI) to GitHub Actions. As was previously implemented for GRNs, users can now color nodes in PPIs with expression data, either provided by the user or from our backend database. Different datasets can be displayed on the top and bottom of the nodes. For database loading, our scripts were ported to AllianceMine because YeastMine was discontinued. New graph functionality has been implemented that allows users to restrict the graph to viewport so that they can drag, zoom, and move the graph with the nodes staying within the application’s bounding box. Finally, the project’s CI pipeline has been migrated from Travis CI to GitHub Actions, integrating workflows for automated builds, unit tests, and linting to streamline development processes and improve maintainability. Ongoing efforts prioritize bug resolution, user interface enhancements, and improved documentation. GRNsight is now positioned to comprehensively address GRNs and PPIs, offering a unified platform for visualizing diverse molecular interaction models. GRNsight is available at <a href="https://dondi.github.io/GRNsight/" target="_blank">https://dondi.github.io/GRNsight/</a>. <br><br>
-                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Tran_Zekarias_SCCUR_20251122.pdf" target="_blank">here</a> to view the slides.      
+                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Tran_Zekarias_SCCUR_20251122.pdf" target="_blank">here</a> to view the slides.
                                 </p>
 
                                 <p class="abstract">
@@ -105,7 +118,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Alexia Filler, Kevin Patterson</b><br><br>
                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Filler_Patterson_CMSI402_Presentation_20200501.pdf" target="_blank">here</a> to view the slides.<br><br>
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>12<sup>th</sup> Annual Loyola Marymount University Undergraduate Research Conference (virtual)</b><br>
                                     <b>April 6, 2020</b><br><br>
@@ -113,7 +126,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Alexia M. Filler, Kevin B. Patterson</b>, John David N. Dionisio, Kam D. Dahlquist<br><br>
 
                                     Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRNs). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN, can mathematically model GRNs. Using a GRNmap output workbook, GRNsight automatically visualizes the network as a graph. GRNsight uses the model output to color-code the edges based on the activation and repression relationships between the transcription factors and colors the nodes based on time course gene expression data. We have added a feature to store expression data in a database, so that users of GRNsight can view and interact with already-existing expression data pulled from the Dahlquist lab and other publicly available datasets. The database is hosted by Amazon Web Services (AWS) Relational Database Service (RDS) and uses a PostgreSQL engine, from which GRNsight performs dynamic queries in response to user requests. Additionally, we have expanded the availability of gene-specific data to a greater number of species. The feature allows user to specify the species of interest either based on a GRNmap workbook or direct user input, and save it for the remainder of the user's session. With the species indicated, the gene page can query the appropriate databases and return information relevant only to species-specific genes. GRNsight is available at <a href="https://dondi.github.io/GRNsight/" target="_blank">https://dondi.github.io/GRNsight/</a><br><br>
-                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Filler_Patterson_LMU-Symposium_20200418_talk.pdf" target="_blank">here</a> to view the slides. 
+                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Filler_Patterson_LMU-Symposium_20200418_talk.pdf" target="_blank">here</a> to view the slides.
                                 </p>
 
                                  <p class="abstract">
@@ -124,7 +137,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
 
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight accepts input files in the Excel, SIF, and GraphML formats and then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges. Activation is represented with red edges, repression is represented with blue edges, and weight magnitudes below a certain threshold are represented with gray edges to denote weak activation or repression relationships. GRNsight now contains features to facilitate network comparison. Nodes on each graph show a heat map corresponding to gene expression levels over time; these nodes can be overlaid with up to two different data sets. The graphs generated by GRNsight may now be automatically laid out in a grid. When a user right-clicks on a gene, data requests are made to five public databases and a web page is dynamically populated with the data returned. Finally, a number of under the hood improvements were made to GRNsight’s architecture. Most notably, GRNsight was made to follow a strict Model-View-Controller (MVC) paradigm. MVC consolidates the application’s state into a single object, from which presentation and interaction are derived. GRNsight version 3.1.3 is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; the code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a>.<br><br>
 
-                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Samdarshi_LMU-Symposium_20190323_talk.pdf" target="_blank">here</a> to view the slides. 
+                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Samdarshi_LMU-Symposium_20190323_talk.pdf" target="_blank">here</a> to view the slides.
                                 </p>
 
                                 <p class="abstract">
@@ -133,7 +146,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     From the <i>lac</i> operon to the spaghettiome, what can we learn from modeling gene regulatory networks on a medium scale?<br>
                                     <b>Kam D. Dahlquist</b><br><br>
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>10<sup>th</sup> Annual Loyola Marymount University Undergraduate Research Conference</b><br>
                                     <b>March 24, 2018</b><br><br>
@@ -148,9 +161,9 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
 
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight imports data from an adjacency matrix in either an Excel workbook, SIF, or GraphML file, then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. Visual issues regarding edge thickness and end markers have been adjusted and test files created. The new GRNsight graph now displays self-regulatory arrows with consistent positions regardless of the node size, edge thickness, or whether it is weighted. The GRNsight layout depends on the force graph engine from D3. We updated GRNsight from D3 version 3 to version 4, allowing the developers to utilize new D3 functionalities. We have implemented block layout where the nodes align into a grid alphabetically by node label. This graph layout feature will allow the users to organize and align the nodes with a simple button interface instead of manually dragging them as before. This will facilitate easier side-by-side comparison of the data from different GRN models. Alternatively, we plan to explore a hierarchical layout option as well. GRNsight is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; the code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a>.<br><br>
                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Shin_LMU-symposium_2018-03-24.pdf" target="_blank">here</a> to view the slides.<br><br>
-            
+
                                 </p>
-   
+
                                 <p class="abstract">
                                     <b>Quantitative and Computational Biosciences Seminar, UCLA</b><br>
                                     <b>March 3, 2018</b><br><br>
@@ -172,14 +185,14 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Eileen J. Choe</b>, Yeon-Soo Shin, Edward B. Bachoura, John David N. Dionisio, Kam D Dahlquist<br><br>
 
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. After GRNsight v1’s release, feedback from users motivated improvements and new features. In GRNsight v2, the graph bounding box is separated from the viewport and expands as far as required for the graph to converge to a steady state, allowing the force graph parameters to be fully applied. The ability to zoom and scroll the graph within the viewport was also added. New analysis features include options for showing edge weight values, customizing the edge thickness normalization factor, and setting the threshold for coloring the edges gray. The addition of features in GRNsight v2 increased the number of possible combinations of functions a user can perform on GRNsight. Thus, we developed an automatic client-side test generator which produces a systematic testing manual. On the server side, syntactic tests for malformed Simple Interaction Format (.sif) files were written, which report end user-targeted errors if an incorrectly formatted SIF file is imported into GRNsight. Future work includes developing a framework to visualize the gene expression over time through coloring the nodes in the network graph. The node coloring feature coupled with the visual and analysis features in GRNsight v2 will provide a more complete visual representation of the GRN, allowing GRNsight users to better derive insights from them. The GRNsight application <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a> and code <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a> are available under the open source BSD license.<br><br>
-                                            
+
                                  <p class="abstract">
                                     <b>WE17: Society for Women Engineers (SWE) Collegiate Competition, Austin, Texas</b><br>
                                     <b>October 28, 2017</b><br><br>
                                     GRNsight v2: a Web Application for Visualizing Models of Small Gene Regulatory Networks<br>
                                     <b>Eileen J. Choe</b>, Nicole A. Anguiano, Anindita Varshneya, Mihir Samdarshi, Yeon-Soo Shin, Edward B. Bachoura, John David N. Dionisio, and Kam D. Dahlquist<br><br>
                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Choe_SWERapidFire2017_final.pdf" target="_blank">here</a> to view the slides.
-                                    <br>           
+                                    <br>
                                 </p>
 
                                 <p class="abstract">
@@ -188,9 +201,9 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     GRNsight<br>
                                     <b>Nicole A. Anguiano</b><br><br>
                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Anguiano_CMSI402_Final_Presentation_2017-05-05.pdf" target="_blank">here</a> to view the slides.
-                                    <br><br>        
+                                    <br><br>
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>9<sup>th</sup> Annual Loyola Marymount University Undergraduate Research Conference</b><br>
                                     <b>March 25, 2017</b><br><br>
@@ -199,14 +212,14 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
 
                                     Abstract: GRNsight is a web application and service for visualizing models of small- to medium-scale gene regulatory networks (GRNs). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight automatically lays out GRN data contained in either an unweighted or weighted network graph based on an Excel workbook containing an adjacency matrix, a Simple Interaction Format (SIF) text file, or a GraphML (XML) file. GRNsight uses pointed and blunt arrowheads, and colors the edges and adjusts their thicknesses based on the sign and magnitude of an edge weight parameter. Visualizations can be modified through manual node dragging and sliders that adjust the force graph parameters. New visual features include the ability to show and hide edge weights, resize the bounding box, zoom into the visualization, and change graph layouts. New analysis features include the ability to adjust the normalization factor of the graph so that the thicknesses of the edges will be on the same scale for two different graphs, facilitating comparison, and the computation of graph statistics, such as betweenness centrality for nodes. Users can access these new features via easily accessible menu and sidebar options. GRNsight follows open and test-driven development best practices, where a testing framework consisting of over 160 automated unit tests ensures that the program is running as expected. GRNsight is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a>.<br><br>
                                             Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/presentations/Varshneya_Anguiano_LMU-Symposium_201703_talk.pdf" target="_blank">here</a> to view the slides.
-                                        
+
                                 <p class="abstract">
                                     <b>National Center for Ecological Analysis and Synthesis, Santa Barbara, California</b><br>
                                     <b>March 8, 2017</b><br><br>
                                     GRNmap and GRNsight:  Open Source Software for Dynamical Systems Modeling and Visualization of Medium-Scale Gene Regulatory Networks<br>
                                     <b>Kam D. Dahlquist</b><br><br>
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>Loyola Marymount University Department of Biology Seminar Series</b><br>
                                     September 16, 2016<br><br>
@@ -214,7 +227,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Kam D. Dahlquist</b><br><br>
                                 </p>
 <br>
-                                
+
                                 <p class="abstract">
                                     <b><a href="https://www.open-bio.org/wiki/BOSC_2016" target="_blank">Bioinformatics Open Source Conference (BOSC) 2016, Orlando, FL</a></b><br>
                                     <b>July 9, 2016</b><br><br>
@@ -225,9 +238,9 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     GRNsight is an open source web application for visualizing such models of gene regulatory networks. GRNsight accepts GRNmap- or user-generated spreadsheets containing an adjacency matrix representation of the GRN and automatically lays out the graph of the GRN model. It is written in JavaScript, with diagrams facilitated by D3.js. Node.js and the Express framework handle server-side functions. GRNsight’s diagrams are based on D3.js’s force graph layout algorithm, which was then extensively customized. GRNsight uses pointed and blunt arrowheads, and colors the edges and adjusts their thicknesses based on the sign (activation or repression) and magnitude of the GRNmap weight parameter. Visualizations can be modified through manual node dragging and sliders that adjust the force graph parameters. From the early stages, GRNsight has had a unit testing framework using Mocha and the Chai assertion library to perform test-driven development where unit tests are written before new functionality is coded. This framework consists of over 160 automated unit tests that examine over 450 test files to ensure that the program is running as expected. Error and warning messages inform the user what happened, the source of the problem, and possible solutions. <br><br>
                                     Together, the life cycle of these two programs illustrate the differences between the cultures of mathematics and computing, the challenges and benefits of bringing an existing code base up to open development standards (GRNmap), and the advantages of starting a project using best practices from the beginning (GRNsight).  Our goal is to facilitate reproducible research.<br><br>
                                      <a href="http://f1000research.com/slides/5-1637" target="_blank">Click here to view the slides on F1000Research.</a><br><br>
-                                     
+
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>Experimental Biology 2016, San Diego, CA</b><br>
                                     <b>April 4, 2016</b><br><br>
@@ -308,7 +321,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                      <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Dinh-et-al_LMU_SYMPOSIUM_2026.pdf" target="_blank">Click here</a> to view the poster. <br><br>
                                 </p>
 
-                                        
+
                                 <p class="abstract">
                     <b>Institute for Quantitative and Computational Biology Retreat, University of Californina, Los Angeles</a></b><br>
                     <b>September 22, 2025</b><br><br>
@@ -318,8 +331,8 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                     A gene regulatory network (GRN) is a set of transcription factors that regulate the expression of genes encoding other transcription factors. GRNmap is an open source MATLAB package that uses ordinary differential equations to model dynamics of small-scale GRNs. The program estimates production rates, expression thresholds, and regulatory weights for each transcription factor in the network based on gene expression data and then performs forward simulations of model dynamics. While the model has been successfully used to understand networks of 15-20 genes, we wanted to closely examine how it works on a smaller scale to determine parameter sensitivity. All 21 possible 'toy' networks of 3 nodes and 4 edges were created based on the simulated expression data outputted when known parameters were run through a forward simulation. Then the simulated data was used to estimate the parameters again. Comparison of the known to estimated parameters showed that estimating production rates in addition to weights and thresholds reduced the accuracy of the results. The model was also sensitive to the direction and magnitude of the weight parameters for networks with the same connectivity. GRNsight is an open-source web application for visualizing such models of GRNs, automatically displaying a graph where edges are color-coded based on the activation and repression relationships, and nodes are color-coded with time course gene expression data. Backend gene expression and gene regulatory network databases allow users to generate a network, color the notes with expression data, and export an Excel workbook for modeling in GRNmap.<br><br>
                         Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/ISMBECCB2025_1759_Dahlquist_poster.pdf" target="_blank"> here</a> to view the poster (also presented at IMSB 2025 below).<br>
                 <br>
-                </p>                                    
-                                        
+                </p>
+
                                 <p class="abstract">
                     <b><a href="https://www.iscb.org/ismbeccb2025/home" target="_blank">ISMB/ECCB 2025, Liverpool, England</a></b><br>
                     <b>July 20-25, 2025</b><br><br>
@@ -327,10 +340,10 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                     <b>Kam D. Dahlquist</b>, Ben G. Fitzpatrick, John David N. Dionisio, Ngoc K. Tran, Nikki C. Chun, Cecilia J. Zaragoza, A'Kaia L. Phelps, Amelie T. Dinh, Milka Y. Zekarias<br><br>
                     <b>Abstract</b><br>
                     A gene regulatory network (GRN) is a set of transcription factors that regulate the expression of genes encoding other transcription factors. GRNmap is an open source MATLAB package that uses ordinary differential equations to model dynamics of small-scale GRNs. The program estimates production rates, expression thresholds, and regulatory weights for each transcription factor in the network based on gene expression data and then performs forward simulations of model dynamics. While the model has been successfully used to understand networks of 15-20 genes, we wanted to closely examine how it works on a smaller scale to determine parameter sensitivity. All 21 possible 'toy' networks of 3 nodes and 4 edges were created based on the simulated expression data outputted when known parameters were run through a forward simulation. Then the simulated data was used to estimate the parameters again. Comparison of the known to estimated parameters showed that estimating production rates in addition to weights and thresholds reduced the accuracy of the results. The model was also sensitive to the direction and magnitude of the weight parameters for networks with the same connectivity. GRNsight is an open-source web application for visualizing such models of GRNs, automatically displaying a graph where edges are color-coded based on the activation and repression relationships, and nodes are color-coded with time course gene expression data. Backend gene expression and gene regulatory network databases allow users to generate a network, color the notes with expression data, and export an Excel workbook for modeling in GRNmap.<br><br>
-                        Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/ISMBECCB2025_1759_Dahlquist_poster.pdf" target="_blank">here</a> to view the poster and <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/ISMBECCB2025_1759_Dahlquist_poster.mp4" target="_blank">here</a> to download the video. 
+                        Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/ISMBECCB2025_1759_Dahlquist_poster.pdf" target="_blank">here</a> to view the poster and <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/ISMBECCB2025_1759_Dahlquist_poster.mp4" target="_blank">here</a> to download the video.
                 <br><br>
-                </p>                                      
-                                    
+                </p>
+
                                <p class="abstract">
                                     <b>Loyola Marymount University 17<sup>th</sup> Annual Undergraduate Research Symposium</a></b><br>
                                     <b>March 21, 2025</b><br><br>
@@ -358,7 +371,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Kam D. Dahlquist</b>, Onariaginosa O. Igbinedion, Ahmad R. Mersaghian, Ngan N. Tran, Deepa V. Dabir, John David N. Dionisio<br><br>
 
                                     Abstract: A gene regulatory network (GRN) consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNmap is an open source MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN based on time course gene expression data. GRNsight is an open source web application for visualizing small-to-medium scale GRNs, especially models produced by GRNmap. GRNsight reads the Excel input and output workbooks from GRNmap and automatically displays the model data as a graph with colored nodes (expression data) and edges (estimated regulatory weights). We recently implemented a backend PostgreSQL database for GRNsight, populated with five public gene expression datasets and regulatory network data from the Saccharomyces Genome Database (SGD). A user can select genes to include in the GRN, and GRNsight will automatically layout the network using regulatory connections from SGD. The user can then select one of the time course gene expression datasets with which to color the nodes and export to a properly-formatted GRNmap input workbook. GRNmap can then be used to estimate the regulatory weights (activation vs. repression and magnitude of the relationship). Although GRNsight was originally designed for GRNs, it has the general applicability for displaying any appropriately-sized, weighted or unweighted network with directed edges. Previously, GRNsight was limited to only displaying graphs with directed edges and was unable to display protein-protein physical interaction (PPI) networks, as they are represented by undirected graphs. Thus a protein-protein physical interaction network mode was created to visualize these models in GRNsight. Additionally, a backend database was added to store PPI data obtained from SGD, so that users can generate a PPI network within GRNsight the same way they can generate a GRN. The graphical user interface was updated to be able to toggle between these two graph modes, enabling comparison of these two types of data. GRNmap is available at <a href="http://kdahlquist.github.io/GRNmap/" target="_blank">http://kdahlquist.github.io/GRNmap/</a>; GRNsight is available at <a href="http://dondi.github.io/GRNsight" target="_blank">http://dondi.github.io/GRNsight</a>.<br><br>
-                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Dahlquist-et-al_TAGC_2024.pdf" target="_blank">here</a> to view the poster. <br><br>                                 
+                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Dahlquist-et-al_TAGC_2024.pdf" target="_blank">here</a> to view the poster. <br><br>
                                 </p>
 
                                 <p class="abstract">
@@ -400,7 +413,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     Abstract: GRNsight is an open source web application and service for visualizing models of gene regulatory networks (GRNs). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNmap is a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN based on user-provided expression data. A limitation for GRNmap is the manual creation of input Excel workbooks which is time-consuming and can be error-prone. GRNsight reads these input and output workbooks from GRNmap and automatically displays the model data as a graph with colored nodes and edges. We have updated the existing back-end GRNsight database to be compatible with other species in addition to Saccharomyces cerevisiae. We cleaned up the database schema and added appropriate types to the data so that proper sorting is achieved when retrieving expression data. We expanded the user interface for GRNsight’s export-to-Excel functionality and connected it to the database, so that users can select which particular expression data sheets to export. Furthermore, we are storing all of the interactions between regulatory genes in the database so that GRNsight users can specify which genes belong in their GRN of interest. In conjunction with the updated expression data export feature, this will allow users to fully automate and validate the creation of GRNmap input workbooks, speeding up the rate of research. GRNsight is available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>.<br><br>
                                      Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Igbinedion_LMU_SYMPOSIUM_2022.pdf" target="_blank">here</a> to view the poster. <br><br>
 
-            
+
                                     A New Gene Expression Dataset for GRNsight: a Web Application for Visualizing Gene Network Models<br>
                                     <b>Ahmad R. Mersaghian, Sarron A. Tadesse</b>, John David N. Dionisio, Kam D. Dahlquist<br><br>
 
@@ -408,7 +421,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                      Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Mersaghian_Tadesse_LMU_SYMPOSIUM_2022.pdf" target="_blank">here</a> to view the poster. <br><br>
 
                                 </p>
-                                        
+
                                     <p class="abstract">
                                     <b>Loyola Marymount University 13<sup>th</sup> Annual Undergraduate Research Symposium (virtual)</b><br>
                                     <b>March 19-20, 2021</b><br><br>
@@ -425,9 +438,9 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>John L. Lopez, Alexia M. Filler</b>, John David N. Dionisio, Kam D. Dahlquist<br><br>
 
                                     Abstract: GRNsight is a web application and service for visualizing models of gene regulatory networks (GRNs). A gene regulatory network consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNmap, a MATLAB program that performs parameter estimation and forward simulation of a differential equations model of a GRN, can mathematically model GRNs. Using a GRNmap output workbook, GRNsight automatically lays out the network graph through a force simulation or arranges the nodes in a grid. GRNsight uses pointed and blunt arrowheads on the edges and color-codes and adjusts edge thicknesses based on the sign (activation or repression) and magnitude of the GRNmap weight parameter. Nodes are colored based on experimental or simulated time course gene expression data found in the GRNmap workbook. We have also added a feature that gives users the option to export data to an GRNmap-formatted Excel workbook. Additionally, we implemented a dynamic gene information webpage. When a user right-clicks on a node in the graph, a pop-up webpage sends a series of data requests to the JASPAR, NCBI Gene, UniProt, Ensembl, and Saccharomyces Genome Databases. The webpage is populated with data returned regarding the gene’s description, protein sequence, DNA binding motif frequency matrix and sequence logo, and Gene Ontology terms. This new feature enables users to access information about the genes to facilitate biological interpretation of the GRN data, and is available in GRNsight version 3.1.0 at <a href="http://dondi.github.io/GRNsight" target="_blank">http://dondi.github.io/GRNsight</a>.<br><br>
-                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Lopez_Filler_LMU_Symposium_2019.pdf" target="_blank">here</a> to view the poster. 
+                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Lopez_Filler_LMU_Symposium_2019.pdf" target="_blank">here</a> to view the poster.
                                 </p>
-                                                
+
                                 <p class="abstract">
                                     <b>8<sup>th</sup> Annual Southern California Systems Biology Conference</b><br>
                                     <b>February 2019</b><br><br>
@@ -435,7 +448,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Mihir Samdarshi</b>, John L. Lopez, John David N. Dionisio, Kam D. Dahlquist<br><br>
 
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight accepts input files in the Excel, SIF, and GraphML formats and then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges. Activation is represented with red edges, repression is represented with blue edges, and weight magnitudes below a certain threshold are represented with gray edges to denote weak activation or repression relationships. GRNsight now contains features to facilitate network comparison. Nodes on each graph show a heat map corresponding to gene expression levels over time; these nodes can be overlaid with up to two different data sets. The graphs generated by GRNsight may now be automatically laid out in a grid. When a user right-clicks on a gene, data requests are made to five public databases and a web page is dynamically populated with the data returned. Finally, a number of under the hood improvements were made to GRNsight’s architecture. Most notably, GRNsight was made to follow a strict Model-View-Controller (MVC) paradigm. MVC consolidates the application’s state into a single object, from which presentation and interaction are derived. GRNsight version 3.1.3 is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; the code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight">https://github.com/dondi/GRNsight</a>.<br>
-                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Samdarshi-et-al_SoCalSysBio_2019.pdf" target="_blank">here</a> to view the poster. 
+                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Samdarshi-et-al_SoCalSysBio_2019.pdf" target="_blank">here</a> to view the poster.
                                 </p>
 
                                 <p class="abstract">
@@ -445,9 +458,9 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     <b>Kam D. Dahlquist</b>, Ben G. Fitzpatrick, Brandon J. Klein, Margaret J. O’Neil, Lauren M. Kelly<br><br>
 
                                     Abstract: A gene regulatory network (GRN) is a group of transcription factors that control the level of expression of genes encoding other transcription factors. Dynamics of GRNs illustrate how expression in the network changes over time. GRNmap, a MATLAB software package (http://kdahlquist.github.io/GRNmap/), uses differential equations to model the dynamics of small-scale GRNs. The software estimates production rates, expression thresholds, and regulatory weights for each transcription factor in the network based on microarray data. Microarray data was obtained from a cold shock experiment where wild-type budding yeast, Saccharomyces cerevisiae, and five strains from which the transcription factors Cin5, Gln3, Hap4, Hmo1, and Zap1 were individually deleted were subjected to cold shock at 13°C for 15, 30, and 60 minutes. Six related GRNs, which ranged from 14-17 transcription factors (nodes) and 25-35 regulatory relationships (edges), were constructed using the microarray data and the YEASTRACT database. GRNmap was then used to estimate production rates, expression thresholds, and regulatory weights for each of these GRNs, followed by visualization of the results with the GRNsight software (<a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>). Forward simulation of the model showed a good fit to the experimental data, particularly in comparison to 30 random networks with the same genes and number of edges. Systematic analysis of edges revealed repeated motifs in the database-derived networks. These motifs included a coherent type I feed forward loop (FFL), an activating regulatory chain, and symmetrical incoherent type I FFLs terminating on the paralogs Yhp1 and Yox1. Multiple regression analysis of the database-derived and random networks demonstrated that model fit to experimental expression data was repeatedly correlated with the eigenvector centrality of individual transcription factors. Better model fit to expression data was observed for transcription factors with high eigenvector centrality, such as Gcn4 and Yhp1. A consolidated network containing 15 transcription factors and 34 edges was constructed from conserved motifs and high eigenvector centrality transcription factors. The consolidated network outperformed all random networks and all but one database-derived network. The consolidated network also featured appreciable overlap with the general environmental stress response, with Hmo1 activating Msn2/Msn4 directly and Yhp1 indirectly.<br><br>
-                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Dahlquist-et-al_yeast-genetics-poster_20180821.pdf" target="_blank">here</a> to view the poster. 
+                                            Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Dahlquist-et-al_yeast-genetics-poster_20180821.pdf" target="_blank">here</a> to view the poster.
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>Beta Beta Beta Biological Honor Society's Pacific District Convention, Concordia University, Irvine, California</b><br>
                                     <b>March 2018</b><br><br>
@@ -458,7 +471,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Samdarshi-et-al_LMU-Symposium_2018.pdf" target="_blank">here</a> to view the poster, which was also presented at the LMU Undergraduate Research Symposium. <b><i>Mihir was awarded Honorable Mention for the John C. Johnson Award for Excellence in Student Research for this poster presentation.</b></i> <br><br>
 
                                 </p>
-                                        
+
                                 <p class="abstract">
                                     <b>10<sup>th</sup> Annual Loyola Marymount University Undergraduate Research Conference</b><br>
                                     <b>March 24, 2018</b><br><br>
@@ -468,7 +481,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight accepts input files in the Excel, SIF, and GraphML formats and then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges. Activation is represented with magenta edges, repression is represented with cyan edges, and weight magnitudes below a certain threshold are represented with gray edges to denote weak activation or repression relationships. To better assess the relative strengths of the regulatory relationships, we added a slider that will adjust the gray threshold based on the magnitude of the weight. To facilitate comparison of graphs with different ranges of weight magnitudes, we added the ability to adjust weight normalization factors that control the thicknesses of the edges. Under the hood, the testing framework was refactored into semantic vs. syntactic tests of the validity of input files. Our development tool chain now also includes automatic test coverage calculation (currently 79%), linting for improved code style and readability, and continuous integration for quality assurance. Underlying third-party software libraries including Express, Node-XLSX, and D3 were updated to maintain compatibility and take advantage of new features. GRNsight is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; the code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a>.<br><br>
                                     Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Samdarshi-et-al_LMU-Symposium_2018.pdf" target="_blank">here</a> to view the poster. <br><br>
 
-                                </p>            
+                                </p>
 
                                 <p class="abstract">
                                     <b>Southern California Conference for Undergraduate Research, California State Polytechnic University, Pomona</b><br>
@@ -478,7 +491,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
 
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight imports data from an adjacency matrix in either an Excel workbook or a SIF or GraphML file, then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. Previous visual issues regarding edge thickness have been adjusted along with corresponding test files to check for any visually unappealing faults. The new GRNsight graph now displays self-regulatory arrows with consistent positions regardless of the node size, edge thickness, or whether it’s weighted. On the server side, syntactic tests for the importable GraphML File Format (.graphml) were written, which return end user-targeted error messages to the user if an incorrectly formatted GraphML file is imported into GRNsight. GRNsight follows open source and test-driven development best practices. The exhaustive testing framework consists of over 160 automated unit tests to ensure that the program runs as expected. We are currently working on changing the embedded D3 code from version 3 to version 4 and planning on applying this for the future release. GRNsight is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; the code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a>.<br><br>
                                             Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Shin-et-al_SCCUR_2017.pdf" target="_blank">here</a> to view the poster. <br><br>
-                                            
+
                                 </p>
 
                                  <p class="abstract">
@@ -489,7 +502,7 @@ Since the last presentation of GRNsight at BOSC in 2016, the code has been refac
 
                                     Abstract: GRNsight is a web application and service for visualizing small- to medium-scale gene regulatory networks (GRNs). A GRN consists of genes, transcription factors, and the regulatory connections between them which govern the level of expression of mRNA and protein from genes. GRNsight imports data from an adjacency matrix in an Excel workbook, then produces weighted or unweighted network graphs by representing genes as nodes and regulatory connections as edges, with colors, end markers, and thicknesses corresponding to the sign and magnitude of activation or repression. GRNsight visualizations can be modified through manually dragging nodes or adjusting sliders that change the force graph parameters. GRNsight follows open source and test-driven development best practices. The exhaustive testing framework consists of over 160 automated unit tests to ensure that the program is running as expected. To increase data interoperability, new input and export file types are accepted and produced by GRNsight, including Simple Interaction Format (SIF) text files and GraphML XML files. The addition of these file types required the refactoring of the test suite, separating syntactic tests for the different file formats from semantic tests that apply to all files. Consequently, there is more complete error and warning message coverage across different file types, providing valuable feedback to the user. GRNsight is freely available at <a href="http://dondi.github.io/GRNsight/" target="_blank">http://dondi.github.io/GRNsight/</a>; the code is available under the open source BSD license at <a href="https://github.com/dondi/GRNsight" target="_blank">https://github.com/dondi/GRNsight</a>.<br>
                                             Click <a href="https://github.com/dondi/GRNsight-archive/blob/main/documents/posters/Samdarshi-et-al_LMU-Symposium_2017.pdf" target="_blank">here</a> to view the poster.
-                                        
+
                                 <p class="abstract">
                                     <b><a href="https://www.open-bio.org/wiki/BOSC_2016" target="_blank">Bioinformatics Open Source Conference (BOSC) 2016</a> and <a href="http://www.iscb.org/ismb2016" target="_blank">Intelligent Systems for Molecular Biology (ISMB) 2016</a>, Orlando, FL</a></b><br>
                                     <b>July 8-12, 2016</b><br><br>
