@@ -589,6 +589,41 @@ const missingGenesAndValuesInTwoColumnSheetsWarning = (input, frequency, sheetNa
     );
 };
 
+const extraGenesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+    const expectedWarningCode = `EXTRA_GENES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+};
+
+const missingGeneIdsWithValuesInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+    const expectedWarningCode = `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+};
+
+const wrongGeneOrderInTwoColumnSheetWarning = (input, frequency, sheetName) => {
+    const expectedWarningCode = `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`;
+    testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode);
+};
+
+const testWarningsForTwoColumnSheet = (input, frequency, sheetName, expectedWarningCode) => {
+    const sheet = xlsx.parse(input);
+    const networks = parseNetworkSheet(sheet);
+    const genes = networks.genes.map(gene => gene.name);
+
+    const workbook = parseAdditionalSheet(sheet, genes);
+
+    assert.exists(workbook.twoColumnSheets, "Expected two column sheets to exist on workbook");
+    assert.exists(
+        workbook.twoColumnSheets[sheetName],
+        `Expected ${sheetName} sheet to exist on workbook`
+    );
+    assert.exists(
+        workbook.twoColumnSheets[sheetName].warnings,
+        `Expected warnings array to exist on ${sheetName} sheet of workbook`
+    );
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings.length, frequency);
+    assert.equal(workbook.twoColumnSheets[sheetName].warnings[0].warningCode, expectedWarningCode);
+};
+
 // GRAPH STATISTICS
 /*
 var shortestPath = function (input, directed, source, target, length) {
@@ -990,6 +1025,10 @@ exports.missingAllValuesForGenes = missingAllValuesForGenes;
 exports.missingAllGenesInTwoColumnSheetWarning = missingAllGenesInTwoColumnSheetWarning;
 exports.missingGenesAndValuesInTwoColumnSheetsWarning =
     missingGenesAndValuesInTwoColumnSheetsWarning;
+exports.extraGenesInTwoColumnSheetWarning = extraGenesInTwoColumnSheetWarning;
+exports.missingGeneIdsWithValuesInTwoColumnSheetWarning =
+    missingGeneIdsWithValuesInTwoColumnSheetWarning;
+exports.wrongGeneOrderInTwoColumnSheetWarning = wrongGeneOrderInTwoColumnSheetWarning;
 
 exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrWarnings;
 exports.importFileSameAsExportFile = importFileSameAsExportFile;

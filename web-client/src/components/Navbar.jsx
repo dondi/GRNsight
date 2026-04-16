@@ -4,6 +4,7 @@ import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,
+  NETWORK_GRN_MODE_SHORT,
   LIGHT_GREEN,
   LIGHT_GRAY,
   MEDIUM_GRAY,
@@ -16,6 +17,14 @@ import {
   VIEW_SIZE_LARGE,
   FIT_TO_WINDOW,
 } from "../helpers/constants";
+import { getNetworkMode, uploadWorkbook } from "../services/api";
+import {
+  annotateWorkbookLinks,
+  extractWorkbookErrorMessage,
+  returnUploadRoute,
+  trackUploadAnalytics,
+  validateUploadFile,
+} from "../services/upload";
 import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import OptionalCheckmark from "./helper-components/OptionalCheckmark";
@@ -23,6 +32,8 @@ import "../App.css";
 
 export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
+  const [uploadError, setUploadError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const {
     networkMode,
     setNetworkMode,
@@ -50,14 +61,15 @@ export default function Navbar({}) {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
-    restrictGraphToViewport,
-    setRestrictGraphToViewport,
+    setNetworkData,
     demoValue,
     setDemoValue,
     viewSize,
     setViewSize,
     zoomPercent,
     setZoomPercent,
+    adaptive,
+    setAdaptive,
   } = useContext(GrnStateContext);
 
   const valueValidator = (min, max, value) => {
@@ -71,6 +83,52 @@ export default function Navbar({}) {
   const handleZoomInputChange = event => {
     setZoomPercent(zoomInputValidator(event.target.value));
     setZoomTextInput(event.target.value);
+  };
+
+  const handleFileUpload = async event => {
+    const file = event.target.files?.[0];
+    const validationError = validateUploadFile(file);
+
+    if (validationError) {
+      setUploadError(validationError);
+      event.target.value = "";
+      return;
+    }
+
+    const uploadRoute = returnUploadRoute(file.name);
+    setUploadError("");
+    setIsUploading(true);
+
+    try {
+      const workbook = await uploadWorkbook(file, uploadRoute);
+      const normalizedWorkbook =
+        uploadRoute !== "upload" || !workbook?.positiveWeights || !workbook?.negativeWeights
+          ? annotateWorkbookLinks(workbook)
+          : workbook;
+
+      setDemoValue(null);
+      setNetworkData(normalizedWorkbook);
+
+      let workbookType = normalizedWorkbook?.meta?.data?.workbookType;
+      if (file.name.toLowerCase().endsWith(".sif")) {
+        workbookType = normalizedWorkbook?.workbookType;
+      } else if (file.name.toLowerCase().endsWith(".graphml")) {
+        workbookType = NETWORK_GRN_MODE_SHORT;
+      }
+
+      try {
+        setNetworkMode(getNetworkMode(workbookType));
+      } catch {
+        // Keep current network mode text if workbookType is unknown.
+      }
+
+      trackUploadAnalytics();
+    } catch (error) {
+      setUploadError(extractWorkbookErrorMessage(error.data || error.message));
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
   };
 
   return (
@@ -111,11 +169,36 @@ export default function Navbar({}) {
             </Box>
             <DottedLine width="95%" />
             <Box pad={{ left: "30px", top: "7px", bottom: "5px" }}>
-              <Button>
+              <Box
+                as="label"
+                htmlFor="navbar-file-upload"
+                className="file-input-trigger"
+                direction="row"
+                align="center"
+                aria-disabled={isUploading}
+                pad={{ end: "6px", vertical: "6px" }}
+              >
+                <input
+                  id="navbar-file-upload"
+                  className="file-input-native"
+                  type="file"
+                  name="file"
+                  accept=".xlsx,.sif,.graphml"
+                  disabled={isUploading}
+                  onChange={handleFileUpload}
+                />
                 <FolderOpen className="folder-icon" size="14px" />
-                <Text>Open File...</Text> <Text className="italics">(.xlsx, .sif, .graphml)</Text>
-              </Button>
+                <Text>Open File...</Text>
+                <Text className="italics">(.xlsx, .sif, .graphml)</Text>
+              </Box>
             </Box>
+            {uploadError ? (
+              <Box pad={{ left: "30px", right: "20px", bottom: "5px" }}>
+                <Text color="status-critical" size="12px">
+                  {uploadError}
+                </Text>
+              </Box>
+            ) : null}
             <DottedLine width="95%" />
             <Box>
               <Button margin={{ top: "7px", right: "20px", left: "30px" }}>
@@ -339,31 +422,32 @@ export default function Navbar({}) {
             <Text margin={{ left: "small" }}>Viewport Size</Text>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_SMALL)}>
-                <OptionalCheckmark chosenViewSize={VIEW_SIZE_SMALL} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={VIEW_SIZE_SMALL} currentValue={viewSize} />
                 <Text>Small (1104 x 648 pixels)</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_MEDIUM)}>
-                <OptionalCheckmark chosenViewSize={VIEW_SIZE_MEDIUM} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={VIEW_SIZE_MEDIUM} currentValue={viewSize} />
                 <Text>Medium (1414 x 840 pixels)</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_LARGE)}>
-                <OptionalCheckmark chosenViewSize={VIEW_SIZE_LARGE} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={VIEW_SIZE_LARGE} currentValue={viewSize} />
                 <Text>Large (1920 x 1080 pixels)</Text>
               </Button>
             </Box>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(FIT_TO_WINDOW)}>
-                <OptionalCheckmark chosenViewSize={FIT_TO_WINDOW} viewSize={viewSize} />
+                <OptionalCheckmark desiredValue={FIT_TO_WINDOW} currentValue={viewSize} />
                 <Text>Fit To Window</Text>
               </Button>
             </Box>
             <DottedLine />
             <Box pad={{ horizontal: "20px", top: "3px" }}>
-              <Button onClick={() => setRestrictGraphToViewport(!restrictGraphToViewport)}>
+              <Button onClick={() => setAdaptive(!adaptive)}>
+                <OptionalCheckmark desiredValue={false} currentValue={adaptive} />
                 <Text>Restrict Graph to Viewport</Text>
               </Button>
             </Box>
