@@ -10,7 +10,7 @@ import {
   TextInput,
   RadioButtonGroup,
 } from "grommet";
-import { Refresh, FolderOpen, Database, FormDown } from "grommet-icons";
+import { Refresh, FolderOpen, FormDown } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,
@@ -30,6 +30,7 @@ import {
 } from "../services/upload";
 import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
+import GenerateNetworkModal from "./GenerateNetworkModal";
 
 export default function Sidebar({}) {
   const {
@@ -169,12 +170,9 @@ export default function Sidebar({}) {
                   <Text size="14px">Open File</Text>
                 </Box>
               </Stack>
-              <Button margin={{ bottom: "15px" }} className="load-from-database">
-                <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
-                  <Database size="14px" />
-                  <Text size="14px">Load from Database</Text>
-                </Box>
-              </Button>
+              <Box margin={{ bottom: "15px" }}>
+                <GenerateNetworkModal />
+              </Box>
             </Box>
           </Box>
           <DottedLine width="95%" />
