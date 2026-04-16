@@ -4,6 +4,7 @@ import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,
+  NETWORK_GRN_MODE_SHORT,
   LIGHT_GREEN,
   LIGHT_GRAY,
   MEDIUM_GRAY,
@@ -16,6 +17,14 @@ import {
   VIEW_SIZE_LARGE,
   FIT_TO_WINDOW,
 } from "../helpers/constants";
+import { getNetworkMode, uploadWorkbook } from "../services/api";
+import {
+  annotateWorkbookLinks,
+  extractWorkbookErrorMessage,
+  returnUploadRoute,
+  trackUploadAnalytics,
+  validateUploadFile,
+} from "../services/upload";
 import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import OptionalCheckmark from "./helper-components/OptionalCheckmark";
@@ -23,6 +32,8 @@ import "../App.css";
 
 export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
+  const [uploadError, setUploadError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const {
     networkMode,
     setNetworkMode,
@@ -50,6 +61,7 @@ export default function Navbar({}) {
     setGrayThreshold,
     showGrayEdgesDashed,
     setShowGrayEdgesDashed,
+    setNetworkData,
     demoValue,
     setDemoValue,
     viewSize,
@@ -71,6 +83,52 @@ export default function Navbar({}) {
   const handleZoomInputChange = event => {
     setZoomPercent(zoomInputValidator(event.target.value));
     setZoomTextInput(event.target.value);
+  };
+
+  const handleFileUpload = async event => {
+    const file = event.target.files?.[0];
+    const validationError = validateUploadFile(file);
+
+    if (validationError) {
+      setUploadError(validationError);
+      event.target.value = "";
+      return;
+    }
+
+    const uploadRoute = returnUploadRoute(file.name);
+    setUploadError("");
+    setIsUploading(true);
+
+    try {
+      const workbook = await uploadWorkbook(file, uploadRoute);
+      const normalizedWorkbook =
+        uploadRoute !== "upload" || !workbook?.positiveWeights || !workbook?.negativeWeights
+          ? annotateWorkbookLinks(workbook)
+          : workbook;
+
+      setDemoValue(null);
+      setNetworkData(normalizedWorkbook);
+
+      let workbookType = normalizedWorkbook?.meta?.data?.workbookType;
+      if (file.name.toLowerCase().endsWith(".sif")) {
+        workbookType = normalizedWorkbook?.workbookType;
+      } else if (file.name.toLowerCase().endsWith(".graphml")) {
+        workbookType = NETWORK_GRN_MODE_SHORT;
+      }
+
+      try {
+        setNetworkMode(getNetworkMode(workbookType));
+      } catch {
+        // Keep current network mode text if workbookType is unknown.
+      }
+
+      trackUploadAnalytics();
+    } catch (error) {
+      setUploadError(extractWorkbookErrorMessage(error.data || error.message));
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
   };
 
   return (
@@ -111,10 +169,28 @@ export default function Navbar({}) {
             </Box>
             <DottedLine width="95%" />
             <Box pad={{ left: "30px", top: "7px", bottom: "5px" }}>
-              <Button>
+              <Box
+                as="label"
+                htmlFor="navbar-file-upload"
+                className="file-input-trigger"
+                direction="row"
+                align="center"
+                aria-disabled={isUploading}
+                pad={{ end: "6px", vertical: "6px" }}
+              >
+                <input
+                  id="navbar-file-upload"
+                  className="file-input-native"
+                  type="file"
+                  name="file"
+                  accept=".xlsx,.sif,.graphml"
+                  disabled={isUploading}
+                  onChange={handleFileUpload}
+                />
                 <FolderOpen className="folder-icon" size="14px" />
-                <Text>Open File...</Text> <Text className="italics">(.xlsx, .sif, .graphml)</Text>
-              </Button>
+                <Text>Open File...</Text>
+                <Text className="italics">(.xlsx, .sif, .graphml)</Text>
+              </Box>
             </Box>
             <DottedLine width="95%" />
             <Box>
