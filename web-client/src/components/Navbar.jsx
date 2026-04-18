@@ -192,13 +192,6 @@ export default function Navbar({}) {
                 <Text className="italics">(.xlsx, .sif, .graphml)</Text>
               </Box>
             </Box>
-            {uploadError ? (
-              <Box pad={{ left: "30px", right: "20px", bottom: "5px" }}>
-                <Text color="status-critical" size="12px">
-                  {uploadError}
-                </Text>
-              </Box>
-            ) : null}
             <DottedLine width="95%" />
             <Box>
               <Button margin={{ top: "7px", right: "20px", left: "30px" }}>
