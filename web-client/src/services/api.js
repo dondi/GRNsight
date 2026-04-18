@@ -7,7 +7,6 @@ import {
 } from "../helpers/constants";
 import { createFileForm } from "./upload";
 
-// TODO: make this port dynamic in the future based on environment
 const API_URL = import.meta.env.DEV
   ? `http://${import.meta.env.VITE_HOST}:${import.meta.env.VITE_PORT}`
   : `https://${import.meta.env.VITE_HOST}`;
@@ -15,13 +14,14 @@ const API_URL = import.meta.env.DEV
 const buildApiUrl = path => `${API_URL}/${path}`;
 
 const parseResponse = async response => {
-  const rawText = await response.text();
-  let parsed;
+  let parsed = null;
 
-  try {
-    parsed = rawText ? JSON.parse(rawText) : null;
-  } catch {
-    parsed = rawText;
+  if (typeof response.json === "function") {
+    try {
+      parsed = await response.json();
+    } catch {
+      parsed = null;
+    }
   }
 
   if (!response.ok) {
@@ -40,12 +40,13 @@ const parseResponse = async response => {
  * @returns {Promise<Object>} The workbook data
  */
 export async function getDemoWorkbook(demoType) {
-  return fetch(buildApiUrl(`demo/${demoType}`))
-    .then(parseResponse)
-    .catch(error => {
-      console.error("Error fetching demo workbook:", error);
-      throw error;
-    });
+  try {
+    const demo = await fetch(buildApiUrl(`demo/${demoType}`));
+    return await parseResponse(demo);
+  } catch (error) {
+    console.error("Error fetching demo workbook:", error);
+    throw error;
+  }
 }
 
 /**
@@ -73,14 +74,17 @@ export const getNetworkMode = workbookType => {
 export async function getWorkbookFromForm(formData, queryURL) {
   const fullUrl = buildApiUrl(queryURL);
 
-  if (!formData) {
-    return await fetch(fullUrl).then(parseResponse);
+  // The presence of formData is taken to indicate a POST.
+  if (formData) {
+    const workbook = await fetch(fullUrl, {
+      method: "POST",
+      body: formData,
+    });
+    return await parseResponse(workbook);
   }
 
-  return fetch(fullUrl, {
-    method: "POST",
-    body: formData,
-  }).then(parseResponse);
+  const workbook = await fetch(fullUrl);
+  return await parseResponse(workbook);
 }
 
 export const uploadWorkbook = (file, queryURL) => {
@@ -90,5 +94,7 @@ export const uploadWorkbook = (file, queryURL) => {
 
 export async function getWorkbookFromUrl(queryURL) {
   const fullUrl = buildApiUrl(queryURL);
-  return await fetch(fullUrl).then(parseResponse);
+
+  const workbook = await fetch(fullUrl);
+  return await parseResponse(workbook);
 }

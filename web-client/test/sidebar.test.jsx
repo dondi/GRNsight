@@ -1,8 +1,29 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import Sidebar from "../src/components/Sidebar";
 import { GrnStateContext } from "../src/App";
 import { DEMO_TYPES, VIEW_SIZE_SMALL, VIEW_SIZE_MEDIUM } from "../src/helpers/constants";
+import { getNetworkMode, uploadWorkbook } from "../src/services/api";
+import {
+  annotateWorkbookLinks,
+  extractWorkbookErrorMessage,
+  returnUploadRoute,
+  trackUploadAnalytics,
+  validateUploadFile,
+} from "../src/services/upload";
+
+vi.mock("../src/services/api", () => ({
+  getNetworkMode: vi.fn(),
+  uploadWorkbook: vi.fn(),
+}));
+
+vi.mock("../src/services/upload", () => ({
+  annotateWorkbookLinks: vi.fn(),
+  extractWorkbookErrorMessage: vi.fn(),
+  returnUploadRoute: vi.fn(),
+  trackUploadAnalytics: vi.fn(),
+  validateUploadFile: vi.fn(),
+}));
 
 vi.mock("../src/components/helper-components/DottedLine", () => ({
   default: ({ width }) => <div data-testid="dotted-line">{width}</div>,
@@ -100,6 +121,7 @@ const buildContext = overrides => ({
   setGrayThreshold: vi.fn(),
   showGrayEdgesDashed: false,
   setShowGrayEdgesDashed: vi.fn(),
+  setNetworkData: vi.fn(),
   demoValue: null,
   setDemoValue: vi.fn(),
   viewSize: VIEW_SIZE_SMALL,
@@ -110,25 +132,31 @@ const buildContext = overrides => ({
 });
 
 describe("Sidebar", () => {
-  let inputClickSpy;
-
   beforeEach(() => {
     vi.clearAllMocks();
-    inputClickSpy = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(() => {});
     globalThis.setValue = vi.fn();
+    validateUploadFile.mockReturnValue(null);
+    returnUploadRoute.mockReturnValue("upload");
+    uploadWorkbook.mockResolvedValue({
+      meta: { data: { workbookType: "grn" } },
+      positiveWeights: [1],
+      negativeWeights: [-1],
+    });
+    annotateWorkbookLinks.mockImplementation(workbook => workbook);
+    getNetworkMode.mockReturnValue("Gene Regulatory Network");
+    extractWorkbookErrorMessage.mockReturnValue("upload failed");
   });
 
   afterEach(() => {
     delete globalThis.setValue;
-    inputClickSpy.mockRestore();
   });
 
   it("covers network, layout, node, edge, and view interactions", () => {
     const context = buildContext();
 
     const {
+      container,
       getAllByTestId,
-      getByTestId,
       getByText,
       getByLabelText,
       getAllByRole,
@@ -150,10 +178,10 @@ describe("Sidebar", () => {
     fireEvent.click(selects[0]);
     expect(context.setDemoValue).toHaveBeenCalledWith(Object.values(DEMO_TYPES)[0]);
 
-    // File input loop and hidden input trigger
-    fireEvent.click(getByTestId("file-input-change"));
-    fireEvent.click(getByText("FolderOpenIcon"));
-    expect(inputClickSpy).toHaveBeenCalled();
+    // File input change using hidden native input in the upload label
+    const fileInput = container.querySelector("#sidebar-file-upload");
+    expect(fileInput).toBeTruthy();
+    fireEvent.change(fileInput, { target: { files: [{ name: "a.tsv", size: 123 }] } });
 
     // Layout controls
     const sliders = getAllByRole("slider");
@@ -207,5 +235,66 @@ describe("Sidebar", () => {
 
     fireEvent.click(getByLabelText("Restrict Graph to Viewport"));
     expect(context.setAdaptive).toHaveBeenCalledWith(false);
+  });
+
+  it("covers upload success path and inner getNetworkMode catch", async () => {
+    const context = buildContext();
+    const normalizedWorkbook = {
+      meta: { data: { workbookType: "grn" } },
+      workbookType: "grn",
+      positiveWeights: [1],
+      negativeWeights: [-1],
+    };
+
+    returnUploadRoute.mockReturnValue("upload-graphml");
+    uploadWorkbook.mockResolvedValue({ meta: { data: {} } });
+    annotateWorkbookLinks.mockReturnValue(normalizedWorkbook);
+    getNetworkMode.mockImplementation(() => {
+      throw new Error("unknown workbook type");
+    });
+
+    const { container } = render(
+      <GrnStateContext.Provider value={context}>
+        <Sidebar />
+      </GrnStateContext.Provider>
+    );
+
+    const fileInput = container.querySelector("#sidebar-file-upload");
+    fireEvent.change(fileInput, {
+      target: { files: [{ name: "graph.graphml", size: 123 }] },
+    });
+
+    await waitFor(() => {
+      expect(uploadWorkbook).toHaveBeenCalledWith(expect.any(Object), "upload-graphml");
+      expect(annotateWorkbookLinks).toHaveBeenCalled();
+      expect(context.setDemoValue).toHaveBeenCalledWith(null);
+      expect(context.setNetworkData).toHaveBeenCalledWith(normalizedWorkbook);
+      expect(trackUploadAnalytics).toHaveBeenCalled();
+      expect(fileInput.value).toBe("");
+    });
+  });
+
+  it("covers upload error path and displays extracted message", async () => {
+    const context = buildContext();
+    const uploadError = new Error("request failed");
+    uploadError.data = { errors: [{ possibleCause: "bad", suggestedFix: "retry" }] };
+    uploadWorkbook.mockRejectedValue(uploadError);
+    extractWorkbookErrorMessage.mockReturnValue("Your graph failed to load");
+
+    const { container } = render(
+      <GrnStateContext.Provider value={context}>
+        <Sidebar />
+      </GrnStateContext.Provider>
+    );
+
+    const fileInput = container.querySelector("#sidebar-file-upload");
+    fireEvent.change(fileInput, {
+      target: { files: [{ name: "graph.xlsx", size: 123 }] },
+    });
+
+    await waitFor(() => {
+      expect(extractWorkbookErrorMessage).toHaveBeenCalled();
+      expect(fileInput.value).toBe("");
+    });
   });
 });
