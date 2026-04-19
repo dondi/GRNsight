@@ -100,7 +100,11 @@ header span {
   background-color: #dfebe5;
 }
 
-.demo-dropdown-navbar {
+.demo-dropdown-navbar button {
+  border: none;
+}
+
+.demo-dropdown-navbar button:hover {
   border: none;
 }
 
@@ -110,16 +114,6 @@ header span {
 
 .navbar button:hover {
   color: #696969;
-  box-shadow: none;
-}
-
-button {
-  border: none;
-  box-shadow: none;
-}
-
-button:hover {
-  border: none;
   box-shadow: none;
 }
 
@@ -356,6 +350,7 @@ input[type="radio"]:checked {
 }
 
 .generate-network-row {
+  width: 100%;
   margin-bottom: 22px;
 }
 
@@ -366,12 +361,21 @@ input[type="radio"]:checked {
 }
 
 .generate-network-select,
-.generate-network-search-input {
-  width: 470px;
+.generate-network-source-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  max-width: none;
 }
 
-.generate-network-source-select {
-  width: 700px;
+.generate-network-select-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}
+
+.generate-network-search-input {
+  width: 470px;
 }
 
 .generate-network-search-row {
@@ -383,11 +387,27 @@ input[type="radio"]:checked {
 }
 
 .generate-network-search-button {
-  border: 1px solid #b8b8b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  border: 1px solid #b8b8b8 !important;
   border-radius: 8px;
   padding: 8px 12px;
   background: #f5f5f5;
   min-width: 60px;
+}
+
+.generate-network-search-button:hover,
+.generate-network-search-button:focus,
+.generate-network-search-button:focus-visible,
+.generate-network-search-button:active {
+  border: 1px solid #b8b8b8 !important;
+}
+
+.generate-network-search-button svg {
+  display: block;
+  margin: 0 auto;
 }
 
 .generate-network-search-button:hover {
@@ -427,13 +447,13 @@ input[type="radio"]:checked {
   padding: 20px 34px 24px;
 }
 
-.generate-network-action-button {
-  border: 1px solid #b8b8b8;
-  border-radius: 8px;
-  background: #f7f7f7;
-  color: #3b3b3b;
-  padding: 10px 18px;
-}
+/* .generate-network-action-button { */
+/* border: 1px solid #b8b8b8; */
+/* border-radius: 4px; */
+/* background: #f7f7f7; */
+/* color: #3b3b3b; */
+/* padding: 10px 18px; */
+/* } */
 
 .generate-network-action-button:hover {
   background: #ebebeb;
@@ -458,11 +478,14 @@ input[type="radio"]:checked {
     min-width: 165px;
   }
 
-  .generate-network-select,
-  .generate-network-source-select,
   .generate-network-search-row {
     width: 600px;
     max-width: 100%;
+  }
+
+  .generate-network-select,
+  .generate-network-source-select {
+    width: auto;
   }
 
   .generate-network-search-row .generate-network-search-input {

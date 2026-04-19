@@ -397,36 +397,40 @@ export default function GenerateNetworkModal() {
                     <Text className="generate-network-label" weight="bold">
                       Network Type
                     </Text>
-                    <Select
-                      className="generate-network-select"
-                      options={modeOptions}
-                      labelKey="label"
-                      valueKey={{ key: "value", reduce: true }}
-                      value={customWorkbook.type}
-                      onChange={({ value }) => setWorkbookType(value)}
-                      size="14px"
-                    />
+                    <Box className="generate-network-select-wrap" flex>
+                      <Select
+                        className="generate-network-select"
+                        options={modeOptions}
+                        labelKey="label"
+                        valueKey={{ key: "value", reduce: true }}
+                        value={customWorkbook.type}
+                        onChange={({ value }) => setWorkbookType(value)}
+                        size="14px"
+                      />
+                    </Box>
                   </Box>
 
                   <Box className="generate-network-row" direction="row" align="center" gap="small">
                     <Text className="generate-network-label" weight="bold">
                       Network Source
                     </Text>
-                    <Select
-                      className="generate-network-source-select"
-                      options={sourceOptions}
-                      value={customWorkbook.source}
-                      disabled={sourceOptions.length === 0}
-                      onChange={({ option }) => {
-                        setErrorMessage("");
-                        setCustomWorkbook(prev => ({
-                          ...prev,
-                          source: option,
-                          genes: {},
-                        }));
-                      }}
-                      size="14px"
-                    />
+                    <Box className="generate-network-select-wrap" flex>
+                      <Select
+                        className="generate-network-source-select"
+                        options={sourceOptions}
+                        value={customWorkbook.source}
+                        disabled={sourceOptions.length === 0}
+                        onChange={({ option }) => {
+                          setErrorMessage("");
+                          setCustomWorkbook(prev => ({
+                            ...prev,
+                            source: option,
+                            genes: {},
+                          }));
+                        }}
+                        size="14px"
+                      />
+                    </Box>
                   </Box>
 
                   <Form
@@ -527,7 +531,7 @@ export default function GenerateNetworkModal() {
             >
               <Button
                 className="generate-network-action-button"
-                label={isGenerating ? "Generating Network" : "Generate Network"}
+                label={"Generate Network"}
                 disabled={isLoadingSources || isGenerating}
                 onClick={generateNetwork}
               />

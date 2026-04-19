@@ -161,9 +161,10 @@ export default function Navbar({}) {
                 options={Object.values(DEMO_TYPES).map(name => (
                   <Text key={name}>{name}</Text>
                 ))}
-                value={<Text>Demo</Text>}
+                value={<Text margin="5px">Demo</Text>}
                 placeholder={<Text>Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
+                plain
                 size="small"
               />
             </Box>

@@ -83,13 +83,24 @@ export const theme = {
     active: {
       default: {
         border: {
-          width: "0px",
+          width: "1px",
+          color: "#ccc",
         },
       },
     },
     border: {
-      width: "0px",
+      width: "1px",
+      color: "#ccc",
     },
+    extend: `
+      &:hover,
+      &:focus,
+      &:focus-visible,
+      &:active {
+        border: 1px solid #ccc;
+        box-shadow: none;
+      }
+    `,
   },
   fileInput: {
     message: {
@@ -115,17 +126,27 @@ export const theme = {
       color: "black",
       size: "medium",
     },
-    control: {
+    container: {
       extend: `
-        border: 1px solid #ccc !important;
-        border-radius: 4px;
+        [role="option"]:hover,
+        button[role="option"]:hover,
+        [role="option"] button:hover {
+          background-color: #f2f2f2;
+          color: #333;
+          border-color: transparent;
+        }
 
-        &:hover,
-        &:focus,
-        &:focus-visible,
-        &[aria-expanded="true"] {
-          border: 1px solid #ccc !important;
-          box-shadow: none;
+        [role="option"][aria-selected="true"],
+        button[role="option"][aria-selected="true"],
+        [role="option"] button[aria-selected="true"] {
+          background-color: #ebebeb;
+          color: #333;
+        }
+
+        [role="option"] *,
+        button[role="option"] *,
+        [role="option"] button * {
+          color: inherit;
         }
       `,
     },
