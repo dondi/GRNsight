@@ -1,3 +1,5 @@
+import { color } from "d3";
+
 export const theme = {
   global: {
     colors: {
@@ -106,6 +108,26 @@ export const theme = {
         style: "solid",
         color: "light-4",
       },
+    },
+  },
+  select: {
+    icons: {
+      color: "black",
+      size: "medium",
+    },
+    control: {
+      extend: `
+        border: 1px solid #ccc !important;
+        border-radius: 4px;
+
+        &:hover,
+        &:focus,
+        &:focus-visible,
+        &[aria-expanded="true"] {
+          border: 1px solid #ccc !important;
+          box-shadow: none;
+        }
+      `,
     },
   },
 };

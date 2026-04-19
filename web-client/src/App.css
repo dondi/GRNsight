@@ -304,10 +304,11 @@ input[type="radio"]:checked {
 .generate-network-modal {
   width: calc(100vw - 20px);
   margin: 0 auto;
-  background: #f8f8f8;
-  border: 1px solid #bcbcbc;
-  border-radius: 4px;
+  border: 1px transparent rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
   overflow: hidden;
+  background: #ffffff;
+  background-clip: padding-box;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
@@ -319,34 +320,32 @@ input[type="radio"]:checked {
 }
 
 .generate-network-modal-header {
-  padding: 10px 14px 10px;
-  background: #ffffff;
+  padding: 15px;
+  background: none;
+  border-radius: 6px 6px 0 0;
   border-bottom: 1px solid #d2d2d2;
 }
 
-.generate-network-modal-title {
-  font-size: 46px;
-  line-height: 1;
-  color: #323232;
+.generate-network-close {
+  color: #d0d0d0;
 }
 
-.generate-network-close {
-  color: #b8b8b8;
+.generate-network-close svg,
+.generate-network-close svg * {
+  stroke: #d0d0d0;
 }
 
 .generate-network-close:hover {
-  color: #8a8a8a;
+  color: #5f5f5f;
+}
+
+.generate-network-close:hover svg,
+.generate-network-close:hover svg * {
+  stroke: #5f5f5f;
 }
 
 .generate-network-modal-body {
-  padding: 30px 34px 20px;
-}
-
-.generate-network-heading {
-  font-size: 56px;
-  line-height: 1;
-  color: #36393d;
-  margin-bottom: 18px;
+  padding: 20px;
 }
 
 .generate-network-warning {
@@ -426,7 +425,6 @@ input[type="radio"]:checked {
 .generate-network-modal-footer {
   border-top: 1px solid #d2d2d2;
   padding: 20px 34px 24px;
-  background: #f3f3f3;
 }
 
 .generate-network-action-button {
@@ -479,16 +477,6 @@ input[type="radio"]:checked {
 
   .generate-network-modal-body {
     padding: 20px;
-  }
-
-  .generate-network-heading {
-    font-size: 38px;
-  }
-
-  .generate-network-warning,
-  .generate-network-label,
-  .generate-network-added-text {
-    font-size: 20px;
   }
 
   .generate-network-row {

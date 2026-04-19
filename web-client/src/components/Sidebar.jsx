@@ -30,7 +30,7 @@ import {
 } from "../services/upload";
 import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
-import GenerateNetworkModal from "./GenerateNetworkModal";
+import GenerateNetworkModal from "./LoadFromDatabaseModal";
 
 export default function Sidebar({}) {
   const {
@@ -139,14 +139,13 @@ export default function Sidebar({}) {
               </Box>
               <Select
                 className="demo-source-dropdown"
-                icon={<FormDown color="black" size="small" />}
                 options={Object.values(DEMO_TYPES).map(name => (
                   <Text key={name}>{name}</Text>
                 ))}
                 value={demoValue}
                 placeholder={<Text>Select a Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
-                size="small"
+                size="14px"
               />
               <Stack anchor="center" margin={{ vertical: "6px" }}>
                 <Box

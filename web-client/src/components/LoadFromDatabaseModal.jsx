@@ -371,29 +371,29 @@ export default function GenerateNetworkModal() {
               justify="between"
               align="center"
             >
-              <Text className="generate-network-modal-title" weight="bold" size="18px">
+              <Text weight="500" size="18px">
                 Load from Database
               </Text>
               <Button
                 className="generate-network-close"
                 icon={<FormClose />}
                 onClick={resetAndClose}
+                pad="0"
               />
             </Box>
             <Box className="generate-network-modal-body">
-              <Text className="generate-network-heading" weight="bold">
+              <Text size="30px" weight="500" margin={{ top: "20px", bottom: "10px" }}>
                 Generate Network
               </Text>
               <Text className="generate-network-warning">
                 Warning: changing network type or source will clear the list of selected genes or
                 proteins below.
               </Text>
-
               {isLoadingSources ? (
                 <Text>Loading network sources...</Text>
               ) : (
                 <>
-                  <Box className="generate-network-row" direction="row" align="center" gap="small">
+                  <Box className="generate-network-row" direction="row" align="center" gap="15px">
                     <Text className="generate-network-label" weight="bold">
                       Network Type
                     </Text>
@@ -404,6 +404,7 @@ export default function GenerateNetworkModal() {
                       valueKey={{ key: "value", reduce: true }}
                       value={customWorkbook.type}
                       onChange={({ value }) => setWorkbookType(value)}
+                      size="14px"
                     />
                   </Box>
 
@@ -412,7 +413,7 @@ export default function GenerateNetworkModal() {
                       Network Source
                     </Text>
                     <Select
-                      className="generate-network-select generate-network-source-select"
+                      className="generate-network-source-select"
                       options={sourceOptions}
                       value={customWorkbook.source}
                       disabled={sourceOptions.length === 0}
@@ -424,6 +425,7 @@ export default function GenerateNetworkModal() {
                           genes: {},
                         }));
                       }}
+                      size="14px"
                     />
                   </Box>
 
@@ -452,6 +454,7 @@ export default function GenerateNetworkModal() {
                           className="generate-network-search-input"
                           value={searchValue}
                           onChange={event => setSearchValue(event.target.value)}
+                          size="14px"
                         />
                         <Button
                           className="generate-network-search-button"
@@ -504,7 +507,6 @@ export default function GenerateNetworkModal() {
                   </Box>
                 </>
               )}
-
               {errorMessage && (
                 <Box
                   className="generate-network-error"
