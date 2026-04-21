@@ -229,6 +229,13 @@ const applyTwoColumnSheetWarnings = (
         warningsToAdd.push(
             constants.warnings.missingAllGenesAndValues(sheetName, /*isAllGenesMissing=*/ false)
         );
+    } else if (genesMissingValue.length > 0) {
+        warningsToAdd.push(
+            constants.warnings.someGenesMissingValuesWarning(
+                sheetName,
+                genesMissingValue.join(", ")
+            )
+        );
     }
 
     // Check extra genes

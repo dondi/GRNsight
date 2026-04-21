@@ -423,6 +423,55 @@ describe("additional-sheet-parser", function () {
             }
         });
 
+        describe("should return MISSING_VALUES warning when sheets are present and not empty but missing values for some genes", function () {
+            const folder = "test-files/additional-sheet-test-files/missing-some-values/";
+
+            const cases = {
+                degradation_rates: [
+                    "missing-first-deg-rate-value.xlsx",
+                    "missing-middle-deg-rate-value.xlsx",
+                    "missing-last-deg-rate-value.xlsx",
+                ],
+                production_rates: [
+                    "missing-first-prod-rate-value.xlsx",
+                    "missing-middle-prod-rate-value.xlsx",
+                    "missing-last-prod-rate-value.xlsx",
+                ],
+                threshold_b: [
+                    "missing-first-threshold_b-value.xlsx",
+                    "missing-middle-threshold_b-value.xlsx",
+                    "missing-last-threshold_b-value.xlsx",
+                ],
+                optimized_production_rates: [
+                    "missing-first-opt-prod-rate-value.xlsx",
+                    "missing-middle-opt-prod-rate-value.xlsx",
+                    "missing-last-opt-prod-rate-value.xlsx",
+                ],
+                optimized_threshold_b: [
+                    "missing-first-opt-threshold_b-value.xlsx",
+                    "missing-middle-opt-threshold_b-value.xlsx",
+                    "missing-last-opt-threshold_b-value.xlsx",
+                ],
+            };
+
+            for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
+                it(`for ${sheetName} sheet`, function () {
+                    for (const fileName of cases[sheetName]) {
+                        test.someGenesMissingValuesWarning(
+                            `${folder}${fileName}`,
+                            1,
+                            sheetName,
+                            expectedText
+                        );
+                    }
+                });
+            }
+        });
+
         describe("should return MISSING_GENE_IDS_FOR_VALUES warning when sheets are present and not empty but missing gene IDs for values", function () {
             const folder = "test-files/additional-sheet-test-files/missing-geneId-with-values/";
 
