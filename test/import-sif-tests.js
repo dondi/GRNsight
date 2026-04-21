@@ -21,9 +21,15 @@ let expectedUnweightedGRNWorkbook = initWorkbook({
     positiveWeights: [],
     negativeWeights: [],
     sheetType: "unweighted",
-    meta: {},
+    meta: {
+        data: {
+            workbookType: constants.NETWORK_GRN_MODE,
+            sheetType: "unweighted",
+            warnings: null,
+            errors: [],
+        },
+    },
     expression: {},
-    workbookType: constants.NETWORK_GRN_MODE,
 });
 
 let expectedUnweightedPPIWorkbook = initWorkbook({
@@ -40,9 +46,15 @@ let expectedUnweightedPPIWorkbook = initWorkbook({
     positiveWeights: [],
     negativeWeights: [],
     sheetType: "unweighted",
-    meta: {},
+    meta: {
+        data: {
+            workbookType: constants.NETWORK_PPI_MODE,
+            sheetType: "unweighted",
+            warnings: null,
+            errors: [],
+        },
+    },
     expression: {},
-    workbookType: constants.NETWORK_PPI_MODE,
 });
 
 var expectedWeightedWorkbook = initWorkbook({
@@ -59,8 +71,14 @@ var expectedWeightedWorkbook = initWorkbook({
     positiveWeights: [],
     negativeWeights: [],
     sheetType: "weighted",
-    meta: {},
-    workbookType: constants.NETWORK_GRN_MODE,
+    meta: {
+        data: {
+            workbookType: constants.NETWORK_GRN_MODE,
+            sheetType: "weighted",
+            warnings: null,
+            errors: [],
+        },
+    },
     expression: {},
 });
 
@@ -80,9 +98,15 @@ var expectedUnweightedWorkbookWithCycle = initWorkbook({
     positiveWeights: [],
     negativeWeights: [],
     sheetType: "unweighted",
-    meta: {},
+    meta: {
+        data: {
+            workbookType: constants.NETWORK_GRN_MODE,
+            sheetType: "unweighted",
+            warnings: null,
+            errors: [],
+        },
+    },
     expression: {},
-    workbookType: constants.NETWORK_GRN_MODE,
 });
 
 var expectedWeightedWorkbookWithCycle = initWorkbook({
@@ -101,9 +125,15 @@ var expectedWeightedWorkbookWithCycle = initWorkbook({
     positiveWeights: [],
     negativeWeights: [],
     sheetType: "weighted",
-    meta: {},
+    meta: {
+        data: {
+            workbookType: constants.NETWORK_GRN_MODE,
+            sheetType: "weighted",
+            warnings: null,
+            errors: [],
+        },
+    },
     expression: {},
-    workbookType: constants.NETWORK_GRN_MODE,
 });
 
 // Unweighted SIF
@@ -313,6 +343,11 @@ describe("Import from SIF", function () {
         expect(importController.sifToGrnsight(inconsistentlyWeightedTestSif)).to.deep.equal(
             extend(true, {}, expectedUnweightedGRNWorkbook, {
                 warnings: [constants.warnings.EDGES_WITHOUT_WEIGHTS],
+                meta: {
+                    data: {
+                        warnings: constants.warnings.EDGES_WITHOUT_WEIGHTS,
+                    },
+                },
             })
         );
     });
@@ -335,6 +370,11 @@ describe("Import from SIF", function () {
         ).to.deep.equal(
             extend(true, {}, expectedUnweightedWorkbookWithCycle, {
                 warnings: [constants.warnings.EDGES_WITHOUT_WEIGHTS],
+                meta: {
+                    data: {
+                        warnings: constants.warnings.EDGES_WITHOUT_WEIGHTS,
+                    },
+                },
             })
         );
     });
@@ -356,9 +396,15 @@ describe("Import from SIF", function () {
                 positiveWeights: [],
                 negativeWeights: [],
                 sheetType: "unweighted",
-                meta: {},
+                meta: {
+                    data: {
+                        workbookType: constants.NETWORK_GRN_MODE,
+                        sheetType: "unweighted",
+                        warnings: null,
+                        errors: [],
+                    },
+                },
                 expression: {},
-                workbookType: constants.NETWORK_GRN_MODE,
             })
         );
     });
@@ -373,9 +419,15 @@ describe("Import from SIF", function () {
                 positiveWeights: [],
                 negativeWeights: [],
                 sheetType: "weighted",
-                meta: {},
+                meta: {
+                    data: {
+                        workbookType: constants.NETWORK_GRN_MODE,
+                        sheetType: "weighted",
+                        warnings: null,
+                        errors: [],
+                    },
+                },
                 expression: {},
-                workbookType: constants.NETWORK_GRN_MODE,
             })
         );
     });
