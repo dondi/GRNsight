@@ -11,16 +11,34 @@ This folder contains scripts for retrieving gene regulatory network (GRN) and pr
 
 ## Running the Script
 
-To fetch and populate data, run `main.py` with the `--network` argument:
+Run `main.py` with `--network` and optionally `--action`:
 
 - `all` – Fetch and populate both GRN and PPI data.
 - `grn` – Fetch and populate only GRN data.
 - `ppi` – Fetch and populate only PPI data.
 
+Actions:
+
+- `all` (default) – Generate TSV files, then populate PostgreSQL.
+- `generate` – Only fetch/process AllianceMine data and write TSV files.
+- `populate` – Only read existing TSV files and populate PostgreSQL.
+
 Example command to populate both GRN and PPI data into a local database:
 
 ```bash
 python3 main.py --network all --db_url postgresql://localhost/postgres
+```
+
+Example command to only generate TSV files (no database write):
+
+```bash
+python3 main.py --network all --action generate
+```
+
+Example command to only populate PostgreSQL from previously generated TSV files:
+
+```bash
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
 ```
 
 ## Troubleshooting
