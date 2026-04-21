@@ -13,6 +13,11 @@ body {
   transition-timing-function: none;
 }
 
+button:hover {
+  border: none;
+  background-color: #ebebeb;
+}
+
 #header-container {
   font-family: "Georgia", serif;
 }
@@ -59,6 +64,11 @@ header span {
   border: none;
 }
 
+.navbar > button:hover {
+  border: none;
+  background-color: transparent;
+}
+
 .navbar button span {
   font-size: 14px;
 }
@@ -85,7 +95,7 @@ header span {
 }
 
 .dropdown-menu button {
-  border: none;
+  border: none !important;
 }
 
 .dropdown-menu button:hover {
@@ -110,11 +120,6 @@ header span {
 
 .folder-icon {
   margin-right: 5px;
-}
-
-.navbar button:hover {
-  color: #696969;
-  box-shadow: none;
 }
 
 .demo-button {
@@ -226,13 +231,17 @@ header span {
 .panel-dropdown-container button,
 .panel-dropdown-container select {
   border: 1px solid #ccc;
-  border-radius: 4px;
   text-overflow: hidden;
 }
 
 .load-from-database {
   padding: 6px 12px;
 }
+
+/* .load-from-database {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+} */
 
 .panel-dropdown-container input {
   padding: 6px 12px;
@@ -265,10 +274,8 @@ header span {
 
 .sidebar-radio-buttons {
   font-size: 14px;
-  /* border: 1px solid "green"; */
 }
 
-/* TODO: is this being used correctly? */
 input[type="radio"]:checked {
   border: 2px solid #333;
 }
@@ -288,11 +295,6 @@ input[type="radio"]:checked {
   stroke-width: 0.5px;
   flex-shrink: 0;
   transition: opacity 0.25s;
-}
-
-.load-from-database {
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
 .generate-network-modal {
@@ -331,6 +333,8 @@ input[type="radio"]:checked {
 
 .generate-network-close:hover {
   color: #5f5f5f;
+  border: none !important;
+  background-color: transparent !important;
 }
 
 .generate-network-close:hover svg,
@@ -344,8 +348,7 @@ input[type="radio"]:checked {
 }
 
 .generate-network-label {
-  min-width: 205px;
-  font-size: 42px;
+  min-width: 150px;
 }
 
 .generate-network-select,
@@ -386,8 +389,7 @@ input[type="radio"]:checked {
   align-items: center;
   justify-content: center;
   line-height: 0;
-  border: 1px solid #b8b8b8 !important;
-  border-radius: 8px;
+  border: 1px solid #ccc !important;
   padding: 8px 12px;
   background: #f5f5f5;
   min-width: 60px;
@@ -397,7 +399,7 @@ input[type="radio"]:checked {
 .generate-network-search-button:focus,
 .generate-network-search-button:focus-visible,
 .generate-network-search-button:active {
-  border: 1px solid #b8b8b8 !important;
+  border: 1px solid #ccc !important;
 }
 
 .generate-network-search-button svg {
@@ -427,23 +429,9 @@ input[type="radio"]:checked {
   margin-top: 8px;
 }
 
-.selected-gene-button {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #f8f8f8;
-}
-
-.selected-gene-button:hover {
-  background: #ececec;
-}
-
 .generate-network-modal-footer {
   border-top: 1px solid #d2d2d2;
-  padding: 20px 34px 24px;
-}
-
-.generate-network-action-button:hover {
-  background: #ebebeb;
+  padding: 20px 20px 20px 20px;
 }
 
 @media (max-width: 1200px) {

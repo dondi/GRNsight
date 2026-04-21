@@ -85,12 +85,14 @@ export const theme = {
         border: {
           width: "1px",
           color: "#ccc",
+          radius: "4px",
         },
       },
     },
     border: {
       width: "1px",
       color: "#ccc",
+      radius: "4px",
     },
     extend: `
       &:hover,

@@ -21,6 +21,7 @@ import {
   countEdges,
   sortWorkbookGenes,
 } from "../helpers/loadFromDbHelpers";
+import "../App.css";
 
 export default function LoadFromDatabaseModal() {
   const { setDemoValue, setNetworkData, setNetworkMode } = useContext(GrnStateContext);
@@ -453,24 +454,19 @@ export default function LoadFromDatabaseModal() {
                   </Box>
                 </>
               )}
-              {errorMessage && (
-                <Box
-                  className="generate-network-error"
-                  pad={{ vertical: "xsmall", horizontal: "small" }}
-                >
-                  <Text size="small" color="#8b0000">
-                    {errorMessage}
-                  </Text>
-                </Box>
-              )}
+              {/* {errorMessage && ( */}
+              <Box
+                className="generate-network-error"
+                pad={{ vertical: "xsmall", horizontal: "small" }}
+              >
+                <Text size="small" color="#8b0000">
+                  {errorMessage}
+                </Text>
+              </Box>
+              {/* )} */}
             </Box>
 
-            <Box
-              className="generate-network-modal-footer"
-              direction="row"
-              justify="end"
-              gap="small"
-            >
+            <Box className="generate-network-modal-footer" direction="row" justify="end" gap="10px">
               <Button
                 className="generate-network-action-button"
                 label={"Generate Network"}
