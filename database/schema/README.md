@@ -102,8 +102,8 @@ To change the default database name, follow these steps:
     ```
     INSERT INTO grnsettings(expression_dataset) VALUES ('<new default database name>');
     ```
-    _Note: The current default database is `dahlquist_2018`. Don't forget ''!_
+    _Note: The current default database is `dahlquist_2018`. Don't forget!_
 
 ### 2. Other databases
 
-For other databases, continue follow the instructions in the [README.md](https://github.com/dondi/GRNsight/tree/master/database) outside of this directory.
+For other databases, continue follow the instructions in the [README.md](https://github.com/dondi/GRNsight/tree/main/database) outside of this directory.
