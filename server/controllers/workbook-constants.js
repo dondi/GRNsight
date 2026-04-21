@@ -429,6 +429,7 @@ module.exports = {
                 errorDescription: [
                     "GRNsight has detected that there are missing gene IDs",
                     `in the imported workbook's ${sheetName} sheet.`,
+                    `GRNsight will not store data from rows with missing gene IDs.`,
                     "The missing gene IDs will need to be supplied to use this workbook as an input file for GRNmap,",
                     "but will not affect the display of the graph in GRNsight.",
                     `The values with missing gene IDs are ${valuesMissingGenes.join(", ")}.`,
