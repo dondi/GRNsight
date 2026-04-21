@@ -434,6 +434,10 @@ input[type="radio"]:checked {
   padding: 20px 20px 20px 20px;
 }
 
+.generate-network-action-button {
+  padding: 6px 12px !important;
+}
+
 @media (max-width: 1200px) {
   .generate-network-modal-title {
     font-size: 28px;

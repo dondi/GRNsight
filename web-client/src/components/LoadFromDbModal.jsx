@@ -454,16 +454,16 @@ export default function LoadFromDatabaseModal() {
                   </Box>
                 </>
               )}
-              {/* {errorMessage && ( */}
-              <Box
-                className="generate-network-error"
-                pad={{ vertical: "xsmall", horizontal: "small" }}
-              >
-                <Text size="small" color="#8b0000">
-                  {errorMessage}
-                </Text>
-              </Box>
-              {/* )} */}
+              {errorMessage && (
+                <Box
+                  className="generate-network-error"
+                  pad={{ vertical: "xsmall", horizontal: "small" }}
+                >
+                  <Text size="small" color="#8b0000">
+                    {errorMessage}
+                  </Text>
+                </Box>
+              )}
             </Box>
 
             <Box className="generate-network-modal-footer" direction="row" justify="end" gap="10px">

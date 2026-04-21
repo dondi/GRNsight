@@ -95,11 +95,13 @@ export const theme = {
       radius: "4px",
     },
     extend: `
+      border-radius: 4px;
       &:hover,
       &:focus,
       &:focus-visible,
       &:active {
         border: 1px solid #ccc;
+        border-radius: 4px;
         box-shadow: none;
       }
     `,
