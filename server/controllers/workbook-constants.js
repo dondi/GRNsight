@@ -108,8 +108,12 @@ module.exports = {
         extraneousDataWarning: function (sheetName, row) {
             return {
                 warningCode: "EXTRANEOUS_DATA",
-                errorDescription: `There is extraneous data outside of the set rows and columns of the 
-                ${sheetName} sheet in row ${row}.`,
+                errorDescription: [
+                    `There is extraneous data outside of the set rows and columns`,
+                    `of the ${sheetName} sheet in row ${row}.`,
+                    `GRNsight does not store the extraneous data,`,
+                    `and the graph display will not be affected.`,
+                ].join(" "),
             };
         },
 
