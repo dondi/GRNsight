@@ -564,6 +564,23 @@ describe("additional-sheet-parser", function () {
                 });
             }
         });
+
+        describe("should return WRONG_GENE_IDS warning when sheets are present and not empty but contain wrong gene IDs", function () {
+            const folder = "test-files/additional-sheet-test-files/wrong-gene-ids/";
+            const cases = {
+                degradation_rates: "wrong-geneID-deg-rates-sheet.xlsx",
+                production_rates: "wrong-geneID-prod-rates-sheet.xlsx",
+                threshold_b: "wrong-geneID-threshold_b-sheet.xlsx",
+                optimized_production_rates: "wrong-geneID-opt-prod-rates-sheet.xlsx",
+                optimized_threshold_b: "wrong-geneID-opt-threshold_b-sheet.xlsx",
+            };
+
+            for (const sheetName in cases) {
+                it(`for ${sheetName} sheet`, function () {
+                    test.wrongGeneIdsWarning(`${folder}${cases[sheetName]}`, sheetName);
+                });
+            }
+        });
     });
 
     describe("optimization diagnostics sheet", function () {
