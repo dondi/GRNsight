@@ -13,68 +13,16 @@ import {
   queryProteinProteinDatabase,
   uploadCustomWorkbook,
 } from "../services/api";
+import {
+  EMPTY_WORKBOOK,
+  modeOptions,
+  getFirstSource,
+  isValidGene,
+  countEdges,
+  sortWorkbookGenes,
+} from "../helpers/loadFromDbHelpers";
 
-const GENE_EXCEPTIONS = {
-  "DUR1,2": "DUR12",
-  "IMP2'": "IMP21",
-  "ARG5,6": "ARG56",
-  "ADE5,7": "ADE57",
-  "MF(ALPHA)1": "YPL187W",
-  "MF(ALPHA)2": "YGL089C",
-};
-
-const EMPTY_WORKBOOK = {
-  genes: {},
-  type: NETWORK_GRN_MODE_SHORT,
-  source: null,
-  sources: {
-    proteinProteinInteractions: {},
-    geneRegulation: {},
-  },
-};
-
-const modeOptions = [
-  { label: "Gene Regulatory", value: NETWORK_GRN_MODE_SHORT },
-  {
-    label: "Protein-Protein Physical Interactions",
-    value: NETWORK_PPI_MODE_SHORT,
-  },
-];
-
-const getFirstSource = sources => {
-  const keys = Object.keys(sources || {});
-  return keys.length > 0 ? keys[0] : null;
-};
-
-const isValidGene = gene => {
-  if (/^[A-Z0-9_-]{1,12}$/.test(gene)) {
-    return gene;
-  }
-
-  if (Object.prototype.hasOwnProperty.call(GENE_EXCEPTIONS, gene)) {
-    return GENE_EXCEPTIONS[gene];
-  }
-
-  return "";
-};
-
-const countEdges = links => {
-  return Object.values(links || {}).reduce((total, targets) => {
-    return total + (Array.isArray(targets) ? targets.length : 0);
-  }, 0);
-};
-
-const sortWorkbookGenes = (genes, workbookType) => {
-  const entries = Object.entries(genes || {});
-
-  if (workbookType === NETWORK_GRN_MODE_SHORT) {
-    return entries.sort((a, b) => String(a[1]).localeCompare(String(b[1])));
-  }
-
-  return entries.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
-};
-
-export default function GenerateNetworkModal() {
+export default function LoadFromDatabaseModal() {
   const { setDemoValue, setNetworkData, setNetworkMode } = useContext(GrnStateContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoadingSources, setIsLoadingSources] = useState(false);
@@ -381,11 +329,11 @@ export default function GenerateNetworkModal() {
                 pad="0"
               />
             </Box>
-            <Box className="generate-network-modal-body">
+            <Box pad="20px">
               <Text size="30px" weight="500" margin={{ top: "20px", bottom: "10px" }}>
                 Generate Network
               </Text>
-              <Text className="generate-network-warning">
+              <Text margin={{ bottom: "24px" }}>
                 Warning: changing network type or source will clear the list of selected genes or
                 proteins below.
               </Text>
@@ -410,7 +358,7 @@ export default function GenerateNetworkModal() {
                     </Box>
                   </Box>
 
-                  <Box className="generate-network-row" direction="row" align="center" gap="small">
+                  <Box className="generate-network-row" direction="row" align="center" gap="15px">
                     <Text className="generate-network-label" weight="bold">
                       Network Source
                     </Text>
@@ -439,12 +387,7 @@ export default function GenerateNetworkModal() {
                       addGene();
                     }}
                   >
-                    <Box
-                      className="generate-network-row"
-                      direction="row"
-                      align="center"
-                      gap="small"
-                    >
+                    <Box className="generate-network-row" direction="row" align="center" gap="15px">
                       <Text className="generate-network-label" weight="bold">
                         Select {geneProteinLabel}
                       </Text>
@@ -458,7 +401,6 @@ export default function GenerateNetworkModal() {
                           className="generate-network-search-input"
                           value={searchValue}
                           onChange={event => setSearchValue(event.target.value)}
-                          size="14px"
                         />
                         <Button
                           className="generate-network-search-button"

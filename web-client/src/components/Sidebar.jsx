@@ -30,7 +30,7 @@ import {
 } from "../services/upload";
 import "../App.css";
 import DottedLine from "./helper-components/DottedLine";
-import GenerateNetworkModal from "./LoadFromDatabaseModal";
+import LoadFromDbModal from "./LoadFromDbModal";
 
 export default function Sidebar({}) {
   const {
@@ -170,7 +170,7 @@ export default function Sidebar({}) {
                 </Box>
               </Stack>
               <Box margin={{ bottom: "15px" }}>
-                <GenerateNetworkModal />
+                <LoadFromDbModal />
               </Box>
             </Box>
           </Box>

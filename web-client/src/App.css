@@ -338,17 +338,6 @@ input[type="radio"]:checked {
   stroke: #5f5f5f;
 }
 
-.generate-network-modal-body {
-  padding: 20px;
-}
-
-.generate-network-warning {
-  font-size: 44px;
-  color: #3d3f42;
-  line-height: 1.35;
-  margin-bottom: 24px;
-}
-
 .generate-network-row {
   width: 100%;
   margin-bottom: 22px;
@@ -357,7 +346,6 @@ input[type="radio"]:checked {
 .generate-network-label {
   min-width: 205px;
   font-size: 42px;
-  color: #34373a;
 }
 
 .generate-network-select,
@@ -375,19 +363,26 @@ input[type="radio"]:checked {
 }
 
 .generate-network-search-input {
-  width: 470px;
+  width: 100%;
 }
 
 .generate-network-search-row {
-  width: 470px;
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .generate-network-search-row .generate-network-search-input {
-  width: 320px;
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
 }
 
 .generate-network-search-button {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   line-height: 0;
@@ -447,14 +442,6 @@ input[type="radio"]:checked {
   padding: 20px 34px 24px;
 }
 
-/* .generate-network-action-button { */
-/* border: 1px solid #b8b8b8; */
-/* border-radius: 4px; */
-/* background: #f7f7f7; */
-/* color: #3b3b3b; */
-/* padding: 10px 18px; */
-/* } */
-
 .generate-network-action-button:hover {
   background: #ebebeb;
 }
@@ -479,7 +466,6 @@ input[type="radio"]:checked {
   }
 
   .generate-network-search-row {
-    width: 600px;
     max-width: 100%;
   }
 
@@ -490,37 +476,6 @@ input[type="radio"]:checked {
 
   .generate-network-search-row .generate-network-search-input {
     width: 100%;
-  }
-}
-
-@media (max-width: 900px) {
-  .generate-network-modal {
-    width: calc(100vw - 18px);
-  }
-
-  .generate-network-modal-body {
-    padding: 20px;
-  }
-
-  .generate-network-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .generate-network-label {
-    min-width: 0;
-  }
-
-  .generate-network-select,
-  .generate-network-source-select,
-  .generate-network-search-row,
-  .generate-network-search-row .generate-network-search-input {
-    width: 100%;
-  }
-
-  .generate-network-modal-footer {
-    padding: 16px 20px 20px;
   }
 }
 
