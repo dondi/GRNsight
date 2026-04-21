@@ -4,6 +4,7 @@ module.exports = [
             "node_modules/**",
             "coverage/**",
             "web-client-classic/public/js/*.min.js",
+            "/web-client/**",
             // Add these from your .eslintignore file
             "coverage/lcov-report/**",
             "_site/**",

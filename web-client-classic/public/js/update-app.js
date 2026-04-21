@@ -385,7 +385,7 @@ const enableNodeColoringUI = function () {
 
 const adjustGeneNameForExpression = function (gene) {
     const geneName = gene.name;
-    return grnState.workbook.meta.data.workbookType === NETWORK_PPI_MODE && geneName.endsWith("p")
+    return grnState.mode === NETWORK_PPI_MODE && geneName.endsWith("p")
         ? geneName.slice(0, -1)
         : geneName;
 };
@@ -555,6 +555,9 @@ const resetDemoDropdown = () => {
 };
 
 const checkWorkbookModeSettings = () => {
+    // We check for expression data to make sure Demo 3 has node coloring off by default
+    const hasExpression = hasExpressionData(grnState.workbook.expression);
+
     if (grnState.mode === NETWORK_PPI_MODE) {
         grnState.nodeColoring.nodeColoringEnabled = false;
         grnState.nodeColoring.showMenu = true;
@@ -563,7 +566,7 @@ const checkWorkbookModeSettings = () => {
         hideEdgeWeightOptions();
         updateModeViews();
     } else if (grnState.mode === NETWORK_GRN_MODE) {
-        grnState.nodeColoring.nodeColoringEnabled = true;
+        grnState.nodeColoring.nodeColoringEnabled = hasExpression;
         grnState.nodeColoring.showMenu = true;
         grnState.colorOptimal = grnState.workbook.sheetType === "weighted";
         showNodeColoringMenus();

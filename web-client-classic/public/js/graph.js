@@ -544,7 +544,7 @@ export var drawGraph = function (workbook) {
     }
 
     let uniqueLinks = [];
-    if (workbook.meta.data.workbookType === NETWORK_PPI_MODE) {
+    if (grnState.mode === NETWORK_PPI_MODE) {
         const seenLinks = {};
         workbook.links.forEach(function (link) {
             const sourceId = getLinkEndpointId(link.source);

@@ -77,6 +77,7 @@ export default function Graph() {
 
   const {
     demoValue,
+    networkData,
     viewSize,
     adaptive,
     colorOptimal,
@@ -88,6 +89,16 @@ export default function Graph() {
     zoomPercent,
     setZoomPercent,
   } = useContext(GrnStateContext);
+
+  const applyWorkbookData = data => {
+    setWorkbook(data);
+    setNodes(data.genes || []);
+    setSheetType(data.sheetType);
+    const weights = calcAllWeights(data, colorOptimal);
+    setAllWeights(weights);
+    setMaxWeight(calcMaxWeight(weights));
+    setError(null);
+  };
 
   const getViewportBoundsData = () => ({
     nodes: simulationRef.current ? simulationRef.current.nodes() : [],
@@ -106,14 +117,8 @@ export default function Graph() {
 
     getDemoWorkbook(demoEndpoint)
       .then(data => {
-        setWorkbook(data);
-        setNodes(data.genes);
-        setSheetType(data.sheetType);
+        applyWorkbookData(data);
         setNetworkMode(getNetworkMode(data.meta.data.workbookType));
-        const weights = calcAllWeights(data, colorOptimal);
-        setAllWeights(weights);
-        setMaxWeight(calcMaxWeight(weights));
-        setError(null);
       })
       .catch(err => {
         setError(err.message);
@@ -123,6 +128,20 @@ export default function Graph() {
         setZoomPercent(ZOOM_DISPLAY_MIDDLE);
       });
   }, [demoValue]);
+
+  useEffect(() => {
+    if (!networkData) return;
+
+    setLoading(true);
+    try {
+      applyWorkbookData(networkData);
+    } catch (err) {
+      setError(err.message || "Failed to display uploaded graph.");
+    } finally {
+      setLoading(false);
+      setZoomPercent(ZOOM_DISPLAY_MIDDLE);
+    }
+  }, [networkData]);
 
   // TODO: need to update with adaptive (restrict to viewport)
   useEffect(() => {
