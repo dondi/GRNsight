@@ -6,7 +6,7 @@ The schema of this database lives within this directory.
 
 ### Schema
 
-The default database name is stored within the settings schema on our Postgres database.
+The default expression dataset name is stored within the settings schema in the Expression database.
 
 The schema is located within this directory at the top level of this file `schema.sql`. It creates the schema as well as defining the table located within the settings schema.
 
@@ -28,9 +28,9 @@ The schema is located within this directory at the top level of this file `schem
     psql -f schema.sql postgresql://localhost/postgres
     ```
 
-### Changing the default database name
+### Changing the default expression dataset name
 
-1. In order to change the default database name you would first need to login to the database using the following command:
+1. In order to change the default expression dataset name you would first need to login to the database using the following command:
 
     For Windows:
 
@@ -48,12 +48,12 @@ The schema is located within this directory at the top level of this file `schem
     ```
     SET SEARCH_PATH TO settings;
     ```
-3. After that you will simply delete the current default database name using this command
+3. After that you will simply delete the current default dataset name using this command
     ```
     DELETE FROM grnsettings;
     ```
-4. And then insert the new database name using the following command
+4. And then insert the new dataset name using the following command
     ```
     INSERT INTO grnsettings(expression_dataset) VALUES ('the new default database name');
     ```
-    _The current default database is 'dahlquist_2018'_
+    _The current default expression dataset is 'dahlquist_2018'_
