@@ -139,9 +139,8 @@ export default function Sidebar({}) {
               </Box>
               <Select
                 className="demo-source-dropdown"
-                options={Object.values(DEMO_TYPES).map(name => (
-                  <Text key={name}>{name}</Text>
-                ))}
+                options={Object.values(DEMO_TYPES)}
+                dropProps={{ className: "demo-source-dropdown-drop" }}
                 value={demoValue}
                 placeholder={<Text>Select a Demo</Text>}
                 onChange={({ option }) => setDemoValue(option)}
@@ -297,9 +296,8 @@ export default function Sidebar({}) {
           {/* TODO: replace with datasets from database */}
           <Select
             className="demo-source-dropdown"
-            options={Object.values(DEMO_TYPES).map(name => (
-              <Text key={name}>{name}</Text>
-            ))}
+            options={Object.values(DEMO_TYPES)}
+            dropProps={{ className: "demo-source-dropdown-drop" }}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
             onChange={({ option }) => setDemoValue(option)}
@@ -315,12 +313,11 @@ export default function Sidebar({}) {
           <Select
             className="demo-source-dropdown"
             pad="0px"
-            options={Object.values(DEMO_TYPES).map(name => (
-              <Text key={name}>{name}</Text>
-            ))}
+            options={Object.values(DEMO_TYPES)}
+            dropProps={{ className: "demo-source-dropdown-drop" }}
             value={demoValue}
             placeholder={<Text>Select a Demo</Text>}
-            onChange={({ option }) => setValue(option)}
+            onChange={({ option }) => setDemoValue(option)}
             size="small"
           />
           <CheckBox

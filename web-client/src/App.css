@@ -263,6 +263,13 @@ header span {
   line-height: 1.42857143;
 }
 
+.demo-source-dropdown,
+.demo-source-dropdown *,
+.demo-source-dropdown-drop,
+.demo-source-dropdown-drop * {
+  font-weight: 400 !important;
+}
+
 .file-input {
   border: 1px solid #ccc;
   border-radius: 4px;

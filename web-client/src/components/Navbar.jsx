@@ -35,6 +35,7 @@ export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
   const [uploadError, setUploadError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null);
   const {
     networkMode,
     setNetworkMode,
@@ -86,6 +87,13 @@ export default function Navbar({}) {
     setZoomTextInput(event.target.value);
   };
 
+  const handleDropContentClick = event => {
+    if (event.target.closest(".demo-dropdown-navbar")) {
+      return;
+    }
+    setOpenMenu(null);
+  };
+
   const handleFileUpload = async event => {
     const file = event.target.files?.[0];
     const validationError = validateUploadFile(file);
@@ -133,8 +141,6 @@ export default function Navbar({}) {
   };
 
   return (
-    // TODO: need to make sure that sizing of elements is okay and consistent because right now proportions look right at 50% view
-    // TODO: need to set max-width of nav? or maybe it's okay for now
     <Nav
       className="navbar"
       direction="row"
@@ -145,10 +151,13 @@ export default function Navbar({}) {
     >
       <DropButton
         label="Network"
+        open={openMenu === "network"}
+        onOpen={() => setOpenMenu("network")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Source
             </Text>
@@ -166,7 +175,14 @@ export default function Navbar({}) {
                 dropContent={
                   <div className="dropdown-menu demo-dropdown-menu">
                     {Object.values(DEMO_TYPES).map(demo => (
-                      <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
+                      <Button
+                        pad="100px"
+                        key={demo}
+                        onClick={() => {
+                          setDemoValue(demo);
+                          setOpenMenu(null);
+                        }}
+                      >
                         <Text>{demo}</Text>
                       </Button>
                     ))}
@@ -225,10 +241,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Layout"
+        open={openMenu === "layout"}
+        onOpen={() => setOpenMenu("layout")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Box pad={{ left: "12px" }}>
               <Text>Graph Options</Text>
             </Box>
@@ -278,12 +297,15 @@ export default function Navbar({}) {
 
       <DropButton
         label="Node"
+        open={openMenu === "node"}
+        onOpen={() => setOpenMenu("node")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
           <div>
             {enableNodeColoring ? (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(false)}>
                     <Checkmark size="small" />
@@ -326,7 +348,7 @@ export default function Navbar({}) {
                 </Box>
               </div>
             ) : (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
                 <Box pad={{ horizontal: "20px", vertical: "3px" }}>
                   <Button onClick={() => setEnableNodeColoring(true)}>
                     <Text margin={{ left: "12px" }}>Enable Node Coloring</Text>
@@ -340,10 +362,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Edge"
+        open={openMenu === "edge"}
+        onOpen={() => setOpenMenu("edge")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Box pad={{ horizontal: "20px", vertical: "3px" }}>
               <Button onClick={() => setColorOptimal(!colorOptimal)}>
                 {colorOptimal && <Checkmark size="small" />}
@@ -407,10 +432,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="View"
+        open={openMenu === "view"}
+        onOpen={() => setOpenMenu("view")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <Text margin={{ left: "small" }}>Viewport Size</Text>
             <Box pad={{ horizontal: "20px", top: "3px" }}>
               <Button onClick={() => setViewSize(VIEW_SIZE_SMALL)}>
@@ -457,10 +485,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Export"
+        open={openMenu === "export"}
+        onOpen={() => setOpenMenu("export")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <DropdownMenuButton text="Export Data" />
             <DropdownMenuButton text="Export Image" />
             <DropdownMenuButton text="Print" />
@@ -470,10 +501,13 @@ export default function Navbar({}) {
 
       <DropButton
         label="Help"
+        open={openMenu === "help"}
+        onOpen={() => setOpenMenu("help")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <DropdownMenuButton text="Getting Started" />
             <DropdownMenuButton text="GRNsight Wiki" />
             <DropdownMenuButton text="About GRNsight" />
@@ -484,13 +518,23 @@ export default function Navbar({}) {
       {/* TODO: set width so that shorter and wider window like web-client-classic */}
       <DropButton
         label="Demo"
+        open={openMenu === "demo"}
+        onOpen={() => setOpenMenu("demo")}
+        onClose={() => setOpenMenu(null)}
         dropAlign={{ top: "bottom", left: "left" }}
         pad="15px"
         icon={false}
         dropContent={
-          <div className="dropdown-menu demo-dropdown-menu">
+          <div className="dropdown-menu demo-dropdown-menu" onClickCapture={handleDropContentClick}>
             {Object.values(DEMO_TYPES).map(demo => (
-              <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
+              <Button
+                pad="100px"
+                key={demo}
+                onClick={() => {
+                  setDemoValue(demo);
+                  setOpenMenu(null);
+                }}
+              >
                 <Text>{demo}</Text>
               </Button>
             ))}
