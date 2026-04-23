@@ -10,7 +10,7 @@ import {
   TextInput,
   RadioButtonGroup,
 } from "grommet";
-import { Refresh, FolderOpen, FormDown } from "grommet-icons";
+import { Refresh, FolderOpen } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,

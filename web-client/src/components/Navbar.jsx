@@ -29,6 +29,7 @@ import DottedLine from "./helper-components/DottedLine";
 import DropdownMenuButton from "./helper-components/DropdownMenuButton";
 import OptionalCheckmark from "./helper-components/OptionalCheckmark";
 import "../App.css";
+import LoadFromDbModal from "./LoadFromDbModal";
 
 export default function Navbar({}) {
   const [zoomTextInput, setZoomTextInput] = useState(ZOOM_DISPLAY_MIDDLE);
@@ -195,9 +196,7 @@ export default function Navbar({}) {
             </Box>
             <DottedLine width="95%" />
             <Box>
-              <Button margin={{ top: "7px", right: "20px", left: "30px" }}>
-                <Text>Load from Database...</Text>
-              </Button>
+              <LoadFromDbModal margin={{ top: "7px", right: "20px", left: "20px" }} />
             </Box>
             <DottedLine />
             <Box>
@@ -207,17 +206,11 @@ export default function Navbar({}) {
               </Button>
             </Box>
             <DottedLine />
-            <Text weight="bold" margin={{ left: "12px" }}>
-              Network Mode
-            </Text>
-            {/* TODO: only display checkmark if selected view */}
-            {/* TODO: need to display text in gray when disabled */}
+            <Text margin={{ left: "12px" }}>Network Mode</Text>
             <Box margin={{ left: "50px" }}>
               <Text color={DARK_GRAY}>{networkMode}</Text>
             </Box>
-            <Text weight="bold" margin={{ left: "12px" }}>
-              Species
-            </Text>
+            <Text margin={{ left: "12px" }}>Species</Text>
             <Box direction="row" margin={{ left: "50px" }}>
               <Text color={DARK_GRAY}>Saccharomyces cerevisiae</Text>
             </Box>

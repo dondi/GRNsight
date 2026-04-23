@@ -1,7 +1,4 @@
-import {
-  NETWORK_GRN_MODE_SHORT,
-  NETWORK_PPI_MODE_SHORT,
-} from "../helpers/constants";
+import { NETWORK_GRN_MODE_SHORT, NETWORK_PPI_MODE_SHORT } from "../helpers/constants";
 
 const GENE_EXCEPTIONS = {
   "DUR1,2": "DUR12",

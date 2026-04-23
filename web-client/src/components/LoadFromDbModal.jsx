@@ -23,7 +23,7 @@ import {
 } from "../helpers/loadFromDbHelpers";
 import "../App.css";
 
-export default function LoadFromDatabaseModal() {
+export default function LoadFromDbModal({ margin }) {
   const { setDemoValue, setNetworkData, setNetworkMode } = useContext(GrnStateContext);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoadingSources, setIsLoadingSources] = useState(false);
@@ -304,7 +304,7 @@ export default function LoadFromDatabaseModal() {
 
   return (
     <>
-      <Button className="load-from-database" onClick={() => setIsOpen(true)}>
+      <Button className="load-from-database" margin={margin} onClick={() => setIsOpen(true)}>
         <Box pad={{ vertical: "6px", horizontal: "12px" }} direction="row" gap="4px">
           <Database size="14px" />
           <Text size="14px">Load from Database</Text>
