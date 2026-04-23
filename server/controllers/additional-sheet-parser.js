@@ -1,23 +1,15 @@
 // Parses "optimization_parameters" and 2-column sheets
 // from GRNmap input or output workbook
+const {
+    applyTwoColumnSheetWarnings,
+    isValidHeader,
+    isValidGeneName,
+    validateRowEntry,
+    addWarning,
+    addError,
+} = require("./validators/two-column-warnings");
 
 var constants = require(__dirname + "/workbook-constants");
-
-const getSheetHeader = (sheetName, column, row) => {
-    if (row === 0) {
-        if (sheetName === "production_rates" || sheetName === "optimized_production_rates") {
-            return column === 0 ? "id" : "production_rate";
-        } else if (sheetName === "degradation_rates") {
-            return column === 0 ? "id" : "degradation_rate";
-        } else if (sheetName === "threshold_b" || sheetName === "optimized_threshold_b") {
-            return column === 0 ? "id" : "threshold_b";
-        } else if (sheetName === "optimization_parameters") {
-            return column === 0 ? "optimization_parameter" : "value";
-        } else if (sheetName === "optimization_diagnostics") {
-            return column === 0 ? "Parameter" : "Value";
-        }
-    }
-};
 
 const optimizationParametersTypeKey = {
     alpha: "number",
@@ -49,59 +41,6 @@ const optimizationParametersObjectKey = {
     simulation_timepoints: "number",
 };
 
-const addWarning = (workbook, message) => {
-    let warningsCount;
-    if (!Object.keys(workbook).includes("warnings")) {
-        warningsCount = 0;
-        workbook.warnings = [];
-    } else {
-        warningsCount = workbook.warnings.length;
-    }
-    const MAX_WARNINGS = 75;
-    if (warningsCount < MAX_WARNINGS) {
-        const exists = workbook.warnings.some(w => w.errorDescription === message.errorDescription);
-        if (exists) {
-            return false;
-        }
-        workbook.warnings.push(message);
-    } else {
-        workbook.errors.push(constants.errors.warningsCountError);
-        return false;
-    }
-};
-
-const addError = (output, message) => {
-    const errorsCount = output.errors.length;
-    const MAX_ERRORS = 20;
-    if (errorsCount < MAX_ERRORS) {
-        output.errors.push(message);
-    } else {
-        output.errors.push(constants.errors.errorsCountError);
-        return false;
-    }
-};
-
-const validGeneName = (output, sheetName, gene, row) => {
-    var maxGeneLength = 12;
-    var regex = /[^a-z0-9\_\-]/gi;
-
-    // Allow missing gene id
-    if (gene === undefined || gene === null || (typeof gene === "string" && gene.trim() === "")) {
-        return false;
-    }
-
-    if (typeof gene !== "string") {
-        addError(output, constants.errors.invalidGeneTypeError(sheetName, gene, row));
-        return false;
-    } else if (gene.length > maxGeneLength) {
-        addError(output, constants.errors.invalidGeneLengthError(sheetName, gene, row));
-        return false;
-    } else if (gene.match(regex) !== null) {
-        addError(output, constants.errors.specialCharacterError(sheetName, gene, row));
-        return false;
-    }
-    return true;
-};
 // Optimization Parameters Parser
 const parseMetaDataSheet = sheet => {
     let meta = {
@@ -110,11 +49,12 @@ const parseMetaDataSheet = sheet => {
         warnings: [],
     };
     let paramType;
-    checkValidHeaderAndAddWarnings(meta, sheet);
+    const isValidHeaderResult = isValidHeader(sheet.data[0], sheet.name);
+    if (!isValidHeaderResult.isValid) {
+        addWarning(meta, isValidHeaderResult.warning);
+    }
 
-    const isHeaderMissing = meta.warnings.some(
-        w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
-    );
+    const isHeaderMissing = isValidHeaderResult.isMissing;
     sheet.data.forEach(function (element, index) {
         if (!isHeaderMissing && index === 0) {
             return;
@@ -156,49 +96,6 @@ const parseMetaDataSheet = sheet => {
     return meta;
 };
 
-// check header method
-const checkValidHeaderAndAddWarnings = (output, sheet) => {
-    const sheetName = sheet.name;
-    const expectedCellA1 = getSheetHeader(sheetName, 0, 0);
-    const expectedCellB1 = getSheetHeader(sheetName, 1, 0);
-
-    const hasData = sheet.data && sheet.data[0];
-    const cellA1 = hasData ? sheet.data[0][0] : undefined;
-    const cellB1 = hasData && sheet.data[0].length > 1 ? sheet.data[0][1] : undefined;
-
-    const isMissing =
-        cellA1 === null ||
-        cellA1 === undefined ||
-        cellB1 === null ||
-        cellB1 === undefined ||
-        String(cellA1).trim() === "" ||
-        String(cellB1).trim() === "" ||
-        (typeof cellA1 === "string" && typeof cellB1 === "number");
-
-    if (isMissing) {
-        addWarning(
-            output,
-            constants.warnings.additionalSheetMissingColumnHeaderWarning(
-                sheetName,
-                expectedCellA1,
-                expectedCellB1
-            )
-        );
-        return;
-    }
-
-    if (cellA1 !== expectedCellA1 || cellB1 !== expectedCellB1) {
-        addWarning(
-            output,
-            constants.warnings.additionalSheetIncorrectColumnHeaderWarning(
-                sheetName,
-                expectedCellA1,
-                expectedCellB1
-            )
-        );
-    }
-};
-
 const parseOptimizationDiagnosticsSheet = sheet => {
     let output = {
         data: {
@@ -216,7 +113,10 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     let currentGene;
     let currentMSE = [];
     // Check Headers
-    checkValidHeaderAndAddWarnings(output, sheet);
+    const isValidHeaderResult = isValidHeader(sheet.data[0], sheet.name);
+    if (!isValidHeaderResult.isValid) {
+        addWarning(output, isValidHeaderResult.warning);
+    }
     // Check Parameter Section
     let row = 1;
     // a missing row is the indicator to move onto the MSE
@@ -291,7 +191,8 @@ const parseOptimizationDiagnosticsSheet = sheet => {
             }
             currentGene = sheet.data[row][0];
             // if it's a valid gene set the key = MSE value
-            if (validGeneName(output, sheet.name, currentGene, row)) {
+            const isValidGeneNameResult = isValidGeneName(currentGene, sheet.name, row);
+            if (isValidGeneNameResult.isValid) {
                 for (let col = 1; col <= output.data.MSE["column-headers"].length; col++) {
                     if (typeof sheet.data[row][col] === "number") {
                         currentMSE.push(sheet.data[row][col]);
@@ -324,76 +225,8 @@ const parseOptimizationDiagnosticsSheet = sheet => {
     return output;
 };
 
-const checkValidGenesAndValuesInTwoColumnSheet = (
-    output,
-    sheet,
-    row,
-    genesMissingValue,
-    valuesMissingGene
-) => {
-    if (!sheet.data[row]) return;
-
-    const currentGene = sheet.data[row][0];
-    const currentValue = sheet.data[row][1];
-
-    const isValueEmpty =
-        currentValue === null ||
-        currentValue === undefined ||
-        (typeof currentValue === "string" && currentValue.trim() === "");
-
-    if (validGeneName(output, sheet.name, currentGene, row + 1)) {
-        if (isValueEmpty) {
-            genesMissingValue.push(currentGene);
-            output.data[currentGene] = undefined;
-        } else {
-            if (typeof currentValue === "number") {
-                output.data[currentGene] = currentValue;
-            } else {
-                addError(
-                    output,
-                    constants.errors.invalidValueError(
-                        sheet.name,
-                        currentValue,
-                        row + 1,
-                        getSheetHeader(sheet.name, 1, 0)
-                    )
-                );
-            }
-        }
-    } else if (!isValueEmpty) {
-        valuesMissingGene.push(currentValue);
-    }
-};
-
-const checkOrderOfGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) => {
-    const genesInSheet = Object.keys(output.data);
-    const presentNetworkGenesInSheet = genesInNetwork.filter(gene => genesInSheet.includes(gene));
-
-    const isWrongGeneOrder =
-        genesInSheet.length > 0 &&
-        !presentNetworkGenesInSheet.every((gene, index) => gene === genesInSheet[index]);
-
-    if (isWrongGeneOrder) {
-        addWarning(output, constants.warnings.wrongGeneOrderInTwoColumnSheet(sheetName));
-
-        // Matching order with genes in network
-        const sortedData = {};
-        genesInNetwork.forEach(gene => {
-            sortedData[gene] = output.data[gene];
-        });
-        output.data = sortedData;
-    }
-};
-
-const checkExtraGenesInTwoColumnSheet = (output, genesInNetwork, sheetName) => {
-    const extraGenes = Object.keys(output.data).filter(g => !genesInNetwork.includes(g));
-
-    if (extraGenes.length > 0) {
-        addWarning(
-            output,
-            constants.warnings.extraGenesInTwoColumnSheetWarning(sheetName, extraGenes.join(", "))
-        );
-    }
+const validData = data => {
+    return data !== undefined && data !== null && !(typeof data === "string" && data.trim() === "");
 };
 
 const parseTwoColumnSheet = (sheet, genesInNetwork) => {
@@ -403,91 +236,66 @@ const parseTwoColumnSheet = (sheet, genesInNetwork) => {
         warnings: [],
     };
 
-    if (sheet.data.length === 0) {
+    if (!sheet.data || sheet.data.length === 0) {
         return output;
     }
 
     const genesMissingValue = [];
     const valuesMissingGene = [];
 
-    // check to see if the genes are strings and the values are numbers
-
     for (let row = 0; row < sheet.data.length; row++) {
-        if (sheet.data[row].length > 2) {
-            addWarning(output, constants.warnings.extraneousDataWarning(sheet.name, row + 1));
+        const rowData = sheet.data[row];
+        const rowNum = row + 1;
+
+        // Extraneous Data Check
+        if (rowData.length > 2) {
+            addWarning(output, constants.warnings.extraneousDataWarning(sheet.name, rowNum));
         }
+
+        // Header Validation (Row 0)
         if (row === 0) {
-            checkValidHeaderAndAddWarnings(output, sheet);
+            const headerValidation = isValidHeader(rowData, sheet.name);
+            if (!headerValidation.isValid) {
+                addWarning(output, headerValidation.warning);
 
-            const isHeaderMissing = output.warnings.some(
-                w => w.warningCode === `MISSING_COLUMN_HEADER_${sheet.name.toUpperCase()}`
-            );
-
-            if (!isHeaderMissing) {
+                if (!headerValidation.isMissing) {
+                    continue;
+                }
+            } else {
                 continue;
             }
         }
 
-        checkValidGenesAndValuesInTwoColumnSheet(
-            output,
-            sheet,
-            row,
-            genesMissingValue,
-            valuesMissingGene
-        );
-    }
+        const geneName = rowData[0];
+        const geneValue = rowData[1];
 
-    // Check whether all genes are missing values
-    const isAllGenesMissingValues =
-        genesInNetwork && genesInNetwork.every(gene => genesMissingValue.includes(gene));
-    if (isAllGenesMissingValues) {
-        addWarning(
-            output,
-            constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
-                sheet.name,
-                /*isAllGenesMissing=*/ false
-            )
-        );
-    }
+        // Row Data Validation
+        const result = validateRowEntry(sheet.name, geneName, geneValue, rowNum);
 
-    // Check for values that are missing genes
-    if (valuesMissingGene.length > 0) {
-        addWarning(
-            output,
-            constants.warnings.missingGeneIdsWithValuesInTwoColumnSheet(
-                sheet.name,
-                valuesMissingGene
-            )
-        );
-    }
-
-    // Check for missing genes in sheet
-    if (genesInNetwork) {
-        //  Check if the output data keys (genes in sheet) include all genes in the network
-        const missingGenes = genesInNetwork.filter(g => !Object.keys(output.data).includes(g));
-        if (missingGenes.length > 0) {
-            if (missingGenes.length === genesInNetwork.length) {
-                addWarning(
-                    output,
-                    constants.warnings.missingAllGenesAndValuesInTwoColumnSheet(
-                        sheet.name,
-                        /*isAllGenesMissing=*/ true
-                    )
-                );
-            } else {
-                addWarning(
-                    output,
-                    constants.warnings.missingGenesAndValuesInTwoColumnSheetWarningWhenImporting(
-                        sheet.name,
-                        missingGenes.join(", ")
-                    )
-                );
+        if (result.isValid) {
+            output.data[result.geneName] = result.missingValue ? undefined : result.geneValue;
+            if (result.missingValue) {
+                if (validData(result.geneName)) {
+                    genesMissingValue.push(result.geneName);
+                }
+            }
+        } else {
+            if (result.error) {
+                addError(output, result.error);
+            }
+            if (!result.missingValue && validData(result.geneValue)) {
+                valuesMissingGene.push(result.geneValue);
             }
         }
-
-        checkExtraGenesInTwoColumnSheet(output, genesInNetwork, sheet.name);
-        checkOrderOfGenesInTwoColumnSheet(output, genesInNetwork, sheet.name);
     }
+
+    applyTwoColumnSheetWarnings(
+        output,
+        sheet.name,
+        genesInNetwork,
+        valuesMissingGene,
+        genesMissingValue
+    );
 
     return output;
 };

@@ -405,6 +405,8 @@ export const upload = function () {
             production_rates: "ProductionRates",
             degradation_rates: "DegradationRates",
             threshold_b: "ThresholdB",
+            optimized_production_rates: "ProductionRates",
+            optimized_threshold_b: "ThresholdB",
         };
 
         const { chosenTwoColumnSheets, sheetsToFetch, warningsToAdd } =
@@ -412,7 +414,7 @@ export const upload = function () {
                 workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
                 chosenSheets,
                 source,
-                warningsConstants: warnings,
+                exportWarningsConstants: warnings,
                 workbookWarnings: grnState.workbook.warnings,
             });
 
