@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Nav, DropButton, Box, Text, Button, TextInput } from "grommet";
 import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
   DEMO_TYPES,
+  NETWORK_GRN_MODE_FULL,
   NETWORK_GRN_MODE_SHORT,
+  NETWORK_PPI_MODE_FULL,
   LIGHT_GREEN,
   LIGHT_GRAY,
   MEDIUM_GRAY,
@@ -74,6 +76,13 @@ export default function Navbar({}) {
     setAdaptive,
   } = useContext(GrnStateContext);
 
+  const isZoomControlDisabled =
+    networkMode !== NETWORK_GRN_MODE_FULL && networkMode !== NETWORK_PPI_MODE_FULL;
+
+  useEffect(() => {
+    setZoomTextInput(zoomPercent);
+  }, [zoomPercent]);
+
   const valueValidator = (min, max, value) => {
     return Math.min(max, Math.max(min, value));
   };
@@ -83,14 +92,32 @@ export default function Navbar({}) {
   };
 
   const handleZoomInputChange = event => {
-    setZoomPercent(zoomInputValidator(event.target.value));
-    setZoomTextInput(event.target.value);
+    const rawValue = event.target.value;
+    setZoomTextInput(rawValue);
+
+    // Let users clear the field while typing without snapping to min zoom.
+    if (rawValue === "") {
+      return;
+    }
+
+    const numericValue = Number(rawValue);
+    if (Number.isNaN(numericValue)) {
+      return;
+    }
+
+    setZoomPercent(zoomInputValidator(numericValue));
   };
 
   const handleDropContentClick = event => {
     if (event.target.closest(".demo-dropdown-navbar")) {
       return;
     }
+
+    // Allow focusing/typing in inputs without immediately closing the menu.
+    if (event.target.closest('input, textarea, [contenteditable="true"], [role="textbox"]')) {
+      return;
+    }
+
     setOpenMenu(null);
   };
 
@@ -474,10 +501,14 @@ export default function Navbar({}) {
 
             <DottedLine />
             <Box pad={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text>
+              <Text color={isZoomControlDisabled ? "#ccc" : undefined}>
                 Zoom ({ZOOM_DISPLAY_MINIMUM} - {ZOOM_DISPLAY_MAXIMUM})
               </Text>{" "}
-              <TextInput value={zoomTextInput} onChange={event => handleZoomInputChange(event)} />
+              <TextInput
+                value={zoomTextInput}
+                onChange={event => handleZoomInputChange(event)}
+                disabled={isZoomControlDisabled}
+              />
             </Box>
           </div>
         }
