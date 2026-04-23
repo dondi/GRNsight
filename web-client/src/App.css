@@ -94,6 +94,11 @@ header span {
   flex-direction: column;
 }
 
+.demo-dropdown-menu {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .dropdown-menu button {
   border: none !important;
 }
@@ -110,8 +115,13 @@ header span {
   background-color: #dfebe5;
 }
 
-.demo-dropdown-navbar button {
+.demo-dropdown-navbar button,
+.demo-dropdown-navbar [role="button"] {
   border: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start !important;
+  text-align: left;
 }
 
 .demo-dropdown-navbar button:hover {

@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Nav, DropButton, Box, Text, Button, TextInput, Select } from "grommet";
+import { Nav, DropButton, Box, Text, Button, TextInput } from "grommet";
 import { Refresh, Checkmark, FolderOpen, CaretRightFill } from "grommet-icons";
 import { GrnStateContext } from "../App";
 import {
@@ -152,25 +152,30 @@ export default function Navbar({}) {
             <Text weight="bold" margin={{ left: "12px" }}>
               Network Source
             </Text>
-            {/* TODO: need to make sure there is a top margin, but adding a 7px top margin causes the buttons to display 7px shifted down */}
-            {/* TODO: need to style options to have no padding/margin */}
-            <Box pad={{ left: "30px", bottom: "5px" }}>
-              <Select
+            <Box pad={{ left: "10px", bottom: "5px" }}>
+              <DropButton
                 className="demo-dropdown-navbar"
-                icon={<CaretRightFill color={LIGHT_GRAY} />}
+                icon={false}
+                label={
+                  <Box direction="row" align="center" justify="between" width="100%">
+                    <Text>Demo</Text>
+                    <CaretRightFill color={LIGHT_GRAY} />
+                  </Box>
+                }
                 dropAlign={{ top: "top", bottom: "top", left: "right", right: "left" }}
-                options={Object.values(DEMO_TYPES).map(name => (
-                  <Text key={name}>{name}</Text>
-                ))}
-                value={<Text margin="5px">Demo</Text>}
-                placeholder={<Text>Demo</Text>}
-                onChange={({ option }) => setDemoValue(option)}
-                plain
-                size="small"
+                dropContent={
+                  <div className="dropdown-menu demo-dropdown-menu">
+                    {Object.values(DEMO_TYPES).map(demo => (
+                      <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
+                        <Text>{demo}</Text>
+                      </Button>
+                    ))}
+                  </div>
+                }
               />
             </Box>
             <DottedLine width="95%" />
-            <Box pad={{ left: "30px", top: "7px", bottom: "5px" }}>
+            <Box pad={{ left: "30px", top: "7px", bottom: "5px", right: "30px" }}>
               <Box
                 as="label"
                 htmlFor="navbar-file-upload"
@@ -483,7 +488,7 @@ export default function Navbar({}) {
         pad="15px"
         icon={false}
         dropContent={
-          <div className="dropdown-menu">
+          <div className="dropdown-menu demo-dropdown-menu">
             {Object.values(DEMO_TYPES).map(demo => (
               <Button pad="100px" key={demo} onClick={() => setDemoValue(demo)}>
                 <Text>{demo}</Text>
