@@ -61,11 +61,11 @@ header span {
 .navbar button,
 .filename {
   color: #000000;
-  border: none;
+  border: none !important;
 }
 
 .navbar > button:hover {
-  border: none;
+  border: none !important;
   background-color: transparent;
 }
 
@@ -111,11 +111,11 @@ header span {
 }
 
 .demo-dropdown-navbar button {
-  border: none;
+  border: none !important;
 }
 
 .demo-dropdown-navbar button:hover {
-  border: none;
+  border: none !important;
 }
 
 .folder-icon {
