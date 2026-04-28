@@ -1,7 +1,7 @@
 from constants import Constants
 from data_services.data_generator import *
 from data_services.save_service import *
-from database_services.populator import *
+from database_services.populator_runner import PopulatorRunner
 import argparse
 from datetime import datetime, timezone, timedelta
 
@@ -26,30 +26,14 @@ def load_data(network_option):
     GeneDataGenerator(GeneFetcherService(), GeneProcessor(formatted_time_stamp), save_service, regulators, proteins)
     
     SourceDataGenerator(SourceProcessor(formatted_time_stamp), save_service)
-
-def add_data_to_database(network_option, db_url):
-    print("Adding data to database.................................................")
-    if network_option in ['all', Constants.GRN_NETWORK_MODE]:
-        network_mode = Constants.GRN_NETWORK_MODE
-        SourceDataPopulator(db_url, network_mode).populate_data()
-        GeneDataPopulator(db_url, network_mode).populate_data()
-        GeneRegulatoryNetworkDataPopulator(db_url).populate_data()
     
-    if network_option in ['all', Constants.PPI_NETWORK_MODE]:
-        network_mode = Constants.PPI_NETWORK_MODE
-        SourceDataPopulator(db_url, network_mode).populate_data()
+def main(network_option, db_url=None, action='all', input_dir=Constants.DATA_DIRECTORY):
+    runner = PopulatorRunner(db_url=db_url, input_dir=input_dir)
 
-        GeneDataPopulator(db_url, network_mode).populate_data()
-        
-        ProteinDataPopulator(db_url).populate_data()
-        
-        ProteinProteinInteractionsDataPopulator(db_url).populate_data()
-    
-def main(network_option, db_url=None, action='all'):
     if action in ['all', 'generate']:
         load_data(network_option)
     if action in ['all', 'populate']:
-        add_data_to_database(network_option, db_url)
+        runner.populate(network_option)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate data for different networks.")
@@ -59,12 +43,14 @@ if __name__ == "__main__":
                         help="Choose whether to only generate TSV files, only populate PostgreSQL from TSV, or do both.")
     parser.add_argument('--db_url', type=str,
                         help="PostgreSQL database URL, e.g., postgresql://localhost/postgres")
+    parser.add_argument('--input_dir', type=str, default=Constants.DATA_DIRECTORY,
+                        help="Input directory for populate mode. If this directory is named script-results, the loader reads TSVs directly; otherwise it scans network subfolders.")
 
     args = parser.parse_args()
     if args.action in ['populate', 'all'] and not args.db_url:
         parser.error("--db_url is required when --action is 'populate' or 'all'.")
 
-    main(args.network, args.db_url, args.action)
+    main(args.network, args.db_url, args.action, args.input_dir)
     
 
     

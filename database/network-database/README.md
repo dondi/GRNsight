@@ -41,6 +41,57 @@ Example command to only populate PostgreSQL from previously generated TSV files:
 python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
 ```
 
+### Populate Input Options
+
+Populate mode uses `--input_dir` to determine how data file is read.
+
+How input is selected:
+
+- If `--input_dir` is `script-results` (default), data is read directly from `script-results/`.
+- Otherwise, the loader treats `--input_dir` as a parent folder and scans its subfolders.
+
+For custom folders, supported schema folder names are:
+
+- GRN:
+    - `gene_regulatory_network_with_timestamp/`
+    - `gene_regulatory_network/`
+- PPI:
+    - `protein_protein_interactions_with_timestamp/`
+    - `protein_protein_interactions/`
+
+If `--network all` is used, both one GRN folder and one PPI folder must exist.
+
+Expected files per schema folder:
+
+- GRN: `source.tsv`, `gene.tsv`, `network.tsv`
+- PPI: `source.tsv`, `gene.tsv`, `protein.tsv`, `physical_interactions.tsv`
+
+Examples:
+
+Populate from `script-results` (default):
+
+```bash
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
+```
+
+Populate from a custom directory that contains schema folders:
+
+```bash
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+```
+
+Populate only GRN from a custom directory:
+
+```bash
+python3 main.py --network grn --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+```
+
+Populate only PPI from a custom directory:
+
+```bash
+python3 main.py --network ppi --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+```
+
 ## Troubleshooting
 
 ### urllib3 ImportError
