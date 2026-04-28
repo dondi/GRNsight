@@ -169,6 +169,9 @@ export const setupLoadAndImportHandlers = grnState => {
                 reloader = () => loadGrn(name, formData);
                 // re-enable upload button
                 disableUpload(false);
+                if (demoFiles.indexOf(name) === -1) {
+                    grnState.demoDropdownValue = null;
+                }
                 updateApp(grnState);
                 // displayStatistics(workbook);
             })
