@@ -760,9 +760,10 @@ export const upload = function () {
                     if (
                         typeof allSheets[i] === "object" &&
                         allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
+                        allSheets[i].checked &&
                         allSheets[i].value &&
-                        allSheets[i].value.includes("expression") &&
-                        allSheets[i].checked
+                        (allSheets[i].value.includes("expression") ||
+                            allSheets[i].value.includes("sigma"))
                     ) {
                         anyExpressionChecked = true;
                         break;
