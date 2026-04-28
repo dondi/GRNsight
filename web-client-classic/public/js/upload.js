@@ -97,7 +97,11 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (Object.keys(grnState.workbook.expression).length > 0 && mode === NETWORK_GRN_MODE && extension === "xlsx") {
+        if (
+            Object.keys(grnState.workbook.expression).length > 0 &&
+            mode === NETWORK_GRN_MODE &&
+            extension === "xlsx"
+        ) {
             source = $("input[name=expressionSource]:checked")[0].value;
             if (source === "userInput") {
                 source = "user-data";
