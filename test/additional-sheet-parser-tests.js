@@ -656,4 +656,18 @@ describe("additional-sheet-parser", function () {
             );
         });
     });
+
+    describe("workbooks with only a network or network_optimized_weights tab", function () {
+        it("loads a workbook with only a network_optimized_weights sheet without fatal error", function () {
+            test.loadsWithoutFatalError(
+                "test-files/additional-sheet-test-files/3-genes_6-edges_network_optimized_weights-sheet-only.xlsx"
+            );
+        });
+
+        it("loads a workbook with only a network sheet without fatal error", function () {
+            test.loadsWithoutFatalError(
+                "test-files/additional-sheet-test-files/3-genes_6-edges_network-sheet-only.xlsx"
+            );
+        });
+    });
 });
