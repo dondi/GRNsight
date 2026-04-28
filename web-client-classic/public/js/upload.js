@@ -97,10 +97,15 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (Object.keys(grnState.workbook.expression).length > 0 && mode === NETWORK_GRN_MODE) {
+        if (mode === NETWORK_GRN_MODE && extension === "xlsx") {
             source = $("input[name=expressionSource]:checked")[0].value;
-            if (source === "userInput") {
-                source = "user-data";
+            if (source === "none") {
+                source = null;
+            } else if (source === "userInput") {
+                // only demos will have an expression source
+                source = grnState.workbook.expression.source
+                    ? grnState.workbook.expression.source
+                    : "user-data";
             }
         }
 
