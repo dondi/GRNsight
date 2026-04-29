@@ -1,7 +1,7 @@
 from constants import Constants
 from data_services.data_generator import *
 from data_services.save_service import *
-from database_services.populator import *
+from database_services.populator_runner import PopulatorRunner
 import argparse
 from datetime import datetime, timezone, timedelta
 
@@ -11,51 +11,46 @@ def load_data(network_option):
     print("Generating data.................................................")
     time_stamp = datetime.now(timezone(timedelta(hours=-8)))
     formatted_time_stamp = time_stamp.strftime("%Y-%m-%d %H:%M:%S%z")
+    grn_data_generator = None
+    protein_data_generator = None
+
     if network_option in ['all', Constants.GRN_NETWORK_MODE]:
-        grnDataGenerator = GeneRegulatoryNetworkDataGenerator(GeneRegulatoryNetworkFetcherService(), GeneRegulatoryNetworkProcessor(formatted_time_stamp), save_service)
+        grn_data_generator = GeneRegulatoryNetworkDataGenerator(GeneRegulatoryNetworkFetcherService(), GeneRegulatoryNetworkProcessor(formatted_time_stamp), save_service)
 
     if network_option in ['all', Constants.PPI_NETWORK_MODE]:
-        proteinDataGenerator = ProteinDataGenerator(ProteinFetcherService(), ProteinProcessor(formatted_time_stamp), save_service)
+        protein_data_generator = ProteinDataGenerator(ProteinFetcherService(), ProteinProcessor(formatted_time_stamp), save_service)
         ProteinProteinInteractionsDataGenerator(ProteinProteinInteractionsFetcherService(), ProteinProteinInteractionsProcessor(formatted_time_stamp), save_service)
 
-    if network_option == Constants.GRN_NETWORK_MODE:
-        GeneDataGenerator(GeneFetcherService(), GeneProcessor(formatted_time_stamp), save_service, grnDataGenerator.data)
-    else:
-        GeneDataGenerator(GeneFetcherService(), GeneProcessor(formatted_time_stamp), save_service, grnDataGenerator.data if grnDataGenerator else None, proteinDataGenerator.data)
+    regulators = grn_data_generator.data if grn_data_generator is not None else None
+    proteins = protein_data_generator.data if protein_data_generator is not None else None
+    GeneDataGenerator(GeneFetcherService(), GeneProcessor(formatted_time_stamp), save_service, regulators, proteins)
     
     SourceDataGenerator(SourceProcessor(formatted_time_stamp), save_service)
-
-def adding_data_to_databse(network_option, db_url):
-    print("Adding data to database.................................................")
-    if network_option in ['all', Constants.GRN_NETWORK_MODE]:
-        network_mode = Constants.GRN_NETWORK_MODE
-        SourceDataPopulator(db_url, network_mode).populate_data()
-        GeneDataPopulator(db_url, network_mode).populate_data()
-        GeneRegulatoryNetworkDataPopulator(db_url).populate_data()
     
-    if network_option in ['all', Constants.PPI_NETWORK_MODE]:
-        network_mode = Constants.PPI_NETWORK_MODE
-        SourceDataPopulator(db_url, network_mode).populate_data()
+def main(network_option, db_url=None, action='all', input_dir=Constants.DATA_DIRECTORY):
+    runner = PopulatorRunner(db_url=db_url, input_dir=input_dir)
 
-        GeneDataPopulator(db_url, network_mode).populate_data()
-        
-        ProteinDataPopulator(db_url).populate_data()
-        
-        ProteinProteinInteractionsDataPopulator(db_url).populate_data()
-    
-def main(network_option, db_url):
-    load_data(network_option)
-    adding_data_to_databse(network_option, db_url)
+    if action in ['all', 'generate']:
+        load_data(network_option)
+    if action in ['all', 'populate']:
+        runner.populate(network_option)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate data for different networks.")
     parser.add_argument('--network', choices=[Constants.PPI_NETWORK_MODE, Constants.GRN_NETWORK_MODE, 'all'], required=True,
                         help=f"Specify the type of network data to generate. Options: '{Constants.PPI_NETWORK_MODE}', '{Constants.GRN_NETWORK_MODE}', 'all'")
-    parser.add_argument('--db_url', type=str, required=True,
+    parser.add_argument('--action', choices=['generate', 'populate', 'all'], default='all',
+                        help="Choose whether to only generate TSV files, only populate PostgreSQL from TSV, or do both.")
+    parser.add_argument('--db_url', type=str,
                         help="PostgreSQL database URL, e.g., postgresql://localhost/postgres")
+    parser.add_argument('--input_dir', type=str, default=Constants.DATA_DIRECTORY,
+                        help="Input directory for populate mode. If this directory is named script-results, the loader reads TSVs directly; otherwise it scans network subfolders.")
 
     args = parser.parse_args()
-    main(args.network, args.db_url)
+    if args.action in ['populate', 'all'] and not args.db_url:
+        parser.error("--db_url is required when --action is 'populate' or 'all'.")
+
+    main(args.network, args.db_url, args.action, args.input_dir)
     
 
     

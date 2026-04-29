@@ -88,14 +88,31 @@ const TWO_COL_SHEET_NAMES = [
     "optimized_threshold_b",
 ];
 
+const MAX_WARNINGS = 75;
+const MAX_ERRORS = 20;
 const OPTIONAL_TWO_COL_SHEET_NAMES = ["optimization_parameters", "optimization_diagnostics"];
 
 const NETWORK_SHEET_NAMES = ["network", "network_optimized_weights", "network_weights"];
 
 const valuesForEachTwoColSheet = {
     production_rates: "production rates",
+    optimized_production_rates: "production rates",
     degradation_rates: "degradation rates",
     threshold_b: "threshold b values",
+    optimized_threshold_b: "threshold b values",
+};
+
+const grnMapInputSuppliedWarningMessage = (sheetName, value) => {
+    const stringValue = String(value);
+
+    const prefix = sheetName.includes("optimized")
+        ? `GRNsight is checking because ${stringValue} should have been provided as GRNmap output,`
+        : [
+              stringValue.charAt(0).toUpperCase() + stringValue.slice(1),
+              " will need to be supplied to use this workbook as an input file for GRNmap,",
+          ].join("");
+
+    return [prefix, "but will not affect the display of the graph in GRNsight."].join(" ");
 };
 
 module.exports = {
@@ -103,13 +120,18 @@ module.exports = {
     TWO_COL_SHEET_NAMES,
     OPTIONAL_TWO_COL_SHEET_NAMES,
     NETWORK_SHEET_NAMES,
-
+    MAX_WARNINGS,
+    MAX_ERRORS,
     warnings: {
         extraneousDataWarning: function (sheetName, row) {
             return {
                 warningCode: "EXTRANEOUS_DATA",
-                errorDescription: `There is extraneous data outside of the set rows and columns of the 
-                ${sheetName} sheet in row ${row}.`,
+                errorDescription: [
+                    `There is extraneous data outside of the set rows and columns`,
+                    `of the ${sheetName} sheet in row ${row}.`,
+                    `GRNsight does not store the extraneous data,`,
+                    `and the graph display will not be affected.`,
+                ].join(" "),
             };
         },
 
@@ -381,51 +403,75 @@ module.exports = {
             };
         },
 
-        missingGenesAndValuesInTwoColumnSheetWarningWhenImporting: function (
-            sheetName,
-            missingGenes
-        ) {
+        missingGenesAndValuesWarningWhenImporting: function (sheetName, missingGenes) {
+            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+
             return {
-                warningCode: `MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}_WHEN_IMPORTING`,
+                warningCode: `MISSING_GENES_AND_VALUES_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `GRNsight has detected that there are missing genes and ${valuesForEachTwoColSheet[sheetName]}`,
                     `in the imported workbook's ${sheetName} sheet.`,
-                    `A ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")} will need to be supplied to use this workbook as an input file for GRNmap,`,
-                    `but will not affect the display of the graph in GRNsight.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
                     `The missing genes and values are: ${missingGenes}.`,
                 ].join(" "),
             };
         },
 
-        missingAllGenesAndValuesInTwoColumnSheet: function (sheetName, isAllGenesMissing) {
+        missingAllGenesAndValues: function (sheetName, isAllGenesMissing) {
             const missingType = isAllGenesMissing ? "genes and values" : "values";
+            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
 
             return {
-                warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_ALL_${missingType.replace(/ /g, "_").toUpperCase()}_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `There were no ${missingType} supplied in the "${sheetName}" sheet in the imported workbook.`,
-                    "This will not affect the display of the graph in GRNsight, but",
-                    `${valuesForEachTwoColSheet[sheetName]} will need to be supplied to use this workbook as an input file for GRNmap.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
                 ].join(" "),
             };
         },
 
-        missingGeneIdsWithValuesInTwoColumnSheet: function (sheetName, valuesMissingGenes) {
+        someGenesMissingValuesWarning: function (sheetName, genes) {
+            const value = `a ${valuesForEachTwoColSheet[sheetName].replace(/s$/, "")}`;
+
             return {
-                warningCode: `MISSING_GENE_IDS_WITH_VALUES_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `MISSING_VALUES_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that there are missing values for ${value} in the imported workbook's "${sheetName}" sheet.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
+                    `The genes with missing values are: ${genes}.`,
+                ].join(" "),
+            };
+        },
+
+        extraGenesWarning: function (sheetName, extraGenes) {
+            return {
+                warningCode: `EXTRA_GENES_${sheetName.toUpperCase()}`,
+                errorDescription: [
+                    `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
+                    `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
+                    "to use this workbook` as an input file for GRNmap,",
+                    "but will not affect the display of the graph in GRNsight.",
+                    `The extra genes are: ${extraGenes}.`,
+                ].join(" "),
+            };
+        },
+
+        missingGeneIdsWithValues: function (sheetName, valuesMissingGenes) {
+            const value = "the missing gene IDs";
+            return {
+                warningCode: `MISSING_GENE_IDS_WITH_VALUES_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     "GRNsight has detected that there are missing gene IDs",
                     `in the imported workbook's ${sheetName} sheet.`,
-                    "The missing gene IDs will need to be supplied to use this workbook as an input file for GRNmap,",
-                    "but will not affect the display of the graph in GRNsight.",
-                    `The values with missing gene IDs are ${valuesMissingGenes.join(", ")}.`,
+                    grnMapInputSuppliedWarningMessage(sheetName, value),
+                    `The values with missing gene IDs are ${valuesMissingGenes}.`,
                 ].join(" "),
             };
         },
 
-        wrongGeneOrderInTwoColumnSheet: function (sheetName) {
+        wrongGeneOrder: function (sheetName) {
             return {
-                warningCode: `WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET_${sheetName.toUpperCase()}`,
+                warningCode: `WRONG_GENE_ORDER_${sheetName.toUpperCase()}`,
                 errorDescription: [
                     `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
                     `were not in the same order as the genes in the 'network' sheet.`,
