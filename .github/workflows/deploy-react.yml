@@ -1,0 +1,38 @@
+name: Deploy to gh-pages
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        working-directory: ./web-client
+        run: npm ci
+
+      - name: Build Web Client
+        working-directory: ./web-client
+        run: npm run build --if-present
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
+        with:
+          ssh-key: ${{ secrets.SSH_KEY }}
+          # The folder containing the built static files to deploy
+          folder: './web-client/dist'
+          # The target folder in the gh-pages branch where the files will be deployed
+          target-folder: 'react-thesis-4081'
