@@ -7,6 +7,8 @@ import {
   NETWORK_GRN_MODE_SHORT,
   NETWORK_PPI_MODE_FULL,
   NETWORK_PPI_MODE_SHORT,
+  MAX_GENES,
+  MAX_EDGES,
 } from "../helpers/constants";
 import {
   queryNetworkDatabase,
@@ -34,10 +36,10 @@ export default function LoadFromDbModal({ margin }) {
 
   const sourceOptions = useMemo(() => {
     if (customWorkbook.type === NETWORK_PPI_MODE_SHORT) {
-      return Object.keys(customWorkbook.sources.proteinProteinInteractions || {});
+      return Object.keys(customWorkbook.sources.proteinProteinInteractions ?? {});
     }
 
-    return Object.keys(customWorkbook.sources.geneRegulation || {});
+    return Object.keys(customWorkbook.sources.geneRegulation ?? {});
   }, [customWorkbook]);
 
   const geneProteinLabel = customWorkbook.type === NETWORK_PPI_MODE_SHORT ? "protein" : "gene";
@@ -62,8 +64,8 @@ export default function LoadFromDbModal({ margin }) {
           return;
         }
 
-        const proteinSources = proteinResponse?.sources || {};
-        const geneSources = networkResponse?.sources || {};
+        const proteinSources = proteinResponse?.sources ?? {};
+        const geneSources = networkResponse?.sources ?? {};
 
         setCustomWorkbook({
           genes: {},
@@ -118,13 +120,16 @@ export default function LoadFromDbModal({ margin }) {
   };
 
   const addGene = async () => {
-    const userEntry = String(searchValue || "").trim();
+    const userEntry = String(searchValue ?? "").trim();
     const normalized = isValidGene(userEntry.toUpperCase());
 
     if (!normalized) {
       setErrorMessage(
-        `${geneProteinLabel}: "${userEntry}" is not to GRNsight specifications. ` +
-          `${geneProteinLabel}s must be 12 characters or less, containing "-", "_", and alpha-numeric characters only.`
+        [
+          `${geneProteinLabel}: "${userEntry}" is not to GRNsight specifications.`,
+          `${geneProteinLabel}s must be 12 characters or less, containing "-", "_",`,
+          "and alpha-numeric characters only.",
+        ].join(" ")
       );
       return;
     }
@@ -199,9 +204,9 @@ export default function LoadFromDbModal({ margin }) {
       return;
     }
 
-    if (genesAmount > 75) {
+    if (genesAmount > MAX_GENES) {
       setErrorMessage(
-        `GRNsight can handle at most 75 genes/proteins. This network contains ${genesAmount}.`
+        `GRNsight can handle at most ${MAX_GENES} genes/proteins. This network contains ${genesAmount}.`
       );
       return;
     }
@@ -226,16 +231,17 @@ export default function LoadFromDbModal({ margin }) {
         });
 
         const edgesAmount = countEdges(response?.links);
-        if (edgesAmount > 100) {
+        if (edgesAmount > MAX_EDGES) {
           setErrorMessage(
-            `GRNsight can handle at most 100 edges. This network contains ${edgesAmount}.`
+            `GRNsight can handle at most ${MAX_EDGES} edges. This network contains ${edgesAmount}.`
           );
           return;
         }
 
         const links = [];
-        Object.entries(response?.links || {}).forEach(([regulator, targets]) => {
-          (targets || []).forEach(target => {
+        console.log("Response links:", response?.links);
+        Object.entries(response?.links ?? {}).forEach(([regulator, targets]) => {
+          (targets ?? []).forEach(target => {
             if (customWorkbook.genes[regulator] && customWorkbook.genes[target]) {
               links.push(`${customWorkbook.genes[regulator]}->${customWorkbook.genes[target]}`);
             }
@@ -267,16 +273,16 @@ export default function LoadFromDbModal({ margin }) {
         });
 
         const edgesAmount = countEdges(response?.links);
-        if (edgesAmount > 100) {
+        if (edgesAmount > MAX_EDGES) {
           setErrorMessage(
-            `GRNsight can handle at most 100 edges. This network contains ${edgesAmount}.`
+            `GRNsight can handle at most ${MAX_EDGES} edges. This network contains ${edgesAmount}.`
           );
           return;
         }
 
         const links = [];
-        Object.entries(response?.links || {}).forEach(([p1, targets]) => {
-          (targets || []).forEach(p2 => {
+        Object.entries(response?.links ?? {}).forEach(([p1, targets]) => {
+          (targets ?? []).forEach(p2 => {
             links.push(`${p1}->${p2}`);
           });
         });
@@ -296,7 +302,9 @@ export default function LoadFromDbModal({ margin }) {
         resetAndClose();
       }
     } catch {
-      setErrorMessage("Unable to generate network. Please try again.");
+      setErrorMessage(
+        "Unable to generate network. Please try again."
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -470,7 +478,7 @@ export default function LoadFromDbModal({ margin }) {
               <Button
                 className="generate-network-action-button"
                 label={"Generate Network"}
-                disabled={isLoadingSources || isGenerating}
+                disabled={isLoadingSources ?? isGenerating}
                 onClick={generateNetwork}
               />
               <Button

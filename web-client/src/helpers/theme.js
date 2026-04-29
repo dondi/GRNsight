@@ -5,6 +5,7 @@ export const theme = {
     colors: {
       text: "#333",
       control: "blue",
+      disabled: "#ccc",
     },
     font: {
       family: "Helvetica Neue, Helvetica, Arial, sans-serif",

@@ -501,7 +501,7 @@ export default function Navbar({}) {
 
             <DottedLine />
             <Box pad={{ horizontal: "20px", vertical: "3px" }} direction="row">
-              <Text color={isZoomControlDisabled ? "#ccc" : undefined}>
+              <Text color={isZoomControlDisabled ? "disabled" : undefined}>
                 Zoom ({ZOOM_DISPLAY_MINIMUM} - {ZOOM_DISPLAY_MAXIMUM})
               </Text>{" "}
               <TextInput
