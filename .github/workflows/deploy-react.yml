@@ -31,7 +31,7 @@ jobs:
         id: deployment
         uses: JamesIves/github-pages-deploy-action@v4.8.0
         with:
-          ssh-key: ${{ secrets.SSH_KEY }}
+          ssh-key: ${{ secrets.GRNSIGHT_REACT_KEY }}
           # The folder containing the built static files to deploy
           folder: './web-client/dist'
           # The target folder in the gh-pages branch where the files will be deployed
