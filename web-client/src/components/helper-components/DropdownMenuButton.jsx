@@ -3,15 +3,15 @@ import { Button, Text } from "grommet";
 export default function DropdownMenuButton({ text, onClick, href, target, rel }) {
   if (href) {
     return (
-      <Button
-        margin={{ horizontal: "20px", top: "3px" }}
+      <a
+        className="dropdown-menu-link"
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={target || "_blank"}
+        rel={rel || "noopener noreferrer"}
         onClick={onClick}
       >
         <Text>{text}</Text>
-      </Button>
+      </a>
     );
   }
 
