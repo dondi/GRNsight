@@ -94,10 +94,6 @@ export default function Navbar({}) {
     setOpenMenu(null);
   };
 
-  const openExternal = url => () => {
-    window.open(url, "_blank", "noopener,noreferrer");
-    setOpenMenu(null);
-  };
 
   const handleFileUpload = async event => {
     const file = event.target.files?.[0];
@@ -515,17 +511,20 @@ export default function Navbar({}) {
           <div className="dropdown-menu" onClickCapture={handleDropContentClick}>
             <DropdownMenuButton
               text="Getting Started"
-              onClick={openExternal(
+              href={
                 "https://dondi.github.io/GRNsight/documentation.html#gettingStarted"
-              )}
+              }
+              onClick={() => setOpenMenu(null)}
             />
             <DropdownMenuButton
               text="GRNsight Wiki"
-              onClick={openExternal("https://github.com/dondi/GRNsight/wiki")}
+              href={"https://github.com/dondi/GRNsight/wiki"}
+              onClick={() => setOpenMenu(null)}
             />
             <DropdownMenuButton
               text="About GRNsight"
-              onClick={openExternal("https://dondi.github.io/GRNsight/about.html")}
+              href={"https://dondi.github.io/GRNsight/about.html"}
+              onClick={() => setOpenMenu(null)}
             />
           </div>
         }
