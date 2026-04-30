@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - beta
+      - cecilia-1454
 
 permissions:
   contents: read
