@@ -116,12 +116,14 @@ header span {
 
 .dropdown-menu .dropdown-menu-link:hover {
   background-color: #dfebe5;
+  border: none;
 }
 
 .dropdown-menu button:hover,
 .dropdown-menu a:hover,
 .dropdown-menu [role="button"]:hover {
   background-color: #dfebe5;
+  border: none;
 }
 
 .dropdown-menu div:has(button),

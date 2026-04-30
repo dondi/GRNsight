@@ -95,6 +95,17 @@ export const theme = {
       radius: "4px",
     },
     extend: `
+      /* Keep navbar buttons borderless without using !important */
+      .navbar &,
+        .navbar &:hover,
+        .navbar &:focus,
+        .navbar &:focus-visible,
+        .navbar &:active {
+          border: none;
+          background-color: transparent;
+          box-shadow: none;
+        }
+
       border-radius: 4px;
       &:hover,
       &:focus,
@@ -104,6 +115,7 @@ export const theme = {
         border-radius: 4px;
         box-shadow: none;
       }
+
     `,
   },
   fileInput: {
