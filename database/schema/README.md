@@ -106,4 +106,4 @@ To change the default expression dataset name, follow these steps:
 
 ### 2. Other databases
 
-For other databases, continue follow the instructions in the [README.md](https://github.com/dondi/GRNsight/tree/main/database) outside of this directory.
+For other databases, continue follow the instructions in the [README.md](https://github.com/dondi/GRNsight/tree/main/database/README.md#3-populate-data-into-database) outside of this directory.
