@@ -67,11 +67,11 @@ All files pertaining the expression database live within this directory.
 
 ### Scripts
 
-All scripts live within the subdirectory `scripts`, located in the top-level of the network database directory.
+All scripts live within the subdirectory `scripts`.
 
-Any source files required to run the scripts live within the subdirectory `source-files`, located in the top-level of the network database directory. As source files may be large, **you must create this directory yourself and add any source files you need to use there**.
+Any source files required to run the scripts live within the subdirectory `source-files`. As source files may be large, **you must create this directory yourself and add any source files you need to use there**.
 
-All generated results of the scripts live in the subdirectory `script-results`, located in the top-level of the network database directory. Currently, all scripts that generate code create the directory if it does not currently exist. When adding a new script that generates resulting code, best practice is to create the script-results directory and any subdirectories if it does not exist, in order to prevent errors and snafus for recently cloned repositories.
+All generated results of the scripts live in the subdirectory `script-results`. Currently, all scripts that generate code create the directory if it does not currently exist. When adding a new script that generates code, the best practice is to create the script-results directory and any subdirectories if they do not exist, to prevent errors and snafus in recently cloned repositories.
 
 Within the scripts directory, there are the following files:
 
@@ -80,9 +80,9 @@ Within the scripts directory, there are the following files:
 
 #### Data Preprocessor(s)
 
-_Note: Data Preprocessing is always specific to each dataset that you obtain. `preprocessing.py` is capable of preprocessing the specific Expression data files located in `source-files/Current Database`. Because these files are too large to be stored on github, access the direct source files on **[BOX](https://lmu.app.box.com/folder/355960875647)** and move them into this directory. If more data sources are to be added in the database, create a new directory in source-files for it, note it in this `README.md` file and create a new preprocessing script for that data source (if required). Please document the changes in this section so that future developers may use your work to recreate the database if ever required._
+_Note: Data Preprocessing is always specific to each dataset that you obtain. `preprocessing.py` can preprocess the Expression data files in `source-files/Current Database`. Because these files are too large to be stored on GitHub, access the direct source files on **[BOX](https://lmu.app.box.com/folder/355960875647)** and move them into this directory. If more data sources are to be added to the database, create a new directory in source-files for it, note it in this `README.md` file, and create a new preprocessing script for that data source (if required). Please document the changes in this section so that future developers may use your work to recreate the database if ever required._
 
-The script (`preprocessing.py`) is used to preprocess the data in `source-files/Current Database`. It parses through each file to construct the processed loader files, so that they are ready to load using `loader.py`.
+The script (`preprocessing.py`) preprocesses the data in `source-files/Current Database`. It parses each file to construct the processed loader files, so they are ready to load with `loader.py`.
 
 The script (`preprocessing.py`) is capable of preprocessing:
 
@@ -105,7 +105,7 @@ The preprocessing script supports command-line flags to allow selective preproce
 
 1. Process everything (default behavior)
 
-If no arguments are specificed:
+If no arguments are specified:
 
 ```
 python3 preprocessing.py
@@ -120,11 +120,11 @@ python3 preprocessing.py --all --source_folder "Current Database"
 This runs every preprocessing step and regenerates all processed files.
 
 > Notes: The default source data directory is `Current Database`, located under `source-files/`.
-> If you want to preprocess a different dataset (for example, updated files or a new version), use the `--source-folder` flag to point to the appropriate directory `source-files/<source-folder>/`. Make sure that directory contains all required input CSV files.
+> If you want to preprocess a different dataset (for example, updated files or a new version), use the `--source-folder` flag to point to the appropriate directory `source-files/<source-folder>/`. Make sure that the directory contains all required input CSV files.
 
 2. Process only specific components
 
-You can process individual sections using falgs:
+You can process individual sections using flags:
 
 | Option            | Description                                               |
 | ----------------- | --------------------------------------------------------- |
@@ -148,7 +148,7 @@ Similar to `preprocessing.py`, the loading script supports command-line flags to
 
 1. Load everything (default behavior)
 
-If no arguments are specificed:
+If no arguments are specified:
 
 ```
 python3 loader.py | psql postgresql://localhost/postgres
@@ -160,11 +160,11 @@ Or explicitly:
 python3 loader.py --all | psql postgresql://localhost/postgres
 ```
 
-This runs every loading step and poplulate all data into database.
+This runs every loading step and populates all data into the database.
 
 2. Load only specific components
 
-You can load individual sections using falgs:
+You can load individual sections using flags:
 
 | Option    | Description                           |
 | --------- | ------------------------------------- |
