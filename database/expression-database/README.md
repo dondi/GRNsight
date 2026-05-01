@@ -20,52 +20,9 @@ All files pertaining the expression database live within this directory.
 ## The basics
 
 ### Overview
-```
-                ┌──────────────────────────────┐
-                │        Source CSV Files      │
-                │  (ExpressionRates.csv /      │
-                │   ExpressionMetadata.csv /   │
-                │   ProductionRates.csv /      │
-                │   DegradationRates.csv)      │
-                └──────────────┬───────────────┘
-                               │
-                               ▼
-                ┌──────────────────────────────┐
-                │        preprocessing.py      │
-                │  - Parse raw CSVs            │
-                │  - Clean data                │
-                │  - Generate loader files     │
-                └──────────────┬───────────────┘
-                               │
-                               ▼
-                ┌──────────────────────────────┐
-                │           loader.py          │
-                └──────────────┬───────────────┘
-                               │
-         ┌─────────────────────┴─────────────────────┐
-         │                                           │
-         ▼                                           ▼
- ┌──────────────────────────────┐     ┌──────────────────────────────┐
- │  Temporary Staging Tables    │     │     TRUNCATE + RELOAD        │
- │  (TEXT columns only)         │     │     (Wipe & reload strategy) │
- │                              │     │                              │
- │  - COPY FROM STDIN           │     │                              │
- │  - INSERT … ON CONFLICT      │     │                              │
- │    (Upsert strategy)         │     │                              │
- │                              │     │                              │
- │  Tables:                     │     │  Tables:                     │
- │  - gene                      │     │  - production_rate           │
- │  - ref                       │     │  - degradation_rate          │
- │  - expression_metadata       │     │                              │
- │  - expression                │     │                              │
- └──────────────┬───────────────┘     └──────────────┬───────────────┘
-                │                                    │
-                └──────────────┬─────────────────────┘
-                               ▼
-                ┌──────────────────────────────┐
-                │   gene_expression schema     │
-                └──────────────────────────────┘
-```
+
+The pipeline starts with raw CSV files containing expression and rate data. These files are processed by a preprocessing step that cleans and prepares the data for loading. A loader script then inserts the processed data into the database. All data ultimately populates the `gene_expression` schema.
+
 ### Scripts
 
 All scripts live within the subdirectory `scripts`.
