@@ -13,5 +13,5 @@ This folder handles loading TSV/CSV data into PostgreSQL.
     - Decides which populators to run.
     - Supports GRN, PPI, or both.
     - Supports two inputs:
-        - script-results directory
+        - `script-results` directory
         - custom folder with schema subfolders
