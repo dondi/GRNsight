@@ -76,9 +76,9 @@ The code for generating and populating the network data (GRN and PPI) is located
 
 **Step 1: Navigate to the network-folder**
 
-    ```
-    <path to GRNsight/database/network-database>
-    ```
+```
+<path to GRNsight/database/network-database>
+```
 
 **Step 2: Run the main.py Script**
 
