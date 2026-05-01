@@ -28,9 +28,9 @@ pip3 install pandas requests intermine tzlocal psycopg2
 
 **Step 1: Create a directory (aka folder) in the `database/expression-database` folder called `source-files`**
 
-    ```
-    mkdir <path to GRNsight/database/expression-database>/source-files
-    ```
+```
+mkdir <path to GRNsight/database/expression-database>/source-files
+```
 
 **Step 2: Download Expression Data**
 
