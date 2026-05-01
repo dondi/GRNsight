@@ -45,26 +45,25 @@ All files pertaining the expression database live within this directory.
           ┌───────────────────┴───────────────────┐
           │                                       │
           ▼                                       ▼
-
-┌──────────────────────────┐ ┌──────────────────────────┐
-│Temporary Staging Tables │ | TRUNCATE + RELOAD |
-│ (TEXT columns only) │ | (Wipe & reload strategy) |
-│ - COPY FROM STDIN │ | |
-│ | | |
-| INSERT … ON CONFLICT | | |
-│ (Upsert strategy) │ │ |
-│ │ │ │
-│ Tables: │ │ Tables: │
-│ - gene │ │ - production_rate │
-│ - ref │ │ - degradation_rate │
-│ - expression_metadata │ │ │
-│ - expression │ │ │
-└─────────────┬────────────┘ └─────────────┬────────────┘
-│ │
-▼ ▼
-┌─────────────────────────────────────────────┐
-│ gene_expression schema │
-└─────────────────────────────────────────────┘
+  ┌──────────────────────────┐ ┌──────────────────────────┐
+  │Temporary Staging Tables  │ | TRUNCATE + RELOAD        |
+  │ (TEXT columns only)      │ | (Wipe & reload strategy) |
+  │ - COPY FROM STDIN        │ |                          |
+  │                          | |                          |
+  | INSERT … ON CONFLICT     | |                          |
+  │ (Upsert strategy)        │ │                          |
+  │                          │ │                          │
+  │ Tables:                  │ │ Tables:                  │
+  │ - gene                   │ │ - production_rate        │
+  │ - ref                    │ │ - degradation_rate       │
+  │ - expression_metadata    │ │                          │
+  │ - expression             │ │                          │
+  └─────────────┬────────────┘ └─────────────┬────────────┘
+                │                            │
+                ▼                            ▼
+       ┌─────────────────────────────────────────────┐
+       │ gene_expression schema                      │
+       └─────────────────────────────────────────────┘
 
 ### Scripts
 
