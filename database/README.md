@@ -183,4 +183,4 @@ python3 main.py --network all --db_url postgresql://localhost/postgres
 
     Once completed, rerun the command that executes `main.py`
 
-For more information, refer to the `README.md` in the `network-folder`.
+For more information, refer to the [`README.md`](https://github.com/dondi/GRNsight/blob/main/database/network-database/README.md) in the `network-database` folder.
