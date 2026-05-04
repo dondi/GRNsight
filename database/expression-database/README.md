@@ -145,7 +145,7 @@ In addition to initializing the database from scratch, the pipeline also support
 
 #### Update workflow overview
 
-When updating data (for example, `production` or `degradation rates`), **`ExpressionData.csv`** is required to determine which genes are present in the expression dataset. This allows the pipeline to:
+When updating data (for example, `production rates` or `degradation rates`), **`ExpressionData.csv`** is required to determine which genes are present in the expression dataset. This allows the pipeline to:
 
 - Identify missing genes,
 
