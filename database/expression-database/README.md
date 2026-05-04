@@ -223,7 +223,7 @@ python3 loader.py --prod --deg | psql postgresql://localhost/postgres
 
 #### Notes on update behavior
 
-- Production and degradation rate tables are wiped and reloaded.
+- Production rate and degradation rate tables are wiped and reloaded.
 
 - Other tables use a staging + upsert strategy, allowing updates without full table resets.
 
