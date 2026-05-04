@@ -72,115 +72,34 @@ For more details on what these scripts are doing and how to update or add new da
 
 #### 2. Network Database for GRN (Gene Regulatory Network) and PPI (Protein-Protein Interactions)
 
-The code for generating and populating the network data (GRN and PPI) is located in the `network-database` folder. The main script for fetching, processing, and loading the data into the database is `main.py`. This script will create a Network Database with data newly fetched from AllianceMine.
+The code for generating and populating the network data (GRN and PPI) is located in the `network-database` folder. The main script for fetching, processing, and loading the data into the database is `main.py`. This script will allow you to load data for the released versions of the Network Database (instructions below) or create a Network Database with data newly fetched from AllianceMine ([see  instructions here](https://github.com/dondi/GRNsight/blob/main/database/network-database/README.md)).
 
-**Step 1: Navigate to the network-folder**
+**Step 1: Navigate to the network-database folder**
 
 ```
-<path to GRNsight/database/network-database>
+cd <path to GRNsight/database/network-database>
 ```
 
-**Step 2: Run the main.py Script**
+**Step 2: Download Network Data**
+
+Download the _"network-database-source-files"_ folder from Box located in [`GRNsight > GRNsight Backups > Network Database`]([https://lmu.box.com/s/n3vebjp6fcrjlinsq5qmmuer9qi4sfke](https://lmu.box.com/s/8e0yhjzcz00bzn89h4l7scxd1eqz2rgi)) to the `network-database` folder. Your the path should look like this: GRNsight > database > network-database > network-database-source-files.  There are four subdirectories in the network-database-source-files folder, `gene_regulatory_network`, `gene_regulatory_network_with_timestamp`, `protein_protein_interactions`, and `protein_protein_interactions_with_timestamp`. The necessary TSV files are within these subdirectories.
+
+**Step 3: Run the main.py Script**
 
 Run the `main.py` script with the appropriate `--network` argument:
 
-- `all`: Fetch and populate both GRN and PPI data.
-- `grn`: Fetch and populate only GRN data.
-- `ppi`: Fetch and populate only PPI data.
+- `all`: GRN and PPI data.
+- `grn`: GRN data only.
+- `ppi`: PPI data only.
+
+and the `--action` argument, `populate`, which reads existing TSV files and populates the PostgreSQL database.
+
+The `populate` action uses `--input_dir` to determine which data files are read. In this case, our input directory is `network-database-source-files`.
 
 For example, to populate both GRN and PPI data into a local database, run:
 
 ```
-python3 main.py --network all --db_url postgresql://localhost/postgres
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres --input_dir network-database-source-files
 ```
 
-**TroubleShooting**
-
-1. `urllib3` OpenSSL Compatibility Error
-
-    If you get the following error:
-
-    ```
-    ImportError: urllib3 v2.0 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'OpenSSL 1.1.0h 27 Mar 2018'
-    ```
-
-    **Cause**: Your Python environment is using an older OpenSSL version that is incompatible with `urlib3` v2.0.
-
-    **Fix**: Downgrade urllib3 to a compatible version:
-    ```
-    pip install urllib3==1.26.6
-    ```
-
-2. `intermine.py` Import Error (Manual Fix Required)
-
-    If you encounter an error similar to the image below when running `main.py`, you may need to manually edit the intermine library.
-    ![image](https://user-images.githubusercontent.com/21343072/213089777-dfe772bc-deca-4df7-816f-72703db24d1e.png)
-
-    This typically happens due to changes in Python’s standard library imports.
-
-    **Fix**:
-
-    1. Navigate to the `intermine/webservice.py` file.
-
-        If you are using a virtual environment, it is usually located at:
-
-        ```
-        <path-to-venv>/lib/<python-version>/site-packages/intermine/webservice.py
-        ```
-
-    2. Locate the existing `try-except` import block. It should look like this:
-
-        ```
-        try:
-            from urlparse import urlparse
-            from UserDict import DictMixin
-            from urllib import urlopen
-            from urllib import urlencode
-        except ImportError:
-            from urllib.parse import urlparse
-            from urllib.parse import urlencode
-            from collections import MutableMapping as DictMixin
-            from urllib.request import urlopen
-        ```
-
-    3. Replace it with the updated version below:
-
-        ```
-        try:
-            from urlparse import urlparse
-            from UserDict import DictMixin
-            from urllib import urlopen
-            from urllib import urlencode
-        except ImportError:
-            from urllib.parse import urlparse
-            from urllib.parse import urlencode
-            from collections.abc import MutableMapping as DictMixin
-            from urllib.request import urlopen
-        ```
-
-    4. Save the file and rerun the command that executes `main.py`.
-
-3. Python 3.13 SSL Certificate Error (macOS)
-
-    When running the database setup command:
-    ```
-    python3 main.py --network all --db_url postgresql://localhost/postgres
-    ```
-    you may encounter SSL or certificate-related errors on **macOS** with **Python 3.13**. This happens because SSL certificates are not always installed by default.
-
-    **Fix**
-    1. Run the certificate installation script:
-        ```
-        /Applications/Python\ 3.13/Install\ Certificates.command
-        ```
-
-    2. If it fails due to permissions, rerun with sudo:
-        ```
-        sudo /Applications/Python\ 3.13/Install\ Certificates.command
-        ```
-
-    3. Enter your system password when prompted
-
-    Once completed, rerun the command that executes `main.py`
-
-For more information, refer to the [`README.md`](https://github.com/dondi/GRNsight/blob/main/database/network-database/README.md) in the `network-database` folder.
+For more information about the options for `main.py`, including how to newly fetch data from AllianceMine and troubleshooting, refer to the [`README.md`](https://github.com/dondi/GRNsight/blob/main/database/network-database/README.md) in the `network-database` folder.
