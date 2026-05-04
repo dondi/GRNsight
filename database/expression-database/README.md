@@ -27,7 +27,7 @@ The pipeline starts with raw CSV files containing expression, production rate, a
 
 All scripts live within the subdirectory `scripts`.
 
-Any source files required to run the scripts live within the subdirectory `source-files`. As source files may be large, **you must create this directory yourself and add any source files you need to use there**.
+Any source files required to run the scripts live within the subdirectory `source-files`. As source files may be large, **you must create this directory yourself on your local machine and add any source files you need to use there**.
 
 All generated results of the scripts live in the subdirectory `script-results`. Currently, all scripts that generate code create the directory if it does not currently exist. When adding a new script that generates code, the best practice is to create the script-results directory and any subdirectories if they do not exist, to prevent errors and snafus in recently cloned repositories.
 
