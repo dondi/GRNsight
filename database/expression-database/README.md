@@ -141,7 +141,7 @@ python3 loader.py --prod --deg | psql postgresql://localhost/postgres
 
 ### Updating Existing Data
 
-In addition to initializing the database from scratch, the pipeline also supports updating existing data, such as production rates, degradation rates, expression or metadata.
+In addition to initializing the database from scratch, the pipeline also supports updating existing data, such as production rates, degradation rates, expression, or metadata.
 
 #### Update workflow overview
 
