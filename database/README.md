@@ -68,7 +68,7 @@ Use the `loader.py` script located in `expression-database/scripts` to load the 
     python3 loader.py | psql <path to database>
     ```
 
-For more details, refer to the [`README.md`](https://github.com/dondi/GRNsight/blob/main/database/expression-database/README.md) inside the `expression-database` folder.
+For more details on what these scripts are doing and how to update or add new datasets to the expression database, refer to the [`README.md`](https://github.com/dondi/GRNsight/blob/main/database/expression-database/README.md) inside the `expression-database` folder.
 
 #### 2. Network Database for GRN (Gene Regulatory Network) and PPI (Protein-Protein Interactions)
 
