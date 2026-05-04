@@ -35,7 +35,7 @@ Example command to only fetch AllianceMine data and generate TSV files (no datab
 python3 main.py --network all --action generate
 ```
 
-Example command to only populate PostgreSQL from previously generated TSV files:
+Example command to only populate PostgreSQL from previously generated TSV files:  QUESTION, what happens if `--input_dir` is not specified?
 
 ```bash
 python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
