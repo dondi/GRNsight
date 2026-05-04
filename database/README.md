@@ -72,7 +72,7 @@ For more details, refer to the [`README.md`](https://github.com/dondi/GRNsight/b
 
 #### 2. Network Database for GRN (Gene Regulatory Network) and PPI (Protein-Protein Interactions)
 
-The code for generating and populating the network data (GRN and PPI) is located in the network-folder. The main script for fetching, processing, and loading the data into the database is `main.py`.
+The code for generating and populating the network data (GRN and PPI) is located in the `network-database` folder. The main script for fetching, processing, and loading the data into the database is `main.py`. This script will create a Network Database with data newly fetched from AllianceMine.
 
 **Step 1: Navigate to the network-folder**
 
