@@ -82,7 +82,7 @@ cd <path to GRNsight/database/network-database>
 
 **Step 2: Download Network Data**
 
-Download the _"network-database-source-files"_ folder from Box located in [`GRNsight > GRNsight Backups > network-database-source-files`]([https://lmu.box.com/s/n3vebjp6fcrjlinsq5qmmuer9qi4sfke](https://lmu.box.com/s/8e0yhjzcz00bzn89h4l7scxd1eqz2rgi)) to the `network-database` folder. Your the path should look like this: GRNsight > database > network-database > network-database-source-files.  There are four subdirectories in the network-database-source-files folder, `gene_regulatory_network`, `gene_regulatory_network_with_timestamp`, `protein_protein_interactions`, and `protein_protein_interactions_with_timestamp`. The necessary TSV files are within these subdirectories.
+Download the _"network-database-source-files"_ folder from Box located in [`GRNsight > GRNsight Backups > network-database-source-files`](https://lmu.box.com/s/8e0yhjzcz00bzn89h4l7scxd1eqz2rgi) to the `network-database` folder. Your the path should look like this: GRNsight > database > network-database > network-database-source-files.  There are four subdirectories in the network-database-source-files folder, `gene_regulatory_network`, `gene_regulatory_network_with_timestamp`, `protein_protein_interactions`, and `protein_protein_interactions_with_timestamp`. The necessary TSV files are within these subdirectories.
 
 **Step 3: Run the main.py Script**
 
