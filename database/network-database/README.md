@@ -23,13 +23,13 @@ Actions:
 - `generate` – Only fetch/process AllianceMine data and write TSV files.
 - `populate` – Only read existing TSV files and populate PostgreSQL.
 
-Example command to populate both GRN and PPI data into a local database:
+Example command to newly fetch data from AllianceMine and populate both GRN and PPI data into a local database:
 
 ```bash
 python3 main.py --network all --db_url postgresql://localhost/postgres
 ```
 
-Example command to only generate TSV files (no database write):
+Example command to only fetch AllianceMine data and generate TSV files (no database write):
 
 ```bash
 python3 main.py --network all --action generate
@@ -43,14 +43,14 @@ python3 main.py --network all --action populate --db_url postgresql://localhost/
 
 ### Populate Input Options
 
-Populate mode uses `--input_dir` to determine how data file is read.
+Populate mode uses `--input_dir` to determine which data files are read.
 
 How input is selected:
 
-- If `--input_dir` is `script-results` (default), data is read directly from `script-results/`.
+- If `--input_dir` is `script-results` (default), data is read directly from the `script-results/` folder created by `main.py` when it retrieves data from AllianceMine.
 - Otherwise, the loader treats `--input_dir` as a parent folder and scans its subfolders.
 
-For custom folders, supported schema folder names are:
+For custom parent folders, subdirectory names supported by the schema are:
 
 - GRN:
     - `gene_regulatory_network_with_timestamp/`
@@ -61,7 +61,7 @@ For custom folders, supported schema folder names are:
 
 If `--network all` is used, both one GRN folder and one PPI folder must exist.
 
-Expected files per schema folder:
+Expected files in these subirectories are:
 
 - GRN: `source.tsv`, `gene.tsv`, `network.tsv`
 - PPI: `source.tsv`, `gene.tsv`, `protein.tsv`, `physical_interactions.tsv`
@@ -74,22 +74,22 @@ Populate from `script-results` (default):
 python3 main.py --network all --action populate --db_url postgresql://localhost/postgres
 ```
 
-Populate from a custom directory that contains schema folders:
+Populate from a custom directory that contains the required subfolders:
 
 ```bash
-python3 main.py --network all --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+python3 main.py --network all --action populate --db_url postgresql://localhost/postgres --input_dir <your-custom-foldername>
 ```
 
 Populate only GRN from a custom directory:
 
 ```bash
-python3 main.py --network grn --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+python3 main.py --network grn --action populate --db_url postgresql://localhost/postgres --input_dir <your-custom-foldername>
 ```
 
 Populate only PPI from a custom directory:
 
 ```bash
-python3 main.py --network ppi --action populate --db_url postgresql://localhost/postgres --input_dir <your-database-foldername>
+python3 main.py --network ppi --action populate --db_url postgresql://localhost/postgres --input_dir <your-custom-foldername>
 ```
 
 ## Troubleshooting
@@ -149,3 +149,26 @@ except ImportError:
 ```
 
 3. Save the file and rerun `main.py`
+
+### Python 3.13 SSL Certificate Error (macOS)
+
+    When running the database setup command:
+    ```
+    python3 main.py --network all --db_url postgresql://localhost/postgres
+    ```
+    you may encounter SSL or certificate-related errors on **macOS** with **Python 3.13**. This happens because SSL certificates are not always installed by default.
+
+    **Fix**
+    1. Run the certificate installation script:
+        ```
+        /Applications/Python\ 3.13/Install\ Certificates.command
+        ```
+
+    2. If it fails due to permissions, rerun with sudo:
+        ```
+        sudo /Applications/Python\ 3.13/Install\ Certificates.command
+        ```
+
+    3. Enter your system password when prompted
+
+    Once completed, rerun the command that executes `main.py`
