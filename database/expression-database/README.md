@@ -21,7 +21,7 @@ All files pertaining the expression database live within this directory.
 
 ### Overview
 
-The pipeline starts with raw CSV files containing expression and rate data. These files are processed by a preprocessing step that cleans and prepares the data for loading. A loader script then inserts the processed data into the database. All data ultimately populates the `gene_expression` schema.
+The pipeline starts with raw CSV files containing expression, productio, and degradation rate data. These files are processed by a preprocessing step that cleans and prepares the data for loading. A loader script then inserts the processed data into the database. All data ultimately populates the `gene_expression` schema.
 
 ### Scripts
 
