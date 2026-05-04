@@ -470,15 +470,24 @@ module.exports = {
         },
 
         wrongGeneOrder: function (sheetName) {
+            const prefix = sheetName.includes("optimized");
+
             return {
                 warningCode: `WRONG_GENE_ORDER_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
-                    `were not in the same order as the genes in the 'network' sheet.`,
-                    `The order of the genes in the '${sheetName}' sheet needs to match the gene order in the 'network' sheet`,
-                    `to use this workbook as an input file for GRNmap,`,
-                    `but will not affect the display of the graph in GRNsight.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
+                          `were not in the same order as the genes in the 'network' sheet.`,
+                          "GRNsight is checking because they should have been in the same order ",
+                          "in the GRNmap output, but will not affect the display of the graph in GRNsight.",
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
+                          `were not in the same order as the genes in the 'network' sheet.`,
+                          `The order of the genes in the '${sheetName}' sheet needs to match the gene order in the 'network' sheet`,
+                          `to use this workbook as an input file for GRNmap,`,
+                          `but will not affect the display of the graph in GRNsight.`,
+                      ].join(" "),
             };
         },
     },
