@@ -444,15 +444,24 @@ module.exports = {
         },
 
         extraGenesWarning: function (sheetName, extraGenes) {
+            const prefix = sheetName.includes("optimized");
+
             return {
                 warningCode: `EXTRA_GENES_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
-                    `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
-                    "to use this workbook` as an input file for GRNmap,",
-                    "but will not affect the display of the graph in GRNsight.",
-                    `The extra genes are: ${extraGenes}.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
+                          `GRNsight is checking because the genes in the ${sheetName} sheet should match the genes `,
+                          "in the 'network' sheet when outputted from the GRNmap, but will not affect the display of the graph in GRNsight.",
+                          `The extra genes are: ${extraGenes}.`,
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
+                          `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
+                          "to use this workbook` as an input file for GRNmap,",
+                          "but will not affect the display of the graph in GRNsight.",
+                          `The extra genes are: ${extraGenes}.`,
+                      ].join(" "),
             };
         },
 
