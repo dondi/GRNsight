@@ -4,9 +4,9 @@ This folder contains scripts for retrieving gene regulatory network (GRN) and pr
 
 ## File Structure
 
-- **`main.py`** – Handles the entire workflow: loading, filtering, and populating data into the database.
+- **`main.py`** – Handles the entire workflow: fetching, processing, and populating data into the database.
 - **`constants.py`** – Defines database namespaces and file directories.
-- **`data_services/`** – Contains scripts for fetching and processing data from AllianceMine into a TSV file for database import.
+- **`data_services/`** – Contains scripts for fetching and processing data from AllianceMine into a TSV file for populating the database.
 - **`database_services/`** – Includes scripts for filtering new data from AllianceMine and populating it into the database.
 
 ## Running the Script
