@@ -50,7 +50,7 @@ How input is selected:
 - If `--input_dir` is `script-results` (default), data is read directly from the `script-results/` folder created by `main.py` when it retrieves data from AllianceMine.
 - Otherwise, the loader treats `--input_dir` as a parent folder and scans its subfolders.
 
-For custom parent folders, subdirectory names supported by the schema are:
+For custom parent folders, subdirectory names required by the script are:
 
 - GRN:
     - `gene_regulatory_network_with_timestamp/`
@@ -66,7 +66,9 @@ Expected files in these subirectories are:
 - GRN: `source.tsv`, `gene.tsv`, `network.tsv`
 - PPI: `source.tsv`, `gene.tsv`, `protein.tsv`, `physical_interactions.tsv`
 
-Examples:
+The files downloadable from [Box](https://lmu.box.com/s/8e0yhjzcz00bzn89h4l7scxd1eqz2rgi) are formatted correctly according to the database schema.  See them for examples.
+
+Example commands:
 
 Populate from `script-results` (default):
 
