@@ -97,10 +97,15 @@ export const upload = function () {
         if (currentExtension && currentExtension.length) {
             filename = filename.substr(0, filename.length - currentExtension[0].length);
         }
-        if (Object.keys(grnState.workbook.expression).length > 0 && mode === NETWORK_GRN_MODE) {
+        if (mode === NETWORK_GRN_MODE && extension === "xlsx") {
             source = $("input[name=expressionSource]:checked")[0].value;
-            if (source === "userInput") {
-                source = "user-data";
+            if (source === "none") {
+                source = null;
+            } else if (source === "userInput") {
+                // only demos will have an expression source
+                source = grnState.workbook.expression.source
+                    ? grnState.workbook.expression.source
+                    : "user-data";
             }
         }
 
@@ -110,10 +115,8 @@ export const upload = function () {
         if (mode !== null && genes !== null && edges !== null && type !== null) {
             filename = `${mode.toUpperCase()}_${genes}-genes_${edges}-edges_${type}`;
         }
-        const { source: expressionSource } = grnState.workbook.expression; // Only demos will have this.
-        if (expressionSource || source) {
-            // In almost all cases, we will use source. But some demos will pre-empt this choice.
-            filename = `${filename}_${expressionSource || source}`;
+        if (source) {
+            filename = `${filename}_${source}`;
         }
         return `${filename}.${extension}`;
     };
