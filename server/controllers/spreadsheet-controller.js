@@ -139,11 +139,7 @@ var crossSheetInteractions = function (workbookFile) {
         // Base workbook is a clone of the prefered Optimized weights sheet
         workbook = deepClone(networkOptimizedWeights, false);
         // Add errors from network sheet if it exists
-        if (
-            network &&
-            typeof network === "object" &&
-            Object.keys(network).length > 0
-        ) {
+        if (network && typeof network === "object" && Object.keys(network).length > 0) {
             if (network.errors !== undefined) {
                 network.errors.forEach(data => workbook.errors.push(data));
             }
