@@ -59,7 +59,7 @@ For custom parent folders, subdirectory names required by the script are:
     - `protein_protein_interactions_with_timestamp/`
     - `protein_protein_interactions/`
 
-If `--network all` is used, _both_ one GRN folder and one PPI folder must exist.  QUESTION, should _both_ be _at least_?
+If `--network all` is used, at least one GRN folder _and_ at least one PPI folder must exist.
 
 Expected files in these subirectories are:
 
