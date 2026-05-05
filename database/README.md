@@ -16,7 +16,7 @@ For detailed instructions on setting up the database schema, refer to the `READM
 
 #### 2. Install Python Dependencies
 
-GRNsight generates Network data (gene regulatory network and protein protein interactions) from SGD through AllianceMine. In order to run the script that generates these Network files, you must pip3 install the dependencies used. If you get an error saying that a module doesn't exist, just run `pip3 install <Module Name>` and it should fix the error. If the error persists and is found in a specific file on your machine, you might have to manually go into that file and alter the naming conventions of the dependencies that are used. _Note: So far this issue has only occured on Ubuntu 22.04.1, and certain MacOS versions so you might be lucky and not have to do it!_
+GRNsight obtains Network data (gene regulatory network and protein protein interactions) from SGD through AllianceMine. In order to run the script that generates these Network files, you must pip3 install the dependencies used. If you get an error saying that a module doesn't exist, just run `pip3 install <Module Name>` and it should fix the error. If the error persists and is found in a specific file on your machine, you might have to manually go into that file and alter the naming conventions of the dependencies that are used. _Note: So far this issue has only occured on Ubuntu 22.04.1, and certain MacOS versions so you might be lucky and not have to do it!_
 
 ```
 pip3 install pandas requests intermine tzlocal psycopg2
