@@ -507,6 +507,14 @@ const missingAllValuesForGenes = function (input, frequency, sheetName, expected
     testWarningsForTwoColumnSheet(input, frequency, sheetName, expectedWarningCode, expectedText);
 };
 
+const loadsWithoutFatalError = function (input) {
+    const sheet = xlsx.parse(input);
+
+    assert.doesNotThrow(function () {
+        spreadsheetController.crossSheetInteractions(sheet);
+    });
+};
+
 const missingGenesAndValuesInTwoColumnSheetsWarning = (
     input,
     frequency,
@@ -1005,3 +1013,5 @@ exports.importExportReImportNoErrorsOrWarnings = importExportReImportNoErrorsOrW
 exports.importFileSameAsExportFile = importFileSameAsExportFile;
 
 exports.wrongCellA1Error = wrongCellA1Error;
+
+exports.loadsWithoutFatalError = loadsWithoutFatalError;
