@@ -97,6 +97,11 @@ export const buildPreFetchTwoColumnWarnings = ({
                 });
                 warningsToAdd.push(warning);
             }
+
+            if (sheetName.includes("optimized")) {
+                continue;
+            }
+
             sheetsToFetch.push(sheetName);
         }
 
