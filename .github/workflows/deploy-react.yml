@@ -28,12 +28,34 @@ jobs:
         working-directory: ./web-client
         run: npm run build --if-present
 
-      - name: Deploy to GitHub Pages
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Checkout or Create gh-pages Branch
+        run: |
+          git fetch origin gh-pages 2>/dev/null || true
+          git checkout --orphan gh-pages-new 2>/dev/null || git checkout gh-pages
+
+      - name: Prepare Deployment Folder
+        run: |
+          mkdir -p react-thesis-4081
+          rm -rf react-thesis-4081/*
+
+      - name: Copy Build Files
+        run: cp -r web-client/dist/* react-thesis-4081/
+
+      - name: Commit and Push
         id: deployment
-        uses: JamesIves/github-pages-deploy-action@v4.8.0
-        with:
-          ssh-key: ${{ secrets.GRNSIGHT_REACT_KEY }}
-          # The folder containing the built static files to deploy
-          folder: './web-client/dist'
-          # The target folder in the gh-pages branch where the files will be deployed
-          target-folder: 'react-thesis-4081'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add react-thesis-4081/
+          if ! git diff --cached --quiet; then
+            git commit -m "Deploy React app from ${{ github.sha }}"
+            git push origin HEAD:gh-pages
+            echo "status=deployed" >> $GITHUB_OUTPUT
+          else
+            echo "status=no-changes" >> $GITHUB_OUTPUT
+          fi
