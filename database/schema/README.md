@@ -79,7 +79,7 @@ Once these steps are completed, your database will be set up and ready to accept
 
 The `settings` table stores the default expression dataset name that is used for the node coloring dropdown menu in GRNsight.
 
-To change the default expression dataset name, follow these steps:
+You need to change the default expression dataset name by following these steps:
 
 1. **Log in to the Database**
 
