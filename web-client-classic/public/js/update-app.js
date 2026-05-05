@@ -3,7 +3,6 @@ import { uploadState } from "./upload";
 import { displayGraphWarnings, displayPPINodeColorWarning } from "./warnings";
 import { max } from "d3-array";
 import { grnState } from "./grnstate";
-import { SET_NORMALIZATION_SIDEBAR, SET_NORMALIZATION_SIDEBAR_VALUE, RESET_NORMALIZATION_SIDEBAR } from "./constants";
 
 import {
     HOST_SITE,
@@ -110,6 +109,9 @@ import {
     EXPORT_TO_UNWEIGHTED_GML_MENU,
     NETWORK_GRN_MODE,
     NETWORK_PPI_MODE,
+    SET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_SIDEBAR_VALUE,
+    RESET_NORMALIZATION_SIDEBAR,
     //   EXPRESSION_SOURCE,
 } from "./constants";
 
