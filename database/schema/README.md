@@ -23,6 +23,10 @@ For example, to access your local PostgreSQL database, use the following command
 ```
 psql postgresql://localhost/postgres
 ```
+or
+```
+psql -U postgres postgresql://localhost/postgres
+```
 
 ## Creating Schemas and Adding Table Specifications
 
