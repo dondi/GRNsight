@@ -628,7 +628,7 @@ export const upload = function () {
             result +
             `
             <li class=\'export-excel-workbook-sheet-option\'>
-                <input type=\'checkbox\' name=\'workbookSheets\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
+                <input type=\'checkbox\' name=\'workbookSheets\' checked=\'true\' value=\"${networkWeights[1]}\" id=\'exportExcelWorkbookSheet-${networkWeights[1]}\' class=\'export-checkbox\'/>
                 <label for=\'exportExcelWorkbookSheet-${networkWeights[1]}\' id=\'exportExcelWorkbookSheet-${networkWeights[1]}-label\' class=\'export-checkbox-label\' >
                     ${networkWeights[1]}
                 </label>
@@ -741,20 +741,20 @@ export const upload = function () {
     };
 
     var handleWorkbookSheetCheckboxBehaviour = () => {
+        const syncSelectAll = () => {
+            const selectAll = $("#exportExcelWorkbookSheet-All");
+            if (!selectAll.length) return;
+            const allSheets = $("input[name=workbookSheets]")
+                .not("#exportExcelWorkbookSheet-All")
+                .not(":disabled");
+            selectAll[0].checked = allSheets.toArray().every(el => el.checked);
+        };
+
         $("input[name=workbookSheets]")
             .not($("#exportExcelWorkbookSheet-All"))
             .on("click", () => {
-                const selectAll = $("#exportExcelWorkbookSheet-All");
-                const allSheets = $("input[name=workbookSheets]");
-                if (selectAll[0].checked) {
-                    for (let i in allSheets) {
-                        if (typeof allSheets[i] === "object") {
-                            if (allSheets[i].checked !== selectAll[0].checked) {
-                                selectAll[0].checked = false;
-                            }
-                        }
-                    }
-                }
+                syncSelectAll();
+
                 let anyExpressionChecked = false;
                 for (let i in allSheets) {
                     if (
@@ -782,6 +782,7 @@ export const upload = function () {
                 }
             }
         });
+        syncSelectAll();
     };
 
     const handleExpressionSheetsFromSource = function (source) {
