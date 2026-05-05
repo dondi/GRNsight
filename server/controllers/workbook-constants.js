@@ -334,15 +334,22 @@ module.exports = {
             isMissing
         ) {
             const headerStatus = isMissing ? "missing" : "incorrect";
+            const prefix = sheetName.includes("optimized");
             return {
                 warningCode: `${headerStatus.toUpperCase()}_COLUMN_HEADER_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet.`,
-                    "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
-                    "but will not affect the display of the graph in GRNsight.",
-                    `Cell A1 should contain the text <b>${expectedA1}</b>,`,
-                    `and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet.`,
+                          `Cell A1 should contain the text <b>${expectedA1}</b>, and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
+                          `GRNsight is checking because these headers should have been provided by the GRNmap output, but they will not affect the display of the graph in GRNsight.`,
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that the headers are ${headerStatus} in the workbook's <b>${sheetName}</b> sheet.`,
+                          "The headers will need to be corrected to use this workbook as an input file for GRNmap,",
+                          "but will not affect the display of the graph in GRNsight.",
+                          `Cell A1 should contain the text <b>${expectedA1}</b>,`,
+                          `and cell B1 should contain the text <b>${expectedB1}</b>, exactly.`,
+                      ].join(" "),
             };
         },
 
@@ -444,15 +451,24 @@ module.exports = {
         },
 
         extraGenesWarning: function (sheetName, extraGenes) {
+            const prefix = sheetName.includes("optimized");
+
             return {
                 warningCode: `EXTRA_GENES_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
-                    `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
-                    "to use this workbook` as an input file for GRNmap,",
-                    "but will not affect the display of the graph in GRNsight.",
-                    `The extra genes are: ${extraGenes}.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
+                          `GRNsight is checking because the genes in the ${sheetName} sheet should match the genes `,
+                          "in the 'network' sheet when outputted from the GRNmap, but will not affect the display of the graph in GRNsight.",
+                          `The extra genes are: ${extraGenes}.`,
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that there are extra genes in the imported workbook's '${sheetName}' sheet.`,
+                          `The genes in the '${sheetName}' sheet need to match the genes in the 'network' sheet`,
+                          "to use this workbook` as an input file for GRNmap,",
+                          "but will not affect the display of the graph in GRNsight.",
+                          `The extra genes are: ${extraGenes}.`,
+                      ].join(" "),
             };
         },
 
@@ -470,15 +486,24 @@ module.exports = {
         },
 
         wrongGeneOrder: function (sheetName) {
+            const prefix = sheetName.includes("optimized");
+
             return {
                 warningCode: `WRONG_GENE_ORDER_${sheetName.toUpperCase()}`,
-                errorDescription: [
-                    `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
-                    `were not in the same order as the genes in the 'network' sheet.`,
-                    `The order of the genes in the '${sheetName}' sheet needs to match the gene order in the 'network' sheet`,
-                    `to use this workbook as an input file for GRNmap,`,
-                    `but will not affect the display of the graph in GRNsight.`,
-                ].join(" "),
+                errorDescription: prefix
+                    ? [
+                          `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
+                          `were not in the same order as the genes in the 'network' sheet.`,
+                          "GRNsight is checking because they should have been in the same order ",
+                          "in the GRNmap output, but will not affect the display of the graph in GRNsight.",
+                      ].join(" ")
+                    : [
+                          `GRNsight has detected that the genes in the imported workbook's '${sheetName}' sheet`,
+                          `were not in the same order as the genes in the 'network' sheet.`,
+                          `The order of the genes in the '${sheetName}' sheet needs to match the gene order in the 'network' sheet`,
+                          `to use this workbook as an input file for GRNmap,`,
+                          `but will not affect the display of the graph in GRNsight.`,
+                      ].join(" "),
             };
         },
     },
