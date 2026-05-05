@@ -167,7 +167,7 @@ describe("additional-sheet-parser", function () {
         it("should return twoColumnInvalidGeneTypeError", function () {
             test.twoColumnInvalidGeneTypeError(
                 "test-files/additional-sheet-test-files/two-column-sheets-invalid-gene-type.xlsx",
-                10
+                5
             );
         });
 
@@ -186,141 +186,104 @@ describe("additional-sheet-parser", function () {
         });
 
         describe("missing column header warnings", function () {
-            it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS", function () {
-                test.additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/optimization-diagnostics-missing-header.xlsx",
-                    1,
-                    "optimization_diagnostics"
-                );
-            });
+            const folder = "test-files/additional-sheet-test-files/missing-header/";
 
-            it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_PARAMETERS", function () {
-                test.additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/optimization-parameters-missing-header.xlsx",
-                    1,
-                    "optimization_parameters"
-                );
-            });
+            const cases = {
+                degradation_rates: [
+                    "missing-deg-rate-headers-deg-rates-sheet.xlsx",
+                    "blank-deg-rate-headers-deg-rates-sheet.xlsx",
+                ],
+                production_rates: [
+                    "missing-prod-rate-headers-prod-rates-sheet.xlsx",
+                    "blank-prod-rate-headers-prod-rates-sheet.xlsx",
+                ],
+                threshold_b: [
+                    "missing-threshold_b-headers-threshold_b-sheet.xlsx",
+                    "blank-threshold_b-headers-threshold_b-sheet.xlsx",
+                ],
+                optimized_production_rates: [
+                    "missing-headers-opt-prod-rates-sheet.xlsx",
+                    "blank-headers-opt-prod-rates-sheet.xlsx",
+                ],
+                optimized_threshold_b: [
+                    "missing-headers-opt-threshold_b-sheet.xlsx",
+                    "blank-headers-opt-threshold_b-sheet.xlsx",
+                ],
+            };
 
-            it("should contain MISSING_COLUMN_HEADER_DEGRADATION_RATES", function () {
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/missing-deg-rate-headers-deg-rates-sheet.xlsx",
-                    1,
-                    "degradation_rates",
-                    /*isMissingSheet=*/ true
-                );
-
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/blank-deg-rate-headers-deg-rates-sheet.xlsx",
-                    1,
-                    "degradation_rates",
-                    /*isMissingSheet=*/ true
-                );
-            });
-
-            it("should contain MISSING_COLUMN_HEADER_PRODUCTION_RATES", function () {
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/missing-prod-rate-headers-prod-rates-sheet.xlsx",
-                    1,
-                    "production_rates",
-                    /*isMissingSheet=*/ true
-                );
-
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/blank-prod-rate-headers-prod-rates-sheet.xlsx",
-                    1,
-                    "production_rates",
-                    /*isMissingSheet=*/ true
-                );
-            });
-
-            it("should contain MISSING_COLUMN_THRESHOLD_B", function () {
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/missing-threshold_b-headers-threshold_b-sheet.xlsx",
-                    1,
-                    "threshold_b",
-                    /*isMissingSheet=*/ true
-                );
-
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/blank-threshold_b-headers-threshold_b-sheet.xlsx",
-                    1,
-                    "threshold_b",
-                    /*isMissingSheet=*/ true
-                );
-            });
+            for (const sheetName in cases) {
+                it(`should contain MISSING_COLUMN_HEADER_${sheetName.toUpperCase()} when ${sheetName} sheet is missing column headers`, function () {
+                    for (const fileName of cases[sheetName]) {
+                        test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                            `${folder}${fileName}`,
+                            1,
+                            sheetName,
+                            /*isMissingSheet=*/ true
+                        );
+                    }
+                });
+            }
         });
 
         describe("incorrect column header warnings", function () {
-            it("should contain INCORRECT_COLUMN_HEADER_DEGRADATION_RATES", function () {
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/wrong-deg-rate-header-deg-rates-sheet.xlsx",
-                    1,
-                    "degradation_rates"
-                );
+            const folder = "test-files/additional-sheet-test-files/wrong-header/";
 
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/wrong-id-header-deg-rates-sheet.xlsx",
-                    1,
-                    "degradation_rates"
-                );
-            });
+            const cases = {
+                degradation_rates: [
+                    "wrong-deg-rate-header-deg-rates-sheet.xlsx",
+                    "wrong-id-header-deg-rates-sheet.xlsx",
+                ],
+                production_rates: [
+                    "wrong-prod-rate-header-prod-rates-sheet.xlsx",
+                    "wrong-id-header-prod-rates-sheet.xlsx",
+                ],
+                threshold_b: [
+                    "wrong-threshold_b-header-threshold_b-sheet.xlsx",
+                    "wrong-id-header-threshold_b-sheet.xlsx",
+                ],
+                optimized_production_rates: [
+                    "wrong-prod-rate-header-opt-prod-rates-sheet.xlsx",
+                    "wrong-id-header-opt-prod-rates-sheet.xlsx",
+                ],
+                optimized_threshold_b: [
+                    "wrong-threshold_b-header-opt-threshold_b-sheet.xlsx",
+                    "wrong-id-header-opt-threshold_b-sheet.xlsx",
+                ],
+            };
 
-            it("should contain INCORRECT_COLUMN_HEADER_PRODUCTION_RATES", function () {
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/wrong-prod-rate-header-prod-rates-sheet.xlsx",
-                    1,
-                    "production_rates"
-                );
-
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/wrong-id-header-prod-rates-sheet.xlsx",
-                    1,
-                    "production_rates"
-                );
-            });
-
-            it("should contain INCORRECT_COLUMN_HEADER_THRESHOLD_B", function () {
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/wrong-threshold_b-header-threshold_b-sheet.xlsx",
-                    1,
-                    "threshold_b"
-                );
-
-                test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
-                    "test-files/additional-sheet-test-files/wrong-id-header-threshold_b-sheet.xlsx",
-                    1,
-                    "threshold_b"
-                );
-            });
-
-            // TODO: Add test for optimization diagnostics and optimization parameters incorrect column headers
+            for (const sheetName in cases) {
+                it(`should contain MISSING_COLUMN_HEADER_${sheetName.toUpperCase()} when ${sheetName} sheet has incorrect column headers`, function () {
+                    for (const fileName of cases[sheetName]) {
+                        test.additionalSheetTwoColumnSheetsIncorrectOrMissingColumnHeaderWarning(
+                            `${folder}${fileName}`,
+                            1,
+                            sheetName
+                        );
+                    }
+                });
+            }
         });
 
         describe("wrong data type error", function () {
-            it("should return invalidvalueError when there are invalid data types in two-column sheets - degradation_rates sheet", function () {
-                test.twoColumnInvalidDataTypeError(
-                    "test-files/additional-sheet-test-files/wrong-datatype-deg.xlsx",
-                    "degradation_rates",
-                    1
-                );
-            });
+            const folder = "test-files/additional-sheet-test-files/wrong-datatype/";
 
-            it("should return invalidvalueError when there are invalid data types in two-column sheets - production_rates sheet", function () {
-                test.twoColumnInvalidDataTypeError(
-                    "test-files/additional-sheet-test-files/wrong-datatype-prod.xlsx",
-                    "production_rates",
-                    1
-                );
-            });
+            const cases = {
+                degradation_rates: "wrong-datatype-deg.xlsx",
+                production_rates: "wrong-datatype-prod.xlsx",
+                threshold_b: "wrong-datatype-threshold_b.xlsx",
+                optimized_production_rates: "wrong-datatype-opt-prod-rates.xlsx",
+                optimized_threshold_b: "wrong-datatype-opt-threshold_b.xlsx",
+            };
 
-            it("should return invalidvalueError when there are invalid data types in two-column sheets - threshold_b sheet", function () {
-                test.twoColumnInvalidDataTypeError(
-                    "test-files/additional-sheet-test-files/wrong-datatype-threshold_b.xlsx",
-                    "threshold_b",
-                    1
-                );
-            });
+            for (const sheetName in cases) {
+                it(`for ${sheetName} sheet`, function () {
+                    test.twoColumnInvalidDataTypeError(
+                        `${folder}${cases[sheetName]}`,
+                        sheetName,
+                        1
+                    );
+                });
+            }
         });
 
         it("should return additionalSheetExtraneousDataWarning", function () {
@@ -357,174 +320,266 @@ describe("additional-sheet-parser", function () {
             );
         });
 
-        it("should return MISSING_ALL_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but missing all genes and values", function () {
-            test.missingAllGenesInTwoColumnSheetWarning(
-                "test-files/additional-sheet-test-files/missing-all-deg-rate-genes-and-values.xlsx",
-                1,
-                "degradation_rates"
-            );
-            test.missingAllGenesInTwoColumnSheetWarning(
-                "test-files/additional-sheet-test-files/missing-all-prod-rate-genes-and-values.xlsx",
-                1,
-                "production_rates"
-            );
-            test.missingAllGenesInTwoColumnSheetWarning(
-                "test-files/additional-sheet-test-files/missing-all-threshold_b-genes-and-values.xlsx",
-                1,
-                "threshold_b"
-            );
+        describe("should return MISSING_ALL_GENES_AND_VALUES warning when sheets are present and not empty but missing all genes and values", function () {
+            const folder = "test-files/additional-sheet-test-files/missing-all-genes/";
+
+            const cases = {
+                degradation_rates: "missing-all-deg-rate-genes-and-values.xlsx",
+                production_rates: "missing-all-prod-rate-genes-and-values.xlsx",
+                threshold_b: "missing-all-threshold_b-genes-and-values.xlsx",
+                optimized_production_rates: "missing-all-optimized-prod-rate-genes-and-values.xlsx",
+                optimized_threshold_b: "missing-all-optimized-threshold_b-genes-and-values.xlsx",
+            };
+
+            for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
+                it(`for ${sheetName} sheet`, function () {
+                    test.missingAllGenesInTwoColumnSheetWarning(
+                        `${folder}${cases[sheetName]}`,
+                        1,
+                        sheetName,
+                        expectedText
+                    );
+                });
+            }
         });
 
-        it("should return MISSING_ALL_VALUES_IN_TWO_COLUMN_SHEET warning when all of the values of genes are missing", function () {
-            test.missingAllValuesForGenes(
-                "test-files/additional-sheet-test-files/missing-all-deg-rate-values.xlsx",
-                1,
-                "degradation_rates"
-            );
+        describe("should return MISSING_ALL_VALUES warning when all of the values of genes are missing", function () {
+            const folder = "test-files/additional-sheet-test-files/missing-all-values/";
 
-            test.missingAllValuesForGenes(
-                "test-files/additional-sheet-test-files/missing-all-prod-rate-values.xlsx",
-                1,
-                "production_rates"
-            );
+            const cases = {
+                degradation_rates: "missing-all-deg-rate-values.xlsx",
+                production_rates: "missing-all-prod-rate-values.xlsx",
+                threshold_b: "missing-all-threshold_b-values.xlsx",
+                optimized_production_rates: "missing-all-optimized-prod-rate-values.xlsx",
+                optimized_threshold_b: "missing-all-optimized-threshold_b-values.xlsx",
+            };
 
-            test.missingAllValuesForGenes(
-                "test-files/additional-sheet-test-files/missing-all-threshold_b-values.xlsx",
-                1,
-                "threshold_b"
-            );
+            for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
+                it(`for ${sheetName} sheet`, function () {
+                    test.missingAllValuesForGenes(
+                        `${folder}${cases[sheetName]}`,
+                        1,
+                        sheetName,
+                        expectedText
+                    );
+                });
+            }
         });
 
-        it("should return MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET when sheets are present and not empty but missing some genes and values", function () {
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-first-gene-and-deg-rate-value.xlsx",
-                1,
-                "degradation_rates"
-            );
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-first-gene-and-prod-rate-value.xlsx",
-                1,
-                "production_rates"
-            );
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-first-gene-and-threshold_b-value.xlsx",
-                1,
-                "threshold_b"
-            );
+        describe("should return MISSING_GENES_AND_VALUES when sheets are present and not empty but missing some genes and values", function () {
+            const folder = "test-files/additional-sheet-test-files/missing-some-genes-and-values/";
 
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-last-gene-and-deg-rate-value.xlsx",
-                1,
-                "degradation_rates"
-            );
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-last-gene-and-prod-rate-value.xlsx",
-                1,
-                "production_rates"
-            );
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-last-gene-and-threshold_b-value.xlsx",
-                1,
-                "threshold_b"
-            );
+            const cases = {
+                degradation_rates: [
+                    "missing-first-gene-and-deg-rate-value.xlsx",
+                    "missing-middle-gene-and-deg-rate-value.xlsx",
+                    "missing-last-gene-and-deg-rate-value.xlsx",
+                ],
+                production_rates: [
+                    "missing-first-gene-and-prod-rate-value.xlsx",
+                    "missing-middle-gene-and-prod-rate-value.xlsx",
+                    "missing-last-gene-and-prod-rate-value.xlsx",
+                ],
+                threshold_b: [
+                    "missing-first-gene-and-threshold_b-value.xlsx",
+                    "missing-middle-gene-and-threshold_b-value.xlsx",
+                    "missing-last-gene-and-threshold_b-value.xlsx",
+                ],
+                optimized_production_rates: [
+                    "missing-first-opt-prod-rate-gene-and-value.xlsx",
+                    "missing-middle-opt-prod-rate-gene-and-value.xlsx",
+                    "missing-last-opt-prod-rate-gene-and-value.xlsx",
+                ],
+                optimized_threshold_b: [
+                    "missing-first-opt-threshold_b-gene-and-value.xlsx",
+                    "missing-middle-opt-threshold_b-gene-and-value.xlsx",
+                    "missing-last-opt-threshold_b-gene-and-value.xlsx",
+                ],
+            };
 
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-middle-gene-and-deg-rate-value.xlsx",
-                1,
-                "degradation_rates"
-            );
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-middle-gene-and-prod-rate-value.xlsx",
-                1,
-                "production_rates"
-            );
-            test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                "test-files/additional-sheet-test-files/missing-middle-gene-and-threshold_b-value.xlsx",
-                1,
-                "threshold_b"
-            );
+            for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
+                it(`for ${sheetName} sheet`, function () {
+                    for (const fileName of cases[sheetName]) {
+                        test.missingGenesAndValuesInTwoColumnSheetsWarning(
+                            `${folder}${fileName}`,
+                            1,
+                            sheetName,
+                            expectedText
+                        );
+                    }
+                });
+            }
         });
 
-        it("should return MISSING_GENES_AND_VALUES_IN_TWO_COLUMN_SHEET_WHEN_IMPORTING warning when sheets are present and not empty but missing some genes and values", function () {
-            it("for degradation_rates sheet", function () {
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-first-gene-and-deg-rate-value.xlsx",
-                    1,
-                    "degradation_rates"
-                );
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-middle-gene-and-deg-rate-value.xlsx",
-                    1,
-                    "degradation_rates"
-                );
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-last-gene-and-deg-rate-value.xlsx",
-                    1,
-                    "degradation_rates"
-                );
-            });
+        describe("should return MISSING_VALUES warning when sheets are present and not empty but missing values for some genes", function () {
+            const folder = "test-files/additional-sheet-test-files/missing-some-values/";
 
-            it("for production_rates sheet", function () {
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-first-gene-and-prod-rate-value.xlsx",
-                    1,
-                    "production_rates"
-                );
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-middle-gene-and-prod-rate-value.xlsx",
-                    1,
-                    "production_rates"
-                );
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-last-gene-and-prod-rate-value.xlsx",
-                    1,
-                    "production_rates"
-                );
-            });
+            const cases = {
+                degradation_rates: [
+                    "missing-first-deg-rate-value.xlsx",
+                    "missing-middle-deg-rate-value.xlsx",
+                    "missing-last-deg-rate-value.xlsx",
+                ],
+                production_rates: [
+                    "missing-first-prod-rate-value.xlsx",
+                    "missing-middle-prod-rate-value.xlsx",
+                    "missing-last-prod-rate-value.xlsx",
+                ],
+                threshold_b: [
+                    "missing-first-threshold_b-value.xlsx",
+                    "missing-middle-threshold_b-value.xlsx",
+                    "missing-last-threshold_b-value.xlsx",
+                ],
+                optimized_production_rates: [
+                    "missing-first-opt-prod-rate-value.xlsx",
+                    "missing-middle-opt-prod-rate-value.xlsx",
+                    "missing-last-opt-prod-rate-value.xlsx",
+                ],
+                optimized_threshold_b: [
+                    "missing-first-opt-threshold_b-value.xlsx",
+                    "missing-middle-opt-threshold_b-value.xlsx",
+                    "missing-last-opt-threshold_b-value.xlsx",
+                ],
+            };
 
-            it("for threshold_b sheet", function () {
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-first-gene-and-threshold_b-value.xlsx",
-                    1,
-                    "threshold_b"
-                );
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-middle-gene-and-threshold_b-value.xlsx",
-                    1,
-                    "threshold_b"
-                );
-                test.missingGenesAndValuesInTwoColumnSheetsWarning(
-                    "test-files/additional-sheet-test-files/missing-last-gene-and-threshold_b-value.xlsx",
-                    1,
-                    "threshold_b"
-                );
-            });
+            for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
+                it(`for ${sheetName} sheet`, function () {
+                    for (const fileName of cases[sheetName]) {
+                        test.someGenesMissingValuesWarning(
+                            `${folder}${fileName}`,
+                            1,
+                            sheetName,
+                            expectedText
+                        );
+                    }
+                });
+            }
         });
 
-        describe("should return WRONG_GENE_ORDER_IN_TWO_COLUMN_SHEET warning when sheets are present and not empty but the order of genes is not the same as the network sheet", function () {
-            it("for degradation_rates sheet", function () {
-                test.wrongGeneOrderInTwoColumnSheetWarning(
-                    "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-deg-rates-sheet.xlsx",
-                    1,
-                    "degradation_rates"
-                );
-            });
+        describe("should return MISSING_GENE_IDS_FOR_VALUES warning when sheets are present and not empty but missing gene IDs for values", function () {
+            const folder = "test-files/additional-sheet-test-files/missing-geneId-with-values/";
 
-            it("for production_rates sheet", function () {
-                test.wrongGeneOrderInTwoColumnSheetWarning(
-                    "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-prod-rates-sheet.xlsx",
-                    1,
-                    "production_rates"
-                );
-            });
+            const cases = {
+                degradation_rates: [
+                    "missing-first-geneID-on-deg-rates-sheet.xlsx",
+                    "missing-middle-geneID-on-deg-rates-sheet.xlsx",
+                    "missing-last-geneID-on-deg-rates-sheet.xlsx",
+                ],
+                production_rates: [
+                    "missing-first-geneID-on-prod-rates-sheet.xlsx",
+                    "missing-middle-geneID-on-prod-rates-sheet.xlsx",
+                    "missing-last-geneID-on-prod-rates-sheet.xlsx",
+                ],
+                threshold_b: [
+                    "missing-first-geneID-on-threshold_b-sheet.xlsx",
+                    "missing-middle-geneID-on-threshold_b-sheet.xlsx",
+                    "missing-last-geneID-on-threshold_b-sheet.xlsx",
+                ],
+                optimized_production_rates: [
+                    "missing-first-geneID-on-opt-prod-rates-sheet.xlsx",
+                    "missing-middle-geneID-on-opt-prod-rates-sheet.xlsx",
+                    "missing-last-geneID-on-opt-prod-rates-sheet.xlsx",
+                ],
+                optimized_threshold_b: [
+                    "missing-first-geneID-on-opt-threshold_b-sheet.xlsx",
+                    "missing-middle-geneID-on-opt-threshold_b-sheet.xlsx",
+                    "missing-last-geneID-on-opt-threshold_b-sheet.xlsx",
+                ],
+            };
 
-            it("for threshold_b sheet", function () {
-                test.wrongGeneOrderInTwoColumnSheetWarning(
-                    "test-files/additional-sheet-test-files/wrong-gene-order/wrong-order-threshold_b-sheet.xlsx",
-                    1,
-                    "threshold_b"
-                );
-            });
+            for (const sheetName in cases) {
+                const expectedText = sheetName.includes("optimized")
+                    ? "GRNsight is checking because"
+                    : "will need to be supplied to use this workbook as an input file for GRNmap,";
+
+                it(`for ${sheetName} sheet`, function () {
+                    for (const fileName of cases[sheetName]) {
+                        test.missingGeneIdsWithValuesInTwoColumnSheetWarning(
+                            `${folder}${fileName}`,
+                            2,
+                            sheetName,
+                            expectedText
+                        );
+                    }
+                });
+            }
+        });
+
+        describe("should return WRONG_GENE_ORDER warning when sheets are present and not empty but the order of genes is not the same as the network sheet", function () {
+            const folder = "test-files/additional-sheet-test-files/wrong-gene-order/";
+
+            const cases = {
+                degradation_rates: "wrong-order-deg-rates-sheet.xlsx",
+                production_rates: "wrong-order-prod-rates-sheet.xlsx",
+                threshold_b: "wrong-order-threshold_b-sheet.xlsx",
+                optimized_production_rates: "wrong-order-opt-prod-rates-sheet.xlsx",
+                optimized_threshold_b: "wrong-order-opt-threshold_b-sheet.xlsx",
+            };
+
+            for (const sheetName in cases) {
+                it(`for ${sheetName} sheet`, function () {
+                    test.wrongGeneOrderInTwoColumnSheetWarning(
+                        `${folder}${cases[sheetName]}`,
+                        1,
+                        sheetName
+                    );
+                });
+            }
+        });
+
+        describe("should return EXTRA_GENES warning when sheets are present and not empty but contain extra genes", function () {
+            const folder = "test-files/additional-sheet-test-files/extra-genes/";
+
+            const cases = {
+                degradation_rates: "extra-row-deg-rates-sheet.xlsx",
+                production_rates: "extra-row-prod-rates-sheet.xlsx",
+                threshold_b: "extra-row-threshold_b-sheet.xlsx",
+                optimized_production_rates: "extra-row-opt-prod-rates-sheet.xlsx",
+                optimized_threshold_b: "extra-row-opt-threshold_b-sheet.xlsx",
+            };
+
+            for (const sheetName in cases) {
+                it(`for ${sheetName} sheet`, function () {
+                    test.extraGenesInTwoColumnSheetWarning(
+                        `${folder}${cases[sheetName]}`,
+                        1,
+                        sheetName
+                    );
+                });
+            }
+        });
+
+        describe("should return WRONG_GENE_IDS warning when sheets are present and not empty but contain wrong gene IDs", function () {
+            const folder = "test-files/additional-sheet-test-files/wrong-gene-ids/";
+            const cases = {
+                degradation_rates: "wrong-geneID-deg-rates-sheet.xlsx",
+                production_rates: "wrong-geneID-prod-rates-sheet.xlsx",
+                threshold_b: "wrong-geneID-threshold_b-sheet.xlsx",
+                optimized_production_rates: "wrong-geneID-opt-prod-rates-sheet.xlsx",
+                optimized_threshold_b: "wrong-geneID-opt-threshold_b-sheet.xlsx",
+            };
+
+            for (const sheetName in cases) {
+                it(`for ${sheetName} sheet`, function () {
+                    test.wrongGeneIdsWarning(`${folder}${cases[sheetName]}`, sheetName);
+                });
+            }
         });
     });
 
@@ -575,6 +630,22 @@ describe("additional-sheet-parser", function () {
             test.invalidMSEDataWarning(
                 "test-files/additional-sheet-test-files/optimization-diagnostics-invalid-MSE-data.xlsx",
                 4
+            );
+        });
+
+        it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_DIAGNOSTICS", function () {
+            test.additionalSheetOptimizationDiagnosticIncorrectOrMissingColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-diagnostics-missing-header.xlsx",
+                1,
+                "optimization_diagnostics"
+            );
+        });
+
+        it("should contain MISSING_COLUMN_HEADER_OPTIMIZATION_PARAMETERS", function () {
+            test.additionalSheetOptimizationParametersIncorrectOrMissingColumnHeaderWarning(
+                "test-files/additional-sheet-test-files/optimization-parameters-missing-header.xlsx",
+                1,
+                "optimization_parameters"
             );
         });
     });

@@ -415,7 +415,7 @@ export const upload = function () {
                 workbookTwoColumnSheets: finalExportSheets.two_column_sheets,
                 chosenSheets,
                 source,
-                warningsConstants: warnings,
+                exportWarningsConstants: warnings,
                 workbookWarnings: grnState.workbook.warnings,
             });
 
@@ -761,9 +761,10 @@ export const upload = function () {
                     if (
                         typeof allSheets[i] === "object" &&
                         allSheets[i].id !== "exportExcelWorkbookSheet-All" &&
+                        allSheets[i].checked &&
                         allSheets[i].value &&
-                        allSheets[i].value.includes("expression") &&
-                        allSheets[i].checked
+                        (allSheets[i].value.includes("expression") ||
+                            allSheets[i].value.includes("sigma"))
                     ) {
                         anyExpressionChecked = true;
                         break;

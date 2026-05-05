@@ -27,10 +27,13 @@ class GeneProcessor(Processor):
         else:
             combine_genes_df = genes_df
         processed_data = []
+        regulator_ids = set()
+        if regulators is not None and "regulator_gene_id" in regulators.columns:
+            regulator_ids = set(regulators["regulator_gene_id"].dropna().values)
+
         for _, row in combine_genes_df.iterrows():
             gene_id = row['systematicName']
-            # Check if the gene_id (systematicName) matches any of the regulators
-            regulator = gene_id in regulators["regulator_gene_id"].values
+            regulator = gene_id in regulator_ids
 
             processed_data.append({
                 "gene_id": gene_id,

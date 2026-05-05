@@ -31,7 +31,7 @@ function App() {
   const [showGrayEdgesDashed, setShowGrayEdgesDashed] = useState(false);
   const [demoValue, setDemoValue] = useState(null);
   const [viewSize, setViewSize] = useState(null);
-  const [adaptive, setAdaptive] = useState(false);
+  const [adaptive, setAdaptive] = useState(true);
   const [networkData, setNetworkData] = useState(null);
   const [zoomPercent, setZoomPercent] = useState(ZOOM_DISPLAY_MIDDLE);
 

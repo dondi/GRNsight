@@ -1,5 +1,5 @@
 import { describe, it, expect, test } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import App from "../src/App.jsx";
 
 describe("App", () => {
@@ -9,13 +9,15 @@ describe("App", () => {
     expect(screen.getByRole("navigation")).toBeInTheDocument();
   });
 
-//   TODO: fix this test
-//   it("provides context to child components", () => {
-//     render(<App />);
-//     // Any component that uses the context will trigger the context line
-//     // For example, if Sidebar uses the context:
-//     expect(screen.getByText("Navbar")).toBeInTheDocument();
-//   });
+  it("toggles sidebar collapsed state when toggle button is clicked", () => {
+    render(<App />);
+
+    const toggleButton = document.getElementById("sidebar-toggle");
+    expect(toggleButton).toBeTruthy();
+    expect(toggleButton?.classList.contains("collapsed")).toBe(false);
+
+    fireEvent.click(toggleButton);
+
+    expect(toggleButton?.classList.contains("collapsed")).toBe(true);
+  });
 });
-
-

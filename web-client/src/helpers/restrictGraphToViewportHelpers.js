@@ -168,20 +168,12 @@ export function getTopYBoundaryMargin(adaptive, graphZoom, yTranslation) {
 
 export function getRightXBoundaryMargin(adaptive, graphZoom, xTranslation, width, nodeWidth) {
   return !adaptive
-    ? -xTranslation / graphZoom +
-        BOUNDARY_MARGIN / 2 +
-        width / graphZoom -
-        BOUNDARY_MARGIN -
-        nodeWidth
+    ? -xTranslation / graphZoom + BOUNDARY_MARGIN / 2 + width / graphZoom - BOUNDARY_MARGIN
     : width - BOUNDARY_MARGIN - nodeWidth;
 }
 
 export function getBottomYBoundaryMargin(adaptive, graphZoom, yTranslation, height) {
   return !adaptive
-    ? -yTranslation / graphZoom +
-        BOUNDARY_MARGIN / 2 +
-        height / graphZoom -
-        BOUNDARY_MARGIN -
-        NODE_HEIGHT
+    ? -yTranslation / graphZoom + BOUNDARY_MARGIN / 2 + height / graphZoom - BOUNDARY_MARGIN
     : height - BOUNDARY_MARGIN - NODE_HEIGHT;
 }
