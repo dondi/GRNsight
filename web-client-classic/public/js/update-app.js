@@ -109,6 +109,9 @@ import {
     EXPORT_TO_UNWEIGHTED_GML_MENU,
     NETWORK_GRN_MODE,
     NETWORK_PPI_MODE,
+    SET_NORMALIZATION_SIDEBAR,
+    SET_NORMALIZATION_SIDEBAR_VALUE,
+    RESET_NORMALIZATION_SIDEBAR,
     //   EXPRESSION_SOURCE,
 } from "./constants";
 
@@ -1030,6 +1033,11 @@ export const updateApp = grnState => {
 
     if (grnState.workbook !== null && grnState.workbook.sheetType === "weighted") {
         showEdgeWeightOptions();
+        $(SET_NORMALIZATION_SIDEBAR_VALUE).prop("disabled", !grnState.colorOptimal);
+        $(SET_NORMALIZATION_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        $(RESET_NORMALIZATION_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        $(GREY_EDGE_THRESHOLD_SLIDER_SIDEBAR).prop("disabled", !grnState.colorOptimal);
+        $(GREY_EDGES_DASHED_SIDEBAR).prop("disabled", !grnState.colorOptimal);
     } else if (grnState.workbook !== null && grnState.workbook.sheetType === "unweighted") {
         hideEdgeWeightOptions();
     } else {
