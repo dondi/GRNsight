@@ -9,7 +9,7 @@ export default function Header() {
     <div id="header-container">
       <header>
         {`GRNsight React: `}
-        <span>{`v__APP_VERSION__} (${formattedBuildDate})`}</span>
+        <span>{`v${__APP_VERSION__} (${formattedBuildDate})`}</span>
       </header>
       <div id="disclaimer">
         <span>Disclaimer:</span>
