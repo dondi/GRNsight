@@ -33,7 +33,7 @@ jobs:
                   git config --global user.email "github-actions@github.com"
                   git config --global user.name "GitHub Actions"
 
-            - name: Prepare deployment folder
+            - name: Prepare Deployment Folder
               run: |
                   mkdir -p react-thesis-4081
                   rm -rf react-thesis-4081/*
