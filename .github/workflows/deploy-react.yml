@@ -46,8 +46,8 @@ jobs:
                   git add react-thesis-4081/
                   if ! git diff --cached --quiet; then
                     git commit -m "Deploy React app from ${{ github.sha }}"
-                    git fetch origin gh-pages --depth=1
-                    git push origin HEAD:gh-pages --force-with-lease
+                    #git fetch origin gh-pages --depth=1
+                    #git push origin HEAD:gh-pages
                     echo "status=deployed" >> $GITHUB_OUTPUT
                   else
                     echo "status=no-changes" >> $GITHUB_OUTPUT
