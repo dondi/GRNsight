@@ -49,7 +49,7 @@ if __name__ == "__main__":
         parser.error("--db_url is required when --action is 'populate' or 'all'.")
 
     # Due to issue #1339, we are defaulting to 'all' for the network option to ensure both GRN and PPI data are generated to get union lists for gene. This happened because the gene list for GRN alone was missing some genes that were only present in the PPI data, which caused the gene data population to fail when run separately.
-    main("all", args.db_url, args.action, args.input_dir)
+    main('all', args.db_url, args.action, args.input_dir)
     
 
     
