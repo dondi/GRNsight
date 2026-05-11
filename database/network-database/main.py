@@ -37,8 +37,6 @@ def main(network_option, db_url=None, action='all', input_dir=Constants.DATA_DIR
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate data for different networks.")
-    parser.add_argument('--network', choices=[Constants.PPI_NETWORK_MODE, Constants.GRN_NETWORK_MODE, 'all'], required=True,
-                        help=f"Specify the type of network data to generate. Options: '{Constants.PPI_NETWORK_MODE}', '{Constants.GRN_NETWORK_MODE}', 'all'")
     parser.add_argument('--action', choices=['generate', 'populate', 'all'], default='all',
                         help="Choose whether to only generate TSV files, only populate PostgreSQL from TSV, or do both.")
     parser.add_argument('--db_url', type=str,
@@ -50,7 +48,8 @@ if __name__ == "__main__":
     if args.action in ['populate', 'all'] and not args.db_url:
         parser.error("--db_url is required when --action is 'populate' or 'all'.")
 
-    main(args.network, args.db_url, args.action, args.input_dir)
+    # Due to issue #1339, we are defaulting to 'all' for the network option to ensure both GRN and PPI data are generated to get union lists for gene. This happened because the gene list for GRN alone was missing some genes that were only present in the PPI data, which caused the gene data population to fail when run separately.
+    main("all", args.db_url, args.action, args.input_dir)
     
 
     
